@@ -3,12 +3,12 @@
  * Template Name: Dashboard - Reports
  */
 
-dokan_redirect_login();
-dokan_redirect_if_not_seller();
+// dokan_redirect_login();
+// dokan_redirect_if_not_seller();
 
-get_header();
+// get_header();
 
-dokan_reports_scripts();
+// dokan_reports_scripts();
 ?>
 
 
@@ -17,16 +17,10 @@ dokan_reports_scripts();
 <div id="primary" class="content-area col-md-10 col-sm-9">
     <div id="content" class="site-content" role="main">
 
-        <?php while (have_posts()) : the_post(); ?>
-
-            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+            <article>
                 <header class="entry-header">
-                    <h1 class="entry-title"><?php the_title(); ?></h1>
+                    <h1 class="entry-title"><?php _e( 'Reports', 'dokan' ) ?></h1>
                 </header><!-- .entry-header -->
-
-                <div class="entry-content">
-                    <?php the_content(); ?>
-                </div><!-- .entry-content -->
 
                 <div class="dokan-report-wrap">
                     <?php
@@ -36,7 +30,7 @@ dokan_reports_scripts();
 
                     $charts = dokan_get_reports_charts();
 
-                    $link = get_permalink();
+                    $link = dokan_get_navigation_url( 'reports' );
                     $current = isset( $_GET['chart'] ) ? $_GET['chart'] : 'overview';
 
                     echo '<ul class="nav nav-tabs">';
@@ -61,9 +55,5 @@ dokan_reports_scripts();
                     <?php } ?>
             </article>
 
-        <?php endwhile; // end of the loop. ?>
-
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
-
-<?php get_footer(); ?>

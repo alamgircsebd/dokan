@@ -253,7 +253,9 @@ function dokan_product_listing_status_filter() {
 }
 
 function dokan_order_listing_status_filter() {
-    $orders_url = get_permalink();
+    $orders_url = get_permalink(). 'orders/';
+
+    var_dump($orders_url );
     $status_class = isset( $_GET['order_status'] ) ? $_GET['order_status'] : 'all';
     $orders_counts = dokan_count_orders( get_current_user_id() );
     ?>
@@ -303,42 +305,42 @@ function dokan_get_dashboard_nav() {
         'dashboard' => array(
             'title' => __( 'Dashboard', 'dokan'),
             'icon' => '<i class="icon-dashboard"></i>',
-            'url' => dokan_get_page_url( 'dashboard' )
+            'url' => dokan_get_navigation_url()
         ),
         'product' => array(
             'title' => __( 'Products', 'dokan'),
             'icon' => '<i class="icon-briefcase"></i>',
-            'url' => dokan_get_page_url( 'products' )
+            'url' => dokan_get_navigation_url( 'products' )
         ),
         'order' => array(
             'title' => __( 'Orders', 'dokan'),
             'icon' => '<i class="icon-basket"></i>',
-            'url' => dokan_get_page_url( 'orders' )
+            'url' => dokan_get_navigation_url( 'orders' )
         ),
         'coupon' => array(
             'title' => __( 'Coupons', 'dokan'),
             'icon' => '<i class="icon-gift"></i>',
-            'url' => dokan_get_page_url( 'coupons' )
+            'url' => dokan_get_navigation_url( 'coupons' )
         ),
         'report' => array(
             'title' => __( 'Reports', 'dokan'),
             'icon' => '<i class="icon-stats"></i>',
-            'url' => dokan_get_page_url( 'reports' )
+            'url' => dokan_get_navigation_url( 'reports' )
         ),
         'reviews' => array(
             'title' => __( 'Reviews', 'dokan'),
             'icon' => '<i class="icon-bubbles"></i>',
-            'url' => dokan_get_page_url( 'reviews' )
+            'url' => dokan_get_navigation_url( 'reviews' )
         ),
         'withdraw' => array(
             'title' => __( 'Withdraw', 'dokan'),
             'icon' => '<i class="icon-upload"></i>',
-            'url' => dokan_get_page_url( 'withdraw' )
+            'url' => dokan_get_navigation_url( 'withdraw' )
         ),
         'settings' => array(
             'title' => __( 'Settings', 'dokan'),
             'icon' => '<i class="icon-cog"></i>',
-            'url' => dokan_get_page_url( 'settings' )
+            'url' => dokan_get_navigation_url( 'settings' )
         ),
     );
 

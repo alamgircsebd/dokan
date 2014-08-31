@@ -50,7 +50,7 @@ define( 'DOKAN_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 // give a way to turn off loading styles and scripts from parent theme
 
 if ( !defined( 'DOKAN_LOAD_STYLE' ) ) {
-    define( 'DOKAN_LOAD_STYLE', true );
+    define( 'DOKAN_LOAD_STYLE', false );
 }
 
 if ( !defined( 'DOKAN_LOAD_SCRIPTS' ) ) {
@@ -103,6 +103,9 @@ class WeDevs_Dokan {
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
         $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
 
+
+        if ( !isset( $content_width ) )
+            $content_width = 640; /* pixels */
         //includes file
         $this->includes();
 
@@ -133,6 +136,24 @@ class WeDevs_Dokan {
         }
 
         return $instance;
+    }
+
+    /**
+     * Get the plugin path.
+     *
+     * @return string
+     */
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
+    }
+
+    /**
+     * Get the template path.
+     *
+     * @return string
+     */
+    public function template_path() {
+        return apply_filters( 'dokan_template_path', 'dokan/' );
     }
 
     /**
@@ -169,6 +190,22 @@ class WeDevs_Dokan {
         load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
+    function init_actions() {
+
+        // Localize our plugin
+        add_action( 'admin_init', array( $this, 'load_table_prifix' ) );
+        add_action( 'init', array( $this, 'localization_setup' ) );
+
+
+        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+        add_action( 'login_enqueue_scripts', array( $this, 'login_scripts' ) );
+
+        // add_action( 'admin_init', array( $this, 'install_theme' ) );
+        add_action( 'admin_init', array( $this, 'block_admin_access' ) );
+    }
+
+
     /**
      * Enqueue admin scripts
      *
@@ -204,46 +241,58 @@ class WeDevs_Dokan {
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'reviews', plugins_url( 'assets/js/reviews.js', __FILE__ ), array( 'jquery' ), null, true );
 
-        if ( DOKAN_LOAD_STYLE === true ) {
-            wp_enqueue_style( 'bootstrap' );
-            wp_enqueue_style( 'icomoon' );
-            wp_enqueue_style( 'fontawesome' );
-            wp_enqueue_style( 'dokan-opensans' );
-            wp_enqueue_style( 'dokan-style' );
-            wp_enqueue_style( 'dokan-skin' );
+        $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
+        
+        if( !$page_id ) {
+            return;
         }
 
-        /****** Scripts ******/
+        if( is_page($page_id ) ) {
 
-        if ( DOKAN_LOAD_SCRIPTS === true ) {
+            dokan_reports_scripts();
+            dokan_frontend_dashboard_scripts();
 
-            if ( is_single() && comments_open() && get_option( 'thread_comments' ) ) {
-                wp_enqueue_script( 'comment-reply' );
+            if ( DOKAN_LOAD_STYLE === true ) {
+                wp_enqueue_style( 'bootstrap' );
+                wp_enqueue_style( 'icomoon' );
+                wp_enqueue_style( 'fontawesome' );
+                wp_enqueue_style( 'dokan-opensans' );
+                wp_enqueue_style( 'dokan-style' );
+                wp_enqueue_style( 'dokan-skin' );
             }
 
-            if ( is_singular() && wp_attachment_is_image() ) {
-                wp_enqueue_script( 'keyboard-image-navigation', plugins_url( 'assets/js/keyboard-image-navigation.js', __FILE__ ), array( 'jquery' ), '20120202' );
+            /****** Scripts ******/
+
+            if ( DOKAN_LOAD_SCRIPTS === true ) {
+
+                if ( is_single() && comments_open() && get_option( 'thread_comments' ) ) {
+                    wp_enqueue_script( 'comment-reply' );
+                }
+
+                if ( is_singular() && wp_attachment_is_image() ) {
+                    wp_enqueue_script( 'keyboard-image-navigation', plugins_url( 'assets/js/keyboard-image-navigation.js', __FILE__ ), array( 'jquery' ), '20120202' );
+                }
+
+                wp_enqueue_script( 'jquery' );
+                wp_enqueue_script( 'jquery-ui' );
+                wp_enqueue_script( 'jquery-ui-datepicker' );
+
+                wp_enqueue_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
+                wp_enqueue_script( 'bootstrap-min', plugins_url( 'assets/js/bootstrap.min.js', __FILE__ ), false, null, true );
+
+                wp_enqueue_script( 'dokan-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), false, null, true );
+                wp_localize_script( 'jquery', 'dokan', array(
+                    'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                    'nonce'       => wp_create_nonce( 'dokan_reviews' ),
+                    'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+                    'seller'      => array(
+                        'available'    => __( 'Available', 'dokan' ),
+                        'notAvailable' => __( 'Not Available', 'dokan' )
+                    )
+                ) );
             }
-
-            wp_enqueue_script( 'jquery' );
-            wp_enqueue_script( 'jquery-ui' );
-            wp_enqueue_script( 'jquery-ui-datepicker' );
-
-            wp_enqueue_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
-            wp_enqueue_script( 'bootstrap-min', plugins_url( 'assets/js/bootstrap.min.js', __FILE__ ), false, null, true );
-
-            wp_enqueue_script( 'dokan-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), false, null, true );
-            wp_localize_script( 'jquery', 'dokan', array(
-                'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-                'nonce'       => wp_create_nonce( 'dokan_reviews' ),
-                'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
-                'seller'      => array(
-                    'available'    => __( 'Available', 'dokan' ),
-                    'notAvailable' => __( 'Not Available', 'dokan' )
-                )
-            ) );
-        }
-
+    
+        }     
     }
 
     function includes() {
@@ -303,22 +352,6 @@ class WeDevs_Dokan {
         return $where;
     }
 
-    function init_actions() {
-
-        // Localize our plugin
-        add_action( 'admin_init', array( $this, 'load_table_prifix' ) );
-        add_action( 'init', array( $this, 'localization_setup' ) );
-
-
-        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-        add_action( 'login_enqueue_scripts', array( $this, 'login_scripts' ) );
-
-        // add_action( 'admin_init', array( $this, 'install_theme' ) );
-        add_action( 'admin_init', array( $this, 'block_admin_access' ) );
-    }
-
-
     /**
      * Init ajax classes
      *
@@ -349,6 +382,7 @@ class WeDevs_Dokan {
 
         new Dokan_Rewrites();
         Dokan_Email::init();
+        Dokan_Template_Shortcodes::init();
     }
 
     /**

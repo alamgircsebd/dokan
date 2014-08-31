@@ -70,7 +70,7 @@ class Dokan_Template_reviews {
         if ( is_user_logged_in() ) {
 
             // initialize
-            $this->limit = 15;
+            $this->limit = 3;
             $this->post_type = 'product';
             $post_type = 'product';
 
@@ -220,7 +220,7 @@ class Dokan_Template_reviews {
         ) );
 
         if ( $page_links ) {
-            return '<div class="wpuf-pagination">' . $page_links . '</div>';
+            return '<div class="pagination">' . $page_links . '</div>';
         }
     }
 
@@ -359,10 +359,15 @@ class Dokan_Template_reviews {
     }
 
     function comment_query( $id, $post_type, $limit, $status ) {
-        global $wpdb;
+        global $wpdb;   
 
-        $pagenum = max(get_query_var('paged' ), 1);
+        $page_number = isset( $_GET['pagenum'] ) ? $_GET['pagenum'] : 0 ;
+
+        $pagenum = max( 1, $page_number );
         $offset = ( $pagenum - 1 ) * $limit;
+
+        var_dump( $pagenum );
+        var_dump( $offset );
 
         if ( $status == '1' ) {
             $query = "c.comment_approved IN ('1','0') AND";
@@ -546,7 +551,7 @@ class Dokan_Template_reviews {
      * @param string $post_type
      */
     function wpuf_comments_menu( $post_type ) {
-        $url = get_permalink();
+        $url = dokan_get_navigation_url( 'reviews' );
         $pending = isset( $this->pending ) ? $this->pending : 0;
         $spam = isset( $this->spam ) ? $this->spam : 0;
         $trash = isset( $this->trash ) ? $this->trash : 0;

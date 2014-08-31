@@ -633,7 +633,7 @@ function dokan_edit_product_url( $product_id ) {
         return trailingslashit( get_permalink( $product_id ) ). 'edit/';
     }
 
-    return add_query_arg( array( 'product_id' => $product_id, 'action' => 'edit' ), dokan_get_page_url('products') );
+    return add_query_arg( array( 'product_id' => $product_id, 'action' => 'edit' ), dokan_get_navigation_url('products') );
 }
 
 /**
@@ -1178,4 +1178,52 @@ function dokan_get_best_sellers( $limit = 5 ) {
     }
 
     return $seller;
+}
+
+/**
+ * Get template part implementation for wedocs
+ *
+ * Looks at the theme directory first
+ */
+function dokan_get_template_part( $slug, $name = '' ) {
+    $dokan = WeDevs_Dokan::init();
+
+    $template = '';
+
+    // Look in yourtheme/slug-name.php and yourtheme/meetup/slug-name.php
+    if ( $name ) {
+        $template = locate_template( array( "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}-{$name}.php" ) );
+    }
+
+    // Get default slug-name.php
+    if ( ! $template && $name && file_exists( $dokan->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
+        $template = $dokan->plugin_path() . "/templates/{$slug}-{$name}.php";
+    }
+
+    if ( ! $template && !$name && file_exists( $dokan->plugin_path() . "/templates/{$slug}.php" ) ) {
+        $template = $dokan->plugin_path() . "/templates/{$slug}.php";
+    }
+
+    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/meetup/slug.php
+    if ( ! $template ) {
+        $template = locate_template( array( "{$slug}.php", $dokan->template_path() . "{$slug}.php" ) );
+    }
+
+    // Allow 3rd party plugin filter template file from their plugin
+    $template = apply_filters( 'ah_get_template_part', $template, $slug, $name );
+
+    if ( $template ) {
+        load_template( $template, false );
+    }
+}
+
+
+function dokan_get_navigation_url( $name = '' ) {
+    if( !empty( $name ) ) {
+        $url = get_permalink() . $name;
+    } else {
+        $url = get_permalink();
+    }
+
+    return apply_filters( 'dokan_get_navigation_url', $url );
 }

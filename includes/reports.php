@@ -540,7 +540,7 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
 
     ?>
     <div class="chart-container">
-        <div class="chart-placeholder main"></div>
+        <div class="chart-placeholder main" style="width: 300px; height: 200px;"></div>
     </div>
 
     <script type="text/javascript">

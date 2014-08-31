@@ -1,7 +1,7 @@
 <?php
 
 dokan_delete_product_handler();
-get_header();
+//get_header();
 ?>
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
@@ -11,15 +11,13 @@ get_header();
 
         <?php do_action( 'dokan_before_listing_product' ); ?>
 
-        <?php while (have_posts()) : the_post(); ?>
-
             <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 
                 <div class="product-listing-top clearfix">
                     <?php dokan_product_listing_status_filter(); ?>
 
                     <span class="col-md-3">
-                        <a href="<?php echo dokan_get_page_url( 'new_product' ); ?>" class="btn btn-large btn-theme pull-right"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add new product', 'dokan' ); ?></a>
+                        <a href="<?php echo dokan_get_navigation_url( 'new-product' ); ?>" class="btn btn-large btn-theme pull-right"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add new product', 'dokan' ); ?></a>
                     </span>
                 </div>
 
@@ -210,8 +208,6 @@ get_header();
                 }
                 ?>
             </article>
-
-        <?php endwhile; // end of the loop. ?>
 
         <?php do_action( 'dokan_after_listing_product' ); ?>
 

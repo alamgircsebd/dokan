@@ -9,7 +9,7 @@ if ( !dokan_is_seller_has_order( $current_user->ID, $order_id ) ) {
 }
 
 $order = new WC_Order( $order_id );
-// var_dump($order);
+//var_dump($order);
 ?>
 <div class="row">
     <div class="col-md-8">
@@ -182,9 +182,14 @@ $order = new WC_Order( $order_id );
                                 <span><?php _e( 'Customer:', 'dokan' ); ?></span>
                                 <?php
                                 $customer_user = absint( get_post_meta( $order->id, '_customer_user', true ) );
-                                $customer_userdata = get_userdata( $customer_user );
+                                if ( $customer_user && $customer_user != 0 ) {
+                                    $customer_userdata = get_userdata( $customer_user );
+                                    $display_name =  $customer_userdata->display_name;
+                                } else {
+                                    $display_name = get_post_meta( $order->id, '_billing_first_name', true ). ' '. get_post_meta( $order->id, '_billing_last_name', true );
+                                }
                                 ?>
-                                <a href="#"><?php echo $customer_userdata->display_name; ?></a><br>
+                                <a href="#"><?php echo $display_name; ?></a><br>
                             </li>
                             <li>
                                 <span><?php _e( 'Email:', 'dokan' ); ?></span>

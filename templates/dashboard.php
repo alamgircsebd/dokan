@@ -3,13 +3,13 @@
  * Template Name: Dashboard
  */
 
-dokan_redirect_login();
-dokan_redirect_if_not_seller();
+// dokan_redirect_login();
+// dokan_redirect_if_not_seller();
 
-get_header();
+// // get_header();
 
-dokan_reports_scripts();
-dokan_frontend_dashboard_scripts();
+// dokan_reports_scripts();
+// dokan_frontend_dashboard_scripts();
 
 $user_id = get_current_user_id();
 $orders_counts = dokan_count_orders( $user_id );
@@ -18,9 +18,9 @@ $comment_counts = dokan_count_comments( 'product', $user_id );
 $pageviews = (int) dokan_author_pageviews( $user_id );
 $earning = dokan_author_total_sales( $user_id );
 
-$products_url = dokan_get_page_url( 'products' );
-$orders_url = dokan_get_page_url( 'orders' );
-$reviews_url = dokan_get_page_url( 'reviews' );
+$products_url = dokan_get_navigation_url( 'products' );
+$orders_url = dokan_get_navigation_url( 'orders' );
+$reviews_url = dokan_get_navigation_url( 'reviews' );
 ?>
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'dashboard' ) ); ?>
@@ -28,15 +28,13 @@ $reviews_url = dokan_get_page_url( 'reviews' );
 <div id="primary" class="content-area col-md-10 col-sm-9">
     <div id="content" class="site-content" role="main">
 
-        <?php while (have_posts()) : the_post(); ?>
-
             <?php
             if ( !dokan_is_seller_enabled( $user_id ) ) {
                 dokan_seller_not_enabled_notice();
             }
             ?>
 
-            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+            <article>
 
                 <div class="row">
                     <div class="col-md-6">
@@ -113,7 +111,7 @@ $reviews_url = dokan_get_page_url( 'reviews' );
                                 </div>
 
                                 <div class="col-md-6" style="text-align: center;">
-                                    <canvas id="order-stats" width="175" height="175"></canvas>
+                                    <canvas id="order-stats" style="width: 175px; height: 175px"></canvas>
                                 </div>
                             </div>
                         </div> <!-- .orders -->
@@ -152,7 +150,7 @@ $reviews_url = dokan_get_page_url( 'reviews' );
                             <div class="widget-title"><i class="fa fa-credit-card"></i> <?php _e( 'Sales', 'dokan' ); ?></div>
 
                             <?php
-                            require_once dirname( dirname(__FILE__) ) . '/includes/reports.php';
+                            require_once DOKAN_DIR . '/includes/reports.php';
 
                             dokan_dashboard_sales_overview();
                             ?>
@@ -194,22 +192,24 @@ $reviews_url = dokan_get_page_url( 'reviews' );
 
                     </div>
                 </div>
-
             </article>
 
-        <?php endwhile; // end of the loop. ?>
+        
 
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
 
 <script type="text/javascript">
     jQuery(function($) {
-        var order_stats = <?php echo json_encode( $order_data ); ?>;
+        
 
-        var ctx = $("#order-stats").get(0).getContext("2d");
-        new Chart(ctx).Doughnut(order_stats);
-    })
+            var order_stats = <?php echo json_encode( $order_data ); ?>;
+
+            var ctx = $("#order-stats").get(0).getContext("2d");
+            new Chart(ctx).Doughnut(order_stats);
+    
+    });
 </script>
 
 
-<?php get_footer(); ?>
+<?php //get_footer(); ?>

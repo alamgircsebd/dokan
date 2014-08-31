@@ -70,9 +70,9 @@ $_stock_status = get_post_meta( $post_id, '_stock_status', true );
 $_visibility = get_post_meta( $post_id, '_visibility', true );
 $_enable_reviews = $post->comment_status;
 
-get_header();
+//get_header();
 
-dokan_frontend_dashboard_scripts();
+// dokan_frontend_dashboard_scripts();
 ?>
 
 <div id="primary" class="content-area col-md-12 col-sm-9">
@@ -351,4 +351,4 @@ dokan_frontend_dashboard_scripts();
 
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
-<?php get_footer(); ?>
+<?php //get_footer(); ?>

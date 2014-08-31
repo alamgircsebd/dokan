@@ -10,10 +10,23 @@ class Dokan_Rewrites {
     function __construct() {
         add_action( 'init', array($this, 'register_rule') );
         add_filter( 'template_include', array($this, 'store_template') );
-        add_filter( 'template_include', array($this, 'product_edit_template'), 11 );
+        // add_filter( 'template_include', array($this, 'product_edit_template'), 11 );
         add_filter( 'template_include', array($this, 'store_review_template'), 11 );
+        // add_filter( 'template_include', array($this, 'dashboard_template'), 12 );
         add_filter( 'query_vars', array($this, 'register_query_var') );
         add_filter( 'pre_get_posts', array($this, 'store_query_filter') );
+
+
+        $this->query_vars = array(
+            'products',
+            'new-product',
+            'orders',
+            'coupons',
+            'reports',
+            'reviews',
+            'withdraw',
+            'settings'
+        );
     }
 
     /**
@@ -22,6 +35,12 @@ class Dokan_Rewrites {
      * @return void
      */
     function register_rule() {
+        // add_rewrite_endpoint( 'dashboard', EP_PAGES );
+        
+        foreach ($this->query_vars as $var) {
+            add_rewrite_endpoint( $var, EP_PAGES );
+        }
+
         $permalinks = get_option( 'woocommerce_permalinks', array() );
         if( isset( $permalinks['product_base'] ) ) {
             $base = substr( $permalinks['product_base'], 1 );
@@ -64,6 +83,10 @@ class Dokan_Rewrites {
         $vars[] = 'store_review';
         $vars[] = 'edit';
         $vars[] = 'term_section';
+        
+        foreach ($this->query_vars as $var) {
+            $vars[] = $var;
+        }
 
         return $vars;
     }
@@ -143,4 +166,10 @@ class Dokan_Rewrites {
             }
         }
     }
+
+    // function dashboard_template( $template ) {
+    //     var_dump( get_query_var( 'dashboard' ) );
+    //     var_dump( $template );
+    //     return $template;
+    // }
 }

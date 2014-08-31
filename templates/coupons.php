@@ -3,8 +3,8 @@
  * Template Name: Dashboard - Coupon
  */
 
-dokan_redirect_login();
-dokan_redirect_if_not_seller();
+// dokan_redirect_login();
+// dokan_redirect_if_not_seller();
 
 
 $dokan_template_coupons = Dokan_Template_Coupons::init();
@@ -18,8 +18,8 @@ if ( !is_wp_error( $validated ) ) {
 $dokan_template_coupons->coupun_delete();
 $is_edit_page = isset( $_GET['view'] ) && $_GET['view'] == 'add_coupons';
 
-get_header();
-dokan_frontend_dashboard_scripts();
+// get_header();
+// dokan_frontend_dashboard_scripts();
 ?>
 
 
@@ -28,14 +28,11 @@ dokan_frontend_dashboard_scripts();
 <div id="primary" class="content-area col-md-10 col-sm-9">
     <div id="content" class="site-content" role="main">
 
-        <?php while (have_posts()) : the_post(); ?>
-
-            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+            <article class="dashboard-coupons-wrapper">
                 <header class="entry-header">
                     <div class="row">
                         <span class="col-md-9">
                             <h1 class="entry-title">
-                            <?php the_title(); ?>
 
                             <?php if ( $is_edit_page ) {
                                 printf( '<small> - %s</small>', __( 'Edit Coupon', 'dokan' ) );
@@ -45,15 +42,11 @@ dokan_frontend_dashboard_scripts();
 
                         <?php if ( !$is_edit_page ) { ?>
                             <span class="col-md-3">
-                                <a href="<?php echo add_query_arg( array( 'view' => 'add_coupons'), get_permalink() ); ?>" class="btn btn-large btn-theme pull-right"><i class="fa fa-gift">&nbsp;</i> <?php _e( 'Add new Coupon', 'dokan' ); ?></a>
+                                <a href="<?php echo add_query_arg( array( 'view' => 'add_coupons'), dokan_get_navigation_url( 'coupons' ) ); ?>" class="btn btn-large btn-theme pull-right"><i class="fa fa-gift">&nbsp;</i> <?php _e( 'Add new Coupon', 'dokan' ); ?></a>
                             </span>
                         <?php } ?>
                     </div>
                 </header><!-- .entry-header -->
-
-                <div class="entry-content">
-                    <?php the_content(); ?>
-                </div><!-- .entry-content -->
 
                 <?php
                 if ( !dokan_is_seller_enabled( get_current_user_id() ) ) {
@@ -83,11 +76,5 @@ dokan_frontend_dashboard_scripts();
 
             </article>
 
-        <?php endwhile; // end of the loop. ?>
-
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
-
-<?php get_footer(); ?>
-
-<?php get_footer(); ?>
