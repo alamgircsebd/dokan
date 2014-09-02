@@ -225,7 +225,7 @@ class WeDevs_Dokan {
         wp_register_style( 'chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
         wp_register_style( 'bootstrap', plugins_url( 'assets/css/bootstrap.css', __FILE__ ), false, null );
         wp_register_style( 'icomoon', plugins_url( 'assets/css/icomoon.css', __FILE__ ), false, null );
-        wp_register_style( 'fontawesome', plugins_url( 'assets/css/font-awesome.css', __FILE__ ), false, null );
+        wp_register_style( 'fontawesome', plugins_url( 'assets/css/font-awesome.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-skin', plugins_url( 'assets/css/skins/' . $skin, __FILE__ ), false, null );
         wp_register_style( 'dokan-opensans', $protocol . '://fonts.googleapis.com/css?family=Open+Sans:400,700' );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
@@ -249,6 +249,9 @@ class WeDevs_Dokan {
 
         if( is_page($page_id ) ) {
 
+            wp_enqueue_style( 'icomoon' );
+            wp_enqueue_style( 'fontawesome' );
+            wp_enqueue_style( 'dokan-style' );
             dokan_reports_scripts();
             dokan_frontend_dashboard_scripts();
 
@@ -324,6 +327,7 @@ class WeDevs_Dokan {
      */
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
+        add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ) );
         add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
     }
 
@@ -461,6 +465,20 @@ class WeDevs_Dokan {
 
         // Return what we found
         return $template;
+    }
+
+    function add_dashboard_template_class( $classes ) {
+        $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
+        
+        if( !$page_id ) {
+            return;
+        }
+
+        if( is_page( $page_id ) ) {
+            $classes[] = 'page-template-templatesdashboard-php';
+        }
+
+        return $classes;
     }
 
 } // WeDevs_Dokan

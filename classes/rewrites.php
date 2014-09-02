@@ -10,12 +10,12 @@ class Dokan_Rewrites {
     function __construct() {
         add_action( 'init', array($this, 'register_rule') );
         add_filter( 'template_include', array($this, 'store_template') );
-        // add_filter( 'template_include', array($this, 'product_edit_template'), 11 );
+        add_filter( 'template_include', array($this,  'product_edit_template'), 11 );
         add_filter( 'template_include', array($this, 'store_review_template'), 11 );
         // add_filter( 'template_include', array($this, 'dashboard_template'), 12 );
         add_filter( 'query_vars', array($this, 'register_query_var') );
         add_filter( 'pre_get_posts', array($this, 'store_query_filter') );
-
+        // add_filter( 'the_content', array( $this, 'load_dashboard_product_edit' ), 11 );
 
         $this->query_vars = array(
             'products',
@@ -125,10 +125,19 @@ class Dokan_Rewrites {
         return $template;
     }
 
+    // function load_dashboard_product_edit() {
+        
+    //     if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
+
+    //         return dokan_get_template_part( 'product-edit' );
+    //     }        
+    // }
+
     function product_edit_template( $template ) {
+
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
 
-            return __DIR__ . '/templates/product-edit.php';
+            return dokan_get_template_part( 'product-edit' );
         }
 
         return $template;

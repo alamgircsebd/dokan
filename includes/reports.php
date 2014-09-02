@@ -540,7 +540,7 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
 
     ?>
     <div class="chart-container">
-        <div class="chart-placeholder main" style="width: 300px; height: 200px;"></div>
+        <div class="chart-placeholder main" style="width: 100%; height: 350px;"></div>
     </div>
 
     <script type="text/javascript">
@@ -553,8 +553,8 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
                     data: order_data.order_amounts,
                     shadowSize: 0,
                     hoverable: true,
-                    points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
-                    lines: { show: true, lineWidth: 4, fill: false },
+                    points: { show: true, radius: 5, lineWidth: 1, fillColor: '#fff', fill: true },
+                    lines: { show: true, lineWidth: 2, fill: false },
                     shadowSize: 0,
                     prepend_tooltip: "<?php echo get_woocommerce_currency_symbol(); ?>"
                 },
@@ -563,8 +563,8 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
                     data: order_data.order_counts,
                     shadowSize: 0,
                     hoverable: true,
-                    points: { show: true, radius: 5, lineWidth: 3, fillColor: '#fff', fill: true },
-                    lines: { show: true, lineWidth: 4, fill: false },
+                    points: { show: true, radius: 5, lineWidth: 2, fillColor: '#fff', fill: true },
+                    lines: { show: true, lineWidth: 3, fill: false },
                     shadowSize: 0,
                     append_tooltip: " <?php echo __( 'sales', 'dokan' ); ?>"
                 },
