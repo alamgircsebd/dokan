@@ -321,16 +321,16 @@ function dokan_daily_sales() {
     }
     ?>
 
-    <form method="post" class="form-inline report-filter" action="">
-        <div class="form-group">
+    <form method="post" class="dokan-form-inline report-filter dokan-clearfix" action="">
+        <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
         </div>
 
-        <div class="form-group">
+        <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
 
-            <input type="submit" name="dokan_report_filter" class="btn btn-theme btn-sm" value="<?php _e( 'Show', 'dokan' ); ?>" />
+            <input type="submit" name="dokan_report_filter" value="<?php _e( 'Show', 'dokan' ); ?>" />
         </div>
     </form>
     <?php
@@ -445,7 +445,7 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
     );
     ?>
     <div id="poststuff" class="dokan-reports-wrap row">
-        <div class="dokan-reports-sidebar col-md-3">
+        <div class="dokan-reports-sidebar report-left dokan-left">
             <ul class="chart-legend">
                 <?php foreach ($legend as $item) {
                     printf( '<li>%s</li>', $item['title'] );
@@ -453,7 +453,7 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
             </ul>
         </div>
 
-        <div class="doakn-reports-main col-md-9">
+        <div class="doakn-reports-main report-right dokan-right">
             <div class="postbox">
                 <h3><span><?php echo $heading; ?></span></h3>
 
@@ -686,13 +686,13 @@ function dokan_top_sellers() {
     $found_products = array_slice( $found_products, 0, 25, true );
     reset( $found_products );
     ?>
-    <form method="post" action="" class="report-filter form-inline">
-        <div class="form-group">
+    <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
+        <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $start_date) ); ?>" />
         </div>
 
-        <div class="form-group">
+        <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
         </div>
@@ -790,13 +790,13 @@ function dokan_top_earners() {
     $found_products = array_slice( $found_products, 0, 25, true );
     reset( $found_products );
     ?>
-    <form method="post" action="" class="report-filter form-inline">
-        <div class="form-group">
+    <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
+        <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $start_date) ); ?>" />
         </div>
 
-        <div class="form-group">
+        <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
         </div>

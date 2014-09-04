@@ -35,7 +35,7 @@ if ( $user_orders ) {
                         <?php echo esc_html( strip_tags( $the_order->get_formatted_order_total() ) ); ?>
                     </td>
                     <td>
-                        <?php printf( '<span class="label label-%s">%s</span>', dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status, 'woocommerce' ) ); ?>
+                        <?php printf( '<span class="dokan-label dokan-label-%s">%s</span>', dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status, 'woocommerce' ) ); ?>
                     </td>
                     <td>
                         <?php
@@ -103,7 +103,7 @@ if ( $user_orders ) {
                         }
 
                         $actions['view'] = array(
-                            'url' => wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), get_permalink() ), 'dokan_view_order' ),
+                            'url' => wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ),
                             'name' => __( 'View', 'dokan' ),
                             'action' => "view",
                             'icon' => '<i class="fa fa-eye">&nbsp;</i>'

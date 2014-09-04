@@ -214,7 +214,7 @@ function dokan_product_dashboard_errors() {
     switch ($type) {
         case 'product_deleted':
             ?>
-            <div class="alert alert-success">
+            <div class="dokan-alert dokan-alert-success">
                 <?php echo __( 'Product has been deleted successfully!', 'dokan' ); ?>
             </div>
             <?php
@@ -222,7 +222,7 @@ function dokan_product_dashboard_errors() {
 
         case 'error':
             ?>
-            <div class="alert alert-danger">
+            <div class="dokan-alert dokan-alert-danger">
                 <?php echo __( 'Something went wrong!', 'dokan' ); ?>
             </div>
             <?php
@@ -231,11 +231,11 @@ function dokan_product_dashboard_errors() {
 }
 
 function dokan_product_listing_status_filter() {
-    $permalink = get_permalink();
+    $permalink = dokan_get_navigation_url( 'products' );
     $status_class = isset( $_GET['post_status'] ) ? $_GET['post_status'] : 'all';
     $post_counts = dokan_count_posts( 'product', get_current_user_id() );
     ?>
-    <ul class="list-inline col-md-9 subsubsub">
+    <ul class="dokan-listing-filter dokan-left subsubsub">
         <li<?php echo $status_class == 'all' ? ' class="active"' : ''; ?>>
             <a href="<?php echo $permalink; ?>"><?php printf( __( 'All (%d)', 'dokan' ), $post_counts->total ); ?></a>
         </li>
@@ -253,9 +253,8 @@ function dokan_product_listing_status_filter() {
 }
 
 function dokan_order_listing_status_filter() {
-    $orders_url = get_permalink(). 'orders/';
+    $orders_url = dokan_get_navigation_url( 'orders' );
 
-    var_dump($orders_url );
     $status_class = isset( $_GET['order_status'] ) ? $_GET['order_status'] : 'all';
     $orders_counts = dokan_count_orders( get_current_user_id() );
     ?>
@@ -503,7 +502,7 @@ add_action( 'register_form', 'dokan_seller_reg_form_fields' );
 
 function dokan_seller_not_enabled_notice() {
     ?>
-        <div class="alert alert-warning">
+        <div class="dokan-alert dokan-alert-warning">
             <strong><?php _e( 'Error!', 'dokan' ); ?></strong>
             <?php _e( 'Your account is not enabled for selling, please contact the admin', 'dokan' ); ?>
         </div>

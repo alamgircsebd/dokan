@@ -15,10 +15,10 @@ $dokan_template_reviews->handle_status();
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'reviews' ) ); ?>
 
-<div id="primary" class="content-area col-md-10 col-sm-9">
+<div id="primary" class="content-area dokan-dashboard-content dokan-reviews-content">
     <div id="content" class="site-content" role="main">
 
-        <article>
+        <article class="dokan-reviews-area">
             <header class="entry-header">
                 <h1 class="entry-title"><?php _e( 'Reviews', 'dokan' ); ?></h1>
             </header><!-- .entry-header -->

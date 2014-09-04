@@ -33,7 +33,7 @@ class Dokan_Template_Coupons{
 
         wp_delete_post( $_GET['post'], true );
 
-        wp_redirect( add_query_arg( array('message' => 'delete_succefully'), get_permalink() ) );
+        wp_redirect( add_query_arg( array('message' => 'delete_succefully'), dokan_get_navigation_url( 'coupons' ) ) );
     }
 
     function validate() {
@@ -143,7 +143,7 @@ class Dokan_Template_Coupons{
         update_post_meta( $post_id, 'customer_email', $customer_email );
 
         if ( !defined( 'DOING_AJAX' ) ) {
-            wp_redirect( add_query_arg( array('message' => $message), get_permalink() ) );
+            wp_redirect( add_query_arg( array('message' => $message), dokan_get_navigation_url( 'coupons' ) ) );
         }
     }
 
@@ -151,7 +151,7 @@ class Dokan_Template_Coupons{
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'delete_succefully' ) {
             ?>
             <div class="dokan-message">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                 <strong><?php _e( 'Coupon has been deleted successfully!', 'dokan' ); ?></strong>
             </div>
             <?php
@@ -160,7 +160,7 @@ class Dokan_Template_Coupons{
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'coupon_saved' ) {
             ?>
             <div class="dokan-message">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                 <strong><?php _e('Coupon has been saved successfully!','dokan'); ?></strong>
             </div>
             <?php
@@ -169,7 +169,7 @@ class Dokan_Template_Coupons{
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'coupon_update' ) {
             ?>
             <div class="dokan-message">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                 <strong><?php _e('Coupon has been updated successfully!','dokan'); ?></strong>
             </div>
             <?php
@@ -235,7 +235,7 @@ class Dokan_Template_Coupons{
                 ?>
                 <tr>
                     <td class="coupon-code">
-                        <?php $edit_url =  wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'edit', 'view' => 'add_coupons'), get_permalink() ), '_coupon_nonce', 'coupon_nonce_url' ); ?>
+                        <?php $edit_url =  wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'edit', 'view' => 'add_coupons'), dokan_get_navigation_url( 'coupons' ) ), '_coupon_nonce', 'coupon_nonce_url' ); ?>
                         <div class="code">
                             <a href="<?php echo $edit_url; ?>"><span><?php echo esc_attr( $post->post_title ); ?></span></a>
                         </div>

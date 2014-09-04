@@ -124,22 +124,22 @@ function dokan_delete_product_handler() {
         $product_id = isset( $_GET['product_id'] ) ? intval( $_GET['product_id'] ) : 0;
 
         if ( !$product_id ) {
-            wp_redirect( add_query_arg( array( 'message' => 'error' ), get_permalink() ) );
+            wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
             return;
         }
 
         if ( !wp_verify_nonce( $_GET['_wpnonce'], 'dokan-delete-product' ) ) {
-            wp_redirect( add_query_arg( array( 'message' => 'error' ), get_permalink() ) );
+            wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
             return;
         }
 
         if ( !dokan_is_product_author( $product_id ) ) {
-            wp_redirect( add_query_arg( array( 'message' => 'error' ), get_permalink() ) );
+            wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
             return;
         }
 
         wp_delete_post( $product_id );
-        wp_redirect( add_query_arg( array( 'message' => 'product_deleted' ), get_permalink() ) );
+        wp_redirect( add_query_arg( array( 'message' => 'product_deleted' ), dokan_get_navigation_url( 'products' ) ) );
         exit;
     }
 }
@@ -1210,7 +1210,7 @@ function dokan_get_template_part( $slug, $name = '' ) {
     }
 
     // Allow 3rd party plugin filter template file from their plugin
-    $template = apply_filters( 'ah_get_template_part', $template, $slug, $name );
+    $template = apply_filters( 'dokan_get_template_part', $template, $slug, $name );
 
     if ( $template ) {
         load_template( $template, false );
@@ -1219,10 +1219,16 @@ function dokan_get_template_part( $slug, $name = '' ) {
 
 
 function dokan_get_navigation_url( $name = '' ) {
+    $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
+        
+    if( !$page_id ) {
+        return;
+    }
+
     if( !empty( $name ) ) {
-        $url = get_permalink() . $name;
+        $url = get_permalink( $page_id ) . $name.'/';
     } else {
-        $url = get_permalink();
+        $url = get_permalink( $page_id );
     }
 
     return apply_filters( 'dokan_get_navigation_url', $url );

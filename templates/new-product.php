@@ -3,68 +3,13 @@
  * Template Name: New Product
  */
 
-dokan_redirect_login();
-dokan_redirect_if_not_seller();
+// dokan_redirect_login();
+// dokan_redirect_if_not_seller();
 
-$errors = array();
-$product_cat = -1;
-$post_content = __( 'Details about your product...', 'dokan' );
+// $errors = array();
+// $product_cat = -1;
+// $post_content = __( 'Details about your product...', 'dokan' );
 
-if ( isset( $_POST['add_product'] ) ) {
-    $post_title = trim( $_POST['post_title'] );
-    $post_content = trim( $_POST['post_content'] );
-    $post_excerpt = trim( $_POST['post_excerpt'] );
-    $price = floatval( $_POST['price'] );
-    $product_cat = intval( $_POST['product_cat'] );
-    $featured_image = absint( $_POST['feat_image_id'] );
-
-    if ( empty( $post_title ) ) {
-        $errors[] = __( 'Please enter product title', 'dokan' );
-    }
-
-    if ( $product_cat < 0 ) {
-        $errors[] = __( 'Please select a category', 'dokan' );
-    }
-
-    $errors = apply_filters( 'dokan_can_add_product', $errors );
-
-    if ( !$errors ) {
-
-        $product_status = dokan_get_new_post_status();
-        $post_data = array(
-            'post_type' => 'product',
-            'post_status' => $product_status,
-            'post_title' => $post_title,
-            'post_content' => $post_content,
-            'post_excerpt' => $post_excerpt,
-        );
-
-        $product_id = wp_insert_post( $post_data );
-
-        if ( $product_id ) {
-
-            /** set images **/
-            if ( $featured_image ) {
-                set_post_thumbnail( $product_id, $featured_image );
-            }
-
-            /** set product category * */
-            wp_set_object_terms( $product_id, (int) $_POST['product_cat'], 'product_cat' );
-            wp_set_object_terms( $product_id, 'simple', 'product_type' );
-
-            update_post_meta( $product_id, '_regular_price', $price );
-            update_post_meta( $product_id, '_sale_price', '' );
-            update_post_meta( $product_id, '_price', $price );
-            update_post_meta( $product_id, '_visibility', 'visible' );
-
-            do_action( 'dokan_new_product_added', $product_id, $post_data );
-
-            Dokan_Email::init()->new_product_added( $product_id, $product_status );
-
-            wp_redirect( dokan_edit_product_url( $product_id ) );
-        }
-    }
-}
 
 // get_header();
 
@@ -73,14 +18,14 @@ if ( isset( $_POST['add_product'] ) ) {
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
 
-<div id="primary" class="content-area col-md-9 col-sm-9">
-    <div id="content" class="site-content" role="main">
-
-        <?php if ( $errors ) { ?>
-            <div class="alert alert-danger">
+<div class="dokan-dashboard-content">
+    
+    <div class="dokan-new-product-area">
+        <?php if ( Dokan_Template_Shortcodes::$errors ) { ?>
+            <div class="dokan-dashboard-contentdokan-alert dokan-alert-danger">
                 <a class="close" data-dismiss="alert">&times;</a>
 
-                <?php foreach ($errors as $error) { ?>
+                <?php foreach ( Dokan_Template_Shortcodes::$errors as $error) { ?>
 
                     <strong>Error!</strong> <?php echo $error ?>.<br>
 
@@ -98,8 +43,8 @@ if ( isset( $_POST['add_product'] ) ) {
 
             <form class="form" method="post">
 
-                <div class="row product-edit-container">
-                    <div class="col-md-4">
+                <div class="row product-edit-container dokan-clearfix">
+                    <div class="content-half-part">
                         <div class="dokan-feat-image-upload">
                             <div class="instruction-inside">
                                 <input type="hidden" name="feat_image_id" class="dokan-feat-image-id" value="0">
@@ -113,12 +58,12 @@ if ( isset( $_POST['add_product'] ) ) {
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
+                    <div class="content-half-part">
+                        <div class="dokan-form-group">
                             <input class="form-control" name="post_title" id="post-title" type="text" placeholder="<?php esc_attr_e( 'Product name..', 'dokan' ); ?>" value="<?php echo dokan_posted_input( 'post_title' ); ?>">
                         </div>
 
-                        <div class="form-group">
+                        <div class="dokan-form-group">
                             <div class="input-group">
                                 <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                 <input class="form-control" name="price" id="product-price" type="text" placeholder="9.99" value="<?php echo dokan_posted_input( 'price' ); ?>">
@@ -141,7 +86,7 @@ if ( isset( $_POST['add_product'] ) ) {
                             'title_li' => '',
                             'class' => 'product_cat form-control',
                             'exclude' => '',
-                            'selected' => $product_cat,
+                            'selected' => Dokan_Template_Shortcodes::$product_cat,
                         ) );
                         ?>
                         </div>
@@ -150,7 +95,7 @@ if ( isset( $_POST['add_product'] ) ) {
 
                 <!-- <textarea name="post_content" id="" cols="30" rows="10" class="span7" placeholder="Describe your product..."><?php echo dokan_posted_textarea( 'post_content' ); ?></textarea> -->
                 <div class="form-group">
-                    <?php wp_editor( $post_content, 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
+                    <?php wp_editor( Dokan_Template_Shortcodes::$post_content, 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
                 </div>
 
                 <?php do_action( 'dokan_new_product_form' ); ?>
@@ -172,7 +117,5 @@ if ( isset( $_POST['add_product'] ) ) {
             <?php do_action( 'dokan_can_post_notice' ); ?>
 
         <?php } ?>
-    </div><!-- #content .site-content -->
-</div><!-- #primary .content-area -->
-
-<?php //get_footer(); ?>
+    </div><!-- .dokan-new-product-area -->
+</div><!-- .dokan-dashboard-content -->

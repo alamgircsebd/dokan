@@ -216,11 +216,18 @@ class Dokan_Template_reviews {
             'prev_text' => __( '&laquo;', 'aag' ),
             'next_text' => __( '&raquo;', 'aag' ),
             'total' => $num_of_pages,
+            'type' => 'array',
             'current' => $pagenum
         ) );
 
         if ( $page_links ) {
-            return '<div class="pagination">' . $page_links . '</div>';
+            $pagination_links  = '<div class="pagination-wrap">';
+            $pagination_links .= '<ul class="pagination"><li>';
+            $pagination_links .= join("</li>\n\t<li>", $page_links);
+            $pagination_links .= "</li>\n</ul>\n";
+            $pagination_links .= '</div>';
+            
+            return $pagination_links;
         }
     }
 
@@ -365,9 +372,6 @@ class Dokan_Template_reviews {
 
         $pagenum = max( 1, $page_number );
         $offset = ( $pagenum - 1 ) * $limit;
-
-        var_dump( $pagenum );
-        var_dump( $offset );
 
         if ( $status == '1' ) {
             $query = "c.comment_approved IN ('1','0') AND";

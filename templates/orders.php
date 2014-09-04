@@ -12,13 +12,13 @@
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'order' ) ); ?>
 
-<div id="primary" class="content-area col-md-10 col-sm-9">
+<div id="primary" class="content-area dokan-dashboard-content dokan-orders-content">
     <div id="content" class="site-content" role="main">
 
-            <article>
+            <article class="dokan-orders-area">
 
                 <?php if ( isset( $_GET['order_id'] ) ) { ?>
-                    <a href="<?php echo dokan_get_navigation_url( 'orders' ) ; ?>" class="btn btn-default btn-sm"><?php _e( '&larr; Orders', 'dokan' ); ?></a>
+                    <a href="<?php echo dokan_get_navigation_url( 'orders' ) ; ?>" class="dokan-btn"><?php _e( '&larr; Orders', 'dokan' ); ?></a>
                 <?php } else {
                     dokan_order_listing_status_filter();
                 } ?>

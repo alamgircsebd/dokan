@@ -164,7 +164,7 @@ class Dokan_Template_Withdraw {
 
             $this->update_status( $row_id, $current_user->ID, 2 );
 
-            wp_redirect( add_query_arg( array( 'message' => 'request_cancelled' ), get_permalink() ) );
+            wp_redirect( add_query_arg( array( 'message' => 'request_cancelled' ), dokan_get_navigation_url( 'withdraw' ) ) );
         }
     }
 
@@ -254,7 +254,7 @@ class Dokan_Template_Withdraw {
         $update = $this->insert_withdraw( $data_info );
         Dokan_Email::init()->new_withdraw_request( $current_user, $amount, $method );
 
-        wp_redirect( add_query_arg( array( 'message' => 'request_success' ), get_permalink() ) );
+        wp_redirect( add_query_arg( array( 'message' => 'request_success' ), dokan_get_navigation_url( 'withdraw' ) ) );
     }
 
     function has_pending_request( $user_id ) {
@@ -636,7 +636,7 @@ class Dokan_Template_Withdraw {
                             $url = add_query_arg( array(
                                 'action' => 'dokan_cancel_withdrow',
                                 'id' => $request->id
-                            ), get_permalink() );
+                            ), dokan_get_navigation_url( 'withdraw' ) );
                             ?>
                             <a href="<?php echo wp_nonce_url( $url, 'dokan_cancel_withdrow' ); ?>">
                                 <?php _e( 'Cancel', 'dokan' ); ?>
@@ -670,8 +670,8 @@ class Dokan_Template_Withdraw {
         switch ($type) {
             case 'request_cancelled':
                 ?>
-                <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <div class="dokan-alert dokan-alert-success">
+                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                     <strong><p><?php _e( 'Your request has been cancelled successfully!', 'dokan' ); ?></p></strong>
                 </div>
                 <?php
@@ -679,16 +679,16 @@ class Dokan_Template_Withdraw {
 
             case 'request_success':
                 ?>
-                <div class="alert alert-success">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <div class="dokan-alert dokan-alert-success">
+                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                     <strong><?php _e( 'Your request has been received successfully and is under review!', 'dokan' ); ?></strong>
                 </div>
                 <?php
                 break;
             case 'request_error':
                 ?>
-                <div class="alert alert-danger">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <div class="dokan-alert dokan-alert-danger">
+                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                     <strong><?php _e( 'Unknown error!', 'dokan' ); ?></strong>
                 </div>
                 <?php
@@ -704,7 +704,7 @@ class Dokan_Template_Withdraw {
 
         if ( $this->has_pending_request( $current_user->ID ) ) {
             ?>
-            <div class="alert alert-warning">
+            <div class="dokan-alert dokan-alert-warning">
                 <p><strong><?php _e( 'You\'ve already pending withdraw request(s).', 'dokan' ); ?></strong></p>
                 <p><?php _e( 'Until it\'s been cancelled or approved, you can\'t submit any new request.', 'dokan' ) ?></p>
             </div>
@@ -715,7 +715,7 @@ class Dokan_Template_Withdraw {
 
         } else if ( !$this->has_withdraw_balance( $current_user->ID ) ) {
 
-            printf( '<div class="alert alert-danger">%s</div>', __( 'You don\'t have sufficient balance for a withdraw request!', 'dokan' ) );
+            printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', __( 'You don\'t have sufficient balance for a withdraw request!', 'dokan' ) );
             return;
         }
 
@@ -729,8 +729,8 @@ class Dokan_Template_Withdraw {
             $withdraw_method = '';
         }
         ?>
-        <div class="alert alert-danger" style="display: none;">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div class="dokan-alert dokan-alert-danger" style="display: none;">
+            <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
             <strong class="jquery_error_place"></strong>
         </div>
 
@@ -804,7 +804,7 @@ class Dokan_Template_Withdraw {
             </table>
 
         <?php } else { ?>
-            <div class="alert alert-warning">
+            <div class="dokan-alert dokan-alert-warning">
                 <strong><?php _e( 'Err!', 'dokan' ); ?></strong> <?php _e( 'Sorry, no transactions found!', 'dokan' ); ?>
             </div>
             <?php

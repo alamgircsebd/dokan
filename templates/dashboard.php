@@ -25,8 +25,7 @@ $reviews_url = dokan_get_navigation_url( 'reviews' );
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'dashboard' ) ); ?>
 
-<div id="primary" class="content-area dokan-dashboard-content">
-    <div id="content" class="site-content" role="main">
+<div class="dokan-dashboard-content">
 
             <?php
             if ( !dokan_is_seller_enabled( $user_id ) ) {
@@ -191,10 +190,6 @@ $reviews_url = dokan_get_navigation_url( 'reviews' );
 
                 </div>
             </article>
-
-        
-
-    </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
 
 <script type="text/javascript">

@@ -1,23 +1,21 @@
 <?php
 
-dokan_delete_product_handler();
 //get_header();
 ?>
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
 
-<div id="primary" class="content-area col-md-10 col-sm-9">
-    <div id="content" class="site-content" role="main">
-
+<div class="dokan-dashboard-content dokan-product-listing">
+    
         <?php do_action( 'dokan_before_listing_product' ); ?>
 
-            <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+            <article class="dokan-product-listing-area">
 
-                <div class="product-listing-top clearfix">
+                <div class="product-listing-top dokan-clearfix">
                     <?php dokan_product_listing_status_filter(); ?>
 
-                    <span class="col-md-3">
-                        <a href="<?php echo dokan_get_navigation_url( 'new-product' ); ?>" class="btn btn-large btn-theme pull-right"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add new product', 'dokan' ); ?></a>
+                    <span class="dokan-add-product-link">
+                        <a href="<?php echo dokan_get_navigation_url( 'new-product' ); ?>" class="dokan-btn dokan-btn-lg dokan-btn-theme dokan-right"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add new product', 'dokan' ); ?></a>
                     </span>
                 </div>
 
@@ -42,13 +40,13 @@ dokan_delete_product_handler();
                         $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
                         $post_statuses = array('publish', 'draft', 'pending');
                         $args = array(
-                            'post_type' => 'product',
-                            'post_status' => $post_statuses,
+                            'post_type'      => 'product',
+                            'post_status'    => $post_statuses,
                             'posts_per_page' => 10,
-                            'author' => get_current_user_id(),
-                            'orderby' => 'post_date',
-                            'order' => 'DESC',
-                            'paged' => $paged
+                            'author'         => get_current_user_id(),
+                            'orderby'        => 'post_date',
+                            'order'          => 'DESC',
+                            'paged'          => $paged
                         );
 
                         if ( isset( $_GET['post_status']) && in_array( $_GET['post_status'], $post_statuses ) ) {
@@ -74,12 +72,12 @@ dokan_delete_product_handler();
 
                                         <div class="row-actions">
                                             <span class="edit"><a href="<?php echo dokan_edit_product_url( $post->ID ); ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
-                                            <span class="delete"><a onclick="return confirm('Are you sure?');" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-delete-product', 'product_id' => $post->ID ), get_permalink( $original_post->ID ) ), 'dokan-delete-product' ); ?>"><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
-                                            <span class="view"><a href="<?php echo get_permalink( $post->ID ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
+                                            <span class="delete"><a onclick="return confirm('Are you sure?');" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-delete-product', 'product_id' => $post->ID ), dokan_get_navigation_url('products') ), 'dokan-delete-product' ); ?>"><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                            <span class="view"><a href="<?php echo get_permalink( $product->ID ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                         </div>
                                     </td>
                                     <td class="post-status">
-                                        <label class="label <?php echo $post->post_status; ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></label>
+                                        <label class="dokan-label <?php echo $post->post_status; ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></label>
                                     </td>
                                     <td>
                                         <?php
@@ -210,8 +208,6 @@ dokan_delete_product_handler();
             </article>
 
         <?php do_action( 'dokan_after_listing_product' ); ?>
-
-    </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
 
 <?php get_footer(); ?>

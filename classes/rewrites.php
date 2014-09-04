@@ -136,7 +136,6 @@ class Dokan_Rewrites {
     function product_edit_template( $template ) {
 
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
-
             return dokan_get_template_part( 'product-edit' );
         }
 

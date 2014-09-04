@@ -4,12 +4,11 @@ global $woocommerce, $current_user, $wpdb;
 $order_id = isset( $_GET['order_id'] ) ? intval( $_GET['order_id'] ) : 0;
 
 if ( !dokan_is_seller_has_order( $current_user->ID, $order_id ) ) {
-    echo '<div class="alert alert-danger">' . __( 'This is not yours, I swear!', 'dokan' ) . '</div>';
+    echo '<div class="dokan-alert dokan-alert-danger">' . __( 'This is not yours, I swear!', 'dokan' ) . '</div>';
     return;
 }
 
 $order = new WC_Order( $order_id );
-//var_dump($order);
 ?>
 <div class="row">
     <div class="col-md-8">
@@ -286,7 +285,5 @@ $order = new WC_Order( $order_id );
                 </div> <!-- .panel -->
             </div>
         </div> <!-- .row -->
-
     </div> <!-- .col-md-4 -->
-
 </div>

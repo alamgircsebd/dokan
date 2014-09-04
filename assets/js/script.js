@@ -317,14 +317,14 @@ jQuery(function($) {
                 if ( resp.success ) {
 
                     $('.dokan-ajax-response').html( $('<div/>', {
-                        'class': 'alert alert-success',
+                        'class': 'dokan-alert dokan-alert-success',
                         'html': '<p>' + resp.data + '</p>'
                     }) );
 
                 } else {
 
                     $('.dokan-ajax-response').html( $('<div/>', {
-                        'class': 'alert alert-danger',
+                        'class': 'dokan-alert dokan-alert-danger',
                         'html': '<p>' + resp.data + '</p>'
                     }) );
                 }

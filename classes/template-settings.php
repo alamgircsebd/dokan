@@ -142,8 +142,8 @@ class Dokan_Template_Settings{
 
         if ( isset($_GET['message'])) {
             ?>
-            <div class="alert alert-success">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <div class="dokan-alert dokan-alert-success">
+                <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
                 <strong><?php _e('Your profile has been updated successfully!','dokan'); ?></strong>
             </div>
             <?php
@@ -207,7 +207,7 @@ class Dokan_Template_Settings{
                     <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
                         <i class="fa fa-cloud-upload"></i>
 
-                        <a href="#" class="dokan-banner-drag btn btn-info"><?php _e( 'Upload banner', 'dokan' ); ?></a>
+                        <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info"><?php _e( 'Upload banner', 'dokan' ); ?></a>
                         <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixel. )', 'dokan' ); ?></p>
                     </div>
                 </div> <!-- .dokan-banner -->
@@ -234,7 +234,7 @@ class Dokan_Template_Settings{
                         <div class="gravatar-button-area<?php echo $gravatar ? ' dokan-hide' : ''; ?>">
                             <i class="fa fa-cloud-upload"></i>
 
-                            <a href="#" class="dokan-gravatar-drag btn btn-info"><?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                            <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-info"><?php _e( 'Upload Photo', 'dokan' ); ?></a>
                         </div>
                     </div>
                 </div>
@@ -297,7 +297,7 @@ class Dokan_Template_Settings{
 
                         <?php $methods = dokan_withdraw_get_active_methods(); ?>
 
-                        <ul class="nav nav-tabs" style="margin-bottom: 10px;">
+                        <ul class="dokan_tabs" style="margin-bottom: 10px;">
                             <?php
                             $count = 0;
                             foreach ($methods as $method_key) {

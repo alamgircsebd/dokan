@@ -195,6 +195,7 @@ class WeDevs_Dokan {
         // Localize our plugin
         add_action( 'admin_init', array( $this, 'load_table_prifix' ) );
         add_action( 'init', array( $this, 'localization_setup' ) );
+        // add_action( 'init', array( $this, 'handle_all_submit' ), 11 );
 
 
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
@@ -225,9 +226,10 @@ class WeDevs_Dokan {
         wp_register_style( 'chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
         wp_register_style( 'bootstrap', plugins_url( 'assets/css/bootstrap.css', __FILE__ ), false, null );
         wp_register_style( 'icomoon', plugins_url( 'assets/css/icomoon.css', __FILE__ ), false, null );
-        wp_register_style( 'fontawesome', plugins_url( 'assets/css/font-awesome.min.css', __FILE__ ), false, null );
+        wp_register_style( 'fontawesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css', false, null );
         wp_register_style( 'dokan-skin', plugins_url( 'assets/css/skins/' . $skin, __FILE__ ), false, null );
         wp_register_style( 'dokan-opensans', $protocol . '://fonts.googleapis.com/css?family=Open+Sans:400,700' );
+        wp_register_style( 'dokan-tabs', plugins_url( 'assets/css/tabulous.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
 
         // register scripts
@@ -238,19 +240,35 @@ class WeDevs_Dokan {
         wp_register_script( 'jquery-chart', plugins_url( 'assets/js/Chart.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-product-editor', plugins_url( 'assets/js/product-editor.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-order', plugins_url( 'assets/js/orders.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-tabs-scripts', plugins_url( 'assets/js/jquery.easytabs.min.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-hashchange-scripts', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), false, null, true );
+        // wp_register_script( 'dokan-hashchange-scripts', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'reviews', plugins_url( 'assets/js/reviews.js', __FILE__ ), array( 'jquery' ), null, true );
 
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
         
+        wp_enqueue_script( 'dokan-tabs-scripts' );
+        
         if( !$page_id ) {
             return;
+        }
+
+
+        if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
+            wp_enqueue_style( 'icomoon' );
+            wp_enqueue_style( 'fontawesome' );
+            // wp_enqueue_style( 'dokan-tabs' );
+            wp_enqueue_style( 'dokan-style' );
+            //dokan_reports_scripts();
+            dokan_frontend_dashboard_scripts();            
         }
 
         if( is_page($page_id ) ) {
 
             wp_enqueue_style( 'icomoon' );
             wp_enqueue_style( 'fontawesome' );
+            // wp_enqueue_style( 'dokan-tabs' );
             wp_enqueue_style( 'dokan-style' );
             dokan_reports_scripts();
             dokan_frontend_dashboard_scripts();
@@ -474,7 +492,7 @@ class WeDevs_Dokan {
             return;
         }
 
-        if( is_page( $page_id ) ) {
+        if( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
             $classes[] = 'page-template-templatesdashboard-php';
         }
 

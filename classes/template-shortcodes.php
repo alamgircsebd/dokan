@@ -7,7 +7,15 @@
 */		
 class Dokan_Template_Shortcodes {
 	
+	public static $errors;
+	public static $product_cat; 
+	public static $post_content;
+	public static $validated;
+	public static $validate;
+
 	function __construct() {
+
+		add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
 		add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
 	}
 
@@ -59,6 +67,93 @@ class Dokan_Template_Shortcodes {
 
 
 	    return dokan_get_template_part( 'dashboard' );
+    }
+
+    function handle_all_submit() {
+    	$errors = array();
+        self::$product_cat = -1;
+        self::$post_content = __( 'Details about your product...', 'dokan' );
+
+        if ( isset( $_POST['add_product'] ) ) {
+            $post_title = trim( $_POST['post_title'] );
+            $post_content = trim( $_POST['post_content'] );
+            $post_excerpt = trim( $_POST['post_excerpt'] );
+            $price = floatval( $_POST['price'] );
+            $product_cat = intval( $_POST['product_cat'] );
+            $featured_image = absint( $_POST['feat_image_id'] );
+
+            if ( empty( $post_title ) ) {
+                $errors[] = __( 'Please enter product title', 'dokan' );
+            }
+
+            if ( $product_cat < 0 ) {
+                $errors[] = __( 'Please select a category', 'dokan' );
+            }
+
+            self::$errors = apply_filters( 'dokan_can_add_product', $errors );
+
+            if ( !self::$errors ) {
+
+                $product_status = dokan_get_new_post_status();
+                $post_data = array(
+                    'post_type' => 'product',
+                    'post_status' => $product_status,
+                    'post_title' => $post_title,
+                    'post_content' => $post_content,
+                    'post_excerpt' => $post_excerpt,
+                );
+
+                $product_id = wp_insert_post( $post_data );
+
+                if ( $product_id ) {
+
+                    /** set images **/
+                    if ( $featured_image ) {
+                        set_post_thumbnail( $product_id, $featured_image );
+                    }
+
+                    /** set product category * */
+                    wp_set_object_terms( $product_id, (int) $_POST['product_cat'], 'product_cat' );
+                    wp_set_object_terms( $product_id, 'simple', 'product_type' );
+
+                    update_post_meta( $product_id, '_regular_price', $price );
+                    update_post_meta( $product_id, '_sale_price', '' );
+                    update_post_meta( $product_id, '_price', $price );
+                    update_post_meta( $product_id, '_visibility', 'visible' );
+
+                    do_action( 'dokan_new_product_added', $product_id, $post_data );
+
+                    Dokan_Email::init()->new_product_added( $product_id, $product_status );
+
+                    wp_redirect( dokan_edit_product_url( $product_id ) );
+                }
+            }
+        }
+
+
+		dokan_delete_product_handler();
+
+		// Coupon functionality
+		$dokan_template_coupons = Dokan_Template_Coupons::init();
+
+		self::$validated = $dokan_template_coupons->validate();
+
+		if ( !is_wp_error( self::$validated ) ) {
+		    $dokan_template_coupons->coupons_create();
+		}
+
+		$dokan_template_coupons->coupun_delete();
+
+		// Withdraw functionality
+		$dokan_withdraw = Dokan_Template_Withdraw::init();
+		self::$validate = $dokan_withdraw->validate();
+
+		if( self::$validate !== false && !is_wp_error( self::$validate ) ) {
+		    $dokan_withdraw->insert_withdraw_info();
+		}
+
+		$dokan_withdraw->cancel_pending();
+
     }
 
 }
