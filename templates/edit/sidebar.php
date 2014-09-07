@@ -8,11 +8,11 @@
     <div class="dokan-post-status dokan-toggle-sidebar">
         <label for="post_status"><?php _e( 'Product Status:', 'dokan' ); ?></label>
 
-        <?php $pending_class = $post->post_status == 'pending' ? '  label label-warning': ''; ?>
+        <?php $pending_class = $post->post_status == 'pending' ? '  dokan-label dokan-label-warning': ''; ?>
         <span class="dokan-toggle-selected-display<?php echo $pending_class; ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></span>
 
         <?php if ( $post->post_status != 'pending' ) { ?>
-            <a class="dokan-toggle-edit label label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
+            <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
 
             <div class="dokan-toggle-select-container dokan-hide">
 
@@ -55,7 +55,7 @@
         ?>
 
         <span class="dokan-toggle-selected-display"><?php echo dokan_get_product_status( $product_type ); ?></span>
-        <a class="dokan-toggle-edit label label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
+        <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
 
             <div class="dokan-toggle-select-container dokan-hide">
                 <select name="_product_type" id="_product_type" class="dokan-toggle-select">
