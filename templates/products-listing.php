@@ -209,5 +209,3 @@
 
         <?php do_action( 'dokan_after_listing_product' ); ?>
 </div><!-- #primary .content-area -->
-
-<?php get_footer(); ?>

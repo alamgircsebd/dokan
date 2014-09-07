@@ -21,34 +21,6 @@ if ( $post->post_author != $seller_id ) {
     wp_die( __( 'Access Denied', 'dokan' ) );
 }
 
-if ( isset( $_POST['update_product']) ) {
-    $product_info = array(
-        'ID' => $post_id,
-        'post_title' => sanitize_text_field( $_POST['post_title'] ),
-        'post_content' => $_POST['post_content'],
-        'post_excerpt' => $_POST['post_excerpt'],
-        'post_status' => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
-        'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
-    );
-
-    wp_update_post( $product_info );
-
-    /** set product category * */
-    wp_set_object_terms( $post_id, (int) $_POST['product_cat'], 'product_cat' );
-    wp_set_object_terms( $post_id, 'simple', 'product_type' );
-
-    dokan_process_product_meta( $post_id );
-
-    /** set images **/
-    $featured_image = absint( $_POST['feat_image_id'] );
-    if ( $featured_image ) {
-        set_post_thumbnail( $post_id, $featured_image );
-    }
-
-    $edit_url = dokan_edit_product_url( $post_id );
-    wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
-}
-
 $_regular_price = get_post_meta( $post_id, '_regular_price', true );
 $_sale_price = get_post_meta( $post_id, '_sale_price', true );
 $is_discount = !empty( $_sale_price ) ? true : false;
@@ -81,7 +53,7 @@ get_header();
 <div class="dokan-dashboard-content dokan-product-edit">
     <div class="dokan-product-edit-area">
 
-        <form class="form" role="form" method="post">
+        <form class="dokan-form-container" role="form" method="post">
 
             <div class="product-edit-container dokan-clearfix">
 
@@ -194,21 +166,21 @@ get_header();
 
                                     <div class="content-half-part">
 
-                                        <div class="form-group">
+                                        <div class="dokan-form-group">
                                             <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>">
                                             <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => 'Product name..', 'value' => $post->post_title ) ); ?>
                                         </div>
 
-                                        <div class="row show_if_simple">
-                                            <div class="form-group col-md-6">
-                                                <div class="input-group">
-                                                    <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                                        <div class="row show_if_simple dokan-clearfix">
+                                            <div class="dokan-form-group dokan-left" style="width:37%">
+                                                <div class="dokan-input-group">
+                                                    <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                     <?php dokan_post_input_box( $post_id, '_regular_price', array( 'placeholder' => '9.99' ) ); ?>
                                                 </div>
                                             </div>
 
 
-                                            <span class="pull-right">
+                                            <span class="dokan-right">
                                                 <label>
                                                     <input type="checkbox" <?php checked( $is_discount, true ); ?> class="_discounted_price"> <?php _e( 'Discounted Price', 'dokan' ); ?>
                                                 </label>
@@ -217,31 +189,31 @@ get_header();
 
                                         <div class="show_if_simple">
                                             <div class="special-price-container<?php echo $is_discount ? '' : ' dokan-hide'; ?>">
-                                                <div class="row form-group">
-                                                    <div class="input-group col-md-6">
-                                                        <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                                                <div class="row dokan-form-group dokan-clearfix">
+                                                    <div class="dokan-input-group dokan-left" style="width:55%">
+                                                        <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                         <?php dokan_post_input_box( $post_id, '_sale_price', array( 'placeholder' => __( 'Special Price', 'dokan' ) ) ); ?>
                                                     </div>
 
-                                                    <div class="col-md-6">
-                                                        <a href="#" class="sale-schedule pull-right"><?php _e( 'Schedule', 'dokan' ); ?></a>
+                                                    <div class="dokan-right">
+                                                        <a href="#" class="sale-schedule dokan-right"><?php _e( 'Schedule', 'dokan' ); ?></a>
                                                     </div>
                                                 </div>
 
                                                 <div class="row sale-schedule-container<?php echo $show_schedule ? '' : ' dokan-hide'; ?>">
                                                     <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon"><?php _e( 'From', 'dokan' ); ?></span>
-                                                                <input type="text" name="_sale_price_dates_from" class="form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
+                                                        <div class="dokan-form-group">
+                                                            <div class="dokan-input-group">
+                                                                <span class="dokan-input-group-addon"><?php _e( 'From', 'dokan' ); ?></span>
+                                                                <input type="text" name="_sale_price_dates_from" class="dokan-form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon"><?php _e( 'To', 'dokan' ); ?></span>
-                                                                <input type="text" name="_sale_price_dates_to" class="form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
+                                                        <div class="dokan-form-group">
+                                                            <div class="dokan-input-group">
+                                                                <span class="dokan-input-group-addon"><?php _e( 'To', 'dokan' ); ?></span>
+                                                                <input type="text" name="_sale_price_dates_to" class="dokan-form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -251,11 +223,11 @@ get_header();
 
 
 
-                                        <div class="form-group">
+                                        <div class="dokan-form-group">
                                             <?php dokan_post_input_box( $post_id, 'post_excerpt', array( 'placeholder' => 'Short description about the product...', 'value' => $post->post_excerpt ), 'textarea' ); ?>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="dokan-form-group">
                                             <?php
                                             $product_cat = -1;
                                             $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
@@ -271,7 +243,7 @@ get_header();
                                                 'id' => 'product_cat',
                                                 'taxonomy' => 'product_cat',
                                                 'title_li' => '',
-                                                'class' => 'product_cat form-control chosen',
+                                                'class' => 'product_cat dokan-form-control chosen',
                                                 'exclude' => '',
                                                 'selected' => $product_cat,
                                             ) );
@@ -281,7 +253,7 @@ get_header();
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div>
                                         <?php wp_editor( esc_textarea( $post->post_content ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
                                     </div>
                                 </div>

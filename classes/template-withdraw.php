@@ -735,29 +735,29 @@ class Dokan_Template_Withdraw {
         </div>
 
         <span class="ajax_table_shown"></span>
-        <form class="form-horizontal withdraw" role="form" method="post">
-            <div class="form-group">
+        <form class="dokan-form-horizontal withdraw" role="form" method="post">
+            <div class="dokan-form-group">
 
-                <label for="withdraw-amount" class="col-sm-3 control-label">
+                <label for="withdraw-amount" class="dokan-w3 dokan-control-label">
                     <?php _e( 'Withdraw Amount', 'dokan' ); ?>
                 </label>
 
-                <div class="col-sm-3 ">
-                    <div class="input-group">
-                        <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                        <input name="witdraw_amount" required number min="<?php echo esc_attr( dokan_get_option( 'withdraw_limit', 'dokan_selling', 50 ) ); ?>" class="form-control" id="withdraw-amount" name="price" type="number" placeholder="9.99" value="<?php echo $amount; ?>"  >
+                <div class="dokan-w5 dokan-text-left">
+                    <div class="dokan-input-group">
+                        <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                        <input name="witdraw_amount" required number min="<?php echo esc_attr( dokan_get_option( 'withdraw_limit', 'dokan_selling', 50 ) ); ?>" class="dokan-form-control" id="withdraw-amount" name="price" type="number" placeholder="9.99" value="<?php echo $amount; ?>"  >
                     </div>
 
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="withdraw-method" class="col-sm-3 control-label">
+            <div class="dokan-form-group">
+                <label for="withdraw-method" class="dokan-w3 dokan-control-label">
                     <?php _e( 'Payment Method', 'dokan' ); ?>
                 </label>
 
-                <div class="col-sm-3">
-                    <select class="form-control" required name="withdraw_method" id="withdraw-method">
+                <div class="dokan-w5 dokan-text-left">
+                    <select class="dokan-form-control" required name="withdraw_method" id="withdraw-method">
                         <?php foreach ($payment_methods as $method_name) { ?>
                             <option <?php selected( $withdraw_method, $method_name );  ?>value="<?php echo esc_attr( $method_name ); ?>"><?php echo dokan_withdraw_get_method_title( $method_name ); ?></option>
                         <?php } ?>
@@ -765,8 +765,8 @@ class Dokan_Template_Withdraw {
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="col-sm-offset-3 col-sm-10 ajax_prev" style="width: 200px;">
+            <div class="dokan-form-group">
+                <div class="dokan-w3 ajax_prev" style="margin-left:23%; width: 200px;">
                     <?php wp_nonce_field( 'dokan_withdraw', 'dokan_withdraw_nonce' ); ?>
                     <input type="submit" class="btn btn-primary" value="<?php esc_attr_e( 'Submit Request', 'dokan' ); ?>" name="withdraw_submit">
                 </div>

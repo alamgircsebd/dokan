@@ -1,8 +1,8 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 ?>
-<div class="panel panel-default">
-	<div class="panel-heading">
+<div class="dokan-panel dokan-panel-default">
+	<div class="dokan-panel-heading">
 		<a class="title" data-toggle="collapse" data-parent="#accordion" href="#collapse-<?php echo $product->id; ?>">
 			<?php echo '#' . absint( $product->id ) . ' &mdash; ' . apply_filters( 'woocommerce_admin_download_permissions_title', $product->get_title(), $download->product_id, $download->order_id, $download->order_key, $download->download_id ) . ' &mdash; ' . sprintf( __( 'File %d: %s', 'woocommerce' ), $file_count, woocommerce_get_filename_from_url( $product->get_file_download_path( $download->download_id ) ) ); ?>
 		</a>

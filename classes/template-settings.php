@@ -190,7 +190,7 @@ class Dokan_Template_Settings{
 
             <div class="dokan-ajax-response"></div>
 
-            <form method="post" id="settings-form"  action="" class="form-horizontal">
+            <form method="post" id="settings-form"  action="" class="dokan-form-horizontal">
 
                 <?php wp_nonce_field( 'dokan_settings_nonce' ); ?>
 
@@ -213,23 +213,23 @@ class Dokan_Template_Settings{
                 </div> <!-- .dokan-banner -->
 
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
 
-                    <div class="col-md-5">
-                        <input id="dokan_store_name" required value="<?php echo $storename; ?>" name="dokan_store_name" placeholder="store name" class="form-control input-md" type="text">
+                    <div class="dokan-w5 dokan-text-left">
+                        <input id="dokan_store_name" required value="<?php echo $storename; ?>" name="dokan_store_name" placeholder="store name" class="dokan-form-control" type="text">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
 
-                    <div class="col-md-5 dokan-gravatar">
-                        <div class="pull-left gravatar-wrap<?php echo $gravatar ? '' : ' dokan-hide'; ?>">
+                    <div class="dokan-w5 dokan-gravatar">
+                        <div class="dokan-left gravatar-wrap<?php echo $gravatar ? '' : ' dokan-hide'; ?>">
                             <?php $gravatar_url = $gravatar ? wp_get_attachment_url( $gravatar ) : ''; ?>
                             <input type="hidden" class="dokan-file-field" value="<?php echo $gravatar; ?>" name="dokan_gravatar">
                             <img class="dokan-gravatar-img" src="<?php echo esc_url( $gravatar_url ); ?>">
-                            <a class="close dokan-remove-gravatar-image">&times;</a>
+                            <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
                         </div>
                         <div class="gravatar-button-area<?php echo $gravatar ? ' dokan-hide' : ''; ?>">
                             <i class="fa fa-cloud-upload"></i>
@@ -239,109 +239,87 @@ class Dokan_Template_Settings{
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="settings[social][fb]"><?php _e( 'Social Profile', 'dokan' ); ?></label>
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="settings[social][fb]"><?php _e( 'Social Profile', 'dokan' ); ?></label>
 
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-facebook-square"></i></span>
-                            <input id="settings[social][fb]" value="<?php echo $fb; ?>" name="settings[social][fb]" class="form-control" placeholder="http://" type="text">
+                    <div class="dokan-w5 dokan-text-left">
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-facebook-square"></i></span>
+                            <input id="settings[social][fb]" value="<?php echo $fb; ?>" name="settings[social][fb]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="settings[social][plus]"></label>
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-google-plus"></i></span>
-                            <input id="settings[social][gplus]" value="<?php echo $gplus; ?>" name="settings[social][gplus]" class="form-control" placeholder="http://" type="text">
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-google-plus"></i></span>
+                            <input id="settings[social][gplus]" value="<?php echo $gplus; ?>" name="settings[social][gplus]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="settings[social][twitter]"></label>
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-twitter"></i></span>
-                            <input id="settings[social][twitter]" value="<?php echo $twitter; ?>" name="settings[social][twitter]" class="form-control" placeholder="http://" type="text">
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-twitter"></i></span>
+                            <input id="settings[social][twitter]" value="<?php echo $twitter; ?>" name="settings[social][twitter]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="settings[social][linkedin]"></label>
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-linkedin"></i></span>
-                            <input id="settings[social][linkedin]" value="<?php echo $linkedin; ?>" name="settings[social][linkedin]" class="form-control" placeholder="http://" type="text">
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-linkedin"></i></span>
+                            <input id="settings[social][linkedin]" value="<?php echo $linkedin; ?>" name="settings[social][linkedin]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="settings[social][youtube]"></label>
-                    <div class="col-md-5">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-youtube"></i></span>
-                            <input id="settings[social][youtube]" value="<?php echo $youtube; ?>" name="settings[social][youtube]" class="form-control" placeholder="http://" type="text">
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-youtube"></i></span>
+                            <input id="settings[social][youtube]" value="<?php echo $youtube; ?>" name="settings[social][youtube]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
                     </div>
                 </div>
 
                 <!-- payment tab -->
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="dokan_setting"><?php _e( 'Payment Method', 'dokan' ); ?></label>
-                    <div class="col-md-6">
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan_setting"><?php _e( 'Payment Method', 'dokan' ); ?></label>
+                    <div class="dokan-w6">
 
                         <?php $methods = dokan_withdraw_get_active_methods(); ?>
-
-                        <ul class="dokan_tabs" style="margin-bottom: 10px;">
-                            <?php
-                            $count = 0;
-                            foreach ($methods as $method_key) {
-                                $method = dokan_withdraw_get_method( $method_key );
-                                ?>
-                                <li<?php echo ( $count == 0 ) ? ' class="active"' : ''; ?>><a href="#dokan-payment-<?php echo $method_key; ?>" data-toggle="tab"><?php echo $method['title']; ?></a></li>
+                        <div id="payment_method_tab">
+                            <ul class="dokan_tabs" style="margin-bottom: 10px; margin-left:0px;">
                                 <?php
-                                $count++;
-                            } ?>
-                        </ul>
+                                $count = 0;
+                                foreach ($methods as $method_key) {
+                                    $method = dokan_withdraw_get_method( $method_key );
+                                    ?>
+                                    <li<?php echo ( $count == 0 ) ? ' class="active"' : ''; ?>><a href="#dokan-payment-<?php echo $method_key; ?>" data-toggle="tab"><?php echo $method['title']; ?></a></li>
+                                    <?php
+                                    $count++;
+                                } ?>
+                            </ul>
 
-                        <!-- Tab panes -->
-                        <div class="tab-content">
-
-                            <?php
-                            $count = 0;
-                            foreach ($methods as $method_key) {
-                                $method = dokan_withdraw_get_method( $method_key );
-
-                                ?>
-                                <div class="tab-pane<?php echo ($count == 0) ? ' active': ''; ?>" id="dokan-payment-<?php echo $method_key; ?>">
-                                    <?php if ( is_callable( $method['callback']) ) {
-                                        call_user_func( $method['callback'], $profile_info );
-                                    } ?>
-                                </div>
+                            <!-- Tab panes -->
+                            <div class="tabs_container">
 
                                 <?php
-                                $count++;
-                            } ?>
-                        </div> <!-- .tab-content -->
+                                $count = 0;
+                                foreach ($methods as $method_key) {
+                                    $method = dokan_withdraw_get_method( $method_key );
 
-                    </div> <!-- .col-md-4 -->
-                </div> <!-- .form-group -->
+                                    ?>
+                                    <div class="tab-pane<?php echo ($count == 0) ? ' active': ''; ?>" id="dokan-payment-<?php echo $method_key; ?>">
+                                        <?php if ( is_callable( $method['callback']) ) {
+                                            call_user_func( $method['callback'], $profile_info );
+                                        } ?>
+                                    </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="setting_phone"><?php _e( 'Phone No', 'dokan' ); ?></label>
-                    <div class="col-md-5">
-                        <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="+123456.." class="form-control input-md" type="text">
+                                    <?php
+                                    $count++;
+                                } ?>
+                            </div> <!-- .tabs_container -->
+                        </div> <!-- .payment method tab -->
+                    </div> <!-- .dokan-w4 -->
+                </div> <!-- .dokan-form-group -->
+
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Phone No', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
+                        <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="+123456.." class="dokan-form-control input-md" type="text">
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="setting_phone"><?php _e( 'Email', 'dokan' ); ?></label>
-                    <div class="col-md-5">
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Email', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
                         <div class="checkbox">
                             <label>
                                 <input type="hidden" name="setting_show_email" value="no">
@@ -351,34 +329,33 @@ class Dokan_Template_Settings{
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="setting_address"><?php _e( 'Address', 'dokan' ); ?></label>
-                    <div class="col-md-5">
-                        <textarea class="form-control" rows="4" id="setting_address" name="setting_address"><?php echo $address; ?></textarea>
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="setting_address"><?php _e( 'Address', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
+                        <textarea class="dokan-form-control" rows="4" id="setting_address" name="setting_address"><?php echo $address; ?></textarea>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="setting_map"><?php _e('Map', 'dokan'); ?></label>
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e('Map', 'dokan'); ?></label>
 
-                    <div class="col-md-4">
+                    <div class="dokan-w4 dokan-text-left">
                         <input id="dokan-map-lat" type="hidden" name="location" value="<?php echo $map_location; ?>" size="30" />
 
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <input id="dokan-map-add" type="text" class="form-control" value="<?php echo $map_address; ?>" name="find_address" placeholder="<?php _e( 'Type an address to find', 'dokan' ); ?>" size="30" />
-                                <a href="#" class="btn btn-default" id="dokan-location-find-btn" type="button"><?php _e( 'Find Address', 'dokan' ); ?></a>
+                        <div class="dokan-input-group">
+                            <span class="">
+                                <input id="dokan-map-add" type="text" class="dokan-form-control" value="<?php echo $map_address; ?>" name="find_address" placeholder="<?php _e( 'Type an address to find', 'dokan' ); ?>" size="30" />
+                                <a href="#" class="" id="dokan-location-find-btn" type="button"><?php _e( 'Find Address', 'dokan' ); ?></a>
                             </span>
                         </div><!-- /input-group -->
 
                         <div class="dokan-google-map" id="dokan-map"></div>
                     </div> <!-- col.md-4 -->
-                </div> <!-- .form-group -->
+                </div> <!-- .dokan-form-group -->
 
-                <div class="form-group">
-                    <label class="col-md-3 control-label" for="dokan_setting"></label>
+                <div class="dokan-form-group">
 
-                    <div class="col-md-4 ajax_prev">
+                    <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
                         <input type="submit" name="dokan_update_profile" class="btn btn-primary" value="<?php esc_attr_e('Update Settings','dokan'); ?>">
                     </div>
                 </div>
@@ -500,6 +477,14 @@ class Dokan_Template_Settings{
 
                         });
                     })(jQuery);
+                </script>
+
+                <script>
+                    (function($){
+                        $(document).ready(function(){
+                            $('#payment_method_tab').easytabs();
+                        });
+                    })(jQuery)
                 </script>
 
                 <script type="text/javascript">

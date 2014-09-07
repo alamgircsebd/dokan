@@ -10,14 +10,14 @@ if ( !dokan_is_seller_has_order( $current_user->ID, $order_id ) ) {
 
 $order = new WC_Order( $order_id );
 ?>
-<div class="row">
-    <div class="col-md-8">
+<div class="row dokan-clearfix">
+    <div class="dokan-w8" style="margin-right:3%;">
 
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong><?php printf( 'Order#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
-                    <div class="panel-body">
+        <div class="row doakn-clearfix">
+            <div class="" style="width:100%">
+                <div class="dokan-panel dokan-panel-default">
+                    <div class="dokan-panel-heading"><strong><?php printf( 'Order#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
+                    <div class="dokan-panel-body">
 
                         <table cellpadding="0" cellspacing="0" class="table order-items">
                             <thead>
@@ -104,19 +104,19 @@ $order = new WC_Order( $order_id );
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong><?php _e( 'Billing Address', 'dokan' ); ?></strong></div>
-                    <div class="panel-body">
+            <div class="dokan-left" style="width:49%; margin-right:2%">
+                <div class="dokan-panel dokan-panel-default">
+                    <div class="dokan-panel-heading"><strong><?php _e( 'Billing Address', 'dokan' ); ?></strong></div>
+                    <div class="dokan-panel-body">
                         <?php echo $order->get_formatted_billing_address(); ?>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong><?php _e( 'Shipping Address', 'dokan' ); ?></strong></div>
-                    <div class="panel-body">
+            <div class="dokan-left" style="width:49%;">
+                <div class="dokan-panel dokan-panel-default">
+                    <div class="dokan-panel-heading"><strong><?php _e( 'Shipping Address', 'dokan' ); ?></strong></div>
+                    <div class="dokan-panel-body">
                         <?php echo $order->get_formatted_shipping_address(); ?>
                     </div>
                 </div>
@@ -124,10 +124,10 @@ $order = new WC_Order( $order_id );
 
             <div class="clear"></div>
 
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong><?php _e( 'Downloadable Product Permission', 'dokan' ); ?></strong></div>
-                    <div class="panel-body">
+            <div class="" style="100%">
+                <div class="dokan-panel dokan-panel-default">
+                    <div class="dokan-panel-heading"><strong><?php _e( 'Downloadable Product Permission', 'dokan' ); ?></strong></div>
+                    <div class="dokan-panel-body">
                         <?php include dirname( __FILE__ ) . '/downloadable.php'; ?>
                     </div>
                 </div>
@@ -135,12 +135,12 @@ $order = new WC_Order( $order_id );
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong><?php _e( 'General Details', 'dokan' ); ?></strong></div>
-                    <div class="panel-body general-details">
+    <div class="dokan-w4">
+        <div class="row dokan-clearfix">
+            <div class="" style="width:100%">
+                <div class="dokan-panel dokan-panel-default">
+                    <div class="dokan-panel-heading"><strong><?php _e( 'General Details', 'dokan' ); ?></strong></div>
+                    <div class="dokan-panel-body general-details">
                         <ul class="list-unstyled order-status">
                             <li>
                                 <span><?php _e( 'Order Status:', 'dokan' ); ?></span>
@@ -220,10 +220,10 @@ $order = new WC_Order( $order_id );
                 </div>
             </div>
 
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading"><strong><?php _e( 'Order Notes', 'dokan' ); ?></strong></div>
-                    <div class="panel-body" id="dokan-order-notes">
+            <div class="" style="width:100%">
+                <div class="dokan-panel dokan-panel-default">
+                    <div class="dokan-panel-heading"><strong><?php _e( 'Order Notes', 'dokan' ); ?></strong></div>
+                    <div class="dokan-panel-body" id="dokan-order-notes">
                         <?php
                         $args = array(
                             'post_id' => $order_id,
@@ -261,13 +261,13 @@ $order = new WC_Order( $order_id );
                         ?>
                         <div class="add_note">
                             <h4><?php _e( 'Add note', 'woocommerce' ); ?></h4>
-                            <form class="form-inline" id="add-order-note" role="form" method="post">
+                            <form class="dokan-form-inline" id="add-order-note" role="form" method="post">
                                 <p>
-                                    <textarea type="text" id="add-note-content" name="note" class="form-control" cols="20" rows="3"></textarea>
+                                    <textarea type="text" id="add-note-content" name="note" class="form-control" cols="19" rows="3"></textarea>
                                 </p>
                                 <div class="clearfix">
-                                    <div class="col-md-8 order_note_type">
-                                        <select name="note_type" id="order_note_type" class="form-control">
+                                    <div class="dokan-w8 order_note_type dokan-form-group">
+                                        <select name="note_type" id="order_note_type" class="dokan-form-control">
                                             <option value="customer"><?php _e( 'Customer note', 'dokan' ); ?></option>
                                             <option value=""><?php _e( 'Private note', 'dokan' ); ?></option>
                                         </select>
@@ -281,8 +281,8 @@ $order = new WC_Order( $order_id );
                                 </div>
                             </form>
                         </div> <!-- .add_note -->
-                    </div> <!-- .panel-body -->
-                </div> <!-- .panel -->
+                    </div> <!-- .dokan-panel-body -->
+                </div> <!-- .dokan-panel -->
             </div>
         </div> <!-- .row -->
     </div> <!-- .col-md-4 -->

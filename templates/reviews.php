@@ -15,17 +15,15 @@ $dokan_template_reviews->handle_status();
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'reviews' ) ); ?>
 
-<div id="primary" class="content-area dokan-dashboard-content dokan-reviews-content">
-    <div id="content" class="site-content" role="main">
+<div class="dokan-dashboard-content dokan-reviews-content">
+    
+    <article class="dokan-reviews-area">
+        <header class="entry-header">
+            <h1 class="entry-title"><?php _e( 'Reviews', 'dokan' ); ?></h1>
+        </header><!-- .entry-header -->
 
-        <article class="dokan-reviews-area">
-            <header class="entry-header">
-                <h1 class="entry-title"><?php _e( 'Reviews', 'dokan' ); ?></h1>
-            </header><!-- .entry-header -->
+        <?php $dokan_template_reviews->reviews_view(); ?>
 
-            <?php $dokan_template_reviews->reviews_view(); ?>
+    </article>
 
-        </article>
-
-    </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->

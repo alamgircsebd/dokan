@@ -41,10 +41,10 @@
 
             if ( dokan_is_seller_enabled( get_current_user_id() ) ) { ?>
 
-            <form class="form" method="post">
+            <form class="dokan-form-container" method="post">
 
                 <div class="row product-edit-container dokan-clearfix">
-                    <div class="content-half-part">
+                    <div class="dokan-w4">
                         <div class="dokan-feat-image-upload">
                             <div class="instruction-inside">
                                 <input type="hidden" name="feat_image_id" class="dokan-feat-image-id" value="0">
@@ -58,23 +58,23 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content-half-part">
+                    <div class="dokan-w6">
                         <div class="dokan-form-group">
-                            <input class="form-control" name="post_title" id="post-title" type="text" placeholder="<?php esc_attr_e( 'Product name..', 'dokan' ); ?>" value="<?php echo dokan_posted_input( 'post_title' ); ?>">
+                            <input class="dokan-form-control" name="post_title" id="post-title" type="text" placeholder="<?php esc_attr_e( 'Product name..', 'dokan' ); ?>" value="<?php echo dokan_posted_input( 'post_title' ); ?>">
                         </div>
 
                         <div class="dokan-form-group">
-                            <div class="input-group">
-                                <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                <input class="form-control" name="price" id="product-price" type="text" placeholder="9.99" value="<?php echo dokan_posted_input( 'price' ); ?>">
+                            <div class="dokan-input-group">
+                                <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                                <input class="dokan-form-control" name="price" id="product-price" type="text" placeholder="9.99" value="<?php echo dokan_posted_input( 'price' ); ?>">
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <textarea name="post_excerpt" id="post-excerpt" rows="5" class="form-control" placeholder="<?php esc_attr_e( 'Short description about the product...', 'dokan' ); ?>"><?php echo dokan_posted_textarea( 'post_excerpt' ); ?></textarea>
+                        <div class="dokan-form-group">
+                            <textarea name="post_excerpt" id="post-excerpt" rows="5" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Short description about the product...', 'dokan' ); ?>"><?php echo dokan_posted_textarea( 'post_excerpt' ); ?></textarea>
                         </div>
 
-                        <div class="form-group">
+                        <div class="dokan-form-group">
                         <?php
                         wp_dropdown_categories( array(
                             'show_option_none' => __( '- Select a category -', 'dokan' ),
@@ -84,7 +84,7 @@
                             'id' => 'product_cat',
                             'taxonomy' => 'product_cat',
                             'title_li' => '',
-                            'class' => 'product_cat form-control',
+                            'class' => 'product_cat dokan-form-control',
                             'exclude' => '',
                             'selected' => Dokan_Template_Shortcodes::$product_cat,
                         ) );
@@ -94,14 +94,14 @@
                 </div>
 
                 <!-- <textarea name="post_content" id="" cols="30" rows="10" class="span7" placeholder="Describe your product..."><?php echo dokan_posted_textarea( 'post_content' ); ?></textarea> -->
-                <div class="form-group">
+                <div class="dokan-form-group">
                     <?php wp_editor( Dokan_Template_Shortcodes::$post_content, 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
                 </div>
 
                 <?php do_action( 'dokan_new_product_form' ); ?>
 
-                <div class="form-group">
-                    <input type="submit" name="add_product" class="btn btn-primary" value="<?php esc_attr_e( 'Add Product', 'dokan' ); ?>"/>
+                <div class="dokan-form-group">
+                    <input type="submit" name="add_product" class="dokan-btn dokan-btn-primary" value="<?php esc_attr_e( 'Add Product', 'dokan' ); ?>"/>
                 </div>
 
             </form>

@@ -442,7 +442,7 @@ function dokan_format_time( $datetime ) {
  */
 function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'text'  ) {
     $placeholder = isset( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
-    $class = isset( $attr['class'] ) ? esc_attr( $attr['class'] ) : 'form-control';
+    $class = isset( $attr['class'] ) ? esc_attr( $attr['class'] ) : 'dokan-form-control';
     $name = isset( $attr['name'] ) ? esc_attr( $attr['name'] ) : $meta_key;
     $value = isset( $attr['value'] ) ? $attr['value'] : get_post_meta( $post_id, $meta_key, true );
     $size = isset( $attr['size'] ) ? $attr['size'] : 30;

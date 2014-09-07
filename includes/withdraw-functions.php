@@ -103,11 +103,11 @@ function dokan_withdraw_method_paypal( $store_settings ) {
 
     $email = isset( $store_settings['payment']['paypal']['email'] ) ? esc_attr( $store_settings['payment']['paypal']['email'] ) : $current_user->user_email ;
     ?>
-    <div class="form-group">
-        <div class="col-md-10">
-            <div class="input-group">
-                <span class="input-group-addon"><?php _e( 'E-mail', 'dokan' ); ?></span>
-                <input value="<?php echo $email; ?>" name="settings[paypal][email]" class="form-control email" placeholder="you@domain.com" type="text">
+    <div class="dokan-form-group">
+        <div class="dokan-w8">
+            <div class="dokan-input-group">
+                <span class="dokan-input-group-addon"><?php _e( 'E-mail', 'dokan' ); ?></span>
+                <input value="<?php echo $email; ?>" name="settings[paypal][email]" class="dokan-form-control email" placeholder="you@domain.com" type="text">
             </div>
         </div>
     </div>
@@ -127,11 +127,11 @@ function dokan_withdraw_method_skrill( $store_settings ) {
 
     $email = isset( $store_settings['payment']['skrill']['email'] ) ? esc_attr( $store_settings['payment']['skrill']['email'] ) : $current_user->user_email ;
     ?>
-    <div class="form-group">
-        <div class="col-md-10">
-            <div class="input-group">
-                <span class="input-group-addon"><?php _e( 'E-mail', 'dokan' ); ?></span>
-                <input value="<?php echo $email; ?>" name="settings[skrill][email]" class="form-control email" placeholder="you@domain.com" type="text">
+    <div class="dokan-form-group">
+        <div class="dokan-w8">
+            <div class="dokan-input-group">
+                <span class="dokan-input-group-addon"><?php _e( 'E-mail', 'dokan' ); ?></span>
+                <input value="<?php echo $email; ?>" name="settings[skrill][email]" class="dokan-form-control email" placeholder="you@domain.com" type="text">
             </div>
         </div>
     </div>
@@ -153,35 +153,35 @@ function dokan_withdraw_method_bank( $store_settings ) {
     $bank_addr = isset( $store_settings['payment']['bank']['bank_addr'] ) ? esc_textarea( $store_settings['payment']['bank']['bank_addr'] ) : '';
     $swift_code = isset( $store_settings['payment']['bank']['swift'] ) ? esc_attr( $store_settings['payment']['bank']['swift'] ) : '';
     ?>
-    <div class="form-group">
-        <div class="col-md-10">
-            <input name="settings[bank][ac_name]" value="<?php echo $account_name; ?>" class="form-control" placeholder="<?php esc_attr_e( 'Your bank account name', 'dokan' ); ?>" type="text">
+    <div class="dokan-form-group">
+        <div class="doakn-w8">
+            <input name="settings[bank][ac_name]" value="<?php echo $account_name; ?>" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Your bank account name', 'dokan' ); ?>" type="text">
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="col-md-10">
-            <input name="settings[bank][ac_number]" value="<?php echo $account_number; ?>" class="form-control" placeholder="<?php esc_attr_e( 'Your bank account number', 'dokan' ); ?>" type="text">
+    <div class="dokan-form-group">
+        <div class="doakn-w8">
+            <input name="settings[bank][ac_number]" value="<?php echo $account_number; ?>" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Your bank account number', 'dokan' ); ?>" type="text">
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="col-md-10">
-            <input name="settings[bank][bank_name]" value="<?php echo $bank_name; ?>" class="form-control" placeholder="<?php _e( 'Name of bank', 'dokan' ) ?>" type="text">
+    <div class="dokan-form-group">
+        <div class="doakn-w8">
+            <input name="settings[bank][bank_name]" value="<?php echo $bank_name; ?>" class="dokan-form-control" placeholder="<?php _e( 'Name of bank', 'dokan' ) ?>" type="text">
         </div>
     </div>
 
-    <div class="form-group">
-        <div class="col-md-10">
-            <textarea name="settings[bank][bank_addr]" class="form-control" placeholder="<?php esc_attr_e( 'Address of your bank', 'dokan' ) ?>"><?php echo $bank_addr; ?></textarea>
+    <div class="dokan-form-group">
+        <div class="doakn-w8">
+            <textarea name="settings[bank][bank_addr]" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Address of your bank', 'dokan' ) ?>"><?php echo $bank_addr; ?></textarea>
         </div>
     </div>
 
-    <div class="form-group">
+    <div class="dokan-form-group">
         <div class="col-md-10">
-            <input value="<?php echo $swift_code; ?>" name="settings[bank][swift]" class="form-control" placeholder="<?php esc_attr_e( 'Swift code', 'dokan' ); ?>" type="text">
+            <input value="<?php echo $swift_code; ?>" name="settings[bank][swift]" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Swift code', 'dokan' ); ?>" type="text">
         </div>
-    </div> <!-- .form-group -->
+    </div> <!-- .dokan-form-group -->
     <?php
 }
 

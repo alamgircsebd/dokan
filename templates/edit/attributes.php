@@ -63,7 +63,7 @@
                     </span>
                 </div>
 
-                <div class="box-inside clearfix">
+                <div class="box-inside dokan-clearfix">
 
                     <div class="attribute-config">
                         <ul class="list-unstyled ">

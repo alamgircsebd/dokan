@@ -255,16 +255,18 @@ class WeDevs_Dokan {
         }
 
 
-        if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
-            wp_enqueue_style( 'icomoon' );
-            wp_enqueue_style( 'fontawesome' );
-            // wp_enqueue_style( 'dokan-tabs' );
-            wp_enqueue_style( 'dokan-style' );
-            //dokan_reports_scripts();
-            dokan_frontend_dashboard_scripts();            
-        }
+        // if (  ) {
+        //     wp_enqueue_style( 'icomoon' );
+        //     wp_enqueue_style( 'fontawesome' );
+        //     // wp_enqueue_style( 'dokan-tabs' );
+        //     wp_enqueue_style( 'dokan-style' );
+        //     //dokan_reports_scripts();
+        //     dokan_frontend_dashboard_scripts();
 
-        if( is_page($page_id ) ) {
+
+        // }
+
+        if( is_page($page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
             wp_enqueue_style( 'icomoon' );
             wp_enqueue_style( 'fontawesome' );
@@ -272,15 +274,6 @@ class WeDevs_Dokan {
             wp_enqueue_style( 'dokan-style' );
             dokan_reports_scripts();
             dokan_frontend_dashboard_scripts();
-
-            if ( DOKAN_LOAD_STYLE === true ) {
-                wp_enqueue_style( 'bootstrap' );
-                wp_enqueue_style( 'icomoon' );
-                wp_enqueue_style( 'fontawesome' );
-                wp_enqueue_style( 'dokan-opensans' );
-                wp_enqueue_style( 'dokan-style' );
-                wp_enqueue_style( 'dokan-skin' );
-            }
 
             /****** Scripts ******/
 
@@ -299,7 +292,7 @@ class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-ui-datepicker' );
 
                 wp_enqueue_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
-                wp_enqueue_script( 'bootstrap-min', plugins_url( 'assets/js/bootstrap.min.js', __FILE__ ), false, null, true );
+                wp_enqueue_script( 'bootstrap-min', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
 
                 wp_enqueue_script( 'dokan-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), false, null, true );
                 wp_localize_script( 'jquery', 'dokan', array(
@@ -312,7 +305,6 @@ class WeDevs_Dokan {
                     )
                 ) );
             }
-    
         }     
     }
 

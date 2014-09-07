@@ -22,31 +22,29 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
 <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'settings' ) ); ?>
 
-<div id="primary" class="content-area dokan-dashboard-content dokan-settings-content">
-    <div id="content" class="site-content" role="main">
-        <article class="dokan-settings-area">
-            <header class="entry-header">
-                <h1 class="entry-title">
-                    <?php _e( 'Settings', 'dokan' );?>
-                    <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
-                </h1>
-            </header><!-- .entry-header -->
+<div class="dokan-dashboard-content dokan-settings-content">
+    <article class="dokan-settings-area">
+        <header class="entry-header">
+            <h1 class="entry-title">
+                <?php _e( 'Settings', 'dokan' );?>
+                <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
+            </h1>
+        </header><!-- .entry-header -->
 
-            <?php if ( is_wp_error( $validate ) ) {
-                $messages = $validate->get_error_messages();
+        <?php if ( is_wp_error( $validate ) ) {
+            $messages = $validate->get_error_messages();
 
-                foreach( $messages as $message ) {
-                    ?>
-                    <div class="dokan-alert dokan-alert-danger" style="width: 40%; margin-left: 25%;">
-                        <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                        <strong><?php echo $message; ?></strong>
-                    </div>
+            foreach( $messages as $message ) {
+                ?>
+                <div class="dokan-alert dokan-alert-danger" style="width: 40%; margin-left: 25%;">
+                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
+                    <strong><?php echo $message; ?></strong>
+                </div>
 
-                    <?php
-                }
-            } ?>
+                <?php
+            }
+        } ?>
 
-            <?php $dokan_template_settings->setting_field($validate); ?>
-        </article>
-    </div><!-- #content .site-content -->
+        <?php $dokan_template_settings->setting_field($validate); ?>
+    </article>
 </div><!-- #primary .content-area -->
