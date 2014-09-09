@@ -349,7 +349,7 @@ class Dokan_Template_Settings{
                             </span>
                         </div><!-- /input-group -->
 
-                        <div class="dokan-google-map" id="dokan-map"></div>
+                        <div class="dokan-google-map" id="dokan-map" style="width:400px; height:300px;"></div>
                     </div> <!-- col.md-4 -->
                 </div> <!-- .dokan-form-group -->
 

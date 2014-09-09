@@ -88,6 +88,7 @@
 .page-template-templatesdashboard-php .dokan-dashboard-content article.dashboard-content-area {
   overflow: hidden;
   margin-top: 0px;
+  padding: 0px 15px;
 }
 .page-template-templatesdashboard-php .dokan-dashboard-content article.dashboard-content-area .dashboard-widget {
   background: #fff;

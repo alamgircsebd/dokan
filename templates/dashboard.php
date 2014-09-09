@@ -35,7 +35,7 @@ $reviews_url = dokan_get_navigation_url( 'reviews' );
 
             <article class="dashboard-content-area">
 
-                <div class="content-half-part">
+                <div class="dokan-w5" style="margin-right:2%">
                     <div class="dashboard-widget big-counter">
                         <ul class="list-inline">
                             <li>
@@ -143,7 +143,7 @@ $reviews_url = dokan_get_navigation_url( 'reviews' );
 
                 </div> <!-- .col-md-6 -->
 
-                <div class="content-half-part">
+                <div class="dokan-w6">
                     <div class="dashboard-widget sells-graph">
                         <div class="widget-title"><i class="fa fa-credit-card"></i> <?php _e( 'Sales', 'dokan' ); ?></div>
 
