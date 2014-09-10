@@ -16,7 +16,9 @@ class Dokan_Template_Shortcodes {
 	function __construct() {
 
 		add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
-		add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
+        add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
+        add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
+		add_shortcode( 'dokan-top-rated-product', array( $this, 'top_rated_product_shortcode' ) );
 	}
 
 	public static function init() {
@@ -190,6 +192,50 @@ class Dokan_Template_Shortcodes {
 
 		$dokan_withdraw->cancel_pending();
 
+    }
+
+    function best_selling_product_shortcode( $atts ) {
+        $per_page = shortcode_atts( array(
+            'no_of_product' => 8
+        ), $atts );
+
+        ob_start();
+        ?>
+        <ul>
+            <?php
+            $best_selling_query = dokan_get_best_selling_products();
+            ?>
+            <?php while ( $best_selling_query->have_posts() ) : $best_selling_query->the_post(); ?>
+
+                <?php wc_get_template_part( 'content', 'product' ); ?>
+
+            <?php endwhile; ?>
+        </ul>
+        <?php
+
+        return ob_get_clean(); 
+    }
+
+    function top_rated_product_shortcode( $atts ) {
+        $per_page = shortcode_atts( array(
+            'no_of_product' => 8
+        ), $atts );
+
+        ob_start();
+        ?>
+        <ul>
+            <?php
+            $best_selling_query = dokan_get_top_rated_products();
+            ?>
+            <?php while ( $best_selling_query->have_posts() ) : $best_selling_query->the_post(); ?>
+
+                <?php wc_get_template_part( 'content', 'product' ); ?>
+
+            <?php endwhile; ?>
+        </ul>
+        <?php
+
+        return ob_get_clean(); 
     }
 
 }

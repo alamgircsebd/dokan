@@ -1428,7 +1428,7 @@ function dokan_get_best_selling_products( $per_page = 8 ) {
                 'key' => '_visibility',
                 'value' => array( 'catalog', 'visible' ),
                 'compare' => 'IN'
-            )
+            ),
         )
     );
 

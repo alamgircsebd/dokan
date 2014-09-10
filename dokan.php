@@ -58,6 +58,7 @@ if ( !defined( 'DOKAN_LOAD_SCRIPTS' ) ) {
 }
 
 
+
 /**
  * Autoload class files on demand
  *
@@ -321,6 +322,7 @@ class WeDevs_Dokan {
 
     }
 
+
     function includes() {
         $lib_dir = __DIR__ . '/lib/';
         $inc_dir = __DIR__ . '/includes/';
@@ -330,6 +332,8 @@ class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/menu-category.php';
         require_once $inc_dir . 'widgets/store-menu-category.php';
         require_once $inc_dir . 'widgets/best-seller.php';
+        require_once $inc_dir . 'widgets/bestselling-product.php';
+        require_once $inc_dir . 'widgets/top-rated-product.php';
 
         require_once $inc_dir . 'wc-functions.php';
 

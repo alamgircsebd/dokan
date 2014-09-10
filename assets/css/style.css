@@ -124,14 +124,14 @@
   padding: 0px;
 }
 .page-template-templatesdashboard-php .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter .title {
-  font-size: 18px;
+  font-size: 15px;
   border-bottom: 1px solid #EBEBEB;
   padding-bottom: 10px;
   padding-top: 6px;
   margin-bottom: 25px;
 }
 .page-template-templatesdashboard-php .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter .count {
-  font-size: 20px;
+  font-size: 18px;
 }
 .page-template-templatesdashboard-php .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.orders {
   overflow: hidden;
