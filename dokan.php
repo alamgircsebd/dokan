@@ -43,6 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
+define( 'DOKAN_PLUGIN_VERSION', '1.0' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -528,7 +529,7 @@ class WeDevs_Dokan {
 
 add_action( 'plugins_loaded', function() {
     $dokan = WeDevs_Dokan::init();
-});
+}, 10 );
 
 register_activation_hook( __FILE__, array( 'WeDevs_Dokan', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WeDevs_Dokan', 'deactivate' ) );

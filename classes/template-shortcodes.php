@@ -67,8 +67,9 @@ class Dokan_Template_Shortcodes {
 	        return dokan_get_template_part( 'settings' ); 
 	    }
 
+        //do_action( 'dokan_dashboard_template_render' );    
 
-	    return dokan_get_template_part( 'dashboard' );
+	    return apply_filters( 'dokan_dashboard_template_render',  dokan_get_template_part( 'dashboard' ) );
     }
 
     function handle_all_submit() {

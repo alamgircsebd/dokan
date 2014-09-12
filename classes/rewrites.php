@@ -7,6 +7,8 @@
  */
 class Dokan_Rewrites {
 
+    public $query_vars = array();
+
     function __construct() {
         add_action( 'init', array($this, 'register_rule') );
         add_filter( 'template_include', array($this, 'store_template') );
@@ -16,8 +18,12 @@ class Dokan_Rewrites {
         add_filter( 'query_vars', array($this, 'register_query_var') );
         add_filter( 'pre_get_posts', array($this, 'store_query_filter') );
         // add_filter( 'the_content', array( $this, 'load_dashboard_product_edit' ), 11 );
+        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable'), 5 );   
+    }
 
-        $this->query_vars = array(
+
+    function load_query_var_variable() {
+        $this->query_vars = apply_filters( 'dokan_query_var_filter', array(
             'products',
             'new-product',
             'orders',
@@ -25,8 +31,8 @@ class Dokan_Rewrites {
             'reports',
             'reviews',
             'withdraw',
-            'settings'
-        );
+            'settings',
+        ));     
     }
 
     /**
@@ -119,10 +125,10 @@ class Dokan_Rewrites {
                 'store.php',
             );
 
-            return get_query_template( 'store', $templates );
+            return get_query_template( 'store', __DIR__. '/templates/'. $templates );
         }
 
-        return $template;
+        return  __DIR__. '/templates/'. $template;
     }
 
     // function load_dashboard_product_edit() {
@@ -174,10 +180,4 @@ class Dokan_Rewrites {
             }
         }
     }
-
-    // function dashboard_template( $template ) {
-    //     var_dump( get_query_var( 'dashboard' ) );
-    //     var_dump( $template );
-    //     return $template;
-    // }
 }

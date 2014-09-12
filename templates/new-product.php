@@ -22,8 +22,8 @@
     
     <div class="dokan-new-product-area">
         <?php if ( Dokan_Template_Shortcodes::$errors ) { ?>
-            <div class="dokan-dashboard-contentdokan-alert dokan-alert-danger">
-                <a class="close" data-dismiss="alert">&times;</a>
+            <div class="dokan-dashboard-content dokan-alert dokan-alert-danger">
+                <a class="dokan-close" data-dismiss="alert">&times;</a>
 
                 <?php foreach ( Dokan_Template_Shortcodes::$errors as $error) { ?>
 
