@@ -3,47 +3,6 @@
 require_once dirname(__FILE__) . '/order-functions.php';
 require_once dirname(__FILE__) . '/withdraw-functions.php';
 
-/**
- * Enqueue report related scripts
- *
- * @return void
- */
-function dokan_reports_scripts() {
-    wp_enqueue_script( 'jquery' );
-    wp_enqueue_script( 'jquery-ui-datepicker' );
-    wp_enqueue_script( 'jquery-chart' );
-    wp_enqueue_script( 'jquery-flot' );
-    wp_enqueue_script( 'jquery-flot-time' );
-    wp_enqueue_script( 'jquery-flot-pie' );
-    wp_enqueue_script( 'jquery-flot-stack' );
-
-    wp_enqueue_style( 'jquery-ui' );
-}
-
-
-/**
- * Includes frontend-dashboard scripts for seller
- *
- * @return void
- */
-function dokan_frontend_dashboard_scripts() {
-    wp_enqueue_script( 'jquery' );
-    wp_enqueue_script( 'jquery-ui' );
-    wp_enqueue_script( 'jquery-ui-autocomplete' );
-    wp_enqueue_script( 'jquery-ui-datepicker' );
-    wp_enqueue_script( 'underscore' );
-    wp_enqueue_script( 'post' );
-    wp_enqueue_media();
-    wp_enqueue_script( 'dokan-product-editor' );
-    wp_enqueue_script( 'chosen' );
-    wp_enqueue_script( 'reviews' );
-    wp_enqueue_script( 'dokan-order' );
-    wp_enqueue_script( 'jquery-ui-autocomplete' );
-
-    wp_enqueue_style( 'jquery-ui' );
-    wp_enqueue_style( 'chosen-style' );
-}
-
 
 /**
  * Check if a user is seller
@@ -1220,7 +1179,7 @@ function dokan_get_template_part( $slug, $name = '' ) {
 
 function dokan_get_navigation_url( $name = '' ) {
     $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
-        
+
     if( !$page_id ) {
         return;
     }
