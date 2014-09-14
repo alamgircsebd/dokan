@@ -176,7 +176,7 @@ function dokan_page_navi( $before = '', $after = '', $wp_query ) {
         $start_page = 1;
     }
 
-    echo $before . '<div class="pagination-container"><ul class="pagination">' . "";
+    echo $before . '<div class="dokan-pagination-container"><ul class="dokan-pagination">' . "";
     if ( $paged > 1 ) {
         $first_page_text = "&laquo;";
         echo '<li class="prev"><a href="' . get_pagenum_link() . '" title="First">' . $first_page_text . '</a></li>';
