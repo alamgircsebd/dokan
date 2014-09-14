@@ -80,7 +80,7 @@ class Dokan_Installer {
                 'post_title' => __( 'Dashboard', 'dokan' ),
                 'slug'       => 'dashboard',
                 'page_id'    => 'dashboard',
-                'content'    => ''
+                'content'    => '[dokan-dashboard]'
             ),
             array(
                 'post_title' => __( 'My Orders', 'dokan' ),
@@ -132,7 +132,10 @@ class Dokan_Installer {
             ) );
 
             if ( $page_id && !is_wp_error( $page_id ) ) {
-                update_post_meta( $page_id, $meta_key, $page['template'] );
+
+                if ( isset( $page['template'] ) ) {
+                    update_post_meta( $page_id, $meta_key, $page['template'] );
+                }
 
                 return $page_id;
             }
