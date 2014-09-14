@@ -16,8 +16,14 @@ module.exports = function(grunt) {
 
             // one to one
             core: {
-                src: '<%= dirs.less %>/style.less',
-                dest: '<%= dirs.css %>/style.css',
+                options: {
+                    sourceMap: true,
+                    sourceMapFilename: '<%= dirs.css %>/style.css.map',
+                    sourceMapURL: 'style.css.map'
+                },
+                files: {
+                    '<%= dirs.css %>/style.css': '<%= dirs.less %>/style.less'
+                }
             },
         },
 
@@ -47,9 +53,23 @@ module.exports = function(grunt) {
         concat: {
             '<%= dirs.js %>/all.js': [
                 '<%= dirs.js %>/admin.js',
-                '<%= dirs.js %>/mytask.js',
-                '<%= dirs.js %>/task.js',
-                '<%= dirs.js %>/upload.js',
+                '<%= dirs.js %>/orders.js',
+                '<%= dirs.js %>/product-editor.js',
+                '<%= dirs.js %>/reviews.js',
+                '<%= dirs.js %>/script.js',
+                '<%= dirs.js %>/settings.js',
+            ],
+            '<%= dirs.js %>/flot-all.min.js': [
+                '<%= dirs.js %>/jquery.flot.min.js',
+                '<%= dirs.js %>/jquery.flot.pie.min.js',
+                '<%= dirs.js %>/jquery.flot.resize.min.js',
+                '<%= dirs.js %>/jquery.flot.stack.min.js',
+                '<%= dirs.js %>/jquery.flot.time.min.js',
+            ],
+            '<%= dirs.css %>/dokan-extra.css': [
+                '<%= dirs.css %>/chosen.min.css',
+                '<%= dirs.css %>/icomoon.css',
+                '<%= dirs.css %>/tabulous.css'
             ]
         },
 
@@ -58,10 +78,10 @@ module.exports = function(grunt) {
             target: {
                 options: {
                     domainPath: '/languages/', // Where to save the POT file.
-                    potFilename: 'my-plugin.pot', // Name of the POT file.
+                    potFilename: 'dokan.pot', // Name of the POT file.
                     type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
                     potHeaders: {
-                        'report-msgid-bugs-to': 'https://github.com/tareq1988/grunt-demo/issues',
+                        'report-msgid-bugs-to': 'http://wedevs.com/support/forum/theme-support/dokan/',
                         'language-team': 'LANGUAGE <EMAIL@ADDRESS>'
                     }
                 }
@@ -71,7 +91,7 @@ module.exports = function(grunt) {
         watch: {
             less: {
                 files: ['<%= dirs.less %>/*.less'],
-                tasks: ['less:core', 'less:skins'],
+                tasks: ['less:core'],
                 options: {
                     livereload: true
                 }
@@ -89,12 +109,14 @@ module.exports = function(grunt) {
 
     grunt.registerTask( 'default', [
         'less',
+        'concat',
         // 'uglify'
     ]);
 
     grunt.registerTask('release', [
         'makepot',
-        // 'concat',
-        // 'uglify'
+        'less',
+        'concat',
+        'uglify'
     ]);
 };
