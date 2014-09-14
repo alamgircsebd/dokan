@@ -36,7 +36,7 @@ License: GPL2
  */
 
 // don't call the file directly
-if ( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Backwards compatibility for older than PHP 5.3.0
 if ( !defined( '__DIR__' ) ) {
@@ -57,7 +57,6 @@ if ( !defined( 'DOKAN_LOAD_STYLE' ) ) {
 if ( !defined( 'DOKAN_LOAD_SCRIPTS' ) ) {
     define( 'DOKAN_LOAD_SCRIPTS', true );
 }
-
 
 
 /**
@@ -100,7 +99,7 @@ class WeDevs_Dokan {
      * @uses add_action()
      */
     public function __construct() {
-        
+
         global $wpdb;
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
         $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
@@ -167,9 +166,10 @@ class WeDevs_Dokan {
         global $wpdb;
 
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
-        $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
-        
+        $wpdb->dokan_orders   = $wpdb->prefix . 'dokan_orders';
+
         require_once __DIR__ . '/includes/theme-functions.php';
+
         $installer = new Dokan_Installer();
         $installer->do_install();
     }
@@ -199,7 +199,6 @@ class WeDevs_Dokan {
         add_action( 'init', array( $this, 'localization_setup' ) );
         add_action( 'template_redirect', array( $this, 'redirect_if_not_logged_seller' ), 11 );
 
-
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
         add_action( 'login_enqueue_scripts', array( $this, 'login_scripts' ) );
@@ -220,17 +219,13 @@ class WeDevs_Dokan {
      */
     public function scripts() {
 
-        $protocol           = is_ssl() ? 'https' : 'http';
-        $skin               = dokan_get_option( 'color_skin', 'dokan_general', 'orange.css' );
+        $protocol = is_ssl() ? 'https' : 'http';
+        $skin     = dokan_get_option( 'color_skin', 'dokan_general', 'orange.css' );
 
         // register styles
         wp_register_style( 'jquery-ui', plugins_url( 'assets/css/jquery-ui-1.10.0.custom.css', __FILE__ ), false, null );
         wp_register_style( 'chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
-        wp_register_style( 'bootstrap', plugins_url( 'assets/css/bootstrap.css', __FILE__ ), false, null );
         wp_register_style( 'icomoon', plugins_url( 'assets/css/icomoon.css', __FILE__ ), false, null );
-        wp_register_style( 'fontawesome', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css', false, null );
-        wp_register_style( 'dokan-skin', plugins_url( 'assets/css/skins/' . $skin, __FILE__ ), false, null );
-        wp_register_style( 'dokan-opensans', $protocol . '://fonts.googleapis.com/css?family=Open+Sans:400,700' );
         wp_register_style( 'dokan-tabs', plugins_url( 'assets/css/tabulous.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
 
@@ -249,26 +244,15 @@ class WeDevs_Dokan {
         wp_register_script( 'reviews', plugins_url( 'assets/js/reviews.js', __FILE__ ), array( 'jquery' ), null, true );
 
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
-        
+
         wp_enqueue_script( 'dokan-tabs-scripts' );
-        
-        if( !$page_id ) {
+
+        // bailout if not dashboard
+        if ( ! $page_id ) {
             return;
         }
 
-
-        // if (  ) {
-        //     wp_enqueue_style( 'icomoon' );
-        //     wp_enqueue_style( 'fontawesome' );
-        //     // wp_enqueue_style( 'dokan-tabs' );
-        //     wp_enqueue_style( 'dokan-style' );
-        //     //dokan_reports_scripts();
-        //     dokan_frontend_dashboard_scripts();
-
-
-        // }
-
-        if( is_page($page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+        if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
             wp_enqueue_style( 'icomoon' );
             wp_enqueue_style( 'fontawesome' );
@@ -291,18 +275,10 @@ class WeDevs_Dokan {
                     'available'    => __( 'Available', 'dokan' ),
                     'notAvailable' => __( 'Not Available', 'dokan' )
                 )
-            ) ); 
-        }    
+            ) );
+        }
 
         if ( DOKAN_LOAD_SCRIPTS === true ) {
-
-                if ( is_single() && comments_open() && get_option( 'thread_comments' ) ) {
-                    wp_enqueue_script( 'comment-reply' );
-                }
-
-                if ( is_singular() && wp_attachment_is_image() ) {
-                    wp_enqueue_script( 'keyboard-image-navigation', plugins_url( 'assets/js/keyboard-image-navigation.js', __FILE__ ), array( 'jquery' ), '20120202' );
-                }
 
             wp_enqueue_script( 'jquery' );
             wp_enqueue_script( 'jquery-ui' );
@@ -318,15 +294,20 @@ class WeDevs_Dokan {
                     'available'    => __( 'Available', 'dokan' ),
                     'notAvailable' => __( 'Not Available', 'dokan' )
                 )
-            ) ); 
+            ) );
         }
 
     }
 
 
+    /**
+     * Include all the required files
+     *
+     * @return void
+     */
     function includes() {
-        $lib_dir = __DIR__ . '/lib/';
-        $inc_dir = __DIR__ . '/includes/';
+        $lib_dir     = __DIR__ . '/lib/';
+        $inc_dir     = __DIR__ . '/includes/';
         $classes_dir = __DIR__ . '/classes/';
 
         require_once $inc_dir . 'theme-functions.php';
@@ -342,7 +323,6 @@ class WeDevs_Dokan {
             require_once $inc_dir . 'admin/admin.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
-            require_once $lib_dir . 'bootstrap-walker.php';
             require_once $inc_dir . 'wc-template.php';
             require_once $inc_dir . 'template-tags.php';
         }
@@ -356,7 +336,7 @@ class WeDevs_Dokan {
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
         add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ) );
-        add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
+        // add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
     }
 
     /**
@@ -418,16 +398,15 @@ class WeDevs_Dokan {
     }
 
     function redirect_if_not_logged_seller() {
-        
         global $post;
-        
+
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
-        
-        if( !$page_id ) {
+
+        if ( ! $page_id ) {
             return;
         }
 
-        if( is_page( $page_id ) ) {
+        if ( is_page( $page_id ) ) {
             dokan_redirect_login();
             dokan_redirect_if_not_seller();
         }
@@ -464,19 +443,19 @@ class WeDevs_Dokan {
      * Scripts and styles for admin panel
      */
     function admin_enqueue_scripts() {
-        // $template_directory = get_template_directory_uri();
-
         wp_enqueue_script( 'dokan_slider_admin', DOKAN_PLUGIN_ASSEST.'/js/admin.js', array( 'jquery' ) );
     }
 
     function load_table_prifix() {
         global $wpdb;
+
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
         $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
     }
 
     /**
      * Load woocommerce located template
+     *
      * @param  string $template
      * @param  string $template_name
      * @param  string $template_path
@@ -490,7 +469,7 @@ class WeDevs_Dokan {
             $template_path = WC()->template_url;
         }
 
-        $plugin_path  = __DIR__. '/woocommerce/';
+        $plugin_path  = __DIR__ . '/woocommerce/';
 
         $template = locate_template(
             array(
@@ -513,13 +492,13 @@ class WeDevs_Dokan {
 
     function add_dashboard_template_class( $classes ) {
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
-        
-        if( !$page_id ) {
-            return;
+
+        if ( ! $page_id ) {
+            return $classes;
         }
 
-        if( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
-            $classes[] = 'page-template-templatesdashboard-php';
+        if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+            $classes[] = 'dokan-dashboard';
         }
 
         return $classes;
