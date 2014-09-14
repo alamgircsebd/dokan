@@ -11,12 +11,22 @@
 
 .dokan-dashboard {
 
-	.dokan-dashboard-content {
+	.dokan-dashboard-wrap {
+		.clearfix();
+		display: block;
+		overflow: hidden;
+		width: 100%;
+	}
 
-		article.dashboard-content-area{
-			overflow:hidden;
-			margin-top:0px;
-			padding:0px 15px;
+	.dokan-dashboard-content {
+		padding: 0 0 0 2%;
+		overflow: hidden;
+		margin-top: 0px;
+		width:80%;
+		float:left;
+
+		article.dashboard-content-area {
+			.clearfix();
 
 			.dashboard-widget {
 		        background: #fff;
@@ -106,6 +116,20 @@
 		    .chart-tooltip {
 		        .dokan-chart-tooltip;
 		    }
+		}
+
+		article {
+			border-bottom: none;
+		}
+
+		ul li {
+			list-style: none;
+			margin: 0px;
+			padding:0px;
+		}
+
+		a {
+			text-decoration: none;
 		}
 	}
 }

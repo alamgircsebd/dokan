@@ -1,12 +1,8 @@
-<?php
+<div class="dokan-dashboard-wrap">
+    <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
 
-//get_header();
-?>
+    <div class="dokan-dashboard-content dokan-product-listing">
 
-<?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
-
-<div class="dokan-dashboard-content dokan-product-listing">
-    
         <?php do_action( 'dokan_before_listing_product' ); ?>
 
             <article class="dokan-product-listing-area">
@@ -208,4 +204,5 @@
             </article>
 
         <?php do_action( 'dokan_after_listing_product' ); ?>
-</div><!-- #primary .content-area -->
+    </div><!-- #primary .content-area -->
+</div><!-- .dokan-dashboard-wrap -->

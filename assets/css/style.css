@@ -85,10 +85,33 @@
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li ul.sub-menu li:last-child {
   border-bottom: none;
 }
-.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area {
+.dokan-dashboard .dokan-dashboard-wrap {
+  display: block;
+  overflow: hidden;
+  width: 100%;
+}
+.dokan-dashboard .dokan-dashboard-wrap:before,
+.dokan-dashboard .dokan-dashboard-wrap:after {
+  content: " ";
+  display: table;
+}
+.dokan-dashboard .dokan-dashboard-wrap:after {
+  clear: both;
+}
+.dokan-dashboard .dokan-dashboard-content {
+  padding: 0 0 0 2%;
   overflow: hidden;
   margin-top: 0px;
-  padding: 0px 15px;
+  width: 80%;
+  float: left;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:before,
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:after {
+  content: " ";
+  display: table;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:after {
+  clear: both;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget {
   background: #fff;
@@ -167,6 +190,17 @@
   padding: 3px 5px;
   font-size: 11px;
   border-radius: 3px;
+}
+.dokan-dashboard .dokan-dashboard-content article {
+  border-bottom: none;
+}
+.dokan-dashboard .dokan-dashboard-content ul li {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.dokan-dashboard .dokan-dashboard-content a {
+  text-decoration: none;
 }
 .dokan-product-listing .dokan-product-listing-area {
   padding: 0px 15px;
@@ -588,9 +622,6 @@
   width: 27%;
   float: left;
 }
-.dokan-orders-content .dokan-orders-area {
-  padding: 0px 15px;
-}
 .dokan-orders-content .dokan-orders-area td.thumb img {
   padding: 2px;
   margin: 0;
@@ -704,9 +735,6 @@
 .dokan-orders-content .dokan-orders-area .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
   min-height: 27px;
 }
-.dokan-reports-content .dokan-reports-area {
-  padding: 0px 15px;
-}
 .dokan-reports-content .dokan-reports-area h1 {
   margin: 0px 0px 20px;
 }
@@ -768,9 +796,6 @@
   padding: 3px 5px;
   font-size: 11px;
   border-radius: 3px;
-}
-.dokan-reviews-content .dokan-reviews-area {
-  padding: 0px 15px;
 }
 .dokan-reviews-content .dokan-reviews-area h1 {
   margin: 0px;
@@ -882,9 +907,6 @@
   left: 0;
   position: absolute;
   top: 0;
-}
-.dokan-coupon-content .dashboard-coupons-area {
-  padding: 0px 15px;
 }
 .dokan-coupon-content .dashboard-coupons-area .dokan-coupon-header {
   margin-bottom: 20px;
@@ -1017,18 +1039,12 @@
 .dokan-coupon-content tr:hover .row-actions {
   visibility: visible;
 }
-.dokan-withdraw-content .dokan-withdraw-area {
-  padding: 0px 15px;
-}
 .dokan-withdraw-content .dokan-withdraw-area h1 {
   margin: 0px 0px 20px;
 }
 .dokan-withdraw-content .dokan-withdraw-area ul li {
   display: inline-block;
   padding: 0px 5px;
-}
-.dokan-settings-content .dokan-settings-area {
-  padding: 0px 15px;
 }
 .dokan-settings-content .dokan-settings-area h1 {
   margin: 0px;
@@ -1144,7 +1160,12 @@
   background-color: #8fae1b;
   content: "\2713";
 }
+.dokan-info {
+  border-top: 3px solid #109AE7;
+}
 .dokan-info:before {
+  background-color: #109AE7;
+  content: "\2713";
   content: "i";
   font-family: Times, Georgia, serif;
   font-style: italic;
@@ -1588,24 +1609,6 @@ ul.subsubsub li.active a {
 .dokan-form-inline .dokan-form-group {
   float: left;
   margin-right: 5px;
-}
-.dokan-dashboard .dokan-dashboard-content {
-  width: 80%;
-  float: left;
-}
-.dokan-dashboard .dokan-dashboard-content .site-content {
-  margin-top: 0px;
-}
-.dokan-dashboard .dokan-dashboard-content .site-content article {
-  border-bottom: none;
-}
-.dokan-dashboard .dokan-dashboard-content ul li {
-  list-style: none;
-  margin: 0px;
-  padding: 0px;
-}
-.dokan-dashboard .dokan-dashboard-content a {
-  text-decoration: none;
 }
 .dokan-hide {
   display: none;

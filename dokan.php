@@ -318,7 +318,7 @@ class WeDevs_Dokan {
      */
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
-        add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ) );
+        add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ), 99 );
         add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
     }
 

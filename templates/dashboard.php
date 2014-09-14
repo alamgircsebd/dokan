@@ -197,19 +197,14 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
 
             </div>
         </article><!-- .dashboard-content-area -->
-    </div><!-- #primary .content-area -->
+    </div><!-- .dokan-dashboard-content -->
 </div><!-- .dokan-dashboard-wrap -->
 
 <script type="text/javascript">
     jQuery(function($) {
-
         var order_stats = <?php echo json_encode( $order_data ); ?>;
 
         var ctx = $("#order-stats").get(0).getContext("2d");
         new Chart(ctx).Doughnut(order_stats);
-
     });
 </script>
-
-
-<?php //get_footer(); ?>

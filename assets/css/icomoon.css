@@ -10,7 +10,7 @@
 	font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="dokan-icon-"], [class*=" dokan-icon-"] {
 	font-family: 'Dokan-Icon';
 	speak: none;
 	font-style: normal;
@@ -24,30 +24,30 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 
-.icon-compass:before {
+.dokan-icon-compass:before {
 	content: "\e600";
 }
-.icon-briefcase:before {
+.dokan-icon-briefcase:before {
 	content: "\e601";
 }
-.icon-dashboard:before {
+.dokan-icon-dashboard:before {
 	content: "\e602";
 }
-.icon-stats:before {
+.dokan-icon-stats:before {
 	content: "\e603";
 }
-.icon-gift:before {
+.dokan-icon-gift:before {
 	content: "\e604";
 }
-.icon-bubbles:before {
+.dokan-icon-bubbles:before {
 	content: "\e605";
 }
-.icon-upload:before {
+.dokan-icon-upload:before {
 	content: "\e606";
 }
-.icon-basket:before {
+.dokan-icon-basket:before {
 	content: "\e607";
 }
-.icon-cog:before {
+.dokan-icon-cog:before {
 	content: "\e608";
 }
