@@ -219,84 +219,67 @@ class WeDevs_Dokan {
      */
     public function scripts() {
 
-        $protocol = is_ssl() ? 'https' : 'http';
-        $skin     = dokan_get_option( 'color_skin', 'dokan_general', 'orange.css' );
+        $suffix   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
         // register styles
         wp_register_style( 'jquery-ui', plugins_url( 'assets/css/jquery-ui-1.10.0.custom.css', __FILE__ ), false, null );
-        wp_register_style( 'chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
-        wp_register_style( 'icomoon', plugins_url( 'assets/css/icomoon.css', __FILE__ ), false, null );
-        wp_register_style( 'dokan-tabs', plugins_url( 'assets/css/tabulous.css', __FILE__ ), false, null );
+        wp_register_style( 'dokan-extra', plugins_url( 'assets/css/dokan-extra.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
 
         // register scripts
-        wp_register_script( 'jquery-flot', plugins_url( 'assets/js/jquery.flot.min.js', __FILE__ ), false, null, true );
-        wp_register_script( 'jquery-flot-time', plugins_url( 'assets/js/jquery.flot.time.min.js', __FILE__ ), false, null, true );
-        wp_register_script( 'jquery-flot-pie', plugins_url( 'assets/js/jquery.flot.pie.min.js', __FILE__ ), false, null, true );
-        wp_register_script( 'jquery-flot-stack', plugins_url( 'assets/js/jquery.flot.stack.min.js', __FILE__ ), false, null, true );
+        wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'jquery-chart', plugins_url( 'assets/js/Chart.min.js', __FILE__ ), false, null, true );
-        wp_register_script( 'dokan-product-editor', plugins_url( 'assets/js/product-editor.js', __FILE__ ), false, null, true );
-        wp_register_script( 'dokan-order', plugins_url( 'assets/js/orders.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-tabs-scripts', plugins_url( 'assets/js/jquery.easytabs.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-hashchange-scripts', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), false, null, true );
-        // wp_register_script( 'dokan-hashchange-scripts', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
-        wp_register_script( 'reviews', plugins_url( 'assets/js/reviews.js', __FILE__ ), array( 'jquery' ), null, true );
+        wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
+        wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
+
+        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all' . $suffix . '.js', __FILE__ ), false, null, true );
 
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
-
-        wp_enqueue_script( 'dokan-tabs-scripts' );
 
         // bailout if not dashboard
         if ( ! $page_id ) {
             return;
         }
 
+        $localize_script = array(
+            'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+            'nonce'       => wp_create_nonce( 'dokan_reviews' ),
+            'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+            'seller'      => array(
+                'available'    => __( 'Available', 'dokan' ),
+                'notAvailable' => __( 'Not Available', 'dokan' )
+            )
+        );
+
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
-            wp_enqueue_style( 'icomoon' );
-            wp_enqueue_style( 'fontawesome' );
-            // wp_enqueue_style( 'dokan-tabs' );
-            wp_enqueue_style( 'dokan-style' );
-            dokan_reports_scripts();
-            dokan_frontend_dashboard_scripts();
+            if ( DOKAN_LOAD_SCRIPTS === true ) {
 
-            wp_enqueue_script( 'jquery' );
-            wp_enqueue_script( 'jquery-ui' );
-            wp_enqueue_script( 'jquery-ui-datepicker' );
-            wp_enqueue_script( 'bootstrap-min', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
-            wp_enqueue_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
-            wp_enqueue_script( 'dokan-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), false, null, true );
-            wp_localize_script( 'jquery', 'dokan', array(
-                'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-                'nonce'       => wp_create_nonce( 'dokan_reviews' ),
-                'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
-                'seller'      => array(
-                    'available'    => __( 'Available', 'dokan' ),
-                    'notAvailable' => __( 'Not Available', 'dokan' )
-                )
-            ) );
+                wp_enqueue_style( 'jquery-ui' );
+                wp_enqueue_style( 'dokan-extra' );
+                wp_enqueue_style( 'dokan-style' );
+
+                wp_enqueue_script( 'jquery' );
+                wp_enqueue_script( 'jquery-ui' );
+                wp_enqueue_script( 'jquery-ui-autocomplete' );
+                wp_enqueue_script( 'jquery-ui-datepicker' );
+                wp_enqueue_script( 'underscore' );
+                wp_enqueue_script( 'post' );
+                wp_enqueue_script( 'bootstrap-tooltip' );
+                wp_enqueue_script( 'form-validate' );
+                wp_enqueue_script( 'dokan-tabs-scripts' );
+                wp_enqueue_script( 'jquery-chart' );
+                wp_enqueue_script( 'jquery-flot' );
+                wp_enqueue_script( 'chosen' );
+                wp_enqueue_media();
+
+                wp_enqueue_script( 'dokan-script' );
+                wp_localize_script( 'jquery', 'dokan', $localize_script );
+            }
         }
-
-        if ( DOKAN_LOAD_SCRIPTS === true ) {
-
-            wp_enqueue_script( 'jquery' );
-            wp_enqueue_script( 'jquery-ui' );
-            wp_enqueue_script( 'jquery-ui-datepicker' );
-            wp_enqueue_script( 'bootstrap-min', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
-            wp_enqueue_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
-            wp_enqueue_script( 'dokan-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), false, null, true );
-            wp_localize_script( 'jquery', 'dokan', array(
-                'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-                'nonce'       => wp_create_nonce( 'dokan_reviews' ),
-                'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
-                'seller'      => array(
-                    'available'    => __( 'Available', 'dokan' ),
-                    'notAvailable' => __( 'Not Available', 'dokan' )
-                )
-            ) );
-        }
-
     }
 
 
@@ -336,7 +319,7 @@ class WeDevs_Dokan {
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
         add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ) );
-        // add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
+        add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
     }
 
     /**
