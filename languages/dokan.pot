@@ -1,0 +1,2898 @@
+# Copyright (C) 2014 weDevs
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Dokan - Create multi-vendor marketplace in minutes! 1.0\n"
+"Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
+"POT-Creation-Date: 2014-09-14 11:34:41+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"X-Generator: grunt-wp-i18n 0.4.8\n"
+
+#: includes/widgets/best-seller.php:97
+msgid "3"
+msgstr ""
+
+#: classes/admin-user-profile.php:53
+msgid "Dokan Options"
+msgstr ""
+
+#: classes/admin-user-profile.php:58
+msgid "Banner"
+msgstr ""
+
+#: classes/admin-user-profile.php:70 classes/template-settings.php:210
+msgid "Upload banner"
+msgstr ""
+
+#: classes/admin-user-profile.php:71 classes/template-settings.php:211
+msgid "(Upload a banner for your store. Banner size is (825x300) pixel. )"
+msgstr ""
+
+#: classes/admin-user-profile.php:78
+msgid "Store name"
+msgstr ""
+
+#: classes/admin-user-profile.php:85 classes/template-settings.php:333
+#: includes/template-tags.php:477
+msgid "Address"
+msgstr ""
+
+#: classes/admin-user-profile.php:92 includes/admin/sellers.php:21
+#: includes/admin/sellers.php:96 includes/template-tags.php:482
+#: templates/sellers.php:60
+msgid "Phone"
+msgstr ""
+
+#: classes/admin-user-profile.php:99
+msgid "Twitter Profile"
+msgstr ""
+
+#: classes/admin-user-profile.php:106
+msgid "Facebook Profile"
+msgstr ""
+
+#: classes/admin-user-profile.php:113
+msgid "Google Plus Profile"
+msgstr ""
+
+#: classes/admin-user-profile.php:120
+msgid "Linkedin Profile"
+msgstr ""
+
+#: classes/admin-user-profile.php:127
+msgid "YouTube Profile"
+msgstr ""
+
+#: classes/admin-user-profile.php:134
+msgid "Selling"
+msgstr ""
+
+#: classes/admin-user-profile.php:139
+msgid "Enable Selling"
+msgstr ""
+
+#: classes/admin-user-profile.php:142
+msgid "Enable or disable product selling capability"
+msgstr ""
+
+#: classes/admin-user-profile.php:147
+msgid "Publishing"
+msgstr ""
+
+#: classes/admin-user-profile.php:152
+msgid "Publish product directly"
+msgstr ""
+
+#: classes/admin-user-profile.php:155
+msgid "Instead going pending, products will be published directly"
+msgstr ""
+
+#: classes/admin-user-profile.php:160 includes/admin/admin.php:166
+msgid "Seller Percentage"
+msgstr ""
+
+#: classes/admin-user-profile.php:164
+msgid "How much amount (%) will get from each order"
+msgstr ""
+
+#: classes/ajax.php:102 classes/ajax.php:136
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: classes/ajax.php:106 classes/ajax.php:140
+msgid "You have taken too long. Please go back and retry."
+msgstr ""
+
+#: classes/ajax.php:115 classes/ajax.php:149
+msgid "You do not have permission to change this order"
+msgstr ""
+
+#: classes/ajax.php:200
+msgid "File %d"
+msgstr ""
+
+#: classes/ajax.php:250 includes/woo-views/variation-admin-html.php:120
+#: includes/woo-views/variation-admin-html.php:133
+msgid "Same as parent"
+msgstr ""
+
+#: classes/ajax.php:251 includes/wc-functions.php:26
+msgid "Standard"
+msgstr ""
+
+#: classes/ajax.php:487 includes/template-tags.php:226
+msgid "Something went wrong!"
+msgstr ""
+
+#: classes/ajax.php:495
+msgid "Email sent successfully!"
+msgstr ""
+
+#: classes/customizer.php:19
+msgid "Theme Logo"
+msgstr ""
+
+#: classes/customizer.php:21
+msgid "Upload your logo to replace the default Logo (dimension : 180 X 50)"
+msgstr ""
+
+#: classes/customizer.php:27
+msgid "Upload Logo"
+msgstr ""
+
+#: classes/customizer.php:39
+msgid "Link"
+msgstr ""
+
+#: classes/customizer.php:52
+msgid "Link hover"
+msgstr ""
+
+#: classes/customizer.php:65
+msgid "Header Background"
+msgstr ""
+
+#: classes/customizer.php:78
+msgid "Navigation Background"
+msgstr ""
+
+#: classes/customizer.php:91
+msgid "Navigation Link"
+msgstr ""
+
+#: classes/customizer.php:103
+msgid "Navigation Link Hover"
+msgstr ""
+
+#: classes/customizer.php:116
+msgid "Footer Background"
+msgstr ""
+
+#: classes/customizer.php:129
+msgid "Copy Container Background"
+msgstr ""
+
+#: classes/customizer.php:142
+msgid "Footer text"
+msgstr ""
+
+#: classes/customizer.php:155
+msgid "Sidebar widget header"
+msgstr ""
+
+#: classes/customizer.php:168
+msgid "Footer widget header"
+msgstr ""
+
+#: classes/customizer.php:182
+msgid "Footer Widget link"
+msgstr ""
+
+#: classes/customizer.php:194
+msgid "Footer Widget link hover"
+msgstr ""
+
+#: classes/email.php:107
+msgid "\"%s\" sent you a message from your \"%s\" store"
+msgstr ""
+
+#: classes/email.php:167
+msgid "[%s] New Withdraw Request"
+msgstr ""
+
+#: classes/email.php:188
+msgid "[%s] Your Withdraw Request has been approved"
+msgstr ""
+
+#: classes/email.php:210
+msgid "[%s] Your Withdraw Request has been cancelled"
+msgstr ""
+
+#: classes/email.php:248
+msgid "[%s] New Seller Registered"
+msgstr ""
+
+#: classes/email.php:300
+msgid "[%s] New Product Added"
+msgstr ""
+
+#: classes/email.php:341
+msgid "[%s] Your product has been approved!"
+msgstr ""
+
+#: classes/installer.php:51 includes/admin/reports.php:119
+#: includes/admin/reports.php:129 includes/admin-functions.php:52
+#: includes/admin-functions.php:545 includes/admin-functions.php:558
+#: includes/wc-template.php:19
+msgid "Seller"
+msgstr ""
+
+#: classes/installer.php:80 includes/admin/admin.php:66
+#: includes/admin/admin.php:205 includes/template-tags.php:305
+msgid "Dashboard"
+msgstr ""
+
+#: classes/installer.php:86 includes/admin/admin.php:211
+#: includes/template-tags.php:560
+msgid "My Orders"
+msgstr ""
+
+#: classes/slider.php:47
+msgid "Slides"
+msgstr ""
+
+#: classes/slider.php:48
+msgid "Slider Options"
+msgstr ""
+
+#: classes/slider.php:68 classes/slider.php:79 classes/slider.php:80
+#: includes/admin/admin.php:70
+msgid "Slider"
+msgstr ""
+
+#: classes/slider.php:81
+msgid "Dokan Slider"
+msgstr ""
+
+#: classes/slider.php:82
+msgid "Add Slider"
+msgstr ""
+
+#: classes/slider.php:83
+msgid "Add New Slider"
+msgstr ""
+
+#: classes/slider.php:84 classes/template-coupons.php:246
+#: templates/edit/sidebar.php:15 templates/edit/sidebar.php:58
+#: templates/product-edit.php:84 templates/products-listing.php:74
+msgid "Edit"
+msgstr ""
+
+#: classes/slider.php:85
+msgid "Edit Slider"
+msgstr ""
+
+#: classes/slider.php:86
+msgid "New Slider"
+msgstr ""
+
+#: classes/slider.php:87 classes/slider.php:88
+msgid "View Slider"
+msgstr ""
+
+#: classes/slider.php:89
+msgid "Search Slider"
+msgstr ""
+
+#: classes/slider.php:90
+msgid "No Slider Found"
+msgstr ""
+
+#: classes/slider.php:91
+msgid "No Slider found in trash"
+msgstr ""
+
+#: classes/slider.php:92
+msgid "Parent Slider"
+msgstr ""
+
+#: classes/slider.php:110
+msgid "Effect"
+msgstr ""
+
+#: classes/slider.php:119
+msgid "Slide Speed"
+msgstr ""
+
+#: classes/slider.php:123
+msgid "Pagination"
+msgstr ""
+
+#: classes/slider.php:126 classes/slider.php:135 includes/admin/reports.php:49
+#: includes/admin/reports.php:63 includes/reports.php:333
+#: includes/reports.php:700 includes/reports.php:804
+msgid "Show"
+msgstr ""
+
+#: classes/slider.php:127 classes/slider.php:136
+msgid "Hide"
+msgstr ""
+
+#: classes/slider.php:132
+msgid "Direction Navigation"
+msgstr ""
+
+#: classes/slider.php:141
+msgid "Sliding Direction"
+msgstr ""
+
+#: classes/slider.php:144
+msgid "horizontal"
+msgstr ""
+
+#: classes/slider.php:145
+msgid "vertical"
+msgstr ""
+
+#: classes/slider.php:150
+msgid "Touch Swipe"
+msgstr ""
+
+#: classes/slider.php:153 classes/slider.php:163 classes/slider.php:172
+#: classes/slider.php:181
+msgid "Yes"
+msgstr ""
+
+#: classes/slider.php:154 classes/slider.php:162 classes/slider.php:171
+#: classes/slider.php:180
+msgid "No"
+msgstr ""
+
+#: classes/slider.php:159
+msgid "Randomize"
+msgstr ""
+
+#: classes/slider.php:168
+msgid "Pause on Hover"
+msgstr ""
+
+#: classes/slider.php:177
+msgid "Pause/Play"
+msgstr ""
+
+#: classes/slider.php:195
+msgid "Add Slide"
+msgstr ""
+
+#: classes/slider.php:339
+msgid "Slide"
+msgstr ""
+
+#: classes/slider.php:342
+msgid "Slide Type"
+msgstr ""
+
+#: classes/slider.php:345
+msgid "Text with Image"
+msgstr ""
+
+#: classes/slider.php:346
+msgid "Full Image"
+msgstr ""
+
+#: classes/slider.php:347
+msgid "Full Video"
+msgstr ""
+
+#: classes/slider.php:352
+msgid "Title Text"
+msgstr ""
+
+#: classes/slider.php:358
+msgid "Detail Text"
+msgstr ""
+
+#: classes/slider.php:364
+msgid "Slide Image"
+msgstr ""
+
+#: classes/slider.php:376
+msgid "Video Embed Code"
+msgstr ""
+
+#: classes/slider.php:382
+msgid "Slide Link Url"
+msgstr ""
+
+#: classes/slider.php:388
+msgid "Open Link"
+msgstr ""
+
+#: classes/slider.php:391
+msgid "Open link in same window"
+msgstr ""
+
+#: classes/slider.php:392
+msgid "Open link in new window"
+msgstr ""
+
+#: classes/slider.php:398 includes/woo-views/variation-admin-html.php:6
+#: templates/edit/attributes.php:62
+msgid "Remove"
+msgstr ""
+
+#: classes/slider.php:483
+msgid "Read More..."
+msgstr ""
+
+#: classes/template-coupons.php:31 classes/template-coupons.php:46
+#: classes/template-coupons.php:76 classes/template-coupons.php:351
+#: classes/template-settings.php:24 classes/template-settings.php:49
+#: classes/template-withdraw.php:158 classes/template-withdraw.php:178
+msgid "Are you cheating?"
+msgstr ""
+
+#: classes/template-coupons.php:52
+msgid "Please enter the coupon title"
+msgstr ""
+
+#: classes/template-coupons.php:56
+msgid "Please enter the amount"
+msgstr ""
+
+#: classes/template-coupons.php:60
+msgid "Please specify any products"
+msgstr ""
+
+#: classes/template-coupons.php:155
+msgid "Coupon has been deleted successfully!"
+msgstr ""
+
+#: classes/template-coupons.php:164
+msgid "Coupon has been saved successfully!"
+msgstr ""
+
+#: classes/template-coupons.php:173
+msgid "Coupon has been updated successfully!"
+msgstr ""
+
+#: classes/template-coupons.php:222
+msgid "Code"
+msgstr ""
+
+#: classes/template-coupons.php:223
+msgid "Coupon type"
+msgstr ""
+
+#: classes/template-coupons.php:224
+msgid "Coupon amount"
+msgstr ""
+
+#: classes/template-coupons.php:225
+msgid "Product IDs"
+msgstr ""
+
+#: classes/template-coupons.php:226
+msgid "Usage / Limit"
+msgstr ""
+
+#: classes/template-coupons.php:227
+msgid "Expiry date"
+msgstr ""
+
+#: classes/template-coupons.php:247
+msgid "Are you sure want to delete"
+msgstr ""
+
+#: classes/template-coupons.php:247
+msgid "delete"
+msgstr ""
+
+#: classes/template-coupons.php:257
+msgid "Fixed Amount"
+msgstr ""
+
+#: classes/template-coupons.php:259
+msgid "Percent"
+msgstr ""
+
+#: classes/template-coupons.php:289
+msgid "%s / %s"
+msgstr ""
+
+#: classes/template-coupons.php:291
+msgid "%s / &infin;"
+msgstr ""
+
+#: classes/template-coupons.php:314
+msgid "No coupons found!"
+msgstr ""
+
+#: classes/template-coupons.php:327 classes/template-reviews.php:216
+#: classes/template-reviews.php:270 classes/template-withdraw.php:480
+#: includes/admin/reports.php:183
+msgid "&laquo;"
+msgstr ""
+
+#: classes/template-coupons.php:328 classes/template-reviews.php:217
+#: classes/template-reviews.php:271 classes/template-withdraw.php:481
+#: includes/admin/reports.php:184
+msgid "&raquo;"
+msgstr ""
+
+#: classes/template-coupons.php:347
+msgid "Create Coupon"
+msgstr ""
+
+#: classes/template-coupons.php:355
+msgid "Update Coupon"
+msgstr ""
+
+#: classes/template-coupons.php:484
+msgid "Coupon Title"
+msgstr ""
+
+#: classes/template-coupons.php:491
+msgid "Description"
+msgstr ""
+
+#: classes/template-coupons.php:498
+msgid "Discount Type"
+msgstr ""
+
+#: classes/template-coupons.php:502
+msgid "Product Discount"
+msgstr ""
+
+#: classes/template-coupons.php:503
+msgid "Product % Discount"
+msgstr ""
+
+#: classes/template-coupons.php:509 classes/template-withdraw.php:351
+#: classes/template-withdraw.php:365 classes/template-withdraw.php:621
+#: classes/template-withdraw.php:788
+msgid "Amount"
+msgstr ""
+
+#: classes/template-coupons.php:516
+msgid "Email Restrictions"
+msgstr ""
+
+#: classes/template-coupons.php:518
+msgid "Email restrictions"
+msgstr ""
+
+#: classes/template-coupons.php:523 classes/template-coupons.php:525
+msgid "Usage Limit"
+msgstr ""
+
+#: classes/template-coupons.php:530 classes/template-coupons.php:532
+msgid "Expire Date"
+msgstr ""
+
+#: classes/template-coupons.php:552 includes/reports.php:707
+#: includes/reports.php:810 woocommerce/order/order-details.php:24
+msgid "Product"
+msgstr ""
+
+#: classes/template-coupons.php:573
+msgid "Enable Free Shipping"
+msgstr ""
+
+#: classes/template-coupons.php:578
+msgid "Check this box if the coupon grants free shipping."
+msgstr ""
+
+#: classes/template-coupons.php:585
+msgid "Exclude Sale Items"
+msgstr ""
+
+#: classes/template-coupons.php:590
+msgid ""
+"Check this box if the coupon should not apply to items on sale. Per-item "
+"coupons will only work if the item is not on sale. Per-cart coupons will "
+"only work if there are no sale items in the cart."
+msgstr ""
+
+#: classes/template-coupons.php:597 classes/template-coupons.php:599
+msgid "Minimum Amount"
+msgstr ""
+
+#: classes/template-coupons.php:608
+msgid "Exclude products"
+msgstr ""
+
+#: classes/template-reviews.php:122 includes/theme-functions.php:605
+msgid "Author"
+msgstr ""
+
+#: classes/template-reviews.php:123
+msgid "Comment"
+msgstr ""
+
+#: classes/template-reviews.php:124
+msgid "Link To"
+msgstr ""
+
+#: classes/template-reviews.php:125
+msgid "Rating"
+msgstr ""
+
+#: classes/template-reviews.php:139
+msgid "Submit"
+msgstr ""
+
+#: classes/template-reviews.php:148 includes/admin/sellers.php:16
+#: includes/admin/sellers.php:91
+#: includes/woo-views/variation-admin-html.php:148
+#: templates/products-listing.php:28
+msgid "Name"
+msgstr ""
+
+#: classes/template-reviews.php:152 includes/admin/sellers.php:18
+#: includes/admin/sellers.php:93 includes/withdraw-functions.php:109
+#: includes/withdraw-functions.php:133
+msgid "E-mail"
+msgstr ""
+
+#: classes/template-reviews.php:156
+msgid "URL"
+msgstr ""
+
+#: classes/template-reviews.php:170
+msgid "Close"
+msgstr ""
+
+#: classes/template-reviews.php:171
+msgid "Update Comment"
+msgstr ""
+
+#: classes/template-reviews.php:291 classes/template-reviews.php:296
+#: classes/template-reviews.php:300 classes/template-reviews.php:304
+msgid "-None-"
+msgstr ""
+
+#: classes/template-reviews.php:292
+msgid "Mark Approve"
+msgstr ""
+
+#: classes/template-reviews.php:293 classes/template-reviews.php:306
+msgid "Mark Spam"
+msgstr ""
+
+#: classes/template-reviews.php:294 classes/template-reviews.php:307
+msgid "Mark Trash"
+msgstr ""
+
+#: classes/template-reviews.php:297
+msgid "Mark Not Spam"
+msgstr ""
+
+#: classes/template-reviews.php:298 classes/template-reviews.php:302
+msgid "Delete permanently"
+msgstr ""
+
+#: classes/template-reviews.php:301
+msgid "Resore"
+msgstr ""
+
+#: classes/template-reviews.php:305 classes/template-withdraw.php:455
+#: classes/template-withdraw.php:460
+msgid "Mark Pending"
+msgstr ""
+
+#: classes/template-reviews.php:360
+msgid "No Result Found"
+msgstr ""
+
+#: classes/template-reviews.php:417
+msgid "Submitted on "
+msgstr ""
+
+#: classes/template-reviews.php:427
+msgid "View Comment"
+msgstr ""
+
+#: classes/template-reviews.php:443
+msgid "Rated %d out of 5"
+msgstr ""
+
+#: classes/template-reviews.php:444
+msgid "out of 5"
+msgstr ""
+
+#: classes/template-reviews.php:460 classes/template-reviews.php:479
+msgid "Approve"
+msgstr ""
+
+#: classes/template-reviews.php:461 classes/template-reviews.php:483
+#: templates/dashboard.php:133
+msgid "Spam"
+msgstr ""
+
+#: classes/template-reviews.php:462 classes/template-reviews.php:484
+#: templates/dashboard.php:138
+msgid "Trash"
+msgstr ""
+
+#: classes/template-reviews.php:466
+msgid "Not Spam"
+msgstr ""
+
+#: classes/template-reviews.php:467 classes/template-reviews.php:472
+#: templates/products-listing.php:75
+msgid "Delete Permanently"
+msgstr ""
+
+#: classes/template-reviews.php:471
+msgid "Restore"
+msgstr ""
+
+#: classes/template-reviews.php:477
+msgid "Unapprove"
+msgstr ""
+
+#: classes/template-reviews.php:482
+msgid "Quick Edit"
+msgstr ""
+
+#: classes/template-reviews.php:565 templates/dashboard.php:123
+msgid "All"
+msgstr ""
+
+#: classes/template-reviews.php:567
+msgid "Pending ("
+msgstr ""
+
+#: classes/template-reviews.php:567 classes/template-reviews.php:570
+#: classes/template-reviews.php:573
+msgid ")"
+msgstr ""
+
+#: classes/template-reviews.php:570
+msgid "Spam ("
+msgstr ""
+
+#: classes/template-reviews.php:573
+msgid "Trash ("
+msgstr ""
+
+#: classes/template-settings.php:38
+msgid "Your information has been saved successfully"
+msgstr ""
+
+#: classes/template-settings.php:57
+msgid "Dokan name required"
+msgstr ""
+
+#: classes/template-settings.php:63
+msgid "Dokan type required"
+msgstr ""
+
+#: classes/template-settings.php:70
+msgid "Invalid email"
+msgstr ""
+
+#: classes/template-settings.php:147
+msgid "Your profile has been updated successfully!"
+msgstr ""
+
+#: classes/template-settings.php:217
+msgid "Store Name"
+msgstr ""
+
+#: classes/template-settings.php:225
+msgid "Profile Picture"
+msgstr ""
+
+#: classes/template-settings.php:237
+msgid "Upload Photo"
+msgstr ""
+
+#: classes/template-settings.php:243
+msgid "Social Profile"
+msgstr ""
+
+#: classes/template-settings.php:273 classes/template-withdraw.php:756
+msgid "Payment Method"
+msgstr ""
+
+#: classes/template-settings.php:314
+msgid "Phone No"
+msgstr ""
+
+#: classes/template-settings.php:321
+msgid "Email"
+msgstr ""
+
+#: classes/template-settings.php:326
+msgid "Show email address in store"
+msgstr ""
+
+#: classes/template-settings.php:340
+msgid "Map"
+msgstr ""
+
+#: classes/template-settings.php:347
+msgid "Type an address to find"
+msgstr ""
+
+#: classes/template-settings.php:348
+msgid "Find Address"
+msgstr ""
+
+#: classes/template-settings.php:359
+msgid "Update Settings"
+msgstr ""
+
+#: classes/template-settings.php:507
+msgid "Book"
+msgstr ""
+
+#: classes/template-settings.php:508
+msgid "Dress"
+msgstr ""
+
+#: classes/template-settings.php:509
+msgid "Electronic"
+msgstr ""
+
+#: classes/template-shortcodes.php:78
+msgid "Details about your product..."
+msgstr ""
+
+#: classes/template-shortcodes.php:89
+msgid "Please enter product title"
+msgstr ""
+
+#: classes/template-shortcodes.php:93
+msgid "Please select a category"
+msgstr ""
+
+#: classes/template-withdraw.php:187
+msgid "Withdraw amount required "
+msgstr ""
+
+#: classes/template-withdraw.php:190
+msgid "You don't have enough balance for this request"
+msgstr ""
+
+#: classes/template-withdraw.php:192
+msgid "Withdraw amount must be greater than %d"
+msgstr ""
+
+#: classes/template-withdraw.php:196
+msgid "withdraw method required"
+msgstr ""
+
+#: classes/template-withdraw.php:322
+msgid "Requests deleted!"
+msgstr ""
+
+#: classes/template-withdraw.php:330
+msgid "Requests cancelled!"
+msgstr ""
+
+#: classes/template-withdraw.php:338
+msgid "Requests approved!"
+msgstr ""
+
+#: classes/template-withdraw.php:350 classes/template-withdraw.php:364
+msgid "User Name"
+msgstr ""
+
+#: classes/template-withdraw.php:352 classes/template-withdraw.php:366
+#: classes/template-withdraw.php:622 classes/template-withdraw.php:789
+msgid "Method"
+msgstr ""
+
+#: classes/template-withdraw.php:353 classes/template-withdraw.php:367
+msgid "Method Details"
+msgstr ""
+
+#: classes/template-withdraw.php:354 classes/template-withdraw.php:368
+msgid "Note"
+msgstr ""
+
+#: classes/template-withdraw.php:355 classes/template-withdraw.php:369
+msgid "IP"
+msgstr ""
+
+#: classes/template-withdraw.php:356 classes/template-withdraw.php:370
+#: classes/template-withdraw.php:623 classes/template-withdraw.php:790
+#: includes/admin-functions.php:49 includes/wc-template.php:175
+#: templates/my-orders.php:41 templates/orders/listing.php:21
+#: templates/products-listing.php:35 woocommerce/myaccount/my-orders.php:34
+msgid "Date"
+msgstr ""
+
+#: classes/template-withdraw.php:410 templates/orders/order-details.php:263
+msgid "Add note"
+msgstr ""
+
+#: classes/template-withdraw.php:416
+msgid "Save"
+msgstr ""
+
+#: classes/template-withdraw.php:417
+msgid "cancel"
+msgstr ""
+
+#: classes/template-withdraw.php:433
+msgid "No result found"
+msgstr ""
+
+#: classes/template-withdraw.php:445 includes/admin/sellers.php:105
+msgid "Bulk Actions"
+msgstr ""
+
+#: classes/template-withdraw.php:449 classes/template-withdraw.php:459
+msgid "Approve Requests"
+msgstr ""
+
+#: classes/template-withdraw.php:450 classes/template-withdraw.php:454
+msgid "Mark as Cancelled"
+msgstr ""
+
+#: classes/template-withdraw.php:465 includes/admin/sellers.php:106
+#: includes/woo-views/html-product-download.php:15
+#: includes/woo-views/html-product-variation-download.php:5
+#: templates/edit/sidebar.php:163
+msgid "Delete"
+msgstr ""
+
+#: classes/template-withdraw.php:466
+msgid "Download PayPal mass payment file"
+msgstr ""
+
+#: classes/template-withdraw.php:471 includes/admin/sellers.php:109
+msgid "Apply"
+msgstr ""
+
+#: classes/template-withdraw.php:605
+msgid "Pending Reivew"
+msgstr ""
+
+#: classes/template-withdraw.php:609
+msgid "Accepted"
+msgstr ""
+
+#: classes/template-withdraw.php:624 classes/template-withdraw.php:642
+#: templates/edit/sidebar.php:31 templates/edit/sidebar.php:71
+#: templates/my-orders.php:85 woocommerce/myaccount/my-orders.php:78
+msgid "Cancel"
+msgstr ""
+
+#: classes/template-withdraw.php:625 includes/admin/reports.php:123
+#: includes/admin/reports.php:133 includes/admin/sellers.php:22
+#: includes/admin/sellers.php:97 includes/admin-functions.php:42
+#: includes/wc-template.php:176 templates/my-orders.php:42
+#: templates/orders/listing.php:19 templates/products-listing.php:29
+#: woocommerce/myaccount/my-orders.php:35
+msgid "Status"
+msgstr ""
+
+#: classes/template-withdraw.php:657
+msgid "- Select Method -"
+msgstr ""
+
+#: classes/template-withdraw.php:658
+msgid "Paypal"
+msgstr ""
+
+#: classes/template-withdraw.php:659 includes/withdraw-functions.php:15
+msgid "Bank Transfer"
+msgstr ""
+
+#: classes/template-withdraw.php:675
+msgid "Your request has been cancelled successfully!"
+msgstr ""
+
+#: classes/template-withdraw.php:684
+msgid "Your request has been received successfully and is under review!"
+msgstr ""
+
+#: classes/template-withdraw.php:692
+msgid "Unknown error!"
+msgstr ""
+
+#: classes/template-withdraw.php:708
+msgid "You've already pending withdraw request(s)."
+msgstr ""
+
+#: classes/template-withdraw.php:709
+msgid "Until it's been cancelled or approved, you can't submit any new request."
+msgstr ""
+
+#: classes/template-withdraw.php:718
+msgid "You don't have sufficient balance for a withdraw request!"
+msgstr ""
+
+#: classes/template-withdraw.php:742
+msgid "Withdraw Amount"
+msgstr ""
+
+#: classes/template-withdraw.php:771
+msgid "Submit Request"
+msgstr ""
+
+#: classes/template-withdraw.php:808
+msgid "Err!"
+msgstr ""
+
+#: classes/template-withdraw.php:808
+msgid "Sorry, no transactions found!"
+msgstr ""
+
+#: classes/update.php:26
+msgid "Updates"
+msgstr ""
+
+#: classes/update.php:49
+msgid ""
+"Please <a href=\"%s\">enter</a> your <strong>Dokan</strong> theme license "
+"key to get regular update and support."
+msgstr ""
+
+#: classes/update.php:64
+msgid "Pleae activate your copy"
+msgstr ""
+
+#: classes/update.php:91
+msgid "Dokan Error:"
+msgstr ""
+
+#: classes/update.php:230
+msgid "Empty email address"
+msgstr ""
+
+#: classes/update.php:234
+msgid "Empty license key"
+msgstr ""
+
+#: classes/update.php:252
+msgid "Settings Saved"
+msgstr ""
+
+#: classes/update.php:268
+msgid "Theme Activation"
+msgstr ""
+
+#: classes/update.php:271
+msgid ""
+"Enter the E-mail address that was used for purchasing the theme and the "
+"license key."
+msgstr ""
+
+#: classes/update.php:272
+msgid ""
+"We recommend you to enter those details to get regular <strong>theme update "
+"and support</strong>."
+msgstr ""
+
+#: classes/update.php:291
+msgid "E-mail Address"
+msgstr ""
+
+#: classes/update.php:294
+msgid "Enter your purchase Email address"
+msgstr ""
+
+#: classes/update.php:298
+msgid "License Key"
+msgstr ""
+
+#: classes/update.php:301
+msgid "Enter your license key"
+msgstr ""
+
+#: classes/update.php:306
+msgid "Save & Activate"
+msgstr ""
+
+#: classes/update.php:311
+msgid "Theme is activated"
+msgstr ""
+
+#: classes/update.php:315
+msgid "Delete License"
+msgstr ""
+
+#: dokan.php:251
+msgid "Available"
+msgstr ""
+
+#: dokan.php:252
+msgid "Not Available"
+msgstr ""
+
+#: dokan.php:532 includes/admin/admin.php:65
+msgid "Dokan"
+msgstr ""
+
+#: dokan.php:541 includes/admin/admin.php:66 includes/admin/dashboard.php:96
+msgid "Dokan Dashboard"
+msgstr ""
+
+#: dokan.php:548 includes/admin/admin.php:59 includes/admin/admin.php:67
+#: includes/admin/dashboard.php:72 includes/template-tags.php:335
+#: templates/withdraw.php:21
+msgid "Withdraw"
+msgstr ""
+
+#: dokan.php:555 includes/admin/admin.php:68
+msgid "All Sellers"
+msgstr ""
+
+#: dokan.php:562 includes/admin/admin.php:69
+msgid "Earning Reports"
+msgstr ""
+
+#: dokan.php:569 includes/admin/admin.php:74 includes/template-tags.php:340
+#: templates/settings.php:29
+msgid "Settings"
+msgstr ""
+
+#: includes/admin/add-on.php:2
+msgid "Dokan - Add-ons"
+msgstr ""
+
+#: includes/admin/admin.php:62
+msgid "Withdraw %s"
+msgstr ""
+
+#: includes/admin/admin.php:68
+msgid "Sellers Listing"
+msgstr ""
+
+#: includes/admin/admin.php:75
+msgid "Add Ons"
+msgstr ""
+
+#: includes/admin/admin.php:75
+msgid "Add-ons"
+msgstr ""
+
+#: includes/admin/admin.php:85
+msgid "General"
+msgstr ""
+
+#: includes/admin/admin.php:89
+msgid "Selling Options"
+msgstr ""
+
+#: includes/admin/admin.php:93
+msgid "Page Settings"
+msgstr ""
+
+#: includes/admin/admin.php:100
+msgid "- select -"
+msgstr ""
+
+#: includes/admin/admin.php:125
+msgid "Admin area access"
+msgstr ""
+
+#: includes/admin/admin.php:126
+msgid "Disable sellers and customers from accessing wp-admin area"
+msgstr ""
+
+#: includes/admin/admin.php:132
+msgid "Show Map on Store Page"
+msgstr ""
+
+#: includes/admin/admin.php:133
+msgid "Enable showing Store location map on store left sidebar"
+msgstr ""
+
+#: includes/admin/admin.php:139
+msgid "Show Contact Form on Store Page"
+msgstr ""
+
+#: includes/admin/admin.php:140
+msgid "Enable showing contact seller form on store left sidebar"
+msgstr ""
+
+#: includes/admin/admin.php:148
+msgid "New Seller Enable Selling"
+msgstr ""
+
+#: includes/admin/admin.php:149
+msgid "Make selling status enable for new registred seller"
+msgstr ""
+
+#: includes/admin/admin.php:155
+msgid "New Product Status"
+msgstr ""
+
+#: includes/admin/admin.php:156
+msgid "Product status when a seller creates a product"
+msgstr ""
+
+#: includes/admin/admin.php:160 templates/products-listing.php:162
+msgid "Published"
+msgstr ""
+
+#: includes/admin/admin.php:161 includes/theme-functions.php:476
+#: templates/dashboard.php:185
+msgid "Pending Review"
+msgstr ""
+
+#: includes/admin/admin.php:167
+msgid "How much amount (%) a seller will get from each order"
+msgstr ""
+
+#: includes/admin/admin.php:173
+msgid "Order Status Change"
+msgstr ""
+
+#: includes/admin/admin.php:174
+msgid "Seller Could Change Order Status"
+msgstr ""
+
+#: includes/admin/admin.php:180
+msgid "Withdraw Methods"
+msgstr ""
+
+#: includes/admin/admin.php:181
+msgid "Withdraw methods for sellers"
+msgstr ""
+
+#: includes/admin/admin.php:188
+msgid "Order Status for Withdraw"
+msgstr ""
+
+#: includes/admin/admin.php:189
+msgid "Order status for which seller can make a withdraw request."
+msgstr ""
+
+#: includes/admin/admin.php:191 includes/admin/admin.php:192
+#: templates/dashboard.php:80
+msgid "Completed"
+msgstr ""
+
+#: includes/admin/admin.php:191 includes/admin/admin.php:192
+#: templates/dashboard.php:90 templates/orders/listing.php:90
+msgid "Processing"
+msgstr ""
+
+#: includes/admin/admin.php:191 includes/admin/admin.php:192
+msgid "On-hold"
+msgstr ""
+
+#: includes/admin/admin.php:196
+msgid "Minimum Withdraw Limit"
+msgstr ""
+
+#: includes/admin/admin.php:197
+msgid "Minimum balance required to make a withdraw request"
+msgstr ""
+
+#: includes/admin/dashboard.php:39
+msgid "Sellers"
+msgstr ""
+
+#: includes/admin/dashboard.php:53
+msgid "No Active Seller"
+msgstr ""
+
+#: includes/admin/dashboard.php:64
+msgid "No Pending Seller"
+msgstr ""
+
+#: includes/admin/dashboard.php:77
+msgid "%d Pending Withdraw"
+msgstr ""
+
+#: includes/admin/dashboard.php:81
+msgid "%d Completed Withdraw"
+msgstr ""
+
+#: includes/admin/dashboard.php:85
+msgid "%d Cancelled Withdraw"
+msgstr ""
+
+#: includes/admin/dashboard.php:101
+msgid "At a Glance"
+msgstr ""
+
+#: includes/admin/dashboard.php:102
+msgid "Dokan News Updates"
+msgstr ""
+
+#: includes/admin/dashboard.php:110 includes/reports.php:14
+msgid "Overview"
+msgstr ""
+
+#: includes/admin/reports.php:7 includes/template-tags.php:325
+#: templates/reports.php:21
+msgid "Reports"
+msgstr ""
+
+#: includes/admin/reports.php:8
+msgid "All Logs"
+msgstr ""
+
+#: includes/admin/reports.php:15
+msgid "By Day"
+msgstr ""
+
+#: includes/admin/reports.php:20
+msgid "By Month"
+msgstr ""
+
+#: includes/admin/reports.php:42 includes/reports.php:326
+#: includes/reports.php:691 includes/reports.php:795
+msgid "From:"
+msgstr ""
+
+#: includes/admin/reports.php:46 includes/reports.php:330
+#: includes/reports.php:696 includes/reports.php:800
+msgid "To:"
+msgstr ""
+
+#: includes/admin/reports.php:55
+msgid "Year:"
+msgstr ""
+
+#: includes/admin/reports.php:90
+msgid "Total Earning"
+msgstr ""
+
+#: includes/admin/reports.php:94
+msgid "Total Earning in this period"
+msgstr ""
+
+#: includes/admin/reports.php:98
+msgid "Order total in this period"
+msgstr ""
+
+#: includes/admin/reports.php:102
+msgid "orders placed in this period"
+msgstr ""
+
+#: includes/admin/reports.php:118 includes/admin/reports.php:128
+#: includes/admin-functions.php:43 includes/wc-template.php:174
+#: templates/dashboard.php:46 templates/my-orders.php:40
+#: templates/orders/listing.php:17 woocommerce/myaccount/my-orders.php:33
+msgid "Order"
+msgstr ""
+
+#: includes/admin/reports.php:120 includes/admin/reports.php:130
+#: templates/orders/listing.php:18
+msgid "Order Total"
+msgstr ""
+
+#: includes/admin/reports.php:121 includes/admin/reports.php:131
+msgid "Seller Earning"
+msgstr ""
+
+#: includes/admin/reports.php:122 includes/admin/reports.php:132
+#: includes/admin-functions.php:387
+msgid "Commision"
+msgstr ""
+
+#: includes/admin/reports.php:159
+msgid "edit"
+msgstr ""
+
+#: includes/admin/sellers.php:2
+msgid "Seller Listing"
+msgstr ""
+
+#: includes/admin/sellers.php:15 includes/admin/sellers.php:90
+#: woocommerce/myaccount/form-login.php:74
+msgid "Username"
+msgstr ""
+
+#: includes/admin/sellers.php:17 includes/admin/sellers.php:92
+#: includes/template-tags.php:465
+msgid "Shop Name"
+msgstr ""
+
+#: includes/admin/sellers.php:19 includes/admin/sellers.php:55
+#: includes/admin/sellers.php:94 includes/template-tags.php:310
+#: templates/dashboard.php:160
+msgid "Products"
+msgstr ""
+
+#: includes/admin/sellers.php:20 includes/admin/sellers.php:95
+msgid "Balance"
+msgstr ""
+
+#: includes/admin/sellers.php:50
+msgid "Activate Selling"
+msgstr ""
+
+#: includes/admin/sellers.php:52
+msgid "Make Inactivate"
+msgstr ""
+
+#: includes/admin/sellers.php:56 includes/template-tags.php:315
+msgid "Orders"
+msgstr ""
+
+#: includes/admin/sellers.php:71
+msgid "Active"
+msgstr ""
+
+#: includes/admin/sellers.php:73
+msgid "Inactive"
+msgstr ""
+
+#: includes/admin/sellers.php:81
+msgid "No users found!"
+msgstr ""
+
+#: includes/admin/sellers.php:122 includes/template-tags.php:189
+#: templates/sellers.php:87
+msgid "&larr; Previous"
+msgstr ""
+
+#: includes/admin/sellers.php:123 includes/template-tags.php:200
+#: templates/sellers.php:88
+msgid "Next &rarr;"
+msgstr ""
+
+#: includes/admin/withdraw.php:8
+msgid "Withdraw Requests"
+msgstr ""
+
+#: includes/admin/withdraw.php:13 templates/dashboard.php:85
+#: templates/dashboard.php:128
+msgid "Pending"
+msgstr ""
+
+#: includes/admin/withdraw.php:18
+msgid "Approved"
+msgstr ""
+
+#: includes/admin/withdraw.php:23 templates/dashboard.php:95
+msgid "Cancelled"
+msgstr ""
+
+#: includes/admin-functions.php:44
+msgid "Purchased"
+msgstr ""
+
+#: includes/admin-functions.php:45
+msgid "Ship to"
+msgstr ""
+
+#: includes/admin-functions.php:47
+msgid "Customer Message"
+msgstr ""
+
+#: includes/admin-functions.php:48 templates/orders/order-details.php:225
+msgid "Order Notes"
+msgstr ""
+
+#: includes/admin-functions.php:50 includes/wc-template.php:177
+#: templates/dashboard.php:75 templates/dashboard.php:170
+#: templates/my-orders.php:43 templates/orders/order-fee-html.php:17
+#: woocommerce/myaccount/my-orders.php:36
+#: woocommerce/order/order-details.php:25
+msgid "Total"
+msgstr ""
+
+#: includes/admin-functions.php:51
+msgid "Actions"
+msgstr ""
+
+#: includes/admin-functions.php:53
+msgid "Sub Order"
+msgstr ""
+
+#: includes/admin-functions.php:79
+msgid "Sub Order of"
+msgstr ""
+
+#: includes/admin-functions.php:89
+msgid "Show Sub-Orders"
+msgstr ""
+
+#: includes/admin-functions.php:89
+msgid "Hide Sub-Orders"
+msgstr ""
+
+#: includes/admin-functions.php:246
+msgid "Toggle Sub-orders"
+msgstr ""
+
+#: includes/admin-functions.php:367
+msgid "Total Sales"
+msgstr ""
+
+#: includes/admin-functions.php:374
+msgid "Total: "
+msgstr ""
+
+#: includes/admin-functions.php:377 includes/reports.php:562
+msgid "Number of orders"
+msgstr ""
+
+#: includes/admin-functions.php:384 includes/reports.php:569
+msgid "sales"
+msgstr ""
+
+#: includes/admin-functions.php:394
+msgid "Commision: "
+msgstr ""
+
+#: includes/order-functions.php:205
+msgid "Mark parent order completed as all child orders are completed."
+msgstr ""
+
+#: includes/reports.php:11 includes/reports.php:708 includes/reports.php:811
+#: templates/dashboard.php:50 templates/dashboard.php:148
+msgid "Sales"
+msgstr ""
+
+#: includes/reports.php:20
+msgid "Sales by day"
+msgstr ""
+
+#: includes/reports.php:25
+msgid "Top sellers"
+msgstr ""
+
+#: includes/reports.php:30
+msgid "Top earners"
+msgstr ""
+
+#: includes/reports.php:288
+msgid "This month's sales"
+msgstr ""
+
+#: includes/reports.php:338
+msgid "Sales in this period"
+msgstr ""
+
+#: includes/reports.php:424
+msgid "%s sales in this period"
+msgstr ""
+
+#: includes/reports.php:428
+msgid "%s average daily sales"
+msgstr ""
+
+#: includes/reports.php:432
+msgid "%s orders placed"
+msgstr ""
+
+#: includes/reports.php:436
+msgid "%s items purchased"
+msgstr ""
+
+#: includes/reports.php:440
+msgid "%s charged for shipping"
+msgstr ""
+
+#: includes/reports.php:444
+msgid "%s worth of coupons used"
+msgstr ""
+
+#: includes/reports.php:552
+msgid "Number of items sold"
+msgstr ""
+
+#: includes/reports.php:722
+msgid "Product does not exist"
+msgstr ""
+
+#: includes/reports.php:826
+msgid "Product no longer exists"
+msgstr ""
+
+#: includes/template-tags.php:26
+msgid "Pingback:"
+msgstr ""
+
+#: includes/template-tags.php:26 includes/template-tags.php:47
+msgid "(Edit)"
+msgstr ""
+
+#: includes/template-tags.php:38
+msgid "%s <span class=\"says\">says:</span>"
+msgstr ""
+
+#: includes/template-tags.php:43
+#. translators: 1: date, 2: time
+msgid "%1$s at %2$s"
+msgstr ""
+
+#: includes/template-tags.php:51
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: includes/template-tags.php:76
+msgid ""
+"<a href=\"%1$s\" title=\"%2$s\" rel=\"bookmark\"><time class=\"entry-date\" "
+"datetime=\"%3$s\" pubdate>%4$s</time></a><span class=\"byline\"></span>"
+msgstr ""
+
+#: includes/template-tags.php:82
+msgid "View all posts by %s"
+msgstr ""
+
+#: includes/template-tags.php:118
+msgid "Post navigation"
+msgstr ""
+
+#: includes/template-tags.php:218
+msgid "Product has been deleted successfully!"
+msgstr ""
+
+#: includes/template-tags.php:240 includes/template-tags.php:265
+msgid "All (%d)"
+msgstr ""
+
+#: includes/template-tags.php:243
+msgid "Online (%d)"
+msgstr ""
+
+#: includes/template-tags.php:246
+msgid "Pending Review (%d)"
+msgstr ""
+
+#: includes/template-tags.php:249
+msgid "Draft (%d)"
+msgstr ""
+
+#: includes/template-tags.php:270
+msgid "Completed (%d)"
+msgstr ""
+
+#: includes/template-tags.php:275
+msgid "Processing (%d)"
+msgstr ""
+
+#: includes/template-tags.php:280
+msgid "On-hold (%d)"
+msgstr ""
+
+#: includes/template-tags.php:285
+msgid "Pending (%d)"
+msgstr ""
+
+#: includes/template-tags.php:290
+msgid "Cancelled (%d)"
+msgstr ""
+
+#: includes/template-tags.php:295
+msgid "Refunded (%d)"
+msgstr ""
+
+#: includes/template-tags.php:320 templates/orders/order-details.php:84
+msgid "Coupons"
+msgstr ""
+
+#: includes/template-tags.php:330 templates/edit/options.php:10
+#: templates/reviews.php:22
+msgid "Reviews"
+msgstr ""
+
+#: includes/template-tags.php:371
+msgid "Product Categories"
+msgstr ""
+
+#: includes/template-tags.php:394
+msgid "Store Product Category"
+msgstr ""
+
+#: includes/template-tags.php:454
+msgid "First Name"
+msgstr ""
+
+#: includes/template-tags.php:459
+msgid "Last Name"
+msgstr ""
+
+#: includes/template-tags.php:470
+msgid "Shop URL"
+msgstr ""
+
+#: includes/template-tags.php:490
+msgid "I am a customer"
+msgstr ""
+
+#: includes/template-tags.php:495
+msgid "I am a seller"
+msgstr ""
+
+#: includes/template-tags.php:506
+msgid "Error!"
+msgstr ""
+
+#: includes/template-tags.php:507
+msgid "Your account is not enabled for selling, please contact the admin"
+msgstr ""
+
+#: includes/template-tags.php:523
+msgid "Cart %s"
+msgstr ""
+
+#: includes/template-tags.php:541
+msgid "Seller Dashboard"
+msgstr ""
+
+#: includes/template-tags.php:544
+msgid "Visit your store"
+msgstr ""
+
+#: includes/template-tags.php:561
+msgid "My Account"
+msgstr ""
+
+#: includes/template-tags.php:562
+msgid "Edit Account"
+msgstr ""
+
+#: includes/template-tags.php:564 templates/orders/order-details.php:109
+#: woocommerce/order/order-details.php:123
+msgid "Billing Address"
+msgstr ""
+
+#: includes/template-tags.php:565 templates/orders/order-details.php:118
+#: woocommerce/order/order-details.php:138
+msgid "Shipping Address"
+msgstr ""
+
+#: includes/template-tags.php:572
+msgid "Log in"
+msgstr ""
+
+#: includes/template-tags.php:573
+msgid "Sign Up"
+msgstr ""
+
+#: includes/theme-functions.php:468 templates/edit/sidebar.php:20
+msgid "Online"
+msgstr ""
+
+#: includes/theme-functions.php:472 templates/edit/sidebar.php:21
+msgid "Draft"
+msgstr ""
+
+#: includes/theme-functions.php:480 includes/theme-functions.php:511
+#: templates/products-listing.php:167
+msgid "Scheduled"
+msgstr ""
+
+#: includes/theme-functions.php:499
+msgid "Simple Product"
+msgstr ""
+
+#: includes/theme-functions.php:503
+msgid "Variable Product"
+msgstr ""
+
+#: includes/theme-functions.php:507
+msgid "Grouped Product"
+msgstr ""
+
+#: includes/theme-functions.php:825
+msgid "Account Name: %s"
+msgstr ""
+
+#: includes/theme-functions.php:828
+msgid "Account Number: %s"
+msgstr ""
+
+#: includes/theme-functions.php:831
+msgid "Bank Name: %s"
+msgstr ""
+
+#: includes/theme-functions.php:834
+msgid "Address: %s"
+msgstr ""
+
+#: includes/theme-functions.php:837
+msgid "SWIFT: %s"
+msgstr ""
+
+#: includes/wc-functions.php:42
+msgid ""
+"Before adding variations, add and save some attributes on the "
+"<strong>Attributes</strong> tab."
+msgstr ""
+
+#: includes/wc-functions.php:44
+msgid "Learn more"
+msgstr ""
+
+#: includes/wc-functions.php:146
+msgid "Add Variation"
+msgstr ""
+
+#: includes/wc-functions.php:148
+msgid "Link all variations"
+msgstr ""
+
+#: includes/wc-functions.php:150
+msgid "Default selections:"
+msgstr ""
+
+#: includes/wc-functions.php:163
+msgid "No default"
+msgstr ""
+
+#: includes/wc-functions.php:248
+msgid ""
+"Are you sure you want to link all variations? This will create a new "
+"variation for each and every possible combination of variation attributes "
+"(max 50 per run)."
+msgstr ""
+
+#: includes/wc-functions.php:265
+msgid "variation added"
+msgstr ""
+
+#: includes/wc-functions.php:267
+msgid "variations added"
+msgstr ""
+
+#: includes/wc-functions.php:269
+msgid "No variations added"
+msgstr ""
+
+#: includes/wc-functions.php:292
+msgid "Are you sure you want to remove this variation?"
+msgstr ""
+
+#: includes/wc-functions.php:402
+msgid "Choose an image"
+msgstr ""
+
+#: includes/wc-functions.php:404
+msgid "Set variation image"
+msgstr ""
+
+#: includes/wc-functions.php:510
+msgid "Product SKU must be unique."
+msgstr ""
+
+#: includes/wc-functions.php:819
+msgid "Variation #%s of %s"
+msgstr ""
+
+#: includes/wc-functions.php:1041
+msgid "Order &ndash; %s"
+msgstr ""
+
+#: includes/wc-functions.php:1283
+msgid "Cheating, eh?"
+msgstr ""
+
+#: includes/wc-functions.php:1292
+msgid "Please enter your first name."
+msgstr ""
+
+#: includes/wc-functions.php:1297
+msgid "Please enter your last name."
+msgstr ""
+
+#: includes/wc-functions.php:1302
+msgid "Please enter your address."
+msgstr ""
+
+#: includes/wc-functions.php:1307
+msgid "Please enter your phone number."
+msgstr ""
+
+#: includes/wc-functions.php:1572
+msgid "Search for products"
+msgstr ""
+
+#: includes/wc-functions.php:1575 templates/edit/options.php:23
+msgid "Search"
+msgstr ""
+
+#: includes/wc-functions.php:1621 includes/widgets/best-seller.php:52
+msgid "No ratings found yet!"
+msgstr ""
+
+#: includes/wc-functions.php:1626
+msgid "Rated %s out of %d"
+msgstr ""
+
+#: includes/wc-template.php:39
+msgid "Seller Info"
+msgstr ""
+
+#: includes/wc-template.php:67
+msgid "Store Name:"
+msgstr ""
+
+#: includes/wc-template.php:76
+msgid "Seller:"
+msgstr ""
+
+#: includes/wc-template.php:85
+msgid "Address:"
+msgstr ""
+
+#: includes/wc-template.php:160
+msgid "Sub Orders"
+msgstr ""
+
+#: includes/wc-template.php:164
+msgid "Note:"
+msgstr ""
+
+#: includes/wc-template.php:165
+msgid ""
+"This order has products from multiple vendors/sellers. So we divided this "
+"order into multiple seller orders.\n"
+"        Each order will be handled by their respective seller independently."
+msgstr ""
+
+#: includes/wc-template.php:201 templates/my-orders.php:70
+#: woocommerce/myaccount/my-orders.php:63
+msgid "%s for %s item"
+msgid_plural "%s for %s items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/wc-template.php:209 templates/my-orders.php:90
+#: templates/orders/listing.php:107 templates/products-listing.php:76
+#: woocommerce/myaccount/my-orders.php:83
+msgid "View"
+msgstr ""
+
+#: includes/widgets/best-seller.php:96
+msgid "Best Seller"
+msgstr ""
+
+#: includes/widgets/best-seller.php:104
+#: includes/widgets/bestselling-product.php:76
+#: includes/widgets/menu-category.php:147
+#: includes/widgets/top-rated-product.php:76
+msgid "Title:"
+msgstr ""
+
+#: includes/widgets/best-seller.php:108
+msgid "No of Seller:"
+msgstr ""
+
+#: includes/widgets/bestselling-product.php:12
+msgid "Dokan Best Selling Widget"
+msgstr ""
+
+#: includes/widgets/bestselling-product.php:13
+msgid "A Widget for displaying Best Selling Products for dokan"
+msgstr ""
+
+#: includes/widgets/bestselling-product.php:69
+msgid "Best Selling Product"
+msgstr ""
+
+#: includes/widgets/bestselling-product.php:80
+#: includes/widgets/top-rated-product.php:80
+msgid "No of Product:"
+msgstr ""
+
+#: includes/widgets/bestselling-product.php:85
+#: includes/widgets/top-rated-product.php:85
+msgid "Show Product Rating"
+msgstr ""
+
+#: includes/widgets/menu-category.php:141
+msgid "Product Category"
+msgstr ""
+
+#: includes/widgets/top-rated-product.php:12
+msgid "Dokan Top Rated Product Widget"
+msgstr ""
+
+#: includes/widgets/top-rated-product.php:13
+msgid "A Widget for displaying To rated products for dokan"
+msgstr ""
+
+#: includes/widgets/top-rated-product.php:69
+msgid "Top Rated Product"
+msgstr ""
+
+#: includes/withdraw-functions.php:11
+msgid "PayPal"
+msgstr ""
+
+#: includes/withdraw-functions.php:19
+msgid "Skrill"
+msgstr ""
+
+#: includes/withdraw-functions.php:158
+msgid "Your bank account name"
+msgstr ""
+
+#: includes/withdraw-functions.php:164
+msgid "Your bank account number"
+msgstr ""
+
+#: includes/withdraw-functions.php:170
+msgid "Name of bank"
+msgstr ""
+
+#: includes/withdraw-functions.php:176
+msgid "Address of your bank"
+msgstr ""
+
+#: includes/withdraw-functions.php:182
+msgid "Swift code"
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:4
+msgid "File Name:"
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:4
+#: includes/woo-views/variation-admin-html.php:148
+msgid "This is the name of the download shown to the customer."
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:5
+#: includes/woo-views/html-product-variation-download.php:2
+msgid "File Name"
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:9
+msgid "File URL:"
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:9
+#: includes/woo-views/variation-admin-html.php:149
+msgid ""
+"This is the URL or absolute path to the file which customers will get "
+"access to."
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:10
+#: includes/woo-views/html-product-variation-download.php:3
+msgid "http://"
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:14
+#: includes/woo-views/html-product-variation-download.php:4
+msgid "Choose file"
+msgstr ""
+
+#: includes/woo-views/html-product-download.php:14
+#: includes/woo-views/html-product-variation-download.php:4
+msgid "Insert file URL"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:7
+msgid "Click to toggle"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:21
+msgid "Any"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:53
+#: templates/edit/inventory.php:3 templates/products-listing.php:30
+msgid "SKU"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:53
+msgid "Enter a SKU for this variation or leave blank to use the parent product SKU."
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:64
+msgid "Stock Qty:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:64
+msgid ""
+"Enter a quantity to enable stock management at variation level, or leave "
+"blank to use the parent product's options."
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:73
+msgid "Regular Price:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:74
+msgid "Variation price (required)"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:77
+msgid "Sale Price:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:77
+#: templates/product-edit.php:199
+msgid "Schedule"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:77
+msgid "Cancel schedule"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:84
+msgid "Sale start date:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:88
+msgid "Sale end date:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:97
+msgid "Weight"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:97
+msgid ""
+"Enter a weight for this variation or leave blank to use the parent product "
+"weight."
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:105
+msgid "Dimensions (L&times;W&times;H)"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:116
+msgid "Shipping class:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:131
+msgid "Tax class:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:144
+msgid "Downloadable Files"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:149
+msgid "File URL"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:164
+#: templates/edit/sidebar.php:103
+msgid "Add File"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:190
+msgid "Download Limit:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:190
+msgid "Leave blank for unlimited re-downloads."
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:191
+#: includes/woo-views/variation-admin-html.php:197
+#: templates/orders/order-download-permission-html.php:28
+msgid "Unlimited"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:196
+msgid "Download Expiry:"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:196
+msgid "Enter the number of days before a download link expires, or leave blank."
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:210
+msgid "Enabled"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:212
+#: templates/products-listing.php:124
+msgid "Downloadable"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:212
+msgid ""
+"Enable this option if access is given to a downloadable file upon purchase "
+"of a product"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:214
+#: templates/products-listing.php:122
+msgid "Virtual"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:214
+msgid "Enable this option if a product is not shipped or there is no shipping cost"
+msgstr ""
+
+#: templates/coupons.php:25
+msgid "Coupon"
+msgstr ""
+
+#: templates/coupons.php:27
+msgid "Edit Coupon"
+msgstr ""
+
+#: templates/coupons.php:34
+msgid "Add new Coupon"
+msgstr ""
+
+#: templates/dashboard.php:42
+msgid "Pageview"
+msgstr ""
+
+#: templates/dashboard.php:100
+msgid "Refunded"
+msgstr ""
+
+#: templates/dashboard.php:105
+msgid "On hold"
+msgstr ""
+
+#: templates/dashboard.php:163
+msgid "+ Add new product"
+msgstr ""
+
+#: templates/dashboard.php:175
+msgid "Live"
+msgstr ""
+
+#: templates/dashboard.php:180
+msgid "Offline"
+msgstr ""
+
+#: templates/edit/attributes.php:1 templates/product-edit.php:104
+msgid "Attributes"
+msgstr ""
+
+#: templates/edit/attributes.php:1
+msgid "Different types of this product (e.g. size, color)"
+msgstr ""
+
+#: templates/edit/attributes.php:80 templates/edit/templates-js.php:21
+msgid "Visible on the product page"
+msgstr ""
+
+#: templates/edit/attributes.php:93 templates/edit/templates-js.php:27
+msgid "Used for variations"
+msgstr ""
+
+#: templates/edit/attributes.php:107 templates/edit/attributes.php:121
+msgid "Option..."
+msgstr ""
+
+#: templates/edit/attributes.php:144
+msgid "+ Add a category"
+msgstr ""
+
+#: templates/edit/attributes.php:145
+msgid "Save attributes"
+msgstr ""
+
+#: templates/edit/inventory.php:10
+msgid "Manage Stock?"
+msgstr ""
+
+#: templates/edit/inventory.php:12
+msgid "Enable stock management at product level"
+msgstr ""
+
+#: templates/edit/inventory.php:17
+msgid "Stock Qty"
+msgstr ""
+
+#: templates/edit/inventory.php:24
+msgid "Stock Status"
+msgstr ""
+
+#: templates/edit/inventory.php:27
+msgid "In Stock"
+msgstr ""
+
+#: templates/edit/inventory.php:28
+msgid "Out of Stock"
+msgstr ""
+
+#: templates/edit/inventory.php:35
+msgid "Allow Backorders"
+msgstr ""
+
+#: templates/edit/inventory.php:38
+msgid "Do not allow"
+msgstr ""
+
+#: templates/edit/inventory.php:39
+msgid "Allow but notify customer"
+msgstr ""
+
+#: templates/edit/inventory.php:40
+msgid "Allow"
+msgstr ""
+
+#: templates/edit/options.php:3
+msgid "Purchase Note"
+msgstr ""
+
+#: templates/edit/options.php:13
+msgid "Enable Reviews"
+msgstr ""
+
+#: templates/edit/options.php:18
+msgid "Visibility"
+msgstr ""
+
+#: templates/edit/options.php:21
+msgid "Catalog or Search"
+msgstr ""
+
+#: templates/edit/options.php:22
+msgid "Catalog"
+msgstr ""
+
+#: templates/edit/options.php:24
+msgid "Hidden"
+msgstr ""
+
+#: templates/edit/options.php:30
+msgid "Sold Individually"
+msgstr ""
+
+#: templates/edit/options.php:32
+msgid "Allow one of this item to be bought in a single order"
+msgstr ""
+
+#: templates/edit/shipping.php:5
+msgid "Weight (kg)"
+msgstr ""
+
+#: templates/edit/shipping.php:12
+msgid "Dimensions (cm)"
+msgstr ""
+
+#: templates/edit/shipping.php:14
+msgid "length"
+msgstr ""
+
+#: templates/edit/shipping.php:15
+msgid "width"
+msgstr ""
+
+#: templates/edit/shipping.php:16
+msgid "height"
+msgstr ""
+
+#: templates/edit/shipping.php:21
+msgid "Shipping Class"
+msgstr ""
+
+#: templates/edit/shipping.php:35
+msgid "No shipping class"
+msgstr ""
+
+#: templates/edit/shipping.php:44
+msgid ""
+"Shipping classes are used by certain shipping methods to group similar "
+"products."
+msgstr ""
+
+#: templates/edit/sidebar.php:3
+msgid "Update Product"
+msgstr ""
+
+#: templates/edit/sidebar.php:9
+msgid "Product Status:"
+msgstr ""
+
+#: templates/edit/sidebar.php:30 templates/edit/sidebar.php:70
+msgid "OK"
+msgstr ""
+
+#: templates/edit/sidebar.php:37
+msgid "Product Type:"
+msgstr ""
+
+#: templates/edit/sidebar.php:41
+msgid "Simple product"
+msgstr ""
+
+#: templates/edit/sidebar.php:42
+msgid "Variable product"
+msgstr ""
+
+#: templates/edit/sidebar.php:83
+msgid "Downloadable Product"
+msgstr ""
+
+#: templates/edit/sidebar.php:123
+msgid "Limit"
+msgstr ""
+
+#: templates/edit/sidebar.php:124
+msgid "Download Limit. e.g: 4"
+msgstr ""
+
+#: templates/edit/sidebar.php:130
+msgid "Number of days"
+msgstr ""
+
+#: templates/edit/sidebar.php:141
+msgid "Image Gallery"
+msgstr ""
+
+#: templates/edit/sidebar.php:163
+msgid "Delete image"
+msgstr ""
+
+#: templates/edit/sidebar.php:175
+msgid "+ Add product images"
+msgstr ""
+
+#: templates/my-orders.php:34 woocommerce/myaccount/my-orders.php:27
+msgid "Recent Orders"
+msgstr ""
+
+#: templates/my-orders.php:79 woocommerce/myaccount/my-orders.php:72
+msgid "Pay"
+msgstr ""
+
+#: templates/my-orders.php:108
+msgid "No orders found!"
+msgstr ""
+
+#: templates/new-product.php:52 templates/product-edit.php:153
+msgid "Upload a product cover image"
+msgstr ""
+
+#: templates/new-product.php:63
+msgid "Product name.."
+msgstr ""
+
+#: templates/new-product.php:74
+msgid "Short description about the product..."
+msgstr ""
+
+#: templates/new-product.php:80 templates/product-edit.php:239
+msgid "- Select a category -"
+msgstr ""
+
+#: templates/new-product.php:104
+msgid "Add Product"
+msgstr ""
+
+#: templates/orders/downloadable.php:36
+msgid "Choose a downloadable product&hellip;"
+msgstr ""
+
+#: templates/orders/downloadable.php:69
+msgid "Grant Access"
+msgstr ""
+
+#: templates/orders/listing.php:20
+msgid "Customer"
+msgstr ""
+
+#: templates/orders/listing.php:22
+msgid "Action"
+msgstr ""
+
+#: templates/orders/listing.php:32
+msgid "Order %s"
+msgstr ""
+
+#: templates/orders/listing.php:54
+msgid "Guest"
+msgstr ""
+
+#: templates/orders/listing.php:63 templates/products-listing.php:143
+msgid "Unpublished"
+msgstr ""
+
+#: templates/orders/listing.php:65 templates/products-listing.php:146
+msgid "Y/m/d g:i:s A"
+msgstr ""
+
+#: templates/orders/listing.php:71 templates/products-listing.php:153
+msgid "%s ago"
+msgstr ""
+
+#: templates/orders/listing.php:73 templates/products-listing.php:155
+msgid "Y/m/d"
+msgstr ""
+
+#: templates/orders/listing.php:98
+msgid "Complete"
+msgstr ""
+
+#: templates/orders/listing.php:153
+msgid "No orders found"
+msgstr ""
+
+#: templates/orders/order-details.php:7
+msgid "This is not yours, I swear!"
+msgstr ""
+
+#: templates/orders/order-details.php:19
+msgid "Order Items"
+msgstr ""
+
+#: templates/orders/order-details.php:25
+msgid "Item"
+msgstr ""
+
+#: templates/orders/order-details.php:29
+msgid "Qty"
+msgstr ""
+
+#: templates/orders/order-details.php:31
+msgid "Totals"
+msgstr ""
+
+#: templates/orders/order-details.php:129
+msgid "Downloadable Product Permission"
+msgstr ""
+
+#: templates/orders/order-details.php:142
+msgid "General Details"
+msgstr ""
+
+#: templates/orders/order-details.php:146
+msgid "Order Status:"
+msgstr ""
+
+#: templates/orders/order-details.php:150
+msgid "&nbsp; Edit"
+msgstr ""
+
+#: templates/orders/order-details.php:168
+msgid "Update"
+msgstr ""
+
+#: templates/orders/order-details.php:174
+msgid "Order Date:"
+msgstr ""
+
+#: templates/orders/order-details.php:181
+msgid "Customer:"
+msgstr ""
+
+#: templates/orders/order-details.php:194
+#: woocommerce/order/order-details.php:106
+msgid "Email:"
+msgstr ""
+
+#: templates/orders/order-details.php:198
+msgid "Phone:"
+msgstr ""
+
+#: templates/orders/order-details.php:202
+msgid "Customer IP:"
+msgstr ""
+
+#: templates/orders/order-details.php:214
+msgid "Customer Note:"
+msgstr ""
+
+#: templates/orders/order-details.php:249
+msgid "added %s ago"
+msgstr ""
+
+#: templates/orders/order-details.php:249
+msgid "Delete note"
+msgstr ""
+
+#: templates/orders/order-details.php:255
+msgid "There are no notes for this order yet."
+msgstr ""
+
+#: templates/orders/order-details.php:271
+msgid "Customer note"
+msgstr ""
+
+#: templates/orders/order-details.php:272
+msgid "Private note"
+msgstr ""
+
+#: templates/orders/order-details.php:280
+msgid "Add Note"
+msgstr ""
+
+#: templates/orders/order-download-permission-html.php:7
+msgid "File %d: %s"
+msgstr ""
+
+#: templates/orders/order-download-permission-html.php:10
+msgid "Revoke Access"
+msgstr ""
+
+#: templates/orders/order-download-permission-html.php:20
+msgid "Downloaded"
+msgstr ""
+
+#: templates/orders/order-download-permission-html.php:22
+msgid "%s time"
+msgid_plural "%s times"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/orders/order-download-permission-html.php:25
+msgid "Downloads Remaining"
+msgstr ""
+
+#: templates/orders/order-download-permission-html.php:31
+msgid "Access Expires"
+msgstr ""
+
+#: templates/orders/order-download-permission-html.php:32
+msgid "Never"
+msgstr ""
+
+#: templates/orders/order-fee-html.php:10
+msgid "Fee Name"
+msgstr ""
+
+#: templates/orders/order-tax-html.php:6
+msgid "Tax Rate:"
+msgstr ""
+
+#: templates/orders/order-tax-html.php:8 templates/sellers.php:32
+#: woocommerce/order/order-details.php:127
+#: woocommerce/order/order-details.php:142
+msgid "N/A"
+msgstr ""
+
+#: templates/orders/order-tax-html.php:16
+msgid "Sales Tax:"
+msgstr ""
+
+#: templates/orders/order-tax-html.php:20
+msgid "Shipping Tax:"
+msgstr ""
+
+#: templates/orders.php:20
+msgid "&larr; Orders"
+msgstr ""
+
+#: templates/product-edit.php:21
+msgid "Access Denied"
+msgstr ""
+
+#: templates/product-edit.php:65
+msgid "Success!"
+msgstr ""
+
+#: templates/product-edit.php:65
+msgid "The product has been updated successfully."
+msgstr ""
+
+#: templates/product-edit.php:68
+msgid "View Product &rarr;"
+msgstr ""
+
+#: templates/product-edit.php:89
+msgid "Options"
+msgstr ""
+
+#: templates/product-edit.php:94
+msgid "Inventory"
+msgstr ""
+
+#: templates/product-edit.php:99
+msgid "Shipping"
+msgstr ""
+
+#: templates/product-edit.php:109
+msgid "Variations"
+msgstr ""
+
+#: templates/product-edit.php:185
+msgid "Discounted Price"
+msgstr ""
+
+#: templates/product-edit.php:195
+msgid "Special Price"
+msgstr ""
+
+#: templates/product-edit.php:207
+msgid "From"
+msgstr ""
+
+#: templates/product-edit.php:215
+msgid "To"
+msgstr ""
+
+#: templates/products-listing.php:18
+msgid "Add new product"
+msgstr ""
+
+#: templates/products-listing.php:27
+msgid "Image"
+msgstr ""
+
+#: templates/products-listing.php:31
+msgid "Stock"
+msgstr ""
+
+#: templates/products-listing.php:32
+msgid "Price"
+msgstr ""
+
+#: templates/products-listing.php:33
+msgid "Type"
+msgstr ""
+
+#: templates/products-listing.php:34
+msgid "Views"
+msgstr ""
+
+#: templates/products-listing.php:94
+msgid "In stock"
+msgstr ""
+
+#: templates/products-listing.php:96
+msgid "Out of stock"
+msgstr ""
+
+#: templates/products-listing.php:116
+msgid "Grouped"
+msgstr ""
+
+#: templates/products-listing.php:118
+msgid "External/Affiliate"
+msgstr ""
+
+#: templates/products-listing.php:126
+msgid "Simple"
+msgstr ""
+
+#: templates/products-listing.php:130
+msgid "Variable"
+msgstr ""
+
+#: templates/products-listing.php:165
+msgid "Missed schedule"
+msgstr ""
+
+#: templates/products-listing.php:170
+msgid "Last Modified"
+msgstr ""
+
+#: templates/products-listing.php:180
+msgid "No product found"
+msgstr ""
+
+#: templates/products-listing.php:198
+msgid "&laquo; Previous"
+msgstr ""
+
+#: templates/products-listing.php:199
+msgid "Next &raquo;"
+msgstr ""
+
+#: templates/sellers.php:45
+msgid "No Image"
+msgstr ""
+
+#: templates/sellers.php:60
+msgid "P:"
+msgstr ""
+
+#: templates/sellers.php:65 templates/settings.php:30
+msgid "Visit Store"
+msgstr ""
+
+#: templates/sellers.php:102
+msgid "No seller found!"
+msgstr ""
+
+#: templates/withdraw.php:44
+msgid "Withdraw Request"
+msgstr ""
+
+#: templates/withdraw.php:47
+msgid "Approved Requests"
+msgstr ""
+
+#: templates/withdraw.php:52
+msgid "Current Balance: %s"
+msgstr ""
+
+#: woocommerce/global/form-login.php:22
+msgid "Username or email"
+msgstr ""
+
+#: woocommerce/global/form-login.php:26 woocommerce/myaccount/form-login.php:36
+#: woocommerce/myaccount/form-login.php:86
+msgid "Password"
+msgstr ""
+
+#: woocommerce/global/form-login.php:35 woocommerce/myaccount/form-login.php:25
+#: woocommerce/myaccount/form-login.php:50
+msgid "Login"
+msgstr ""
+
+#: woocommerce/global/form-login.php:38 woocommerce/myaccount/form-login.php:44
+msgid "Remember me"
+msgstr ""
+
+#: woocommerce/global/form-login.php:42 woocommerce/myaccount/form-login.php:53
+msgid "Lost your password?"
+msgstr ""
+
+#: woocommerce/myaccount/form-login.php:32
+msgid "Username or email address"
+msgstr ""
+
+#: woocommerce/myaccount/form-login.php:66
+#: woocommerce/myaccount/form-login.php:98
+msgid "Register"
+msgstr ""
+
+#: woocommerce/myaccount/form-login.php:81
+msgid "Email address"
+msgstr ""
+
+#: woocommerce/myaccount/form-login.php:91
+msgid "Anti-spam"
+msgstr ""
+
+#: woocommerce/order/order-details.php:20
+msgid "Order Details"
+msgstr ""
+
+#: woocommerce/order/order-details.php:70
+msgid "Download file%s"
+msgstr ""
+
+#: woocommerce/order/order-details.php:102
+msgid "Customer details"
+msgstr ""
+
+#: woocommerce/order/order-details.php:107
+msgid "Telephone:"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Dokan - Create multi-vendor marketplace in minutes!"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://wedevs.com/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and "
+"weDevs."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "weDevs"
+msgstr ""
+
+#: includes/template-tags.php:124
+msgctxt "Previous post link"
+msgid "&larr;"
+msgstr ""
+
+#: includes/template-tags.php:127
+msgctxt "Next post link"
+msgid "&rarr;"
+msgstr ""
+
+#: includes/wc-functions.php:1041
+msgctxt "Order date parsed by strftime"
+msgid "%b %d, %Y @ %I:%M %p"
+msgstr ""
+
+#: includes/wc-template.php:137
+msgctxt "breadcrumb"
+msgid "<i class=\"fa fa-home\"></i> Home"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:85
+msgctxt "placeholder"
+msgid "From&hellip;"
+msgstr ""
+
+#: includes/woo-views/variation-admin-html.php:89
+msgctxt "placeholder"
+msgid "To&hellip;"
+msgstr ""
