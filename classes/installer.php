@@ -49,17 +49,17 @@ class Dokan_Installer {
         }
 
         add_role( 'seller', __( 'Seller', 'dokan' ), array(
-            'read' => true,
-            'publish_posts' => true,
-            'edit_posts' => true,
+            'read'                   => true,
+            'publish_posts'          => true,
+            'edit_posts'             => true,
             'delete_published_posts' => true,
-            'edit_published_posts' => true,
-            'delete_posts' => true,
-            'manage_categories' => true,
-            'moderate_comments' => true,
-            'unfiltered_html' => true,
-            'upload_files' => true,
-            'dokandar' => true
+            'edit_published_posts'   => true,
+            'delete_posts'           => true,
+            'manage_categories'      => true,
+            'moderate_comments'      => true,
+            'unfiltered_html'        => true,
+            'upload_files'           => true,
+            'dokandar'               => true
         ) );
 
         $wp_roles->add_cap( 'shop_manager', 'dokandar' );
