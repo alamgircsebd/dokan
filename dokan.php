@@ -254,6 +254,10 @@ class WeDevs_Dokan {
             )
         );
 
+        if ( get_query_var( 'store' ) ) {
+            wp_enqueue_style( 'dokan-style' );
+        }
+
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
             if ( DOKAN_LOAD_SCRIPTS === true ) {

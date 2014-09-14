@@ -10,15 +10,15 @@ class Dokan_Rewrites {
     public $query_vars = array();
 
     function __construct() {
-        add_action( 'init', array($this, 'register_rule') );
-        // add_filter( 'template_include', array($this, 'store_template') );
+        add_action( 'init', array( $this, 'register_rule' ) );
+        add_filter( 'template_include', array( $this, 'store_template' ) );
         // add_filter( 'template_include', array($this,  'product_edit_template'), 11 );
         // add_filter( 'template_include', array($this, 'store_review_template'), 11 );
         // add_filter( 'template_include', array($this, 'dashboard_template'), 12 );
-        add_filter( 'query_vars', array($this, 'register_query_var') );
-        add_filter( 'pre_get_posts', array($this, 'store_query_filter') );
+        add_filter( 'query_vars', array( $this, 'register_query_var' ) );
+        add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
         // add_filter( 'the_content', array( $this, 'load_dashboard_product_edit' ), 11 );
-        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable'), 5 );
+        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 5 );
     }
 
 
@@ -32,7 +32,7 @@ class Dokan_Rewrites {
             'reviews',
             'withdraw',
             'settings',
-        ));
+        ) );
     }
 
     /**
@@ -41,14 +41,13 @@ class Dokan_Rewrites {
      * @return void
      */
     function register_rule() {
-        // add_rewrite_endpoint( 'dashboard', EP_PAGES );
 
-        foreach ($this->query_vars as $var) {
+        foreach ( $this->query_vars as $var ) {
             add_rewrite_endpoint( $var, EP_PAGES );
         }
 
         $permalinks = get_option( 'woocommerce_permalinks', array() );
-        if( isset( $permalinks['product_base'] ) ) {
+        if ( isset( $permalinks['product_base'] ) ) {
             $base = substr( $permalinks['product_base'], 1 );
         }
 
@@ -81,7 +80,7 @@ class Dokan_Rewrites {
     /**
      * Register the query var
      *
-     * @param array $vars
+     * @param array   $vars
      * @return array
      */
     function register_query_var( $vars ) {
@@ -90,7 +89,7 @@ class Dokan_Rewrites {
         $vars[] = 'edit';
         $vars[] = 'term_section';
 
-        foreach ($this->query_vars as $var) {
+        foreach ( $this->query_vars as $var ) {
             $vars[] = $var;
         }
 
@@ -100,7 +99,7 @@ class Dokan_Rewrites {
     /**
      * Include store template
      *
-     * @param type $template
+     * @param type    $template
      * @return string
      */
     function store_template( $template ) {
@@ -111,24 +110,19 @@ class Dokan_Rewrites {
             $store_user = get_user_by( 'slug', $store_name );
 
             // no user found
-            if ( !$store_user ) {
+            if ( ! $store_user ) {
                 return get_404_template();
             }
 
             // check if the user is seller
-            if ( !dokan_is_user_seller( $store_user->ID ) ) {
+            if ( ! dokan_is_user_seller( $store_user->ID ) ) {
                 return get_404_template();
             }
 
-            $templates = array(
-                "store-{$store_name}.php",
-                'store.php',
-            );
-
-            return get_query_template( 'store', __DIR__. '/templates/'. $templates );
+            return dokan_locate_template( 'store.php' );
         }
 
-        return  __DIR__. '/templates/'. $template;
+        return $template;
     }
 
     // function load_dashboard_product_edit() {
@@ -170,11 +164,11 @@ class Dokan_Rewrites {
 
             if ( $query->query['term_section'] ) {
                 $query->set( 'tax_query',
-                array(
                     array(
-                        'taxonomy' => 'product_cat',
-                        'field' => 'term_id',
-                        'terms' => $query->query['term'])
+                        array(
+                            'taxonomy' => 'product_cat',
+                            'field' => 'term_id',
+                            'terms' => $query->query['term'] )
                     )
                 );
             }
