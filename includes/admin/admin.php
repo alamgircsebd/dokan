@@ -81,19 +81,15 @@ class Dokan_Admin_Settings {
     function get_settings_sections() {
         $sections = array(
             array(
-                'id' => 'dokan_general',
+                'id'    => 'dokan_general',
                 'title' => __( 'General', 'dokan' )
             ),
             array(
-                'id' => 'dokan_home',
-                'title' => __( 'Home Page', 'dokan' )
-            ),
-            array(
-                'id' => 'dokan_selling',
+                'id'    => 'dokan_selling',
                 'title' => __( 'Selling Options', 'dokan' )
             ),
             array(
-                'id' => 'dokan_pages',
+                'id'    => 'dokan_pages',
                 'title' => __( 'Page Settings', 'dokan' )
             )
         );
@@ -131,22 +127,6 @@ class Dokan_Admin_Settings {
                     'type' => 'checkbox',
                     'default' => 'on'
                 ),
-                'color_skin' => array(
-                    'name' => 'color_skin',
-                    'label' => __( 'Color Skin', 'dokan' ),
-                    'desc' => __( 'Choose the color skin of the theme', 'dokan' ),
-                    'type' => 'select',
-                    'default' => 'orange',
-                    'options' => apply_filters( 'dokan_color_skin', array(
-                        'orange.css' => __( 'Orange', 'dokan' ),
-                        'sky.css' => __( 'Sky', 'dokan' ),
-                        'blue.css' => __( 'Blue', 'dokan' ),
-                        'green.css' => __( 'Green', 'dokan' ),
-                        'purple.css' => __( 'Purple', 'dokan' ),
-                        'red.css' => __( 'Red', 'dokan' ),
-                        'pink.css' => __( 'Pink', 'dokan' ),
-                    ) )
-                ),
                 'store_map' => array(
                     'name' => 'store_map',
                     'label' => __( 'Show Map on Store Page', 'dokan' ),
@@ -160,13 +140,6 @@ class Dokan_Admin_Settings {
                     'desc' => __( 'Enable showing contact seller form on store left sidebar', 'dokan' ),
                     'type' => 'checkbox',
                     'default' => 'on'
-                ),
-                'footer_text' => array(
-                    'name' => 'footer_text',
-                    'label' => __( 'Site footer text', 'dokan' ),
-                    'desc' => '',
-                    'default' => sprintf( __( '&copy; %d. All rights are reserved', 'dokan' ), date('Y') ),
-                    'type' => 'text',
                 ),
             ),
             'dokan_selling' => array(
@@ -226,116 +199,17 @@ class Dokan_Admin_Settings {
                     'type' => 'text',
                 ),
             ),
-            'dokan_home' => array(
-                'show_slider' => array(
-                    'name' => 'show_slider',
-                    'label' => __( 'Slider', 'dokan' ),
-                    'desc' => __( 'Show Slider', 'dokan' ),
-                    'type' => 'checkbox',
-                    'default' => 'on'
-                ),
-                'slider_id' => array(
-                    'name' => 'slider_id',
-                    'label' => __( 'Select Slider', 'dokan' ),
-                    'desc' => __( 'Select which slider to show on homepage', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $slider_array
-                ),
-                'show_featured' => array(
-                    'name' => 'show_featured',
-                    'label' => __( 'Featured Products', 'dokan' ),
-                    'desc' => __( 'Show Featured Products', 'dokan' ),
-                    'type' => 'checkbox',
-                    'default' => 'on'
-                ),
-                'show_latest' => array(
-                    'name' => 'show_latest',
-                    'label' => __( 'Latest Products', 'dokan' ),
-                    'desc' => __( 'Show Latest Products', 'dokan' ),
-                    'type' => 'checkbox',
-                    'default' => 'on'
-                ),
-                'show_best_selling' => array(
-                    'name' => 'show_best_selling',
-                    'label' => __( 'Best Selling Products', 'dokan' ),
-                    'desc' => __( 'Show Best Selling Products', 'dokan' ),
-                    'type' => 'checkbox',
-                    'default' => 'on'
-                ),
-                'show_top_rated' => array(
-                    'name' => 'show_top_rated',
-                    'label' => __( 'Top Rated Products', 'dokan' ),
-                    'desc' => __( 'Show Top Rated Products', 'dokan' ),
-                    'type' => 'checkbox',
-                    'default' => 'on'
-                ),
-                'show_on_sale' => array(
-                    'name' => 'show_on_sale',
-                    'label' => __( 'On Sale Products', 'dokan' ),
-                    'desc' => __( 'Show On Sale Products', 'dokan' ),
-                    'type' => 'checkbox',
-                    'default' => 'on'
-                ),
-            ),
             'dokan_pages' => array(
                 'dashboard' => array(
-                    'name' => 'dashboard',
-                    'label' => __( 'Dashboard', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'products' => array(
-                    'name' => 'products',
-                    'label' => __( 'Products Listing', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'new_product' => array(
-                    'name' => 'new_product',
-                    'label' => __( 'Create Product Page', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'orders' => array(
-                    'name' => 'orders',
-                    'label' => __( 'Orders', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'coupons' => array(
-                    'name' => 'coupons',
-                    'label' => __( 'Coupons', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'reports' => array(
-                    'name' => 'reports',
-                    'label' => __( 'Reports', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'reviews' => array(
-                    'name' => 'reviews',
-                    'label' => __( 'Reviews', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'withdraw' => array(
-                    'name' => 'withdraw',
-                    'label' => __( 'Withdraw', 'dokan' ),
-                    'type' => 'select',
-                    'options' => $pages_array
-                ),
-                'settings' => array(
-                    'name' => 'settings',
-                    'label' => __( 'Settings', 'dokan' ),
-                    'type' => 'select',
+                    'name'    => 'dashboard',
+                    'label'   => __( 'Dashboard', 'dokan' ),
+                    'type'    => 'select',
                     'options' => $pages_array
                 ),
                 'my_orders' => array(
-                    'name' => 'my_orders',
-                    'label' => __( 'My Orders', 'dokan' ),
-                    'type' => 'select',
+                    'name'    => 'my_orders',
+                    'label'   => __( 'My Orders', 'dokan' ),
+                    'type'    => 'select',
                     'options' => $pages_array
                 ),
             )
