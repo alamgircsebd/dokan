@@ -541,21 +541,113 @@ function dokan_posted_textarea( $key ) {
     return esc_textarea( $value );
 }
 
+/**
+ * Get template part implementation for wedocs
+ *
+ * Looks at the theme directory first
+ */
+function dokan_get_template_part( $slug, $name = '' ) {
+    $dokan = WeDevs_Dokan::init();
 
+    $template = '';
+
+    // Look in yourtheme/slug-name.php and yourtheme/dokan/slug-name.php
+    if ( $name ) {
+        $template = locate_template( array( "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}-{$name}.php" ) );
+    }
+
+    // Get default slug-name.php
+    if ( ! $template && $name && file_exists( $dokan->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
+        $template = $dokan->plugin_path() . "/templates/{$slug}-{$name}.php";
+    }
+
+    if ( ! $template && !$name && file_exists( $dokan->plugin_path() . "/templates/{$slug}.php" ) ) {
+        $template = $dokan->plugin_path() . "/templates/{$slug}.php";
+    }
+
+    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/dokan/slug.php
+    if ( ! $template ) {
+        $template = locate_template( array( "{$slug}.php", $dokan->template_path() . "{$slug}.php" ) );
+    }
+
+    // Allow 3rd party plugin filter template file from their plugin
+    $template = apply_filters( 'dokan_get_template_part', $template, $slug, $name );
+
+    if ( $template ) {
+        load_template( $template, false );
+    }
+}
 
 /**
- * Helper function to include a file
+ * Get other templates (e.g. product attributes) passing attributes and including the file.
  *
- * @param type $template_name
- * @param type $args
+ * @access public
+ * @param mixed $template_name
+ * @param array $args (default: array())
+ * @param string $template_path (default: '')
+ * @param string $default_path (default: '')
+ * @return void
  */
-function dokan_get_template( $template_name, $args = array() ) {
-
-    if ( file_exists( $template_name ) ) {
+function dokan_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
+    if ( $args && is_array( $args ) ) {
         extract( $args );
-
-        include_once $template_name;
     }
+
+    $located = dokan_locate_template( $template_name, $template_path, $default_path );
+
+    if ( ! file_exists( $located ) ) {
+        _doing_it_wrong( __FUNCTION__, sprintf( '<code>%s</code> does not exist.', $located ), '2.1' );
+        return;
+    }
+
+    do_action( 'dokan_before_template_part', $template_name, $template_path, $located, $args );
+
+    include( $located );
+
+    do_action( 'dokan_after_template_part', $template_name, $template_path, $located, $args );
+}
+
+/**
+ * Locate a template and return the path for inclusion.
+ *
+ * This is the load order:
+ *
+ *      yourtheme       /   $template_path  /   $template_name
+ *      yourtheme       /   $template_name
+ *      $default_path   /   $template_name
+ *
+ * @access public
+ * @param mixed $template_name
+ * @param string $template_path (default: '')
+ * @param string $default_path (default: '')
+ * @return string
+ */
+function dokan_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+    $dokan = WeDevs_Dokan::init();
+
+    if ( ! $template_path ) {
+        $template_path = $dokan->template_path();
+    }
+
+    if ( ! $default_path ) {
+        $default_path = $dokan->plugin_path() . '/templates/';
+    }
+
+    // Look within passed path within the theme - this is priority
+    $template = locate_template(
+        array(
+            trailingslashit( $template_path ) . $template_name,
+            $template_name
+        )
+    );
+
+    // Get default template
+    if ( ! $template ) {
+        $template = $default_path . $template_name;
+    }
+
+    // Return what we found
+    return apply_filters('dokan_locate_template', $template, $template_name, $template_path);
 }
 
 
@@ -1134,43 +1226,6 @@ function dokan_get_best_sellers( $limit = 5 ) {
     }
 
     return $seller;
-}
-
-/**
- * Get template part implementation for wedocs
- *
- * Looks at the theme directory first
- */
-function dokan_get_template_part( $slug, $name = '' ) {
-    $dokan = WeDevs_Dokan::init();
-
-    $template = '';
-
-    // Look in yourtheme/slug-name.php and yourtheme/meetup/slug-name.php
-    if ( $name ) {
-        $template = locate_template( array( "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}-{$name}.php" ) );
-    }
-
-    // Get default slug-name.php
-    if ( ! $template && $name && file_exists( $dokan->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
-        $template = $dokan->plugin_path() . "/templates/{$slug}-{$name}.php";
-    }
-
-    if ( ! $template && !$name && file_exists( $dokan->plugin_path() . "/templates/{$slug}.php" ) ) {
-        $template = $dokan->plugin_path() . "/templates/{$slug}.php";
-    }
-
-    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/meetup/slug.php
-    if ( ! $template ) {
-        $template = locate_template( array( "{$slug}.php", $dokan->template_path() . "{$slug}.php" ) );
-    }
-
-    // Allow 3rd party plugin filter template file from their plugin
-    $template = apply_filters( 'dokan_get_template_part', $template, $slug, $name );
-
-    if ( $template ) {
-        load_template( $template, false );
-    }
 }
 
 

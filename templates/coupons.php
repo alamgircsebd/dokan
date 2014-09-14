@@ -4,7 +4,7 @@ $is_edit_page           = isset( $_GET['view'] ) && $_GET['view'] == 'add_coupon
 ?>
 
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'coupon' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'coupon' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-coupon-content">
 

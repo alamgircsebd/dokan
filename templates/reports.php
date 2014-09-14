@@ -1,5 +1,5 @@
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'report' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'report' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-reports-content">
 

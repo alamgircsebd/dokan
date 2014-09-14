@@ -43,7 +43,7 @@ $_enable_reviews = $post->comment_status;
 get_header();
 ?>
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-product-edit">
         <div class="dokan-product-edit-area">

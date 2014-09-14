@@ -25,7 +25,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
 
 <div class="dokan-dashboard-wrap">
 
-    <?php dokan_get_template( dirname(__FILE__) . '/dashboard-nav.php', array( 'active_menu' => 'dashboard' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'dashboard' ) ); ?>
 
     <div class="dokan-dashboard-content">
 
