@@ -19,7 +19,8 @@ module.exports = function(grunt) {
                 options: {
                     sourceMap: true,
                     sourceMapFilename: '<%= dirs.css %>/style.css.map',
-                    sourceMapURL: 'style.css.map'
+                    sourceMapURL: 'style.css.map',
+                    sourceMapRootpath: '../../'
                 },
                 files: {
                     '<%= dirs.css %>/style.css': '<%= dirs.less %>/style.less'
