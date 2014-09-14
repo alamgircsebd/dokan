@@ -16,7 +16,7 @@ jQuery(function($) {
 
     // set dashboard menu height
     var dashboardMenu = $('ul.dokan-dashboard-menu'),
-        contentArea = $('#content article');
+        contentArea = $('.dokan-dashboard-content');
 
     if ( contentArea.height() > dashboardMenu.height() ) {
         dashboardMenu.css({ height: contentArea.height() });
