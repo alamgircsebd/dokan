@@ -11,17 +11,21 @@ class Dokan_Rewrites {
 
     function __construct() {
         add_action( 'init', array( $this, 'register_rule' ) );
+
         add_filter( 'template_include', array( $this, 'store_template' ) );
-        // add_filter( 'template_include', array($this,  'product_edit_template'), 11 );
-        // add_filter( 'template_include', array($this, 'store_review_template'), 11 );
-        // add_filter( 'template_include', array($this, 'dashboard_template'), 12 );
+        add_filter( 'template_include', array( $this, 'store_review_template' ) );
+        add_filter( 'template_include', array($this,  'product_edit_template') );
+
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
-        // add_filter( 'the_content', array( $this, 'load_dashboard_product_edit' ), 11 );
         add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 5 );
     }
 
-
+    /**
+     * Sets the query vars on plugins_loaded
+     *
+     * @return void
+     */
     function load_query_var_variable() {
         $this->query_vars = apply_filters( 'dokan_query_var_filter', array(
             'products',
@@ -125,14 +129,6 @@ class Dokan_Rewrites {
         return $template;
     }
 
-    // function load_dashboard_product_edit() {
-
-    //     if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
-
-    //         return dokan_get_template_part( 'product-edit' );
-    //     }
-    // }
-
     function product_edit_template( $template ) {
 
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
@@ -144,9 +140,8 @@ class Dokan_Rewrites {
 
     function store_review_template( $template ) {
 
-        if ( $var = get_query_var( 'store_review' ) ) {
-
-            return __DIR__ . '/store-reviews.php';
+        if ( get_query_var( 'store_review' ) ) {
+            return dokan_locate_template( 'store-reviews.php' );
         }
 
         return $template;

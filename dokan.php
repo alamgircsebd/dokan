@@ -254,7 +254,7 @@ class WeDevs_Dokan {
             )
         );
 
-        if ( get_query_var( 'store' ) ) {
+        if ( get_query_var( 'store' ) || get_query_var( 'store_review' ) ) {
             wp_enqueue_style( 'dokan-style' );
         }
 
