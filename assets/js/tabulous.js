@@ -82,19 +82,9 @@
                     thisform.find('div'+thislink).addClass('make_transist').addClass('showflip');
                 }
 
-
                 firstdiv.css('height',thisdivwidth+'px');
-
-                
-
-
             });
 
-           
-
-
-         
-            
         },
 
         yourOtherFunction: function(el, options) {
@@ -111,5 +101,3 @@
     };
 
 })( jQuery, window, document );
-
-
