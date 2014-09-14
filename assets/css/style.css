@@ -1406,7 +1406,7 @@ a.dokan-label:focus {
 }
 .dokan-alert > p,
 .dokan-alert > ul {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 .dokan-alert > p + p {
   margin-top: 5px;
@@ -1611,7 +1611,7 @@ ul.subsubsub li.active a {
   display: none;
 }
 span.dokan-loading {
-  background: url("assets/images/wpspin_light.gif") no-repeat;
+  background: url("../images/wpspin_light.gif") no-repeat;
   float: right;
   height: 16px;
   margin: 5px 5px 0;
@@ -1640,6 +1640,9 @@ span.error {
   line-height: 30px;
   vertical-align: middle;
   width: 100%;
+}
+.dokan-form-control p {
+  margin-bottom: 0;
 }
 textarea.dokan-form-control {
   height: auto;
@@ -1847,3 +1850,4 @@ textarea.dokan-form-control {
 .dokan-panel-default > .dokan-panel-footer + .dokan-panel-collapse > .dokan-panel-body {
   border-bottom-color: #dddddd;
 }
+/*# sourceMappingURL=style.css.map */
