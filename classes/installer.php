@@ -78,65 +78,15 @@ class Dokan_Installer {
         $pages = array(
             array(
                 'post_title' => __( 'Dashboard', 'dokan' ),
-                'slug' => 'dashboard',
-                'template' => 'templates/dashboard.php',
-                'page_id' => 'dashboard',
-                'child' => array(
-                    array(
-                        'post_title' => __( 'Products', 'dokan' ),
-                        'slug' => 'products',
-                        'template' => 'templates/products.php',
-                        'page_id' => 'products',
-                    ),
-                    array(
-                        'post_title' => __( 'Create Product', 'dokan' ),
-                        'slug' => 'add-product',
-                        'template' => 'templates/new-product.php',
-                        'page_id' => 'new_product',
-                    ),
-                    array(
-                        'post_title' => __( 'Orders', 'dokan' ),
-                        'slug' => 'orders',
-                        'template' => 'templates/orders.php',
-                        'page_id' => 'orders',
-                    ),
-                    array(
-                        'post_title' => __( 'Coupons', 'dokan' ),
-                        'slug' => 'coupons',
-                        'template' => 'templates/coupons.php',
-                        'page_id' => 'coupons',
-                    ),
-                    array(
-                        'post_title' => __( 'Reports', 'dokan' ),
-                        'slug' => 'reports',
-                        'template' => 'templates/reports.php',
-                        'page_id' => 'reports',
-                    ),
-                    array(
-                        'post_title' => __( 'Reviews', 'dokan' ),
-                        'slug' => 'reviews',
-                        'template' => 'templates/reviews.php',
-                        'page_id' => 'reviews',
-                    ),
-                    array(
-                        'post_title' => __( 'Withdraw', 'dokan' ),
-                        'slug' => 'withdraw',
-                        'template' => 'templates/withdraw.php',
-                        'page_id' => 'withdraw',
-                    ),
-                    array(
-                        'post_title' => __( 'Settings', 'dokan' ),
-                        'slug' => 'settings',
-                        'template' => 'templates/settings.php',
-                        'page_id' => 'settings',
-                    )
-                )
+                'slug'       => 'dashboard',
+                'page_id'    => 'dashboard',
+                'content'    => ''
             ),
             array(
                 'post_title' => __( 'My Orders', 'dokan' ),
-                'slug' => 'my-orders',
-                'template' => 'templates/my-orders.php',
-                'page_id' => 'my_orders',
+                'slug'       => 'my-orders',
+                'page_id'    => 'my_orders',
+                'content'    => ''
             )
         );
 
@@ -172,12 +122,13 @@ class Dokan_Installer {
         $meta_key = '_wp_page_template';
         $page_obj = get_page_by_path( $page['post_title'] );
 
-        if ( !$page_obj ) {
+        if ( ! $page_obj ) {
             $page_id = wp_insert_post( array(
-                'post_title' => $page['post_title'],
-                'post_name' => $page['slug'],
-                'post_status' => 'publish',
-                'post_type' => 'page',
+                'post_title'   => $page['post_title'],
+                'post_name'    => $page['slug'],
+                'post_content' => $page['content'],
+                'post_status'  => 'publish',
+                'post_type'    => 'page',
             ) );
 
             if ( $page_id && !is_wp_error( $page_id ) ) {
