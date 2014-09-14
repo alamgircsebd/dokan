@@ -1,9 +1,9 @@
 /**
  * Dokan Plugin main Style less file
  *
- * Import all individual page styles 
+ * Import all individual page styles
  * in this less file which compile to style.css
- * file in assets/css directoryS 
+ * file in assets/css directoryS
  */
 .dokan-dashboard .dokan-dash-sidebar {
   width: 17%;
@@ -1121,6 +1121,64 @@
 }
 .dokan-settings-content .dokan-settings-area ul.dokan-categories label {
   font-weight: normal;
+}
+.dokan-single-store {
+  margin: 0;
+}
+.dokan-single-store .profile-frame {
+  height: 300px;
+  padding: 0px;
+  margin-bottom: 30px;
+  position: relative;
+  background-size: 100% auto;
+}
+.dokan-single-store .profile-frame .profile-info-box {
+  height: 100%;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  width: 33%;
+}
+.dokan-single-store .profile-frame .profile-info-box a {
+  color: #ccc;
+}
+.dokan-single-store .profile-frame .profile-info-box:hover {
+  color: #fff;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-img {
+  height: 105px;
+  text-align: center;
+  padding-top: 15px;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-img img {
+  background: #000;
+  border-radius: 500px;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info {
+  margin-left: 25px;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info li {
+  padding-bottom: 5px;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info li.store-name {
+  font-weight: bold;
+  padding-bottom: 10px;
+  font-size: 15px;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info i {
+  font-weight: bold;
+  float: left;
+  margin-left: -25px;
+  margin-top: 4px;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info .store-social i {
+  color: #fff;
+  font-size: 20px;
+  float: none;
+  font-weight: normal;
+  margin: 0;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info .seller-rating {
+  display: none;
 }
 .wp-editor-wrap {
   border: 1px solid #ededed;
