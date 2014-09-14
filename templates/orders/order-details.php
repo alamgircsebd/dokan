@@ -155,9 +155,9 @@ $order = new WC_Order( $order_id );
 
                                     <select id="order_status" name="order_status" class="form-control">
                                         <?php
-                                            $statuses = (array) get_terms( 'shop_order_status', array( 'hide_empty' => 0, 'orderby' => 'id' ) );
-                                            foreach ( $statuses as $status ) {
-                                                echo '<option value="' . esc_attr( $status->slug ) . '" ' . selected( $status->slug, $order->status, false ) . '>' . esc_html__( $status->name, 'woocommerce' ) . '</option>';
+                                            $statuses = wc_get_order_statuses();
+                                            foreach ( $statuses as $status => $label ) {
+                                                echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . $label . '</option>';
                                             }
                                         ?>
                                     </select>

@@ -20,7 +20,7 @@ function dokan_get_seller_orders( $seller_id, $status = 'all', $limit = 10, $off
                 LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
                 WHERE
                     do.seller_id = %d AND
-                    p.post_status = 'publish'
+                    p.post_status != 'trash'
                     $status_where
                 GROUP BY do.order_id
                 ORDER BY p.post_date DESC
@@ -54,11 +54,11 @@ function dokan_get_seller_orders_number( $seller_id, $status = 'all' ) {
                 LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
                 WHERE
                     do.seller_id = %d AND
-                    p.post_status = 'publish'
+                    p.post_status != 'trash'
                     $status_where";
 
         $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
-        $count = $result->count;
+        $count  = $result->count;
 
         wp_cache_set( $cache_key, $count, 'dokan' );
     }
@@ -81,7 +81,7 @@ function dokan_is_seller_has_order( $seller_id, $order_id ) {
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
             WHERE
                 do.seller_id = %d AND
-                p.post_status = 'publish' AND
+                p.post_status != 'trash' AND
                 do.order_id = %d
             GROUP BY do.order_id";
 
@@ -102,7 +102,7 @@ function dokan_count_orders( $user_id ) {
     $counts = wp_cache_get( $cache_key, 'dokan' );
 
     if ( $counts === false ) {
-        $counts = array('pending' => 0, 'completed' => 0, 'on-hold' => 0, 'processing' => 0, 'refunded' => 0, 'cancelled' => 0, 'total' => 0);
+        $counts = array('wc-pending' => 0, 'wc-completed' => 0, 'wc-on-hold' => 0, 'wc-processing' => 0, 'wc-refunded' => 0, 'wc-cancelled' => 0, 'total' => 0);
 
         $sql = "SELECT do.order_status
                 FROM {$wpdb->prefix}dokan_orders AS do
@@ -110,7 +110,7 @@ function dokan_count_orders( $user_id ) {
                 WHERE
                     do.seller_id = %d AND
                     p.post_type = 'shop_order' AND
-                    p.post_status = 'publish'";
+                    p.post_status != 'trash'";
 
         $results = $wpdb->get_results( $wpdb->prepare( $sql, $user_id ) );
 
@@ -182,7 +182,7 @@ function dokan_on_child_order_status_change( $order_id, $old_status, $new_status
 
     // get all the child orders and monitor the status
     $parent_order_id = $order_post->post_parent;
-    $sub_orders = get_children( array( 'post_parent' => $parent_order_id, 'post_type' => 'shop_order' ) );
+    $sub_orders      = get_children( array( 'post_parent' => $parent_order_id, 'post_type' => 'shop_order' ) );
 
 
     // return if any child order is not completed
@@ -192,7 +192,7 @@ function dokan_on_child_order_status_change( $order_id, $old_status, $new_status
         foreach ($sub_orders as $sub) {
             $order = new WC_Order( $sub->ID );
 
-            if ( $order->status != 'completed' ) {
+            if ( $order->post_status != 'wc-completed' ) {
                 $all_complete = false;
             }
         }
@@ -202,7 +202,7 @@ function dokan_on_child_order_status_change( $order_id, $old_status, $new_status
     // mark the parent order as complete
     if ( $all_complete ) {
         $parent_order = new WC_Order( $parent_order_id );
-        $parent_order->update_status( 'completed', __( 'Mark parent order completed as all child orders are completed.', 'dokan' ) );
+        $parent_order->update_status( 'wc-completed', __( 'Mark parent order completed as all child orders are completed.', 'dokan' ) );
     }
 }
 
@@ -231,18 +231,18 @@ function dokan_delete_sync_order( $order_id ) {
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
 
-    $order = new WC_Order( $order_id );
-    $seller_id = dokan_get_seller_id_by_order( $order_id );
-    $percentage = dokan_get_seller_percentage( $seller_id );
+    $order       = new WC_Order( $order_id );
+    $seller_id   = dokan_get_seller_id_by_order( $order_id );
+    $percentage  = dokan_get_seller_percentage( $seller_id );
     $order_total = $order->get_total();
 
     $wpdb->insert( $wpdb->prefix . 'dokan_orders',
         array(
-            'order_id' => $order_id,
-            'seller_id' => $seller_id,
-            'order_total' => $order_total,
-            'net_amount' => ($order_total * $percentage)/100,
-            'order_status' => $order->status,
+            'order_id'     => $order_id,
+            'seller_id'    => $seller_id,
+            'order_total'  => $order_total,
+            'net_amount'   => ($order_total * $percentage)/100,
+            'order_status' => $order->post_status,
         ),
         array(
             '%d',

@@ -266,33 +266,33 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'completed' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'order_status' => 'completed' ), $orders_url ); ?>">
-                <?php printf( __( 'Completed (%d)', 'dokan' ), $orders_counts->completed ); ?></span>
+            <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-completed' ), $orders_url ); ?>">
+                <?php printf( __( 'Completed (%d)', 'dokan' ), $orders_counts->{'wc-completed'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'processing' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'order_status' => 'processing' ), $orders_url ); ?>">
-                <?php printf( __( 'Processing (%d)', 'dokan' ), $orders_counts->processing ); ?></span>
+            <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-processing' ), $orders_url ); ?>">
+                <?php printf( __( 'Processing (%d)', 'dokan' ), $orders_counts->{'wc-processing'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'on-hold' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'order_status' => 'on-hold' ), $orders_url ); ?>">
-                <?php printf( __( 'On-hold (%d)', 'dokan' ), $orders_counts->{'on-hold'} ); ?></span>
+            <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-on-hold' ), $orders_url ); ?>">
+                <?php printf( __( 'On-hold (%d)', 'dokan' ), $orders_counts->{'wc-on-hold'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'pending' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'order_status' => 'pending' ), $orders_url ); ?>">
-                <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->pending ); ?></span>
+            <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-pending' ), $orders_url ); ?>">
+                <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->{'wc-pending'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'canceled' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'order_status' => 'cancelled' ), $orders_url ); ?>">
-                <?php printf( __( 'Cancelled (%d)', 'dokan' ), $orders_counts->cancelled ); ?></span>
+            <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-cancelled' ), $orders_url ); ?>">
+                <?php printf( __( 'Cancelled (%d)', 'dokan' ), $orders_counts->{'wc-cancelled'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'refunded' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'order_status' => 'refunded' ), $orders_url ); ?>">
-                <?php printf( __( 'Refunded (%d)', 'dokan' ), $orders_counts->refunded ); ?></span>
+            <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-refunded' ), $orders_url ); ?>">
+                <?php printf( __( 'Refunded (%d)', 'dokan' ), $orders_counts->{'wc-refunded'} ); ?></span>
             </a>
         </li>
     </ul>
@@ -303,43 +303,43 @@ function dokan_get_dashboard_nav() {
     $urls = array(
         'dashboard' => array(
             'title' => __( 'Dashboard', 'dokan'),
-            'icon' => '<i class="icon-dashboard"></i>',
-            'url' => dokan_get_navigation_url()
+            'icon'  => '<i class="dokan-icon-dashboard"></i>',
+            'url'   => dokan_get_navigation_url()
         ),
         'product' => array(
             'title' => __( 'Products', 'dokan'),
-            'icon' => '<i class="icon-briefcase"></i>',
-            'url' => dokan_get_navigation_url( 'products' )
+            'icon'  => '<i class="dokan-icon-briefcase"></i>',
+            'url'   => dokan_get_navigation_url( 'products' )
         ),
         'order' => array(
             'title' => __( 'Orders', 'dokan'),
-            'icon' => '<i class="icon-basket"></i>',
-            'url' => dokan_get_navigation_url( 'orders' )
+            'icon'  => '<i class="dokan-icon-basket"></i>',
+            'url'   => dokan_get_navigation_url( 'orders' )
         ),
         'coupon' => array(
             'title' => __( 'Coupons', 'dokan'),
-            'icon' => '<i class="icon-gift"></i>',
-            'url' => dokan_get_navigation_url( 'coupons' )
+            'icon'  => '<i class="dokan-icon-gift"></i>',
+            'url'   => dokan_get_navigation_url( 'coupons' )
         ),
         'report' => array(
             'title' => __( 'Reports', 'dokan'),
-            'icon' => '<i class="icon-stats"></i>',
-            'url' => dokan_get_navigation_url( 'reports' )
+            'icon'  => '<i class="dokan-icon-stats"></i>',
+            'url'   => dokan_get_navigation_url( 'reports' )
         ),
         'reviews' => array(
             'title' => __( 'Reviews', 'dokan'),
-            'icon' => '<i class="icon-bubbles"></i>',
-            'url' => dokan_get_navigation_url( 'reviews' )
+            'icon'  => '<i class="dokan-icon-bubbles"></i>',
+            'url'   => dokan_get_navigation_url( 'reviews' )
         ),
         'withdraw' => array(
             'title' => __( 'Withdraw', 'dokan'),
-            'icon' => '<i class="icon-upload"></i>',
-            'url' => dokan_get_navigation_url( 'withdraw' )
+            'icon'  => '<i class="dokan-icon-upload"></i>',
+            'url'   => dokan_get_navigation_url( 'withdraw' )
         ),
         'settings' => array(
             'title' => __( 'Settings', 'dokan'),
-            'icon' => '<i class="icon-cog"></i>',
-            'url' => dokan_get_navigation_url( 'settings' )
+            'icon'  => '<i class="dokan-icon-cog"></i>',
+            'url'   => dokan_get_navigation_url( 'settings' )
         ),
     );
 

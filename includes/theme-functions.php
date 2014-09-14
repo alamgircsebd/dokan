@@ -256,14 +256,11 @@ function dokan_generate_sync_table() {
     global $wpdb;
 
     $sql = "SELECT oi.order_id, p.ID as product_id, p.post_title, p.post_author as seller_id,
-                oim2.meta_value as order_total, terms.name as order_status
+                oim2.meta_value as order_total, p.post_status as order_status
             FROM {$wpdb->prefix}woocommerce_order_items oi
-            LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim ON oim.order_item_id = oi.order_item_id
-            LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim2 ON oim2.order_item_id = oi.order_item_id
-            LEFT JOIN $wpdb->posts p ON oim.meta_value = p.ID
-            LEFT JOIN {$wpdb->term_relationships} rel ON oi.order_id = rel.object_id
-            LEFT JOIN {$wpdb->term_taxonomy} tax ON rel.term_taxonomy_id = tax.term_taxonomy_id
-            LEFT JOIN {$wpdb->terms} terms ON tax.term_id = terms.term_id
+            INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim ON oim.order_item_id = oi.order_item_id
+            INNER JOIN {$wpdb->prefix}woocommerce_order_itemmeta oim2 ON oim2.order_item_id = oi.order_item_id
+            INNER JOIN $wpdb->posts p ON oi.order_id = p.ID
             WHERE
                 oim.meta_key = '_product_id' AND
                 oim2.meta_key = '_line_total'
@@ -281,10 +278,10 @@ function dokan_generate_sync_table() {
             $wpdb->insert(
                 $table_name,
                 array(
-                    'order_id' => $order->order_id,
-                    'seller_id' => $order->seller_id,
-                    'order_total' => $order->order_total,
-                    'net_amount' => ($order->order_total * $percentage)/100,
+                    'order_id'     => $order->order_id,
+                    'seller_id'    => $order->seller_id,
+                    'order_total'  => $order->order_total,
+                    'net_amount'   => ($order->order_total * $percentage)/100,
                     'order_status' => $order->order_status,
                 ),
                 array(
