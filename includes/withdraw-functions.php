@@ -232,7 +232,7 @@ function dokan_get_withdraw_count() {
 function dokan_withdraw_get_active_order_status() {
     $order_status = dokan_get_option( 'withdraw_order_status', 'dokan_selling', array( 'wc-completed' ) );
 
-    return apply_filters( 'dokan_withdraw_active_status', $order_status )
+    return apply_filters( 'dokan_withdraw_active_status', $order_status );
 }
 
 /**

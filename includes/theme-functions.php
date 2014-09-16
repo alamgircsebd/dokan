@@ -864,13 +864,13 @@ function dokan_get_store_info( $seller_id ) {
 
     $defaults = array(
         'store_name' => '',
-        'social' => array(),
-        'payment' => array( 'paypal' => array( 'email' ), 'bank' => array() ),
-        'phone' => '',
+        'social'     => array(),
+        'payment'    => array( 'paypal' => array( 'email' ), 'bank' => array() ),
+        'phone'      => '',
         'show_email' => 'off',
-        'address' => '',
-        'location' => '',
-        'banner' => 0
+        'address'    => '',
+        'location'   => '',
+        'banner'     => 0
     );
 
     $info = wp_parse_args( $info, $defaults );
@@ -941,21 +941,21 @@ function dokan_get_seller_bank_details( $seller_id ) {
 function dokan_get_sellers( $number = 10, $offset = 0 ) {
     $args = apply_filters( 'dokan_seller_list_query', array(
         'role' => 'seller',
-        'number' => $number,
-        'offset' => $offset,
-        'orderby' => 'registered',
-        'order' => 'ASC',
+        'number'     => $number,
+        'offset'     => $offset,
+        'orderby'    => 'registered',
+        'order'      => 'ASC',
         'meta_query' => array(
             array(
-                'key' => 'dokan_enable_selling',
-                'value' => 'yes',
+                'key'     => 'dokan_enable_selling',
+                'value'   => 'yes',
                 'compare' => '='
             )
         )
     ) );
 
     $user_query = new WP_User_Query( $args );
-    $sellers = $user_query->get_results();
+    $sellers    = $user_query->get_results();
 
     return array( 'users' => $sellers, 'count' => $user_query->total_users );
 }
@@ -976,21 +976,6 @@ function dokan_add_to_cart_fragments( $fragment ) {
 
 add_filter( 'add_to_cart_fragments', 'dokan_add_to_cart_fragments' );
 
-
-
-/**
- * Get wishlist url if YITH Wishlist plugin is installed
- *
- * @global WITH_WCWL $yith_wcwl
- * @global WC_Product $product
- */
-function dokan_add_to_wishlist_link() {
-    if ( class_exists( 'YITH_WCWL' ) ) {
-        global $yith_wcwl, $product;
-
-        printf( '<a href="%s" class="btn fav add_to_wishlist" data-product-id="%d" data-product-type=""><i class="fa fa-heart"></i></a>', $yith_wcwl->get_addtowishlist_url(), $product->id );
-    }
-}
 
 /**
  * Put data with post_date's into an array of times

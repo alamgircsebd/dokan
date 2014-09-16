@@ -1,13 +1,13 @@
 <?php
 global $woocommerce;
 
-$seller_id = get_current_user_id();
+$seller_id    = get_current_user_id();
 $order_status = isset( $_GET['order_status'] ) ? sanitize_key( $_GET['order_status'] ) : 'all';
-$paged = max( 1, get_query_var( 'paged' ) );
-$limit = 10;
-$offset = ( $paged - 1 ) * $limit;
+$paged        = max( 1, get_query_var( 'paged' ) );
+$limit        = 10;
+$offset       = ( $paged - 1 ) * $limit;
 
-$user_orders = dokan_get_seller_orders( $seller_id, $order_status, $limit, $offset );
+$user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $limit, $offset );
 
 if ( $user_orders ) {
     ?>
