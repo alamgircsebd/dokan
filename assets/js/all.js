@@ -738,7 +738,7 @@ jQuery(function($) {
 				curr_page = self.data('curr_page'),
                 tr = self.closest('tr'),
                 data = {
-                    'action': 'wpuf_comment_status',
+                    'action': 'dokan_comment_status',
                     'comment_id': comment_id,
                     'comment_status': comment_status,
 					'page_status': page_status,

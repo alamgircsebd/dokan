@@ -18,7 +18,7 @@
 
                 <?php $post_statuses = apply_filters( 'dokan_post_status', array(
                     'publish' => __( 'Online', 'dokan' ),
-                    'draft' => __( 'Draft', 'dokan' )
+                    'draft'   => __( 'Draft', 'dokan' )
                 ), $post ); ?>
 
                 <select id="post_status" class="dokan-toggle-select" name="post_status">
@@ -27,7 +27,7 @@
                     <?php } ?>
                 </select>
 
-                <a class="dokan-toggle-save btn btn-default btn-sm" href="#"><?php _e( 'OK', 'dokan' ); ?></a>
+                <a class="dokan-toggle-save dokan-btn dokan-btn-default dokan-btn-sm" href="#"><?php _e( 'OK', 'dokan' ); ?></a>
                 <a class="dokan-toggle-cacnel" href="#"><?php _e( 'Cancel', 'dokan' ); ?></a>
             </div> <!-- #dokan-toggle-select -->
         <?php } ?>
@@ -47,8 +47,8 @@
         } else {
             $product_type = 'simple';
         }
-        
-         
+
+
         if ( !array_key_exists( $product_type, $supported_types) ) {
             $product_type = 'simple';
         }
@@ -59,15 +59,15 @@
 
             <div class="dokan-toggle-select-container dokan-hide">
                 <select name="_product_type" id="_product_type" class="dokan-toggle-select">
-                    <?php 
-                    foreach ( $supported_types as $value => $label ) { 
+                    <?php
+                    foreach ( $supported_types as $value => $label ) {
                         echo '<option value="' . esc_attr( $value ) . '" ' . selected( $product_type, $value, false ) .'>' . esc_html( $label ) . '</option>';
                     }
                     ?>
-                    
+
                 </select>
 
-                <a class="dokan-toggle-save btn btn-default btn-sm" href="#"><?php _e( 'OK', 'dokan' ); ?></a>
+                <a class="dokan-toggle-save dokan-btn dokan-btn-default dokan-btn-sm" href="#"><?php _e( 'OK', 'dokan' ); ?></a>
                 <a class="dokan-toggle-cacnel" href="#"><?php _e( 'Cancel', 'dokan' ); ?></a>
             </div> <!-- #dokan-toggle-select -->
 

@@ -36,8 +36,8 @@ class Dokan_Ajax {
 
         // reviews
         $reviews = Dokan_Template_reviews::init();
-        add_action( 'wp_ajax_wpuf_comment_status', array( $reviews, 'ajax_comment_status' ) );
-        add_action( 'wp_ajax_wpuf_update_comment', array( $reviews, 'ajax_update_comment' ) );
+        add_action( 'wp_ajax_dokan_comment_status', array( $reviews, 'ajax_comment_status' ) );
+        add_action( 'wp_ajax_dokan_update_comment', array( $reviews, 'ajax_update_comment' ) );
 
         //settings
         $settings = Dokan_Template_Settings::init();
@@ -65,7 +65,7 @@ class Dokan_Ajax {
      * chop url check
      */
     function shop_url_check() {
-        
+
         if ( !wp_verify_nonce( $_POST['_nonce'], 'dokan_reviews' ) ) {
             wp_send_json_error( array(
                 'type' => 'nonce',
@@ -459,14 +459,17 @@ class Dokan_Ajax {
 
         check_ajax_referer( 'dokan_change_status' );
 
-        $order_id = intval( $_POST['order_id'] );
+        $order_id     = intval( $_POST['order_id'] );
         $order_status = $_POST['order_status'];
 
         $order = new WC_Order( $order_id );
         $order->update_status( $order_status );
 
+        $statuses     = wc_get_order_statuses();
+        $status_label = isset( $statuses[$order_status] ) ? $statuses[$order_status] : $order_status;
         $status_class = dokan_get_order_status_class( $order_status );
-        echo '<label class="label label-' . $status_class . '">' . $order_status . '</label>';
+
+        echo '<label class="dokan-label dokan-label-' . $status_class . '">' . $status_label . '</label>';
         exit;
     }
 

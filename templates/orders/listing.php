@@ -19,7 +19,7 @@ if ( $user_orders ) {
                 <th><?php _e( 'Status', 'dokan' ); ?></th>
                 <th><?php _e( 'Customer', 'dokan' ); ?></th>
                 <th><?php _e( 'Date', 'dokan' ); ?></th>
-                <th><?php _e( 'Action', 'dokan' ); ?></th>
+                <th width="17%"><?php _e( 'Action', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -28,16 +28,16 @@ if ( $user_orders ) {
                 $the_order = new WC_Order( $order->order_id );
                 ?>
                 <tr>
-                    <td>
+                    <td class="dokan-order-id">
                         <?php echo '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'woocommerce' ), esc_attr( $the_order->get_order_number() ) ) . '</strong></a>'; ?>
                     </td>
-                    <td>
+                    <td class="dokan-order-total">
                         <?php echo esc_html( strip_tags( $the_order->get_formatted_order_total() ) ); ?>
                     </td>
-                    <td>
+                    <td class="dokan-order-status">
                         <?php printf( '<span class="dokan-label dokan-label-%s">%s</span>', dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status, 'woocommerce' ) ); ?>
                     </td>
-                    <td>
+                    <td class="dokan-order-customer">
                         <?php
                         if ( $the_order->user_id )
                             $user_info = get_userdata( $the_order->user_id );
@@ -57,7 +57,7 @@ if ( $user_orders ) {
                         echo $user;
                         ?>
                     </td>
-                    <td>
+                    <td class="dokan-order-date">
                         <?php
                         if ( '0000-00-00 00:00:00' == $the_order->order_date ) {
                             $t_time = $h_time = __( 'Unpublished', 'dokan' );
@@ -76,7 +76,7 @@ if ( $user_orders ) {
                         echo '<abbr title="' . esc_attr( $t_time ) . '">' . esc_html( apply_filters( 'post_date_column_time', $h_time, $the_order->id ) ) . '</abbr>';
                         ?>
                     </td>
-                    <td width="15%">
+                    <td class="dokan-order-action" width="17%">
                         <?php
                         do_action( 'woocommerce_admin_order_actions_start', $the_order );
 
@@ -99,7 +99,7 @@ if ( $user_orders ) {
                                     'action' => "complete",
                                     'icon' => '<i class="fa fa-check">&nbsp;</i>'
                                 );
-                            
+
                         }
 
                         $actions['view'] = array(
@@ -113,7 +113,7 @@ if ( $user_orders ) {
 
                         foreach ($actions as $action) {
                             $icon = ( isset( $action['icon'] ) ) ? $action['icon'] : '';
-                            printf( '<a class="btn btn-default btn-sm tips" href="%s" data-toggle="tooltip" data-placement="top" title="%s">%s</a> ', esc_url( $action['url'] ), esc_attr( $action['name'] ), $icon );
+                            printf( '<a class="dokan-btn dokan-btn-default dokan-btn-sm tips" href="%s" data-toggle="tooltip" data-placement="top" title="%s">%s</a> ', esc_url( $action['url'] ), esc_attr( $action['name'] ), $icon );
                         }
 
                         do_action( 'woocommerce_admin_order_actions_end', $the_order );

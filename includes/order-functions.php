@@ -296,30 +296,37 @@ function dokan_get_seller_id_by_order( $order_id ) {
 function dokan_get_order_status_class( $status ) {
     switch ($status) {
         case 'completed':
+        case 'wc-completed':
             return 'success';
             break;
 
         case 'pending':
+        case 'wc-pending':
             return 'danger';
             break;
 
         case 'on-hold':
+        case 'wc-on-hold':
             return 'warning';
             break;
 
         case 'processing':
+        case 'wc-processing':
             return 'info';
             break;
 
         case 'refunded':
+        case 'wc-refunded':
             return 'default';
             break;
 
         case 'cancelled':
+        case 'wc-cancelled':
             return 'default';
             break;
 
         case 'failed':
+        case 'wc-failed':
             return 'danger';
             break;
     }

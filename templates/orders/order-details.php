@@ -8,7 +8,8 @@ if ( !dokan_is_seller_has_order( $current_user->ID, $order_id ) ) {
     return;
 }
 
-$order = new WC_Order( $order_id );
+$statuses = wc_get_order_statuses();
+$order    = new WC_Order( $order_id );
 ?>
 <div class="row dokan-clearfix">
     <div class="dokan-w8" style="margin-right:3%;">
@@ -19,7 +20,7 @@ $order = new WC_Order( $order_id );
                     <div class="dokan-panel-heading"><strong><?php printf( 'Order#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
                     <div class="dokan-panel-body">
 
-                        <table cellpadding="0" cellspacing="0" class="table order-items">
+                        <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
                             <thead>
                                 <tr>
                                     <th class="item" colspan="2"><?php _e( 'Item', 'woocommerce' ); ?></th>
@@ -79,7 +80,7 @@ $order = new WC_Order( $order_id );
 
                         if ( $coupons ) {
                             ?>
-                            <table class="table order-items">
+                            <table class="dokan-table order-items">
                                 <tr>
                                     <th><?php _e( 'Coupons', 'dokan' ); ?></th>
                                     <td>
@@ -144,7 +145,7 @@ $order = new WC_Order( $order_id );
                         <ul class="list-unstyled order-status">
                             <li>
                                 <span><?php _e( 'Order Status:', 'dokan' ); ?></span>
-                                <label class="dokan-label dokan-label-<?php echo dokan_get_order_status_class( $order->status ); ?>"><?php echo $order->status; ?></label>
+                                <label class="dokan-label dokan-label-<?php echo dokan_get_order_status_class( $order->post_status ); ?>"><?php echo isset( $statuses[$order->post_status] ) ? $statuses[$order->post_status] : $order->post_status; ?></label>
 
                                 <?php if ( dokan_get_option( 'order_status_change', 'dokan_selling', 'on' ) == 'on' ) {?>
                                     <a href="#" class="dokan-edit-status"><small><?php _e( '&nbsp; Edit', 'dokan' ); ?></small></a>
@@ -155,19 +156,18 @@ $order = new WC_Order( $order_id );
 
                                     <select id="order_status" name="order_status" class="form-control">
                                         <?php
-                                            $statuses = wc_get_order_statuses();
-                                            foreach ( $statuses as $status => $label ) {
-                                                echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . $label . '</option>';
-                                            }
+                                        foreach ( $statuses as $status => $label ) {
+                                            echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . $label . '</option>';
+                                        }
                                         ?>
                                     </select>
 
                                     <input type="hidden" name="order_id" value="<?php echo $order->id; ?>">
                                     <input type="hidden" name="action" value="dokan_change_status">
                                     <input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'dokan_change_status' ); ?>">
-                                    <input type="submit" class="btn btn-success btn-sm" name="dokan_change_status" value="<?php _e( 'Update', 'dokan' ); ?>">
+                                    <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm" name="dokan_change_status" value="<?php _e( 'Update', 'dokan' ); ?>">
 
-                                    <a href="#" class="btn btn-default btn-sm dokan-cancel-status">Cancel</a>
+                                    <a href="#" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-cancel-status">Cancel</a>
                                 </form>
                             </li>
                             <li>
@@ -266,7 +266,7 @@ $order = new WC_Order( $order_id );
                                     <textarea type="text" id="add-note-content" name="note" class="form-control" cols="19" rows="3"></textarea>
                                 </p>
                                 <div class="clearfix">
-                                    <div class="dokan-w8 order_note_type dokan-form-group">
+                                    <div class="order_note_type dokan-form-group">
                                         <select name="note_type" id="order_note_type" class="dokan-form-control">
                                             <option value="customer"><?php _e( 'Customer note', 'dokan' ); ?></option>
                                             <option value=""><?php _e( 'Private note', 'dokan' ); ?></option>

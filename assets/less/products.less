@@ -1,143 +1,143 @@
 .dokan-product-listing {
 
-	.dokan-product-listing-area {
-		padding:0px 15px;
+    .dokan-product-listing-area {
+        padding:0px 15px;
 
-		.row-actions {
-	        visibility: hidden;
-	        font-size: 12px;
-	        color: #ccc;
+        .row-actions {
+            visibility: hidden;
+            font-size: 12px;
+            color: #ccc;
 
-	        .delete a {
-	            color: #A05;
+            .delete a {
+                color: #A05;
 
-	            &:hover {
-	                color: red;
-	            }
-	        }
-	    }
+                &:hover {
+                    color: red;
+                }
+            }
+        }
 
-	    tr:hover .row-actions {
-	        visibility: visible;
-	    }
+        tr:hover .row-actions {
+            visibility: visible;
+        }
 
-	    table td img {
-	        max-width: 48px;
-	        max-height: 48px;
-	    }
+        table td img {
+            max-width: 48px;
+            max-height: 48px;
+        }
 
-		.product-listing-top {
-	        border-bottom: 1px solid @borderColor;
-	        line-height: 50px;
-	        margin-bottom: 15px;
-			
+        .product-listing-top {
+            border-bottom: 1px solid @borderColor;
+            line-height: 50px;
+            margin-bottom: 15px;
 
-			ul.dokan-listing-filter {
-				width:70%;
-			}
 
-	        ul.dokan-listing-filter li {
-	        	display:inline-block;
-	        	padding:0px 10px 0px 0px;
-	        }
+            ul.dokan-listing-filter {
+                width:70%;
+            }
 
-	        span.dokan-add-product-link {
-	        	width:30%;
-	        }
-	    }
+            ul.dokan-listing-filter li {
+                display:inline-block;
+                padding:0px 10px 0px 0px;
+            }
 
-	    table.product-listing-table {
-	        span.product-type:before {
-	            font-family: FontAwesome;
-	            content: "\f133";
-	            display: block;
-	            text-align: center;
-	        }
+            span.dokan-add-product-link {
+                width:30%;
+            }
+        }
 
-	        span.product-type.downloadable:before {
-	            font-family: FontAwesome;
-	            content: "\f019";
-	            display: block;
-	            text-align: center;
-	        }
+        table.product-listing-table {
+            span.product-type:before {
+                font-family: FontAwesome;
+                content: "\f133";
+                display: block;
+                text-align: center;
+            }
 
-	        span.product-type.variable:before {
-	            font-family: FontAwesome;
-	            content: "\f02d";
-	            display: block;
-	            text-align: center;
-	        }
+            span.product-type.downloadable:before {
+                font-family: FontAwesome;
+                content: "\f019";
+                display: block;
+                text-align: center;
+            }
 
-	        span.product-type.simple:before {
-	            font-family: FontAwesome;
-	            content: "\f0c9";
-	            display: block;
-	            text-align: center;
-	        }
+            span.product-type.variable:before {
+                font-family: FontAwesome;
+                content: "\f02d";
+                display: block;
+                text-align: center;
+            }
 
-	        span.product-type.virtual:before {
-	            font-family: FontAwesome;
-	            content: "\f0c2";
-	            display: block;
-	            text-align: center;
-	        }
+            span.product-type.simple:before {
+                font-family: FontAwesome;
+                content: "\f0c9";
+                display: block;
+                text-align: center;
+            }
 
-	        mark.instock {
-	            color: #7AD03A;
-	            background: transparent;
-	            font-weight: bold;
-	        }
+            span.product-type.virtual:before {
+                font-family: FontAwesome;
+                content: "\f0c2";
+                display: block;
+                text-align: center;
+            }
 
-			td {
-				vertical-align: top;	
-			}
+            mark.instock {
+                color: #7AD03A;
+                background: transparent;
+                font-weight: bold;
+            }
 
-			p {
-				margin-bottom: 0px;
-				padding-bottom: 0px;
-			}
+            td {
+                vertical-align: top;
+            }
 
-	        td.post-status {
-	            label.draft {
-	                background: #ccc;
-	            }
+            p {
+                margin-bottom: 0px;
+                padding-bottom: 0px;
+            }
 
-	            label.publish {
-	                background: #65C265;
-	            }
+            td.post-status {
+                label.draft {
+                    background: #ccc;
+                }
 
-	            label.pending {
-	                background: #f05025;
-	            }
-	        }
+                label.publish {
+                    background: #65C265;
+                }
 
-	        td.post-date {
-	            font-size: 13px;
-	        }
-	    }
+                label.pending {
+                    background: #f05025;
+                }
+            }
 
-	    del .amount {
-	        color: #dd5a43;
-	    }
+            td.post-date {
+                font-size: 13px;
+            }
+        }
 
-	    ins {
-	        text-decoration: none;
+        del .amount {
+            color: #dd5a43;
+        }
 
-	        .amount {
-	            color: #69aa46;
-	            font-weight: bold;
-	        }
-	    }
-	}
+        ins {
+            text-decoration: none;
+
+            .amount {
+                color: #69aa46;
+                font-weight: bold;
+            }
+        }
+    }
 }
 
 .dokan-new-product-area {
-	padding:0px 15px;
+    padding:0px 15px;
 }
 
 .product-edit-container {
     font-size: 13px;
-    
+
     .tab-pane {
         padding: 15px 0;
     }
@@ -164,7 +164,8 @@
             color: #8F8F8F;
             text-shadow: 0 1px 1px #FFF;
             background: #F0F0F0;
-            padding:3px;
+            padding: 3px 10px;
+            font-size: 12px;
 
             &:hover {
                 color: #ECECEC;

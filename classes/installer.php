@@ -124,11 +124,12 @@ class Dokan_Installer {
 
         if ( ! $page_obj ) {
             $page_id = wp_insert_post( array(
-                'post_title'   => $page['post_title'],
-                'post_name'    => $page['slug'],
-                'post_content' => $page['content'],
-                'post_status'  => 'publish',
-                'post_type'    => 'page',
+                'post_title'     => $page['post_title'],
+                'post_name'      => $page['slug'],
+                'post_content'   => $page['content'],
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'comment_status' => 'closed'
             ) );
 
             if ( $page_id && !is_wp_error( $page_id ) ) {

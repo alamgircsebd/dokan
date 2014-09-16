@@ -54,8 +54,8 @@ class Dokan_Admin_Settings {
 
     function admin_menu() {
         $menu_position = apply_filters( 'doakn_menu_position', 17 );
-        $capability = apply_filters( 'doakn_menu_capability', 'manage_options' );
-        $withdraw = dokan_get_withdraw_count();
+        $capability    = apply_filters( 'doakn_menu_capability', 'manage_options' );
+        $withdraw      = dokan_get_withdraw_count();
         $withdraw_text = __( 'Withdraw', 'dokan' );
 
         if ( $withdraw['pending'] ) {
@@ -121,40 +121,40 @@ class Dokan_Admin_Settings {
         $settings_fields = array(
             'dokan_general' => array(
                 'admin_access' => array(
-                    'name' => 'admin_access',
-                    'label' => __( 'Admin area access', 'dokan' ),
-                    'desc' => __( 'Disable sellers and customers from accessing wp-admin area', 'dokan' ),
-                    'type' => 'checkbox',
+                    'name'    => 'admin_access',
+                    'label'   => __( 'Admin area access', 'dokan' ),
+                    'desc'    => __( 'Disable sellers and customers from accessing wp-admin area', 'dokan' ),
+                    'type'    => 'checkbox',
                     'default' => 'on'
                 ),
                 'store_map' => array(
-                    'name' => 'store_map',
-                    'label' => __( 'Show Map on Store Page', 'dokan' ),
-                    'desc' => __( 'Enable showing Store location map on store left sidebar', 'dokan' ),
-                    'type' => 'checkbox',
+                    'name'    => 'store_map',
+                    'label'   => __( 'Show Map on Store Page', 'dokan' ),
+                    'desc'    => __( 'Enable showing Store location map on store left sidebar', 'dokan' ),
+                    'type'    => 'checkbox',
                     'default' => 'on'
                 ),
                 'contact_seller' => array(
-                    'name' => 'contact_seller',
-                    'label' => __( 'Show Contact Form on Store Page', 'dokan' ),
-                    'desc' => __( 'Enable showing contact seller form on store left sidebar', 'dokan' ),
-                    'type' => 'checkbox',
+                    'name'    => 'contact_seller',
+                    'label'   => __( 'Show Contact Form on Store Page', 'dokan' ),
+                    'desc'    => __( 'Enable showing contact seller form on store left sidebar', 'dokan' ),
+                    'type'    => 'checkbox',
                     'default' => 'on'
                 ),
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
-                    'name' => 'new_seller_enable_selling',
-                    'label' => __( 'New Seller Enable Selling', 'dokan' ),
-                    'desc' => __( 'Make selling status enable for new registred seller', 'dokan' ),
-                    'type' => 'checkbox',
+                    'name'    => 'new_seller_enable_selling',
+                    'label'   => __( 'New Seller Enable Selling', 'dokan' ),
+                    'desc'    => __( 'Make selling status enable for new registred seller', 'dokan' ),
+                    'type'    => 'checkbox',
                     'default' => 'on'
                 ),
                 'product_status' => array(
-                    'name' => 'product_status',
-                    'label' => __( 'New Product Status', 'dokan' ),
-                    'desc' => __( 'Product status when a seller creates a product', 'dokan' ),
-                    'type' => 'select',
+                    'name'    => 'product_status',
+                    'label'   => __( 'New Product Status', 'dokan' ),
+                    'desc'    => __( 'Product status when a seller creates a product', 'dokan' ),
+                    'type'    => 'select',
                     'default' => 'pending',
                     'options' => array(
                         'publish' => __( 'Published', 'dokan' ),
@@ -162,41 +162,48 @@ class Dokan_Admin_Settings {
                     )
                 ),
                 'seller_percentage' => array(
-                    'name' => 'seller_percentage',
-                    'label' => __( 'Seller Percentage', 'dokan' ),
-                    'desc' => __( 'How much amount (%) a seller will get from each order', 'dokan' ),
+                    'name'    => 'seller_percentage',
+                    'label'   => __( 'Seller Percentage', 'dokan' ),
+                    'desc'    => __( 'How much amount (%) a seller will get from each order', 'dokan' ),
                     'default' => '90',
-                    'type' => 'text',
+                    'type'    => 'text',
                 ),
                 'order_status_change' => array(
-                    'name' => 'order_status_change',
-                    'label' => __( 'Order Status Change', 'dokan' ),
-                    'desc' => __( 'Seller Could Change Order Status', 'dokan' ),
-                    'type' => 'checkbox',
+                    'name'    => 'order_status_change',
+                    'label'   => __( 'Order Status Change', 'dokan' ),
+                    'desc'    => __( 'Seller can change order status', 'dokan' ),
+                    'type'    => 'checkbox',
                     'default' => 'on'
                 ),
                 'withdraw_methods' => array(
-                    'name' => 'withdraw_methods',
-                    'label' => __( 'Withdraw Methods', 'dokan' ),
-                    'desc' => __( 'Withdraw methods for sellers', 'dokan' ),
-                    'type' => 'multicheck',
+                    'name'    => 'withdraw_methods',
+                    'label'   => __( 'Withdraw Methods', 'dokan' ),
+                    'desc'    => __( 'Withdraw methods for sellers', 'dokan' ),
+                    'type'    => 'multicheck',
                     'default' => array( 'paypal' => 'paypal' ),
                     'options' => dokan_withdraw_get_methods()
                 ),
                 'withdraw_order_status' => array(
-                    'name' => 'withdraw_order_status',
-                    'label' => __( 'Order Status for Withdraw', 'dokan' ),
-                    'desc' => __( 'Order status for which seller can make a withdraw request.', 'dokan' ),
-                    'type' => 'multicheck',
-                    'default' => array( 'completed' => __( 'Completed', 'dokan' ), 'processing' => __( 'Processing', 'dokan' ), 'on-hold' => __( 'On-hold', 'dokan' ) ),
-                    'options' => array( 'completed' => __( 'Completed', 'dokan' ), 'processing' => __( 'Processing', 'dokan' ), 'on-hold' => __( 'On-hold', 'dokan' ) )
+                    'name'    => 'withdraw_order_status',
+                    'label'   => __( 'Order Status for Withdraw', 'dokan' ),
+                    'desc'    => __( 'Order status for which seller can make a withdraw request.', 'dokan' ),
+                    'type'    => 'multicheck',
+                    'default' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
+                    'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) )
                 ),
                 'withdraw_limit' => array(
-                    'name' => 'withdraw_limit',
-                    'label' => __( 'Minimum Withdraw Limit', 'dokan' ),
-                    'desc' => __( 'Minimum balance required to make a withdraw request', 'dokan' ),
+                    'name'    => 'withdraw_limit',
+                    'label'   => __( 'Minimum Withdraw Limit', 'dokan' ),
+                    'desc'    => __( 'Minimum balance required to make a withdraw request', 'dokan' ),
                     'default' => '50',
-                    'type' => 'text',
+                    'type'    => 'text',
+                ),
+                'review_edit' => array(
+                    'name'    => 'review_edit',
+                    'label'   => __( 'Review Editing', 'dokan' ),
+                    'desc'    => __( 'Seller can edit product reviews', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'off'
                 ),
             ),
             'dokan_pages' => array(

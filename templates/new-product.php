@@ -10,7 +10,7 @@
 
                     <?php foreach ( Dokan_Template_Shortcodes::$errors as $error) { ?>
 
-                        <strong>Error!</strong> <?php echo $error ?>.<br>
+                        <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
 
                     <?php } ?>
                 </div>
@@ -32,7 +32,7 @@
                                 <div class="instruction-inside">
                                     <input type="hidden" name="feat_image_id" class="dokan-feat-image-id" value="0">
                                     <i class="fa fa-cloud-upload"></i>
-                                    <a href="#" class="dokan-feat-image-btn btn btn-sm"><?php _e( 'Upload a product cover image', 'dokan' ); ?></a>
+                                    <a href="#" class="dokan-feat-image-btn dokan-btn"><?php _e( 'Upload Product Image', 'dokan' ); ?></a>
                                 </div>
 
                                 <div class="image-wrap dokan-hide">
@@ -61,15 +61,15 @@
                             <?php
                             wp_dropdown_categories( array(
                                 'show_option_none' => __( '- Select a category -', 'dokan' ),
-                                'hierarchical' => 1,
-                                'hide_empty' => 0,
-                                'name' => 'product_cat',
-                                'id' => 'product_cat',
-                                'taxonomy' => 'product_cat',
-                                'title_li' => '',
-                                'class' => 'product_cat dokan-form-control',
-                                'exclude' => '',
-                                'selected' => Dokan_Template_Shortcodes::$product_cat,
+                                'hierarchical'     => 1,
+                                'hide_empty'       => 0,
+                                'name'             => 'product_cat',
+                                'id'               => 'product_cat',
+                                'taxonomy'         => 'product_cat',
+                                'title_li'         => '',
+                                'class'            => 'product_cat dokan-form-control',
+                                'exclude'          => '',
+                                'selected'         => Dokan_Template_Shortcodes::$product_cat,
                             ) );
                             ?>
                             </div>
@@ -84,7 +84,7 @@
                     <?php do_action( 'dokan_new_product_form' ); ?>
 
                     <div class="dokan-form-group">
-                        <input type="submit" name="add_product" class="dokan-btn dokan-btn-primary" value="<?php esc_attr_e( 'Add Product', 'dokan' ); ?>"/>
+                        <input type="submit" name="add_product" class="dokan-btn" value="<?php esc_attr_e( 'Add Product', 'dokan' ); ?>"/>
                     </div>
 
                 </form>

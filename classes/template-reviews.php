@@ -13,10 +13,14 @@ class Dokan_Template_reviews {
     private $trash;
     private $post_type;
 
+    public function __construct() {
+        $this->quick_edit = ( dokan_get_option( 'review_edit', 'dokan_selling', 'off' ) == 'on' ) ? true : false;
+    }
+
     public static function init() {
         static $instance = false;
 
-        if( !$instance ) {
+        if ( !$instance ) {
             $instance = new Dokan_Template_reviews();
         }
 
@@ -26,13 +30,13 @@ class Dokan_Template_reviews {
 
     function ajax_comment_status() {
 
-        if ( !wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) && !is_user_logged_in() ) {
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) && !is_user_logged_in() ) {
             wp_send_json_error();
         }
 
-        $comment_id = $_POST['comment_id'];
-        $action = $_POST['comment_status'];
-        $post_type = $_POST['post_type'];
+        $comment_id  = $_POST['comment_id'];
+        $action      = $_POST['comment_status'];
+        $post_type   = $_POST['post_type'];
         $page_status = $_POST['curr_page'];
 
         if ( $action == 'delete' && isset( $comment_id ) ) {
@@ -47,17 +51,16 @@ class Dokan_Template_reviews {
 
         $this->get_count( $post_type );
 
-
         ob_start();
         $this->render_row( $comment, $post_type  );
         $html = array(
             'pending' => $this->pending,
-            'spam' => $this->spam,
-            'trash' => $this->trash,
+            'spam'    => $this->spam,
+            'trash'   => $this->trash,
             'content' => ob_get_clean()
         );
 
-        wp_send_json_success( $html);
+        wp_send_json_success( $html );
     }
 
     /**
@@ -70,23 +73,20 @@ class Dokan_Template_reviews {
         if ( is_user_logged_in() ) {
 
             // initialize
-            $this->limit = 3;
             $this->post_type = 'product';
-            $post_type = 'product';
+            $post_type       = 'product';
 
             $this->get_count( $post_type );
 
             echo '<div class="dokan-comments-wrap">';
-            //menu
-            $this->wpuf_comments_menu( $post_type );
+                //menu
+                $this->wpuf_comments_menu( $post_type );
 
-            //Show all comments in this form
-            $this->show_comment_table( $post_type );
+                //Show all comments in this form
+                $this->show_comment_table( $post_type );
 
             echo '</div> <!-- .dokan-comments-wrap -->';
         }
-
-
     }
 
     /**
@@ -94,22 +94,22 @@ class Dokan_Template_reviews {
      *
      * @global object $wpdb
      * @global object $current_user
-     * @param string $post_type
+     * @param string  $post_type
      */
     function get_count( $post_type ) {
         global $wpdb, $current_user;
 
-        $counts = dokan_count_comments( $post_type, $current_user->ID );
+        $counts        = dokan_count_comments( $post_type, $current_user->ID );
 
         $this->pending = $counts->moderated;
-        $this->spam = $counts->spam;
-        $this->trash = $counts->trash;
+        $this->spam    = $counts->spam;
+        $this->trash   = $counts->trash;
     }
 
     /**
      * Show all comments in this form
      *
-     * @param string $post_type
+     * @param string  $post_type
      */
     function show_comment_table( $post_type ) {
         ?>
@@ -134,7 +134,7 @@ class Dokan_Template_reviews {
                 <?php $this->bulk_option(); ?>
             </select>
 
-            <?php wp_nonce_field('wpuf_comment_nonce', 'wpuf_nonce'); ?>
+            <?php wp_nonce_field( 'wpuf_comment_nonce', 'wpuf_nonce' ); ?>
 
             <input type="submit" value="<?php _e( 'Submit', 'dokan' ); ?>" class="btn btn-theme btn-sm" name="comt_stat_sub">
         </form>
@@ -184,7 +184,8 @@ class Dokan_Template_reviews {
 
     /**
      * Pagination
-     * @param string $post_type
+     *
+     * @param string  $post_type
      * @return string
      */
     function pagination( $post_type ) {
@@ -198,7 +199,7 @@ class Dokan_Template_reviews {
         }
 
         $total = $wpdb->get_var(
-                "SELECT COUNT(*)
+            "SELECT COUNT(*)
             FROM $wpdb->comments, $wpdb->posts
             WHERE   $wpdb->posts.post_author='$current_user->ID' AND
             $wpdb->posts.post_status='publish' AND
@@ -211,34 +212,34 @@ class Dokan_Template_reviews {
         $num_of_pages = ceil( $total / $this->limit );
 
         $page_links = paginate_links( array(
-            'base' => add_query_arg( 'pagenum', '%#%' ),
-            'format' => '',
-            'prev_text' => __( '&laquo;', 'aag' ),
-            'next_text' => __( '&raquo;', 'aag' ),
-            'total' => $num_of_pages,
-            'type' => 'array',
-            'current' => $pagenum
-        ) );
+                'base'      => add_query_arg( 'pagenum', '%#%' ),
+                'format'    => '',
+                'prev_text' => __( '&laquo;', 'aag' ),
+                'next_text' => __( '&raquo;', 'aag' ),
+                'total'     => $num_of_pages,
+                'type'      => 'array',
+                'current'   => $pagenum
+            ) );
 
         if ( $page_links ) {
             $pagination_links  = '<div class="pagination-wrap">';
             $pagination_links .= '<ul class="pagination"><li>';
-            $pagination_links .= join("</li>\n\t<li>", $page_links);
+            $pagination_links .= join( "</li>\n\t<li>", $page_links );
             $pagination_links .= "</li>\n</ul>\n";
             $pagination_links .= '</div>';
-            
+
             return $pagination_links;
         }
     }
 
 
-
     /**
      * Pagination
-     * @param int $id
-     * @param string $post_type
-     * @param int $limit
-     * @param string $status
+     *
+     * @param int     $id
+     * @param string  $post_type
+     * @param int     $limit
+     * @param string  $status
      * @return string
      */
     function review_pagination( $id, $post_type, $limit, $status ) {
@@ -252,7 +253,7 @@ class Dokan_Template_reviews {
         }
 
         $total = $wpdb->get_var(
-                "SELECT COUNT(*)
+            "SELECT COUNT(*)
             FROM $wpdb->comments, $wpdb->posts
             WHERE   $wpdb->posts.post_author='$id' AND
             $wpdb->posts.post_status='publish' AND
@@ -261,16 +262,16 @@ class Dokan_Template_reviews {
             $wpdb->posts.post_type='$post_type'"
         );
 
-        $pagenum = max(get_query_var('paged' ), 1);
+        $pagenum = max( get_query_var( 'paged' ), 1 );
         $num_of_pages = ceil( $total / $limit );
 
         $page_links = paginate_links( array(
-            'base' => dokan_get_store_url( $id ) . 'reviews/%_%',
-            'format' => 'page/%#%',
+            'base'      => dokan_get_store_url( $id ) . 'reviews/%_%',
+            'format'    => 'page/%#%',
             'prev_text' => __( '&laquo;', 'aag' ),
             'next_text' => __( '&raquo;', 'aag' ),
-            'total' => $num_of_pages,
-            'current' => $pagenum
+            'total'     => $num_of_pages,
+            'current'   => $pagenum
         ) );
 
         if ( $page_links ) {
@@ -311,6 +312,7 @@ class Dokan_Template_reviews {
 
     /**
      * return current page status. Is it panding, spam, trash or all
+     *
      * @return string
      */
     function page_status() {
@@ -319,59 +321,57 @@ class Dokan_Template_reviews {
         if ( $status == 'hold' ) {
             return '0';
         } else if ( $status == 'spam' ) {
-            return 'spam';
-        } else if ( $status == 'trash' ) {
-            return 'trash';
-        } else {
+                return 'spam';
+            } else if ( $status == 'trash' ) {
+                return 'trash';
+            } else {
             return '1';
         }
     }
 
     function get_comment_status( $status ) {
-        switch ($status) {
-            case '1':
-                return 'approved';
+        switch ( $status ) {
+        case '1':
+            return 'approved';
 
-            case '0':
-                return 'pending';
+        case '0':
+            return 'pending';
 
-            default:
-                return $status;
+        default:
+            return $status;
         }
     }
 
     /**
      * return all comments by comments status
+     *
      * @global object $current_user
      * @global object $wpdb
-     * @param string $post_type
+     * @param string  $post_type
      * @return string
      */
     function render_body( $post_type ) {
         global $current_user;
 
-        $status = $this->page_status();
-
-        $limit = $this->limit;
-        
+        $status   = $this->page_status();
+        $limit    = $this->limit;
         $comments = $this->comment_query( $current_user->ID, $post_type, $limit, $status );
 
         if ( count( $comments ) == 0 ) {
             return '<tr><td colspan="5">' . __( 'No Result Found', 'dokan' ) . '</td></tr>';
         }
 
-        foreach ($comments as $comment) {
+        foreach ( $comments as $comment ) {
             $this->render_row( $comment, $post_type );
         }
     }
 
     function comment_query( $id, $post_type, $limit, $status ) {
-        global $wpdb;   
+        global $wpdb;
 
         $page_number = isset( $_GET['pagenum'] ) ? $_GET['pagenum'] : 0 ;
-
-        $pagenum = max( 1, $page_number );
-        $offset = ( $pagenum - 1 ) * $limit;
+        $pagenum     = max( 1, $page_number );
+        $offset      = ( $pagenum - 1 ) * $limit;
 
         if ( $status == '1' ) {
             $query = "c.comment_approved IN ('1','0') AND";
@@ -396,12 +396,11 @@ class Dokan_Template_reviews {
     }
 
     function render_row( $comment, $post_type ) {
-        // var_dump( $comment );
 
-        $comment_date = get_comment_date( 'Y/m/d \a\t g:i a', $comment->comment_ID );
+        $comment_date       = get_comment_date( 'Y/m/d \a\t g:i a', $comment->comment_ID );
         $comment_author_img = get_avatar( $comment->comment_author_email, 32 );
-        $eidt_post_url = get_edit_post_link( $comment->comment_post_ID );
-        $permalink = get_comment_link( $comment );
+        $eidt_post_url      = get_edit_post_link( $comment->comment_post_ID );
+        $permalink          = get_comment_link( $comment );
         ?>
         <tr class="<?php echo $this->get_comment_status( $comment->comment_approved ); ?>">
             <td class="col-check"><input class="dokan-check-col" type="checkbox" name="commentid[]" value="<?php echo $comment->comment_ID; ?>"></td>
@@ -413,9 +412,13 @@ class Dokan_Template_reviews {
                 <?php } ?>
                 <?php echo $comment->comment_author_email; ?>
             </td>
-            <td class="col-content"><div class="dokan-comments-subdate">
-                <?php _e( 'Submitted on ', 'dokan' );
-                echo $comment_date; ?> </div>
+            <td class="col-content">
+                <div class="dokan-comments-subdate">
+                    <?php
+                    _e( 'Submitted on ', 'dokan' );
+                    echo $comment_date;
+                    ?>
+                </div>
 
                 <div class="dokan-comments-content"><?php echo $comment->comment_content; ?></div>
 
@@ -436,11 +439,11 @@ class Dokan_Template_reviews {
                 </div>
             </td>
             <td>
-            <?php if ( get_option('woocommerce_enable_review_rating') == 'yes' ) : ?>
+            <?php if ( get_option( 'woocommerce_enable_review_rating' ) == 'yes' ) : ?>
                 <?php $rating =  intval( get_comment_meta( $comment->comment_ID, 'rating', true ) ); ?>
 
             <div class="dokan-rating">
-                <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf(__( 'Rated %d out of 5', 'dokan' ), $rating) ?>">
+                <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf( __( 'Rated %d out of 5', 'dokan' ), $rating ) ?>">
                     <span style="width:<?php echo ( intval( get_comment_meta( $comment->comment_ID, 'rating', true ) ) / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo $rating; ?></strong> <?php _e( 'out of 5', 'dokan' ); ?></span>
                 </div>
             </div>
@@ -479,7 +482,9 @@ class Dokan_Template_reviews {
                     <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" data-comment_id="<?php echo $comment->comment_ID; ?>" data-cmt_status="1" class="dokan-cmt-action"><?php _e( 'Approve', 'dokan' ); ?></a></li>
                 <?php } ?>
 
-                <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" class="dokan-cmt-edit"><?php _e( 'Quick Edit', 'dokan' ); ?></a></li>
+                <?php if ( $this->quick_edit ) { ?>
+                    <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" class="dokan-cmt-edit"><?php _e( 'Quick Edit', 'dokan' ); ?></a></li>
+                <?php } ?>
                 <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" data-comment_id="<?php echo $comment->comment_ID; ?>" data-cmt_status="spam" class="dokan-cmt-action"><?php _e( 'Spam', 'dokan' ); ?></a></li>
                 <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" data-comment_id="<?php echo $comment->comment_ID; ?>" data-cmt_status="trash" class="dokan-cmt-action"><?php _e( 'Trash', 'dokan' ); ?></a></li>
             <?php
@@ -488,22 +493,24 @@ class Dokan_Template_reviews {
 
     function ajax_update_comment() {
 
-        if ( !is_user_logged_in() ) {
-            wp_send_json_error();
+        if ( ! $this->quick_edit ) {
+            wp_send_json_error( __( 'You can not edit reviews!', 'dokan' ) );
         }
 
         if ( !wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) ) {
             wp_send_json_error();
         }
 
+
+
         $comment_id = absint( $_POST['comment_id'] );
         $commentarr = array(
-            'comment_ID' => $comment_id,
-            'comment_content' => $_POST['content'],
-            'comment_author' => $_POST['author'],
+            'comment_ID'           => $comment_id,
+            'comment_content'      => $_POST['content'],
+            'comment_author'       => $_POST['author'],
             'comment_author_email' => $_POST['email'],
-            'comment_author_url' => $_POST['url'],
-            'comment_approved' => $_POST['status'],
+            'comment_author_url'   => $_POST['url'],
+            'comment_approved'     => $_POST['status'],
         );
 
         wp_update_comment( $commentarr );
@@ -525,7 +532,7 @@ class Dokan_Template_reviews {
             return;
         }
 
-        if ( !wp_verify_nonce($_POST['wpuf_nonce'], 'wpuf_comment_nonce') && !is_user_logged_in() ) {
+        if ( !wp_verify_nonce( $_POST['wpuf_nonce'], 'wpuf_comment_nonce' ) && !is_user_logged_in() ) {
             return;
         }
 
@@ -535,7 +542,7 @@ class Dokan_Template_reviews {
             return;
         }
 
-        foreach ($_POST['commentid'] as $commentid) {
+        foreach ( $_POST['commentid'] as $commentid ) {
             if ( $action == 'delete' ) {
                 wp_delete_comment( $commentid );
             } else {
@@ -544,7 +551,7 @@ class Dokan_Template_reviews {
         }
 
         $current_status = isset( $_GET['comment_status'] ) ? $_GET['comment_status'] : '';
-        $redirect_to = add_query_arg( array('comment_status' => $current_status), get_permalink() );
+        $redirect_to = add_query_arg( array( 'comment_status' => $current_status ), get_permalink() );
         wp_redirect( $redirect_to );
 
     }
@@ -552,25 +559,25 @@ class Dokan_Template_reviews {
     /**
      * Show menu
      *
-     * @param string $post_type
+     * @param string  $post_type
      */
     function wpuf_comments_menu( $post_type ) {
-        $url = dokan_get_navigation_url( 'reviews' );
+        $url     = dokan_get_navigation_url( 'reviews' );
         $pending = isset( $this->pending ) ? $this->pending : 0;
-        $spam = isset( $this->spam ) ? $this->spam : 0;
-        $trash = isset( $this->trash ) ? $this->trash : 0;
+        $spam    = isset( $this->spam ) ? $this->spam : 0;
+        $trash   = isset( $this->trash ) ? $this->trash : 0;
         ?>
         <div id="dokan-comments_menu">
             <ul class="subsubsub list-inline">
                 <li><a href="<?php echo $url; ?>"><?php _e( 'All', 'dokan' ); ?></a></li>
                 <li>
-                    <a href="<?php echo add_query_arg( array('comment_status' => 'hold'), $url ); ?>"><?php _e( 'Pending (', 'dokan' ); ?><span class="comments-menu-pending"><?php echo $pending; ?></span><?php _e( ')', 'dokan' ); ?></a>
+                    <a href="<?php echo add_query_arg( array( 'comment_status' => 'hold' ), $url ); ?>"><?php _e( 'Pending (', 'dokan' ); ?><span class="comments-menu-pending"><?php echo $pending; ?></span><?php _e( ')', 'dokan' ); ?></a>
                 </li>
                 <li>
-                    <a href="<?php echo add_query_arg( array('comment_status' => 'spam'), $url ); ?>"><?php _e( 'Spam (', 'dokan' ); ?><span class="comments-menu-spam"><?php echo $spam; ?></span><?php _e( ')', 'dokan' ); ?></a>
+                    <a href="<?php echo add_query_arg( array( 'comment_status' => 'spam' ), $url ); ?>"><?php _e( 'Spam (', 'dokan' ); ?><span class="comments-menu-spam"><?php echo $spam; ?></span><?php _e( ')', 'dokan' ); ?></a>
                 </li>
                 <li>
-                    <a href="<?php echo add_query_arg( array('comment_status' => 'trash'), $url ); ?>"><?php _e( 'Trash (', 'dokan' ); ?><span class="comments-menu-trash"><?php echo $trash; ?></span><?php _e( ')', 'dokan' ); ?></a>
+                    <a href="<?php echo add_query_arg( array( 'comment_status' => 'trash' ), $url ); ?>"><?php _e( 'Trash (', 'dokan' ); ?><span class="comments-menu-trash"><?php echo $trash; ?></span><?php _e( ')', 'dokan' ); ?></a>
                 </li>
             </ul>
         </div>
@@ -580,7 +587,7 @@ class Dokan_Template_reviews {
     /**
      * count all, pending, spam, trash
      *
-     * @param init, string $status
+     * @param init,   string $status
      * @parm string $post_type
      */
     function count_status( $post_type, $status ) {
@@ -598,4 +605,3 @@ class Dokan_Template_reviews {
     }
 
 }
-

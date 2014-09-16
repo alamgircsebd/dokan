@@ -223,6 +223,7 @@ class WeDevs_Dokan {
 
         // register styles
         wp_register_style( 'jquery-ui', plugins_url( 'assets/css/jquery-ui-1.10.0.custom.css', __FILE__ ), false, null );
+        wp_register_style( 'fontawesome', plugins_url( 'assets/css/font-awesome.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-extra', plugins_url( 'assets/css/dokan-extra.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
 
@@ -255,6 +256,7 @@ class WeDevs_Dokan {
         );
 
         if ( get_query_var( 'store' ) || get_query_var( 'store_review' ) ) {
+            wp_enqueue_style( 'fontawesome' );
             wp_enqueue_style( 'dokan-style' );
         }
 
@@ -263,6 +265,7 @@ class WeDevs_Dokan {
             if ( DOKAN_LOAD_SCRIPTS === true ) {
 
                 wp_enqueue_style( 'jquery-ui' );
+                wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-extra' );
                 wp_enqueue_style( 'dokan-style' );
 

@@ -8,83 +8,6 @@
  */
 
 
-if ( ! function_exists( 'dokan_comment' ) ) :
-/**
- * Template for comments and pingbacks.
- *
- * Used as a callback by wp_list_comments() for displaying the comments.
- *
- * @package dokan - 2014 1.0
- */
-function dokan_comment( $comment, $args, $depth ) {
-    $GLOBALS['comment'] = $comment;
-    switch ( $comment->comment_type ) :
-        case 'pingback' :
-        case 'trackback' :
-    ?>
-    <li class="post pingback">
-        <p><?php _e( 'Pingback:', 'dokan' ); ?> <?php comment_author_link(); ?><?php edit_comment_link( __( '(Edit)', 'dokan' ), ' ' ); ?></p>
-    <?php
-            break;
-        default :
-    ?>
-    <li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
-        <article id="comment-<?php comment_ID(); ?>" class="comment">
-            <footer>
-                <div class="comment-author vcard">
-                    <div class="comment-avatar">
-                        <?php echo get_avatar( $comment, 75 ); ?>
-                    </div>
-                    <?php printf( __( '%s <span class="says">says:</span>', 'dokan' ), sprintf( '<cite class="fn">%s</cite>', get_comment_author_link() ) ); ?>
-
-                    <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>"><time pubdate datetime="<?php comment_time( 'c' ); ?>">
-                        <?php
-                        /* translators: 1: date, 2: time */
-                        printf( __( '%1$s at %2$s', 'dokan' ), get_comment_date(), get_comment_time() );
-                        ?>
-                        </time>
-                    </a>
-                    <?php edit_comment_link( __( '(Edit)', 'dokan' ), ' ' );
-                    ?>
-                </div><!-- .comment-author .vcard -->
-                <?php if ( $comment->comment_approved == '0' ) : ?>
-                    <em><?php _e( 'Your comment is awaiting moderation.', 'dokan' ); ?></em>
-                    <br />
-                <?php endif; ?>
-            </footer>
-
-            <div class="comment-content"><?php comment_text(); ?></div>
-
-            <div class="reply">
-                <?php comment_reply_link( array_merge( $args, array( 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-            </div><!-- .reply -->
-        </article><!-- #comment-## -->
-
-    <?php
-            break;
-    endswitch;
-}
-endif; // ends check for tp_comment()
-
-if ( ! function_exists( 'dokan_posted_on' ) ) :
-/**
- * Prints HTML with meta information for the current post-date/time and author.
- *
- * @package dokan - 2014 1.0
- */
-function dokan_posted_on() {
-    printf( __( '<a href="%1$s" title="%2$s" rel="bookmark"><time class="entry-date" datetime="%3$s" pubdate>%4$s</time></a><span class="byline"></span>', 'dokan' ),
-        esc_url( get_permalink() ),
-        esc_attr( get_the_time() ),
-        esc_attr( get_the_date( 'c' ) ),
-        esc_html( get_the_date() ),
-        esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ),
-        esc_attr( sprintf( __( 'View all posts by %s', 'dokan' ), get_the_author() ) ),
-        esc_html( get_the_author() )
-    );
-}
-endif;
-
 if ( ! function_exists( 'dokan_content_nav' ) ) :
 
 /**
@@ -359,27 +282,6 @@ function dokan_dashboard_nav( $active_menu ) {
     return $menu;
 }
 
-if ( ! function_exists( 'dokan_category_widget' ) ) :
-
-/**
- * Display the product category widget
- *
- * @return void
- */
-function dokan_category_widget() {
-     the_widget( 'Dokan_Category_Widget', array(
-        'title' => __( 'Product Categories', 'dokan' )
-        ),
-        array(
-            'before_widget' => '<aside class="widget dokan-category-menu">',
-            'after_widget' => '</aside>',
-            'before_title' => '<h3 class="widget-title">',
-            'after_title' => '</h3>',
-        )
-    );
-}
-
-endif;
 
 if ( ! function_exists( 'dokan_store_category_menu' ) ) :
 
@@ -413,7 +315,7 @@ function dokan_store_category_menu( $seller_id ) { ?>
             }
 
             $args = array(
-                'taxonomy' => 'product_cat',
+                'taxonomy'      => 'product_cat',
                 'selected_cats' => ''
             );
 

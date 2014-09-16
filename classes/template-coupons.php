@@ -6,7 +6,7 @@
  */
 class Dokan_Template_Coupons{
 
-    private $perpage = 2;
+    private $perpage = 10;
     private $total_query_result;
 
     public static function init() {
@@ -189,21 +189,21 @@ class Dokan_Template_Coupons{
 
         $perpage = $this->perpage;
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-        $offset = ( $pagenum - 1 ) * $perpage;
+        $offset  = ( $pagenum - 1 ) * $perpage;
 
         $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
         $args = array(
-            'post_type' => 'shop_coupon',
-            'post_status' => array('publish'),
+            'post_type'      => 'shop_coupon',
+            'post_status'    => array('publish'),
             'posts_per_page' => $this->perpage,
-            'offset' => $offset,
-            'author' => get_current_user_id(),
-            'paged' => $paged
+            'offset'         => $offset,
+            'author'         => get_current_user_id(),
+            'paged'          => $paged
         );
 
 
         $coupon_query = new WP_Query( $args );
-        $all_coupons = $coupon_query->get_posts();
+        $all_coupons  = $coupon_query->get_posts();
 
 
         if ( $all_coupons ) {
@@ -351,25 +351,25 @@ class Dokan_Template_Coupons{
                 wp_die( __( 'Are you cheating?', 'dokan' ) );
             }
 
-            $post = get_post( $_GET['post'] );
-            $button_name = __( 'Update Coupon', 'dokan' );
+            $post              = get_post( $_GET['post'] );
+            $button_name       = __( 'Update Coupon', 'dokan' );
 
-            $discount_type = get_post_meta( $post->ID, 'discount_type', true );
-            $amount = get_post_meta( $post->ID, 'coupon_amount', true );
+            $discount_type     = get_post_meta( $post->ID, 'discount_type', true );
+            $amount            = get_post_meta( $post->ID, 'coupon_amount', true );
 
-            $products = get_post_meta( $post->ID, 'product_ids', true );
-            $exclude_products = get_post_meta( $post->ID, 'exclude_product_ids', true );
-            $usage_limit = get_post_meta( $post->ID, 'usage_limit', true );
-            $expire = get_post_meta( $post->ID, 'expiry_date', true );
-            $apply_before_tax = get_post_meta( $post->ID, 'apply_before_tax', true );
-            $free_shipping = get_post_meta( $post->ID, 'free_shipping', true );
+            $products          = get_post_meta( $post->ID, 'product_ids', true );
+            $exclude_products  = get_post_meta( $post->ID, 'exclude_product_ids', true );
+            $usage_limit       = get_post_meta( $post->ID, 'usage_limit', true );
+            $expire            = get_post_meta( $post->ID, 'expiry_date', true );
+            $apply_before_tax  = get_post_meta( $post->ID, 'apply_before_tax', true );
+            $free_shipping     = get_post_meta( $post->ID, 'free_shipping', true );
             $exclide_sale_item = get_post_meta( $post->ID, 'exclude_sale_items', true );
-            $minimum_amount = get_post_meta( $post->ID, 'minimum_amount', true );
-            $customer_email = get_post_meta( $post->ID, 'customer_email', true );
+            $minimum_amount    = get_post_meta( $post->ID, 'minimum_amount', true );
+            $customer_email    = get_post_meta( $post->ID, 'customer_email', true );
         }
 
-        $post_id = isset( $post->ID ) ? $post->ID : '';
-        $post_title = isset( $post->post_title ) ? $post->post_title : '';
+        $post_id     = isset( $post->ID ) ? $post->ID : '';
+        $post_title  = isset( $post->post_title ) ? $post->post_title : '';
         $description = isset( $post->post_content ) ? $post->post_content : '';
 
         $discount_type = isset( $discount_type ) ? $discount_type : '';
@@ -379,11 +379,11 @@ class Dokan_Template_Coupons{
             }
         }
 
-        $amount = isset( $amount ) ? $amount : '';
-        $products = isset( $products ) ? $products : '';
+        $amount           = isset( $amount ) ? $amount : '';
+        $products         = isset( $products ) ? $products : '';
         $exclude_products = isset( $exclude_products ) ? $exclude_products : '';
-        $usage_limit = isset( $usage_limit ) ? $usage_limit : '';
-        $expire = isset( $expire ) ? $expire : '';
+        $usage_limit      = isset( $usage_limit ) ? $usage_limit : '';
+        $expire           = isset( $expire ) ? $expire : '';
 
         if ( isset( $free_shipping ) && $free_shipping == 'yes' ) {
             $free_shipping = 'checked';
@@ -409,9 +409,9 @@ class Dokan_Template_Coupons{
 
         if ( is_wp_error( $validated ) ) {
 
-            $post_id = $_POST['post_id'];
-            $post_title = $_POST['title'];
-            $description = $_POST['description'];
+            $post_id       = $_POST['post_id'];
+            $post_title    = $_POST['title'];
+            $description   = $_POST['description'];
 
             $discount_type = $_POST['discount_type'];
 
@@ -436,7 +436,7 @@ class Dokan_Template_Coupons{
             }
 
             $usage_limit = $_POST['usage_limit'];
-            $expire = $_POST['expire'];
+            $expire      = $_POST['expire'];
 
 
 
@@ -479,7 +479,7 @@ class Dokan_Template_Coupons{
         <form method="post" action="" class="dokan-form-horizontal coupons">
             <input type="hidden"  value="<?php echo $post_id; ?>" name="post_id">
             <?php wp_nonce_field('coupon_nonce','coupon_nonce_field'); ?>
-            <!-- Text input-->
+
             <div class="dokan-form-group">
                 <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'Coupon Title', 'dokan' ); ?><span class="required"> *</span></label>
                 <div class="dokan-w5 dokan-text-left">
@@ -534,16 +534,14 @@ class Dokan_Template_Coupons{
             </div>
 
             <?php
-                $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
                 $args = array(
-                    'post_type' => 'product',
-                    'post_status' => array('publish', 'draft', 'pending'),
-                    'posts_per_page' => 10,
-                    'author' => get_current_user_id(),
-                    'paged' => $paged
+                    'post_type'      => 'product',
+                    'post_status'    => array('publish', 'draft', 'pending'),
+                    'posts_per_page' => 100,
+                    'author'         => get_current_user_id(),
                 );
 
-                $query = new WP_Query( $args );
+                $query       = new WP_Query( $args );
                 $products_id = str_replace( ' ', '', $products );
                 $products_id = explode( ',', $products_id );
             ?>
@@ -560,8 +558,7 @@ class Dokan_Template_Coupons{
                                 $select = '';
                             }
                             ?>
-                            <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php _e( $object->post_title, 'dokan' ); ?></option>
-
+                            <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></option>
                             <?php
                         }
                         ?>
@@ -587,8 +584,12 @@ class Dokan_Template_Coupons{
                     <div class="checkbox">
                         <label for="checkboxes-2">
                             <input name="exclude_sale_items" <?php echo $exclide_sale_item; ?> id="checkboxes-2" value="yes" type="checkbox">
-                            <?php _e( 'Check this box if the coupon should not apply to items on sale. Per-item coupons will only work if the item is not on sale. Per-cart coupons will only work if there are no sale items in the cart.', 'dokan' ); ?>
+                            <?php _e( 'Check this box if the coupon should not apply to items on sale.', 'dokan' );?>
                         </label>
+
+                        <div class="help">
+                            <?php _e(' Per-item coupons will only work if the item is not on sale. Per-cart coupons will only work if there are no sale items in the cart.', 'dokan' ); ?>
+                        </div>
                     </div>
                 </div>
             </div>
