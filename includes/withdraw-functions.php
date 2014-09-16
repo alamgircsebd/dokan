@@ -2,21 +2,21 @@
 
 /**
  * Get default withdraw methods
- * 
+ *
  * @return array
  */
 function dokan_withdraw_register_methods() {
     $methods = array(
         'paypal' => array(
-            'title' =>  __( 'PayPal', 'dokan' ),
+            'title'    =>  __( 'PayPal', 'dokan' ),
             'callback' => 'dokan_withdraw_method_paypal'
         ),
         'bank' => array(
-            'title' => __( 'Bank Transfer', 'dokan' ),
+            'title'    => __( 'Bank Transfer', 'dokan' ),
             'callback' => 'dokan_withdraw_method_bank'
         ),
         'skrill' => array(
-            'title' => __( 'Skrill', 'dokan' ),
+            'title'    => __( 'Skrill', 'dokan' ),
             'callback' => 'dokan_withdraw_method_skrill'
         ),
     );
@@ -27,7 +27,7 @@ function dokan_withdraw_register_methods() {
 
 /**
  * Get registered withdraw methods suitable for Settings Api
- * 
+ *
  * @return array
  */
 function dokan_withdraw_get_methods() {
@@ -44,9 +44,9 @@ function dokan_withdraw_get_methods() {
 
 /**
  * Get active withdraw methods.
- * 
- * Default is paypal 
- * 
+ *
+ * Default is paypal
+ *
  * @return array
  */
 function dokan_withdraw_get_active_methods() {
@@ -58,7 +58,7 @@ function dokan_withdraw_get_active_methods() {
 
 /**
  * Get a single withdraw method based on key
- * 
+ *
  * @param string $method_key
  * @return boolean|array
  */
@@ -76,7 +76,7 @@ function dokan_withdraw_get_method( $method_key ) {
 
 /**
  * Get title from a withdraw method
- * 
+ *
  * @param string $method_key
  * @return string
  */
@@ -94,7 +94,7 @@ function dokan_withdraw_get_method_title( $method_key ) {
 
 /**
  * Callback for PayPal in store settings
- * 
+ *
  * @global WP_User $current_user
  * @param array $store_settings
  */
@@ -118,7 +118,7 @@ function dokan_withdraw_method_paypal( $store_settings ) {
 
 /**
  * Callback for Skrill in store settings
- * 
+ *
  * @global WP_User $current_user
  * @param array $store_settings
  */
@@ -142,16 +142,16 @@ function dokan_withdraw_method_skrill( $store_settings ) {
 
 /**
  * Callback for Bank in store settings
- * 
+ *
  * @global WP_User $current_user
  * @param array $store_settings
  */
 function dokan_withdraw_method_bank( $store_settings ) {
-    $account_name = isset( $store_settings['payment']['bank']['ac_name'] ) ? esc_attr( $store_settings['payment']['bank']['ac_name'] ) : '';
+    $account_name   = isset( $store_settings['payment']['bank']['ac_name'] ) ? esc_attr( $store_settings['payment']['bank']['ac_name'] ) : '';
     $account_number = isset( $store_settings['payment']['bank']['ac_number'] ) ? esc_attr( $store_settings['payment']['bank']['ac_number'] ) : '';
-    $bank_name = isset( $store_settings['payment']['bank']['bank_name'] ) ? esc_attr( $store_settings['payment']['bank']['bank_name'] ) : '';
-    $bank_addr = isset( $store_settings['payment']['bank']['bank_addr'] ) ? esc_textarea( $store_settings['payment']['bank']['bank_addr'] ) : '';
-    $swift_code = isset( $store_settings['payment']['bank']['swift'] ) ? esc_attr( $store_settings['payment']['bank']['swift'] ) : '';
+    $bank_name      = isset( $store_settings['payment']['bank']['bank_name'] ) ? esc_attr( $store_settings['payment']['bank']['bank_name'] ) : '';
+    $bank_addr      = isset( $store_settings['payment']['bank']['bank_addr'] ) ? esc_textarea( $store_settings['payment']['bank']['bank_addr'] ) : '';
+    $swift_code     = isset( $store_settings['payment']['bank']['swift'] ) ? esc_attr( $store_settings['payment']['bank']['swift'] ) : '';
     ?>
     <div class="dokan-form-group">
         <div class="doakn-w8">
@@ -189,7 +189,7 @@ function dokan_withdraw_method_bank( $store_settings ) {
 
 /**
  * Get withdraw counts, used in admin area
- * 
+ *
  * @global WPDB $wpdb
  * @return array
  */
@@ -225,14 +225,14 @@ function dokan_get_withdraw_count() {
 
 /**
  * Get active withdraw order status.
- * 
- * Default is 'completed', 'processing', 'on-hold' 
- * 
+ *
+ * Default is 'completed', 'processing', 'on-hold'
+ *
  */
 function dokan_withdraw_get_active_order_status() {
-    $order_status = dokan_get_option( 'withdraw_order_status', 'dokan_selling', array( 'completed', 'processing', 'on-hold' ) );
+    $order_status = dokan_get_option( 'withdraw_order_status', 'dokan_selling', array( 'wc-completed' ) );
 
-    return $order_status;
+    return apply_filters( 'dokan_withdraw_active_status', $order_status )
 }
 
 /**
@@ -241,6 +241,6 @@ function dokan_withdraw_get_active_order_status() {
  */
 function dokan_withdraw_get_active_order_status_in_comma() {
     $order_status = dokan_withdraw_get_active_order_status();
-    $status = "'".implode("', '", $order_status )."'";
+    $status = "'" . implode("', '", $order_status ) . "'";
     return $status;
 }
