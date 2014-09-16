@@ -1155,7 +1155,7 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.65);
   color: #fff;
-  width: 33%;
+  width: 40%;
 }
 .dokan-single-store .profile-frame .profile-info-box a {
   color: #ccc;
@@ -1173,10 +1173,17 @@
   border-radius: 500px;
 }
 .dokan-single-store .profile-frame .profile-info-box .profile-info {
-  margin-left: 25px;
+  margin-left: 15%;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info .dokan-store-info {
+  list-style: none;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info .dokan-store-info .dokan-store-phone a,
+.dokan-single-store .profile-frame .profile-info-box .profile-info .dokan-store-info .dokan-store-email a {
+  text-decoration: none;
 }
 .dokan-single-store .profile-frame .profile-info-box .profile-info li {
-  padding-bottom: 5px;
+  padding-bottom: 8px;
 }
 .dokan-single-store .profile-frame .profile-info-box .profile-info li.store-name {
   font-weight: bold;
@@ -1189,7 +1196,13 @@
   margin-left: -25px;
   margin-top: 4px;
 }
-.dokan-single-store .profile-frame .profile-info-box .profile-info .store-social i {
+.dokan-single-store .profile-frame .profile-info-box .profile-info ul.store-social {
+  list-style: none;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info ul.store-social li {
+  display: inline-block;
+}
+.dokan-single-store .profile-frame .profile-info-box .profile-info ul.store-social i {
   color: #fff;
   font-size: 20px;
   float: none;
@@ -1198,6 +1211,10 @@
 }
 .dokan-single-store .profile-frame .profile-info-box .profile-info .seller-rating {
   display: none;
+}
+.dokan-single-store .store-review-wrap h2.headline {
+  font-size: 17px;
+  margin-bottom: 15px;
 }
 .wp-editor-wrap {
   border: 1px solid #ededed;
@@ -1656,6 +1673,16 @@ input[type="submit"].dokan-btn-sm,
 }
 .dokan-table > tbody + tbody {
   border-top: 2px solid #ededed;
+}
+.chart-tooltip {
+  position: absolute;
+  display: none;
+  line-height: 1;
+  background: #333;
+  color: #fff;
+  padding: 3px 5px;
+  font-size: 11px;
+  border-radius: 3px;
 }
 .dokan-close {
   float: right;
