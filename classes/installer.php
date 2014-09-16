@@ -7,7 +7,7 @@
  */
 class Dokan_Installer {
 
-    private $theme_version = 0.1;
+    private $theme_version = 1.2;
 
     function do_install() {
 
@@ -27,8 +27,35 @@ class Dokan_Installer {
         update_option( 'dokan_theme_version', $this->theme_version );
     }
 
+    /**
+     * Perform all the upgrade routines
+     *
+     * @return void
+     */
     function do_upgrades() {
+        $installed_version = get_option( 'dokan_theme_version' );
+
+        // may be it's the first install
+        if ( ! $installed_version ) {
+            return false;
+        }
+
         // do upgrades
+        if ( version_compare( $installed_version, '1.2', '<' ) ) {
+            $this->update_to_12();
+        }
+    }
+
+    /**
+     * Update to version 1.2
+     *
+     * @return void
+     */
+    public function update_to_12() {
+        // regenerate sync table for woocommerce 2.2 order status changes
+        dokan_generate_sync_table();
+
+        update_option( 'dokan_theme_version', '1.2' );
     }
 
     function woocommerce_settings() {

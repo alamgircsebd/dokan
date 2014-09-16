@@ -16,8 +16,11 @@ class Dokan_Admin_Settings {
     function __construct() {
         $this->settings_api = new WeDevs_Settings_API();
 
+        add_action( 'admin_init', array($this, 'do_updates') );
         add_action( 'admin_init', array($this, 'admin_init') );
         add_action( 'admin_menu', array($this, 'admin_menu') );
+
+        add_action( 'admin_notices', array($this, 'update_notice' ) );
     }
 
     function dashboard_script() {
@@ -259,6 +262,45 @@ class Dokan_Admin_Settings {
         include dirname(__FILE__) . '/add-on.php';
     }
 
+    public function do_updates() {
+        if ( isset( $_GET['dokan_do_update'] ) && $_GET['dokan_do_update'] == 'true' ) {
+            $installer = new Dokan_Installer();
+            $installer->do_upgrades();
+        }
+    }
+
+    public function is_dokan_needs_update() {
+        $installed_version = get_option( 'dokan_theme_version' );
+
+        // may be it's the first install
+        if ( ! $installed_version ) {
+            return false;
+        }
+
+        if ( version_compare( $installed_version, '1.2', '<' ) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function update_notice() {
+        if ( ! $this->is_dokan_needs_update() ) {
+            return;
+        }
+        ?>
+        <div id="message" class="updated">
+            <p><?php _e( '<strong>Dokan Data Update Required</strong> &#8211; We need to update your install to the latest version', 'dokan' ); ?></p>
+            <p class="submit"><a href="<?php echo add_query_arg( 'dokan_do_update', 'true', admin_url( 'admin.php?page=dokan' ) ); ?>" class="dokan-update-btn button-primary"><?php _e( 'Run the updater', 'dokan' ); ?></a></p>
+        </div>
+
+        <script type="text/javascript">
+            jQuery('.dokan-update-btn').click('click', function(){
+                return confirm( '<?php _e( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'dokan' ); ?>' );
+            });
+        </script>
+    <?php
+    }
 }
 
 $settings = new Dokan_Admin_Settings();
