@@ -1216,6 +1216,30 @@
   font-size: 17px;
   margin-bottom: 15px;
 }
+ul.dokan-seller-wrap {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.dokan-seller-wrap:before,
+ul.dokan-seller-wrap:after {
+  content: " ";
+  display: table;
+}
+ul.dokan-seller-wrap:after {
+  clear: both;
+}
+ul.dokan-seller-wrap li.dokan-single-seller {
+  float: left;
+  width: 48%;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+ul.dokan-seller-wrap li.dokan-single-seller:nth-child(2n+1) {
+  margin-right: 3%;
+  clear: left;
+}
 .wp-editor-wrap {
   border: 1px solid #ededed;
 }

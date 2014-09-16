@@ -87,7 +87,13 @@ class Dokan_Installer {
                 'slug'       => 'my-orders',
                 'page_id'    => 'my_orders',
                 'content'    => ''
-            )
+            ),
+            array(
+                'post_title' => __( 'Store List', 'dokan' ),
+                'slug'       => 'store-listing',
+                'page_id'    => 'my_orders',
+                'content'    => '[dokan-stores]'
+            ),
         );
 
         $dokan_page_settings = array();
