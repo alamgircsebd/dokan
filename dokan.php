@@ -293,12 +293,23 @@ class WeDevs_Dokan {
                 wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-style' );
             }
+
+            if ( DOKAN_LOAD_SCRIPTS ) {
+                wp_enqueue_script( 'jquery-ui-sortable' );
+                wp_enqueue_script( 'jquery-ui-datepicker' );
+                wp_enqueue_script( 'bootstrap-tooltip' );
+                wp_enqueue_script( 'form-validate' );
+                wp_enqueue_script( 'dokan-script' );
+                wp_localize_script( 'jquery', 'dokan', $localize_script );
+            }
         }
 
         // load dokan style on every pages. requires for shortcodes in other pages
         if ( DOKAN_LOAD_STYLE ) {
             wp_enqueue_style( 'dokan-style' );
         }
+
+        do_action( 'dokan_after_load_script' );
     }
 
 
