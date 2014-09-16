@@ -1,6 +1,6 @@
 
 <div class="update-button-wrap">
-    <input type="submit" name="update_product" class="btn btn-theme btn-lg btn-block" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
+    <input type="submit" name="update_product" class="dokan-btn dokan-btn-orange dokan-btn-lg btn-block" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
 </div>
 
 <div class="toggle-sidebar-container">
@@ -88,11 +88,11 @@
         <ul class="list-unstyled ">
             <li class="dokan-form-group">
 
-                <table class="table table-condensed">
+                <table class="dokan-table dokan-table-condensed">
                     <tfoot>
                         <tr>
                             <th>
-                                <a href="#" class="insert-file-row btn btn-sm btn-success" data-row="<?php
+                                <a href="#" class="insert-file-row dokan-btn dokan-btn-sm dokan-btn-success" data-row="<?php
                                     $file = array(
                                         'file' => '',
                                         'name' => ''
@@ -172,7 +172,7 @@
             <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_images ); ?>">
         </div>
 
-        <a href="#" class="add-product-images btn btn-success"><?php _e( '+ Add product images', 'dokan' ); ?></a>
+        <a href="#" class="add-product-images dokan-btn dokan-btn-success"><?php _e( '+ Add product images', 'dokan' ); ?></a>
     </div>
 </aside> <!-- .product-gallery -->
 

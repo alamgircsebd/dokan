@@ -69,10 +69,10 @@ get_header();
 
                             <ul class="dokan_tabs">
                                 <?php
-                                $terms = wp_get_object_terms( $post->ID, 'product_type' );
-                                $product_type = sanitize_title( current( $terms )->name );
-                                $shipping_class = ($product_type == 'simple' ) ? '' : 'dokan-hide';
-                                $variations_class = ($product_type == 'simple' ) ? 'dokan-hide' : '';
+                                $terms                   = wp_get_object_terms( $post->ID, 'product_type' );
+                                $product_type            = sanitize_title( current( $terms )->name );
+                                $shipping_class          = ($product_type == 'simple' ) ? '' : 'dokan-hide';
+                                $variations_class        = ($product_type == 'simple' ) ? 'dokan-hide' : '';
                                 $dokan_product_data_tabs = apply_filters( 'dokan_product_data_tabs', array(
 
                                     'edit' => array(
@@ -109,11 +109,9 @@ get_header();
                                 ) );
 
                                 foreach ( $dokan_product_data_tabs as $key => $tab ) { ?>
-
                                     <li class="<?php echo $key; ?>_options <?php echo $key; ?>_tab <?php echo implode( ' ' , $tab['class'] ); ?>">
                                         <a href="#<?php echo $tab['target']; ?>" data-toggle="tab"><?php echo esc_html( $tab['label'] ); ?></a>
                                     </li>
-
                                 <?php
                                 }
 
@@ -131,13 +129,14 @@ get_header();
                                         <div class="content-half-part">
                                             <div class="dokan-feat-image-upload">
                                                 <?php
-                                                $wrap_class = ' dokan-hide';
+                                                $wrap_class        = ' dokan-hide';
                                                 $instruction_class = '';
-                                                $feat_image_id = 0;
+                                                $feat_image_id     = 0;
+
                                                 if ( has_post_thumbnail( $post_id ) ) {
-                                                    $wrap_class = '';
+                                                    $wrap_class        = '';
                                                     $instruction_class = ' dokan-hide';
-                                                    $feat_image_id = get_post_thumbnail_id( $post_id );
+                                                    $feat_image_id     = get_post_thumbnail_id( $post_id );
                                                 }
                                                 ?>
 
@@ -166,8 +165,8 @@ get_header();
                                                 <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => 'Product name..', 'value' => $post->post_title ) ); ?>
                                             </div>
 
-                                            <div class="row show_if_simple dokan-clearfix">
-                                                <div class="dokan-form-group dokan-left" style="width:37%">
+                                            <div class="show_if_simple dokan-clearfix">
+                                                <div class="dokan-form-group">
                                                     <div class="dokan-input-group">
                                                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                         <?php dokan_post_input_box( $post_id, '_regular_price', array( 'placeholder' => '9.99' ) ); ?>
@@ -175,16 +174,16 @@ get_header();
                                                 </div>
 
 
-                                                <span class="dokan-right">
+                                                <div class="discount-price">
                                                     <label>
-                                                        <input type="checkbox" <?php checked( $is_discount, true ); ?> class="_discounted_price"> <?php _e( 'Discounted Price', 'dokan' ); ?>
+                                                        <input type="checkbox" <?php checked( $is_discount, true ); ?> class="_discounted_price"> <?php _e( 'Enable Discounted Price', 'dokan' ); ?>
                                                     </label>
-                                                </span>
+                                                </div>
                                             </div>
 
                                             <div class="show_if_simple">
                                                 <div class="special-price-container<?php echo $is_discount ? '' : ' dokan-hide'; ?>">
-                                                    <div class="row dokan-form-group dokan-clearfix">
+                                                    <div class="dokan-form-group dokan-clearfix">
                                                         <div class="dokan-input-group dokan-left" style="width:55%">
                                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                             <?php dokan_post_input_box( $post_id, '_sale_price', array( 'placeholder' => __( 'Special Price', 'dokan' ) ) ); ?>
@@ -195,27 +194,23 @@ get_header();
                                                         </div>
                                                     </div>
 
-                                                    <div class="row sale-schedule-container<?php echo $show_schedule ? '' : ' dokan-hide'; ?>">
-                                                        <div class="col-md-6">
-                                                            <div class="dokan-form-group">
-                                                                <div class="dokan-input-group">
-                                                                    <span class="dokan-input-group-addon"><?php _e( 'From', 'dokan' ); ?></span>
-                                                                    <input type="text" name="_sale_price_dates_from" class="dokan-form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
-                                                                </div>
+                                                    <div class="sale-schedule-container<?php echo $show_schedule ? '' : ' dokan-hide'; ?>">
+                                                        <div class="dokan-form-group">
+                                                            <div class="dokan-input-group">
+                                                                <span class="dokan-input-group-addon"><?php _e( 'From', 'dokan' ); ?></span>
+                                                                <input type="text" name="_sale_price_dates_from" class="dokan-form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_from ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-6">
-                                                            <div class="dokan-form-group">
-                                                                <div class="dokan-input-group">
-                                                                    <span class="dokan-input-group-addon"><?php _e( 'To', 'dokan' ); ?></span>
-                                                                    <input type="text" name="_sale_price_dates_to" class="dokan-form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
-                                                                </div>
+
+                                                        <div class="dokan-form-group">
+                                                            <div class="dokan-input-group">
+                                                                <span class="dokan-input-group-addon"><?php _e( 'To', 'dokan' ); ?></span>
+                                                                <input type="text" name="_sale_price_dates_to" class="dokan-form-control datepicker" value="<?php echo esc_attr( $_sale_price_dates_to ); ?>" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" placeholder="YYYY-MM-DD">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div> <!-- .show_if_simple -->
-
 
 
                                             <div class="dokan-form-group">
@@ -232,15 +227,15 @@ get_header();
 
                                                 wp_dropdown_categories( array(
                                                     'show_option_none' => __( '- Select a category -', 'dokan' ),
-                                                    'hierarchical' => 1,
-                                                    'hide_empty' => 0,
-                                                    'name' => 'product_cat',
-                                                    'id' => 'product_cat',
-                                                    'taxonomy' => 'product_cat',
-                                                    'title_li' => '',
-                                                    'class' => 'product_cat dokan-form-control chosen',
-                                                    'exclude' => '',
-                                                    'selected' => $product_cat,
+                                                    'hierarchical'     => 1,
+                                                    'hide_empty'       => 0,
+                                                    'name'             => 'product_cat',
+                                                    'id'               => 'product_cat',
+                                                    'taxonomy'         => 'product_cat',
+                                                    'title_li'         => '',
+                                                    'class'            => 'product_cat dokan-form-control chosen',
+                                                    'exclude'          => '',
+                                                    'selected'         => $product_cat,
                                                 ) );
                                                 ?>
                                             </div>

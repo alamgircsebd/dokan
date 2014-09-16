@@ -84,6 +84,10 @@ ul.dokan_tabs{
                 background-color: #eee;
             }
         }
+
+        &.dokan-hide {
+            display: none;
+        }
     }
 
     li.active {
@@ -120,6 +124,7 @@ ul.dokan_tabs{
     }
 }
 
+input[type="submit"].dokan-btn,
 .dokan-btn {
     display: inline-block;
     margin-bottom: 0; // For input.btn
@@ -150,22 +155,32 @@ ul.dokan_tabs{
 }
 
 
+input[type="submit"].dokan-btn-orange,
 .dokan-btn-orange {
     .button-variant( #fff; @mainColor; @mainColor);
 }
 
+input[type="submit"].dokan-btn-success,
 .dokan-btn-success {
     .button-variant(#fff; @brand-success; darken(@brand-success, 5%));
 }
 
+input[type="submit"].dokan-btn-default,
 .dokan-btn-default {
     .button-variant(#333; #fff; #ccc);
 }
 
+input[type="submit"].dokan-btn-danger,
+.dokan-btn-danger {
+    .button-variant(#fff; @brand-danger; darken(@brand-danger, 5%));
+}
+
+input[type="submit"].dokan-btn-lg,
 .dokan-btn-lg {
     .button-size(10px; 16px; 18px; 1.33; 6px);
 }
 
+input[type="submit"].dokan-btn-sm,
 .dokan-btn-sm {
     .button-size(5px; 10px; 12px; 1.5; 3px);
 }

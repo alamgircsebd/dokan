@@ -11,8 +11,8 @@
         </p>
 
         <p>
-            <a href="#" class="btn btn-sm btn-default upload_file_button" data-choose="<?php _e( 'Choose file', 'dokan' ); ?>" data-update="<?php _e( 'Insert file URL', 'dokan' ); ?>"><?php echo str_replace( ' ', '&nbsp;', __( 'Choose file', 'woocommerce' ) ); ?></a>
-            <a href="#" class="btn btn-sm btn-danger delete"><span><?php _e( 'Delete', 'dokan' ); ?></span></a>
+            <a href="#" class="dokan-btn dokan-btn-sm dokan-btn-default upload_file_button" data-choose="<?php _e( 'Choose file', 'dokan' ); ?>" data-update="<?php _e( 'Insert file URL', 'dokan' ); ?>"><?php echo str_replace( ' ', '&nbsp;', __( 'Choose file', 'woocommerce' ) ); ?></a>
+            <a href="#" class="dokan-btn dokan-btn-sm dokan-btn-danger delete"><span><?php _e( 'Delete', 'dokan' ); ?></span></a>
         </p>
     </td>
 </tr>

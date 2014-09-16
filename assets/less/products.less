@@ -144,6 +144,7 @@
 
     label {
         font-weight: normal;
+        cursor: pointer;
     }
 
     .dokan-feat-image-upload {
@@ -225,8 +226,16 @@
         margin-top: 35px;
 
         .dokan-side-head {
-            background: #eee;
-            padding: 5px 10px;
+            background: #f5f5f5;
+            padding: 10px;
+        }
+
+        .dokan-side-body {
+            padding: 10px;
+
+            .dokan-form-control {
+                width: 90%;
+            }
         }
 
         .downloadable_files {
@@ -234,24 +243,22 @@
                 border-top: none;
                 border-bottom: 1px solid @borderColor;
 
+                label {
+                    font-weight: normal;
+                }
+
                 input {
-                    width: 100%;
+                    width: 90%;
                 }
             }
-            ul{
+
+            ul {
                 margin:0px;
                 padding:0px;
             }
+
             ul li{
                 margin-bottom:15px;
-            }
-
-            .dokan-side-body {
-                padding: 10px;
-
-                .input-group-addon {
-                    width: 20px;
-                }
             }
         }
     }
@@ -517,6 +524,11 @@
     padding: 8px 0;
     border-bottom: 1px solid #DFDFDF;
     margin-bottom: 15px;
+
+    .dokan-toggle-sidebar {
+        display: block;
+        margin-bottom: 5px;
+    }
 }
 
 .dokan-product-edit-area {
@@ -531,5 +543,10 @@
     .dokan-product-edit-right {
         width:27%;
         float:left;
+    }
+
+    .discount-price label {
+        font-weight: normal;
+        cursor: pointer;
     }
 }
