@@ -127,8 +127,8 @@ class Dokan_Template_Withdraw {
             }
 
             $data[] = array(
-                'email' => dokan_get_seller_withdraw_mail( $obj->user_id ),
-                'amount' => $obj->amount,
+                'email'    => dokan_get_seller_withdraw_mail( $obj->user_id ),
+                'amount'   => $obj->amount,
                 'currency' => get_option( 'woocommerce_currency' )
             );
 
@@ -672,7 +672,7 @@ class Dokan_Template_Withdraw {
                 ?>
                 <div class="dokan-alert dokan-alert-success">
                     <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                    <strong><p><?php _e( 'Your request has been cancelled successfully!', 'dokan' ); ?></p></strong>
+                    <strong><?php _e( 'Your request has been cancelled successfully!', 'dokan' ); ?></strong>
                 </div>
                 <?php
                 break;

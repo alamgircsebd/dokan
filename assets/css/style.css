@@ -1077,8 +1077,14 @@
   padding-top: 70px;
   display: none;
 }
+.dokan-settings-content .dokan-settings-area .dokan-banner:hover {
+  cursor: pointer;
+}
 .dokan-settings-content .dokan-settings-area .dokan-banner:hover .dokan-remove-banner-image {
   display: block;
+}
+.dokan-settings-content .dokan-settings-area .dokan-gravatar {
+  position: relative;
 }
 .dokan-settings-content .dokan-settings-area .dokan-gravatar .dokan-remove-gravatar-image {
   position: absolute;
@@ -1086,7 +1092,7 @@
   height: 80px;
   background: #000;
   top: 0;
-  left: 15px;
+  left: 0;
   opacity: .7;
   font-size: 70px;
   text-align: center;

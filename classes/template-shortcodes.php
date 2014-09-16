@@ -1,14 +1,14 @@
-<?php 
+<?php
 
 /**
 *  Tempalte shortcode class file
 *
 *  @load all shortcode for template  rendering
-*/		
+*/
 class Dokan_Template_Shortcodes {
-	
+
 	public static $errors;
-	public static $product_cat; 
+	public static $product_cat;
 	public static $post_content;
 	public static $validated;
 	public static $validate;
@@ -40,34 +40,34 @@ class Dokan_Template_Shortcodes {
 	    }
 
 	    if ( isset( $wp->query_vars['products'] ) ) {
-	        return dokan_get_template_part( 'products' ); 
+	        return dokan_get_template_part( 'products' );
 	    }
 
 	    if ( isset( $wp->query_vars['new-product'] ) ) {
-	        return dokan_get_template_part( 'new-product' ); 
+	        return dokan_get_template_part( 'new-product' );
 	    }
 
 	    if ( isset( $wp->query_vars['orders'] ) ) {
-	        return dokan_get_template_part( 'orders' ); 
+	        return dokan_get_template_part( 'orders' );
 	    }
 
 	    if ( isset( $wp->query_vars['coupons'] ) ) {
-	        return dokan_get_template_part( 'coupons' ); 
+	        return dokan_get_template_part( 'coupons' );
 	    }
 
 	    if ( isset( $wp->query_vars['reviews'] ) ) {
-	        return dokan_get_template_part( 'reviews' ); 
+	        return dokan_get_template_part( 'reviews' );
 	    }
 
 	    if ( isset( $wp->query_vars['withdraw'] ) ) {
-	        return dokan_get_template_part( 'withdraw' ); 
+	        return dokan_get_template_part( 'withdraw' );
 	    }
 
 	    if ( isset( $wp->query_vars['settings'] ) ) {
-	        return dokan_get_template_part( 'settings' ); 
+	        return dokan_get_template_part( 'settings' );
 	    }
 
-        //do_action( 'dokan_dashboard_template_render' );    
+        //do_action( 'dokan_dashboard_template_render' );
 
 	    return apply_filters( 'dokan_dashboard_template_render',  dokan_get_template_part( 'dashboard' ) );
     }
@@ -99,9 +99,9 @@ class Dokan_Template_Shortcodes {
 
                 $product_status = dokan_get_new_post_status();
                 $post_data = array(
-                    'post_type' => 'product',
-                    'post_status' => $product_status,
-                    'post_title' => $post_title,
+                    'post_type'    => 'product',
+                    'post_status'  => $product_status,
+                    'post_title'   => $post_title,
                     'post_content' => $post_content,
                     'post_excerpt' => $post_excerpt,
                 );
@@ -143,11 +143,11 @@ class Dokan_Template_Shortcodes {
 
         if ( isset( $_POST['update_product']) ) {
             $product_info = array(
-                'ID' => $post_id,
-                'post_title' => sanitize_text_field( $_POST['post_title'] ),
-                'post_content' => $_POST['post_content'],
-                'post_excerpt' => $_POST['post_excerpt'],
-                'post_status' => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
+                'ID'             => $post_id,
+                'post_title'     => sanitize_text_field( $_POST['post_title'] ),
+                'post_content'   => $_POST['post_content'],
+                'post_excerpt'   => $_POST['post_excerpt'],
+                'post_status'    => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
                 'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
             );
 
@@ -214,7 +214,7 @@ class Dokan_Template_Shortcodes {
         </ul>
         <?php
 
-        return ob_get_clean(); 
+        return ob_get_clean();
     }
 
     function top_rated_product_shortcode( $atts ) {
@@ -236,7 +236,7 @@ class Dokan_Template_Shortcodes {
         </ul>
         <?php
 
-        return ob_get_clean(); 
+        return ob_get_clean();
     }
 
 }

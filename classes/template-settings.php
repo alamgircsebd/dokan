@@ -149,42 +149,41 @@ class Dokan_Template_Settings{
             <?php
         }
 
-        $profile_info = dokan_get_store_info( $current_user->ID );
+        $profile_info   = dokan_get_store_info( $current_user->ID );
 
-        $banner = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
-        $storename = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
-        $gravatar = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
+        $banner         = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
+        $storename      = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
+        $gravatar       = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
 
-        $fb = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
-        $twitter = isset( $profile_info['social']['twitter'] ) ? esc_url( $profile_info['social']['twitter'] ) : '';
-        $gplus = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
-        $linkedin = isset( $profile_info['social']['linkedin'] ) ? esc_url( $profile_info['social']['linkedin'] ) : '';
-        $youtube = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
+        $fb             = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
+        $twitter        = isset( $profile_info['social']['twitter'] ) ? esc_url( $profile_info['social']['twitter'] ) : '';
+        $gplus          = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
+        $linkedin       = isset( $profile_info['social']['linkedin'] ) ? esc_url( $profile_info['social']['linkedin'] ) : '';
+        $youtube        = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
 
         // bank
-        $phone = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
-        $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
-        $address = isset( $profile_info['address'] ) ? esc_textarea( $profile_info['address'] ) : '';
-        $map_location = isset( $profile_info['location'] ) ? esc_attr( $profile_info['location'] ) : '';
-        $map_address = isset( $profile_info['find_address'] ) ? esc_attr( $profile_info['find_address'] ) : '';
+        $phone          = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
+        $show_email     = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
+        $address        = isset( $profile_info['address'] ) ? esc_textarea( $profile_info['address'] ) : '';
+        $map_location   = isset( $profile_info['location'] ) ? esc_attr( $profile_info['location'] ) : '';
+        $map_address    = isset( $profile_info['find_address'] ) ? esc_attr( $profile_info['find_address'] ) : '';
         $dokan_category = isset( $profile_info['dokan_category'] ) ? $profile_info['dokan_category'] : '';
 
 
         if ( is_wp_error( $validate) ) {
-            $social = $_POST['settings']['social'];
+            $social       = $_POST['settings']['social'];
+            $storename    = $_POST['dokan_store_name'];
 
-            $storename = $_POST['dokan_store_name'];
+            $fb           = esc_url( $social['fb'] );
+            $twitter      = esc_url( $social['twitter'] );
+            $gplus        = esc_url( $social['gplus'] );
+            $linkedin     = esc_url( $social['linkedin'] );
+            $youtube      = esc_url( $social['youtube'] );
 
-            $fb = esc_url( $social['fb'] );
-            $twitter = esc_url( $social['twitter'] );
-            $gplus = esc_url( $social['gplus'] );
-            $linkedin = esc_url( $social['linkedin'] );
-            $youtube = esc_url( $social['youtube'] );
-
-            $phone = $_POST['setting_phone'];
-            $address = $_POST['setting_address'];
+            $phone        = $_POST['setting_phone'];
+            $address      = $_POST['setting_address'];
             $map_location = $_POST['location'];
-            $map_address = $_POST['find_address'];
+            $map_address  = $_POST['find_address'];
         }
         ?>
 
@@ -232,9 +231,7 @@ class Dokan_Template_Settings{
                             <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
                         </div>
                         <div class="gravatar-button-area<?php echo $gravatar ? ' dokan-hide' : ''; ?>">
-                            <i class="fa fa-cloud-upload"></i>
-
-                            <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-info"><?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                            <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
                         </div>
                     </div>
                 </div>
