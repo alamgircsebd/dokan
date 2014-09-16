@@ -1150,6 +1150,7 @@
   margin-bottom: 30px;
   position: relative;
   background-size: 100% auto;
+  background-color: #eee;
 }
 .dokan-single-store .profile-frame .profile-info-box {
   height: 100%;
