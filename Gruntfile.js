@@ -26,6 +26,12 @@ module.exports = function(grunt) {
                     '<%= dirs.css %>/style.css': '<%= dirs.less %>/style.less'
                 }
             },
+
+            admin: {
+                files: {
+                    '<%= dirs.css %>/admin.css': ['<%= dirs.less %>/admin.less', '<%= dirs.less %>/admin-report.less']
+                }
+            }
         },
 
         uglify: {

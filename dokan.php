@@ -196,7 +196,10 @@ class WeDevs_Dokan {
 
         // Localize our plugin
         add_action( 'admin_init', array( $this, 'load_table_prifix' ) );
+
         add_action( 'init', array( $this, 'localization_setup' ) );
+        add_action( 'init', array( $this, 'register_scripts' ) );
+
         add_action( 'template_redirect', array( $this, 'redirect_if_not_logged_seller' ), 11 );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
@@ -207,18 +210,7 @@ class WeDevs_Dokan {
         add_action( 'admin_init', array( $this, 'block_admin_access' ) );
     }
 
-
-    /**
-     * Enqueue admin scripts
-     *
-     * Allows plugin assets to be loaded.
-     *
-     * @uses wp_enqueue_script()
-     * @uses wp_localize_script()
-     * @uses wp_enqueue_style
-     */
-    public function scripts() {
-
+    public function register_scripts() {
         $suffix   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
         // register styles
@@ -237,7 +229,18 @@ class WeDevs_Dokan {
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
         wp_register_script( 'dokan-script', plugins_url( 'assets/js/all' . $suffix . '.js', __FILE__ ), false, null, true );
+    }
 
+    /**
+     * Enqueue admin scripts
+     *
+     * Allows plugin assets to be loaded.
+     *
+     * @uses wp_enqueue_script()
+     * @uses wp_localize_script()
+     * @uses wp_enqueue_style
+     */
+    public function scripts() {
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
 
         // bailout if not dashboard
@@ -398,7 +401,6 @@ class WeDevs_Dokan {
      */
     function init_classes() {
         if ( is_admin() ) {
-            Dokan_Slider::init();
             new Dokan_Admin_User_Profile();
             new Dokan_Update();
         } else {

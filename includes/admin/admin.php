@@ -24,24 +24,18 @@ class Dokan_Admin_Settings {
     }
 
     function dashboard_script() {
-        // $template = get_template_directory_uri() . '/assets/';
-
         wp_enqueue_style( 'dokan-admin-dash', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
         $this->report_scripts();
     }
 
     function report_scripts() {
-        // $template_directory = get_template_directory_uri();
 
-        wp_enqueue_style( 'dokan-admin-report', DOKAN_PLUGIN_ASSEST . '/css/admin-report.css' );
-        wp_enqueue_style( 'jquery-ui', DOKAN_PLUGIN_ASSEST . '/css/jquery-ui-1.10.0.custom.css', false, null );
+        wp_enqueue_style( 'dokan-admin-report', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
+        wp_enqueue_style( 'jquery-ui' );
 
         wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'jquery-flot', DOKAN_PLUGIN_ASSEST . '/js/jquery.flot.min.js', false, null, true );
-        wp_enqueue_script( 'jquery-flot-time', DOKAN_PLUGIN_ASSEST . '/js/jquery.flot.time.min.js', false, null, true );
-        wp_enqueue_script( 'jquery-flot-pie', DOKAN_PLUGIN_ASSEST . '/js/jquery.flot.pie.min.js', false, null, true );
-        wp_enqueue_script( 'jquery-flot-stack', DOKAN_PLUGIN_ASSEST . '/js/jquery.flot.stack.min.js', false, null, true );
-        wp_enqueue_script( 'jquery-chart', DOKAN_PLUGIN_ASSEST . '/js/Chart.min.js', false, null, true );
+        wp_enqueue_script( 'jquery-flot' );
+        wp_enqueue_script( 'jquery-chart' );
     }
 
     function admin_init() {
@@ -70,7 +64,6 @@ class Dokan_Admin_Settings {
         add_submenu_page( 'dokan', __( 'Withdraw', 'dokan' ), $withdraw_text, $capability, 'dokan-withdraw', array($this, 'withdraw_page') );
         add_submenu_page( 'dokan', __( 'Sellers Listing', 'dokan' ), __( 'All Sellers', 'dokan' ), $capability, 'dokan-sellers', array($this, 'seller_listing') );
         $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array($this, 'report_page') );
-        add_submenu_page( 'dokan', __( 'Slider', 'dokan' ), __( 'Slider', 'dokan' ), $capability, 'edit.php?post_type=dokan_slider' );
 
         do_action( 'dokan_admin_menu' );
 
@@ -252,8 +245,6 @@ class Dokan_Admin_Settings {
 
     function report_page() {
         global $wpdb;
-
-        dokan_reports_scripts();
 
         include dirname(__FILE__) . '/reports.php';
     }
