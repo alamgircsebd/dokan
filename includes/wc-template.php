@@ -125,7 +125,6 @@ function dokan_order_show_suborders( $parent_order ) {
         Each order will be handled by their respective seller independently.', 'dokan' ); ?>
     </div>
 
-
     <table class="shop_table my_account_orders table table-striped">
 
         <thead>
@@ -139,6 +138,7 @@ function dokan_order_show_suborders( $parent_order ) {
         </thead>
         <tbody>
         <?php
+        $statuses = wc_get_order_statuses();
         foreach ($sub_orders as $order_post) {
             $order      = new WC_Order( $order_post->ID );
             $item_count = $order->get_item_count();
@@ -153,7 +153,7 @@ function dokan_order_show_suborders( $parent_order ) {
                         <time datetime="<?php echo date('Y-m-d', strtotime( $order->order_date ) ); ?>" title="<?php echo esc_attr( strtotime( $order->order_date ) ); ?>"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $order->order_date ) ); ?></time>
                     </td>
                     <td class="order-status" style="text-align:left; white-space:nowrap;">
-                        <?php echo ucfirst( $order->post_status ); ?>
+                        <?php echo isset( $statuses[$order->post_status] ) ? $statuses[$order->post_status] : $order->post_status; ?>
                     </td>
                     <td class="order-total">
                         <?php echo sprintf( _n( '%s for %s item', '%s for %s items', $item_count, 'woocommerce' ), $order->get_formatted_order_total(), $item_count ); ?>
