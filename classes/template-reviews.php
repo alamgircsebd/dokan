@@ -208,7 +208,7 @@ class Dokan_Template_reviews {
             $wpdb->posts.post_type='$post_type'"
         );
 
-        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $total / $this->limit );
 
         $page_links = paginate_links( array(
@@ -271,11 +271,18 @@ class Dokan_Template_reviews {
             'prev_text' => __( '&laquo;', 'aag' ),
             'next_text' => __( '&raquo;', 'aag' ),
             'total'     => $num_of_pages,
+            'type'      => 'array',
             'current'   => $pagenum
         ) );
 
         if ( $page_links ) {
-            return '<div class="wpuf-pagination">' . $page_links . '</div>';
+            $pagination_links  = '<div class="pagination-wrap">';
+            $pagination_links .= '<ul class="pagination"><li>';
+            $pagination_links .= join( "</li>\n\t<li>", $page_links );
+            $pagination_links .= "</li>\n</ul>\n";
+            $pagination_links .= '</div>';
+
+            return $pagination_links;
         }
     }
 
@@ -382,7 +389,8 @@ class Dokan_Template_reviews {
         $comments = $wpdb->get_results(
             "SELECT c.comment_content, c.comment_ID, c.comment_author,
                 c.comment_author_email, c.comment_author_url,
-                p.post_title, c.user_id, c.comment_post_ID, c.comment_approved
+                p.post_title, c.user_id, c.comment_post_ID, c.comment_approved,
+                c.comment_date
             FROM $wpdb->comments as c, $wpdb->posts as p
             WHERE p.post_author='$id' AND
                 p.post_status='publish' AND
