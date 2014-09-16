@@ -1228,15 +1228,20 @@ function dokan_get_best_sellers( $limit = 5 ) {
     return $seller;
 }
 
-
+/**
+ * Get navigation url for the dokan dashboard
+ *
+ * @param  string $name endpoint name
+ * @return string url
+ */
 function dokan_get_navigation_url( $name = '' ) {
     $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
 
-    if( !$page_id ) {
+    if ( ! $page_id ) {
         return;
     }
 
-    if( !empty( $name ) ) {
+    if ( ! empty( $name ) ) {
         $url = get_permalink( $page_id ) . $name.'/';
     } else {
         $url = get_permalink( $page_id );

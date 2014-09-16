@@ -216,7 +216,7 @@ class Dokan_Template_Coupons{
             $this->message();
             ?>
 
-            <table class="table">
+            <table class="dokan-table">
                 <thead>
                     <tr>
                         <th><?php _e('Code', 'dokan'); ?></th>

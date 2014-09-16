@@ -1526,9 +1526,9 @@ function dokan_get_on_sale_products( $per_page = 10, $paged = 1 ) {
 function dokan_get_seller_balance( $seller_id, $formatted = true ) {
     global $wpdb;
 
-    $status = dokan_withdraw_get_active_order_status_in_comma();
+    $status    = dokan_withdraw_get_active_order_status_in_comma();
     $cache_key = 'dokan_seller_balance_' . $seller_id;
-    $earning = wp_cache_get( $cache_key, 'dokan' );
+    $earning   = wp_cache_get( $cache_key, 'dokan' );
 
     if ( false === $earning ) {
         $sql = "SELECT SUM(net_amount) as earnings,

@@ -16,7 +16,7 @@ function dokan_product_seller_info( $item_data, $cart_item ) {
     $seller_info = get_userdata( $cart_item['data']->post->post_author );
 
     $item_data[] = array(
-        'name' => __( 'Seller', 'dokan' ),
+        'name'  => __( 'Seller', 'dokan' ),
         'value' => $seller_info->display_name
     );
 
@@ -36,7 +36,7 @@ add_filter( 'woocommerce_get_item_data', 'dokan_product_seller_info', 10, 2 );
 function dokan_seller_product_tab( $tabs) {
 
     $tabs['seller'] = array(
-        'title' => __( 'Seller Info', 'dokan' ),
+        'title'    => __( 'Seller Info', 'dokan' ),
         'priority' => 90,
         'callback' => 'dokan_product_seller_tab'
     );
@@ -56,9 +56,8 @@ add_filter( 'woocommerce_product_tabs', 'dokan_seller_product_tab' );
 function dokan_product_seller_tab( $val ) {
     global $product;
 
-    $author = get_user_by( 'id', $product->post->post_author );
+    $author     = get_user_by( 'id', $product->post->post_author );
     $store_info = dokan_get_store_info( $author->ID );
-//    var_dump( $store_info );
     ?>
     <ul class="list-unstyled">
 
@@ -99,50 +98,6 @@ function dokan_product_seller_tab( $val ) {
 
 
 /**
- * Renders item-bar of products in the loop
- *
- * @global WC_Product $product
- */
-function dokan_product_loop_price() {
-    global $product;
-    ?>
-    <span class="item-bar">
-
-        <?php woocommerce_template_loop_price(); ?>
-
-        <span class="item-button">
-            <?php woocommerce_template_loop_add_to_cart(); ?>
-            <?php dokan_add_to_wishlist_link(); ?>
-        </span>
-    </span>
-    <?php
-}
-
-add_action( 'woocommerce_after_shop_loop_item', 'dokan_product_loop_price' );
-
-
-/**
- * Filters WC breadcrumb parameters
- *
- * @param type $args
- * @return type
- */
-function dokan_woo_breadcrumb( $args ) {
-    return array(
-        'delimiter'   => '&nbsp; <i class="fa fa-angle-right"></i> &nbsp;',
-        'wrap_before' => '<nav class="breadcrumb" ' . ( is_single() ? 'itemprop="breadcrumb"' : '' ) . '>',
-        'wrap_after'  => '</nav>',
-        'before'      => '<li>',
-        'after'       => '</li>',
-        'home'        => _x( '<i class="fa fa-home"></i> Home', 'breadcrumb', 'dokan' ),
-    );
-}
-
-add_filter( 'woocommerce_breadcrumb_defaults', 'dokan_woo_breadcrumb' );
-
-
-
-/**
  * Show sub-orders on a parent order if available
  *
  * @param WC_Order $parent_order
@@ -150,9 +105,13 @@ add_filter( 'woocommerce_breadcrumb_defaults', 'dokan_woo_breadcrumb' );
  */
 function dokan_order_show_suborders( $parent_order ) {
 
-    $sub_orders = get_children( array( 'post_parent' => $parent_order->id, 'post_type' => 'shop_order' ) );
+    $sub_orders = get_children( array(
+        'post_parent' => $parent_order->id,
+        'post_type'   => 'shop_order',
+        'post_status' => array( 'wc-pending', 'wc-completed', 'wc-processing', 'wc-on-hold' )
+    ) );
 
-    if ( !$sub_orders ) {
+    if ( ! $sub_orders ) {
         return;
     }
     ?>
@@ -181,8 +140,7 @@ function dokan_order_show_suborders( $parent_order ) {
         <tbody>
         <?php
         foreach ($sub_orders as $order_post) {
-            $order = new WC_Order( $order_post->ID );
-            $status = get_term_by( 'slug', $order->status, 'shop_order_status' );
+            $order      = new WC_Order( $order_post->ID );
             $item_count = $order->get_item_count();
             ?>
                 <tr class="order">
@@ -195,7 +153,7 @@ function dokan_order_show_suborders( $parent_order ) {
                         <time datetime="<?php echo date('Y-m-d', strtotime( $order->order_date ) ); ?>" title="<?php echo esc_attr( strtotime( $order->order_date ) ); ?>"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $order->order_date ) ); ?></time>
                     </td>
                     <td class="order-status" style="text-align:left; white-space:nowrap;">
-                        <?php echo ucfirst( __( $status->name, 'dokan' ) ); ?>
+                        <?php echo ucfirst( $order->post_status ); ?>
                     </td>
                     <td class="order-total">
                         <?php echo sprintf( _n( '%s for %s item', '%s for %s items', $item_count, 'woocommerce' ), $order->get_formatted_order_total(), $item_count ); ?>
@@ -225,7 +183,11 @@ function dokan_order_show_suborders( $parent_order ) {
 
 add_action( 'woocommerce_order_details_after_order_table', 'dokan_order_show_suborders' );
 
-
+/**
+ * Default seller image
+ *
+ * @return string
+ */
 function dokan_get_no_seller_image() {
     $image = DOKAN_PLUGIN_ASSEST. '/images/no-seller-image.png';
 

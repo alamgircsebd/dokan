@@ -25,7 +25,7 @@
   display: block;
   color: #fff;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
   text-decoration: none;
 }
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a i {
@@ -1326,6 +1326,7 @@ ul.dokan_tabs li.active {
   color: #ccc;
 }
 input[type="submit"].dokan-btn,
+a.dokan-btn,
 .dokan-btn {
   display: inline-block;
   margin-bottom: 0;
@@ -1348,17 +1349,22 @@ input[type="submit"].dokan-btn,
   user-select: none;
 }
 input[type="submit"].dokan-btn:hover,
+a.dokan-btn:hover,
 .dokan-btn:hover,
 input[type="submit"].dokan-btn:focus,
+a.dokan-btn:focus,
 .dokan-btn:focus,
 input[type="submit"].dokan-btn.focus,
+a.dokan-btn.focus,
 .dokan-btn.focus {
   color: #333;
   text-decoration: none;
 }
 input[type="submit"].dokan-btn:active,
+a.dokan-btn:active,
 .dokan-btn:active,
 input[type="submit"].dokan-btn.active,
+a.dokan-btn.active,
 .dokan-btn.active {
   outline: 0;
   background-image: none;
@@ -1366,265 +1372,365 @@ input[type="submit"].dokan-btn.active,
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
 input[type="submit"].dokan-btn-orange,
+a.dokan-btn-orange,
 .dokan-btn-orange {
   color: #ffffff;
   background-color: #f05025;
   border-color: #f05025;
 }
 input[type="submit"].dokan-btn-orange:hover,
+a.dokan-btn-orange:hover,
 .dokan-btn-orange:hover,
 input[type="submit"].dokan-btn-orange:focus,
+a.dokan-btn-orange:focus,
 .dokan-btn-orange:focus,
 input[type="submit"].dokan-btn-orange:active,
+a.dokan-btn-orange:active,
 .dokan-btn-orange:active,
 input[type="submit"].dokan-btn-orange.active,
+a.dokan-btn-orange.active,
 .dokan-btn-orange.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-orange,
+.open .dropdown-togglea.dokan-btn-orange,
 .open .dropdown-toggle.dokan-btn-orange {
   color: #ffffff;
   background-color: #dd3b0f;
   border-color: #ca360e;
 }
 input[type="submit"].dokan-btn-orange:active,
+a.dokan-btn-orange:active,
 .dokan-btn-orange:active,
 input[type="submit"].dokan-btn-orange.active,
+a.dokan-btn-orange.active,
 .dokan-btn-orange.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-orange,
+.open .dropdown-togglea.dokan-btn-orange,
 .open .dropdown-toggle.dokan-btn-orange {
   background-image: none;
 }
 input[type="submit"].dokan-btn-orange.disabled,
+a.dokan-btn-orange.disabled,
 .dokan-btn-orange.disabled,
 input[type="submit"].dokan-btn-orange[disabled],
+a.dokan-btn-orange[disabled],
 .dokan-btn-orange[disabled],
 fieldset[disabled] input[type="submit"].dokan-btn-orange,
+fieldset[disabled] a.dokan-btn-orange,
 fieldset[disabled] .dokan-btn-orange,
 input[type="submit"].dokan-btn-orange.disabled:hover,
+a.dokan-btn-orange.disabled:hover,
 .dokan-btn-orange.disabled:hover,
 input[type="submit"].dokan-btn-orange[disabled]:hover,
+a.dokan-btn-orange[disabled]:hover,
 .dokan-btn-orange[disabled]:hover,
 fieldset[disabled] input[type="submit"].dokan-btn-orange:hover,
+fieldset[disabled] a.dokan-btn-orange:hover,
 fieldset[disabled] .dokan-btn-orange:hover,
 input[type="submit"].dokan-btn-orange.disabled:focus,
+a.dokan-btn-orange.disabled:focus,
 .dokan-btn-orange.disabled:focus,
 input[type="submit"].dokan-btn-orange[disabled]:focus,
+a.dokan-btn-orange[disabled]:focus,
 .dokan-btn-orange[disabled]:focus,
 fieldset[disabled] input[type="submit"].dokan-btn-orange:focus,
+fieldset[disabled] a.dokan-btn-orange:focus,
 fieldset[disabled] .dokan-btn-orange:focus,
 input[type="submit"].dokan-btn-orange.disabled:active,
+a.dokan-btn-orange.disabled:active,
 .dokan-btn-orange.disabled:active,
 input[type="submit"].dokan-btn-orange[disabled]:active,
+a.dokan-btn-orange[disabled]:active,
 .dokan-btn-orange[disabled]:active,
 fieldset[disabled] input[type="submit"].dokan-btn-orange:active,
+fieldset[disabled] a.dokan-btn-orange:active,
 fieldset[disabled] .dokan-btn-orange:active,
 input[type="submit"].dokan-btn-orange.disabled.active,
+a.dokan-btn-orange.disabled.active,
 .dokan-btn-orange.disabled.active,
 input[type="submit"].dokan-btn-orange[disabled].active,
+a.dokan-btn-orange[disabled].active,
 .dokan-btn-orange[disabled].active,
 fieldset[disabled] input[type="submit"].dokan-btn-orange.active,
+fieldset[disabled] a.dokan-btn-orange.active,
 fieldset[disabled] .dokan-btn-orange.active {
   background-color: #f05025;
   border-color: #f05025;
 }
 input[type="submit"].dokan-btn-orange .badge,
+a.dokan-btn-orange .badge,
 .dokan-btn-orange .badge {
   color: #f05025;
   background-color: #fff;
 }
 input[type="submit"].dokan-btn-success,
+a.dokan-btn-success,
 .dokan-btn-success {
   color: #ffffff;
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
 input[type="submit"].dokan-btn-success:hover,
+a.dokan-btn-success:hover,
 .dokan-btn-success:hover,
 input[type="submit"].dokan-btn-success:focus,
+a.dokan-btn-success:focus,
 .dokan-btn-success:focus,
 input[type="submit"].dokan-btn-success:active,
+a.dokan-btn-success:active,
 .dokan-btn-success:active,
 input[type="submit"].dokan-btn-success.active,
+a.dokan-btn-success.active,
 .dokan-btn-success.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-success,
+.open .dropdown-togglea.dokan-btn-success,
 .open .dropdown-toggle.dokan-btn-success {
   color: #ffffff;
   background-color: #47a447;
   border-color: #398439;
 }
 input[type="submit"].dokan-btn-success:active,
+a.dokan-btn-success:active,
 .dokan-btn-success:active,
 input[type="submit"].dokan-btn-success.active,
+a.dokan-btn-success.active,
 .dokan-btn-success.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-success,
+.open .dropdown-togglea.dokan-btn-success,
 .open .dropdown-toggle.dokan-btn-success {
   background-image: none;
 }
 input[type="submit"].dokan-btn-success.disabled,
+a.dokan-btn-success.disabled,
 .dokan-btn-success.disabled,
 input[type="submit"].dokan-btn-success[disabled],
+a.dokan-btn-success[disabled],
 .dokan-btn-success[disabled],
 fieldset[disabled] input[type="submit"].dokan-btn-success,
+fieldset[disabled] a.dokan-btn-success,
 fieldset[disabled] .dokan-btn-success,
 input[type="submit"].dokan-btn-success.disabled:hover,
+a.dokan-btn-success.disabled:hover,
 .dokan-btn-success.disabled:hover,
 input[type="submit"].dokan-btn-success[disabled]:hover,
+a.dokan-btn-success[disabled]:hover,
 .dokan-btn-success[disabled]:hover,
 fieldset[disabled] input[type="submit"].dokan-btn-success:hover,
+fieldset[disabled] a.dokan-btn-success:hover,
 fieldset[disabled] .dokan-btn-success:hover,
 input[type="submit"].dokan-btn-success.disabled:focus,
+a.dokan-btn-success.disabled:focus,
 .dokan-btn-success.disabled:focus,
 input[type="submit"].dokan-btn-success[disabled]:focus,
+a.dokan-btn-success[disabled]:focus,
 .dokan-btn-success[disabled]:focus,
 fieldset[disabled] input[type="submit"].dokan-btn-success:focus,
+fieldset[disabled] a.dokan-btn-success:focus,
 fieldset[disabled] .dokan-btn-success:focus,
 input[type="submit"].dokan-btn-success.disabled:active,
+a.dokan-btn-success.disabled:active,
 .dokan-btn-success.disabled:active,
 input[type="submit"].dokan-btn-success[disabled]:active,
+a.dokan-btn-success[disabled]:active,
 .dokan-btn-success[disabled]:active,
 fieldset[disabled] input[type="submit"].dokan-btn-success:active,
+fieldset[disabled] a.dokan-btn-success:active,
 fieldset[disabled] .dokan-btn-success:active,
 input[type="submit"].dokan-btn-success.disabled.active,
+a.dokan-btn-success.disabled.active,
 .dokan-btn-success.disabled.active,
 input[type="submit"].dokan-btn-success[disabled].active,
+a.dokan-btn-success[disabled].active,
 .dokan-btn-success[disabled].active,
 fieldset[disabled] input[type="submit"].dokan-btn-success.active,
+fieldset[disabled] a.dokan-btn-success.active,
 fieldset[disabled] .dokan-btn-success.active {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
 input[type="submit"].dokan-btn-success .badge,
+a.dokan-btn-success .badge,
 .dokan-btn-success .badge {
   color: #5cb85c;
   background-color: #fff;
 }
 input[type="submit"].dokan-btn-default,
+a.dokan-btn-default,
 .dokan-btn-default {
   color: #333333;
   background-color: #ffffff;
   border-color: #cccccc;
 }
 input[type="submit"].dokan-btn-default:hover,
+a.dokan-btn-default:hover,
 .dokan-btn-default:hover,
 input[type="submit"].dokan-btn-default:focus,
+a.dokan-btn-default:focus,
 .dokan-btn-default:focus,
 input[type="submit"].dokan-btn-default:active,
+a.dokan-btn-default:active,
 .dokan-btn-default:active,
 input[type="submit"].dokan-btn-default.active,
+a.dokan-btn-default.active,
 .dokan-btn-default.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-default,
+.open .dropdown-togglea.dokan-btn-default,
 .open .dropdown-toggle.dokan-btn-default {
   color: #333333;
   background-color: #ebebeb;
   border-color: #adadad;
 }
 input[type="submit"].dokan-btn-default:active,
+a.dokan-btn-default:active,
 .dokan-btn-default:active,
 input[type="submit"].dokan-btn-default.active,
+a.dokan-btn-default.active,
 .dokan-btn-default.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-default,
+.open .dropdown-togglea.dokan-btn-default,
 .open .dropdown-toggle.dokan-btn-default {
   background-image: none;
 }
 input[type="submit"].dokan-btn-default.disabled,
+a.dokan-btn-default.disabled,
 .dokan-btn-default.disabled,
 input[type="submit"].dokan-btn-default[disabled],
+a.dokan-btn-default[disabled],
 .dokan-btn-default[disabled],
 fieldset[disabled] input[type="submit"].dokan-btn-default,
+fieldset[disabled] a.dokan-btn-default,
 fieldset[disabled] .dokan-btn-default,
 input[type="submit"].dokan-btn-default.disabled:hover,
+a.dokan-btn-default.disabled:hover,
 .dokan-btn-default.disabled:hover,
 input[type="submit"].dokan-btn-default[disabled]:hover,
+a.dokan-btn-default[disabled]:hover,
 .dokan-btn-default[disabled]:hover,
 fieldset[disabled] input[type="submit"].dokan-btn-default:hover,
+fieldset[disabled] a.dokan-btn-default:hover,
 fieldset[disabled] .dokan-btn-default:hover,
 input[type="submit"].dokan-btn-default.disabled:focus,
+a.dokan-btn-default.disabled:focus,
 .dokan-btn-default.disabled:focus,
 input[type="submit"].dokan-btn-default[disabled]:focus,
+a.dokan-btn-default[disabled]:focus,
 .dokan-btn-default[disabled]:focus,
 fieldset[disabled] input[type="submit"].dokan-btn-default:focus,
+fieldset[disabled] a.dokan-btn-default:focus,
 fieldset[disabled] .dokan-btn-default:focus,
 input[type="submit"].dokan-btn-default.disabled:active,
+a.dokan-btn-default.disabled:active,
 .dokan-btn-default.disabled:active,
 input[type="submit"].dokan-btn-default[disabled]:active,
+a.dokan-btn-default[disabled]:active,
 .dokan-btn-default[disabled]:active,
 fieldset[disabled] input[type="submit"].dokan-btn-default:active,
+fieldset[disabled] a.dokan-btn-default:active,
 fieldset[disabled] .dokan-btn-default:active,
 input[type="submit"].dokan-btn-default.disabled.active,
+a.dokan-btn-default.disabled.active,
 .dokan-btn-default.disabled.active,
 input[type="submit"].dokan-btn-default[disabled].active,
+a.dokan-btn-default[disabled].active,
 .dokan-btn-default[disabled].active,
 fieldset[disabled] input[type="submit"].dokan-btn-default.active,
+fieldset[disabled] a.dokan-btn-default.active,
 fieldset[disabled] .dokan-btn-default.active {
   background-color: #ffffff;
   border-color: #cccccc;
 }
 input[type="submit"].dokan-btn-default .badge,
+a.dokan-btn-default .badge,
 .dokan-btn-default .badge {
   color: #ffffff;
   background-color: #fff;
 }
 input[type="submit"].dokan-btn-danger,
+a.dokan-btn-danger,
 .dokan-btn-danger {
   color: #ffffff;
   background-color: #d9534f;
   border-color: #d43f3a;
 }
 input[type="submit"].dokan-btn-danger:hover,
+a.dokan-btn-danger:hover,
 .dokan-btn-danger:hover,
 input[type="submit"].dokan-btn-danger:focus,
+a.dokan-btn-danger:focus,
 .dokan-btn-danger:focus,
 input[type="submit"].dokan-btn-danger:active,
+a.dokan-btn-danger:active,
 .dokan-btn-danger:active,
 input[type="submit"].dokan-btn-danger.active,
+a.dokan-btn-danger.active,
 .dokan-btn-danger.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-danger,
+.open .dropdown-togglea.dokan-btn-danger,
 .open .dropdown-toggle.dokan-btn-danger {
   color: #ffffff;
   background-color: #d2322d;
   border-color: #ac2925;
 }
 input[type="submit"].dokan-btn-danger:active,
+a.dokan-btn-danger:active,
 .dokan-btn-danger:active,
 input[type="submit"].dokan-btn-danger.active,
+a.dokan-btn-danger.active,
 .dokan-btn-danger.active,
 .open .dropdown-toggleinput[type="submit"].dokan-btn-danger,
+.open .dropdown-togglea.dokan-btn-danger,
 .open .dropdown-toggle.dokan-btn-danger {
   background-image: none;
 }
 input[type="submit"].dokan-btn-danger.disabled,
+a.dokan-btn-danger.disabled,
 .dokan-btn-danger.disabled,
 input[type="submit"].dokan-btn-danger[disabled],
+a.dokan-btn-danger[disabled],
 .dokan-btn-danger[disabled],
 fieldset[disabled] input[type="submit"].dokan-btn-danger,
+fieldset[disabled] a.dokan-btn-danger,
 fieldset[disabled] .dokan-btn-danger,
 input[type="submit"].dokan-btn-danger.disabled:hover,
+a.dokan-btn-danger.disabled:hover,
 .dokan-btn-danger.disabled:hover,
 input[type="submit"].dokan-btn-danger[disabled]:hover,
+a.dokan-btn-danger[disabled]:hover,
 .dokan-btn-danger[disabled]:hover,
 fieldset[disabled] input[type="submit"].dokan-btn-danger:hover,
+fieldset[disabled] a.dokan-btn-danger:hover,
 fieldset[disabled] .dokan-btn-danger:hover,
 input[type="submit"].dokan-btn-danger.disabled:focus,
+a.dokan-btn-danger.disabled:focus,
 .dokan-btn-danger.disabled:focus,
 input[type="submit"].dokan-btn-danger[disabled]:focus,
+a.dokan-btn-danger[disabled]:focus,
 .dokan-btn-danger[disabled]:focus,
 fieldset[disabled] input[type="submit"].dokan-btn-danger:focus,
+fieldset[disabled] a.dokan-btn-danger:focus,
 fieldset[disabled] .dokan-btn-danger:focus,
 input[type="submit"].dokan-btn-danger.disabled:active,
+a.dokan-btn-danger.disabled:active,
 .dokan-btn-danger.disabled:active,
 input[type="submit"].dokan-btn-danger[disabled]:active,
+a.dokan-btn-danger[disabled]:active,
 .dokan-btn-danger[disabled]:active,
 fieldset[disabled] input[type="submit"].dokan-btn-danger:active,
+fieldset[disabled] a.dokan-btn-danger:active,
 fieldset[disabled] .dokan-btn-danger:active,
 input[type="submit"].dokan-btn-danger.disabled.active,
+a.dokan-btn-danger.disabled.active,
 .dokan-btn-danger.disabled.active,
 input[type="submit"].dokan-btn-danger[disabled].active,
+a.dokan-btn-danger[disabled].active,
 .dokan-btn-danger[disabled].active,
 fieldset[disabled] input[type="submit"].dokan-btn-danger.active,
+fieldset[disabled] a.dokan-btn-danger.active,
 fieldset[disabled] .dokan-btn-danger.active {
   background-color: #d9534f;
   border-color: #d43f3a;
 }
 input[type="submit"].dokan-btn-danger .badge,
+a.dokan-btn-danger .badge,
 .dokan-btn-danger .badge {
   color: #d9534f;
   background-color: #fff;
