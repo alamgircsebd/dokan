@@ -187,10 +187,10 @@
                 if ( $product_query->max_num_pages > 1 ) {
                     echo '<div class="pagination-wrap">';
                     $page_links = paginate_links( array(
-                        'current' => max( 1, get_query_var( 'paged' ) ),
-                        'total' => $product_query->max_num_pages,
-                        'base' => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
-                        'type' => 'array',
+                        'current'   => max( 1, get_query_var( 'paged' ) ),
+                        'total'     => $product_query->max_num_pages,
+                        'base'      => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
+                        'type'      => 'array',
                         'prev_text' => __( '&laquo; Previous', 'dokan' ),
                         'next_text' => __( 'Next &raquo;', 'dokan' )
                     ) );
