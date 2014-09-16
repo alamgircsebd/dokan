@@ -51,7 +51,7 @@ define( 'DOKAN_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 // give a way to turn off loading styles and scripts from parent theme
 
 if ( !defined( 'DOKAN_LOAD_STYLE' ) ) {
-    define( 'DOKAN_LOAD_STYLE', false );
+    define( 'DOKAN_LOAD_STYLE', true );
 }
 
 if ( !defined( 'DOKAN_LOAD_SCRIPTS' ) ) {
@@ -255,19 +255,17 @@ class WeDevs_Dokan {
             )
         );
 
-        if ( get_query_var( 'store' ) || get_query_var( 'store_review' ) ) {
-            wp_enqueue_style( 'fontawesome' );
-            wp_enqueue_style( 'dokan-style' );
-        }
-
+        // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
-            if ( DOKAN_LOAD_SCRIPTS === true ) {
-
+            if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
                 wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-extra' );
                 wp_enqueue_style( 'dokan-style' );
+            }
+
+            if ( DOKAN_LOAD_SCRIPTS ) {
 
                 wp_enqueue_script( 'jquery' );
                 wp_enqueue_script( 'jquery-ui' );
@@ -286,6 +284,20 @@ class WeDevs_Dokan {
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
             }
+        }
+
+        // store and my account page
+        if ( get_query_var( 'store' ) || get_query_var( 'store_review' ) || is_account_page() ) {
+
+            if ( DOKAN_LOAD_STYLE ) {
+                wp_enqueue_style( 'fontawesome' );
+                wp_enqueue_style( 'dokan-style' );
+            }
+        }
+
+        // load dokan style on every pages. requires for shortcodes in other pages
+        if ( DOKAN_LOAD_STYLE ) {
+            wp_enqueue_style( 'dokan-style' );
         }
     }
 
@@ -326,7 +338,7 @@ class WeDevs_Dokan {
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
         add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ), 99 );
-        add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
+        // add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
     }
 
     /**
@@ -440,7 +452,7 @@ class WeDevs_Dokan {
         global $wpdb;
 
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
-        $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_orders   = $wpdb->prefix . 'dokan_orders';
     }
 
     /**
