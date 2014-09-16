@@ -77,6 +77,10 @@ class Dokan_Template_Shortcodes {
         self::$product_cat = -1;
         self::$post_content = __( 'Details about your product...', 'dokan' );
 
+        if ( ! $_POST ) {
+            return;
+        }
+
         if ( isset( $_POST['add_product'] ) ) {
             $post_title = trim( $_POST['post_title'] );
             $post_content = trim( $_POST['post_content'] );
