@@ -6,13 +6,13 @@
 
     if ( false === $add_ons ) {
         $response = wp_remote_get( 'http://wedevs.com/api/dokan/addons.php', array('timeout' => 15) );
-        $update = wp_remote_retrieve_body( $response );
+        $add_ons  = wp_remote_retrieve_body( $response );
 
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
             return false;
         }
 
-        set_transient( 'dokan_addons', $update, 12 * HOUR_IN_SECONDS );
+        set_transient( 'dokan_addons', $add_ons, 12 * HOUR_IN_SECONDS );
     }
 
     $add_ons = json_decode( $add_ons );

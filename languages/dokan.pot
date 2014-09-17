@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dokan - Create multi-vendor marketplace in minutes! 1.0\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2014-09-17 06:28:25+00:00\n"
+"POT-Creation-Date: 2014-09-17 09:27:37+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -100,36 +100,40 @@ msgstr ""
 msgid "How much amount (%) will get from each order"
 msgstr ""
 
-#: classes/ajax.php:102 classes/ajax.php:136
+#: classes/ajax.php:75
+msgid "<strong>Seller:</strong> %s"
+msgstr ""
+
+#: classes/ajax.php:118 classes/ajax.php:152
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: classes/ajax.php:106 classes/ajax.php:140
+#: classes/ajax.php:122 classes/ajax.php:156
 msgid "You have taken too long. Please go back and retry."
 msgstr ""
 
-#: classes/ajax.php:115 classes/ajax.php:149
+#: classes/ajax.php:131 classes/ajax.php:165
 msgid "You do not have permission to change this order"
 msgstr ""
 
-#: classes/ajax.php:200
+#: classes/ajax.php:216
 msgid "File %d"
 msgstr ""
 
-#: classes/ajax.php:250 includes/woo-views/variation-admin-html.php:120
+#: classes/ajax.php:266 includes/woo-views/variation-admin-html.php:120
 #: includes/woo-views/variation-admin-html.php:133
 msgid "Same as parent"
 msgstr ""
 
-#: classes/ajax.php:251 includes/wc-functions.php:26
+#: classes/ajax.php:267 includes/wc-functions.php:26
 msgid "Standard"
 msgstr ""
 
-#: classes/ajax.php:490 includes/template-tags.php:149
+#: classes/ajax.php:506 includes/template-tags.php:149
 msgid "Something went wrong!"
 msgstr ""
 
-#: classes/ajax.php:498
+#: classes/ajax.php:514
 msgid "Email sent successfully!"
 msgstr ""
 
@@ -228,7 +232,7 @@ msgstr ""
 #: classes/installer.php:78 includes/admin/reports.php:119
 #: includes/admin/reports.php:129 includes/admin-functions.php:52
 #: includes/admin-functions.php:545 includes/admin-functions.php:558
-#: includes/wc-template.php:19
+#: includes/wc-template.php:13
 msgid "Seller"
 msgstr ""
 
@@ -237,12 +241,7 @@ msgstr ""
 msgid "Dashboard"
 msgstr ""
 
-#: classes/installer.php:113 includes/admin/admin.php:214
-#: includes/template-tags.php:462
-msgid "My Orders"
-msgstr ""
-
-#: classes/installer.php:119
+#: classes/installer.php:113
 msgid "Store List"
 msgstr ""
 
@@ -302,7 +301,7 @@ msgid "Expiry date"
 msgstr ""
 
 #: classes/template-coupons.php:246 templates/edit/sidebar.php:15
-#: templates/edit/sidebar.php:58 templates/product-edit.php:79
+#: templates/edit/sidebar.php:58 templates/product-edit.php:84
 #: templates/products-listing.php:70
 msgid "Edit"
 msgstr ""
@@ -764,7 +763,7 @@ msgstr ""
 
 #: classes/template-withdraw.php:356 classes/template-withdraw.php:370
 #: classes/template-withdraw.php:623 classes/template-withdraw.php:790
-#: includes/admin-functions.php:49 includes/wc-template.php:133
+#: includes/admin-functions.php:49 includes/wc-template.php:126
 #: templates/orders/listing.php:21 templates/products-listing.php:31
 msgid "Date"
 msgstr ""
@@ -828,7 +827,7 @@ msgstr ""
 #: classes/template-withdraw.php:625 includes/admin/reports.php:123
 #: includes/admin/reports.php:133 includes/admin/sellers.php:22
 #: includes/admin/sellers.php:97 includes/admin-functions.php:42
-#: includes/wc-template.php:134 templates/orders/listing.php:19
+#: includes/wc-template.php:127 templates/orders/listing.php:19
 #: templates/products-listing.php:25
 msgid "Status"
 msgstr ""
@@ -885,77 +884,77 @@ msgstr ""
 msgid "Sorry, no transactions found!"
 msgstr ""
 
-#: classes/update.php:26
+#: classes/update.php:34
 msgid "Updates"
 msgstr ""
 
-#: classes/update.php:49
+#: classes/update.php:57
 msgid ""
-"Please <a href=\"%s\">enter</a> your <strong>Dokan</strong> theme license "
+"Please <a href=\"%s\">enter</a> your <strong>Dokan</strong> plugin license "
 "key to get regular update and support."
 msgstr ""
 
-#: classes/update.php:64
+#: classes/update.php:72
 msgid "Pleae activate your copy"
 msgstr ""
 
-#: classes/update.php:91
+#: classes/update.php:99
 msgid "Dokan Error:"
 msgstr ""
 
-#: classes/update.php:230
+#: classes/update.php:273
 msgid "Empty email address"
 msgstr ""
 
-#: classes/update.php:234
+#: classes/update.php:277
 msgid "Empty license key"
 msgstr ""
 
-#: classes/update.php:252
+#: classes/update.php:295
 msgid "Settings Saved"
 msgstr ""
 
-#: classes/update.php:268
-msgid "Theme Activation"
+#: classes/update.php:311
+msgid "Plugin Activation"
 msgstr ""
 
-#: classes/update.php:271
+#: classes/update.php:314
 msgid ""
-"Enter the E-mail address that was used for purchasing the theme and the "
+"Enter the E-mail address that was used for purchasing the plugin and the "
 "license key."
 msgstr ""
 
-#: classes/update.php:272
+#: classes/update.php:315
 msgid ""
-"We recommend you to enter those details to get regular <strong>theme update "
-"and support</strong>."
+"We recommend you to enter those details to get regular <strong>plugin "
+"update and support</strong>."
 msgstr ""
 
-#: classes/update.php:291
+#: classes/update.php:334
 msgid "E-mail Address"
 msgstr ""
 
-#: classes/update.php:294
+#: classes/update.php:337
 msgid "Enter your purchase Email address"
 msgstr ""
 
-#: classes/update.php:298
+#: classes/update.php:341
 msgid "License Key"
 msgstr ""
 
-#: classes/update.php:301
+#: classes/update.php:344
 msgid "Enter your license key"
 msgstr ""
 
-#: classes/update.php:306
+#: classes/update.php:349
 msgid "Save & Activate"
 msgstr ""
 
-#: classes/update.php:311
-msgid "Theme is activated"
+#: classes/update.php:354
+msgid "Plugin is activated"
 msgstr ""
 
-#: classes/update.php:315
+#: classes/update.php:358
 msgid "Delete License"
 msgstr ""
 
@@ -1137,6 +1136,10 @@ msgstr ""
 msgid "Seller can edit product reviews"
 msgstr ""
 
+#: includes/admin/admin.php:214 includes/template-tags.php:462
+msgid "My Orders"
+msgstr ""
+
 #: includes/admin/admin.php:284
 msgid ""
 "<strong>Dokan Data Update Required</strong> &#8211; We need to update your "
@@ -1242,7 +1245,7 @@ msgid "orders placed in this period"
 msgstr ""
 
 #: includes/admin/reports.php:118 includes/admin/reports.php:128
-#: includes/admin-functions.php:43 includes/wc-template.php:132
+#: includes/admin-functions.php:43 includes/wc-template.php:125
 #: templates/dashboard.php:48 templates/orders/listing.php:17
 msgid "Order"
 msgstr ""
@@ -1345,7 +1348,7 @@ msgstr ""
 msgid "Order Notes"
 msgstr ""
 
-#: includes/admin-functions.php:50 includes/wc-template.php:135
+#: includes/admin-functions.php:50 includes/wc-template.php:128
 #: templates/dashboard.php:82 templates/dashboard.php:177
 #: templates/orders/order-fee-html.php:17
 msgid "Total"
@@ -1610,23 +1613,23 @@ msgstr ""
 msgid "Grouped Product"
 msgstr ""
 
-#: includes/theme-functions.php:914
+#: includes/theme-functions.php:915
 msgid "Account Name: %s"
 msgstr ""
 
-#: includes/theme-functions.php:917
+#: includes/theme-functions.php:918
 msgid "Account Number: %s"
 msgstr ""
 
-#: includes/theme-functions.php:920
+#: includes/theme-functions.php:921
 msgid "Bank Name: %s"
 msgstr ""
 
-#: includes/theme-functions.php:923
+#: includes/theme-functions.php:924
 msgid "Address: %s"
 msgstr ""
 
-#: includes/theme-functions.php:926
+#: includes/theme-functions.php:927
 msgid "SWIFT: %s"
 msgstr ""
 
@@ -1735,44 +1738,44 @@ msgstr ""
 msgid "Rated %s out of %d"
 msgstr ""
 
-#: includes/wc-template.php:39
+#: includes/wc-template.php:32
 msgid "Seller Info"
 msgstr ""
 
-#: includes/wc-template.php:66
+#: includes/wc-template.php:59
 msgid "Store Name:"
 msgstr ""
 
-#: includes/wc-template.php:75
+#: includes/wc-template.php:68
 msgid "Seller:"
 msgstr ""
 
-#: includes/wc-template.php:84
+#: includes/wc-template.php:77
 msgid "Address:"
 msgstr ""
 
-#: includes/wc-template.php:119
+#: includes/wc-template.php:112
 msgid "Sub Orders"
 msgstr ""
 
-#: includes/wc-template.php:123
+#: includes/wc-template.php:116
 msgid "Note:"
 msgstr ""
 
-#: includes/wc-template.php:124
+#: includes/wc-template.php:117
 msgid ""
 "This order has products from multiple vendors/sellers. So we divided this "
 "order into multiple seller orders.\n"
 "        Each order will be handled by their respective seller independently."
 msgstr ""
 
-#: includes/wc-template.php:159
+#: includes/wc-template.php:152
 msgid "%s for %s item"
 msgid_plural "%s for %s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wc-template.php:167 templates/orders/listing.php:107
+#: includes/wc-template.php:160 templates/orders/listing.php:107
 #: templates/products-listing.php:72
 msgid "View"
 msgstr ""
@@ -1943,7 +1946,7 @@ msgid "Sale Price:"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:77
-#: templates/product-edit.php:193
+#: templates/product-edit.php:198
 msgid "Schedule"
 msgstr ""
 
@@ -2076,7 +2079,7 @@ msgstr ""
 msgid "Offline"
 msgstr ""
 
-#: templates/edit/attributes.php:1 templates/product-edit.php:99
+#: templates/edit/attributes.php:1 templates/product-edit.php:104
 msgid "Attributes"
 msgstr ""
 
@@ -2274,7 +2277,7 @@ msgstr ""
 msgid "Short description about the product..."
 msgstr ""
 
-#: templates/new-product.php:63 templates/product-edit.php:229
+#: templates/new-product.php:63 templates/product-edit.php:234
 msgid "- Select a category -"
 msgstr ""
 
@@ -2468,55 +2471,55 @@ msgstr ""
 msgid "&larr; Orders"
 msgstr ""
 
-#: templates/product-edit.php:16
+#: templates/product-edit.php:19
 msgid "Access Denied"
 msgstr ""
 
-#: templates/product-edit.php:60
+#: templates/product-edit.php:65
 msgid "Success!"
 msgstr ""
 
-#: templates/product-edit.php:60
+#: templates/product-edit.php:65
 msgid "The product has been updated successfully."
 msgstr ""
 
-#: templates/product-edit.php:63
+#: templates/product-edit.php:68
 msgid "View Product &rarr;"
 msgstr ""
 
-#: templates/product-edit.php:84
+#: templates/product-edit.php:89
 msgid "Options"
 msgstr ""
 
-#: templates/product-edit.php:89
+#: templates/product-edit.php:94
 msgid "Inventory"
 msgstr ""
 
-#: templates/product-edit.php:94
+#: templates/product-edit.php:99
 msgid "Shipping"
 msgstr ""
 
-#: templates/product-edit.php:104
+#: templates/product-edit.php:109
 msgid "Variations"
 msgstr ""
 
-#: templates/product-edit.php:147
+#: templates/product-edit.php:152
 msgid "Upload a product cover image"
 msgstr ""
 
-#: templates/product-edit.php:179
+#: templates/product-edit.php:184
 msgid "Enable Discounted Price"
 msgstr ""
 
-#: templates/product-edit.php:189
+#: templates/product-edit.php:194
 msgid "Special Price"
 msgstr ""
 
-#: templates/product-edit.php:200
+#: templates/product-edit.php:205
 msgid "From"
 msgstr ""
 
-#: templates/product-edit.php:207
+#: templates/product-edit.php:212
 msgid "To"
 msgstr ""
 
