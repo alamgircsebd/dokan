@@ -3,13 +3,15 @@ global $post, $product;
 
 wp_enqueue_script( 'dokan-tabs-scripts' );
 
-$post_id   = $post->ID;
-$seller_id = get_current_user_id();
+$post_id        = $post->ID;
+$seller_id      = get_current_user_id();
+$from_shortcode = false;
 
 if ( isset( $_GET['product_id'] ) ) {
-    $post_id = intval( $_GET['product_id'] );
-    $post    = get_post( $post_id );
-    $product = get_product( $post_id );
+    $post_id        = intval( $_GET['product_id'] );
+    $post           = get_post( $post_id );
+    $product        = get_product( $post_id );
+    $from_shortcode = true;
 }
 
 // bail out if not author
@@ -41,7 +43,9 @@ $_stock_status   = get_post_meta( $post_id, '_stock_status', true );
 $_visibility     = get_post_meta( $post_id, '_visibility', true );
 $_enable_reviews = $post->comment_status;
 
-get_header();
+if ( ! $from_shortcode ) {
+    get_header();
+}
 ?>
 <div class="dokan-dashboard-wrap">
     <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
@@ -322,4 +326,10 @@ get_header();
     })(jQuery)
 </script>
 
-<?php get_footer(); ?>
+<?php
+wp_reset_postdata();
+
+if ( ! $from_shortcode ) {
+    get_footer();
+}
+?>
