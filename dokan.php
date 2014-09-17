@@ -105,8 +105,6 @@ class WeDevs_Dokan {
         $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
 
 
-        if ( !isset( $content_width ) )
-            $content_width = 640; /* pixels */
         //includes file
         $this->includes();
 
@@ -119,8 +117,6 @@ class WeDevs_Dokan {
 
         //for reviews ajax request
         $this->init_ajax();
-
-
     }
 
     /**
@@ -356,7 +352,6 @@ class WeDevs_Dokan {
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
         add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ), 99 );
-        // add_filter( 'woocommerce_locate_template', array( $this, 'dokan_woocommerce_locate_template' ), 10, 3 );
     }
 
     /**
@@ -473,42 +468,10 @@ class WeDevs_Dokan {
     }
 
     /**
-     * Load woocommerce located template
+     * Add body class for dokan-dashboard
      *
-     * @param  string $template
-     * @param  string $template_name
-     * @param  string $template_path
-     * @return string
+     * @param array $classes
      */
-    public function dokan_woocommerce_locate_template( $template, $template_name, $template_path ) {
-
-        $_template = $template;
-
-        if ( ! $template_path ) {
-            $template_path = WC()->template_url;
-        }
-
-        $plugin_path  = __DIR__ . '/woocommerce/';
-
-        $template = locate_template(
-            array(
-              $template_path . $template_name,
-              $template_name
-            )
-        );
-
-        if ( ! $template && file_exists( $plugin_path . $template_name ) ) {
-            $template = $plugin_path . $template_name;
-        }
-
-        if ( ! $template ) {
-            $template = $_template;
-        }
-
-        // Return what we found
-        return $template;
-    }
-
     function add_dashboard_template_class( $classes ) {
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
 
@@ -525,9 +488,11 @@ class WeDevs_Dokan {
 
 } // WeDevs_Dokan
 
-add_action( 'plugins_loaded', function() {
+function dokan_load_plugin() {
     $dokan = WeDevs_Dokan::init();
-}, 10 );
+}
+
+add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
 
 register_activation_hook( __FILE__, array( 'WeDevs_Dokan', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WeDevs_Dokan', 'deactivate' ) );
@@ -561,7 +526,7 @@ add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_a
 function dokan_admin_toolbar() {
     global $wp_admin_bar;
 
-    if ( !current_user_can( 'manage_options' ) ) {
+    if ( ! current_user_can( 'manage_options' ) ) {
         return;
     }
 
