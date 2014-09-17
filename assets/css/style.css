@@ -1761,6 +1761,7 @@ a.dokan-btn-danger .badge,
   background-color: #fff;
 }
 input[type="submit"].dokan-btn-lg,
+a.dokan-btn-lg,
 .dokan-btn-lg {
   padding: 10px 16px;
   font-size: 18px;
@@ -1768,6 +1769,7 @@ input[type="submit"].dokan-btn-lg,
   border-radius: 6px;
 }
 input[type="submit"].dokan-btn-sm,
+a.dokan-btn-sm,
 .dokan-btn-sm {
   padding: 5px 10px;
   font-size: 12px;
