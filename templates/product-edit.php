@@ -9,6 +9,7 @@ $seller_id = get_current_user_id();
 if ( isset( $_GET['product_id'] ) ) {
     $post_id = intval( $_GET['product_id'] );
     $post    = get_post( $post_id );
+    $product = get_product( $post_id );
 }
 
 // bail out if not author
