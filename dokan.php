@@ -248,6 +248,10 @@ class WeDevs_Dokan {
             return;
         }
 
+        if ( ! function_exists( 'WC' ) ) {
+            return;
+        }
+
         $localize_script = array(
             'ajaxurl'     => admin_url( 'admin-ajax.php' ),
             'nonce'       => wp_create_nonce( 'dokan_reviews' ),

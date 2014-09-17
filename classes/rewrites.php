@@ -21,6 +21,10 @@ class Dokan_Rewrites {
         add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 5 );
     }
 
+    public function is_woo_installed() {
+        return function_exists( 'WC' );
+    }
+
     /**
      * Sets the query vars on plugins_loaded
      *
@@ -110,6 +114,10 @@ class Dokan_Rewrites {
 
         $store_name = get_query_var( 'store' );
 
+        if ( ! $this->is_woo_installed() ) {
+            return $template;
+        }
+
         if ( !empty( $store_name ) ) {
             $store_user = get_user_by( 'slug', $store_name );
 
@@ -131,6 +139,10 @@ class Dokan_Rewrites {
 
     function product_edit_template( $template ) {
 
+        if ( ! $this->is_woo_installed() ) {
+            return $template;
+        }
+
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
             return dokan_get_template_part( 'product-edit' );
         }
@@ -139,6 +151,10 @@ class Dokan_Rewrites {
     }
 
     function store_review_template( $template ) {
+
+        if ( ! $this->is_woo_installed() ) {
+            return $template;
+        }
 
         if ( get_query_var( 'store_review' ) ) {
             return dokan_locate_template( 'store-reviews.php' );

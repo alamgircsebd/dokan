@@ -37,6 +37,10 @@ class Dokan_Template_Shortcodes {
     public function load_template_files() {
     	global $wp;
 
+        if ( ! function_exists( 'WC' ) ) {
+            return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
+        }
+
 	    if ( isset( $wp->query_vars['reports'] ) ) {
 	        return dokan_get_template_part( 'reports' );
 	    }
