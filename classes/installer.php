@@ -110,12 +110,6 @@ class Dokan_Installer {
                 'content'    => '[dokan-dashboard]'
             ),
             array(
-                'post_title' => __( 'My Orders', 'dokan' ),
-                'slug'       => 'my-orders',
-                'page_id'    => 'my_orders',
-                'content'    => ''
-            ),
-            array(
                 'post_title' => __( 'Store List', 'dokan' ),
                 'slug'       => 'store-listing',
                 'page_id'    => 'my_orders',
