@@ -59,6 +59,22 @@ class Dokan_Ajax {
 
 
         add_action( 'wp_ajax_nopriv_shop_url', array($this, 'shop_url_check') );
+
+        add_filter( 'woocommerce_cart_item_name', array($this, 'seller_info_checkout'), 10, 2 );
+    }
+
+    /**
+     * Injects seller name on checkout page
+     *
+     * @param array $item_data
+     * @param array $cart_item
+     * @return array
+     */
+    function seller_info_checkout( $item_data, $cart_item ) {
+        $info   = dokan_get_store_info( $cart_item['data']->post->post_author );
+        $seller = sprintf( __( '<strong>Seller:</strong> %s', 'dokan' ), $info['store_name'] );
+
+        return $item_data . '<br>' . $seller;
     }
 
     /**
