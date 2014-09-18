@@ -1,16 +1,4 @@
 <?php
-/**
- * Template Name: Dashboard
- */
-
-// dokan_redirect_login();
-// dokan_redirect_if_not_seller();
-
-// // get_header();
-
-// dokan_reports_scripts();
-// dokan_frontend_dashboard_scripts();
-
 $user_id        = get_current_user_id();
 $orders_counts  = dokan_count_orders( $user_id );
 $post_counts    = dokan_count_posts( 'product', $user_id );
@@ -30,14 +18,14 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
     <div class="dokan-dashboard-content">
 
         <?php
-        if ( !dokan_is_seller_enabled( $user_id ) ) {
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
             dokan_seller_not_enabled_notice();
         }
         ?>
 
         <article class="dashboard-content-area">
 
-            <div class="dokan-w5" style="margin-right:2%">
+            <div class="dokan-w6 dokan-dash-left">
                 <div class="dashboard-widget big-counter">
                     <ul class="list-inline">
                         <li>
@@ -74,50 +62,47 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                     );
                     ?>
 
-                    <div class="row">
-                        <div class="content-half-part">
-                            <ul class="list-unstyled list-count">
-                                <li>
-                                    <a href="<?php echo $orders_url; ?>">
-                                        <span class="title"><?php _e( 'Total', 'dokan' ); ?></span> <span class="count"><?php echo $orders_counts->total; ?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-completed' ), $orders_url ); ?>" style="color: <?php echo $order_data[0]['color']; ?>">
-                                        <span class="title"><?php _e( 'Completed', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-completed'}, 0 ); ?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-pending' ), $orders_url ); ?>" style="color: <?php echo $order_data[1]['color']; ?>">
-                                        <span class="title"><?php _e( 'Pending', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-pending'}, 0 );; ?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-processing' ), $orders_url ); ?>" style="color: <?php echo $order_data[2]['color']; ?>">
-                                        <span class="title"><?php _e( 'Processing', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-processing'}, 0 );; ?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-cancelled' ), $orders_url ); ?>" style="color: <?php echo $order_data[3]['color']; ?>">
-                                        <span class="title"><?php _e( 'Cancelled', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-cancelled'}, 0 ); ?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-refunded' ), $orders_url ); ?>" style="color: <?php echo $order_data[4]['color']; ?>">
-                                        <span class="title"><?php _e( 'Refunded', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-refunded'}, 0 ); ?></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-on-hold' ), $orders_url ); ?>" style="color: <?php echo $order_data[5]['color']; ?>">
-                                        <span class="title"><?php _e( 'On hold', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-on-hold'}, 0 ); ?></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="content-half-part">
-                            <canvas id="order-stats" style="width:180px !important; height:100px !important; margin-top:30px;"></canvas>
-                        </div>
-                        <div class="dokan-clearfix"></div>
+                    <div class="content-half-part">
+                        <ul class="list-unstyled list-count">
+                            <li>
+                                <a href="<?php echo $orders_url; ?>">
+                                    <span class="title"><?php _e( 'Total', 'dokan' ); ?></span> <span class="count"><?php echo $orders_counts->total; ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-completed' ), $orders_url ); ?>" style="color: <?php echo $order_data[0]['color']; ?>">
+                                    <span class="title"><?php _e( 'Completed', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-completed'}, 0 ); ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-pending' ), $orders_url ); ?>" style="color: <?php echo $order_data[1]['color']; ?>">
+                                    <span class="title"><?php _e( 'Pending', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-pending'}, 0 );; ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-processing' ), $orders_url ); ?>" style="color: <?php echo $order_data[2]['color']; ?>">
+                                    <span class="title"><?php _e( 'Processing', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-processing'}, 0 );; ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-cancelled' ), $orders_url ); ?>" style="color: <?php echo $order_data[3]['color']; ?>">
+                                    <span class="title"><?php _e( 'Cancelled', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-cancelled'}, 0 ); ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-refunded' ), $orders_url ); ?>" style="color: <?php echo $order_data[4]['color']; ?>">
+                                    <span class="title"><?php _e( 'Refunded', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-refunded'}, 0 ); ?></span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-on-hold' ), $orders_url ); ?>" style="color: <?php echo $order_data[5]['color']; ?>">
+                                    <span class="title"><?php _e( 'On hold', 'dokan' ); ?></span> <span class="count"><?php echo number_format_i18n( $orders_counts->{'wc-on-hold'}, 0 ); ?></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="content-half-part">
+                        <canvas id="order-stats"></canvas>
                     </div>
                 </div> <!-- .orders -->
 
@@ -150,7 +135,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
 
             </div> <!-- .col-md-6 -->
 
-            <div class="dokan-w6">
+            <div class="dokan-w6 dokan-dash-right">
                 <div class="dashboard-widget sells-graph">
                     <div class="widget-title"><i class="fa fa-credit-card"></i> <?php _e( 'Sales', 'dokan' ); ?></div>
 

@@ -4,9 +4,9 @@
     <div class="dokan-dashboard-content dokan-reports-content">
 
         <article class="dokan-reports-area">
-            <header class="entry-header">
+            <header class="dokan-dashboard-header">
                 <h1 class="entry-title"><?php _e( 'Reports', 'dokan' ) ?></h1>
-            </header><!-- .entry-header -->
+            </header><!-- .dokan-dashboard-header -->
 
             <div class="dokan-report-wrap">
                 <?php

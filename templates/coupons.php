@@ -9,7 +9,7 @@ $is_edit_page           = isset( $_GET['view'] ) && $_GET['view'] == 'add_coupon
     <div class="dokan-dashboard-content dokan-coupon-content">
 
         <article class="dashboard-coupons-area">
-            <header class="dokan-coupon-header dokan-clearfix">
+            <header class="dokan-dashboard-header dokan-clearfix">
                 <span class="left-header-content dokan-left">
                     <h1 class="entry-title">
                         <?php _e( 'Coupon', 'dokan' ); ?>

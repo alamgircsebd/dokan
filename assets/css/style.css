@@ -98,11 +98,22 @@
 .dokan-dashboard .dokan-dashboard-wrap:after {
   clear: both;
 }
+.dokan-dashboard .dokan-dashboard-wrap * {
+  box-sizing: border-box;
+}
+.dokan-dashboard header.dokan-dashboard-header {
+  margin: 0 0 15px 0;
+}
+.dokan-dashboard header.dokan-dashboard-header h1 {
+  margin: 0 0 10px 0;
+  border-bottom: 1px solid #ededed;
+  padding: 0 0 10px 0;
+}
 .dokan-dashboard .dokan-dashboard-content {
-  padding: 0 0 0 2%;
+  padding: 0 0 0 15px;
   overflow: hidden;
   margin-top: 0px;
-  width: 80%;
+  width: 83%;
   float: left;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:before,
@@ -112,6 +123,9 @@
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:after {
   clear: both;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-dash-left {
+  padding-right: 15px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget {
   background: #fff;
@@ -129,7 +143,7 @@
   font-weight: bold;
   font-size: 15px;
   border-bottom: 1px solid #EBEBEB;
-  padding-bottom: 6px;
+  padding: 6px 0;
   margin-bottom: 6px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget .widget-title i {
@@ -137,7 +151,7 @@
   padding-right: 5px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter {
-  padding: 15px 20px;
+  padding: 15px 0;
   text-align: center;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter li {
@@ -160,9 +174,15 @@
   overflow: hidden;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.orders .content-half-part {
-  width: 42%;
-  padding: 0px 10px;
+  width: 50%;
+  padding: 0;
   float: left;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.orders #order-stats {
+  width: 250px !important;
+  height: 100% !important;
+  margin-top: 15px;
+  margin-left: -10px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.products .pull-right a {
   -moz-border-radius: 0;
@@ -1066,8 +1086,7 @@
 .dokan-settings-content .dokan-settings-area .dokan-banner {
   border: 4px dashed #D8D8D8;
   height: 270px;
-  margin: 30px;
-  margin-left: 65px;
+  margin: 0 0 30px 0;
   max-width: 760px;
   text-align: center;
   overflow: hidden;
@@ -1758,6 +1777,97 @@ input[type="submit"].dokan-btn-danger .badge,
 a.dokan-btn-danger .badge,
 .dokan-btn-danger .badge {
   color: #d9534f;
+  background-color: #fff;
+}
+input[type="submit"].dokan-btn-info,
+a.dokan-btn-info,
+.dokan-btn-info {
+  color: #ffffff;
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+input[type="submit"].dokan-btn-info:hover,
+a.dokan-btn-info:hover,
+.dokan-btn-info:hover,
+input[type="submit"].dokan-btn-info:focus,
+a.dokan-btn-info:focus,
+.dokan-btn-info:focus,
+input[type="submit"].dokan-btn-info:active,
+a.dokan-btn-info:active,
+.dokan-btn-info:active,
+input[type="submit"].dokan-btn-info.active,
+a.dokan-btn-info.active,
+.dokan-btn-info.active,
+.open .dropdown-toggleinput[type="submit"].dokan-btn-info,
+.open .dropdown-togglea.dokan-btn-info,
+.open .dropdown-toggle.dokan-btn-info {
+  color: #ffffff;
+  background-color: #39b3d7;
+  border-color: #269abc;
+}
+input[type="submit"].dokan-btn-info:active,
+a.dokan-btn-info:active,
+.dokan-btn-info:active,
+input[type="submit"].dokan-btn-info.active,
+a.dokan-btn-info.active,
+.dokan-btn-info.active,
+.open .dropdown-toggleinput[type="submit"].dokan-btn-info,
+.open .dropdown-togglea.dokan-btn-info,
+.open .dropdown-toggle.dokan-btn-info {
+  background-image: none;
+}
+input[type="submit"].dokan-btn-info.disabled,
+a.dokan-btn-info.disabled,
+.dokan-btn-info.disabled,
+input[type="submit"].dokan-btn-info[disabled],
+a.dokan-btn-info[disabled],
+.dokan-btn-info[disabled],
+fieldset[disabled] input[type="submit"].dokan-btn-info,
+fieldset[disabled] a.dokan-btn-info,
+fieldset[disabled] .dokan-btn-info,
+input[type="submit"].dokan-btn-info.disabled:hover,
+a.dokan-btn-info.disabled:hover,
+.dokan-btn-info.disabled:hover,
+input[type="submit"].dokan-btn-info[disabled]:hover,
+a.dokan-btn-info[disabled]:hover,
+.dokan-btn-info[disabled]:hover,
+fieldset[disabled] input[type="submit"].dokan-btn-info:hover,
+fieldset[disabled] a.dokan-btn-info:hover,
+fieldset[disabled] .dokan-btn-info:hover,
+input[type="submit"].dokan-btn-info.disabled:focus,
+a.dokan-btn-info.disabled:focus,
+.dokan-btn-info.disabled:focus,
+input[type="submit"].dokan-btn-info[disabled]:focus,
+a.dokan-btn-info[disabled]:focus,
+.dokan-btn-info[disabled]:focus,
+fieldset[disabled] input[type="submit"].dokan-btn-info:focus,
+fieldset[disabled] a.dokan-btn-info:focus,
+fieldset[disabled] .dokan-btn-info:focus,
+input[type="submit"].dokan-btn-info.disabled:active,
+a.dokan-btn-info.disabled:active,
+.dokan-btn-info.disabled:active,
+input[type="submit"].dokan-btn-info[disabled]:active,
+a.dokan-btn-info[disabled]:active,
+.dokan-btn-info[disabled]:active,
+fieldset[disabled] input[type="submit"].dokan-btn-info:active,
+fieldset[disabled] a.dokan-btn-info:active,
+fieldset[disabled] .dokan-btn-info:active,
+input[type="submit"].dokan-btn-info.disabled.active,
+a.dokan-btn-info.disabled.active,
+.dokan-btn-info.disabled.active,
+input[type="submit"].dokan-btn-info[disabled].active,
+a.dokan-btn-info[disabled].active,
+.dokan-btn-info[disabled].active,
+fieldset[disabled] input[type="submit"].dokan-btn-info.active,
+fieldset[disabled] a.dokan-btn-info.active,
+fieldset[disabled] .dokan-btn-info.active {
+  background-color: #5bc0de;
+  border-color: #46b8da;
+}
+input[type="submit"].dokan-btn-info .badge,
+a.dokan-btn-info .badge,
+.dokan-btn-info .badge {
+  color: #5bc0de;
   background-color: #fff;
 }
 input[type="submit"].dokan-btn-lg,

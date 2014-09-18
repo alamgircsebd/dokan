@@ -15,12 +15,12 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
     <div class="dokan-dashboard-content dokan-settings-content">
         <article class="dokan-settings-area">
-            <header class="entry-header">
+            <header class="dokan-dashboard-header">
                 <h1 class="entry-title">
                     <?php _e( 'Settings', 'dokan' );?>
                     <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
                 </h1>
-            </header><!-- .entry-header -->
+            </header><!-- .dokan-dashboard-header -->
 
             <?php if ( is_wp_error( $validate ) ) {
                 $messages = $validate->get_error_messages();
