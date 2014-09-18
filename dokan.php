@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Dokan - Create multi-vendor marketplace in minutes!
+Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: http://wedevs.com/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
 Version: 1.0
