@@ -18,7 +18,7 @@ class Dokan_Rewrites {
 
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
-        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 5 );
+        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 9 );
     }
 
     public function is_woo_installed() {
