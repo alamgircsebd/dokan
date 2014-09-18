@@ -8,62 +8,6 @@
  */
 
 
-if ( ! function_exists( 'dokan_content_nav' ) ) :
-
-/**
- * Display navigation to next/previous pages when applicable
- */
-function dokan_content_nav( $nav_id, $query = null ) {
-    global $wp_query, $post;
-
-    if ( $query ) {
-        $wp_query = $query;
-    }
-
-    // Don't print empty markup on single pages if there's nowhere to navigate.
-    if ( is_single() ) {
-        $previous = ( is_attachment() ) ? get_post( $post->post_parent ) : get_adjacent_post( false, '', true );
-        $next = get_adjacent_post( false, '', false );
-
-        if ( !$next && !$previous )
-            return;
-    }
-
-    // Don't print empty markup in archives if there's only one page.
-    if ( $wp_query->max_num_pages < 2 && ( is_home() || is_archive() || is_search() ) )
-        return;
-
-    $nav_class = 'site-navigation paging-navigation';
-    if ( is_single() )
-        $nav_class = 'site-navigation post-navigation';
-    ?>
-    <nav role="navigation" id="<?php echo $nav_id; ?>" class="<?php echo $nav_class; ?>">
-        <h1 class="assistive-text"><?php _e( 'Post navigation', 'dokan' ); ?></h1>
-
-        <ul class="pager">
-        <?php if ( is_single() ) : // navigation links for single posts  ?>
-
-            <li class="previous">
-                <?php previous_post_link( '%link', _x( '&larr;', 'Previous post link', 'dokan' ) . ' %title' ); ?>
-            </li>
-            <li class="next">
-                <?php next_post_link( '%link', '%title ' . _x( '&rarr;', 'Next post link', 'dokan' ) ); ?>
-            </li>
-
-        <?php endif; ?>
-        </ul>
-
-
-        <?php if ( $wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() ) ) : // navigation links for home, archive, and search pages ?>
-            <?php dokan_page_navi( '', '', $wp_query ); ?>
-        <?php endif; ?>
-
-    </nav><!-- #<?php echo $nav_id; ?> -->
-    <?php
-}
-
-endif;
-
 
 if ( ! function_exists( 'dokan_page_navi' ) ) :
 
