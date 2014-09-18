@@ -444,7 +444,7 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
         'title' => sprintf( __( '%s worth of coupons used', 'dokan' ), '<strong>' . wc_price( $total_coupons ) . '</strong>' ),
     );
     ?>
-    <div id="poststuff" class="dokan-reports-wrap row">
+    <div id="poststuff" class="dokan-reports-wrap">
         <div class="dokan-reports-sidebar report-left dokan-left">
             <ul class="chart-legend">
                 <?php foreach ($legend as $item) {
