@@ -99,11 +99,10 @@ class WeDevs_Dokan {
      * @uses add_action()
      */
     public function __construct() {
-
         global $wpdb;
-        $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
-        $wpdb->dokan_orders = $wpdb->prefix . 'dokan_orders';
 
+        $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
+        $wpdb->dokan_orders   = $wpdb->prefix . 'dokan_orders';
 
         //includes file
         $this->includes();
