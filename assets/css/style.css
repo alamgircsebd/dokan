@@ -2559,4 +2559,73 @@ textarea.dokan-form-control {
 .dokan-panel-default > .dokan-panel-footer + .dokan-panel-collapse > .dokan-panel-body {
   border-bottom-color: #dddddd;
 }
+/*--------------------------------------------------
+:: Responsive Styles
+-------------------------------------------------- */
+@media (max-width: 767px) {
+  .dokan-dashboard .dokan-dash-sidebar,
+  .dokan-dashboard .dokan-dashboard-content {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li {
+    display: inline-block;
+    border-right: 1px solid #454545;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.active:after {
+    content: '';
+    display: none;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a {
+    padding: 12px 24px;
+  }
+  .dokan-dashboard .dokan-dashboard-content {
+    padding-left: 0;
+  }
+  .dokan-single-store .profile-frame .profile-info-box {
+    width: 60%;
+  }
+}
+@media (max-width: 430px) {
+  .dokan-dashboard .dokan-dash-sidebar,
+  .dokan-dashboard .dokan-dashboard-content {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:before,
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:after {
+    content: " ";
+    display: table;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:after {
+    clear: both;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li {
+    float: left;
+    width: 50%;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a {
+    padding: 12px 18px;
+  }
+  .dokan-dashboard .dokan-product-listing .dokan-product-listing-area .product-listing-top ul.dokan-listing-filter {
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-right,
+  .dokan-dashboard .dokan-left {
+    float: none !important;
+  }
+  .dokan-dashboard .dokan-w6,
+  .dokan-dashboard .dokan-w8,
+  .dokan-dashboard .dokan-w4 {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-reports-content .dokan-reports-area .dokan-reports-wrap .report-left,
+  .dokan-dashboard .dokan-reports-content .dokan-reports-area .dokan-reports-wrap .report-right {
+    width: 100%;
+  }
+  .dokan-single-store .profile-frame .profile-info-box {
+    width: 100%;
+  }
+}
 /*# sourceMappingURL=style.css.map */
