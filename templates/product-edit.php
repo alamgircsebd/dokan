@@ -53,10 +53,22 @@ if ( ! $from_shortcode ) {
     <div class="dokan-dashboard-content dokan-product-edit">
         <div class="dokan-product-edit-area">
 
-            <?php if ( $post->post_status == 'publish' ) { ?>
-                <p>&nbsp;</p>
-                <a href="<?php echo get_permalink( $post->ID ); ?>" class="dokan-btn dokan-btn-sm dokan-btn-default" target="_blank"><i class="fa fa-external-link"></i> <?php _e( 'View Product', 'dokan' ); ?></a>
-            <?php } ?>
+            <header class="dokan-pro-edit-breadcrumb">
+                <h1 class="dokan-header-crumb">
+                    <span class="dokan-breadcrumb"><a href="<?php echo dokan_get_navigation_url( 'products' ) ?>"><?php _e( 'Products', 'dokan' ); ?></a> &rarr; </span>
+                    <?php echo $post->post_title; ?>
+
+                    <?php if ( $_visibility == 'hidden' ) { ?>
+                        <span class="dokan-label dokan-label-default"><?php _e( 'Hidden', 'dokan' ); ?></span>
+                    <?php } ?>
+
+                    <?php if ( $post->post_status == 'publish' ) { ?>
+                        <span class="dokan-right">
+                            <a class="view-product dokan-btn dokan-btn-sm" href="<?php echo get_permalink( $post->ID ); ?>" target="_blank"><?php _e( 'View Product', 'dokan' ); ?></a>
+                        </span>
+                    <?php } ?>
+                </h1>
+            </header>
 
             <form class="dokan-form-container" role="form" method="post">
 

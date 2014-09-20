@@ -325,6 +325,28 @@
 .dokan-new-product-area {
   padding: 0px 15px;
 }
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb {
+  display: block;
+  border-bottom: 1px solid #ededed;
+  padding: 0 0 10px 0;
+  margin: 0 0 15px 0;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 {
+  font-size: 18px;
+  line-height: 1.42;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 .dokan-breadcrumb,
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 .dokan-breadcrumb a {
+  color: #aaa;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 .dokan-label {
+  font-size: 11px;
+  font-weight: normal;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 a.view-product {
+  background-color: #FAFAFA;
+  border-color: #EBEBEB;
+}
 .product-edit-container {
   font-size: 13px;
 }
