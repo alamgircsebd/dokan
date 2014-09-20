@@ -1404,6 +1404,30 @@ function dokan_get_featured_products( $per_page = 9) {
     return $featured_query;
 }
 
+/**
+ * Get latest products
+ *
+ * Shown on homepage
+ *
+ * @param int $per_page
+ * @return \WP_Query
+ */
+function dokan_get_latest_products( $per_page = 9) {
+    $featured_query = new WP_Query( apply_filters( 'dokan_get_featured_products', array(
+        'posts_per_page'      => $per_page,
+        'post_type'           => 'product',
+        'ignore_sticky_posts' => 1,
+        'meta_query'          => array(
+            array(
+                'key'     => '_visibility',
+                'value'   => array('catalog', 'visible'),
+                'compare' => 'IN'
+            )
+    ) ) ) );
+
+    return $featured_query;
+}
+
 
 
 /**
