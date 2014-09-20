@@ -14,7 +14,7 @@ class Dokan_Best_Seller_Widget extends WP_Widget {
      **/
     public function __construct() {
         $widget_ops = array( 'classname' => 'dokan-best-seller-widget', 'description' => 'Dokan best seller widget' );
-        $this->WP_Widget( 'dokan-best-seller-widget', 'Dokan Best Seller', $widget_ops );
+        $this->WP_Widget( 'dokan-best-seller-widget', 'Dokan: Best Sellers', $widget_ops );
     }
 
     /**

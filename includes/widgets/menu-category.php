@@ -67,8 +67,8 @@ class Dokan_Category_Widget extends WP_Widget {
      * @return void
      **/
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-category-menu', 'description' => 'Dokan product category menu' );
-        $this->WP_Widget( 'dokan-category-menu', 'Dokan Product Category', $widget_ops );
+        $widget_ops = array( 'classname' => 'dokan-category-menu', 'description' => __( 'Dokan product category menu', 'dokan' ) );
+        $this->WP_Widget( 'dokan-category-menu', 'Dokan: Product Category', $widget_ops );
     }
 
     /**

@@ -289,9 +289,9 @@ if ( ! function_exists( 'dokan_store_category_menu' ) ) :
  * @param  int $seller_id
  * @return void
  */
-function dokan_store_category_menu( $seller_id ) { ?>
+function dokan_store_category_menu( $seller_id, $title = '' ) { ?>
     <aside class="widget dokan-category-menu">
-        <h3 class="widget-title"><?php _e( 'Store Product Category', 'dokan' ); ?></h3>
+        <h3 class="widget-title"><?php echo $title; ?></h3>
         <div id="cat-drop-stack">
             <?php
             global $wpdb;

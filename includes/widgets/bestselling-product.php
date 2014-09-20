@@ -1,17 +1,16 @@
 <?php
 
 
-class Dokan_BestSelling_Widget extends WP_Widget {
+class Dokan_Best_Selling_Widget extends WP_Widget {
 
     /**
-     * Register widget with WordPress.
-     */
-    function __construct() {
-        parent::__construct(
-            'Dokan_BestSellig', // Base ID
-            __( 'Dokan Best Selling Widget', 'dokan'), // Name
-            array( 'description' => __( 'A Widget for displaying Best Selling Products for dokan', 'dokan' ), 'classname' => 'woocommerce widget_products' ) // Args
-        );
+     * Constructor
+     *
+     * @return void
+     **/
+    public function __construct() {
+        $widget_ops = array( 'classname' => 'woocommerce widget_products dokan-best-selling', 'description' => 'A Widget for displaying Best Selling Products for dokan' );
+        $this->WP_Widget( 'dokan-best-selling-widget', 'Dokan: Best Selling Widget', $widget_ops );
     }
 
     /**
@@ -26,8 +25,8 @@ class Dokan_BestSelling_Widget extends WP_Widget {
         $title = apply_filters( 'widget_title', $instance['title'] );
         extract( $instance );
 
-        $r = dokan_get_best_selling_products( $no_of_product ); 
-        
+        $r = dokan_get_best_selling_products( $no_of_product );
+
         echo $args['before_widget'];
         if ( ! empty( $title ) ) {
             echo $args['before_title'] . $title . $args['after_title'];
@@ -62,22 +61,22 @@ class Dokan_BestSelling_Widget extends WP_Widget {
      */
     public function form( $instance ) {
         if ( isset( $instance[ 'title' ] ) ) {
-            $title = esc_attr( $instance[ 'title' ] );
+            $title         = esc_attr( $instance[ 'title' ] );
             $no_of_product = esc_attr( intval( $instance[ 'no_of_product' ] ) );
-            $show_rating = esc_attr( $instance['show_rating'] );
+            $show_rating   = esc_attr( $instance['show_rating'] );
         }  else {
             $title = __( 'Best Selling Product', 'dokan' );
             $no_of_product = '8';
-            $show_rating = '0';
+            $show_rating   = '0';
         }
 
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'dokan' ); ?></label> 
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id( 'no_of_product' ); ?>"><?php _e( 'No of Product:', 'dokan' ); ?></label> 
+            <label for="<?php echo $this->get_field_id( 'no_of_product' ); ?>"><?php _e( 'No of Product:', 'dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'no_of_product' ); ?>" name="<?php echo $this->get_field_name( 'no_of_product' ); ?>" type="text" value="<?php echo ( $no_of_product == '-1' ) ? '' : $no_of_product; ?>">
         </p>
         <p>
@@ -85,7 +84,7 @@ class Dokan_BestSelling_Widget extends WP_Widget {
             <label for="<?php echo $this->get_field_id( 'show_rating' ); ?>"><?php _e( 'Show Product Rating', 'dokan' ); ?></label>
         </p>
 
-        <?php 
+        <?php
     }
 
     /**
@@ -108,4 +107,4 @@ class Dokan_BestSelling_Widget extends WP_Widget {
 
 } // class Dokan best selling product widget
 
-add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_BestSelling_Widget' );" ) );
+add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_Best_Selling_Widget' );" ) );
