@@ -843,14 +843,6 @@ jQuery(function($) {
 
 })(jQuery);
 jQuery(function($) {
-    // $('button.single_add_to_cart_button').removeClass('button').addClass('btn btn-danger');
-    // $('a.button').removeClass('button').addClass('btn btn-danger');
-
-    $('ul.dropdown-menu li.dropdown').hover(function() {
-        $(this).addClass('open');
-    }, function() {
-        $(this).removeClass('open');
-    });
 
     $('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
@@ -862,28 +854,10 @@ jQuery(function($) {
     var dashboardMenu = $('ul.dokan-dashboard-menu'),
         contentArea = $('.dokan-dashboard-content');
 
-    if ( contentArea.height() > dashboardMenu.height() ) {
-        dashboardMenu.css({ height: contentArea.height() });
-    }
-
-    // cat drop stack, disable parent anchors if has children
-    if ( $(window).width() < 767) {
-        $('#cat-drop-stack li.has-children').on('click', '> a', function(e) {
-            e.preventDefault();
-
-            $(this).siblings('.sub-category').slideToggle('fast');
-        });
-    } else {
-        $('#cat-drop-stack li.has-children > .sub-category').each(function(index, el) {
-            var sub_cat = $(el);
-            var length = sub_cat.find('.sub-block').length;
-
-            if ( length == 3 ) {
-                sub_cat.css('width', '260%');
-            } else if ( length > 3) {
-                sub_cat.css('width', '340%');
-            }
-        });
+    if ( $(window).width() > 767) {
+        if ( contentArea.height() > dashboardMenu.height() ) {
+            dashboardMenu.css({ height: contentArea.height() });
+        }
     }
 
     function showTooltip(x, y, contents) {
@@ -937,18 +911,6 @@ jQuery(function($) {
             jQuery(".chart-tooltip").remove();
             prev_data_index = null;
         }
-    });
-
-    $('body').on('added_to_cart', function(event, data) {
-        $('i.fa-shopping-cart').removeClass('fa-spin');
-
-        $('.dokan-cart-amount-top > .amount').fadeOut( 'fast', function(){
-            $('.dokan-cart-amount-top > .amount').html(data.amount).fadeIn('fast');
-        });
-    });
-
-    $('body').on('adding_to_cart', function(e, button) {
-        $(button).children('i').addClass('fa-spin');
     });
 
 });

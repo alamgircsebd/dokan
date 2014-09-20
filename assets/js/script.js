@@ -6,6 +6,16 @@ jQuery(function($) {
 
     $('.tips').tooltip();
 
+    // set dashboard menu height
+    var dashboardMenu = $('ul.dokan-dashboard-menu'),
+        contentArea = $('.dokan-dashboard-content');
+
+    if ( $(window).width() > 767) {
+        if ( contentArea.height() > dashboardMenu.height() ) {
+            dashboardMenu.css({ height: contentArea.height() });
+        }
+    }
+
     function showTooltip(x, y, contents) {
         jQuery('<div class="chart-tooltip">' + contents + '</div>').css({
             top: y - 16,
