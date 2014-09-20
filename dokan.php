@@ -296,7 +296,8 @@ class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-style' );
             }
 
-            if ( DOKAN_LOAD_SCRIPTS ) {
+
+            if ( is_account_page() && DOKAN_LOAD_SCRIPTS ) {
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
