@@ -53,6 +53,11 @@ if ( ! $from_shortcode ) {
     <div class="dokan-dashboard-content dokan-product-edit">
         <div class="dokan-product-edit-area">
 
+            <?php if ( $post->post_status == 'publish' ) { ?>
+                <p>&nbsp;</p>
+                <a href="<?php echo get_permalink( $post->ID ); ?>" class="dokan-btn dokan-btn-sm dokan-btn-default" target="_blank"><i class="fa fa-external-link"></i> <?php _e( 'View Product', 'dokan' ); ?></a>
+            <?php } ?>
+
             <form class="dokan-form-container" role="form" method="post">
 
                 <div class="product-edit-container dokan-clearfix">
