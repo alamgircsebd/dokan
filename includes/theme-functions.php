@@ -56,6 +56,19 @@ function dokan_is_product_author( $product_id = 0 ) {
     return false;
 }
 
+/**
+ * Check if it's a store page
+ *
+ * @return boolean
+ */
+function dokan_is_store_page() {
+    if ( get_query_var( 'store' ) ) {
+        return true;
+    }
+
+    return false;
+}
+
 
 /**
  * Redirect to login page if not already logged in
