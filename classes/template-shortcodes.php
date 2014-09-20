@@ -310,7 +310,7 @@ class Dokan_Template_Shortcodes {
 
                                 </address>
 
-                                <p><a class="dokan-btn dokan-btn-orange" href="<?php echo $store_url; ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></p>
+                                <p><a class="dokan-btn dokan-btn-theme" href="<?php echo $store_url; ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></p>
 
                             </div> <!-- .caption -->
                         </div> <!-- .thumbnail -->
