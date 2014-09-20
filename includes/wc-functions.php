@@ -1601,3 +1601,91 @@ function dokan_get_readable_seller_rating( $seller_id ) {
 
     <?php
 }
+
+/**
+ * Adds default dokan store settings when a new seller registers
+ *
+ * @param int $user_id
+ * @param array $data
+ * @return void
+ */
+function dokan_user_update_to_seller( $user, $data ) {
+    if ( ! dokan_is_user_customer( $user->ID ) ) {
+        return;
+    }
+
+    $user_id = $user->ID;
+
+    // Remove role
+    $user->remove_role( 'customer' );
+
+    // Add role
+    $user->add_role( 'seller' );
+
+    update_user_meta( $user_id, 'first_name', $data['fname'] );
+    update_user_meta( $user_id, 'last_name', $data['lname'] );
+
+    if ( dokan_get_option( 'new_seller_enable_selling', 'dokan_selling', 'on' ) == 'off' ) {
+        update_user_meta( $user_id, 'dokan_enable_selling', 'no' );
+    } else {
+        update_user_meta( $user_id, 'dokan_enable_selling', 'yes' );
+    }
+
+    $dokan_settings = array(
+        'store_name'     => $data['shopname'],
+        'social'         => array(),
+        'payment'        => array(),
+        'phone'          => $data['phone'],
+        'show_email'     => 'no',
+        'address'        => $data['address'],
+        'location'       => '',
+        'find_address'   => '',
+        'dokan_category' => '',
+        'banner'         => 0,
+    );
+
+    update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
+
+
+    $publishing = dokan_get_option( 'product_status', 'dokan_selling' );
+    $percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );
+
+    update_user_meta( $user_id, 'dokan_publishing', $publishing );
+    update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
+
+    Dokan_Email::init()->new_seller_registered_mail( $user_id );
+}
+
+/**
+ * Handles the become a seller form
+ *
+ * @return void
+ */
+function dokan_become_seller_handler () {
+    if ( isset( $_POST['dokan_migration'] ) && wp_verify_nonce( $_POST['dokan_nonce'], 'account_migration' ) ) {
+        $user   = get_userdata( get_current_user_id() );
+        $errors = array();
+
+        $checks = array(
+            'fname'    => __( 'Enter your first name', 'dokan' ),
+            'lname'    => __( 'Enter your last name', 'dokan' ),
+            'shopname' => __( 'Enter your shop name', 'dokan' ),
+            'address'  => __( 'Enter your shop address', 'dokan' ),
+            'phone'    => __( 'Enter your phone number', 'dokan' ),
+        );
+
+        foreach ($checks as $field => $error) {
+            if ( empty( $_POST[$field]) ) {
+                $errors[] = $error;
+            }
+        }
+
+        if ( ! $errors ) {
+            dokan_user_update_to_seller( $user, $_POST );
+
+            wp_redirect( dokan_get_page_url( 'myaccount', 'dokan' ) );
+        }
+    }
+}
+
+add_action( 'template_redirect', 'dokan_become_seller_handler' );

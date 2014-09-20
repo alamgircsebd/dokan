@@ -11,7 +11,21 @@ require_once dirname(__FILE__) . '/withdraw-functions.php';
  * @return boolean
  */
 function dokan_is_user_seller( $user_id ) {
-    if ( !user_can( $user_id, 'dokandar' ) ) {
+    if ( ! user_can( $user_id, 'dokandar' ) ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Check if a user is customer
+ *
+ * @param int $user_id
+ * @return boolean
+ */
+function dokan_is_user_customer( $user_id ) {
+    if ( ! user_can( $user_id, 'customer' ) ) {
         return false;
     }
 
