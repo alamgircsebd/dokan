@@ -293,6 +293,8 @@ class Dokan_Admin_Settings {
                         }
                     }
 
+                    flush_rewrite_rules();
+
                     wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
                     exit;
 
