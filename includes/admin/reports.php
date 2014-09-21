@@ -1,35 +1,49 @@
 <div class="wrap">
     <?php
-    $tab = isset( $_GET['tab'] ) ?  $_GET['tab'] : 'report';
-    $type = isset( $_GET['type'] ) ?  $_GET['type'] : 'day'; ?>
+    $tab  = isset( $_GET['tab'] ) ?  $_GET['tab'] : 'report';
+    $type = isset( $_GET['type'] ) ?  $_GET['type'] : 'day';
+
+    $all_tabs = apply_filters( 'dokan_admin_report_tabs', array(
+        'report' => __( 'Reports', 'dokan' ),
+        'logs'   => __( 'All Logs', 'dokan' ),
+    ) );
+    ?>
 
     <h2 class="nav-tab-wrapper woo-nav-tab-wrapper">
-        <a href="admin.php?page=dokan-reports&amp;tab=report" class="nav-tab<?php if ( $tab == 'report' ) echo ' nav-tab-active'; ?>"><?php _e( 'Reports', 'dokan' ); ?></a>
-        <a href="admin.php?page=dokan-reports&amp;tab=logs" class="nav-tab<?php if ( $tab == 'logs' ) echo ' nav-tab-active'; ?>"><?php _e( 'All Logs', 'dokan' ); ?></a>
+        <?php foreach ($all_tabs as $tab_id => $label) { ?>
+            <a href="admin.php?page=dokan-reports&amp;tab=<?php echo esc_attr( $tab_id ); ?>" class="nav-tab<?php if ( $tab == $tab_id ) echo ' nav-tab-active'; ?>"><?php echo $label; ?></a>
+        <?php } ?>
     </h2>
 
-    <?php if ( $tab == 'report' ) { ?>
-        <ul class="subsubsub" style="float: none;">
-            <li>
-                <a href="admin.php?page=dokan-reports&amp;tab=report&amp;type=day" <?php if ( $type == 'day' ) echo 'class="current"'; ?>>
-                    <?php _e( 'By Day', 'dokan' ); ?>
-                </a> |
-            </li>
-            <li>
-                <a href="admin.php?page=dokan-reports&amp;tab=report&amp;type=month" <?php if ( $type == 'month' ) echo 'class="current"'; ?>>
-                    <?php _e( 'By Month', 'dokan' ); ?>
-                </a>
-            </li>
+    <?php if ( $tab == 'report' ) {
+        $report_sub_head = apply_filters( 'dokan_admin_report_sub', array(
+            'day'   => __( 'By Day', 'dokan' ),
+            'month' => __( 'By Month', 'dokan' )
+        ) );
+        $head_count = count( $report_sub_head );
+        $loop_count = 1;
+        ?>
+        <ul class="subsubsub dokan-report-sub" style="float: none;">
+            <?php foreach ($report_sub_head as $sub_id => $sub_label) { ?>
+                <li>
+                    <a href="admin.php?page=dokan-reports&amp;tab=report&amp;type=<?php echo esc_attr( $sub_id ); ?>" <?php if ( $type == $sub_id ) echo 'class="current"'; ?>><?php echo $sub_label; ?></a>
+
+                    <?php
+                    echo ( $loop_count != $head_count ) ? '|' : '';
+                    $loop_count++;
+                    ?>
+                </li>
+            <?php } ?>
         </ul>
 
         <?php
-        $start_date = date( 'Y-m-01', current_time('timestamp') );
-        $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+        $start_date   = date( 'Y-m-01', current_time('timestamp') );
+        $end_date     = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
         $current_year = $selected_year = date('Y');
 
         if ( isset( $_POST['dokan_report_filter_date'] ) ) {
             $start_date = $_POST['start_date'];
-            $end_date = $_POST['end_date'];
+            $end_date   = $_POST['end_date'];
         }
 
         if ( isset( $_POST['dokan_report_filter_year'] ) ) {
@@ -62,7 +76,11 @@
 
                 <input type="submit" name="dokan_report_filter_year" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
             </form>
-        <?php } ?>
+        <?php
+        } else {
+            do_action( 'dokan_report_sub_' . $type, $tab, $start_date, $end_date, $selected_year, $current_year );
+        }
+        ?>
 
         <div class="admin-report-container">
             <?php
@@ -76,9 +94,9 @@
 
             if ( $report_data ) {
                 foreach ($report_data as $row) {
-                    $order_total += $row->order_total;
+                    $order_total   += $row->order_total;
                     $earning_total += $row->earning;
-                    $total_orders += $row->total_orders;
+                    $total_orders  += $row->total_orders;
                 }
             }
             ?>
@@ -110,7 +128,7 @@
         </div>
 
 
-    <?php } else { ?>
+    <?php } else if ( $tab == 'logs' ) { ?>
 
         <table class="widefat withdraw-table" style="margin-top: 15px;">
             <thead>
@@ -192,6 +210,8 @@
         } ?>
         </div>
 
+    <?php } else { ?>
+        <?php do_action( 'dokan_admin_report_tab_' . $tab ); ?>
     <?php } ?>
 
     <script type="text/javascript">
