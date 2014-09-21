@@ -36,7 +36,6 @@
             $selected_year = $_POST['report_year'];
         }
 
-        $active_countrys = array();//dokan_b2b_get_active_country();
 
         if ( $type == 'day' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
@@ -51,23 +50,7 @@
                     <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
                 </span>
             </form>
-            <form method="post" class="form-inline report-filter" action="">
-                <span class="form-group">
-                    <label for="to"><?php _e( 'Country', 'dokan' ); ?></label>
-                    <select name="country">
-                        <option value="-1"><?php _e( '-Select-', 'dokan-b2b' ); ?></option> 
-                        <?php
-                        foreach ( $active_countrys as $id => $active_country ) {
-                            ?>
-                            <option value="<?php echo $id; ?>"><?php echo $active_country; ?></option> 
-                            <?php
-                        }
-                        ?>
-                    </select>
 
-                    <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
-                </span>
-            </form>
         <?php } elseif ( $type == 'month' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
@@ -166,7 +149,7 @@
 
                 $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
                         LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
-                        WHERE seller_id != 0 AND p.post_status = 'publish' $seller_where
+                        WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where
                         ORDER BY do.order_id DESC LIMIT $offset, $limit";
                 $all_logs = $wpdb->get_results( $sql );
 
@@ -197,12 +180,12 @@
             $count = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}dokan_orders WHERE $count_where");
             $num_of_pages = ceil( $count / $limit );
             $page_links = paginate_links( array(
-                'base' => add_query_arg( 'paged', '%#%' ),
-                'format' => '',
+                'base'      => add_query_arg( 'paged', '%#%' ),
+                'format'    => '',
                 'prev_text' => __( '&laquo;', 'aag' ),
                 'next_text' => __( '&raquo;', 'aag' ),
-                'total' => $num_of_pages,
-                'current' => $pagenum
+                'total'     => $num_of_pages,
+                'current'   => $pagenum
             ) );
 
             if ( $page_links ) {

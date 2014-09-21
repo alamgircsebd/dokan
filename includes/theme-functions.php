@@ -261,7 +261,7 @@ function dokan_author_total_sales( $seller_id ) {
                 FROM {$wpdb->prefix}woocommerce_order_items AS oi
                 LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS oim ON oim.order_item_id = oi.order_item_id
                 LEFT JOIN {$wpdb->prefix}dokan_orders do ON oi.order_id = do.order_id
-                WHERE do.seller_id = %d AND oim.meta_key = '_line_total' AND do.order_status IN ('completed', 'processing', 'on-hold')";
+                WHERE do.seller_id = %d AND oim.meta_key = '_line_total' AND do.order_status IN ('wc-completed', 'wc-processing', 'wc-on-hold')";
 
         $count = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
         $earnings = $count->earnings;
