@@ -18,6 +18,8 @@ class Dokan_Admin_Settings {
 
         add_action( 'admin_init', array($this, 'do_updates') );
         add_action( 'admin_init', array($this, 'admin_init') );
+        add_action( 'admin_init', array($this, 'tools_page_handler') );
+
         add_action( 'admin_menu', array($this, 'admin_menu') );
 
         add_action( 'admin_notices', array($this, 'update_notice' ) );
@@ -67,6 +69,7 @@ class Dokan_Admin_Settings {
 
         do_action( 'dokan_admin_menu' );
 
+        add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array($this, 'tools_page') );
         add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
         add_submenu_page( 'dokan', __( 'Add Ons', 'dokan' ), __( 'Add-ons', 'dokan' ), $capability, 'dokan-addons', array($this, 'addon_page') );
 
@@ -245,6 +248,68 @@ class Dokan_Admin_Settings {
 
     function addon_page() {
         include dirname(__FILE__) . '/add-on.php';
+    }
+
+    function tools_page() {
+        include dirname(__FILE__) . '/tools.php';
+    }
+
+    function tools_page_handler() {
+        if ( isset( $_GET['dokan_action'] ) && current_user_can( 'manage_options' ) ) {
+            $action = $_GET['dokan_action'];
+
+            check_admin_referer( 'dokan-tools-action' );
+
+            switch ($action) {
+                case 'dokan_install_pages':
+
+                    $pages = array(
+                        array(
+                            'post_title' => __( 'Dashboard', 'dokan' ),
+                            'slug'       => 'dashboard',
+                            'page_id'    => 'dashboard',
+                            'content'    => '[dokan-dashboard]'
+                        ),
+                        array(
+                            'post_title' => __( 'Store List', 'dokan' ),
+                            'slug'       => 'store-listing',
+                            'page_id'    => 'my_orders',
+                            'content'    => '[dokan-stores]'
+                        ),
+                    );
+
+                    foreach ($pages as $page) {
+                        $page_id = wp_insert_post( array(
+                            'post_title'     => $page['post_title'],
+                            'post_name'      => $page['slug'],
+                            'post_content'   => $page['content'],
+                            'post_status'    => 'publish',
+                            'post_type'      => 'page',
+                            'comment_status' => 'closed'
+                        ) );
+
+                        if ( $page['slug'] == 'dashboard' ) {
+                            update_option( 'dokan_pages', array( 'dashboard' => $page_id ) );
+                        }
+                    }
+
+                    wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
+                    exit;
+
+                    break;
+
+                case 'regen_sync_table':
+                    dokan_generate_sync_table();
+
+                    wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=regenerated' ) );
+                    exit;
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
     }
 
     public function do_updates() {
