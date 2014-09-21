@@ -280,6 +280,8 @@ function dokan_site_total_earning() {
 function dokan_admin_report( $group_by = 'day', $year = '' ) {
     global $wpdb, $wp_locale;
 
+    $group_by = apply_filters( 'dokan_report_group_by', $group_by );
+
     $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
     $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
     $current_year = date( 'Y' );
@@ -319,7 +321,10 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
         }
         $barwidth             = 60 * 60 * 24 * 7 * 4 * 1000;
     }
-
+    
+    $left_join      = apply_filters( 'dokan_report_left_join', $date_where );
+    $date_where     = apply_filters( 'dokan_report_where', $date_where );
+    
     $sql = "SELECT
                 SUM((do.order_total - do.net_amount)) as earning,
                 SUM(do.order_total) as order_total,
@@ -327,6 +332,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
                 p.post_date as order_date
             FROM {$wpdb->prefix}dokan_orders do
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+            $left_join
             WHERE
                 seller_id != 0 AND
                 p.post_status != 'trash' AND
@@ -560,3 +566,4 @@ function dokan_add_seller_meta_box(){
 }
 
 add_action( 'add_meta_boxes', 'dokan_add_seller_meta_box' );
+

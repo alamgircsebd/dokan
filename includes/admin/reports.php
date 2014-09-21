@@ -88,10 +88,10 @@
             <?php
             $order_total = $earning_total = $total_orders = 0;
 
-            if ( $type == 'day' ) {
-                $report_data = dokan_admin_report();
-            } elseif ( $type == 'month' ) {
+            if ( $type == 'month' ) {
                 $report_data = dokan_admin_report( 'month', $selected_year );
+            } else {
+                $report_data = dokan_admin_report();
             }
 
             if ( $report_data ) {
