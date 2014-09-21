@@ -259,8 +259,8 @@ function dokan_site_total_earning() {
     global $wpdb;
 
     $sql = "SELECT  SUM((do.order_total - do.net_amount)) as earning
-            FROM {$wpdb->prefix}dokan_orders do
-            LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+            FROM {$wpdb->prefix}dokan_orders as do
+            LEFT JOIN $wpdb->posts as p ON do.order_id = p.ID
             WHERE seller_id != 0 AND p.post_status = 'publish' AND do.order_status IN ('on-hold', 'completed', 'processing')
             ORDER BY do.order_id DESC";
 

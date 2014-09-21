@@ -36,6 +36,8 @@
             $selected_year = $_POST['report_year'];
         }
 
+        $active_countrys = array();//dokan_b2b_get_active_country();
+
         if ( $type == 'day' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
@@ -45,6 +47,23 @@
                 <span class="form-group">
                     <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
                     <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
+
+                    <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
+                </span>
+            </form>
+            <form method="post" class="form-inline report-filter" action="">
+                <span class="form-group">
+                    <label for="to"><?php _e( 'Country', 'dokan' ); ?></label>
+                    <select name="country">
+                        <option value="-1"><?php _e( '-Select-', 'dokan-b2b' ); ?></option> 
+                        <?php
+                        foreach ( $active_countrys as $id => $active_country ) {
+                            ?>
+                            <option value="<?php echo $id; ?>"><?php echo $active_country; ?></option> 
+                            <?php
+                        }
+                        ?>
+                    </select>
 
                     <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
                 </span>
