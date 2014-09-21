@@ -186,32 +186,32 @@ function dokan_order_listing_status_filter() {
                 <?php printf( __( 'All (%d)', 'dokan' ), $orders_counts->total ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'completed' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-completed' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-completed' ), $orders_url ); ?>">
                 <?php printf( __( 'Completed (%d)', 'dokan' ), $orders_counts->{'wc-completed'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'processing' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-processing' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-processing' ), $orders_url ); ?>">
                 <?php printf( __( 'Processing (%d)', 'dokan' ), $orders_counts->{'wc-processing'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'on-hold' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-on-hold' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-on-hold' ), $orders_url ); ?>">
                 <?php printf( __( 'On-hold (%d)', 'dokan' ), $orders_counts->{'wc-on-hold'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'pending' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-pending' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-pending' ), $orders_url ); ?>">
                 <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->{'wc-pending'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'canceled' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-canceled' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-cancelled' ), $orders_url ); ?>">
                 <?php printf( __( 'Cancelled (%d)', 'dokan' ), $orders_counts->{'wc-cancelled'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'refunded' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-refunded' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-refunded' ), $orders_url ); ?>">
                 <?php printf( __( 'Refunded (%d)', 'dokan' ), $orders_counts->{'wc-refunded'} ); ?></span>
             </a>

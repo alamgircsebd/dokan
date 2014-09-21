@@ -147,7 +147,7 @@
 
                 $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
                         LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
-                        WHERE seller_id != 0 AND p.post_status = 'publish' $seller_where
+                        WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where
                         ORDER BY do.order_id DESC LIMIT $offset, $limit";
                 $all_logs = $wpdb->get_results( $sql );
 
@@ -178,12 +178,12 @@
             $count = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}dokan_orders WHERE $count_where");
             $num_of_pages = ceil( $count / $limit );
             $page_links = paginate_links( array(
-                'base' => add_query_arg( 'paged', '%#%' ),
-                'format' => '',
+                'base'      => add_query_arg( 'paged', '%#%' ),
+                'format'    => '',
                 'prev_text' => __( '&laquo;', 'aag' ),
                 'next_text' => __( '&raquo;', 'aag' ),
-                'total' => $num_of_pages,
-                'current' => $pagenum
+                'total'     => $num_of_pages,
+                'current'   => $pagenum
             ) );
 
             if ( $page_links ) {

@@ -143,6 +143,11 @@ function dokan_count_orders( $user_id ) {
 function dokan_on_order_status_change( $order_id, $old_status, $new_status ) {
     global $wpdb;
 
+    // make sure order status contains "wc-" prefix
+    if ( stripos( $new_status, 'wc-' ) === false ) {
+        $new_status = 'wc-' . $new_status;
+    }
+
     // insert on dokan sync table
     $wpdb->update( $wpdb->prefix . 'dokan_orders',
         array( 'order_status' => $new_status ),
@@ -231,10 +236,11 @@ function dokan_delete_sync_order( $order_id ) {
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
 
-    $order       = new WC_Order( $order_id );
-    $seller_id   = dokan_get_seller_id_by_order( $order_id );
-    $percentage  = dokan_get_seller_percentage( $seller_id );
-    $order_total = $order->get_total();
+    $order        = new WC_Order( $order_id );
+    $seller_id    = dokan_get_seller_id_by_order( $order_id );
+    $percentage   = dokan_get_seller_percentage( $seller_id );
+    $order_total  = $order->get_total();
+    $order_status = $order->post_status;
 
     $wpdb->insert( $wpdb->prefix . 'dokan_orders',
         array(
@@ -242,7 +248,7 @@ function dokan_sync_insert_order( $order_id ) {
             'seller_id'    => $seller_id,
             'order_total'  => $order_total,
             'net_amount'   => ($order_total * $percentage)/100,
-            'order_status' => $order->post_status,
+            'order_status' => $order_status,
         ),
         array(
             '%d',
