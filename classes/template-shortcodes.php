@@ -108,13 +108,13 @@ class Dokan_Template_Shortcodes {
             if ( !self::$errors ) {
 
                 $product_status = dokan_get_new_post_status();
-                $post_data = array(
+                $post_data = apply_filters( 'dokan_insert_product_post_data', array(
                     'post_type'    => 'product',
                     'post_status'  => $product_status,
                     'post_title'   => $post_title,
                     'post_content' => $post_content,
                     'post_excerpt' => $post_excerpt,
-                );
+                ));
 
                 $product_id = wp_insert_post( $post_data );
 
