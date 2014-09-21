@@ -50,6 +50,7 @@
             $selected_year = $_POST['report_year'];
         }
 
+
         if ( $type == 'day' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
@@ -63,6 +64,7 @@
                     <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
                 </span>
             </form>
+
         <?php } elseif ( $type == 'month' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">

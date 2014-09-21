@@ -259,6 +259,7 @@ function dokan_site_total_earning() {
     global $wpdb;
 
     $sql = "SELECT  SUM((do.order_total - do.net_amount)) as earning
+
             FROM {$wpdb->prefix}dokan_orders do
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
             WHERE seller_id != 0 AND p.post_status = 'publish' AND do.order_status IN ('wc-on-hold', 'wc-completed', 'wc-processing')
@@ -328,7 +329,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
             WHERE
                 seller_id != 0 AND
-                p.post_status = 'publish' AND
+                p.post_status != 'trash' AND
                 do.order_status IN ('wc-on-hold', 'wc-completed', 'wc-processing')
                 $date_where
             GROUP BY $group_by_query";
