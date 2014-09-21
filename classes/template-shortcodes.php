@@ -108,13 +108,13 @@ class Dokan_Template_Shortcodes {
             if ( !self::$errors ) {
 
                 $product_status = dokan_get_new_post_status();
-                $post_data = array(
+                $post_data = apply_filters( 'dokan_insert_product_post_data', array(
                     'post_type'    => 'product',
                     'post_status'  => $product_status,
                     'post_title'   => $post_title,
                     'post_content' => $post_content,
                     'post_excerpt' => $post_excerpt,
-                );
+                ));
 
                 $product_id = wp_insert_post( $post_data );
 
@@ -310,7 +310,7 @@ class Dokan_Template_Shortcodes {
 
                                 </address>
 
-                                <p><a class="dokan-btn dokan-btn-orange" href="<?php echo $store_url; ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></p>
+                                <p><a class="dokan-btn dokan-btn-theme" href="<?php echo $store_url; ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></p>
 
                             </div> <!-- .caption -->
                         </div> <!-- .thumbnail -->

@@ -19,6 +19,8 @@ class Dokan_Rewrites {
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
         add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 9 );
+
+        add_filter( 'woocommerce_locate_template', array($this, 'account_migration_template') );
     }
 
     public function is_woo_installed() {
@@ -40,6 +42,7 @@ class Dokan_Rewrites {
             'reviews',
             'withdraw',
             'settings',
+            'account-migration'
         ) );
     }
 
@@ -184,5 +187,20 @@ class Dokan_Rewrites {
                 );
             }
         }
+    }
+
+    /**
+     * Account migration template on my account
+     *
+     * @param  string $file path of the template
+     * @return string
+     */
+    function account_migration_template( $file ) {
+
+        if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) ) {
+            return dokan_locate_template( 'update-account.php' );
+        }
+
+        return $file;
     }
 }

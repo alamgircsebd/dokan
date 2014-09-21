@@ -325,6 +325,28 @@
 .dokan-new-product-area {
   padding: 0px 15px;
 }
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb {
+  display: block;
+  border-bottom: 1px solid #ededed;
+  padding: 0 0 10px 0;
+  margin: 0 0 15px 0;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 {
+  font-size: 18px;
+  line-height: 1.42;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 .dokan-breadcrumb,
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 .dokan-breadcrumb a {
+  color: #aaa;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 .dokan-label {
+  font-size: 11px;
+  font-weight: normal;
+}
+.dokan-product-edit-area header.dokan-pro-edit-breadcrumb h1 a.view-product {
+  background-color: #FAFAFA;
+  border-color: #EBEBEB;
+}
 .product-edit-container {
   font-size: 13px;
 }
@@ -1415,94 +1437,94 @@ a.dokan-btn.active,
   -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
   box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
 }
-input[type="submit"].dokan-btn-orange,
-a.dokan-btn-orange,
-.dokan-btn-orange {
+input[type="submit"].dokan-btn-theme,
+a.dokan-btn-theme,
+.dokan-btn-theme {
   color: #ffffff;
   background-color: #f05025;
   border-color: #f05025;
 }
-input[type="submit"].dokan-btn-orange:hover,
-a.dokan-btn-orange:hover,
-.dokan-btn-orange:hover,
-input[type="submit"].dokan-btn-orange:focus,
-a.dokan-btn-orange:focus,
-.dokan-btn-orange:focus,
-input[type="submit"].dokan-btn-orange:active,
-a.dokan-btn-orange:active,
-.dokan-btn-orange:active,
-input[type="submit"].dokan-btn-orange.active,
-a.dokan-btn-orange.active,
-.dokan-btn-orange.active,
-.open .dropdown-toggleinput[type="submit"].dokan-btn-orange,
-.open .dropdown-togglea.dokan-btn-orange,
-.open .dropdown-toggle.dokan-btn-orange {
+input[type="submit"].dokan-btn-theme:hover,
+a.dokan-btn-theme:hover,
+.dokan-btn-theme:hover,
+input[type="submit"].dokan-btn-theme:focus,
+a.dokan-btn-theme:focus,
+.dokan-btn-theme:focus,
+input[type="submit"].dokan-btn-theme:active,
+a.dokan-btn-theme:active,
+.dokan-btn-theme:active,
+input[type="submit"].dokan-btn-theme.active,
+a.dokan-btn-theme.active,
+.dokan-btn-theme.active,
+.open .dropdown-toggleinput[type="submit"].dokan-btn-theme,
+.open .dropdown-togglea.dokan-btn-theme,
+.open .dropdown-toggle.dokan-btn-theme {
   color: #ffffff;
   background-color: #dd3b0f;
   border-color: #ca360e;
 }
-input[type="submit"].dokan-btn-orange:active,
-a.dokan-btn-orange:active,
-.dokan-btn-orange:active,
-input[type="submit"].dokan-btn-orange.active,
-a.dokan-btn-orange.active,
-.dokan-btn-orange.active,
-.open .dropdown-toggleinput[type="submit"].dokan-btn-orange,
-.open .dropdown-togglea.dokan-btn-orange,
-.open .dropdown-toggle.dokan-btn-orange {
+input[type="submit"].dokan-btn-theme:active,
+a.dokan-btn-theme:active,
+.dokan-btn-theme:active,
+input[type="submit"].dokan-btn-theme.active,
+a.dokan-btn-theme.active,
+.dokan-btn-theme.active,
+.open .dropdown-toggleinput[type="submit"].dokan-btn-theme,
+.open .dropdown-togglea.dokan-btn-theme,
+.open .dropdown-toggle.dokan-btn-theme {
   background-image: none;
 }
-input[type="submit"].dokan-btn-orange.disabled,
-a.dokan-btn-orange.disabled,
-.dokan-btn-orange.disabled,
-input[type="submit"].dokan-btn-orange[disabled],
-a.dokan-btn-orange[disabled],
-.dokan-btn-orange[disabled],
-fieldset[disabled] input[type="submit"].dokan-btn-orange,
-fieldset[disabled] a.dokan-btn-orange,
-fieldset[disabled] .dokan-btn-orange,
-input[type="submit"].dokan-btn-orange.disabled:hover,
-a.dokan-btn-orange.disabled:hover,
-.dokan-btn-orange.disabled:hover,
-input[type="submit"].dokan-btn-orange[disabled]:hover,
-a.dokan-btn-orange[disabled]:hover,
-.dokan-btn-orange[disabled]:hover,
-fieldset[disabled] input[type="submit"].dokan-btn-orange:hover,
-fieldset[disabled] a.dokan-btn-orange:hover,
-fieldset[disabled] .dokan-btn-orange:hover,
-input[type="submit"].dokan-btn-orange.disabled:focus,
-a.dokan-btn-orange.disabled:focus,
-.dokan-btn-orange.disabled:focus,
-input[type="submit"].dokan-btn-orange[disabled]:focus,
-a.dokan-btn-orange[disabled]:focus,
-.dokan-btn-orange[disabled]:focus,
-fieldset[disabled] input[type="submit"].dokan-btn-orange:focus,
-fieldset[disabled] a.dokan-btn-orange:focus,
-fieldset[disabled] .dokan-btn-orange:focus,
-input[type="submit"].dokan-btn-orange.disabled:active,
-a.dokan-btn-orange.disabled:active,
-.dokan-btn-orange.disabled:active,
-input[type="submit"].dokan-btn-orange[disabled]:active,
-a.dokan-btn-orange[disabled]:active,
-.dokan-btn-orange[disabled]:active,
-fieldset[disabled] input[type="submit"].dokan-btn-orange:active,
-fieldset[disabled] a.dokan-btn-orange:active,
-fieldset[disabled] .dokan-btn-orange:active,
-input[type="submit"].dokan-btn-orange.disabled.active,
-a.dokan-btn-orange.disabled.active,
-.dokan-btn-orange.disabled.active,
-input[type="submit"].dokan-btn-orange[disabled].active,
-a.dokan-btn-orange[disabled].active,
-.dokan-btn-orange[disabled].active,
-fieldset[disabled] input[type="submit"].dokan-btn-orange.active,
-fieldset[disabled] a.dokan-btn-orange.active,
-fieldset[disabled] .dokan-btn-orange.active {
+input[type="submit"].dokan-btn-theme.disabled,
+a.dokan-btn-theme.disabled,
+.dokan-btn-theme.disabled,
+input[type="submit"].dokan-btn-theme[disabled],
+a.dokan-btn-theme[disabled],
+.dokan-btn-theme[disabled],
+fieldset[disabled] input[type="submit"].dokan-btn-theme,
+fieldset[disabled] a.dokan-btn-theme,
+fieldset[disabled] .dokan-btn-theme,
+input[type="submit"].dokan-btn-theme.disabled:hover,
+a.dokan-btn-theme.disabled:hover,
+.dokan-btn-theme.disabled:hover,
+input[type="submit"].dokan-btn-theme[disabled]:hover,
+a.dokan-btn-theme[disabled]:hover,
+.dokan-btn-theme[disabled]:hover,
+fieldset[disabled] input[type="submit"].dokan-btn-theme:hover,
+fieldset[disabled] a.dokan-btn-theme:hover,
+fieldset[disabled] .dokan-btn-theme:hover,
+input[type="submit"].dokan-btn-theme.disabled:focus,
+a.dokan-btn-theme.disabled:focus,
+.dokan-btn-theme.disabled:focus,
+input[type="submit"].dokan-btn-theme[disabled]:focus,
+a.dokan-btn-theme[disabled]:focus,
+.dokan-btn-theme[disabled]:focus,
+fieldset[disabled] input[type="submit"].dokan-btn-theme:focus,
+fieldset[disabled] a.dokan-btn-theme:focus,
+fieldset[disabled] .dokan-btn-theme:focus,
+input[type="submit"].dokan-btn-theme.disabled:active,
+a.dokan-btn-theme.disabled:active,
+.dokan-btn-theme.disabled:active,
+input[type="submit"].dokan-btn-theme[disabled]:active,
+a.dokan-btn-theme[disabled]:active,
+.dokan-btn-theme[disabled]:active,
+fieldset[disabled] input[type="submit"].dokan-btn-theme:active,
+fieldset[disabled] a.dokan-btn-theme:active,
+fieldset[disabled] .dokan-btn-theme:active,
+input[type="submit"].dokan-btn-theme.disabled.active,
+a.dokan-btn-theme.disabled.active,
+.dokan-btn-theme.disabled.active,
+input[type="submit"].dokan-btn-theme[disabled].active,
+a.dokan-btn-theme[disabled].active,
+.dokan-btn-theme[disabled].active,
+fieldset[disabled] input[type="submit"].dokan-btn-theme.active,
+fieldset[disabled] a.dokan-btn-theme.active,
+fieldset[disabled] .dokan-btn-theme.active {
   background-color: #f05025;
   border-color: #f05025;
 }
-input[type="submit"].dokan-btn-orange .badge,
-a.dokan-btn-orange .badge,
-.dokan-btn-orange .badge {
+input[type="submit"].dokan-btn-theme .badge,
+a.dokan-btn-theme .badge,
+.dokan-btn-theme .badge {
   color: #f05025;
   background-color: #fff;
 }
@@ -2536,5 +2558,74 @@ textarea.dokan-form-control {
 }
 .dokan-panel-default > .dokan-panel-footer + .dokan-panel-collapse > .dokan-panel-body {
   border-bottom-color: #dddddd;
+}
+/*--------------------------------------------------
+:: Responsive Styles
+-------------------------------------------------- */
+@media (max-width: 767px) {
+  .dokan-dashboard .dokan-dash-sidebar,
+  .dokan-dashboard .dokan-dashboard-content {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li {
+    display: inline-block;
+    border-right: 1px solid #454545;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.active:after {
+    content: '';
+    display: none;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a {
+    padding: 12px 24px;
+  }
+  .dokan-dashboard .dokan-dashboard-content {
+    padding-left: 0;
+  }
+  .dokan-single-store .profile-frame .profile-info-box {
+    width: 60%;
+  }
+}
+@media (max-width: 430px) {
+  .dokan-dashboard .dokan-dash-sidebar,
+  .dokan-dashboard .dokan-dashboard-content {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:before,
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:after {
+    content: " ";
+    display: table;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:after {
+    clear: both;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li {
+    float: left;
+    width: 50%;
+  }
+  .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a {
+    padding: 12px 18px;
+  }
+  .dokan-dashboard .dokan-product-listing .dokan-product-listing-area .product-listing-top ul.dokan-listing-filter {
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-right,
+  .dokan-dashboard .dokan-left {
+    float: none !important;
+  }
+  .dokan-dashboard .dokan-w6,
+  .dokan-dashboard .dokan-w8,
+  .dokan-dashboard .dokan-w4 {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .dokan-reports-content .dokan-reports-area .dokan-reports-wrap .report-left,
+  .dokan-dashboard .dokan-reports-content .dokan-reports-area .dokan-reports-wrap .report-right {
+    width: 100%;
+  }
+  .dokan-single-store .profile-frame .profile-info-box {
+    width: 100%;
+  }
 }
 /*# sourceMappingURL=style.css.map */

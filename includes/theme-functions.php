@@ -11,7 +11,21 @@ require_once dirname(__FILE__) . '/withdraw-functions.php';
  * @return boolean
  */
 function dokan_is_user_seller( $user_id ) {
-    if ( !user_can( $user_id, 'dokandar' ) ) {
+    if ( ! user_can( $user_id, 'dokandar' ) ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Check if a user is customer
+ *
+ * @param int $user_id
+ * @return boolean
+ */
+function dokan_is_user_customer( $user_id ) {
+    if ( ! user_can( $user_id, 'customer' ) ) {
         return false;
     }
 
@@ -36,6 +50,19 @@ function dokan_is_product_author( $product_id = 0 ) {
     }
 
     if ( $author == get_current_user_id() ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Check if it's a store page
+ *
+ * @return boolean
+ */
+function dokan_is_store_page() {
+    if ( get_query_var( 'store' ) ) {
         return true;
     }
 
@@ -234,7 +261,7 @@ function dokan_author_total_sales( $seller_id ) {
                 FROM {$wpdb->prefix}woocommerce_order_items AS oi
                 LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS oim ON oim.order_item_id = oi.order_item_id
                 LEFT JOIN {$wpdb->prefix}dokan_orders do ON oi.order_id = do.order_id
-                WHERE do.seller_id = %d AND oim.meta_key = '_line_total' AND do.order_status IN ('completed', 'processing', 'on-hold')";
+                WHERE do.seller_id = %d AND oim.meta_key = '_line_total' AND do.order_status IN ('wc-completed', 'wc-processing', 'wc-on-hold')";
 
         $count = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
         $earnings = $count->earnings;
@@ -398,10 +425,10 @@ function dokan_format_time( $datetime ) {
  */
 function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'text'  ) {
     $placeholder = isset( $attr['placeholder'] ) ? esc_attr( $attr['placeholder'] ) : '';
-    $class = isset( $attr['class'] ) ? esc_attr( $attr['class'] ) : 'dokan-form-control';
-    $name = isset( $attr['name'] ) ? esc_attr( $attr['name'] ) : $meta_key;
-    $value = isset( $attr['value'] ) ? $attr['value'] : get_post_meta( $post_id, $meta_key, true );
-    $size = isset( $attr['size'] ) ? $attr['size'] : 30;
+    $class       = isset( $attr['class'] ) ? esc_attr( $attr['class'] ) : 'dokan-form-control';
+    $name        = isset( $attr['name'] ) ? esc_attr( $attr['name'] ) : $meta_key;
+    $value       = isset( $attr['value'] ) ? $attr['value'] : get_post_meta( $post_id, $meta_key, true );
+    $size        = isset( $attr['size'] ) ? $attr['size'] : 30;
 
     switch ($type) {
         case 'text':
@@ -419,9 +446,10 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
 
         case 'checkbox':
             $label = isset( $attr['label'] ) ? $attr['label'] : '';
+            $class = ( $class == 'dokan-form-control' ) ? '' : $class;
             ?>
 
-            <label class="checkbox-inline" for="<?php echo $name; ?>">
+            <label class="<?php echo $class; ?>" for="<?php echo $name; ?>">
                 <input name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo $value; ?>" type="checkbox"<?php checked( $value, 'yes' ); ?>>
                 <?php echo $label; ?>
             </label>

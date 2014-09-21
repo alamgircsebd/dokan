@@ -1,40 +1,55 @@
 <div class="wrap">
     <?php
-    $tab = isset( $_GET['tab'] ) ?  $_GET['tab'] : 'report';
-    $type = isset( $_GET['type'] ) ?  $_GET['type'] : 'day'; ?>
+    $tab  = isset( $_GET['tab'] ) ?  $_GET['tab'] : 'report';
+    $type = isset( $_GET['type'] ) ?  $_GET['type'] : 'day';
+
+    $all_tabs = apply_filters( 'dokan_admin_report_tabs', array(
+        'report' => __( 'Reports', 'dokan' ),
+        'logs'   => __( 'All Logs', 'dokan' ),
+    ) );
+    ?>
 
     <h2 class="nav-tab-wrapper woo-nav-tab-wrapper">
-        <a href="admin.php?page=dokan-reports&amp;tab=report" class="nav-tab<?php if ( $tab == 'report' ) echo ' nav-tab-active'; ?>"><?php _e( 'Reports', 'dokan' ); ?></a>
-        <a href="admin.php?page=dokan-reports&amp;tab=logs" class="nav-tab<?php if ( $tab == 'logs' ) echo ' nav-tab-active'; ?>"><?php _e( 'All Logs', 'dokan' ); ?></a>
+        <?php foreach ($all_tabs as $tab_id => $label) { ?>
+            <a href="admin.php?page=dokan-reports&amp;tab=<?php echo esc_attr( $tab_id ); ?>" class="nav-tab<?php if ( $tab == $tab_id ) echo ' nav-tab-active'; ?>"><?php echo $label; ?></a>
+        <?php } ?>
     </h2>
 
-    <?php if ( $tab == 'report' ) { ?>
-        <ul class="subsubsub" style="float: none;">
-            <li>
-                <a href="admin.php?page=dokan-reports&amp;tab=report&amp;type=day" <?php if ( $type == 'day' ) echo 'class="current"'; ?>>
-                    <?php _e( 'By Day', 'dokan' ); ?>
-                </a> |
-            </li>
-            <li>
-                <a href="admin.php?page=dokan-reports&amp;tab=report&amp;type=month" <?php if ( $type == 'month' ) echo 'class="current"'; ?>>
-                    <?php _e( 'By Month', 'dokan' ); ?>
-                </a>
-            </li>
+    <?php if ( $tab == 'report' ) {
+        $report_sub_head = apply_filters( 'dokan_admin_report_sub', array(
+            'day'   => __( 'By Day', 'dokan' ),
+            'month' => __( 'By Month', 'dokan' )
+        ) );
+        $head_count = count( $report_sub_head );
+        $loop_count = 1;
+        ?>
+        <ul class="subsubsub dokan-report-sub" style="float: none;">
+            <?php foreach ($report_sub_head as $sub_id => $sub_label) { ?>
+                <li>
+                    <a href="admin.php?page=dokan-reports&amp;tab=report&amp;type=<?php echo esc_attr( $sub_id ); ?>" <?php if ( $type == $sub_id ) echo 'class="current"'; ?>><?php echo $sub_label; ?></a>
+
+                    <?php
+                    echo ( $loop_count != $head_count ) ? '|' : '';
+                    $loop_count++;
+                    ?>
+                </li>
+            <?php } ?>
         </ul>
 
         <?php
-        $start_date = date( 'Y-m-01', current_time('timestamp') );
-        $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+        $start_date   = date( 'Y-m-01', current_time('timestamp') );
+        $end_date     = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
         $current_year = $selected_year = date('Y');
 
         if ( isset( $_POST['dokan_report_filter_date'] ) ) {
             $start_date = $_POST['start_date'];
-            $end_date = $_POST['end_date'];
+            $end_date   = $_POST['end_date'];
         }
 
         if ( isset( $_POST['dokan_report_filter_year'] ) ) {
             $selected_year = $_POST['report_year'];
         }
+
 
         if ( $type == 'day' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
@@ -49,6 +64,7 @@
                     <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
                 </span>
             </form>
+
         <?php } elseif ( $type == 'month' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
@@ -62,23 +78,27 @@
 
                 <input type="submit" name="dokan_report_filter_year" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
             </form>
-        <?php } ?>
+        <?php
+        } else {
+            do_action( 'dokan_report_sub_' . $type, $tab, $start_date, $end_date, $selected_year, $current_year );
+        }
+        ?>
 
         <div class="admin-report-container">
             <?php
             $order_total = $earning_total = $total_orders = 0;
 
-            if ( $type == 'day' ) {
-                $report_data = dokan_admin_report();
-            } elseif ( $type == 'month' ) {
+            if ( $type == 'month' ) {
                 $report_data = dokan_admin_report( 'month', $selected_year );
+            } else {
+                $report_data = dokan_admin_report();
             }
 
             if ( $report_data ) {
                 foreach ($report_data as $row) {
-                    $order_total += $row->order_total;
+                    $order_total   += $row->order_total;
                     $earning_total += $row->earning;
-                    $total_orders += $row->total_orders;
+                    $total_orders  += $row->total_orders;
                 }
             }
             ?>
@@ -110,7 +130,7 @@
         </div>
 
 
-    <?php } else { ?>
+    <?php } else if ( $tab == 'logs' ) { ?>
 
         <table class="widefat withdraw-table" style="margin-top: 15px;">
             <thead>
@@ -147,7 +167,7 @@
 
                 $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
                         LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
-                        WHERE seller_id != 0 AND p.post_status = 'publish' $seller_where
+                        WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where
                         ORDER BY do.order_id DESC LIMIT $offset, $limit";
                 $all_logs = $wpdb->get_results( $sql );
 
@@ -178,12 +198,12 @@
             $count = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}dokan_orders WHERE $count_where");
             $num_of_pages = ceil( $count / $limit );
             $page_links = paginate_links( array(
-                'base' => add_query_arg( 'paged', '%#%' ),
-                'format' => '',
+                'base'      => add_query_arg( 'paged', '%#%' ),
+                'format'    => '',
                 'prev_text' => __( '&laquo;', 'aag' ),
                 'next_text' => __( '&raquo;', 'aag' ),
-                'total' => $num_of_pages,
-                'current' => $pagenum
+                'total'     => $num_of_pages,
+                'current'   => $pagenum
             ) );
 
             if ( $page_links ) {
@@ -192,6 +212,8 @@
         } ?>
         </div>
 
+    <?php } else { ?>
+        <?php do_action( 'dokan_admin_report_tab_' . $tab ); ?>
     <?php } ?>
 
     <script type="text/javascript">

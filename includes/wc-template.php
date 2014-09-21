@@ -7,11 +7,11 @@
  * @return array
  */
 function dokan_product_seller_info( $item_data, $cart_item ) {
-    $seller_info = get_userdata( $cart_item['data']->post->post_author );
+    $seller_info = dokan_get_store_info( $cart_item['data']->post->post_author );
 
     $item_data[] = array(
         'name'  => __( 'Seller', 'dokan' ),
-        'value' => $seller_info->display_name
+        'value' => $seller_info['store_name']
     );
 
     return $item_data;

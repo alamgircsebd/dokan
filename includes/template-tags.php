@@ -7,7 +7,61 @@
  * @package dokan
  */
 
+if ( ! function_exists( 'dokan_content_nav' ) ) :
 
+/**
+ * Display navigation to next/previous pages when applicable
+ */
+function dokan_content_nav( $nav_id, $query = null ) {
+    global $wp_query, $post;
+
+    if ( $query ) {
+        $wp_query = $query;
+    }
+
+    // Don't print empty markup on single pages if there's nowhere to navigate.
+    if ( is_single() ) {
+        $previous = ( is_attachment() ) ? get_post( $post->post_parent ) : get_adjacent_post( false, '', true );
+        $next = get_adjacent_post( false, '', false );
+
+        if ( !$next && !$previous )
+            return;
+    }
+
+    // Don't print empty markup in archives if there's only one page.
+    if ( $wp_query->max_num_pages < 2 && ( is_home() || is_archive() || is_search() ) )
+        return;
+
+    $nav_class = 'site-navigation paging-navigation';
+    if ( is_single() )
+        $nav_class = 'site-navigation post-navigation';
+    ?>
+    <nav role="navigation" id="<?php echo $nav_id; ?>" class="<?php echo $nav_class; ?>">
+        <h1 class="assistive-text"><?php _e( 'Post navigation', 'dokan' ); ?></h1>
+
+        <ul class="pager">
+        <?php if ( is_single() ) : // navigation links for single posts  ?>
+
+            <li class="previous">
+                <?php previous_post_link( '%link', _x( '&larr;', 'Previous post link', 'dokan' ) . ' %title' ); ?>
+            </li>
+            <li class="next">
+                <?php next_post_link( '%link', '%title ' . _x( '&rarr;', 'Next post link', 'dokan' ) ); ?>
+            </li>
+
+        <?php endif; ?>
+        </ul>
+
+
+        <?php if ( $wp_query->max_num_pages > 1 && ( is_home() || is_archive() || is_search() ) ) : // navigation links for home, archive, and search pages ?>
+            <?php dokan_page_navi( '', '', $wp_query ); ?>
+        <?php endif; ?>
+
+    </nav><!-- #<?php echo $nav_id; ?> -->
+    <?php
+}
+
+endif;
 
 if ( ! function_exists( 'dokan_page_navi' ) ) :
 
@@ -132,32 +186,32 @@ function dokan_order_listing_status_filter() {
                 <?php printf( __( 'All (%d)', 'dokan' ), $orders_counts->total ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'completed' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-completed' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-completed' ), $orders_url ); ?>">
                 <?php printf( __( 'Completed (%d)', 'dokan' ), $orders_counts->{'wc-completed'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'processing' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-processing' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-processing' ), $orders_url ); ?>">
                 <?php printf( __( 'Processing (%d)', 'dokan' ), $orders_counts->{'wc-processing'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'on-hold' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-on-hold' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-on-hold' ), $orders_url ); ?>">
                 <?php printf( __( 'On-hold (%d)', 'dokan' ), $orders_counts->{'wc-on-hold'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'pending' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-pending' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-pending' ), $orders_url ); ?>">
                 <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->{'wc-pending'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'canceled' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-canceled' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-cancelled' ), $orders_url ); ?>">
                 <?php printf( __( 'Cancelled (%d)', 'dokan' ), $orders_counts->{'wc-cancelled'} ); ?></span>
             </a>
         </li>
-        <li<?php echo $status_class == 'refunded' ? ' class="active"' : ''; ?>>
+        <li<?php echo $status_class == 'wc-refunded' ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( array( 'order_status' => 'wc-refunded' ), $orders_url ); ?>">
                 <?php printf( __( 'Refunded (%d)', 'dokan' ), $orders_counts->{'wc-refunded'} ); ?></span>
             </a>
@@ -235,9 +289,9 @@ if ( ! function_exists( 'dokan_store_category_menu' ) ) :
  * @param  int $seller_id
  * @return void
  */
-function dokan_store_category_menu( $seller_id ) { ?>
+function dokan_store_category_menu( $seller_id, $title = '' ) { ?>
     <aside class="widget dokan-category-menu">
-        <h3 class="widget-title"><?php _e( 'Store Product Category', 'dokan' ); ?></h3>
+        <h3 class="widget-title"><?php echo $title; ?></h3>
         <div id="cat-drop-stack">
             <?php
             global $wpdb;
@@ -403,7 +457,6 @@ function dokan_header_user_menu() {
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo esc_html( $current_user->display_name ); ?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href="<?php echo dokan_get_page_url( 'my_orders' ); ?>"><?php _e( 'My Orders', 'dokan' ); ?></a></li>
                     <li><a href="<?php echo dokan_get_page_url( 'myaccount', 'woocommerce' ); ?>"><?php _e( 'My Account', 'dokan' ); ?></a></li>
                     <li><a href="<?php echo wc_customer_edit_account_url(); ?>"><?php _e( 'Edit Account', 'dokan' ); ?></a></li>
                     <li class="divider"></li>
@@ -423,3 +476,18 @@ function dokan_header_user_menu() {
 }
 
 endif;
+
+function dokan_account_migration_button() {
+    $user = wp_get_current_user();
+
+    if ( dokan_is_user_customer( $user->ID ) ) {
+        ?>
+        <p>&nbsp;</p>
+        <p>
+            <a href="<?php echo dokan_get_page_url( 'myaccount', 'woocommerce' ); ?>account-migration/seller/" class="button button-primary"><?php _e( 'Become a Seller', 'dokan' ); ?></a>
+        </p>
+        <?php
+    }
+}
+
+add_action( 'woocommerce_after_my_account', 'dokan_account_migration_button' );

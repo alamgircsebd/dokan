@@ -1215,14 +1215,14 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
 
         if ( $product->needs_shipping() ) {
             $shipping_products[] = array(
-                'product_id' => $product_item['product_id'],
-                'variation_id' => $product_item['variation_id'],
-                'variation' => '',
-                'quantity' => $product_item['qty'],
-                'data' => $product,
-                'line_total' => $product_item['line_total'],
-                'line_tax' => $product_item['line_tax'],
-                'line_subtotal' => $product_item['line_subtotal'],
+                'product_id'        => $product_item['product_id'],
+                'variation_id'      => $product_item['variation_id'],
+                'variation'         => '',
+                'quantity'          => $product_item['qty'],
+                'data'              => $product,
+                'line_total'        => $product_item['line_total'],
+                'line_tax'          => $product_item['line_tax'],
+                'line_subtotal'     => $product_item['line_subtotal'],
                 'line_subtotal_tax' => $product_item['line_subtotal_tax'],
             );
         }
@@ -1230,15 +1230,15 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
 
     if ( $shipping_products ) {
         $package = array(
-            'contents' => $shipping_products,
-            'contents_cost' => array_sum( wp_list_pluck( $shipping_products, 'line_total' ) ),
+            'contents'        => $shipping_products,
+            'contents_cost'   => array_sum( wp_list_pluck( $shipping_products, 'line_total' ) ),
             'applied_coupons' => array(),
-            'destination' => array(
-                'country' => $parent_order->shipping_country,
-                'state' => $parent_order->shipping_state,
-                'postcode' => $parent_order->shipping_postcode,
-                'city' => $parent_order->shipping_city,
-                'address' => $parent_order->shipping_address_1,
+            'destination'     => array(
+                'country'   => $parent_order->shipping_country,
+                'state'     => $parent_order->shipping_state,
+                'postcode'  => $parent_order->shipping_postcode,
+                'city'      => $parent_order->shipping_city,
+                'address'   => $parent_order->shipping_address_1,
                 'address_2' => $parent_order->shipping_address_2,
             )
         );
@@ -1329,8 +1329,8 @@ function dokan_new_customer_data( $data ) {
     $data['role'] = $role;
 
     if ( $role == 'seller' ) {
-        $data['first_name'] = strip_tags( $_POST['fname'] );
-        $data['last_name'] = strip_tags( $_POST['lname'] );
+        $data['first_name']    = strip_tags( $_POST['fname'] );
+        $data['last_name']     = strip_tags( $_POST['lname'] );
         $data['user_nicename'] = sanitize_title( $_POST['shopurl'] );
     }
 
@@ -1354,16 +1354,16 @@ function dokan_on_create_seller( $user_id, $data ) {
     }
 
     $dokan_settings = array(
-        'store_name' => $_POST['shopname'],
-        'social' => array(),
-        'payment' => array(),
-        'phone' => $_POST['phone'],
-        'show_email' => 'no',
-        'address' => $_POST['address'],
-        'location' => '',
-        'find_address' => '',
+        'store_name'     => strip_tags( $_POST['shopname'] ),
+        'social'         => array(),
+        'payment'        => array(),
+        'phone'          => $_POST['phone'],
+        'show_email'     => 'no',
+        'address'        => strip_tags( $_POST['address'] ),
+        'location'       => '',
+        'find_address'   => '',
         'dokan_category' => '',
-        'banner' => 0,
+        'banner'         => 0,
     );
 
     update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
@@ -1385,21 +1385,45 @@ add_action( 'woocommerce_created_customer', 'dokan_on_create_seller', 10, 2);
  */
 function dokan_get_featured_products( $per_page = 9) {
     $featured_query = new WP_Query( apply_filters( 'dokan_get_featured_products', array(
-        'posts_per_page' => $per_page,
-        'post_type' => 'product',
+        'posts_per_page'      => $per_page,
+        'post_type'           => 'product',
         'ignore_sticky_posts' => 1,
-        'meta_query' => array(
+        'meta_query'          => array(
             array(
-                'key' => '_visibility',
-                'value' => array('catalog', 'visible'),
+                'key'     => '_visibility',
+                'value'   => array('catalog', 'visible'),
                 'compare' => 'IN'
             ),
             array(
-                'key' => '_featured',
+                'key'   => '_featured',
                 'value' => 'yes'
             )
         )
     ) ) );
+
+    return $featured_query;
+}
+
+/**
+ * Get latest products
+ *
+ * Shown on homepage
+ *
+ * @param int $per_page
+ * @return \WP_Query
+ */
+function dokan_get_latest_products( $per_page = 9) {
+    $featured_query = new WP_Query( apply_filters( 'dokan_get_featured_products', array(
+        'posts_per_page'      => $per_page,
+        'post_type'           => 'product',
+        'ignore_sticky_posts' => 1,
+        'meta_query'          => array(
+            array(
+                'key'     => '_visibility',
+                'value'   => array('catalog', 'visible'),
+                'compare' => 'IN'
+            )
+    ) ) ) );
 
     return $featured_query;
 }
@@ -1417,16 +1441,16 @@ function dokan_get_featured_products( $per_page = 9) {
 function dokan_get_best_selling_products( $per_page = 8 ) {
 
     $args = array(
-        'post_type' => 'product',
-        'post_status' => 'publish',
+        'post_type'           => 'product',
+        'post_status'         => 'publish',
         'ignore_sticky_posts' => 1,
-        'posts_per_page' => $per_page,
-        'meta_key' => 'total_sales',
-        'orderby' => 'meta_value_num',
-        'meta_query' => array(
+        'posts_per_page'      => $per_page,
+        'meta_key'            => 'total_sales',
+        'orderby'             => 'meta_value_num',
+        'meta_query'          => array(
             array(
-                'key' => '_visibility',
-                'value' => array( 'catalog', 'visible' ),
+                'key'     => '_visibility',
+                'value'   => array( 'catalog', 'visible' ),
                 'compare' => 'IN'
             ),
         )
@@ -1601,3 +1625,91 @@ function dokan_get_readable_seller_rating( $seller_id ) {
 
     <?php
 }
+
+/**
+ * Adds default dokan store settings when a new seller registers
+ *
+ * @param int $user_id
+ * @param array $data
+ * @return void
+ */
+function dokan_user_update_to_seller( $user, $data ) {
+    if ( ! dokan_is_user_customer( $user->ID ) ) {
+        return;
+    }
+
+    $user_id = $user->ID;
+
+    // Remove role
+    $user->remove_role( 'customer' );
+
+    // Add role
+    $user->add_role( 'seller' );
+
+    update_user_meta( $user_id, 'first_name', $data['fname'] );
+    update_user_meta( $user_id, 'last_name', $data['lname'] );
+
+    if ( dokan_get_option( 'new_seller_enable_selling', 'dokan_selling', 'on' ) == 'off' ) {
+        update_user_meta( $user_id, 'dokan_enable_selling', 'no' );
+    } else {
+        update_user_meta( $user_id, 'dokan_enable_selling', 'yes' );
+    }
+
+    $dokan_settings = array(
+        'store_name'     => $data['shopname'],
+        'social'         => array(),
+        'payment'        => array(),
+        'phone'          => $data['phone'],
+        'show_email'     => 'no',
+        'address'        => $data['address'],
+        'location'       => '',
+        'find_address'   => '',
+        'dokan_category' => '',
+        'banner'         => 0,
+    );
+
+    update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
+
+
+    $publishing = dokan_get_option( 'product_status', 'dokan_selling' );
+    $percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );
+
+    update_user_meta( $user_id, 'dokan_publishing', $publishing );
+    update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
+
+    Dokan_Email::init()->new_seller_registered_mail( $user_id );
+}
+
+/**
+ * Handles the become a seller form
+ *
+ * @return void
+ */
+function dokan_become_seller_handler () {
+    if ( isset( $_POST['dokan_migration'] ) && wp_verify_nonce( $_POST['dokan_nonce'], 'account_migration' ) ) {
+        $user   = get_userdata( get_current_user_id() );
+        $errors = array();
+
+        $checks = array(
+            'fname'    => __( 'Enter your first name', 'dokan' ),
+            'lname'    => __( 'Enter your last name', 'dokan' ),
+            'shopname' => __( 'Enter your shop name', 'dokan' ),
+            'address'  => __( 'Enter your shop address', 'dokan' ),
+            'phone'    => __( 'Enter your phone number', 'dokan' ),
+        );
+
+        foreach ($checks as $field => $error) {
+            if ( empty( $_POST[$field]) ) {
+                $errors[] = $error;
+            }
+        }
+
+        if ( ! $errors ) {
+            dokan_user_update_to_seller( $user, $_POST );
+
+            wp_redirect( dokan_get_page_url( 'myaccount', 'dokan' ) );
+        }
+    }
+}
+
+add_action( 'template_redirect', 'dokan_become_seller_handler' );

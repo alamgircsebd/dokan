@@ -296,10 +296,12 @@ class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-style' );
             }
 
+
             if ( DOKAN_LOAD_SCRIPTS ) {
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
+                wp_enqueue_script( 'chosen' );
                 wp_enqueue_script( 'form-validate' );
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
@@ -331,6 +333,9 @@ class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/best-seller.php';
         require_once $inc_dir . 'widgets/bestselling-product.php';
         require_once $inc_dir . 'widgets/top-rated-product.php';
+        require_once $inc_dir . 'widgets/store-location.php';
+        require_once $inc_dir . 'widgets/store-contact.php';
+        require_once $inc_dir . 'widgets/store-menu.php';
 
         require_once $inc_dir . 'wc-functions.php';
 

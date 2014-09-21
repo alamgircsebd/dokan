@@ -31,7 +31,7 @@ add_filter( 'woocommerce_reports_get_order_report_query', 'dokan_admin_order_rep
 
 /**
  * Change the columns shown in admin.
- * 
+ *
  * @param array $existing_columns
  * @return array
  */
@@ -251,7 +251,7 @@ add_action( 'restrict_manage_posts', 'dokan_admin_shop_order_toggle_sub_orders')
 
 /**
  * Get total commision earning of the site
- * 
+ *
  * @global WPDB $wpdb
  * @return int
  */
@@ -259,9 +259,10 @@ function dokan_site_total_earning() {
     global $wpdb;
 
     $sql = "SELECT  SUM((do.order_total - do.net_amount)) as earning
+
             FROM {$wpdb->prefix}dokan_orders do
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
-            WHERE seller_id != 0 AND p.post_status = 'publish' AND do.order_status IN ('on-hold', 'completed', 'processing')
+            WHERE seller_id != 0 AND p.post_status = 'publish' AND do.order_status IN ('wc-on-hold', 'wc-completed', 'wc-processing')
             ORDER BY do.order_id DESC";
 
     return $wpdb->get_var( $sql );
@@ -269,7 +270,7 @@ function dokan_site_total_earning() {
 
 /**
  * Generate report in admin area
- * 
+ *
  * @global WPDB $wpdb
  * @global type $wp_locale
  * @param string $group_by
@@ -278,6 +279,8 @@ function dokan_site_total_earning() {
  */
 function dokan_admin_report( $group_by = 'day', $year = '' ) {
     global $wpdb, $wp_locale;
+
+    $group_by = apply_filters( 'dokan_report_group_by', $group_by );
 
     $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
     $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
@@ -318,7 +321,10 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
         }
         $barwidth             = 60 * 60 * 24 * 7 * 4 * 1000;
     }
-
+    
+    $left_join      = apply_filters( 'dokan_report_left_join', $date_where );
+    $date_where     = apply_filters( 'dokan_report_where', $date_where );
+    
     $sql = "SELECT
                 SUM((do.order_total - do.net_amount)) as earning,
                 SUM(do.order_total) as order_total,
@@ -326,10 +332,11 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
                 p.post_date as order_date
             FROM {$wpdb->prefix}dokan_orders do
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+            $left_join
             WHERE
                 seller_id != 0 AND
-                p.post_status = 'publish' AND
-                do.order_status IN ('on-hold', 'completed', 'processing')
+                p.post_status != 'trash' AND
+                do.order_status IN ('wc-on-hold', 'wc-completed', 'wc-processing')
                 $date_where
             GROUP BY $group_by_query";
 
@@ -515,7 +522,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
 
 /**
  * Send notification to the seller once a product is published from pending
- * 
+ *
  * @param WP_Post $post
  * @return void
  */
@@ -543,7 +550,7 @@ function dokan_seller_meta_box($post) {
     global $user_ID;
     ?>
     <label class="screen-reader-text" for="post_author_override"><?php _e('Seller'); ?></label>
-    
+
      <?php
     wp_dropdown_users( array(
         'role' => 'seller',
@@ -559,3 +566,4 @@ function dokan_add_seller_meta_box(){
 }
 
 add_action( 'add_meta_boxes', 'dokan_add_seller_meta_box' );
+
