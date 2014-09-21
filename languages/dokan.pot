@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dokan - Multi-vendor Marketplace 1.0\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2014-09-21 10:07:18+00:00\n"
+"POT-Creation-Date: 2014-09-21 13:18:28+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -92,7 +92,7 @@ msgstr ""
 msgid "Instead going pending, products will be published directly"
 msgstr ""
 
-#: classes/admin-user-profile.php:160 includes/admin/admin.php:162
+#: classes/admin-user-profile.php:160 includes/admin/admin.php:165
 msgid "Seller Percentage"
 msgstr ""
 
@@ -231,17 +231,18 @@ msgstr ""
 
 #: classes/installer.php:78 includes/admin/reports.php:139
 #: includes/admin/reports.php:149 includes/admin-functions.php:52
-#: includes/admin-functions.php:546 includes/admin-functions.php:559
+#: includes/admin-functions.php:552 includes/admin-functions.php:565
 #: includes/wc-template.php:13
 msgid "Seller"
 msgstr ""
 
-#: classes/installer.php:107 includes/admin/admin.php:63
-#: includes/admin/admin.php:208 includes/template-tags.php:226
+#: classes/installer.php:107 includes/admin/admin.php:65
+#: includes/admin/admin.php:211 includes/admin/admin.php:268
+#: includes/template-tags.php:226
 msgid "Dashboard"
 msgstr ""
 
-#: classes/installer.php:113
+#: classes/installer.php:113 includes/admin/admin.php:274
 msgid "Store List"
 msgstr ""
 
@@ -970,29 +971,29 @@ msgstr ""
 msgid "Not Available"
 msgstr ""
 
-#: dokan.php:539 includes/admin/admin.php:62
+#: dokan.php:539 includes/admin/admin.php:64
 msgid "Dokan"
 msgstr ""
 
-#: dokan.php:548 includes/admin/admin.php:63 includes/admin/dashboard.php:96
+#: dokan.php:548 includes/admin/admin.php:65 includes/admin/dashboard.php:96
 msgid "Dokan Dashboard"
 msgstr ""
 
-#: dokan.php:555 includes/admin/admin.php:56 includes/admin/admin.php:64
+#: dokan.php:555 includes/admin/admin.php:58 includes/admin/admin.php:66
 #: includes/admin/dashboard.php:72 includes/template-tags.php:256
 #: templates/withdraw.php:12
 msgid "Withdraw"
 msgstr ""
 
-#: dokan.php:562 includes/admin/admin.php:65
+#: dokan.php:562 includes/admin/admin.php:67
 msgid "All Sellers"
 msgstr ""
 
-#: dokan.php:569 includes/admin/admin.php:66
+#: dokan.php:569 includes/admin/admin.php:68
 msgid "Earning Reports"
 msgstr ""
 
-#: dokan.php:576 includes/admin/admin.php:70 includes/template-tags.php:261
+#: dokan.php:576 includes/admin/admin.php:73 includes/template-tags.php:261
 #: templates/settings.php:20
 msgid "Settings"
 msgstr ""
@@ -1001,156 +1002,160 @@ msgstr ""
 msgid "Dokan - Add-ons"
 msgstr ""
 
-#: includes/admin/admin.php:59
+#: includes/admin/admin.php:61
 msgid "Withdraw %s"
 msgstr ""
 
-#: includes/admin/admin.php:65
+#: includes/admin/admin.php:67
 msgid "Sellers Listing"
 msgstr ""
 
-#: includes/admin/admin.php:71
+#: includes/admin/admin.php:72
+msgid "Tools"
+msgstr ""
+
+#: includes/admin/admin.php:74
 msgid "Add Ons"
 msgstr ""
 
-#: includes/admin/admin.php:71
+#: includes/admin/admin.php:74
 msgid "Add-ons"
 msgstr ""
 
-#: includes/admin/admin.php:81
+#: includes/admin/admin.php:84
 msgid "General"
 msgstr ""
 
-#: includes/admin/admin.php:85
+#: includes/admin/admin.php:88
 msgid "Selling Options"
 msgstr ""
 
-#: includes/admin/admin.php:89
+#: includes/admin/admin.php:92
 msgid "Page Settings"
 msgstr ""
 
-#: includes/admin/admin.php:96
+#: includes/admin/admin.php:99
 msgid "- select -"
 msgstr ""
 
-#: includes/admin/admin.php:121
+#: includes/admin/admin.php:124
 msgid "Admin area access"
 msgstr ""
 
-#: includes/admin/admin.php:122
+#: includes/admin/admin.php:125
 msgid "Disable sellers and customers from accessing wp-admin area"
 msgstr ""
 
-#: includes/admin/admin.php:128
+#: includes/admin/admin.php:131
 msgid "Show Map on Store Page"
 msgstr ""
 
-#: includes/admin/admin.php:129
+#: includes/admin/admin.php:132
 msgid "Enable showing Store location map on store left sidebar"
 msgstr ""
 
-#: includes/admin/admin.php:135
+#: includes/admin/admin.php:138
 msgid "Show Contact Form on Store Page"
 msgstr ""
 
-#: includes/admin/admin.php:136
+#: includes/admin/admin.php:139
 msgid "Enable showing contact seller form on store left sidebar"
 msgstr ""
 
-#: includes/admin/admin.php:144
+#: includes/admin/admin.php:147
 msgid "New Seller Enable Selling"
 msgstr ""
 
-#: includes/admin/admin.php:145
+#: includes/admin/admin.php:148
 msgid "Make selling status enable for new registred seller"
 msgstr ""
 
-#: includes/admin/admin.php:151
+#: includes/admin/admin.php:154
 msgid "New Product Status"
 msgstr ""
 
-#: includes/admin/admin.php:152
+#: includes/admin/admin.php:155
 msgid "Product status when a seller creates a product"
 msgstr ""
 
-#: includes/admin/admin.php:156 templates/products-listing.php:158
+#: includes/admin/admin.php:159 templates/products-listing.php:158
 msgid "Published"
 msgstr ""
 
-#: includes/admin/admin.php:157 includes/theme-functions.php:501
+#: includes/admin/admin.php:160 includes/theme-functions.php:501
 #: templates/dashboard.php:177
 msgid "Pending Review"
 msgstr ""
 
-#: includes/admin/admin.php:163
+#: includes/admin/admin.php:166
 msgid "How much amount (%) a seller will get from each order"
 msgstr ""
 
-#: includes/admin/admin.php:169
+#: includes/admin/admin.php:172
 msgid "Order Status Change"
 msgstr ""
 
-#: includes/admin/admin.php:170
+#: includes/admin/admin.php:173
 msgid "Seller can change order status"
 msgstr ""
 
-#: includes/admin/admin.php:176
+#: includes/admin/admin.php:179
 msgid "Withdraw Methods"
 msgstr ""
 
-#: includes/admin/admin.php:177
+#: includes/admin/admin.php:180
 msgid "Withdraw methods for sellers"
 msgstr ""
 
-#: includes/admin/admin.php:184
+#: includes/admin/admin.php:187
 msgid "Order Status for Withdraw"
 msgstr ""
 
-#: includes/admin/admin.php:185
+#: includes/admin/admin.php:188
 msgid "Order status for which seller can make a withdraw request."
 msgstr ""
 
-#: includes/admin/admin.php:187 includes/admin/admin.php:188
+#: includes/admin/admin.php:190 includes/admin/admin.php:191
 #: templates/dashboard.php:74
 msgid "Completed"
 msgstr ""
 
-#: includes/admin/admin.php:187 includes/admin/admin.php:188
+#: includes/admin/admin.php:190 includes/admin/admin.php:191
 #: templates/dashboard.php:84 templates/orders/listing.php:90
 msgid "Processing"
 msgstr ""
 
-#: includes/admin/admin.php:187 includes/admin/admin.php:188
+#: includes/admin/admin.php:190 includes/admin/admin.php:191
 msgid "On-hold"
 msgstr ""
 
-#: includes/admin/admin.php:192
+#: includes/admin/admin.php:195
 msgid "Minimum Withdraw Limit"
 msgstr ""
 
-#: includes/admin/admin.php:193
+#: includes/admin/admin.php:196
 msgid "Minimum balance required to make a withdraw request"
 msgstr ""
 
-#: includes/admin/admin.php:199
+#: includes/admin/admin.php:202
 msgid "Review Editing"
 msgstr ""
 
-#: includes/admin/admin.php:200
+#: includes/admin/admin.php:203
 msgid "Seller can edit product reviews"
 msgstr ""
 
-#: includes/admin/admin.php:278
+#: includes/admin/admin.php:345
 msgid ""
 "<strong>Dokan Data Update Required</strong> &#8211; We need to update your "
 "install to the latest version"
 msgstr ""
 
-#: includes/admin/admin.php:279
+#: includes/admin/admin.php:346
 msgid "Run the updater"
 msgstr ""
 
-#: includes/admin/admin.php:284
+#: includes/admin/admin.php:351
 msgid ""
 "It is strongly recommended that you backup your database before proceeding. "
 "Are you sure you wish to run the updater now?"
@@ -1260,7 +1265,7 @@ msgid "Seller Earning"
 msgstr ""
 
 #: includes/admin/reports.php:142 includes/admin/reports.php:152
-#: includes/admin-functions.php:388
+#: includes/admin-functions.php:394
 msgid "Commision"
 msgstr ""
 
@@ -1313,6 +1318,44 @@ msgstr ""
 
 #: includes/admin/sellers.php:81
 msgid "No users found!"
+msgstr ""
+
+#: includes/admin/tools.php:2
+msgid "Dokan Tools"
+msgstr ""
+
+#: includes/admin/tools.php:10
+msgid "Pages have been created and installed!"
+msgstr ""
+
+#: includes/admin/tools.php:14
+msgid "Order sync table has been regenerated!"
+msgstr ""
+
+#: includes/admin/tools.php:30
+msgid "Page Installation"
+msgstr ""
+
+#: includes/admin/tools.php:33
+msgid "Clicking this button will create required pages for the plugin."
+msgstr ""
+
+#: includes/admin/tools.php:34
+msgid "Install Dokan Pages"
+msgstr ""
+
+#: includes/admin/tools.php:39
+msgid "Regenerate Order Sync Table"
+msgstr ""
+
+#: includes/admin/tools.php:42
+msgid ""
+"This tool will delete all orders from the Dokan's sync table and re-build "
+"it."
+msgstr ""
+
+#: includes/admin/tools.php:44
+msgid "Re-build"
 msgstr ""
 
 #: includes/admin/withdraw.php:8
@@ -1378,23 +1421,23 @@ msgstr ""
 msgid "Toggle Sub-orders"
 msgstr ""
 
-#: includes/admin-functions.php:368
+#: includes/admin-functions.php:374
 msgid "Total Sales"
 msgstr ""
 
-#: includes/admin-functions.php:375
+#: includes/admin-functions.php:381
 msgid "Total: "
 msgstr ""
 
-#: includes/admin-functions.php:378 includes/reports.php:562
+#: includes/admin-functions.php:384 includes/reports.php:562
 msgid "Number of orders"
 msgstr ""
 
-#: includes/admin-functions.php:385 includes/reports.php:569
+#: includes/admin-functions.php:391 includes/reports.php:569
 msgid "sales"
 msgstr ""
 
-#: includes/admin-functions.php:395
+#: includes/admin-functions.php:401
 msgid "Commision: "
 msgstr ""
 
