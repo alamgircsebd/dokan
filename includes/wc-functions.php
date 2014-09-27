@@ -1276,7 +1276,7 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
  * @return \WP_Error
  */
 function dokan_seller_registration_errors( $error ) {
-    $allowed_roles = array( 'customer', 'seller' );
+    $allowed_roles = apply_filters( 'dokan_register_user_role', array( 'customer', 'seller' ) );
 
     // is the role name allowed or user is trying to manipulate?
     if ( isset( $_POST['role'] ) && !in_array( $_POST['role'], $allowed_roles ) ) {

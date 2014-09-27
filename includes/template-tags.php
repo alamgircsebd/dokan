@@ -382,6 +382,10 @@ function dokan_seller_reg_form_fields() {
             <label for="shop-phone"><?php _e( 'Phone', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr($_POST['phone']); ?>" required="required" />
         </p>
+
+    </div>
+    <div class="dokan-new-field-wrap" style="display: none;">
+        <?php do_action( 'dokn_aditional_relation_filed' ); ?>
     </div>
 
     <p class="form-row form-group user-role">
@@ -394,7 +398,9 @@ function dokan_seller_reg_form_fields() {
             <input type="radio" name="role" value="seller"<?php checked( $role, 'seller' ); ?>>
             <?php _e( 'I am a seller', 'dokan' ); ?>
         </label>
+        <?php do_action( 'dokan_registration_form_role', $role ); ?>
     </p>
+
     <?php
 }
 
