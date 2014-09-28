@@ -2629,3 +2629,9 @@ textarea.dokan-form-control {
   }
 }
 /*# sourceMappingURL=style.css.map */
+
+.product-edit-container #product-attributes .select-attribute.form-control {
+  display: inline;
+  width: auto;
+}
+

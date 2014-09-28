@@ -21,6 +21,7 @@ class Dokan_Template_Shortcodes {
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
         add_shortcode( 'dokan-top-rated-product', array( $this, 'top_rated_product_shortcode' ) );
 		add_shortcode( 'dokan-stores', array( $this, 'store_listing' ) );
+        add_shortcode( 'dokan-my-orders', array( $this, 'my_orders_page' ) );
 	}
 
 	public static function init() {
@@ -360,6 +361,10 @@ class Dokan_Template_Shortcodes {
         $content = ob_get_clean();
 
         return apply_filters( 'dokan_seller_listing', $content, $attr );
+    }
+
+    function my_orders_page() {
+        return dokan_get_template_part( 'my-orders' );
     }
 
 }
