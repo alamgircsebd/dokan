@@ -211,6 +211,12 @@ class Dokan_Admin_Settings {
                     'label'   => __( 'Dashboard', 'dokan' ),
                     'type'    => 'select',
                     'options' => $pages_array
+                ),
+                'my_orders' => array(
+                    'name'    => 'my_orders',
+                    'label'   => __( 'My Orders', 'dokan' ),
+                    'type'    => 'select',
+                    'options' => $pages_array
                 )
             )
         );
