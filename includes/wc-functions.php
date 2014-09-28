@@ -1039,7 +1039,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
     $order_data = apply_filters( 'woocommerce_new_order_data', array(
         'post_type'     => 'shop_order',
         'post_title'    => sprintf( __( 'Order &ndash; %s', 'woocommerce' ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Order date parsed by strftime', 'woocommerce' ) ) ),
-        'post_status'   => 'publish',
+        'post_status'   => 'wc-pending',
         'ping_status'   => 'closed',
         'post_excerpt'  => isset( $posted['order_comments'] ) ? $posted['order_comments'] : '',
         'post_author'   => $seller_id,
@@ -1053,6 +1053,8 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
 
         $order_total = $order_tax = 0;
         $product_ids = array();
+
+        do_action( 'woocommerce_new_order', $order_id );
 
         // now insert line items
         foreach ($seller_products as $item) {
@@ -1119,9 +1121,6 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         update_post_meta( $order_id, '_customer_user_agent',    get_post_meta( $parent_order->id, '_customer_user_agent', true ) );
 
         do_action( 'dokan_checkout_update_order_meta', $order_id );
-
-        // Order status
-        wp_set_object_terms( $order_id, 'pending', 'shop_order_status' );
     } // if order
 }
 
@@ -1713,3 +1712,59 @@ function dokan_become_seller_handler () {
 }
 
 add_action( 'template_redirect', 'dokan_become_seller_handler' );
+
+/**
+ * Exclude child order emails for customers
+ *
+ * A hacky way to do this from this filter. Because there is no easy
+ * way to do this by removing action hooks from WooCommerce. It would be easier
+ * if they were from functions. Because they are added from classes, we can't
+ * remove those action hooks. Thats why we are doing this from the wp_mail filter.
+ *
+ * @param  array $attr
+ * @return array
+ */
+function dokan_exclude_child_customer_receipt( $attr ) {
+    $subject      = $attr['subject'];
+    $empty_attr   = array( 'to', 'subject', 'message', 'headers', 'attachments' );
+
+    // order receipt
+    $sub_receipt  = __( 'Your {site_title} order receipt from {order_date}', 'woocommerce' );
+    $sub_download = __( 'Your {site_title} order from {order_date} is complete', 'woocommerce' );
+
+    $sub_receipt  = str_replace( array('{site_title}', '{order_date}'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_receipt);
+    $sub_download = str_replace( array('{site_title}', '{order_date} is complete'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_download);
+
+    // dokan_log( 'BEGIN: ' . $subject );
+
+    // not a customer receipt mail
+    if ( ( stripos( $subject, $sub_receipt ) === false ) && ( stripos( $subject, $sub_download ) === false ) ) {
+        // dokan_log( 'not a customer receipt email' );
+        return $attr;
+    }
+
+    $message = $attr['message'];
+    $pattern = '/Order: #(\d+)/';
+    preg_match( $pattern, $message, $matches );
+
+    if ( isset( $matches[1] ) ) {
+        $order_id = $matches[1];
+        $order    = get_post( $order_id );
+
+        // dokan_log( 'order id found: #' . $order_id );
+
+        // we found a child order
+        if ( ! is_wp_error( $order ) && $order->post_parent != 0 ) {
+            // dokan_log( 'skipping receipt mail' );
+            return $empty_attr;
+        }
+    } else {
+        // dokan_log( 'no order id found' );
+    }
+
+    // dokan_log( 'END: ' . $subject );
+
+    return $attr;
+}
+
+add_filter( 'wp_mail', 'dokan_exclude_child_customer_receipt', 10 );
