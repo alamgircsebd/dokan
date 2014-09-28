@@ -1735,11 +1735,8 @@ function dokan_exclude_child_customer_receipt( $attr ) {
     $sub_receipt  = str_replace( array('{site_title}', '{order_date}'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_receipt);
     $sub_download = str_replace( array('{site_title}', '{order_date} is complete'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_download);
 
-    // dokan_log( 'BEGIN: ' . $subject );
-
     // not a customer receipt mail
     if ( ( stripos( $subject, $sub_receipt ) === false ) && ( stripos( $subject, $sub_download ) === false ) ) {
-        // dokan_log( 'not a customer receipt email' );
         return $attr;
     }
 
@@ -1751,18 +1748,11 @@ function dokan_exclude_child_customer_receipt( $attr ) {
         $order_id = $matches[1];
         $order    = get_post( $order_id );
 
-        // dokan_log( 'order id found: #' . $order_id );
-
         // we found a child order
         if ( ! is_wp_error( $order ) && $order->post_parent != 0 ) {
-            // dokan_log( 'skipping receipt mail' );
             return $empty_attr;
         }
-    } else {
-        // dokan_log( 'no order id found' );
     }
-
-    // dokan_log( 'END: ' . $subject );
 
     return $attr;
 }
