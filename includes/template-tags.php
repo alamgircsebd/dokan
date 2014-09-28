@@ -382,6 +382,10 @@ function dokan_seller_reg_form_fields() {
             <label for="shop-phone"><?php _e( 'Phone', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr($_POST['phone']); ?>" required="required" />
         </p>
+
+    </div>
+    <div class="dokan-new-field-wrap" style="display: none;">
+        <?php do_action( 'dokn_aditional_relation_filed' ); ?>
     </div>
 
     <p class="form-row form-group user-role">
@@ -394,7 +398,9 @@ function dokan_seller_reg_form_fields() {
             <input type="radio" name="role" value="seller"<?php checked( $role, 'seller' ); ?>>
             <?php _e( 'I am a seller', 'dokan' ); ?>
         </label>
+        <?php do_action( 'dokan_registration_form_role', $role ); ?>
     </p>
+
     <?php
 }
 
@@ -457,6 +463,7 @@ function dokan_header_user_menu() {
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo esc_html( $current_user->display_name ); ?> <b class="caret"></b></a>
                 <ul class="dropdown-menu">
+                    <li><a href="<?php echo dokan_get_page_url( 'my_orders' ); ?>"><?php _e( 'My Orders', 'dokan' ); ?></a></li>
                     <li><a href="<?php echo dokan_get_page_url( 'myaccount', 'woocommerce' ); ?>"><?php _e( 'My Account', 'dokan' ); ?></a></li>
                     <li><a href="<?php echo wc_customer_edit_account_url(); ?>"><?php _e( 'Edit Account', 'dokan' ); ?></a></li>
                     <li class="divider"></li>

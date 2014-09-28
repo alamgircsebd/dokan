@@ -106,7 +106,7 @@
             <div class="dokan-reports-sidebar">
                 <ul class="chart-legend">
                     <li>
-                        <strong><?php echo wc_price( dokan_site_total_earning() ); ?></strong>
+                        <strong><?php echo wc_price( $earning_total ); ?></strong>
                         <?php _e( 'Total Earning', 'dokan' ); ?>
                     </li>
                     <li>
@@ -131,26 +131,40 @@
 
 
     <?php } else if ( $tab == 'logs' ) { ?>
-
+        <?php
+            $headers = array(
+                'order_id'     => __( 'Order', 'dokan' ),
+                'seller_id'    => __( 'Seller', 'dokan' ),
+                'order_total'  => __( 'Order Total', 'dokan' ),
+                'net_amount'   => __( 'Seller Earning', 'dokan' ),
+                'commision'    => __( 'Commision', 'dokan' ),
+                'order_status' => __( 'Status', 'dokan' ),
+            );
+            $headers = apply_filters( 'dokan_earning_report_header', $headers );
+        ?>
+        <?php do_action( 'dokan_prev_report_form', $_GET ); ?>
+        
         <table class="widefat withdraw-table" style="margin-top: 15px;">
             <thead>
                 <tr>
-                    <th><?php _e( 'Order', 'dokan' ); ?></th>
-                    <th><?php _e( 'Seller', 'dokan' ); ?></th>
-                    <th><?php _e( 'Order Total', 'dokan' ); ?></th>
-                    <th><?php _e( 'Seller Earning', 'dokan' ); ?></th>
-                    <th><?php _e( 'Commision', 'dokan' ); ?></th>
-                    <th><?php _e( 'Status', 'dokan' ); ?></th>
+                    <?php 
+                    foreach( (array)$headers as $key=>$label ) {
+                        ?>
+                            <th><?php echo $label; ?></th>
+                        <?php
+                    }
+                    ?>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <th><?php _e( 'Order', 'dokan' ); ?></th>
-                    <th><?php _e( 'Seller', 'dokan' ); ?></th>
-                    <th><?php _e( 'Order Total', 'dokan' ); ?></th>
-                    <th><?php _e( 'Seller Earning', 'dokan' ); ?></th>
-                    <th><?php _e( 'Commision', 'dokan' ); ?></th>
-                    <th><?php _e( 'Status', 'dokan' ); ?></th>
+                    <?php 
+                    foreach( (array)$headers as $key=>$label ) {
+                        ?>
+                            <th><?php echo $label; ?></th>
+                        <?php
+                    }
+                    ?>
                 </tr>
             </tfoot>
             <tbody>
@@ -168,19 +182,36 @@
                 $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
                         LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
                         WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where
-                        ORDER BY do.order_id DESC LIMIT $offset, $limit";
+                        ORDER BY do.order_id DESC LIMIT 0, 20";
+                  
                 $all_logs = $wpdb->get_results( $sql );
-
                 foreach ($all_logs as $log) {
                     $seller = get_user_by( 'id', $log->seller_id );
+
+                    $result = array(
+                        'order_id'     => '<a href="'.admin_url( 'post.php?action=edit&amp;post='. $log->order_id ).'">#'.$log->order_id.'</a>',
+                        'seller_id'    => '<a href="'.add_query_arg( array( 'seller_id' => $log->seller_id ) ).'">'.$seller->display_name.'</a> (<a href="'.admin_url( 'user-edit.php?user_id='. $log->seller_id ).'">'.__( 'edit', 'dokan' ).'</a>)',
+                        'order_total'  => $log->order_total,
+                        'net_amount'   => $log->net_amount,
+                        'commision'    => $log->order_total - $log->net_amount,
+                        'order_status' => $log->order_status
+                    );
+
+                    $result = apply_filters( 'dokan_report_table_value', $result, $log->order_id, $log->seller_id ); 
+                    $result['order_total'] = !empty( $result['order_total'] ) ? wc_price( $result['order_total'] ) : '';
+                    $result['net_amount'] = !empty( $result['net_amount'] ) ? wc_price( $result['net_amount'] ) : '';
+                        $result['commision'] = !empty( $result['commision'] ) ? wc_price( $result['commision'] ) : '';
                     ?>
                     <tr<?php echo $count % 2 == 0 ? ' class="alternate"' : '' ;?>>
-                        <th><?php printf( '<a href="%s">#%s</a>', admin_url( 'post.php?action=edit&amp;post='. $log->order_id ), $log->order_id ); ?></th>
-                        <th><?php printf( '<a href="%s">%s</a> (<a href="%s">%s</a>)', add_query_arg( array( 'seller_id' => $log->seller_id ) ), $seller->display_name, admin_url( 'user-edit.php?user_id='. $log->seller_id ), __( 'edit', 'dokan' ) ); ?></th>
-                        <th><?php echo wc_price( $log->order_total ); ?></th>
-                        <th><?php echo wc_price( $log->net_amount ); ?></th>
-                        <th><?php echo wc_price( $log->order_total - $log->net_amount ); ?></th>
-                        <th><?php echo $log->order_status; ?></th>
+
+                        <?php
+                            foreach ((array)$headers as $key => $content ) {
+                                ?>
+                                <th><?php echo isset( $result[$key] ) ? $result[$key] : ''; ?></th>
+
+                                <?php
+                            }
+                        ?>
                     </tr>
                     <?php
                     $count++;

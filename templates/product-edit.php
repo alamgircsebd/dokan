@@ -147,7 +147,7 @@ if ( ! $from_shortcode ) {
 
                                     <?php do_action( 'dokan_product_edit_before_main' ); ?>
 
-                                    <div class="row dokan-clearfix">
+                                    <div class="dokan-clearfix">
                                         <div class="content-half-part">
                                             <div class="dokan-feat-image-upload">
                                                 <?php
@@ -264,7 +264,7 @@ if ( ! $from_shortcode ) {
                                         </div>
                                     </div>
 
-                                    <div class="row">
+                                    <div class="dokan-rich-text-wrap">
                                         <div>
                                             <?php wp_editor( esc_textarea( $post->post_content ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
                                         </div>
