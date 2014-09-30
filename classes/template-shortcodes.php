@@ -15,7 +15,8 @@ class Dokan_Template_Shortcodes {
 
 	function __construct() {
 
-		add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
+        add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
+		add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
@@ -180,9 +181,6 @@ class Dokan_Template_Shortcodes {
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
         }
 
-
-		dokan_delete_product_handler();
-
 		// Coupon functionality
 		$dokan_template_coupons = Dokan_Template_Coupons::init();
 
@@ -204,6 +202,15 @@ class Dokan_Template_Shortcodes {
 
 		$dokan_withdraw->cancel_pending();
 
+    }
+
+    /**
+     * Handle delete product link
+     *
+     * @return void
+     */
+    function handle_delete_product() {
+        dokan_delete_product_handler();
     }
 
     function best_selling_product_shortcode( $atts ) {
