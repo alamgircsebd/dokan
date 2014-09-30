@@ -257,6 +257,8 @@ class WeDevs_Dokan {
                 'notAvailable' => __( 'Not Available', 'dokan' )
             )
         );
+        //wp_enqueue_style( 'fontawesome' );
+
 
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
@@ -312,6 +314,7 @@ class WeDevs_Dokan {
         // load dokan style on every pages. requires for shortcodes in other pages
         if ( DOKAN_LOAD_STYLE ) {
             wp_enqueue_style( 'dokan-style' );
+            wp_enqueue_style( 'fontawesome' );
         }
 
         do_action( 'dokan_after_load_script' );
