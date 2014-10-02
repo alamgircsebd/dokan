@@ -382,6 +382,8 @@ function dokan_seller_reg_form_fields() {
             <label for="shop-phone"><?php _e( 'Phone', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr($_POST['phone']); ?>" required="required" />
         </p>
+        
+        <?php  do_action( 'dokan_seller_registration_field_after' ); ?>
 
     </div>
     <div class="dokan-new-field-wrap" style="display: none;">
