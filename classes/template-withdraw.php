@@ -316,26 +316,26 @@ class Dokan_Template_Withdraw {
         ?>
 
         <?php if ( isset( $_GET['message'] ) ) {
-            if ( $_GET['message'] == 'trashed' ) {
-                ?>
-                <div class="updated">
-                    <p><strong><?php _e( 'Requests deleted!', 'dokan' ); ?></strong></p>
-                </div>
-                <?php
+            $message = '';
+
+            switch ($_GET['message']) {
+                case 'trashed':
+                    $message = __( 'Requests deleted!', 'dokan' );
+                    break;
+
+                case 'cancelled':
+                    $message = __( 'Requests cancelled!', 'dokan' );
+                    break;
+
+                case 'approved':
+                    $message = __( 'Requests approved!', 'dokan' );
+                    break;
             }
 
-            if ( $_GET['message'] == 'cancelled' ) {
+            if ( ! empty( $message ) ) {
                 ?>
                 <div class="updated">
-                    <p><strong><?php _e( 'Requests cancelled!', 'dokan' ); ?></strong></p>
-                </div>
-                <?php
-            }
-
-            if ( $_GET['message'] == 'approved' ) {
-                ?>
-                <div class="updated">
-                    <p><strong><?php _e( 'Requests approved!', 'dokan' ); ?></strong></p>
+                    <p><strong><?php echo $message; ?></strong></p>
                 </div>
                 <?php
             }
@@ -654,9 +654,9 @@ class Dokan_Template_Withdraw {
 
     function get_payment_methods() {
         $method = array(
-            '' => __( '- Select Method -', 'dokan' ),
+            ''       => __( '- Select Method -', 'dokan' ),
             'paypal' => __( 'Paypal', 'dokan' ),
-            'bank' => __( 'Bank Transfer', 'dokan' ),
+            'bank'   => __( 'Bank Transfer', 'dokan' ),
         );
 
         $payment_methods = apply_filters( 'payment_withdraw_option', $method );
@@ -666,33 +666,29 @@ class Dokan_Template_Withdraw {
 
     function show_alert_messages() {
         $type = isset( $_GET['message'] ) ? $_GET['message'] : '';
+        $message = '';
 
         switch ($type) {
             case 'request_cancelled':
-                ?>
-                <div class="dokan-alert dokan-alert-success">
-                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                    <strong><?php _e( 'Your request has been cancelled successfully!', 'dokan' ); ?></strong>
-                </div>
-                <?php
+                $message = __( 'Your request has been cancelled successfully!', 'dokan' );
                 break;
 
             case 'request_success':
-                ?>
-                <div class="dokan-alert dokan-alert-success">
-                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                    <strong><?php _e( 'Your request has been received successfully and is under review!', 'dokan' ); ?></strong>
-                </div>
-                <?php
+                $message = __( 'Your request has been received successfully and is under review!', 'dokan' );
                 break;
+
             case 'request_error':
-                ?>
-                <div class="dokan-alert dokan-alert-danger">
-                    <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                    <strong><?php _e( 'Unknown error!', 'dokan' ); ?></strong>
-                </div>
-                <?php
+                $message = __( 'Unknown error!', 'dokan' );
                 break;
+        }
+
+        if ( ! empty( $message ) ) {
+            ?>
+            <div class="dokan-alert dokan-alert-danger">
+                <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
+                <strong><?php echo $message; ?></strong>
+            </div>
+            <?php
         }
     }
 
@@ -736,8 +732,8 @@ class Dokan_Template_Withdraw {
 
         <span class="ajax_table_shown"></span>
         <form class="dokan-form-horizontal withdraw" role="form" method="post">
-            <div class="dokan-form-group">
 
+            <div class="dokan-form-group">
                 <label for="withdraw-amount" class="dokan-w3 dokan-control-label">
                     <?php _e( 'Withdraw Amount', 'dokan' ); ?>
                 </label>
@@ -747,7 +743,6 @@ class Dokan_Template_Withdraw {
                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input name="witdraw_amount" required number min="<?php echo esc_attr( dokan_get_option( 'withdraw_limit', 'dokan_selling', 50 ) ); ?>" class="dokan-form-control" id="withdraw-amount" name="price" type="number" placeholder="9.99" value="<?php echo $amount; ?>"  >
                     </div>
-
                 </div>
             </div>
 
