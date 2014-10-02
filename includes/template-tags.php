@@ -224,42 +224,42 @@ function dokan_get_dashboard_nav() {
     $urls = array(
         'dashboard' => array(
             'title' => __( 'Dashboard', 'dokan'),
-            'icon'  => '<i class="dokan-icon-dashboard"></i>',
+            'icon'  => '<i class="fa fa-tachometer"></i>',
             'url'   => dokan_get_navigation_url()
         ),
         'product' => array(
             'title' => __( 'Products', 'dokan'),
-            'icon'  => '<i class="dokan-icon-briefcase"></i>',
+            'icon'  => '<i class="fa fa-briefcase"></i>',
             'url'   => dokan_get_navigation_url( 'products' )
         ),
         'order' => array(
             'title' => __( 'Orders', 'dokan'),
-            'icon'  => '<i class="dokan-icon-basket"></i>',
+            'icon'  => '<i class="fa fa-shopping-cart"></i>',
             'url'   => dokan_get_navigation_url( 'orders' )
         ),
         'coupon' => array(
             'title' => __( 'Coupons', 'dokan'),
-            'icon'  => '<i class="dokan-icon-gift"></i>',
+            'icon'  => '<i class="fa fa-gift"></i>',
             'url'   => dokan_get_navigation_url( 'coupons' )
         ),
         'report' => array(
             'title' => __( 'Reports', 'dokan'),
-            'icon'  => '<i class="dokan-icon-stats"></i>',
+            'icon'  => '<i class="fa fa-line-chart"></i>',
             'url'   => dokan_get_navigation_url( 'reports' )
         ),
         'reviews' => array(
             'title' => __( 'Reviews', 'dokan'),
-            'icon'  => '<i class="dokan-icon-bubbles"></i>',
+            'icon'  => '<i class="fa fa-comments-o"></i>',
             'url'   => dokan_get_navigation_url( 'reviews' )
         ),
         'withdraw' => array(
             'title' => __( 'Withdraw', 'dokan'),
-            'icon'  => '<i class="dokan-icon-upload"></i>',
+            'icon'  => '<i class="fa fa-upload"></i>',
             'url'   => dokan_get_navigation_url( 'withdraw' )
         ),
         'settings' => array(
             'title' => __( 'Settings', 'dokan'),
-            'icon'  => '<i class="dokan-icon-cog"></i>',
+            'icon'  => '<i class="fa fa-cog"></i>',
             'url'   => dokan_get_navigation_url( 'settings' )
         ),
     );
@@ -382,6 +382,8 @@ function dokan_seller_reg_form_fields() {
             <label for="shop-phone"><?php _e( 'Phone', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr($_POST['phone']); ?>" required="required" />
         </p>
+        
+        <?php  do_action( 'dokan_seller_registration_field_after', 'dokan' ); ?>
 
     </div>
     <div class="dokan-new-field-wrap" style="display: none;">

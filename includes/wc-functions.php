@@ -1716,17 +1716,17 @@ add_action( 'template_redirect', 'dokan_become_seller_handler' );
 /**
  * Exclude child order emails for customers
  *
- * A hacky way to do this from this filter. Because there is no easy
+ * A hacky and dirty way to do this from this action. Because there is no easy
  * way to do this by removing action hooks from WooCommerce. It would be easier
  * if they were from functions. Because they are added from classes, we can't
- * remove those action hooks. Thats why we are doing this from the wp_mail filter.
+ * remove those action hooks. Thats why we are doing this from the phpmailer_init action
+ * by returning a fake phpmailer class.
  *
  * @param  array $attr
  * @return array
  */
-function dokan_exclude_child_customer_receipt( $attr ) {
-    $subject      = $attr['subject'];
-    $empty_attr   = array( 'to', 'subject', 'message', 'headers', 'attachments' );
+function dokan_exclude_child_customer_receipt( &$phpmailer ) {
+    $subject      = $phpmailer->Subject;
 
     // order receipt
     $sub_receipt  = __( 'Your {site_title} order receipt from {order_date}', 'woocommerce' );
@@ -1737,10 +1737,10 @@ function dokan_exclude_child_customer_receipt( $attr ) {
 
     // not a customer receipt mail
     if ( ( stripos( $subject, $sub_receipt ) === false ) && ( stripos( $subject, $sub_download ) === false ) ) {
-        return $attr;
+        return;
     }
 
-    $message = $attr['message'];
+    $message = $phpmailer->Body;
     $pattern = '/Order: #(\d+)/';
     preg_match( $pattern, $message, $matches );
 
@@ -1750,11 +1750,16 @@ function dokan_exclude_child_customer_receipt( $attr ) {
 
         // we found a child order
         if ( ! is_wp_error( $order ) && $order->post_parent != 0 ) {
-            return $empty_attr;
+            $phpmailer = new DokanFakeMailer();
         }
     }
-
-    return $attr;
 }
 
-add_filter( 'wp_mail', 'dokan_exclude_child_customer_receipt', 10 );
+add_action( 'phpmailer_init', 'dokan_exclude_child_customer_receipt' );
+
+/**
+ * A fake mailer class to replace phpmailer
+ */
+class DokanFakeMailer {
+    public function Send() {}
+}
