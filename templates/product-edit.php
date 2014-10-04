@@ -21,7 +21,7 @@ if ( $post->post_author != $seller_id ) {
 
 $_regular_price         = get_post_meta( $post_id, '_regular_price', true );
 $_sale_price            = get_post_meta( $post_id, '_sale_price', true );
-$is_discount            = !empty( $_sale_price ) ? true : false;
+$is_discount            = ( $_sale_price != '' ) ? true : false;
 $_sale_price_dates_from = get_post_meta( $post_id, '_sale_price_dates_from', true );
 $_sale_price_dates_to   = get_post_meta( $post_id, '_sale_price_dates_to', true );
 
@@ -198,7 +198,7 @@ if ( ! $from_shortcode ) {
 
                                                 <div class="discount-price">
                                                     <label>
-                                                        <input type="checkbox" <?php checked( $is_discount, true ); ?> class="_discounted_price"> <?php _e( 'Enable Discounted Price', 'dokan' ); ?>
+                                                        <input type="checkbox" <?php checked( $is_discount, true ); ?> class="_discounted_price" name="_discounted_price"> <?php _e( 'Enable Discounted Price', 'dokan' ); ?>
                                                     </label>
                                                 </div>
                                             </div>
