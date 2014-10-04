@@ -142,6 +142,7 @@ class Dokan_Template_Shortcodes {
                     Dokan_Email::init()->new_product_added( $product_id, $product_status );
 
                     wp_redirect( dokan_edit_product_url( $product_id ) );
+                    exit;
                 }
             }
         }
@@ -180,6 +181,7 @@ class Dokan_Template_Shortcodes {
 
             $edit_url = dokan_edit_product_url( $post_id );
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
+            exit;
         }
 
 		// Coupon functionality

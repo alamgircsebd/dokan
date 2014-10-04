@@ -461,8 +461,13 @@ function dokan_process_product_meta( $post_id ) {
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
 
     // Update post meta
-    update_post_meta( $post_id, '_regular_price', stripslashes( $_POST['_regular_price'] ) );
-    update_post_meta( $post_id, '_sale_price', stripslashes( $_POST['_sale_price'] ) );
+    if ( isset( $_POST['_regular_price'] ) ) {
+        update_post_meta( $post_id, '_regular_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
+    }
+
+    if ( isset( $_POST['_sale_price'] ) ) {
+        update_post_meta( $post_id, '_sale_price', ( $_POST['_sale_price'] === '' ? '' : wc_format_decimal( $_POST['_sale_price'] ) ) );
+    }
 
     if ( isset( $_POST['_tax_status'] ) )
         update_post_meta( $post_id, '_tax_status', stripslashes( $_POST['_tax_status'] ) );
@@ -620,35 +625,47 @@ function dokan_process_product_meta( $post_id ) {
     } else {
 
         $date_from = isset( $_POST['_sale_price_dates_from'] ) ? $_POST['_sale_price_dates_from'] : '';
-        $date_to = isset( $_POST['_sale_price_dates_to'] ) ? $_POST['_sale_price_dates_to'] : '';
+        $date_to   = isset( $_POST['_sale_price_dates_to'] ) ? $_POST['_sale_price_dates_to'] : '';
 
         // Dates
-        if ( $date_from )
+        if ( $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( $date_from ) );
-        else
+        } else {
             update_post_meta( $post_id, '_sale_price_dates_from', '' );
+        }
 
-        if ( $date_to )
+        if ( $date_to ) {
             update_post_meta( $post_id, '_sale_price_dates_to', strtotime( $date_to ) );
-        else
+        } else {
             update_post_meta( $post_id, '_sale_price_dates_to', '' );
+        }
 
-        if ( $date_to && ! $date_from )
+        if ( $date_to && ! $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
+        }
 
         // Update price if on sale
-        if ( $_POST['_sale_price'] != '' && $date_to == '' && $date_from == '' )
-            update_post_meta( $post_id, '_price', stripslashes( $_POST['_sale_price'] ) );
-        else
-            update_post_meta( $post_id, '_price', stripslashes( $_POST['_regular_price'] ) );
+        if ( '' !== $_POST['_sale_price'] && '' == $date_to && '' == $date_from ) {
+            update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_sale_price'] ) );
+        } else {
+            update_post_meta( $post_id, '_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
+        }
 
-        if ( $_POST['_sale_price'] != '' && $date_from && strtotime( $date_from ) < strtotime( 'NOW', current_time( 'timestamp' ) ) )
-            update_post_meta( $post_id, '_price', stripslashes($_POST['_sale_price']) );
+        if ( '' !== $_POST['_sale_price'] && $date_from && strtotime( $date_from ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+            update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_sale_price'] ) );
+        }
 
         if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
-            update_post_meta( $post_id, '_price', stripslashes($_POST['_regular_price']) );
-            update_post_meta( $post_id, '_sale_price_dates_from', '');
-            update_post_meta( $post_id, '_sale_price_dates_to', '');
+            update_post_meta( $post_id, '_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
+            update_post_meta( $post_id, '_sale_price_dates_from', '' );
+            update_post_meta( $post_id, '_sale_price_dates_to', '' );
+        }
+
+        // reset price is discounted checkbox was not checked
+        if ( ! isset( $_POST['_discounted_price'] ) ) {
+            update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_regular_price'] ) );
+            update_post_meta( $post_id, '_regular_price', wc_format_decimal( $_POST['_regular_price'] ) );
+            update_post_meta( $post_id, '_sale_price', '' );
         }
     }
 
