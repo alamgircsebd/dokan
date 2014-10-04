@@ -340,6 +340,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
                 $date_where
             GROUP BY $group_by_query";
 
+
     $data = $wpdb->get_results( $sql );
 
     // echo $sql;

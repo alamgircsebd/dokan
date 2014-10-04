@@ -15,12 +15,15 @@ class Dokan_Template_Shortcodes {
 
 	function __construct() {
 
-		add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
+        add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
+        add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
+		add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
         add_shortcode( 'dokan-top-rated-product', array( $this, 'top_rated_product_shortcode' ) );
 		add_shortcode( 'dokan-stores', array( $this, 'store_listing' ) );
+        add_shortcode( 'dokan-my-orders', array( $this, 'my_orders_page' ) );
 	}
 
 	public static function init() {
@@ -139,6 +142,7 @@ class Dokan_Template_Shortcodes {
                     Dokan_Email::init()->new_product_added( $product_id, $product_status );
 
                     wp_redirect( dokan_edit_product_url( $product_id ) );
+                    exit;
                 }
             }
         }
@@ -177,10 +181,8 @@ class Dokan_Template_Shortcodes {
 
             $edit_url = dokan_edit_product_url( $post_id );
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
+            exit;
         }
-
-
-		dokan_delete_product_handler();
 
 		// Coupon functionality
 		$dokan_template_coupons = Dokan_Template_Coupons::init();
@@ -192,17 +194,32 @@ class Dokan_Template_Shortcodes {
 		}
 
 		$dokan_template_coupons->coupun_delete();
+    }
 
-		// Withdraw functionality
-		$dokan_withdraw = Dokan_Template_Withdraw::init();
-		self::$validate = $dokan_withdraw->validate();
+    /**
+     * Handle delete product link
+     *
+     * @return void
+     */
+    function handle_delete_product() {
+        dokan_delete_product_handler();
+    }
 
-		if( self::$validate !== false && !is_wp_error( self::$validate ) ) {
-		    $dokan_withdraw->insert_withdraw_info();
-		}
+    /**
+     * [handle_withdraws description]
+     *
+     * @return void
+     */
+    function handle_withdraws() {
+        // Withdraw functionality
+        $dokan_withdraw = Dokan_Template_Withdraw::init();
+        self::$validate = $dokan_withdraw->validate();
 
-		$dokan_withdraw->cancel_pending();
+        if ( self::$validate !== false && !is_wp_error( self::$validate ) ) {
+            $dokan_withdraw->insert_withdraw_info();
+        }
 
+        $dokan_withdraw->cancel_pending();
     }
 
     function best_selling_product_shortcode( $atts ) {
@@ -360,6 +377,10 @@ class Dokan_Template_Shortcodes {
         $content = ob_get_clean();
 
         return apply_filters( 'dokan_seller_listing', $content, $attr );
+    }
+
+    function my_orders_page() {
+        return dokan_get_template_part( 'my-orders' );
     }
 
 }

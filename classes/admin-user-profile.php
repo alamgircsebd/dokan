@@ -164,6 +164,9 @@ class Dokan_Admin_User_Profile {
                         <p class="description"><?php _e( 'How much amount (%) will get from each order', 'dokan' ) ?></p>
                     </td>
                 </tr>
+
+                <?php do_action( 'dokan_seller_meta_fields', $user ); ?>
+
             </tbody>
         </table>
 
@@ -299,5 +302,6 @@ class Dokan_Admin_User_Profile {
         update_user_meta( $user_id, 'dokan_enable_selling', $selling );
         update_user_meta( $user_id, 'dokan_publishing', $publishing );
         update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
+        do_action( 'dokan_process_seller_meta_fields', $user_id );
     }
 }

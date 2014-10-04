@@ -11,10 +11,10 @@ if ( !dokan_is_seller_has_order( $current_user->ID, $order_id ) ) {
 $statuses = wc_get_order_statuses();
 $order    = new WC_Order( $order_id );
 ?>
-<div class="row dokan-clearfix">
-    <div class="dokan-w8" style="margin-right:3%;">
+<div class="dokan-clearfix">
+    <div class="dokan-w7" style="margin-right:3%;">
 
-        <div class="row doakn-clearfix">
+        <div class="doakn-clearfix">
             <div class="" style="width:100%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php printf( 'Order#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>

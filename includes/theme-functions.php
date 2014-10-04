@@ -984,6 +984,8 @@ function dokan_get_sellers( $number = 10, $offset = 0 ) {
     ) );
 
     $user_query = new WP_User_Query( $args );
+
+
     $sellers    = $user_query->get_results();
 
     return array( 'users' => $sellers, 'count' => $user_query->total_users );

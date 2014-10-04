@@ -461,8 +461,13 @@ function dokan_process_product_meta( $post_id ) {
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
 
     // Update post meta
-    update_post_meta( $post_id, '_regular_price', stripslashes( $_POST['_regular_price'] ) );
-    update_post_meta( $post_id, '_sale_price', stripslashes( $_POST['_sale_price'] ) );
+    if ( isset( $_POST['_regular_price'] ) ) {
+        update_post_meta( $post_id, '_regular_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
+    }
+
+    if ( isset( $_POST['_sale_price'] ) ) {
+        update_post_meta( $post_id, '_sale_price', ( $_POST['_sale_price'] === '' ? '' : wc_format_decimal( $_POST['_sale_price'] ) ) );
+    }
 
     if ( isset( $_POST['_tax_status'] ) )
         update_post_meta( $post_id, '_tax_status', stripslashes( $_POST['_tax_status'] ) );
@@ -620,40 +625,52 @@ function dokan_process_product_meta( $post_id ) {
     } else {
 
         $date_from = isset( $_POST['_sale_price_dates_from'] ) ? $_POST['_sale_price_dates_from'] : '';
-        $date_to = isset( $_POST['_sale_price_dates_to'] ) ? $_POST['_sale_price_dates_to'] : '';
+        $date_to   = isset( $_POST['_sale_price_dates_to'] ) ? $_POST['_sale_price_dates_to'] : '';
 
         // Dates
-        if ( $date_from )
+        if ( $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( $date_from ) );
-        else
+        } else {
             update_post_meta( $post_id, '_sale_price_dates_from', '' );
+        }
 
-        if ( $date_to )
+        if ( $date_to ) {
             update_post_meta( $post_id, '_sale_price_dates_to', strtotime( $date_to ) );
-        else
+        } else {
             update_post_meta( $post_id, '_sale_price_dates_to', '' );
+        }
 
-        if ( $date_to && ! $date_from )
+        if ( $date_to && ! $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
+        }
 
         // Update price if on sale
-        if ( $_POST['_sale_price'] != '' && $date_to == '' && $date_from == '' )
-            update_post_meta( $post_id, '_price', stripslashes( $_POST['_sale_price'] ) );
-        else
-            update_post_meta( $post_id, '_price', stripslashes( $_POST['_regular_price'] ) );
+        if ( '' !== $_POST['_sale_price'] && '' == $date_to && '' == $date_from ) {
+            update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_sale_price'] ) );
+        } else {
+            update_post_meta( $post_id, '_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
+        }
 
-        if ( $_POST['_sale_price'] != '' && $date_from && strtotime( $date_from ) < strtotime( 'NOW', current_time( 'timestamp' ) ) )
-            update_post_meta( $post_id, '_price', stripslashes($_POST['_sale_price']) );
+        if ( '' !== $_POST['_sale_price'] && $date_from && strtotime( $date_from ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
+            update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_sale_price'] ) );
+        }
 
         if ( $date_to && strtotime( $date_to ) < strtotime( 'NOW', current_time( 'timestamp' ) ) ) {
-            update_post_meta( $post_id, '_price', stripslashes($_POST['_regular_price']) );
-            update_post_meta( $post_id, '_sale_price_dates_from', '');
-            update_post_meta( $post_id, '_sale_price_dates_to', '');
+            update_post_meta( $post_id, '_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
+            update_post_meta( $post_id, '_sale_price_dates_from', '' );
+            update_post_meta( $post_id, '_sale_price_dates_to', '' );
+        }
+
+        // reset price is discounted checkbox was not checked
+        if ( ! isset( $_POST['_discounted_price'] ) ) {
+            update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_regular_price'] ) );
+            update_post_meta( $post_id, '_regular_price', wc_format_decimal( $_POST['_regular_price'] ) );
+            update_post_meta( $post_id, '_sale_price', '' );
         }
     }
 
     // Sold Individuall
-    if ( ! empty( $_POST['_sold_individually'] ) ) {
+    if ( isset( $_POST['_sold_individually'] ) ) {
         update_post_meta( $post_id, '_sold_individually', 'yes' );
     } else {
         update_post_meta( $post_id, '_sold_individually', '' );
@@ -1039,7 +1056,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
     $order_data = apply_filters( 'woocommerce_new_order_data', array(
         'post_type'     => 'shop_order',
         'post_title'    => sprintf( __( 'Order &ndash; %s', 'woocommerce' ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Order date parsed by strftime', 'woocommerce' ) ) ),
-        'post_status'   => 'publish',
+        'post_status'   => 'wc-pending',
         'ping_status'   => 'closed',
         'post_excerpt'  => isset( $posted['order_comments'] ) ? $posted['order_comments'] : '',
         'post_author'   => $seller_id,
@@ -1053,6 +1070,8 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
 
         $order_total = $order_tax = 0;
         $product_ids = array();
+
+        do_action( 'woocommerce_new_order', $order_id );
 
         // now insert line items
         foreach ($seller_products as $item) {
@@ -1119,9 +1138,6 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         update_post_meta( $order_id, '_customer_user_agent',    get_post_meta( $parent_order->id, '_customer_user_agent', true ) );
 
         do_action( 'dokan_checkout_update_order_meta', $order_id );
-
-        // Order status
-        wp_set_object_terms( $order_id, 'pending', 'shop_order_status' );
     } // if order
 }
 
@@ -1276,7 +1292,7 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
  * @return \WP_Error
  */
 function dokan_seller_registration_errors( $error ) {
-    $allowed_roles = array( 'customer', 'seller' );
+    $allowed_roles = apply_filters( 'dokan_register_user_role', array( 'customer', 'seller' ) );
 
     // is the role name allowed or user is trying to manipulate?
     if ( isset( $_POST['role'] ) && !in_array( $_POST['role'], $allowed_roles ) ) {
@@ -1713,3 +1729,54 @@ function dokan_become_seller_handler () {
 }
 
 add_action( 'template_redirect', 'dokan_become_seller_handler' );
+
+/**
+ * Exclude child order emails for customers
+ *
+ * A hacky and dirty way to do this from this action. Because there is no easy
+ * way to do this by removing action hooks from WooCommerce. It would be easier
+ * if they were from functions. Because they are added from classes, we can't
+ * remove those action hooks. Thats why we are doing this from the phpmailer_init action
+ * by returning a fake phpmailer class.
+ *
+ * @param  array $attr
+ * @return array
+ */
+function dokan_exclude_child_customer_receipt( &$phpmailer ) {
+    $subject      = $phpmailer->Subject;
+
+    // order receipt
+    $sub_receipt  = __( 'Your {site_title} order receipt from {order_date}', 'woocommerce' );
+    $sub_download = __( 'Your {site_title} order from {order_date} is complete', 'woocommerce' );
+
+    $sub_receipt  = str_replace( array('{site_title}', '{order_date}'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_receipt);
+    $sub_download = str_replace( array('{site_title}', '{order_date} is complete'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_download);
+
+    // not a customer receipt mail
+    if ( ( stripos( $subject, $sub_receipt ) === false ) && ( stripos( $subject, $sub_download ) === false ) ) {
+        return;
+    }
+
+    $message = $phpmailer->Body;
+    $pattern = '/Order: #(\d+)/';
+    preg_match( $pattern, $message, $matches );
+
+    if ( isset( $matches[1] ) ) {
+        $order_id = $matches[1];
+        $order    = get_post( $order_id );
+
+        // we found a child order
+        if ( ! is_wp_error( $order ) && $order->post_parent != 0 ) {
+            $phpmailer = new DokanFakeMailer();
+        }
+    }
+}
+
+add_action( 'phpmailer_init', 'dokan_exclude_child_customer_receipt' );
+
+/**
+ * A fake mailer class to replace phpmailer
+ */
+class DokanFakeMailer {
+    public function Send() {}
+}

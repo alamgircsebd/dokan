@@ -405,9 +405,8 @@ jQuery(function($) {
         },
 
         validate: function(self) {
-            // e.preventDefault();
 
-            $('form#register').validate({
+            $('form.register').validate({
                 errorPlacement: validatorError,
                 success: validatorSuccess,
                 submitHandler: function(form) {
