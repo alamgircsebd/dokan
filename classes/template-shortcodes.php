@@ -16,7 +16,8 @@ class Dokan_Template_Shortcodes {
 	function __construct() {
 
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
-		add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
+        add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
+		add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
@@ -141,6 +142,7 @@ class Dokan_Template_Shortcodes {
                     Dokan_Email::init()->new_product_added( $product_id, $product_status );
 
                     wp_redirect( dokan_edit_product_url( $product_id ) );
+                    exit;
                 }
             }
         }
@@ -179,6 +181,7 @@ class Dokan_Template_Shortcodes {
 
             $edit_url = dokan_edit_product_url( $post_id );
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
+            exit;
         }
 
 		// Coupon functionality
@@ -191,17 +194,6 @@ class Dokan_Template_Shortcodes {
 		}
 
 		$dokan_template_coupons->coupun_delete();
-
-		// Withdraw functionality
-		$dokan_withdraw = Dokan_Template_Withdraw::init();
-		self::$validate = $dokan_withdraw->validate();
-
-		if( self::$validate !== false && !is_wp_error( self::$validate ) ) {
-		    $dokan_withdraw->insert_withdraw_info();
-		}
-
-		$dokan_withdraw->cancel_pending();
-
     }
 
     /**
@@ -211,6 +203,23 @@ class Dokan_Template_Shortcodes {
      */
     function handle_delete_product() {
         dokan_delete_product_handler();
+    }
+
+    /**
+     * [handle_withdraws description]
+     *
+     * @return void
+     */
+    function handle_withdraws() {
+        // Withdraw functionality
+        $dokan_withdraw = Dokan_Template_Withdraw::init();
+        self::$validate = $dokan_withdraw->validate();
+
+        if ( self::$validate !== false && !is_wp_error( self::$validate ) ) {
+            $dokan_withdraw->insert_withdraw_info();
+        }
+
+        $dokan_withdraw->cancel_pending();
     }
 
     function best_selling_product_shortcode( $atts ) {
