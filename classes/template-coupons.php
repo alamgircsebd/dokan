@@ -327,11 +327,15 @@ class Dokan_Template_Coupons{
             'prev_text' => __( '&laquo;', 'aag' ),
             'next_text' => __( '&raquo;', 'aag' ),
             'total' => $num_of_pages,
-            'current' => $pagenum
+            'current' => $pagenum,
+            'type' => 'array'
         ) );
 
         if ( $page_links ) {
-            return '<div class="wpuf-pagination">' . $page_links . '</div>';
+            echo "<ul class='pagination'>\n\t<li>";
+            echo join("</li>\n\t<li>", $page_links);
+            echo "</li>\n</ul>\n";
+            echo '</div>';
         }
     }
 
