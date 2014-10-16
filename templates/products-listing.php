@@ -33,7 +33,8 @@
                     </thead>
                     <tbody>
                         <?php
-                        $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
+                        $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+
                         $post_statuses = array('publish', 'draft', 'pending');
                         $args = array(
                             'post_type'      => 'product',
@@ -42,7 +43,7 @@
                             'author'         => get_current_user_id(),
                             'orderby'        => 'post_date',
                             'order'          => 'DESC',
-                            'paged'          => $paged
+                            'paged'          => $pagenum
                         );
 
                         if ( isset( $_GET['post_status']) && in_array( $_GET['post_status'], $post_statuses ) ) {
@@ -184,12 +185,15 @@
                 <?php
                 wp_reset_postdata();
 
+                $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+                
                 if ( $product_query->max_num_pages > 1 ) {
                     echo '<div class="pagination-wrap">';
                     $page_links = paginate_links( array(
-                        'current'   => max( 1, get_query_var( 'paged' ) ),
+                        'current'   => $pagenum,
                         'total'     => $product_query->max_num_pages,
-                        'base'      => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
+                        'base'      => add_query_arg( 'pagenum', '%#%' ),
+                        'format'    => '',
                         'type'      => 'array',
                         'prev_text' => __( '&laquo; Previous', 'dokan' ),
                         'next_text' => __( 'Next &raquo;', 'dokan' )
