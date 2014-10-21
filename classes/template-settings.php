@@ -189,6 +189,8 @@ class Dokan_Template_Settings{
 
             <div class="dokan-ajax-response"></div>
 
+            <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
+
             <form method="post" id="settings-form"  action="" class="dokan-form-horizontal">
 
                 <?php wp_nonce_field( 'dokan_settings_nonce' ); ?>
@@ -211,6 +213,7 @@ class Dokan_Template_Settings{
                     </div>
                 </div> <!-- .dokan-banner -->
 
+                <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
 
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
@@ -350,6 +353,8 @@ class Dokan_Template_Settings{
                     </div> <!-- col.md-4 -->
                 </div> <!-- .dokan-form-group -->
 
+                <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
+
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
@@ -358,6 +363,8 @@ class Dokan_Template_Settings{
                 </div>
 
             </form>
+
+            <?php do_action( 'dokan_settings_after_form', $current_user, $profile_info ); ?>
 
                 <script type="text/javascript">
 
