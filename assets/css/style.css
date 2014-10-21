@@ -459,6 +459,10 @@
 .product-edit-container #product-attributes h4 {
   margin-bottom: 15px;
 }
+.product-edit-container #product-attributes .select-attribute.form-control {
+  display: inline;
+  width: auto;
+}
 .product-edit-container #variants-holder .inputs-box {
   background: #f5f5f5;
   margin-bottom: 20px;
@@ -2624,14 +2628,24 @@ textarea.dokan-form-control {
   .dokan-dashboard .dokan-reports-content .dokan-reports-area .dokan-reports-wrap .report-right {
     width: 100%;
   }
+  .dokan-dashboard .dokan-product-edit-area .dokan-product-edit-left,
+  .dokan-dashboard .dokan-product-edit-area .dokan-product-edit-right {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard .content-half-part {
+    float: none;
+    width: 100%;
+  }
+  .dokan-dashboard ul.dokan_tabs {
+    padding-left: 0;
+    margin-right: 0;
+  }
+  .dokan-dashboard ul.dokan_tabs li {
+    margin-bottom: 10px;
+  }
   .dokan-single-store .profile-frame .profile-info-box {
     width: 100%;
   }
 }
 /*# sourceMappingURL=style.css.map */
-
-.product-edit-container #product-attributes .select-attribute.form-control {
-  display: inline;
-  width: auto;
-}
-
