@@ -1219,7 +1219,8 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
 
     $shipping_method = is_array( $shipping_methods ) ? reset( $shipping_methods ) : array();
 
-    
+    $shipping_method = apply_filters( 'dokan_shipping_method', $shipping_method, $order_id, $parent_order );
+
     // bail out if no shipping methods found
     if ( !$shipping_method ) {
         return;
@@ -1247,7 +1248,6 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
         }
     }
 
-    
     if ( $shipping_products ) {
         $package = array(
             'contents'        => $shipping_products,
@@ -1265,12 +1265,10 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
 
         $wc_shipping = WC_Shipping::instance();
         $pack = $wc_shipping->calculate_shipping_for_package( $package );
-        $seller_id = dokan_get_seller_id_by_order($order_id);
-        $seller_shipping_id = $_POST['shipping_method'][$seller_id];
 
+        if ( array_key_exists( $shipping_method['method_id'], $pack['rates'] ) ) {
 
-        if ( array_key_exists( $seller_shipping_id, $pack['rates'] ) ) {
-            $method = $pack['rates'][$seller_shipping_id];
+            $method = $pack['rates'][$shipping_method['method_id']];
             $cost = wc_format_decimal( $method->cost );
 
             $item_id = wc_add_order_item( $order_id, array(
