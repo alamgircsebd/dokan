@@ -6,12 +6,12 @@
  */
 
 
-class Dokan_Template_Settings{
+class Dokan_Template_Settings {
 
     public static function init() {
         static $instance = false;
 
-        if( !$instance ) {
+        if ( !$instance ) {
             $instance = new Dokan_Template_Settings();
         }
 
@@ -20,7 +20,7 @@ class Dokan_Template_Settings{
 
     function ajax_settings() {
 
-        if( !wp_verify_nonce( $_POST['_wpnonce'], 'dokan_settings_nonce' ) ) {
+        if ( !wp_verify_nonce( $_POST['_wpnonce'], 'dokan_settings_nonce' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
 
@@ -28,7 +28,7 @@ class Dokan_Template_Settings{
 
         $ajax_validate =  $this->validate();
 
-        if( is_wp_error( $ajax_validate ) ) {
+        if ( is_wp_error( $ajax_validate ) ) {
             wp_send_json_error( $ajax_validate->errors );
         }
 
@@ -41,11 +41,11 @@ class Dokan_Template_Settings{
 
     function validate() {
 
-        if( !isset( $_POST['dokan_update_profile'] ) ) {
+        if ( !isset( $_POST['dokan_update_profile'] ) ) {
             return false;
         }
 
-        if( !wp_verify_nonce( $_POST['_wpnonce'], 'dokan_settings_nonce' ) ) {
+        if ( !wp_verify_nonce( $_POST['_wpnonce'], 'dokan_settings_nonce' ) ) {
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
@@ -54,20 +54,20 @@ class Dokan_Template_Settings{
         $dokan_name = sanitize_text_field( $_POST['dokan_store_name'] );
 
         if ( empty( $dokan_name ) ) {
-            $error->add('dokan_name', __('Dokan name required', 'dokan' ));
+            $error->add( 'dokan_name', __( 'Dokan name required', 'dokan' ) );
         }
 
-        if ( isset($_POST['setting_category']) ) {
+        if ( isset( $_POST['setting_category'] ) ) {
 
-            if ( !is_array( $_POST['setting_category'] ) || !count($_POST['setting_category']) ) {
-                $error->add('dokan_type', __('Dokan type required', 'dokan' ));
+            if ( !is_array( $_POST['setting_category'] ) || !count( $_POST['setting_category'] ) ) {
+                $error->add( 'dokan_type', __( 'Dokan type required', 'dokan' ) );
             }
         }
 
-        if( !empty( $_POST['setting_paypal_email'] ) ) {
+        if ( !empty( $_POST['setting_paypal_email'] ) ) {
             $email = filter_var( $_POST['setting_paypal_email'], FILTER_VALIDATE_EMAIL );
-            if( empty( $email ) ) {
-                $error->add('dokan_email', __('Invalid email', 'dokan' ) );
+            if ( empty( $email ) ) {
+                $error->add( 'dokan_email', __( 'Invalid email', 'dokan' ) );
             }
         }
 
@@ -85,33 +85,33 @@ class Dokan_Template_Settings{
         $social = $_POST['settings']['social'];
 
         $dokan_settings = array(
-            'store_name'      => $_POST['dokan_store_name'],
-            'social' => array(
-                'fb' => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
-                'gplus' => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
-                'twitter' => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
-                'linkedin' => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
-                'youtube' => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
+            'store_name'   => $_POST['dokan_store_name'],
+            'social'       => array(
+                'fb'           => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
+                'gplus'        => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
+                'twitter'      => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
+                'linkedin'     => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
+                'youtube'      => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
             ),
-            'payment' => array(),
-            'phone' => $_POST['setting_phone'],
-            'show_email' => $_POST['setting_show_email'],
-            'address' => $_POST['setting_address'],
-            'location' => $_POST['location'],
+            'payment'      => array(),
+            'phone'        => $_POST['setting_phone'],
+            'show_email'   => $_POST['setting_show_email'],
+            'address'      => $_POST['setting_address'],
+            'location'     => $_POST['location'],
             'find_address' => $_POST['find_address'],
-            'banner' => $_POST['dokan_banner'],
-            'gravatar' => $_POST['dokan_gravatar'],
+            'banner'       => $_POST['dokan_banner'],
+            'gravatar'     => $_POST['dokan_gravatar'],
         );
 
         if ( isset( $_POST['settings']['bank'] ) ) {
             $bank = $_POST['settings']['bank'];
 
             $dokan_settings['payment']['bank'] = array(
-                'ac_name' => sanitize_text_field( $bank['ac_name'] ),
+                'ac_name'   => sanitize_text_field( $bank['ac_name'] ),
                 'ac_number' => sanitize_text_field( $bank['ac_number'] ),
                 'bank_name' => sanitize_text_field( $bank['bank_name'] ),
                 'bank_addr' => sanitize_text_field( $bank['bank_addr'] ),
-                'swift' => sanitize_text_field( $bank['swift'] ),
+                'swift'     => sanitize_text_field( $bank['swift'] ),
             );
         }
 
@@ -132,19 +132,19 @@ class Dokan_Template_Settings{
 
         do_action( 'dokan_store_profile_saved', $store_id, $dokan_settings );
 
-        if ( !defined('DOING_AJAX') && DOING_AJAX !== true ) {
-            wp_redirect( add_query_arg( array( 'message' => 'profile_saved' ), get_permalink() ) );
+        if ( ! defined( 'DOING_AJAX' ) ) {
+            $_GET['message'] = 'profile_saved';
         }
     }
 
     function setting_field( $validate = '' ) {
         global $current_user;
 
-        if ( isset($_GET['message'])) {
+        if ( isset( $_GET['message'] ) ) {
             ?>
             <div class="dokan-alert dokan-alert-success">
                 <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                <strong><?php _e('Your profile has been updated successfully!','dokan'); ?></strong>
+                <strong><?php _e( 'Your profile has been updated successfully!', 'dokan' ); ?></strong>
             </div>
             <?php
         }
@@ -170,7 +170,7 @@ class Dokan_Template_Settings{
         $dokan_category = isset( $profile_info['dokan_category'] ) ? $profile_info['dokan_category'] : '';
 
 
-        if ( is_wp_error( $validate) ) {
+        if ( is_wp_error( $validate ) ) {
             $social       = $_POST['settings']['social'];
             $storename    = $_POST['dokan_store_name'];
 
@@ -278,7 +278,7 @@ class Dokan_Template_Settings{
                             <ul class="dokan_tabs" style="margin-bottom: 10px; margin-left:0px;">
                                 <?php
                                 $count = 0;
-                                foreach ($methods as $method_key) {
+                                foreach ( $methods as $method_key ) {
                                     $method = dokan_withdraw_get_method( $method_key );
                                     ?>
                                     <li<?php echo ( $count == 0 ) ? ' class="active"' : ''; ?>><a href="#dokan-payment-<?php echo $method_key; ?>" data-toggle="tab"><?php echo $method['title']; ?></a></li>
@@ -292,16 +292,14 @@ class Dokan_Template_Settings{
 
                                 <?php
                                 $count = 0;
-                                foreach ($methods as $method_key) {
+                                foreach ( $methods as $method_key ) {
                                     $method = dokan_withdraw_get_method( $method_key );
-
                                     ?>
-                                    <div class="tab-pane<?php echo ($count == 0) ? ' active': ''; ?>" id="dokan-payment-<?php echo $method_key; ?>">
-                                        <?php if ( is_callable( $method['callback']) ) {
+                                    <div class="tab-pane<?php echo ( $count == 0 ) ? ' active': ''; ?>" id="dokan-payment-<?php echo $method_key; ?>">
+                                        <?php if ( is_callable( $method['callback'] ) ) {
                                             call_user_func( $method['callback'], $profile_info );
                                         } ?>
                                     </div>
-
                                     <?php
                                     $count++;
                                 } ?>
@@ -337,7 +335,7 @@ class Dokan_Template_Settings{
                 </div>
 
                 <div class="dokan-form-group">
-                    <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e('Map', 'dokan'); ?></label>
+                    <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e( 'Map', 'dokan' ); ?></label>
 
                     <div class="dokan-w4 dokan-text-left">
                         <input id="dokan-map-lat" type="hidden" name="location" value="<?php echo $map_location; ?>" size="30" />
@@ -358,7 +356,7 @@ class Dokan_Template_Settings{
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
-                        <input type="submit" name="dokan_update_profile" class="btn btn-primary" value="<?php esc_attr_e('Update Settings','dokan'); ?>">
+                        <input type="submit" name="dokan_update_profile" class="btn btn-primary" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 
@@ -508,11 +506,11 @@ class Dokan_Template_Settings{
 
     function get_dokan_categories() {
         $dokan_category = array(
-            'book' => __('Book', 'dokan'),
-            'dress' => __('Dress', 'dokan'),
-            'electronic' => __('Electronic', 'dokan'),
+            'book'       => __( 'Book', 'dokan' ),
+            'dress'      => __( 'Dress', 'dokan' ),
+            'electronic' => __( 'Electronic', 'dokan' ),
         );
 
-        return apply_filters('dokan_category', $dokan_category);
+        return apply_filters( 'dokan_category', $dokan_category );
     }
 }
