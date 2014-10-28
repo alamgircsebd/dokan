@@ -75,7 +75,7 @@ class Dokan_Ajax {
         $info   = dokan_get_store_info( $cart_item['data']->post->post_author );
         $seller = sprintf( __( '<strong>Seller:</strong> %s', 'dokan' ), $info['store_name'] );
 
-        return $item_data . '<br>' . $seller;
+        return $item_data;
     }
 
     /**

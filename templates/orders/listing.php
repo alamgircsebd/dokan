@@ -3,7 +3,7 @@ global $woocommerce;
 
 $seller_id    = get_current_user_id();
 $order_status = isset( $_GET['order_status'] ) ? sanitize_key( $_GET['order_status'] ) : 'all';
-$paged        = max( 1, get_query_var( 'paged' ) );
+$paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
 $limit        = 10;
 $offset       = ( $paged - 1 ) * $limit;
 
@@ -136,7 +136,8 @@ if ( $user_orders ) {
         $page_links = paginate_links( array(
             'current' => $paged,
             'total' => $num_of_pages,
-            'base' => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
+            'base'      => add_query_arg( 'pagenum', '%#%' ),
+            'format'    => '',
             'type' => 'array',
         ) );
 
