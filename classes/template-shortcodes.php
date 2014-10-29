@@ -78,7 +78,7 @@ class Dokan_Template_Shortcodes {
 
         //do_action( 'dokan_dashboard_template_render' );
 
-	    return apply_filters( 'dokan_dashboard_template_render', $wp->query_vars );
+	    return apply_filters( 'dokan_dashboard_template_render',dokan_get_template_part( 'dashboard' ), $wp->query_vars );
     }
 
     function handle_all_submit() {
@@ -151,7 +151,9 @@ class Dokan_Template_Shortcodes {
             $post_id = intval( $_GET['product_id'] );
         } else {
             global $post, $product;
-            $post_id = $post->ID;
+            if( !empty( $post ) ){
+                $post_id = $post->ID;
+            }
         }
 
 
