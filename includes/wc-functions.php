@@ -1137,7 +1137,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         update_post_meta( $order_id, '_customer_ip_address',    get_post_meta( $parent_order->id, '_customer_ip_address', true ) );
         update_post_meta( $order_id, '_customer_user_agent',    get_post_meta( $parent_order->id, '_customer_user_agent', true ) );
 
-        do_action( 'dokan_checkout_update_order_meta', $order_id );
+        do_action( 'dokan_checkout_update_order_meta', $order_id, $seller_id );
     } // if order
 }
 

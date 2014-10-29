@@ -71,7 +71,7 @@ if ( ! $from_shortcode ) {
             </header>
 
             <form class="dokan-form-container" role="form" method="post">
-
+                <?php wp_nonce_field( 'dokan_edit_product', 'dokan_edit_product_nonce' ); ?>    
                 <div class="product-edit-container dokan-clearfix">
 
                     <div class="dokan-product-edit-left">
