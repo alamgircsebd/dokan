@@ -74,8 +74,9 @@ class Dokan_Ajax {
     function seller_info_checkout( $item_data, $cart_item ) {
         $info   = dokan_get_store_info( $cart_item['data']->post->post_author );
         $seller = sprintf( __( '<strong>Seller:</strong> %s', 'dokan' ), $info['store_name'] );
+        $data   = $item_data . $seller;
 
-        return $item_data;
+        return apply_filters( 'dokan_seller_info_checkout', $data, $info, $item_data, $cart_item );
     }
 
     /**
@@ -86,7 +87,7 @@ class Dokan_Ajax {
         if ( !wp_verify_nonce( $_POST['_nonce'], 'dokan_reviews' ) ) {
             wp_send_json_error( array(
                 'type' => 'nonce',
-                'message' => 'Are you cheating?'
+                'message' => __( 'Are you cheating?', 'dokan' )
             ) );
         }
 
@@ -516,7 +517,7 @@ class Dokan_Ajax {
         wp_send_json_success( $success );
         exit;
     }
- 
+
 
     function dokan_pre_define_attribute() {
 
