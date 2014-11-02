@@ -1,32 +1,32 @@
 <?php
 
 /**
-*  Tempalte shortcode class file
-*
-*  @load all shortcode for template  rendering
-*/
+ * Tempalte shortcode class file
+ *
+ * @load all shortcode for template  rendering
+ */
 class Dokan_Template_Shortcodes {
 
-	public static $errors;
-	public static $product_cat;
-	public static $post_content;
-	public static $validated;
-	public static $validate;
+    public static $errors;
+    public static $product_cat;
+    public static $post_content;
+    public static $validated;
+    public static $validate;
 
-	function __construct() {
+    function __construct() {
 
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
-		add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
+        add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
         add_shortcode( 'dokan-top-rated-product', array( $this, 'top_rated_product_shortcode' ) );
-		add_shortcode( 'dokan-stores', array( $this, 'store_listing' ) );
+        add_shortcode( 'dokan-stores', array( $this, 'store_listing' ) );
         add_shortcode( 'dokan-my-orders', array( $this, 'my_orders_page' ) );
-	}
+    }
 
-	public static function init() {
+    public static function init() {
         static $instance = false;
 
         if ( ! $instance ) {
@@ -38,68 +38,68 @@ class Dokan_Template_Shortcodes {
 
 
     public function load_template_files() {
-    	global $wp;
+        global $wp;
 
         if ( ! function_exists( 'WC' ) ) {
             return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
         }
 
-	    if ( isset( $wp->query_vars['reports'] ) ) {
-	        dokan_get_template_part( 'reports' );
+        if ( isset( $wp->query_vars['reports'] ) ) {
+            dokan_get_template_part( 'reports' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['products'] ) ) {
-	        dokan_get_template_part( 'products' );
+        if ( isset( $wp->query_vars['products'] ) ) {
+            dokan_get_template_part( 'products' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['new-product'] ) ) {
-	        dokan_get_template_part( 'new-product' );
+        if ( isset( $wp->query_vars['new-product'] ) ) {
+            dokan_get_template_part( 'new-product' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['orders'] ) ) {
-	        dokan_get_template_part( 'orders' );
+        if ( isset( $wp->query_vars['orders'] ) ) {
+            dokan_get_template_part( 'orders' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['coupons'] ) ) {
-	        dokan_get_template_part( 'coupons' );
+        if ( isset( $wp->query_vars['coupons'] ) ) {
+            dokan_get_template_part( 'coupons' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['reviews'] ) ) {
-	        dokan_get_template_part( 'reviews' );
+        if ( isset( $wp->query_vars['reviews'] ) ) {
+            dokan_get_template_part( 'reviews' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['withdraw'] ) ) {
-	        dokan_get_template_part( 'withdraw' );
+        if ( isset( $wp->query_vars['withdraw'] ) ) {
+            dokan_get_template_part( 'withdraw' );
             return;
-	    }
+        }
 
-	    if ( isset( $wp->query_vars['settings'] ) ) {
-	        dokan_get_template_part( 'settings' );
+        if ( isset( $wp->query_vars['settings'] ) ) {
+            dokan_get_template_part( 'settings' );
             return;
-	    }
+        }
 
-        if( isset( $wp->query_vars['page'] ) )  {
-	       dokan_get_template_part( 'dashboard' );
-           return;             
-        } 
+        if ( isset( $wp->query_vars['page'] ) ) {
+            dokan_get_template_part( 'dashboard' );
+            return;
+        }
 
         do_action( 'dokan_load_custom_template', $wp->query_vars );
-    
+
     }
 
     function handle_all_submit() {
 
-        if( !is_user_logged_in() ) {
+        if ( !is_user_logged_in() ) {
             return;
         }
 
-        if( !dokan_is_user_seller( get_current_user_id() ) ){
+        if ( !dokan_is_user_seller( get_current_user_id() ) ) {
             return;
         }
 
@@ -134,12 +134,12 @@ class Dokan_Template_Shortcodes {
 
                 $product_status = dokan_get_new_post_status();
                 $post_data = apply_filters( 'dokan_insert_product_post_data', array(
-                    'post_type'    => 'product',
-                    'post_status'  => $product_status,
-                    'post_title'   => $post_title,
-                    'post_content' => $post_content,
-                    'post_excerpt' => $post_excerpt,
-                ));
+                        'post_type'    => 'product',
+                        'post_status'  => $product_status,
+                        'post_title'   => $post_title,
+                        'post_content' => $post_content,
+                        'post_excerpt' => $post_excerpt,
+                    ) );
 
                 $product_id = wp_insert_post( $post_data );
 
@@ -173,7 +173,7 @@ class Dokan_Template_Shortcodes {
             $post_id = intval( $_GET['product_id'] );
         } else {
             global $post, $product;
-            if( !empty( $post ) ){
+            if ( !empty( $post ) ) {
                 $post_id = $post->ID;
             }
         }
@@ -208,16 +208,16 @@ class Dokan_Template_Shortcodes {
             exit;
         }
 
-		// Coupon functionality
-		$dokan_template_coupons = Dokan_Template_Coupons::init();
+        // Coupon functionality
+        $dokan_template_coupons = Dokan_Template_Coupons::init();
 
-		self::$validated = $dokan_template_coupons->validate();
+        self::$validated = $dokan_template_coupons->validate();
 
-		if ( !is_wp_error( self::$validated ) ) {
-		    $dokan_template_coupons->coupons_create();
-		}
+        if ( !is_wp_error( self::$validated ) ) {
+            $dokan_template_coupons->coupons_create();
+        }
 
-		$dokan_template_coupons->coupun_delete();
+        $dokan_template_coupons->coupun_delete();
     }
 
     /**
@@ -248,8 +248,8 @@ class Dokan_Template_Shortcodes {
 
     function best_selling_product_shortcode( $atts ) {
         $per_page = shortcode_atts( array(
-            'no_of_product' => 8
-        ), $atts );
+                'no_of_product' => 8
+            ), $atts );
 
         ob_start();
         ?>
@@ -315,7 +315,7 @@ class Dokan_Template_Shortcodes {
             ?>
             <ul class="dokan-seller-wrap">
                 <?php
-                foreach ($sellers['users'] as $seller) {
+                foreach ( $sellers['users'] as $seller ) {
                     $store_info = dokan_get_store_info( $seller->ID );
                     $banner_id  = isset( $store_info['banner'] ) ? $store_info['banner'] : 0;
                     $store_name = isset( $store_info['store_name'] ) ? esc_html( $store_info['store_name'] ) : __( 'N/A', 'dokan' );
@@ -360,34 +360,34 @@ class Dokan_Template_Shortcodes {
 
             </ul> <!-- .dokan-seller-wrap -->
 
-                <?php
-                $user_count = $sellers['count'];
-                $num_of_pages = ceil( $user_count / $limit );
+            <?php
+            $user_count = $sellers['count'];
+            $num_of_pages = ceil( $user_count / $limit );
 
-                if ( $num_of_pages > 1 ) {
-                    echo '<div class="pagination-container clearfix">';
-                    $page_links = paginate_links( array(
-                        'current'   => $paged,
-                        'total'     => $num_of_pages,
-                        'base'      => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
-                        'type'      => 'array',
-                        'prev_text' => __( '&larr; Previous', 'dokan' ),
-                        'next_text' => __( 'Next &rarr;', 'dokan' ),
-                    ) );
+            if ( $num_of_pages > 1 ) {
+                echo '<div class="pagination-container clearfix">';
+                $page_links = paginate_links( array(
+                    'current'   => $paged,
+                    'total'     => $num_of_pages,
+                    'base'      => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
+                    'type'      => 'array',
+                    'prev_text' => __( '&larr; Previous', 'dokan' ),
+                    'next_text' => __( 'Next &rarr;', 'dokan' ),
+                ) );
 
-                    if ( $page_links ) {
-                        $pagination_links  = '<div class="pagination-wrap">';
-                        $pagination_links .= '<ul class="pagination"><li>';
-                        $pagination_links .= join( "</li>\n\t<li>", $page_links );
-                        $pagination_links .= "</li>\n</ul>\n";
-                        $pagination_links .= '</div>';
+                if ( $page_links ) {
+                    $pagination_links  = '<div class="pagination-wrap">';
+                    $pagination_links .= '<ul class="pagination"><li>';
+                    $pagination_links .= join( "</li>\n\t<li>", $page_links );
+                    $pagination_links .= "</li>\n</ul>\n";
+                    $pagination_links .= '</div>';
 
-                        echo $pagination_links;
-                    }
-
-                    echo '</div>';
+                    echo $pagination_links;
                 }
-                ?>
+
+                echo '</div>';
+            }
+            ?>
 
             <?php
         } else {
