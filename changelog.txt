@@ -1,5 +1,14 @@
 ==================== Plugin Version ====================
 
+v1.2 -> November 2, 2014
+---------------------
+- [fix] Security fixes. props to @yann
+- [fix] dokan_templart_part function wasn't picking up template from theme
+- [fix] Add missing action hooks from the theme migration
+- [fix] Paginations in dashboard
+- [fix] Product edit page responsive issue
+
+
 v1.1 -> October 5, 2014
 ---------------------
 - [new] Pre-defined attributes brought back in the plugin.
