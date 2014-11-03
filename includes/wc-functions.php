@@ -1137,7 +1137,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         update_post_meta( $order_id, '_customer_ip_address',    get_post_meta( $parent_order->id, '_customer_ip_address', true ) );
         update_post_meta( $order_id, '_customer_user_agent',    get_post_meta( $parent_order->id, '_customer_user_agent', true ) );
 
-        do_action( 'dokan_checkout_update_order_meta', $order_id );
+        do_action( 'dokan_checkout_update_order_meta', $order_id, $seller_id );
     } // if order
 }
 
@@ -1213,9 +1213,13 @@ function dokan_create_sub_order_coupon( $parent_order, $order_id, $product_ids )
  * @return type
  */
 function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_products ) {
+
     // take only the first shipping method
     $shipping_methods = $parent_order->get_shipping_methods();
+
     $shipping_method = is_array( $shipping_methods ) ? reset( $shipping_methods ) : array();
+
+    $shipping_method = apply_filters( 'dokan_shipping_method', $shipping_method, $order_id, $parent_order );
 
     // bail out if no shipping methods found
     if ( !$shipping_method ) {
@@ -1263,6 +1267,7 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
         $pack = $wc_shipping->calculate_shipping_for_package( $package );
 
         if ( array_key_exists( $shipping_method['method_id'], $pack['rates'] ) ) {
+
             $method = $pack['rates'][$shipping_method['method_id']];
             $cost = wc_format_decimal( $method->cost );
 

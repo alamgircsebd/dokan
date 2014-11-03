@@ -579,10 +579,8 @@ function dokan_get_template_part( $slug, $name = '' ) {
 
     $template = '';
 
-    // Look in yourtheme/slug-name.php and yourtheme/dokan/slug-name.php
-    if ( $name ) {
-        $template = locate_template( array( "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}-{$name}.php" ) );
-    }
+    // Look in yourtheme/dokan/slug-name.php and yourtheme/dokan/slug.php
+    $template = locate_template( array( $dokan->template_path() . "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}.php" ) );
 
     // Get default slug-name.php
     if ( ! $template && $name && file_exists( $dokan->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
@@ -591,11 +589,6 @@ function dokan_get_template_part( $slug, $name = '' ) {
 
     if ( ! $template && !$name && file_exists( $dokan->plugin_path() . "/templates/{$slug}.php" ) ) {
         $template = $dokan->plugin_path() . "/templates/{$slug}.php";
-    }
-
-    // If template file doesn't exist, look in yourtheme/slug.php and yourtheme/dokan/slug.php
-    if ( ! $template ) {
-        $template = locate_template( array( "{$slug}.php", $dokan->template_path() . "{$slug}.php" ) );
     }
 
     // Allow 3rd party plugin filter template file from their plugin
