@@ -109,6 +109,7 @@ class Dokan_Email {
         $headers = array( "Reply-To: {$from_name}<{$from_email}>" );
 
         $this->send( $seller_email, $subject, $body, $headers );
+        do_action( 'after_send_contact_seller_mail', $seller_email, $subject, $body );
     }
 
 
@@ -168,6 +169,7 @@ class Dokan_Email {
         $body = $this->prepare_withdraw( $body, $user, $amount, $method );
 
         $this->send( $this->admin_email(), $subject, $body );
+        do_action( 'after_new_withdraw_request', $this->admin_email(), $subject, $body );
     }
 
 
@@ -189,6 +191,7 @@ class Dokan_Email {
         $body = $this->prepare_withdraw( $body, $user, $amount, $method );
 
         $this->send( $user->user_email, $subject, $body );
+        do_action( 'after_withdraw_request_approve', $user->user_email, $subject, $body );
     }
 
 
@@ -211,6 +214,7 @@ class Dokan_Email {
         $body = $this->prepare_withdraw( $body, $user, $amount, $method, $note );
 
         $this->send( $user->user_email, $subject, $body );
+        do_action( 'after_withdraw_request_cancel', $user->user_email, $subject, $body );
     }
 
 
@@ -248,6 +252,7 @@ class Dokan_Email {
         $subject = sprintf( __( '[%s] New Seller Registered', 'dokan' ), $this->get_from_name() );
 
         $this->send( $this->admin_email(), $subject, $body );
+        do_action( 'after_new_seller_registered_mail', $this->admin_email(), $subject, $body );
     }
 
 
@@ -300,6 +305,7 @@ class Dokan_Email {
         $subject = sprintf( __( '[%s] New Product Added', 'dokan' ), $this->get_from_name() );
 
         $this->send( $this->admin_email(), $subject, $body );
+        do_action( 'after_new_product_added', $this->admin_email(), $subject, $body );
     }
 
 
@@ -341,6 +347,7 @@ class Dokan_Email {
         $subject = sprintf( __( '[%s] Your product has been approved!', 'dokan' ), $this->get_from_name() );
 
         $this->send( $seller->user_email, $subject, $body );
+        do_action( 'after_product_published', $seller->user_email, $subject, $body );
     }
 
     /**
