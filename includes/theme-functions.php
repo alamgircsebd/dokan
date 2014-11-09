@@ -1238,6 +1238,33 @@ function dokan_get_best_sellers( $limit = 5 ) {
 }
 
 /**
+ * Get feature sellers list
+ *
+ * @param  integer $limit
+ * @return array
+ */
+function dokan_get_feature_sellers( $count = 5 ) {
+    $args = array(
+        'role'         => 'seller',
+        'meta_key'     => 'dokan_feature_seller',
+        'meta_value'   => 'yes',
+        'offset'       => $count
+    );
+    $users = get_users( $args );
+
+    $args = array(
+        'role'         => 'administrator',
+        'meta_key'     => 'dokan_feature_seller',
+        'meta_value'   => 'yes',
+        'offset'       => $count
+    );
+    $admins = get_users( $args );
+
+    $sellers = array_merge( $admins, $users );
+    return $sellers;
+}
+
+/**
  * Get navigation url for the dokan dashboard
  *
  * @param  string $name endpoint name

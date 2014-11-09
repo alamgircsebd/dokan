@@ -335,6 +335,7 @@ class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/menu-category.php';
         require_once $inc_dir . 'widgets/store-menu-category.php';
         require_once $inc_dir . 'widgets/best-seller.php';
+        require_once $inc_dir . 'widgets/feature-seller.php';
         require_once $inc_dir . 'widgets/bestselling-product.php';
         require_once $inc_dir . 'widgets/top-rated-product.php';
         require_once $inc_dir . 'widgets/store-location.php';
