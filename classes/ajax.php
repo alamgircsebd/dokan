@@ -58,7 +58,7 @@ class Dokan_Ajax {
 
         add_action( 'wp_ajax_dokan_toggle_seller', array( $this, 'toggle_seller_status' ) );
 
-
+        add_action( 'wp_ajax_shop_url', array($this, 'shop_url_check') );
         add_action( 'wp_ajax_nopriv_shop_url', array($this, 'shop_url_check') );
 
         add_filter( 'woocommerce_cart_item_name', array($this, 'seller_info_checkout'), 10, 2 );
@@ -74,35 +74,42 @@ class Dokan_Ajax {
     function seller_info_checkout( $item_data, $cart_item ) {
         $info   = dokan_get_store_info( $cart_item['data']->post->post_author );
         $seller = sprintf( __( '<strong>Seller:</strong> %s', 'dokan' ), $info['store_name'] );
+        $data   = $item_data . $seller;
 
-        return $item_data;
+        return apply_filters( 'dokan_seller_info_checkout', $data, $info, $item_data, $cart_item );
     }
 
     /**
      * chop url check
      */
     function shop_url_check() {
+        global $user_ID;
 
         if ( !wp_verify_nonce( $_POST['_nonce'], 'dokan_reviews' ) ) {
             wp_send_json_error( array(
                 'type' => 'nonce',
-                'message' => 'Are you cheating?'
+                'message' => __( 'Are you cheating?', 'dokan' )
             ) );
         }
 
         $url_slug = $_POST['url_slug'];
-
-        $check = true;
-
-        $user = get_user_by( 'slug', $url_slug );
+        $check    = true;
+        $user     = get_user_by( 'slug', $url_slug );
 
         if ( $user != '' ) {
             $check = false;
         }
 
+        // check if a customer wants to migrate, his username should be available
+        if ( is_user_logged_in() && dokan_is_user_customer( $user_ID ) ) {
+            $current_user = wp_get_current_user();
+
+            if ( $current_user->user_nicename == $user->user_nicename ) {
+                $check = true;
+            }
+        }
+
         echo $check;
-
-
     }
 
     /**
@@ -516,7 +523,7 @@ class Dokan_Ajax {
         wp_send_json_success( $success );
         exit;
     }
- 
+
 
     function dokan_pre_define_attribute() {
 
