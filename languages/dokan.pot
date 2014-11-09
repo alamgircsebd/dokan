@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dokan - Multi-vendor Marketplace 1.2\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2014-11-03 07:03:00+00:00\n"
+"POT-Creation-Date: 2014-11-09 02:45:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -104,7 +104,7 @@ msgstr ""
 msgid "<strong>Seller:</strong> %s"
 msgstr ""
 
-#: classes/ajax.php:90 classes/template-coupons.php:31
+#: classes/ajax.php:91 classes/template-coupons.php:31
 #: classes/template-coupons.php:46 classes/template-coupons.php:76
 #: classes/template-coupons.php:355 classes/template-settings.php:24
 #: classes/template-settings.php:49 classes/template-withdraw.php:158
@@ -112,55 +112,55 @@ msgstr ""
 msgid "Are you cheating?"
 msgstr ""
 
-#: classes/ajax.php:120 classes/ajax.php:154
+#: classes/ajax.php:126 classes/ajax.php:160
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: classes/ajax.php:124 classes/ajax.php:158
+#: classes/ajax.php:130 classes/ajax.php:164
 msgid "You have taken too long. Please go back and retry."
 msgstr ""
 
-#: classes/ajax.php:133 classes/ajax.php:167
+#: classes/ajax.php:139 classes/ajax.php:173
 msgid "You do not have permission to change this order"
 msgstr ""
 
-#: classes/ajax.php:218
+#: classes/ajax.php:224
 msgid "File %d"
 msgstr ""
 
-#: classes/ajax.php:268 includes/woo-views/variation-admin-html.php:120
+#: classes/ajax.php:274 includes/woo-views/variation-admin-html.php:120
 #: includes/woo-views/variation-admin-html.php:133
 msgid "Same as parent"
 msgstr ""
 
-#: classes/ajax.php:269 includes/wc-functions.php:26
+#: classes/ajax.php:275 includes/wc-functions.php:26
 msgid "Standard"
 msgstr ""
 
-#: classes/ajax.php:508 includes/template-tags.php:147
+#: classes/ajax.php:514 includes/template-tags.php:147
 msgid "Something went wrong!"
 msgstr ""
 
-#: classes/ajax.php:516
+#: classes/ajax.php:522
 msgid "Email sent successfully!"
 msgstr ""
 
-#: classes/ajax.php:538 includes/woo-views/variation-admin-html.php:6
+#: classes/ajax.php:544 includes/woo-views/variation-admin-html.php:6
 #: templates/edit/attributes.php:56
 msgid "Remove"
 msgstr ""
 
-#: classes/ajax.php:549 templates/edit/attributes.php:74
+#: classes/ajax.php:555 templates/edit/attributes.php:74
 #: templates/edit/templates-js.php:21
 msgid "Visible on the product page"
 msgstr ""
 
-#: classes/ajax.php:556 templates/edit/attributes.php:87
+#: classes/ajax.php:562 templates/edit/attributes.php:87
 #: templates/edit/templates-js.php:27
 msgid "Used for variations"
 msgstr ""
 
-#: classes/ajax.php:567 classes/ajax.php:578 templates/edit/attributes.php:101
+#: classes/ajax.php:573 classes/ajax.php:584 templates/edit/attributes.php:101
 #: templates/edit/attributes.php:115
 msgid "Option..."
 msgstr ""
