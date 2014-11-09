@@ -49,4 +49,7 @@ tests_add_filter( 'setup_theme', 'install_wc' );
 tests_add_filter( 'setup_theme', 'install_dokan' );
 
 require $_tests_dir . '/includes/bootstrap.php';
+require dirname( __FILE__ ) . '/helpers/helper.php';
 
+$current_user = new WP_User(1);
+$current_user->set_role('administrator');
