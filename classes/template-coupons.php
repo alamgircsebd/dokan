@@ -311,7 +311,7 @@ class Dokan_Template_Coupons{
             echo $this->pagination();
         } else {
             ?>
-            <p class="dokan-message"><?php _e( 'No coupons found!', 'dokan' ); ?></p>
+            <p class="dokan-error"><?php _e( 'No coupons found!', 'dokan' ); ?></p>
             <?php
         }
     }
