@@ -85,7 +85,7 @@ class Dokan_Template_Settings {
         $social = $_POST['settings']['social'];
 
         $dokan_settings = array(
-            'store_name'   => $_POST['dokan_store_name'],
+            'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
             'social'       => array(
                 'fb'           => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
                 'gplus'        => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
@@ -94,13 +94,13 @@ class Dokan_Template_Settings {
                 'youtube'      => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
             ),
             'payment'      => array(),
-            'phone'        => $_POST['setting_phone'],
-            'show_email'   => $_POST['setting_show_email'],
-            'address'      => $_POST['setting_address'],
-            'location'     => $_POST['location'],
-            'find_address' => $_POST['find_address'],
-            'banner'       => $_POST['dokan_banner'],
-            'gravatar'     => $_POST['dokan_gravatar'],
+            'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
+            'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
+            'address'      => strp_tags( $_POST['setting_address'] ),
+            'location'     => sanitize_text_field( $_POST['location'] ),
+            'find_address' => sanitize_text_field( $_POST['find_address'] ),
+            'banner'       => absint( $_POST['dokan_banner'] ),
+            'gravatar'     => absint( $_POST['dokan_gravatar'] ),
         );
 
         if ( isset( $_POST['settings']['bank'] ) ) {
