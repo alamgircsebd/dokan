@@ -90,7 +90,6 @@ class Dokan_Template_Shortcodes {
         }
 
         do_action( 'dokan_load_custom_template', $wp->query_vars );
-
     }
 
     function handle_all_submit() {
