@@ -1,5 +1,14 @@
 ==================== Plugin Version ====================
 
+v1.3 -> November 20, 2014
+---------------------
+- [fix] Sanitize settings fields
+- [fix] Calculate admin commision without shipping
+- [new] Featured seller widget
+- [new] Few hooks in mail
+- [fix] Customer to seller migration bugfix
+
+
 v1.2 -> November 2, 2014
 ---------------------
 - [fix] Security fixes. props to @yann

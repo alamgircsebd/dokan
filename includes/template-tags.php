@@ -329,16 +329,23 @@ function dokan_store_category_menu( $seller_id, $title = '' ) { ?>
 
 endif;
 
-
+/**
+ * Clear transient once a product is saved or deleted
+ *
+ * @param  int $post_id
+ *
+ * @return void
+ */
 function dokan_store_category_delete_transient( $post_id ) {
 
-    $post_tmp = get_post($post_id);
+    $post_tmp = get_post( $post_id );
     $seller_id = $post_tmp->post_author;
+
     //delete store category transient
     delete_transient( 'dokan-store-category-'.$seller_id );
 }
 
-add_action( 'deleted_post', 'dokan_store_category_delete_transient' );
+add_action( 'delete_post', 'dokan_store_category_delete_transient' );
 add_action( 'save_post', 'dokan_store_category_delete_transient' );
 
 
@@ -382,7 +389,7 @@ function dokan_seller_reg_form_fields() {
             <label for="shop-phone"><?php _e( 'Phone', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr($_POST['phone']); ?>" required="required" />
         </p>
-        
+
         <?php  do_action( 'dokan_seller_registration_field_after' ); ?>
 
     </div>
