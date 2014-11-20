@@ -504,7 +504,7 @@ class Dokan_Ajax {
      */
     function contact_seller() {
         $posted = $_POST;
-
+        
         check_ajax_referer( 'dokan_contact_seller' );
         // print_r($posted);
 
@@ -518,7 +518,7 @@ class Dokan_Ajax {
         $contact_name = trim( strip_tags( $posted['name'] ) );
 
         Dokan_Email::init()->contact_seller( $seller->user_email, $contact_name, $posted['email'], $posted['message'] );
-
+        
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );
         exit;

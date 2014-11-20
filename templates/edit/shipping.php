@@ -1,4 +1,6 @@
-<div class="dokan-form-horizontal">
+<?php do_action( 'dokan_product_options_shipping_before' ); ?>
+
+<div class="dokan-form-horizontal dokan-product-shipping">
     <input type="hidden" name="product_shipping_class" value="0">
 
     <div class="dokan-form-group show_if_simple">

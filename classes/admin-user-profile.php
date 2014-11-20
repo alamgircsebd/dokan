@@ -42,6 +42,7 @@ class Dokan_Admin_User_Profile {
         $store_settings = dokan_get_store_info( $user->ID );
         $banner = isset( $store_settings['banner'] ) ? absint( $store_settings['banner'] ) : 0;
         $seller_percentage = get_user_meta( $user->ID, 'dokan_seller_percentage', true );
+        $feature_seller = get_user_meta( $user->ID, 'dokan_feature_seller', true );
 
         $fb = isset( $store_settings['social']['fb'] ) ? esc_url( $store_settings['social']['fb'] ) : '';
         $twitter = isset( $store_settings['social']['twitter'] ) ? esc_url( $store_settings['social']['twitter'] ) : '';
@@ -165,6 +166,19 @@ class Dokan_Admin_User_Profile {
                     </td>
                 </tr>
 
+                <tr>
+                    <th><?php _e( 'Feature Seller', 'wedevs' ); ?></th>
+                    <td>
+                        <label for="dokan_feature">
+                            <input type="hidden" name="dokan_feature" value="no">
+                            <input name="dokan_feature" type="checkbox" id="dokan_feature" value="yes" <?php checked( $feature_seller, 'yes' ); ?> />
+                            <?php _e( 'Make feature seller', 'wedevs' ); ?>
+                        </label>
+
+                        <p class="description"><?php _e( 'This seller will be marked as a feature seller.', 'wedevs' ) ?></p>
+                    </td>
+                </tr>
+
                 <?php do_action( 'dokan_seller_meta_fields', $user ); ?>
 
             </tbody>
@@ -283,6 +297,7 @@ class Dokan_Admin_User_Profile {
         $selling = sanitize_text_field( $_POST['dokan_enable_selling'] );
         $publishing = sanitize_text_field( $_POST['dokan_publish'] );
         $percentage = floatval( $_POST['dokan_seller_percentage'] );
+        $feature_seller = sanitize_text_field( $_POST['dokan_feature'] );
         $store_settings = dokan_get_store_info( $user_id );
         $social = $_POST['dokan_social'];
 
@@ -302,6 +317,7 @@ class Dokan_Admin_User_Profile {
         update_user_meta( $user_id, 'dokan_enable_selling', $selling );
         update_user_meta( $user_id, 'dokan_publishing', $publishing );
         update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
+        update_user_meta( $user_id, 'dokan_feature_seller', $feature_seller );
         do_action( 'dokan_process_seller_meta_fields', $user_id );
     }
 }
