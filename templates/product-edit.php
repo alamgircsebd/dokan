@@ -275,33 +275,34 @@ if ( ! $from_shortcode ) {
                                 </div> <!-- #edit-product -->
 
                                 <div id="product-options">
-
-                                    <?php include_once dirname(__FILE__) . '/edit/options.php'; ?>
-
+                                
+                                    <?php dokan_get_template_part( 'edit/options' ); ?>
                                     <?php do_action( 'dokan_product_edit_after_options' ); ?>
 
                                 </div> <!-- #product-options -->
 
                                 <div id="product-inventory">
 
-                                    <?php include_once dirname(__FILE__) . '/edit/inventory.php'; ?>
-
+                                    <?php dokan_get_template_part( 'edit/inventory' ); ?>
                                     <?php do_action( 'dokan_product_edit_after_inventory' ); ?>
 
                                 </div> <!-- #product-inventory -->
 
                                 <div id="product-shipping">
-                                    <?php include_once dirname(__FILE__) . '/edit/shipping.php'; ?>
-
+                                    
+                                    <?php dokan_get_template_part( 'edit/shipping' ); ?> 
                                     <?php do_action( 'dokan_product_edit_after_shipping' ); ?>
+                                
                                 </div>
 
                                 <!-- ===== Attributes ===== -->
 
                                 <div class="show_if_simple" id="product-attributes">
-
-                                    <?php include_once dirname(__FILE__) . '/edit/attributes.php'; ?>
-                                    <?php include_once dirname(__FILE__) . '/edit/templates-js.php'; ?>
+                                    
+                                    <?php  
+                                        dokan_get_template_part( 'edit/attributes' );
+                                        dokan_get_template_part( 'edit/templates-js' );
+                                    ?>
 
                                     <?php do_action( 'dokan_product_edit_after_attributes' ); ?>
 
@@ -326,8 +327,8 @@ if ( ! $from_shortcode ) {
 
                     <div class="dokan-product-edit-right dokan-edit-sidebar">
 
-                        <?php include_once dirname(__FILE__) . '/edit/sidebar.php'; ?>
-
+                        <?php dokan_get_template_part( 'edit/sidebar' ); ?> 
+                    
                     </div> <!-- .dokan-edit-sidebar -->
                 </div> <!-- .product-edit-container -->
             </form>
