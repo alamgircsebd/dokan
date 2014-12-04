@@ -96,7 +96,7 @@ class Dokan_Template_Settings {
             'payment'      => array(),
             'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
             'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
-            'address'      => strp_tags( $_POST['setting_address'] ),
+            'address'      => strip_tags( $_POST['setting_address'] ),
             'location'     => sanitize_text_field( $_POST['location'] ),
             'find_address' => sanitize_text_field( $_POST['find_address'] ),
             'banner'       => absint( $_POST['dokan_banner'] ),
