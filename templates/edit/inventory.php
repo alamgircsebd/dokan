@@ -1,3 +1,6 @@
+<?php 
+global $post;
+?>
 <div class="dokan-form-horizontal">
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_sku"><?php _e( 'SKU', 'dokan' ); ?></label>
@@ -5,7 +8,7 @@
             <?php dokan_post_input_box( $post->ID, '_sku', array( 'placeholder' => 'SKU' ) ); ?>
         </div>
     </div>
-
+    
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for=""><?php _e( 'Manage Stock?', 'dokan' ); ?></label>
         <div class="dokan-w6 dokan-text-left">
@@ -13,7 +16,7 @@
         </div>
     </div>
 
-    <div class="dokan-form-group">
+    <div class="dokan-form-group show_if_simple">
         <label class="dokan-w4 dokan-control-label" for="_stock_qty"><?php _e( 'Stock Qty', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_stock', array( 'placeholder' => '10' ) ); ?>

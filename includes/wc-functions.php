@@ -86,10 +86,9 @@ function dokan_variable_product_type_options() {
                 $variations = get_posts( $args );
                 $loop = 0;
 
-                // var_dump( $variations );
 
                 if ( $variations ) foreach ( $variations as $variation ) {
-
+                   
                     $variation_id           = absint( $variation->ID );
                     $variation_post_status  = esc_attr( $variation->post_status );
                     $variation_data         = get_post_meta( $variation_id );
@@ -132,7 +131,7 @@ function dokan_variable_product_type_options() {
                     $_weight        = wc_format_localized_decimal( $_weight );
                     $_length        = wc_format_localized_decimal( $_length );
                     $_width         = wc_format_localized_decimal( $_width );
-                        $_height        = wc_format_localized_decimal( $_height );
+                    $_height        = wc_format_localized_decimal( $_height );
 
                     include DOKAN_INC_DIR . '/woo-views/variation-admin-html.php';
 
@@ -686,7 +685,7 @@ function dokan_process_product_meta( $post_id ) {
             update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
             update_post_meta( $post_id, '_backorders', stripslashes( $_POST['_backorders'] ) );
             update_post_meta( $post_id, '_manage_stock', 'yes' );
-
+        
             // Check stock level
             if ( $product_type !== 'variable' && $_POST['_backorders'] == 'no' && (int) $_POST['_stock'] < 1 )
                 update_post_meta( $post_id, '_stock_status', 'outofstock' );
@@ -862,6 +861,7 @@ function dokan_save_variations( $post_id ) {
 
             // Update post meta
             update_post_meta( $variation_id, '_sku', wc_clean( $variable_sku[ $i ] ) );
+            update_post_meta( $variation_id, '_stock', wc_clean( $variable_stock[ $i ] ) );
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
             update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
             update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );

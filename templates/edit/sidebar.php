@@ -1,4 +1,9 @@
+<?php
+global $post;
 
+$_downloadable   = get_post_meta( $post->ID, '_downloadable', true );
+
+?>
 <div class="update-button-wrap">
     <input type="submit" name="update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
 </div>
@@ -145,7 +150,7 @@
         <div id="product_images_container">
             <ul class="product_images dokan-clearfix">
                 <?php
-                $product_images = get_post_meta( $post_id, '_product_image_gallery', true );
+                $product_images = get_post_meta( $post->ID, '_product_image_gallery', true );
                 $gallery = explode( ',', $product_images );
 
                 if ( $gallery ) {
