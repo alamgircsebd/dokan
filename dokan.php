@@ -117,6 +117,8 @@ class WeDevs_Dokan {
 
         //for reviews ajax request
         $this->init_ajax();
+
+        do_action( 'dokan_loaded' );
     }
 
     /**

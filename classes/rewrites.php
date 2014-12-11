@@ -18,21 +18,25 @@ class Dokan_Rewrites {
 
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
-        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 9 );
 
         add_filter( 'woocommerce_locate_template', array($this, 'account_migration_template') );
     }
 
+    /**
+     * Check if WooCommerce installed or not
+     * @return boolean true|false;
+     */
     public function is_woo_installed() {
         return function_exists( 'WC' );
     }
 
     /**
-     * Sets the query vars on plugins_loaded
+     * Register the rewrite rule
      *
      * @return void
      */
-    function load_query_var_variable() {
+    function register_rule() {
+
         $this->query_vars = apply_filters( 'dokan_query_var_filter', array(
             'products',
             'new-product',
@@ -44,14 +48,6 @@ class Dokan_Rewrites {
             'settings',
             'account-migration'
         ) );
-    }
-
-    /**
-     * Register the rewrite rule
-     *
-     * @return void
-     */
-    function register_rule() {
 
         foreach ( $this->query_vars as $var ) {
             add_rewrite_endpoint( $var, EP_PAGES );
@@ -86,6 +82,8 @@ class Dokan_Rewrites {
 
         add_rewrite_rule( 'store/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&term=$matches[2]&term_section=true', 'top' );
         add_rewrite_rule( 'store/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
+        
+        do_action( 'dokan_rewrite_rules_loaded' );
     }
 
     /**
