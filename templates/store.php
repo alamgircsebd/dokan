@@ -8,16 +8,44 @@
 
 $store_user = get_userdata( get_query_var( 'author' ) );
 $store_info = dokan_get_store_info( $store_user->ID );
+$map_location = isset( $store_info['location'] ) ? esc_attr( $store_info['location'] ) : '';
 
 $scheme = is_ssl() ? 'https' : 'http';
 wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sensor=true' );
 
 get_header();
+if ( dokan_get_option( 'enable_theme_store_sidebar', 'dokan_general', 'off' ) == 'off' ) {
 ?>
+    <div id="secondary" class="col-md-3 dokan-clearfix dokan-w4" role="complementary" style="margin-right:3%;">
+        <div class="widget-area collapse widget-collapse">
+            <?php
+            if ( ! dynamic_sidebar( 'sidebar-store' ) ) {
 
-<?php get_sidebar( 'store' ); ?>
+                $args = array(
+                    'before_widget' => '<aside class="widget">',
+                    'after_widget'  => '</aside>',
+                    'before_title'  => '<h3 class="widget-title">',
+                    'after_title'   => '</h3>',
+                );
 
-<div id="primary" class="content-area dokan-single-store">
+                if ( class_exists( 'Dokan_Store_Location' ) ) {
+                    the_widget( 'Dokan_Store_Category_Menu', array( 'title' => __( 'Store Category', 'dokan' ) ), $args );
+                    the_widget( 'Dokan_Store_Location', array( 'title' => __( 'Store Location', 'dokan' ) ), $args );
+                    the_widget( 'Dokan_Store_Contact_Form', array( 'title' => __( 'Contact Seller', 'dokan' ) ), $args );
+                }
+
+            }
+            ?>
+
+            <?php do_action( 'dokan_sidebar_store_after', $store_user, $store_info ); ?>
+        </div>
+    </div><!-- #secondary .widget-area -->
+<?php
+}else {
+    get_sidebar( 'store' );
+} ?>
+
+<div id="primary" class="content-area dokan-single-store dokan-w8">
     <div id="content" class="site-content store-page-wrap woocommerce" role="main">
 
         <?php dokan_get_template_part( 'store-header' ); ?>
@@ -50,6 +78,5 @@ get_header();
     </div>
 
     </div><!-- #content .site-content -->
-</div><!-- #primary .content-area -->
 
 <?php get_footer(); ?>

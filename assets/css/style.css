@@ -2649,3 +2649,8 @@ textarea.dokan-form-control {
   }
 }
 /*# sourceMappingURL=style.css.map */
+
+.dokan-widget-area {
+  width:0px;
+  margin-left:0px;
+}
