@@ -6,8 +6,8 @@ $order_status = isset( $_GET['order_status'] ) ? sanitize_key( $_GET['order_stat
 $paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
 $limit        = 10;
 $offset       = ( $paged - 1 ) * $limit;
-
-$user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $limit, $offset );
+$order_date   = isset( $_GET['order_date'] ) ? sanitize_key( $_GET['order_date'] ) : NULL;
+$user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $order_date, $limit, $offset );
 
 if ( $user_orders ) {
     ?>
@@ -132,7 +132,7 @@ if ( $user_orders ) {
     $num_of_pages = ceil( $order_count / $limit );
 
     if ( $num_of_pages > 1 ) {
-        echo '<div class="pagination-container">';
+        echo '<div class="pagination-wrap">';
         $page_links = paginate_links( array(
             'current' => $paged,
             'total' => $num_of_pages,
@@ -155,3 +155,13 @@ if ( $user_orders ) {
     </div>
 
 <?php } ?>
+
+<script>
+    (function($){
+        $(document).ready(function(){
+            $('.datepicker').datepicker({
+                dateFormat: 'yy-m-d'
+            });
+        });
+    })(jQuery);
+</script>
