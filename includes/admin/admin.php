@@ -204,6 +204,13 @@ class Dokan_Admin_Settings {
                     'default' => '50',
                     'type'    => 'text',
                 ),
+                'withdraw_date_limit' => array(
+                    'name'    => 'withdraw_date_limit',
+                    'label'   => __( 'Threshold withdraw for', 'dokan' ),
+                    'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
+                    'default' => '0',
+                    'type'    => 'text',
+                ),
                 'review_edit' => array(
                     'name'    => 'review_edit',
                     'label'   => __( 'Review Editing', 'dokan' ),
