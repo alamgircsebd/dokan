@@ -49,7 +49,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                 </div> <!-- .big-counter -->
 
                 <div class="dashboard-widget orders">
-                    <div class="widget-title"><i class="fa fa-shopping-cart"></i> Orders</div>
+                    <div class="widget-title"><i class="fa fa-shopping-cart"></i> <?php _e( 'Orders', 'dokan' ); ?></div>
 
                     <?php
                     $order_data = array(
@@ -107,7 +107,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                 </div> <!-- .orders -->
 
                 <div class="dashboard-widget reviews">
-                    <div class="widget-title"><i class="fa fa-comments"></i> Reviews</div>
+                    <div class="widget-title"><i class="fa fa-comments"></i> <?php _e( 'Reviews', 'dokan' ); ?></div>
 
                     <ul class="list-unstyled list-count">
                         <li>
