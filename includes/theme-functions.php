@@ -62,7 +62,8 @@ function dokan_is_product_author( $product_id = 0 ) {
  * @return boolean
  */
 function dokan_is_store_page() {
-    if ( get_query_var( 'store' ) ) {
+    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+    if ( get_query_var( $custom_store_url ) ) {
         return true;
     }
 
@@ -815,8 +816,8 @@ function dokan_is_seller_trusted( $user_id ) {
  */
 function dokan_get_store_url( $user_id ) {
     $userdata = get_userdata( $user_id );
-
-    return sprintf( '%s/%s/', home_url( '/store' ), $userdata->user_nicename );
+    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+    return sprintf( '%s/%s/', home_url( '/' . $custom_store_url ), $userdata->user_nicename );
 }
 
 
