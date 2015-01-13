@@ -8,8 +8,10 @@
 class Dokan_Rewrites {
 
     public $query_vars = array();
+    public $custom_store_url = '';
 
     function __construct() {
+        $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
         add_action( 'init', array( $this, 'register_rule' ) );
 
         add_filter( 'template_include', array( $this, 'store_template' ) );
@@ -23,9 +25,9 @@ class Dokan_Rewrites {
     }
 
     /**
-     * Check if WooCommerce installed or not
-     * @return boolean true|false;
-     */
+    * Check if WooCommerce installed or not
+    * @return boolean true|false;
+    */
     public function is_woo_installed() {
         return function_exists( 'WC' );
     }
@@ -36,7 +38,6 @@ class Dokan_Rewrites {
      * @return void
      */
     function register_rule() {
-
         $this->query_vars = apply_filters( 'dokan_query_var_filter', array(
             'products',
             'new-product',
@@ -74,15 +75,15 @@ class Dokan_Rewrites {
             }
         }
 
-        add_rewrite_rule( 'store/([^/]+)/?$', 'index.php?store=$matches[1]', 'top' );
-        add_rewrite_rule( 'store/([^/]+)/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&paged=$matches[2]', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]', 'top' );
 
-        add_rewrite_rule( 'store/([^/]+)/reviews?$', 'index.php?store=$matches[1]&store_review=true', 'top' );
-        add_rewrite_rule( 'store/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&store_review=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
 
-        add_rewrite_rule( 'store/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&term=$matches[2]&term_section=true', 'top' );
-        add_rewrite_rule( 'store/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
-        
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&term_section=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
+    
         do_action( 'dokan_rewrite_rules_loaded' );
     }
 
@@ -93,7 +94,7 @@ class Dokan_Rewrites {
      * @return array
      */
     function register_query_var( $vars ) {
-        $vars[] = 'store';
+        $vars[] = $this->custom_store_url;
         $vars[] = 'store_review';
         $vars[] = 'edit';
         $vars[] = 'term_section';
@@ -113,7 +114,7 @@ class Dokan_Rewrites {
      */
     function store_template( $template ) {
 
-        $store_name = get_query_var( 'store' );
+        $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! $this->is_woo_installed() ) {
             return $template;
@@ -167,7 +168,7 @@ class Dokan_Rewrites {
     function store_query_filter( $query ) {
         global $wp_query;
 
-        $author = get_query_var( 'store' );
+        $author = get_query_var( $this->custom_store_url );
 
         if ( !is_admin() && $query->is_main_query() && !empty( $author ) ) {
             $query->set( 'post_type', 'product' );
@@ -180,7 +181,8 @@ class Dokan_Rewrites {
                         array(
                             'taxonomy' => 'product_cat',
                             'field' => 'term_id',
-                            'terms' => $query->query['term'] )
+                            'terms' => $query->query['term'] 
+                        )
                     )
                 );
             }

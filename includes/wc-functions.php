@@ -1574,14 +1574,16 @@ function dokan_get_seller_balance( $seller_id, $formatted = true ) {
     $status    = dokan_withdraw_get_active_order_status_in_comma();
     $cache_key = 'dokan_seller_balance_' . $seller_id;
     $earning   = wp_cache_get( $cache_key, 'dokan' );
+    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_selling', 0 );   
+    $date = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$threshold_day.' days' ) );
 
     if ( false === $earning ) {
         $sql = "SELECT SUM(net_amount) as earnings,
             (SELECT SUM(amount) FROM {$wpdb->prefix}dokan_withdraw WHERE user_id = %d AND status = 1) as withdraw
-            FROM {$wpdb->prefix}dokan_orders
-            WHERE seller_id = %d AND order_status IN({$status})";
+            FROM {$wpdb->prefix}dokan_orders as do LEFT JOIN {$wpdb->prefix}posts as p ON do.order_id = p.ID   
+            WHERE seller_id = %d AND DATE(p.post_date) < %s AND order_status IN({$status})";
 
-        $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id, $seller_id ) );
+        $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id, $seller_id, $date ) );
         $earning = $result->earnings - $result->withdraw;
 
         wp_cache_set( $cache_key, $earning, 'dokan' );

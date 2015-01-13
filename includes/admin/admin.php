@@ -204,6 +204,20 @@ class Dokan_Admin_Settings {
                     'default' => '50',
                     'type'    => 'text',
                 ),
+                'withdraw_date_limit' => array(
+                    'name'    => 'withdraw_date_limit',
+                    'label'   => __( 'Threshold withdraw for', 'dokan' ),
+                    'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
+                    'default' => '0',
+                    'type'    => 'text',
+                ),
+                'custom_store_url' => array(
+                    'name'    => 'custom_store_url',
+                    'label'   => __( 'Seller Store URL', 'dokan' ),
+                    'desc'    => __( 'Define seller store URL ( http://yoursite.com/[this-text]/[seller-name] )', 'dokan' ),
+                    'default' => 'store',
+                    'type'    => 'text',
+                ),
                 'review_edit' => array(
                     'name'    => 'review_edit',
                     'label'   => __( 'Review Editing', 'dokan' ),

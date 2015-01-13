@@ -698,6 +698,10 @@ class Dokan_Template_Withdraw {
         // show alert messages
         $this->show_alert_messages();
 
+        if ( $this->get_user_balance( $current_user->ID ) < 0 ) {
+            printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', __( 'You already withdrawed '. get_woocommerce_currency_symbol().abs($this->get_user_balance( $current_user->ID )) .'. This amount will deducted from your next selling amount', 'dokan' ) );
+        }
+
         if ( $this->has_pending_request( $current_user->ID ) ) {
             ?>
             <div class="dokan-alert dokan-alert-warning">
@@ -712,8 +716,10 @@ class Dokan_Template_Withdraw {
         } else if ( !$this->has_withdraw_balance( $current_user->ID ) ) {
 
             printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', __( 'You don\'t have sufficient balance for a withdraw request!', 'dokan' ) );
+
             return;
         }
+        
 
         $payment_methods = dokan_withdraw_get_active_methods();
 
