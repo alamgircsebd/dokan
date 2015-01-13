@@ -263,8 +263,7 @@ class WeDevs_Dokan {
 
 
         // load only in dokan dashboard and edit page
-        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
-        if ( get_query_var( $custom_store_url ) || get_query_var( 'store_review' ) || is_account_page() ) {
+        if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
@@ -295,7 +294,8 @@ class WeDevs_Dokan {
         }
 
         // store and my account page
-        if ( get_query_var( 'store' ) || get_query_var( 'store_review' ) || is_account_page() ) {
+        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+        if ( get_query_var( $custom_store_url ) || get_query_var( 'store_review' ) || is_account_page() ) {
 
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'fontawesome' );
