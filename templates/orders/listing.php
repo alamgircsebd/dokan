@@ -130,15 +130,16 @@ if ( $user_orders ) {
     <?php
     $order_count = dokan_get_seller_orders_number( $seller_id, $order_status );
     $num_of_pages = ceil( $order_count / $limit );
-
+    $base_url  = dokan_get_navigation_url( 'orders' );   
     if ( $num_of_pages > 1 ) {
         echo '<div class="pagination-wrap">';
         $page_links = paginate_links( array(
-            'current' => $paged,
-            'total' => $num_of_pages,
-            'base'      => add_query_arg( 'pagenum', '%#%' ),
-            'format'    => '',
-            'type' => 'array',
+            'current'   => $paged,
+            'total'     => $num_of_pages,
+            'base'      => $base_url. '%_%',
+            'format'    => '?pagenum=%#%',
+            'add_args'  => false,
+            'type'      => 'array',
         ) );
 
         echo "<ul class='pagination'>\n\t<li>";
