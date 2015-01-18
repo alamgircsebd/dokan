@@ -186,14 +186,16 @@
                 wp_reset_postdata();
 
                 $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+                $base_url = dokan_get_navigation_url('products');
                 
                 if ( $product_query->max_num_pages > 1 ) {
                     echo '<div class="pagination-wrap">';
                     $page_links = paginate_links( array(
                         'current'   => $pagenum,
                         'total'     => $product_query->max_num_pages,
-                        'base'      => add_query_arg( 'pagenum', '%#%' ),
-                        'format'    => '',
+                        'base'      => $base_url. '%_%',
+                        'format'    => '?pagenum=%#%',
+                        'add_args'  => false,
                         'type'      => 'array',
                         'prev_text' => __( '&laquo; Previous', 'dokan' ),
                         'next_text' => __( 'Next &raquo;', 'dokan' )

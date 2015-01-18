@@ -18,6 +18,7 @@ class Dokan_Template_Shortcodes {
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
+        add_action( 'template_redirect', array( $this, 'haldle_order_export' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
@@ -26,6 +27,11 @@ class Dokan_Template_Shortcodes {
         add_shortcode( 'dokan-my-orders', array( $this, 'my_orders_page' ) );
     }
 
+    /**
+     * Singleton method
+     *
+     * @return self
+     */
     public static function init() {
         static $instance = false;
 
@@ -36,7 +42,14 @@ class Dokan_Template_Shortcodes {
         return $instance;
     }
 
-
+    /**
+     * Load template files
+     *
+     * Based on the query vars, load the appropriate template files
+     * in the frontend user dashboard.
+     *
+     * @return void
+     */
     public function load_template_files() {
         global $wp;
 
@@ -92,19 +105,23 @@ class Dokan_Template_Shortcodes {
         do_action( 'dokan_load_custom_template', $wp->query_vars );
     }
 
+    /**
+     * Handle all the form POST submit
+     *
+     * @return void
+     */
     function handle_all_submit() {
 
-        if ( !is_user_logged_in() ) {
+        if ( ! is_user_logged_in() ) {
             return;
         }
 
-        if ( !dokan_is_user_seller( get_current_user_id() ) ) {
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
             return;
         }
-
 
         $errors = array();
-        self::$product_cat = -1;
+        self::$product_cat  = -1;
         self::$post_content = __( 'Details about your product...', 'dokan' );
 
         if ( ! $_POST ) {
@@ -112,11 +129,11 @@ class Dokan_Template_Shortcodes {
         }
 
         if ( isset( $_POST['add_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_product_nonce'], 'dokan_add_new_product' ) ) {
-            $post_title = trim( $_POST['post_title'] );
-            $post_content = trim( $_POST['post_content'] );
-            $post_excerpt = trim( $_POST['post_excerpt'] );
-            $price = floatval( $_POST['price'] );
-            $product_cat = intval( $_POST['product_cat'] );
+            $post_title     = trim( $_POST['post_title'] );
+            $post_content   = trim( $_POST['post_content'] );
+            $post_excerpt   = trim( $_POST['post_excerpt'] );
+            $price          = floatval( $_POST['price'] );
+            $product_cat    = intval( $_POST['product_cat'] );
             $featured_image = absint( $_POST['feat_image_id'] );
 
             if ( empty( $post_title ) ) {
@@ -172,6 +189,7 @@ class Dokan_Template_Shortcodes {
             $post_id = intval( $_GET['product_id'] );
         } else {
             global $post, $product;
+
             if ( !empty( $post ) ) {
                 $post_id = $post->ID;
             }
@@ -245,10 +263,173 @@ class Dokan_Template_Shortcodes {
         $dokan_withdraw->cancel_pending();
     }
 
+    /**
+     * Export user orders to CSV format
+     *
+     * @return void
+     */
+    function haldle_order_export() {
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( isset( $_POST['dokan_order_export_all'] ) ) {
+
+            $filename = "Orders-".time();
+            header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
+            header( "Content-Disposition: attachment; filename=$filename.csv" );
+
+            $headers = array(
+                'order_id'             => __( 'Order No', 'dokan' ),
+                'order_items'          => __( 'Order Items', 'dokan' ),
+                'order_shipping'       => __( 'Shipping method', 'dokan' ),
+                'order_shipping_cost'  => __( 'Shipping Cost', 'dokan' ),
+                'order_payment_method' => __( 'Payment method', 'dokan' ),
+                'order_total'          => __( 'Order Total', 'dokan' ),
+                'order_status'         => __( 'Order Status', 'dokan' ),
+                'order_date'           => __( 'Order Date', 'dokan' ),
+                'customer_name'        => __( 'Customer Name', 'dokan' ),
+                'customer_email'       => __( 'Customer Email', 'dokan' ),
+                'customer_phone'       => __( 'Customer Phone', 'dokan' ),
+                'customer_ip'          => __( 'Customer IP', 'dokan' ),
+            );
+
+            foreach ( (array)$headers as $label ) {
+                echo $label .', ';
+            }
+
+            echo "\r\n";
+            $user_orders = dokan_get_seller_orders( get_current_user_id(), 'all', NULL, 10000000, 0 );
+            $statuses    = wc_get_order_statuses();
+            $results     = array();
+            foreach ( $user_orders as $order ) {
+                $the_order = new WC_Order( $order->order_id );
+
+                $customer = get_post_meta( $order->order_id , '_customer_user', true );
+                if ( $customer ) {
+                    $customer_details = get_user_by( 'id', $customer );
+                    $customer_name    = $customer_details->user_login;
+                    $customer_email   = esc_html( get_post_meta( $order->order_id, '_billing_email', true ) );
+                    $customer_phone   = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
+                    $customer_ip      = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
+                } else {
+                    $customer_name  = get_post_meta( $order->id, '_billing_first_name', true ). ' '. get_post_meta( $order->id, '_billing_last_name', true ).'(Guest)';
+                    $customer_email = esc_html( get_post_meta( $order->order_id, '_billing_email', true ) );
+                    $customer_phone = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
+                    $customer_ip    = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
+                }
+
+                $results = array(
+                    'order_id'             => $order->order_id,
+                    'order_items'          => dokan_get_product_list_by_order( $the_order, ';' ),
+                    'order_shipping'       => $the_order->get_shipping_method(),
+                    'order_shipping_cost'  => $the_order->get_total_shipping(),
+                    'order_payment_method' => get_post_meta( $order->order_id, '_payment_method_title', true ),
+                    'order_total'          => $the_order->get_total(),
+                    'order_status'         => $statuses[$the_order->post_status],
+                    'order_date'           => $the_order->order_date,
+                    'customer_name'        => $customer_name,
+                    'customer_email'       => $customer_email,
+                    'customer_phone'       => $customer_phone,
+                    'customer_ip'          => $customer_ip,
+                );
+
+                foreach ( $results as $csv_key => $csv_val ) {
+                    echo $csv_val . ', ';
+                }
+                echo "\r\n";
+            }
+            exit();
+        }
+
+        if ( isset( $_POST['dokan_order_export_filtered'] ) ) {
+
+            $filename = "Orders-".time();
+            header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
+            header( "Content-Disposition: attachment; filename=$filename.csv" );
+
+            $headers = array(
+                'order_id'             => __( 'Order No', 'dokan' ),
+                'order_items'          => __( 'Order Items', 'dokan' ),
+                'order_shipping'       => __( 'Shipping method', 'dokan' ),
+                'order_shipping_cost'  => __( 'Shipping Cost', 'dokan' ),
+                'order_payment_method' => __( 'Payment method', 'dokan' ),
+                'order_total'          => __( 'Order Total', 'dokan' ),
+                'order_status'         => __( 'Order Status', 'dokan' ),
+                'order_date'           => __( 'Order Date', 'dokan' ),
+                'customer_name'        => __( 'Customer Name', 'dokan' ),
+                'customer_email'       => __( 'Customer Email', 'dokan' ),
+                'customer_phone'       => __( 'Customer Phone', 'dokan' ),
+                'customer_ip'          => __( 'Customer IP', 'dokan' ),
+            );
+
+            foreach ( (array)$headers as $label ) {
+                echo $label .', ';
+            }
+            echo "\r\n";
+
+            $order_date   = ( isset( $_POST['order_date'] ) ) ? $_POST['order_date'] : NULL;
+            $order_status = ( isset( $_POST['order_status'] ) ) ? $_POST['order_status'] : 'all';
+            $user_orders  = dokan_get_seller_orders( get_current_user_id(), $order_status, $order_date, 10000000, 0 );
+            $statuses     = wc_get_order_statuses();
+            $results      = array();
+
+            foreach ( $user_orders as $order ) {
+                $the_order = new WC_Order( $order->order_id );
+
+                $customer = get_post_meta( $order->order_id , '_customer_user', true );
+                if ( $customer ) {
+                    $customer_details = get_user_by( 'id', $customer );
+                    $customer_name    = $customer_details->user_login;
+                    $customer_email   = esc_html( get_post_meta( $order->order_id, '_billing_email', true ) );
+                    $customer_phone   = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
+                    $customer_ip      = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
+                } else {
+                    $customer_name  = get_post_meta( $order->id, '_billing_first_name', true ). ' '. get_post_meta( $order->id, '_billing_last_name', true ).'(Guest)';
+                    $customer_email = esc_html( get_post_meta( $order->order_id, '_billing_email', true ) );
+                    $customer_phone = esc_html( get_post_meta( $order->order_id, '_billing_phone', true ) );
+                    $customer_ip    = esc_html( get_post_meta( $order->order_id, '_customer_ip_address', true ) );
+                }
+
+                $results = array(
+                    'order_id'             => $order->order_id,
+                    'order_items'          => dokan_get_product_list_by_order( $the_order ),
+                    'order_shipping'       => $the_order->get_shipping_method(),
+                    'order_shipping_cost'  => $the_order->get_total_shipping(),
+                    'order_payment_method' => get_post_meta( $order->order_id, '_payment_method_title', true ),
+                    'order_total'          => $the_order->get_total(),
+                    'order_status'         => $statuses[$the_order->post_status],
+                    'order_date'           => $the_order->order_date,
+                    'customer_name'        => $customer_name,
+                    'customer_email'       => $customer_email,
+                    'customer_phone'       => $customer_phone,
+                    'customer_ip'          => $customer_ip,
+                );
+
+                foreach ( $results as $csv_key => $csv_val ) {
+                    echo $csv_val . ', ';
+                }
+                echo "\r\n";
+            }
+            exit();
+        }
+    }
+
+    /**
+     * Render best selling products
+     *
+     * @param  array  $atts
+     *
+     * @return string
+     */
     function best_selling_product_shortcode( $atts ) {
         $per_page = shortcode_atts( array(
-                'no_of_product' => 8
-            ), $atts );
+            'no_of_product' => 8
+        ), $atts );
 
         ob_start();
         ?>
@@ -267,6 +448,13 @@ class Dokan_Template_Shortcodes {
         return ob_get_clean();
     }
 
+    /**
+     * Render top rated products via shortcode
+     *
+     * @param  array  $atts
+     *
+     * @return string
+     */
     function top_rated_product_shortcode( $atts ) {
         $per_page = shortcode_atts( array(
             'no_of_product' => 8
@@ -299,8 +487,8 @@ class Dokan_Template_Shortcodes {
         global $post;
 
         $attr = shortcode_atts( array(
-            'per_page' => 10,
-        ), $atts );
+                'per_page' => 10,
+            ), $atts );
 
         $paged  = max( 1, get_query_var( 'paged' ) );
         $limit  = $attr['per_page'];
@@ -366,13 +554,13 @@ class Dokan_Template_Shortcodes {
             if ( $num_of_pages > 1 ) {
                 echo '<div class="pagination-container clearfix">';
                 $page_links = paginate_links( array(
-                    'current'   => $paged,
-                    'total'     => $num_of_pages,
-                    'base'      => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
-                    'type'      => 'array',
-                    'prev_text' => __( '&larr; Previous', 'dokan' ),
-                    'next_text' => __( 'Next &rarr;', 'dokan' ),
-                ) );
+                        'current'   => $paged,
+                        'total'     => $num_of_pages,
+                        'base'      => str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) ),
+                        'type'      => 'array',
+                        'prev_text' => __( '&larr; Previous', 'dokan' ),
+                        'next_text' => __( 'Next &rarr;', 'dokan' ),
+                    ) );
 
                 if ( $page_links ) {
                     $pagination_links  = '<div class="pagination-wrap">';
@@ -402,6 +590,11 @@ class Dokan_Template_Shortcodes {
         return apply_filters( 'dokan_seller_listing', $content, $attr );
     }
 
+    /**
+     * Render my orders page
+     *
+     * @return string
+     */
     function my_orders_page() {
         return dokan_get_template_part( 'my-orders' );
     }

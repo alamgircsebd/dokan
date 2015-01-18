@@ -1,5 +1,20 @@
 ==================== Plugin Version ====================
 
+v1.4 -> January 18, 2015
+---------------------
+- [new] Added admin option to change store URL
+- [new] Added withdraw threshold feature
+- [new] Order report Export and listing
+- [new] Added admin option to enable-disable store sidebar from theme
+- [new] Coupon fee shipping removed
+- [fix] Pagination compatible with Wordpress v4.1
+- [fix] Language translation fixed
+- [fix] Seller name changed to store name at featured seller widget
+- [fix] Fix product stock quantity save error
+- [fix] Fix product variation stock error
+- [fix] Settings page error fix
+
+
 v1.3 -> November 20, 2014
 ---------------------
 - [fix] Sanitize settings fields

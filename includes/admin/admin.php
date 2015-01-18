@@ -140,6 +140,13 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
+                'enable_theme_store_sidebar' => array(
+                    'name'    => 'enable_theme_store_sidebar',
+                    'label'   => __( 'Enable Store Sidebar From Theme', 'dokan' ),
+                    'desc'    => __( 'Enable showing Store Sidebar From Your Theme.', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'off'
+                ),
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
@@ -195,6 +202,20 @@ class Dokan_Admin_Settings {
                     'label'   => __( 'Minimum Withdraw Limit', 'dokan' ),
                     'desc'    => __( 'Minimum balance required to make a withdraw request', 'dokan' ),
                     'default' => '50',
+                    'type'    => 'text',
+                ),
+                'withdraw_date_limit' => array(
+                    'name'    => 'withdraw_date_limit',
+                    'label'   => __( 'Threshold withdraw for', 'dokan' ),
+                    'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
+                    'default' => '0',
+                    'type'    => 'text',
+                ),
+                'custom_store_url' => array(
+                    'name'    => 'custom_store_url',
+                    'label'   => __( 'Seller Store URL', 'dokan' ),
+                    'desc'    => __( 'Define seller store URL ( http://yoursite.com/[this-text]/[seller-name] )', 'dokan' ),
+                    'default' => 'store',
                     'type'    => 'text',
                 ),
                 'review_edit' => array(

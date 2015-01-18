@@ -8,31 +8,41 @@
 class Dokan_Rewrites {
 
     public $query_vars = array();
+    public $custom_store_url = '';
 
-    function __construct() {
+    /**
+     * Hook into the functions
+     */
+    public function __construct() {
+        $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+
         add_action( 'init', array( $this, 'register_rule' ) );
 
         add_filter( 'template_include', array( $this, 'store_template' ) );
         add_filter( 'template_include', array( $this, 'store_review_template' ) );
-        add_filter( 'template_include', array($this,  'product_edit_template') );
+        add_filter( 'template_include', array( $this,  'product_edit_template' ) );
 
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
-        add_action( 'plugins_loaded', array( $this, 'load_query_var_variable' ), 9 );
 
-        add_filter( 'woocommerce_locate_template', array($this, 'account_migration_template') );
+        add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
     }
 
+    /**
+     * Check if WooCommerce installed or not
+     *
+     * @return boolean
+     */
     public function is_woo_installed() {
         return function_exists( 'WC' );
     }
 
     /**
-     * Sets the query vars on plugins_loaded
+     * Register the rewrite rule
      *
      * @return void
      */
-    function load_query_var_variable() {
+    function register_rule() {
         $this->query_vars = apply_filters( 'dokan_query_var_filter', array(
             'products',
             'new-product',
@@ -44,14 +54,6 @@ class Dokan_Rewrites {
             'settings',
             'account-migration'
         ) );
-    }
-
-    /**
-     * Register the rewrite rule
-     *
-     * @return void
-     */
-    function register_rule() {
 
         foreach ( $this->query_vars as $var ) {
             add_rewrite_endpoint( $var, EP_PAGES );
@@ -78,14 +80,16 @@ class Dokan_Rewrites {
             }
         }
 
-        add_rewrite_rule( 'store/([^/]+)/?$', 'index.php?store=$matches[1]', 'top' );
-        add_rewrite_rule( 'store/([^/]+)/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&paged=$matches[2]', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]', 'top' );
 
-        add_rewrite_rule( 'store/([^/]+)/reviews?$', 'index.php?store=$matches[1]&store_review=true', 'top' );
-        add_rewrite_rule( 'store/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&store_review=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
 
-        add_rewrite_rule( 'store/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&term=$matches[2]&term_section=true', 'top' );
-        add_rewrite_rule( 'store/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?store=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&term_section=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
+
+        do_action( 'dokan_rewrite_rules_loaded' );
     }
 
     /**
@@ -95,7 +99,7 @@ class Dokan_Rewrites {
      * @return array
      */
     function register_query_var( $vars ) {
-        $vars[] = 'store';
+        $vars[] = $this->custom_store_url;
         $vars[] = 'store_review';
         $vars[] = 'edit';
         $vars[] = 'term_section';
@@ -115,7 +119,7 @@ class Dokan_Rewrites {
      */
     function store_template( $template ) {
 
-        $store_name = get_query_var( 'store' );
+        $store_name = get_query_var( $this->custom_store_url );
 
         if ( ! $this->is_woo_installed() ) {
             return $template;
@@ -140,6 +144,13 @@ class Dokan_Rewrites {
         return $template;
     }
 
+    /**
+     * Returns the edit product template
+     *
+     * @param string  $template
+     *
+     * @return string
+     */
     function product_edit_template( $template ) {
 
         if ( ! $this->is_woo_installed() ) {
@@ -153,6 +164,13 @@ class Dokan_Rewrites {
         return $template;
     }
 
+    /**
+     * Returns the store review template
+     *
+     * @param string  $template
+     *
+     * @return string
+     */
     function store_review_template( $template ) {
 
         if ( ! $this->is_woo_installed() ) {
@@ -166,10 +184,19 @@ class Dokan_Rewrites {
         return $template;
     }
 
+    /**
+     * Store query filter
+     *
+     * Handles the product filtering by category in store page
+     *
+     * @param object  $query
+     *
+     * @return void
+     */
     function store_query_filter( $query ) {
         global $wp_query;
 
-        $author = get_query_var( 'store' );
+        $author = get_query_var( $this->custom_store_url );
 
         if ( !is_admin() && $query->is_main_query() && !empty( $author ) ) {
             $query->set( 'post_type', 'product' );
@@ -181,8 +208,9 @@ class Dokan_Rewrites {
                     array(
                         array(
                             'taxonomy' => 'product_cat',
-                            'field' => 'term_id',
-                            'terms' => $query->query['term'] )
+                            'field'    => 'term_id',
+                            'terms'    => $query->query['term']
+                        )
                     )
                 );
             }
@@ -192,7 +220,7 @@ class Dokan_Rewrites {
     /**
      * Account migration template on my account
      *
-     * @param  string $file path of the template
+     * @param string  $file path of the template
      * @return string
      */
     function account_migration_template( $file ) {

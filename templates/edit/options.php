@@ -32,4 +32,5 @@
             <?php dokan_post_input_box( $post->ID, '_sold_individually', array('label' => __( 'Allow one of this item to be bought in a single order', 'dokan' ) ), 'checkbox' ); ?>
         </div>
     </div>
+
 </div> <!-- .form-horizontal -->
