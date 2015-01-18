@@ -2,10 +2,10 @@
 
 v1.4 -> January 18, 2015
 ---------------------
-- [new] Added admin option to change store URL 
+- [new] Added admin option to change store URL
 - [new] Added withdraw threshold feature
 - [new] Order report Export and listing
-- [new] Added admin option to enable-disable store sidebar from theme 
+- [new] Added admin option to enable-disable store sidebar from theme
 - [new] Coupon fee shipping removed
 - [fix] Pagination compatible with Wordpress v4.1
 - [fix] Language translation fixed
