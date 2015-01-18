@@ -10,6 +10,7 @@ v1.4 -> January 18, 2015
 - [fix] Pagination compatible with Wordpress v4.1
 - [fix] Language translation fixed
 - [fix] Seller name changed to store name at featured seller widget
+- [fix] Fix product stock quantity save error
 - [fix] Fix product variation stock error
 - [fix] Settings page error fix
 
