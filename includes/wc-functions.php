@@ -88,7 +88,7 @@ function dokan_variable_product_type_options() {
 
 
                 if ( $variations ) foreach ( $variations as $variation ) {
-                   
+
                     $variation_id           = absint( $variation->ID );
                     $variation_post_status  = esc_attr( $variation->post_status );
                     $variation_data         = get_post_meta( $variation_id );
@@ -685,7 +685,7 @@ function dokan_process_product_meta( $post_id ) {
             update_post_meta( $post_id, '_stock_status', stripslashes( $_POST['_stock_status'] ) );
             update_post_meta( $post_id, '_backorders', stripslashes( $_POST['_backorders'] ) );
             update_post_meta( $post_id, '_manage_stock', 'yes' );
-        
+
             // Check stock level
             if ( $product_type !== 'variable' && $_POST['_backorders'] == 'no' && (int) $_POST['_stock'] < 1 )
                 update_post_meta( $post_id, '_stock_status', 'outofstock' );
@@ -1566,21 +1566,22 @@ function dokan_get_on_sale_products( $per_page = 10, $paged = 1 ) {
  * @global WPDB $wpdb
  * @param type $seller_id
  * @param type $formatted
- * @return type
+ *
+ * @return mixed
  */
 function dokan_get_seller_balance( $seller_id, $formatted = true ) {
     global $wpdb;
 
-    $status    = dokan_withdraw_get_active_order_status_in_comma();
-    $cache_key = 'dokan_seller_balance_' . $seller_id;
-    $earning   = wp_cache_get( $cache_key, 'dokan' );
-    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_selling', 0 );   
-    $date = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$threshold_day.' days' ) );
+    $status        = dokan_withdraw_get_active_order_status_in_comma();
+    $cache_key     = 'dokan_seller_balance_' . $seller_id;
+    $earning       = wp_cache_get( $cache_key, 'dokan' );
+    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_selling', 0 );
+    $date          = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$threshold_day.' days' ) );
 
     if ( false === $earning ) {
         $sql = "SELECT SUM(net_amount) as earnings,
             (SELECT SUM(amount) FROM {$wpdb->prefix}dokan_withdraw WHERE user_id = %d AND status = 1) as withdraw
-            FROM {$wpdb->prefix}dokan_orders as do LEFT JOIN {$wpdb->prefix}posts as p ON do.order_id = p.ID   
+            FROM {$wpdb->prefix}dokan_orders as do LEFT JOIN {$wpdb->prefix}posts as p ON do.order_id = p.ID
             WHERE seller_id = %d AND DATE(p.post_date) < %s AND order_status IN({$status})";
 
         $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id, $seller_id, $date ) );
@@ -1593,7 +1594,7 @@ function dokan_get_seller_balance( $seller_id, $formatted = true ) {
         return wc_price( $earning );
     }
 
-    return $earning;
+    return number_format_i18n( $earning, 2 );
 }
 
 /**

@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Dokan - Multi-vendor Marketplace
-Plugin URI: http://wedevs.com/
+Plugin URI: http://wedevs.com/theme/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 1.3
+Version: 1.4
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
