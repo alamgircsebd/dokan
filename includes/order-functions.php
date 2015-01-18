@@ -343,19 +343,24 @@ function dokan_get_order_status_class( $status ) {
 
 /**
  * Get product items list from order
- * @param  object $order 
- * @return string  [list of product]
+ *
+ * @since 1.4
+ *
+ * @param  object $order
+ * @param  string $glue
+ *
+ * @return string list of products
  */
-function dokan_get_product_list_by_order( $order ) {
-    
+function dokan_get_product_list_by_order( $order, $glue = ',' ) {
+
     $product_list = '';
-    $order_item = $order->get_items();
+    $order_item   = $order->get_items();
 
     foreach( $order_item as $product ) {
-        $prodct_name[] = $product['name']; 
+        $prodct_name[] = $product['name'];
     }
 
-    $product_list = implode( ',', $prodct_name );
+    $product_list = implode( $glue, $prodct_name );
 
     return $product_list;
 }
