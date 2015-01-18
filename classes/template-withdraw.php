@@ -833,8 +833,9 @@ class Dokan_Template_Withdraw {
         // show alert messages
         $this->show_alert_messages();
 
-        if ( $this->get_user_balance( $current_user->ID ) < 0 ) {
-            printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', __( 'You already withdrawed '. get_woocommerce_currency_symbol().abs( $this->get_user_balance( $current_user->ID ) ) .'. This amount will deducted from your next selling amount', 'dokan' ) );
+        $balance = $this->get_user_balance( $current_user->ID );
+        if ( $balance < 0 ) {
+            printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', sprintf( __( 'You already withdrawed %s. This amount will deducted from your next balance.', 'dokan' ), wc_price( $balance ) ) );
         }
 
         if ( $this->has_pending_request( $current_user->ID ) ) {
