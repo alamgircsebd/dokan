@@ -191,7 +191,7 @@ function dokan_order_listing_status_filter() {
 
     <ul class="list-inline order-statuses-filter">
         <li<?php echo $status_class == 'all' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -205,7 +205,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-completed' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -219,7 +219,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-processing' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -233,7 +233,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-on-hold' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -247,7 +247,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-pending' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -261,7 +261,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-canceled' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -275,7 +275,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-refunded' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -465,9 +465,8 @@ function dokan_seller_reg_form_fields() {
         <?php  do_action( 'dokan_seller_registration_field_after' ); ?>
 
     </div>
-    <div class="dokan-new-field-wrap" style="display: none;">
-        <?php do_action( 'dokn_aditional_relation_filed' ); ?>
-    </div>
+
+    <?php do_action( 'dokan_reg_form_field' ); ?>
 
     <p class="form-row form-group user-role">
         <label class="radio">
