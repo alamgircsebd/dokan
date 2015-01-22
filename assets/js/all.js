@@ -1296,3 +1296,96 @@ jQuery(function($) {
     });
 
 })(jQuery);
+
+// Shipping tab js
+(function($){
+    $(document).ready(function(){
+
+        $('.dokan-shipping-location-wrapper').on('change', '.dps_country_selection', function() {
+            var self = $(this),
+                data = {
+                    country_id : self.find(':selected').val(),
+                    action  : 'dps_select_state_by_country'
+                };
+                // console.log(data);
+                $.post( dokan.ajaxurl, data, function(response) {
+                    if( response.success ) {
+                        self.closest('.dps-shipping-location-content').find('table.dps-shipping-states tbody').html(response.data);
+                    }
+                });
+
+        });
+
+    });
+})(jQuery);
+
+
+(function($){
+    
+    $(document).ready(function(){
+        $('#shipping-form').on('change', 'input[type="radio"][name="dokan_shipping_type"]', function(){
+            
+            var value = $(this).val(),
+                add_qty_wrapper = $('.dokan-shipping-add-product');
+            if( value == 'productwise' ) {
+                add_qty_wrapper.addClass('dokan-hide');
+                $('.dokan-shipping-wrapper').removeClass('dokan-hide'); 
+            } else if( value == 'instore_pickup' ) {
+                $('.dokan-shipping-wrapper').addClass('dokan-hide');
+            } else {
+                $('.dokan-shipping-wrapper').removeClass('dokan-hide');
+                add_qty_wrapper.removeClass('dokan-hide');
+            }
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-shipping-add', function(e) {
+            e.preventDefault();
+            // $('#dps-shipping-hidden-lcoation-content').find('table.dps-shipping-states tbody').html('');
+            html = $('#dps-shipping-hidden-lcoation-content')
+            var row = $(html).first().clone().appendTo($('.dokan-shipping-location-wrapper')).show();
+
+            row.removeAttr('id');
+            row.find('input,select').val('');
+            $('table.dps-shipping-states tr').first().find('a.dps-remove').hide();
+            row.find('a.dps-shipping-remove').show();
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-shipping-remove', function(e) {
+            e.preventDefault();
+            $(this).closest('.dps-shipping-location-content').remove();
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-add', function(e) {
+            e.preventDefault();
+
+            var row = $(this).closest('tr').first().clone().appendTo($(this).closest('table.dps-shipping-states'));
+            row.find('input,select').val('');
+            row.find('a.dps-remove').show();
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-remove', function(e) {
+            e.preventDefault();
+            $(this).closest('tr').remove();
+        });
+
+        $('.dokan-shipping-location-wrapper').find('table.dps-shipping-states tr').first().find('a.dps-remove').hide();
+        $('.dps-shipping-location-content').first().find('a.dps-shipping-remove').hide();
+
+    });
+
+})(jQuery);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

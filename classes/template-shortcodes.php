@@ -18,7 +18,8 @@ class Dokan_Template_Shortcodes {
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
-        add_action( 'template_redirect', array( $this, 'haldle_order_export' ) );
+        add_action( 'template_redirect', array( $this, 'handle_order_export' ) );
+        add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
@@ -89,6 +90,11 @@ class Dokan_Template_Shortcodes {
 
         if ( isset( $wp->query_vars['withdraw'] ) ) {
             dokan_get_template_part( 'withdraw' );
+            return;
+        }
+
+        if ( isset( $wp->query_vars['shipping'] ) ) {
+            dokan_get_template_part( 'shipping' );
             return;
         }
 
@@ -268,7 +274,7 @@ class Dokan_Template_Shortcodes {
      *
      * @return void
      */
-    function haldle_order_export() {
+    function handle_order_export() {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -416,6 +422,95 @@ class Dokan_Template_Shortcodes {
                 echo "\r\n";
             }
             exit();
+        }
+    }
+
+    /**
+     *  Handle Shipping post submit
+     * @return void
+     */
+    function handle_shipping() {
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+        
+
+        if( isset( $_POST['dokan_update_shipping_options'] ) && wp_verify_nonce( $_POST['dokan_shipping_form_field_nonce'], 'dokan_shipping_form_field' ) ) {
+            
+            $user_id = get_current_user_id();   
+            $s_rates = array();
+            $rates = array();
+            
+            if( isset( $_POST['dps_enable_shipping'] ) ) {
+                update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );
+            }
+
+            if( isset( $_POST['dokan_shipping_type'] ) ) {
+                update_user_meta( $user_id, '_dokan_shipping_type', $_POST['dokan_shipping_type'] );
+            }
+
+            if( isset( $_POST['dps_shipping_type_price'] ) ) {
+                update_user_meta( $user_id, '_dps_shipping_type_price', $_POST['dps_shipping_type_price'] );
+            }
+
+            if( isset( $_POST['dps_additional_product'] ) ) {
+                update_user_meta( $user_id, '_dps_additional_product', $_POST['dps_additional_product'] );
+            }
+
+            if( isset( $_POST['dps_additional_qty'] ) ) {
+                update_user_meta( $user_id, '_dps_additional_qty', $_POST['dps_additional_qty'] );
+            }
+
+            if( isset( $_POST['dps_form_location'] ) ) {
+                update_user_meta( $user_id, '_dps_form_location', $_POST['dps_form_location'] );
+            }
+
+            if ( isset( $_POST['dps_country_to'] ) ) {
+                
+                foreach ($_POST['dps_country_to'] as $key => $value) {
+                    $country = $value;
+                    $c_price = floatval( $_POST['dps_country_to_price'][$key] );
+
+                    if( !$c_price && empty( $c_price ) ) {
+                        $c_price = 0;
+                    }
+
+                    if ( !empty( $value ) ) {
+                        $rates[$country] = $c_price;
+                    }
+                }
+            }
+
+            update_user_meta( $user_id, '_dps_country_rates', $rates );
+
+            if ( isset( $_POST['dps_state_to'] ) ) {                
+                foreach ( $_POST['dps_state_to'] as $country_code => $states ) {
+                    
+                    foreach ( $states as $key_val => $name ) {
+                        $country_c = $country_code;
+                        $state_code = $name;
+                        $s_price = floatval( $_POST['dps_state_to_price'][$country_c][$key_val] );
+
+                        if( !$s_price || empty( $s_price ) ) {
+                            $s_price = 0;
+                        }
+
+                        if ( !empty( $name ) ) {
+                            $s_rates[$country_c][$state_code] = $s_price;
+                        }    
+                    }
+                }
+            }
+
+            update_user_meta( $user_id, '_dps_state_rates', $s_rates );
+
+            $shipping_url = dokan_get_navigation_url( 'shipping' );
+            wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
+            exit;
         }
     }
 

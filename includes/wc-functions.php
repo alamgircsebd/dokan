@@ -490,6 +490,12 @@ function dokan_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_height', '' );
     }
 
+    //Save shipping meta data
+    update_post_meta( $post_id, '_disable_shipping', stripslashes( isset( $_POST['_disable_shipping'] ) ? $_POST['_disable_shipping'] : '' ) );
+    update_post_meta( $post_id, '_overwrite_shipping', stripslashes( isset( $_POST['_overwrite_shipping'] ) ? $_POST['_overwrite_shipping'] : '' ) );
+    update_post_meta( $post_id, '_shipping_type_price', stripslashes( isset( $_POST['_shipping_type_price'] ) ? $_POST['_shipping_type_price'] : '' ) );
+    update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );    
+
     // Save shipping class
     $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
     wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');

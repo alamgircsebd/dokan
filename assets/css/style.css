@@ -2652,4 +2652,25 @@ textarea.dokan-form-control {
     width: 100%;
   }
 }
+table.dps-shipping-table {
+  padding: 10px;
+}
+table.dps-shipping-table tr {
+  padding: 10px;
+}
+table.dps-shipping-table tr td {
+  padding: 10px;
+}
+table.dps-shipping-states {
+  padding: 10px;
+}
+table.dps-shipping-states tr {
+  padding: 10px;
+}
+table.dps-shipping-states tr td {
+  padding: 10px;
+}
+#dps-shipping-hidden-lcoation-content {
+  display: none;
+}
 /*# sourceMappingURL=style.css.map */

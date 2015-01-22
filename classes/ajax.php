@@ -62,6 +62,10 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_nopriv_shop_url', array($this, 'shop_url_check') );
 
         add_filter( 'woocommerce_cart_item_name', array($this, 'seller_info_checkout'), 10, 2 );
+
+        // Shipping ajax hanlding
+        add_action( 'wp_ajax_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
+        add_action( 'wp_ajax_nopriv_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
     }
 
     /**
@@ -754,5 +758,58 @@ class Dokan_Ajax {
                 wp_update_post( array( 'ID' => $pro->ID, 'post_status' => 'pending' ) );
             }
         }
+    }
+
+    function load_state_by_country() {
+        $country_id = $_POST['country_id'];
+
+        $country_obj = new WC_Countries();
+        $states = $country_obj->states;
+
+        ob_start();
+        if( !empty( $states[$country_id] ) ) {
+            // foreach ( $states[$country_id] as $state_code => $state ) {
+            ?>
+             <tr>
+                <td>
+                    <select name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" id="dps_state_selection">
+                        <?php state_dropdown( $states[$country_id], '', true ); ?>
+                    </select>
+                </td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                        <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
+                    </div>
+                </td>
+                <td>
+                    <a class="dps-add" href="#"><span><?php _e( 'Add', 'dokan-shipping' ); ?></span></a>
+                    <a class="dps-remove" href="#"><span><?php _e( 'Remove', 'dokan-shipping' ); ?></span></a>
+                </td>
+            </tr>   
+            <?php
+            // }
+        } else {
+            ?>
+            <tr>
+                <td>
+                    <input type="text" name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" placeholder="State name">
+                </td>
+                <td>
+                    <div class="input-group">
+                        <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                        <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
+                    </div>
+                </td>
+                <td>
+                    <a class="dps-add" href="#"><span><?php _e( 'Add', 'dokan-shipping' ); ?></span></a>
+                    <a class="dps-remove" href="#"><span><?php _e( 'Remove', 'dokan-shipping' ); ?></span></a>
+                </td>
+            </tr>
+            <?php
+        }
+        $data = ob_get_clean();  
+
+        wp_send_json_success( $data );
     }
 }
