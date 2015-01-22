@@ -18,6 +18,7 @@ class Dokan_Template_Shortcodes {
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
+        add_action( 'template_redirect', array( $this, 'handle_coupons' ) );
         add_action( 'template_redirect', array( $this, 'handle_order_export' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
 
@@ -231,6 +232,19 @@ class Dokan_Template_Shortcodes {
             exit;
         }
 
+       
+    }
+
+    function handle_coupons() {
+
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
         // Coupon functionality
         $dokan_template_coupons = Dokan_Template_Coupons::init();
 
@@ -249,6 +263,15 @@ class Dokan_Template_Shortcodes {
      * @return void
      */
     function handle_delete_product() {
+        
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
         dokan_delete_product_handler();
     }
 
