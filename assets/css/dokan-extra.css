@@ -96,6 +96,7 @@ p {
 	overflow: hidden;
 	position: relative;
 	background: white;
+	padding: 15px;
 }
 
 #tabs_container div {

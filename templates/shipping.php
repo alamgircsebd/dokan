@@ -1,18 +1,17 @@
 <?php 
 
 $country_obj = new WC_Countries();
-$countries = $country_obj->countries;
-$states = $country_obj->states;
-$user_id = get_current_user_id();
+$countries   = $country_obj->countries;
+$states      = $country_obj->states;
+$user_id     = get_current_user_id();
 
-$dps_enable_shipping = get_user_meta( $user_id, '_dps_shipping_enable', true );
-$dps_shipping_type = get_user_meta( $user_id, '_dokan_shipping_type', true );
+$dps_enable_shipping     = get_user_meta( $user_id, '_dps_shipping_enable', true );
 $dps_shipping_type_price = get_user_meta( $user_id, '_dps_shipping_type_price', true );
-$dps_additional_product = get_user_meta( $user_id, '_dps_additional_product', true );
-$dps_additional_qty = get_user_meta( $user_id, '_dps_additional_qty', true );
-$dps_form_location = get_user_meta( $user_id, '_dps_form_location', true );
-$dps_country_rates = get_user_meta( $user_id, '_dps_country_rates', true );
-$dps_state_rates = get_user_meta( $user_id, '_dps_state_rates', true );
+$dps_additional_product  = get_user_meta( $user_id, '_dps_additional_product', true );
+$dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true );
+$dps_form_location       = get_user_meta( $user_id, '_dps_form_location', true );
+$dps_country_rates       = get_user_meta( $user_id, '_dps_country_rates', true );
+$dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
 
 ?>
 <div class="dokan-dashboard-wrap">
@@ -50,27 +49,6 @@ $dps_state_rates = get_user_meta( $user_id, '_dps_state_rates', true );
                             <label>
                                 <input type="hidden" name="dps_enable_shipping" value="no">
                                 <input type="checkbox" name="dps_enable_shipping" value="yes" <?php checked( 'yes', $dps_enable_shipping, true ); ?>> <?php _e( 'Enable shipping functionality', 'dokan' ); ?>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dokan-form-group" id="dokan-shipping-type">
-                    <label class="dokan-w3 dokan-control-label" style="margin-top:9px"><?php _e( 'Shipping Type', 'dokan' ); ?></label>
-                    <div class="dokan-w5 dokan-text-left">
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="dokan_shipping_type" value="instore_pickup" <?php checked( 'instore_pickup', $dps_shipping_type, true ); ?>> <?php _e( 'Instore Pickup', 'dokan' ); ?>
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="dokan_shipping_type" value="storewide" <?php  checked( 'storewide', $dps_shipping_type, true ); ?>> <?php _e( 'Storewide Shipping', 'dokan' ); ?>
-                            </label>
-                        </div>
-                        <div class="radio">
-                            <label>
-                                <input type="radio" name="dokan_shipping_type" value="productwise" <?php checked( 'productwise', $dps_shipping_type, true ); ?>> <?php _e( 'Productwise Shipping', 'dokan' ); ?>
                             </label>
                         </div>
                     </div>
