@@ -29,8 +29,6 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
         $this->init_form_fields(); // This is part of the settings API. Override the method to add your own settings
         $this->init_settings(); // This is part of the settings API. Loads settings you previously init.
 
-        $type       = $this->get_option( 'type' );
-        $this->type = empty( $type ) ? 'item' : $type;
 
         // Save settings in admin if you have any defined
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -59,15 +57,6 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
                 'default'       => __( 'Regular Shipping', 'dokan-shipping' ),
                 'desc_tip'      => true,
             ),
-            'type' => array(
-                'title'         => __( 'Cost Added...', 'dokan-shipping' ),
-                'type'          => 'select',
-                'default'       => 'order',
-                'options'       => array(
-                    'seller'    => __( 'Per Seller - charge shipping for the products from a seller as a whole', 'dokan-shipping' ),
-                    'item'      => __( 'Per Item - charge shipping for each item individually', 'dokan-shipping' ),
-                ),
-            ),
         );
 
     }
@@ -90,14 +79,7 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
         $amount = 0.0;
 
         if ( $products ) {
-
-            if ( $this->type == 'seller' ) {
-                $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
-            } else {
-                // calculate per item
-                $amount = $this->calculate_per_items( $products, $destination_country, $destination_state );
-            }
-
+            $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
         }
 
     	$rate = array(
@@ -136,11 +118,11 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
     public static function is_shipping_enabled_for_seller( $seller_id ) {
         $enabled = get_user_meta( $seller_id, '_dps_shipping_enable', true );
 
-        if ( $enabled != 'yes' ) {
-            return false;
+        if ( $enabled == 'yes' ) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -212,102 +194,80 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
         $amount = 0.0;
 
         $seller_products = array();
-        // var_dump( $dps_enable_shipping, $dps_shipping_type_price, $dps_additional_product, $dps_additional_qty, $dps_country_rates ); 
+
         foreach ($products as $product) {
             $seller_id                     = get_post_field( 'post_author', $product['product_id'] );
             $seller_products[$seller_id][] = $product;
         }
 
-        //var_dump( $seller_products );
-
         if ( $seller_products ) {
             
             foreach ( $seller_products as $seller_id => $products ) {
 
-                // if( self::is_shipping_enabled_for_seller( $seller_id ) ) {
-                //     continue;
-                // }
+                if( !self::is_shipping_enabled_for_seller( $seller_id ) ) {
+                    continue;
+                }
 
                 foreach ( $products as $product ) {
 
-                    if( get_post_meta( $product['product_id'], '_overwrite_shipping', true ) == 'yes' ) {
-
-                        $product_overwide_shipping = get_post_meta( $product['product_id'], '_shipping_type_price', true );
-                        $product_overwide_qty      = get_post_meta( $product['product_id'], '_additional_qty', true );
-
-                        if( $product['quantity'] > 1 ) {
-                            $price[$seller_id]['override'][] = $product_overwide_shipping; 
-                        } else {
-                            $price[$seller_id]['override'][] = $product_overwide_shipping + ( ( $product['quantity'] - 1 ) * $product_overwide_qty );
-                        }
-
-                    } else {
                         
-                        $default_shipping_price     = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
-                        $default_shipping_add_price = get_user_meta( $seller_id, '_dps_additional_product', true );
+                    $default_shipping_price     = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
+                    $default_shipping_add_price = get_user_meta( $seller_id, '_dps_additional_product', true );
+                    
+                    if( get_post_meta( $product['product_id'], '_overwrite_shipping', true ) == 'yes' ) {
+                        $default_shipping_qty_price = get_post_meta( $product['product_id'], '_additional_qty', true );
+                        $price[ $seller_id ]['addition_price'][] = get_post_meta( $product['product_id'], '_additional_price', true );
+                    } else {
                         $default_shipping_qty_price = get_user_meta( $seller_id, '_dps_additional_qty', true );
-
-                        if ( $product['quantity'] > 1 ) {
-                            $price[ $seller_id ]['storewide'][] = $default_shipping_price;
-                        } else {
-                            $price[ $seller_id ]['storewide'][] = $default_shipping_price + ( ( $product['quantity'] - 1 ) * $default_shipping_qty_price );
-                        }
-
+                        $price[ $seller_id ]['addition_price'][] = 0;
+                    }
+                    
+                    $price[ $seller_id ]['default'] = $default_shipping_price; 
+                    
+                    if ( $product['quantity'] > 1 ) {
+                        $price[ $seller_id ]['qty'][] = ( ( $product['quantity'] - 1 ) * $default_shipping_qty_price );
+                    } else {
+                        $price[ $seller_id ]['qty'][] = 0;
                     }
 
-                    // if ( array_key_exists('shipping', $product) ) {
-                    //     $price[ $seller_id ]['override'][] = $product['shipping'];
-                    // } else {
-                    //     $price[ $seller_id ]['storewide'][] = $shipping;
-                    // }
+                    if( count( $products) > 1 ) {
+                        $price[ $seller_id ]['add_product'] = $default_shipping_add_price * ( count( $products) - 1 );
+                    } else {
+                        $price[ $seller_id ]['add_product'] = 0;
+                    }
+
                 }
 
-                $dps_country_rates = get_user_meta( $user_id, '_dps_country_rates', true );
-                $dps_state_rates   = get_user_meta( $user_id, '_dps_state_rates', true );
+                $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
+                $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true );
                 
-                //$default_shipping_price = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
+                // var_dump( $dps_country_rates, $dps_state_rates );
+                if( isset( $dps_state_rates[$destination_country] ) ) {
 
-                // var_dump( $products );
+                    if( array_key_exists( $destination_state, $dps_state_rates[$destination_country] ) ) {
 
-                // foreach ( $products as $product ) {
-                    
-                //     $product_id = $product['product_id'];
+                        if( isset( $dps_state_rates[$destination_country][$destination_state] ) ) {
+                            $price[$seller_id]['state_rates'] = $dps_state_rates[$destination_country][$destination_state];
+                        } else {
+                            $price[$seller_id]['state_rates'] = ( isset( $dps_country_rates[$destination_country] ) ) ? $dps_country_rates[$destination_country] : 0; 
+                        }
 
-                //     if( $i > 1 ) {
-                //         $add_product_price = get_user_meta( $seller_id, '_dps_additional_product', false );
-                //         $per_seller_cost = array_merge( $default_shipping_price, $add_product_price );
-                //     }
-
-                //     if( $product['quantity'] > 1 ) {
-                //         $add_qty_price = get_user_meta( $seller_id, '_dps_additional_qty', true );
-                //         $per_seller_cost_qtywise = ($product['quantity'] - 1 ) * $add_qty_price;
-                //     }
-                //     // calculate cost
-                //     // $cost = self::get_product_costs( $product['product_id'] );
-
-                //     // if ( array_key_exists( $destination, $cost ) ) {
-                //     //     // for countries
-                //     //     $seller_costs[] = $cost[$destination];
-
-                //     // } elseif ( array_key_exists( 'everywhere', $cost ) ) {
-                //     //     // for everywhere
-                //     //     $seller_costs[] = $cost['everywhere'];
-                //     // }
-                //     $i++;
-                // }
-
-
-                // if ( $seller_costs ) {
-                //     $cost   = max($seller_costs);
-                //     $amount += $cost;
-                // }
+                    } elseif ( array_key_exists( 'everywhere', $dps_state_rates[$destination_country] ) ) {
+                        $price[$seller_id]['state_rates'] = ( isset( $dps_state_rates[$destination_country]['everywhere'] ) ) ? $dps_state_rates[$destination_country]['everywhere'] : 0;
+                    } else {
+                        $price[$seller_id]['state_rates'] = 0;
+                    }
             
+                } else {
+                    $price[$seller_id]['state_rates'] = ( isset( $dps_country_rates[$destination_country] ) ) ? $dps_country_rates[$destination_country] : 0;
+                }                
             } 
         }
 
+        foreach ( $price as $s_id => $value ) {
+            $amount = $amount + ( array_sum( $value['addition_price'] )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
+        }
 
-        // var_dump( $price );
- 
         return $amount;
     }
 }
