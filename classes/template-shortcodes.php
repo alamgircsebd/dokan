@@ -488,6 +488,14 @@ class Dokan_Template_Shortcodes {
                 update_user_meta( $user_id, '_dps_additional_qty', $_POST['dps_additional_qty'] );
             }
 
+            if( isset( $_POST['_dps_ship_policy'] ) ) {
+                update_user_meta( $user_id, '_dps_ship_policy', $_POST['dps_ship_policy'] );
+            }
+
+            if( isset( $_POST['dps_refund_policy'] ) ) {
+                update_user_meta( $user_id, '_dps_refund_policy', $_POST['dps_refund_policy'] );
+            }
+
             if( isset( $_POST['dps_form_location'] ) ) {
                 update_user_meta( $user_id, '_dps_form_location', $_POST['dps_form_location'] );
             }

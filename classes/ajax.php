@@ -772,19 +772,24 @@ class Dokan_Ajax {
             ?>
              <tr>
                 <td>
+                    <label for="">State</label>
                     <select name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" id="dps_state_selection">
                         <?php state_dropdown( $states[$country_id], '', true ); ?>
                     </select>
                 </td>
                 <td>
+                    <label for="">Cost</label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
                     </div>
                 </td>
-                <td>
-                    <a class="dps-add" href="#"><span><?php _e( 'Add', 'dokan-shipping' ); ?></span></a>
-                    <a class="dps-remove" href="#"><span><?php _e( 'Remove', 'dokan-shipping' ); ?></span></a>
+                <td width="12%">
+                    <label for=""></label>
+                    <div>
+                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
+                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                    </div>
                 </td>
             </tr>   
             <?php
@@ -793,17 +798,22 @@ class Dokan_Ajax {
             ?>
             <tr>
                 <td>
+                    <label for="">State</label>
                     <input type="text" name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" placeholder="State name">
                 </td>
                 <td>
+                    <label for="">Cost</label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
                     </div>
                 </td>
-                <td>
-                    <a class="dps-add" href="#"><span><?php _e( 'Add', 'dokan-shipping' ); ?></span></a>
-                    <a class="dps-remove" href="#"><span><?php _e( 'Remove', 'dokan-shipping' ); ?></span></a>
+                <td width="12%">
+                    <label for=""></label>
+                    <div>
+                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
+                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                    </div>
                 </td>
             </tr>
             <?php

@@ -2673,4 +2673,29 @@ table.dps-shipping-states tr td {
 #dps-shipping-hidden-lcoation-content {
   display: none;
 }
+.dokan-shipping-location-wrapper .dps-shipping-location-content {
+  border: 2px solid #eee;
+  padding: 10px;
+  margin-bottom: 15px;
+  position: relative;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table {
+  background: #eee;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table tr td {
+  width: 50%;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content .dps-shipping-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states {
+  text-align: center;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-add,
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-remove {
+  color: #000;
+  font-size: 11px;
+}
 /*# sourceMappingURL=style.css.map */

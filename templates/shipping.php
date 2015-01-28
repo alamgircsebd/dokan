@@ -12,6 +12,9 @@ $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true 
 $dps_form_location       = get_user_meta( $user_id, '_dps_form_location', true );
 $dps_country_rates       = get_user_meta( $user_id, '_dps_country_rates', true );
 $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
+$dps_shipping_policy     = get_user_meta( $user_id, '_dps_ship_policy', true );
+$dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true );
+
 
 ?>
 <div class="dokan-dashboard-wrap">
@@ -56,8 +59,6 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
 
                 <div class="dokan-shipping-wrapper">
      
-                    
-
                     <div class="dokan-form-group dokan-shipping-price dokan-shipping-type-price">
                         <label class="dokan-w3 dokan-control-label" for="shipping_type_price"><?php _e( 'Default Shipping Price', 'dokan' ); ?></label>
 
@@ -83,6 +84,20 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
                     </div>
 
                     <div class="dokan-form-group">
+                        <label class="dokan-w3 dokan-control-label" for="_dps_ship_policy"><?php _e( 'Shipping Policy', 'dokan' ); ?></label>
+                        <div class="dokan-w6 dokan-text-left">
+                            <textarea name="dps_ship_policy" id="" class="dokan-form-control"><?php echo $dps_shipping_policy; ?></textarea>
+                        </div>
+                    </div>
+
+                    <div class="dokan-form-group">
+                        <label class="dokan-w3 dokan-control-label" for="_dps_refund_policy"><?php _e( 'Refund Policy', 'dokan' ); ?></label>
+                        <div class="dokan-w6 dokan-text-left">
+                            <textarea name="dps_refund_policy" id="" class="dokan-form-control"><?php echo $dps_refund_policy; ?></textarea>
+                        </div>
+                    </div>
+
+                    <div class="dokan-form-group">
                         <label class="dokan-w3 dokan-control-label" for="dps_form_location"><?php _e( 'Ships from:', 'dokan' ); ?></label>
 
                         <div class="dokan-w5">
@@ -102,16 +117,19 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
                                 <?php foreach ( $dps_country_rates as $country => $country_rate ) : ?>
                             
                                     <div class="dps-shipping-location-content">
+
                                         <table class="dps-shipping-table">
                                             <tbody>
 
                                                 <tr class="dps-shipping-location">
                                                     <td width="40%">
+                                                        <label for="">Ship to</label>
                                                         <select name="dps_country_to[]" class="dokan-form-control dps_country_selection" id="dps_country_selection">
                                                             <?php country_dropdown( $countries, $country, '' ); ?>
                                                         </select>
                                                     </td>
                                                     <td>
+                                                        <label for="">Cost</label>
                                                         <div class="dokan-input-group">
                                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                             <input type="text" placeholder="9.99" class="form-control" name="dps_country_to_price[]" value="<?php echo esc_attr( $country_rate ); ?>">
@@ -128,22 +146,28 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
                                                                     <?php foreach ( $dps_state_rates[$country] as $state => $state_rate ): ?>
                                                                         
                                                                         <?php if ( isset( $states[$country] ) && !empty( $states[$country] ) ): ?>
-                                                                    
+                                                                            
                                                                             <tr>
                                                                                 <td>
+                                                                                    <label for="">State</label>
                                                                                     <select name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control" id="dps_state_selection">
                                                                                         <?php state_dropdown( $states[$country], $state, true ); ?>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td>
+                                                                                    <label for="">Cost</label>
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                                                         <input type="text" placeholder="9.99" value="<?php echo $state_rate; ?>" class="form-control" name="dps_state_to_price[<?php echo $country; ?>][]">
                                                                                     </div>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <a class="dps-add" href="#"><span><?php _e( 'Add', 'dokan' ); ?></span></a>
-                                                                                    <a class="dps-remove" href="#"><span><?php _e( 'Remove', 'dokan' ); ?></span></a>
+
+                                                                                <td width="15%">
+                                                                                    <label for=""></label>
+                                                                                    <div>
+                                                                                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
+                                                                                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                                                                                    </div>
                                                                                 </td>
                                                                             </tr>  
                                                                         
@@ -151,17 +175,23 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
 
                                                                             <tr>
                                                                                 <td>
+                                                                                    <label for="">State</label>
                                                                                     <input type="text" name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control" placeholder="State name" value="<?php echo $state; ?>">
                                                                                 </td>
                                                                                 <td>
+                                                                                    <label for="">Cost</label>
                                                                                     <div class="input-group">
                                                                                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                                                                                         <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country; ?>][]" value="<?php echo $state_rate; ?>">
                                                                                     </div>
                                                                                 </td>
-                                                                                <td>
-                                                                                    <a class="dps-add" href="#"><span><?php _e( 'Add', 'dokan' ); ?></span></a>
-                                                                                    <a class="dps-remove" href="#"><span><?php _e( 'Remove', 'dokan' ); ?></span></a>
+                                                                                
+                                                                                <td width="12%">
+                                                                                    <label for=""></label>
+                                                                                    <div>
+                                                                                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
+                                                                                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                                                                                    </div>
                                                                                 </td>
                                                                             </tr>     
 
@@ -176,7 +206,7 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
 
                                             </tbody>
                                         </table>
-                                        <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'Remove', 'dokan' ); ?></a>
+                                        <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
                                     </div>
 
                                 <?php endforeach; ?>
@@ -212,15 +242,12 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
 
                                         </tbody>
                                     </table>
-                                    <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'Remove', 'dokan' ); ?></a>
+                                    <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
                                 </div>
                             <?php endif; ?>    
                             
                             </div>
-
                             <a href="#" class="btn btn-default dps-shipping-add"><?php _e( 'Add Location', 'dokan' ); ?></a>
-                                
-
                         </div>
                     </div>
 
@@ -270,7 +297,7 @@ $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
             </tr>
         </tbody>
     </table>
-    <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'Remove', 'dokan' ); ?></a>
+    <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
 </div>  
 
 <!-- End of render content via jquery -->

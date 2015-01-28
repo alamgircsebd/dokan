@@ -1332,7 +1332,6 @@ jQuery(function($) {
             $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content').first().find('a.dps-shipping-remove').show();
             row.removeAttr('id');
             row.find('input,select').val('');
-            $('table.dps-shipping-states tr').first().find('a.dps-remove').hide();
             row.find('a.dps-shipping-remove').show();
         });
 
@@ -1340,8 +1339,6 @@ jQuery(function($) {
             e.preventDefault();
             $(this).closest('.dps-shipping-location-content').remove();
             $dpsElm = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
-
-            console.log( $dpsElm.length );
 
             if( $dpsElm.length == 1) {
                 $dpsElm.first().find('a.dps-shipping-remove').hide();
@@ -1363,14 +1360,19 @@ jQuery(function($) {
                 console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
                 $(this).closest('.dps-shipping-location-content').find('input,select').val('');
             }
-            
+
             $(this).closest('tr').remove();
 
 
         });
 
-        $('.dokan-shipping-location-wrapper').find('table.dps-shipping-states tr').first().find('a.dps-remove').hide();
-        $('.dps-shipping-location-content').first().find('a.dps-shipping-remove').hide();
+        //$('.dokan-shipping-location-wrapper').find('table.dps-shipping-states tr').first().find('a.dps-remove').hide();
+        // $('.dps-shipping-location-content').first().find('a.dps-shipping-remove').hide();
+
+        $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
+        if( $wrap.length == 1) {
+            $wrap.first().find('a.dps-shipping-remove').hide();
+        }
 
     });
 
