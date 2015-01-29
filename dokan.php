@@ -496,6 +496,10 @@ class WeDevs_Dokan {
             $classes[] = 'dokan-dashboard';
         }
 
+        if ( dokan_is_store_page () ) {
+            $classes[] = 'dokan-store';
+        }
+
         return $classes;
     }
 

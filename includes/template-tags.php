@@ -37,7 +37,6 @@ function dokan_content_nav( $nav_id, $query = null ) {
         $nav_class = 'site-navigation post-navigation';
     ?>
     <nav role="navigation" id="<?php echo $nav_id; ?>" class="<?php echo $nav_class; ?>">
-        <h1 class="assistive-text"><?php _e( 'Post navigation', 'dokan' ); ?></h1>
 
         <ul class="pager">
         <?php if ( is_single() ) : // navigation links for single posts  ?>
