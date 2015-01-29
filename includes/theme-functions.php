@@ -1286,3 +1286,50 @@ function dokan_get_navigation_url( $name = '' ) {
 
     return apply_filters( 'dokan_get_navigation_url', $url );
 }
+
+
+/**
+ * Generate country dropdwon
+ *
+ * @param array $options
+ * @param string $selected
+ * @param bool $everywhere
+ */
+function country_dropdown( $options, $selected = '', $everywhere = false ) {
+    printf( '<option value="">%s</option>', __( '- Select a location -', 'dokan-shipping' ) );
+
+    if ( $everywhere ) {
+        echo '<optgroup label="--------------------------">';
+        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        echo '</optgroup>';
+    }
+
+    echo '<optgroup label="------------------------------">';
+    foreach ($options as $key => $value) {
+        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+    }
+    echo '</optgroup>';
+}
+
+/**
+ * Generate country dropdwon
+ *
+ * @param array $options
+ * @param string $selected
+ * @param bool $everywhere
+ */
+function state_dropdown( $options, $selected = '', $everywhere = false ) {
+    printf( '<option value="">%s</option>', __( '- Select a State -', 'dokan-shipping' ) );
+
+    if ( $everywhere ) {
+        echo '<optgroup label="--------------------------">';
+        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        echo '</optgroup>';
+    }
+
+    echo '<optgroup label="------------------------------">';
+    foreach ($options as $key => $value) {
+        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+    }
+    echo '</optgroup>';
+}

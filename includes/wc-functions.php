@@ -490,6 +490,12 @@ function dokan_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_height', '' );
     }
 
+    //Save shipping meta data
+    update_post_meta( $post_id, '_disable_shipping', stripslashes( isset( $_POST['_disable_shipping'] ) ? $_POST['_disable_shipping'] : '' ) );
+    update_post_meta( $post_id, '_overwrite_shipping', stripslashes( isset( $_POST['_overwrite_shipping'] ) ? $_POST['_overwrite_shipping'] : '' ) );
+    update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
+    update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );    
+
     // Save shipping class
     $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
     wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
@@ -1582,7 +1588,7 @@ function dokan_get_seller_balance( $seller_id, $formatted = true ) {
         $sql = "SELECT SUM(net_amount) as earnings,
             (SELECT SUM(amount) FROM {$wpdb->prefix}dokan_withdraw WHERE user_id = %d AND status = 1) as withdraw
             FROM {$wpdb->prefix}dokan_orders as do LEFT JOIN {$wpdb->prefix}posts as p ON do.order_id = p.ID
-            WHERE seller_id = %d AND DATE(p.post_date) < %s AND order_status IN({$status})";
+            WHERE seller_id = %d AND DATE(p.post_date) <= %s AND order_status IN({$status})";
 
         $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id, $seller_id, $date ) );
         $earning = $result->earnings - $result->withdraw;

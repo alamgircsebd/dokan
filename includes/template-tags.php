@@ -329,6 +329,11 @@ function dokan_get_dashboard_nav() {
             'icon'  => '<i class="fa fa-upload"></i>',
             'url'   => dokan_get_navigation_url( 'withdraw' )
         ),
+        'shipping' => array(
+            'title' => __( 'Shipping', 'dokan'),
+            'icon'  => '<i class="fa fa-truck"></i>',
+            'url'   => dokan_get_navigation_url( 'shipping' )
+        ),
         'settings' => array(
             'title' => __( 'Settings', 'dokan'),
             'icon'  => '<i class="fa fa-cog"></i>',

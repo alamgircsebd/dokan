@@ -421,6 +421,7 @@ class WeDevs_Dokan {
         new Dokan_Rewrites();
         Dokan_Email::init();
         Dokan_Template_Shortcodes::init();
+        Dokan_Template_Shipping::init();
     }
 
     function redirect_if_not_logged_seller() {
@@ -588,3 +589,27 @@ function dokan_admin_toolbar() {
 
 // Hook into the 'wp_before_admin_bar_render' action
 add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );
+
+function pr( $data ) {
+    echo "<pre>";
+    print_r( $data );
+    echo "</pre>";
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
