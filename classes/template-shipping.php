@@ -86,46 +86,37 @@ class Dokan_Template_Shipping {
         $errors = array();
         foreach ( $products as $key => $product) {
 
-            $seller_id         = get_post_field( 'post_author', $product['product_id'] );
+            $seller_id = get_post_field( 'post_author', $product['product_id'] );
             
             if ( ! Dokan_WC_Per_Product_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
                 continue;
             }
 
+            if( Dokan_WC_Per_Product_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
+                continue;
+            } 
+
             $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
             $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true ); 
             
             $has_found = false;
+            $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
+            $dps_state = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
 
-            if( isset( $dps_state_rates[$destination_country] ) ) {
-
-                if( array_key_exists( $destination_state, $dps_state_rates[$destination_country] ) ) {
-                    var_dump( $dps_state_rates[$destination_country][$destination_state] );
-                    if( isset( $dps_state_rates[$destination_country][$destination_state] ) ) {
-                        $has_found = true;
-                    } else {
-                        $has_found = true;
-                    }
-
-                } elseif ( array_key_exists( 'everywhere', $dps_state_rates[$destination_country] ) ) {
+            // var_dump( $dps_country, $dps_state);
+            if( array_key_exists( $destination_country, $dps_country ) ) {
+                
+                if( array_key_exists( $destination_state, $dps_state ) ) {
                     $has_found = true;
-                } else {
-                    $has_found = false;
+                } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+                    $has_found = true;
                 }
-        
-            } else {
-                $has_found = false;
-            }  
-
+            } 
         
             if ( ! $has_found ) {
                 $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ) );
             }
         }
-
-        var_dump( $errors );
-        var_dump( $has_found );
-        die();
 
         if ( $errors ) {
             if ( count( $errors ) == 1 ) {
@@ -153,7 +144,7 @@ class Dokan_Template_Shipping {
         }
 
         $tabs['shipping'] = array(
-            'title' => __( 'Shipping', 'dokan-shipping' ),
+            'title' => __( 'Shipping', 'dokan' ),
             'priority' => 12,
             'callback' => array($this, 'shipping_tab')
         );
@@ -161,6 +152,10 @@ class Dokan_Template_Shipping {
         return $tabs;
     }
 
+    /**
+     * Callback for Register_prouduct_tab function
+     * @return [type] [description]
+     */
     function shipping_tab() {
         global $post;
 
@@ -180,8 +175,8 @@ class Dokan_Template_Shipping {
             <table class="table">
                 <thead>
                     <tr>
-                        <th><?php _e( 'Ship To', 'dokan-shipping' ); ?></th>
-                        <th><?php _e( 'Cost', 'dokan-shipping' ); ?></th>
+                        <th><?php _e( 'Ship To', 'dokan' ); ?></th>
+                        <th><?php _e( 'Cost', 'dokan' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -191,7 +186,7 @@ class Dokan_Template_Shipping {
                         <td>
                             <?php
                             if ( $country == 'everywhere' ) {
-                                _e( 'Everywhere Else', 'dokan-shipping' );
+                                _e( 'Everywhere Else', 'dokan' );
                             } else {
                                 echo $countries[$country];
                             }
@@ -205,8 +200,8 @@ class Dokan_Template_Shipping {
                                 <table width="100%" class="table">
                                     <thead>
                                         <tr>
-                                            <th><?php _e( 'Ship To state', 'dokan-shipping' ); ?></th>
-                                            <th><?php _e( 'Cost', 'dokan-shipping' ); ?></th>
+                                            <th><?php _e( 'Shipping state', 'dokan' ); ?></th>
+                                            <th><?php _e( 'Cost', 'dokan' ); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -215,7 +210,7 @@ class Dokan_Template_Shipping {
                                                 <td>
                                                     <?php
                                                     if ( $state_code == 'everywhere' ) {
-                                                        _e( 'Everywhere Else', 'dokan-shipping' );
+                                                        _e( 'Everywhere Else', 'dokan' );
                                                     } else {
                                                         if( isset( $states[$country][$state_code] ) ) {
                                                             echo $states[$country][$state_code];
@@ -243,7 +238,7 @@ class Dokan_Template_Shipping {
             <p>&nbsp;</p>
 
         <?php if ( $shipping_policy ) { ?>
-            <strong><?php _e( 'Shipping Policy', 'dokan-shipping' ); ?></strong>
+            <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
             <hr>
 
             <?php echo wpautop( $shipping_policy ); ?>
@@ -252,7 +247,7 @@ class Dokan_Template_Shipping {
         <p>&nbsp;</p>
 
         <?php if ( $refund_policy ) { ?>
-            <strong><?php _e( 'Refund Policy', 'dokan-shipping' ); ?></strong>
+            <strong><?php _e( 'Refund Policy', 'dokan' ); ?></strong>
             <hr>
 
             <?php echo wpautop( $refund_policy ); ?>

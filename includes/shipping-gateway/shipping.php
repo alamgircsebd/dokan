@@ -1,5 +1,13 @@
 <?php
 
+/**
+ *  Dokan regular Shipping Class
+ *
+ *  Register WooCommerce gateway as 
+ *  Dokan Shipping 
+ *
+ *  @author weDevs <info@wedevs.com>
+ */
 class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
     /**
      * Constructor for your shipping class
@@ -45,16 +53,16 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
 
         $this->form_fields = array(
             'enabled' => array(
-                'title'         => __( 'Enable/Disable', 'dokan-shipping' ),
+                'title'         => __( 'Enable/Disable', 'dokan' ),
                 'type'          => 'checkbox',
-                'label'         => __( 'Enable Shipping', 'dokan-shipping' ),
+                'label'         => __( 'Enable Shipping', 'dokan' ),
                 'default'       => 'yes'
             ),
             'title' => array(
-                'title'         => __( 'Method Title', 'dokan-shipping' ),
+                'title'         => __( 'Method Title', 'dokan' ),
                 'type'          => 'text',
-                'description'   => __( 'This controls the title which the user sees during checkout.', 'dokan-shipping' ),
-                'default'       => __( 'Regular Shipping', 'dokan-shipping' ),
+                'description'   => __( 'This controls the title which the user sees during checkout.', 'dokan' ),
+                'default'       => __( 'Regular Shipping', 'dokan' ),
                 'desc_tip'      => true,
             ),
         );
@@ -99,14 +107,14 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
      * @param  int  $product_id
      * @return boolean
      */
-    public static function is_product_enabled( $product_id ) {
-        $enabled = get_post_meta( $product_id, '_dps_ship_enable', true );
+    public static function is_product_disable_shipping( $product_id ) {
+        $enabled = get_post_meta( $product_id, '_disable_shipping', true );
 
-        if ( $enabled != 'yes' ) {
-            return false;
+        if ( $enabled == 'yes' ) {
+            return true;
         }
 
-        return true;
+        return false;
     }
 
     /**
@@ -125,18 +133,6 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
         return false;
     }
 
-    /**
-     * Get product shipping costs
-     *
-     * @param  int $product_id
-     * @return array
-     */
-    public static function get_product_costs( $product_id ) {
-        $cost = get_post_meta( $product_id, '_dps_rates', true );
-        $cost = is_array( $cost ) ? $cost : array();
-
-        return $cost;
-    }
 
     /**
      * Get product shipping costs
@@ -151,38 +147,7 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
         return $country_cost;
     }
 
-    /**
-     * Calculate shipping per items
-     *
-     * @param  array $products
-     * @param  array $destination
-     * @return float
-     */
-    private function calculate_per_items( $products, $destination ) {
-        $amount = 0.0;
-
-        foreach ($products as $product) {
-
-            if ( ! self::is_product_enabled( $product['product_id'] ) ) {
-                continue;
-            }
-
-            // calculate cost
-            $cost = self::get_product_costs( $product['product_id'] );
-
-            if ( array_key_exists( $destination, $cost ) ) {
-                // for countries
-                $amount += $cost[$destination];
-
-            } elseif ( array_key_exists( 'everywhere', $cost ) ) {
-                // for everywhere
-                $amount += $cost['everywhere'];
-            }
-        }
-
-        return $amount;
-    }
-
+    
     /**
      * Calculate shipping per seller
      *
@@ -210,6 +175,9 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
 
                 foreach ( $products as $product ) {
 
+                    if( self::is_product_disable_shipping( $product['product_id'] ) ) {
+                        continue 2;
+                    } 
                         
                     $default_shipping_price     = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
                     $default_shipping_add_price = get_user_meta( $seller_id, '_dps_additional_product', true );

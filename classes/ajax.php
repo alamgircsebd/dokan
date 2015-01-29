@@ -760,31 +760,34 @@ class Dokan_Ajax {
         }
     }
 
+    /**
+     *  Load State via ajax for shipping
+     * @return html Set of states
+     */
     function load_state_by_country() {
-        $country_id = $_POST['country_id'];
 
+        $country_id = $_POST['country_id'];
         $country_obj = new WC_Countries();
         $states = $country_obj->states;
 
         ob_start();
         if( !empty( $states[$country_id] ) ) {
-            // foreach ( $states[$country_id] as $state_code => $state ) {
             ?>
              <tr>
                 <td>
-                    <label for="">State</label>
+                    <label for=""><?php _e( 'State', 'dokan' ); ?></label>
                     <select name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" id="dps_state_selection">
                         <?php state_dropdown( $states[$country_id], '', true ); ?>
                     </select>
                 </td>
                 <td>
-                    <label for="">Cost</label>
+                    <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
                     </div>
                 </td>
-                <td width="12%">
+                <td width="15%">
                     <label for=""></label>
                     <div>
                         <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
@@ -798,17 +801,17 @@ class Dokan_Ajax {
             ?>
             <tr>
                 <td>
-                    <label for="">State</label>
+                    <label for=""><?php _e( 'State', 'dokan' ); ?></label>
                     <input type="text" name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" placeholder="State name">
                 </td>
                 <td>
-                    <label for="">Cost</label>
+                    <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
                     </div>
                 </td>
-                <td width="12%">
+                <td width="15%">
                     <label for=""></label>
                     <div>
                         <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>

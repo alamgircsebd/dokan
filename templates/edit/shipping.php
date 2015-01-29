@@ -58,7 +58,7 @@ $dps_additional_qty = get_user_meta( $user_id, '_dps_additional_qty', true );
 
 
     <div class="dokan-form-group dokan-shipping-price dokan-shipping-type-price">
-        <label class="dokan-w4 dokan-control-label" for="shipping_type_price"><?php _e( 'Addition cost', 'dokan' ); ?></label>
+        <label class="dokan-w4 dokan-control-label" for="shipping_type_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
 
         <div class="dokan-w4 dokan-text-left">
             <input id="shipping_type_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
