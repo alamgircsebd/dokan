@@ -109,7 +109,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                     <div class="dokan-form-group">
 
-                        <div class="dokan-w8 dps-main-wrapper">
+                        <div class="dokan-w12 dps-main-wrapper">
                             <div class="dokan-shipping-location-wrapper">
                             
                             <?php if ( $dps_country_rates ) : ?>
