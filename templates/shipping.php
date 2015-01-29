@@ -207,7 +207,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
+                                        <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
                                     </div>
 
                                 <?php endforeach; ?>
@@ -235,18 +235,18 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                                             <tr class="dps-shipping-states-wrapper">
                                                 <table class="dps-shipping-states">
-                                                    <tbody><tbody>
+                                                    <tbody></tbody>
                                                 </table>
                                             </tr>
 
                                         </tbody>
                                     </table>
-                                    <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
+                                    <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
                                 </div>
                             <?php endif; ?>    
                             
                             </div>
-                            <a href="#" class="btn btn-default dps-shipping-add"><?php _e( 'Add Location', 'dokan' ); ?></a>
+                            <a href="#" class="dokan-btn dokan-btn-default dps-shipping-add"><?php _e( 'Add Location', 'dokan' ); ?></a>
                         </div>
                     </div>
 
@@ -294,7 +294,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
             </tr>
         </tbody>
     </table>
-    <a href="#" class="btn btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
+    <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><?php _e( 'X', 'dokan' ); ?></a>
 </div>  
 
 <!-- End of render content via jquery -->
