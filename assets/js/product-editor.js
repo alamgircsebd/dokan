@@ -219,7 +219,7 @@
                     } );
 
                     // fire change events for varaiations
-                    $('input.variable_is_downloadable, input.variable_is_virtual').trigger('change');
+                    $('input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock').trigger('change');
 
                     $('#variants-holder').unblock();
                 });

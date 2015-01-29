@@ -2654,6 +2654,7 @@ textarea.dokan-form-control {
 }
 table.dps-shipping-table {
   padding: 10px;
+  width: 100%;
 }
 table.dps-shipping-table tr {
   padding: 10px;
@@ -2663,12 +2664,14 @@ table.dps-shipping-table tr td {
 }
 table.dps-shipping-states {
   padding: 10px;
+  width: 100%;
 }
 table.dps-shipping-states tr {
   padding: 10px;
 }
 table.dps-shipping-states tr td {
   padding: 10px;
+  width: 30%;
 }
 #dps-shipping-hidden-lcoation-content {
   display: none;

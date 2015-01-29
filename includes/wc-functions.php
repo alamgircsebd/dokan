@@ -86,56 +86,68 @@ function dokan_variable_product_type_options() {
                 $variations = get_posts( $args );
                 $loop = 0;
 
+                if ( $variations )  {
 
-                if ( $variations ) foreach ( $variations as $variation ) {
+                    foreach ( $variations as $variation ) {
 
-                    $variation_id           = absint( $variation->ID );
-                    $variation_post_status  = esc_attr( $variation->post_status );
-                    $variation_data         = get_post_meta( $variation_id );
-                    $variation_data['variation_post_id'] = $variation_id;
+                        $variation_id           = absint( $variation->ID );
+                        $variation_post_status  = esc_attr( $variation->post_status );
+                        $variation_data         = get_post_meta( $variation_id );
+                        $variation_data['variation_post_id'] = $variation_id;
 
-                    // Grab shipping classes
-                    $shipping_classes = get_the_terms( $variation_id, 'product_shipping_class' );
-                    $shipping_class = ( $shipping_classes && ! is_wp_error( $shipping_classes ) ) ? current( $shipping_classes )->term_id : '';
+                        // Grab shipping classes
+                        $shipping_classes = get_the_terms( $variation_id, 'product_shipping_class' );
+                        $shipping_class = ( $shipping_classes && ! is_wp_error( $shipping_classes ) ) ? current( $shipping_classes )->term_id : '';
 
-                    $variation_fields = array(
-                        '_sku',
-                        '_stock',
-                        '_regular_price',
-                        '_sale_price',
-                        '_weight',
-                        '_length',
-                        '_width',
-                        '_height',
-                        '_download_limit',
-                        '_download_expiry',
-                        '_downloadable_files',
-                        '_downloadable',
-                        '_virtual',
-                        '_thumbnail_id',
-                        '_sale_price_dates_from',
-                        '_sale_price_dates_to'
-                    );
+                        $variation_fields = array(
+                            '_sku',
+                            '_stock',
+                            '_manage_stock',
+                            '_stock_status',
+                            '_regular_price',
+                            '_sale_price',
+                            '_weight',
+                            '_length',
+                            '_width',
+                            '_height',
+                            '_download_limit',
+                            '_download_expiry',
+                            '_downloadable_files',
+                            '_downloadable',
+                            '_virtual',
+                            '_thumbnail_id',
+                            '_sale_price_dates_from',
+                            '_sale_price_dates_to'
+                        );
 
-                    foreach ( $variation_fields as $field ) {
-                        $$field = isset( $variation_data[ $field ][0] ) ? maybe_unserialize( $variation_data[ $field ][0] ) : '';
+                        foreach ( $variation_fields as $field ) {
+                            $$field = isset( $variation_data[ $field ][0] ) ? maybe_unserialize( $variation_data[ $field ][0] ) : '';
+                        }
+                        
+                        $_backorders = isset( $variation_data['_backorders'][0] ) ? $variation_data['_backorders'][0] : null;
+
+                        $_tax_class = isset( $variation_data['_tax_class'][0] ) ? $variation_data['_tax_class'][0] : null;
+                        $image_id   = absint( $_thumbnail_id );
+                        $image      = $image_id ? wp_get_attachment_thumb_url( $image_id ) : '';
+
+                        // Locale formatting
+                        $_regular_price = wc_format_localized_price( $_regular_price );
+                        $_sale_price    = wc_format_localized_price( $_sale_price );
+                        $_weight        = wc_format_localized_decimal( $_weight );
+                        $_length        = wc_format_localized_decimal( $_length );
+                        $_width         = wc_format_localized_decimal( $_width );
+                        $_height        = wc_format_localized_decimal( $_height );
+
+                        // Stock BW compat
+                        if ( '' !== $_stock ) {
+                            $_manage_stock = 'yes';
+                        }
+
+                        include DOKAN_INC_DIR . '/woo-views/variation-admin-html.php';
+
+                        $loop++;
                     }
 
-                    $_tax_class = isset( $variation_data['_tax_class'][0] ) ? $variation_data['_tax_class'][0] : null;
-                    $image_id   = absint( $_thumbnail_id );
-                    $image      = $image_id ? wp_get_attachment_thumb_url( $image_id ) : '';
-
-                    // Locale formatting
-                    $_regular_price = wc_format_localized_price( $_regular_price );
-                    $_sale_price    = wc_format_localized_price( $_sale_price );
-                    $_weight        = wc_format_localized_decimal( $_weight );
-                    $_length        = wc_format_localized_decimal( $_length );
-                    $_width         = wc_format_localized_decimal( $_width );
-                    $_height        = wc_format_localized_decimal( $_height );
-
-                    include DOKAN_INC_DIR . '/woo-views/variation-admin-html.php';
-
-                    $loop++;
                 }
                 ?>
             </div> <!-- .woocommerce_variations -->
@@ -332,6 +344,16 @@ function dokan_variable_product_type_options() {
 
         });
 
+        jQuery('#variable_product_options').on('change', 'input.variable_manage_stock', function(){
+
+            jQuery(this).closest('.woocommerce_variation').find('.show_if_variation_manage_stock').hide();
+
+            if (jQuery(this).is(':checked')) {
+                jQuery(this).closest('.woocommerce_variation').find('.show_if_variation_manage_stock').show();
+            }
+
+        });
+
         jQuery('#variable_product_options').on('change', 'input.variable_is_virtual', function(){
 
             jQuery(this).closest('.woocommerce_variation').find('.hide_if_variation_virtual').show();
@@ -342,7 +364,8 @@ function dokan_variable_product_type_options() {
 
         });
 
-        jQuery('input.variable_is_downloadable, input.variable_is_virtual').change();
+
+        jQuery('input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock' ).change();
 
         // Ordering
         $('#variable_product_options').on( 'woocommerce_variations_added', function() {
@@ -799,27 +822,31 @@ function dokan_save_variations( $post_id ) {
 
     if ( isset( $_POST['variable_sku'] ) ) {
 
-        $variable_post_id                   = $_POST['variable_post_id'];
-        $variable_sku                       = $_POST['variable_sku'];
-        $variable_regular_price             = $_POST['variable_regular_price'];
-        $variable_sale_price                = $_POST['variable_sale_price'];
-        $upload_image_id                    = $_POST['upload_image_id'];
-        $variable_download_limit            = $_POST['variable_download_limit'];
-        $variable_download_expiry           = $_POST['variable_download_expiry'];
-        $variable_shipping_class            = $_POST['variable_shipping_class'];
-        $variable_tax_class                 = isset( $_POST['variable_tax_class'] ) ? $_POST['variable_tax_class'] : array();
-        $variable_menu_order                = $_POST['variation_menu_order'];
-        $variable_sale_price_dates_from     = $_POST['variable_sale_price_dates_from'];
-        $variable_sale_price_dates_to       = $_POST['variable_sale_price_dates_to'];
-
-        $variable_weight                    = isset( $_POST['variable_weight'] ) ? $_POST['variable_weight'] : array();
-        $variable_length                    = isset( $_POST['variable_length'] ) ? $_POST['variable_length'] : array();
-        $variable_width                     = isset( $_POST['variable_width'] ) ? $_POST['variable_width'] : array();
-        $variable_height                    = isset( $_POST['variable_height'] ) ? $_POST['variable_height'] : array();
-        $variable_stock                     = isset( $_POST['variable_stock'] ) ? $_POST['variable_stock'] : array();
-        $variable_enabled                   = isset( $_POST['variable_enabled'] ) ? $_POST['variable_enabled'] : array();
-        $variable_is_virtual                = isset( $_POST['variable_is_virtual'] ) ? $_POST['variable_is_virtual'] : array();
-        $variable_is_downloadable           = isset( $_POST['variable_is_downloadable'] ) ? $_POST['variable_is_downloadable'] : array();
+        $variable_post_id               = $_POST['variable_post_id'];
+        $variable_sku                   = $_POST['variable_sku'];
+        $variable_regular_price         = $_POST['variable_regular_price'];
+        $variable_sale_price            = $_POST['variable_sale_price'];
+        $upload_image_id                = $_POST['upload_image_id'];
+        $variable_download_limit        = $_POST['variable_download_limit'];
+        $variable_download_expiry       = $_POST['variable_download_expiry'];
+        $variable_shipping_class        = $_POST['variable_shipping_class'];
+        $variable_tax_class             = isset( $_POST['variable_tax_class'] ) ? $_POST['variable_tax_class'] : array();
+        $variable_menu_order            = $_POST['variation_menu_order'];
+        $variable_sale_price_dates_from = $_POST['variable_sale_price_dates_from'];
+        $variable_sale_price_dates_to   = $_POST['variable_sale_price_dates_to'];
+        
+        $variable_weight                = isset( $_POST['variable_weight'] ) ? $_POST['variable_weight'] : array();
+        $variable_length                = isset( $_POST['variable_length'] ) ? $_POST['variable_length'] : array();
+        $variable_width                 = isset( $_POST['variable_width'] ) ? $_POST['variable_width'] : array();
+        $variable_height                = isset( $_POST['variable_height'] ) ? $_POST['variable_height'] : array();
+        $variable_stock                 = isset( $_POST['variable_stock'] ) ? $_POST['variable_stock'] : array();
+        $variable_manage_stock          = isset( $_POST['variable_manage_stock'] ) ? $_POST['variable_manage_stock'] : array();
+        $variable_stock_status          = isset( $_POST['variable_stock_status'] ) ? $_POST['variable_stock_status'] : array();
+        $variable_backorders            = isset( $_POST['variable_backorders'] ) ? $_POST['variable_backorders'] : array();
+        
+        $variable_enabled               = isset( $_POST['variable_enabled'] ) ? $_POST['variable_enabled'] : array();
+        $variable_is_virtual            = isset( $_POST['variable_is_virtual'] ) ? $_POST['variable_is_virtual'] : array();
+        $variable_is_downloadable       = isset( $_POST['variable_is_downloadable'] ) ? $_POST['variable_is_downloadable'] : array();
 
         $max_loop = max( array_keys( $_POST['variable_post_id'] ) );
 
@@ -836,6 +863,8 @@ function dokan_save_variations( $post_id ) {
 
             // Enabled or disabled
             $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
+            $parent_manage_stock = isset( $_POST['_manage_stock'] ) ? 'yes' : 'no';
+            $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
             // Generate a useful post title
             $variation_post_title = sprintf( __( 'Variation #%s of %s', 'woocommerce' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
@@ -871,6 +900,23 @@ function dokan_save_variations( $post_id ) {
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
             update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
             update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );
+
+            // Stock handling
+            update_post_meta( $variation_id, '_manage_stock', $manage_stock );
+
+            // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
+            // var_dump( $variable_stock_status[ $i ] );
+            if ( ! empty( $variable_stock_status[ $i ] ) ) {
+                wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
+            }
+
+            if ( 'yes' === $manage_stock ) {
+                update_post_meta( $variation_id, '_backorders', wc_clean( $variable_backorders[ $i ] ) );
+                wc_update_product_stock( $variation_id, wc_stock_amount( $variable_stock[ $i ] ) );
+            } else {
+                delete_post_meta( $variation_id, '_backorders' );
+                delete_post_meta( $variation_id, '_stock' );
+            }
 
             if ( isset( $variable_weight[ $i ] ) )
                 update_post_meta( $variation_id, '_weight', ( $variable_weight[ $i ] === '' ) ? '' : wc_format_decimal( $variable_weight[ $i ] ) );
@@ -982,6 +1028,7 @@ function dokan_save_variations( $post_id ) {
 
             do_action( 'woocommerce_save_product_variation', $variation_id, $i );
         }
+
     }
 
     // Update parent if variable so price sorting works and stays in sync with the cheapest child
