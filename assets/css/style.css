@@ -1262,6 +1262,15 @@
   font-size: 17px;
   margin-bottom: 15px;
 }
+.dokan-store-sidebar input[type=text],
+.dokan-store-sidebar input[type=email],
+.dokan-store-sidebar textarea {
+  width: 100%;
+}
+.dokan-store-sidebar form.seller-form ul {
+  margin: 0;
+  padding: 0;
+}
 ul.dokan-seller-wrap {
   list-style: none;
   margin: 0;
