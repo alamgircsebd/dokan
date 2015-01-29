@@ -157,6 +157,7 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
      */
     private function calculate_per_seller( $products, $destination_country, $destination_state  ) {
         $amount = 0.0;
+        $price = array();
 
         $seller_products = array();
 
@@ -231,10 +232,12 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
                 }                
             } 
         }
-
-        foreach ( $price as $s_id => $value ) {
-            $amount = $amount + ( array_sum( $value['addition_price'] )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
+        if( !empty( $price ) ) {
+            foreach ( $price as $s_id => $value ) {
+                $amount = $amount + ( array_sum( $value['addition_price'] )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
+            }
         }
+ 
 
         return $amount;
     }
