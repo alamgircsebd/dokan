@@ -22,8 +22,8 @@ get_header( 'shop' );
     <?php do_action( 'woocommerce_before_main_content' ); ?>
 
     <?php if ( 'off' == $sidebar ) { ?>
-        <div id="secondary" class="dokan-clearfix dokan-w4 dokan-store-sidebar" role="complementary" style="margin-right:3%;">
-            <div class="widget-area widget-collapse">
+        <div id="dokan-secondary" class="dokan-clearfix dokan-w4 dokan-store-sidebar" role="complementary" style="margin-right:3%;">
+            <div class="dokan-widget-area widget-collapse">
                 <?php
                 if ( ! dynamic_sidebar( 'sidebar-store' ) ) {
 
@@ -52,8 +52,8 @@ get_header( 'shop' );
     }
     ?>
 
-    <div id="primary" class="content-area dokan-single-store dokan-w8">
-        <div id="content" class="site-content store-page-wrap woocommerce" role="main">
+    <div id="dokan-primary" class="dokan-single-store dokan-w8">
+        <div id="dokan-content" class="store-page-wrap woocommerce" role="main">
 
             <?php dokan_get_template_part( 'store-header' ); ?>
 

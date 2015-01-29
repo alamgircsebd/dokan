@@ -1186,6 +1186,9 @@
 .dokan-settings-content .dokan-settings-area ul.dokan-categories label {
   font-weight: normal;
 }
+.dokan-store #primary {
+  width: 100%;
+}
 .dokan-single-store {
   margin: 0;
 }
@@ -1270,6 +1273,14 @@
 .dokan-store-sidebar form.seller-form ul {
   margin: 0;
   padding: 0;
+  list-style: none;
+}
+.dokan-store-sidebar form.seller-form ul li {
+  margin-bottom: 8px;
+}
+.dokan-store-sidebar #dokan-store-location {
+  width: 100%;
+  height: 200px;
 }
 ul.dokan-seller-wrap {
   list-style: none;
@@ -1961,10 +1972,6 @@ a.dokan-btn-sm,
   padding: 3px 5px;
   font-size: 11px;
   border-radius: 3px;
-}
-.dokan-widget-area {
-  width: 0px;
-  margin-left: 0px;
 }
 .dokan-close {
   float: right;
