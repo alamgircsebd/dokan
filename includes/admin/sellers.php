@@ -121,6 +121,7 @@
                     'base' => add_query_arg( 'pagenum', '%#%' ),
                     'prev_text' => __( '&larr; Previous', 'dokan' ),
                     'next_text' => __( 'Next &rarr;', 'dokan' ),
+                    'add_args'  => false,
                 ) );
 
                 if ( $page_links ) {
