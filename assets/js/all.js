@@ -264,6 +264,12 @@ jQuery(function($) {
                 $(this).closest('tr').remove();
                 return false;
             });
+
+            this.loadCategoryChosen();
+        },
+
+        loadCategoryChosen: function() {
+            $('select.product_tags').chosen();
         },
 
         /**

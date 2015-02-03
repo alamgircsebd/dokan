@@ -97,6 +97,28 @@
                                 </div>
                             <?php endif; ?>
 
+                            <div class="dokan-form-group">
+
+                                <?php
+                                $drop_down_tags = wp_dropdown_categories( array(
+                                    'show_option_none' => __( '', 'dokan' ),
+                                    'hierarchical'     => 1,
+                                    'hide_empty'       => 0,
+                                    'name'             => 'product_tag[]',
+                                    'id'               => 'product_tag',
+                                    'taxonomy'         => 'product_tag',
+                                    'title_li'         => '',
+                                    'class'            => 'product_tags dokan-form-control chosen',
+                                    'exclude'          => '',
+                                    'selected'         => '',
+                                    'echo'             => 0
+                                ) );
+
+                                echo str_replace( '<select', '<select data-placeholder="Select product tags" multiple="multiple" ', $drop_down_tags );
+                                ?>
+                            </div>
+
+
                         </div>
                     </div>
 
