@@ -156,6 +156,17 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
+                'product_category_style' => array(
+                    'name'    => 'product_category_style',
+                    'label'   => __( 'Category Selection', 'dokan' ),
+                    'desc'    => __( 'What option do you prefere for seller to select product category? ', 'dokan' ),
+                    'type'    => 'select',
+                    'default' => 'single',
+                    'options' => array(
+                        'single' => __( 'Single', 'dokan' ),
+                        'multiple' => __( 'Multiple', 'dokan' )
+                    )
+                ),
                 'product_status' => array(
                     'name'    => 'product_status',
                     'label'   => __( 'New Product Status', 'dokan' ),

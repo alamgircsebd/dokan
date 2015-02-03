@@ -238,29 +238,58 @@ if ( ! $from_shortcode ) {
                                             <div class="dokan-form-group">
                                                 <?php dokan_post_input_box( $post_id, 'post_excerpt', array( 'placeholder' => 'Short description about the product...', 'value' => $post->post_excerpt ), 'textarea' ); ?>
                                             </div>
+                                            
+                                            <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
+                                                <div class="dokan-form-group">
+        
+                                                    <?php
+                                                    $product_cat = -1;
+                                                    $term = array();
+                                                    $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
 
-                                            <div class="dokan-form-group">
-                                                <?php
-                                                $product_cat = -1;
-                                                $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
-                                                if ( $term ) {
-                                                    $product_cat = reset( $term );
-                                                }
+                                                    if ( $term ) {
+                                                        $product_cat = reset( $term );
+                                                    }
 
-                                                wp_dropdown_categories( array(
-                                                    'show_option_none' => __( '- Select a category -', 'dokan' ),
-                                                    'hierarchical'     => 1,
-                                                    'hide_empty'       => 0,
-                                                    'name'             => 'product_cat',
-                                                    'id'               => 'product_cat',
-                                                    'taxonomy'         => 'product_cat',
-                                                    'title_li'         => '',
-                                                    'class'            => 'product_cat dokan-form-control chosen',
-                                                    'exclude'          => '',
-                                                    'selected'         => $product_cat,
-                                                ) );
-                                                ?>
-                                            </div>
+                                                    wp_dropdown_categories( array(
+                                                        'show_option_none' => __( '- Select a category -', 'dokan' ),
+                                                        'hierarchical'     => 1,
+                                                        'hide_empty'       => 0,
+                                                        'name'             => 'product_cat',
+                                                        'id'               => 'product_cat',
+                                                        'taxonomy'         => 'product_cat',
+                                                        'title_li'         => '',
+                                                        'class'            => 'product_cat dokan-form-control chosen',
+                                                        'exclude'          => '',
+                                                        'selected'         => $product_cat,
+                                                    ) );
+                                                    ?>
+                                                </div>
+                                            <?php elseif ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'multiple' ): ?>
+                                                <div class="dokan-form-group dokan-list-category-box">
+                                                    <h5><?php _e( 'Choose a category', 'dokan' );  ?></h5>
+                                                    <ul class="dokan-checkbox-cat">
+                                                        <?php
+                                                        $term = array();
+                                                        $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
+                                                         
+                                                        include_once DOKAN_LIB_DIR.'/class.category-walker.php';
+                                                        wp_list_categories(array(
+
+                                                          'walker'       => new DokanCategoryWalker(),
+                                                          'name'         => 'product_cat',
+                                                          'title_li'     => '',
+                                                          'id'           => 'product_cat',
+                                                          'hide_empty'   => 0,
+                                                          'taxonomy'     => 'product_cat',
+                                                          'hierarchical' => 1,    
+                                                          'selected'     => $term
+                                                        ));
+                                                        ?>
+                                                    </ul>
+                                                </div>
+                                            <?php endif; ?>
+
                                         </div>
                                     </div>
 
