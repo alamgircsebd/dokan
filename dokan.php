@@ -523,7 +523,7 @@ class WeDevs_Dokan {
         }
 
         // Add the site name.
-        $title .= get_bloginfo( 'name' );
+        $title = get_bloginfo( 'name' );
 
         // Add the site description for the home/front page.
         $site_description = get_bloginfo( 'description', 'display' );
@@ -636,27 +636,3 @@ function dokan_admin_toolbar() {
 
 // Hook into the 'wp_before_admin_bar_render' action
 add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );
-
-function pr( $data ) {
-    echo "<pre>";
-    print_r( $data );
-    echo "</pre>";
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
