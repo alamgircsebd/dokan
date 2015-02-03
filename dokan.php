@@ -364,6 +364,7 @@ class WeDevs_Dokan {
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
         add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ), 99 );
+        add_filter( 'wp_title', array( $this, 'wp_title' ), 10, 2 );
     }
 
     /**
@@ -501,6 +502,48 @@ class WeDevs_Dokan {
         }
 
         return $classes;
+    }
+
+    
+    /**
+     * Create a nicely formatted and more specific title element text for output
+     * in head of document, based on current view.
+     *
+     * @since Dokan 1.0.4
+     *
+     * @param string  $title Default title text for current view.
+     * @param string  $sep   Optional separator.
+     * @return string The filtered title.
+     */
+    function wp_title( $title, $sep ) {
+        global $paged, $page;
+
+        if ( is_feed() ) {
+            return $title;
+        }
+
+        // Add the site name.
+        $title .= get_bloginfo( 'name' );
+
+        // Add the site description for the home/front page.
+        $site_description = get_bloginfo( 'description', 'display' );
+
+        if( dokan_is_store_page() ){
+            $store_user = get_userdata( get_query_var( 'author' ) );
+            $store_info = dokan_get_store_info( $store_user->ID );
+            $stora_name = esc_html( $store_info['store_name'] );
+            $title = "$stora_name $sep $title";
+        }
+        else if ( $site_description && ( is_home() || is_front_page() ) ) {
+            $title = "$title $sep $site_description";
+        }
+
+        // Add a page number if necessary.
+        if ( $paged >= 2 || $page >= 2 ) {
+            $title = "$title $sep " . sprintf( __( 'Page %s', 'dokan' ), max( $paged, $page ) );
+        }
+
+        return $title;
     }
 
 } // WeDevs_Dokan
