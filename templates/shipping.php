@@ -1,9 +1,10 @@
 <?php 
 
-$country_obj = new WC_Countries();
-$countries   = $country_obj->countries;
-$states      = $country_obj->states;
-$user_id     = get_current_user_id();
+$country_obj     = new WC_Countries();
+$countries       = $country_obj->countries;
+$states          = $country_obj->states;
+$user_id         = get_current_user_id();
+$processing_time = dokan_get_shipping_processing_times();
 
 $dps_enable_shipping     = get_user_meta( $user_id, '_dps_shipping_enable', true );
 $dps_shipping_type_price = get_user_meta( $user_id, '_dps_shipping_type_price', true );
@@ -12,6 +13,7 @@ $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true 
 $dps_form_location       = get_user_meta( $user_id, '_dps_form_location', true );
 $dps_country_rates       = get_user_meta( $user_id, '_dps_country_rates', true );
 $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
+$dps_pt         = get_user_meta( $user_id, '_dps_pt', true );
 $dps_shipping_policy     = get_user_meta( $user_id, '_dps_ship_policy', true );
 $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true );
 
@@ -80,6 +82,19 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                         <div class="dokan-w5 dokan-text-left">
                             <input id="additional_qty" value="<?php echo $dps_additional_qty; ?>" name="dps_additional_qty" placeholder="9.99" class="dokan-form-control" type="number" step="any" min="0">
+                        </div>
+                    </div>
+
+                    <div class="dokan-form-group dokan-shipping-price dokan-shipping-add-qty">
+                        <label class="dokan-w3 dokan-control-label" for="dps_pt"><?php _e( 'Processing Time', 'dokan' ); ?></label>
+
+                        <div class="dokan-w5 dokan-text-left">
+                            <select name="dps_pt" id="dps_pt" class="dokan-form-control">
+                                <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
+                                      <option value="<?php echo $processing_key; ?>" <?php selected( $dps_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>  
+                                <?php endforeach ?>
+                            </select>
+                            <!-- <input id="additional_qty" value="<?php echo $dps_pt; ?>" name="dps_pt" placeholder="9.99" class="dokan-form-control" type="number" step="any" min="0"> -->
                         </div>
                     </div>
 

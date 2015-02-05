@@ -1333,3 +1333,40 @@ function state_dropdown( $options, $selected = '', $everywhere = false ) {
     }
     echo '</optgroup>';
 }
+
+/**
+ * Shupping Processing time dropdown options
+ *
+ * @return array
+ */
+function dokan_get_shipping_processing_times() {
+    $times = array(
+        '' => __( 'Ready to ship in...', 'dokan' ),
+        '1' => __( '1 business day', 'dokan' ),
+        '2' => __( '1-2 business day', 'dokan' ),
+        '3' => __( '1-3 business day', 'dokan' ),
+        '4' => __( '3-5 business day', 'dokan' ),
+        '5' => __( '1-2 weeks', 'dokan' ),
+        '6' => __( '2-3 weeks', 'dokan' ),
+        '7' => __( '3-4 weeks', 'dokan' ),
+        '8' => __( '4-6 weeks', 'dokan' ),
+        '9' => __( '6-8 weeks', 'dokan' ),
+    );
+
+    return apply_filters( 'dokan_shipping_processing_times', $times );
+}
+
+/**
+ * Get a single processing time string
+ *
+ * @param string $index
+ * @return string
+ */
+function dokan_get_processing_time_value( $index ) {
+    $times = dokan_get_shipping_processing_times();
+
+    if ( isset( $times[$index] ) ) {
+        return $times[$index];
+    }
+}
+

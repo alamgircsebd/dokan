@@ -159,17 +159,33 @@ class Dokan_Template_Shipping {
     function shipping_tab() {
         global $post;
 
-        $from = get_user_meta( $post->post_author, '_dps_form_location', true );
+        $processing        = get_user_meta( $post->post_author, '_dps_pt', true );
+        $from              = get_user_meta( $post->post_author, '_dps_form_location', true );
         $dps_country_rates = get_user_meta( $post->post_author, '_dps_country_rates', true );
-        $dps_state_rates = get_user_meta( $post->post_author, '_dps_state_rates', true );
-        $shipping_policy = get_user_meta( $post->post_author, '_dps_ship_policy', true );
-        $refund_policy = get_user_meta( $post->post_author, '_dps_refund_policy', true );
+        $dps_state_rates   = get_user_meta( $post->post_author, '_dps_state_rates', true );
+        $shipping_policy   = get_user_meta( $post->post_author, '_dps_ship_policy', true );
+        $refund_policy     = get_user_meta( $post->post_author, '_dps_refund_policy', true );
 
         $country_obj = new WC_Countries();
-        $countries = $country_obj->countries;
-        $states = $country_obj->states;
+        $countries   = $country_obj->countries;
+        $states      = $country_obj->states;
 
         ?>
+
+        <?php if ( $processing ) { ?>
+                <p>
+                    <strong>
+                    <?php _e( 'Ready to ship in', 'dokan-shipping' ); ?> <?php echo dokan_get_processing_time_value( $processing ); ?>
+
+                    <?php
+                    if ( $from ) {
+                        echo __( 'from', 'dokan-shipping' ) . ' ' . $countries[$from];
+                    }
+                    ?>
+                </strong>
+            </p>
+            <hr>
+        <?php } ?>
 
         <?php if ( $dps_country_rates ) { ?>
             <table class="table">
