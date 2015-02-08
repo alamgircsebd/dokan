@@ -87,11 +87,13 @@ class Dokan_Template_Settings {
         $dokan_settings = array(
             'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
             'social'       => array(
-                'fb'           => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
-                'gplus'        => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
-                'twitter'      => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
-                'linkedin'     => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
-                'youtube'      => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
+                'fb'        => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
+                'gplus'     => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
+                'twitter'   => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
+                'linkedin'  => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
+                'youtube'   => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
+                'flickr'    => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
+                'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
             ),
             'payment'      => array(),
             'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
@@ -150,17 +152,19 @@ class Dokan_Template_Settings {
         }
 
         $profile_info   = dokan_get_store_info( $current_user->ID );
-
+        
         $banner         = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
         $storename      = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
         $gravatar       = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
-
+        
         $fb             = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
         $twitter        = isset( $profile_info['social']['twitter'] ) ? esc_url( $profile_info['social']['twitter'] ) : '';
         $gplus          = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
         $linkedin       = isset( $profile_info['social']['linkedin'] ) ? esc_url( $profile_info['social']['linkedin'] ) : '';
         $youtube        = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
-
+        $flickr         = isset( $profile_info['social']['flickr'] ) ? esc_url( $profile_info['social']['flickr'] ) : '';
+        $instagram      = isset( $profile_info['social']['instagram'] ) ? esc_url( $profile_info['social']['instagram'] ) : '';
+        
         // bank
         $phone          = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
         $show_email     = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
@@ -265,6 +269,17 @@ class Dokan_Template_Settings {
                             <span class="dokan-input-group-addon"><i class="fa fa-youtube"></i></span>
                             <input id="settings[social][youtube]" value="<?php echo $youtube; ?>" name="settings[social][youtube]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
+
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-instagram"></i></span>
+                            <input id="settings[social][instagram]" value="<?php echo $instagram; ?>" name="settings[social][instagram]" class="dokan-form-control" placeholder="http://" type="text">
+                        </div>
+
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-flickr"></i></span>
+                            <input id="settings[social][flickr]" value="<?php echo $flickr; ?>" name="settings[social][flickr]" class="dokan-form-control" placeholder="http://" type="text">
+                        </div>
+
                     </div>
                 </div>
 
