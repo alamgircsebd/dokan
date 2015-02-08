@@ -696,6 +696,9 @@
   font-weight: normal;
   cursor: pointer;
 }
+.dokan-orders-content .dokan-orders-area .dokan-order-filter-serach {
+  padding: 10px 7px;
+}
 .dokan-orders-content .dokan-orders-area td.thumb img {
   padding: 2px;
   margin: 0;

@@ -330,7 +330,7 @@ function dokan_daily_sales() {
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
 
-            <input type="submit" name="dokan_report_filter" value="<?php _e( 'Show', 'dokan' ); ?>" />
+            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
         </div>
     </form>
     <?php
@@ -697,7 +697,7 @@ function dokan_top_sellers() {
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
         </div>
 
-        <input type="submit" class="btn btn-success btn-sm" value="<?php _e( 'Show', 'dokan' ); ?>" />
+        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
     </form>
 
 
@@ -801,7 +801,7 @@ function dokan_top_earners() {
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
         </div>
 
-        <input type="submit" class="btn btn-theme btn-sm" value="<?php _e( 'Show', 'dokan' ); ?>" />
+        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
     </form>
 
     <table class="table table-striped">

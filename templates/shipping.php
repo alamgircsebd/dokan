@@ -261,7 +261,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                             <?php endif; ?>    
                             
                             </div>
-                            <a href="#" class="dokan-btn dokan-btn-default dps-shipping-add"><?php _e( 'Add Location', 'dokan' ); ?></a>
+                            <a href="#" class="dokan-btn dokan-btn-default dps-shipping-add dokan-right"><?php _e( 'Add Location', 'dokan' ); ?></a>
                         </div>
                     </div>
 
@@ -272,7 +272,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:23%;">
-                        <input type="submit" name="dokan_update_shipping_options" class="btn btn-primary" value="<?php esc_attr_e( 'Save Settings', 'dokan' ); ?>">
+                        <input type="submit" name="dokan_update_shipping_options" class="dokan-btn dokan-btn-danger dokan-theme" value="<?php esc_attr_e( 'Save Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 

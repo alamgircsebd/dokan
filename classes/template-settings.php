@@ -212,7 +212,7 @@ class Dokan_Template_Settings {
                     <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
                         <i class="fa fa-cloud-upload"></i>
 
-                        <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info"><?php _e( 'Upload banner', 'dokan' ); ?></a>
+                        <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
                         <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixel. )', 'dokan' ); ?></p>
                     </div>
                 </div> <!-- .dokan-banner -->
@@ -371,7 +371,7 @@ class Dokan_Template_Settings {
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
-                        <input type="submit" name="dokan_update_profile" class="btn btn-primary" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
+                        <input type="submit" name="dokan_update_profile" class="dokan-btn dokan-btn-danger dokan-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 
