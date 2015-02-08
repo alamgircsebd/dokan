@@ -8,7 +8,7 @@
  *
  *  @author weDevs <info@wedevs.com>
  */
-class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
+class Dokan_WC_Shipping extends WC_Shipping_Method {
     /**
      * Constructor for your shipping class
      *
@@ -16,8 +16,8 @@ class Dokan_WC_Per_Product_Shipping extends WC_Shipping_Method {
      * @return void
      */
     public function __construct() {
-        $this->id                 = 'dokan_per_product';
-        $this->method_title       = __( 'Dokan Per Product Shipping' );
+        $this->id                 = 'dokan_product_shipping';
+        $this->method_title       = __( 'Dokan Shipping' );
         $this->method_description = __( 'Enable sellers to set shipping cost per product and per country' );
 
         $this->enabled      = $this->get_option( 'enabled' );

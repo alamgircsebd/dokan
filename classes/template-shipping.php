@@ -42,7 +42,7 @@ class Dokan_Template_Shipping {
      * @return array
      */
     function register_shipping( $methods ) {
-        $methods[] = 'Dokan_WC_Per_Product_Shipping';
+        $methods[] = 'Dokan_WC_Shipping';
 
         return $methods;
     }
@@ -59,8 +59,7 @@ class Dokan_Template_Shipping {
         $shipping_method = WC()->session->get( 'chosen_shipping_methods' );
 
         // per product shipping was not chosen
-        if ( ! is_array( $shipping_method ) || !in_array( 'dokan_per_product', $shipping_method ) ) {
-            wc_add_notice( __( 'shipping was not chosen', 'woocommerce' ), 'error' );
+        if ( ! is_array( $shipping_method ) || !in_array( 'dokan_product_shipping', $shipping_method ) ) {
             return;
         }
 
