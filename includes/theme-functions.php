@@ -830,7 +830,7 @@ function dokan_get_store_url( $user_id ) {
 function dokan_get_review_url( $user_id ) {
     $userstore = dokan_get_store_url( $user_id );
 
-    return $userstore ."reviews";
+    return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
 }
 
 
