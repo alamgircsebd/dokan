@@ -131,7 +131,7 @@
 
                     <div class="dokan-form-group">
                         <?php wp_nonce_field( 'dokan_add_new_product', 'dokan_add_new_product_nonce' ); ?>
-                        <input type="submit" name="add_product" class="dokan-btn" value="<?php esc_attr_e( 'Add Product', 'dokan' ); ?>"/>
+                        <input type="submit" name="add_product" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Add Product', 'dokan' ); ?>"/>
                     </div>
 
                 </form>

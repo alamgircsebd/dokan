@@ -272,7 +272,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:23%;">
-                        <input type="submit" name="dokan_update_shipping_options" class="dokan-btn dokan-btn-danger dokan-theme" value="<?php esc_attr_e( 'Save Settings', 'dokan' ); ?>">
+                        <input type="submit" name="dokan_update_shipping_options" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Save Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 

@@ -572,18 +572,6 @@ class Dokan_Template_Coupons{
                 </div>
             </div>
 
-            <!-- <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Enable Free Shipping', 'dokan' ); ?></label>
-                <div class="dokan-w6 dokan-text-left">
-                    <div class="checkbox">
-                        <label for="checkboxes-0">
-                            <input name="enable_free_ship" <?php echo $free_shipping; ?> id="checkboxes-0" value="yes" type="checkbox">
-                            <?php _e( 'Check this box if the coupon grants free shipping.', 'dokan' ); ?>
-                        </label>
-                    </div>
-                </div>
-            </div> -->
-
             <div class="dokan-form-group">
                 <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Exclude Sale Items', 'dokan' ); ?></label>
                 <div class="dokan-w7 dokan-text-left">
@@ -633,8 +621,8 @@ class Dokan_Template_Coupons{
             </div>
 
             <div class="dokan-form-group">
-                <div class="dokan-w5 ajax_prev dokan-text-left" style="margin-left:25%">
-                    <input type="submit" id="" name="coupon_creation" value="<?php echo $button_name; ?>" class="btn btn-theme">
+                <div class="dokan-w5 ajax_prev dokan-text-left" style="margin-left:23%">
+                    <input type="submit" id="" name="coupon_creation" value="<?php echo $button_name; ?>" class="dokan-btn dokan-btn-danger dokan-btn-theme">
                 </div>
             </div>
 

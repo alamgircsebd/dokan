@@ -904,7 +904,7 @@ class Dokan_Template_Withdraw {
             <div class="dokan-form-group">
                 <div class="dokan-w3 ajax_prev" style="margin-left:23%; width: 200px;">
                     <?php wp_nonce_field( 'dokan_withdraw', 'dokan_withdraw_nonce' ); ?>
-                    <input type="submit" class="btn btn-primary" value="<?php esc_attr_e( 'Submit Request', 'dokan' ); ?>" name="withdraw_submit">
+                    <input type="submit" class="dokan-btn dokan-btn-theme" value="<?php esc_attr_e( 'Submit Request', 'dokan' ); ?>" name="withdraw_submit">
                 </div>
             </div>
         </form>

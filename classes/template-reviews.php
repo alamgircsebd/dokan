@@ -136,7 +136,7 @@ class Dokan_Template_reviews {
 
             <?php wp_nonce_field( 'wpuf_comment_nonce', 'wpuf_nonce' ); ?>
 
-            <input type="submit" value="<?php _e( 'Submit', 'dokan' ); ?>" class="btn btn-theme btn-sm" name="comt_stat_sub">
+            <input type="submit" value="<?php _e( 'Submit', 'dokan' ); ?>" class="dokan-btn  dokan-danger dokan-btn-theme dokan-btn-sm" name="comt_stat_sub">
         </form>
 
         <script type="text/template" id="dokan-edit-comment-row">
