@@ -1,5 +1,10 @@
 <?php 
 
+/**
+ *  Shipping template
+ *  @since  2.0
+ */
+
 $country_obj     = new WC_Countries();
 $countries       = $country_obj->countries;
 $states          = $country_obj->states;
@@ -13,7 +18,7 @@ $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true 
 $dps_form_location       = get_user_meta( $user_id, '_dps_form_location', true );
 $dps_country_rates       = get_user_meta( $user_id, '_dps_country_rates', true );
 $dps_state_rates         = get_user_meta( $user_id, '_dps_state_rates', true );
-$dps_pt         = get_user_meta( $user_id, '_dps_pt', true );
+$dps_pt                  = get_user_meta( $user_id, '_dps_pt', true );
 $dps_shipping_policy     = get_user_meta( $user_id, '_dps_ship_policy', true );
 $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true );
 

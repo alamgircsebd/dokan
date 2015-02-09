@@ -147,6 +147,13 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'off'
                 ),
+                'product_add_mail' => array(
+                    'name'    => 'product_add_mail',
+                    'label'   => __( 'Product Mail Notification', 'dokan' ),
+                    'desc'    => __( 'Email notification on new product submission', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
@@ -159,7 +166,7 @@ class Dokan_Admin_Settings {
                 'product_category_style' => array(
                     'name'    => 'product_category_style',
                     'label'   => __( 'Category Selection', 'dokan' ),
-                    'desc'    => __( 'What option do you prefere for seller to select product category? ', 'dokan' ),
+                    'desc'    => __( 'What option do you prefer for seller to select product category? ', 'dokan' ),
                     'type'    => 'select',
                     'default' => 'single',
                     'options' => array(
@@ -177,13 +184,6 @@ class Dokan_Admin_Settings {
                         'publish' => __( 'Published', 'dokan' ),
                         'pending' => __( 'Pending Review', 'dokan' )
                     )
-                ),
-                'product_add_mail' => array(
-                    'name'    => 'product_add_mail',
-                    'label'   => __( 'Product Mail Notification', 'dokan' ),
-                    'desc'    => __( 'Enable new product added mail notification', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'on'
                 ),
                 'seller_percentage' => array(
                     'name'    => 'seller_percentage',
@@ -224,7 +224,7 @@ class Dokan_Admin_Settings {
                 ),
                 'withdraw_date_limit' => array(
                     'name'    => 'withdraw_date_limit',
-                    'label'   => __( 'Threshold withdraw for', 'dokan' ),
+                    'label'   => __( 'Withdraw Threshold', 'dokan' ),
                     'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
                     'default' => '0',
                     'type'    => 'text',
@@ -232,7 +232,7 @@ class Dokan_Admin_Settings {
                 'custom_store_url' => array(
                     'name'    => 'custom_store_url',
                     'label'   => __( 'Seller Store URL', 'dokan' ),
-                    'desc'    => __( 'Define seller store URL ( http://yoursite.com/[this-text]/[seller-name] )', 'dokan' ),
+                    'desc'    => sprintf( __( 'Define seller store URL (%s<strong>[this-text]</strong>/[seller-name])', 'dokan' ), site_url( '/' ) ),
                     'default' => 'store',
                     'type'    => 'text',
                 ),

@@ -13,6 +13,10 @@ class Dokan_Template_Shortcodes {
     public static $validated;
     public static $validate;
 
+    /**
+     *  Dokan template shortcodes __constract
+     *  Initial loaded when class create an instanace
+     */
     function __construct() {
 
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
@@ -205,7 +209,7 @@ class Dokan_Template_Shortcodes {
 
                     do_action( 'dokan_new_product_added', $product_id, $post_data );
 
-                    if( dokan_get_option( 'product_add_mail', 'dokan_selling', 'on' ) == 'on' ) {
+                    if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
                         Dokan_Email::init()->new_product_added( $product_id, $product_status );
                     }
 
@@ -260,6 +264,7 @@ class Dokan_Template_Shortcodes {
 
             wp_set_object_terms( $post_id, 'simple', 'product_type' );
 
+            /**  Process all variation products meta */
             dokan_process_product_meta( $post_id );
 
             /** set images **/
@@ -276,6 +281,11 @@ class Dokan_Template_Shortcodes {
        
     }
 
+    /**
+     * Handle the coupons submission
+     * 
+     * @return void 
+     */
     function handle_coupons() {
 
         if ( ! is_user_logged_in() ) {
@@ -317,7 +327,7 @@ class Dokan_Template_Shortcodes {
     }
 
     /**
-     * [handle_withdraws description]
+     * Handle Withdraw form submission
      *
      * @return void
      */
@@ -336,6 +346,7 @@ class Dokan_Template_Shortcodes {
     /**
      * Export user orders to CSV format
      *
+     * @since 1.4
      * @return void
      */
     function handle_order_export() {
@@ -491,7 +502,9 @@ class Dokan_Template_Shortcodes {
 
     /**
      *  Handle Shipping post submit
-     * @return void
+     *
+     *  @since  2.0
+     *  @return void
      */
     function handle_shipping() {
         if ( ! is_user_logged_in() ) {
