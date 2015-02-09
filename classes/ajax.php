@@ -77,7 +77,7 @@ class Dokan_Ajax {
      */
     function seller_info_checkout( $item_data, $cart_item ) {
         $info   = dokan_get_store_info( $cart_item['data']->post->post_author );
-        $seller = sprintf( __( '<strong>Seller:</strong> %s', 'dokan' ), $info['store_name'] );
+        $seller = sprintf( __( '<br><strong> Seller:</strong> %s', 'dokan' ), $info['store_name'] );
         $data   = $item_data . $seller;
 
         return apply_filters( 'dokan_seller_info_checkout', $data, $info, $item_data, $cart_item );
