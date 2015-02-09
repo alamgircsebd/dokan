@@ -178,6 +178,13 @@ class Dokan_Admin_Settings {
                         'pending' => __( 'Pending Review', 'dokan' )
                     )
                 ),
+                'product_add_mail' => array(
+                    'name'    => 'product_add_mail',
+                    'label'   => __( 'Product Mail Notification', 'dokan' ),
+                    'desc'    => __( 'Enable new product added mail notification', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
                 'seller_percentage' => array(
                     'name'    => 'seller_percentage',
                     'label'   => __( 'Seller Percentage', 'dokan' ),

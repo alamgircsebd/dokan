@@ -205,7 +205,9 @@ class Dokan_Template_Shortcodes {
 
                     do_action( 'dokan_new_product_added', $product_id, $post_data );
 
-                    Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                    if( dokan_get_option( 'product_add_mail', 'dokan_selling', 'on' ) == 'on' ) {
+                        Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                    }
 
                     wp_redirect( dokan_edit_product_url( $product_id ) );
                     exit;
