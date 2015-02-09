@@ -22,6 +22,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
         $this->enabled      = $this->get_option( 'enabled' );
         $this->title        = $this->get_option( 'title' );
+        $this->tax_status   = $this->get_option( 'tax_status' );
 
         $this->init();
     }
@@ -65,6 +66,16 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                 'default'       => __( 'Regular Shipping', 'dokan' ),
                 'desc_tip'      => true,
             ),
+            'tax_status' => array(
+                'title'         => __( 'Tax Status', 'woocommerce' ),
+                'type'          => 'select',
+                'default'       => 'taxable',
+                'options'       => array(
+                    'taxable'   => __( 'Taxable', 'woocommerce' ),
+                    'none'      => _x( 'None', 'Tax status', 'woocommerce' )
+                ),
+            ),
+
         );
 
     }
@@ -90,11 +101,14 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
             $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
         }
 
-    	$rate = array(
+
+        $tax_rate = ( $this->tax_status == 'none' ) ? false : '';
+
+        $rate = array(
             'id'    => $this->id,
             'label' => $this->title,
             'cost'  => $amount,
-            'taxes' => false
+            'taxes' => $tax_rate
         );
 
         // Register the rate
