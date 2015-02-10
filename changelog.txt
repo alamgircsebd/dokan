@@ -1,5 +1,35 @@
 ==================== Plugin Version ====================
 
+v2.0 -> February 10, 2015
+---------------------
+- [new] Add Custom Store wide and Per-Product Shipping option for individual sellers
+- [new] Add TAX option for individual sellers on seller dashboard
+- [new] Add Shipping TAX option
+- [new] Variation stock management feature on font end
+- [new] TAX and shipping management for variation product
+- [new] Added settings for new product add email notification to admin
+- [new] Added flickr, Instagram in seller store social profile field
+- [new] Added tag feature in Seller dashboard product add or edit
+- [new] Added Multiple category selection in seller product add or edit 
+- [new] Set cookie for page view
+- [fix] Line break in seller name with product in chart page
+- [fix] Add seller review url filter ('dokan_get_seller_review_url')
+- [fix] Fix some styling issue for button, position 
+- [fix] Fixes the broken Store page sidebar for any WooCommerce compatible theme.
+- [fix] Admin seller listing pagination fixed 
+- [fix] Use wp_title filter from dokan theme and correct store title
+- [fix] Product edit tab background white colour removed 
+- [fix] Media popup close icon styling fixed
+- [fix] Regenerate map file
+- [fix] Update code structure by id prefixed with dokan and stuff 
+- [fix] Transliteration fixes 
+- [fix] Fix withdraw threshold query
+- [fix] Coupon delete problem fixed
+- [fix] Fix settings page undefined error
+- [fix] Change hook name ‘dokn_aditional_relation_filed’ to ‘dokan_reg_form_field’
+- [fix] Language file updated
+
+
 v1.4 -> January 18, 2015
 ---------------------
 - [new] Added admin option to change store URL
