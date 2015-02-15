@@ -1097,9 +1097,9 @@ jQuery(function($) {
                 var wrap = self.closest('.dokan-banner');
                 wrap.find('input.dokan-file-field').val(attachment.id);
                 wrap.find('img.dokan-banner-img').attr('src', attachment.url);
-                $('.image-wrap', wrap).removeClass('dokan-hide');
+                self.parent().siblings('.image-wrap', wrap).removeClass('dokan-hide');
 
-                $('.button-area').addClass('dokan-hide');
+                self.parent('.button-area').addClass('dokan-hide');
             });
 
             // Finally, open the modal
@@ -1131,9 +1131,10 @@ jQuery(function($) {
 
                 var wrap = self.closest('.dokan-gravatar');
                 wrap.find('input.dokan-file-field').val(attachment.id);
-                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);
-                $('.gravatar-wrap', wrap).removeClass('dokan-hide');
-                $('.gravatar-button-area').addClass('dokan-hide');
+                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);                
+                self.parent().siblings('.gravatar-wrap', wrap).removeClass('dokan-hide');
+                self.parent('.gravatar-button-area').addClass('dokan-hide');
+
             });
 
             // Finally, open the modal
