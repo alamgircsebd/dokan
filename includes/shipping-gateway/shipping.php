@@ -169,7 +169,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
      * @param  array $destination
      * @return float
      */
-    private function calculate_per_seller( $products, $destination_country, $destination_state  ) {
+    public function calculate_per_seller( $products, $destination_country, $destination_state  ) {
         $amount = 0.0;
         $price = array();
 
@@ -253,7 +253,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
         }
  
 
-        return $amount;
+        return apply_filters( 'dokan_shipping_calculate_amount', $amount, $price, $products, $destination_country, $destination_state );
     }
 }
 
