@@ -59,6 +59,10 @@ class Dokan_Template_Shortcodes {
     public function load_template_files() {
         global $wp;
 
+        $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
+
+        $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+
         if ( ! function_exists( 'WC' ) ) {
             return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
         }
@@ -98,7 +102,7 @@ class Dokan_Template_Shortcodes {
             return;
         }
 
-        if ( isset( $wp->query_vars['shipping'] ) ) {
+        if ( isset( $wp->query_vars['shipping'] ) && $enable_shipping == 'yes' ) {
             dokan_get_template_part( 'shipping' );
             return;
         }

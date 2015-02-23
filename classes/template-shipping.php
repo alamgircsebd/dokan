@@ -87,11 +87,11 @@ class Dokan_Template_Shipping {
 
             $seller_id = get_post_field( 'post_author', $product['product_id'] );
             
-            if ( ! Dokan_WC_Per_Product_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
+            if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
                 continue;
             }
 
-            if( Dokan_WC_Per_Product_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
+            if( Dokan_WC_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
                 continue;
             } 
 
