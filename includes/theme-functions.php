@@ -451,6 +451,7 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
             ?>
 
             <label class="<?php echo $class; ?>" for="<?php echo $name; ?>">
+                <input type="hidden" name="<?php echo $name; ?>" value="no">
                 <input name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="yes" type="checkbox"<?php checked( $value, 'yes' ); ?>>
                 <?php echo $label; ?>
             </label>
