@@ -253,7 +253,7 @@ function dokan_order_listing_status_filter() {
                         'dokan_order_filter' => 'Filter',
                     );
                 }
-                $pending_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-on-hold' ) );
+                $pending_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-pending' ) );
             ?>
             <a href="<?php echo add_query_arg( $pending_order_url, $orders_url ); ?>">
                 <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->{'wc-pending'} ); ?></span>
