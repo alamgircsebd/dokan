@@ -461,6 +461,8 @@ jQuery(function($) {
             var row = $(html).first().clone().appendTo($('.dokan-shipping-location-wrapper')).show();
             $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content').first().find('a.dps-shipping-remove').show();
             
+            $('.tips').tooltip();
+            
             row.removeAttr('id');
             row.find('input,select').val('');
             row.find('a.dps-shipping-remove').show();
@@ -482,6 +484,7 @@ jQuery(function($) {
             var row = $(this).closest('tr').first().clone().appendTo($(this).closest('table.dps-shipping-states'));
             row.find('input,select').val('');
             row.find('a.dps-remove').show();
+            $('.tips').tooltip();
         });
 
         $('.dokan-shipping-location-wrapper').on('click', 'a.dps-remove', function(e) {
