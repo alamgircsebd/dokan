@@ -148,7 +148,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                             <?php country_dropdown( $countries, $country, '' ); ?>
                                                         </select>
                                                     </td>
-                                                    <td>
+                                                    <td class="dps_shipping_location_cost">
                                                         <label for=""><?php _e( 'Cost', 'dokan' ); ?><span class="dokan-tooltips-help tips" title="<?php _e( 'Enable Shipping', 'dokan' ); ?>"><i class="fa fa-question-circle"></i></span></label>
                                                         <div class="dokan-input-group">
                                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
@@ -166,11 +166,11 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                     <?php foreach ( $dps_state_rates[$country] as $state => $state_rate ): ?>
                                                                         
                                                                         <?php if ( isset( $states[$country] ) && !empty( $states[$country] ) ): ?>
-                                                                            
+                                                                                
                                                                             <tr>
                                                                                 <td>
                                                                                     <label for=""><?php _e( 'State', 'dokan' ) ?> <span class="dokan-tooltips-help tips" title="<?php _e( 'Enable Shipping', 'dokan' ); ?>"><i class="fa fa-question-circle"></i></span></label>
-                                                                                    <select name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control" id="dps_state_selection">
+                                                                                    <select name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control dps_state_selection">
                                                                                         <?php state_dropdown( $states[$country], $state, true ); ?>
                                                                                     </select>
                                                                                 </td>
@@ -196,7 +196,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                             <tr>
                                                                                 <td>
                                                                                     <label for=""><?php _e( 'State', 'dokan' ); ?></label>
-                                                                                    <input type="text" name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control" placeholder="State name" value="<?php echo $state; ?>">
+                                                                                    <input type="text" name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control dps_state_selection" placeholder="State name" value="<?php echo $state; ?>">
                                                                                 </td>
                                                                                 <td>
                                                                                     <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
@@ -244,7 +244,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                         <?php country_dropdown( $countries, '', false ); ?>
                                                     </select>
                                                 </td>
-                                                <td>
+                                                <td class="dps_shipping_location_cost">
                                                     <label for=""><?php _e( 'Cost', 'dokan' ); ?><span class="dokan-tooltips-help tips" title="<?php _e( 'Enable Shipping', 'dokan' ); ?>"><i class="fa fa-question-circle"></i></span></label>
                                                     <div class="input-group">
                                                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
@@ -299,7 +299,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                         <?php country_dropdown( $countries, '', false ); ?>
                     </select>
                 </td>
-                <td>
+                <td class="dps_shipping_location_cost">
                     <label for=""><?php _e( 'Cost', 'dokan' ); ?><span class="dokan-tooltips-help tips" title="<?php _e( 'Enable Shipping', 'dokan' ); ?>"><i class="fa fa-question-circle"></i></span></label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>

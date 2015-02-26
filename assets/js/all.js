@@ -1377,6 +1377,19 @@ jQuery(function($) {
 
         });
 
+        $('.dokan-shipping-location-wrapper').on('change keyup', '.dps_state_selection', function() {
+            var self = $(this);
+
+            if( self.val() == '' || self.val() == '-1' ) {
+                self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
+            } else {
+                self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').hide();    
+            }
+        });
+
+        $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('change');
+        $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('keyup');
+
         $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
         
         if( $wrap.length == 1) {

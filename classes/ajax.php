@@ -776,7 +776,7 @@ class Dokan_Ajax {
              <tr>
                 <td>
                     <label for=""><?php _e( 'State', 'dokan' ); ?></label>
-                    <select name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" id="dps_state_selection">
+                    <select name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control dps_state_selection" id="dps_state_selection">
                         <?php state_dropdown( $states[$country_id], '', true ); ?>
                     </select>
                 </td>
@@ -802,7 +802,7 @@ class Dokan_Ajax {
             <tr>
                 <td>
                     <label for=""><?php _e( 'State', 'dokan' ); ?></label>
-                    <input type="text" name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control" placeholder="State name">
+                    <input type="text" name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control dps_state_selection" placeholder="State name">
                 </td>
                 <td>
                     <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
