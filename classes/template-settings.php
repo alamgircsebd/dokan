@@ -2,10 +2,8 @@
 /**
  * Dokan settings Class
  *
- * @ weDves
+ * @author weDves
  */
-
-
 class Dokan_Template_Settings {
 
     public static function init() {
@@ -18,6 +16,11 @@ class Dokan_Template_Settings {
         return $instance;
     }
 
+    /**
+     * Save settings via ajax
+     *
+     * @return void
+     */
     function ajax_settings() {
 
         if ( !wp_verify_nonce( $_POST['_wpnonce'], 'dokan_settings_nonce' ) ) {
@@ -38,7 +41,11 @@ class Dokan_Template_Settings {
         wp_send_json_success( __( 'Your information has been saved successfully', 'dokan' ) );
     }
 
-
+    /**
+     * Validate settings submission
+     *
+     * @return void
+     */
     function validate() {
 
         if ( !isset( $_POST['dokan_update_profile'] ) ) {
@@ -79,9 +86,12 @@ class Dokan_Template_Settings {
 
     }
 
+    /**
+     * Save store settings
+     *
+     * @return void
+     */
     function insert_settings_info() {
-
-
         $social = $_POST['settings']['social'];
 
         $dokan_settings = array(
@@ -139,6 +149,13 @@ class Dokan_Template_Settings {
         }
     }
 
+    /**
+     * Show the settings form
+     *
+     * @param  string
+     *
+     * @return void
+     */
     function setting_field( $validate = '' ) {
         global $current_user;
 
@@ -152,11 +169,11 @@ class Dokan_Template_Settings {
         }
 
         $profile_info   = dokan_get_store_info( $current_user->ID );
-        
+
         $banner         = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
         $storename      = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
         $gravatar       = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
-        
+
         $fb             = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
         $twitter        = isset( $profile_info['social']['twitter'] ) ? esc_url( $profile_info['social']['twitter'] ) : '';
         $gplus          = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
@@ -164,7 +181,7 @@ class Dokan_Template_Settings {
         $youtube        = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
         $flickr         = isset( $profile_info['social']['flickr'] ) ? esc_url( $profile_info['social']['flickr'] ) : '';
         $instagram      = isset( $profile_info['social']['instagram'] ) ? esc_url( $profile_info['social']['instagram'] ) : '';
-        
+
         // bank
         $phone          = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
         $show_email     = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
