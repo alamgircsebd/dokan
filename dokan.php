@@ -504,7 +504,7 @@ class WeDevs_Dokan {
         return $classes;
     }
 
-    
+
     /**
      * Create a nicely formatted and more specific title element text for output
      * in head of document, based on current view.
@@ -556,83 +556,3 @@ add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
 
 register_activation_hook( __FILE__, array( 'WeDevs_Dokan', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WeDevs_Dokan', 'deactivate' ) );
-
-/**
- * Adds seller email to the new order notification email
- *
- * @param string  $admin_email
- * @param WC_Order $order
- * @return array
- */
-function dokan_wc_email_recipient_add_seller( $admin_email, $order ) {
-    $emails = array( $admin_email );
-
-    $seller_id = dokan_get_seller_id_by_order( $order->id );
-
-    if ( $seller_id ) {
-        $seller_email = get_user_by( 'id', $seller_id )->user_email;
-
-        if ( $admin_email != $seller_email ) {
-            array_push( $emails, $seller_email );
-        }
-    }
-
-    return $emails;
-}
-
-add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
-
-// Add Toolbar Menus
-function dokan_admin_toolbar() {
-    global $wp_admin_bar;
-
-    if ( ! current_user_can( 'manage_options' ) ) {
-        return;
-    }
-
-    $args = array(
-        'id'     => 'dokan',
-        'title'  => __( 'Dokan', 'admin' ),
-        'href'   => admin_url( 'admin.php?page=dokan' )
-    );
-
-    $wp_admin_bar->add_menu( $args );
-
-    $wp_admin_bar->add_menu( array(
-        'id'     => 'dokan-dashboard',
-        'parent' => 'dokan',
-        'title'  => __( 'Dokan Dashboard', 'dokan' ),
-        'href'   => admin_url( 'admin.php?page=dokan' )
-    ) );
-
-    $wp_admin_bar->add_menu( array(
-        'id'     => 'dokan-withdraw',
-        'parent' => 'dokan',
-        'title'  => __( 'Withdraw', 'dokan' ),
-        'href'   => admin_url( 'admin.php?page=dokan-withdraw' )
-    ) );
-
-    $wp_admin_bar->add_menu( array(
-        'id'     => 'dokan-sellers',
-        'parent' => 'dokan',
-        'title'  => __( 'All Sellers', 'dokan' ),
-        'href'   => admin_url( 'admin.php?page=dokan-sellers' )
-    ) );
-
-    $wp_admin_bar->add_menu( array(
-        'id'     => 'dokan-reports',
-        'parent' => 'dokan',
-        'title'  => __( 'Earning Reports', 'dokan' ),
-        'href'   => admin_url( 'admin.php?page=dokan-reports' )
-    ) );
-
-    $wp_admin_bar->add_menu( array(
-        'id'     => 'dokan-settings',
-        'parent' => 'dokan',
-        'title'  => __( 'Settings', 'dokan' ),
-        'href'   => admin_url( 'admin.php?page=dokan-settings' )
-    ) );
-}
-
-// Hook into the 'wp_before_admin_bar_render' action
-add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );
