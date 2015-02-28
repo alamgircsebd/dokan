@@ -3,12 +3,11 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: http://wedevs.com/theme/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 1.4
+Version: 2.0
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
 */
-
 
 /**
  * Copyright (c) 2014 weDevs (email: info@wedevs.com). All rights reserved.
@@ -58,7 +57,6 @@ if ( !defined( 'DOKAN_LOAD_STYLE' ) ) {
 if ( !defined( 'DOKAN_LOAD_SCRIPTS' ) ) {
     define( 'DOKAN_LOAD_SCRIPTS', true );
 }
-
 
 /**
  * Autoload class files on demand
@@ -364,7 +362,7 @@ class WeDevs_Dokan {
     function init_filters() {
         add_filter( 'posts_where', array( $this, 'hide_others_uploads' ) );
         add_filter( 'body_class', array( $this, 'add_dashboard_template_class' ), 99 );
-        add_filter( 'wp_title', array( $this, 'wp_title' ), 10, 2 );
+        add_filter( 'wp_title', array( $this, 'wp_title' ), 20, 2 );
     }
 
     /**
@@ -522,25 +520,19 @@ class WeDevs_Dokan {
             return $title;
         }
 
-        // Add the site name.
-        $title .= get_bloginfo( 'name' );
-
-        // Add the site description for the home/front page.
-        $site_description = get_bloginfo( 'description', 'display' );
-
-        if( dokan_is_store_page() ){
+        if ( dokan_is_store_page() ) {
+            $site_title = get_bloginfo( 'name' );
             $store_user = get_userdata( get_query_var( 'author' ) );
             $store_info = dokan_get_store_info( $store_user->ID );
-            $stora_name = esc_html( $store_info['store_name'] );
-            $title = "$stora_name $sep $title";
-        }
-        else if ( $site_description && ( is_home() || is_front_page() ) ) {
-            $title = "$title $sep $site_description";
-        }
+            $store_name = esc_html( $store_info['store_name'] );
+            $title      = "$store_name $sep $site_title";
 
-        // Add a page number if necessary.
-        if ( $paged >= 2 || $page >= 2 ) {
-            $title = "$title $sep " . sprintf( __( 'Page %s', 'dokan' ), max( $paged, $page ) );
+            // Add a page number if necessary.
+            if ( $paged >= 2 || $page >= 2 ) {
+                $title = "$title $sep " . sprintf( __( 'Page %s', 'dokan' ), max( $paged, $page ) );
+            }
+
+            return $title;
         }
 
         return $title;
