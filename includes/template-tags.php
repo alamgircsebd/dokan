@@ -37,7 +37,6 @@ function dokan_content_nav( $nav_id, $query = null ) {
         $nav_class = 'site-navigation post-navigation';
     ?>
     <nav role="navigation" id="<?php echo $nav_id; ?>" class="<?php echo $nav_class; ?>">
-        <h1 class="assistive-text"><?php _e( 'Post navigation', 'dokan' ); ?></h1>
 
         <ul class="pager">
         <?php if ( is_single() ) : // navigation links for single posts  ?>
@@ -191,7 +190,7 @@ function dokan_order_listing_status_filter() {
 
     <ul class="list-inline order-statuses-filter">
         <li<?php echo $status_class == 'all' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -205,7 +204,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-completed' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -219,7 +218,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-processing' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -233,7 +232,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-on-hold' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -247,21 +246,21 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-pending' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
                         'dokan_order_filter' => 'Filter',
                     );
                 }
-                $pending_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-on-hold' ) );
+                $pending_order_url = array_merge( $date_filter, array( 'order_status' => 'wc-pending' ) );
             ?>
             <a href="<?php echo add_query_arg( $pending_order_url, $orders_url ); ?>">
                 <?php printf( __( 'Pending (%d)', 'dokan' ), $orders_counts->{'wc-pending'} ); ?></span>
             </a>
         </li>
         <li<?php echo $status_class == 'wc-canceled' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -275,7 +274,7 @@ function dokan_order_listing_status_filter() {
             </a>
         </li>
         <li<?php echo $status_class == 'wc-refunded' ? ' class="active"' : ''; ?>>
-            <?php 
+            <?php
                 if( $order_date ) {
                     $date_filter = array(
                         'order_date' => $order_date,
@@ -335,6 +334,17 @@ function dokan_get_dashboard_nav() {
             'url'   => dokan_get_navigation_url( 'settings' )
         ),
     );
+
+    $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
+    $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+
+    if( $enable_shipping == 'yes' ) {
+        $urls['shipping'] = array(
+            'title' => __( 'Shipping', 'dokan'),
+            'icon'  => '<i class="fa fa-truck"></i>',
+            'url'   => dokan_get_navigation_url( 'shipping' )
+        );
+    }
 
     return apply_filters( 'dokan_get_dashboard_nav', $urls );
 }
@@ -465,9 +475,8 @@ function dokan_seller_reg_form_fields() {
         <?php  do_action( 'dokan_seller_registration_field_after' ); ?>
 
     </div>
-    <div class="dokan-new-field-wrap" style="display: none;">
-        <?php do_action( 'dokn_aditional_relation_filed' ); ?>
-    </div>
+
+    <?php do_action( 'dokan_reg_form_field' ); ?>
 
     <p class="form-row form-group user-role">
         <label class="radio">

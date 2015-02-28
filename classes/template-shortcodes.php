@@ -13,12 +13,18 @@ class Dokan_Template_Shortcodes {
     public static $validated;
     public static $validate;
 
+    /**
+     *  Dokan template shortcodes __constract
+     *  Initial loaded when class create an instanace
+     */
     function __construct() {
 
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
-        add_action( 'template_redirect', array( $this, 'haldle_order_export' ) );
+        add_action( 'template_redirect', array( $this, 'handle_coupons' ) );
+        add_action( 'template_redirect', array( $this, 'handle_order_export' ) );
+        add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
 
         add_shortcode( 'dokan-dashboard', array( $this, 'load_template_files' ) );
         add_shortcode( 'dokan-best-selling-product', array( $this, 'best_selling_product_shortcode' ) );
@@ -52,6 +58,10 @@ class Dokan_Template_Shortcodes {
      */
     public function load_template_files() {
         global $wp;
+
+        $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
+
+        $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
         if ( ! function_exists( 'WC' ) ) {
             return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
@@ -89,6 +99,11 @@ class Dokan_Template_Shortcodes {
 
         if ( isset( $wp->query_vars['withdraw'] ) ) {
             dokan_get_template_part( 'withdraw' );
+            return;
+        }
+
+        if ( isset( $wp->query_vars['shipping'] ) && $enable_shipping == 'yes' ) {
+            dokan_get_template_part( 'shipping' );
             return;
         }
 
@@ -133,17 +148,24 @@ class Dokan_Template_Shortcodes {
             $post_content   = trim( $_POST['post_content'] );
             $post_excerpt   = trim( $_POST['post_excerpt'] );
             $price          = floatval( $_POST['price'] );
-            $product_cat    = intval( $_POST['product_cat'] );
             $featured_image = absint( $_POST['feat_image_id'] );
 
             if ( empty( $post_title ) ) {
+
                 $errors[] = __( 'Please enter product title', 'dokan' );
             }
 
-            if ( $product_cat < 0 ) {
-                $errors[] = __( 'Please select a category', 'dokan' );
+            if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
+                $product_cat    = intval( $_POST['product_cat'] );
+                if ( $product_cat < 0 ) {
+                    $errors[] = __( 'Please select a category', 'dokan' );
+                }
+            } else {
+                if( !isset( $_POST['product_cat'] ) && empty( $_POST['product_cat'] ) ) {
+                    $errors[] = __( 'Please select atleast one category', 'dokan' );
+                }    
             }
-
+            
             self::$errors = apply_filters( 'dokan_can_add_product', $errors );
 
             if ( !self::$errors ) {
@@ -166,8 +188,22 @@ class Dokan_Template_Shortcodes {
                         set_post_thumbnail( $product_id, $featured_image );
                     }
 
+                    if( isset( $_POST['product_tag'] ) && !empty( $_POST['product_tag'] ) ) {                
+                        $tags_ids = array_map( 'intval', (array)$_POST['product_tag'] );
+                        wp_set_object_terms( $product_id, $tags_ids, 'product_tag' );
+                    } 
+
                     /** set product category * */
-                    wp_set_object_terms( $product_id, (int) $_POST['product_cat'], 'product_cat' );
+                    if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
+                        wp_set_object_terms( $product_id, (int) $_POST['product_cat'], 'product_cat' );
+                    } else {
+                        if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {                
+                            $cat_ids = array_map( 'intval', (array)$_POST['product_cat'] );
+                            wp_set_object_terms( $product_id, $cat_ids, 'product_cat' );
+                        } 
+                    }
+
+                    /** Set Product type by default simple */
                     wp_set_object_terms( $product_id, 'simple', 'product_type' );
 
                     update_post_meta( $product_id, '_regular_price', $price );
@@ -177,7 +213,9 @@ class Dokan_Template_Shortcodes {
 
                     do_action( 'dokan_new_product_added', $product_id, $post_data );
 
-                    Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                    if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
+                        Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                    }
 
                     wp_redirect( dokan_edit_product_url( $product_id ) );
                     exit;
@@ -208,10 +246,29 @@ class Dokan_Template_Shortcodes {
 
             wp_update_post( $product_info );
 
+            /** Set Product tags */
+            if( isset( $_POST['product_tag'] ) ) { 
+                $tags_ids = array_map( 'intval', (array)$_POST['product_tag'] );
+            } else {
+                $tags_ids = array();
+            } 
+            wp_set_object_terms( $post_id, $tags_ids, 'product_tag' ); 
+
+
             /** set product category * */
-            wp_set_object_terms( $post_id, (int) $_POST['product_cat'], 'product_cat' );
+            
+            if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
+                wp_set_object_terms( $post_id, (int) $_POST['product_cat'], 'product_cat' );
+            } else {
+                if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {                
+                    $cat_ids = array_map( 'intval', (array)$_POST['product_cat'] );
+                    wp_set_object_terms( $post_id, $cat_ids, 'product_cat' );
+                } 
+            }
+
             wp_set_object_terms( $post_id, 'simple', 'product_type' );
 
+            /**  Process all variation products meta */
             dokan_process_product_meta( $post_id );
 
             /** set images **/
@@ -223,6 +280,24 @@ class Dokan_Template_Shortcodes {
             $edit_url = dokan_edit_product_url( $post_id );
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
             exit;
+        }
+
+       
+    }
+
+    /**
+     * Handle the coupons submission
+     * 
+     * @return void 
+     */
+    function handle_coupons() {
+
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
         }
 
         // Coupon functionality
@@ -243,11 +318,20 @@ class Dokan_Template_Shortcodes {
      * @return void
      */
     function handle_delete_product() {
+        
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
         dokan_delete_product_handler();
     }
 
     /**
-     * [handle_withdraws description]
+     * Handle Withdraw form submission
      *
      * @return void
      */
@@ -266,9 +350,10 @@ class Dokan_Template_Shortcodes {
     /**
      * Export user orders to CSV format
      *
+     * @since 1.4
      * @return void
      */
-    function haldle_order_export() {
+    function handle_order_export() {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -416,6 +501,109 @@ class Dokan_Template_Shortcodes {
                 echo "\r\n";
             }
             exit();
+        }
+    }
+
+    /**
+     *  Handle Shipping post submit
+     *
+     *  @since  2.0
+     *  @return void
+     */
+    function handle_shipping() {
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+        
+
+        if( isset( $_POST['dokan_update_shipping_options'] ) && wp_verify_nonce( $_POST['dokan_shipping_form_field_nonce'], 'dokan_shipping_form_field' ) ) {
+            
+            $user_id = get_current_user_id();   
+            $s_rates = array();
+            $rates = array();
+            
+            if( isset( $_POST['dps_enable_shipping'] ) ) {
+                update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );
+            }
+
+            if( isset( $_POST['dokan_shipping_type'] ) ) {
+                update_user_meta( $user_id, '_dokan_shipping_type', $_POST['dokan_shipping_type'] );
+            }
+
+            if( isset( $_POST['dps_shipping_type_price'] ) ) {
+                update_user_meta( $user_id, '_dps_shipping_type_price', $_POST['dps_shipping_type_price'] );
+            }
+
+            if( isset( $_POST['dps_additional_product'] ) ) {
+                update_user_meta( $user_id, '_dps_additional_product', $_POST['dps_additional_product'] );
+            }
+
+            if( isset( $_POST['dps_additional_qty'] ) ) {
+                update_user_meta( $user_id, '_dps_additional_qty', $_POST['dps_additional_qty'] );
+            }
+
+            if( isset( $_POST['dps_pt'] ) ) {
+                update_user_meta( $user_id, '_dps_pt', $_POST['dps_pt'] );
+            }
+
+            if( isset( $_POST['dps_ship_policy'] ) ) {
+                update_user_meta( $user_id, '_dps_ship_policy', $_POST['dps_ship_policy'] );
+            }
+
+            if( isset( $_POST['dps_refund_policy'] ) ) {
+                update_user_meta( $user_id, '_dps_refund_policy', $_POST['dps_refund_policy'] );
+            }
+
+            if( isset( $_POST['dps_form_location'] ) ) {
+                update_user_meta( $user_id, '_dps_form_location', $_POST['dps_form_location'] );
+            }
+
+            if ( isset( $_POST['dps_country_to'] ) ) {
+                
+                foreach ($_POST['dps_country_to'] as $key => $value) {
+                    $country = $value;
+                    $c_price = floatval( $_POST['dps_country_to_price'][$key] );
+
+                    if( !$c_price && empty( $c_price ) ) {
+                        $c_price = 0;
+                    }
+
+                    if ( !empty( $value ) ) {
+                        $rates[$country] = $c_price;
+                    }
+                }
+            }
+
+            update_user_meta( $user_id, '_dps_country_rates', $rates );
+
+            if ( isset( $_POST['dps_state_to'] ) ) {                
+                foreach ( $_POST['dps_state_to'] as $country_code => $states ) {
+                    
+                    foreach ( $states as $key_val => $name ) {
+                        $country_c = $country_code;
+                        $state_code = $name;
+                        $s_price = floatval( $_POST['dps_state_to_price'][$country_c][$key_val] );
+
+                        if( !$s_price || empty( $s_price ) ) {
+                            $s_price = 0;
+                        }
+
+                        if ( !empty( $name ) ) {
+                            $s_rates[$country_c][$state_code] = $s_price;
+                        }    
+                    }
+                }
+            }
+
+            update_user_meta( $user_id, '_dps_state_rates', $s_rates );
+
+            $shipping_url = dokan_get_navigation_url( 'shipping' );
+            wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
+            exit;
         }
     }
 

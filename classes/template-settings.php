@@ -2,10 +2,8 @@
 /**
  * Dokan settings Class
  *
- * @ weDves
+ * @author weDves
  */
-
-
 class Dokan_Template_Settings {
 
     public static function init() {
@@ -18,6 +16,11 @@ class Dokan_Template_Settings {
         return $instance;
     }
 
+    /**
+     * Save settings via ajax
+     *
+     * @return void
+     */
     function ajax_settings() {
 
         if ( !wp_verify_nonce( $_POST['_wpnonce'], 'dokan_settings_nonce' ) ) {
@@ -38,7 +41,11 @@ class Dokan_Template_Settings {
         wp_send_json_success( __( 'Your information has been saved successfully', 'dokan' ) );
     }
 
-
+    /**
+     * Validate settings submission
+     *
+     * @return void
+     */
     function validate() {
 
         if ( !isset( $_POST['dokan_update_profile'] ) ) {
@@ -79,24 +86,29 @@ class Dokan_Template_Settings {
 
     }
 
+    /**
+     * Save store settings
+     *
+     * @return void
+     */
     function insert_settings_info() {
-
-
         $social = $_POST['settings']['social'];
 
         $dokan_settings = array(
             'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
             'social'       => array(
-                'fb'           => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
-                'gplus'        => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
-                'twitter'      => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
-                'linkedin'     => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
-                'youtube'      => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
+                'fb'        => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
+                'gplus'     => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
+                'twitter'   => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
+                'linkedin'  => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
+                'youtube'   => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
+                'flickr'    => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
+                'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
             ),
             'payment'      => array(),
             'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
             'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
-            'address'      => stip_tags( $_POST['setting_address'] ),
+            'address'      => strip_tags( $_POST['setting_address'] ),
             'location'     => sanitize_text_field( $_POST['location'] ),
             'find_address' => sanitize_text_field( $_POST['find_address'] ),
             'banner'       => absint( $_POST['dokan_banner'] ),
@@ -137,6 +149,13 @@ class Dokan_Template_Settings {
         }
     }
 
+    /**
+     * Show the settings form
+     *
+     * @param  string
+     *
+     * @return void
+     */
     function setting_field( $validate = '' ) {
         global $current_user;
 
@@ -160,6 +179,8 @@ class Dokan_Template_Settings {
         $gplus          = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
         $linkedin       = isset( $profile_info['social']['linkedin'] ) ? esc_url( $profile_info['social']['linkedin'] ) : '';
         $youtube        = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
+        $flickr         = isset( $profile_info['social']['flickr'] ) ? esc_url( $profile_info['social']['flickr'] ) : '';
+        $instagram      = isset( $profile_info['social']['instagram'] ) ? esc_url( $profile_info['social']['instagram'] ) : '';
 
         // bank
         $phone          = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
@@ -208,7 +229,7 @@ class Dokan_Template_Settings {
                     <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
                         <i class="fa fa-cloud-upload"></i>
 
-                        <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info"><?php _e( 'Upload banner', 'dokan' ); ?></a>
+                        <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
                         <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixel. )', 'dokan' ); ?></p>
                     </div>
                 </div> <!-- .dokan-banner -->
@@ -265,6 +286,17 @@ class Dokan_Template_Settings {
                             <span class="dokan-input-group-addon"><i class="fa fa-youtube"></i></span>
                             <input id="settings[social][youtube]" value="<?php echo $youtube; ?>" name="settings[social][youtube]" class="dokan-form-control" placeholder="http://" type="text">
                         </div>
+
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-instagram"></i></span>
+                            <input id="settings[social][instagram]" value="<?php echo $instagram; ?>" name="settings[social][instagram]" class="dokan-form-control" placeholder="http://" type="text">
+                        </div>
+
+                        <div class="dokan-input-group dokan-form-group">
+                            <span class="dokan-input-group-addon"><i class="fa fa-flickr"></i></span>
+                            <input id="settings[social][flickr]" value="<?php echo $flickr; ?>" name="settings[social][flickr]" class="dokan-form-control" placeholder="http://" type="text">
+                        </div>
+
                     </div>
                 </div>
 
@@ -356,7 +388,7 @@ class Dokan_Template_Settings {
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
-                        <input type="submit" name="dokan_update_profile" class="btn btn-primary" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
+                        <input type="submit" name="dokan_update_profile" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 

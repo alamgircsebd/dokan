@@ -451,6 +451,7 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
             ?>
 
             <label class="<?php echo $class; ?>" for="<?php echo $name; ?>">
+                <input type="hidden" name="<?php echo $name; ?>" value="no">
                 <input name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="yes" type="checkbox"<?php checked( $value, 'yes' ); ?>>
                 <?php echo $label; ?>
             </label>
@@ -830,7 +831,7 @@ function dokan_get_store_url( $user_id ) {
 function dokan_get_review_url( $user_id ) {
     $userstore = dokan_get_store_url( $user_id );
 
-    return $userstore ."reviews";
+    return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
 }
 
 
@@ -1286,3 +1287,166 @@ function dokan_get_navigation_url( $name = '' ) {
 
     return apply_filters( 'dokan_get_navigation_url', $url );
 }
+
+
+/**
+ * Generate country dropdwon
+ *
+ * @param array $options
+ * @param string $selected
+ * @param bool $everywhere
+ */
+function country_dropdown( $options, $selected = '', $everywhere = false ) {
+    printf( '<option value="">%s</option>', __( '- Select a location -', 'dokan-shipping' ) );
+
+    if ( $everywhere ) {
+        echo '<optgroup label="--------------------------">';
+        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        echo '</optgroup>';
+    }
+
+    echo '<optgroup label="------------------------------">';
+    foreach ($options as $key => $value) {
+        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+    }
+    echo '</optgroup>';
+}
+
+/**
+ * Generate country dropdwon
+ *
+ * @param array $options
+ * @param string $selected
+ * @param bool $everywhere
+ */
+function state_dropdown( $options, $selected = '', $everywhere = false ) {
+    printf( '<option value="">%s</option>', __( '- Select a State -', 'dokan-shipping' ) );
+
+    if ( $everywhere ) {
+        echo '<optgroup label="--------------------------">';
+        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        echo '</optgroup>';
+    }
+
+    echo '<optgroup label="------------------------------">';
+    foreach ($options as $key => $value) {
+        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+    }
+    echo '</optgroup>';
+}
+
+/**
+ * Shupping Processing time dropdown options
+ *
+ * @return array
+ */
+function dokan_get_shipping_processing_times() {
+    $times = array(
+        '' => __( 'Ready to ship in...', 'dokan' ),
+        '1' => __( '1 business day', 'dokan' ),
+        '2' => __( '1-2 business day', 'dokan' ),
+        '3' => __( '1-3 business day', 'dokan' ),
+        '4' => __( '3-5 business day', 'dokan' ),
+        '5' => __( '1-2 weeks', 'dokan' ),
+        '6' => __( '2-3 weeks', 'dokan' ),
+        '7' => __( '3-4 weeks', 'dokan' ),
+        '8' => __( '4-6 weeks', 'dokan' ),
+        '9' => __( '6-8 weeks', 'dokan' ),
+    );
+
+    return apply_filters( 'dokan_shipping_processing_times', $times );
+}
+
+/**
+ * Get a single processing time string
+ *
+ * @param string $index
+ * @return string
+ */
+function dokan_get_processing_time_value( $index ) {
+    $times = dokan_get_shipping_processing_times();
+
+    if ( isset( $times[$index] ) ) {
+        return $times[$index];
+    }
+}
+
+/**
+ * Adds seller email to the new order notification email
+ *
+ * @param string  $admin_email
+ * @param WC_Order $order
+ * @return array
+ */
+function dokan_wc_email_recipient_add_seller( $admin_email, $order ) {
+    $emails = array( $admin_email );
+
+    $seller_id = dokan_get_seller_id_by_order( $order->id );
+
+    if ( $seller_id ) {
+        $seller_email = get_user_by( 'id', $seller_id )->user_email;
+
+        if ( $admin_email != $seller_email ) {
+            array_push( $emails, $seller_email );
+        }
+    }
+
+    return $emails;
+}
+
+add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
+
+// Add Toolbar Menus
+function dokan_admin_toolbar() {
+    global $wp_admin_bar;
+
+    if ( ! current_user_can( 'manage_options' ) ) {
+        return;
+    }
+
+    $args = array(
+        'id'     => 'dokan',
+        'title'  => __( 'Dokan', 'admin' ),
+        'href'   => admin_url( 'admin.php?page=dokan' )
+    );
+
+    $wp_admin_bar->add_menu( $args );
+
+    $wp_admin_bar->add_menu( array(
+        'id'     => 'dokan-dashboard',
+        'parent' => 'dokan',
+        'title'  => __( 'Dokan Dashboard', 'dokan' ),
+        'href'   => admin_url( 'admin.php?page=dokan' )
+    ) );
+
+    $wp_admin_bar->add_menu( array(
+        'id'     => 'dokan-withdraw',
+        'parent' => 'dokan',
+        'title'  => __( 'Withdraw', 'dokan' ),
+        'href'   => admin_url( 'admin.php?page=dokan-withdraw' )
+    ) );
+
+    $wp_admin_bar->add_menu( array(
+        'id'     => 'dokan-sellers',
+        'parent' => 'dokan',
+        'title'  => __( 'All Sellers', 'dokan' ),
+        'href'   => admin_url( 'admin.php?page=dokan-sellers' )
+    ) );
+
+    $wp_admin_bar->add_menu( array(
+        'id'     => 'dokan-reports',
+        'parent' => 'dokan',
+        'title'  => __( 'Earning Reports', 'dokan' ),
+        'href'   => admin_url( 'admin.php?page=dokan-reports' )
+    ) );
+
+    $wp_admin_bar->add_menu( array(
+        'id'     => 'dokan-settings',
+        'parent' => 'dokan',
+        'title'  => __( 'Settings', 'dokan' ),
+        'href'   => admin_url( 'admin.php?page=dokan-settings' )
+    ) );
+}
+
+// Hook into the 'wp_before_admin_bar_render' action
+add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );

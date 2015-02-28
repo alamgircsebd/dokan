@@ -9,7 +9,7 @@ class Dokan_Pageviews {
 
     public function __construct() {
         /* Registers the entry views extension scripts if we're on the correct page. */
-        add_action( 'template_redirect', array($this, 'load_views') );
+        add_action( 'template_redirect', array($this, 'load_views'), 25 );
 
         /* Add the entry views AJAX actions to the appropriate hooks. */
         add_action( 'wp_ajax_dokan_pageview', array($this, 'update_ajax') );
@@ -26,10 +26,25 @@ class Dokan_Pageviews {
     function load_views() {
 
         if ( is_singular( 'product' ) ) {
+            global $post;
 
-            wp_enqueue_script( 'jquery' );
+            if ( empty( $_COOKIE['dokan_product_viewed'] ) ) {
+                $dokan_viewed_products = array();
+            }
+            else {
+                $dokan_viewed_products = (array) explode( ',', $_COOKIE['dokan_product_viewed'] );
+            }
 
-            add_action( 'wp_footer', array($this, 'load_scripts') );
+            if ( ! in_array( $post->ID, $dokan_viewed_products ) ) {
+                $dokan_viewed_products[] = $post->ID;
+
+                wp_enqueue_script( 'jquery' );
+
+                add_action( 'wp_footer', array($this, 'load_scripts') );
+            }
+
+            // Store for single product view
+            setcookie( 'dokan_product_viewed', implode( ',', $dokan_viewed_products ) );
         }
     }
 

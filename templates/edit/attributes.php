@@ -45,7 +45,7 @@
 
                     <?php } else { ?>
 
-                        <input type="text" class="category-name" placeholder="Category name" name="attribute_names[<?php echo $i; ?>]" value="<?php echo esc_attr( $attribute_name ); ?>">
+                        <input type="text" class="category-name" placeholder="<?php esc_attr_e( 'Category name', 'dokan' ); ?>" name="attribute_names[<?php echo $i; ?>]" value="<?php echo esc_attr( $attribute_name ); ?>">
                         <input type="hidden" name="attribute_is_taxonomy[<?php echo $i; ?>]" value="0">
 
                     <?php } ?>
@@ -137,12 +137,12 @@
 <p class="toolbar pull-right">
 
     <select class="select-attribute form-control" name="category_names" >
-        <option value="">Custom Attribute</option>
+        <option value=""><?php _e( 'Custom Attribute', 'dokan' ); ?></option>
         <?php
         if ( !empty( $attribute_taxonomies ) ) { ?>
             <?php foreach ( $attribute_taxonomies as $key => $value ) { ?>
                 <option value="<?php echo $value->attribute_name; ?>"><?php echo $value->attribute_label; ?></option>
-            <?php } 
+            <?php }
         }?>
     </select>
     <button class="btn btn-success add-variant-category"><?php _e( '+ Add a category', 'dokan' ); ?></button>

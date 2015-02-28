@@ -254,6 +254,9 @@ jQuery(function($) {
             $('.dokan-toggle-sidebar').on('click', 'a.dokan-toggle-save', this.sidebarToggle.saveStatus);
             $('.dokan-toggle-sidebar').on('click', 'a.dokan-toggle-cacnel', this.sidebarToggle.cancel);
 
+            // shipping
+            $('#product-shipping').on('click', '#_overwrite_shipping', this.shipping.showHideOverride);
+
             // File inputs
             $('.product-edit-container').on('click', 'a.insert-file-row', function(){
                 $(this).closest('table').find('tbody').append( $(this).data( 'row' ) );
@@ -264,6 +267,13 @@ jQuery(function($) {
                 $(this).closest('tr').remove();
                 return false;
             });
+
+            this.loadCategoryChosen();
+            this.shipping.showHideOverride();
+        },
+
+        loadCategoryChosen: function() {
+            $('select.product_tags').chosen();
         },
 
         /**
@@ -419,7 +429,7 @@ jQuery(function($) {
                     } );
 
                     // fire change events for varaiations
-                    $('input.variable_is_downloadable, input.variable_is_virtual').trigger('change');
+                    $('input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock').trigger('change');
 
                     $('#variants-holder').unblock();
                 });
@@ -726,6 +736,16 @@ jQuery(function($) {
                 container.siblings('a.dokan-toggle-edit').show();
 
                 return false;
+            }
+        },
+
+        shipping: {
+            showHideOverride: function() {
+                if ( $('#_overwrite_shipping').is(':checked') ) {
+                    $('.show_if_override').show();
+                } else {
+                    $('.show_if_override').hide();
+                }
             }
         }
     };
@@ -1091,9 +1111,9 @@ jQuery(function($) {
                 var wrap = self.closest('.dokan-banner');
                 wrap.find('input.dokan-file-field').val(attachment.id);
                 wrap.find('img.dokan-banner-img').attr('src', attachment.url);
-                $('.image-wrap', wrap).removeClass('dokan-hide');
+                self.parent().siblings('.image-wrap', wrap).removeClass('dokan-hide');
 
-                $('.button-area').addClass('dokan-hide');
+                self.parent('.button-area').addClass('dokan-hide');
             });
 
             // Finally, open the modal
@@ -1125,9 +1145,10 @@ jQuery(function($) {
 
                 var wrap = self.closest('.dokan-gravatar');
                 wrap.find('input.dokan-file-field').val(attachment.id);
-                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);
-                $('.gravatar-wrap', wrap).removeClass('dokan-hide');
-                $('.gravatar-button-area').addClass('dokan-hide');
+                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);                
+                self.parent().siblings('.gravatar-wrap', wrap).removeClass('dokan-hide');
+                self.parent('.gravatar-button-area').addClass('dokan-hide');
+
             });
 
             // Finally, open the modal
@@ -1296,3 +1317,114 @@ jQuery(function($) {
     });
 
 })(jQuery);
+
+// Shipping tab js
+(function($){
+    $(document).ready(function(){
+
+        $('.dokan-shipping-location-wrapper').on('change', '.dps_country_selection', function() {
+            var self = $(this),
+                data = {
+                    country_id : self.find(':selected').val(),
+                    action  : 'dps_select_state_by_country'
+                };
+                // console.log(data);
+                $.post( dokan.ajaxurl, data, function(response) {
+                    if( response.success ) {
+                        self.closest('.dps-shipping-location-content').find('table.dps-shipping-states tbody').html(response.data);
+                    }
+                });
+
+        });
+
+    });
+})(jQuery);
+
+
+(function($){
+    
+    $(document).ready(function(){
+       
+        $('.dps-main-wrapper').on('click', 'a.dps-shipping-add', function(e) {
+            e.preventDefault();
+
+            html = $('#dps-shipping-hidden-lcoation-content');
+            var row = $(html).first().clone().appendTo($('.dokan-shipping-location-wrapper')).show();
+            $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content').first().find('a.dps-shipping-remove').show();
+            
+            $('.tips').tooltip();
+            
+            row.removeAttr('id');
+            row.find('input,select').val('');
+            row.find('a.dps-shipping-remove').show();
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-shipping-remove', function(e) {
+            e.preventDefault();
+            $(this).closest('.dps-shipping-location-content').remove();
+            $dpsElm = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
+
+            if( $dpsElm.length == 1) {
+                $dpsElm.first().find('a.dps-shipping-remove').hide();
+            }
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-add', function(e) {
+            e.preventDefault();
+
+            var row = $(this).closest('tr').first().clone().appendTo($(this).closest('table.dps-shipping-states'));
+            row.find('input,select').val('');
+            row.find('a.dps-remove').show();
+            $('.tips').tooltip();
+        });
+
+        $('.dokan-shipping-location-wrapper').on('click', 'a.dps-remove', function(e) {
+            e.preventDefault();
+            
+            if( $(this).closest('table.dps-shipping-states').find( 'tr' ).length == 1 ){
+                console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
+                $(this).closest('.dps-shipping-location-content').find('input,select').val('');
+            }
+
+            $(this).closest('tr').remove();
+
+
+        });
+
+        $('.dokan-shipping-location-wrapper').on('change keyup', '.dps_state_selection', function() {
+            var self = $(this);
+
+            if( self.val() == '' || self.val() == '-1' ) {
+                self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
+            } else {
+                self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').hide();    
+            }
+        });
+
+        $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('change');
+        $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('keyup');
+
+        $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
+        
+        if( $wrap.length == 1) {
+            $wrap.first().find('a.dps-shipping-remove').hide();
+        }
+
+    });
+
+})(jQuery);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

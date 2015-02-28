@@ -54,6 +54,9 @@
             $('.dokan-toggle-sidebar').on('click', 'a.dokan-toggle-save', this.sidebarToggle.saveStatus);
             $('.dokan-toggle-sidebar').on('click', 'a.dokan-toggle-cacnel', this.sidebarToggle.cancel);
 
+            // shipping
+            $('#product-shipping').on('click', '#_overwrite_shipping', this.shipping.showHideOverride);
+
             // File inputs
             $('.product-edit-container').on('click', 'a.insert-file-row', function(){
                 $(this).closest('table').find('tbody').append( $(this).data( 'row' ) );
@@ -64,6 +67,13 @@
                 $(this).closest('tr').remove();
                 return false;
             });
+
+            this.loadCategoryChosen();
+            this.shipping.showHideOverride();
+        },
+
+        loadCategoryChosen: function() {
+            $('select.product_tags').chosen();
         },
 
         /**
@@ -219,7 +229,7 @@
                     } );
 
                     // fire change events for varaiations
-                    $('input.variable_is_downloadable, input.variable_is_virtual').trigger('change');
+                    $('input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock').trigger('change');
 
                     $('#variants-holder').unblock();
                 });
@@ -526,6 +536,16 @@
                 container.siblings('a.dokan-toggle-edit').show();
 
                 return false;
+            }
+        },
+
+        shipping: {
+            showHideOverride: function() {
+                if ( $('#_overwrite_shipping').is(':checked') ) {
+                    $('.show_if_override').show();
+                } else {
+                    $('.show_if_override').hide();
+                }
             }
         }
     };

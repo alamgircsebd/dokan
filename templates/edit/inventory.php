@@ -1,5 +1,17 @@
 <?php 
 global $post;
+
+$tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
+$classes_options = array();
+$classes_options[''] = __( 'Standard', 'dokan' );
+
+if ( $tax_classes ) {
+
+    foreach ( $tax_classes as $class ) {
+        $classes_options[ sanitize_title( $class ) ] = esc_html( $class );
+    }
+}
+
 ?>
 <div class="dokan-form-horizontal">
     <div class="dokan-form-group">
@@ -16,7 +28,7 @@ global $post;
         </div>
     </div>
 
-    <div class="dokan-form-group show_if_simple">
+    <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_stock_qty"><?php _e( 'Stock Qty', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_stock', array( 'placeholder' => '10' ) ); ?>
@@ -45,4 +57,27 @@ global $post;
             ); ?>
         </div>
     </div>
+
+    <?php if ( 'yes' == get_option( 'woocommerce_calc_taxes' ) ) { ?>
+        
+        <div class="dokan-form-group">
+            <label class="dokan-w4 dokan-control-label" for="_tax_status"><?php _e( 'Tax Status', 'dokan' ); ?></label>
+            <div class="dokan-w4 dokan-text-left">
+                <?php dokan_post_input_box( $post->ID, '_tax_status', array( 'options' => array(
+                    'taxable'   => __( 'Taxable', 'dokan' ),
+                    'shipping'  => __( 'Shipping only', 'dokan' ),
+                    'none'      => _x( 'None', 'Tax status', 'dokan' )
+                    ) ), 'select'
+                ); ?>
+            </div>
+        </div>
+        
+        <div class="dokan-form-group">
+            <label class="dokan-w4 dokan-control-label" for="_tax_class"><?php _e( 'Tax Class', 'dokan' ); ?></label>
+            <div class="dokan-w4 dokan-text-left">
+                <?php dokan_post_input_box( $post->ID, '_tax_class', array( 'options' => $classes_options ), 'select' ); ?>
+            </div>
+        </div>
+
+    <?php } ?>
 </div> <!-- .form-horizontal -->

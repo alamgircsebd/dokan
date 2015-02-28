@@ -406,6 +406,21 @@
 .product-edit-container .dokan-feat-image-upload .image-wrap:hover a.close {
   display: block;
 }
+.product-edit-container .dokan-list-category-box {
+  border: 1px solid #ccc;
+  background: #fff;
+  padding: 0px 15px 15px;
+  max-height: 200px;
+  min-height: 45px;
+  overflow: scroll;
+}
+.product-edit-container .dokan-list-category-box ul.dokan-checkbox-cat {
+  padding: 0;
+  margin: 0;
+}
+.product-edit-container .dokan-list-category-box ul.dokan-checkbox-cat li {
+  line-height: 20px;
+}
 .product-edit-container .instruction-inside {
   text-align: center;
   padding-top: 40px;
@@ -680,6 +695,9 @@
 .dokan-product-edit-area .discount-price label {
   font-weight: normal;
   cursor: pointer;
+}
+.dokan-orders-content .dokan-orders-area .dokan-order-filter-serach {
+  padding: 10px 7px;
 }
 .dokan-orders-content .dokan-orders-area td.thumb img {
   padding: 2px;
@@ -1261,6 +1279,23 @@
 .dokan-single-store .store-review-wrap h2.headline {
   font-size: 17px;
   margin-bottom: 15px;
+}
+.dokan-store-sidebar input[type=text],
+.dokan-store-sidebar input[type=email],
+.dokan-store-sidebar textarea {
+  width: 100%;
+}
+.dokan-store-sidebar form.seller-form ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dokan-store-sidebar form.seller-form ul li {
+  margin-bottom: 8px;
+}
+.dokan-store-sidebar #dokan-store-location {
+  width: 100%;
+  height: 200px;
 }
 ul.dokan-seller-wrap {
   list-style: none;
@@ -1953,9 +1988,20 @@ a.dokan-btn-sm,
   font-size: 11px;
   border-radius: 3px;
 }
-.dokan-widget-area {
-  width: 0px;
-  margin-left: 0px;
+.dokan-tooltips-help {
+  margin-left: 7px;
+}
+.tooltip-inner {
+  font-size: 12px;
+}
+/**
+ * Media Popup style 
+ */
+.media-modal .screen-reader-text {
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 .dokan-close {
   float: right;
@@ -2651,5 +2697,54 @@ textarea.dokan-form-control {
   .dokan-single-store .profile-frame .profile-info-box {
     width: 100%;
   }
+}
+table.dps-shipping-table {
+  padding: 10px;
+  width: 100%;
+}
+table.dps-shipping-table tr {
+  padding: 10px;
+}
+table.dps-shipping-table tr td {
+  padding: 10px;
+}
+table.dps-shipping-states {
+  padding: 10px;
+  width: 100%;
+}
+table.dps-shipping-states tr {
+  padding: 10px;
+}
+table.dps-shipping-states tr td {
+  padding: 10px;
+  width: 30%;
+}
+#dps-shipping-hidden-lcoation-content {
+  display: none;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content {
+  border: 2px solid #eee;
+  padding: 10px;
+  margin-bottom: 15px;
+  position: relative;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table {
+  background: #eee;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table tr td {
+  width: 50%;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content .dps-shipping-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states {
+  text-align: center;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-add,
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-remove {
+  color: #000;
+  font-size: 11px;
 }
 /*# sourceMappingURL=style.css.map */
