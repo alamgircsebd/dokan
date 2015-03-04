@@ -698,11 +698,7 @@ function dokan_process_product_meta( $post_id ) {
     }
 
     // Sold Individuall
-    if ( isset( $_POST['_sold_individually'] ) ) {
-        update_post_meta( $post_id, '_sold_individually', 'yes' );
-    } else {
-        update_post_meta( $post_id, '_sold_individually', '' );
-    }
+    update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
 
     
     // Stock Data
