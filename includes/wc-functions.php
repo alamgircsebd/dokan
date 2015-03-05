@@ -697,6 +697,18 @@ function dokan_process_product_meta( $post_id ) {
         }
     }
 
+    //enable reviews
+    if ( $_POST['_enable_reviews'] == 'yes' ) {
+        $comment_status = 'open';
+    } else {
+        $comment_status = 'closed';
+    }
+    // Update the post into the database
+    wp_update_post( array(
+        'ID'           => $post_id,
+        'comment_status' => $comment_status,
+    ) );
+
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
 
@@ -724,7 +736,7 @@ function dokan_process_product_meta( $post_id ) {
             }
 
         } elseif ( 'grouped' !== $product_type && ! empty( $_POST['_manage_stock'] ) ) {
-            $manage_stock = 'yes';
+            $manage_stock = $_POST['_manage_stock'];
             $backorders   = wc_clean( $_POST['_backorders'] );
         }
 
