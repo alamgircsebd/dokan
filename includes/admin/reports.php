@@ -42,7 +42,7 @@
 		$start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
 		$end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 		$current_year = $selected_year = date( 'Y' );
-		$chosen_store_name='';
+		$chosen_seller_id='';
 
 		if ( isset( $_POST['dokan_report_filter_date'] ) ) {
 			$start_date = $_POST['start_date'];
@@ -53,7 +53,7 @@
 			$selected_year = $_POST['report_year'];
 		}
 		if ( isset( $_POST['chosen_store_name'] ) ) {
-			$chosen_store_name = $_POST['chosen_store_name'];
+			$chosen_seller_id = $_POST['chosen_store_name'];
 		}
 
 
@@ -79,7 +79,8 @@
 			$user_search = new WP_User_Query( array( 'role' => 'seller' ) );
 			$sellers = (array) $user_search->get_results();
 
-			$chosen_placeholder = __( 'Select a Store...', 'dokan' );
+			$chosen_placeholder = __( 'Select a Store...', 'dokan' );	
+			//echo $chosen_seller_id;
 			?>
 			<form method="post" class="form-inline report-filter" action="" >
 
@@ -94,7 +95,7 @@
 
 							if ( isset( $info['store_name'] ) ) {
 								?>
-								<option><?php echo $info['store_name'] ?>  </option>
+								<option value='<?php echo $user->ID  ?>'><?php echo $info['store_name'] ?>  </option>
 
 							<?php } ?>
 						<?php } ?>
