@@ -80,22 +80,39 @@
 			$sellers = (array) $user_search->get_results();
 
 			$chosen_placeholder = __( 'Select a Store...', 'dokan' );	
-			//echo $chosen_seller_id;
+			
 			?>
 			<form method="post" class="form-inline report-filter" action="" >
 
 				<span class="form-group">
-					<select id='chosen_store_name' name='chosen_store_name' data-placeholder= '<?php echo $chosen_placeholder; ?>' style="width:350px;"  class="chosen-select">
+					<label for="chosen_store_name"><b><?php _e( 'Store Name : ', 'dokan' ); ?></b></label>
+					<select id='chosen_store_name' name='chosen_store_name' data-placeholder= '<?php echo __( 'Select a Store...', 'dokan' ); ?>' style="width:350px;"  class="chosen-select">
 						<?php
 						?>
 						<option></option>
 						<?php
+						$seller_count_flag = 1;
+						if(!isset($_POST['chosen_store_name'])){
+						$seller_count_flag = 0;						
+						}
 						foreach ( $sellers as $user ) {
 							$info = dokan_get_store_info( $user->ID );
-
+							
+							//if no seller id is posted, first seller selected by default
+							if($seller_count_flag===0){
+								$chosen_seller_id = $user->ID;
+								$seller_count_flag = 1;
+							}
+							// set seller as selected if came from post value
+							if($chosen_seller_id==$user->ID){
+								$selected = 'selected';
+							}else{
+								$selected ='';
+							}
+							//generate option element
 							if ( isset( $info['store_name'] ) ) {
 								?>
-								<option value='<?php echo $user->ID  ?>'><?php echo $info['store_name'] ?>  </option>
+								<option <?php echo $selected ?> value='<?php echo $user->ID  ?>'><?php echo $info['store_name'] ?>  </option>
 
 							<?php } ?>
 						<?php } ?>
@@ -141,10 +158,7 @@
 			if ( $type == 'month' ) {
 				$report_data = dokan_admin_report( 'month', $selected_year );
 			} elseif ( $type == 'seller' ) {
-				//$report_data = dokan_admin_report_by_seller();
-				//Temporary Disabled...........................
-				$report_data = 0;
-				
+				$report_data = dokan_admin_report_by_seller($chosen_seller_id);						
 			} else {
 				$report_data = dokan_admin_report();
 			}
