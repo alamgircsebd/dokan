@@ -34,10 +34,13 @@ class Dokan_Admin_Settings {
 
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
+        wp_enqueue_style( 'dokan-chosen-style' );
 
         wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'jquery-flot' );
         wp_enqueue_script( 'jquery-chart' );
+        wp_enqueue_script( 'chosen' );
+     
     }
 
     function admin_init() {
