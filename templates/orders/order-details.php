@@ -105,6 +105,8 @@ $order    = new WC_Order( $order_id );
                 </div>
             </div>
 
+            <?php do_action( 'dokan_order_detail_after_order_items', $order ); ?>
+
             <div class="dokan-left" style="width:49%; margin-right:2%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'Billing Address', 'dokan' ); ?></strong></div>

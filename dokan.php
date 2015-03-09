@@ -3,14 +3,14 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: http://wedevs.com/theme/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.0
+Version: 2.0.1
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
 */
 
 /**
- * Copyright (c) 2014 weDevs (email: info@wedevs.com). All rights reserved.
+ * Copyright (c) 2015 weDevs (email: info@wedevs.com). All rights reserved.
  *
  * Released under the GPL license
  * http://www.opensource.org/licenses/gpl-license.php
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '1.0' );
+define( 'DOKAN_PLUGIN_VERSION', '2.0.1' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -214,6 +214,7 @@ class WeDevs_Dokan {
         wp_register_style( 'fontawesome', plugins_url( 'assets/css/font-awesome.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-extra', plugins_url( 'assets/css/dokan-extra.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
+        wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );

@@ -1,5 +1,12 @@
 ==================== Plugin Version ====================
 
+v2.0.1 -> March 9, 2015
+---------------------
+- [fix] Minor bug in shipping gateway
+- [fix] Manage stock and product review status wasn't updating
+- [fix] Sell individually checkbox wasn't updating
+- [new] Earning by seller report in Dokan admin earning reports page
+
 v2.0 -> March 1, 2015
 ---------------------
 - [new] Add Custom Store wide and Per-Product Shipping option for individual sellers

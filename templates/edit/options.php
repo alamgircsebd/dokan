@@ -25,7 +25,7 @@
             ) ), 'select' ); ?>
         </div>
     </div>
-
+    
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_enable_reviews"><?php _e( 'Sold Individually', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
