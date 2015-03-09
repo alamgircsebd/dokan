@@ -321,10 +321,10 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
         }
         $barwidth             = 60 * 60 * 24 * 7 * 4 * 1000;
     }
-    
+
     $left_join      = apply_filters( 'dokan_report_left_join', $date_where );
     $date_where     = apply_filters( 'dokan_report_where', $date_where );
-    
+
     $sql = "SELECT
                 SUM((do.order_total - do.net_amount)) as earning,
                 SUM(do.order_total) as order_total,
@@ -579,17 +579,17 @@ add_action( 'add_meta_boxes', 'dokan_add_seller_meta_box' );
  */
 function dokan_admin_report_by_seller( $chosen_seller_id) {
     global $wpdb, $wp_locale;
-	
-	$group_by = 'day';
-	$year = '';
-    $group_by = apply_filters( 'dokan_report_group_by', $group_by );
 
-    $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
-    $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
+    $group_by     = 'day';
+    $year         = '';
+    $group_by     = apply_filters( 'dokan_report_group_by', $group_by );
+
+    $start_date   = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
+    $end_date     = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
     $current_year = date( 'Y' );
-	
-    if(!isset($chosen_seller_id)){
-		return "Please Select A Store Name";
+
+    if ( ! isset( $chosen_seller_id ) ) {
+		return __( 'Please Select A Store Name', 'dokan' );
 	}
 
     if ( ! $start_date ) {
@@ -627,10 +627,10 @@ function dokan_admin_report_by_seller( $chosen_seller_id) {
         }
         $barwidth             = 60 * 60 * 24 * 7 * 4 * 1000;
     }
-    
+
     $left_join      = apply_filters( 'dokan_report_left_join', $date_where );
     $date_where     = apply_filters( 'dokan_report_where', $date_where );
-    
+
     $sql = "SELECT
                 SUM((do.order_total - do.net_amount)) as earning,
                 SUM(do.order_total) as order_total,
@@ -649,9 +649,6 @@ function dokan_admin_report_by_seller( $chosen_seller_id) {
 
     $data = $wpdb->get_results( $sql );
 
-    // echo $sql;
-    // var_dump($data);
-    // var_dump($data, $barwidth, $start_date, $end_date);
     // Prepare data for report
     $order_counts      = dokan_prepare_chart_data( $data, 'order_date', 'total_orders', $chart_interval, $start_date_to_time, $group_by );
     $order_amounts     = dokan_prepare_chart_data( $data, 'order_date', 'order_total', $chart_interval, $start_date_to_time, $group_by );
@@ -659,17 +656,16 @@ function dokan_admin_report_by_seller( $chosen_seller_id) {
 
     // Encode in json format
     $chart_data = json_encode( array(
-        'order_counts'      => array_values( $order_counts ),
-        'order_amounts'     => array_values( $order_amounts ),
-        'order_commision'     => array_values( $order_commision )
+        'order_counts'    => array_values( $order_counts ),
+        'order_amounts'   => array_values( $order_amounts ),
+        'order_commision' => array_values( $order_commision )
     ) );
 
     $chart_colours = array(
-        'order_counts'  => '#3498db',
+        'order_counts'    => '#3498db',
         'order_amounts'   => '#1abc9c',
-        'order_commision'   => '#73a724'
+        'order_commision' => '#73a724'
     );
-
     ?>
 
     <script type="text/javascript">

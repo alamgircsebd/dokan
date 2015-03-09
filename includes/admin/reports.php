@@ -1,12 +1,12 @@
 <div class="wrap">
 	<?php
-	$tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'report';
+	$tab  = isset( $_GET['tab'] ) ? $_GET['tab'] : 'report';
 	$type = isset( $_GET['type'] ) ? $_GET['type'] : 'day';
 
 	$all_tabs = apply_filters( 'dokan_admin_report_tabs', array(
 		'report' => __( 'Reports', 'dokan' ),
-		'logs' => __( 'All Logs', 'dokan' ),
-			) );
+		'logs'   => __( 'All Logs', 'dokan' ),
+	) );
 	?>
 
     <h2 class="nav-tab-wrapper woo-nav-tab-wrapper">
@@ -18,10 +18,11 @@
 	<?php
 	if ( $tab == 'report' ) {
 		$report_sub_head = apply_filters( 'dokan_admin_report_sub', array(
-			'day' => __( 'By Day', 'dokan' ),
-			'month' => __( 'By Month', 'dokan' ),
+			'day'    => __( 'By Day', 'dokan' ),
+			'month'  => __( 'By Month', 'dokan' ),
 			'seller' => __( 'By Seller', 'dokan' )
-				) );
+		) );
+
 		$head_count = count( $report_sub_head );
 		$loop_count = 1;
 		?>
@@ -33,25 +34,26 @@
 					<?php
 					echo ( $loop_count != $head_count ) ? '|' : '';
 					$loop_count++;
-					?> 
+					?>
 				</li>
 			<?php } ?>
 		</ul>
 
 		<?php
-		$start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
-		$end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
-		$current_year = $selected_year = date( 'Y' );
-		$chosen_seller_id='';
+		$start_date       = date( 'Y-m-01', current_time( 'timestamp' ) );
+		$end_date         = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+		$current_year     = $selected_year = date( 'Y' );
+		$chosen_seller_id ='';
 
 		if ( isset( $_POST['dokan_report_filter_date'] ) ) {
 			$start_date = $_POST['start_date'];
-			$end_date = $_POST['end_date'];
+			$end_date   = $_POST['end_date'];
 		}
 
 		if ( isset( $_POST['dokan_report_filter_year'] ) ) {
 			$selected_year = $_POST['report_year'];
 		}
+
 		if ( isset( $_POST['chosen_store_name'] ) ) {
 			$chosen_seller_id = $_POST['chosen_store_name'];
 		}
@@ -76,11 +78,10 @@
 		}
 		if ( $type == 'seller' ) {
 
-			$user_search = new WP_User_Query( array( 'role' => 'seller' ) );
-			$sellers = (array) $user_search->get_results();
-
-			$chosen_placeholder = __( 'Select a Store...', 'dokan' );	
-			
+			$user_search        = new WP_User_Query( array( 'role' => 'seller' ) );
+			$sellers            = $user_search->get_results();
+			$chosen_placeholder = __( 'Select a Store...', 'dokan' );
+			$seller_id          = isset( $_POST['chosen_store_name'] ) ? intval( $_POST['chosen_store_name'] ) : 0;
 			?>
 			<form method="post" class="form-inline report-filter" action="" >
 
@@ -91,29 +92,12 @@
 						?>
 						<option></option>
 						<?php
-						$seller_count_flag = 1;
-						if(!isset($_POST['chosen_store_name'])){
-						$seller_count_flag = 0;						
-						}
 						foreach ( $sellers as $user ) {
 							$info = dokan_get_store_info( $user->ID );
-							
-							//if no seller id is posted, first seller selected by default
-							if($seller_count_flag===0){
-								$chosen_seller_id = $user->ID;
-								$seller_count_flag = 1;
-							}
-							// set seller as selected if came from post value
-							if($chosen_seller_id==$user->ID){
-								$selected = 'selected';
-							}else{
-								$selected ='';
-							}
-							//generate option element
+
 							if ( isset( $info['store_name'] ) ) {
 								?>
-								<option <?php echo $selected ?> value='<?php echo $user->ID  ?>'><?php echo $info['store_name'] ?>  </option>
-
+								<option <?php selected( $seller_id, $user->ID ); ?> <?php echo $selected ?> value='<?php echo $user->ID  ?>'><?php echo esc_html( $info['store_name'] ) ?></option>
 							<?php } ?>
 						<?php } ?>
 					</select>
@@ -121,7 +105,8 @@
 				</span>
 
 				<span class="form-group">
-					<label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+					<label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
+					<input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
 				</span>
 
 				<span class="form-group">
@@ -158,16 +143,16 @@
 			if ( $type == 'month' ) {
 				$report_data = dokan_admin_report( 'month', $selected_year );
 			} elseif ( $type == 'seller' ) {
-				$report_data = dokan_admin_report_by_seller($chosen_seller_id);						
+				$report_data = dokan_admin_report_by_seller( $chosen_seller_id );
 			} else {
 				$report_data = dokan_admin_report();
 			}
 
 			if ( $report_data ) {
 				foreach ( $report_data as $row ) {
-					$order_total += $row->order_total;
+					$order_total   += $row->order_total;
 					$earning_total += $row->earning;
-					$total_orders += $row->total_orders;
+					$total_orders  += $row->total_orders;
 				}
 			}
 			?>
@@ -202,11 +187,11 @@
 	<?php } else if ( $tab == 'logs' ) { ?>
 		<?php
 		$headers = array(
-			'order_id' => __( 'Order', 'dokan' ),
-			'seller_id' => __( 'Seller', 'dokan' ),
-			'order_total' => __( 'Order Total', 'dokan' ),
-			'net_amount' => __( 'Seller Earning', 'dokan' ),
-			'commision' => __( 'Commision', 'dokan' ),
+			'order_id'     => __( 'Order', 'dokan' ),
+			'seller_id'    => __( 'Seller', 'dokan' ),
+			'order_total'  => __( 'Order Total', 'dokan' ),
+			'net_amount'   => __( 'Seller Earning', 'dokan' ),
+			'commision'    => __( 'Commision', 'dokan' ),
 			'order_status' => __( 'Status', 'dokan' ),
 		);
 		$headers = apply_filters( 'dokan_earning_report_header', $headers );
@@ -238,12 +223,13 @@
 			</tfoot>
 			<tbody>
 				<?php
-				$count = 0;
-				$pagenum = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
-				$limit = 20;
-				$offset = ( $pagenum - 1 ) * $limit;
+				$count        = 0;
+				$pagenum      = isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
+				$limit        = 20;
+				$offset       = ( $pagenum - 1 ) * $limit;
 
 				$seller_where = '';
+
 				if ( isset( $_GET['seller_id'] ) ) {
 					$seller_where = $wpdb->prepare( 'AND seller_id = %d', $_GET['seller_id'] );
 				}
@@ -258,18 +244,18 @@
 					$seller = get_user_by( 'id', $log->seller_id );
 
 					$result = array(
-						'order_id' => '<a href="' . admin_url( 'post.php?action=edit&amp;post=' . $log->order_id ) . '">#' . $log->order_id . '</a>',
-						'seller_id' => '<a href="' . add_query_arg( array( 'seller_id' => $log->seller_id ) ) . '">' . $seller->display_name . '</a> (<a href="' . admin_url( 'user-edit.php?user_id=' . $log->seller_id ) . '">' . __( 'edit', 'dokan' ) . '</a>)',
-						'order_total' => $log->order_total,
-						'net_amount' => $log->net_amount,
-						'commision' => $log->order_total - $log->net_amount,
+						'order_id'     => '<a href="' . admin_url( 'post.php?action=edit&amp;post=' . $log->order_id ) . '">#' . $log->order_id . '</a>',
+						'seller_id'    => '<a href="' . add_query_arg( array( 'seller_id' => $log->seller_id ) ) . '">' . $seller->display_name . '</a> (<a href="' . admin_url( 'user-edit.php?user_id=' . $log->seller_id ) . '">' . __( 'edit', 'dokan' ) . '</a>)',
+						'order_total'  => $log->order_total,
+						'net_amount'   => $log->net_amount,
+						'commision'    => $log->order_total - $log->net_amount,
 						'order_status' => $log->order_status
 					);
 
-					$result = apply_filters( 'dokan_report_table_value', $result, $log->order_id, $log->seller_id );
+					$result                = apply_filters( 'dokan_report_table_value', $result, $log->order_id, $log->seller_id );
 					$result['order_total'] = !empty( $result['order_total'] ) ? wc_price( $result['order_total'] ) : '';
-					$result['net_amount'] = !empty( $result['net_amount'] ) ? wc_price( $result['net_amount'] ) : '';
-					$result['commision'] = !empty( $result['commision'] ) ? wc_price( $result['commision'] ) : '';
+					$result['net_amount']  = !empty( $result['net_amount'] ) ? wc_price( $result['net_amount'] ) : '';
+					$result['commision']   = !empty( $result['commision'] ) ? wc_price( $result['commision'] ) : '';
 					?>
 					<tr<?php echo $count % 2 == 0 ? ' class="alternate"' : ''; ?>>
 
@@ -293,19 +279,22 @@
 			<?php
 			if ( $all_logs ) {
 				$count_where = 'seller_id != 0';
+
 				if ( isset( $_GET['seller_id'] ) ) {
 					$count_where = $wpdb->prepare( 'seller_id = %d', $_GET['seller_id'] );
 				}
-				$count = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}dokan_orders WHERE $count_where" );
+
+				$count        = $wpdb->get_var( "SELECT COUNT(id) FROM {$wpdb->prefix}dokan_orders WHERE $count_where" );
 				$num_of_pages = ceil( $count / $limit );
+
 				$page_links = paginate_links( array(
-					'base' => add_query_arg( 'paged', '%#%' ),
-					'format' => '',
+					'base'      => add_query_arg( 'paged', '%#%' ),
+					'format'    => '',
 					'prev_text' => __( '&laquo;', 'aag' ),
 					'next_text' => __( '&raquo;', 'aag' ),
-					'total' => $num_of_pages,
-					'current' => $pagenum
-						) );
+					'total'     => $num_of_pages,
+					'current'   => $pagenum
+				) );
 
 				if ( $page_links ) {
 					echo '<div class="tablenav-pages">' . $page_links . '</div>';
@@ -323,22 +312,14 @@
             $('.datepicker').datepicker({
                 dateFormat: 'yy-mm-dd'
             });
-            $('#chosen_store_name').chosen();           
+            $('#chosen_store_name').chosen();
             $('select').on('change', function ( params) {
                 submit_chosen_data(params.selected);
             });
 
             function submit_chosen_data(data) {
                 $('input[name="store_name"]').attr('value', data);
-
-                console.log($('input[name="store_name"]').val());
-
             }
-
         });
-
-
-
     </script>
-
 </div>
