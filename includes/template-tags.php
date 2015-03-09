@@ -328,17 +328,12 @@ function dokan_get_dashboard_nav() {
             'icon'  => '<i class="fa fa-upload"></i>',
             'url'   => dokan_get_navigation_url( 'withdraw' )
         ),
-        'settings' => array(
-            'title' => __( 'Settings', 'dokan'),
-            'icon'  => '<i class="fa fa-cog"></i>',
-            'url'   => dokan_get_navigation_url( 'settings' )
-        ),
     );
 
     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
     $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
-    if( $enable_shipping == 'yes' ) {
+    if ( $enable_shipping == 'yes' ) {
         $urls['shipping'] = array(
             'title' => __( 'Shipping', 'dokan'),
             'icon'  => '<i class="fa fa-truck"></i>',
@@ -346,7 +341,15 @@ function dokan_get_dashboard_nav() {
         );
     }
 
-    return apply_filters( 'dokan_get_dashboard_nav', $urls );
+    $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
+
+    $urls['settings'] = array(
+        'title' => __( 'Settings', 'dokan'),
+        'icon'  => '<i class="fa fa-cog"></i>',
+        'url'   => dokan_get_navigation_url( 'settings' )
+    );
+
+    return $urls;
 }
 
 function dokan_dashboard_nav( $active_menu ) {

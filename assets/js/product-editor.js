@@ -433,7 +433,6 @@
                     selection.map( function( attachment ) {
                         attachment = attachment.toJSON();
 
-                        console.log(attachment, self);
                         // set the image hidden id
                         self.siblings('input.dokan-feat-image-id').val(attachment.id);
 
