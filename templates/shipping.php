@@ -175,7 +175,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                         <div class="dokan-w12 dps-main-wrapper">
                             <div class="dokan-shipping-location-wrapper">
 
-                            <p>Add the countries and states you deliver your products. You can specify staes as well. If the shipping price is same except some states, then there is an option <strong>Everywhere Else</strong>, you can use that.</p>
+                            <p><?php _e( 'Add the countries and states you deliver your products. You can specify states as well. If the shipping price is same except some states, then there is an option <strong>Everywhere Else</strong>, you can use that.', 'dokan' ) ?></p>
 
                             <?php if ( $dps_country_rates ) : ?>
 

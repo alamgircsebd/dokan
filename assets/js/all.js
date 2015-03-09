@@ -1383,7 +1383,7 @@ jQuery(function($) {
             
             if( $(this).closest('table.dps-shipping-states').find( 'tr' ).length == 1 ){
                 console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
-                $(this).closest('.dps-shipping-location-content').find('input,select').val('');
+                $(this).closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
             }
 
             $(this).closest('tr').remove();

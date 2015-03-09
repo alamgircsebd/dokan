@@ -105,13 +105,19 @@ class Dokan_Template_Shipping {
             // var_dump( $dps_country, $dps_state);
             if( array_key_exists( $destination_country, $dps_country ) ) {
                 
-                if( array_key_exists( $destination_state, $dps_state ) ) {
-                    $has_found = true;
-                } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+                if( $dps_state ) {
+                    if( array_key_exists( $destination_state, $dps_state ) ) {
+                        $has_found = true;
+                    } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+                        $has_found = true;
+                    }    
+                } else {
                     $has_found = true;
                 }
+
+                
             } 
-        
+                    
             if ( ! $has_found ) {
                 $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ) );
             }
