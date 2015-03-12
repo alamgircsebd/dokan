@@ -1123,12 +1123,12 @@
   display: inline-block;
   padding: 0px 5px;
 }
+.dokan-profile-completeness .dokan-alert {
+  margin-bottom: 0;
+}
 .dokan-settings-content .dokan-settings-area h1 {
   margin: 0px;
   padding: 0px;
-}
-.dokan-settings-content .dokan-settings-area .dokan-panel-alert {
-  margin: 0px;
 }
 .dokan-settings-content .dokan-settings-area .dokan-banner {
   border: 4px dashed #D8D8D8;

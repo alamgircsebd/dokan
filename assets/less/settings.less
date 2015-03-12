@@ -1,109 +1,110 @@
+.dokan-profile-completeness .dokan-alert {
+    margin-bottom: 0;
+}
+
 .dokan-settings-content {
 
-	.dokan-settings-area {
+    .dokan-settings-area {
 
-		h1 {
-			margin:0px;
-			padding:0px;
-		}
-                .dokan-panel-alert{
-                    margin : 0px;
+        h1 {
+            margin:0px;
+            padding:0px;
+        }
+
+        .dokan-banner {
+            border: 4px dashed #D8D8D8;
+            height: 270px;
+            margin: 0 0 30px 0;
+            max-width: 760px;
+            text-align: center;
+            overflow: hidden;
+            position: relative;
+
+            img {
+                max-width: 100%;
+            }
+
+            .dokan-remove-banner-image {
+                position: absolute;
+                width: 100%;
+                height: 270px;
+                background: #000;
+                top: 0;
+                left: 0;
+                opacity: 0.7;
+                font-size: 100px;
+                color: red;
+                padding-top: 70px;
+                display: none;
+            }
+
+            &:hover {
+                cursor: pointer;
+
+                .dokan-remove-banner-image {
+                    display: block;
                 }
-               
-		.dokan-banner {
-	        border: 4px dashed #D8D8D8;
-	        height: 270px;
-	        margin: 0 0 30px 0;
-	        max-width: 760px;
-	        text-align: center;
-	        overflow: hidden;
-	        position: relative;
+            }
+        }
 
-	        img {
-	            max-width: 100%;
-	        }
+        .dokan-gravatar {
+            position: relative;
 
-	        .dokan-remove-banner-image {
-	            position: absolute;
-	            width: 100%;
-	            height: 270px;
-	            background: #000;
-	            top: 0;
-	            left: 0;
-	            opacity: 0.7;
-	            font-size: 100px;
-	            color: red;
-	            padding-top: 70px;
-	            display: none;
-	        }
+            .dokan-remove-gravatar-image {
+                position:absolute;
+                width:80px;
+                height:80px;
+                background:#000;
+                top:0;
+                left: 0;
+                opacity:.7;
+                font-size:70px;
+                text-align: center;
+                color:#f00;
+                padding-top:5px;
+                display:none;
+                border-radius: 50%;
+            }
 
-	        &:hover {
-	        	cursor: pointer;
+            .gravatar-wrap {
+                .dokan-gravatar-img {
+                    border-radius: 50%;
+                    height: 80px !important;
+                    width: 80px;
+                }
+            }
 
-	            .dokan-remove-banner-image {
-	                display: block;
-	            }
-	        }
-	    }
+            &:hover {
+                .dokan-remove-gravatar-image {
+                    display: block;
+                }
+            }
 
-	    .dokan-gravatar {
-	    	position: relative;
+        }
 
-	        .dokan-remove-gravatar-image {
-	            position:absolute;
-	            width:80px;
-	            height:80px;
-	            background:#000;
-	            top:0;
-	            left: 0;
-	            opacity:.7;
-	            font-size:70px;
-	            text-align: center;
-	            color:#f00;
-	            padding-top:5px;
-	            display:none;
-	            border-radius: 50%;
-	        }
+        .button-area {
+            margin-top: 35px;
 
-	        .gravatar-wrap {
-	            .dokan-gravatar-img {
-	                border-radius: 50%;
-	                height: 80px !important;
-	                width: 80px;
-	            }
-	        }
+            i.fa-cloud-upload {
+                display: block;
+                font-size: 80px;
+                color: #DFDFDF;
+            }
 
-	        &:hover {
-	            .dokan-remove-gravatar-image {
-	                display: block;
-	            }
-	        }
+            .help-block {
+                font-size: 12px;
+                color: #B1B1B1;
+            }
+        }
 
-	    }
+        ul.dokan-categories {
+            list-style: none;
+            padding: 0;
+            margin: 0;
 
-	    .button-area {
-	        margin-top: 35px;
-
-	        i.fa-cloud-upload {
-	            display: block;
-	            font-size: 80px;
-	            color: #DFDFDF;
-	        }
-
-	        .help-block {
-	            font-size: 12px;
-	            color: #B1B1B1;
-	        }
-	    }
-
-	    ul.dokan-categories {
-	        list-style: none;
-	        padding: 0;
-	        margin: 0;
-
-	        label {
-	            font-weight: normal;
-	        }
-	    }
-	}
+            label {
+                font-weight: normal;
+            }
+        }
+    }
 }
