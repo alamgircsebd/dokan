@@ -47,7 +47,8 @@ class Dokan_Template_Settings {
         );
 
         //wp_send_json_success( __( 'Your information has been saved successfully', 'dokan' ) );
-        wp_send_json_success(  array( 'success' => true, 'data'=> $data ) );
+        //wp_send_json_success(  array( 'success' => true, 'data'=> $data ) );
+        wp_send_json_success( $data );
     }
 
     /**
@@ -574,7 +575,7 @@ class Dokan_Template_Settings {
                                          'youtube' => 2,
                                         'linkedin' => 2,
                                         ),
-            '$payment_method_val'     => 15,
+            'payment_method_val'     => 15,
             'phone_val'               => 10,
             'address_val'             => 10,
             'map_val'                 => 15,
@@ -582,6 +583,7 @@ class Dokan_Template_Settings {
 
 //Setting values for completion
         $progress_values = apply_filters('dokan_profile_completion_values', $progress_values);
+  
         extract($progress_values);
       
         if ( $dokan_settings['banner'] != 0 ) {
