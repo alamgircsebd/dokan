@@ -24,7 +24,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
         ?>
 
         <article class="dashboard-content-area">
-
+            <?php echo dokan_get_profile_progressbar(); ?>
             <div class="dokan-w6 dokan-dash-left">
                 <div class="dashboard-widget big-counter">
                     <ul class="list-inline">

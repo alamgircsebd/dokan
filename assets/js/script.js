@@ -277,15 +277,15 @@ jQuery(function($) {
                self.find('span.dokan-loading').remove();
                 $('html,body').animate({scrollTop:100});
 
-                if ( resp.success ) {
-
-                    $('.dokan-ajax-response').html( $('<div/>', {
+               if ( resp.success ) {
+                   console.log(resp.data);                  
+                    //Harcoded Customization for template-settings function
+                      $('.dokan-ajax-response').html( $('<div/>', {
                         'class': 'dokan-alert dokan-alert-success',
-                        'html': '<p>' + resp.data + '</p>'
+                        'html': '<p>' + resp.data.msg + '</p>',
                     }) );
-
-                } else {
-
+                     $('.dokan-ajax-response').append(resp.data.progress);
+                }else {
                     $('.dokan-ajax-response').html( $('<div/>', {
                         'class': 'dokan-alert dokan-alert-danger',
                         'html': '<p>' + resp.data + '</p>'
