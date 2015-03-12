@@ -1465,8 +1465,8 @@ add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );
         ob_start();
         ?>
             <?php if(  strlen( trim($next_todo))!=0 ){ ?>
-<div class="panel panel-default">
-    <div class="panel-body">
+<div class="dokan-panel dokan-panel-default">
+    <div class="dokan-panel-body">
     <div class="dokan-progress">
         <div class="dokan-progress-bar dokan-progress-bar-info dokan-progress-bar-striped" role="progressbar"
              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $progress ?>%">
