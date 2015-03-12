@@ -43,7 +43,7 @@ class Dokan_Template_Settings {
 
         $data = array(
             'progress' => $progress_bar,
-            'msg' => $success_msg,
+            'msg'      => $success_msg,
         );
 
         //wp_send_json_success( __( 'Your information has been saved successfully', 'dokan' ) );
