@@ -222,9 +222,9 @@ class Dokan_Template_Settings {
         }
         ?>
 
-                <div class="dokan-ajax-response">
-                    <?php echo dokan_get_profile_progressbar(); ?>
-                </div>
+            <div class="dokan-ajax-response">
+                <?php echo dokan_get_profile_progressbar(); ?>
+            </div>
 
             <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
 
