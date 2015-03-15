@@ -322,7 +322,7 @@ if ( ! $from_shortcode ) {
 
                                     <div class="dokan-rich-text-wrap">
                                         <div>
-                                            <?php wp_editor( esc_textarea( $post->post_content ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
+                                            <?php wp_editor( esc_textarea( wpautop( $post->post_content ) ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
                                         </div>
                                     </div>
 
