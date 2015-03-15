@@ -730,7 +730,7 @@ function dokan_process_product_meta( $post_id ) {
             // Stock status is always determined by children so sync later
             $stock_status = '';
 
-            if ( ! empty( $_POST['_manage_stock'] ) ) {
+            if ( ! empty( $_POST['_manage_stock'] ) && $_POST['_manage_stock'] == 'yes' ) {
                 $manage_stock = 'yes';
                 $backorders   = wc_clean( $_POST['_backorders'] );
             }
@@ -932,9 +932,17 @@ function dokan_save_variations( $post_id ) {
             // Stock handling
             update_post_meta( $variation_id, '_manage_stock', $manage_stock );
 
+            if ( 'yes' === $manage_stock ) {
+                update_post_meta( $variation_id, '_backorders', wc_clean( $variable_backorders[ $i ] ) );
+                wc_update_product_stock( $variation_id, wc_stock_amount( $variable_stock[ $i ] ) );
+            } else {
+                delete_post_meta( $variation_id, '_backorders' );
+                delete_post_meta( $variation_id, '_stock' );
+            }
+
             // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
             if ( ! empty( $variable_stock_status[ $i ] ) ) {
-                //var_dump( $variable_stock_status[ $i ] );
+
                 if( isset( $variable_stock[$i] ) && !empty( $variable_stock[$i] ) ) {
                     update_post_meta( $variation_id, '_stock_status', $variable_stock_status[ $i ] );
                 } else {
@@ -942,14 +950,6 @@ function dokan_save_variations( $post_id ) {
                 } 
                 //wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
                 //WC_Product_Variable::sync_stock_status( $variation_id );                
-            }
-
-            if ( 'yes' === $manage_stock ) {
-                update_post_meta( $variation_id, '_backorders', wc_clean( $variable_backorders[ $i ] ) );
-                wc_update_product_stock( $variation_id, wc_stock_amount( $variable_stock[ $i ] ) );
-            } else {
-                delete_post_meta( $variation_id, '_backorders' );
-                delete_post_meta( $variation_id, '_stock' );
             }
 
             if ( isset( $variable_weight[ $i ] ) )
