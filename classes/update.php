@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Dokan Update class
+ *
+ * Performas license validation and update checking
+ *
+ * @package Dokan
+ */
 class Dokan_Update {
 
     const base_url   = 'http://wedevs.com/';
@@ -8,6 +14,11 @@ class Dokan_Update {
     const slug       = 'dokan';
 
     function __construct() {
+
+        // bail out if it's a local server
+        if ( $this->is_local_server() ) {
+            return;
+        }
 
         add_action( 'dokan_admin_menu', array($this, 'admin_menu'), 99 );
 
@@ -23,6 +34,15 @@ class Dokan_Update {
 
         add_filter( 'pre_set_site_transient_update_plugins', array($this, 'check_update') );
         add_filter( 'plugins_api', array(&$this, 'check_info'), 10, 3 );
+    }
+
+    /**
+     * Check if the current server is localhost
+     *
+     * @return boolean
+     */
+    private function is_local_server() {
+        return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
     }
 
     /**
