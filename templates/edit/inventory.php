@@ -35,7 +35,7 @@ if ( $tax_classes ) {
         </div>
     </div>
 
-    <div class="dokan-form-group">
+    <div class="dokan-form-group hide_if_variable">
         <label class="dokan-w4 dokan-control-label" for="_stock_status"><?php _e( 'Stock Status', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_stock_status', array( 'options' => array(
