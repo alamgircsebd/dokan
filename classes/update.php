@@ -42,7 +42,7 @@ class Dokan_Update {
      * @return boolean
      */
     private function is_local_server() {
-        return $_SERVER['REMOTE_ADDR'] == '127.0.0.1';
+        return in_array( $_SERVER['REMOTE_ADDR'], array( '127.0.0.1', '::1' ) );
     }
 
     /**
