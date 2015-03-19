@@ -312,9 +312,9 @@ function dokan_variable_product_type_options() {
                     jQuery(el).block({ message: null, overlayCSS: { background: '#fff url(<?php echo $woocommerce->plugin_url(); ?>/assets/images/ajax-loader.gif) no-repeat center', opacity: 0.6 } });
 
                     var data = {
-                        action: 'woocommerce_remove_variation',
-                        variation_id: variation,
-                        security: '<?php echo wp_create_nonce("delete-variation"); ?>'
+                        action: 'woocommerce_remove_variations',
+                        variation_ids: variation,
+                        security: '<?php echo wp_create_nonce("delete-variations"); ?>'
                     };
 
                     jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
@@ -928,9 +928,12 @@ function dokan_save_variations( $post_id ) {
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
             update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
             update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );
-
-            // Stock handling
             update_post_meta( $variation_id, '_manage_stock', $manage_stock );
+
+            // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
+            if ( ! empty( $variable_stock_status[ $i ] ) ) {
+                wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
+            }
 
             if ( 'yes' === $manage_stock ) {
                 update_post_meta( $variation_id, '_backorders', wc_clean( $variable_backorders[ $i ] ) );
@@ -938,18 +941,6 @@ function dokan_save_variations( $post_id ) {
             } else {
                 delete_post_meta( $variation_id, '_backorders' );
                 delete_post_meta( $variation_id, '_stock' );
-            }
-
-            // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
-            if ( ! empty( $variable_stock_status[ $i ] ) ) {
-
-                if( isset( $variable_stock[$i] ) && !empty( $variable_stock[$i] ) ) {
-                    update_post_meta( $variation_id, '_stock_status', $variable_stock_status[ $i ] );
-                } else {
-                    update_post_meta( $variation_id, '_stock_status', 'outofstock' );
-                } 
-                //wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
-                //WC_Product_Variable::sync_stock_status( $variation_id );                
             }
 
             if ( isset( $variable_weight[ $i ] ) )
