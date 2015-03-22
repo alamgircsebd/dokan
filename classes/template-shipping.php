@@ -147,6 +147,10 @@ class Dokan_Template_Shipping {
         if( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
             return $tabs;
         }
+        
+        if( get_post_meta( $post->ID, '_downloadable', true ) == 'yes' ) {
+            return $tabs;
+        }
 
         $enabled = get_user_meta( $post->post_author, '_dps_shipping_enable', true );
         if ( $enabled != 'yes' ) {
