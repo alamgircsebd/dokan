@@ -471,7 +471,7 @@ function dokan_process_product_meta( $post_id ) {
     // Get types
     $product_type       = empty( $_POST['_product_type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['_product_type'] ) );
     $is_downloadable    = isset( $_POST['_downloadable'] ) ? 'yes' : 'no';
-    $is_virtual         = isset( $_POST['_virtual'] ) ? 'yes' : 'no';
+    $is_virtual         = ( $is_downloadable == 'yes' ) ? 'yes' : 'no';
 
     // Product type + Downloadable/Virtual
     wp_set_object_terms( $post_id, $product_type, 'product_type' );
@@ -881,8 +881,19 @@ function dokan_save_variations( $post_id ) {
             $variation_id = absint( $variable_post_id[ $i ] );
 
             // Virtal/Downloadable
-            $is_virtual = isset( $variable_is_virtual[ $i ] ) ? 'yes' : 'no';
             $is_downloadable = isset( $variable_is_downloadable[ $i ] ) ? 'yes' : 'no';
+            
+            if ( isset( $variable_is_virtual[ $i ] ) ) {
+                $is_virtual = 'yes';    
+            } else {
+                
+                if ( $is_downloadable == 'yes' ) {
+                    $is_virtual = 'yes';
+                } else {
+                    $is_virtual = 'no';
+                } 
+            }
+            // $is_virtual = isset(  ) ? 'yes' : 'no';
 
             // Enabled or disabled
             $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';

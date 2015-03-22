@@ -192,6 +192,13 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
                     if( self::is_product_disable_shipping( $product['product_id'] ) ) {
                         continue 2;
+                    }
+                    
+                    $is_virtual      = get_post_meta( $product['product_id'], '_virtual', true );
+                    $is_downloadable = get_post_meta( $product['product_id'], '_downloadable', true );
+                    
+                    if( ( $is_virtual == 'yes' ) || ( $is_downloadable == 'yes' ) ) {
+                        continue 2;
                     } 
                         
                     $default_shipping_price     = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
