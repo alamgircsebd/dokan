@@ -256,6 +256,7 @@ jQuery(function($) {
 
             // shipping
             $('#product-shipping').on('click', '#_overwrite_shipping', this.shipping.showHideOverride);
+            $('#product-shipping').on('click', '#_disable_shipping', this.shipping.disableOverride);
 
             // File inputs
             $('.product-edit-container').on('click', 'a.insert-file-row', function(){
@@ -270,6 +271,7 @@ jQuery(function($) {
 
             this.loadCategoryChosen();
             this.shipping.showHideOverride();
+            this.shipping.disableOverride();
         },
 
         loadCategoryChosen: function() {
@@ -745,7 +747,18 @@ jQuery(function($) {
                 } else {
                     $('.show_if_override').hide();
                 }
+            },
+
+            disableOverride: function() {
+                if ( $('#_disable_shipping').is(':checked') ) {
+                    $('.hide_if_disable').hide();
+                } else {
+                    $('.hide_if_disable').show();
+                    Dokan_Editor.shipping.showHideOverride();
+                }
+
             }
+
         }
     };
 

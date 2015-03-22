@@ -37,7 +37,7 @@ $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true 
         </div>
     </div>
 
-    <div class="dokan-form-group show_if_simple">
+    <div class="dokan-form-group show_if_simple hide_if_disable">
         <label class="dokan-w4 dokan-control-label" for="_overwrite_shipping"><?php _e( 'Override Shipping', 'dokan' ); ?></label>
         <div class="dokan-w8 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
@@ -45,7 +45,7 @@ $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true 
     </div>
 
 
-    <div class="dokan-form-group dokan-shipping-price dokan-shipping-type-price show_if_override">
+    <div class="dokan-form-group dokan-shipping-price dokan-shipping-type-price show_if_override hide_if_disable">
         <label class="dokan-w4 dokan-control-label" for="shipping_type_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
 
         <div class="dokan-w4 dokan-text-left">
@@ -53,7 +53,7 @@ $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true 
         </div>
     </div>
 
-    <div class="dokan-form-group dokan-shipping-price dokan-shipping-add-qty show_if_override">
+    <div class="dokan-form-group dokan-shipping-price dokan-shipping-add-qty show_if_override hide_if_disable">
         <label class="dokan-w4 dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
 
         <div class="dokan-w4 dokan-text-left">
