@@ -143,10 +143,16 @@ class Dokan_Template_Shipping {
      */
     function register_product_tab( $tabs ) {
         global $post;
+        
+        if( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
+            return $tabs;
+        }
+
         $enabled = get_user_meta( $post->post_author, '_dps_shipping_enable', true );
         if ( $enabled != 'yes' ) {
             return $tabs;
         }
+
 
         $tabs['shipping'] = array(
             'title' => __( 'Shipping', 'dokan' ),
@@ -174,7 +180,6 @@ class Dokan_Template_Shipping {
         $country_obj = new WC_Countries();
         $countries   = $country_obj->countries;
         $states      = $country_obj->states;
-
         ?>
 
         <?php if ( $processing ) { ?>
@@ -202,7 +207,7 @@ class Dokan_Template_Shipping {
                 </thead>
                 <tbody>
 
-                <?php foreach ($dps_country_rates as $country => $cost ) { ?>
+                <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
                     <tr>
                         <td>
                             <?php
@@ -213,9 +218,18 @@ class Dokan_Template_Shipping {
                             }
                             ?>
                         </td>
-                        <td><?php echo wc_price( $cost ); ?></td>
+                        <td>
+                            <?php
+
+                                if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) {
+                                    echo '--------'; 
+                                } else {
+                                    echo wc_price( $cost );
+                                }
+                            ?>
+                        </td>
                     </tr>
-                    <?php if ( $dps_state_rates ): ?>
+                    <?php if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ): ?>
                         <tr>
                             <td>
                                 <table width="100%" class="table">
@@ -261,7 +275,6 @@ class Dokan_Template_Shipping {
         <?php if ( $shipping_policy ) { ?>
             <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
             <hr>
-
             <?php echo wpautop( $shipping_policy ); ?>
         <?php } ?>
 
@@ -270,7 +283,6 @@ class Dokan_Template_Shipping {
         <?php if ( $refund_policy ) { ?>
             <strong><?php _e( 'Refund Policy', 'dokan' ); ?></strong>
             <hr>
-
             <?php echo wpautop( $refund_policy ); ?>
         <?php } ?>
         <?php
