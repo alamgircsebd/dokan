@@ -195,6 +195,7 @@
             'order_status' => __( 'Status', 'dokan' ),
         );
         $headers = apply_filters( 'dokan_earning_report_header', $headers );
+        $statuses = wc_get_order_statuses();
         ?>
         <?php do_action( 'dokan_prev_report_form', $_GET ); ?>
 
@@ -249,7 +250,7 @@
                         'order_total'  => $log->order_total,
                         'net_amount'   => $log->net_amount,
                         'commision'    => $log->order_total - $log->net_amount,
-                        'order_status' => $log->order_status
+                        'order_status' => $statuses[$log->order_status]
                     );
 
                     $result                = apply_filters( 'dokan_report_table_value', $result, $log->order_id, $log->seller_id );
