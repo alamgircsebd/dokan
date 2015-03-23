@@ -45,6 +45,9 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                             <div class="title"><?php _e( 'Sales', 'dokan' ); ?></div>
                             <div class="count"><?php echo woocommerce_price( $earning ); ?></div>
                         </li>
+
+                        <?php do_action( 'dokan_seller_dashboard_widget_counter' ); ?>
+                        
                     </ul>
                 </div> <!-- .big-counter -->
 
