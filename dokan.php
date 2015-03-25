@@ -348,6 +348,7 @@ class WeDevs_Dokan {
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
+            require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
             require_once $inc_dir . 'wc-template.php';
@@ -413,6 +414,7 @@ class WeDevs_Dokan {
     function init_classes() {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
+            Dokan_Admin_Ajax::init();
             new Dokan_Update();
         } else {
             new Dokan_Pageviews();

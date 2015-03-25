@@ -412,7 +412,9 @@ class Dokan_Template_Withdraw {
                 <?php
             }
         } ?>
-        <form method="post" action="">
+        <form method="post" action="" id="dokan-admin-withdraw-action">
+            <?php wp_nonce_field( 'dokan_withdraw_admin_bulk_action', 'dokan_withdraw_admin_bulk_action_nonce' ); ?>
+            
             <table class="widefat withdraw-table">
                 <thead>
                     <tr>
@@ -451,6 +453,7 @@ class Dokan_Template_Withdraw {
                 $store_info = dokan_get_store_info( $row->user_id );
                     ?>
                     <tr class="<?php echo ( $count % 2 ) == 0 ? 'alternate': 'odd'; ?>">
+
                         <th class="check-column">
                             <input type="checkbox" name="id[<?php echo $row->id;?>]" value="<?php echo $row->id;?>">
                             <input type="hidden" name="user_id[<?php echo $row->id;?>]" value="<?php echo $row->user_id; ?>">
@@ -459,6 +462,29 @@ class Dokan_Template_Withdraw {
                         </th>
                         <td>
                             <strong><a href="<?php echo admin_url( 'user-edit.php?user_id=' . $user_data->ID ); ?>"><?php echo $user_data->user_login; ?></a></strong>
+                            <div class="row-actions">
+                                <?php if ( $status == 'pending' ) { ?>
+
+                                    <span class="edit"><a href="#" class="dokan-withdraw-action" data-status="approve" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Approve', 'dokan' ); ?></a> | </span>
+                                    <span class="edit"><a href="#" class="dokan-withdraw-action" data-status="cancel" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a></span>
+                                
+                                <?php } elseif ( $status == 'completed' ) { ?>
+                                    
+                                    <span class="edit"><a href="#" class="dokan-withdraw-action" data-status="cancel" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a> | </span>
+                                    <span class="edit"><a href="#" class="dokan-withdraw-action" data-status="pending" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Pending', 'dokan' ); ?></a></span>
+
+                                <?php } elseif ( $status == 'cancelled' ) { ?>
+                                    
+                                    <span class="edit"><a href="#" class="dokan-withdraw-action" data-status="approve" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Approve', 'dokan' ); ?></a> | </span>
+                                    <span class="edit"><a href="#" class="dokan-withdraw-action" data-status="pending" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Pending', 'dokan' ); ?></a></span>
+
+                                <?php } ?>
+
+                                <?php if ( $result ) { ?>
+                                    <span class="trash"> | <a href="#" class="dokan-withdraw-action" data-status="delete" data-withdraw_id = "<?php echo $row->id; ?>"><?php _e( 'Delete', 'dokan' ); ?></a></span>
+
+                                <?php } ?>
+                            </div>
                         </td>
                         <td><?php echo wc_price( $row->amount ); ?></td>
                         <td><?php echo dokan_withdraw_get_method_title( $row->method ); ?></td>
@@ -562,7 +588,7 @@ class Dokan_Template_Withdraw {
             </div>
 
         </form>
-
+        <?php $ajax_url = admin_url('admin-ajax.php'); ?>
         <style type="text/css">
             .withdraw-table {
                 margin-top: 10px;
@@ -571,7 +597,49 @@ class Dokan_Template_Withdraw {
             .withdraw-table td, .withdraw-table th {
                 vertical-align: top;
             }
+
+            .custom-spinner {
+                background: url('images/spinner-2x.gif') no-repeat;
+                background-position: 43% 9px;
+                background-size: 20px 20px;
+                opacity: .4;
+                filter: alpha(opacity=40);
+                width: 20px;
+                height: 20px;
+            }
         </style>
+        <script>
+            (function($){
+                $(document).ready(function(){
+                    var url = "<?php echo $ajax_url; ?>";
+
+                    $('#dokan-admin-withdraw-action').on('click', 'a.dokan-withdraw-action', function(e) {
+                        e.preventDefault();
+                        var self = $(this);
+
+                        self.closest( 'tr' ).addClass('custom-spinner');
+                        data = {
+                            action: 'dokan_withdraw_form_action',
+                            formData : $('#dokan-admin-withdraw-action').serialize(),
+                            status: self.data('status') ,
+                            withdraw_id : self.data( 'withdraw_id' )   
+                        }
+
+                        $.post(url, data, function( resp ) {
+
+                            if( resp.success ) {
+                                self.closest( 'tr' ).removeClass('custom-spinner');
+                                window.location = resp.data.url;
+                            } else {
+                                self.closest( 'tr' ).removeClass('custom-spinner');    
+                                alert( 'Somthig wrong magi' );
+                            }
+                        });
+
+                    }); 
+                });
+            })(jQuery)
+        </script>
         <?php
 
         $this->add_note_script();
