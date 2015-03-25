@@ -1477,7 +1477,7 @@ function dokan_get_profile_progressbar() {
                 </div>
             </div>
 
-            <div class="dokan-alert dokan-alert-danger dokan-panel-alert"><?php echo $next_todo; ?></div>
+            <div class="dokan-alert dokan-alert-info dokan-panel-alert"><?php echo $next_todo; ?></div>
            </div>
         </div>
     <?php

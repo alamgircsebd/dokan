@@ -588,8 +588,8 @@ function dokan_admin_report_by_seller( $chosen_seller_id) {
     $end_date     = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
     $current_year = date( 'Y' );
 
-    if ( ! isset( $chosen_seller_id ) ) {
-		return __( 'Please Select A Store Name', 'dokan' );
+    if ( ! isset( $chosen_seller_id ) || $chosen_seller_id=='' || $chosen_seller_id == Null) {
+		return 0;
 	}
 
     if ( ! $start_date ) {

@@ -14,7 +14,6 @@
         'meta_value'  => get_current_user_id(),
         'post_type'   => 'shop_order',
         'post_status' => 'wc-publish',
-        'post_parent' => 0
     ) ) );
 
     if ( $customer_orders ) : ?>
