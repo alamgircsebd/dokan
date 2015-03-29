@@ -1,0 +1,196 @@
+<?php 
+
+/**
+*  Dokan Announcement class
+*
+*  Announcement for seller
+*
+*  @since 2.2
+*
+*  @author weDevs <info@wedevs.com>
+*/
+class Dokan_Announcement {
+	
+    private $post_type = 'dokan_announcement';
+    private $assign_type = array();
+
+	/**
+	 *  Load autometically all actions
+	 */
+	function __construct() {
+        $this->assign_type = array( ''=> __( '--Select--', 'dokan' ), 'all_seller'=> __( 'All Seller' ), 'selected_seller' => __( 'Selected Seller' ) );
+        add_action( 'init', array($this, 'post_types') );
+        add_action( 'do_meta_boxes', array($this, 'do_metaboxes' ) );
+        add_action( 'save_post', array($this, 'save_announcement_meta'), 10, 2 );
+	}
+
+	/**
+     * Initializes the Dokan_Template_Withdraw class
+     *
+     * Checks for an existing Dokan_Template_Withdraw instance
+     * and if it doesn't find one, creates it.
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_Announcement();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Register Announcement post type
+     * 
+     * @return void 
+     */
+    function post_types() {
+        register_post_type( $this->post_type, array(
+            'label' => __( 'Announcement', 'dokan' ),
+            'description' => '',
+            'public' => false,
+            'show_ui' => true,
+            'show_in_menu' => false,
+            'capability_type' => 'post',
+            'hierarchical' => false,
+            'rewrite' => array('slug' => ''),
+            'query_var' => false,
+            'supports' => array( 'title', 'editor' ),
+            'labels' => array(
+                'name' => __( 'Announcement', 'dokan' ),
+                'singular_name' => __( 'Announcement', 'dokan' ),
+                'menu_name' => __( 'Dokan Announcement', 'dokan' ),
+                'add_new' => __( 'Add Announcement', 'dokan' ),
+                'add_new_item' => __( 'Add New Announcement', 'dokan' ),
+                'edit' => __( 'Edit', 'dokan' ),
+                'edit_item' => __( 'Edit Announcement', 'dokan' ),
+                'new_item' => __( 'New Announcement', 'dokan' ),
+                'view' => __( 'View Announcement', 'dokan' ),
+                'view_item' => __( 'View Announcement', 'dokan' ),
+                'search_items' => __( 'Search Announcement', 'dokan' ),
+                'not_found' => __( 'No Announcement Found', 'dokan' ),
+                'not_found_in_trash' => __( 'No Announcement found in trash', 'dokan' ),
+                'parent' => __( 'Parent Announcement', 'dokan' )
+            ),
+        ) );
+    }
+
+    /**
+     * Initialize metabox for dokan announcement post type
+     * 
+     * @return void
+     */
+    function do_metaboxes() {
+        add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );    
+    }
+
+    /**
+     * Announcement metabox callback function
+     * 
+     * @param  integer $post_id 
+     * @return void          
+     */
+    function meta_boxes_cb( $post_id ) {
+        global $post;
+        $user_search        = new WP_User_Query( array( 'role' => 'seller' ) );
+        $sellers            = $user_search->get_results();
+
+        $announcement_type  = get_post_meta( $post->ID, '_announcement_type', true );
+        $announcement_users = get_post_meta( $post->ID, '_announcement_selected_user', true );
+        $announcement_sellers = ( $announcement_users ) ? $announcement_users : array();
+
+        ?>
+            <table class="form-table dokan-announcement-meta-wrap-table">
+                <tr>
+                    <th><?php _e( 'Assign type', 'dokan' ); ?></th>
+                    <td>
+                        <select name="dokan_announcement_assign_type" id="dokan_announcement_assign_type" style="width:60%">
+                            <?php foreach ( $this->assign_type as $key => $type ): ?>
+                                <option value="<?php echo $key; ?>" <?php selected( $announcement_type, $key ); ?>><?php echo $type; ?></option>        
+                            <?php endforeach ?>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr class="selected_seller_field">
+                    <th><?php _e( 'Assign Sellers', 'dokan' ); ?></th>
+                    <td>
+                        <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Sellers...', 'dokan' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
+                            <option></option>
+                            <?php
+                            foreach ( $sellers as $user ) {
+                                $info = dokan_get_store_info( $user->ID );
+
+                                if ( isset( $info['store_name'] ) ) {
+                                    ?>
+                                    <option <?php echo in_array( $user->ID, $announcement_sellers ) ? 'selected="selected"' : ''; ?> value='<?php echo $user->ID  ?>'><?php echo esc_html( $info['store_name'] ) ?></option>
+                                <?php } ?>
+                            <?php } ?>
+
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <?php wp_nonce_field( 'dokan_announcement_meta_action', 'dokan_announcement_meta_action_nonce' ); ?>
+
+            <script>
+                (function($){
+                    $(document).ready( function() {
+                        $('#dokan_announcement_assign_seller').chosen( { width: '60%' });
+                        $('table.dokan-announcement-meta-wrap-table').on( 'change', 'select#dokan_announcement_assign_type', function(){
+                            var self = $(this);
+                            if( self.val() == 'selected_seller' ) {
+                                $( 'tr.selected_seller_field' ).show();
+                            } else {
+                                $( 'tr.selected_seller_field' ).hide();
+                            }
+                        });
+                        $('select#dokan_announcement_assign_type').trigger('change')
+                    });
+                })(jQuery);
+            </script>
+            <style>
+                .chosen-choices li.search-field input[type="text"] {
+                    height: 23px !important;
+                }
+                tr.selected_seller_field{
+                    display: none;
+                }
+            </style>
+        <?php
+    }
+
+    /**
+     * Save Announcement post meta
+     * 
+     * @param  integer $post_id 
+     * @param  object $post    
+     * @return void         
+     */
+    function save_announcement_meta( $post_id, $post ) {
+
+        if ( ! isset( $_POST['dokan_announcement_meta_action_nonce'] ) ) {
+            return $post_id;
+        }
+
+        if ( ! wp_verify_nonce( $_POST['dokan_announcement_meta_action_nonce'], 'dokan_announcement_meta_action' ) ) {
+            return $post_id;
+        }
+
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
+            return $post_id;
+
+        $post_type = get_post_type_object( $post->post_type );
+
+        if ( !current_user_can( $post_type->cap->edit_post, $post_id ) ) {
+            return $post_id;
+        }
+
+        $announcement_assign_type   = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type']: '';
+        $announcement_assign_seller = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
+        
+        update_post_meta( $post_id, '_announcement_type', $announcement_assign_type );
+        update_post_meta( $post_id, '_announcement_selected_user', $announcement_assign_seller );
+    }
+}
