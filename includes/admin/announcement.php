@@ -93,11 +93,11 @@ class Dokan_Announcement {
      */
     function meta_boxes_cb( $post_id ) {
         global $post;
-        $user_search        = new WP_User_Query( array( 'role' => 'seller' ) );
-        $sellers            = $user_search->get_results();
+        $user_search = new WP_User_Query( array( 'role' => 'seller' ) );
+        $sellers     = $user_search->get_results();
 
-        $announcement_type  = get_post_meta( $post->ID, '_announcement_type', true );
-        $announcement_users = get_post_meta( $post->ID, '_announcement_selected_user', true );
+        $announcement_type    = get_post_meta( $post->ID, '_announcement_type', true );
+        $announcement_users   = get_post_meta( $post->ID, '_announcement_selected_user', true );
         $announcement_sellers = ( $announcement_users ) ? $announcement_users : array();
 
         ?>
@@ -133,7 +133,6 @@ class Dokan_Announcement {
                 </tr>
             </table>
             <?php wp_nonce_field( 'dokan_announcement_meta_action', 'dokan_announcement_meta_action_nonce' ); ?>
-
             <script>
                 (function($){
                     $(document).ready( function() {
@@ -189,8 +188,128 @@ class Dokan_Announcement {
 
         $announcement_assign_type   = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type']: '';
         $announcement_assign_seller = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
-        
+        $announcement_assign_seller_array = array();
+
         update_post_meta( $post_id, '_announcement_type', $announcement_assign_type );
         update_post_meta( $post_id, '_announcement_selected_user', $announcement_assign_seller );
+
+        if ( $announcement_assign_type == 'selected_seller' ) {
+
+            $this->process_seller_announcement_data( $announcement_assign_seller, $post_id );
+        
+        } elseif ( $announcement_assign_type == 'all_seller' ) {
+            
+            $users = new WP_User_Query( array( 'role' => 'seller' ) );
+            $sellers     = $users->get_results();
+            if( $sellers ) {
+                foreach ( $sellers as $user ) {
+                    $announcement_assign_seller_array[] = $user->ID; 
+                }
+            }
+            $this->process_seller_announcement_data( $announcement_assign_seller_array, $post_id );
+        }    
     }
+
+    function process_seller_announcement_data( $announcement_seller, $post_id ) {
+
+        $inserted_seller_id = $this->get_assign_seller( $post_id );
+        
+        if( !empty( $inserted_seller_id ) ) {
+            foreach ( $inserted_seller_id as $key => $value) {
+                $db[] = $value['user_id'];
+            }
+        } else {
+            $db = array();
+        }
+
+        $sellers = $announcement_seller;
+        $existing_seller = $new_seller = $del_seller = array();
+
+        foreach( $sellers as $seller ) {
+            if( in_array( $seller, $db ) ) {
+                $existing_seller[] = $seller; 
+            } else {
+                $new_seller[] = $seller; 
+            }
+        }
+
+        $del_seller = array_diff( $db, $existing_seller ); 
+        
+        if( $del_seller ) {
+            $this->delete_assign_seller( $del_seller, $post_id );
+        }
+
+        if( $new_seller ) {
+            $this->insert_assign_seller( $new_seller, $post_id );
+        }
+    }
+
+    function get_assign_seller( $post_id ) {
+        global $wpdb;
+        $table_name = $wpdb->prefix.'dokan_announcement';
+
+        $sql = "SELECT `user_id` FROM {$table_name} WHERE `post_id`= $post_id";
+
+        $results = $wpdb->get_results( $sql, ARRAY_A );
+
+        if( $results ) {
+            return $results;
+        } else {
+            return array();
+        }
+    }
+
+    function insert_assign_seller( $seller_array, $post_id ) {
+        global $wpdb;
+        $values = '';
+        $table_name = $wpdb->prefix.'dokan_announcement';
+        $i = 0;
+        
+        foreach ( $seller_array as $key => $seller_id ) {
+            $sep = ( $i==0 ) ? '':',';
+            $values .= sprintf( "$sep( %d, %d, '%s')", (int)$seller_id, (int)$post_id, 'unread');
+            $i++;
+        }
+
+        $sql = "INSERT INTO {$table_name} (`user_id`, `post_id`, `status` ) VALUES $values";
+        $wpdb->query( $sql );
+    }
+
+    function delete_assign_seller( $seller_array, $post_id ) {
+        if( !is_array( $seller_array ) ) {
+            return;
+        }
+        global $wpdb;
+        $table_name = $wpdb->prefix.'dokan_announcement';
+        $values = '';
+        $i = 0;
+        foreach ( $seller_array as $key => $seller_id ) {
+            $sep = ( $i == 0 ) ? '':',';
+            $values .= sprintf( "$sep( %d, %d )", (int)$seller_id, (int)$post_id );
+            $i++;
+        }
+
+        // $sellers = implode( ',', $seller_array );
+        $sql = "DELETE FROM {$table_name} WHERE (`user_id`, `post_id` ) IN ($values)";
+        if( $values ) {
+            $wpdb->query( $sql );
+        }
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
