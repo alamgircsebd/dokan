@@ -35,7 +35,7 @@ if( is_numeric( $notice_id ) ) {
                     </div>
                     
                     <div class="dokan-announcement-link">
-                        <a href="<?php echo dokan_get_navigation_url( 'notice' ) ?>"><?php _e( 'Back to all Notice', 'dokan' ); ?></a>
+                        <a href="<?php echo dokan_get_navigation_url( 'notice' ) ?>" class="dokan-btn dokan-btn-theme"><?php _e( 'Back to all Notice', 'dokan' ); ?></a>
                     </div>
                     <!-- Table for linsting  -->
 
