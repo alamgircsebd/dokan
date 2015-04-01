@@ -102,6 +102,16 @@ class Dokan_Template_Shortcodes {
             return;
         }
 
+        if ( isset( $wp->query_vars['notice'] ) ) {
+            dokan_get_template_part( 'notice' );
+            return;
+        }
+
+        if ( isset( $wp->query_vars['single-notice'] ) ) {
+            dokan_get_template_part( 'single-notice' );
+            return;
+        }
+
         if ( isset( $wp->query_vars['shipping'] ) && $enable_shipping == 'yes' ) {
             dokan_get_template_part( 'shipping' );
             return;

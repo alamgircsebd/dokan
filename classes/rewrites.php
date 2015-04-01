@@ -51,6 +51,8 @@ class Dokan_Rewrites {
             'reports',
             'reviews',
             'withdraw',
+            'notice',
+            'single-notice',
             'shipping',
             'settings',
             'account-migration'

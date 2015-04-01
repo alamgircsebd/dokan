@@ -66,6 +66,10 @@ class Dokan_Ajax {
         // Shipping ajax hanlding
         add_action( 'wp_ajax_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
         add_action( 'wp_ajax_nopriv_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
+
+        // Announcement ajax handling
+        add_action( 'wp_ajax_dokan_announcement_remove_row', array( $this, 'remove_announcement') );
+        add_action( 'wp_ajax_nopriv_dokan_announcement_remove_row', array( $this, 'remove_announcement') );
     }
 
     /**
@@ -824,5 +828,27 @@ class Dokan_Ajax {
         $data = ob_get_clean();  
 
         wp_send_json_success( $data );
+    }
+
+    function remove_announcement() {
+        check_ajax_referer( 'dokan_reviews' );
+        global $wpdb;
+
+        $table_name = $wpdb->prefix. 'dokan_announcement';
+        $row_id = $_POST['row_id'];
+
+        $result = $wpdb->update( 
+            $table_name, 
+            array( 
+                'status' => 'trash',
+            ), 
+            array( 'id' => $row_id, 'user_id' => get_current_user_id() ) 
+        );
+
+        if( $result ) {
+            wp_send_json_success();
+        } else {
+            wp_send_json_error();
+        }
     }
 }

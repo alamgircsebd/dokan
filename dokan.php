@@ -256,7 +256,9 @@ class WeDevs_Dokan {
             'seller'      => array(
                 'available'    => __( 'Available', 'dokan' ),
                 'notAvailable' => __( 'Not Available', 'dokan' )
-            )
+            ),
+            'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
+            'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
         );
         //wp_enqueue_style( 'fontawesome' );
 
