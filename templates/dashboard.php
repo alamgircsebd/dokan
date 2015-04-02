@@ -218,7 +218,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                         <div class="dokan-no-announcement">
                             <div class="annoument-no-wrapper">
                                 <i class="fa fa-bell dokan-announcement-icon"></i>
-                                <p><?php _e( 'No Notice found', 'dokan' ) ?></p>
+                                <p><?php _e( 'No announcement found', 'dokan' ) ?></p>
                             </div>
                         </div>
                     <?php endif ?>

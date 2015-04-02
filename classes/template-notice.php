@@ -105,9 +105,13 @@ class Dokan_Template_Notice {
                 }
             } else {
                 ?>
-                    <div class="dokan-error">
-                        <?php _e( 'No Notice Found', 'dokan' ); ?>
+                <div class="dokan-no-announcement">
+                    <div class="annoument-no-wrapper">
+                        <i class="fa fa-bell dokan-announcement-icon"></i>
+                        <p><?php _e( 'No announcement found', 'dokan' ) ?></p>
                     </div>
+                </div>
+
                 <?php
             }
             ?>

@@ -1157,7 +1157,7 @@ jQuery(function($) {
 
                 var wrap = self.closest('.dokan-gravatar');
                 wrap.find('input.dokan-file-field').val(attachment.id);
-                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);                
+                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);
                 self.parent().siblings('.gravatar-wrap', wrap).removeClass('dokan-hide');
                 self.parent('.gravatar-button-area').addClass('dokan-hide');
 
@@ -1181,7 +1181,7 @@ jQuery(function($) {
                 $('html,body').animate({scrollTop:100});
 
                if ( resp.success ) {
-                   console.log(resp.data);                  
+                   console.log(resp.data);
                     //Harcoded Customization for template-settings function
                       $('.dokan-ajax-response').html( $('<div/>', {
                         'class': 'dokan-alert dokan-alert-success',
@@ -1354,18 +1354,18 @@ jQuery(function($) {
 
 
 (function($){
-    
+
     $(document).ready(function(){
-       
+
         $('.dps-main-wrapper').on('click', 'a.dps-shipping-add', function(e) {
             e.preventDefault();
 
             html = $('#dps-shipping-hidden-lcoation-content');
             var row = $(html).first().clone().appendTo($('.dokan-shipping-location-wrapper')).show();
             $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content').first().find('a.dps-shipping-remove').show();
-            
+
             $('.tips').tooltip();
-            
+
             row.removeAttr('id');
             row.find('input,select').val('');
             row.find('a.dps-shipping-remove').show();
@@ -1374,7 +1374,7 @@ jQuery(function($) {
         $('.dokan-shipping-location-wrapper').on('click', 'a.dps-shipping-remove', function(e) {
             e.preventDefault();
             $(this).closest('.dps-shipping-location-content').remove();
-            $dpsElm = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
+            $dpsElm = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content');
 
             if( $dpsElm.length == 1) {
                 $dpsElm.first().find('a.dps-shipping-remove').hide();
@@ -1392,7 +1392,7 @@ jQuery(function($) {
 
         $('.dokan-shipping-location-wrapper').on('click', 'a.dps-remove', function(e) {
             e.preventDefault();
-            
+
             if( $(this).closest('table.dps-shipping-states').find( 'tr' ).length == 1 ){
                 console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
                 $(this).closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
@@ -1409,15 +1409,15 @@ jQuery(function($) {
             if( self.val() == '' || self.val() == '-1' ) {
                 self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
             } else {
-                self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').hide();    
+                self.closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').hide();
             }
         });
 
         $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('change');
         $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('keyup');
 
-        $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content'); 
-        
+        $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content');
+
         if( $wrap.length == 1) {
             $wrap.first().find('a.dps-shipping-remove').hide();
         }
@@ -1428,25 +1428,29 @@ jQuery(function($) {
 
 // For Announcement scripts;
 (function($){
-    
+
     $(document).ready(function(){
         $( '.dokan-announcement-wrapper' ).on( 'click', 'a.remove_announcement', function(e) {
             e.preventDefault();
-            
+
             if( confirm( dokan.delete_confirm ) ) {
 
                 var self = $(this),
                     data = {
-                        'action' : 'dokan_announcement_remove_row', 
+                        'action' : 'dokan_announcement_remove_row',
                         'row_id' : self.data('notice_row'),
                         '_wpnonce' : dokan.nonce
                     };
-                self.closest('.dokan-announcement-wrapper-item').append('<span class="dokan-loading" style="position:absolute;top:2px; right:15px"> </span>');    
+                self.closest('.dokan-announcement-wrapper-item').append('<span class="dokan-loading" style="position:absolute;top:2px; right:15px"> </span>');
+                var row_count = $('.dokan-announcement-wrapper-item').length;
                 $.post( dokan.ajaxurl, data, function(response) {
                     if( response.success ) {
                         self.closest('.dokan-announcement-wrapper-item').find( 'span.dokan-loading' ).remove();
                         self.closest('.dokan-announcement-wrapper-item').fadeOut(function(){
                             $(this).remove();
+                            if( row_count == 1 ) {
+                                $( '.dokan-announcement-wrapper' ).html( response.data );
+                            }
                         });
                     } else {
                         alert( dokan.wrong_message );

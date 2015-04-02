@@ -3048,6 +3048,26 @@ table.dps-shipping-states tr td {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
 }
+.dokan-announcement-wrapper .dokan-no-announcement .annoument-no-wrapper {
+  height: 100%;
+  margin: 70px auto;
+  text-align: center;
+}
+.dokan-announcement-wrapper .dokan-no-announcement .annoument-no-wrapper .dokan-announcement-icon {
+  font-size: 165px;
+  color: #e3e3e3;
+  -moz-animation: ring 8s 1s ease-in-out infinite !important;
+  -moz-transform-origin: 50% 4px;
+  -webkit-animation: ring 8s 1s ease-in-out infinite !important;
+  -webkit-transform-origin: 50% 4px;
+  animation: ring 8s 1s ease-in-out infinite !important;
+  transform-origin: 50% 4px;
+}
+.dokan-announcement-wrapper .dokan-no-announcement .annoument-no-wrapper p {
+  margin-top: 10px;
+  color: #a6a6a6;
+  font-size: 30px;
+}
 .dokan-announcement-wrapper .dokan-announcement-wrapper-item {
   padding: 22px;
   background: #f3f3f3;

@@ -512,7 +512,7 @@ class Dokan_Ajax {
      */
     function contact_seller() {
         $posted = $_POST;
-        
+
         check_ajax_referer( 'dokan_contact_seller' );
         // print_r($posted);
 
@@ -526,7 +526,7 @@ class Dokan_Ajax {
         $contact_name = trim( strip_tags( $posted['name'] ) );
 
         Dokan_Email::init()->contact_seller( $seller->user_email, $contact_name, $posted['email'], $posted['message'] );
-        
+
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );
         exit;
@@ -798,7 +798,7 @@ class Dokan_Ajax {
                         <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
                     </div>
                 </td>
-            </tr>   
+            </tr>
             <?php
             // }
         } else {
@@ -825,7 +825,7 @@ class Dokan_Ajax {
             </tr>
             <?php
         }
-        $data = ob_get_clean();  
+        $data = ob_get_clean();
 
         wp_send_json_success( $data );
     }
@@ -837,16 +837,27 @@ class Dokan_Ajax {
         $table_name = $wpdb->prefix. 'dokan_announcement';
         $row_id = $_POST['row_id'];
 
-        $result = $wpdb->update( 
-            $table_name, 
-            array( 
+        $result = $wpdb->update(
+            $table_name,
+            array(
                 'status' => 'trash',
-            ), 
-            array( 'id' => $row_id, 'user_id' => get_current_user_id() ) 
+            ),
+            array( 'id' => $row_id, 'user_id' => get_current_user_id() )
         );
 
-        if( $result ) {
-            wp_send_json_success();
+        ob_start();
+        ?>
+        <div class="dokan-no-announcement">
+            <div class="annoument-no-wrapper">
+                <i class="fa fa-bell dokan-announcement-icon"></i>
+                <p><?php _e( 'No Announcement found', 'dokan' ) ?></p>
+            </div>
+        </div>
+        <?php
+        $content = ob_get_clean();
+
+        if ( $result ) {
+            wp_send_json_success( $content );
         } else {
             wp_send_json_error();
         }
