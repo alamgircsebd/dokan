@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
 *  Dokan Announcement class
@@ -10,7 +10,7 @@
 *  @author weDevs <info@wedevs.com>
 */
 class Dokan_Announcement {
-	
+
     private $post_type = 'dokan_announcement';
     private $assign_type = array();
 
@@ -42,8 +42,8 @@ class Dokan_Announcement {
 
     /**
      * Register Announcement post type
-     * 
-     * @return void 
+     *
+     * @return void
      */
     function post_types() {
         register_post_type( $this->post_type, array(
@@ -78,18 +78,18 @@ class Dokan_Announcement {
 
     /**
      * Initialize metabox for dokan announcement post type
-     * 
+     *
      * @return void
      */
     function do_metaboxes() {
-        add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );    
+        add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );
     }
 
     /**
      * Announcement metabox callback function
-     * 
-     * @param  integer $post_id 
-     * @return void          
+     *
+     * @param  integer $post_id
+     * @return void
      */
     function meta_boxes_cb( $post_id ) {
         global $post;
@@ -103,18 +103,18 @@ class Dokan_Announcement {
         ?>
             <table class="form-table dokan-announcement-meta-wrap-table">
                 <tr>
-                    <th><?php _e( 'Assign type', 'dokan' ); ?></th>
+                    <th><?php _e( 'Send Announcement To', 'dokan' ); ?></th>
                     <td>
                         <select name="dokan_announcement_assign_type" id="dokan_announcement_assign_type" style="width:60%">
                             <?php foreach ( $this->assign_type as $key => $type ): ?>
-                                <option value="<?php echo $key; ?>" <?php selected( $announcement_type, $key ); ?>><?php echo $type; ?></option>        
+                                <option value="<?php echo $key; ?>" <?php selected( $announcement_type, $key ); ?>><?php echo $type; ?></option>
                             <?php endforeach ?>
                         </select>
                     </td>
                 </tr>
 
                 <tr class="selected_seller_field">
-                    <th><?php _e( 'Assign Sellers', 'dokan' ); ?></th>
+                    <th><?php _e( 'Select Sellers', 'dokan' ); ?></th>
                     <td>
                         <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Sellers...', 'dokan' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
                             <option></option>
@@ -162,10 +162,10 @@ class Dokan_Announcement {
 
     /**
      * Save Announcement post meta
-     * 
-     * @param  integer $post_id 
-     * @param  object $post    
-     * @return void         
+     *
+     * @param  integer $post_id
+     * @param  object $post
+     * @return void
      */
     function save_announcement_meta( $post_id, $post ) {
 
@@ -177,7 +177,7 @@ class Dokan_Announcement {
             return $post_id;
         }
 
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) 
+        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
             return $post_id;
 
         $post_type = get_post_type_object( $post->post_type );
@@ -196,24 +196,24 @@ class Dokan_Announcement {
         if ( $announcement_assign_type == 'selected_seller' ) {
 
             $this->process_seller_announcement_data( $announcement_assign_seller, $post_id );
-        
+
         } elseif ( $announcement_assign_type == 'all_seller' ) {
-            
+
             $users = new WP_User_Query( array( 'role' => 'seller' ) );
             $sellers     = $users->get_results();
             if( $sellers ) {
                 foreach ( $sellers as $user ) {
-                    $announcement_assign_seller_array[] = $user->ID; 
+                    $announcement_assign_seller_array[] = $user->ID;
                 }
             }
             $this->process_seller_announcement_data( $announcement_assign_seller_array, $post_id );
-        }    
+        }
     }
 
     function process_seller_announcement_data( $announcement_seller, $post_id ) {
 
         $inserted_seller_id = $this->get_assign_seller( $post_id );
-        
+
         if( !empty( $inserted_seller_id ) ) {
             foreach ( $inserted_seller_id as $key => $value) {
                 $db[] = $value['user_id'];
@@ -227,14 +227,14 @@ class Dokan_Announcement {
 
         foreach( $sellers as $seller ) {
             if( in_array( $seller, $db ) ) {
-                $existing_seller[] = $seller; 
+                $existing_seller[] = $seller;
             } else {
-                $new_seller[] = $seller; 
+                $new_seller[] = $seller;
             }
         }
 
-        $del_seller = array_diff( $db, $existing_seller ); 
-        
+        $del_seller = array_diff( $db, $existing_seller );
+
         if( $del_seller ) {
             $this->delete_assign_seller( $del_seller, $post_id );
         }
@@ -264,7 +264,7 @@ class Dokan_Announcement {
         $values = '';
         $table_name = $wpdb->prefix.'dokan_announcement';
         $i = 0;
-        
+
         foreach ( $seller_array as $key => $seller_id ) {
             $sep = ( $i==0 ) ? '':',';
             $values .= sprintf( "$sep( %d, %d, '%s')", (int)$seller_id, (int)$post_id, 'unread');
