@@ -545,9 +545,9 @@
   width: 50%;
 }
 .product-edit-container #product-variations .wc-metabox table td.upload_image img {
-  width: 110px;
-  max-width: 110px;
-  max-height: 110px;
+  width: 100px;
+  max-width: 100px;
+  max-height: 100px;
 }
 .product-edit-container #product-variations .wc-metabox table td.options label {
   display: block;
