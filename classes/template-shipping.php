@@ -181,19 +181,44 @@ class Dokan_Template_Shipping {
         $shipping_policy   = get_user_meta( $post->post_author, '_dps_ship_policy', true );
         $refund_policy     = get_user_meta( $post->post_author, '_dps_refund_policy', true );
 
+        // Store wide shipping info
+        $store_shipping_type_price    = (float)get_user_meta( $post->post_author, '_dps_shipping_type_price', true );
+        $additional_product_cost      = get_post_meta( $post->ID, '_additional_price', true );
+        $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
+        $additional_qty_product_price = get_post_meta( $post->ID, '_additional_qty', true );
+        $dps_additional_qty           = get_user_meta( $post->post_author, '_dps_additional_qty', true );
+        $additional_qty_price         = ( $additional_qty_product_price ) ? $additional_qty_product_price : $dps_additional_qty;
+        
         $country_obj = new WC_Countries();
         $countries   = $country_obj->countries;
         $states      = $country_obj->states;
         ?>
 
-        <?php if ( $processing ) { ?>
+        <?php if ( $base_shipping_type_price ): ?>
+             <p>
+                    <strong>
+                        <?php _e( 'Base Shipping Cost for this product : ', 'dokan' ); ?> <?php echo wc_price( $base_shipping_type_price ); ?>
+                    </strong>
+            </p>
+        <?php endif ?>
+
+        <?php if ( $base_shipping_type_price ): ?>
+             <p>
+                    <strong>
+                        <?php _e( 'Shipping Cost of additional quantity for this product : ', 'dokan' ); ?> <?php echo wc_price( $additional_qty_price ); ?>
+                    </strong>
+            </p>
+
+        <?php endif ?>
+
+        <?php if ( $additional_qty_price ) { ?>
                 <p>
                     <strong>
-                    <?php _e( 'Ready to ship in', 'dokan-shipping' ); ?> <?php echo dokan_get_processing_time_value( $processing ); ?>
+                    <?php _e( 'Ready to ship in', 'dokan' ); ?> <?php echo dokan_get_processing_time_value( $processing ); ?>
 
                     <?php
                     if ( $from ) {
-                        echo __( 'from', 'dokan-shipping' ) . ' ' . $countries[$from];
+                        echo __( 'from', 'dokan' ) . ' ' . $countries[$from];
                     }
                     ?>
                 </strong>
