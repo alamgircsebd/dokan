@@ -108,7 +108,7 @@ function dokan_redirect_if_not_seller( $redirect = '' ) {
  */
 function dokan_delete_product_handler() {
     if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-delete-product' ) {
-        $product_id = isset( $_GET['product_id'] ) ? intval( $_GET['product_id'] ) : 0;
+        $product_id = isset( $_GET['product_id'] ) ? (int) $_GET['product_id'] : 0;
 
         if ( !$product_id ) {
             wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
@@ -1486,4 +1486,125 @@ function dokan_get_profile_progressbar() {
     $output = ob_get_clean();
 
     return $output;
+}
+
+/**
+ * Display a monthly dropdown for filtering product listing on seller dashboard
+ *
+ * @since 2.0.2
+ * @access public
+ *
+ */
+function dokan_product_listing_filter_months_dropdown() {
+    global $wpdb, $wp_locale;
+
+    $months = $wpdb->get_results( "
+        SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
+        FROM $wpdb->posts
+        WHERE post_type = 'product'
+        ORDER BY post_date DESC
+    " );
+
+    /**
+     * Filter the 'Months' drop-down results.
+     *
+     * @since 2.0.2
+     *
+     * @param object $months    The months drop-down query results.
+     */
+    $months = apply_filters( 'months_dropdown_results', $months );
+
+    $month_count = count( $months );
+
+    if ( !$month_count || ( 1 == $month_count && 0 == $months[0]->month ) )
+        return;
+
+    $date = isset( $_GET['date'] ) ? (int) $_GET['date'] : 0;
+    ?>
+    <select name="date" id="filter-by-date" class="dokan-form-control">
+        <option<?php selected( $date, 0 ); ?> value="0"><?php _e( 'All dates' ); ?></option>
+    <?php
+    foreach ( $months as $arc_row ) {
+        if ( 0 == $arc_row->year )
+            continue;
+
+        $month = zeroise( $arc_row->month, 2 );
+        $year = $arc_row->year;
+
+        printf( "<option %s value='%s' >%s</option>\n",
+            selected( $date, $year . $month, false ),
+            esc_attr( $year . $month ),
+            /* translators: 1: month name, 2: 4-digit year */
+            sprintf( __( '%1$s %2$d' ), $wp_locale->get_month( $month ), $year )
+        );
+    }
+    ?>
+    </select>
+    <?php
+}
+
+/**
+ * Display form for filtering product listing on seller dashboard
+ *
+ * @since 2.0.2
+ * @access public
+ *
+ */
+function dokan_product_listing_filter() {
+    do_action( 'dokan_product_listing_filter_before_form');
+    ?>
+
+    <form class="dokan-form-inline dokan-w6" method="get" >
+
+        <div class="dokan-form-group">
+            <?php dokan_product_listing_filter_months_dropdown(); ?>
+        </div>
+
+        <div class="dokan-form-group">
+            <?php
+            wp_dropdown_categories( array(
+                'show_option_none' => __( '- Select a category -', 'dokan' ),
+                'hierarchical'     => 1,
+                'hide_empty'       => 0,
+                'name'             => 'product_cat',
+                'id'               => 'product_cat',
+                'taxonomy'         => 'product_cat',
+                'title_li'         => '',
+                'class'            => 'product_cat dokan-form-control chosen',
+                'exclude'          => '',
+                'selected'         => isset( $_GET['product_cat'] ) ? $_GET['product_cat'] : '-1',
+            ) );
+            ?>
+        </div>
+
+        <?php 
+        if( isset( $_GET['product_search_name'] ) ) { ?>
+            <input type="hidden" name="product_search_name" value="<?php echo $_GET['product_search_name']; ?>">
+        <? }
+        ?>
+
+        <button type="submit" name="product_listing_filter" value="ok" class="dokan-btn dokan-btn-theme">Filter</button>
+
+    </form>
+    <?php do_action( 'dokan_product_listing_filter_before_search_form'); ?>
+    <form method="get" class="dokan-form-inline dokan-w6">
+
+        <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right">Search</button>
+
+        <div class="dokan-form-group dokan-right">
+            <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Product name" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
+        </div>
+
+        <?php 
+        if( isset( $_GET['product_cat'] ) ) { ?>
+            <input type="hidden" name="product_cat" value="<?php echo $_GET['product_cat']; ?>">
+        <? }
+
+        if( isset( $_GET['date'] ) ) { ?>
+            <input type="hidden" name="date" value="<?php echo $_GET['date']; ?>">
+        <? }
+        ?>
+    </form>
+    <?php
+    do_action( 'dokan_product_listing_filter_after_form');
 }
