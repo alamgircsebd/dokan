@@ -51,12 +51,7 @@ if( is_numeric( $notice_id ) ) {
                     <div class="dokan-error">
                         <?php echo sprintf( "<p>%s <a href='%s'>%s</a></p", __( 'No Notice found; ', 'dokan' ), dokan_get_navigation_url('notice'), __( 'Back to all Notice', 'dokan' ) ) ?>
                     </div> 
-
-                    <!-- Table for linsting  -->
-
-                    <!-- Pagination styles -->
                 </article>
-
             <?php endif ?>
             
         <?php do_action( 'dokan_after_listing_notice' ); ?>
