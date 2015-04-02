@@ -1494,16 +1494,18 @@ function dokan_get_profile_progressbar() {
  * @since 2.0.2
  * @access public
  *
+ * @param int $user_id
  */
-function dokan_product_listing_filter_months_dropdown() {
+function dokan_product_listing_filter_months_dropdown( $user_id ) {
     global $wpdb, $wp_locale;
 
-    $months = $wpdb->get_results( "
+    $months = $wpdb->get_results( $wpdb->prepare( "
         SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
         FROM $wpdb->posts
         WHERE post_type = 'product'
+        AND post_author = %d
         ORDER BY post_date DESC
-    " );
+    ", $user_id )  );
 
     /**
      * Filter the 'Months' drop-down results.
@@ -1557,7 +1559,7 @@ function dokan_product_listing_filter() {
     <form class="dokan-form-inline dokan-w6" method="get" >
 
         <div class="dokan-form-group">
-            <?php dokan_product_listing_filter_months_dropdown(); ?>
+            <?php dokan_product_listing_filter_months_dropdown( get_current_user_id() ); ?>
         </div>
 
         <div class="dokan-form-group">
