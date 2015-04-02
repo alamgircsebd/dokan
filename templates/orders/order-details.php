@@ -159,6 +159,9 @@ $order    = new WC_Order( $order_id );
                                     <select id="order_status" name="order_status" class="form-control">
                                         <?php
                                         foreach ( $statuses as $status => $label ) {
+                                            if( $status == 'wc-refunded' ) {
+                                                continue;
+                                            }
                                             echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . $label . '</option>';
                                         }
                                         ?>
