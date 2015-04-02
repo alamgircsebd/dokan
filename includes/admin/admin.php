@@ -21,17 +21,26 @@ class Dokan_Admin_Settings {
         add_action( 'admin_init', array($this, 'tools_page_handler') );
 
         add_action( 'admin_menu', array($this, 'admin_menu') );
-
         add_action( 'admin_notices', array($this, 'update_notice' ) );
     }
 
+    /**
+     * Dashboard scripts and styles
+     *
+     * @return void
+     */
     function dashboard_script() {
         wp_enqueue_style( 'dokan-admin-dash', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
+
         $this->report_scripts();
     }
 
+    /**
+     * Reporting scripts
+     *
+     * @return void
+     */
     function report_scripts() {
-
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
         wp_enqueue_style( 'dokan-chosen-style' );
@@ -40,12 +49,19 @@ class Dokan_Admin_Settings {
         wp_enqueue_script( 'jquery-flot' );
         wp_enqueue_script( 'jquery-chart' );
         wp_enqueue_script( 'chosen' );
-     
     }
 
+    /**
+     * Seller announcement scripts
+     *
+     * @since 2.1
+     *
+     * @return void
+     */
     function announcement_scripts() {
         global $post_type;
-        if( 'dokan_announcement' == $post_type ) {
+
+        if ( 'dokan_announcement' == $post_type ) {
             wp_enqueue_style( 'dokan-chosen-style' );
             wp_enqueue_script( 'chosen' );
         }
