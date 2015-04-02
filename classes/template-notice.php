@@ -3,7 +3,7 @@
  * Dokan Notice Class
  *
  * @since  2.1
- * 
+ *
  * @author weDevs
  */
 class Dokan_Template_Notice {
@@ -31,15 +31,15 @@ class Dokan_Template_Notice {
      * Get Announcement via teble and announcement post type
      *
      * @since  2.1
-     * 
+     *
      * @param  integer $per_page
-     * 
+     *
      * @return object
      */
     function get_announcement_by_users( $per_page = NULL ) {
-        
+
         $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-        
+
         $args = array(
             'post_type' => 'dokan_announcement',
             'post_status' => 'publish',
@@ -53,7 +53,7 @@ class Dokan_Template_Notice {
 
         $query = new WP_Query( $args );
 
-        $this->remove_query_filter();               
+        $this->remove_query_filter();
 
         return $query;
     }
@@ -62,8 +62,8 @@ class Dokan_Template_Notice {
      * Show announcement template
      *
      * @since  2.1
-     * 
-     * @return void 
+     *
+     * @return void
      */
     function show_announcement_template() {
 
@@ -76,11 +76,11 @@ class Dokan_Template_Notice {
             if( $query->posts ) {
                 $i = 0;
                 foreach ( $query->posts as $notice ) {
-                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-notice' ).''.$notice->ID );
+                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-announcement' ).''.$notice->ID );
                     ?>
                     <div class="dokan-announcement-wrapper-item <?php echo ( $notice->status == 'unread' ) ? 'dokan-announcement-uread' : '' ?>">
-                        <div class="announcement-action"> 
-                            <a href="#" class="remove_announcement" data-notice_row = <?php echo $notice->id; ?>><i class="fa fa-times"></i></a> 
+                        <div class="announcement-action">
+                            <a href="#" class="remove_announcement" data-notice_row = <?php echo $notice->id; ?>><i class="fa fa-times"></i></a>
                         </div>
                         <div class="dokan-annnouncement-date dokan-left">
                             <div class="announcement-day"><?php echo date('d', strtotime( $notice->post_date ) ) ?></div>
@@ -113,22 +113,22 @@ class Dokan_Template_Notice {
             ?>
         </div>
         <?php
-        
+
         wp_reset_postdata();
 
         $this->get_pagination( $query );
-        
+
     }
 
     /**
-     *  Add Query filter for select, join and where 
+     *  Add Query filter for select, join and where
      *  with dokan_announcement post type
      *
      *  @since  2.1
      */
     function add_query_filter() {
-        add_filter( 'posts_fields', array( $this, 'select_dokan_announcement_table' ), 10, 2 ); 
-        add_filter( 'posts_join', array( $this, 'join_dokan_announcement_table' ) );             
+        add_filter( 'posts_fields', array( $this, 'select_dokan_announcement_table' ), 10, 2 );
+        add_filter( 'posts_join', array( $this, 'join_dokan_announcement_table' ) );
         add_filter( 'posts_where', array( $this, 'where_dokan_announcement_table' ), 10, 2 );
     }
 
@@ -136,28 +136,28 @@ class Dokan_Template_Notice {
      * Remove query filters
      *
      * @since  2.1
-     * 
+     *
      * @return void
      */
     function remove_query_filter() {
-        remove_filter( 'posts_fields', array( $this, 'select_dokan_announcement_table' ), 10, 2 ); 
-        remove_filter( 'posts_join', array( $this, 'join_dokan_announcement_table' ) );          
-        remove_filter( 'posts_where', array( $this, 'where_dokan_announcement_table' ), 10, 2 ); 
+        remove_filter( 'posts_fields', array( $this, 'select_dokan_announcement_table' ), 10, 2 );
+        remove_filter( 'posts_join', array( $this, 'join_dokan_announcement_table' ) );
+        remove_filter( 'posts_where', array( $this, 'where_dokan_announcement_table' ), 10, 2 );
     }
 
     /**
      * Render pagination for seller announcement
      *
      * @since  2.1
-     * 
-     * @param  object $query 
-     * 
-     * @return void        
+     *
+     * @param  object $query
+     *
+     * @return void
      */
     function get_pagination( $query ) {
         $pagenum  = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $base_url = dokan_get_navigation_url('notice');
-        
+
         if ( $query->max_num_pages > 1 ) {
             echo '<div class="pagination-wrap">';
             $page_links = paginate_links( array(
@@ -182,59 +182,59 @@ class Dokan_Template_Notice {
      * Get single announcement
      *
      * @since  2.1
-     * 
-     * @param  integer $notice_id 
-     * 
-     * @return object            
+     *
+     * @param  integer $notice_id
+     *
+     * @return object
      */
     function get_single_announcement( $notice_id ) {
         $args = array(
             'p' => $notice_id,
-            'post_type' => 'dokan_announcement' 
+            'post_type' => 'dokan_announcement'
         );
 
         $this->add_query_filter();
 
         $query = new WP_Query( $args );
-        $notice = (array)$query->posts; 
+        $notice = (array)$query->posts;
 
         $this->remove_query_filter();
-        
+
         return $notice;
     }
 
     /**
-     * Update notice status in dokan_announcement table 
+     * Update notice status in dokan_announcement table
      *
      * @since  2.1
-     * 
-     * @param  integer $notice_id 
-     * @param  string $status  
-     *   
-     * @return void            
+     *
+     * @param  integer $notice_id
+     * @param  string $status
+     *
+     * @return void
      */
     function update_notice_status( $notice_id, $status ) {
         global $wpdb;
         $table_name = $wpdb->prefix.'dokan_announcement';
 
-        $wpdb->update( 
-            $table_name, 
-            array( 
+        $wpdb->update(
+            $table_name,
+            array(
                 'status' => $status,
-            ), 
-            array( 'post_id' => $notice_id, 'user_id' => get_current_user_id() ) 
+            ),
+            array( 'post_id' => $notice_id, 'user_id' => get_current_user_id() )
         );
     }
 
     /**
      * Select query filter
      *
-     * @since  2.1 
-     * 
-     * @param  string $fields 
-     * @param  object $query  
-     * 
-     * @return string         
+     * @since  2.1
+     *
+     * @param  string $fields
+     * @param  object $query
+     *
+     * @return string
      */
     function select_dokan_announcement_table( $fields, $query ) {
         global $wpdb;
@@ -249,29 +249,29 @@ class Dokan_Template_Notice {
      * Join query filter
      *
      * @since  2.1
-     * 
-     * @param  string $join 
-     * 
-     * @return string       
+     *
+     * @param  string $join
+     *
+     * @return string
      */
     function join_dokan_announcement_table( $join ) {
         global $wpdb;
-        
+
         $table_name = $wpdb->prefix .'dokan_announcement';
         $join .= " LEFT JOIN $table_name AS da ON $wpdb->posts.ID = da.post_id";
 
-        return $join; 
+        return $join;
     }
 
     /**
      * Where query filter
      *
      * @since  2.1
-     * 
-     * @param  integer $where 
-     * @param  object $query 
-     * 
-     * @return string        
+     *
+     * @param  integer $where
+     * @param  object $query
+     *
+     * @return string
      */
     function where_dokan_announcement_table( $where, $query ) {
         global $wpdb;

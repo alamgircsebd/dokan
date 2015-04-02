@@ -47,7 +47,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                         </li>
 
                         <?php do_action( 'dokan_seller_dashboard_widget_counter' ); ?>
-                        
+
                     </ul>
                 </div> <!-- .big-counter -->
 
@@ -187,18 +187,18 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                         <i class="icon-briefcase"></i> <?php _e( 'Latest Announcement', 'dokan' ); ?>
 
                         <span class="pull-right">
-                            <a href="<?php echo dokan_get_navigation_url( 'notice' ); ?>"><?php _e( 'See All', 'dokan' ); ?></a>
+                            <a href="<?php echo dokan_get_navigation_url( 'announcement' ); ?>"><?php _e( 'See All', 'dokan' ); ?></a>
                         </span>
                     </div>
-                    <?php 
+                    <?php
                         $template_notice = Dokan_Template_Notice::init();
-                        $query = $template_notice->get_announcement_by_users(3);  
+                        $query = $template_notice->get_announcement_by_users(3);
                     ?>
                     <?php if ( $query->posts ): ?>
                         <ul class="list-unstyled">
                             <?php foreach ( $query->posts as $notice ): ?>
-                                <?php 
-                                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-notice' ).''.$notice->ID );
+                                <?php
+                                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-announcement' ).''.$notice->ID );
                                  ?>
                                 <li>
                                     <div class="dokan-dashboard-announce-content dokan-left">

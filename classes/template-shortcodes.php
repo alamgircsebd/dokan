@@ -102,13 +102,13 @@ class Dokan_Template_Shortcodes {
             return;
         }
 
-        if ( isset( $wp->query_vars['notice'] ) ) {
-            dokan_get_template_part( 'notice' );
+        if ( isset( $wp->query_vars['announcement'] ) ) {
+            dokan_get_template_part( 'announcement' );
             return;
         }
 
-        if ( isset( $wp->query_vars['single-notice'] ) ) {
-            dokan_get_template_part( 'single-notice' );
+        if ( isset( $wp->query_vars['single-announcement'] ) ) {
+            dokan_get_template_part( 'single-announcement' );
             return;
         }
 
@@ -173,9 +173,9 @@ class Dokan_Template_Shortcodes {
             } else {
                 if( !isset( $_POST['product_cat'] ) && empty( $_POST['product_cat'] ) ) {
                     $errors[] = __( 'Please select atleast one category', 'dokan' );
-                }    
+                }
             }
-            
+
             self::$errors = apply_filters( 'dokan_can_add_product', $errors );
 
             if ( !self::$errors ) {
@@ -198,19 +198,19 @@ class Dokan_Template_Shortcodes {
                         set_post_thumbnail( $product_id, $featured_image );
                     }
 
-                    if( isset( $_POST['product_tag'] ) && !empty( $_POST['product_tag'] ) ) {                
+                    if( isset( $_POST['product_tag'] ) && !empty( $_POST['product_tag'] ) ) {
                         $tags_ids = array_map( 'intval', (array)$_POST['product_tag'] );
                         wp_set_object_terms( $product_id, $tags_ids, 'product_tag' );
-                    } 
+                    }
 
                     /** set product category * */
                     if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
                         wp_set_object_terms( $product_id, (int) $_POST['product_cat'], 'product_cat' );
                     } else {
-                        if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {                
+                        if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {
                             $cat_ids = array_map( 'intval', (array)$_POST['product_cat'] );
                             wp_set_object_terms( $product_id, $cat_ids, 'product_cat' );
-                        } 
+                        }
                     }
 
                     /** Set Product type by default simple */
@@ -257,23 +257,23 @@ class Dokan_Template_Shortcodes {
             wp_update_post( $product_info );
 
             /** Set Product tags */
-            if( isset( $_POST['product_tag'] ) ) { 
+            if( isset( $_POST['product_tag'] ) ) {
                 $tags_ids = array_map( 'intval', (array)$_POST['product_tag'] );
             } else {
                 $tags_ids = array();
-            } 
-            wp_set_object_terms( $post_id, $tags_ids, 'product_tag' ); 
+            }
+            wp_set_object_terms( $post_id, $tags_ids, 'product_tag' );
 
 
             /** set product category * */
-            
+
             if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
                 wp_set_object_terms( $post_id, (int) $_POST['product_cat'], 'product_cat' );
             } else {
-                if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {                
+                if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {
                     $cat_ids = array_map( 'intval', (array)$_POST['product_cat'] );
                     wp_set_object_terms( $post_id, $cat_ids, 'product_cat' );
-                } 
+                }
             }
 
             wp_set_object_terms( $post_id, 'simple', 'product_type' );
@@ -292,13 +292,13 @@ class Dokan_Template_Shortcodes {
             exit;
         }
 
-       
+
     }
 
     /**
      * Handle the coupons submission
-     * 
-     * @return void 
+     *
+     * @return void
      */
     function handle_coupons() {
 
@@ -328,7 +328,7 @@ class Dokan_Template_Shortcodes {
      * @return void
      */
     function handle_delete_product() {
-        
+
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -528,14 +528,14 @@ class Dokan_Template_Shortcodes {
         if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
             return;
         }
-        
+
 
         if( isset( $_POST['dokan_update_shipping_options'] ) && wp_verify_nonce( $_POST['dokan_shipping_form_field_nonce'], 'dokan_shipping_form_field' ) ) {
-            
-            $user_id = get_current_user_id();   
+
+            $user_id = get_current_user_id();
             $s_rates = array();
             $rates = array();
-            
+
             if( isset( $_POST['dps_enable_shipping'] ) ) {
                 update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );
             }
@@ -573,7 +573,7 @@ class Dokan_Template_Shortcodes {
             }
 
             if ( isset( $_POST['dps_country_to'] ) ) {
-                
+
                 foreach ($_POST['dps_country_to'] as $key => $value) {
                     $country = $value;
                     $c_price = floatval( $_POST['dps_country_to_price'][$key] );
@@ -590,9 +590,9 @@ class Dokan_Template_Shortcodes {
 
             update_user_meta( $user_id, '_dps_country_rates', $rates );
 
-            if ( isset( $_POST['dps_state_to'] ) ) {                
+            if ( isset( $_POST['dps_state_to'] ) ) {
                 foreach ( $_POST['dps_state_to'] as $country_code => $states ) {
-                    
+
                     foreach ( $states as $key_val => $name ) {
                         $country_c = $country_code;
                         $state_code = $name;
@@ -604,7 +604,7 @@ class Dokan_Template_Shortcodes {
 
                         if ( !empty( $name ) ) {
                             $s_rates[$country_c][$state_code] = $s_price;
-                        }    
+                        }
                     }
                 }
             }

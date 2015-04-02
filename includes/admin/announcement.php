@@ -1,7 +1,7 @@
 <?php
 
 /**
-*  Dokan Announcement class
+*  Dokan Announcement class for Admin
 *
 *  Announcement for seller
 *
@@ -22,6 +22,8 @@ class Dokan_Announcement {
         add_action( 'init', array($this, 'post_types') );
         add_action( 'do_meta_boxes', array($this, 'do_metaboxes' ) );
         add_action( 'save_post', array($this, 'save_announcement_meta'), 10, 2 );
+        add_filter( 'manage_edit-dokan_announcement_columns', array( $this, 'add_type_columns' ) );
+        add_filter( 'manage_dokan_announcement_posts_custom_column', array( $this, 'assign_type_edit_columns' ), 10, 2 );
 	}
 
 	/**
@@ -42,6 +44,8 @@ class Dokan_Announcement {
 
     /**
      * Register Announcement post type
+     *
+     * @since 2.1
      *
      * @return void
      */
@@ -79,6 +83,8 @@ class Dokan_Announcement {
     /**
      * Initialize metabox for dokan announcement post type
      *
+     * @since 2.1
+     *
      * @return void
      */
     function do_metaboxes() {
@@ -89,6 +95,7 @@ class Dokan_Announcement {
      * Announcement metabox callback function
      *
      * @param  integer $post_id
+     *
      * @return void
      */
     function meta_boxes_cb( $post_id ) {
@@ -161,10 +168,51 @@ class Dokan_Announcement {
     }
 
     /**
+     * Add custom column label
+     *
+     * @since  2.1
+     *
+     * @param array $columns
+     */
+    function add_type_columns( $columns ) {
+        unset( $columns['date'] );
+        $columns['assign_type'] = __( 'Assign Type' );
+        $columns['date'] = __( 'Date' );
+
+        return $columns;
+    }
+
+    /**
+     * Render custom column content
+     *
+     * @since  2.1
+     *
+     * @param  string $column
+     * @param  integer $post_id
+     *
+     * @return void
+     */
+    function assign_type_edit_columns( $column, $post_id ) {
+        global $post;
+
+        if( $column == 'assign_type' ) {
+            $assign_type = get_post_meta( $post_id, '_announcement_type', true );
+            if( $assign_type ) {
+                echo $this->assign_type[$assign_type];
+            } else {
+                _e( 'No user assign', 'dokan' );
+            }
+        }
+    }
+
+    /**
      * Save Announcement post meta
+     *
+     * @since  2.1
      *
      * @param  integer $post_id
      * @param  object $post
+     *
      * @return void
      */
     function save_announcement_meta( $post_id, $post ) {
@@ -210,6 +258,16 @@ class Dokan_Announcement {
         }
     }
 
+    /**
+     * Proce seller announcement data
+     *
+     * @since  2.1
+     *
+     * @param  array $announcement_seller
+     * @param  integer $post_id
+     *
+     * @return void
+     */
     function process_seller_announcement_data( $announcement_seller, $post_id ) {
 
         $inserted_seller_id = $this->get_assign_seller( $post_id );
@@ -244,6 +302,15 @@ class Dokan_Announcement {
         }
     }
 
+    /**
+     * Get assign seller
+     *
+     * @since  2.1
+     *
+     * @param  integer $post_id
+     *
+     * @return array
+     */
     function get_assign_seller( $post_id ) {
         global $wpdb;
         $table_name = $wpdb->prefix.'dokan_announcement';
@@ -259,6 +326,16 @@ class Dokan_Announcement {
         }
     }
 
+    /**
+     * Insert assing seller
+     *
+     * @since 2.1
+     *
+     * @param  array $seller_array
+     * @param  integer $post_id
+     *
+     * @return void
+     */
     function insert_assign_seller( $seller_array, $post_id ) {
         global $wpdb;
         $values = '';
@@ -275,6 +352,16 @@ class Dokan_Announcement {
         $wpdb->query( $sql );
     }
 
+    /**
+     * Delete assign seller
+     *
+     * @since  2.1
+     *
+     * @param  array $seller_array
+     * @param  integer $post_id
+     *
+     * @return void
+     */
     function delete_assign_seller( $seller_array, $post_id ) {
         if( !is_array( $seller_array ) ) {
             return;
@@ -295,7 +382,6 @@ class Dokan_Announcement {
             $wpdb->query( $sql );
         }
     }
-
 }
 
 
