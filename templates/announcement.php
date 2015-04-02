@@ -13,7 +13,7 @@
             <article class="dokan-notice-listing-area">
                 <header class="dokan-dashboard-header dokan-clearfix">
                     <span class="left-header-content">
-                        <h1 class="entry-title"><?php _e( 'Notice', 'dokan' ); ?></h1>
+                        <h1 class="entry-title"><?php _e( 'Announcement', 'dokan' ); ?></h1>
                     </span>
                 </header>
 
@@ -22,8 +22,8 @@
                 </div>
 
                 <?php // show errors ?>
-                
-                <?php $announcement->show_announcement_template(); ?>    
+
+                <?php $announcement->show_announcement_template(); ?>
                 <!-- Table for linsting  -->
 
                 <!-- Pagination styles -->
