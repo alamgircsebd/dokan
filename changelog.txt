@@ -1,5 +1,30 @@
 ==================== Plugin Version ====================
 
+v2.0.2 -> April 2, 2015
+---------------------
+- [new] Seller total earning view on seller dashboard
+- [new] Product listing filter and search field in seller dashboard product page
+- [new] Added shipping processing time for individual product 
+- [fix] Variable product image size fixed 
+- [fix] Product variation sku tooltip display fixed 
+- [fix] Shipping tab extra info added 
+- [fix] Order refund by seller removed
+- [new] Seller announcement feature
+- [new] Add admin view withdraw table row action 
+- [fix] Fixed enable store contact seller and map show option of backend 
+- [fix] Download limit text and input type changed to number
+- [fix] Admin all log order status display fixed 
+- [fix] Restricted shipping charge for downloadable product or virtual product 
+- [fix] Shipping tab disable for downloadable product 
+- [fix] Shipping info display error fixed
+- [fix] Shipping disable logical issue fixed
+- [fix] Show hide override shipping option according to disable shipping in single product
+- [fix] Variation remove item problem fixed
+- [fix] Variation stock management fixed
+- [fix] Wp editor content render with auto p fix
+- [fix] Fix inventory stock management 
+- [new] Seller Profile completeness
+
 v2.0.1 -> March 9, 2015
 ---------------------
 - [fix] Minor bug in shipping gateway

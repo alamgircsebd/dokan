@@ -45,6 +45,10 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                             <div class="title"><?php _e( 'Sales', 'dokan' ); ?></div>
                             <div class="count"><?php echo woocommerce_price( $earning ); ?></div>
                         </li>
+                        <li>
+                            <div class="title"><?php _e( 'Earning', 'dokan' ); ?></div>
+                            <div class="count"><?php echo dokan_get_seller_balance( $user_id ); ?></div>
+                        </li>
 
                         <?php do_action( 'dokan_seller_dashboard_widget_counter' ); ?>
                         
