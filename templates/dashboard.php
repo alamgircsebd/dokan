@@ -194,25 +194,29 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                         $template_notice = Dokan_Template_Notice::init();
                         $query = $template_notice->get_announcement_by_users(3);  
                     ?>
-                    <ul class="list-unstyled">
-                        <?php foreach ( $query->posts as $notice ): ?>
-                            <?php 
-                                $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-notice' ).''.$notice->ID );
-                             ?>
-                            <li>
-                                <div class="dokan-dashboard-announce-content dokan-left">
-                                    <a href="<?php echo $notice_url; ?>"><h3><?php echo $notice->post_title ?></h3></a>
-                                    <?php echo wp_trim_words( $notice->post_content, 6, '...' ); ?>
-                                </div>
-                                <div class="dokan-dashboard-announce-date dokan-right">
-                                    <div class="announce-day"><?php echo date( 'd', strtotime( $notice->post_date ) ); ?></div>
-                                    <div class="announce-month"><?php echo date( 'l', strtotime( $notice->post_date ) ); ?></div>
-                                    <div class="announce-year"><?php echo date( 'Y', strtotime( $notice->post_date ) ); ?></div>
-                                </div>
-                                <div class="dokan-clearfix"></div>
-                            </li>
-                        <?php endforeach ?>
-                    </ul>
+                    <?php if ( $query->posts ): ?>
+                        <ul class="list-unstyled">
+                            <?php foreach ( $query->posts as $notice ): ?>
+                                <?php 
+                                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-notice' ).''.$notice->ID );
+                                 ?>
+                                <li>
+                                    <div class="dokan-dashboard-announce-content dokan-left">
+                                        <a href="<?php echo $notice_url; ?>"><h3><?php echo $notice->post_title ?></h3></a>
+                                        <?php echo wp_trim_words( $notice->post_content, 6, '...' ); ?>
+                                    </div>
+                                    <div class="dokan-dashboard-announce-date dokan-right">
+                                        <div class="announce-day"><?php echo date( 'd', strtotime( $notice->post_date ) ); ?></div>
+                                        <div class="announce-month"><?php echo date( 'l', strtotime( $notice->post_date ) ); ?></div>
+                                        <div class="announce-year"><?php echo date( 'Y', strtotime( $notice->post_date ) ); ?></div>
+                                    </div>
+                                    <div class="dokan-clearfix"></div>
+                                </li>
+                            <?php endforeach ?>
+                        </ul>
+                    <?php else: ?>
+                        <p><?php _e( 'No notice found', 'dokan' ); ?></p>
+                    <?php endif ?>
                 </div> <!-- .products -->
 
             </div>

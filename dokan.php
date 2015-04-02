@@ -161,8 +161,9 @@ class WeDevs_Dokan {
     public static function activate() {
         global $wpdb;
 
-        $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
-        $wpdb->dokan_orders   = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_withdraw     = $wpdb->prefix . 'dokan_withdraw';
+        $wpdb->dokan_orders       = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_announcement = $wpdb->prefix . 'dokan_announcement';
 
         require_once __DIR__ . '/includes/theme-functions.php';
 
