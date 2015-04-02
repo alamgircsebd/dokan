@@ -419,7 +419,7 @@ class WeDevs_Dokan {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
             Dokan_Admin_Ajax::init();
-            Dokan_Announcement::init();
+            new Dokan_Announcement();
             new Dokan_Update();
         } else {
             new Dokan_Pageviews();

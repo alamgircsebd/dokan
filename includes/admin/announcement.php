@@ -1,14 +1,13 @@
 <?php
-
 /**
-*  Dokan Announcement class for Admin
-*
-*  Announcement for seller
-*
-*  @since 2.2
-*
-*  @author weDevs <info@wedevs.com>
-*/
+ *  Dokan Announcement class for Admin
+ *
+ *  Announcement for seller
+ *
+ *  @since 2.1
+ *
+ *  @author weDevs <info@wedevs.com>
+ */
 class Dokan_Announcement {
 
     private $post_type = 'dokan_announcement';
@@ -18,29 +17,19 @@ class Dokan_Announcement {
 	 *  Load autometically all actions
 	 */
 	function __construct() {
-        $this->assign_type = array( ''=> __( '--Select--', 'dokan' ), 'all_seller'=> __( 'All Seller' ), 'selected_seller' => __( 'Selected Seller' ) );
+        $this->assign_type = array(
+            ''                => __( '-- Select --', 'dokan' ),
+            'all_seller'      => __( 'All Seller' ),
+            'selected_seller' => __( 'Selected Seller' )
+        );
+
         add_action( 'init', array($this, 'post_types') );
         add_action( 'do_meta_boxes', array($this, 'do_metaboxes' ) );
         add_action( 'save_post', array($this, 'save_announcement_meta'), 10, 2 );
+
         add_filter( 'manage_edit-dokan_announcement_columns', array( $this, 'add_type_columns' ) );
         add_filter( 'manage_dokan_announcement_posts_custom_column', array( $this, 'assign_type_edit_columns' ), 10, 2 );
 	}
-
-	/**
-     * Initializes the Dokan_Template_Withdraw class
-     *
-     * Checks for an existing Dokan_Template_Withdraw instance
-     * and if it doesn't find one, creates it.
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( ! $instance ) {
-            $instance = new Dokan_Announcement();
-        }
-
-        return $instance;
-    }
 
     /**
      * Register Announcement post type
@@ -51,31 +40,31 @@ class Dokan_Announcement {
      */
     function post_types() {
         register_post_type( $this->post_type, array(
-            'label' => __( 'Announcement', 'dokan' ),
-            'description' => '',
-            'public' => false,
-            'show_ui' => true,
-            'show_in_menu' => false,
+            'label'           => __( 'Announcement', 'dokan' ),
+            'description'     => '',
+            'public'          => false,
+            'show_ui'         => true,
+            'show_in_menu'    => false,
             'capability_type' => 'post',
-            'hierarchical' => false,
-            'rewrite' => array('slug' => ''),
-            'query_var' => false,
-            'supports' => array( 'title', 'editor' ),
-            'labels' => array(
-                'name' => __( 'Announcement', 'dokan' ),
-                'singular_name' => __( 'Announcement', 'dokan' ),
-                'menu_name' => __( 'Dokan Announcement', 'dokan' ),
-                'add_new' => __( 'Add Announcement', 'dokan' ),
-                'add_new_item' => __( 'Add New Announcement', 'dokan' ),
-                'edit' => __( 'Edit', 'dokan' ),
-                'edit_item' => __( 'Edit Announcement', 'dokan' ),
-                'new_item' => __( 'New Announcement', 'dokan' ),
-                'view' => __( 'View Announcement', 'dokan' ),
-                'view_item' => __( 'View Announcement', 'dokan' ),
-                'search_items' => __( 'Search Announcement', 'dokan' ),
-                'not_found' => __( 'No Announcement Found', 'dokan' ),
+            'hierarchical'    => false,
+            'rewrite'         => array('slug' => ''),
+            'query_var'       => false,
+            'supports'        => array( 'title', 'editor' ),
+            'labels'          => array(
+                'name'               => __( 'Announcement', 'dokan' ),
+                'singular_name'      => __( 'Announcement', 'dokan' ),
+                'menu_name'          => __( 'Dokan Announcement', 'dokan' ),
+                'add_new'            => __( 'Add Announcement', 'dokan' ),
+                'add_new_item'       => __( 'Add New Announcement', 'dokan' ),
+                'edit'               => __( 'Edit', 'dokan' ),
+                'edit_item'          => __( 'Edit Announcement', 'dokan' ),
+                'new_item'           => __( 'New Announcement', 'dokan' ),
+                'view'               => __( 'View Announcement', 'dokan' ),
+                'view_item'          => __( 'View Announcement', 'dokan' ),
+                'search_items'       => __( 'Search Announcement', 'dokan' ),
+                'not_found'          => __( 'No Announcement Found', 'dokan' ),
                 'not_found_in_trash' => __( 'No Announcement found in trash', 'dokan' ),
-                'parent' => __( 'Parent Announcement', 'dokan' )
+                'parent'             => __( 'Parent Announcement', 'dokan' )
             ),
         ) );
     }
@@ -100,6 +89,7 @@ class Dokan_Announcement {
      */
     function meta_boxes_cb( $post_id ) {
         global $post;
+
         $user_search = new WP_User_Query( array( 'role' => 'seller' ) );
         $sellers     = $user_search->get_results();
 
@@ -140,18 +130,21 @@ class Dokan_Announcement {
                 </tr>
             </table>
             <?php wp_nonce_field( 'dokan_announcement_meta_action', 'dokan_announcement_meta_action_nonce' ); ?>
+
             <script>
                 (function($){
                     $(document).ready( function() {
                         $('#dokan_announcement_assign_seller').chosen( { width: '60%' });
                         $('table.dokan-announcement-meta-wrap-table').on( 'change', 'select#dokan_announcement_assign_type', function(){
                             var self = $(this);
-                            if( self.val() == 'selected_seller' ) {
+
+                            if ( self.val() == 'selected_seller' ) {
                                 $( 'tr.selected_seller_field' ).show();
                             } else {
                                 $( 'tr.selected_seller_field' ).hide();
                             }
                         });
+
                         $('select#dokan_announcement_assign_type').trigger('change')
                     });
                 })(jQuery);
@@ -176,8 +169,9 @@ class Dokan_Announcement {
      */
     function add_type_columns( $columns ) {
         unset( $columns['date'] );
-        $columns['assign_type'] = __( 'Assign Type' );
-        $columns['date'] = __( 'Date' );
+
+        $columns['assign_type'] = __( 'Sent To' );
+        $columns['date']        = __( 'Date' );
 
         return $columns;
     }
@@ -195,12 +189,13 @@ class Dokan_Announcement {
     function assign_type_edit_columns( $column, $post_id ) {
         global $post;
 
-        if( $column == 'assign_type' ) {
+        if ( $column == 'assign_type' ) {
             $assign_type = get_post_meta( $post_id, '_announcement_type', true );
-            if( $assign_type ) {
+
+            if ( $assign_type ) {
                 echo $this->assign_type[$assign_type];
             } else {
-                _e( 'No user assign', 'dokan' );
+                _e( 'No seller assigned!', 'dokan' );
             }
         }
     }
@@ -234,8 +229,8 @@ class Dokan_Announcement {
             return $post_id;
         }
 
-        $announcement_assign_type   = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type']: '';
-        $announcement_assign_seller = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
+        $announcement_assign_type         = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type']: '';
+        $announcement_assign_seller       = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
         $announcement_assign_seller_array = array();
 
         update_post_meta( $post_id, '_announcement_type', $announcement_assign_type );
@@ -247,13 +242,15 @@ class Dokan_Announcement {
 
         } elseif ( $announcement_assign_type == 'all_seller' ) {
 
-            $users = new WP_User_Query( array( 'role' => 'seller' ) );
-            $sellers     = $users->get_results();
-            if( $sellers ) {
+            $users   = new WP_User_Query( array( 'role' => 'seller' ) );
+            $sellers = $users->get_results();
+
+            if ( $sellers ) {
                 foreach ( $sellers as $user ) {
                     $announcement_assign_seller_array[] = $user->ID;
                 }
             }
+
             $this->process_seller_announcement_data( $announcement_assign_seller_array, $post_id );
         }
     }
@@ -272,7 +269,7 @@ class Dokan_Announcement {
 
         $inserted_seller_id = $this->get_assign_seller( $post_id );
 
-        if( !empty( $inserted_seller_id ) ) {
+        if ( !empty( $inserted_seller_id ) ) {
             foreach ( $inserted_seller_id as $key => $value) {
                 $db[] = $value['user_id'];
             }
@@ -280,11 +277,11 @@ class Dokan_Announcement {
             $db = array();
         }
 
-        $sellers = $announcement_seller;
+        $sellers         = $announcement_seller;
         $existing_seller = $new_seller = $del_seller = array();
 
         foreach( $sellers as $seller ) {
-            if( in_array( $seller, $db ) ) {
+            if ( in_array( $seller, $db ) ) {
                 $existing_seller[] = $seller;
             } else {
                 $new_seller[] = $seller;
@@ -293,11 +290,11 @@ class Dokan_Announcement {
 
         $del_seller = array_diff( $db, $existing_seller );
 
-        if( $del_seller ) {
+        if ( $del_seller ) {
             $this->delete_assign_seller( $del_seller, $post_id );
         }
 
-        if( $new_seller ) {
+        if ( $new_seller ) {
             $this->insert_assign_seller( $new_seller, $post_id );
         }
     }
@@ -313,13 +310,14 @@ class Dokan_Announcement {
      */
     function get_assign_seller( $post_id ) {
         global $wpdb;
+
         $table_name = $wpdb->prefix.'dokan_announcement';
 
         $sql = "SELECT `user_id` FROM {$table_name} WHERE `post_id`= $post_id";
 
         $results = $wpdb->get_results( $sql, ARRAY_A );
 
-        if( $results ) {
+        if ( $results ) {
             return $results;
         } else {
             return array();
@@ -338,13 +336,15 @@ class Dokan_Announcement {
      */
     function insert_assign_seller( $seller_array, $post_id ) {
         global $wpdb;
-        $values = '';
+
+        $values     = '';
         $table_name = $wpdb->prefix.'dokan_announcement';
-        $i = 0;
+        $i          = 0;
 
         foreach ( $seller_array as $key => $seller_id ) {
-            $sep = ( $i==0 ) ? '':',';
-            $values .= sprintf( "$sep( %d, %d, '%s')", (int)$seller_id, (int)$post_id, 'unread');
+            $sep    = ( $i==0 ) ? '':',';
+            $values .= sprintf( "%s ( %d, %d, '%s')", $sep, $seller_id, $post_id, 'unread' );
+
             $i++;
         }
 
@@ -363,39 +363,28 @@ class Dokan_Announcement {
      * @return void
      */
     function delete_assign_seller( $seller_array, $post_id ) {
-        if( !is_array( $seller_array ) ) {
+        if ( ! is_array( $seller_array ) ) {
             return;
         }
+
         global $wpdb;
+
         $table_name = $wpdb->prefix.'dokan_announcement';
-        $values = '';
-        $i = 0;
+        $values     = '';
+        $i          = 0;
+
         foreach ( $seller_array as $key => $seller_id ) {
-            $sep = ( $i == 0 ) ? '':',';
-            $values .= sprintf( "$sep( %d, %d )", (int)$seller_id, (int)$post_id );
+            $sep    = ( $i == 0 ) ? '' : ',';
+            $values .= sprintf( "%s( %d, %d )", $sep, $seller_id, $post_id );
+
             $i++;
         }
 
         // $sellers = implode( ',', $seller_array );
         $sql = "DELETE FROM {$table_name} WHERE (`user_id`, `post_id` ) IN ($values)";
-        if( $values ) {
+
+        if ( $values ) {
             $wpdb->query( $sql );
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
