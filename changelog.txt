@@ -4,26 +4,26 @@ v2.0.2 -> April 2, 2015
 ---------------------
 - [new] Seller announcement feature
 - [new] Seller Profile completeness
-- [new] Seller total earning view on seller dashboard
 - [new] Product listing filter and search field in seller dashboard product page
-- [new] Added shipping processing time for individual product 
 - [new] Add admin view withdraw table row action 
-- [fix] Variable product image size fixed 
-- [fix] Product variation sku tooltip display fixed 
-- [fix] Shipping tab extra info added 
-- [fix] Order refund by seller removed
-- [fix] Fixed enable store contact seller and map show option of backend 
-- [fix] Download limit text and input type changed to number
-- [fix] Admin all log order status display fixed 
-- [fix] Restricted shipping charge for downloadable product or virtual product 
-- [fix] Shipping tab disable for downloadable product 
-- [fix] Shipping info display error fixed
-- [fix] Shipping disable logical issue fixed
-- [fix] Show hide override shipping option according to disable shipping in single product
-- [fix] Variation remove item problem fixed
-- [fix] Variation stock management fixed
-- [fix] Wp editor content render with auto p fix
-- [fix] Fix inventory stock management 
+- [new] Added shipping processing time for individual product
+- [new] Seller total earning view on seller dashboard
+- [tweak] Shipping tab disable for downloadable product
+- [tweak] Enable store contact seller and map show option of backend
+- [tweak] Variable product image size
+- [tweak] Product variation sku tooltip display
+- [tweak] Shipping tab extra info added 
+- [tweak] Order refund by seller removed
+- [tweak] Download limit text and input type changed to number
+- [tweak] Admin all log order status display
+- [tweak] Restricted shipping charge for downloadable product or virtual product
+- [tweak] Show hide override shipping option according to disable shipping in single product
+- [fix] Shipping info display error
+- [fix] Shipping disable logical issue
+- [fix] Variation remove item problem
+- [fix] Variation stock management
+- [fix] Wp editor content render with auto p
+- [fix] Inventory stock management
 
 v2.0.1 -> March 9, 2015
 ---------------------
