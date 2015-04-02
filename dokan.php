@@ -161,8 +161,9 @@ class WeDevs_Dokan {
     public static function activate() {
         global $wpdb;
 
-        $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
-        $wpdb->dokan_orders   = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_withdraw     = $wpdb->prefix . 'dokan_withdraw';
+        $wpdb->dokan_orders       = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_announcement = $wpdb->prefix . 'dokan_announcement';
 
         require_once __DIR__ . '/includes/theme-functions.php';
 
@@ -256,7 +257,9 @@ class WeDevs_Dokan {
             'seller'      => array(
                 'available'    => __( 'Available', 'dokan' ),
                 'notAvailable' => __( 'Not Available', 'dokan' )
-            )
+            ),
+            'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
+            'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
         );
         //wp_enqueue_style( 'fontawesome' );
 
@@ -348,6 +351,7 @@ class WeDevs_Dokan {
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
+            require_once $inc_dir . 'admin/announcement.php';
             require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
@@ -415,6 +419,7 @@ class WeDevs_Dokan {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
             Dokan_Admin_Ajax::init();
+            Dokan_Announcement::init();
             new Dokan_Update();
         } else {
             new Dokan_Pageviews();

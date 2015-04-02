@@ -7,8 +7,6 @@
  */
 class Dokan_Installer {
 
-    private $theme_version = 1.2;
-
     function do_install() {
 
         // upgrades
@@ -24,7 +22,7 @@ class Dokan_Installer {
 
         flush_rewrite_rules();
 
-        update_option( 'dokan_theme_version', $this->theme_version );
+        update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
     }
 
     /**
@@ -44,6 +42,10 @@ class Dokan_Installer {
         if ( version_compare( $installed_version, '1.2', '<' ) ) {
             $this->update_to_12();
         }
+
+        if ( version_compare( $installed_version, '2.1', '<' ) ) {
+            $this->update_to_21();
+        }
     }
 
     /**
@@ -54,9 +56,19 @@ class Dokan_Installer {
     public function update_to_12() {
         // regenerate sync table for woocommerce 2.2 order status changes
         dokan_generate_sync_table();
-
-        update_option( 'dokan_theme_version', '1.2' );
     }
+
+    /**
+     * Update to version 2.1
+     *
+     * @since 2.1
+     * 
+     * @return void 
+     */
+    public function update_to_21() {
+       $this->create_announcement_table();
+    }
+
 
     function woocommerce_settings() {
         update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
@@ -182,6 +194,7 @@ class Dokan_Installer {
         include_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
         $this->create_withdraw_table();
+        $this->create_announcement_table();
         $this->create_sync_table();
     }
 
@@ -220,4 +233,30 @@ class Dokan_Installer {
 
         dbDelta( $sql );
     }
+
+    /**
+     * Create Announcement table
+     *
+     * @since  2.1
+     * 
+     * @return void 
+     * 
+     */
+    function create_announcement_table() {
+        global $wpdb;
+
+        $sql = "CREATE TABLE IF NOT EXISTS {$wpdb->dokan_announcement} (
+               `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+               `user_id` bigint(20) unsigned NOT NULL,
+               `post_id` bigint(11) NOT NULL,
+               `status` varchar(30) NOT NULL,
+              PRIMARY KEY (id)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
+
+        require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql );
+
+
+    }
+
 }

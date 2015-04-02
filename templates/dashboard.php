@@ -51,7 +51,7 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                         </li>
 
                         <?php do_action( 'dokan_seller_dashboard_widget_counter' ); ?>
-                        
+
                     </ul>
                 </div> <!-- .big-counter -->
 
@@ -140,20 +140,6 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                     </ul>
                 </div> <!-- .reviews -->
 
-            </div> <!-- .col-md-6 -->
-
-            <div class="dokan-w6 dokan-dash-right">
-                <div class="dashboard-widget sells-graph">
-                    <div class="widget-title"><i class="fa fa-credit-card"></i> <?php _e( 'Sales', 'dokan' ); ?></div>
-
-                    <?php
-                    require_once DOKAN_DIR . '/includes/reports.php';
-
-                    dokan_dashboard_sales_overview();
-                    ?>
-                </div> <!-- .sells-graph -->
-
-
                 <div class="dashboard-widget products">
                     <div class="widget-title">
                         <i class="icon-briefcase"></i> <?php _e( 'Products', 'dokan' ); ?>
@@ -185,6 +171,61 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                             </a>
                         </li>
                     </ul>
+                </div> <!-- .products -->
+
+            </div> <!-- .col-md-6 -->
+
+            <div class="dokan-w6 dokan-dash-right">
+                <div class="dashboard-widget sells-graph">
+                    <div class="widget-title"><i class="fa fa-credit-card"></i> <?php _e( 'Sales', 'dokan' ); ?></div>
+
+                    <?php
+                    require_once DOKAN_DIR . '/includes/reports.php';
+
+                    dokan_dashboard_sales_overview();
+                    ?>
+                </div> <!-- .sells-graph -->
+
+                <div class="dashboard-widget dokan-announcement-widget">
+                    <div class="widget-title">
+                        <i class="icon-briefcase"></i> <?php _e( 'Latest Announcement', 'dokan' ); ?>
+
+                        <span class="pull-right">
+                            <a href="<?php echo dokan_get_navigation_url( 'announcement' ); ?>"><?php _e( 'See All', 'dokan' ); ?></a>
+                        </span>
+                    </div>
+                    <?php
+                        $template_notice = Dokan_Template_Notice::init();
+                        $query = $template_notice->get_announcement_by_users(3);
+                    ?>
+                    <?php if ( $query->posts ): ?>
+                        <ul class="list-unstyled">
+                            <?php foreach ( $query->posts as $notice ): ?>
+                                <?php
+                                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-announcement' ).''.$notice->ID );
+                                 ?>
+                                <li>
+                                    <div class="dokan-dashboard-announce-content dokan-left">
+                                        <a href="<?php echo $notice_url; ?>"><h3><?php echo $notice->post_title ?></h3></a>
+                                        <?php echo wp_trim_words( $notice->post_content, 6, '...' ); ?>
+                                    </div>
+                                    <div class="dokan-dashboard-announce-date dokan-right">
+                                        <div class="announce-day"><?php echo date( 'd', strtotime( $notice->post_date ) ); ?></div>
+                                        <div class="announce-month"><?php echo date( 'l', strtotime( $notice->post_date ) ); ?></div>
+                                        <div class="announce-year"><?php echo date( 'Y', strtotime( $notice->post_date ) ); ?></div>
+                                    </div>
+                                    <div class="dokan-clearfix"></div>
+                                </li>
+                            <?php endforeach ?>
+                        </ul>
+                    <?php else: ?>
+                        <div class="dokan-no-announcement">
+                            <div class="annoument-no-wrapper">
+                                <i class="fa fa-bell dokan-announcement-icon"></i>
+                                <p><?php _e( 'No announcement found', 'dokan' ) ?></p>
+                            </div>
+                        </div>
+                    <?php endif ?>
                 </div> <!-- .products -->
 
             </div>

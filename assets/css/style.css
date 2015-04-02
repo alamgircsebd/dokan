@@ -211,6 +211,72 @@
   font-size: 11px;
   border-radius: 3px;
 }
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget {
+  min-height: 310px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget .dokan-no-announcement .annoument-no-wrapper {
+  width: 170px;
+  height: 100%;
+  margin: 70px auto;
+  text-align: center;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget .dokan-no-announcement .annoument-no-wrapper .dokan-announcement-icon {
+  font-size: 100px;
+  color: #e3e3e3;
+  -moz-animation: ring 8s 1s ease-in-out infinite !important;
+  -moz-transform-origin: 50% 4px;
+  -webkit-animation: ring 8s 1s ease-in-out infinite !important;
+  -webkit-transform-origin: 50% 4px;
+  animation: ring 8s 1s ease-in-out infinite !important;
+  transform-origin: 50% 4px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget .dokan-no-announcement .annoument-no-wrapper p {
+  margin-top: 10px;
+  color: #a6a6a6;
+  font-size: 18px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget .widget-title {
+  margin-bottom: 0px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul {
+  margin-bottom: 0px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li {
+  border-bottom: 1px solid #e8e8e8;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-content {
+  width: 80%;
+  font-size: 13px;
+  color: #656565;
+  padding-left: 4px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-content h3 {
+  font-size: 15px;
+  font-weight: bold;
+  margin: 16px 0px 0px;
+  padding: 5px 0px;
+  color: #6f6f6f;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-date {
+  width: 20%;
+  height: 77px;
+  text-align: center;
+  line-height: 20px;
+  background-color: #f3f3f3;
+  color: #8b8b8b;
+  margin: 7px 0px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-date .announce-day {
+  padding-top: 5px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-date .announce-year {
+  font-size: 15px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li:last-child {
+  border-bottom: none;
+}
 .dokan-dashboard .dokan-dashboard-content article {
   border-bottom: none;
 }
@@ -221,6 +287,154 @@
 }
 .dokan-dashboard .dokan-dashboard-content a {
   text-decoration: none;
+}
+@-webkit-keyframes ring {
+  0% {
+    transform: rotate(0);
+  }
+  1% {
+    transform: rotate(30deg);
+  }
+  3% {
+    transform: rotate(-28deg);
+  }
+  5% {
+    transform: rotate(34deg);
+  }
+  7% {
+    transform: rotate(-32deg);
+  }
+  9% {
+    transform: rotate(30deg);
+  }
+  11% {
+    transform: rotate(-28deg);
+  }
+  13% {
+    transform: rotate(26deg);
+  }
+  15% {
+    transform: rotate(-24deg);
+  }
+  17% {
+    transform: rotate(22deg);
+  }
+  19% {
+    transform: rotate(-20deg);
+  }
+  21% {
+    transform: rotate(18deg);
+  }
+  23% {
+    transform: rotate(-16deg);
+  }
+  25% {
+    transform: rotate(14deg);
+  }
+  27% {
+    transform: rotate(-12deg);
+  }
+  29% {
+    transform: rotate(10deg);
+  }
+  31% {
+    transform: rotate(-8deg);
+  }
+  33% {
+    transform: rotate(6deg);
+  }
+  35% {
+    transform: rotate(-4deg);
+  }
+  37% {
+    transform: rotate(2deg);
+  }
+  39% {
+    transform: rotate(-1deg);
+  }
+  41% {
+    transform: rotate(1deg);
+  }
+  43% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(0);
+  }
+}
+@-moz-keyframes ring {
+  0% {
+    transform: rotate(0);
+  }
+  1% {
+    transform: rotate(30deg);
+  }
+  3% {
+    transform: rotate(-28deg);
+  }
+  5% {
+    transform: rotate(34deg);
+  }
+  7% {
+    transform: rotate(-32deg);
+  }
+  9% {
+    transform: rotate(30deg);
+  }
+  11% {
+    transform: rotate(-28deg);
+  }
+  13% {
+    transform: rotate(26deg);
+  }
+  15% {
+    transform: rotate(-24deg);
+  }
+  17% {
+    transform: rotate(22deg);
+  }
+  19% {
+    transform: rotate(-20deg);
+  }
+  21% {
+    transform: rotate(18deg);
+  }
+  23% {
+    transform: rotate(-16deg);
+  }
+  25% {
+    transform: rotate(14deg);
+  }
+  27% {
+    transform: rotate(-12deg);
+  }
+  29% {
+    transform: rotate(10deg);
+  }
+  31% {
+    transform: rotate(-8deg);
+  }
+  33% {
+    transform: rotate(6deg);
+  }
+  35% {
+    transform: rotate(-4deg);
+  }
+  37% {
+    transform: rotate(2deg);
+  }
+  39% {
+    transform: rotate(-1deg);
+  }
+  41% {
+    transform: rotate(1deg);
+  }
+  43% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(0);
+  }
 }
 .dokan-product-listing .dokan-product-listing-area {
   padding: 0px 15px;
@@ -2649,6 +2863,12 @@ textarea.dokan-form-control {
     float: none;
     width: 100%;
   }
+  .dokan-dashboard .dashboard-content-area .dokan-announcement-widget .dokan-right {
+    float: right !important;
+  }
+  .dokan-dashboard .dashboard-content-area .dokan-announcement-widget .dokan-left {
+    float: left !important;
+  }
   .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:before,
   .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu:after {
     content: " ";
@@ -2827,5 +3047,118 @@ table.dps-shipping-states tr td {
 .progress-striped .dokan-progress-bar-danger {
   background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
   background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+}
+.dokan-announcement-wrapper .dokan-no-announcement .annoument-no-wrapper {
+  height: 100%;
+  margin: 70px auto;
+  text-align: center;
+}
+.dokan-announcement-wrapper .dokan-no-announcement .annoument-no-wrapper .dokan-announcement-icon {
+  font-size: 165px;
+  color: #e3e3e3;
+  -moz-animation: ring 8s 1s ease-in-out infinite !important;
+  -moz-transform-origin: 50% 4px;
+  -webkit-animation: ring 8s 1s ease-in-out infinite !important;
+  -webkit-transform-origin: 50% 4px;
+  animation: ring 8s 1s ease-in-out infinite !important;
+  transform-origin: 50% 4px;
+}
+.dokan-announcement-wrapper .dokan-no-announcement .annoument-no-wrapper p {
+  margin-top: 10px;
+  color: #a6a6a6;
+  font-size: 30px;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item {
+  padding: 22px;
+  background: #f3f3f3;
+  border: 1px solid #eee;
+  margin-bottom: 25px;
+  position: relative;
+  width: 98%;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-announcement-heading {
+  margin-bottom: 5px;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-announcement-heading h3 {
+  margin: 5px 0px;
+  padding: 0px 0px 8px;
+  font-weight: bold;
+  font-size: 20px;
+  color: #494949;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-annnouncement-date {
+  width: 95px;
+  height: 95px;
+  color: #fff;
+  margin-right: 25px;
+  vertical-align: middle;
+  background-color: #818181;
+  text-align: center;
+  border-radius: 300px;
+  -webkit-border-radius: 300px;
+  -moz-border-radius: 300px;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-annnouncement-date .announcement-day {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 16px;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-annnouncement-date .announcement-year {
+  font-weight: bold;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-announcement-content-wrap {
+  width: 80%;
+  height: 100%;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .dokan-announcement-content-wrap .dokan-announcement-content {
+  color: #656565;
+  font-size: 13px;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .announcement-action {
+  position: absolute;
+  top: -12px;
+  right: -8px;
+  font-size: 12px;
+  width: 25px;
+  height: 25px;
+  text-align: center;
+  background-color: #818181;
+  border-radius: 20px;
+  line-height: 23px;
+}
+.dokan-announcement-wrapper .dokan-announcement-wrapper-item .announcement-action a {
+  color: #fff;
+  font-size: 20px;
+}
+@media (max-width: 992px) {
+  .dokan-announcement-wrapper-item {
+    padding: 15px;
+    text-align: center;
+  }
+  .dokan-announcement-wrapper-item .dokan-annnouncement-date {
+    float: none !important;
+    margin: 0 auto 15px !important;
+  }
+  .dokan-announcement-wrapper-item .dokan-annnouncement-date .announcement-day {
+    margin-top: 0px !important;
+    padding-top: 16px;
+  }
+  .dokan-announcement-wrapper-item .dokan-announcement-content-wrap {
+    float: none !important;
+    width: 100% !important;
+  }
+}
+article.dokan-notice-single-notice-area span.dokan-single-announcement-date {
+  display: block;
+  margin-bottom: 10px;
+}
+.dokan-announcement-uread {
+  border: 1px solid #f05025 !important;
+}
+.dokan-announcement-uread .dokan-annnouncement-date {
+  background-color: #f05025 !important;
+}
+.dokan-announcement-bg-uread {
+  background-color: #f05025;
 }
 /*# sourceMappingURL=style.css.map */
