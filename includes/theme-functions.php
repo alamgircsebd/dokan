@@ -1491,7 +1491,7 @@ function dokan_get_profile_progressbar() {
 /**
  * Display a monthly dropdown for filtering product listing on seller dashboard
  *
- * @since 2.0.2
+ * @since 2.1
  * @access public
  *
  * @param int $user_id
@@ -1510,7 +1510,7 @@ function dokan_product_listing_filter_months_dropdown( $user_id ) {
     /**
      * Filter the 'Months' drop-down results.
      *
-     * @since 2.0.2
+     * @since 2.1
      *
      * @param object $months    The months drop-down query results.
      */
@@ -1548,12 +1548,12 @@ function dokan_product_listing_filter_months_dropdown( $user_id ) {
 /**
  * Display form for filtering product listing on seller dashboard
  *
- * @since 2.0.2
+ * @since 2.1
  * @access public
  *
  */
 function dokan_product_listing_filter() {
-    do_action( 'dokan_product_listing_filter_before_form');
+    do_action( 'dokan_product_listing_filter_before_form' );
     ?>
 
     <form class="dokan-form-inline dokan-w6" method="get" >
@@ -1580,7 +1580,7 @@ function dokan_product_listing_filter() {
         </div>
 
         <?php 
-        if( isset( $_GET['product_search_name'] ) ) { ?>
+        if ( isset( $_GET['product_search_name'] ) ) { ?>
             <input type="hidden" name="product_search_name" value="<?php echo $_GET['product_search_name']; ?>">
         <? }
         ?>
@@ -1588,7 +1588,7 @@ function dokan_product_listing_filter() {
         <button type="submit" name="product_listing_filter" value="ok" class="dokan-btn dokan-btn-theme">Filter</button>
 
     </form>
-    <?php do_action( 'dokan_product_listing_filter_before_search_form'); ?>
+    <?php do_action( 'dokan_product_listing_filter_before_search_form' ); ?>
     <form method="get" class="dokan-form-inline dokan-w6">
 
         <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right">Search</button>
@@ -1598,15 +1598,15 @@ function dokan_product_listing_filter() {
         </div>
 
         <?php 
-        if( isset( $_GET['product_cat'] ) ) { ?>
+        if ( isset( $_GET['product_cat'] ) ) { ?>
             <input type="hidden" name="product_cat" value="<?php echo $_GET['product_cat']; ?>">
         <? }
 
-        if( isset( $_GET['date'] ) ) { ?>
+        if ( isset( $_GET['date'] ) ) { ?>
             <input type="hidden" name="date" value="<?php echo $_GET['date']; ?>">
         <? }
         ?>
     </form>
     <?php
-    do_action( 'dokan_product_listing_filter_after_form');
+    do_action( 'dokan_product_listing_filter_after_form' );
 }
