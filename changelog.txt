@@ -1,6 +1,6 @@
 ==================== Plugin Version ====================
 
-v2.0.2 -> April 2, 2015
+v2.1 -> April 2, 2015
 ---------------------
 - [new] Seller announcement feature
 - [new] Seller Profile completeness
