@@ -9,7 +9,7 @@
 class Dokan_Update {
 
     const base_url     = 'http://wedevs.com/';
-    const update_check = 'http://api.wedevs.com/update_check'
+    const update_check = 'http://api.wedevs.com/update_check';
     const product_id   = 'dokan';
     const option       = 'dokan_license';
     const slug         = 'dokan';
