@@ -8,10 +8,11 @@
  */
 class Dokan_Update {
 
-    const base_url   = 'http://wedevs.com/';
-    const product_id = 'dokan';
-    const option     = 'dokan_license';
-    const slug       = 'dokan';
+    const base_url     = 'http://wedevs.com/';
+    const update_check = 'http://api.wedevs.com/update_check'
+    const product_id   = 'dokan';
+    const option       = 'dokan_license';
+    const slug         = 'dokan';
 
     function __construct() {
 
@@ -271,7 +272,7 @@ class Dokan_Update {
             )
         );
 
-        $response = wp_remote_post( self::base_url . '?action=wedevs_update_check', $params );
+        $response = wp_remote_post( self::update_check, $params );
         $update   = wp_remote_retrieve_body( $response );
 
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
