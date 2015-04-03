@@ -1585,13 +1585,13 @@ function dokan_product_listing_filter() {
         <? }
         ?>
 
-        <button type="submit" name="product_listing_filter" value="ok" class="dokan-btn dokan-btn-theme">Filter</button>
+        <button type="submit" name="product_listing_filter" value="ok" class="dokan-btn dokan-btn-theme"><?php _e( 'Filter', 'dokan') ?></button>
 
     </form>
     <?php do_action( 'dokan_product_listing_filter_before_search_form' ); ?>
     <form method="get" class="dokan-form-inline dokan-w6">
 
-        <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right">Search</button>
+        <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right"><?php _e( 'Search', 'dokan') ?></button>
 
         <div class="dokan-form-group dokan-right">
             <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Product name" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
