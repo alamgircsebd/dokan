@@ -1600,11 +1600,11 @@ function dokan_product_listing_filter() {
         <?php 
         if ( isset( $_GET['product_cat'] ) ) { ?>
             <input type="hidden" name="product_cat" value="<?php echo $_GET['product_cat']; ?>">
-        <? }
+        <?php }
 
         if ( isset( $_GET['date'] ) ) { ?>
             <input type="hidden" name="date" value="<?php echo $_GET['date']; ?>">
-        <? }
+        <?php }
         ?>
     </form>
     <?php
