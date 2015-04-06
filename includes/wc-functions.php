@@ -312,9 +312,9 @@ function dokan_variable_product_type_options() {
                     jQuery(el).block({ message: null, overlayCSS: { background: '#fff url(<?php echo $woocommerce->plugin_url(); ?>/assets/images/ajax-loader.gif) no-repeat center', opacity: 0.6 } });
 
                     var data = {
-                        action: 'woocommerce_remove_variation',
-                        variation_id: variation,
-                        security: '<?php echo wp_create_nonce("delete-variation"); ?>'
+                        action: 'woocommerce_remove_variations',
+                        variation_ids: variation,
+                        security: '<?php echo wp_create_nonce("delete-variations"); ?>'
                     };
 
                     jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
@@ -471,7 +471,7 @@ function dokan_process_product_meta( $post_id ) {
     // Get types
     $product_type       = empty( $_POST['_product_type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['_product_type'] ) );
     $is_downloadable    = isset( $_POST['_downloadable'] ) ? 'yes' : 'no';
-    $is_virtual         = isset( $_POST['_virtual'] ) ? 'yes' : 'no';
+    $is_virtual         = ( $is_downloadable == 'yes' ) ? 'yes' : 'no';
 
     // Product type + Downloadable/Virtual
     wp_set_object_terms( $post_id, $product_type, 'product_type' );
@@ -518,6 +518,7 @@ function dokan_process_product_meta( $post_id ) {
     update_post_meta( $post_id, '_overwrite_shipping', stripslashes( isset( $_POST['_overwrite_shipping'] ) ? $_POST['_overwrite_shipping'] : '' ) );
     update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
     update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );    
+    update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );    
 
     // Save shipping class
     $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
@@ -730,7 +731,7 @@ function dokan_process_product_meta( $post_id ) {
             // Stock status is always determined by children so sync later
             $stock_status = '';
 
-            if ( ! empty( $_POST['_manage_stock'] ) ) {
+            if ( ! empty( $_POST['_manage_stock'] ) && $_POST['_manage_stock'] == 'yes' ) {
                 $manage_stock = 'yes';
                 $backorders   = wc_clean( $_POST['_backorders'] );
             }
@@ -881,8 +882,19 @@ function dokan_save_variations( $post_id ) {
             $variation_id = absint( $variable_post_id[ $i ] );
 
             // Virtal/Downloadable
-            $is_virtual = isset( $variable_is_virtual[ $i ] ) ? 'yes' : 'no';
             $is_downloadable = isset( $variable_is_downloadable[ $i ] ) ? 'yes' : 'no';
+            
+            if ( isset( $variable_is_virtual[ $i ] ) ) {
+                $is_virtual = 'yes';    
+            } else {
+                
+                if ( $is_downloadable == 'yes' ) {
+                    $is_virtual = 'yes';
+                } else {
+                    $is_virtual = 'no';
+                } 
+            }
+            // $is_virtual = isset(  ) ? 'yes' : 'no';
 
             // Enabled or disabled
             $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
@@ -928,20 +940,11 @@ function dokan_save_variations( $post_id ) {
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
             update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
             update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );
-
-            // Stock handling
             update_post_meta( $variation_id, '_manage_stock', $manage_stock );
 
             // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
             if ( ! empty( $variable_stock_status[ $i ] ) ) {
-                //var_dump( $variable_stock_status[ $i ] );
-                if( isset( $variable_stock[$i] ) && !empty( $variable_stock[$i] ) ) {
-                    update_post_meta( $variation_id, '_stock_status', $variable_stock_status[ $i ] );
-                } else {
-                    update_post_meta( $variation_id, '_stock_status', 'outofstock' );
-                } 
-                //wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
-                //WC_Product_Variable::sync_stock_status( $variation_id );                
+                wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
             }
 
             if ( 'yes' === $manage_stock ) {

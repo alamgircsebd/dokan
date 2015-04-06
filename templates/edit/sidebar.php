@@ -126,13 +126,13 @@ $_downloadable   = get_post_meta( $post->ID, '_downloadable', true );
             <li class="dokan-form-group">
                 <div class="dokan-input-group">
                     <span class="dokan-input-group-addon"><?php _e( 'Limit', 'dokan' ); ?></span>
-                    <?php dokan_post_input_box( $post->ID, '_download_limit', array( 'placeholder' => __( 'Download Limit. e.g: 4', 'dokan' ) ) ); ?>
+                    <?php dokan_post_input_box( $post->ID, '_download_limit', array( 'placeholder' => __( 'Number of times', 'dokan' ), 'min' => 1, 'step' => 1 ), 'number' ); ?>
                 </div>
             </li>
             <li class="dokan-form-group">
                 <div class="dokan-input-group">
                     <span class="dokan-input-group-addon">Expiry</span>
-                    <?php dokan_post_input_box( $post->ID, '_download_expiry', array( 'placeholder' => __( 'Number of days', 'dokan' ) ) ); ?>
+                    <?php dokan_post_input_box( $post->ID, '_download_expiry', array( 'placeholder' => __( 'Number of days', 'dokan' ), 'min' => 1, 'step' => 1 ), 'number' ); ?>
                 </div>
             </li>
         </ul>

@@ -6,7 +6,6 @@
         <?php do_action( 'dokan_before_listing_product' ); ?>
 
             <article class="dokan-product-listing-area">
-
                 <div class="product-listing-top dokan-clearfix">
                     <?php dokan_product_listing_status_filter(); ?>
 
@@ -16,6 +15,10 @@
                 </div>
 
                 <?php dokan_product_dashboard_errors(); ?>
+
+                <div class="dokan-w12">
+                    <?php dokan_product_listing_filter(); ?>
+                </div>
 
                 <table class="table table-striped product-listing-table">
                     <thead>
@@ -49,6 +52,26 @@
                         if ( isset( $_GET['post_status']) && in_array( $_GET['post_status'], $post_statuses ) ) {
                             $args['post_status'] = $_GET['post_status'];
                         }
+
+                        if( isset( $_GET['date'] ) && $_GET['date'] != 0 ) {
+                            $args['m'] = $_GET['date'];
+                        }
+
+                        if( isset( $_GET['product_cat'] ) && $_GET['product_cat'] != -1 ) {
+                            $args['tax_query']= array(
+                                array(
+                                    'taxonomy' => 'product_cat',
+                                    'field' => 'id',
+                                    'terms' => (int)  $_GET['product_cat'],
+                                    'include_children' => false,
+                                )
+                            );
+                        }
+
+                        if ( isset( $_GET['product_search_name']) && !empty( $_GET['product_search_name'] ) ) {
+                             $args['s'] = $_GET['product_search_name'];
+                        }
+
 
                         $original_post = $post;
                         $product_query = new WP_Query( apply_filters( 'dokan_product_listing_query', $args ) );

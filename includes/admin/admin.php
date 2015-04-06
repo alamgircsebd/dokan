@@ -21,17 +21,26 @@ class Dokan_Admin_Settings {
         add_action( 'admin_init', array($this, 'tools_page_handler') );
 
         add_action( 'admin_menu', array($this, 'admin_menu') );
-
         add_action( 'admin_notices', array($this, 'update_notice' ) );
     }
 
+    /**
+     * Dashboard scripts and styles
+     *
+     * @return void
+     */
     function dashboard_script() {
         wp_enqueue_style( 'dokan-admin-dash', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
+
         $this->report_scripts();
     }
 
+    /**
+     * Reporting scripts
+     *
+     * @return void
+     */
     function report_scripts() {
-
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
         wp_enqueue_style( 'dokan-chosen-style' );
@@ -40,7 +49,22 @@ class Dokan_Admin_Settings {
         wp_enqueue_script( 'jquery-flot' );
         wp_enqueue_script( 'jquery-chart' );
         wp_enqueue_script( 'chosen' );
-     
+    }
+
+    /**
+     * Seller announcement scripts
+     *
+     * @since 2.1
+     *
+     * @return void
+     */
+    function announcement_scripts() {
+        global $post_type;
+
+        if ( 'dokan_announcement' == $post_type ) {
+            wp_enqueue_style( 'dokan-chosen-style' );
+            wp_enqueue_script( 'chosen' );
+        }
     }
 
     function admin_init() {
@@ -69,6 +93,7 @@ class Dokan_Admin_Settings {
         add_submenu_page( 'dokan', __( 'Withdraw', 'dokan' ), $withdraw_text, $capability, 'dokan-withdraw', array($this, 'withdraw_page') );
         add_submenu_page( 'dokan', __( 'Sellers Listing', 'dokan' ), __( 'All Sellers', 'dokan' ), $capability, 'dokan-sellers', array($this, 'seller_listing') );
         $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array($this, 'report_page') );
+        $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
 
         do_action( 'dokan_admin_menu' );
 
@@ -78,6 +103,10 @@ class Dokan_Admin_Settings {
 
         add_action( $dashboard, array($this, 'dashboard_script' ) );
         add_action( $report, array($this, 'report_scripts' ) );
+        // add_action( $announcement, array($this, 'announcement_scripts' ) );
+        add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
+        add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
+
     }
 
     function get_settings_sections() {

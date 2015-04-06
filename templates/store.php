@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 $store_user   = get_userdata( get_query_var( 'author' ) );
 $store_info   = dokan_get_store_info( $store_user->ID );
 $map_location = isset( $store_info['location'] ) ? esc_attr( $store_info['location'] ) : '';
-$sidebar      = dokan_get_option( 'enable_theme_store_sidebar', 'dokan_general', 'off' );
 $scheme       = is_ssl() ? 'https' : 'http';
 
 wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sensor=true' );
@@ -21,9 +20,10 @@ get_header( 'shop' );
 
     <?php do_action( 'woocommerce_before_main_content' ); ?>
 
-    <?php if ( 'off' == $sidebar ) { ?>
-        <div id="dokan-secondary" class="dokan-clearfix dokan-w4 dokan-store-sidebar" role="complementary" style="margin-right:3%;">
+    <?php if ( dokan_get_option( 'enable_theme_store_sidebar', 'dokan_general', 'off' ) == 'off' ) { ?>
+        <div id="dokan-secondary" class="dokan-clearfix dokan-w3 dokan-store-sidebar" role="complementary" style="margin-right:3%;">
             <div class="dokan-widget-area widget-collapse">
+                 <?php do_action( 'dokan_sidebar_store_before', $store_user, $store_info ); ?>
                 <?php
                 if ( ! dynamic_sidebar( 'sidebar-store' ) ) {
 
@@ -36,8 +36,12 @@ get_header( 'shop' );
 
                     if ( class_exists( 'Dokan_Store_Location' ) ) {
                         the_widget( 'Dokan_Store_Category_Menu', array( 'title' => __( 'Store Category', 'dokan' ) ), $args );
-                        the_widget( 'Dokan_Store_Location', array( 'title' => __( 'Store Location', 'dokan' ) ), $args );
-                        the_widget( 'Dokan_Store_Contact_Form', array( 'title' => __( 'Contact Seller', 'dokan' ) ), $args );
+                        if( dokan_get_option( 'store_map', 'dokan_general', 'on' ) == 'on' ) {
+                            the_widget( 'Dokan_Store_Location', array( 'title' => __( 'Store Location', 'dokan' ) ), $args );
+                        }
+                        if( dokan_get_option( 'contact_seller', 'dokan_general', 'on' ) == 'on' ) {
+                            the_widget( 'Dokan_Store_Contact_Form', array( 'title' => __( 'Contact Seller', 'dokan' ) ), $args );
+                        }
                     }
 
                 }

@@ -86,10 +86,8 @@
             <form method="post" class="form-inline report-filter" action="" >
 
                 <span class="form-group">
-                    <label for="chosen_store_name"><b><?php _e( 'Store Name : ', 'dokan' ); ?></b></label>
+                    <label for='chosen_store_name'<b><?php _e( 'Store Name : ', 'dokan' ); ?></b></label>
                     <select id='chosen_store_name' name='chosen_store_name' data-placeholder= '<?php echo __( 'Select a Store...', 'dokan' ); ?>' style="width:350px;"  class="chosen-select">
-                        <?php
-                        ?>
                         <option></option>
                         <?php
                         foreach ( $sellers as $user ) {
@@ -97,7 +95,7 @@
 
                             if ( isset( $info['store_name'] ) ) {
                                 ?>
-                                <option <?php selected( $seller_id, $user->ID ); ?> <?php echo $selected ?> value='<?php echo $user->ID  ?>'><?php echo esc_html( $info['store_name'] ) ?></option>
+                                <option <?php selected( $seller_id, $user->ID); ?> value='<?php echo $user->ID  ?>'><?php echo esc_html( $info['store_name'] ) ?></option>
                             <?php } ?>
                         <?php } ?>
                     </select>
@@ -195,6 +193,7 @@
             'order_status' => __( 'Status', 'dokan' ),
         );
         $headers = apply_filters( 'dokan_earning_report_header', $headers );
+        $statuses = wc_get_order_statuses();
         ?>
         <?php do_action( 'dokan_prev_report_form', $_GET ); ?>
 
@@ -249,7 +248,7 @@
                         'order_total'  => $log->order_total,
                         'net_amount'   => $log->net_amount,
                         'commision'    => $log->order_total - $log->net_amount,
-                        'order_status' => $log->order_status
+                        'order_status' => $statuses[$log->order_status]
                     );
 
                     $result                = apply_filters( 'dokan_report_table_value', $result, $log->order_id, $log->seller_id );

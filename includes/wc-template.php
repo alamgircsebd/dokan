@@ -187,3 +187,17 @@ function dokan_get_no_seller_image() {
 
     return apply_filters( 'dokan_no_seller_image', $image );
 }
+
+/**
+ * Override Customer Orders array
+ * 
+ * @param post_arg_query array()
+ * 
+ * @return array() post_arg_query
+ */
+function dokan_get_customer_main_order( $customer_orders ) {
+    $customer_orders['post_parent'] = 0;
+    return $customer_orders;
+}
+
+add_filter( 'woocommerce_my_account_my_orders_query', 'dokan_get_customer_main_order');

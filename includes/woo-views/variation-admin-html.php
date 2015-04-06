@@ -50,8 +50,8 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 			<tr>
 				<td class="sku" colspan="2">
 					<?php if ( wc_product_sku_enabled() ) : ?>
-						<label><?php _e( 'SKU', 'dokan' ); ?>: <a class="tips" title="<?php _e( 'Enter a SKU for this variation or leave blank to use the parent product SKU.', 'dokan' ); ?>" href="#">[?]</a></label>
 						<input type="text" size="5" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" placeholder="<?php echo esc_attr( $parent_data['sku'] ); ?>" />
+						<label><?php _e( 'SKU', 'dokan' ); ?>: <a class="tips" title="<?php _e( 'Enter a SKU for this variation or leave blank to use the parent product SKU.', 'dokan' ); ?>" href="#">[?]</a></label>
 					<?php else : ?>
 						<input type="hidden" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" />
 					<?php endif; ?>

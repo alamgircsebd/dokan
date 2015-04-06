@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: http://wedevs.com/theme/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.0.1
+Version: 2.1
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.0.1' );
+define( 'DOKAN_PLUGIN_VERSION', '2.1' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -161,8 +161,9 @@ class WeDevs_Dokan {
     public static function activate() {
         global $wpdb;
 
-        $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
-        $wpdb->dokan_orders   = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_withdraw     = $wpdb->prefix . 'dokan_withdraw';
+        $wpdb->dokan_orders       = $wpdb->prefix . 'dokan_orders';
+        $wpdb->dokan_announcement = $wpdb->prefix . 'dokan_announcement';
 
         require_once __DIR__ . '/includes/theme-functions.php';
 
@@ -256,7 +257,9 @@ class WeDevs_Dokan {
             'seller'      => array(
                 'available'    => __( 'Available', 'dokan' ),
                 'notAvailable' => __( 'Not Available', 'dokan' )
-            )
+            ),
+            'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
+            'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
         );
         //wp_enqueue_style( 'fontawesome' );
 
@@ -348,6 +351,8 @@ class WeDevs_Dokan {
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
+            require_once $inc_dir . 'admin/announcement.php';
+            require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
             require_once $inc_dir . 'wc-template.php';
@@ -413,7 +418,10 @@ class WeDevs_Dokan {
     function init_classes() {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
+            Dokan_Admin_Ajax::init();
+            new Dokan_Announcement();
             new Dokan_Update();
+            new Dokan_Upgrade();
         } else {
             new Dokan_Pageviews();
         }

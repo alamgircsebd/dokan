@@ -66,6 +66,10 @@ class Dokan_Ajax {
         // Shipping ajax hanlding
         add_action( 'wp_ajax_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
         add_action( 'wp_ajax_nopriv_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
+
+        // Announcement ajax handling
+        add_action( 'wp_ajax_dokan_announcement_remove_row', array( $this, 'remove_announcement') );
+        add_action( 'wp_ajax_nopriv_dokan_announcement_remove_row', array( $this, 'remove_announcement') );
     }
 
     /**
@@ -508,7 +512,7 @@ class Dokan_Ajax {
      */
     function contact_seller() {
         $posted = $_POST;
-        
+
         check_ajax_referer( 'dokan_contact_seller' );
         // print_r($posted);
 
@@ -522,7 +526,7 @@ class Dokan_Ajax {
         $contact_name = trim( strip_tags( $posted['name'] ) );
 
         Dokan_Email::init()->contact_seller( $seller->user_email, $contact_name, $posted['email'], $posted['message'] );
-        
+
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );
         exit;
@@ -794,7 +798,7 @@ class Dokan_Ajax {
                         <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
                     </div>
                 </td>
-            </tr>   
+            </tr>
             <?php
             // }
         } else {
@@ -821,8 +825,41 @@ class Dokan_Ajax {
             </tr>
             <?php
         }
-        $data = ob_get_clean();  
+        $data = ob_get_clean();
 
         wp_send_json_success( $data );
+    }
+
+    function remove_announcement() {
+        check_ajax_referer( 'dokan_reviews' );
+        global $wpdb;
+
+        $table_name = $wpdb->prefix. 'dokan_announcement';
+        $row_id = $_POST['row_id'];
+
+        $result = $wpdb->update(
+            $table_name,
+            array(
+                'status' => 'trash',
+            ),
+            array( 'id' => $row_id, 'user_id' => get_current_user_id() )
+        );
+
+        ob_start();
+        ?>
+        <div class="dokan-no-announcement">
+            <div class="annoument-no-wrapper">
+                <i class="fa fa-bell dokan-announcement-icon"></i>
+                <p><?php _e( 'No Announcement found', 'dokan' ) ?></p>
+            </div>
+        </div>
+        <?php
+        $content = ob_get_clean();
+
+        if ( $result ) {
+            wp_send_json_success( $content );
+        } else {
+            wp_send_json_error();
+        }
     }
 }
