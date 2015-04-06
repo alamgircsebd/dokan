@@ -64,7 +64,7 @@ class Dokan_Upgrade {
             return;
         }
 
-        if( !isset( $_POST['dokan_upgrade_action_nonce'] ) ) {
+        if ( !isset( $_POST['dokan_upgrade_action_nonce'] ) ) {
             return;
         }
 
