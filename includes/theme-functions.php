@@ -1582,7 +1582,7 @@ function dokan_product_listing_filter() {
         <?php 
         if ( isset( $_GET['product_search_name'] ) ) { ?>
             <input type="hidden" name="product_search_name" value="<?php echo $_GET['product_search_name']; ?>">
-        <? }
+        <?php }
         ?>
 
         <button type="submit" name="product_listing_filter" value="ok" class="dokan-btn dokan-btn-theme"><?php _e( 'Filter', 'dokan'); ?></button>
