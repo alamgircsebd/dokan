@@ -39,11 +39,11 @@ class Dokan_Upgrade {
 
         if ( version_compare( $installed_version, DOKAN_PLUGIN_VERSION , '<' ) ) {
             ?>
-                <div class="update-nag" style="width:94%;">
-                    <p><?php _e( 'Please click the button below to enable the new features in this latest version of dokan plguin. The new features will not work untill you click this button.', 'dokan' ) ?></p>
+                <div class="notice notice-warning">
+                    <p><?php _e( '<strong>Dokan Data Update Required</strong> &#8211; Please click the button below to update to the latest version.', 'dokan' ) ?></p>
 
-                    <form action="" method="post">
-                        <input type="submit" class="button button-default" name="dokan_upgrade_plugin" value="Upgrade">
+                    <form action="" method="post" style="padding-bottom: 10px;">
+                        <input type="submit" class="button button-primary" name="dokan_upgrade_plugin" value="<?php esc_attr_e( 'Run the Updater', 'dokan' ); ?>">
                         <?php wp_nonce_field( 'dokan_upgrade_action', 'dokan_upgrade_action_nonce' ); ?>
                     </form>
                 </div>
@@ -59,10 +59,6 @@ class Dokan_Upgrade {
      * @return void
      */
     function upgrade_action_perform() {
-
-        if ( !is_admin() ) {
-            return;
-        }
 
         if ( !isset( $_POST['dokan_upgrade_action_nonce'] ) ) {
             return;
@@ -80,14 +76,12 @@ class Dokan_Upgrade {
 
         if ( version_compare( $installed_version, DOKAN_PLUGIN_VERSION , '<' ) ) {
 
-            $redirect_url = $_SERVER['HTTP_REFERER'];
-
             $dokan_installer = new Dokan_Installer();
-
             $dokan_installer->create_announcement_table();
 
             update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
 
+            $redirect_url = $_SERVER['HTTP_REFERER'];
             wp_safe_redirect( $redirect_url );
         }
 
