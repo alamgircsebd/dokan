@@ -34,6 +34,7 @@ class Dokan_Update {
         }
 
         add_filter( 'pre_set_site_transient_update_plugins', array($this, 'check_update') );
+        add_filter( 'pre_set_transient_update_plugins', array($this, 'check_update') );
         add_filter( 'plugins_api', array(&$this, 'check_info'), 10, 3 );
     }
 
