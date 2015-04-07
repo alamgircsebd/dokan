@@ -333,6 +333,14 @@ function dokan_get_dashboard_nav() {
 
         $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
 
+
+        /**
+        * Filter to get the seller dashboard settings navigation.
+        *
+        * @since 2.1.1
+        *
+        * @param array.
+        */
         $urls['settings'] = apply_filters( 'dokan_get_dashboard_settings_nav', array(
             'title' => __( 'Settings <i class="fa fa-angle-right"></i>', 'dokan'),
             'icon'  => '<i class="fa fa-cog"></i>',
@@ -372,7 +380,14 @@ function dokan_get_dashboard_nav() {
             );
         }
 
-    return $urls;
+    /**
+    * Filter to get the final seller dashboard navigation.
+    *
+    * @since 2.1.1
+    *
+    * @param array $urls.
+    */
+    return apply_filters( 'dokan_get_seller_dashboard_nav', $urls );
 }
 
 function dokan_dashboard_nav( $active_menu ) {
