@@ -122,6 +122,21 @@ class Dokan_Template_Shortcodes {
             return;
         }
 
+        if ( isset( $wp->query_vars['profile-settings'] ) ) {
+            dokan_get_template_part( 'profile-settings' );
+            return;
+        }
+
+        if ( isset( $wp->query_vars['store-settings'] ) ) {
+            dokan_get_template_part( 'store-settings' );
+            return;
+        }
+
+        if ( isset( $wp->query_vars['payment-settings'] ) ) {
+            dokan_get_template_part( 'payment-settings' );
+            return;
+        }
+
         if ( isset( $wp->query_vars['page'] ) ) {
             dokan_get_template_part( 'dashboard' );
             return;

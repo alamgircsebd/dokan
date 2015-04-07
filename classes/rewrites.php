@@ -55,6 +55,9 @@ class Dokan_Rewrites {
             'single-announcement',
             'shipping',
             'settings',
+            'profile-settings',
+            'store-settings',
+            'payment-settings',
             'account-migration'
         ) );
 
