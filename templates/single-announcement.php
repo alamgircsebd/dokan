@@ -31,7 +31,7 @@ if( is_numeric( $notice_id ) ) {
                     <span class="dokan-single-announcement-date"><i class="fa fa-calendar"></i> <?php echo date('F j, Y ', strtotime( $notice_data->post_date ) ); ?></span>
 
                     <div class="entry-content">
-                        <?php echo $notice_data->post_content; ?>
+                        <?php echo wpautop( $notice_data->post_content ); ?>
                     </div>
 
                     <div class="dokan-announcement-link">
