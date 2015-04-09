@@ -62,8 +62,8 @@ class Dokan_Installer {
      * Update to version 2.1
      *
      * @since 2.1
-     * 
-     * @return void 
+     *
+     * @return void
      */
     public function update_to_21() {
        $this->create_announcement_table();
@@ -238,14 +238,15 @@ class Dokan_Installer {
      * Create Announcement table
      *
      * @since  2.1
-     * 
-     * @return void 
-     * 
+     *
+     * @return void
+     *
      */
     function create_announcement_table() {
         global $wpdb;
+        $table_name = $wpdb->prefix . 'dokan_announcement';
 
-        $sql = "CREATE TABLE IF NOT EXISTS {$wpdb->dokan_announcement} (
+        $sql = "CREATE TABLE IF NOT EXISTS {$table_name} (
                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                `user_id` bigint(20) unsigned NOT NULL,
                `post_id` bigint(11) NOT NULL,

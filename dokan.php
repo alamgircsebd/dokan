@@ -421,6 +421,7 @@ class WeDevs_Dokan {
             Dokan_Admin_Ajax::init();
             new Dokan_Announcement();
             new Dokan_Update();
+            new Dokan_Upgrade();
         } else {
             new Dokan_Pageviews();
         }
