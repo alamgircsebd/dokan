@@ -312,7 +312,7 @@ if ( ! $from_shortcode ) {
                                                         'walker'           => new Dokan_Walker_Tag_Multi()
                                                     ) );
 
-                                                    echo str_replace( '<select', '<select data-placeholder="Select product tags" multiple="multiple" ', $drop_down_tags );
+                                                    echo str_replace( '<select', '<select data-placeholder="' . __( 'Select product tags', 'dokan' ) . '" multiple="multiple" ', $drop_down_tags );
 
                                                     ?>
                                             </div>

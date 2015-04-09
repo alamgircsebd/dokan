@@ -2219,6 +2219,9 @@ a.dokan-btn-sm,
   position: absolute;
   width: 1px;
 }
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+  height: 28px;
+}
 .dokan-close {
   float: right;
   font-weight: bold;
