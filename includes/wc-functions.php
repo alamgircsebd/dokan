@@ -1754,6 +1754,7 @@ function dokan_user_update_to_seller( $user, $data ) {
     // Add role
     $user->add_role( 'seller' );
 
+    $user_id = wp_update_user( array( 'ID' => $user_id, 'user_nicename' => $data['shopurl'] ) );
     update_user_meta( $user_id, 'first_name', $data['fname'] );
     update_user_meta( $user_id, 'last_name', $data['lname'] );
 
