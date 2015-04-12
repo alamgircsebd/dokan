@@ -206,10 +206,10 @@ $reviews_url    = dokan_get_navigation_url( 'reviews' );
                                  ?>
                                 <li>
                                     <div class="dokan-dashboard-announce-content dokan-left">
-                                        <a href="<?php echo $notice_url; ?>"><h3><?php echo $notice->post_title ?></h3></a>
+                                        <a href="<?php echo $notice_url; ?>"><h3><?php echo $notice->post_title; ?></h3></a>
                                         <?php echo wp_trim_words( $notice->post_content, 6, '...' ); ?>
                                     </div>
-                                    <div class="dokan-dashboard-announce-date dokan-right">
+                                    <div class="dokan-dashboard-announce-date dokan-right <?php echo ( $notice->status == 'unread' ) ? 'dokan-dashboard-announce-unread' : 'dokan-dashboard-announce-read'; ?>">
                                         <div class="announce-day"><?php echo date( 'd', strtotime( $notice->post_date ) ); ?></div>
                                         <div class="announce-month"><?php echo date( 'l', strtotime( $notice->post_date ) ); ?></div>
                                         <div class="announce-year"><?php echo date( 'Y', strtotime( $notice->post_date ) ); ?></div>
