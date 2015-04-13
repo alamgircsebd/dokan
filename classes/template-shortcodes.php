@@ -625,9 +625,16 @@ class Dokan_Template_Shortcodes {
      * @return string
      */
     function best_selling_product_shortcode( $atts ) {
-        $per_page = shortcode_atts( array(
+        /**
+        * Filter return the number of best selling product per page.
+        *
+        * @since 2.1.1
+        *
+        * @param array
+        */
+        $per_page = shortcode_atts( apply_filters( 'dokan_best_selling_product_per_page', array(
             'no_of_product' => 8
-        ), $atts );
+        ), $atts ) );
 
         ob_start();
         ?>
