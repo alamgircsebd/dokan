@@ -654,9 +654,16 @@ class Dokan_Template_Shortcodes {
      * @return string
      */
     function top_rated_product_shortcode( $atts ) {
-        $per_page = shortcode_atts( array(
+        /**
+        * Filter return the number of top rated product per page.
+        *
+        * @since 2.1.1
+        *
+        * @param array
+        */
+        $per_page = shortcode_atts( apply_filters( 'dokan_top_rated_product_per_page', array(
             'no_of_product' => 8
-        ), $atts );
+        ), $atts ) );
 
         ob_start();
         ?>
@@ -684,9 +691,16 @@ class Dokan_Template_Shortcodes {
     function store_listing( $atts ) {
         global $post;
 
-        $attr = shortcode_atts( array(
+        /**
+        * Filter return the number of store listing number per page.
+        *
+        * @since 2.1.1
+        *
+        * @param array
+        */
+        $attr = shortcode_atts( apply_filters( 'dokan_store_listing_per_page', array(
                 'per_page' => 10,
-            ), $atts );
+            ), $atts ) );
 
         $paged  = max( 1, get_query_var( 'paged' ) );
         $limit  = $attr['per_page'];
