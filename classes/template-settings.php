@@ -103,8 +103,12 @@ class Dokan_Template_Settings {
      */
     function insert_settings_info() {
         $social = $_POST['settings']['social'];
+        
+        $store_id = get_current_user_id();
 
-        $dokan_settings = array(
+        $dokan_settings = dokan_get_store_info( $store_id );
+
+        $new_args = array(
             'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
             'social'       => array(
                 'fb'        => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
@@ -124,6 +128,8 @@ class Dokan_Template_Settings {
             'banner'       => absint( $_POST['dokan_banner'] ),
             'gravatar'     => absint( $_POST['dokan_gravatar'] ),
         );
+        
+        $dokan_settings = wp_parse_args( $new_args, $dokan_settings );
 
         if ( isset( $_POST['settings']['bank'] ) ) {
             $bank = $_POST['settings']['bank'];
@@ -148,8 +154,6 @@ class Dokan_Template_Settings {
                 'email' => filter_var( $_POST['settings']['skrill']['email'], FILTER_VALIDATE_EMAIL )
             );
         }
-
-        $store_id = get_current_user_id();
 
         $profile_completeness = $this->calculate_profile_completeness_value( $dokan_settings );
         $dokan_settings['profile_completion'] = $profile_completeness;
