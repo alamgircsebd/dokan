@@ -1592,9 +1592,11 @@ function dokan_product_listing_filter() {
     <form method="get" class="dokan-form-inline dokan-w6">
 
         <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right"><?php _e( 'Search', 'dokan'); ?></button>
+        
+        <?php wp_nonce_field( 'dokan_product_search', 'dokan_product_search_nonce' ); ?>
 
         <div class="dokan-form-group dokan-right">
-            <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Product name" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
+            <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Search Products" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
         </div>
 
         <?php 
@@ -1610,3 +1612,41 @@ function dokan_product_listing_filter() {
     <?php
     do_action( 'dokan_product_listing_filter_after_form' );
 }
+
+/**
+ * Search by SKU or ID for seller dashboard product listings.
+ *
+ * @param string $where
+ * @return string
+ */
+function dokan_product_search_by_sku( $where ) {
+    global $pagenow, $wpdb, $wp;
+
+    if ( !isset( $_GET['product_search_name'] ) || empty( $_GET['product_search_name'] || ! isset( $_POST['dokan_product_search_nonce'] ) || ! wp_verify_nonce( $_POST['dokan_product_search_nonce'], 'dokan_product_search' ) ) ) {
+        return $where;
+    }
+
+    $search_ids = array();
+    $terms      = explode( ',', $_GET['product_search_name'] );
+
+    foreach ( $terms as $term ) {
+        if ( is_numeric( $term ) ) {
+            $search_ids[] = $term;
+        }
+        // Attempt to get a SKU
+        $sku_to_id = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_sku' AND meta_value LIKE '%%%s%%';", wc_clean( $term ) ) );
+
+        if ( $sku_to_id && sizeof( $sku_to_id ) > 0 ) {
+            $search_ids = array_merge( $search_ids, $sku_to_id );
+        }
+    }
+
+    $search_ids = array_filter( array_map( 'absint', $search_ids ) );
+
+    if ( sizeof( $search_ids ) > 0 ) {
+        $where = str_replace( ')))', ") OR ({$wpdb->posts}.ID IN (" . implode( ',', $search_ids ) . "))))", $where );
+    }
+
+    return $where;
+}
+add_filter( 'posts_search', 'dokan_product_search_by_sku' );

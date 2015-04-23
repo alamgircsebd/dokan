@@ -69,13 +69,13 @@
                         }
 
                         if ( isset( $_GET['product_search_name']) && !empty( $_GET['product_search_name'] ) ) {
-                             $args['s'] = $_GET['product_search_name'];
+                            $args['s'] = $_GET['product_search_name'];
                         }
 
 
                         $original_post = $post;
                         $product_query = new WP_Query( apply_filters( 'dokan_product_listing_query', $args ) );
-
+                        
                         if ( $product_query->have_posts() ) {
                             while ($product_query->have_posts()) {
                                 $product_query->the_post();
