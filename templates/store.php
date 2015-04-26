@@ -17,7 +17,6 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
 get_header( 'shop' );
 ?>
-
     <?php do_action( 'woocommerce_before_main_content' ); ?>
 
     <?php if ( dokan_get_option( 'enable_theme_store_sidebar', 'dokan_general', 'off' ) == 'off' ) { ?>
