@@ -56,7 +56,7 @@
                             <div class="dokan-form-group">
                                 <textarea name="post_excerpt" id="post-excerpt" rows="5" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Short description about the product...', 'dokan' ); ?>"><?php echo dokan_posted_textarea( 'post_excerpt' ); ?></textarea>
                             </div>
-                            
+
                             <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                                 <div class="dokan-form-group">
 
@@ -84,12 +84,11 @@
                                         wp_list_categories(array(
 
                                           'walker'       => new DokanCategoryWalker(),
-                                          'name'         => 'product_cat',
                                           'title_li'     => '',
                                           'id'           => 'product_cat',
                                           'hide_empty'   => 0,
                                           'taxonomy'     => 'product_cat',
-                                          'hierarchical' => 1,    
+                                          'hierarchical' => 1,
                                           'selected'     => array()
                                         ));
                                         ?>
