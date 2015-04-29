@@ -60,6 +60,13 @@ class Dokan_Template_Coupons{
             $errors->add( 'products', __( 'Please specify any products', 'dokan' ) );
         }
 
+        $args = array( 'post_type' => 'shop_coupon', 'name' => $_POST['title'] );
+        $query = get_posts( $args );
+
+        if ( !empty( $query ) ) {
+            $errors->add( 'duplicate', __( 'Coupon title exists. Please change the title', 'dokan' ) );
+        }
+
         if ( $errors->get_error_codes() ) {
             return $errors;
         }
@@ -380,7 +387,7 @@ class Dokan_Template_Coupons{
 
         $discount_type = isset( $discount_type ) ? $discount_type : '';
         if ( isset( $discount_type ) ) {
-            if ( $discount_type == 'coupon_percent_product' ) {
+            if ( $discount_type == 'percent_product' ) {
                 $discount_type = 'selected';
             }
         }
@@ -421,7 +428,7 @@ class Dokan_Template_Coupons{
 
             $discount_type = $_POST['discount_type'];
 
-            if ( $discount_type == 'coupon_percent_product' ) {
+            if ( $discount_type == 'percent_product' ) {
                 $discount_type = 'selected';
             }
 
@@ -506,7 +513,7 @@ class Dokan_Template_Coupons{
                 <div class="dokan-w5 dokan-text-left">
                     <select id="discount_type" name="discount_type" class="dokan-form-control">
                         <option value="fixed_product"><?php _e( 'Product Discount', 'dokan' ); ?></option>
-                        <option value="percent_product"><?php _e( 'Product % Discount', 'dokan' ); ?></option>
+                        <option value="percent_product" <?php echo $discount_type; ?> ><?php _e( 'Product % Discount', 'dokan' ); ?></option>
                     </select>
                 </div>
             </div>

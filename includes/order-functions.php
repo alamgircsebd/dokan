@@ -242,12 +242,14 @@ function dokan_sync_insert_order( $order_id ) {
     $percentage     = dokan_get_seller_percentage( $seller_id );
 
     $order_total    = $order->get_total();
-    $order_subtotal = $order->get_subtotal();
-    $other_cost     = $order_total - $order_subtotal;
+    $order_shipping = $order->get_total_shipping();
+    $order_tax      = $order->get_total_tax();
+    $extra_cost     = $order_shipping + $order_tax;
+    $order_cost     = $order_total - $extra_cost;
     $order_status   = $order->post_status;
 
-    $net_amount     = ( ( $order_subtotal * $percentage ) / 100 ) + $other_cost;
-    $net_amount     = apply_filters( 'dokan_order_net_amount', $net_amount, $order, $seller_id, $percentage );
+    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+    $net_amount     = apply_filters( 'dokan_order_net_amount', $net_amount, $order );
 
     $wpdb->insert( $wpdb->prefix . 'dokan_orders',
         array(
