@@ -60,15 +60,7 @@ class Dokan_Template_Coupons{
             $errors->add( 'products', __( 'Please specify any products', 'dokan' ) );
         }
 
-        $args = array( 'post_type' => 'shop_coupon', 'name' => $_POST['title'] );
-        $query = get_posts( $args );
-
-        if ( !empty( $query ) ) {
-
-            if ( empty( $_POST['post_id'] ) || $_POST['post_id'] != $query[0]->ID ) {
-                $errors->add( 'duplicate', __( 'Coupon title exists. Please change the title', 'dokan' ) );
-            }
-        }
+        $this->is_coupon_exist( $_POST['title'], $errors );
 
         if ( $errors->get_error_codes() ) {
             return $errors;
@@ -76,6 +68,18 @@ class Dokan_Template_Coupons{
 
         return true;
     }
+
+    function is_coupon_exist( $title, $errors ) {
+        $args = array( 'post_type' => 'shop_coupon', 'name' => $title );
+        $query = get_posts( $args );
+
+        if ( !empty( $query ) ) {
+            if ( empty( $_POST['post_id'] ) || $_POST['post_id'] != $query[0]->ID ) {
+                return $errors->add( 'duplicate', __( 'Coupon title already exists', 'dokan' ) );
+            }
+        }
+    }
+
 
     function coupons_create() {
 
