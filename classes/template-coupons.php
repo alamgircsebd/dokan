@@ -69,6 +69,16 @@ class Dokan_Template_Coupons{
         return true;
     }
 
+    /**
+    * Get the orders total from a specific seller
+    *
+    * @since version 3
+    *
+    * @param string $title
+    * @param object $error
+    * 
+    * @return object $error
+    */
     function is_coupon_exist( $title, $errors ) {
         $args = array( 'post_type' => 'shop_coupon', 'name' => $title );
         $query = get_posts( $args );
