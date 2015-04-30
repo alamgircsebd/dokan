@@ -60,11 +60,14 @@ class Dokan_Template_Coupons{
             $errors->add( 'products', __( 'Please specify any products', 'dokan' ) );
         }
 
-        $args = array( 'post_type' => 'shop_coupon', 'name' => $_POST['title'] );
-        $query = get_posts( $args );
+        if ( empty( $_POST['post_id'] ) ) {
 
-        if ( !empty( $query ) ) {
-            $errors->add( 'duplicate', __( 'Coupon title exists. Please change the title', 'dokan' ) );
+            $args = array( 'post_type' => 'shop_coupon', 'name' => $_POST['title'] );
+            $query = get_posts( $args );
+
+            if ( !empty( $query ) ) {
+                $errors->add( 'duplicate', __( 'Coupon title exists. Please change the title', 'dokan' ) );
+            }
         }
 
         if ( $errors->get_error_codes() ) {
