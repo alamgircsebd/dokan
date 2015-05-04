@@ -1168,11 +1168,10 @@ jQuery(function($) {
 
         },
 
-        submitSettings: function() {
+        /*submitSettings: function() {
 
             var self = $( "form#settings-form" ),
                 form_data = self.serialize() + '&action=dokan_settings';
-
 
             self.find('.ajax_prev').append('<span class="dokan-loading"> </span>');
             $.post(dokan.ajaxurl, form_data, function(resp) {
@@ -1195,21 +1194,48 @@ jQuery(function($) {
                     }) );
                 }
             });
+        },*/
+        submitSettings: function( form_id ) {
+            var self = $( "form#"+form_id ),
+                form_data = self.serialize() + '&action=dokan_settings&form_id=' + form_id;
+
+            //console.log(form_data);
+
+            self.find('.ajax_prev').append('<span class="dokan-loading"> </span>');
+            $.post(dokan.ajaxurl, form_data, function(resp) {
+
+                console.log(resp);
+                self.find('span.dokan-loading').remove();
+                $('html,body').animate({scrollTop:100});
+
+                if ( resp.success ) {
+                    console.log(resp.data);
+                    //Harcoded Customization for template-settings function
+                    $('.dokan-ajax-response').html( $('<div/>', {
+                        'class': 'dokan-alert dokan-alert-success',
+                        'html': '<p>' + resp.data.msg + '</p>',
+                    }) );
+                    $('.dokan-ajax-response').append(resp.data.progress);
+                }else {
+                    $('.dokan-ajax-response').html( $('<div/>', {
+                        'class': 'dokan-alert dokan-alert-danger',
+                        'html': '<p>' + resp.data + '</p>'
+                    }) );
+                }
+            });
         },
 
         validateForm: function(self) {
-
-            $("form#settings-form").validate({
+            $("form#settings-form,form#profile-form,form#store-form,form#payment-form").validate({
                 //errorLabelContainer: '#errors'
                 submitHandler: function(form) {
-                    self.submitSettings();
+                    self.submitSettings(form.getAttribute('id'));
                 },
                 errorElement: 'span',
                 errorClass: 'error',
                 errorPlacement: validatorError,
                 success: validatorSuccess
             });
-
         },
 
         removeBanner: function(e) {

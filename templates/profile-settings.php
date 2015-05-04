@@ -1,6 +1,6 @@
 <?php
 $dokan_template_settings = Dokan_Template_Settings::init();
-$validate                = $dokan_template_settings->validate();
+$validate                = $dokan_template_settings->profile_validate();
 
 if ( $validate !== false && !is_wp_error( $validate ) ) {
    $dokan_template_settings->insert_settings_info();
@@ -53,7 +53,6 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
             $profile_info   = dokan_get_store_info( $current_user->ID );
 
-            $storename      = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
             $gravatar       = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
 
             $fb             = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
@@ -71,44 +70,46 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
             if ( is_wp_error( $validate ) ) {
                 $social       = $_POST['settings']['social'];
-                $storename    = $_POST['dokan_store_name'];
-
 
                 $fb           = esc_url( $social['fb'] );
                 $twitter      = esc_url( $social['twitter'] );
                 $gplus        = esc_url( $social['gplus'] );
                 $linkedin     = esc_url( $social['linkedin'] );
                 $youtube      = esc_url( $social['youtube'] );
-
-
                 $phone        = $_POST['setting_phone'];
 
             }
-            $social_field_array = [
-                'fb' => [
-                    'icon' => 'facebook-square',
-                    'value' => $fb,
-                ],
-                'gplus' => [
-                    'icon' => 'google-plus',
-                    'value' => $gplus,
-                ],
-                'twitter' => [
-                    'value' => $twitter,
-                ],
-                'linkedin' => [
-                    'value' => $linkedin,
-                ],
-                'youtube' => [
-                    'value' => $youtube,
-                ],
-                'instagram' => [
-                    'value' => $instagram,
-                ],
-                'flickr' => [
-                    'value' => $flickr,
-                ],
-            ];
+            $social_field_array = apply_filters( 'dokan_profile_social_fields', array(
+                    'fb' => array(
+                        'icon' => 'facebook-square',
+                        'value' => $fb,
+                    ),
+                    'gplus' => array(
+                        'icon' => 'google-plus',
+                        'value' => $gplus,
+                    ),
+                    'twitter' => array(
+                        'icon' => 'twitter',
+                        'value' => $twitter,
+                    ),
+                    'linkedin' => array(
+                        'icon' => 'linkedin',
+                        'value' => $linkedin,
+                    ),
+                    'youtube' => array(
+                        'icon' => 'youtube',
+                        'value' => $youtube,
+                    ),
+                    'instagram' => array(
+                        'icon' => 'instagram',
+                        'value' => $instagram,
+                    ),
+                    'flickr' => array(
+                        'icon' => 'flickr',
+                        'value' => $flickr,
+                    ),
+                )
+            );
             ?>
 
             <div class="dokan-ajax-response">
@@ -117,9 +118,9 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
             <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
 
-            <form method="post" id="settings-form"  action="" class="dokan-form-horizontal">
+            <form method="post" id="profile-form"  action="" class="dokan-form-horizontal"><?php ///settings-form ?>
 
-                <?php wp_nonce_field( 'dokan_settings_nonce' ); ?>
+                <?php wp_nonce_field( 'dokan_profile_settings_nonce' ); ?>
 
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
@@ -164,7 +165,7 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                         foreach( $social_field_array as $social_word => $social_array ) {
                             ?>
                             <div class="dokan-input-group dokan-form-group">
-                                <span class="dokan-input-group-addon"><i class="fa fa-<?php echo isset( $social_array['icon'] )?$social_array['icon']:$social_word; ?>"></i></span>
+                                <span class="dokan-input-group-addon"><i class="fa fa-<?php echo isset( $social_array['icon'] )?$social_array['icon']:''; ?>"></i></span>
                                 <input id="settings[social][<?php echo $social_word; ?>]" value="<?php echo $social_array['value']; ?>" name="settings[social][<?php echo $social_word; ?>]" class="dokan-form-control" placeholder="http://" type="text">
                             </div>
                         <?php
@@ -176,9 +177,8 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                 <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
 
                 <div class="dokan-form-group">
-
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
-                        <input type="submit" name="dokan_update_profile" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
+                        <input type="submit" name="dokan_update_profile_settings" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 

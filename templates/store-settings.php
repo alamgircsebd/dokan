@@ -77,9 +77,9 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
             <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
 
-            <form method="post" id="settings-form"  action="" class="dokan-form-horizontal">
+            <form method="post" id="store-form"  action="" class="dokan-form-horizontal">
 
-                <?php wp_nonce_field( 'dokan_settings_nonce' ); ?>
+                <?php wp_nonce_field( 'dokan_store_settings_nonce' ); ?>
 
                 <div class="dokan-banner">
 
@@ -138,7 +138,7 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                 <div class="dokan-form-group">
 
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
-                        <input type="submit" name="dokan_update_profile" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
+                        <input type="submit" name="dokan_update_store_settings" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
                     </div>
                 </div>
 
