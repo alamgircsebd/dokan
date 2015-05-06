@@ -218,7 +218,7 @@ class Dokan_Update {
             return $obj;
         }
 
-        return false;
+        return $false;
     }
 
     /**
