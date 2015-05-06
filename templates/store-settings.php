@@ -101,6 +101,11 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
                 <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
 
+               
+
+
+
+
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
 
