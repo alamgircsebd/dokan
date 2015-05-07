@@ -175,7 +175,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                         <div class="dokan-w12 dps-main-wrapper">
                             <div class="dokan-shipping-location-wrapper">
 
-                            <p><?php _e( 'Add the countries and states you deliver your products. You can specify states as well. If the shipping price is same except some states, then there is an option <strong>Everywhere Else</strong>, you can use that.', 'dokan' ) ?></p>
+                            <p><?php _e( 'Add the countries and states that you deliver your products to. You can specify states as well. If the shipping price is same except some states, then there is an option <strong>Everywhere Else</strong>, you can use that.', 'dokan' ) ?></p>
 
                             <?php if ( $dps_country_rates ) : ?>
 
@@ -196,7 +196,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                         </select>
                                                     </td>
                                                     <td class="dps_shipping_location_cost">
-                                                        <label for=""><?php _e( 'Cost', 'dokan' ); ?>
+                                                        <label for=""><?php _e( 'Extra Cost', 'dokan' ); ?>
                                                         <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. Else add the states below', 'dokan' ); ?>">
                                                         <i class="fa fa-question-circle"></i></span></label>
                                                         <div class="dokan-input-group">
@@ -226,7 +226,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                                     </select>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <label for=""><?php _e( 'Cost', 'dokan' ); ?>
+                                                                                    <label for=""><?php _e( 'Extra Cost', 'dokan' ); ?>
                                                                                     <span class="dokan-tooltips-help tips" title="<?php _e( 'Shipping price for this state', 'dokan' ); ?>">
                                                                                     <i class="fa fa-question-circle"></i></span></label>
                                                                                     <div class="input-group">
