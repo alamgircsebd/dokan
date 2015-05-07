@@ -183,7 +183,7 @@ class Dokan_Template_Shipping {
 
         // Store wide shipping info
         $store_shipping_type_price    = (float)get_user_meta( $post->post_author, '_dps_shipping_type_price', true );
-        $additional_product_cost      = get_post_meta( $post->ID, '_additional_price', true );
+        $additional_product_cost      = (float)get_post_meta( $post->ID, '_additional_price', true );
         $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
         $additional_qty_product_price = get_post_meta( $post->ID, '_additional_qty', true );
         $dps_additional_qty           = get_user_meta( $post->post_author, '_dps_additional_qty', true );
@@ -197,23 +197,53 @@ class Dokan_Template_Shipping {
         ?>
 
         <?php if ( $base_shipping_type_price ): ?>
-             <p>
-                    <strong>
-                        <?php _e( 'Base Shipping Cost for this product : ', 'dokan' ); ?> <?php echo wc_price( $base_shipping_type_price ); ?>
-                    </strong>
-            </p>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><?php _e( 'Base Shipping', 'dokan' ); ?></th>
+                        <th><?php _e( 'Base Cost', 'dokan' ); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <?php _e( 'For Vendor', 'dokan' ); ?>
+                        </td>
+                        <td>
+                            <?php echo wc_price( $store_shipping_type_price ); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php _e( 'For this Product', 'dokan' ); ?>
+                        </td>
+                        <td>
+                            <?php echo wc_price( $additional_product_cost ); ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <?php _e( 'Total', 'dokan' ); ?>
+                        </td>
+                        <td>
+                            <?php echo wc_price( $base_shipping_type_price ); ?>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr>
         <?php endif ?>
 
-        <?php if ( $base_shipping_type_price ): ?>
+        <?php if ( $additional_qty_price ): ?>
              <p>
-                    <strong>
-                        <?php _e( 'Shipping Cost of additional quantity for this product : ', 'dokan' ); ?> <?php echo wc_price( $additional_qty_price ); ?>
-                    </strong>
+                <strong>
+                    <?php _e( 'Shipping Cost of additional quantity for this product : ', 'dokan' ); ?> <?php echo wc_price( $additional_qty_price ); ?>
+                </strong>
             </p>
 
         <?php endif ?>
 
-        <?php if ( $additional_qty_price ) { ?>
+        <?php if ( $processing_time ) { ?>
                 <p>
                     <strong>
                     <?php _e( 'Ready to ship in', 'dokan' ); ?> <?php echo dokan_get_processing_time_value( $processing_time ); ?>
@@ -233,7 +263,7 @@ class Dokan_Template_Shipping {
                 <thead>
                     <tr>
                         <th><?php _e( 'Ship To', 'dokan' ); ?></th>
-                        <th><?php _e( 'Cost', 'dokan' ); ?></th>
+                        <th><?php _e( 'Extra Cost', 'dokan' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -267,7 +297,7 @@ class Dokan_Template_Shipping {
                                     <thead>
                                         <tr>
                                             <th><?php _e( 'Shipping state', 'dokan' ); ?></th>
-                                            <th><?php _e( 'Cost', 'dokan' ); ?></th>
+                                            <th><?php _e( 'Extra Cost', 'dokan' ); ?></th>
                                         </tr>
                                     </thead>
                                     <tbody>

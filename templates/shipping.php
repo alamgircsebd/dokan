@@ -196,7 +196,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                         </select>
                                                     </td>
                                                     <td class="dps_shipping_location_cost">
-                                                        <label for=""><?php _e( 'Extra Cost', 'dokan' ); ?>
+                                                        <label for=""><?php _e( 'Cost', 'dokan' ); ?>
                                                         <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. Else add the states below', 'dokan' ); ?>">
                                                         <i class="fa fa-question-circle"></i></span></label>
                                                         <div class="dokan-input-group">
@@ -226,7 +226,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                                     </select>
                                                                                 </td>
                                                                                 <td>
-                                                                                    <label for=""><?php _e( 'Extra Cost', 'dokan' ); ?>
+                                                                                    <label for=""><?php _e( 'Cost', 'dokan' ); ?>
                                                                                     <span class="dokan-tooltips-help tips" title="<?php _e( 'Shipping price for this state', 'dokan' ); ?>">
                                                                                     <i class="fa fa-question-circle"></i></span></label>
                                                                                     <div class="input-group">
