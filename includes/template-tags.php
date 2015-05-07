@@ -291,7 +291,13 @@ function dokan_order_listing_status_filter() {
     <?php
 }
 
+/**
+ * Dashboard Navigation menus
+ *
+ * @return array
+ */
 function dokan_get_dashboard_nav() {
+
     $urls = array(
         'dashboard' => array(
             'title' => __( 'Dashboard', 'dokan'),
@@ -330,35 +336,96 @@ function dokan_get_dashboard_nav() {
         ),
     );
 
+    $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
+
+    $settings = array(
+        'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
+        'icon'  => '<i class="fa fa-cog"></i>',
+        'url'   => dokan_get_navigation_url( 'settings/store' ),
+        'sub'   => array(
+            'back' => array(
+                'title' => __( 'Back to Dashboard', 'dokan'),
+                'icon'  => '<i class="fa fa-long-arrow-left"></i>',
+                'url'   => dokan_get_navigation_url()
+            ),
+            'store' => array(
+                'title' => __( 'Store', 'dokan'),
+                'icon'  => '<i class="fa fa-university"></i>',
+                'url'   => dokan_get_navigation_url( 'settings/store' )
+            ),
+            'payment' => array(
+                'title' => __( 'Payment', 'dokan'),
+                'icon'  => '<i class="fa fa-credit-card"></i>',
+                'url'   => dokan_get_navigation_url( 'settings/payment' )
+            )
+        )
+    );
+
     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
-    $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+    $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
     if ( $enable_shipping == 'yes' ) {
-        $urls['shipping'] = array(
+        $settings['sub']['shipping'] = array(
             'title' => __( 'Shipping', 'dokan'),
             'icon'  => '<i class="fa fa-truck"></i>',
-            'url'   => dokan_get_navigation_url( 'shipping' )
+            'url'   => dokan_get_navigation_url( 'settings/shipping' )
         );
     }
 
-    $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
-
-    $urls['settings'] = array(
-        'title' => __( 'Settings', 'dokan'),
-        'icon'  => '<i class="fa fa-cog"></i>',
-        'url'   => dokan_get_navigation_url( 'settings' )
+    $settings['sub']['social'] = array(
+        'title' => __( 'Social Profile', 'dokan'),
+        'icon'  => '<i class="fa fa-share-alt-square"></i>',
+        'url'   => dokan_get_navigation_url( 'settings/social' )
     );
 
-    return $urls;
+    /**
+     * Filter to get the seller dashboard settings navigation.
+     *
+     * @since 2.1.1
+     *
+     * @param array.
+     */
+    $urls['settings'] = apply_filters( 'dokan_get_dashboard_settings_nav', $settings );
+
+    /**
+     * Filter to get the final seller dashboard navigation.
+     *
+     * @since 2.1.1
+     *
+     * @param array $urls.
+     */
+    return apply_filters( 'dokan_get_seller_dashboard_nav', $urls );
 }
 
-function dokan_dashboard_nav( $active_menu ) {
-    $urls = dokan_get_dashboard_nav();
+/**
+ * Renders the Dokan dashboard menu
+ *
+ * For settings menu, the active menu format is `settings/menu_key_name`.
+ * The active menu will be splitted at `/` and the `menu_key_name` will be matched
+ * with settings sub menu array. If it's a match, the settings menu will be shown
+ * only. Otherwise the main navigation menu will be shown.
+ *
+ * @param  string  $active_menu
+ *
+ * @return string rendered menu HTML
+ */
+function dokan_dashboard_nav( $active_menu = '' ) {
+
+    $nav_menu          = dokan_get_dashboard_nav();
+    $active_menu_parts = explode( '/', $active_menu );
+
+    if ( isset( $active_menu_parts[1] ) && $active_menu_parts[0] == 'settings' && array_key_exists( $active_menu_parts[1], $nav_menu['settings']['sub'] ) ) {
+        $urls        = $nav_menu['settings']['sub'];
+        $active_menu = $active_menu_parts[1];
+    } else {
+        $urls = $nav_menu;
+    }
+
     $menu = '<ul class="dokan-dashboard-menu">';
 
     foreach ($urls as $key => $item) {
-        $class = ( $active_menu == $key ) ? ' class="active"' : '';
-        $menu .= sprintf( '<li%s><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
+        $class = ( $active_menu == $key ) ? 'active ' . $key : $key;
+        $menu .= sprintf( '<li class="%s"><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
     }
     $menu .= '</ul>';
 

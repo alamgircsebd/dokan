@@ -25,7 +25,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
 ?>
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'shipping' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'settings/shipping' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-settings-content">
         <article class="dokan-settings-area">

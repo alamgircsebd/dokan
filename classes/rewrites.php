@@ -53,7 +53,6 @@ class Dokan_Rewrites {
             'withdraw',
             'announcement',
             'single-announcement',
-            'shipping',
             'settings',
             'account-migration'
         ) );
