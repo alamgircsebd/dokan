@@ -115,7 +115,8 @@ class Dokan_Template_Settings {
     }
 
     /**
-     * validate profile settings
+     * Validate profile settings
+     *
      * @return bool|WP_Error
      */
     function profile_validate() {
@@ -139,6 +140,7 @@ class Dokan_Template_Settings {
 
         if ( !empty( $_POST['setting_paypal_email'] ) ) {
             $email = filter_var( $_POST['setting_paypal_email'], FILTER_VALIDATE_EMAIL );
+
             if ( empty( $email ) ) {
                 $error->add( 'dokan_email', __( 'Invalid email', 'dokan' ) );
             }
@@ -149,11 +151,11 @@ class Dokan_Template_Settings {
         }
 
         return true;
-
     }
 
     /**
      * Validate store settings
+     *
      * @return bool|WP_Error
      */
     function store_validate() {
@@ -235,10 +237,8 @@ class Dokan_Template_Settings {
      */
     function insert_settings_info() {
 
-        $store_id = get_current_user_id();
-
+        $store_id            = get_current_user_id();
         $prev_dokan_settings = get_user_meta( $store_id, 'dokan_profile_settings', true );
-
 
         if ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_profile_settings_nonce' ) ) {
 
@@ -261,7 +261,7 @@ class Dokan_Template_Settings {
             );
 
 
-        }elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_store_settings_nonce' ) ) {
+        } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_store_settings_nonce' ) ) {
 
             //update store setttings info
             $dokan_settings = array(
@@ -272,7 +272,7 @@ class Dokan_Template_Settings {
                 'banner'       => absint( $_POST['dokan_banner'] ),
             );
 
-        }elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_payment_settings_nonce' ) ) {
+        } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_payment_settings_nonce' ) ) {
 
             //update payment settings info
             $dokan_settings = array(

@@ -5,13 +5,10 @@ $validate                = $dokan_template_settings->profile_validate();
 if ( $validate !== false && !is_wp_error( $validate ) ) {
    $dokan_template_settings->insert_settings_info();
 }
-
-$scheme = is_ssl() ? 'https' : 'http';
-wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sensor=true' );
 ?>
 
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'profile-settings' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'social-profile' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-settings-content">
         <article class="dokan-settings-area">

@@ -2694,7 +2694,7 @@ textarea.dokan-form-control {
   color: #555;
   text-align: center;
   background-color: #eee;
-  border: 1px solid #ccc;
+  border: 1px solid #ededed;
   border-radius: 4px;
 }
 .dokan-input-group-addon input[type="radio"],
