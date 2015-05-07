@@ -788,7 +788,7 @@ class Dokan_Ajax {
                     <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                        <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
+                        <input type="text" placeholder="0.00" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
                     </div>
                 </td>
                 <td width="15%">
@@ -812,7 +812,7 @@ class Dokan_Ajax {
                     <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
                     <div class="input-group">
                         <span class="input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                        <input type="text" placeholder="9.99" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
+                        <input type="text" placeholder="0.00" class="form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
                     </div>
                 </td>
                 <td width="15%">

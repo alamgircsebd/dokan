@@ -55,7 +55,7 @@ $porduct_shipping_pt = ( $_processing_time ) ? $_processing_time : $dps_pt;
         <label class="dokan-w4 dokan-control-label" for="shipping_type_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
 
         <div class="dokan-w4 dokan-text-left">
-            <input id="shipping_type_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
+            <input id="shipping_type_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="0.00" class="dokan-form-control" type="number" step="any">
         </div>
     </div>
 

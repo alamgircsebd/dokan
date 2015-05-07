@@ -49,7 +49,7 @@
                             <div class="dokan-form-group">
                                 <div class="dokan-input-group">
                                     <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                    <input class="dokan-form-control" name="price" id="product-price" type="text" placeholder="9.99" value="<?php echo dokan_posted_input( 'price' ); ?>">
+                                    <input class="dokan-form-control" name="price" id="product-price" type="text" placeholder="0.00" value="<?php echo dokan_posted_input( 'price' ); ?>">
                                 </div>
                             </div>
 

@@ -191,7 +191,7 @@ if ( ! $from_shortcode ) {
                                                 <div class="dokan-form-group">
                                                     <div class="dokan-input-group">
                                                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                                        <?php dokan_post_input_box( $post_id, '_regular_price', array( 'placeholder' => '9.99' ) ); ?>
+                                                        <?php dokan_post_input_box( $post_id, '_regular_price', array( 'placeholder' => '0.00' ) ); ?>
                                                     </div>
                                                 </div>
 
