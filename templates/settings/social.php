@@ -50,8 +50,6 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
 
             $profile_info   = dokan_get_store_info( $current_user->ID );
 
-            $gravatar       = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
-
             $fb             = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
             $twitter        = isset( $profile_info['social']['twitter'] ) ? esc_url( $profile_info['social']['twitter'] ) : '';
             $gplus          = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
@@ -59,11 +57,6 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
             $youtube        = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
             $flickr         = isset( $profile_info['social']['flickr'] ) ? esc_url( $profile_info['social']['flickr'] ) : '';
             $instagram      = isset( $profile_info['social']['instagram'] ) ? esc_url( $profile_info['social']['instagram'] ) : '';
-
-            // bank
-            $phone          = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
-            $show_email     = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
-
 
             if ( is_wp_error( $validate ) ) {
                 $social       = $_POST['settings']['social'];
@@ -118,41 +111,6 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
             <form method="post" id="profile-form"  action="" class="dokan-form-horizontal"><?php ///settings-form ?>
 
                 <?php wp_nonce_field( 'dokan_profile_settings_nonce' ); ?>
-
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 dokan-control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
-
-                    <div class="dokan-w5 dokan-gravatar">
-                        <div class="dokan-left gravatar-wrap<?php echo $gravatar ? '' : ' dokan-hide'; ?>">
-                            <?php $gravatar_url = $gravatar ? wp_get_attachment_url( $gravatar ) : ''; ?>
-                            <input type="hidden" class="dokan-file-field" value="<?php echo $gravatar; ?>" name="dokan_gravatar">
-                            <img class="dokan-gravatar-img" src="<?php echo esc_url( $gravatar_url ); ?>">
-                            <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
-                        </div>
-                        <div class="gravatar-button-area<?php echo $gravatar ? ' dokan-hide' : ''; ?>">
-                            <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Phone No', 'dokan' ); ?></label>
-                    <div class="dokan-w5 dokan-text-left">
-                        <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="+123456.." class="dokan-form-control input-md" type="text">
-                    </div>
-                </div>
-
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Email', 'dokan' ); ?></label>
-                    <div class="dokan-w5 dokan-text-left">
-                        <div class="checkbox">
-                            <label>
-                                <input type="hidden" name="setting_show_email" value="no">
-                                <input type="checkbox" name="setting_show_email" value="yes"<?php checked( $show_email, 'yes' ); ?>> <?php _e( 'Show email address in store', 'dokan' ); ?>
-                            </label>
-                        </div>
-                    </div>
-                </div>
 
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="settings[social][fb]"><?php _e( 'Social Profile', 'dokan' ); ?></label>

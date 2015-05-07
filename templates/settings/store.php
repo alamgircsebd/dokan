@@ -52,8 +52,11 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
             $profile_info   = dokan_get_store_info( $current_user->ID );
 
+            $gravatar       = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
             $banner         = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
             $storename      = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
+            $phone          = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
+            $show_email     = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
 
             // bank
             $address        = isset( $profile_info['address'] ) ? esc_textarea( $profile_info['address'] ) : '';
@@ -102,6 +105,22 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                 <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
 
                 <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
+
+                    <div class="dokan-w5 dokan-gravatar">
+                        <div class="dokan-left gravatar-wrap<?php echo $gravatar ? '' : ' dokan-hide'; ?>">
+                            <?php $gravatar_url = $gravatar ? wp_get_attachment_url( $gravatar ) : ''; ?>
+                            <input type="hidden" class="dokan-file-field" value="<?php echo $gravatar; ?>" name="dokan_gravatar">
+                            <img class="dokan-gravatar-img" src="<?php echo esc_url( $gravatar_url ); ?>">
+                            <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
+                        </div>
+                        <div class="gravatar-button-area<?php echo $gravatar ? ' dokan-hide' : ''; ?>">
+                            <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
 
                     <div class="dokan-w5 dokan-text-left">
@@ -113,6 +132,25 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                     <label class="dokan-w3 dokan-control-label" for="setting_address"><?php _e( 'Address', 'dokan' ); ?></label>
                     <div class="dokan-w5 dokan-text-left">
                         <textarea class="dokan-form-control" rows="4" id="setting_address" name="setting_address"><?php echo $address; ?></textarea>
+                    </div>
+                </div>
+
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Phone No', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
+                        <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="+123456.." class="dokan-form-control input-md" type="text">
+                    </div>
+                </div>
+
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Email', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
+                        <div class="checkbox">
+                            <label>
+                                <input type="hidden" name="setting_show_email" value="no">
+                                <input type="checkbox" name="setting_show_email" value="yes"<?php checked( $show_email, 'yes' ); ?>> <?php _e( 'Show email address in store', 'dokan' ); ?>
+                            </label>
+                        </div>
                     </div>
                 </div>
 

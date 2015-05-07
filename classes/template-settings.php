@@ -254,10 +254,7 @@ class Dokan_Template_Settings {
                     'youtube'   => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
                     'flickr'    => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
                     'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
-                ),
-                'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
-                'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
-                'gravatar'     => absint( $_POST['dokan_gravatar'] ),
+                )
             );
 
 
@@ -270,6 +267,9 @@ class Dokan_Template_Settings {
                 'location'     => sanitize_text_field( $_POST['location'] ),
                 'find_address' => sanitize_text_field( $_POST['find_address'] ),
                 'banner'       => absint( $_POST['dokan_banner'] ),
+                'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
+                'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
+                'gravatar'     => absint( $_POST['dokan_gravatar'] ),
             );
 
         } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_payment_settings_nonce' ) ) {
