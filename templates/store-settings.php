@@ -101,11 +101,6 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 
                 <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
 
-               
-
-
-
-
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
 
@@ -124,17 +119,17 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e( 'Map', 'dokan' ); ?></label>
 
-                    <div class="dokan-w4 dokan-text-left">
+                    <div class="dokan-w6 dokan-text-left">
                         <input id="dokan-map-lat" type="hidden" name="location" value="<?php echo $map_location; ?>" size="30" />
 
-                        <div class="dokan-input-group">
-                            <span class="">
-                                <input id="dokan-map-add" type="text" class="dokan-form-control" value="<?php echo $map_address; ?>" name="find_address" placeholder="<?php _e( 'Type an address to find', 'dokan' ); ?>" size="30" />
-                                <a href="#" class="" id="dokan-location-find-btn" type="button"><?php _e( 'Find Address', 'dokan' ); ?></a>
-                            </span>
-                        </div><!-- /input-group -->
+                        <div class="dokan-map-wrap">
+                            <div class="dokan-map-search-bar">
+                                <input id="dokan-map-add" type="text" class="dokan-map-search" value="<?php echo $map_address; ?>" name="find_address" placeholder="<?php _e( 'Type an address to find', 'dokan' ); ?>" size="30" />
+                                <a href="#" class="dokan-map-find-btn" id="dokan-location-find-btn" type="button"><?php _e( 'Find Address', 'dokan' ); ?></a>
+                            </div>
 
-                        <div class="dokan-google-map" id="dokan-map" style="width:400px; height:300px;"></div>
+                            <div class="dokan-google-map" id="dokan-map"></div>
+                        </div>
                     </div> <!-- col.md-4 -->
                 </div> <!-- .dokan-form-group -->
 
@@ -146,7 +141,6 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                         <input type="submit" name="dokan_update_store_settings" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
                     </div>
                 </div>
-
             </form>
 
             <?php do_action( 'dokan_settings_after_form', $current_user, $profile_info ); ?>
