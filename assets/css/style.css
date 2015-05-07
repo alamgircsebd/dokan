@@ -85,6 +85,9 @@
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li ul.sub-menu li:last-child {
   border-bottom: none;
 }
+.dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.settings i.pull-right {
+  padding-top: 5px;
+}
 .dokan-dashboard .dokan-dashboard-wrap {
   display: block;
   overflow: hidden;
@@ -2207,11 +2210,14 @@ a.dokan-btn-sm,
 .dokan-tooltips-help {
   margin-left: 7px;
 }
+.dokan-tooltips-help i {
+  color: #ccc;
+}
 .tooltip-inner {
   font-size: 12px;
 }
 /**
- * Media Popup style 
+ * Media Popup style
  */
 .media-modal .screen-reader-text {
   overflow: hidden;

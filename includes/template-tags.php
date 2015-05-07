@@ -291,105 +291,119 @@ function dokan_order_listing_status_filter() {
     <?php
 }
 
+/**
+ * Dashboard Navigation menus
+ *
+ * @return array
+ */
 function dokan_get_dashboard_nav() {
 
-        $urls = array(
+    $urls = array(
+        'dashboard' => array(
+            'title' => __( 'Dashboard', 'dokan'),
+            'icon'  => '<i class="fa fa-tachometer"></i>',
+            'url'   => dokan_get_navigation_url()
+        ),
+        'product' => array(
+            'title' => __( 'Products', 'dokan'),
+            'icon'  => '<i class="fa fa-briefcase"></i>',
+            'url'   => dokan_get_navigation_url( 'products' )
+        ),
+        'order' => array(
+            'title' => __( 'Orders', 'dokan'),
+            'icon'  => '<i class="fa fa-shopping-cart"></i>',
+            'url'   => dokan_get_navigation_url( 'orders' )
+        ),
+        'coupon' => array(
+            'title' => __( 'Coupons', 'dokan'),
+            'icon'  => '<i class="fa fa-gift"></i>',
+            'url'   => dokan_get_navigation_url( 'coupons' )
+        ),
+        'report' => array(
+            'title' => __( 'Reports', 'dokan'),
+            'icon'  => '<i class="fa fa-line-chart"></i>',
+            'url'   => dokan_get_navigation_url( 'reports' )
+        ),
+        'reviews' => array(
+            'title' => __( 'Reviews', 'dokan'),
+            'icon'  => '<i class="fa fa-comments-o"></i>',
+            'url'   => dokan_get_navigation_url( 'reviews' )
+        ),
+        'withdraw' => array(
+            'title' => __( 'Withdraw', 'dokan'),
+            'icon'  => '<i class="fa fa-upload"></i>',
+            'url'   => dokan_get_navigation_url( 'withdraw' )
+        ),
+    );
+
+    $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
+
+    $settings = array(
+        'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
+        'icon'  => '<i class="fa fa-cog"></i>',
+        'url'   => dokan_get_navigation_url( 'store-settings' ),
+        'sub'   => array(
             'dashboard' => array(
-                'title' => __( 'Dashboard', 'dokan'),
-                'icon'  => '<i class="fa fa-tachometer"></i>',
+                'title' => __( 'Back to Dashboard', 'dokan'),
+                'icon'  => '<i class="fa fa-long-arrow-left"></i>',
                 'url'   => dokan_get_navigation_url()
             ),
-            'product' => array(
-                'title' => __( 'Products', 'dokan'),
-                'icon'  => '<i class="fa fa-briefcase"></i>',
-                'url'   => dokan_get_navigation_url( 'products' )
+            'store-settings' => array(
+                'title' => __( 'Store', 'dokan'),
+                'icon'  => '<i class="fa fa-university"></i>',
+                'url'   => dokan_get_navigation_url( 'store-settings' )
             ),
-            'order' => array(
-                'title' => __( 'Orders', 'dokan'),
-                'icon'  => '<i class="fa fa-shopping-cart"></i>',
-                'url'   => dokan_get_navigation_url( 'orders' )
-            ),
-            'coupon' => array(
-                'title' => __( 'Coupons', 'dokan'),
-                'icon'  => '<i class="fa fa-gift"></i>',
-                'url'   => dokan_get_navigation_url( 'coupons' )
-            ),
-            'report' => array(
-                'title' => __( 'Reports', 'dokan'),
-                'icon'  => '<i class="fa fa-line-chart"></i>',
-                'url'   => dokan_get_navigation_url( 'reports' )
-            ),
-            'reviews' => array(
-                'title' => __( 'Reviews', 'dokan'),
-                'icon'  => '<i class="fa fa-comments-o"></i>',
-                'url'   => dokan_get_navigation_url( 'reviews' )
-            ),
-            'withdraw' => array(
-                'title' => __( 'Withdraw', 'dokan'),
-                'icon'  => '<i class="fa fa-upload"></i>',
-                'url'   => dokan_get_navigation_url( 'withdraw' )
-            ),
+            'payment-settings' => array(
+                'title' => __( 'Payment', 'dokan'),
+                'icon'  => '<i class="fa fa-credit-card"></i>',
+                'url'   => dokan_get_navigation_url( 'payment-settings' )
+            )
+        )
+    );
+
+    $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
+    $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+
+    if ( $enable_shipping == 'yes' ) {
+        $settings['sub']['shipping'] = array(
+            'title' => __( 'Shipping', 'dokan'),
+            'icon'  => '<i class="fa fa-truck"></i>',
+            'url'   => dokan_get_navigation_url( 'shipping' )
         );
+    }
 
-        $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
-
-
-        /**
-        * Filter to get the seller dashboard settings navigation.
-        *
-        * @since 2.1.1
-        *
-        * @param array.
-        */
-        $urls['settings'] = apply_filters( 'dokan_get_dashboard_settings_nav', array(
-            'title' => __( 'Settings <i class="fa fa-angle-right"></i>', 'dokan'),
-            'icon'  => '<i class="fa fa-cog"></i>',
-            'url'   => dokan_get_navigation_url( 'profile-settings' ),
-            'sub'   => array(
-                'dashboard' => array(
-                    'title' => __( 'Back to Dashboard', 'dokan'),
-                    'icon'  => '<i class="fa fa-long-arrow-left"></i>',
-                    'url'   => dokan_get_navigation_url()
-                ),
-                'profile-settings' => array(
-                    'title' => __( 'Profile', 'dokan'),
-                    'icon'  => '<i class="fa fa-user"></i>',
-                    'url'   => dokan_get_navigation_url( 'profile-settings' )
-                ),
-                'store-settings' => array(
-                    'title' => __( 'Store', 'dokan'),
-                    'icon'  => '<i class="fa fa-university"></i>',
-                    'url'   => dokan_get_navigation_url( 'store-settings' )
-                ),
-                'payment-settings' => array(
-                    'title' => __( 'Payment', 'dokan'),
-                    'icon'  => '<i class="fa fa-credit-card"></i>',
-                    'url'   => dokan_get_navigation_url( 'payment-settings' )
-                ),
-            ),
-        ) );
-
-        $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
-        $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-
-        if ( $enable_shipping == 'yes' ) {
-            $urls['settings']['sub']['shipping'] = array(
-                'title' => __( 'Shipping', 'dokan'),
-                'icon'  => '<i class="fa fa-truck"></i>',
-                'url'   => dokan_get_navigation_url( 'shipping' )
-            );
-        }
+    $settings['sub']['profile-settings'] = array(
+        'title' => __( 'Social Profile', 'dokan'),
+        'icon'  => '<i class="fa fa-share-alt-square"></i>',
+        'url'   => dokan_get_navigation_url( 'profile-settings' )
+    );
 
     /**
-    * Filter to get the final seller dashboard navigation.
-    *
-    * @since 2.1.1
-    *
-    * @param array $urls.
-    */
+     * Filter to get the seller dashboard settings navigation.
+     *
+     * @since 2.1.1
+     *
+     * @param array.
+     */
+    $urls['settings'] = apply_filters( 'dokan_get_dashboard_settings_nav', $settings );
+
+    /**
+     * Filter to get the final seller dashboard navigation.
+     *
+     * @since 2.1.1
+     *
+     * @param array $urls.
+     */
     return apply_filters( 'dokan_get_seller_dashboard_nav', $urls );
 }
 
+/**
+ * [dokan_dashboard_nav description]
+ *
+ * @param  [type]  [description]
+ *
+ * @return [type]  [description]
+ */
 function dokan_dashboard_nav( $active_menu ) {
 
     $urls = dokan_get_dashboard_nav();
@@ -405,12 +419,12 @@ function dokan_dashboard_nav( $active_menu ) {
             }
         }
     }
-    
+
     $menu = '<ul class="dokan-dashboard-menu">';
 
     foreach ($menu_nav as $key => $item) {
-        $class = ( $active_menu == $key ) ? ' class="active"' : '';
-        $menu .= sprintf( '<li%s><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
+        $class = ( $active_menu == $key ) ? 'active ' . $key : $key;
+        $menu .= sprintf( '<li class="%s"><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
     }
     $menu .= '</ul>';
 
