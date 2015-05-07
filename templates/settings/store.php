@@ -11,7 +11,7 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
 ?>
 
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'store-settings' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'settings/store' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-settings-content">
         <article class="dokan-settings-area">

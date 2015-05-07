@@ -343,17 +343,17 @@ function dokan_get_dashboard_nav() {
         'icon'  => '<i class="fa fa-cog"></i>',
         'url'   => dokan_get_navigation_url( 'settings/store' ),
         'sub'   => array(
-            'dashboard' => array(
+            'back' => array(
                 'title' => __( 'Back to Dashboard', 'dokan'),
                 'icon'  => '<i class="fa fa-long-arrow-left"></i>',
                 'url'   => dokan_get_navigation_url()
             ),
-            'store-settings' => array(
+            'store' => array(
                 'title' => __( 'Store', 'dokan'),
                 'icon'  => '<i class="fa fa-university"></i>',
                 'url'   => dokan_get_navigation_url( 'settings/store' )
             ),
-            'payment-settings' => array(
+            'payment' => array(
                 'title' => __( 'Payment', 'dokan'),
                 'icon'  => '<i class="fa fa-credit-card"></i>',
                 'url'   => dokan_get_navigation_url( 'settings/payment' )
@@ -372,7 +372,7 @@ function dokan_get_dashboard_nav() {
         );
     }
 
-    $settings['sub']['social-profile'] = array(
+    $settings['sub']['social'] = array(
         'title' => __( 'Social Profile', 'dokan'),
         'icon'  => '<i class="fa fa-share-alt-square"></i>',
         'url'   => dokan_get_navigation_url( 'settings/social' )
@@ -398,31 +398,32 @@ function dokan_get_dashboard_nav() {
 }
 
 /**
- * [dokan_dashboard_nav description]
+ * Renders the Dokan dashboard menu
  *
- * @param  [type]  [description]
+ * For settings menu, the active menu format is `settings/menu_key_name`.
+ * The active menu will be splitted at `/` and the `menu_key_name` will be matched
+ * with settings sub menu array. If it's a match, the settings menu will be shown
+ * only. Otherwise the main navigation menu will be shown.
  *
- * @return [type]  [description]
+ * @param  string  $active_menu
+ *
+ * @return string rendered menu HTML
  */
-function dokan_dashboard_nav( $active_menu ) {
+function dokan_dashboard_nav( $active_menu = '' ) {
 
-    $urls = dokan_get_dashboard_nav();
+    $nav_menu          = dokan_get_dashboard_nav();
+    $active_menu_parts = explode( '/', $active_menu );
 
-    if ( array_key_exists( $active_menu, $urls ) ) {
-        $menu_nav = $urls;
+    if ( isset( $active_menu_parts[1] ) && $active_menu_parts[0] == 'settings' && array_key_exists( $active_menu_parts[1], $nav_menu['settings']['sub'] ) ) {
+        $urls        = $nav_menu['settings']['sub'];
+        $active_menu = $active_menu_parts[1];
     } else {
-        foreach ( $urls as $url) {
-            if ( array_key_exists( 'sub', $url ) ) {
-                if ( array_key_exists( $active_menu, $url['sub'] ) ) {
-                    $menu_nav = $url['sub'];
-                }
-            }
-        }
+        $urls = $nav_menu;
     }
 
     $menu = '<ul class="dokan-dashboard-menu">';
 
-    foreach ($menu_nav as $key => $item) {
+    foreach ($urls as $key => $item) {
         $class = ( $active_menu == $key ) ? 'active ' . $key : $key;
         $menu .= sprintf( '<li class="%s"><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
     }

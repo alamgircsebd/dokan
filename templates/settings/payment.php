@@ -7,7 +7,7 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
 }
 ?>
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'payment-settings' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'settings/payment' ) ); ?>
 
     <div class="dokan-dashboard-content dokan-settings-content">
         <article class="dokan-settings-area">
