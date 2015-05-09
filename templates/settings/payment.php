@@ -13,10 +13,14 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
         <article class="dokan-settings-area">
             <header class="dokan-dashboard-header">
                 <h1 class="entry-title">
-                    <?php _e( 'Settings', 'dokan' );?>
+                    <?php _e( 'Payment Settings', 'dokan' );?>
                     <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
                 </h1>
             </header><!-- .dokan-dashboard-header -->
+
+            <p class="help">
+                <?php _e( 'Please update your payment informations below to get your store payments seamlessly.', 'dokan' ); ?>
+            </p>
 
             <?php if ( is_wp_error( $validate ) ) {
                 $messages = $validate->get_error_messages();
@@ -63,46 +67,21 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
 
                 <?php wp_nonce_field( 'dokan_payment_settings_nonce' ); ?>
 
-                <!-- payment tab -->
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 dokan-control-label" for="dokan_setting"><?php _e( 'Payment Method', 'dokan' ); ?></label>
-                    <div class="dokan-w6">
-
-                        <?php $methods = dokan_withdraw_get_active_methods(); ?>
-                        <div id="payment_method_tab">
-                            <ul class="dokan_tabs" style="margin-bottom: 10px; margin-left:0px;">
-                                <?php
-                                $count = 0;
-                                foreach ( $methods as $method_key ) {
-                                    $method = dokan_withdraw_get_method( $method_key );
-                                    ?>
-                                    <li<?php echo ( $count == 0 ) ? ' class="active"' : ''; ?>><a href="#dokan-payment-<?php echo $method_key; ?>" data-toggle="tab"><?php echo $method['title']; ?></a></li>
-                                    <?php
-                                    $count++;
+                <?php $methods = dokan_withdraw_get_active_methods(); ?>
+                <?php foreach ( $methods as $method_key ) {
+                    $method = dokan_withdraw_get_method( $method_key );
+                    ?>
+                    <fieldset classs="payment-field-<?php echo $method_key; ?>">
+                        <div class="dokan-form-group">
+                            <label class="dokan-w3 dokan-control-label" for="dokan_setting"><?php echo $method['title'] ?></label>
+                            <div class="dokan-w6">
+                                <?php if ( is_callable( $method['callback'] ) ) {
+                                    call_user_func( $method['callback'], $profile_info );
                                 } ?>
-                            </ul>
-
-                            <!-- Tab panes -->
-                            <div class="tabs_container">
-
-                                <?php
-                                $count = 0;
-                                foreach ( $methods as $method_key ) {
-                                    $method = dokan_withdraw_get_method( $method_key );
-                                    ?>
-                                    <div class="tab-pane<?php echo ( $count == 0 ) ? ' active': ''; ?>" id="dokan-payment-<?php echo $method_key; ?>">
-                                        <?php if ( is_callable( $method['callback'] ) ) {
-                                            call_user_func( $method['callback'], $profile_info );
-                                        } ?>
-                                    </div>
-                                    <?php
-                                    $count++;
-                                } ?>
-                            </div> <!-- .tabs_container -->
-                        </div> <!-- .payment method tab -->
-                    </div> <!-- .dokan-w4 -->
-                </div> <!-- .dokan-form-group -->
-
+                            </div> <!-- .dokan-w6 -->
+                        </div>
+                    </fieldset>
+                <?php } ?>
 
                 <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
 
@@ -116,14 +95,6 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
             </form>
 
             <?php do_action( 'dokan_settings_after_form', $current_user, $profile_info ); ?>
-
-            <script>
-                (function($){
-                    $(document).ready(function(){
-                        $('#payment_method_tab').easytabs();
-                    });
-                })(jQuery)
-            </script>
 
             <!--settings updated content ends-->
         </article>
