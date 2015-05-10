@@ -437,13 +437,18 @@ jQuery(function($) {
                     country_id : self.find(':selected').val(),
                     action  : 'dps_select_state_by_country'
                 };
-                // console.log(data);
-                $.post( dokan.ajaxurl, data, function(response) {
-                    if( response.success ) {
-                        self.closest('.dps-shipping-location-content').find('table.dps-shipping-states tbody').html(response.data);
-                    }
-                });
 
+                console.log( self.val() );
+
+                if ( self.val() == '' || self.val() == 'everywhere' ) {
+                    self.closest('.dps-shipping-location-content').find('table.dps-shipping-states tbody').html('');
+                } else {
+                    $.post( dokan.ajaxurl, data, function(response) {
+                        if( response.success ) {
+                            self.closest('.dps-shipping-location-content').find('table.dps-shipping-states tbody').html(response.data);
+                        }
+                    });
+                }
         });
 
     });

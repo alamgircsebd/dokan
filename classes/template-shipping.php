@@ -86,38 +86,39 @@ class Dokan_Template_Shipping {
         foreach ( $products as $key => $product) {
 
             $seller_id = get_post_field( 'post_author', $product['product_id'] );
-            
+
             if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
                 continue;
             }
 
             if( Dokan_WC_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
                 continue;
-            } 
+            }
 
             $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
-            $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true ); 
-            
+            $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true );
+
             $has_found = false;
             $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
             $dps_state = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
 
-            // var_dump( $dps_country, $dps_state);
-            if( array_key_exists( $destination_country, $dps_country ) ) {
-                
-                if( $dps_state ) {
-                    if( array_key_exists( $destination_state, $dps_state ) ) {
+            if ( array_key_exists( $destination_country, $dps_country ) ) {
+
+                if ( $dps_state ) {
+                    if ( array_key_exists( $destination_state, $dps_state ) ) {
                         $has_found = true;
                     } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
                         $has_found = true;
-                    }    
+                    }
                 } else {
                     $has_found = true;
                 }
+            } else {
+                if ( array_key_exists( 'everywhere', $dps_country ) ) {
+                    $has_found = true;
+                }
+            }
 
-                
-            } 
-                    
             if ( ! $has_found ) {
                 $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ) );
             }
@@ -143,11 +144,11 @@ class Dokan_Template_Shipping {
      */
     function register_product_tab( $tabs ) {
         global $post;
-        
+
         if( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
             return $tabs;
         }
-        
+
         if( get_post_meta( $post->ID, '_downloadable', true ) == 'yes' ) {
             return $tabs;
         }
@@ -236,7 +237,7 @@ class Dokan_Template_Shipping {
                                                 echo $states[$country][$state_code];
                                             } else {
                                                 echo $state_code;
-                                            }    
+                                            }
                                         }
                                         ?>
                                     </td>
@@ -291,5 +292,5 @@ class Dokan_Template_Shipping {
 
 
 
-    
+
 }

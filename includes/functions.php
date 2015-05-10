@@ -1269,13 +1269,13 @@ function dokan_country_dropdown( $options, $selected = '', $everywhere = false )
 
     if ( $everywhere ) {
         echo '<optgroup label="--------------------------">';
-        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        printf( '<option value="everywhere"%s>%s</option>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
         echo '</optgroup>';
     }
 
     echo '<optgroup label="------------------------------">';
     foreach ($options as $key => $value) {
-        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+        printf( '<option value="%s"%s>%s</option>', $key, selected( $selected, $key, true ), $value );
     }
     echo '</optgroup>';
 }
@@ -1292,13 +1292,13 @@ function dokan_state_dropdown( $options, $selected = '', $everywhere = false ) {
 
     if ( $everywhere ) {
         echo '<optgroup label="--------------------------">';
-        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        printf( '<option value="everywhere" %s>%s</option>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
         echo '</optgroup>';
     }
 
     echo '<optgroup label="------------------------------">';
     foreach ($options as $key => $value) {
-        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+        printf( '<option value="%s" %s>%s</option>', $key, selected( $selected, $key, true ), $value );
     }
     echo '</optgroup>';
 }
