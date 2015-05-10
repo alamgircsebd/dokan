@@ -70,6 +70,21 @@ function dokan_is_store_page() {
 }
 
 /**
+ * Check if current page is store review page
+ *
+ * @since 2.2
+ *
+ * @return boolean
+ */
+function dokan_is_store_review_page() {
+    if ( get_query_var( 'store_review' ) == 'true' ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Redirect to login page if not already logged in
  *
  * @return void
@@ -1634,19 +1649,19 @@ function dokan_get_social_profile_fields() {
             'title' => __( 'Facebook', 'dokan' ),
         ),
         'gplus' => array(
-            'icon'  => 'google-plus',
+            'icon'  => 'google-plus-square',
             'title' => __( 'Google Plus', 'dokan' ),
         ),
         'twitter' => array(
-            'icon'  => 'twitter',
+            'icon'  => 'twitter-square',
             'title' => __( 'Twitter', 'dokan' ),
         ),
         'linkedin' => array(
-            'icon'  => 'linkedin',
+            'icon'  => 'linkedin-square',
             'title' => __( 'LinkedIn', 'dokan' ),
         ),
         'youtube' => array(
-            'icon'  => 'youtube',
+            'icon'  => 'youtube-square',
             'title' => __( 'Youtube', 'dokan' ),
         ),
         'instagram' => array(
