@@ -1,5 +1,18 @@
 ==================== Plugin Version ====================
 
+v2.2 -> May 12, 2015
+---------------------
+- [fix] Gallery image render fix
+- [new] create settings submenu 
+- [fix] Fix translation issues on product and order status text
+- [fix] fix user migration shop url error 
+- [tweak] dokan product listing search by sku and product id added 
+- [fix] Category problem fixed for updated WordPress 4.2
+- [new] Gallery image render fix
+- [new] Gallery image render fix
+- [new] Gallery image render fix
+
+
 v2.1 -> April 2, 2015
 ---------------------
 - [new] Seller announcement feature
