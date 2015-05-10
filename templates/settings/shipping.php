@@ -171,7 +171,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                         <div class="dokan-w5">
                             <select name="dps_form_location" class="dokan-form-control">
-                                <?php country_dropdown( $countries, $dps_form_location ); ?>
+                                <?php dokan_country_dropdown( $countries, $dps_form_location ); ?>
                             </select>
                         </div>
                     </div>
@@ -198,7 +198,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                         <span class="dokan-tooltips-help tips" title="<?php _e( 'The country you ship to', 'dokan' ); ?>">
                                                         <i class="fa fa-question-circle"></i></span></label>
                                                         <select name="dps_country_to[]" class="dokan-form-control dps_country_selection" id="dps_country_selection">
-                                                            <?php country_dropdown( $countries, $country, '' ); ?>
+                                                            <?php dokan_country_dropdown( $countries, $country, '' ); ?>
                                                         </select>
                                                     </td>
                                                     <td class="dps_shipping_location_cost">
@@ -302,7 +302,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                     <span class="dokan-tooltips-help tips" title="<?php _e( 'The country you ship to', 'dokan' ); ?>">
                                                     <i class="fa fa-question-circle"></i></span></label>
                                                     <select name="dps_country_to[]" class="dokan-form-control dps_country_selection" id="dps_country_selection">
-                                                        <?php country_dropdown( $countries, '', false ); ?>
+                                                        <?php dokan_country_dropdown( $countries, '', false ); ?>
                                                     </select>
                                                 </td>
                                                 <td class="dps_shipping_location_cost">
@@ -361,7 +361,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                     <span class="dokan-tooltips-help tips" title="<?php _e( 'The country you ship to', 'dokan' ); ?>">
                     <i class="fa fa-question-circle"></i></span></label>
                     <select name="dps_country_to[]" class="dokan-form-control dps_country_selection" id="dps_country_selection">
-                        <?php country_dropdown( $countries, '', false ); ?>
+                        <?php dokan_country_dropdown( $countries, '', false ); ?>
                     </select>
                 </td>
                 <td class="dps_shipping_location_cost">

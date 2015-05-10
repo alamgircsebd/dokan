@@ -1264,7 +1264,7 @@ function dokan_get_navigation_url( $name = '' ) {
  * @param string $selected
  * @param bool $everywhere
  */
-function country_dropdown( $options, $selected = '', $everywhere = false ) {
+function dokan_country_dropdown( $options, $selected = '', $everywhere = false ) {
     printf( '<option value="">%s</option>', __( '- Select a location -', 'dokan-shipping' ) );
 
     if ( $everywhere ) {
