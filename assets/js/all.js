@@ -1168,26 +1168,26 @@ jQuery(function($) {
 
         },
 
-        submitSettings: function() {
+        submitSettings: function(form_id) {
 
-            var self = $( "form#settings-form" ),
-                form_data = self.serialize() + '&action=dokan_settings';
-
+            var self = $( "form#" + form_id ),
+                form_data = self.serialize() + '&action=dokan_settings&form_id=' + form_id;
 
             self.find('.ajax_prev').append('<span class="dokan-loading"> </span>');
             $.post(dokan.ajaxurl, form_data, function(resp) {
 
-               self.find('span.dokan-loading').remove();
+                self.find('span.dokan-loading').remove();
                 $('html,body').animate({scrollTop:100});
 
                if ( resp.success ) {
-                   console.log(resp.data);
-                    //Harcoded Customization for template-settings function
+                    // Harcoded Customization for template-settings function
                       $('.dokan-ajax-response').html( $('<div/>', {
                         'class': 'dokan-alert dokan-alert-success',
                         'html': '<p>' + resp.data.msg + '</p>',
                     }) );
-                     $('.dokan-ajax-response').append(resp.data.progress);
+
+                    $('.dokan-ajax-response').append(resp.data.progress);
+
                 }else {
                     $('.dokan-ajax-response').html( $('<div/>', {
                         'class': 'dokan-alert dokan-alert-danger',
@@ -1199,10 +1199,10 @@ jQuery(function($) {
 
         validateForm: function(self) {
 
-            $("form#settings-form").validate({
+            $("form#settings-form, form#profile-form, form#store-form, form#payment-form").validate({
                 //errorLabelContainer: '#errors'
                 submitHandler: function(form) {
-                    self.submitSettings();
+                    self.submitSettings( form.getAttribute('id') );
                 },
                 errorElement: 'span',
                 errorClass: 'error',
@@ -1341,8 +1341,6 @@ jQuery(function($) {
                     action  : 'dps_select_state_by_country'
                 };
 
-                console.log( self.val() );
-
                 if ( self.val() == '' || self.val() == 'everywhere' ) {
                     self.closest('.dps-shipping-location-content').find('table.dps-shipping-states tbody').html('');
                 } else {
@@ -1352,7 +1350,6 @@ jQuery(function($) {
                         }
                     });
                 }
-
         });
 
     });
@@ -1464,23 +1461,7 @@ jQuery(function($) {
                 });
             }
 
-
         });
-
     });
 
 })(jQuery);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
