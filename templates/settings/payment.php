@@ -19,7 +19,7 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
             </header><!-- .dokan-dashboard-header -->
 
             <div class="dokan-page-help">
-                <?php _e( 'Please update your payment informations below to get your store payments seamlessly.', 'dokan' ); ?>
+                <?php _e( 'These are the withdraw methods available for you. Please update your payment informations below to submit withdraw requests and get your store payments seamlessly.', 'dokan' ); ?>
             </div>
 
             <?php if ( is_wp_error( $validate ) ) {
