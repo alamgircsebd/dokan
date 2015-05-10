@@ -17,7 +17,7 @@ get_header( 'shop' );
 ?>
 
 <?php do_action( 'woocommerce_before_main_content' ); ?>
-    
+
 <?php if ( dokan_get_option( 'enable_theme_store_sidebar', 'dokan_general', 'off' ) == 'off' ) { ?>
     <div id="dokan-secondary" class="dokan-clearfix dokan-w3 dokan-store-sidebar" role="complementary" style="margin-right:3%;">
         <div class="dokan-widget-area widget-collapse">
