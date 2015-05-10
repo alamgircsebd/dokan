@@ -1462,7 +1462,7 @@
 .dokan-single-store .profile-frame {
   height: 300px;
   padding: 0px;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   position: relative;
   background-size: 100% auto;
   background-color: #eee;
@@ -1527,6 +1527,24 @@
 }
 .dokan-single-store .profile-frame .profile-info-box .profile-info .seller-rating {
   display: none;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul {
+  border-width: 0 1px 1px 1px;
+  border-color: #ededed #ededed #ededed #ededed;
+  border-style: solid;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul li {
+  display: inline-block;
+  border-right: 1px solid #ededed;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul li a {
+  text-decoration: none;
+  color: #666;
+  padding: 10px 15px;
+  display: inline-block;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul li a:hover {
+  background: #eee;
 }
 .dokan-single-store .store-review-wrap h2.headline {
   font-size: 17px;

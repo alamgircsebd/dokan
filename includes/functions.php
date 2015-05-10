@@ -860,6 +860,31 @@ function dokan_get_store_info( $seller_id ) {
 }
 
 /**
+ * Get tabs for showing in a single store page
+ *
+ * @since 2.2
+ *
+ * @param  int  $store_id
+ *
+ * @return array
+ */
+function dokan_get_store_tabs( $store_id ) {
+
+    $tabs = array(
+        'products' => array(
+            'title' => __( 'Products', 'dokan' ),
+            'url'   => dokan_get_store_url( $store_id )
+        ),
+        'reviews' => array(
+            'title' => __( 'Reviews', 'dokan' ),
+            'url'   => dokan_get_review_url( $store_id )
+        ),
+    );
+
+    return apply_filters( 'dokan_store_tabs', $tabs, $store_id );
+}
+
+/**
  * Get withdraw email method based on seller ID and type
  *
  * @param int $seller_id

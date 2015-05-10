@@ -5,7 +5,7 @@
     .profile-frame {
         height: 300px;
         padding: 0px;
-        margin-bottom: 30px;
+        margin-bottom: 60px;
         position: relative;
         background-size: 100% auto;
         background-color: #eee;
@@ -85,6 +85,30 @@
 
                 .seller-rating {
                     display: none;
+                }
+            }
+        }
+
+        .dokan-store-tabs {
+            ul {
+                border-width: 0 1px 1px 1px;
+                border-color: @borderColor @borderColor @borderColor @borderColor;
+                border-style: solid;
+
+                li {
+                    display: inline-block;
+                    border-right: 1px solid @borderColor;
+
+                    a {
+                        text-decoration: none;
+                        color: #666;
+                        padding: 10px 15px;
+                        display: inline-block;
+
+                        &:hover {
+                            background: #eee;
+                        }
+                    }
                 }
             }
         }

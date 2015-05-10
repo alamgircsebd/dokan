@@ -1,7 +1,7 @@
 <?php
 $store_user = get_userdata( get_query_var( 'author' ) );
 $store_info = dokan_get_store_info( $store_user->ID );
-
+$store_tabs = dokan_get_store_tabs( $store_user->ID );
 ?>
 <div class="profile-frame">
 
@@ -95,4 +95,14 @@ $store_info = dokan_get_store_info( $store_user->ID );
             </ul>
         </div> <!-- .profile-info -->
     </div> <!-- .profile-info-box -->
+
+    <?php if ( $store_tabs ) { ?>
+        <div class="dokan-store-tabs">
+            <ul class="dokan-list-inline">
+                <?php foreach( $store_tabs as $key => $tab ) { ?>
+                    <li><a href="<?php echo esc_url( $tab['url'] ); ?>"><?php echo $tab['title']; ?></a></li>
+                <?php } ?>
+            </ul>
+        </div>
+    <?php } ?>
 </div> <!-- .profile-frame -->
