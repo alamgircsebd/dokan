@@ -381,27 +381,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
             </tr>
         </tbody>
     </table>
-    <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><i class="fa fa-remove"></i></a>
+    <a href="#" class="dps-shipping-remove"><i class="fa fa-remove"></i></a>
 </div>
 
 <!-- End of render content via jquery -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
