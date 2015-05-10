@@ -1643,7 +1643,7 @@ function dokan_get_social_profile_fields() {
         ),
         'linkedin' => array(
             'icon'  => 'linkedin',
-            'title' => __( 'Linked In', 'dokan' ),
+            'title' => __( 'LinkedIn', 'dokan' ),
         ),
         'youtube' => array(
             'icon'  => 'youtube',

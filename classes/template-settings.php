@@ -242,21 +242,18 @@ class Dokan_Template_Settings {
 
         if ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_profile_settings_nonce' ) ) {
 
-            //update profile settings info
-            $social = $_POST['settings']['social'];
+            // update profile settings info
+            $social         = $_POST['settings']['social'];
+            $social_fields  = dokan_get_social_profile_fields();
+            $dokan_settings = array( 'social' => array() );
 
-            $dokan_settings =  array(
-                'social'       => array(
-                    'fb'        => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
-                    'gplus'     => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
-                    'twitter'   => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
-                    'linkedin'  => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
-                    'youtube'   => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
-                    'flickr'    => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
-                    'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
-                )
-            );
-
+            if ( is_array( $social ) ) {
+                foreach ($social as $key => $value) {
+                    if ( isset( $social_fields[ $key ] ) ) {
+                        $dokan_settings['social'][ $key ] = filter_var( $social[ $key ], FILTER_VALIDATE_URL );
+                    }
+                }
+            }
 
         } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_store_settings_nonce' ) ) {
 
@@ -304,53 +301,6 @@ class Dokan_Template_Settings {
             }
 
         }
-
-        /*$social = $_POST['settings']['social'];
-
-        $dokan_settings = array(
-            'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
-            'social'       => array(
-                'fb'        => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
-                'gplus'     => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
-                'twitter'   => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
-                'linkedin'  => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
-                'youtube'   => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
-                'flickr'    => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
-                'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
-            ),
-            'payment'      => array(),
-            'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
-            'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
-            'address'      => strip_tags( $_POST['setting_address'] ),
-            'location'     => sanitize_text_field( $_POST['location'] ),
-            'find_address' => sanitize_text_field( $_POST['find_address'] ),
-            'banner'       => absint( $_POST['dokan_banner'] ),
-            'gravatar'     => absint( $_POST['dokan_gravatar'] ),
-        );
-
-        if ( isset( $_POST['settings']['bank'] ) ) {
-            $bank = $_POST['settings']['bank'];
-
-            $dokan_settings['payment']['bank'] = array(
-                'ac_name'   => sanitize_text_field( $bank['ac_name'] ),
-                'ac_number' => sanitize_text_field( $bank['ac_number'] ),
-                'bank_name' => sanitize_text_field( $bank['bank_name'] ),
-                'bank_addr' => sanitize_text_field( $bank['bank_addr'] ),
-                'swift'     => sanitize_text_field( $bank['swift'] ),
-            );
-        }
-
-        if ( isset( $_POST['settings']['paypal'] ) ) {
-            $dokan_settings['payment']['paypal'] = array(
-                'email' => filter_var( $_POST['settings']['paypal']['email'], FILTER_VALIDATE_EMAIL )
-            );
-        }
-
-        if ( isset( $_POST['settings']['skrill'] ) ) {
-            $dokan_settings['payment']['skrill'] = array(
-                'email' => filter_var( $_POST['settings']['skrill']['email'], FILTER_VALIDATE_EMAIL )
-            );
-        }*/
 
         $dokan_settings = array_merge($prev_dokan_settings,$dokan_settings);
 
