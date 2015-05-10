@@ -765,17 +765,18 @@ class Dokan_Ajax {
     }
 
     /**
-     *  Load State via ajax for shipping
+     * Load State via ajax for shipping
+     *
      * @return html Set of states
      */
     function load_state_by_country() {
 
-        $country_id = $_POST['country_id'];
+        $country_id  = $_POST['country_id'];
         $country_obj = new WC_Countries();
-        $states = $country_obj->states;
+        $states      = $country_obj->states;
 
         ob_start();
-        if( !empty( $states[$country_id] ) ) {
+        if ( !empty( $states[$country_id] ) ) {
             ?>
              <tr>
                 <td>
@@ -794,8 +795,8 @@ class Dokan_Ajax {
                 <td width="15%">
                     <label for=""></label>
                     <div>
-                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
-                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                        <a class="dps-add" href="#"><i class="fa fa-plus"></i></a>
+                        <a class="dps-remove" href="#"><i class="fa fa-minus"></i></a>
                     </div>
                 </td>
             </tr>
@@ -818,24 +819,26 @@ class Dokan_Ajax {
                 <td width="15%">
                     <label for=""></label>
                     <div>
-                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
-                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                        <a class="dps-add" href="#"><i class="fa fa-plus"></i></a>
+                        <a class="dps-remove" href="#"><i class="fa fa-minus"></i></a>
                     </div>
                 </td>
             </tr>
             <?php
         }
+
         $data = ob_get_clean();
 
         wp_send_json_success( $data );
     }
 
     function remove_announcement() {
-        check_ajax_referer( 'dokan_reviews' );
         global $wpdb;
 
+        check_ajax_referer( 'dokan_reviews' );
+
         $table_name = $wpdb->prefix. 'dokan_announcement';
-        $row_id = $_POST['row_id'];
+        $row_id     = $_POST['row_id'];
 
         $result = $wpdb->update(
             $table_name,
