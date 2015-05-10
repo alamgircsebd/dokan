@@ -18,9 +18,9 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
                 </h1>
             </header><!-- .dokan-dashboard-header -->
 
-            <p class="help">
+            <div class="dokan-page-help">
                 <?php _e( 'Please update your payment informations below to get your store payments seamlessly.', 'dokan' ); ?>
-            </p>
+            </div>
 
             <?php if ( is_wp_error( $validate ) ) {
                 $messages = $validate->get_error_messages();

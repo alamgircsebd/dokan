@@ -31,9 +31,15 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
         <article class="dokan-settings-area">
             <header class="dokan-dashboard-header">
                 <h1 class="entry-title">
-                    <?php _e( 'Shipping', 'dokan' ); ?>
+                    <?php _e( 'Shipping Settings', 'dokan' ); ?>
+                    <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
                 </h1>
             </header><!-- .dokan-dashboard-header -->
+
+            <div class="dokan-page-help">
+                <p><?php _e( 'This page contains your store-wide shipping settings, costs, shipping and refund policy.', 'dokan' ); ?></p>
+                <p><?php _e( 'You can enable/disable shipping for your products. Also you can override these shipping costs from an individual product.', 'dokan' ); ?></p>
+            </div>
 
             <?php
             if ( isset( $_GET['message'] ) && $_GET['message'] == 'shipping_saved' ) {
@@ -175,7 +181,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                         <div class="dokan-w12 dps-main-wrapper">
                             <div class="dokan-shipping-location-wrapper">
 
-                            <p><?php _e( 'Add the countries and states that you deliver your products to. You can specify states as well. If the shipping price is same except some states, then there is an option <strong>Everywhere Else</strong>, you can use that.', 'dokan' ) ?></p>
+                            <p class="dokan-page-help"><?php _e( 'Add the countries you deliver your products to. You can specify states as well. If the shipping price is same except some countries/states, there is an option <strong>Everywhere Else</strong>, you can use that.', 'dokan' ) ?></p>
 
                             <?php if ( $dps_country_rates ) : ?>
 
@@ -238,8 +244,8 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                                 <td width="15%">
                                                                                     <label for=""></label>
                                                                                     <div>
-                                                                                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
-                                                                                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                                                                                        <a class="dps-add" href="#"><i class="fa fa-plus"></i></a>
+                                                                                        <a class="dps-remove" href="#"><i class="fa fa-minus"></i></a>
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -262,8 +268,8 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                                 <td width="14%">
                                                                                     <label for=""></label>
                                                                                     <div>
-                                                                                        <a class="dps-add" href="#"><i class="fa fa-plus-circle fa-2x"></i></a>
-                                                                                        <a class="dps-remove" href="#"><i class="fa fa-minus-circle fa-2x"></i></a>
+                                                                                        <a class="dps-add" href="#"><i class="fa fa-plus"></i></a>
+                                                                                        <a class="dps-remove" href="#"><i class="fa fa-minus"></i></a>
                                                                                     </div>
                                                                                 </td>
                                                                             </tr>
@@ -280,7 +286,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><strong><?php _e( 'x', 'dokan' ); ?></strong></a>
+                                        <a href="#" class="dps-shipping-remove"><i class="fa fa-remove"></i></a>
                                     </div>
 
                                 <?php endforeach; ?>
@@ -318,7 +324,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                                         </tbody>
                                     </table>
-                                    <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><strong><?php _e( 'x', 'dokan' ); ?></strong></a>
+                                    <a href="#" class="dps-shipping-remove"><i class="fa fa-remove"></i></a>
                                 </div>
                             <?php endif; ?>
 
@@ -375,7 +381,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
             </tr>
         </tbody>
     </table>
-    <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><strong><?php _e( 'x', 'dokan' ); ?></strong></a>
+    <a href="#" class="dokan-btn dokan-btn-default dps-shipping-remove"><i class="fa fa-remove"></i></a>
 </div>
 
 <!-- End of render content via jquery -->

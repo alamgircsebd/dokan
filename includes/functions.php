@@ -1594,3 +1594,45 @@ function dokan_product_search_by_sku( $where ) {
 }
 
 add_filter( 'posts_search', 'dokan_product_search_by_sku' );
+
+/**
+ * Dokan Social Profile fields
+ *
+ * @since 2.2
+ *
+ * @return array
+ */
+function dokan_get_social_profile_fields() {
+    $fields = array(
+        'fb' => array(
+            'icon'  => 'facebook-square',
+            'title' => __( 'Facebook', 'dokan' ),
+        ),
+        'gplus' => array(
+            'icon'  => 'google-plus',
+            'title' => __( 'Google Plus', 'dokan' ),
+        ),
+        'twitter' => array(
+            'icon'  => 'twitter',
+            'title' => __( 'Twitter', 'dokan' ),
+        ),
+        'linkedin' => array(
+            'icon'  => 'linkedin',
+            'title' => __( 'Linked In', 'dokan' ),
+        ),
+        'youtube' => array(
+            'icon'  => 'youtube',
+            'title' => __( 'Youtube', 'dokan' ),
+        ),
+        'instagram' => array(
+            'icon'  => 'instagram',
+            'title' => __( 'Instagram', 'dokan' ),
+        ),
+        'flickr' => array(
+            'icon'  => 'flickr',
+            'title' => __( 'Flickr', 'dokan' ),
+        ),
+    );
+
+    return apply_filters( 'dokan_profile_social_fields', $fields );
+}
