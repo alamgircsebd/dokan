@@ -1287,7 +1287,7 @@ function dokan_country_dropdown( $options, $selected = '', $everywhere = false )
  * @param string $selected
  * @param bool $everywhere
  */
-function state_dropdown( $options, $selected = '', $everywhere = false ) {
+function dokan_state_dropdown( $options, $selected = '', $everywhere = false ) {
     printf( '<option value="">%s</option>', __( '- Select a State -', 'dokan-shipping' ) );
 
     if ( $everywhere ) {

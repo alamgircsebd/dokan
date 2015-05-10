@@ -228,7 +228,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                                     <span class="dokan-tooltips-help tips" title="<?php _e( 'The state you ship to', 'dokan' ); ?>">
                                                                                     <i class="fa fa-question-circle"></i></span></label>
                                                                                     <select name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control dps_state_selection">
-                                                                                        <?php state_dropdown( $states[$country], $state, true ); ?>
+                                                                                        <?php dokan_state_dropdown( $states[$country], $state, true ); ?>
                                                                                     </select>
                                                                                 </td>
                                                                                 <td>
