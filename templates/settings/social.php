@@ -14,10 +14,14 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
         <article class="dokan-settings-area">
             <header class="dokan-dashboard-header">
                 <h1 class="entry-title">
-                    <?php _e( 'Settings', 'dokan' );?>
+                    <?php _e( 'Social Profiles', 'dokan' );?>
                     <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
                 </h1>
             </header><!-- .dokan-dashboard-header -->
+
+            <div class="dokan-page-help">
+                <?php _e( 'Social profiles help you to gain more trust. Consider adding your social profile links for better user interaction.', 'dokan' ); ?>
+            </div>
 
             <?php if ( is_wp_error( $validate ) ) {
                 $messages = $validate->get_error_messages();
@@ -48,58 +52,8 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
             <?php
             }
 
-            $profile_info   = dokan_get_store_info( $current_user->ID );
-
-            $fb             = isset( $profile_info['social']['fb'] ) ? esc_url( $profile_info['social']['fb'] ) : '';
-            $twitter        = isset( $profile_info['social']['twitter'] ) ? esc_url( $profile_info['social']['twitter'] ) : '';
-            $gplus          = isset( $profile_info['social']['gplus'] ) ? esc_url ( $profile_info['social']['gplus'] ) : '';
-            $linkedin       = isset( $profile_info['social']['linkedin'] ) ? esc_url( $profile_info['social']['linkedin'] ) : '';
-            $youtube        = isset( $profile_info['social']['youtube'] ) ? esc_url( $profile_info['social']['youtube'] ) : '';
-            $flickr         = isset( $profile_info['social']['flickr'] ) ? esc_url( $profile_info['social']['flickr'] ) : '';
-            $instagram      = isset( $profile_info['social']['instagram'] ) ? esc_url( $profile_info['social']['instagram'] ) : '';
-
-            if ( is_wp_error( $validate ) ) {
-                $social       = $_POST['settings']['social'];
-
-                $fb           = esc_url( $social['fb'] );
-                $twitter      = esc_url( $social['twitter'] );
-                $gplus        = esc_url( $social['gplus'] );
-                $linkedin     = esc_url( $social['linkedin'] );
-                $youtube      = esc_url( $social['youtube'] );
-                $phone        = $_POST['setting_phone'];
-
-            }
-            $social_field_array = apply_filters( 'dokan_profile_social_fields', array(
-                    'fb' => array(
-                        'icon' => 'facebook-square',
-                        'value' => $fb,
-                    ),
-                    'gplus' => array(
-                        'icon' => 'google-plus',
-                        'value' => $gplus,
-                    ),
-                    'twitter' => array(
-                        'icon' => 'twitter',
-                        'value' => $twitter,
-                    ),
-                    'linkedin' => array(
-                        'icon' => 'linkedin',
-                        'value' => $linkedin,
-                    ),
-                    'youtube' => array(
-                        'icon' => 'youtube',
-                        'value' => $youtube,
-                    ),
-                    'instagram' => array(
-                        'icon' => 'instagram',
-                        'value' => $instagram,
-                    ),
-                    'flickr' => array(
-                        'icon' => 'flickr',
-                        'value' => $flickr,
-                    ),
-                )
-            );
+            $profile_info  = dokan_get_store_info( $current_user->ID );
+            $social_fields = dokan_get_social_profile_fields();
             ?>
 
             <div class="dokan-ajax-response">
@@ -112,22 +66,18 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
 
                 <?php wp_nonce_field( 'dokan_profile_settings_nonce' ); ?>
 
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 dokan-control-label" for="settings[social][fb]"><?php _e( 'Social Profile', 'dokan' ); ?></label>
+                <?php foreach( $social_fields as $key => $field ) { ?>
+                    <div class="dokan-form-group">
+                        <label class="dokan-w3 dokan-control-label"><?php echo $field['title']; ?></label>
 
-                    <div class="dokan-w5 dokan-text-left">
-                        <?php
-                        foreach( $social_field_array as $social_word => $social_array ) {
-                            ?>
+                        <div class="dokan-w5">
                             <div class="dokan-input-group dokan-form-group">
-                                <span class="dokan-input-group-addon"><i class="fa fa-<?php echo isset( $social_array['icon'] )?$social_array['icon']:''; ?>"></i></span>
-                                <input id="settings[social][<?php echo $social_word; ?>]" value="<?php echo $social_array['value']; ?>" name="settings[social][<?php echo $social_word; ?>]" class="dokan-form-control" placeholder="http://" type="text">
+                                <span class="dokan-input-group-addon"><i class="fa fa-<?php echo isset( $field['icon'] ) ? $field['icon'] : ''; ?>"></i></span>
+                                <input id="settings[social][<?php echo $key; ?>]" value="<?php echo isset( $profile_info['social'][$key] ) ? esc_url( $profile_info['social'][$key] ) : ''; ?>" name="settings[social][<?php echo $key; ?>]" class="dokan-form-control" placeholder="http://" type="url">
                             </div>
-                        <?php
-                        }
-                        ?>
+                        </div>
                     </div>
-                </div>
+                <?php } ?>
 
                 <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
 

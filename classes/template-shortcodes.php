@@ -627,7 +627,7 @@ class Dokan_Template_Shortcodes {
 
             update_user_meta( $user_id, '_dps_state_rates', $s_rates );
 
-            $shipping_url = dokan_get_navigation_url( 'shipping' );
+            $shipping_url = dokan_get_navigation_url( 'settings/shipping' );
             wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
             exit;
         }

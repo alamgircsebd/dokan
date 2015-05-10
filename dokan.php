@@ -336,7 +336,7 @@ class WeDevs_Dokan {
         $inc_dir     = __DIR__ . '/includes/';
         $classes_dir = __DIR__ . '/classes/';
 
-        require_once $inc_dir . 'theme-functions.php';
+        require_once $inc_dir . 'functions.php';
         require_once $inc_dir . 'widgets/menu-category.php';
         require_once $inc_dir . 'widgets/store-menu-category.php';
         require_once $inc_dir . 'widgets/best-seller.php';

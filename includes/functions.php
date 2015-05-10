@@ -32,7 +32,6 @@ function dokan_is_user_customer( $user_id ) {
     return true;
 }
 
-
 /**
  * Check if current user is the product author
  *
@@ -70,7 +69,6 @@ function dokan_is_store_page() {
     return false;
 }
 
-
 /**
  * Redirect to login page if not already logged in
  *
@@ -82,8 +80,6 @@ function dokan_redirect_login() {
         exit;
     }
 }
-
-
 
 /**
  * If the current user is not seller, redirect to homepage
@@ -98,8 +94,6 @@ function dokan_redirect_if_not_seller( $redirect = '' ) {
         exit;
     }
 }
-
-
 
 /**
  * Handles the product delete action
@@ -130,8 +124,6 @@ function dokan_delete_product_handler() {
         exit;
     }
 }
-
-
 
 /**
  * Count post type from a user
@@ -165,8 +157,6 @@ function dokan_count_posts( $post_type, $user_id ) {
 
     return $counts;
 }
-
-
 
 /**
  * Get comment count based on post type and user id
@@ -212,8 +202,6 @@ function dokan_count_comments( $post_type, $user_id ) {
     return $counts;
 }
 
-
-
 /**
  * Get total pageview for a seller
  *
@@ -241,7 +229,6 @@ function dokan_author_pageviews( $seller_id ) {
 
     return $pageview;
 }
-
 
 /**
  * Get total sales amount of a seller
@@ -272,8 +259,6 @@ function dokan_author_total_sales( $seller_id ) {
 
     return $earnings;
 }
-
-
 
 /**
  * Generate dokan sync table
@@ -324,7 +309,6 @@ function dokan_generate_sync_table() {
     } // if
 }
 
-
 if ( !function_exists( 'dokan_get_seller_percentage' ) ) :
 
 /**
@@ -369,7 +353,6 @@ function dokan_get_new_post_status() {
     return $status;
 }
 
-
 /**
  * Function to get the client ip address
  *
@@ -398,8 +381,6 @@ function dokan_get_client_ip() {
     return $ipaddress;
 }
 
-
-
 /**
  * Datetime format helper function
  *
@@ -414,7 +395,6 @@ function dokan_format_time( $datetime ) {
 
     return date_i18n( $date_format . ' ' . $time_format, $timestamp );
 }
-
 
 /**
  * generate a input box based on arguments
@@ -481,8 +461,6 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
     }
 }
 
-
-
 /**
  * Get user friendly post status based on post
  *
@@ -512,7 +490,6 @@ function dokan_get_post_status( $status ) {
             break;
     }
 }
-
 
 /**
  * Get readable product type based on product
@@ -557,7 +534,6 @@ function dokan_posted_input( $key ) {
 
     return esc_attr( $value );
 }
-
 
 /**
  * Helper function for input textarea
@@ -673,7 +649,6 @@ function dokan_locate_template( $template_name, $template_path = '', $default_pa
     return apply_filters('dokan_locate_template', $template, $template_name, $template_path);
 }
 
-
 /**
  * Get page permalink based on context
  *
@@ -691,7 +666,6 @@ function dokan_get_page_url( $page, $context = 'dokan' ) {
 
     return get_permalink( $page_id );
 }
-
 
 /**
  * Get edit product url
@@ -741,8 +715,6 @@ function dokan_get_option( $option, $section, $default = '' ) {
     return $default;
 }
 
-
-
 /**
  * Redirect users from standard WordPress register page to woocommerce
  * my account page
@@ -760,8 +732,6 @@ function dokan_redirect_to_register(){
 
 add_action( 'login_init', 'dokan_redirect_to_register' );
 
-
-
 /**
  * Pretty print a variable
  *
@@ -770,8 +740,6 @@ add_action( 'login_init', 'dokan_redirect_to_register' );
 function dokan_pre( $value ) {
     printf( '<pre>%s</pre>', print_r( $value, true ) );
 }
-
-
 
 /**
  * Check if the seller is enabled
@@ -789,8 +757,6 @@ function dokan_is_seller_enabled( $user_id ) {
     return false;
 }
 
-
-
 /**
  * Check if the seller is trusted
  *
@@ -807,8 +773,6 @@ function dokan_is_seller_trusted( $user_id ) {
     return false;
 }
 
-
-
 /**
  * Get store page url of a seller
  *
@@ -820,7 +784,6 @@ function dokan_get_store_url( $user_id ) {
     $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
     return sprintf( '%s/%s/', home_url( '/' . $custom_store_url ), $userdata->user_nicename );
 }
-
 
 /**
  * Get review page url of a seller
@@ -834,8 +797,6 @@ function dokan_get_review_url( $user_id ) {
     return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
 }
 
-
-
 /**
  * Helper function for loggin
  *
@@ -845,8 +806,6 @@ function dokan_log( $message ) {
     $message = sprintf( "[%s] %s\n", date( 'd.m.Y h:i:s' ), $message );
     error_log( $message, 3, DOKAN_DIR . '/debug.log' );
 }
-
-
 
 /**
  * Filter WP Media Manager files if the current user is seller.
@@ -872,8 +831,6 @@ function dokan_media_uploader_restrict( $args ) {
 }
 
 add_filter( 'ajax_query_attachments_args', 'dokan_media_uploader_restrict' );
-
-
 
 /**
  * Get store info based on seller ID
@@ -902,7 +859,30 @@ function dokan_get_store_info( $seller_id ) {
     return $info;
 }
 
+/**
+ * Get tabs for showing in a single store page
+ *
+ * @since 2.2
+ *
+ * @param  int  $store_id
+ *
+ * @return array
+ */
+function dokan_get_store_tabs( $store_id ) {
 
+    $tabs = array(
+        'products' => array(
+            'title' => __( 'Products', 'dokan' ),
+            'url'   => dokan_get_store_url( $store_id )
+        ),
+        'reviews' => array(
+            'title' => __( 'Reviews', 'dokan' ),
+            'url'   => dokan_get_review_url( $store_id )
+        ),
+    );
+
+    return apply_filters( 'dokan_store_tabs', $tabs, $store_id );
+}
 
 /**
  * Get withdraw email method based on seller ID and type
@@ -920,8 +900,6 @@ function dokan_get_seller_withdraw_mail( $seller_id, $type = 'paypal' ) {
 
     return false;
 }
-
-
 
 /**
  * Get seller bank details
@@ -953,8 +931,6 @@ function dokan_get_seller_bank_details( $seller_id ) {
     return nl2br( implode( "\n", $details ) );
 }
 
-
-
 /**
  * Get seller listing
  *
@@ -985,8 +961,6 @@ function dokan_get_sellers( $number = 10, $offset = 0 ) {
 
     return array( 'users' => $sellers, 'count' => $user_query->total_users );
 }
-
-
 
 /**
  * Add cart total amount on add_to_cart_fragments
@@ -1055,8 +1029,6 @@ function dokan_prepare_chart_data( $data, $date_key, $data_key, $interval, $star
     return $prepared_data;
 }
 
-
-
 /**
  * Disable selling capability by default once a seller is registered
  *
@@ -1077,8 +1049,6 @@ function dokan_admin_user_register( $user_id ) {
 }
 
 add_action( 'user_register', 'dokan_admin_user_register' );
-
-
 
 /**
  * Get seller count based on enable and disabled sellers
@@ -1130,7 +1100,6 @@ function dokan_disable_admin_bar( $show_admin_bar ) {
 
 add_filter( 'show_admin_bar', 'dokan_disable_admin_bar' );
 
-
 /**
  * Human readable number format.
  *
@@ -1148,7 +1117,6 @@ function dokan_number_format( $number ) {
 
     return $number;
 }
-
 
 /**
  * Get coupon edit url
@@ -1296,18 +1264,18 @@ function dokan_get_navigation_url( $name = '' ) {
  * @param string $selected
  * @param bool $everywhere
  */
-function country_dropdown( $options, $selected = '', $everywhere = false ) {
+function dokan_country_dropdown( $options, $selected = '', $everywhere = false ) {
     printf( '<option value="">%s</option>', __( '- Select a location -', 'dokan-shipping' ) );
 
     if ( $everywhere ) {
         echo '<optgroup label="--------------------------">';
-        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        printf( '<option value="everywhere"%s>%s</option>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
         echo '</optgroup>';
     }
 
     echo '<optgroup label="------------------------------">';
     foreach ($options as $key => $value) {
-        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+        printf( '<option value="%s"%s>%s</option>', $key, selected( $selected, $key, true ), $value );
     }
     echo '</optgroup>';
 }
@@ -1319,18 +1287,18 @@ function country_dropdown( $options, $selected = '', $everywhere = false ) {
  * @param string $selected
  * @param bool $everywhere
  */
-function state_dropdown( $options, $selected = '', $everywhere = false ) {
+function dokan_state_dropdown( $options, $selected = '', $everywhere = false ) {
     printf( '<option value="">%s</option>', __( '- Select a State -', 'dokan-shipping' ) );
 
     if ( $everywhere ) {
         echo '<optgroup label="--------------------------">';
-        printf( '<option value="everywhere"%s>%s</a>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
+        printf( '<option value="everywhere" %s>%s</option>', selected( $selected, 'everywhere', true ), __( 'Everywhere Else', 'dokan-shipping' ) );
         echo '</optgroup>';
     }
 
     echo '<optgroup label="------------------------------">';
     foreach ($options as $key => $value) {
-        printf( '<option value="%s"%s>%s</a>', $key, selected( $selected, $key, true ), $value );
+        printf( '<option value="%s" %s>%s</option>', $key, selected( $selected, $key, true ), $value );
     }
     echo '</optgroup>';
 }
@@ -1579,7 +1547,7 @@ function dokan_product_listing_filter() {
             ?>
         </div>
 
-        <?php 
+        <?php
         if ( isset( $_GET['product_search_name'] ) ) { ?>
             <input type="hidden" name="product_search_name" value="<?php echo $_GET['product_search_name']; ?>">
         <?php }
@@ -1592,14 +1560,14 @@ function dokan_product_listing_filter() {
     <form method="get" class="dokan-form-inline dokan-w6">
 
         <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right"><?php _e( 'Search', 'dokan'); ?></button>
-        
+
         <?php wp_nonce_field( 'dokan_product_search', 'dokan_product_search_nonce' ); ?>
 
         <div class="dokan-form-group dokan-right">
             <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Search Products" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
         </div>
 
-        <?php 
+        <?php
         if ( isset( $_GET['product_cat'] ) ) { ?>
             <input type="hidden" name="product_cat" value="<?php echo $_GET['product_cat']; ?>">
         <?php }
@@ -1649,4 +1617,47 @@ function dokan_product_search_by_sku( $where ) {
 
     return $where;
 }
+
 add_filter( 'posts_search', 'dokan_product_search_by_sku' );
+
+/**
+ * Dokan Social Profile fields
+ *
+ * @since 2.2
+ *
+ * @return array
+ */
+function dokan_get_social_profile_fields() {
+    $fields = array(
+        'fb' => array(
+            'icon'  => 'facebook-square',
+            'title' => __( 'Facebook', 'dokan' ),
+        ),
+        'gplus' => array(
+            'icon'  => 'google-plus',
+            'title' => __( 'Google Plus', 'dokan' ),
+        ),
+        'twitter' => array(
+            'icon'  => 'twitter',
+            'title' => __( 'Twitter', 'dokan' ),
+        ),
+        'linkedin' => array(
+            'icon'  => 'linkedin',
+            'title' => __( 'LinkedIn', 'dokan' ),
+        ),
+        'youtube' => array(
+            'icon'  => 'youtube',
+            'title' => __( 'Youtube', 'dokan' ),
+        ),
+        'instagram' => array(
+            'icon'  => 'instagram',
+            'title' => __( 'Instagram', 'dokan' ),
+        ),
+        'flickr' => array(
+            'icon'  => 'flickr',
+            'title' => __( 'Flickr', 'dokan' ),
+        ),
+    );
+
+    return apply_filters( 'dokan_profile_social_fields', $fields );
+}
