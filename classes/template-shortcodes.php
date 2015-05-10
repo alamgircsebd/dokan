@@ -644,7 +644,7 @@ class Dokan_Template_Shortcodes {
         /**
         * Filter return the number of best selling product per page.
         *
-        * @since 2.1.1
+        * @since 2.2
         *
         * @param array
         */
@@ -680,7 +680,7 @@ class Dokan_Template_Shortcodes {
         /**
         * Filter return the number of top rated product per page.
         *
-        * @since 2.1.1
+        * @since 2.2
         *
         * @param array
         */
@@ -717,7 +717,7 @@ class Dokan_Template_Shortcodes {
         /**
         * Filter return the number of store listing number per page.
         *
-        * @since 2.1.1
+        * @since 2.2
         *
         * @param array
         */
