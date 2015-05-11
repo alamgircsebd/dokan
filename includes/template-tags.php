@@ -378,6 +378,12 @@ function dokan_get_dashboard_nav() {
         'icon'  => '<i class="fa fa-share-alt-square"></i>',
         'url'   => dokan_get_navigation_url( 'settings/social' )
     );
+    
+    $settings['sub']['seo'] = array(
+        'title' => __( 'Store SEO', 'dokan'),
+        'icon'  => '<i class="fa fa-globe"></i>',
+        'url'   => dokan_get_navigation_url( 'settings/seo' )
+    );
 
     /**
      * Filter to get the seller dashboard settings navigation.
