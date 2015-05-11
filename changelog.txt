@@ -1,6 +1,6 @@
 ==================== Plugin Version ====================
 
-v2.2 -> May 12, 2015
+v2.2 -> May 11, 2015
 ---------------------
 
 - [new] Settings pages divided into submenu
