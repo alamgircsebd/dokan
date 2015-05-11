@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: http://wedevs.com/theme/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.1
+Version: 2.2
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -336,7 +336,7 @@ class WeDevs_Dokan {
         $inc_dir     = __DIR__ . '/includes/';
         $classes_dir = __DIR__ . '/classes/';
 
-        require_once $inc_dir . 'theme-functions.php';
+        require_once $inc_dir . 'functions.php';
         require_once $inc_dir . 'widgets/menu-category.php';
         require_once $inc_dir . 'widgets/store-menu-category.php';
         require_once $inc_dir . 'widgets/best-seller.php';

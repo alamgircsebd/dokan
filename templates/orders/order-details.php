@@ -17,19 +17,19 @@ $order    = new WC_Order( $order_id );
         <div class="doakn-clearfix">
             <div class="" style="width:100%">
                 <div class="dokan-panel dokan-panel-default">
-                    <div class="dokan-panel-heading"><strong><?php printf( 'Order#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
+                    <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
                     <div class="dokan-panel-body">
 
                         <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
                             <thead>
                                 <tr>
-                                    <th class="item" colspan="2"><?php _e( 'Item', 'woocommerce' ); ?></th>
+                                    <th class="item" colspan="2"><?php _e( 'Item', 'dokan' ); ?></th>
 
                                     <?php do_action( 'woocommerce_admin_order_item_headers' ); ?>
 
-                                    <th class="quantity"><?php _e( 'Qty', 'woocommerce' ); ?></th>
+                                    <th class="quantity"><?php _e( 'Qty', 'dokan' ); ?></th>
 
-                                    <th class="line_cost"><?php _e( 'Totals', 'woocommerce' ); ?></th>
+                                    <th class="line_cost"><?php _e( 'Totals', 'dokan' ); ?></th>
                                 </tr>
                             </thead>
                             <tbody id="order_items_list">
@@ -162,7 +162,7 @@ $order    = new WC_Order( $order_id );
                                             if( $status == 'wc-refunded' ) {
                                                 continue;
                                             }
-                                            echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . $label . '</option>';
+                                            echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . esc_html__( $label, 'dokan' ) . '</option>';
                                         }
                                         ?>
                                     </select>
@@ -172,7 +172,7 @@ $order    = new WC_Order( $order_id );
                                     <input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'dokan_change_status' ); ?>">
                                     <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm" name="dokan_change_status" value="<?php _e( 'Update', 'dokan' ); ?>">
 
-                                    <a href="#" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-cancel-status">Cancel</a>
+                                    <a href="#" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-cancel-status"><?php _e( 'Cancel', 'dokan' ) ?></a>
                                 </form>
                             </li>
                             <li>
@@ -251,13 +251,13 @@ $order    = new WC_Order( $order_id );
                                         <?php echo wpautop( wptexturize( wp_kses_post( $note->comment_content ) ) ); ?>
                                     </div>
                                     <p class="meta">
-                                        <?php printf( __( 'added %s ago', 'woocommerce' ), human_time_diff( strtotime( $note->comment_date_gmt ), current_time( 'timestamp', 1 ) ) ); ?> <a href="#" class="delete_note"><?php _e( 'Delete note', 'woocommerce' ); ?></a>
+                                        <?php printf( __( 'added %s ago', 'dokan' ), human_time_diff( strtotime( $note->comment_date_gmt ), current_time( 'timestamp', 1 ) ) ); ?> <a href="#" class="delete_note"><?php _e( 'Delete note', 'woocommerce' ); ?></a>
                                     </p>
                                 </li>
                                 <?php
                             }
                         } else {
-                            echo '<li>' . __( 'There are no notes for this order yet.', 'woocommerce' ) . '</li>';
+                            echo '<li>' . __( 'There are no notes for this order yet.', 'dokan' ) . '</li>';
                         }
 
                         echo '</ul>';
@@ -265,7 +265,7 @@ $order    = new WC_Order( $order_id );
                         add_filter( 'comments_clauses', array( 'WC_Comments', 'exclude_order_comments' ), 10, 1 );
                         ?>
                         <div class="add_note">
-                            <h4><?php _e( 'Add note', 'woocommerce' ); ?></h4>
+                            <h4><?php _e( 'Add note', 'dokan' ); ?></h4>
                             <form class="dokan-form-inline" id="add-order-note" role="form" method="post">
                                 <p>
                                     <textarea type="text" id="add-note-content" name="note" class="form-control" cols="19" rows="3"></textarea>

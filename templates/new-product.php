@@ -49,14 +49,14 @@
                             <div class="dokan-form-group">
                                 <div class="dokan-input-group">
                                     <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                    <input class="dokan-form-control" name="price" id="product-price" type="text" placeholder="9.99" value="<?php echo dokan_posted_input( 'price' ); ?>">
+                                    <input class="dokan-form-control" name="price" id="product-price" type="text" placeholder="0.00" value="<?php echo dokan_posted_input( 'price' ); ?>">
                                 </div>
                             </div>
 
                             <div class="dokan-form-group">
                                 <textarea name="post_excerpt" id="post-excerpt" rows="5" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Short description about the product...', 'dokan' ); ?>"><?php echo dokan_posted_textarea( 'post_excerpt' ); ?></textarea>
                             </div>
-                            
+
                             <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                                 <div class="dokan-form-group">
 
@@ -84,12 +84,11 @@
                                         wp_list_categories(array(
 
                                           'walker'       => new DokanCategoryWalker(),
-                                          'name'         => 'product_cat',
                                           'title_li'     => '',
                                           'id'           => 'product_cat',
                                           'hide_empty'   => 0,
                                           'taxonomy'     => 'product_cat',
-                                          'hierarchical' => 1,    
+                                          'hierarchical' => 1,
                                           'selected'     => array()
                                         ));
                                         ?>

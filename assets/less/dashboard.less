@@ -33,7 +33,7 @@
 	}
 
 	.dokan-dashboard-content {
-		padding: 0 0 0 15px;
+		padding: 0 0 0 25px;
 		overflow: hidden;
 		margin-top: 0px;
 		width: 83%;
@@ -200,8 +200,6 @@
 		    				height:77px;
 		    				text-align: center;
 		    				line-height: 20px;
-		    				background-color: #f3f3f3;
-							color:#8b8b8b;
 							margin:7px 0px;
 		    				.announce-day {
 		    					padding-top:5px;
@@ -213,10 +211,46 @@
 		    				}
 		    			}
 
+		    			.dokan-dashboard-announce-read {
+		    				background-color: #f3f3f3;
+							color:#8b8b8b;
+		    			}
+
+		    			.dokan-dashboard-announce-unread {
+		    				background-color: #f05025;
+							color:#f3f3f3;
+		    			}
+
 		    			&:last-child {
 		    				border-bottom: none;
 		    			}
 		    		}
+		    	}
+		    }
+		}
+
+		article.dokan-settings-area {
+
+			.dokan-map-wrap {
+				border: 1px solid @borderColor;
+
+				.dokan-map-search-bar {
+					position: relative;
+				}
+
+				.dokan-map-find-btn {
+					display: none;
+				}
+
+				.dokan-map-search {
+					border: none;
+					width: 100%;
+					padding: 5px 10px;
+				}
+
+		    	.dokan-google-map {
+		    		width: 100%;
+		    		height: 300px;
 		    	}
 		    }
 		}
@@ -233,6 +267,17 @@
 
 		a {
 			text-decoration: none;
+		}
+
+		.dokan-page-help {
+			display: block;
+			font-style: italic;
+			color: #888;
+			margin-bottom: 30px;
+
+			p {
+				margin-bottom: 10px;
+			}
 		}
 	}
 }

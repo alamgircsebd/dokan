@@ -154,11 +154,11 @@ function dokan_variable_product_type_options() {
 
             <p class="toolbar">
 
-                <button type="button" class="btn btn-sm btn-success button-primary add_variation" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Add Variation', 'woocommerce' ); ?></button>
+                <button type="button" class="btn btn-sm btn-success button-primary add_variation" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Add Variation', 'dokan' ); ?></button>
 
-                <button type="button" class="btn btn-sm btn-default link_all_variations" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Link all variations', 'woocommerce' ); ?></button>
+                <button type="button" class="btn btn-sm btn-default link_all_variations" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Link all variations', 'dokan' ); ?></button>
 
-                <strong><?php _e( 'Default selections:', 'woocommerce' ); ?></strong>
+                <strong><?php _e( 'Default selections:', 'dokan' ); ?></strong>
                 <?php
                     $default_attributes = maybe_unserialize( get_post_meta( $post->ID, '_default_attributes', true ) );
                     foreach ( $attributes as $attribute ) {
@@ -171,7 +171,7 @@ function dokan_variable_product_type_options() {
                         $variation_selected_value = isset( $default_attributes[ sanitize_title( $attribute['name'] ) ] ) ? $default_attributes[ sanitize_title( $attribute['name'] ) ] : '';
 
                         // Name will be something like attribute_pa_color
-                        echo '<select name="default_attribute_' . sanitize_title( $attribute['name'] ) . '"><option value="">' . __( 'No default', 'woocommerce' ) . ' ' . esc_html( wc_attribute_label( $attribute['name'] ) ) . '&hellip;</option>';
+                        echo '<select name="default_attribute_' . sanitize_title( $attribute['name'] ) . '"><option value="">' . __( 'No default', 'dokan' ) . ' ' . esc_html( wc_attribute_label( $attribute['name'] ) ) . '&hellip;</option>';
 
                         // Get terms for attribute taxonomy or value if its a custom attribute
                         if ( $attribute['is_taxonomy'] ) {
@@ -1754,6 +1754,7 @@ function dokan_user_update_to_seller( $user, $data ) {
     // Add role
     $user->add_role( 'seller' );
 
+    $user_id = wp_update_user( array( 'ID' => $user_id, 'user_nicename' => $data['shopurl'] ) );
     update_user_meta( $user_id, 'first_name', $data['fname'] );
     update_user_meta( $user_id, 'last_name', $data['lname'] );
 

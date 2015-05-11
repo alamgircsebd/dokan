@@ -950,7 +950,7 @@ class Dokan_Template_Withdraw {
                 <div class="dokan-w5 dokan-text-left">
                     <div class="dokan-input-group">
                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                        <input name="witdraw_amount" required number min="<?php echo esc_attr( dokan_get_option( 'withdraw_limit', 'dokan_selling', 50 ) ); ?>" class="dokan-form-control" id="withdraw-amount" name="price" type="number" placeholder="9.99" value="<?php echo $amount; ?>"  >
+                        <input name="witdraw_amount" required number min="<?php echo esc_attr( dokan_get_option( 'withdraw_limit', 'dokan_selling', 50 ) ); ?>" class="dokan-form-control" id="withdraw-amount" name="price" type="number" placeholder="0.00" value="<?php echo $amount; ?>"  >
                     </div>
                 </div>
             </div>

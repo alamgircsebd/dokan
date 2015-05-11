@@ -86,38 +86,39 @@ class Dokan_Template_Shipping {
         foreach ( $products as $key => $product) {
 
             $seller_id = get_post_field( 'post_author', $product['product_id'] );
-            
+
             if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
                 continue;
             }
 
             if( Dokan_WC_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
                 continue;
-            } 
+            }
 
             $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
-            $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true ); 
-            
+            $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true );
+
             $has_found = false;
             $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
             $dps_state = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
 
-            // var_dump( $dps_country, $dps_state);
-            if( array_key_exists( $destination_country, $dps_country ) ) {
-                
-                if( $dps_state ) {
-                    if( array_key_exists( $destination_state, $dps_state ) ) {
+            if ( array_key_exists( $destination_country, $dps_country ) ) {
+
+                if ( $dps_state ) {
+                    if ( array_key_exists( $destination_state, $dps_state ) ) {
                         $has_found = true;
                     } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
                         $has_found = true;
-                    }    
+                    }
                 } else {
                     $has_found = true;
                 }
+            } else {
+                if ( array_key_exists( 'everywhere', $dps_country ) ) {
+                    $has_found = true;
+                }
+            }
 
-                
-            } 
-                    
             if ( ! $has_found ) {
                 $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ) );
             }
@@ -143,11 +144,11 @@ class Dokan_Template_Shipping {
      */
     function register_product_tab( $tabs ) {
         global $post;
-        
+
         if( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
             return $tabs;
         }
-        
+
         if( get_post_meta( $post->ID, '_downloadable', true ) == 'yes' ) {
             return $tabs;
         }
@@ -183,7 +184,7 @@ class Dokan_Template_Shipping {
 
         // Store wide shipping info
         $store_shipping_type_price    = (float)get_user_meta( $post->post_author, '_dps_shipping_type_price', true );
-        $additional_product_cost      = get_post_meta( $post->ID, '_additional_price', true );
+        $additional_product_cost      = (float)get_post_meta( $post->ID, '_additional_price', true );
         $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
         $additional_qty_product_price = get_post_meta( $post->ID, '_additional_qty', true );
         $dps_additional_qty           = get_user_meta( $post->post_author, '_dps_additional_qty', true );
@@ -196,26 +197,9 @@ class Dokan_Template_Shipping {
         $states      = $country_obj->states;
         ?>
 
-        <?php if ( $base_shipping_type_price ): ?>
-             <p>
-                    <strong>
-                        <?php _e( 'Base Shipping Cost for this product : ', 'dokan' ); ?> <?php echo wc_price( $base_shipping_type_price ); ?>
-                    </strong>
-            </p>
-        <?php endif ?>
-
-        <?php if ( $base_shipping_type_price ): ?>
-             <p>
-                    <strong>
-                        <?php _e( 'Shipping Cost of additional quantity for this product : ', 'dokan' ); ?> <?php echo wc_price( $additional_qty_price ); ?>
-                    </strong>
-            </p>
-
-        <?php endif ?>
-
-        <?php if ( $additional_qty_price ) { ?>
-                <p>
-                    <strong>
+        <?php if ( $processing_time ) { ?>
+            <p>
+                <strong>
                     <?php _e( 'Ready to ship in', 'dokan' ); ?> <?php echo dokan_get_processing_time_value( $processing_time ); ?>
 
                     <?php
@@ -229,79 +213,66 @@ class Dokan_Template_Shipping {
         <?php } ?>
 
         <?php if ( $dps_country_rates ) { ?>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th><?php _e( 'Ship To', 'dokan' ); ?></th>
-                        <th><?php _e( 'Cost', 'dokan' ); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
-                    <tr>
-                        <td>
-                            <?php
-                            if ( $country == 'everywhere' ) {
-                                _e( 'Everywhere Else', 'dokan' );
-                            } else {
-                                echo $countries[$country];
-                            }
-                            ?>
-                        </td>
-                        <td>
-                            <?php
+            <h4><?php _e( 'Shipping cost:', 'dokan' ); ?></h4>
 
-                                if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) {
-                                    echo '--------'; 
-                                } else {
-                                    echo wc_price( $cost );
-                                }
-                            ?>
-                        </td>
-                    </tr>
-                    <?php if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ): ?>
-                        <tr>
-                            <td>
-                                <table width="100%" class="table">
-                                    <thead>
-                                        <tr>
-                                            <th><?php _e( 'Shipping state', 'dokan' ); ?></th>
-                                            <th><?php _e( 'Cost', 'dokan' ); ?></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
-                                            <tr>
-                                                <td>
-                                                    <?php
-                                                    if ( $state_code == 'everywhere' ) {
-                                                        _e( 'Everywhere Else', 'dokan' );
-                                                    } else {
-                                                        if( isset( $states[$country][$state_code] ) ) {
-                                                            echo $states[$country][$state_code];
-                                                        } else {
-                                                            echo $state_code;
-                                                        }    
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td><?php echo wc_price( $state_cost ); ?></td>
+            <?php foreach ( $dps_country_rates as $country => $cost ) {
+                if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th width="90%"><?php echo $countries[$country]; ?></th>
+                                <th><?php _e( '', 'dokan' ); ?></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
+                                <tr>
+                                    <td>
+                                        <?php
+                                        if ( $state_code == 'everywhere' ) {
+                                            _e( 'Everywhere Else', 'dokan' );
+                                        } else {
+                                            if( isset( $states[$country][$state_code] ) ) {
+                                                echo $states[$country][$state_code];
+                                            } else {
+                                                echo $state_code;
+                                            }
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?php echo wc_price( $state_cost + $base_shipping_type_price ); ?></td>
+                                </tr>
+                            <?php endforeach ?>
+                        </tbody>
+                    </table>
+                    <p>&nbsp;</p>
+                <?php } else { ?>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <th width="90%"><?php echo $countries[$country]; ?></th>
+                                <th><?php echo wc_price( $cost + $base_shipping_type_price ); ?></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                <?php
+                }
+            }
+        } ?>
 
-                                            </tr>
-                                        <?php endforeach ?>
-                                    </tbody>
-                                </table>  
-                            </td>   
-                        </tr>
-                    <?php endif ?>
-                <?php } ?>
-                    </tbody>
-                </table>
 
-            <?php } ?>
+        <?php if ( $additional_qty_price ): ?>
+            <hr>
+             <p>
+                <strong>
+                    <?php _e( 'Extra shipping Cost for each additional quantity of this product : ', 'dokan' ); ?> <?php echo wc_price( $additional_qty_price ); ?>
+                </strong>
+            </p>
 
-            <p>&nbsp;</p>
+        <?php endif ?>
+
+        <p>&nbsp;</p>
 
         <?php if ( $shipping_policy ) { ?>
             <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
@@ -321,5 +292,5 @@ class Dokan_Template_Shipping {
 
 
 
-    
+
 }

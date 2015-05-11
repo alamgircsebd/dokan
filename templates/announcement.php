@@ -4,7 +4,8 @@
 ?>
 
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'notice' ) ); ?>
+    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'announcement' ) ); ?>
+    <?php //var_dump( $urls = dokan_get_dashboard_nav() ); ?>
 
     <div class="dokan-dashboard-content dokan-notice-listing">
 

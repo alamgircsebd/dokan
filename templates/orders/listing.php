@@ -35,7 +35,7 @@ if ( $user_orders ) {
                         <?php echo esc_html( strip_tags( $the_order->get_formatted_order_total() ) ); ?>
                     </td>
                     <td class="dokan-order-status">
-                        <?php printf( '<span class="dokan-label dokan-label-%s">%s</span>', dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status, 'woocommerce' ) ); ?>
+                        <?php printf( '<span class="dokan-label dokan-label-%s">%s</span>', dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status, 'dokan' ) ); ?>
                     </td>
                     <td class="dokan-order-customer">
                         <?php

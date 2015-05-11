@@ -59,10 +59,6 @@ class Dokan_Template_Shortcodes {
     public function load_template_files() {
         global $wp;
 
-        $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
-
-        $enable_shipping = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-
         if ( ! function_exists( 'WC' ) ) {
             return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
         }
@@ -112,14 +108,46 @@ class Dokan_Template_Shortcodes {
             return;
         }
 
-        if ( isset( $wp->query_vars['shipping'] ) && $enable_shipping == 'yes' ) {
-            dokan_get_template_part( 'shipping' );
-            return;
-        }
-
         if ( isset( $wp->query_vars['settings'] ) ) {
-            dokan_get_template_part( 'settings' );
-            return;
+            switch ($wp->query_vars['settings']) {
+
+                case 'store':
+                    dokan_get_template_part( 'settings/store' );
+                    break;
+
+                case 'social':
+                    dokan_get_template_part( 'settings/social' );
+                    break;
+
+                case 'shipping':
+                    $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings', array( 'enabled' => 'yes' ) );
+                    $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+
+                    if ( $enable_shipping == 'yes') {
+                        dokan_get_template_part( 'settings/shipping' );
+                    }
+                    break;
+
+                case 'payment':
+                    dokan_get_template_part( 'settings/payment' );
+                    break;
+
+                default:
+
+                    /**
+                     * Allow plugins too hook into here and add their
+                     * own settings pages
+                     *
+                     * @since 2.2
+                     */
+                    $template_path = apply_filters( 'dokan_settings_template', false, $wp->query_vars['settings'] );
+
+                    if ( $template_path !== false && file_exists( $template_path ) ) {
+                        require_once $template_path;
+                    }
+
+                    break;
+            }
         }
 
         if ( isset( $wp->query_vars['page'] ) ) {
@@ -611,7 +639,7 @@ class Dokan_Template_Shortcodes {
 
             update_user_meta( $user_id, '_dps_state_rates', $s_rates );
 
-            $shipping_url = dokan_get_navigation_url( 'shipping' );
+            $shipping_url = dokan_get_navigation_url( 'settings/shipping' );
             wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
             exit;
         }
@@ -625,9 +653,16 @@ class Dokan_Template_Shortcodes {
      * @return string
      */
     function best_selling_product_shortcode( $atts ) {
-        $per_page = shortcode_atts( array(
+        /**
+        * Filter return the number of best selling product per page.
+        *
+        * @since 2.2
+        *
+        * @param array
+        */
+        $per_page = shortcode_atts( apply_filters( 'dokan_best_selling_product_per_page', array(
             'no_of_product' => 8
-        ), $atts );
+        ), $atts ) );
 
         ob_start();
         ?>
@@ -654,9 +689,16 @@ class Dokan_Template_Shortcodes {
      * @return string
      */
     function top_rated_product_shortcode( $atts ) {
-        $per_page = shortcode_atts( array(
+        /**
+        * Filter return the number of top rated product per page.
+        *
+        * @since 2.2
+        *
+        * @param array
+        */
+        $per_page = shortcode_atts( apply_filters( 'dokan_top_rated_product_per_page', array(
             'no_of_product' => 8
-        ), $atts );
+        ), $atts ) );
 
         ob_start();
         ?>
@@ -684,9 +726,16 @@ class Dokan_Template_Shortcodes {
     function store_listing( $atts ) {
         global $post;
 
-        $attr = shortcode_atts( array(
+        /**
+        * Filter return the number of store listing number per page.
+        *
+        * @since 2.2
+        *
+        * @param array
+        */
+        $attr = shortcode_atts( apply_filters( 'dokan_store_listing_per_page', array(
                 'per_page' => 10,
-            ), $atts );
+            ), $atts ) );
 
         $paged  = max( 1, get_query_var( 'paged' ) );
         $limit  = $attr['per_page'];

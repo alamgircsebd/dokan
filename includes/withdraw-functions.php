@@ -24,7 +24,6 @@ function dokan_withdraw_register_methods() {
     return apply_filters( 'dokan_withdraw_methods', $methods );
 }
 
-
 /**
  * Get registered withdraw methods suitable for Settings Api
  *
@@ -41,7 +40,6 @@ function dokan_withdraw_get_methods() {
     return $methods;
 }
 
-
 /**
  * Get active withdraw methods.
  *
@@ -54,7 +52,6 @@ function dokan_withdraw_get_active_methods() {
 
     return $methods;
 }
-
 
 /**
  * Get a single withdraw method based on key
@@ -72,8 +69,6 @@ function dokan_withdraw_get_method( $method_key ) {
     return false;
 }
 
-
-
 /**
  * Get title from a withdraw method
  *
@@ -89,8 +84,6 @@ function dokan_withdraw_get_method_title( $method_key ) {
 
     return '';
 }
-
-
 
 /**
  * Callback for PayPal in store settings
@@ -114,8 +107,6 @@ function dokan_withdraw_method_paypal( $store_settings ) {
     <?php
 }
 
-
-
 /**
  * Callback for Skrill in store settings
  *
@@ -137,8 +128,6 @@ function dokan_withdraw_method_skrill( $store_settings ) {
     </div>
     <?php
 }
-
-
 
 /**
  * Callback for Bank in store settings
@@ -185,8 +174,6 @@ function dokan_withdraw_method_bank( $store_settings ) {
     <?php
 }
 
-
-
 /**
  * Get withdraw counts, used in admin area
  *
@@ -220,8 +207,6 @@ function dokan_get_withdraw_count() {
 
     return $counts;
 }
-
-
 
 /**
  * Get active withdraw order status.

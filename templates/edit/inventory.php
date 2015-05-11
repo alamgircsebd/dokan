@@ -17,7 +17,7 @@ if ( $tax_classes ) {
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_sku"><?php _e( 'SKU', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
-            <?php dokan_post_input_box( $post->ID, '_sku', array( 'placeholder' => 'SKU' ) ); ?>
+            <?php dokan_post_input_box( $post->ID, '_sku', array( 'placeholder' => __( 'SKU', 'dokan' ) ) ); ?>
         </div>
     </div>
     

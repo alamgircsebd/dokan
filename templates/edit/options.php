@@ -29,7 +29,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_enable_reviews"><?php _e( 'Sold Individually', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
-            <?php dokan_post_input_box( $post->ID, '_sold_individually', array('label' => __( 'Allow one of this item to be bought in a single order', 'dokan' ) ), 'checkbox' ); ?>
+            <?php dokan_post_input_box( $post->ID, '_sold_individually', array('label' => __( 'Enable this to only allow one of this item to be bought in a single order', 'dokan' ) ), 'checkbox' ); ?>
         </div>
     </div>
 

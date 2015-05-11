@@ -71,7 +71,7 @@ if ( ! $from_shortcode ) {
             </header>
 
             <form class="dokan-form-container" role="form" method="post">
-                <?php wp_nonce_field( 'dokan_edit_product', 'dokan_edit_product_nonce' ); ?>    
+                <?php wp_nonce_field( 'dokan_edit_product', 'dokan_edit_product_nonce' ); ?>
                 <div class="product-edit-container dokan-clearfix">
 
                     <div class="dokan-product-edit-left">
@@ -191,7 +191,7 @@ if ( ! $from_shortcode ) {
                                                 <div class="dokan-form-group">
                                                     <div class="dokan-input-group">
                                                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                                        <?php dokan_post_input_box( $post_id, '_regular_price', array( 'placeholder' => '9.99' ) ); ?>
+                                                        <?php dokan_post_input_box( $post_id, '_regular_price', array( 'placeholder' => '0.00' ) ); ?>
                                                     </div>
                                                 </div>
 
@@ -238,10 +238,10 @@ if ( ! $from_shortcode ) {
                                             <div class="dokan-form-group">
                                                 <?php dokan_post_input_box( $post_id, 'post_excerpt', array( 'placeholder' => 'Short description about the product...', 'value' => $post->post_excerpt ), 'textarea' ); ?>
                                             </div>
-                                            
+
                                             <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                                                 <div class="dokan-form-group">
-        
+
                                                     <?php
                                                     $product_cat = -1;
                                                     $term = array();
@@ -272,16 +272,15 @@ if ( ! $from_shortcode ) {
                                                         <?php
                                                         $term = array();
                                                         $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
-                                                         
+
                                                         include_once DOKAN_LIB_DIR.'/class.category-walker.php';
                                                         wp_list_categories(array(
                                                             'walker'       => new DokanCategoryWalker(),
-                                                            'name'         => 'product_cat',
                                                             'title_li'     => '',
                                                             'id'           => 'product_cat',
                                                             'hide_empty'   => 0,
                                                             'taxonomy'     => 'product_cat',
-                                                            'hierarchical' => 1,    
+                                                            'hierarchical' => 1,
                                                             'selected'     => $term
                                                         ));
                                                         ?>
@@ -292,7 +291,7 @@ if ( ! $from_shortcode ) {
                                             <div class="dokan-form-group">
 
                                                     <?php
-                                                    
+
                                                     require_once DOKAN_LIB_DIR.'/class.tag-walker.php';
 
                                                     $term = wp_get_post_terms( $post_id, 'product_tag', array( 'fields' => 'ids') );
@@ -312,7 +311,7 @@ if ( ! $from_shortcode ) {
                                                         'walker'           => new Dokan_Walker_Tag_Multi()
                                                     ) );
 
-                                                    echo str_replace( '<select', '<select data-placeholder="Select product tags" multiple="multiple" ', $drop_down_tags );
+                                                    echo str_replace( '<select', '<select data-placeholder="' . __( 'Select product tags', 'dokan' ) . '" multiple="multiple" ', $drop_down_tags );
 
                                                     ?>
                                             </div>
@@ -331,7 +330,7 @@ if ( ! $from_shortcode ) {
                                 </div> <!-- #edit-product -->
 
                                 <div id="product-options">
-                                
+
                                     <?php dokan_get_template_part( 'edit/options' ); ?>
                                     <?php do_action( 'dokan_product_edit_after_options' ); ?>
 
@@ -345,17 +344,17 @@ if ( ! $from_shortcode ) {
                                 </div> <!-- #product-inventory -->
 
                                 <div id="product-shipping">
-                                    
-                                    <?php dokan_get_template_part( 'edit/shipping' ); ?> 
+
+                                    <?php dokan_get_template_part( 'edit/shipping' ); ?>
                                     <?php do_action( 'dokan_product_edit_after_shipping' ); ?>
-                                
+
                                 </div>
 
                                 <!-- ===== Attributes ===== -->
 
                                 <div class="show_if_simple" id="product-attributes">
-                                    
-                                    <?php  
+
+                                    <?php
                                         dokan_get_template_part( 'edit/attributes' );
                                         dokan_get_template_part( 'edit/templates-js' );
                                     ?>
@@ -383,8 +382,8 @@ if ( ! $from_shortcode ) {
 
                     <div class="dokan-product-edit-right dokan-edit-sidebar">
 
-                        <?php dokan_get_template_part( 'edit/sidebar' ); ?> 
-                    
+                        <?php dokan_get_template_part( 'edit/sidebar' ); ?>
+
                     </div> <!-- .dokan-edit-sidebar -->
                 </div> <!-- .product-edit-container -->
             </form>

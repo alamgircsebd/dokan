@@ -85,6 +85,9 @@
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li ul.sub-menu li:last-child {
   border-bottom: none;
 }
+.dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.settings i.pull-right {
+  padding-top: 5px;
+}
 .dokan-dashboard .dokan-dashboard-wrap {
   display: block;
   overflow: hidden;
@@ -110,7 +113,7 @@
   padding: 0 0 10px 0;
 }
 .dokan-dashboard .dokan-dashboard-content {
-  padding: 0 0 0 15px;
+  padding: 0 0 0 25px;
   overflow: hidden;
   margin-top: 0px;
   width: 83%;
@@ -261,8 +264,6 @@
   height: 77px;
   text-align: center;
   line-height: 20px;
-  background-color: #f3f3f3;
-  color: #8b8b8b;
   margin: 7px 0px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-date .announce-day {
@@ -273,8 +274,34 @@
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-date .announce-year {
   font-size: 15px;
 }
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-read {
+  background-color: #f3f3f3;
+  color: #8b8b8b;
+}
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li .dokan-dashboard-announce-unread {
+  background-color: #f05025;
+  color: #f3f3f3;
+}
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dokan-announcement-widget ul li:last-child {
   border-bottom: none;
+}
+.dokan-dashboard .dokan-dashboard-content article.dokan-settings-area .dokan-map-wrap {
+  border: 1px solid #ededed;
+}
+.dokan-dashboard .dokan-dashboard-content article.dokan-settings-area .dokan-map-wrap .dokan-map-search-bar {
+  position: relative;
+}
+.dokan-dashboard .dokan-dashboard-content article.dokan-settings-area .dokan-map-wrap .dokan-map-find-btn {
+  display: none;
+}
+.dokan-dashboard .dokan-dashboard-content article.dokan-settings-area .dokan-map-wrap .dokan-map-search {
+  border: none;
+  width: 100%;
+  padding: 5px 10px;
+}
+.dokan-dashboard .dokan-dashboard-content article.dokan-settings-area .dokan-map-wrap .dokan-google-map {
+  width: 100%;
+  height: 300px;
 }
 .dokan-dashboard .dokan-dashboard-content article {
   border-bottom: none;
@@ -286,6 +313,15 @@
 }
 .dokan-dashboard .dokan-dashboard-content a {
   text-decoration: none;
+}
+.dokan-dashboard .dokan-dashboard-content .dokan-page-help {
+  display: block;
+  font-style: italic;
+  color: #888;
+  margin-bottom: 30px;
+}
+.dokan-dashboard .dokan-dashboard-content .dokan-page-help p {
+  margin-bottom: 10px;
 }
 @-webkit-keyframes ring {
   0% {
@@ -1426,7 +1462,7 @@
 .dokan-single-store .profile-frame {
   height: 300px;
   padding: 0px;
-  margin-bottom: 30px;
+  margin-bottom: 60px;
   position: relative;
   background-size: 100% auto;
   background-color: #eee;
@@ -1491,6 +1527,24 @@
 }
 .dokan-single-store .profile-frame .profile-info-box .profile-info .seller-rating {
   display: none;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul {
+  border-width: 0 1px 1px 1px;
+  border-color: #ededed #ededed #ededed #ededed;
+  border-style: solid;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul li {
+  display: inline-block;
+  border-right: 1px solid #ededed;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul li a {
+  text-decoration: none;
+  color: #666;
+  padding: 10px 15px;
+  display: inline-block;
+}
+.dokan-single-store .profile-frame .dokan-store-tabs ul li a:hover {
+  background: #eee;
 }
 .dokan-single-store .store-review-wrap h2.headline {
   font-size: 17px;
@@ -2207,17 +2261,23 @@ a.dokan-btn-sm,
 .dokan-tooltips-help {
   margin-left: 7px;
 }
+.dokan-tooltips-help i {
+  color: #ccc;
+}
 .tooltip-inner {
   font-size: 12px;
 }
 /**
- * Media Popup style 
+ * Media Popup style
  */
 .media-modal .screen-reader-text {
   overflow: hidden;
   padding: 0;
   position: absolute;
   width: 1px;
+}
+.chosen-container-multi .chosen-choices li.search-field input[type="text"] {
+  height: 28px;
 }
 .dokan-close {
   float: right;
@@ -2609,9 +2669,9 @@ span.error {
 .dokan-form-control {
   background-color: #ffffff;
   background-image: none;
-  border: 1px solid #cccccc;
+  border: 1px solid #ededed;
   padding: 4px 6px;
-  border-radius: 4px;
+  border-radius: 0;
   color: #555555;
   display: block;
   font-size: 14px;
@@ -2670,7 +2730,7 @@ textarea.dokan-form-control {
   color: #555;
   text-align: center;
   background-color: #eee;
-  border: 1px solid #ccc;
+  border: 1px solid #ededed;
   border-radius: 4px;
 }
 .dokan-input-group-addon input[type="radio"],
@@ -2944,11 +3004,18 @@ table.dps-shipping-states tr td {
 #dps-shipping-hidden-lcoation-content {
   display: none;
 }
+.dokan-shipping-location-wrapper {
+  border-top: 1px solid #ededed;
+  padding-top: 15px;
+  margin-top: 30px;
+}
 .dokan-shipping-location-wrapper .dps-shipping-location-content {
   border: 2px solid #eee;
-  padding: 10px;
   margin-bottom: 15px;
   position: relative;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table tr td {
+  padding: 10px 15px;
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table {
   background: #eee;
@@ -2958,16 +3025,31 @@ table.dps-shipping-states tr td {
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content .dps-shipping-remove {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: -1px;
+  right: -1px;
+  height: 25px;
+  width: 25px;
+  background: #fff;
+  color: #ccc;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content .dps-shipping-remove:hover {
+  color: #fff;
+  background: #ccc;
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states {
   text-align: center;
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-add,
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-remove {
-  color: #000;
+  color: #A8A8A8;
   font-size: 11px;
+  border: 1px solid #eee;
+  padding: 3px 5px 2px 5px;
+  border-radius: 3px;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-add:hover,
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-remove:hover {
+  background: #eee;
 }
 @-webkit-keyframes progress-bar-stripes {
   from {
