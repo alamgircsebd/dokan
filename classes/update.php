@@ -147,6 +147,10 @@ class Dokan_Update {
         $update     = wp_remote_retrieve_body( $response );
 
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
+            if ( is_wp_error( $response ) ) {
+                echo '<div class="error"><p>Error: ' . $response->get_error_message() . '</p></div>';
+            }
+
             return false;
         }
 
