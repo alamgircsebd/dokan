@@ -28,14 +28,14 @@ $porduct_shipping_pt = ( $_processing_time ) ? $_processing_time : $dps_pt;
     </div>
 
     <div class="dokan-form-group show_if_simple">
-        <label class="dokan-w4 dokan-control-label" for="_backorders"><?php _e( 'Weight (' . get_option( 'woocommerce_weight_unit' ) . ')', 'dokan' ); ?></label>
+        <label class="dokan-w4 dokan-control-label" for="_backorders"><?php echo __( 'Weight', 'dokan' ) . ' (' . get_option( 'woocommerce_weight_unit' ) . ')'; ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_weight' ); ?>
         </div>
     </div>
 
     <div class="dokan-form-group show_if_simple">
-        <label class="dokan-w4 dokan-control-label" for="_backorders"><?php _e( 'Dimensions (' . get_option( 'woocommerce_dimension_unit' ) . ')', 'dokan' ); ?></label>
+        <label class="dokan-w4 dokan-control-label" for="_backorders"><?php echo __( 'Dimensions', 'dokan' ) . ' (' . get_option( 'woocommerce_dimension_unit' ) . ')'; ?></label>
         <div class="dokan-w8 dokan-text-left product-dimension">
             <?php dokan_post_input_box( $post->ID, '_length', array( 'class' => 'form-control col-sm-1', 'placeholder' => __( 'length', 'dokan' ) ), 'number' ); ?>
             <?php dokan_post_input_box( $post->ID, '_width', array( 'class' => 'form-control col-sm-1', 'placeholder' => __( 'width', 'dokan' ) ), 'number' ); ?>
