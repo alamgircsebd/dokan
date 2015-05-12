@@ -212,6 +212,8 @@ class Dokan_Template_Shipping {
             <hr>
         <?php } ?>
 
+        <h4><?php _e( 'Shipping cost:', 'dokan' ); ?></h4>
+
         <?php if ( $dps_country_rates ) { ?>
 
             <?php foreach ( $dps_country_rates as $country => $cost ) {
