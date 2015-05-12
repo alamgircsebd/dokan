@@ -341,23 +341,24 @@ function dokan_get_dashboard_nav() {
     $settings = array(
         'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
         'icon'  => '<i class="fa fa-cog"></i>',
-        'url'   => dokan_get_navigation_url( 'settings/store' ),
-        'sub'   => array(
-            'back' => array(
-                'title' => __( 'Back to Dashboard', 'dokan'),
-                'icon'  => '<i class="fa fa-long-arrow-left"></i>',
-                'url'   => dokan_get_navigation_url()
-            ),
-            'store' => array(
-                'title' => __( 'Store', 'dokan'),
-                'icon'  => '<i class="fa fa-university"></i>',
-                'url'   => dokan_get_navigation_url( 'settings/store' )
-            ),
-            'payment' => array(
-                'title' => __( 'Payment', 'dokan'),
-                'icon'  => '<i class="fa fa-credit-card"></i>',
-                'url'   => dokan_get_navigation_url( 'settings/payment' )
-            )
+        'url'   => dokan_get_navigation_url( 'settings/store' )
+    );
+
+    $settings_sub = array(
+        'back' => array(
+            'title' => __( 'Back to Dashboard', 'dokan'),
+            'icon'  => '<i class="fa fa-long-arrow-left"></i>',
+            'url'   => dokan_get_navigation_url()
+        ),
+        'store' => array(
+            'title' => __( 'Store', 'dokan'),
+            'icon'  => '<i class="fa fa-university"></i>',
+            'url'   => dokan_get_navigation_url( 'settings/store' )
+        ),
+        'payment' => array(
+            'title' => __( 'Payment', 'dokan'),
+            'icon'  => '<i class="fa fa-credit-card"></i>',
+            'url'   => dokan_get_navigation_url( 'settings/payment' )
         )
     );
 
@@ -365,14 +366,14 @@ function dokan_get_dashboard_nav() {
     $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
     if ( $enable_shipping == 'yes' ) {
-        $settings['sub']['shipping'] = array(
+        $settings_sub['shipping'] = array(
             'title' => __( 'Shipping', 'dokan'),
             'icon'  => '<i class="fa fa-truck"></i>',
             'url'   => dokan_get_navigation_url( 'settings/shipping' )
         );
     }
 
-    $settings['sub']['social'] = array(
+    $settings_sub['social'] = array(
         'title' => __( 'Social Profile', 'dokan'),
         'icon'  => '<i class="fa fa-share-alt-square"></i>',
         'url'   => dokan_get_navigation_url( 'settings/social' )
@@ -381,16 +382,18 @@ function dokan_get_dashboard_nav() {
     /**
      * Filter to get the seller dashboard settings navigation.
      *
-     * @since 2.1.1
+     * @since 2.2
      *
      * @param array.
      */
-    $urls['settings'] = apply_filters( 'dokan_get_dashboard_settings_nav', $settings );
+    $settings['sub']  = apply_filters( 'dokan_get_dashboard_settings_nav', $settings_sub );
+
+    $urls['settings'] = $settings;
 
     /**
      * Filter to get the final seller dashboard navigation.
      *
-     * @since 2.1.1
+     * @since 2.2
      *
      * @param array $urls.
      */
