@@ -174,9 +174,9 @@ module.exports = function(grunt) {
         'makepot',
         'less',
         'concat',
-        'clean',
-        'copy',
-        'compress'
+        // 'clean',
+        // 'copy',
+        // 'compress'
         // 'uglify'
     ]);
 
