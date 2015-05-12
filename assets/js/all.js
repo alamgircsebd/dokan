@@ -1097,7 +1097,9 @@ jQuery(function($) {
         },
 
 
-        imageUpload: function() {
+        imageUpload: function(e) {
+            e.preventDefault();
+
             var file_frame,
                 self = $(this);
 
@@ -1132,7 +1134,9 @@ jQuery(function($) {
             file_frame.open();
 
         },
-        gragatarImageUpload: function() {
+        gragatarImageUpload: function(e) {
+            e.preventDefault();
+
             var file_frame,
                 self = $(this);
 
