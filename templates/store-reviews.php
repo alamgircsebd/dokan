@@ -131,4 +131,6 @@ get_header( 'shop' );
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
 
+<?php do_action( 'woocommerce_after_main_content' ); ?>
+
 <?php get_footer(); ?>
