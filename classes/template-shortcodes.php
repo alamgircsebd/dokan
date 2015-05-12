@@ -133,7 +133,17 @@ class Dokan_Template_Shortcodes {
                     break;
 
                 default:
-                    # code...
+                    /**
+                     * Allow plugins too hook into here and add their
+                     * own settings pages
+                     *
+                     * @since 2.2
+                     */
+                    $template_path = apply_filters( 'dokan_settings_template', false, $wp->query_vars['settings'] );
+
+                    if ( $template_path !== false && file_exists( $template_path ) ) {
+                        require_once $template_path;
+                    }
                     break;
             }
         }
