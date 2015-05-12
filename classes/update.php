@@ -8,7 +8,7 @@
  */
 class Dokan_Update {
 
-    const base_url     = 'http://wedevs.com/';
+    const base_url     = 'https://wedevs.com/';
     const update_check = 'http://api.wedevs.com/update_check';
     const product_id   = 'dokan';
     const option       = 'dokan_license';
@@ -35,7 +35,7 @@ class Dokan_Update {
 
         add_filter( 'pre_set_site_transient_update_plugins', array($this, 'check_update') );
         add_filter( 'pre_set_transient_update_plugins', array($this, 'check_update') );
-        add_filter( 'plugins_api', array(&$this, 'check_info'), 10, 3 );
+        add_filter( 'plugins_api', array($this, 'check_info'), 10, 3 );
     }
 
     /**
@@ -147,6 +147,14 @@ class Dokan_Update {
         $update     = wp_remote_retrieve_body( $response );
 
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
+            if ( is_wp_error( $response ) ) {
+                echo '<div class="error"><p><strong>Dokan Activation Error:</strong> ' . $response->get_error_message() . '</p></div>';
+            }
+
+            if ( $response['response']['code'] != 200 ) {
+                echo '<div class="error"><p><strong>Dokan Activation Error:</strong> ' . $response['response']['code'] .' - ' . $response['response']['message'] . '</p></div>';
+            }
+
             return false;
         }
 

@@ -1,5 +1,14 @@
 ==================== Plugin Version ====================
 
+v2.2.1 -> May 12, 2015
+---------------------
+
+- [fix] Fix whight and dimensions string translation error on product edit shipping tab 
+- [fix] Fix store listing shortcode rendering error
+- [fix] Remove (#) sign from url when dokan gravatar and banner image upload
+- [fix] Fix require once file name which rename 'theme-fucntion.php' to 'functions.php'
+- [fix] Fix product listing sku search condition bug
+
 v2.2 -> May 11, 2015
 ---------------------
 

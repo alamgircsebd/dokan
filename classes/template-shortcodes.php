@@ -133,7 +133,6 @@ class Dokan_Template_Shortcodes {
                     break;
 
                 default:
-
                     /**
                      * Allow plugins too hook into here and add their
                      * own settings pages
@@ -145,7 +144,6 @@ class Dokan_Template_Shortcodes {
                     if ( $template_path !== false && file_exists( $template_path ) ) {
                         require_once $template_path;
                     }
-
                     break;
             }
         }
@@ -735,7 +733,7 @@ class Dokan_Template_Shortcodes {
         */
         $attr = shortcode_atts( apply_filters( 'dokan_store_listing_per_page', array(
                 'per_page' => 10,
-            ), $atts ) );
+            ) ), $atts );
 
         $paged  = max( 1, get_query_var( 'paged' ) );
         $limit  = $attr['per_page'];

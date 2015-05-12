@@ -174,9 +174,15 @@ module.exports = function(grunt) {
         'makepot',
         'less',
         'concat',
+        // 'clean',
+        // 'copy',
+        // 'compress'
+        // 'uglify'
+    ]);
+
+    grunt.registerTask( 'zip', [
         'clean',
         'copy',
         'compress'
-        // 'uglify'
-    ]);
+    ])
 };
