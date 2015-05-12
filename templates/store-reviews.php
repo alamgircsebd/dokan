@@ -53,8 +53,8 @@ get_header( 'shop' );
 }
 ?>
 
-<div id="primary" class="content-area dokan-single-store dokan-w8">
-    <div id="content" class="site-content store-review-wrap woocommerce" role="main">
+<div id="dokan-primary" class="dokan-single-store dokan-w8">
+    <div id="dokan-content" class="store-review-wrap woocommerce" role="main">
 
         <?php dokan_get_template_part( 'store-header' ); ?>
 
