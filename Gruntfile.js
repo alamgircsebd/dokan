@@ -179,4 +179,10 @@ module.exports = function(grunt) {
         'compress'
         // 'uglify'
     ]);
+
+    grunt.registerTask( 'zip', [
+        'clean',
+        'copy',
+        'compress'
+    ])
 };
