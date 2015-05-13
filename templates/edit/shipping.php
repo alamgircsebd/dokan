@@ -20,21 +20,21 @@ $porduct_shipping_pt = ( $_processing_time ) ? $_processing_time : $dps_pt;
 <div class="dokan-form-horizontal dokan-product-shipping">
     <input type="hidden" name="product_shipping_class" value="0">
 
-    <div class="dokan-form-group show_if_simple">
+    <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_disable_shipping"><?php _e( 'Disable Shipping', 'dokan' ); ?></label>
         <div class="dokan-w8 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_disable_shipping', array( 'label' => __( 'Disable shipping for this product', 'dokan' ) ), 'checkbox' ); ?>
         </div>
     </div>
 
-    <div class="dokan-form-group show_if_simple">
+    <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_backorders"><?php echo __( 'Weight', 'dokan' ) . ' (' . get_option( 'woocommerce_weight_unit' ) . ')'; ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_weight' ); ?>
         </div>
     </div>
 
-    <div class="dokan-form-group show_if_simple">
+    <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_backorders"><?php echo __( 'Dimensions', 'dokan' ) . ' (' . get_option( 'woocommerce_dimension_unit' ) . ')'; ?></label>
         <div class="dokan-w8 dokan-text-left product-dimension">
             <?php dokan_post_input_box( $post->ID, '_length', array( 'class' => 'form-control col-sm-1', 'placeholder' => __( 'length', 'dokan' ) ), 'number' ); ?>
@@ -43,7 +43,7 @@ $porduct_shipping_pt = ( $_processing_time ) ? $_processing_time : $dps_pt;
         </div>
     </div>
 
-    <div class="dokan-form-group show_if_simple hide_if_disable">
+    <div class="dokan-form-group hide_if_disable">
         <label class="dokan-w4 dokan-control-label" for="_overwrite_shipping"><?php _e( 'Override Shipping', 'dokan' ); ?></label>
         <div class="dokan-w8 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>

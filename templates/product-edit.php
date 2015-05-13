@@ -93,7 +93,6 @@ if ( ! $from_shortcode ) {
                                 <?php
                                 $terms                   = wp_get_object_terms( $post->ID, 'product_type' );
                                 $product_type            = sanitize_title( current( $terms )->name );
-                                $shipping_class          = ($product_type == 'simple' ) ? '' : 'dokan-hide';
                                 $variations_class        = ($product_type == 'simple' ) ? 'dokan-hide' : '';
                                 $dokan_product_data_tabs = apply_filters( 'dokan_product_data_tabs', array(
 
@@ -115,7 +114,7 @@ if ( ! $from_shortcode ) {
                                     'shipping' => array(
                                         'label'  => __( 'Shipping', 'dokan' ),
                                         'target' => 'product-shipping',
-                                        'class'  => array( 'show_if_simple', $shipping_class ),
+                                        'class'  => array(),
                                     ),
                                     'attributes' => array(
                                         'label'  => __( 'Attributes', 'dokan' ),
