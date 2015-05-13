@@ -60,7 +60,11 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
                 <?php echo dokan_get_profile_progressbar(); ?>
             </div>
 
-            <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
+            <?php 
+            /**
+             * @since 2.2.2 Insert action before social settings form
+             */
+            do_action( 'dokan_profile_settings_before_form', $current_user, $profile_info ); ?>
 
             <form method="post" id="profile-form"  action="" class="dokan-form-horizontal"><?php ///settings-form ?>
 
@@ -79,7 +83,11 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
                     </div>
                 <?php } ?>
 
-                <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
+                <?php 
+                /**
+                 * @since 2.2.2 Insert action on bottom social settings form
+                 */
+                do_action( 'dokan_profile_settings_form_bottom', $current_user, $profile_info ); ?>
 
                 <div class="dokan-form-group">
                     <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
@@ -89,7 +97,11 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
 
             </form>
 
-            <?php do_action( 'dokan_settings_after_form', $current_user, $profile_info ); ?>
+            <?php 
+            /**
+             * @since 2.2.2 Insert action after social settings form
+             */
+            do_action( 'dokan_profile_settings_after_form', $current_user, $profile_info ); ?>
             <!--settings updated content end-->
 
         </article>
