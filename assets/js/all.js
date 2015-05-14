@@ -1494,16 +1494,19 @@ jQuery(function($) {
             
             submit : function( data ){
                 var feedback = $('#dokan-seo-feedback');
-                console.log(dokan.ajaxurl);
+                feedback.fadeOut();
+                
                 $.post( dokan.ajaxurl, data, function ( resp ) {
                     if ( resp.success == true ) {
                         feedback.html(resp.data);
                         feedback.removeClass('dokan-hide');
                         feedback.addClass('dokan-alert-success');
+                        feedback.fadeIn();
                     } else {
                         feedback.html(resp.data);
                         feedback.addClass('dokan-alert-danger');
                         feedback.removeClass('dokan-hide');
+                        feedback.fadeIn();
                     }
                 } )
             }
