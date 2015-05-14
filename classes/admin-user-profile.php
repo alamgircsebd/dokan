@@ -49,6 +49,8 @@ class Dokan_Admin_User_Profile {
         $gplus = isset( $store_settings['social']['gplus'] ) ? esc_url ( $store_settings['social']['gplus'] ) : '';
         $linkedin = isset( $store_settings['social']['linkedin'] ) ? esc_url( $store_settings['social']['linkedin'] ) : '';
         $youtube = isset( $store_settings['social']['youtube'] ) ? esc_url( $store_settings['social']['youtube'] ) : '';
+        $instagram = isset( $store_settings['social']['instagram'] ) ? esc_url( $store_settings['social']['instagram'] ) : '';
+        $flickr = isset( $store_settings['social']['flickr'] ) ? esc_url( $store_settings['social']['flickr'] ) : '';
 
         ?>
         <h3><?php _e( 'Dokan Options', 'dokan' ); ?></h3>
@@ -128,6 +130,20 @@ class Dokan_Admin_User_Profile {
                     <th><?php _e( 'YouTube Profile', 'dokan' ); ?></th>
                     <td>
                         <input type="text" name="dokan_social[youtube]" class="regular-text" value="<?php echo $youtube; ?>">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><?php _e( 'Instagram Profile', 'dokan' ); ?></th>
+                    <td>
+                        <input type="text" name="dokan_social[instagram]" class="regular-text" value="<?php echo $instagram; ?>">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><?php _e( 'Flickr Profile', 'dokan' ); ?></th>
+                    <td>
+                        <input type="text" name="dokan_social[flickr]" class="regular-text" value="<?php echo $flickr; ?>">
                     </td>
                 </tr>
 
@@ -311,6 +327,8 @@ class Dokan_Admin_User_Profile {
             'twitter' => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
             'linkedin' => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
             'youtube' => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
+            'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
+            'flickr' => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
         );
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_settings );
