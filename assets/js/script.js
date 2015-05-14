@@ -566,3 +566,50 @@ jQuery(function($) {
     });
 
 })(jQuery);
+//dokan store seo form submit
+(function($){
+
+    var wrapper = $( '.dokan-dashboard-content.dokan-settings-content.dokan-store-seo-wrapper' );
+    var Dokan_Store_SEO = {
+        
+        init : function() {            
+            wrapper.on( 'click', 'input#dokan-store-seo-form-submit', this.form.validate );
+        },
+        form : {
+            
+            validate : function(){        
+                var self = $( this ),
+                data = {
+                    action: 'dokan_seo_form_handler',
+                    data: self.closest( '#dokan-store-seo-form' ).serialize(),
+                };
+                console.log(data.data);
+                Dokan_Store_SEO.form.submit( data );
+                
+                return false;
+            },
+            
+            submit : function( data ){
+                var feedback = $('#dokan-seo-feedback');
+                console.log(dokan.ajaxurl);
+                $.post( dokan.ajaxurl, data, function ( resp ) {
+                    if ( resp.success == true ) {
+                        feedback.html(resp.data);
+                        feedback.removeClass('dokan-hide');
+                        feedback.addClass('dokan-alert-success');
+                    } else {
+                        feedback.html(resp.data);
+                        feedback.addClass('dokan-alert-danger');
+                        feedback.removeClass('dokan-hide');
+                    }
+                } )
+            }
+                
+        },
+    };
+       
+    $(function() {
+        Dokan_Store_SEO.init();
+    }); 
+
+})(jQuery);
