@@ -37,20 +37,14 @@ class Dokan_Admin_User_Profile {
             return;
         }
 
-        $selling = get_user_meta( $user->ID, 'dokan_enable_selling', true );
-        $publishing = get_user_meta( $user->ID, 'dokan_publishing', true );
-        $store_settings = dokan_get_store_info( $user->ID );
-        $banner = isset( $store_settings['banner'] ) ? absint( $store_settings['banner'] ) : 0;
+        $selling           = get_user_meta( $user->ID, 'dokan_enable_selling', true );
+        $publishing        = get_user_meta( $user->ID, 'dokan_publishing', true );
+        $store_settings    = dokan_get_store_info( $user->ID );
+        $banner            = isset( $store_settings['banner'] ) ? absint( $store_settings['banner'] ) : 0;
         $seller_percentage = get_user_meta( $user->ID, 'dokan_seller_percentage', true );
-        $feature_seller = get_user_meta( $user->ID, 'dokan_feature_seller', true );
+        $feature_seller    = get_user_meta( $user->ID, 'dokan_feature_seller', true );
 
-        $fb = isset( $store_settings['social']['fb'] ) ? esc_url( $store_settings['social']['fb'] ) : '';
-        $twitter = isset( $store_settings['social']['twitter'] ) ? esc_url( $store_settings['social']['twitter'] ) : '';
-        $gplus = isset( $store_settings['social']['gplus'] ) ? esc_url ( $store_settings['social']['gplus'] ) : '';
-        $linkedin = isset( $store_settings['social']['linkedin'] ) ? esc_url( $store_settings['social']['linkedin'] ) : '';
-        $youtube = isset( $store_settings['social']['youtube'] ) ? esc_url( $store_settings['social']['youtube'] ) : '';
-        $instagram = isset( $store_settings['social']['instagram'] ) ? esc_url( $store_settings['social']['instagram'] ) : '';
-        $flickr = isset( $store_settings['social']['flickr'] ) ? esc_url( $store_settings['social']['flickr'] ) : '';
+        $social_fields     = dokan_get_social_profile_fields();
 
         ?>
         <h3><?php _e( 'Dokan Options', 'dokan' ); ?></h3>
@@ -98,54 +92,16 @@ class Dokan_Admin_User_Profile {
                     </td>
                 </tr>
 
-                <tr>
-                    <th><?php _e( 'Twitter Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[twitter]" class="regular-text" value="<?php echo $twitter; ?>">
-                    </td>
-                </tr>
+                <?php foreach ($social_fields as $key => $value) { ?>
 
-                <tr>
-                    <th><?php _e( 'Facebook Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[fb]" class="regular-text" value="<?php echo $fb; ?>">
-                    </td>
-                </tr>
+                    <tr>
+                        <th><?php echo $value['title']; ?></th>
+                        <td>
+                            <input type="text" name="dokan_social[<?php echo $key; ?>]" class="regular-text" value="<?php echo isset( $store_settings['social'][$key] ) ? esc_url( $store_settings['social'][$key] ) : ''; ?>">
+                        </td>
+                    </tr>
 
-                <tr>
-                    <th><?php _e( 'Google Plus Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[gplus]" class="regular-text" value="<?php echo $gplus; ?>">
-                    </td>
-                </tr>
-
-                <tr>
-                    <th><?php _e( 'Linkedin Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[linkedin]" class="regular-text" value="<?php echo $linkedin; ?>">
-                    </td>
-                </tr>
-
-                <tr>
-                    <th><?php _e( 'YouTube Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[youtube]" class="regular-text" value="<?php echo $youtube; ?>">
-                    </td>
-                </tr>
-
-                <tr>
-                    <th><?php _e( 'Instagram Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[instagram]" class="regular-text" value="<?php echo $instagram; ?>">
-                    </td>
-                </tr>
-
-                <tr>
-                    <th><?php _e( 'Flickr Profile', 'dokan' ); ?></th>
-                    <td>
-                        <input type="text" name="dokan_social[flickr]" class="regular-text" value="<?php echo $flickr; ?>">
-                    </td>
-                </tr>
+                <?php } ?>
 
                 <tr>
                     <th><?php _e( 'Selling', 'dokan' ); ?></th>
@@ -310,32 +266,35 @@ class Dokan_Admin_User_Profile {
             return;
         }
 
-        $selling = sanitize_text_field( $_POST['dokan_enable_selling'] );
-        $publishing = sanitize_text_field( $_POST['dokan_publish'] );
-        $percentage = floatval( $_POST['dokan_seller_percentage'] );
+        $selling        = sanitize_text_field( $_POST['dokan_enable_selling'] );
+        $publishing     = sanitize_text_field( $_POST['dokan_publish'] );
+        $percentage     = floatval( $_POST['dokan_seller_percentage'] );
         $feature_seller = sanitize_text_field( $_POST['dokan_feature'] );
         $store_settings = dokan_get_store_info( $user_id );
-        $social = $_POST['dokan_social'];
 
-        $store_settings['banner'] = intval( $_POST['dokan_banner'] );
+        $social         = $_POST['dokan_social'];
+        $social_fields  = dokan_get_social_profile_fields();
+
+        $store_settings['banner']     = intval( $_POST['dokan_banner'] );
         $store_settings['store_name'] = sanitize_text_field( $_POST['dokan_store_name'] );
-        $store_settings['address'] = wp_kses_post( $_POST['dokan_store_address'] );
-        $store_settings['phone'] = sanitize_text_field( $_POST['dokan_store_phone'] );
-        $store_settings['social'] = array(
-            'fb' => filter_var( $social['fb'], FILTER_VALIDATE_URL ),
-            'gplus' => filter_var( $social['gplus'], FILTER_VALIDATE_URL ),
-            'twitter' => filter_var( $social['twitter'], FILTER_VALIDATE_URL ),
-            'linkedin' => filter_var( $social['linkedin'], FILTER_VALIDATE_URL ),
-            'youtube' => filter_var( $social['youtube'], FILTER_VALIDATE_URL ),
-            'instagram' => filter_var( $social['instagram'], FILTER_VALIDATE_URL ),
-            'flickr' => filter_var( $social['flickr'], FILTER_VALIDATE_URL ),
-        );
+        $store_settings['address']    = wp_kses_post( $_POST['dokan_store_address'] );
+        $store_settings['phone']      = sanitize_text_field( $_POST['dokan_store_phone'] );
+
+        // social settings
+        if ( is_array( $social ) ) {
+            foreach ($social as $key => $value) {
+                if ( isset( $social_fields[ $key ] ) ) {
+                    $store_settings['social'][ $key ] = filter_var( $social[ $key ], FILTER_VALIDATE_URL );
+                }
+            }
+        }
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_settings );
         update_user_meta( $user_id, 'dokan_enable_selling', $selling );
         update_user_meta( $user_id, 'dokan_publishing', $publishing );
         update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
         update_user_meta( $user_id, 'dokan_feature_seller', $feature_seller );
+
         do_action( 'dokan_process_seller_meta_fields', $user_id );
     }
 }
