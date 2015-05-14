@@ -1,5 +1,16 @@
 ==================== Plugin Version ====================
 
+v2.2.2 -> May 14, 2015
+---------------------
+
+- [fix] Fix shipping calculation for 'everywhere else country' in checkout 
+- [fix] Fix undefine error on single product shipping tab if select everywhere else country 
+- [fix] Make override shipping value empty once set and then remove it 
+- [fix] Show shipping tab on product edit for both simple and variable type product
+- [fix] Change same hooks on different settings forms 
+- [fix] Fix dokan store tab margin 
+- [fix] Fix store review template class/id 
+
 v2.2.1 -> May 12, 2015
 ---------------------
 
