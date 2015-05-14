@@ -7,6 +7,9 @@
  * @author WeDevs
  */
 class Dokan_Store_Seo {
+    
+    public $feedback  = false;
+    public $seller_id = false;
 
     public function __construct() {
        
@@ -29,7 +32,7 @@ class Dokan_Store_Seo {
      */
     function init_hooks() {
 
-        add_action( 'wp_ajax_insert_meta_data', array( $this, 'insert_meta_data' ) );
+        add_action( 'wp_ajax_dokan_seo_form_handler', array( $this, 'dokan_seo_form_handler' ) );
         add_action( 'template_redirect', array( $this, 'output_meta_tags' ) );
     }
     
@@ -127,7 +130,100 @@ class Dokan_Store_Seo {
         $desc  = "Description, this is the long desciption";
         return $desc;
     }
+    
+    
+    /*
+    * print SEO meta form on frontend
+    * 
+    * @since 1.0.0
+    * 
+    */
+    function frontend_meta_form(){
+        $current_user   = get_current_user_id();
+        $seller_profile = dokan_get_store_info( $current_user );
+        $seo_meta = isset( $seller_profile['store_seo'] ) ? $seller_profile['store_seo'] : array();
+        
+        $default_store_seo = array(
+            'dokan-seo-title'         => false,
+            'dokan-seo-meta-desc'     => false,
+            'dokan-seo-meta-keywords' => false,
+        );
+        
+        $seo_meta = wp_parse_args( $seo_meta, $default_store_seo );
+        
+        
+    ?>  
+        <div class="dokan-alert dokan-hide" id="dokan-seo-feedback"></div>
+        <form method="post" id="dokan-store-seo-form"  action="" class="dokan-form-horizontal">
 
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan-seo-title"><?php _e( 'SEO Title :', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
+                        <input id="dokan-seo-title" value="<?php echo $this->print_saved_meta($seo_meta['dokan-seo-title']) ?>" name="dokan-seo-title" placeholder=" " class="dokan-form-control input-md" type="text">
+                    </div>                         
+                </div>
+
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-desc"><?php _e( 'Meta Description :', 'dokan' ); ?></label>
+                    <div class="dokan-w5 dokan-text-left">
+                        <textarea class="dokan-form-control" rows="3" id="dokan-seo-meta-desc" name="dokan-seo-meta-desc"><?php echo $this->print_saved_meta($seo_meta['dokan-seo-meta-desc']) ?></textarea>
+                    </div>                         
+                </div>
+
+                <div class="dokan-form-group">
+                    <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-keywords"><?php _e( 'Meta Keywords :', 'dokan' ); ?></label>
+                    <div class="dokan-w7 dokan-text-left">
+                        <input id="dokan-seo-meta-keywords" value="<?php echo $this->print_saved_meta($seo_meta['dokan-seo-meta-keywords']) ?>" name="dokan-seo-meta-keywords" placeholder=" " class="dokan-form-control input-md" type="text">
+                    </div>                         
+                </div>
+
+                <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
+
+                <div class="dokan-form-group" style="margin-left: 23%">   
+                    <input type="submit" id='dokan-store-seo-form-submit' class="dokan-left dokan-btn dokan-btn-theme" value="<?php esc_attr_e( 'Save Changes', 'dokan' ); ?>">
+                </div>
+            </form>
+    <?php  
+    }
+    
+   /*check meta data and print
+    * @since 1.0.0
+    * @param bool || string $val
+    * 
+    * @return string $val
+    */
+    function print_saved_meta( $val ) {
+        if ( $val == false )
+            return '';
+        else
+            return esc_attr ($val);
+    }
+
+    function dokan_seo_form_handler(){
+        parse_str( $_POST['data'], $postdata );
+
+        if ( !wp_verify_nonce( $postdata['dokan_store_seo_form_nonce'], 'dokan_store_seo_form_action' ) ) {
+            wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
+        }
+        
+        unset( $postdata['dokan_store_seo_form_nonce'] );
+        unset( $postdata['_wp_http_referer'] );
+        
+        $default_store_seo = array(
+            'dokan-seo-title'         => false,
+            'dokan-seo-meta-desc'     => false,
+            'dokan-seo-meta-keywords' => false,
+        );
+
+        $current_user   = get_current_user_id();
+        $seller_profile = dokan_get_store_info( $current_user );
+        
+        $seller_profile['store_seo'] = wp_parse_args( $postdata, $default_store_seo );
+        
+        update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
+        
+        wp_send_json_success('Your Changes Have been Updated');
+    }
 }
 $seo = Dokan_Store_Seo::init();
 
