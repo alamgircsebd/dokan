@@ -8,8 +8,8 @@
  */
 class Dokan_Store_Seo {
     
-    public $feedback  = false;
-    public $seller_id = false;
+    public $feedback    = false;
+    private $store_info = false;
 
     public function __construct() {
        
@@ -45,6 +45,12 @@ class Dokan_Store_Seo {
             return;
         }
         
+        if ( dokan_get_option( 'store_seo', 'dokan_general' ) === 'off' ) {
+            return;
+        }
+        
+        $this->store_info = dokan_get_store_info( get_query_var( 'author' ) );
+        
         if ( class_exists( 'All_in_One_SEO_Pack' ) ) {
 
             //apply_filters( 'aioseop_title', $title );
@@ -64,7 +70,7 @@ class Dokan_Store_Seo {
         } else {
             
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
-            add_action( 'wp_head', array( $this, 'print_tags' ), 500 );
+            add_action( 'wp_head', array( $this, 'print_tags' ), 1 );
             
         }
     }
@@ -79,13 +85,21 @@ class Dokan_Store_Seo {
      */
     function print_tags() {
         //get values of title,desc and keywords
+        $meta_values = $this->store_info;
         
-        $desc  = "Description, this is the long desciption";
-        $keywords = "DOKAN, SEO, STORE, QQQ";
-        ?>
-        <meta name="description" content="<?php echo esc_attr($desc) ?>"/>
-        <meta name="keywords" content="<?php echo esc_attr($keywords) ?>"/>
-        <?php
+        if ( !isset($meta_values['store_seo']) || $meta_values == false ) {
+            return;
+        }
+        
+        $desc     = $meta_values['store_seo']['dokan-seo-meta-desc'];
+        $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
+        
+        if($desc){
+            echo PHP_EOL.'<meta name="description" content="'.$this->print_saved_meta($desc).'"/>';
+        }
+        if($keywords){
+            echo PHP_EOL.'<meta name="keywords" content="'.$this->print_saved_meta($keywords).'"/>';
+        }        
     }
     
     /*
@@ -99,9 +113,23 @@ class Dokan_Store_Seo {
     function replace_title($title){
         //get title
         
-        $title = 'DOKAN_STORE_SEO';
+        $title_deafault = $title;
         
-        return $title;
+        $meta_values = $this->store_info;
+        
+        if ( !isset($meta_values['store_seo']) || $meta_values == false ) {
+            return;
+        }
+        
+        $title = $meta_values['store_seo']['dokan-seo-title'];
+        
+        if($title){
+            return $title;
+        }else{
+            return $title_deafault;
+        }
+        
+        
     }
     
     /*
