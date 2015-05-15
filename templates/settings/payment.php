@@ -61,7 +61,11 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
                 <?php echo dokan_get_profile_progressbar(); ?>
             </div>
 
-            <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
+            <?php 
+            /**
+             * @since 2.2.2 Insert action before payment settings form
+             */
+            do_action( 'dokan_payment_settings_before_form', $current_user, $profile_info ); ?>
 
             <form method="post" id="payment-form"  action="" class="dokan-form-horizontal">
 
@@ -83,7 +87,11 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
                     </fieldset>
                 <?php } ?>
 
-                <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
+                <?php 
+                /**
+                 * @since 2.2.2 Insert action on botton of payment settings form
+                 */
+                do_action( 'dokan_payment_settings_form_bottom', $current_user, $profile_info ); ?>
 
                 <div class="dokan-form-group">
 
@@ -94,7 +102,11 @@ if ( $validate !== false && !is_wp_error( $validate ) ) {
 
             </form>
 
-            <?php do_action( 'dokan_settings_after_form', $current_user, $profile_info ); ?>
+            <?php 
+            /**
+             * @since 2.2.2 Insert action after social settings form
+             */
+            do_action( 'dokan_payment_settings_after_form', $current_user, $profile_info ); ?>
 
             <!--settings updated content ends-->
         </article>

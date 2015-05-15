@@ -1532,6 +1532,8 @@
   border-width: 0 1px 1px 1px;
   border-color: #ededed #ededed #ededed #ededed;
   border-style: solid;
+  margin: 0;
+  padding: 0;
 }
 .dokan-single-store .profile-frame .dokan-store-tabs ul li {
   display: inline-block;

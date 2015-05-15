@@ -1,9 +1,20 @@
 ==================== Plugin Version ====================
 
+v2.2.2 -> May 15, 2015
+---------------------
+
+- [fix] Fix shipping calculation for 'everywhere else country' in checkout
+- [fix] Fix undefine error on single product shipping tab if select everywhere else country
+- [fix] Make override shipping value empty once set and then remove it
+- [fix] Show shipping tab on product edit for both simple and variable type product
+- [fix] Change same hooks on different settings forms
+- [fix] Fix dokan store tab margin
+- [fix] Fix store review template class/id
+
 v2.2.1 -> May 12, 2015
 ---------------------
 
-- [fix] Fix whight and dimensions string translation error on product edit shipping tab 
+- [fix] Fix whight and dimensions string translation error on product edit shipping tab
 - [fix] Fix store listing shortcode rendering error
 - [fix] Remove (#) sign from url when dokan gravatar and banner image upload
 - [fix] Fix require once file name which rename 'theme-fucntion.php' to 'functions.php'

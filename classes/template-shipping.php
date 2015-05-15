@@ -231,7 +231,7 @@ class Dokan_Template_Shipping {
                                     <td>
                                         <?php
                                         if ( $state_code == 'everywhere' ) {
-                                            _e( 'Everywhere Else', 'dokan' );
+                                            _e( 'Other States', 'dokan' );
                                         } else {
                                             if( isset( $states[$country][$state_code] ) ) {
                                                 echo $states[$country][$state_code];
@@ -251,7 +251,7 @@ class Dokan_Template_Shipping {
                     <table class="table">
                         <tbody>
                             <tr>
-                                <th width="90%"><?php echo $countries[$country]; ?></th>
+                                <th width="90%"><?php echo ( $country == 'everywhere' ) ? _e( 'Other Countries' ) : $countries[$country]; ?></th>
                                 <th><?php echo wc_price( $cost + $base_shipping_type_price ); ?></th>
                             </tr>
                         </tbody>

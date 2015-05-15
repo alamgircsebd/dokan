@@ -244,7 +244,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
                 } else {
 
-                    if ( array_key_exists( 'everywhere', $dps_country_rates ) ) {
+                    if ( !array_key_exists( $destination_country, $dps_country_rates ) ) {
                         $price[$seller_id]['state_rates'] = isset( $dps_country_rates['everywhere'] ) ? $dps_country_rates['everywhere'] : 0;
                     } else {
                         $price[$seller_id]['state_rates'] = ( isset( $dps_country_rates[$destination_country] ) ) ? $dps_country_rates[$destination_country] : 0;

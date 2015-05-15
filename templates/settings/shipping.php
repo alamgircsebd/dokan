@@ -56,7 +56,11 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                 <?php  wp_nonce_field( 'dokan_shipping_form_field', 'dokan_shipping_form_field_nonce' ); ?>
 
-                <?php do_action( 'dokan_shipping_form_top' ); ?>
+                <?php 
+                /**
+                 * @since 2.2.2 Insert action before shipping settings form
+                 */
+                do_action( 'dokan_shipping_settings_form_top' ); ?>
 
                 <div class="dokan-form-group">
                     <label class="dokan-w4 dokan-control-label" for="dps_enable_shipping" style="margin-top:6px">
@@ -335,7 +339,11 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
 
                 </div>
 
-                <?php do_action( 'dokan_shipping_form_bottom' ); ?>
+                <?php 
+                /**
+                 * @since 2.2.2 Insert action after social settings form
+                 */
+                do_action( 'dokan_shipping_settings_form_bottom' ); ?>
 
                 <div class="dokan-form-group">
 
