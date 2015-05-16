@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dokan - Multi-vendor Marketplace 2.2.1\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-05-12 10:49:36+00:00\n"
+"POT-Creation-Date: 2015-05-15 05:32:25+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,98 +17,78 @@ msgstr ""
 msgid "3"
 msgstr ""
 
-#: classes/admin-user-profile.php:54
+#: classes/admin-user-profile.php:50
 msgid "Dokan Options"
 msgstr ""
 
-#: classes/admin-user-profile.php:59
+#: classes/admin-user-profile.php:55
 msgid "Banner"
 msgstr ""
 
-#: classes/admin-user-profile.php:71 templates/settings/store.php:100
+#: classes/admin-user-profile.php:67 templates/settings/store.php:100
 msgid "Upload banner"
 msgstr ""
 
-#: classes/admin-user-profile.php:72 templates/settings/store.php:101
+#: classes/admin-user-profile.php:68 templates/settings/store.php:101
 msgid "(Upload a banner for your store. Banner size is (825x300) pixel. )"
 msgstr ""
 
-#: classes/admin-user-profile.php:79
+#: classes/admin-user-profile.php:75
 msgid "Store name"
 msgstr ""
 
-#: classes/admin-user-profile.php:86 includes/template-tags.php:539
+#: classes/admin-user-profile.php:82 includes/template-tags.php:539
 #: templates/settings/store.php:132 templates/update-account.php:58
 msgid "Address"
 msgstr ""
 
-#: classes/admin-user-profile.php:93 classes/template-shortcodes.php:781
+#: classes/admin-user-profile.php:89 classes/template-shortcodes.php:781
 #: includes/admin/sellers.php:21 includes/admin/sellers.php:96
 #: includes/template-tags.php:544 templates/update-account.php:63
 msgid "Phone"
 msgstr ""
 
-#: classes/admin-user-profile.php:100
-msgid "Twitter Profile"
-msgstr ""
-
 #: classes/admin-user-profile.php:107
-msgid "Facebook Profile"
-msgstr ""
-
-#: classes/admin-user-profile.php:114
-msgid "Google Plus Profile"
-msgstr ""
-
-#: classes/admin-user-profile.php:121
-msgid "Linkedin Profile"
-msgstr ""
-
-#: classes/admin-user-profile.php:128
-msgid "YouTube Profile"
-msgstr ""
-
-#: classes/admin-user-profile.php:135
 msgid "Selling"
 msgstr ""
 
-#: classes/admin-user-profile.php:140
+#: classes/admin-user-profile.php:112
 msgid "Enable Selling"
 msgstr ""
 
-#: classes/admin-user-profile.php:143
+#: classes/admin-user-profile.php:115
 msgid "Enable or disable product selling capability"
 msgstr ""
 
-#: classes/admin-user-profile.php:148
+#: classes/admin-user-profile.php:120
 msgid "Publishing"
 msgstr ""
 
-#: classes/admin-user-profile.php:153
+#: classes/admin-user-profile.php:125
 msgid "Publish product directly"
 msgstr ""
 
-#: classes/admin-user-profile.php:156
+#: classes/admin-user-profile.php:128
 msgid "Instead going pending, products will be published directly"
 msgstr ""
 
-#: classes/admin-user-profile.php:161 includes/admin/admin.php:222
+#: classes/admin-user-profile.php:133 includes/admin/admin.php:222
 msgid "Seller Percentage"
 msgstr ""
 
-#: classes/admin-user-profile.php:165
+#: classes/admin-user-profile.php:137
 msgid "How much amount (%) will get from each order"
 msgstr ""
 
-#: classes/admin-user-profile.php:170 includes/widgets/feature-seller.php:97
+#: classes/admin-user-profile.php:142 includes/widgets/feature-seller.php:97
 msgid "Feature Seller"
 msgstr ""
 
-#: classes/admin-user-profile.php:175
+#: classes/admin-user-profile.php:147
 msgid "Make feature seller"
 msgstr ""
 
-#: classes/admin-user-profile.php:178
+#: classes/admin-user-profile.php:150
 msgid "This seller will be marked as a feature seller."
 msgstr ""
 
@@ -182,14 +162,14 @@ msgid "Option..."
 msgstr ""
 
 #: classes/ajax.php:783 classes/ajax.php:809
-#: templates/settings/shipping.php:227 templates/settings/shipping.php:257
+#: templates/settings/shipping.php:231 templates/settings/shipping.php:261
 msgid "State"
 msgstr ""
 
 #: classes/ajax.php:789 classes/ajax.php:813
-#: templates/settings/shipping.php:205 templates/settings/shipping.php:235
-#: templates/settings/shipping.php:261 templates/settings/shipping.php:309
-#: templates/settings/shipping.php:368
+#: templates/settings/shipping.php:209 templates/settings/shipping.php:239
+#: templates/settings/shipping.php:265 templates/settings/shipping.php:313
+#: templates/settings/shipping.php:376
 msgid "Cost"
 msgstr ""
 
@@ -365,7 +345,7 @@ msgstr ""
 
 #: classes/template-coupons.php:270 includes/admin/announcement.php:59
 #: templates/edit/sidebar.php:20 templates/edit/sidebar.php:63
-#: templates/product-edit.php:101 templates/products-listing.php:94
+#: templates/product-edit.php:100 templates/products-listing.php:94
 msgid "Edit"
 msgstr ""
 
@@ -741,7 +721,7 @@ msgid "These products do not ship to your chosen location.: %s"
 msgstr ""
 
 #: classes/template-shipping.php:163 includes/template-tags.php:370
-#: templates/product-edit.php:116
+#: templates/product-edit.php:115
 msgid "Shipping"
 msgstr ""
 
@@ -757,20 +737,23 @@ msgstr ""
 msgid "Shipping cost:"
 msgstr ""
 
-#: classes/template-shipping.php:234 includes/functions.php:1286
-#: includes/functions.php:1309
-msgid "Everywhere Else"
+#: classes/template-shipping.php:234
+msgid "Other States"
+msgstr ""
+
+#: classes/template-shipping.php:254
+msgid "Other Countries"
 msgstr ""
 
 #: classes/template-shipping.php:269
 msgid "Extra shipping Cost for each additional quantity of this product : "
 msgstr ""
 
-#: classes/template-shipping.php:278 templates/settings/shipping.php:140
+#: classes/template-shipping.php:278 templates/settings/shipping.php:144
 msgid "Shipping Policy"
 msgstr ""
 
-#: classes/template-shipping.php:286 templates/settings/shipping.php:153
+#: classes/template-shipping.php:286 templates/settings/shipping.php:157
 msgid "Refund Policy"
 msgstr ""
 
@@ -1717,8 +1700,8 @@ msgstr ""
 msgid "Purchased"
 msgstr ""
 
-#: includes/admin-functions.php:45 templates/settings/shipping.php:197
-#: templates/settings/shipping.php:301 templates/settings/shipping.php:360
+#: includes/admin-functions.php:45 templates/settings/shipping.php:201
+#: templates/settings/shipping.php:305 templates/settings/shipping.php:368
 msgid "Ship to"
 msgstr ""
 
@@ -1837,6 +1820,10 @@ msgstr ""
 msgid "- Select a location -"
 msgstr ""
 
+#: includes/functions.php:1286 includes/functions.php:1309
+msgid "Everywhere Else"
+msgstr ""
+
 #: includes/functions.php:1305
 msgid "- Select a State -"
 msgstr ""
@@ -1899,7 +1886,7 @@ msgid "%1$s %2$d"
 msgstr ""
 
 #: includes/functions.php:1550 templates/new-product.php:65
-#: templates/product-edit.php:255
+#: templates/product-edit.php:254
 msgid "- Select a category -"
 msgstr ""
 
@@ -2012,7 +1999,7 @@ msgstr ""
 msgid "Enable/Disable"
 msgstr ""
 
-#: includes/shipping-gateway/shipping.php:59 templates/settings/shipping.php:63
+#: includes/shipping-gateway/shipping.php:59 templates/settings/shipping.php:67
 msgid "Enable Shipping"
 msgstr ""
 
@@ -2229,72 +2216,72 @@ msgstr ""
 msgid "Set variation image"
 msgstr ""
 
-#: includes/wc-functions.php:544
+#: includes/wc-functions.php:553
 msgid "Product SKU must be unique."
 msgstr ""
 
-#: includes/wc-functions.php:905
+#: includes/wc-functions.php:914
 msgid "Variation #%s of %s"
 msgstr ""
 
-#: includes/wc-functions.php:1142
+#: includes/wc-functions.php:1151
 msgid "Order &ndash; %s"
 msgstr ""
 
-#: includes/wc-functions.php:1388
+#: includes/wc-functions.php:1397
 msgid "Cheating, eh?"
 msgstr ""
 
-#: includes/wc-functions.php:1397
+#: includes/wc-functions.php:1406
 msgid "Please enter your first name."
 msgstr ""
 
-#: includes/wc-functions.php:1402
+#: includes/wc-functions.php:1411
 msgid "Please enter your last name."
 msgstr ""
 
-#: includes/wc-functions.php:1407
+#: includes/wc-functions.php:1416
 msgid "Please enter your address."
 msgstr ""
 
-#: includes/wc-functions.php:1412
+#: includes/wc-functions.php:1421
 msgid "Please enter your phone number."
 msgstr ""
 
-#: includes/wc-functions.php:1717 includes/widgets/best-seller.php:52
+#: includes/wc-functions.php:1726 includes/widgets/best-seller.php:52
 #: includes/widgets/feature-seller.php:53
 msgid "No ratings found yet!"
 msgstr ""
 
-#: includes/wc-functions.php:1722
+#: includes/wc-functions.php:1731
 msgid "Rated %s out of %d"
 msgstr ""
 
-#: includes/wc-functions.php:1803
+#: includes/wc-functions.php:1812
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/wc-functions.php:1804
+#: includes/wc-functions.php:1813
 msgid "Enter your last name"
 msgstr ""
 
-#: includes/wc-functions.php:1805
+#: includes/wc-functions.php:1814
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/wc-functions.php:1806
+#: includes/wc-functions.php:1815
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/wc-functions.php:1807
+#: includes/wc-functions.php:1816
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:1842
+#: includes/wc-functions.php:1851
 msgid "Your {site_title} order receipt from {order_date}"
 msgstr ""
 
-#: includes/wc-functions.php:1843
+#: includes/wc-functions.php:1852
 msgid "Your {site_title} order from {order_date} is complete"
 msgstr ""
 
@@ -2598,7 +2585,7 @@ msgid "Sale Price:"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:93
-#: templates/product-edit.php:215
+#: templates/product-edit.php:214
 msgid "Schedule"
 msgstr ""
 
@@ -2753,7 +2740,7 @@ msgstr ""
 msgid "See All"
 msgstr ""
 
-#: templates/edit/attributes.php:1 templates/product-edit.php:121
+#: templates/edit/attributes.php:1 templates/product-edit.php:120
 msgid "Attributes"
 msgstr ""
 
@@ -2877,11 +2864,11 @@ msgstr ""
 msgid "Additional cost"
 msgstr ""
 
-#: templates/edit/shipping.php:63 templates/settings/shipping.php:109
+#: templates/edit/shipping.php:63 templates/settings/shipping.php:113
 msgid "Per Qty Additional Price"
 msgstr ""
 
-#: templates/edit/shipping.php:71 templates/settings/shipping.php:122
+#: templates/edit/shipping.php:71 templates/settings/shipping.php:126
 msgid "Processing Time"
 msgstr ""
 
@@ -2965,7 +2952,7 @@ msgstr ""
 msgid "Short description about the product..."
 msgstr ""
 
-#: templates/new-product.php:80 templates/product-edit.php:270
+#: templates/new-product.php:80 templates/product-edit.php:269
 msgid "Choose a category"
 msgstr ""
 
@@ -3183,39 +3170,39 @@ msgstr ""
 msgid "View Product &rarr;"
 msgstr ""
 
-#: templates/product-edit.php:106
+#: templates/product-edit.php:105
 msgid "Options"
 msgstr ""
 
-#: templates/product-edit.php:111
+#: templates/product-edit.php:110
 msgid "Inventory"
 msgstr ""
 
-#: templates/product-edit.php:126
+#: templates/product-edit.php:125
 msgid "Variations"
 msgstr ""
 
-#: templates/product-edit.php:169
+#: templates/product-edit.php:168
 msgid "Upload a product cover image"
 msgstr ""
 
-#: templates/product-edit.php:201
+#: templates/product-edit.php:200
 msgid "Enable Discounted Price"
 msgstr ""
 
-#: templates/product-edit.php:211
+#: templates/product-edit.php:210
 msgid "Special Price"
 msgstr ""
 
-#: templates/product-edit.php:222
+#: templates/product-edit.php:221
 msgid "From"
 msgstr ""
 
-#: templates/product-edit.php:229
+#: templates/product-edit.php:228
 msgid "To"
 msgstr ""
 
-#: templates/product-edit.php:314
+#: templates/product-edit.php:313
 msgid "Select product tags"
 msgstr ""
 
@@ -3287,7 +3274,7 @@ msgstr ""
 msgid "Your profile has been updated successfully!"
 msgstr ""
 
-#: templates/settings/payment.php:91 templates/settings/social.php:86
+#: templates/settings/payment.php:99 templates/settings/social.php:94
 #: templates/settings/store.php:179
 msgid "Update Settings"
 msgstr ""
@@ -3312,92 +3299,92 @@ msgstr ""
 msgid "Shipping options saved successfully"
 msgstr ""
 
-#: templates/settings/shipping.php:64
+#: templates/settings/shipping.php:68
 msgid "Check this if you want to enable shipping for your store"
 msgstr ""
 
-#: templates/settings/shipping.php:73
+#: templates/settings/shipping.php:77
 msgid "Enable shipping functionality"
 msgstr ""
 
-#: templates/settings/shipping.php:83
+#: templates/settings/shipping.php:87
 msgid "Default Shipping Price"
 msgstr ""
 
-#: templates/settings/shipping.php:84
+#: templates/settings/shipping.php:88
 msgid ""
 "This is the base price and will be the starting shipping price for each "
 "product"
 msgstr ""
 
-#: templates/settings/shipping.php:96
+#: templates/settings/shipping.php:100
 msgid "Per Product Additional Price"
 msgstr ""
 
-#: templates/settings/shipping.php:97
+#: templates/settings/shipping.php:101
 msgid ""
 "If a customer buys more than one type product from your store, first "
 "product of the every second type will be charged with this price"
 msgstr ""
 
-#: templates/settings/shipping.php:110
+#: templates/settings/shipping.php:114
 msgid "Every second product of same type will be charged with this price"
 msgstr ""
 
-#: templates/settings/shipping.php:123
+#: templates/settings/shipping.php:127
 msgid "The time required before sending the product for delivery"
 msgstr ""
 
-#: templates/settings/shipping.php:141
+#: templates/settings/shipping.php:145
 msgid "Write your terms, conditions and instructions about shipping"
 msgstr ""
 
-#: templates/settings/shipping.php:154
+#: templates/settings/shipping.php:158
 msgid "Write your terms, conditions and instructions about refund"
 msgstr ""
 
-#: templates/settings/shipping.php:166
+#: templates/settings/shipping.php:170
 msgid "Ships from:"
 msgstr ""
 
-#: templates/settings/shipping.php:167
+#: templates/settings/shipping.php:171
 msgid ""
 "The place you send the products for delivery. Most of the time it as store "
 "location"
 msgstr ""
 
-#: templates/settings/shipping.php:184
+#: templates/settings/shipping.php:188
 msgid ""
 "Add the countries you deliver your products to. You can specify states as "
 "well. If the shipping price is same except some countries/states, there is "
 "an option <strong>Everywhere Else</strong>, you can use that."
 msgstr ""
 
-#: templates/settings/shipping.php:198 templates/settings/shipping.php:302
-#: templates/settings/shipping.php:361
+#: templates/settings/shipping.php:202 templates/settings/shipping.php:306
+#: templates/settings/shipping.php:369
 msgid "The country you ship to"
 msgstr ""
 
-#: templates/settings/shipping.php:206 templates/settings/shipping.php:310
-#: templates/settings/shipping.php:369
+#: templates/settings/shipping.php:210 templates/settings/shipping.php:314
+#: templates/settings/shipping.php:377
 msgid ""
 "If the shipping price is same for all the states, use this field. Else add "
 "the states below"
 msgstr ""
 
-#: templates/settings/shipping.php:228
+#: templates/settings/shipping.php:232
 msgid "The state you ship to"
 msgstr ""
 
-#: templates/settings/shipping.php:236
+#: templates/settings/shipping.php:240
 msgid "Shipping price for this state"
 msgstr ""
 
-#: templates/settings/shipping.php:332
+#: templates/settings/shipping.php:336
 msgid "Add Location"
 msgstr ""
 
-#: templates/settings/shipping.php:343
+#: templates/settings/shipping.php:351
 msgid "Save Settings"
 msgstr ""
 
@@ -3524,7 +3511,7 @@ msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
 
-#: includes/wc-functions.php:1142
+#: includes/wc-functions.php:1151
 msgctxt "Order date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
