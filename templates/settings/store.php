@@ -124,7 +124,7 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                     <label class="dokan-w3 dokan-control-label" for="dokan_store_name"><?php _e( 'Store Name', 'dokan' ); ?></label>
 
                     <div class="dokan-w5 dokan-text-left">
-                        <input id="dokan_store_name" required value="<?php echo $storename; ?>" name="dokan_store_name" placeholder="store name" class="dokan-form-control" type="text">
+                        <input id="dokan_store_name" required value="<?php echo $storename; ?>" name="dokan_store_name" placeholder="<?php _e( 'store name', 'dokan'); ?>" class="dokan-form-control" type="text">
                     </div>
                 </div>
 
@@ -138,7 +138,7 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                 <div class="dokan-form-group">
                     <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Phone No', 'dokan' ); ?></label>
                     <div class="dokan-w5 dokan-text-left">
-                        <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="+123456.." class="dokan-form-control input-md" type="text">
+                        <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="<?php _e( '+123456..', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
                     </div>
                 </div>
 
