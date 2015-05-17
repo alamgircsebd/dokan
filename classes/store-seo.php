@@ -53,11 +53,7 @@ class Dokan_Store_Seo {
         
         if ( class_exists( 'All_in_One_SEO_Pack' ) ) {
 
-            //apply_filters( 'aioseop_title', $title );
-            //apply_filters( 'aioseop_description', $this->get_main_description( $post ) );
-            //apply_filters( 'aioseop_keywords', $keywords );
-
-            add_filter( 'wp_title', array( $this, 'replace_title' ),500 );
+            add_filter( 'aioseop_title', array( $this, 'replace_title' ),500 );
             add_filter( 'aioseop_keywords', array( $this, 'replace_keywords' ), 100 );
             add_filter( 'aioseop_description', array( $this, 'replace_desc' ), 100 );
             
@@ -99,7 +95,7 @@ class Dokan_Store_Seo {
         }
         if($keywords){
             echo PHP_EOL.'<meta name="keywords" content="'.$this->print_saved_meta($keywords).'"/>';
-        }        
+        }
     }
     
     /*
@@ -113,23 +109,21 @@ class Dokan_Store_Seo {
     function replace_title($title){
         //get title
         
-        $title_deafault = $title;
+        $title_default = $title;
         
         $meta_values = $this->store_info;
         
         if ( !isset($meta_values['store_seo']) || $meta_values == false ) {
-            return;
+            return $title_default;
         }
         
         $title = $meta_values['store_seo']['dokan-seo-title'];
         
-        if($title){
+        if ( $title ) {
             return $title;
-        }else{
-            return $title_deafault;
+        } else {
+            return $title_default;
         }
-        
-        
     }
     
     /*
@@ -140,10 +134,22 @@ class Dokan_Store_Seo {
      * 
      * @return keywords
      */
-    function replace_keywords($keywords){
+    function replace_keywords( $keywords ) {
+
+        $keywords_default = $keywords;
         
-        $keywords = "DOKAN, SEO, STORE, QQQ";
-        return $keywords;
+        $meta_values = $this->store_info;
+        
+        if ( !isset($meta_values['store_seo']) || $meta_values == false ) {
+            return $keywords_default;
+        }
+        
+        $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
+
+        if ( $keywords ) 
+            return $keywords;
+        else 
+            return $keywords_default;   
     }
     
      /*
@@ -153,10 +159,23 @@ class Dokan_Store_Seo {
      * 
      * @return desc
      */
-    function replace_desc(){
+     function replace_desc( $desc ) {
+
+        $desc_default = $desc;
         
-        $desc  = "Description, this is the long desciption";
-        return $desc;
+        $meta_values = $this->store_info;
+        
+        if ( !isset($meta_values['store_seo']) || $meta_values == false ) {
+            return $desc_default;
+        }
+        
+        $desc = $meta_values['store_seo']['dokan-seo-meta-desc'];
+
+        if ( $desc ) 
+            return $desc;
+        else 
+            return $desc_default;   
+        
     }
     
     
@@ -247,6 +266,8 @@ class Dokan_Store_Seo {
         $seller_profile = dokan_get_store_info( $current_user );
         
         $seller_profile['store_seo'] = wp_parse_args( $postdata, $default_store_seo );
+        
+        //unset( $seller_profile['store_seo'] );
         
         update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
         
