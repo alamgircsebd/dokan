@@ -265,22 +265,6 @@ class Dokan_Store_Seo {
         $og_image_url = $og_image ? wp_get_attachment_thumb_url( $og_image ) : '';
         
         ?>
-        <style>
-            .dokan-seo-image .dokan-gravatar-img{
-                border-radius: 0% !important;
-                height: 150px !important ;
-                width:  150px !important;
-                
-            }
-            
-            .dokan-seo-image .dokan-remove-gravatar-image{
-                height: 150px !important;
-                width: 150px !important;
-                border-radius: 0% !important;
-            }
-            
-            
-        </style>
         <div class="dokan-form-group ">
             <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-image"><?php _e( 'Facebook Image :', 'dokan' ); ?></label>
             <div class="dokan-w5 dokan-gravatar dokan-seo-image">
