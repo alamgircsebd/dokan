@@ -63,6 +63,14 @@ class Dokan_Store_Seo {
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
             add_filter( 'wpseo_metakeywords', array( $this, 'replace_keywords' ) );
             add_filter( 'wpseo_metadesc', array( $this, 'replace_desc' ) );
+            
+
+            
+            add_filter( 'wpseo_opengraph_title', array( $this, 'replace_og_title' ) );
+            add_filter( 'wpseo_opengraph_desc', array( $this, 'replace_og_desc' ) );
+            add_filter( 'wpseo_opengraph_image', array( $this, 'replace_og_img' ) );
+            
+            
         } else {
 
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
@@ -89,12 +97,24 @@ class Dokan_Store_Seo {
 
         $desc     = $meta_values['store_seo']['dokan-seo-meta-desc'];
         $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
+        $og_title = $meta_values['store_seo']['dokan-seo-og-title'];
+        $og_desc  = $meta_values['store_seo']['dokan-seo-og-desc'];
+        $og_img  = $meta_values['store_seo']['dokan-seo-og-image'];
 
         if ( $desc ) {
             echo PHP_EOL . '<meta name="description" content="' . $this->print_saved_meta( $desc ) . '"/>';
         }
         if ( $keywords ) {
             echo PHP_EOL . '<meta name="keywords" content="' . $this->print_saved_meta( $keywords ) . '"/>';
+        }
+        if ( $og_title ) {
+            echo PHP_EOL . '<meta property="og:title" content="' . $this->print_saved_meta( $og_title ) . '"/>';
+        }
+        if ( $og_desc ) {
+            echo PHP_EOL . '<meta property="og:description" content="' . $this->print_saved_meta( $og_desc ) . '"/>';
+        }
+        if ( $og_img ) {
+            echo PHP_EOL . '<meta property="og:image" content="' . $this->replace_og_img( $og_img ) . '"/>';
         }
     }
 
@@ -178,6 +198,70 @@ class Dokan_Store_Seo {
             return $desc;
         else
             return $desc_default;
+    }
+    
+   /*replace OG tag title for WP_SEO
+    * @since 1.0.0
+    */
+    function replace_og_title( $title ) {
+
+        $title_default = $title;
+
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return $title_default;
+        }
+
+        $title = $meta_values['store_seo']['dokan-seo-og-title'];
+
+        if ( $title ) {
+            return $title;
+        } else {
+            return $title_default;
+        }
+    }
+
+   /*replace OG tag description for WP_SEO
+    * @since 1.0.0
+    */
+    function replace_og_desc( $desc ){
+        
+        $desc_default = $desc;
+
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return $desc_default;
+        }
+
+        $desc = $meta_values['store_seo']['dokan-seo-og-desc'];
+
+        if ( $desc )
+            return $desc;
+        else
+            return $desc_default;
+        
+    }
+    
+   /*replace OG tag Image for WP_SEO
+    * @since 1.0.0
+    */
+    function replace_og_img( $img ){
+        $img_default = $img;
+
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return $img_default;
+        }
+
+        $img = $meta_values['store_seo']['dokan-seo-og-image'];
+
+        if ( $img )           
+            return wp_get_attachment_url($img);                    
+        else
+            return $img_default;       
     }
 
     /*
