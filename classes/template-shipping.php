@@ -212,75 +212,50 @@ class Dokan_Template_Shipping {
             <hr>
         <?php } ?>
 
-        <h4><?php _e( 'Shipping cost:', 'dokan' ); ?></h4>
-
         <?php if ( $dps_country_rates ) { ?>
 
-            <?php foreach ( $dps_country_rates as $country => $cost ) {
-                if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th width="90%"><?php echo $countries[$country]; ?></th>
-                                <th><?php _e( '', 'dokan' ); ?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
-                                <tr>
-                                    <td>
-                                        <?php
-                                        if ( $state_code == 'everywhere' ) {
-                                            _e( 'Other States', 'dokan' );
-                                        } else {
-                                            if( isset( $states[$country][$state_code] ) ) {
-                                                echo $states[$country][$state_code];
-                                            } else {
-                                                echo $state_code;
-                                            }
-                                        }
-                                        ?>
-                                    </td>
-                                    <td><?php echo wc_price( $state_cost + $base_shipping_type_price ); ?></td>
-                                </tr>
-                            <?php endforeach ?>
-                        </tbody>
-                    </table>
-                    <p>&nbsp;</p>
-                <?php } else { ?>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <th width="90%"><?php echo ( $country == 'everywhere' ) ? _e( 'Other Countries' ) : $countries[$country]; ?></th>
-                                <th><?php echo wc_price( $cost + $base_shipping_type_price ); ?></th>
-                            </tr>
-                        </tbody>
-                    </table>
-                <?php
-                }
-            }
-        } ?>
+            <h4><?php _e( 'Shipping Calculation:', 'dokan' ); ?></h4>
+
+            <div class="dokan-shipping-calculate-wrapper">
+
+                <div class="dokan-shipping-country-wrapper dokan-form-group">
+                    
+                    <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan' ); ?></label>
+                    <select name="dokan-shipping-country" id="dokan-shipping-country" class="dokan-shipping-country dokan-form-control" data-product_id="<?php echo $post->ID; ?>" data-author_id="<?php echo $post->post_author; ?>">
+                        <option value=""><?php _e( '--Select Country--', 'dokan' ); ?></option>
+                        <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
+                            <option value="<?php echo $country; ?>"><?php echo ( $country == 'everywhere' ) ? _e( 'Other Countries' ) : $countries[$country]; ?></option>
+                        <?php } ?>
+                    </select>
+
+                </div>
+
+                <div class="dokan-shipping-state-wrapper dokan-form-group">
+
+                </div>
+
+                <div class="dokan-shipping-qty-wrapper dokan-form-group">
+                    <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan' ); ?></label>
+                    <input type="number" class="dokan-shipping-qty dokan-form-control" id="dokan-shipping-qty" name="dokan-shipping-qty" value="1" placeholder="1">
+                </div>
+
+                <div class="dokan-shipping-price-wrapper dokan-form-group">
+
+                </div>
 
 
-        <?php if ( $additional_qty_price ): ?>
-            <hr>
-             <p>
-                <strong>
-                    <?php _e( 'Extra shipping Cost for each additional quantity of this product : ', 'dokan' ); ?> <?php echo wc_price( $additional_qty_price ); ?>
-                </strong>
-            </p>
+            </div>
 
-        <?php endif ?>
+        <?php } ?>
 
         <p>&nbsp;</p>
 
         <?php if ( $shipping_policy ) { ?>
             <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
             <hr>
+            <p>&nbsp;</p>
             <?php echo wpautop( $shipping_policy ); ?>
         <?php } ?>
-
-        <p>&nbsp;</p>
 
         <?php if ( $refund_policy ) { ?>
             <strong><?php _e( 'Refund Policy', 'dokan' ); ?></strong>

@@ -227,6 +227,7 @@ class WeDevs_Dokan {
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
         wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
     }
 
     /**
@@ -239,6 +240,23 @@ class WeDevs_Dokan {
      * @uses wp_enqueue_style
      */
     public function scripts() {
+
+        if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
+            wp_enqueue_script( 'dokan-product-shipping' );
+            $localize_script = array(
+                'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                'nonce'       => wp_create_nonce( 'dokan_reviews' ),
+                'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+                'seller'      => array(
+                    'available'    => __( 'Available', 'dokan' ),
+                    'notAvailable' => __( 'Not Available', 'dokan' )
+                ),
+                'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
+                'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
+            );
+            wp_localize_script( 'jquery', 'dokan', $localize_script );
+        }
+
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
 
         // bailout if not dashboard
