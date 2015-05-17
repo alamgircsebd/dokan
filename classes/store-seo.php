@@ -63,13 +63,16 @@ class Dokan_Store_Seo {
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
             add_filter( 'wpseo_metakeywords', array( $this, 'replace_keywords' ) );
             add_filter( 'wpseo_metadesc', array( $this, 'replace_desc' ) );
-            
+
             add_filter( 'wpseo_opengraph_title', array( $this, 'replace_og_title' ) );
             add_filter( 'wpseo_opengraph_desc', array( $this, 'replace_og_desc' ) );
             add_filter( 'wpseo_opengraph_image', array( $this, 'replace_og_img' ) );
             add_action( 'wpseo_opengraph', array( $this, 'print_og_img' ), 20 );
-            
-            
+
+            add_filter( 'wpseo_twitter_title', array( $this, 'replace_twitter_title' ) );
+            add_filter( 'wpseo_twitter_description', array( $this, 'replace_twitter_desc' ) );
+            add_filter( 'wpseo_twitter_image', array( $this, 'replace_twitter_img' ) );
+            add_action( 'wpseo_twitter', array( $this, 'print_twitter_img' ), 20 );
         } else {
 
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
@@ -94,11 +97,15 @@ class Dokan_Store_Seo {
             return;
         }
 
-        $desc     = $meta_values['store_seo']['dokan-seo-meta-desc'];
-        $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
-        $og_title = $meta_values['store_seo']['dokan-seo-og-title'];
-        $og_desc  = $meta_values['store_seo']['dokan-seo-og-desc'];
-        $og_img  = $meta_values['store_seo']['dokan-seo-og-image'];
+        $desc          = $meta_values['store_seo']['dokan-seo-meta-desc'];
+        $keywords      = $meta_values['store_seo']['dokan-seo-meta-keywords'];
+        $og_title      = $meta_values['store_seo']['dokan-seo-og-title'];
+        $og_desc       = $meta_values['store_seo']['dokan-seo-og-desc'];
+        $og_img        = $meta_values['store_seo']['dokan-seo-og-image'];
+        $twitter_title = $meta_values['store_seo']['dokan-seo-twitter-title'];
+        $twitter_desc  = $meta_values['store_seo']['dokan-seo-twitter-desc'];
+        $twitter_img   = $meta_values['store_seo']['dokan-seo-twitter-image'];
+
 
         if ( $desc ) {
             echo PHP_EOL . '<meta name="description" content="' . $this->print_saved_meta( $desc ) . '"/>';
@@ -113,7 +120,43 @@ class Dokan_Store_Seo {
             echo PHP_EOL . '<meta property="og:description" content="' . $this->print_saved_meta( $og_desc ) . '"/>';
         }
         if ( $og_img ) {
-            echo PHP_EOL . '<meta property="og:image" content="' . $this->replace_og_img( $og_img ) . '"/>';
+            echo PHP_EOL . '<meta property="og:image" content="' . wp_get_attachment_url( $og_img ) . '"/>';
+        }
+        if ( $twitter_title ) {
+            echo PHP_EOL . '<meta name="twitter:title" content="' . $this->print_saved_meta( $twitter_title ) . '"/>';
+        }
+        if ( $twitter_desc ) {
+            echo PHP_EOL . '<meta name="twitter:description" content="' . $this->print_saved_meta( $twitter_desc ) . '"/>';
+        }
+        if ( $twitter_img ) {
+            echo PHP_EOL . '<meta name="twitter:image" content="' . wp_get_attachment_url( $twitter_img ) . '"/>';
+        }
+    }
+
+    /* Generic meta replacer for meta tags
+     * 
+     * @since 1.0.0
+     * @param string val, string meta_name, string meta_type
+     * @return string meta
+     * 
+     */
+
+    function replace_meta( $val_default, $meta, $type = '' ) {
+
+
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return $val_default;
+        }
+
+        $key = 'dokan-seo-' . $type . '-' . $meta;
+        $val = $meta_values['store_seo'][$key];
+
+        if ( $val ) {
+            return $val;
+        } else {
+            return $val_default;
         }
     }
 
@@ -127,23 +170,7 @@ class Dokan_Store_Seo {
      */
 
     function replace_title( $title ) {
-        //get title
-
-        $title_default = $title;
-
-        $meta_values = $this->store_info;
-
-        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
-            return $title_default;
-        }
-
-        $title = $meta_values['store_seo']['dokan-seo-title'];
-
-        if ( $title ) {
-            return $title;
-        } else {
-            return $title_default;
-        }
+        return $this->replace_meta( $title, 'title', 'meta' );
     }
 
     /*
@@ -156,21 +183,7 @@ class Dokan_Store_Seo {
      */
 
     function replace_keywords( $keywords ) {
-
-        $keywords_default = $keywords;
-
-        $meta_values = $this->store_info;
-
-        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
-            return $keywords_default;
-        }
-
-        $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
-
-        if ( $keywords )
-            return $keywords;
-        else
-            return $keywords_default;
+        return $this->replace_meta( $keywords, 'keywords', 'meta' );
     }
 
     /*
@@ -182,71 +195,30 @@ class Dokan_Store_Seo {
      */
 
     function replace_desc( $desc ) {
-
-        $desc_default = $desc;
-
-        $meta_values = $this->store_info;
-
-        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
-            return $desc_default;
-        }
-
-        $desc = $meta_values['store_seo']['dokan-seo-meta-desc'];
-
-        if ( $desc )
-            return $desc;
-        else
-            return $desc_default;
+        return $this->replace_meta( $desc, 'desc', 'meta' );
     }
-    
-   /*replace OG tag title for WP_SEO
-    * @since 1.0.0
-    */
+
+    /* replace OG tag title for WP_SEO
+     * @since 1.0.0
+     */
+
     function replace_og_title( $title ) {
-
-        $title_default = $title;
-
-        $meta_values = $this->store_info;
-
-        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
-            return $title_default;
-        }
-
-        $title = $meta_values['store_seo']['dokan-seo-og-title'];
-
-        if ( $title ) {
-            return $title;
-        } else {
-            return $title_default;
-        }
+        return $this->replace_meta( $title, 'title', 'og' );
     }
 
-   /*replace OG tag description for WP_SEO
-    * @since 1.0.0
-    */
-    function replace_og_desc( $desc ){
-        
-        $desc_default = $desc;
+    /* replace OG tag description for WP_SEO
+     * @since 1.0.0
+     */
 
-        $meta_values = $this->store_info;
-
-        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
-            return $desc_default;
-        }
-
-        $desc = $meta_values['store_seo']['dokan-seo-og-desc'];
-
-        if ( $desc )
-            return $desc;
-        else
-            return $desc_default;
-        
+    function replace_og_desc( $desc ) {
+        return $this->replace_meta( $desc, 'desc', 'og' );
     }
-    
-   /*replace OG tag Image for WP_SEO
-    * @since 1.0.0
-    */
-    function replace_og_img( $img ){
+
+    /* replace OG tag Image for WP_SEO
+     * @since 1.0.0
+     */
+
+    function replace_og_img( $img ) {
         $img_default = $img;
 
         $meta_values = $this->store_info;
@@ -257,25 +229,83 @@ class Dokan_Store_Seo {
 
         $img = $meta_values['store_seo']['dokan-seo-og-image'];
 
-        if ( $img )           
-            return wp_get_attachment_url($img);                    
+        if ( $img )
+            return wp_get_attachment_url( $img );
         else
-            return $img_default;       
+            return $img_default;
     }
-    
-    function print_og_img(){
+
+    function print_og_img() {
         $meta_values = $this->store_info;
 
         if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
             return;
         }
-        
-        $og_img  = $meta_values['store_seo']['dokan-seo-og-image'];
-        
+
+        $og_img = $meta_values['store_seo']['dokan-seo-og-image'];
+
         if ( $og_img ) {
-            echo '<meta property="og:image" content="' . $this->replace_og_img( $og_img ) . '"/>';
+            echo '<meta property="og:image" content="' . wp_get_attachment_url( $og_img ) . '"/>';
         }
-        
+    }
+
+    /* replace twitter tag title for WP_SEO
+     * 
+     * 
+     */
+
+    function replace_twitter_title( $val_default ) {
+        return $this->replace_meta( $val_default, 'title', 'twitter' );
+    }
+
+    /* replace twitter tag description for WP_SEO
+     * 
+     * 
+     */
+
+    function replace_twitter_desc( $val_default ) {
+        return $this->replace_meta( $val_default, 'desc', 'twitter' );
+    }
+
+    /* replace twitter image tag for WP_SEO
+     * 
+     * 
+     */
+
+    function replace_twitter_img( $img ) {
+
+        $img_default = $img;
+
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return $img_default;
+        }
+
+        $img = $meta_values['store_seo']['dokan-seo-twitter-image'];
+
+        if ( $img )
+            return wp_get_attachment_url( $img );
+        else
+            return $img_default;
+    }
+
+    /*
+     * prints out twitter image tag
+     */
+
+    function print_twitter_img() {
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return;
+        }
+
+        $tw_img = $meta_values['store_seo']['dokan-seo-twitter-image'];
+
+        if ( $tw_img ) {
+            echo '<meta name="twitter:image" content="' . wp_get_attachment_url( $tw_img ) . '"/>';
+        }
     }
 
     /*
@@ -291,12 +321,15 @@ class Dokan_Store_Seo {
         $seo_meta       = isset( $seller_profile['store_seo'] ) ? $seller_profile['store_seo'] : array();
 
         $default_store_seo = array(
-            'dokan-seo-title'         => false,
+            'dokan-seo-meta-title'    => false,
             'dokan-seo-meta-desc'     => false,
             'dokan-seo-meta-keywords' => false,
             'dokan-seo-og-title'      => false,
             'dokan-seo-og-desc'       => false,
             'dokan-seo-og-image'      => false,
+            'dokan-seo-twitter-title' => false,
+            'dokan-seo-twitter-desc'  => false,
+            'dokan-seo-twitter-image' => false,
         );
 
         $seo_meta = wp_parse_args( $seo_meta, $default_store_seo );
@@ -305,9 +338,9 @@ class Dokan_Store_Seo {
         <form method="post" id="dokan-store-seo-form"  action="" class="dokan-form-horizontal">
 
             <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan-seo-title"><?php _e( 'SEO Title :', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-title"><?php _e( 'SEO Title :', 'dokan' ); ?></label>
                 <div class="dokan-w5 dokan-text-left">
-                    <input id="dokan-seo-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-title'] ) ?>" name="dokan-seo-title" placeholder=" " class="dokan-form-control input-md" type="text">
+                    <input id="dokan-seo-meta-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-meta-title'] ) ?>" name="dokan-seo-meta-title" placeholder=" " class="dokan-form-control input-md" type="text">
                 </div>                         
             </div>
 
@@ -324,9 +357,10 @@ class Dokan_Store_Seo {
                     <input id="dokan-seo-meta-keywords" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-meta-keywords'] ) ?>" name="dokan-seo-meta-keywords" placeholder=" " class="dokan-form-control input-md" type="text">
                 </div>                         
             </div>
-            
+
             <?php $this->print_fb_meta_form( $seo_meta ); ?>
-                
+            <?php $this->print_twitter_meta_form( $seo_meta ); ?>
+
             <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
 
             <div class="dokan-form-group" style="margin-left: 23%">   
@@ -335,33 +369,33 @@ class Dokan_Store_Seo {
         </form>
         <?php
     }
-    
+
     /*
      * print social meta input fields
      * 
      * @since 1.0.0
      * 
      */
-    function print_fb_meta_form( $seo_meta ){
+
+    function print_fb_meta_form( $seo_meta ) {
         ?>
-        
+
         <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-title"><?php _e( 'Facebook Title :', 'dokan' ); ?></label>
-                <div class="dokan-w5 dokan-text-left">
-                    <input id="dokan-seo-og-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-og-title'] ) ?>" name="dokan-seo-og-title" placeholder=" " class="dokan-form-control input-md" type="text">
-                </div>                         
+            <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-title"><?php _e( 'Facebook Title :', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <input id="dokan-seo-og-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-og-title'] ) ?>" name="dokan-seo-og-title" placeholder=" " class="dokan-form-control input-md" type="text">
+            </div>                         
         </div>
-        
+
         <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-desc"><?php _e( 'Facebook Description :', 'dokan' ); ?></label>
-                <div class="dokan-w5 dokan-text-left">
-                    <textarea class="dokan-form-control" rows="3" id="dokan-seo-og-desc" name="dokan-seo-og-desc"><?php echo $this->print_saved_meta( $seo_meta['dokan-seo-og-desc'] ) ?></textarea>
-                </div>               
+            <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-desc"><?php _e( 'Facebook Description :', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <textarea class="dokan-form-control" rows="3" id="dokan-seo-og-desc" name="dokan-seo-og-desc"><?php echo $this->print_saved_meta( $seo_meta['dokan-seo-og-desc'] ) ?></textarea>
+            </div>               
         </div>
         <?php
-        $og_image = $seo_meta['dokan-seo-og-image'] ? $seo_meta['dokan-seo-og-image'] : 0;
+        $og_image     = $seo_meta['dokan-seo-og-image'] ? $seo_meta['dokan-seo-og-image'] : 0;
         $og_image_url = $og_image ? wp_get_attachment_thumb_url( $og_image ) : '';
-        
         ?>
         <div class="dokan-form-group ">
             <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-image"><?php _e( 'Facebook Image :', 'dokan' ); ?></label>
@@ -377,10 +411,53 @@ class Dokan_Store_Seo {
                 </div>
             </div>
         </div>
-        
-        
-        
-        
+
+
+
+
+        <?php
+    }
+
+    /*
+     * print twitter meta form
+     * @since 1.0.0
+     */
+
+    function print_twitter_meta_form( $seo_meta ) {
+        ?>
+
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label" for="dokan-seo-twitter-title"><?php _e( 'Twitter Title :', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <input id="dokan-seo-twitter-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-twitter-title'] ) ?>" name="dokan-seo-twitter-title" placeholder=" " class="dokan-form-control input-md" type="text">
+            </div>                         
+        </div>
+
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label" for="dokan-seo-twitter-desc"><?php _e( 'Twitter Description :', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <textarea class="dokan-form-control" rows="3" id="dokan-seo-twitter-desc" name="dokan-seo-twitter-desc"><?php echo $this->print_saved_meta( $seo_meta['dokan-seo-twitter-desc'] ) ?></textarea>
+            </div>               
+        </div>
+        <?php
+        $twitter_image     = $seo_meta['dokan-seo-twitter-image'] ? $seo_meta['dokan-seo-twitter-image'] : 0;
+        $twitter_image_url = $twitter_image ? wp_get_attachment_thumb_url( $twitter_image ) : '';
+        ?>
+        <div class="dokan-form-group ">
+            <label class="dokan-w3 dokan-control-label" for="dokan-seo-twitter-image"><?php _e( 'Twitter Image :', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-gravatar dokan-seo-image">
+                <div class="dokan-left gravatar-wrap<?php echo $twitter_image ? '' : ' dokan-hide'; ?>">                    
+                    <input type="hidden" class="dokan-file-field" value="<?php echo $twitter_image; ?>" name="dokan-seo-twitter-image">
+                    <img class="dokan-gravatar-img" src="<?php echo esc_url( $twitter_image_url ); ?>">
+                    <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
+                </div>
+
+                <div class="gravatar-button-area <?php echo $twitter_image ? ' dokan-hide' : ''; ?>">
+                    <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default dokan-left"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                </div>
+            </div>
+        </div>
+
         <?php
     }
 
@@ -397,8 +474,7 @@ class Dokan_Store_Seo {
         else
             return esc_attr( $val );
     }
-    
-    
+
     function dokan_seo_form_handler() {
         parse_str( $_POST['data'], $postdata );
 
@@ -410,12 +486,15 @@ class Dokan_Store_Seo {
         unset( $postdata['_wp_http_referer'] );
 
         $default_store_seo = array(
-            'dokan-seo-title'         => false,
+            'dokan-seo-meta-title'    => false,
             'dokan-seo-meta-desc'     => false,
             'dokan-seo-meta-keywords' => false,
             'dokan-seo-og-title'      => false,
             'dokan-seo-og-desc'       => false,
             'dokan-seo-og-image'      => false,
+            'dokan-seo-twitter-title' => false,
+            'dokan-seo-twitter-desc'  => false,
+            'dokan-seo-twitter-image' => false,
         );
 
         $current_user   = get_current_user_id();
