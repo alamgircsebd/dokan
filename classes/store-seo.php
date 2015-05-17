@@ -283,15 +283,15 @@ class Dokan_Store_Seo {
         </style>
         <div class="dokan-form-group ">
             <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-image"><?php _e( 'Facebook Image :', 'dokan' ); ?></label>
-            <div class="dokan-w5 dokan-seo-image">
+            <div class="dokan-w5 dokan-gravatar dokan-seo-image">
                 <div class="dokan-left gravatar-wrap<?php echo $og_image ? '' : ' dokan-hide'; ?>">                    
                     <input type="hidden" class="dokan-file-field" value="<?php echo $og_image; ?>" name="dokan-seo-og-image">
                     <img class="dokan-gravatar-img" src="<?php echo esc_url( $og_image_url ); ?>">
                     <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
                 </div>
 
-                <div class="gravatar-button-area<?php echo $og_image ? ' dokan-hide' : ''; ?>">
-                    <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                <div class="gravatar-button-area <?php echo $og_image ? ' dokan-hide' : ''; ?>">
+                    <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default dokan-left"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
                 </div>
             </div>
         </div>
