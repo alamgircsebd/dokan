@@ -196,6 +196,9 @@ class Dokan_Store_Seo {
             'dokan-seo-title'         => false,
             'dokan-seo-meta-desc'     => false,
             'dokan-seo-meta-keywords' => false,
+            'dokan-seo-og-title'      => false,
+            'dokan-seo-og-desc'       => false,
+            'dokan-seo-og-image'      => false,
         );
 
         $seo_meta = wp_parse_args( $seo_meta, $default_store_seo );
@@ -223,13 +226,79 @@ class Dokan_Store_Seo {
                     <input id="dokan-seo-meta-keywords" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-meta-keywords'] ) ?>" name="dokan-seo-meta-keywords" placeholder=" " class="dokan-form-control input-md" type="text">
                 </div>                         
             </div>
-
+            
+            <?php $this->print_fb_meta_form( $seo_meta ); ?>
+                
             <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
 
             <div class="dokan-form-group" style="margin-left: 23%">   
                 <input type="submit" id='dokan-store-seo-form-submit' class="dokan-left dokan-btn dokan-btn-theme" value="<?php esc_attr_e( 'Save Changes', 'dokan' ); ?>">
             </div>
         </form>
+        <?php
+    }
+    
+    /*
+     * print social meta input fields
+     * 
+     * @since 1.0.0
+     * 
+     */
+    function print_fb_meta_form( $seo_meta ){
+        ?>
+        
+        <div class="dokan-form-group">
+                <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-title"><?php _e( 'Facebook Title :', 'dokan' ); ?></label>
+                <div class="dokan-w5 dokan-text-left">
+                    <input id="dokan-seo-og-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-og-title'] ) ?>" name="dokan-seo-og-title" placeholder=" " class="dokan-form-control input-md" type="text">
+                </div>                         
+        </div>
+        
+        <div class="dokan-form-group">
+                <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-desc"><?php _e( 'Facebook Description :', 'dokan' ); ?></label>
+                <div class="dokan-w5 dokan-text-left">
+                    <textarea class="dokan-form-control" rows="3" id="dokan-seo-og-desc" name="dokan-seo-og-desc"><?php echo $this->print_saved_meta( $seo_meta['dokan-seo-og-desc'] ) ?></textarea>
+                </div>               
+        </div>
+        <?php
+        $og_image = $seo_meta['dokan-seo-og-image'] ? $seo_meta['dokan-seo-og-image'] : 0;
+        $og_image_url = $og_image ? wp_get_attachment_thumb_url( $og_image ) : '';
+        
+        ?>
+        <style>
+            .dokan-seo-image .dokan-gravatar-img{
+                border-radius: 0% !important;
+                height: 150px !important ;
+                width:  150px !important;
+                
+            }
+            
+            .dokan-seo-image .dokan-remove-gravatar-image{
+                height: 150px !important;
+                width: 150px !important;
+                border-radius: 0% !important;
+            }
+            
+            
+        </style>
+        <div class="dokan-form-group ">
+            <label class="dokan-w3 dokan-control-label" for="dokan-seo-og-image"><?php _e( 'Facebook Image :', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-seo-image">
+                <div class="dokan-left gravatar-wrap<?php echo $og_image ? '' : ' dokan-hide'; ?>">                    
+                    <input type="hidden" class="dokan-file-field" value="<?php echo $og_image; ?>" name="dokan-seo-og-image">
+                    <img class="dokan-gravatar-img" src="<?php echo esc_url( $og_image_url ); ?>">
+                    <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
+                </div>
+
+                <div class="gravatar-button-area<?php echo $og_image ? ' dokan-hide' : ''; ?>">
+                    <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                </div>
+            </div>
+        </div>
+        
+        
+        
+        
         <?php
     }
 
@@ -246,7 +315,8 @@ class Dokan_Store_Seo {
         else
             return esc_attr( $val );
     }
-
+    
+    
     function dokan_seo_form_handler() {
         parse_str( $_POST['data'], $postdata );
 
@@ -261,6 +331,9 @@ class Dokan_Store_Seo {
             'dokan-seo-title'         => false,
             'dokan-seo-meta-desc'     => false,
             'dokan-seo-meta-keywords' => false,
+            'dokan-seo-og-title'      => false,
+            'dokan-seo-og-desc'       => false,
+            'dokan-seo-og-image'      => false,
         );
 
         $current_user   = get_current_user_id();
