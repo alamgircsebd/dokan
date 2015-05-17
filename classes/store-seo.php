@@ -64,11 +64,10 @@ class Dokan_Store_Seo {
             add_filter( 'wpseo_metakeywords', array( $this, 'replace_keywords' ) );
             add_filter( 'wpseo_metadesc', array( $this, 'replace_desc' ) );
             
-
-            
             add_filter( 'wpseo_opengraph_title', array( $this, 'replace_og_title' ) );
             add_filter( 'wpseo_opengraph_desc', array( $this, 'replace_og_desc' ) );
             add_filter( 'wpseo_opengraph_image', array( $this, 'replace_og_img' ) );
+            add_action( 'wpseo_opengraph', array( $this, 'print_og_img' ), 20 );
             
             
         } else {
@@ -262,6 +261,21 @@ class Dokan_Store_Seo {
             return wp_get_attachment_url($img);                    
         else
             return $img_default;       
+    }
+    
+    function print_og_img(){
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return;
+        }
+        
+        $og_img  = $meta_values['store_seo']['dokan-seo-og-image'];
+        
+        if ( $og_img ) {
+            echo '<meta property="og:image" content="' . $this->replace_og_img( $og_img ) . '"/>';
+        }
+        
     }
 
     /*
