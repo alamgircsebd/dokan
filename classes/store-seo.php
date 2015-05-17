@@ -58,6 +58,7 @@ class Dokan_Store_Seo {
             add_filter( 'aioseop_title', array( $this, 'replace_title' ), 500 );
             add_filter( 'aioseop_keywords', array( $this, 'replace_keywords' ), 100 );
             add_filter( 'aioseop_description', array( $this, 'replace_desc' ), 100 );
+            add_action( 'wp_head', array( $this, 'print_social_tags' ), 1 );
         } elseif ( class_exists( 'WPSEO_Frontend' ) ) {
 
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
@@ -77,6 +78,7 @@ class Dokan_Store_Seo {
 
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
             add_action( 'wp_head', array( $this, 'print_tags' ), 1 );
+            add_action( 'wp_head', array( $this, 'print_social_tags' ), 1 );
         }
     }
 
@@ -97,14 +99,9 @@ class Dokan_Store_Seo {
             return;
         }
 
-        $desc          = $meta_values['store_seo']['dokan-seo-meta-desc'];
-        $keywords      = $meta_values['store_seo']['dokan-seo-meta-keywords'];
-        $og_title      = $meta_values['store_seo']['dokan-seo-og-title'];
-        $og_desc       = $meta_values['store_seo']['dokan-seo-og-desc'];
-        $og_img        = $meta_values['store_seo']['dokan-seo-og-image'];
-        $twitter_title = $meta_values['store_seo']['dokan-seo-twitter-title'];
-        $twitter_desc  = $meta_values['store_seo']['dokan-seo-twitter-desc'];
-        $twitter_img   = $meta_values['store_seo']['dokan-seo-twitter-image'];
+        $desc     = $meta_values['store_seo']['dokan-seo-meta-desc'];
+        $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
+
 
 
         if ( $desc ) {
@@ -113,6 +110,26 @@ class Dokan_Store_Seo {
         if ( $keywords ) {
             echo PHP_EOL . '<meta name="keywords" content="' . $this->print_saved_meta( $keywords ) . '"/>';
         }
+    }
+
+    /* prints out social tags
+     * 
+     * @since 1.0.0     
+     */
+
+    function print_social_tags() {
+        $meta_values = $this->store_info;
+
+        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+            return;
+        }
+        $og_title      = $meta_values['store_seo']['dokan-seo-og-title'];
+        $og_desc       = $meta_values['store_seo']['dokan-seo-og-desc'];
+        $og_img        = $meta_values['store_seo']['dokan-seo-og-image'];
+        $twitter_title = $meta_values['store_seo']['dokan-seo-twitter-title'];
+        $twitter_desc  = $meta_values['store_seo']['dokan-seo-twitter-desc'];
+        $twitter_img   = $meta_values['store_seo']['dokan-seo-twitter-image'];
+
         if ( $og_title ) {
             echo PHP_EOL . '<meta property="og:title" content="' . $this->print_saved_meta( $og_title ) . '"/>';
         }
@@ -359,9 +376,9 @@ class Dokan_Store_Seo {
             </div>
 
             <?php $this->print_fb_meta_form( $seo_meta ); ?>
-            <?php $this->print_twitter_meta_form( $seo_meta ); ?>
+        <?php $this->print_twitter_meta_form( $seo_meta ); ?>
 
-            <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
+        <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
 
             <div class="dokan-form-group" style="margin-left: 23%">   
                 <input type="submit" id='dokan-store-seo-form-submit' class="dokan-left dokan-btn dokan-btn-theme" value="<?php esc_attr_e( 'Save Changes', 'dokan' ); ?>">
