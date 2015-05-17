@@ -281,42 +281,66 @@ class Dokan_Ajax {
             $attributes = (array) maybe_unserialize( get_post_meta( $post_id, '_product_attributes', true ) );
 
             // Get tax classes
-            $tax_classes = array_filter(array_map('trim', explode("\n", get_option('woocommerce_tax_classes'))));
-            $tax_class_options = array();
+            $tax_classes                 = WC_Tax::get_tax_classes();
+            $tax_class_options           = array();
             $tax_class_options['parent'] =__( 'Same as parent', 'woocommerce' );
-            $tax_class_options[''] = __( 'Standard', 'woocommerce' );
-            if ($tax_classes) foreach ( $tax_classes as $class )
-                $tax_class_options[sanitize_title($class)] = $class;
+            $tax_class_options['']       = __( 'Standard', 'woocommerce' );
+
+            if ( $tax_classes ) {
+                foreach ( $tax_classes as $class ) {
+                    $tax_class_options[ sanitize_title( $class ) ] = $class;
+                }
+            }
+
+            $backorder_options = array(
+                'no'     => __( 'Do not allow', 'woocommerce' ),
+                'notify' => __( 'Allow, but notify customer', 'woocommerce' ),
+                'yes'    => __( 'Allow', 'woocommerce' )
+            );
+
+            $stock_status_options = array(
+                'instock'    => __( 'In stock', 'woocommerce' ),
+                'outofstock' => __( 'Out of stock', 'woocommerce' )
+            );
 
             // Get parent data
             $parent_data = array(
-                'id'        => $post_id,
-                'attributes' => $attributes,
-                'tax_class_options' => $tax_class_options,
-                'sku'       => get_post_meta( $post_id, '_sku', true ),
-                'weight'    => get_post_meta( $post_id, '_weight', true ),
-                'length'    => get_post_meta( $post_id, '_length', true ),
-                'width'     => get_post_meta( $post_id, '_width', true ),
-                'height'    => get_post_meta( $post_id, '_height', true ),
-                'tax_class' => get_post_meta( $post_id, '_tax_class', true )
+                'id'                   => $post_id,
+                'attributes'           => $attributes,
+                'tax_class_options'    => $tax_class_options,
+                'sku'                  => get_post_meta( $post_id, '_sku', true ),
+                'weight'               => get_post_meta( $post_id, '_weight', true ),
+                'length'               => get_post_meta( $post_id, '_length', true ),
+                'width'                => get_post_meta( $post_id, '_width', true ),
+                'height'               => get_post_meta( $post_id, '_height', true ),
+                'tax_class'            => get_post_meta( $post_id, '_tax_class', true ),
+                'backorder_options'    => $backorder_options,
+                'stock_status_options' => $stock_status_options
             );
 
-            if ( ! $parent_data['weight'] )
+            if ( ! $parent_data['weight'] ) {
                 $parent_data['weight'] = '0.00';
+            }
 
-            if ( ! $parent_data['length'] )
+            if ( ! $parent_data['length'] ) {
                 $parent_data['length'] = '0';
+            }
 
-            if ( ! $parent_data['width'] )
+            if ( ! $parent_data['width'] ) {
                 $parent_data['width'] = '0';
+            }
 
-            if ( ! $parent_data['height'] )
+            if ( ! $parent_data['height'] ) {
                 $parent_data['height'] = '0';
+            }
 
-            $_tax_class = '';
+            $_tax_class          = '';
             $_downloadable_files = '';
-            $image_id = 0;
-            $variation = get_post( $variation_id ); // Get the variation object
+            $_stock_status       = '';
+            $_backorders         = '';
+            $image_id            = 0;
+            $_thumbnail_id       = '';
+            $variation           = get_post( $variation_id ); // Get the variation object
 
             // include( 'admin/post-types/meta-boxes/views/html-variation-admin.php' );
             include DOKAN_INC_DIR . '/woo-views/variation-admin-html.php';

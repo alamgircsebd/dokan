@@ -303,7 +303,7 @@ if ( ! $from_shortcode ) {
                                                         'id'               => 'product_tag',
                                                         'taxonomy'         => 'product_tag',
                                                         'title_li'         => '',
-                                                        'class'            => 'product_tags dokan-form-control chosen',
+                                                        'class'            => 'product_tags dokan-form-control',
                                                         'exclude'          => '',
                                                         'selected'         => $selected,
                                                         'echo'             => 0,
@@ -394,6 +394,9 @@ if ( ! $from_shortcode ) {
     (function($){
         $(document).ready(function(){
             $('#tab-container').easytabs();
+            $('#tab-container').bind('easytabs:before', function(){
+                $('#product_tag_chosen').css({ width: '100%' });
+            });
         });
     })(jQuery)
 </script>
