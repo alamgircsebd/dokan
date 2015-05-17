@@ -376,9 +376,9 @@ class Dokan_Store_Seo {
             </div>
 
             <?php $this->print_fb_meta_form( $seo_meta ); ?>
-        <?php $this->print_twitter_meta_form( $seo_meta ); ?>
+            <?php $this->print_twitter_meta_form( $seo_meta ); ?>
 
-        <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
+            <?php wp_nonce_field( 'dokan_store_seo_form_action', 'dokan_store_seo_form_nonce' ); ?>
 
             <div class="dokan-form-group" style="margin-left: 23%">   
                 <input type="submit" id='dokan-store-seo-form-submit' class="dokan-left dokan-btn dokan-btn-theme" value="<?php esc_attr_e( 'Save Changes', 'dokan' ); ?>">
