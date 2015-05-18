@@ -355,21 +355,33 @@ class Dokan_Store_Seo {
         <form method="post" id="dokan-store-seo-form"  action="" class="dokan-form-horizontal">
 
             <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-title"><?php _e( 'SEO Title :', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-title"><?php _e( 'SEO Title :', 'dokan' ); ?>
+                    <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'SEO Title is shown as the title of your store page', 'dokan' ); ?>">
+                        <i class="fa fa-question-circle"></i>
+                    </span>
+                </label>                
                 <div class="dokan-w5 dokan-text-left">
                     <input id="dokan-seo-meta-title" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-meta-title'] ) ?>" name="dokan-seo-meta-title" placeholder=" " class="dokan-form-control input-md" type="text">
                 </div>                         
             </div>
 
             <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-desc"><?php _e( 'Meta Description :', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-desc"><?php _e( 'Meta Description :', 'dokan' ); ?>
+                    <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'The meta description is often shown as the black text under the title in a search result. For this to work it has to contain the keyword that was searched for and should be less than 156 chars.', 'dokan' ); ?>">
+                        <i class="fa fa-question-circle"></i>
+                    </span>
+                </label>
                 <div class="dokan-w5 dokan-text-left">
                     <textarea class="dokan-form-control" rows="3" id="dokan-seo-meta-desc" name="dokan-seo-meta-desc"><?php echo $this->print_saved_meta( $seo_meta['dokan-seo-meta-desc'] ) ?></textarea>
-                </div>                         
+                </div>
             </div>
 
             <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-keywords"><?php _e( 'Meta Keywords :', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-keywords"><?php _e( 'Meta Keywords :', 'dokan' ); ?>
+                    <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Insert some comma separated keywords for better ranking of your store page.', 'dokan' ); ?>">
+                        <i class="fa fa-question-circle"></i>
+                    </span>
+                </label>
                 <div class="dokan-w7 dokan-text-left">
                     <input id="dokan-seo-meta-keywords" value="<?php echo $this->print_saved_meta( $seo_meta['dokan-seo-meta-keywords'] ) ?>" name="dokan-seo-meta-keywords" placeholder=" " class="dokan-form-control input-md" type="text">
                 </div>                         
@@ -432,7 +444,7 @@ class Dokan_Store_Seo {
 
 
 
-        <?php
+    <?php
     }
 
     /*
