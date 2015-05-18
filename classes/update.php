@@ -149,13 +149,13 @@ class Dokan_Update {
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
             if ( is_wp_error( $response ) ) {
                 echo '<div class="error"><p><strong>Dokan Activation Error:</strong> ' . $response->get_error_message() . '</p></div>';
+                return false;
             }
 
             if ( $response['response']['code'] != 200 ) {
                 echo '<div class="error"><p><strong>Dokan Activation Error:</strong> ' . $response['response']['code'] .' - ' . $response['response']['message'] . '</p></div>';
+                return false;
             }
-
-            return false;
         }
 
         return json_decode( $update );
