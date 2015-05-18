@@ -917,7 +917,17 @@ class Dokan_Ajax {
             <select name="dokan-shipping-state" class="dokan-shipping-state dokan-form-control" id="dokan-shipping-state">
                 <option value=""><?php _e( '--Select State--', 'dokan' ); ?></option>
                 <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
-                    <option value="<?php echo $state_code ?>"><?php echo ( $state_code == 'everywhere' ) ? _e( 'Other States' ) : $states[$country][$state_code]; ?></option>
+                    <option value="<?php echo $state_code ?>"><?php
+                        if ( $state_code == 'everywhere' ) {
+                            _e( 'Other States', 'dokan' );
+                        } else {
+                            if( isset( $states[$country][$state_code] ) ) {
+                                echo $states[$country][$state_code];
+                            } else {
+                                echo $state_code;
+                            }
+                        }
+                    ?></option>
                 <?php endforeach ?>
             </select>
         <?php 
@@ -945,7 +955,11 @@ class Dokan_Ajax {
         $dps_additional_qty           = get_user_meta( $_POST['author_id'], '_dps_additional_qty', true );
         $additional_qty_price         = ( $additional_qty_product_price ) ? $additional_qty_product_price : $dps_additional_qty;
 
-        $country = $_POST['country_id'];
+        if ( isset( $_POST['country_id'] ) || !empty( $_POST['country_id'] ) ) {
+            $country = $_POST['country_id'];
+        } else {
+            $country = '';
+        }
         if ( isset( $_POST['quantity'] ) && $_POST['quantity'] > 0 ) {
             $quantity = $_POST['quantity'];
         } else {
@@ -954,11 +968,17 @@ class Dokan_Ajax {
         $additional_quantity_cost = ( $quantity - 1 ) * $additional_qty_price;
         ob_start(); ?>
         <?php 
-        if ( !isset( $_POST['state'] ) || empty( $_POST['state'] ) ) {
-            echo 'Shipping Cost : <h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
-        } else if ( isset( $_POST['state'] ) && !empty( $_POST['state'] ) ) {
-            $state = $_POST['state'];
-            echo 'Shipping Cost : <h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+        if ( $country != '' ) {
+            if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
+                _e( 'Please select a State from the dropdown', 'dokan' );
+            } else if ( !isset( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
+                echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+            } else if ( isset( $_POST['state'] ) && !empty( $_POST['state'] ) ) {
+                $state = $_POST['state'];
+                echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+            }
+        } else {
+            _e( 'Please select a country from the dropdown', 'dokan' );
         }
         $content = ob_get_clean();
         

@@ -56,16 +56,12 @@
                     'quantity' : self.closest('.dokan-shipping-calculate-wrapper').find('input.dokan-shipping-qty').val(),
                     'state' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-state').val(),
                 };
-
-            if( self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').val() != '' ) {
-                $.post( dokan.ajaxurl, data, function( resp ) {
-                    if( resp.success ) {
-                        self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html( resp.data );
-                    }
-                });
-            } else {
-                self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html('');
-            }   
+                
+            $.post( dokan.ajaxurl, data, function( resp ) {
+                if( resp.success ) {
+                    self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html( resp.data );
+                }
+            });  
         });
     });
 
