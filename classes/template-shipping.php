@@ -216,11 +216,11 @@ class Dokan_Template_Shipping {
 
             <h4><?php _e( 'Shipping Calculation:', 'dokan' ); ?></h4>
 
-            <div class="dokan-shipping-calculate-wrapper">
+            <div class="dokan-shipping-calculate-wrapper dokan-form-inline">
 
-                <div class="dokan-shipping-country-wrapper dokan-form-group">
+                <div class="dokan-shipping-country-wrapper dokan-form-group dokan-w3">
                     
-                    <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan' ); ?></label>
+                    <!-- <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan' ); ?></label> -->
                     <select name="dokan-shipping-country" id="dokan-shipping-country" class="dokan-shipping-country dokan-form-control" data-product_id="<?php echo $post->ID; ?>" data-author_id="<?php echo $post->post_author; ?>">
                         <option value=""><?php _e( '--Select Country--', 'dokan' ); ?></option>
                         <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
@@ -234,30 +234,33 @@ class Dokan_Template_Shipping {
 
                 </div>
 
-                <div class="dokan-shipping-qty-wrapper dokan-form-group">
-                    <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan' ); ?></label>
+                <div class="dokan-shipping-qty-wrapper dokan-form-group dokan-w3">
+                    <!-- <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan' ); ?></label> -->
                     <input type="number" class="dokan-shipping-qty dokan-form-control" id="dokan-shipping-qty" name="dokan-shipping-qty" value="1" placeholder="1">
                 </div>
+                
+                <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator dokan-w3">Calculate</button>
+
+                <div class="dokan-clearfix"></div>
 
                 <div class="dokan-shipping-price-wrapper dokan-form-group">
 
                 </div>
-
-
+                
+                <div class="dokan-clearfix"></div>
             </div>
 
         <?php } ?>
 
-        <p>&nbsp;</p>
-
         <?php if ( $shipping_policy ) { ?>
-            <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
-            <hr>
             <p>&nbsp;</p>
+            <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
             <?php echo wpautop( $shipping_policy ); ?>
         <?php } ?>
 
         <?php if ( $refund_policy ) { ?>
+            <hr>
+            <p>&nbsp;</p>
             <strong><?php _e( 'Refund Policy', 'dokan' ); ?></strong>
             <hr>
             <?php echo wpautop( $refund_policy ); ?>

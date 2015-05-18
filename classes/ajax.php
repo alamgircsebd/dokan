@@ -71,9 +71,13 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_dokan_announcement_remove_row', array( $this, 'remove_announcement') );
         add_action( 'wp_ajax_nopriv_dokan_announcement_remove_row', array( $this, 'remove_announcement') );
 
+        // shipping state ajax
+        add_action( 'wp_ajax_nopriv_dokan_shipping_country_select', array( $this, 'get_state_by_shipping_country') );
+        add_action( 'wp_ajax_dokan_shipping_country_select', array( $this, 'get_state_by_shipping_country') );
+
         // shipping calculation ajax
-        add_action( 'wp_ajax_nopriv_dokan_shipping_country_select', array( $this, 'calculate_shipping_country') );
-        add_action( 'wp_ajax_dokan_shipping_country_select', array( $this, 'calculate_shipping_country') );
+        add_action( 'wp_ajax_nopriv_dokan_shipping_calculator', array( $this, 'get_calculated_shipping_cost') );
+        add_action( 'wp_ajax_dokan_shipping_calculator', array( $this, 'get_calculated_shipping_cost') );
     }
 
     /**
@@ -895,11 +899,40 @@ class Dokan_Ajax {
     }
 
     /**
+     * get state by shipping country
+     *
+     * @return
+     */
+    function get_state_by_shipping_country() {
+        global $post;
+        $dps_state_rates   = get_user_meta( $_POST['author_id'], '_dps_state_rates', true );
+        $country_obj = new WC_Countries();
+        $states      = $country_obj->states;
+
+        $country = $_POST['country_id'];
+        ob_start(); ?>
+        <?php 
+        if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
+            <!-- <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan' ); ?></label> -->
+            <select name="dokan-shipping-state" class="dokan-shipping-state dokan-form-control" id="dokan-shipping-state">
+                <option value=""><?php _e( '--Select State--', 'dokan' ); ?></option>
+                <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
+                    <option value="<?php echo $state_code ?>"><?php echo ( $state_code == 'everywhere' ) ? _e( 'Other States' ) : $states[$country][$state_code]; ?></option>
+                <?php endforeach ?>
+            </select>
+        <?php 
+        }
+        $content = ob_get_clean();
+        
+        wp_send_json_success( $content );
+    }
+
+    /**
      * calculate shipping rate in single product page
      *
      * @return
      */
-    function calculate_shipping_country() {
+    function get_calculated_shipping_cost() {
         global $post;
         
         $dps_country_rates = get_user_meta( $_POST['author_id'], '_dps_country_rates', true );
@@ -912,10 +945,6 @@ class Dokan_Ajax {
         $dps_additional_qty           = get_user_meta( $_POST['author_id'], '_dps_additional_qty', true );
         $additional_qty_price         = ( $additional_qty_product_price ) ? $additional_qty_product_price : $dps_additional_qty;
 
-        $country_obj = new WC_Countries();
-        $countries   = $country_obj->countries;
-        $states      = $country_obj->states;
-
         $country = $_POST['country_id'];
         if ( isset( $_POST['quantity'] ) && $_POST['quantity'] > 0 ) {
             $quantity = $_POST['quantity'];
@@ -923,32 +952,16 @@ class Dokan_Ajax {
             $quantity = 1;
         }
         $additional_quantity_cost = ( $quantity - 1 ) * $additional_qty_price;
-        $flag = '';
         ob_start(); ?>
-
         <?php 
         if ( !isset( $_POST['state'] ) || empty( $_POST['state'] ) ) {
-            if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
-                <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan' ); ?></label>
-                <select name="dokan-shipping-state" class="dokan-shipping-state dokan-form-control" id="dokan-shipping-state">
-                    <option value=""><?php _e( '--Select State--', 'dokan' ); ?></option>
-                    <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
-                        <option value="<?php echo $state_code ?>"><?php echo ( $state_code == 'everywhere' ) ? _e( 'Other States' ) : $states[$country][$state_code]; ?></option>
-                    <?php endforeach ?>
-                </select>
-            <?php 
-                $flag = 'state';
-            } else {
-                $flag = 'price';
-                echo 'Shipping Cost : <h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
-            }
+            echo 'Shipping Cost : <h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
         } else if ( isset( $_POST['state'] ) && !empty( $_POST['state'] ) ) {
             $state = $_POST['state'];
-            $flag = 'price';
             echo 'Shipping Cost : <h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
         }
         $content = ob_get_clean();
         
-        wp_send_json_success( array( 'content' => $content, 'flag' => $flag ) );
+        wp_send_json_success( $content );
     }
 }

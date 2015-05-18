@@ -10,23 +10,15 @@
                 data = {
                     'action' : 'dokan_shipping_country_select',
                     'country_id' : self.val(),
-                    'product_id' : self.data('product_id'),
                     'author_id' : self.data('author_id'),
-                    'quantity' : self.closest('.dokan-shipping-calculate-wrapper').find('input.dokan-shipping-qty').val(),
-                    'state' : '',
                 };
 
             if( self.val() != '' ) {
                 $.post( dokan.ajaxurl, data, function( resp ) {
                     
                     if( resp.success ) {
-                        if( resp.data.flag == 'state' ) {
-                            self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-state-wrapper').html( resp.data.content );
-                            self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html('');
-                        } else if ( resp.data.flag == 'price' ) {
-                            self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html( resp.data.content );
-                            self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-state-wrapper').html('');
-                        }
+                        self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-state-wrapper').html( resp.data );
+                        self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html('');
                     }
                 });
             } else {
@@ -52,53 +44,23 @@
             }
         });
 
-        $('.dokan-shipping-calculate-wrapper').on( 'keyup', '#dokan-shipping-qty', function(e) {
-            
-                var self = $(this),
-                    data = {
-                        'action' : 'dokan_shipping_country_select',
-                        'country_id' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').val(),
-                        'product_id' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').data('product_id'),
-                        'author_id' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').data('author_id'),
-                        'quantity' : self.val(),
-                        'state' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-state').val(),
-                    };
-
-                if( self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').val() != '' ) {
-                    $.post( dokan.ajaxurl, data, function( resp ) {
-                        
-                        if( resp.success ) {
-                            if( resp.data.flag == 'state' ) {
-                                self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-state-wrapper').html( resp.data.content );
-                                self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html('');
-                            } else if ( resp.data.flag == 'price' ) {
-                                self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html( resp.data.content );
-                            }
-                        }
-                    });
-                }  
-        });
-
-        $( '.dokan-shipping-calculate-wrapper' ).on( 'change', 'select.dokan-shipping-state', function(e) {
+        $( '.dokan-shipping-calculate-wrapper' ).on( 'click', 'button.dokan-shipping-calculator', function(e) {
             e.preventDefault();
             
             var self = $(this),
                 data = {
-                    'action' : 'dokan_shipping_country_select',
+                    'action' : 'dokan_shipping_calculator',
                     'country_id' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').val(),
                     'product_id' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').data('product_id'),
                     'author_id' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').data('author_id'),
                     'quantity' : self.closest('.dokan-shipping-calculate-wrapper').find('input.dokan-shipping-qty').val(),
-                    'state' : self.val(),
+                    'state' : self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-state').val(),
                 };
 
-            if( self.val() != '' && self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').val() != '' ) {
+            if( self.closest('.dokan-shipping-calculate-wrapper').find('select.dokan-shipping-country').val() != '' ) {
                 $.post( dokan.ajaxurl, data, function( resp ) {
-                    
                     if( resp.success ) {
-                        if ( resp.data.flag == 'price' ) {
-                            self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html( resp.data.content );
-                        }
+                        self.closest('.dokan-shipping-calculate-wrapper').find('.dokan-shipping-price-wrapper').html( resp.data );
                     }
                 });
             } else {
