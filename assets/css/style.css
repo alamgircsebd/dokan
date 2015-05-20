@@ -2281,6 +2281,14 @@ a.dokan-btn-sm,
 .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
   height: 28px;
 }
+.dokan-shipping-calculate-wrapper .dokan-shipping-country-wrapper label,
+.dokan-shipping-calculate-wrapper .dokan-shipping-state-wrapper label,
+.dokan-shipping-calculate-wrapper .dokan-shipping-qty-wrapper label {
+  font-weight: normal;
+}
+.dokan-shipping-calculate-wrapper button.dokan-shipping-calculator {
+  margin-top: 33px;
+}
 .dokan-close {
   float: right;
   font-weight: bold;
@@ -3243,13 +3251,5 @@ article.dokan-notice-single-notice-area span.dokan-single-announcement-date {
 }
 .dokan-announcement-bg-uread {
   background-color: #f05025;
-}
-.dokan-shipping-calculate-wrapper .dokan-shipping-country-wrapper label,
-.dokan-shipping-calculate-wrapper .dokan-shipping-state-wrapper label,
-.dokan-shipping-calculate-wrapper .dokan-shipping-qty-wrapper label {
-  font-weight: normal;
-}
-.dokan-shipping-calculate-wrapper button.dokan-shipping-calculator {
-  margin-top: 33px;
 }
 /*# sourceMappingURL=style.css.map */
