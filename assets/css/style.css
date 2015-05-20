@@ -3244,4 +3244,12 @@ article.dokan-notice-single-notice-area span.dokan-single-announcement-date {
 .dokan-announcement-bg-uread {
   background-color: #f05025;
 }
+.dokan-shipping-calculate-wrapper .dokan-shipping-country-wrapper label,
+.dokan-shipping-calculate-wrapper .dokan-shipping-state-wrapper label,
+.dokan-shipping-calculate-wrapper .dokan-shipping-qty-wrapper label {
+  font-weight: normal;
+}
+.dokan-shipping-calculate-wrapper button.dokan-shipping-calculator {
+  margin-top: 33px;
+}
 /*# sourceMappingURL=style.css.map */

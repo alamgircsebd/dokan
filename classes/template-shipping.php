@@ -220,7 +220,7 @@ class Dokan_Template_Shipping {
 
                 <div class="dokan-shipping-country-wrapper dokan-form-group dokan-w3">
                     
-                    <!-- <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan' ); ?></label> -->
+                    <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan' ); ?></label>
                     <select name="dokan-shipping-country" id="dokan-shipping-country" class="dokan-shipping-country dokan-form-control" data-product_id="<?php echo $post->ID; ?>" data-author_id="<?php echo $post->post_author; ?>">
                         <option value=""><?php _e( '--Select Country--', 'dokan' ); ?></option>
                         <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
@@ -235,11 +235,11 @@ class Dokan_Template_Shipping {
                 </div>
 
                 <div class="dokan-shipping-qty-wrapper dokan-form-group dokan-w3">
-                    <!-- <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan' ); ?></label> -->
+                    <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan' ); ?></label>
                     <input type="number" class="dokan-shipping-qty dokan-form-control" id="dokan-shipping-qty" name="dokan-shipping-qty" value="1" placeholder="1">
                 </div>
                 
-                <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator dokan-w3">Calculate</button>
+                <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator dokan-w3"><?php _e( 'Get Shipping Cost', 'dokan' ); ?></button>
 
                 <div class="dokan-clearfix"></div>
 

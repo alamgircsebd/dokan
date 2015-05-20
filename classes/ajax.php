@@ -913,7 +913,7 @@ class Dokan_Ajax {
         ob_start(); ?>
         <?php 
         if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
-            <!-- <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan' ); ?></label> -->
+            <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan' ); ?></label>
             <select name="dokan-shipping-state" class="dokan-shipping-state dokan-form-control" id="dokan-shipping-state">
                 <option value=""><?php _e( '--Select State--', 'dokan' ); ?></option>
                 <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
