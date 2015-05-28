@@ -131,6 +131,10 @@ class Dokan_Template_Shortcodes {
                 case 'payment':
                     dokan_get_template_part( 'settings/payment' );
                     break;
+                                
+                case 'seo':
+                    dokan_get_template_part( 'settings/seo' );
+                    break;
 
                 default:
                     /**

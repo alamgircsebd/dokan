@@ -364,7 +364,7 @@ function dokan_get_dashboard_nav() {
 
     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
     $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-
+    
     if ( $enable_shipping == 'yes' ) {
         $settings_sub['shipping'] = array(
             'title' => __( 'Shipping', 'dokan'),
@@ -372,13 +372,19 @@ function dokan_get_dashboard_nav() {
             'url'   => dokan_get_navigation_url( 'settings/shipping' )
         );
     }
-
     $settings_sub['social'] = array(
         'title' => __( 'Social Profile', 'dokan'),
         'icon'  => '<i class="fa fa-share-alt-square"></i>',
         'url'   => dokan_get_navigation_url( 'settings/social' )
     );
-
+    if ( dokan_get_option( 'store_seo', 'dokan_general', 'on' ) === 'on' ) {
+        $settings_sub['seo'] = array(
+            'title' => __( 'Store SEO', 'dokan' ),
+            'icon'  => '<i class="fa fa-globe"></i>',
+            'url'   => dokan_get_navigation_url( 'settings/seo' )
+        );
+    }
+    
     /**
      * Filter to get the seller dashboard settings navigation.
      *

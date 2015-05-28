@@ -186,6 +186,13 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
+                'store_seo' => array(
+                    'name'    => 'store_seo',
+                    'label'   => __( 'Enable Store SEO', 'dokan' ),
+                    'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(

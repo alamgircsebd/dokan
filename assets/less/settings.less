@@ -81,6 +81,40 @@
             }
 
         }
+        .dokan-seo-image {
+            position: relative;
+
+            .dokan-remove-gravatar-image {
+                position:absolute;
+                width:150px;
+                height:150px;
+                background:#000;
+                top:0;
+                left: 0;
+                opacity:.7;
+                font-size:70px;
+                text-align: center;
+                color:#f00;
+                padding-top:35px;
+                display:none;
+                border-radius: 0%;
+            }
+
+            .gravatar-wrap {
+                .dokan-gravatar-img {
+                    border-radius: 0%;
+                    height: 150px !important;
+                    width: 150px;
+                }
+            }
+
+            &:hover {
+                .dokan-remove-gravatar-image {
+                    display: block;
+                }
+            }
+
+        }
 
         .button-area {
             margin-top: 35px;

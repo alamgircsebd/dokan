@@ -374,8 +374,11 @@ class WeDevs_Dokan {
             require_once $inc_dir . 'admin-functions.php';
         } else {
             require_once $inc_dir . 'wc-template.php';
-            require_once $inc_dir . 'template-tags.php';
+            require_once $inc_dir . 'template-tags.php';            
         }
+        
+        require_once $classes_dir. 'store-seo.php';
+       
     }
 
     /**
@@ -542,7 +545,7 @@ class WeDevs_Dokan {
      */
     function wp_title( $title, $sep ) {
         global $paged, $page;
-
+       
         if ( is_feed() ) {
             return $title;
         }
@@ -569,6 +572,7 @@ class WeDevs_Dokan {
 
 function dokan_load_plugin() {
     $dokan = WeDevs_Dokan::init();
+    
 }
 
 add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
