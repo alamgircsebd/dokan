@@ -86,6 +86,17 @@ if ( ! $from_shortcode ) {
                                 <?php } ?>
                             </div>
                         <?php } ?>
+                        <?php if ( Dokan_Template_Shortcodes::$errors ) { ?>
+                            <div class="dokan-alert dokan-alert-danger">
+                                <a class="dokan-close" data-dismiss="alert">&times;</a>
+
+                                <?php foreach ( Dokan_Template_Shortcodes::$errors as $error) { ?>
+
+                                    <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
+
+                                <?php } ?>
+                            </div>
+                        <?php } ?>
 
                         <div id="tab-container" class='tab-container'> <!-- Only required for left/right tabs -->
 
