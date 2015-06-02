@@ -616,3 +616,18 @@ jQuery(function($) {
     }); 
 
 })(jQuery);
+
+//localize Validation messages
+(function($){
+    var dokan_messages = dokan_validate_msg;
+    
+    dokan_messages.maxlength   = $.validator.format( dokan_messages.maxlength_msg );
+    dokan_messages.minlength   = $.validator.format( dokan_messages.minlength_msg );
+    dokan_messages.rangelength = $.validator.format( dokan_messages.rangelength_msg );
+    dokan_messages.range       = $.validator.format( dokan_messages.range_msg );
+    dokan_messages.max         = $.validator.format( dokan_messages.max_msg );
+    dokan_messages.min         = $.validator.format( dokan_messages.min_msg );    
+  
+    $.validator.messages = dokan_messages;
+
+})(jQuery);
