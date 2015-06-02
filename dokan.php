@@ -299,7 +299,7 @@ class WeDevs_Dokan {
                     'min_msg'         => __( "Please enter a value greater than or equal to {0}." , 'dokan' ),
                 );
                 
-                wp_localize_script( 'form-validate', 'dokan_validate_msg', $form_validate_messages );
+                wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
 
 
         // load only in dokan dashboard and edit page

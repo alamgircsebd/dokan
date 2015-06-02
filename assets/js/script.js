@@ -619,7 +619,7 @@ jQuery(function($) {
 
 //localize Validation messages
 (function($){
-    var dokan_messages = dokan_validate_msg;
+    var dokan_messages = DokanValidateMsg;
     
     dokan_messages.maxlength   = $.validator.format( dokan_messages.maxlength_msg );
     dokan_messages.minlength   = $.validator.format( dokan_messages.minlength_msg );
