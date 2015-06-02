@@ -1267,7 +1267,7 @@ function dokan_get_navigation_url( $name = '' ) {
         $url = get_permalink( $page_id );
     }
 
-    return apply_filters( 'dokan_get_navigation_url', $url );
+    return apply_filters( 'dokan_get_navigation_url', $url, $name );
 }
 
 
