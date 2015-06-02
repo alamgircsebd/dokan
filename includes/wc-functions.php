@@ -23,7 +23,7 @@ function dokan_variable_product_type_options() {
     // Get tax classes
     $tax_classes = array_filter( array_map('trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
     $tax_class_options = array();
-    $tax_class_options[''] = __( 'Standard', 'woocommerce' );
+    $tax_class_options[''] = __( 'Standard', 'dokan' );
     if ( $tax_classes ) {
         foreach ( $tax_classes as $class ) {
             $tax_class_options[ sanitize_title( $class ) ] = esc_attr( $class );
@@ -39,9 +39,9 @@ function dokan_variable_product_type_options() {
 
             <div id="message" class="inline woocommerce-message">
                 <div class="squeezer">
-                    <h4><?php _e( 'Before adding variations, add and save some attributes on the <strong>Attributes</strong> tab.', 'woocommerce' ); ?></h4>
+                    <h4><?php _e( 'Before adding variations, add and save some attributes on the <strong>Attributes</strong> tab.', 'dokan' ); ?></h4>
 
-                    <p class="submit"><a class="button-primary" href="http://docs.woothemes.com/document/product-variations/" target="_blank"><?php _e( 'Learn more', 'woocommerce' ); ?></a></p>
+                    <p class="submit"><a class="button-primary" href="http://docs.woothemes.com/document/product-variations/" target="_blank"><?php _e( 'Learn more', 'dokan' ); ?></a></p>
                 </div>
             </div>
 
@@ -256,7 +256,7 @@ function dokan_variable_product_type_options() {
 
         jQuery('#variable_product_options').on('click', 'button.link_all_variations', function(){
 
-            var answer = confirm('<?php echo esc_js( __( 'Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max 50 per run).', 'woocommerce' ) ); ?>');
+            var answer = confirm('<?php echo esc_js( __( 'Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max 50 per run).', 'dokan' ) ); ?>');
 
             if (answer) {
 
@@ -421,9 +421,9 @@ function dokan_variable_product_type_options() {
                 // Create the media frame.
                 variable_image_frame = wp.media.frames.variable_image = wp.media({
                     // Set the title of the modal.
-                    title: '<?php echo esc_js( __( 'Choose an image', 'woocommerce' ) ); ?>',
+                    title: '<?php echo esc_js( __( 'Choose an image', 'dokan' ) ); ?>',
                     button: {
-                        text: '<?php echo esc_js( __( 'Set variation image', 'woocommerce' ) ); ?>'
+                        text: '<?php echo esc_js( __( 'Set variation image', 'dokan' ) ); ?>'
                     }
                 });
 
@@ -550,7 +550,7 @@ function dokan_process_product_meta( $post_id ) {
                     AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
                  ", $new_sku ) )
                 ) {
-                $woocommerce_errors[] = __( 'Product SKU must be unique.', 'woocommerce' );
+                $woocommerce_errors[] = __( 'Product SKU must be unique.', 'dokan' );
             } else {
                 update_post_meta( $post_id, '_sku', $new_sku );
             }
@@ -911,7 +911,7 @@ function dokan_save_variations( $post_id ) {
             $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
             // Generate a useful post title
-            $variation_post_title = sprintf( __( 'Variation #%s of %s', 'woocommerce' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
+            $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
 
             // Update or Add post
             if ( ! $variation_id ) {
@@ -1148,7 +1148,7 @@ add_action( 'woocommerce_checkout_update_order_meta', 'dokan_create_sub_order' )
 function dokan_create_seller_order( $parent_order, $seller_id, $seller_products ) {
     $order_data = apply_filters( 'woocommerce_new_order_data', array(
         'post_type'     => 'shop_order',
-        'post_title'    => sprintf( __( 'Order &ndash; %s', 'woocommerce' ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Order date parsed by strftime', 'woocommerce' ) ) ),
+        'post_title'    => sprintf( __( 'Order &ndash; %s', 'dokan' ), strftime( _x( '%b %d, %Y @ %I:%M %p', 'Order date parsed by strftime', 'dokan' ) ) ),
         'post_status'   => 'wc-pending',
         'ping_status'   => 'closed',
         'post_excerpt'  => isset( $posted['order_comments'] ) ? $posted['order_comments'] : '',
@@ -1848,8 +1848,8 @@ function dokan_exclude_child_customer_receipt( &$phpmailer ) {
     $subject      = $phpmailer->Subject;
 
     // order receipt
-    $sub_receipt  = __( 'Your {site_title} order receipt from {order_date}', 'woocommerce' );
-    $sub_download = __( 'Your {site_title} order from {order_date} is complete', 'woocommerce' );
+    $sub_receipt  = __( 'Your {site_title} order receipt from {order_date}', 'dokan' );
+    $sub_download = __( 'Your {site_title} order from {order_date} is complete', 'dokan' );
 
     $sub_receipt  = str_replace( array('{site_title}', '{order_date}'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_receipt);
     $sub_download = str_replace( array('{site_title}', '{order_date} is complete'), array(wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES ), ''), $sub_download);
