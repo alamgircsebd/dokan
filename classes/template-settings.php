@@ -86,7 +86,7 @@ class Dokan_Template_Settings {
         $error = new WP_Error();
 
         $dokan_name = sanitize_text_field( $_POST['dokan_store_name'] );
-        
+
         if ( empty( $dokan_name ) ) {
             $error->add( 'dokan_name', __( 'Dokan name required', 'dokan' ) );
         }
@@ -104,10 +104,10 @@ class Dokan_Template_Settings {
                 $error->add( 'dokan_email', __( 'Invalid email', 'dokan' ) );
             }
         }
-        
+
         /* Address Fields Validation */
         $required_fields  = array(
-            'street_1',            
+            'street_1',
             'city',
             'zip',
             'country',
@@ -117,7 +117,7 @@ class Dokan_Template_Settings {
         }
         foreach ( $required_fields as $key ) {
             if ( empty( $_POST['dokan_address'][$key] ) ) {
-                $code = 'dokan_address['.$key.']';                
+                $code = 'dokan_address['.$key.']';
                 $error->add( $code, sprintf( __('Address field for %s is required','dokan'), $key ) );
             }
         }
@@ -276,13 +276,15 @@ class Dokan_Template_Settings {
             //update store setttings info
             $dokan_settings = array(
                 'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
-                'address'      => $_POST['dokan_address'] ,
+                'address'      => isset( $_POST['dokan_address'] ) ? $_POST['dokan_address'] : array(),
                 'location'     => sanitize_text_field( $_POST['location'] ),
                 'find_address' => sanitize_text_field( $_POST['find_address'] ),
                 'banner'       => absint( $_POST['dokan_banner'] ),
                 'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
                 'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
                 'gravatar'     => absint( $_POST['dokan_gravatar'] ),
+                'enable_tnc'   => isset( $_POST['dokan_store_tnc_enable'] ) ? $_POST['dokan_store_tnc_enable'] : '',
+                'store_tnc'    => isset( $_POST['dokan_store_tnc'] ) ? $_POST['dokan_store_tnc']: ''
             );
 
         } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_payment_settings_nonce' ) ) {

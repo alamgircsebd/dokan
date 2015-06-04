@@ -2946,6 +2946,13 @@ input.tagit-hidden-field {
 .dokan-shipping-calculate-wrapper button.dokan-shipping-calculator {
   margin-top: 33px;
 }
+#dokan_store_tnc_enable {
+  display: inline-block;
+  width: 20px;
+}
+.dokan_tock_check {
+  width: auto;
+}
 .dokan-close {
   float: right;
   font-weight: bold;

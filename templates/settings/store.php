@@ -40,7 +40,7 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
             <?php //$dokan_template_settings->setting_field($validate); ?>
             <!--settings updated content-->
             <?php
-            
+
             if ( isset( $_GET['message'] ) ) {
                 ?>
                 <div class="dokan-alert dokan-alert-success">
@@ -69,13 +69,14 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
             $map_location   = isset( $profile_info['location'] ) ? esc_attr( $profile_info['location'] ) : '';
             $map_address    = isset( $profile_info['find_address'] ) ? esc_attr( $profile_info['find_address'] ) : '';
             $dokan_category = isset( $profile_info['dokan_category'] ) ? $profile_info['dokan_category'] : '';
-
+            $enable_tnc     = isset( $profile_info['enable_tnc'] ) ? $profile_info['enable_tnc'] : '';
+            $store_tnc      = isset( $profile_info['store_tnc'] ) ? $profile_info['store_tnc'] : '' ;
 
             if ( is_wp_error( $validate ) ) {
                 $storename    = $_POST['dokan_store_name'];
                 $map_location = $_POST['location'];
                 $map_address  = $_POST['find_address'];
-                
+
                 $address_street1 = $_POST['dokan_address']['street_1'];
                 $address_street2 = $_POST['dokan_address']['street_2'];
                 $address_city    = $_POST['dokan_address']['city'];
@@ -139,17 +140,17 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                     </div>
                 </div>
                  <!--address-->
-                
-                <?php 
+
+                <?php
                 $verified = false;
-                
+
                 if ( isset( $profile_info['dokan_verification']['info']['store_address']['v_status'] ) ) {
                     if ( $profile_info['dokan_verification']['info']['store_address']['v_status'] == 'approved' ){
                         $verified = true;
-                    }                    
+                    }
                 }
                 dokan_seller_address_fields( $verified );
-                
+
                 ?>
                 <!--address-->
 
@@ -189,6 +190,39 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                     </div> <!-- col.md-4 -->
                 </div> <!-- .dokan-form-group -->
 
+                <!--terms and conditions enable or not -->
+                <?php
+                $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_selling', 'off' );
+                if ( $tnc_enable == 'on' ) :
+                    ?>
+                    <div class="dokan-form-group">
+                        <label class="dokan-w3 dokan-control-label" for="dokan_store_tnc_enable"><?php _e( 'Terms and Conditions', 'dokan' ); ?></label>
+                        <div class="dokan-w5 dokan-text-left dokan_tock_check">
+                            <div class="checkbox">
+                                <label>
+                                    <input id="dokan_store_tnc_enable" value="on" <?php echo $enable_tnc == 'on' ? 'checked':'' ; ?> name="dokan_store_tnc_enable" class="dokan-form-control" type="checkbox"><?php _e( 'Show terms and conditions in store page', 'dokan' ); ?>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="dokan-form-group" id="dokan_tnc_text">
+                        <label class="dokan-w3 dokan-control-label" for="dokan_store_tnc"><?php _e( 'TOC Details', 'dokan' ); ?></label>
+                        <div class="dokan-w8 dokan-text-left">
+                            <?php
+                            $settings = array(
+                                'editor_height' => 200,
+                                'media_buttons' => false,
+                                'teeny' => true,
+                                'quicktags' => false
+                            );
+                            wp_editor( $store_tnc, 'dokan_store_tnc', $settings);
+                            ?>
+                        </div>
+                    </div>
+
+                <?php endif;?>
+
+
                 <?php do_action( 'dokan_settings_form_bottom', $current_user, $profile_info ); ?>
 
                 <div class="dokan-form-group">
@@ -200,14 +234,14 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
             </form>
 
             <?php do_action( 'dokan_settings_after_form', $current_user, $profile_info ); ?>
-                
+
             <script type="text/javascript">
 
                 (function($) {
                     var dokan_address_wrapper = $( '.dokan-address-fields' );
                     var dokan_address_select = {
                         init: function () {
-                            
+
                             dokan_address_wrapper.on( 'change', 'select.country_to_state', this.state_select );
                         },
                         state_select: function () {
@@ -223,19 +257,19 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                                 country = $( this ).val();
 
                             if ( states[ country ] ) {
-                                
+
                                 if ( $.isEmptyObject( states[ country ] ) ) {
 
                                     $( 'div#dokan-states-box' ).slideUp( 2 );
                                     if ( $statebox.is( 'select' ) ) {
                                         $( 'select#dokan_address_state' ).replaceWith( '<input type="text" class="' + input_class + '" name="' + input_name + '" id="' + input_id + '" required />' );
                                     }
-                                    
+
                                     $( '#dokan_address_state' ).val( 'N/A' );
-                                    
+
                                 } else {
                                     input_selected_state = '';
-                                    
+
                                     var options = '',
                                         state = states[ country ];
 
@@ -261,17 +295,17 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                                     }
                                     $( '#dokan_address_state' ).removeClass( 'dokan-hide' );
                                     $( 'div#dokan-states-box' ).slideDown();
-                                    
+
                                 }
                             } else {
-                                
-                                
+
+
                                 if ( $statebox.is( 'select' ) ) {
                                     input_selected_state = '';
                                     $( 'select#dokan_address_state' ).replaceWith( '<input type="text" class="' + input_class + '" name="' + input_name + '" id="' + input_id + '" required="required"/>' );
                                 }
                                 $( '#dokan_address_state' ).val(input_selected_state);
-                                
+
                                 if ( $( '#dokan_address_state' ).val() == 'N/A' ){
                                     $( '#dokan_address_state' ).val('');
                                 }
@@ -280,10 +314,10 @@ wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sens
                             }
                         }
                     }
-                    
+
                     $(function() {
                         dokan_address_select.init();
-                        
+
                         <?php
                         $locations = explode( ',', $map_location );
                         $def_lat = isset( $locations[0] ) ? $locations[0] : 90.40714300000002;

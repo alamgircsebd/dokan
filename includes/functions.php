@@ -945,6 +945,16 @@ function dokan_get_store_tabs( $store_id ) {
         ),
     );
 
+    $store_info = dokan_get_store_info( $store_id );
+    $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_selling', 'off' );
+
+    if ( isset($store_info['enable_tnc']) && $store_info['enable_tnc'] == 'on' && $tnc_enable == 'on' ) {
+        $tabs['terms_and_conditions'] = array(
+            'title' => __( 'Terms and Conditions', 'dokan' ),
+            'url'   => dokan_get_toc_url( $store_id )
+        );
+    }
+
     return apply_filters( 'dokan_store_tabs', $tabs, $store_id );
 }
 
@@ -1967,3 +1977,19 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
 
     return apply_filters( 'dokan_get_seller_address', $formatted_address, $profile_info );
 }
+
+/**
+ * Get terms and conditions page
+ *
+ * @since 2.3
+ *
+ * @param $store_id
+ * @param $store_info
+ *
+ * @return string
+ */
+function dokan_get_toc_url( $store_id ) {
+    $userstore = dokan_get_store_url( $store_id );
+    return apply_filters( 'dokan_get_toc_url', $userstore ."toc" );
+}
+

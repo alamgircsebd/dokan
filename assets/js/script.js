@@ -271,6 +271,10 @@ jQuery(function($) {
 
         submitSettings: function(form_id) {
 
+            if ( typeof tinyMCE != 'undefined' ) {
+                tinyMCE.triggerSave();
+            }
+
             var self = $( "form#" + form_id ),
                 form_data = self.serialize() + '&action=dokan_settings&form_id=' + form_id;
 
@@ -571,13 +575,13 @@ jQuery(function($) {
 
     var wrapper = $( '.dokan-dashboard-content.dokan-settings-content.dokan-store-seo-wrapper' );
     var Dokan_Store_SEO = {
-        
-        init : function() {            
+
+        init : function() {
             wrapper.on( 'click', 'input#dokan-store-seo-form-submit', this.form.validate );
         },
         form : {
-            
-            validate : function(){        
+
+            validate : function(){
                 var self = $( this ),
                 data = {
                     action: 'dokan_seo_form_handler',
@@ -585,14 +589,14 @@ jQuery(function($) {
                 };
                 console.log(data.data);
                 Dokan_Store_SEO.form.submit( data );
-                
+
                 return false;
             },
-            
+
             submit : function( data ){
                 var feedback = $('#dokan-seo-feedback');
                 feedback.fadeOut();
-                
+
                 $.post( dokan.ajaxurl, data, function ( resp ) {
                     if ( resp.success == true ) {
                         feedback.html(resp.data);
@@ -607,27 +611,41 @@ jQuery(function($) {
                     }
                 } )
             }
-                
+
         },
     };
-       
+
     $(function() {
         Dokan_Store_SEO.init();
-    }); 
+    });
 
 })(jQuery);
 
 //localize Validation messages
 (function($){
     var dokan_messages = DokanValidateMsg;
-    
+
     dokan_messages.maxlength   = $.validator.format( dokan_messages.maxlength_msg );
     dokan_messages.minlength   = $.validator.format( dokan_messages.minlength_msg );
     dokan_messages.rangelength = $.validator.format( dokan_messages.rangelength_msg );
     dokan_messages.range       = $.validator.format( dokan_messages.range_msg );
     dokan_messages.max         = $.validator.format( dokan_messages.max_msg );
-    dokan_messages.min         = $.validator.format( dokan_messages.min_msg );    
-  
+    dokan_messages.min         = $.validator.format( dokan_messages.min_msg );
+
     $.validator.messages = dokan_messages;
+
+    $(document).on('click','#dokan_store_tnc_enable',function(e) {
+        if($(this).is(':checked')) {
+            $('#dokan_tnc_text').show();
+        }else {
+            $('#dokan_tnc_text').hide();
+        }
+    }).ready(function(e){
+        if($('#dokan_store_tnc_enable').is(':checked')) {
+            $('#dokan_tnc_text').show();
+        }else {
+            $('#dokan_tnc_text').hide();
+        }
+    });
 
 })(jQuery);
