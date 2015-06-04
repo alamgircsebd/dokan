@@ -29,13 +29,13 @@ if ( $user_orders ) {
                 ?>
                 <tr>
                     <td class="dokan-order-id">
-                        <?php echo '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'woocommerce' ), esc_attr( $the_order->get_order_number() ) ) . '</strong></a>'; ?>
+                        <?php echo '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $the_order->get_order_number() ) ) . '</strong></a>'; ?>
                     </td>
                     <td class="dokan-order-total">
                         <?php echo esc_html( strip_tags( $the_order->get_formatted_order_total() ) ); ?>
                     </td>
                     <td class="dokan-order-status">
-                        <?php printf( '<span class="dokan-label dokan-label-%s">%s</span>', dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status, 'dokan' ) ); ?>
+                        <?php printf( __('<span class="dokan-label dokan-label-%s">%s</span>', 'dokan' ), dokan_get_order_status_class( $the_order->status ), esc_html__( $the_order->status ) ); ?>
                     </td>
                     <td class="dokan-order-customer">
                         <?php

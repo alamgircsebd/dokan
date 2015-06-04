@@ -50,7 +50,6 @@ class Dokan_Template_Settings {
                 break;
         }
 
-
         if ( is_wp_error( $ajax_validate ) ) {
             wp_send_json_error( $ajax_validate->errors );
         }
@@ -106,12 +105,29 @@ class Dokan_Template_Settings {
             }
         }
 
+        /* Address Fields Validation */
+        $required_fields  = array(
+            'street_1',
+            'city',
+            'zip',
+            'country',
+        );
+        if ( $_POST['dokan_address']['state'] != 'N/A' ) {
+            $required_fields[] = 'state';
+        }
+        foreach ( $required_fields as $key ) {
+            if ( empty( $_POST['dokan_address'][$key] ) ) {
+                $code = 'dokan_address['.$key.']';
+                $error->add( $code, sprintf( __('Address field for %s is required','dokan'), $key ) );
+            }
+        }
+
+
         if ( $error->get_error_codes() ) {
             return $error;
         }
 
         return true;
-
     }
 
     /**
@@ -260,13 +276,15 @@ class Dokan_Template_Settings {
             //update store setttings info
             $dokan_settings = array(
                 'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
-                'address'      => strip_tags( $_POST['setting_address'] ),
+                'address'      => isset( $_POST['dokan_address'] ) ? $_POST['dokan_address'] : array(),
                 'location'     => sanitize_text_field( $_POST['location'] ),
                 'find_address' => sanitize_text_field( $_POST['find_address'] ),
                 'banner'       => absint( $_POST['dokan_banner'] ),
                 'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
                 'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
                 'gravatar'     => absint( $_POST['dokan_gravatar'] ),
+                'enable_tnc'   => isset( $_POST['dokan_store_tnc_enable'] ) ? $_POST['dokan_store_tnc_enable'] : '',
+                'store_tnc'    => isset( $_POST['dokan_store_tnc'] ) ? $_POST['dokan_store_tnc']: ''
             );
 
         } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_payment_settings_nonce' ) ) {
@@ -426,7 +444,7 @@ class Dokan_Template_Settings {
 
         //calculate completeness for address
         if( isset( $dokan_settings['address'] ) ):
-            if ( strlen( trim( $dokan_settings['address'] ) ) != 0 ) {
+            if ( !empty($dokan_settings['address']['street_1']) ) {
                 $profile_val          = $profile_val + $address_val;
                 $track_val['address'] = $address_val;
             } else {

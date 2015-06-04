@@ -186,14 +186,39 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
+                'store_seo' => array(
+                    'name'    => 'store_seo',
+                    'label'   => __( 'Enable Store SEO', 'dokan' ),
+                    'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
             ),
             'dokan_selling' => array(
+                'seller_enable_terms_and_conditions' => array(
+                    'name'    => 'seller_enable_terms_and_conditions',
+                    'label'   => __( 'Terms and Conditions', 'dokan' ),
+                    'desc'    => __( 'Enable terms and conditions for seller store', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'off'
+                 ),
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
                     'label'   => __( 'New Seller Enable Selling', 'dokan' ),
                     'desc'    => __( 'Make selling status enable for new registred seller', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
+                ),
+                'product_style' => array(
+                    'name'    => 'product_style',
+                    'label'   => __( 'Add/Edit Product Style', 'dokan' ),
+                    'desc'    => __( 'The style you prefer for seller to add or edit products. ', 'dokan' ),
+                    'type'    => 'select',
+                    'default' => 'old',
+                    'options' => array(
+                        'old' => __( 'Tab View', 'dokan' ),
+                        'new' => __( 'Flat View', 'dokan' )
+                    )
                 ),
                 'product_category_style' => array(
                     'name'    => 'product_category_style',

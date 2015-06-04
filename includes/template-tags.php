@@ -364,7 +364,7 @@ function dokan_get_dashboard_nav() {
 
     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
     $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-
+    
     if ( $enable_shipping == 'yes' ) {
         $settings_sub['shipping'] = array(
             'title' => __( 'Shipping', 'dokan'),
@@ -372,13 +372,19 @@ function dokan_get_dashboard_nav() {
             'url'   => dokan_get_navigation_url( 'settings/shipping' )
         );
     }
-
     $settings_sub['social'] = array(
         'title' => __( 'Social Profile', 'dokan'),
         'icon'  => '<i class="fa fa-share-alt-square"></i>',
         'url'   => dokan_get_navigation_url( 'settings/social' )
     );
-
+    if ( dokan_get_option( 'store_seo', 'dokan_general', 'on' ) === 'on' ) {
+        $settings_sub['seo'] = array(
+            'title' => __( 'Store SEO', 'dokan' ),
+            'icon'  => '<i class="fa fa-globe"></i>',
+            'url'   => dokan_get_navigation_url( 'settings/seo' )
+        );
+    }
+    
     /**
      * Filter to get the seller dashboard settings navigation.
      *
@@ -533,11 +539,6 @@ function dokan_seller_reg_form_fields() {
             <strong id="url-alart-mgs" class="pull-right"></strong>
             <input type="text" class="input-text form-control" name="shopurl" id="seller-url" value="<?php if ( ! empty( $_POST['shopurl'] ) ) echo esc_attr($_POST['shopurl']); ?>" required="required" />
             <small><?php echo home_url() . '/' . dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' ); ?>/<strong id="url-alart"></strong></small>
-        </p>
-
-        <p class="form-row form-group form-row-wide">
-            <label for="seller-address"><?php _e( 'Address', 'dokan' ); ?><span class="required">*</span></label>
-            <textarea type="text" id="seller-address" name="address" class="form-control input" required="required"><?php if ( ! empty( $_POST['address'] ) ) echo esc_textarea($_POST['address']); ?></textarea>
         </p>
 
         <p class="form-row form-group form-row-wide">

@@ -86,6 +86,17 @@ if ( ! $from_shortcode ) {
                                 <?php } ?>
                             </div>
                         <?php } ?>
+                        <?php if ( Dokan_Template_Shortcodes::$errors ) { ?>
+                            <div class="dokan-alert dokan-alert-danger">
+                                <a class="dokan-close" data-dismiss="alert">&times;</a>
+
+                                <?php foreach ( Dokan_Template_Shortcodes::$errors as $error) { ?>
+
+                                    <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
+
+                                <?php } ?>
+                            </div>
+                        <?php } ?>
 
                         <div id="tab-container" class='tab-container'> <!-- Only required for left/right tabs -->
 
@@ -303,7 +314,7 @@ if ( ! $from_shortcode ) {
                                                         'id'               => 'product_tag',
                                                         'taxonomy'         => 'product_tag',
                                                         'title_li'         => '',
-                                                        'class'            => 'product_tags dokan-form-control chosen',
+                                                        'class'            => 'product_tags dokan-form-control',
                                                         'exclude'          => '',
                                                         'selected'         => $selected,
                                                         'echo'             => 0,
@@ -394,6 +405,10 @@ if ( ! $from_shortcode ) {
     (function($){
         $(document).ready(function(){
             $('#tab-container').easytabs();
+            $('#tab-container').bind('easytabs:before', function(){
+                $('select.product_tags').chosen();
+                $('#product_tag_chosen').css({ width: '100%' });
+            });
         });
     })(jQuery)
 </script>

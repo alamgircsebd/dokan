@@ -21,6 +21,7 @@ class Dokan_Rewrites {
         add_filter( 'template_include', array( $this, 'store_template' ) );
         add_filter( 'template_include', array( $this, 'store_review_template' ) );
         add_filter( 'template_include', array( $this,  'product_edit_template' ) );
+        add_filter( 'template_include', array( $this,  'store_toc_template' ) );
 
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
@@ -91,6 +92,9 @@ class Dokan_Rewrites {
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&term_section=true', 'top' );
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
 
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/toc?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&toc=true', 'top' );
++       add_rewrite_rule( $this->custom_store_url.'/([^/]+)/toc/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&toc=true', 'top' );
+
         do_action( 'dokan_rewrite_rules_loaded' );
     }
 
@@ -105,6 +109,7 @@ class Dokan_Rewrites {
         $vars[] = 'store_review';
         $vars[] = 'edit';
         $vars[] = 'term_section';
+        $vars[] = 'toc';
 
         foreach ( $this->query_vars as $var ) {
             $vars[] = $var;
@@ -147,6 +152,28 @@ class Dokan_Rewrites {
     }
 
     /**
+     * Returns the terms_and_conditions template
+     *
+     * @since 2.3
+     *
+     * @param string $template
+     *
+     * @return string
+     */
+    function store_toc_template( $template ) {
+
+        if ( ! $this->is_woo_installed() ) {
+            return $template;
+        }
+        if ( get_query_var( 'toc' ) ) {
+            return dokan_locate_template( 'store-toc.php' );
+        }
+
+        return $template;
+
+    }
+
+    /**
      * Returns the edit product template
      *
      * @param string  $template
@@ -160,7 +187,13 @@ class Dokan_Rewrites {
         }
 
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
-            return dokan_get_template_part( 'product-edit' );
+            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+                $edit_product_url = dokan_get_template_part( 'product-edit' );
+            } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
+                $edit_product_url = dokan_get_template_part( 'new-product-single' );
+            }
+
+            return $edit_product_url;
         }
 
         return $template;

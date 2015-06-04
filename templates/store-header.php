@@ -25,9 +25,10 @@ $social_fields = dokan_get_social_profile_fields();
                 <?php if ( isset( $store_info['store_name'] ) ) { ?>
                     <li class="store-name"><?php echo esc_html( $store_info['store_name'] ); ?></li>
                 <?php } ?>
-
                 <?php if ( isset( $store_info['address'] ) && !empty( $store_info['address'] ) ) { ?>
-                    <li class="dokan-store-address"><i class="fa fa-map-marker"></i> <?php echo esc_html( $store_info['address'] ); ?></li>
+                    <li class="dokan-store-address"><i class="fa fa-map-marker"></i>
+                        <?php echo dokan_get_seller_address( $store_user->ID ); ?>
+                    </li>
                 <?php } ?>
 
                 <?php if ( isset( $store_info['phone'] ) && !empty( $store_info['phone'] ) ) { ?>

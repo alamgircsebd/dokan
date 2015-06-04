@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: https://wedevs.com/products/plugins/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.2.2
+Version: 2.3-rc1
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.2.2' );
+define( 'DOKAN_PLUGIN_VERSION', '2.3-rc1' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -216,17 +216,21 @@ class WeDevs_Dokan {
         wp_register_style( 'dokan-extra', plugins_url( 'assets/css/dokan-extra.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
+        wp_register_style( 'dokan-magnific-popup', plugins_url( 'assets/css/magnific-popup.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'jquery-chart', plugins_url( 'assets/js/Chart.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-tabs-scripts', plugins_url( 'assets/js/jquery.easytabs.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-hashchange-scripts', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-tag-it', plugins_url( 'assets/js/tag-it.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
+        wp_register_script( 'dokan-popup', plugins_url( 'assets/js/jquery.magnific-popup.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
         wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
     }
 
     /**
@@ -239,6 +243,23 @@ class WeDevs_Dokan {
      * @uses wp_enqueue_style
      */
     public function scripts() {
+
+        if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
+            wp_enqueue_script( 'dokan-product-shipping' );
+            $localize_script = array(
+                'ajaxurl'     => admin_url( 'admin-ajax.php' ),
+                'nonce'       => wp_create_nonce( 'dokan_reviews' ),
+                'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+                'seller'      => array(
+                    'available'    => __( 'Available', 'dokan' ),
+                    'notAvailable' => __( 'Not Available', 'dokan' )
+                ),
+                'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
+                'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
+            );
+            wp_localize_script( 'jquery', 'dokan', $localize_script );
+        }
+
         $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
 
         // bailout if not dashboard
@@ -260,18 +281,43 @@ class WeDevs_Dokan {
             ),
             'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
             'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
+            'duplicates_attribute_messg' => __( 'Sorry this attribute option already exist, Try another one', 'dokan' ),
+            'variation_unset_warning' => __( 'Warning! This product will not have any variation by unchecked this option', 'dokan' ),
         );
-        //wp_enqueue_style( 'fontawesome' );
 
+        $form_validate_messages = array(
+            'required'        => __( "This field is required from localization.", 'dokan' ),
+            'remote'          => __( "Please fix this field.", 'dokan' ),
+            'email'           => __( "Please enter a valid email address." , 'dokan' ),
+            'url'             => __( "Please enter a valid URL." , 'dokan' ),
+            'date'            => __( "Please enter a valid date." , 'dokan' ),
+            'dateISO'         => __( "Please enter a valid date (ISO)." , 'dokan' ),
+            'number'          => __( "Please enter a valid number." , 'dokan' ),
+            'digits'          => __( "Please enter only digits." , 'dokan' ),
+            'creditcard'      => __( "Please enter a valid credit card number." , 'dokan' ),
+            'equalTo'         => __( "Please enter the same value again." , 'dokan' ),
+            'maxlength_msg'   => __( "Please enter no more than {0} characters." , 'dokan' ),
+            'minlength_msg'   => __( "Please enter at least {0} characters." , 'dokan' ),
+            'rangelength_msg' => __( "Please enter a value between {0} and {1} characters long." , 'dokan' ),
+            'range_msg'       => __( "Please enter a value between {0} and {1}." , 'dokan' ),
+            'max_msg'         => __( "Please enter a value less than or equal to {0}." , 'dokan' ),
+            'min_msg'         => __( "Please enter a value greater than or equal to {0}." , 'dokan' ),
+        );
+
+        wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
+
+        // var_dump('lol');
 
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+
 
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
                 wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-extra' );
                 wp_enqueue_style( 'dokan-style' );
+                wp_enqueue_style( 'dokan-magnific-popup' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -282,6 +328,7 @@ class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'underscore' );
                 wp_enqueue_script( 'post' );
+                wp_enqueue_script( 'dokan-tag-it' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
                 wp_enqueue_script( 'form-validate' );
                 wp_enqueue_script( 'dokan-tabs-scripts' );
@@ -289,6 +336,7 @@ class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-flot' );
                 wp_enqueue_script( 'chosen' );
                 wp_enqueue_media();
+                wp_enqueue_script( 'dokan-popup' );
 
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
@@ -320,6 +368,12 @@ class WeDevs_Dokan {
         if ( DOKAN_LOAD_STYLE ) {
             wp_enqueue_style( 'dokan-style' );
             wp_enqueue_style( 'fontawesome' );
+        }
+
+        //load country select js in seller settings store template
+        global $wp;
+        if ( isset( $wp->query_vars['settings'] ) == 'store' ) {
+            wp_enqueue_script( 'wc-country-select' );
         }
 
         do_action( 'dokan_after_load_script' );
@@ -358,6 +412,9 @@ class WeDevs_Dokan {
             require_once $inc_dir . 'wc-template.php';
             require_once $inc_dir . 'template-tags.php';
         }
+
+        require_once $classes_dir. 'store-seo.php';
+
     }
 
     /**
@@ -551,6 +608,7 @@ class WeDevs_Dokan {
 
 function dokan_load_plugin() {
     $dokan = WeDevs_Dokan::init();
+
 }
 
 add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );

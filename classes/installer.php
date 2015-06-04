@@ -17,6 +17,7 @@ class Dokan_Installer {
         $this->setup_pages();
         $this->woocommerce_settings();
         $this->create_tables();
+        $this->product_design();
 
         dokan_generate_sync_table();
 
@@ -38,46 +39,56 @@ class Dokan_Installer {
             return false;
         }
 
-        // do upgrades
-        if ( version_compare( $installed_version, '1.2', '<' ) ) {
-            $this->update_to_12();
-        }
+        $dokan_updates = array(
+            '1.2' => 'dokan-upgrade-1.2.php',
+            '2.1' => 'dokan-upgrade-2.1.php',
+            '2.3' => 'dokan-upgrade-2.3.php',
+        );
 
-        if ( version_compare( $installed_version, '2.1', '<' ) ) {
-            $this->update_to_21();
+        foreach ( $dokan_updates as $version => $path ) {
+            if ( version_compare( $installed_version, $version, '<' ) ) {
+                require_once DOKAN_INC_DIR . '/upgrades/' . $path;
+                update_option( 'dokan_theme_version', $version );
+            }
         }
     }
 
     /**
-     * Update to version 1.2
+     * Update WooCommerce mayaccount registration settings
+     *
+     * @since 1.0
      *
      * @return void
      */
-    public function update_to_12() {
-        // regenerate sync table for woocommerce 2.2 order status changes
-        dokan_generate_sync_table();
-    }
-
-    /**
-     * Update to version 2.1
-     *
-     * @since 2.1
-     *
-     * @return void
-     */
-    public function update_to_21() {
-       $this->create_announcement_table();
-    }
-
-
     function woocommerce_settings() {
         update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
+    }
+
+    /**
+     * Update product new style options
+     *
+     * when user first install this plugin
+     * the new product style options changed to new
+     *
+     * @since 2.3
+     *
+     * @return void
+     */
+    function product_design() {
+        $installed_version = get_option( 'dokan_theme_version' );
+
+        if ( !$installed_version ) {
+            $options = get_option( 'dokan_selling' );
+            $options['product_style'] = 'new';
+            update_option( 'dokan_selling', $options );
+        }
     }
 
     /**
      * Init dokan user roles
      *
      * @since Dokan 1.0
+     *
      * @global WP_Roles $wp_roles
      */
     function user_roles() {

@@ -1,5 +1,19 @@
 ==================== Plugin Version ====================
 
+v2.3 -> June 4, 2015
+---------------------
+
+- [new] Add new flat view style for product add and edit on seller dashboard
+- [new] Add store SEO manage system for sellers store page
+- [new] Add shipping calculator on single product page shipping tab
+- [new] Add new tab on seller store page to show terms and conditions
+- [tweak] Store address field change to multiple-fields on seller dashboard store settings
+- [fix] Fix styling issue in seller dashboard shipping settings options
+- [fix] Fix some text domain for translation issues on several pages
+- [fix] Fix empty title and empty category error on seller dashboard product edit page
+- [fix] Plugin updater: return false early when response error
+- [fix] Fix placeholder translation support for phone number and store name on seller dashboard store settings
+
 v2.2.2 -> May 15, 2015
 ---------------------
 
