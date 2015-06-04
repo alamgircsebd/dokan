@@ -279,27 +279,27 @@ class WeDevs_Dokan {
             'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
             'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
         );
-        //wp_enqueue_style( 'fontawesome' );
+
         $form_validate_messages = array(
-                    'required'        => __( "This field is required from localization.", 'dokan' ),
-                    'remote'          => __( "Please fix this field.", 'dokan' ),
-                    'email'           => __( "Please enter a valid email address." , 'dokan' ),
-                    'url'             => __( "Please enter a valid URL." , 'dokan' ),
-                    'date'            => __( "Please enter a valid date." , 'dokan' ),
-                    'dateISO'         => __( "Please enter a valid date (ISO)." , 'dokan' ),
-                    'number'          => __( "Please enter a valid number." , 'dokan' ),
-                    'digits'          => __( "Please enter only digits." , 'dokan' ),
-                    'creditcard'      => __( "Please enter a valid credit card number." , 'dokan' ),
-                    'equalTo'         => __( "Please enter the same value again." , 'dokan' ),
-                    'maxlength_msg'   => __( "Please enter no more than {0} characters." , 'dokan' ),
-                    'minlength_msg'   => __( "Please enter at least {0} characters." , 'dokan' ),
-                    'rangelength_msg' => __( "Please enter a value between {0} and {1} characters long." , 'dokan' ),
-                    'range_msg'       => __( "Please enter a value between {0} and {1}." , 'dokan' ),
-                    'max_msg'         => __( "Please enter a value less than or equal to {0}." , 'dokan' ),
-                    'min_msg'         => __( "Please enter a value greater than or equal to {0}." , 'dokan' ),
-                );
-                
-                wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
+            'required'        => __( "This field is required from localization.", 'dokan' ),
+            'remote'          => __( "Please fix this field.", 'dokan' ),
+            'email'           => __( "Please enter a valid email address." , 'dokan' ),
+            'url'             => __( "Please enter a valid URL." , 'dokan' ),
+            'date'            => __( "Please enter a valid date." , 'dokan' ),
+            'dateISO'         => __( "Please enter a valid date (ISO)." , 'dokan' ),
+            'number'          => __( "Please enter a valid number." , 'dokan' ),
+            'digits'          => __( "Please enter only digits." , 'dokan' ),
+            'creditcard'      => __( "Please enter a valid credit card number." , 'dokan' ),
+            'equalTo'         => __( "Please enter the same value again." , 'dokan' ),
+            'maxlength_msg'   => __( "Please enter no more than {0} characters." , 'dokan' ),
+            'minlength_msg'   => __( "Please enter at least {0} characters." , 'dokan' ),
+            'rangelength_msg' => __( "Please enter a value between {0} and {1} characters long." , 'dokan' ),
+            'range_msg'       => __( "Please enter a value between {0} and {1}." , 'dokan' ),
+            'max_msg'         => __( "Please enter a value less than or equal to {0}." , 'dokan' ),
+            'min_msg'         => __( "Please enter a value greater than or equal to {0}." , 'dokan' ),
+        );
+
+        wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
 
 
         // load only in dokan dashboard and edit page
@@ -394,11 +394,11 @@ class WeDevs_Dokan {
             require_once $inc_dir . 'admin-functions.php';
         } else {
             require_once $inc_dir . 'wc-template.php';
-            require_once $inc_dir . 'template-tags.php';            
+            require_once $inc_dir . 'template-tags.php';
         }
-        
+
         require_once $classes_dir. 'store-seo.php';
-       
+
     }
 
     /**
@@ -565,7 +565,7 @@ class WeDevs_Dokan {
      */
     function wp_title( $title, $sep ) {
         global $paged, $page;
-       
+
         if ( is_feed() ) {
             return $title;
         }
@@ -592,7 +592,7 @@ class WeDevs_Dokan {
 
 function dokan_load_plugin() {
     $dokan = WeDevs_Dokan::init();
-    
+
 }
 
 add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
