@@ -1799,7 +1799,7 @@ function dokan_seller_address_fields( $verified = false ) {
                             <span class="required"> *</span>
                         <?php } ?>
                     </label>
-                    <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[street_1]" value="<?php echo esc_attr( $address_street1 ); ?>" name="dokan_address[street_1]" placeholder=" " class="dokan-form-control input-md" type="text">
+                    <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[street_1]" value="<?php echo esc_attr( $address_street1 ); ?>" name="dokan_address[street_1]" placeholder="Street address" class="dokan-form-control input-md" type="text">
                 </div>
             <?php }
             if ( $seller_address_fields['street_2'] ) { ?>
@@ -1812,7 +1812,7 @@ function dokan_seller_address_fields( $verified = false ) {
                             <span class="required"> *</span>
                         <?php } ?>
                     </label>
-                    <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[street_2]" value="<?php echo esc_attr( $address_street2 ); ?>" name="dokan_address[street_2]" placeholder=" " class="dokan-form-control input-md" type="text">
+                    <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[street_2]" value="<?php echo esc_attr( $address_street2 ); ?>" name="dokan_address[street_2]" placeholder="Apartment, suite, unit etc. (optional)" class="dokan-form-control input-md" type="text">
                 </div>
             <?php }
             if ( $seller_address_fields['city'] || $seller_address_fields['zip'] ) {
@@ -1828,7 +1828,7 @@ function dokan_seller_address_fields( $verified = false ) {
                                     <span class="required"> *</span>
                                 <?php } ?>
                             </label>
-                            <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[city]" value="<?php echo esc_attr( $address_city ); ?>" name="dokan_address[city]" placeholder="" class="dokan-form-control input-md" type="text">
+                            <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[city]" value="<?php echo esc_attr( $address_city ); ?>" name="dokan_address[city]" placeholder="Town / City" class="dokan-form-control input-md" type="text">
                         </div>
                     <?php }
                     if ( $seller_address_fields['zip'] ) { ?>
@@ -1841,7 +1841,7 @@ function dokan_seller_address_fields( $verified = false ) {
                                     <span class="required"> *</span>
                                 <?php } ?>
                             </label>
-                            <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[zip]" value="<?php echo esc_attr( $address_zip ); ?>" name="dokan_address[zip]" placeholder=" " class="dokan-form-control input-md" type="text">
+                            <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[zip]" value="<?php echo esc_attr( $address_zip ); ?>" name="dokan_address[zip]" placeholder="Postcode / Zip" class="dokan-form-control input-md" type="text">
                         </div>
                     <?php } ?>
                     <div class="dokan-clearfix"></div>
