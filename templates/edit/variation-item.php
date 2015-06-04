@@ -61,7 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
         <input type="hidden" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" />
     <?php endif; ?>
 </td>
-<td style="width:15% !important;">
+<td style="width:25% !important;">
     <a href="#variation-edit-popup" class="dokan-btn dokan-btn-theme edit_variation"><i class="fa fa-pencil"></i></a>
     <a class="dokan-btn dokan-btn-theme remove_variation" data-variation_id=<?php echo $variation_id; ?>><i class="fa fa-trash-o"></i></a>
 </td>

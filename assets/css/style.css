@@ -644,6 +644,10 @@ body {
 .product-edit-new-container .dokan-form-top-area:after {
   clear: both;
 }
+.product-edit-new-container .dokan-product-short-description {
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
 .product-edit-new-container .content-half-part.featured-image {
   padding-left: 25px;
 }
@@ -1280,7 +1284,7 @@ body {
 }
 .product-variation-single-popup-content #product-variations .wc-metabox h3 {
   background: #e5e5e5;
-  padding: 10px;
+  padding: 15px;
   font-size: 14px;
 }
 .product-variation-single-popup-content #product-variations .wc-metabox h3 button {
@@ -1289,7 +1293,7 @@ body {
   margin-top: -5px;
 }
 .product-variation-single-popup-content #product-variations .wc-metabox table {
-  margin: 10px;
+  margin: 30px;
 }
 .product-variation-single-popup-content #product-variations .wc-metabox table td {
   vertical-align: top;
@@ -1358,6 +1362,9 @@ body {
 .product-variation-single-popup-content #product-variations p.toolbar select {
   border: 1px solid #ededed;
 }
+.product-variation-single-popup-content input#dokan_save_single_variation {
+  margin: 10px;
+}
 .update-button-wrap {
   border-bottom: 1px solid #DFDFDF;
   padding-bottom: 13px;
@@ -1422,7 +1429,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .white-popup {
   position: relative;
   background: #FFF;
-  padding: 20px;
+  padding: 0px;
   width: auto;
   max-width: 690px;
   margin: 20px auto;

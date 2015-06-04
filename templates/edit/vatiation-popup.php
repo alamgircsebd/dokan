@@ -241,7 +241,7 @@
                             </div>
                         </div>
                     </div>
-                    <input type="submit" name="dokan_save_single_variation" value="<?php _e( 'Save', 'dokan' ) ?>" class="dokan-btn dokan-btn-theme dokan-right">
+                    <input type="submit" id="dokan_save_single_variation" name="dokan_save_single_variation" value="<?php _e( 'Save', 'dokan' ) ?>" class="dokan-btn dokan-btn-theme dokan-right">
                     <span class="dokan-loading dokan-hide"></span>
                 </form>
                 <div class="dokan-clearfix"></div>

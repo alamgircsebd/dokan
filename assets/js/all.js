@@ -474,9 +474,18 @@ jQuery(function($) {
 
             downloadable: function() {
                 if ( $(this).prop('checked') ) {
+                    if ( $('.dokan-product-shipping-tax').hasClass('woocommerce-no-tax') ) {
+                        $('.dokan-product-shipping-tax').addClass('dokan-hide');
+                    };
+
                     $('.hide_if_downloadable').hide();
                     $(this).closest('div').find('.dokan-side-body').removeClass('dokan-hide');
                 } else {
+
+                    if ( $('.dokan-product-shipping-tax').hasClass('woocommerce-no-tax') ) {
+                        $('.dokan-product-shipping-tax').removeClass('dokan-hide');
+                    };
+
                     $('.hide_if_downloadable').show();
                     $(this).closest('div').find('.dokan-side-body').addClass('dokan-hide');
                 }
