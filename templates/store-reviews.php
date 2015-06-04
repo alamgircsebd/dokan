@@ -126,7 +126,6 @@ get_header( 'shop' );
         <?php
         echo $dokan_template_reviews->review_pagination( $id, $post_type, $limit, $status );
         ?>
-    </div>
 
     </div><!-- #content .site-content -->
 </div><!-- #primary .content-area -->
