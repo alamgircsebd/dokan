@@ -2151,12 +2151,6 @@ function dokan_seller_registration_errors( $error ) {
         if ( empty( $last_name ) ) {
             return new WP_Error( 'lname-error', __( 'Please enter your last name.', 'dokan' ) );
         }
-
-        $address = trim( $_POST['address'] );
-        if ( empty( $address ) ) {
-            return new WP_Error( 'address-error', __( 'Please enter your address.', 'dokan' ) );
-        }
-
         $phone = trim( $_POST['phone'] );
         if ( empty( $phone ) ) {
             return new WP_Error( 'phone-error', __( 'Please enter your phone number.', 'dokan' ) );
@@ -2213,8 +2207,7 @@ function dokan_on_create_seller( $user_id, $data ) {
         'social'         => array(),
         'payment'        => array(),
         'phone'          => $_POST['phone'],
-        'show_email'     => 'no',
-        'address'        => strip_tags( $_POST['address'] ),
+        'show_email'     => 'no',        
         'location'       => '',
         'find_address'   => '',
         'dokan_category' => '',
