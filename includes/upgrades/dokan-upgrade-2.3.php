@@ -40,35 +40,30 @@ function upgrade_dokan_23() {
  *
  * @return void
  */
-function upgrade_store_meta_23(){
-    
+function upgrade_store_meta_23() {
+
     $query = new WP_User_Query( array(
-        'role'    => 'seller',              
+        'role'    => 'seller',
     ) );
     $sellers = $query->get_results();
-    
+
     $default_settings = array(
         'store_name'   => '',
-        
         'location'     => '',
         'find_address' => '',
         'banner'       => '',
         'phone'        => '',
         'show_email'   => '',
         'gravatar'     => '',
-        
         'payment'      => array(),
-        
-        'social'       => array(),
-
+        'social'       => array()
     );
-    
+
     foreach ( $sellers as $seller ) {
 
         $current_settings = dokan_get_store_info( $seller->ID );
         $current_settings = wp_parse_args($current_settings, $default_settings);
-        
-        $old_address = $current_settings['address'];
+        $old_address      = $current_settings['address'];
 
         $new_address =  array(
             'street_1' => $old_address,
@@ -76,9 +71,9 @@ function upgrade_store_meta_23(){
             'city'     => '',
             'zip'      => '',
             'country'  => '',
-            'state'    => '',
+            'state'    => ''
         );
-        
+
         $current_settings['address'] = $new_address;
         update_user_meta( $seller->ID, 'dokan_profile_settings', $current_settings );
     }
