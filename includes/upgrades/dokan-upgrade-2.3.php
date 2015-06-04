@@ -31,8 +31,6 @@ function upgrade_dokan_23() {
     }
 }
 
-upgrade_dokan_23();
-
 
 /**
  * Upgrade store meta for sellers
@@ -85,3 +83,6 @@ function upgrade_store_meta_23(){
         update_user_meta( $seller->ID, 'dokan_profile_settings', $current_settings );
     }
 }
+
+upgrade_dokan_23();
+upgrade_store_meta_23();
