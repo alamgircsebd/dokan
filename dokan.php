@@ -369,7 +369,13 @@ class WeDevs_Dokan {
             wp_enqueue_style( 'dokan-style' );
             wp_enqueue_style( 'fontawesome' );
         }
-
+        
+        //load country select js in seller settings store template 
+        global $wp;
+        if ( isset( $wp->query_vars['settings'] ) == 'store' ) {
+            wp_enqueue_script( 'wc-country-select' );
+        }
+        
         do_action( 'dokan_after_load_script' );
     }
 

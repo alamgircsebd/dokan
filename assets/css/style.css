@@ -1938,6 +1938,10 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-settings-content .dokan-settings-area ul.dokan-categories label {
   font-weight: normal;
 }
+.dokan-settings-content .dokan-settings-area .dokan-address-fields label {
+  font-weight: normal;
+  font-size: 12px;
+}
 .dokan-single-store {
   margin: 0;
 }
@@ -2897,6 +2901,9 @@ input.tagit-hidden-field {
   width: 35px;
   top: 45%;
   left: 50%;
+}
+.dokan-right-margin-30 {
+  margin-right: 30px;
 }
 .dokan-close {
   float: right;

@@ -75,9 +75,9 @@ function dokan_product_seller_tab( $val ) {
         </li>
         <?php if ( !empty( $store_info['address'] ) ) { ?>
             <li class="store-address">
-                <span><?php _e( 'Address:', 'dokan' ); ?></span>
+                <span><b><?php _e( 'Address:', 'dokan' ); ?></b></span>
                 <span class="details">
-                    <?php echo esc_html( $store_info['address'] ); ?>
+                    <?php echo dokan_get_seller_address( $author->ID ) ?>
                 </span>
             </li>
         <?php } ?>
