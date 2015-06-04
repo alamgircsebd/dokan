@@ -1729,9 +1729,9 @@ function dokan_get_social_profile_fields() {
 /**
  * Generate Address fields form for seller
  * @since 2.3
- * 
+ *
  * @param boolean verified
- * 
+ *
  * @return void
  */
 
@@ -1844,7 +1844,7 @@ function dokan_seller_address_fields( $verified = false ) {
                             <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[zip]" value="<?php echo esc_attr( $address_zip ); ?>" name="dokan_address[zip]" placeholder=" " class="dokan-form-control input-md" type="text">
                         </div>
                     <?php } ?>
-                    <div class="dokan-clearfix"></div>                            
+                    <div class="dokan-clearfix"></div>
                 </div>
             <?php }
 
@@ -1857,7 +1857,7 @@ function dokan_seller_address_fields( $verified = false ) {
                     <label class="control-label" for="dokan_address[country]"><?php _e( 'Country ', 'dokan' ); ?>
                         <?php
                         $required_attr = '';
-                        if ( $seller_address_fields['country']['required'] ) { 
+                        if ( $seller_address_fields['country']['required'] ) {
                             $required_attr = 'required'; ?>
                             <span class="required"> *</span>
                         <?php } ?>
@@ -1900,14 +1900,14 @@ function dokan_seller_address_fields( $verified = false ) {
     <?php
 }
 
-/** 
+/**
  * Generate Address string | array for given seller id or current user
- * 
+ *
  * @since 2.3
- * 
+ *
  * @param int seller_id, defaults to current_user_id
  * @param boolean get_array, if true returns array instead of string
- * 
+ *
  * @return String|array Address | array Address
  */
 function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
@@ -1947,7 +1947,7 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
                 'country'  => $country_name,
                 'state'    => $state_name,
             );
-            
+
             return $address;
         }
         ob_start();
@@ -1963,7 +1963,7 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
             <span class="address-state"><?php echo $state_name ?></span>
             <span class="address-country"><?php echo $country_name ?></span>
         </p>
-        
+
     <?php
     return ob_get_clean();
 }

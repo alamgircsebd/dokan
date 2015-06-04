@@ -1918,6 +1918,32 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-settings-content .dokan-settings-area .dokan-gravatar:hover .dokan-remove-gravatar-image {
   display: block;
 }
+.dokan-settings-content .dokan-settings-area .dokan-seo-image {
+  position: relative;
+}
+.dokan-settings-content .dokan-settings-area .dokan-seo-image .dokan-remove-gravatar-image {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: #000;
+  top: 0;
+  left: 0;
+  opacity: .7;
+  font-size: 70px;
+  text-align: center;
+  color: #f00;
+  padding-top: 35px;
+  display: none;
+  border-radius: 0%;
+}
+.dokan-settings-content .dokan-settings-area .dokan-seo-image .gravatar-wrap .dokan-gravatar-img {
+  border-radius: 0%;
+  height: 150px !important;
+  width: 150px;
+}
+.dokan-settings-content .dokan-settings-area .dokan-seo-image:hover .dokan-remove-gravatar-image {
+  display: block;
+}
 .dokan-settings-content .dokan-settings-area .button-area {
   margin-top: 35px;
 }
@@ -2894,6 +2920,9 @@ input.tagit-hidden-field {
   filter: alpha(opacity=40);
   opacity: 0.4;
 }
+.dokan-right-margin-30 {
+  margin-right: 30px;
+}
 .dokan-variation-loader {
   background: url("../images/ajax-loader@2x.gif") no-repeat;
   position: absolute;
@@ -2901,9 +2930,6 @@ input.tagit-hidden-field {
   width: 35px;
   top: 45%;
   left: 50%;
-}
-.dokan-right-margin-30 {
-  margin-right: 30px;
 }
 .dokan-close {
   float: right;
@@ -3658,7 +3684,7 @@ table.dps-shipping-states tr td {
   padding: 10px 15px;
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table {
-  background: #eee;
+  background: #F5F5F5;
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-table tr td {
   width: 50%;
@@ -3678,6 +3704,9 @@ table.dps-shipping-states tr td {
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states {
   text-align: center;
+}
+.dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states tr td:last-child {
+  vertical-align: middle;
 }
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-add,
 .dokan-shipping-location-wrapper .dps-shipping-location-content table.dps-shipping-states .dps-remove {
