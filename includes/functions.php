@@ -1928,13 +1928,18 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
 
             $street_1     = isset( $address['street_1'] ) ? $address['street_1'] : '';
             $street_2     = isset( $address['street_2'] ) ? $address['street_2'] : '';
-            $city         = isset( $address['city'] ) ? $address['city'] . ', ' : '';
+            $city         = isset( $address['city'] ) ? $address['city'] : '';
+            $city         = ( $city == '' ) ? $city : $city . ', ';
+            
             $zip          = isset( $address['zip'] ) ? $address['zip'] : '';
             $country_code = isset( $address['country'] ) ? $address['country'] : '';
             $state_code   = isset( $address['state'] ) ? $address['state'] : '';
+            $state_code   = ( $address['state'] == 'N/A' ) ? '' : $address['state'];
 
             $country_name = isset( $countries[$country_code] ) ? $countries[$country_code] : '';
-            $state_name   = isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] . ', ' : $state_code . ', ';
+            $state_name   = isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code;
+            $state_name   = ($state_code == '') ? $state_name : $state_name.', ';
+            
         } else {
             return 'N/A';
         }
@@ -1945,7 +1950,7 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
                 'city'     => $city,
                 'zip'      => $zip,
                 'country'  => $country_name,
-                'state'    => $state_name,
+                'state'    => isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code,
             );
 
             return $address;
