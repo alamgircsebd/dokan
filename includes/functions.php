@@ -1912,63 +1912,58 @@ function dokan_seller_address_fields( $verified = false ) {
  */
 function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
 
-        if ( $seller_id == '' ) {
-            $seller_id = get_current_user_id();
-        }
+    if ( $seller_id == '' ) {
+        $seller_id = get_current_user_id();
+    }
 
-        $profile_info = dokan_get_store_info( $seller_id );
+    $profile_info = dokan_get_store_info( $seller_id );
 
-        if ( isset( $profile_info['address'] ) ) {
+    if ( isset( $profile_info['address'] ) ) {
 
-            $address = $profile_info['address'];
+        $address = $profile_info['address'];
 
-            $country_obj = new WC_Countries();
-            $countries   = $country_obj->countries;
-            $states      = $country_obj->states;
+        $country_obj = new WC_Countries();
+        $countries   = $country_obj->countries;
+        $states      = $country_obj->states;
 
-            $street_1     = isset( $address['street_1'] ) ? $address['street_1'] : '';
-            $street_2     = isset( $address['street_2'] ) ? $address['street_2'] : '';
-            $city         = isset( $address['city'] ) ? $address['city'] : '';
-            $city         = ( $city == '' ) ? $city : $city . ', ';
-            
-            $zip          = isset( $address['zip'] ) ? $address['zip'] : '';
-            $country_code = isset( $address['country'] ) ? $address['country'] : '';
-            $state_code   = isset( $address['state'] ) ? $address['state'] : '';
-            $state_code   = ( $address['state'] == 'N/A' ) ? '' : $address['state'];
+        $street_1     = isset( $address['street_1'] ) ? $address['street_1'] : '';
+        $street_2     = isset( $address['street_2'] ) ? $address['street_2'] : '';
+        $city         = isset( $address['city'] ) ? $address['city'] : '';
 
-            $country_name = isset( $countries[$country_code] ) ? $countries[$country_code] : '';
-            $state_name   = isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code;
-            $state_name   = ($state_code == '') ? $state_name : $state_name.', ';
-            
-        } else {
-            return 'N/A';
-        }
-        if ( $get_array == TRUE ) {
-            $address = array(
-                'street_1' => $street_1,
-                'street_2' => $street_2,
-                'city'     => $city,
-                'zip'      => $zip,
-                'country'  => $country_name,
-                'state'    => isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code,
-            );
+        $zip          = isset( $address['zip'] ) ? $address['zip'] : '';
+        $country_code = isset( $address['country'] ) ? $address['country'] : '';
+        $state_code   = isset( $address['state'] ) ? $address['state'] : '';
+        $state_code   = ( $address['state'] == 'N/A' ) ? '' : $address['state'];
 
-            return $address;
-        }
-        ob_start();
-        ?>
-        <p>
-            <span class="address-street"><?php echo $street_1 ?></span>
-            <br>
-            <span class="address-street-2"><?php echo $street_2 ?></span>
-            <br>
-            <span class="address-city"><?php echo $city?></span>
-            <span class="address-zip"><?php echo $zip?></span>
-            <br>
-            <span class="address-state"><?php echo $state_name ?></span>
-            <span class="address-country"><?php echo $country_name ?></span>
-        </p>
+        $country_name = isset( $countries[$country_code] ) ? $countries[$country_code] : '';
+        $state_name   = isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code;
 
-    <?php
-    return ob_get_clean();
+    } else {
+        return 'N/A';
+    }
+
+    if ( $get_array == TRUE ) {
+        $address = array(
+            'street_1' => $street_1,
+            'street_2' => $street_2,
+            'city'     => $city,
+            'zip'      => $zip,
+            'country'  => $country_name,
+            'state'    => isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code,
+        );
+
+        return $address;
+    }
+
+    $country           = new WC_Countries();
+    $formatted_address = $country->get_formatted_address( array(
+        'address_1' => $street_1,
+        'address_2' => $street_2,
+        'city'      => $city,
+        'postcode'  => $zip,
+        'state'     => $state_code,
+        'country'   => $country_code
+    ) );
+
+    return apply_filters( 'dokan_get_seller_address', $formatted_address, $profile_info );
 }
