@@ -917,37 +917,40 @@ function dokan_new_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_tax_status', 'none' );
     }
 
-    // Save Shipping meta data if enable shipping
-    if ( $is_virtual == 'no' ) {
-        update_post_meta( $post_id, '_weight', stripslashes( $_POST['_weight'] ) );
-        update_post_meta( $post_id, '_length', stripslashes( $_POST['_length'] ) );
-        update_post_meta( $post_id, '_width', stripslashes( $_POST['_width'] ) );
-        update_post_meta( $post_id, '_height', stripslashes( $_POST['_height'] ) );
-    } else {
-        update_post_meta( $post_id, '_weight', '' );
-        update_post_meta( $post_id, '_length', '' );
-        update_post_meta( $post_id, '_width', '' );
-        update_post_meta( $post_id, '_height', '' );
-    }
-    //Save shipping meta data
-    //
-    update_post_meta( $post_id, '_disable_shipping', stripslashes( isset( $_POST['_disable_shipping'] ) ? 'no' : 'yes' ) );
+    if ( 'yes' == get_option( 'woocommerce_calc_shipping' ) ) {
 
-    if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
-        update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
-        update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
-        update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
-        update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
-    } else {
-        update_post_meta( $post_id, '_overwrite_shipping', 'no' );
-        update_post_meta( $post_id, '_additional_price', '' );
-        update_post_meta( $post_id, '_additional_qty', '' );
-        update_post_meta( $post_id, '_dps_processing_time', '' );
-    }
+        // Save Shipping meta data if enable shipping
+        if ( $is_virtual == 'no' ) {
+            update_post_meta( $post_id, '_weight', stripslashes( $_POST['_weight'] ) );
+            update_post_meta( $post_id, '_length', stripslashes( $_POST['_length'] ) );
+            update_post_meta( $post_id, '_width', stripslashes( $_POST['_width'] ) );
+            update_post_meta( $post_id, '_height', stripslashes( $_POST['_height'] ) );
+        } else {
+            update_post_meta( $post_id, '_weight', '' );
+            update_post_meta( $post_id, '_length', '' );
+            update_post_meta( $post_id, '_width', '' );
+            update_post_meta( $post_id, '_height', '' );
+        }
+        //Save shipping meta data
+        //
+        update_post_meta( $post_id, '_disable_shipping', stripslashes( isset( $_POST['_disable_shipping'] ) ? 'no' : 'yes' ) );
 
-    // Save shipping class
-    $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
-    wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
+        if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
+            update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
+            update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
+            update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
+            update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
+        } else {
+            update_post_meta( $post_id, '_overwrite_shipping', 'no' );
+            update_post_meta( $post_id, '_additional_price', '' );
+            update_post_meta( $post_id, '_additional_qty', '' );
+            update_post_meta( $post_id, '_dps_processing_time', '' );
+        }
+
+        // Save shipping class
+        $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
+        wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
+    }
 
     // Unique SKU
     $sku     = get_post_meta($post_id, '_sku', true);
@@ -2151,12 +2154,6 @@ function dokan_seller_registration_errors( $error ) {
         if ( empty( $last_name ) ) {
             return new WP_Error( 'lname-error', __( 'Please enter your last name.', 'dokan' ) );
         }
-
-        $address = trim( $_POST['address'] );
-        if ( empty( $address ) ) {
-            return new WP_Error( 'address-error', __( 'Please enter your address.', 'dokan' ) );
-        }
-
         $phone = trim( $_POST['phone'] );
         if ( empty( $phone ) ) {
             return new WP_Error( 'phone-error', __( 'Please enter your phone number.', 'dokan' ) );
@@ -2213,8 +2210,7 @@ function dokan_on_create_seller( $user_id, $data ) {
         'social'         => array(),
         'payment'        => array(),
         'phone'          => $_POST['phone'],
-        'show_email'     => 'no',
-        'address'        => strip_tags( $_POST['address'] ),
+        'show_email'     => 'no',        
         'location'       => '',
         'find_address'   => '',
         'dokan_category' => '',

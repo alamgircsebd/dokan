@@ -8,11 +8,13 @@ if( isset( $post->ID ) && $post->ID && $post->post_type == 'product' ) {
     $post_id = $post->ID;
     $post_title = $post->post_title;
     $post_content = $post->post_content;
+    $post_excerpt = $post->post_excerpt;
     $post_status = $post->post_status;
 } else {
     $post_id = NULL;
     $post_title = '';
     $post_content = '';
+    $post_excerpt = '';
     $post_status = 'pending';
     $from_shortcode = true;
 
@@ -23,6 +25,7 @@ if ( isset( $_GET['product_id'] ) ) {
     $post           = get_post( $post_id );
     $post_title     = $post->post_title;
     $post_content   = $post->post_content;
+    $post_excerpt   = $post->post_excerpt;
     $post_status    = $post->post_status;
     $product        = get_product( $post_id );
     $from_shortcode = true;
@@ -48,6 +51,7 @@ $_length            = get_post_meta( $post_id, '_length', true );
 $_width             = get_post_meta( $post_id, '_width', true );
 $_height            = get_post_meta( $post_id, '_height', true );
 $_downloadable      = get_post_meta( $post_id, '_downloadable', true );
+$_stock             = get_post_meta( $post_id, '_stock', true );
 $_stock_status      = get_post_meta( $post_id, '_stock_status', true );
 $_visibility        = get_post_meta( $post_id, '_visibility', true );
 $_enable_reviews    = $post->comment_status;
@@ -353,6 +357,11 @@ if ( ! $from_shortcode ) {
                             </div><!-- .content-half-part -->
                         </div><!-- .dokan-form-top-area -->
 
+                        <div class="dokan-product-short-description">
+                            <label for="post_excerpt" class="form-label"><?php _e( 'Short Description', 'dokan' ); ?></label>
+                            <?php wp_editor( esc_textarea( wpautop( $post_excerpt ) ), 'post_excerpt', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_excerpt') ); ?>
+                        </div>
+
                         <div class="dokan-product-description">
                             <label for="post_content" class="form-label"><?php _e( 'Description', 'dokan' ); ?></label>
                             <?php wp_editor( esc_textarea( wpautop( $post_content ) ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
@@ -385,7 +394,7 @@ if ( ! $from_shortcode ) {
 
                                     <div class="dokan-w3 hide_if_variation">
                                         <label for="_stock" class="dokan-form-label"><?php _e( 'Quantity', 'dokan' ); ?></label>
-                                        <?php dokan_post_input_box( $post_id, '_stock', array( 'placeholder' => __( '10', 'dokan' ) ) ); ?>
+                                        <input type="number" name="_stock" placeholder="<?php __( '1', 'dokan' ); ?>" value="<?php echo wc_stock_amount( $_stock ); ?>" min="0" step="1">
                                     </div>
 
                                     <div class="dokan-w3 hide_if_variation">
@@ -486,7 +495,6 @@ if ( ! $from_shortcode ) {
                                     <?php do_action( 'dokan_product_edit_after_sidebar' ); ?>
                                 <?php endif; ?>
                                 <div class="dokan-divider-top"></div>
-                                <?php //var_dump( $product_attributes ); ?>
 
                                 <div class="dokan-clearfix dokan-variation-container">
                                     <label class="checkbox-inline form-label hide_if_variation" for="_has_attribute">
@@ -544,7 +552,7 @@ if ( ! $from_shortcode ) {
                                                             $options = array_map( 'trim', explode('|', $attribute['value'] ) );
                                                         }
                                                         ?>
-                                                        <td colspan="3"><input type="text" name="attribute_values[]" value="<?php echo implode( ',', $options ); ?>" class="dokan-form-control dokan-attribute-option-values"></td>
+                                                        <td colspan="4"><input type="text" name="attribute_values[]" value="<?php echo implode( ',', $options ); ?>" class="dokan-form-control dokan-attribute-option-values"></td>
                                                         <td><button class="dokan-btn dokan-btn-theme remove_attribute"><i class="fa fa-trash-o"></i></button></td>
                                                     </tr>
                                                 <?php endforeach; ?>
@@ -554,13 +562,13 @@ if ( ! $from_shortcode ) {
                                                             <input type="text" name="attribute_names[]" value="" class="dokan-form-control dokan-attribute-option-name">
                                                             <input type="hidden" name="attribute_is_taxonomy[]" value="0">
                                                         </td>
-                                                        <td colspan="3"><input type="text" name="attribute_values[]" value="" class="dokan-form-control dokan-attribute-option-values"></td>
+                                                        <td colspan="4"><input type="text" name="attribute_values[]" value="" class="dokan-form-control dokan-attribute-option-values"></td>
                                                         <td><button class="dokan-btn dokan-btn-theme remove_attribute"><i class="fa fa-trash-o"></i></button></td>
                                                     </tr>
                                                 <?php endif ?>
 
                                                     <tr class="dokan-attribute-is-variations">
-                                                        <td colspan="3">
+                                                        <td colspan="6">
                                                             <label class="checkbox-inline form-label" for="_create_variation">
                                                                 <input name="_create_variation" value="no" type="hidden">
                                                                 <input name="_create_variation" id="_create_variation" value="yes" type="checkbox">
@@ -599,7 +607,8 @@ if ( ! $from_shortcode ) {
                             <?php do_action( 'dokan_product_options_shipping_before' ); ?>
                         <?php endif; ?>
 
-                        <div class="dokan-product-inventory dokan-edit-row dokan-clearfix">
+                        <?php if ( 'yes' == get_option( 'woocommerce_calc_shipping' ) || 'yes' == get_option( 'woocommerce_calc_taxes' ) ): ?>
+                        <div class="dokan-product-shipping-tax dokan-edit-row dokan-clearfix <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
                             <div class="dokan-side-left">
                                 <h2><?php _e( 'Shipping & Tax', 'dokan' ); ?></h2>
 
@@ -609,86 +618,88 @@ if ( ! $from_shortcode ) {
                             </div>
 
                             <div class="dokan-side-right">
-
-                                <div class="dokan-clearfix hide_if_downloadable dokan-shipping-container">
-                                    <input type="hidden" name="product_shipping_class" value="0">
-                                    <div class="dokan-form-group">
-                                        <label class="dokan-checkbox-inline" for="_disable_shipping">
-                                            <input type="checkbox" id="_disable_shipping" name="_disable_shipping" <?php checked( $_disable_shipping, 'no' ); ?>>
-                                            <?php _e( 'This product required shipping', 'dokan' ); ?>
-                                        </label>
-                                    </div>
-
-                                    <div class="show_if_needs_shipping dokan-shipping-dimention-options">
-                                        <?php dokan_post_input_box( $post_id, '_weight', array( 'class' => 'form-control', 'placeholder' => __( 'weight (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                                        <?php dokan_post_input_box( $post_id, '_length', array( 'class' => 'form-control', 'placeholder' => __( 'length (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                                        <?php dokan_post_input_box( $post_id, '_width', array( 'class' => 'form-control', 'placeholder' => __( 'width (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                                        <?php dokan_post_input_box( $post_id, '_height', array( 'class' => 'form-control', 'placeholder' => __( 'height (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                                        <div class="dokan-clearfix"></div>
-                                    </div>
-
-                                    <?php if ( $post_id ): ?>
-                                        <?php do_action( 'dokan_product_options_shipping' ); ?>
-                                    <?php endif; ?>
-                                    <div class="show_if_needs_shipping dokan-form-group">
-                                        <label class="control-label" for="product_shipping_class"><?php _e( 'Shipping Class', 'dokan' ); ?></label>
-                                        <div class="dokan-text-left">
-                                            <?php
-                                            // Shipping Class
-                                            $classes = get_the_terms( $post->ID, 'product_shipping_class' );
-                                            if ( $classes && ! is_wp_error( $classes ) ) {
-                                                $current_shipping_class = current($classes)->term_id;
-                                            } else {
-                                                $current_shipping_class = '';
-                                            }
-
-                                            $args = array(
-                                                'taxonomy'          => 'product_shipping_class',
-                                                'hide_empty'        => 0,
-                                                'show_option_none'  => __( 'No shipping class', 'dokan' ),
-                                                'name'              => 'product_shipping_class',
-                                                'id'                => 'product_shipping_class',
-                                                'selected'          => $current_shipping_class,
-                                                'class'             => 'dokan-form-control'
-                                            );
-                                            ?>
-
-                                            <?php wp_dropdown_categories( $args ); ?>
-                                            <p class="help-block"><?php _e( 'Shipping classes are used by certain shipping methods to group similar products.', 'dokan' ); ?></p>
-                                        </div>
-                                    </div>
-
-                                    <div class="show_if_needs_shipping dokan-shipping-product-options">
-
+                                <?php if( 'yes' == get_option('woocommerce_calc_shipping') ): ?>
+                                    <div class="dokan-clearfix hide_if_downloadable dokan-shipping-container">
+                                        <input type="hidden" name="product_shipping_class" value="0">
                                         <div class="dokan-form-group">
-                                            <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
+                                            <label class="dokan-checkbox-inline" for="_disable_shipping">
+                                                <input type="checkbox" id="_disable_shipping" name="_disable_shipping" <?php checked( $_disable_shipping, 'no' ); ?>>
+                                                <?php _e( 'This product required shipping', 'dokan' ); ?>
+                                            </label>
                                         </div>
 
-                                        <div class="dokan-form-group show_if_override">
-                                            <label class="dokan-control-label" for="_additional_product_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
-                                            <input id="_additional_product_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
+                                        <div class="show_if_needs_shipping dokan-shipping-dimention-options">
+                                            <?php dokan_post_input_box( $post_id, '_weight', array( 'class' => 'form-control', 'placeholder' => __( 'weight (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                                            <?php dokan_post_input_box( $post_id, '_length', array( 'class' => 'form-control', 'placeholder' => __( 'length (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                                            <?php dokan_post_input_box( $post_id, '_width', array( 'class' => 'form-control', 'placeholder' => __( 'width (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                                            <?php dokan_post_input_box( $post_id, '_height', array( 'class' => 'form-control', 'placeholder' => __( 'height (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                                            <div class="dokan-clearfix"></div>
                                         </div>
 
-                                        <div class="dokan-form-group show_if_override">
-                                            <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
-                                            <input id="additional_qty" value="<?php echo ( $_additional_qty ) ? $_additional_qty : $dps_additional_qty; ?>" name="_additional_qty" placeholder="1.99" class="dokan-form-control" type="number" step="any">
+                                        <?php if ( $post_id ): ?>
+                                            <?php do_action( 'dokan_product_options_shipping' ); ?>
+                                        <?php endif; ?>
+                                        <div class="show_if_needs_shipping dokan-form-group">
+                                            <label class="control-label" for="product_shipping_class"><?php _e( 'Shipping Class', 'dokan' ); ?></label>
+                                            <div class="dokan-text-left">
+                                                <?php
+                                                // Shipping Class
+                                                $classes = get_the_terms( $post->ID, 'product_shipping_class' );
+                                                if ( $classes && ! is_wp_error( $classes ) ) {
+                                                    $current_shipping_class = current($classes)->term_id;
+                                                } else {
+                                                    $current_shipping_class = '';
+                                                }
+
+                                                $args = array(
+                                                    'taxonomy'          => 'product_shipping_class',
+                                                    'hide_empty'        => 0,
+                                                    'show_option_none'  => __( 'No shipping class', 'dokan' ),
+                                                    'name'              => 'product_shipping_class',
+                                                    'id'                => 'product_shipping_class',
+                                                    'selected'          => $current_shipping_class,
+                                                    'class'             => 'dokan-form-control'
+                                                );
+                                                ?>
+
+                                                <?php wp_dropdown_categories( $args ); ?>
+                                                <p class="help-block"><?php _e( 'Shipping classes are used by certain shipping methods to group similar products.', 'dokan' ); ?></p>
+                                            </div>
                                         </div>
 
-                                        <div class="dokan-form-group show_if_override">
-                                            <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Processing Time', 'dokan' ); ?></label>
-                                            <select name="_dps_processing_time" id="_dps_processing_time" class="dokan-form-control">
-                                                <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
-                                                      <option value="<?php echo $processing_key; ?>" <?php selected( $porduct_shipping_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
-                                                <?php endforeach ?>
-                                            </select>
+                                        <div class="show_if_needs_shipping dokan-shipping-product-options">
+
+                                            <div class="dokan-form-group">
+                                                <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
+                                            </div>
+
+                                            <div class="dokan-form-group show_if_override">
+                                                <label class="dokan-control-label" for="_additional_product_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
+                                                <input id="_additional_product_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
+                                            </div>
+
+                                            <div class="dokan-form-group show_if_override">
+                                                <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
+                                                <input id="additional_qty" value="<?php echo ( $_additional_qty ) ? $_additional_qty : $dps_additional_qty; ?>" name="_additional_qty" placeholder="1.99" class="dokan-form-control" type="number" step="any">
+                                            </div>
+
+                                            <div class="dokan-form-group show_if_override">
+                                                <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Processing Time', 'dokan' ); ?></label>
+                                                <select name="_dps_processing_time" id="_dps_processing_time" class="dokan-form-control">
+                                                    <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
+                                                          <option value="<?php echo $processing_key; ?>" <?php selected( $porduct_shipping_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
+                                                    <?php endforeach ?>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
 
-                                <div class="dokan-divider-top hide_if_downloadable"></div>
+                                <?php if ( 'yes' == get_option('woocommerce_calc_shipping') && 'yes' == get_option( 'woocommerce_calc_taxes' ) ): ?>
+                                    <div class="dokan-divider-top hide_if_downloadable"></div>
+                                <?php endif ?>
 
                                 <?php if ( 'yes' == get_option( 'woocommerce_calc_taxes' ) ) { ?>
-
                                 <div class="dokan-clearfix dokan-tax-container">
                                     <div class="dokan-form-group">
                                         <label for="_required_tax" class="dokan-form-label">
@@ -721,6 +732,7 @@ if ( ! $from_shortcode ) {
                                 <?php } ?>
                             </div><!-- .dokan-side-right -->
                         </div><!-- .dokan-product-inventory -->
+                        <?php endif; ?>
 
                         <?php if ( $post_id ): ?>
                             <?php do_action( 'dokan_product_edit_after_shipping' ); ?>
@@ -777,7 +789,7 @@ if ( ! $from_shortcode ) {
 
                         <?php if ( $post_id ): ?>
                             <?php do_action( 'dokan_product_edit_after_options' ); ?>
-                        <?php endif; ?>                        
+                        <?php endif; ?>
 
                         <?php wp_nonce_field( 'dokan_add_new_product', 'dokan_add_new_product_nonce' ); ?>
                         <input type="submit" name="dokan_add_product" class="dokan-btn dokan-btn-theme dokan-btn-lg btn-block" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>

@@ -135,7 +135,7 @@ class Dokan_Template_Shortcodes {
                 case 'payment':
                     dokan_get_template_part( 'settings/payment' );
                     break;
-                                
+
                 case 'seo':
                     dokan_get_template_part( 'settings/seo' );
                     break;
@@ -233,7 +233,7 @@ class Dokan_Template_Shortcodes {
                         'ID'             => $post_id,
                         'post_title'     => sanitize_text_field( $_POST['post_title'] ),
                         'post_content'   => $_POST['post_content'],
-                        'post_excerpt'   => '',
+                        'post_excerpt'   => $_POST['post_excerpt'],
                         'post_status'    => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
                         'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
                     ) );
@@ -282,8 +282,10 @@ class Dokan_Template_Shortcodes {
                         do_action( 'dokan_new_product_added', $product_id, $post_data );
                     }
 
-                    if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
-                        //Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                    if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
+                        if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
+                            Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                        }
                     }
 
                     wp_redirect( add_query_arg( array( 'message' => 'success' ), dokan_edit_product_url( $product_id ) ) );
