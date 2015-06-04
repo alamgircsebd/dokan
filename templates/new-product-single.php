@@ -51,6 +51,7 @@ $_length            = get_post_meta( $post_id, '_length', true );
 $_width             = get_post_meta( $post_id, '_width', true );
 $_height            = get_post_meta( $post_id, '_height', true );
 $_downloadable      = get_post_meta( $post_id, '_downloadable', true );
+$_stock             = get_post_meta( $post_id, '_stock', true );
 $_stock_status      = get_post_meta( $post_id, '_stock_status', true );
 $_visibility        = get_post_meta( $post_id, '_visibility', true );
 $_enable_reviews    = $post->comment_status;
@@ -393,7 +394,7 @@ if ( ! $from_shortcode ) {
 
                                     <div class="dokan-w3 hide_if_variation">
                                         <label for="_stock" class="dokan-form-label"><?php _e( 'Quantity', 'dokan' ); ?></label>
-                                        <?php dokan_post_input_box( $post_id, '_stock', array( 'placeholder' => __( '10', 'dokan' ) ) ); ?>
+                                        <input type="number" name="_stock" placeholder="<?php __( '1', 'dokan' ); ?>" value="<?php echo wc_stock_amount( $_stock ); ?>" min="0" step="1">
                                     </div>
 
                                     <div class="dokan-w3 hide_if_variation">
