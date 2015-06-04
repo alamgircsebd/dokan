@@ -72,18 +72,11 @@ class Dokan_Upgrade {
             return;
         }
 
-        $installed_version = get_option( 'dokan_theme_version' );
-
-        if ( version_compare( $installed_version, DOKAN_PLUGIN_VERSION , '<' ) ) {
-
-            $dokan_installer = new Dokan_Installer();
-            $dokan_installer->create_announcement_table();
-
-            update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
-
-            $redirect_url = $_SERVER['HTTP_REFERER'];
-            wp_safe_redirect( $redirect_url );
-        }
+        $dokan_installer = new Dokan_Installer();
+        $dokan_installer->do_upgrades();
+        // call upgrade class
+        $redirect_url = $_SERVER['HTTP_REFERER'];
+        wp_safe_redirect( $redirect_url );
 
     }
 

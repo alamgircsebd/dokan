@@ -473,6 +473,20 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
             <input type="number" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>" min="<?php echo esc_attr( $min ); ?>" step="<?php echo esc_attr( $step ); ?>" size="<?php echo esc_attr( $size ); ?>">
             <?php
             break;
+
+        case 'radio':
+            $options = is_array( $attr['options'] ) ? $attr['options'] : array();
+            foreach ( $options as $key => $label ) {
+            ?>
+            <label class="<?php echo $class; ?>" for="<?php echo $key; ?>">
+                <input name="<?php echo $name; ?>" id="<?php echo $key; ?>" value="<?php echo $key; ?>" type="radio"<?php checked( $value, $key ); ?>>
+                <?php echo $label; ?>
+            </label>
+
+            <?php
+            }
+            break;
+
     }
 }
 
@@ -498,6 +512,36 @@ function dokan_get_post_status( $status ) {
 
         case 'future':
             return __( 'Scheduled', 'dokan' );
+            break;
+
+        default:
+            return '';
+            break;
+    }
+}
+
+/**
+ * Get user friendly post status label based class
+ *
+ * @param string $status
+ * @return string
+ */
+function dokan_get_post_status_label_class( $status ) {
+    switch ( $status ) {
+        case 'publish':
+            return 'dokan-label-success';
+            break;
+
+        case 'draft':
+            return 'dokan-label-default';
+            break;
+
+        case 'pending':
+            return 'dokan-label-warning';;
+            break;
+
+        case 'future':
+            return 'dokan-label-info';;
             break;
 
         default:
@@ -692,7 +736,13 @@ function dokan_edit_product_url( $product_id ) {
         return trailingslashit( get_permalink( $product_id ) ). 'edit/';
     }
 
-    return add_query_arg( array( 'product_id' => $product_id, 'action' => 'edit' ), dokan_get_navigation_url('products') );
+    if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+        $new_product_url = dokan_get_navigation_url('products');
+    } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
+        $new_product_url = dokan_get_navigation_url('new-product');
+    }
+
+    return add_query_arg( array( 'product_id' => $product_id, 'action' => 'edit' ), $new_product_url );
 }
 
 /**

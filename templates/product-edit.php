@@ -406,6 +406,7 @@ if ( ! $from_shortcode ) {
         $(document).ready(function(){
             $('#tab-container').easytabs();
             $('#tab-container').bind('easytabs:before', function(){
+                $('select.product_tags').chosen();
                 $('#product_tag_chosen').css({ width: '100%' });
             });
         });

@@ -78,12 +78,12 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 									<label><?php _e( 'Stock status', 'dokan' ); ?> <a href="#" class="tips" title="<?php _e( 'Controls whether or not the product is listed as "in stock" or "out of stock" on the frontend.', 'dokan' ) ?>">[?]</a></label>
 									<select name="variable_stock_status[<?php echo $loop; ?>]">
 										<option value="instock" <?php selected( $_stock_status, 'instock' ) ?>><?php _e( 'In stock', 'dokan' ); ?></option>
-										<option value="outofstock" <?php selected( $_stock_status, 'outofstock' ) ?>><?php _e( 'Out of stock', 'dokan' ); ?></option>									
+										<option value="outofstock" <?php selected( $_stock_status, 'outofstock' ) ?>><?php _e( 'Out of stock', 'dokan' ); ?></option>
 									</select>
 								</td>
 							</tr>
 						<?php endif; ?>
-						
+
 						<tr class="variable_pricing">
 							<td>
 								<label><?php echo __( 'Regular Price:', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
@@ -228,7 +228,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 					<label class="checkbox"><input type="checkbox" class="checkbox variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enable this option if access is given to a downloadable file upon purchase of a product', 'dokan' ); ?>" href="#">[?]</a></label>
 
 					<label class="checkbox"><input type="checkbox" class="checkbox variable_is_virtual" name="variable_is_virtual[<?php echo $loop; ?>]" <?php checked( isset( $_virtual ) ? $_virtual : '', 'yes' ); ?> /> <?php _e( 'Virtual', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enable this option if a product is not shipped or there is no shipping cost', 'dokan' ); ?>" href="#">[?]</a></label>
-					
+
 					<label class="checkbox"><input type="checkbox" class="checkbox variable_manage_stock" name="variable_manage_stock[<?php echo $loop; ?>]" <?php checked( isset( $_manage_stock ) ? $_manage_stock : '', 'yes' ); ?> /> <?php _e( 'Manage Stock?', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enable this option to enable stock management at variation level', 'dokan' ); ?>" href="#">[?]</a></label>
 
 					<?php do_action( 'woocommerce_variation_options', $loop, $variation_data, $variation ); ?>

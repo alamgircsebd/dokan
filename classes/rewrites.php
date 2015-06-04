@@ -160,7 +160,13 @@ class Dokan_Rewrites {
         }
 
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
-            return dokan_get_template_part( 'product-edit' );
+            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+                $edit_product_url = dokan_get_template_part( 'product-edit' );
+            } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
+                $edit_product_url = dokan_get_template_part( 'new-product-single' );
+            }
+
+            return $edit_product_url;
         }
 
         return $template;

@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: https://wedevs.com/products/plugins/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.2.2
+Version: 2.3
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.2.2' );
+define( 'DOKAN_PLUGIN_VERSION', '2.3' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -216,13 +216,16 @@ class WeDevs_Dokan {
         wp_register_style( 'dokan-extra', plugins_url( 'assets/css/dokan-extra.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
+        wp_register_style( 'dokan-magnific-popup', plugins_url( 'assets/css/magnific-popup.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'jquery-chart', plugins_url( 'assets/js/Chart.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-tabs-scripts', plugins_url( 'assets/js/jquery.easytabs.min.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-hashchange-scripts', plugins_url( 'assets/js/jquery.hashchange.min.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-tag-it', plugins_url( 'assets/js/tag-it.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
+        wp_register_script( 'dokan-popup', plugins_url( 'assets/js/jquery.magnific-popup.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
@@ -278,6 +281,8 @@ class WeDevs_Dokan {
             ),
             'delete_confirm' => __('Are you want to sure ?', 'dokan' ),
             'wrong_message' => __('Something wrong, Please try again', 'dokan' ),
+            'duplicates_attribute_messg' => __( 'Sorry this attribute option already exist, Try another one', 'dokan' ),
+            'variation_unset_warning' => __( 'Warning! This product will not have any variation by unchecked this option', 'dokan' ),
         );
 
         $form_validate_messages = array(
@@ -301,15 +306,18 @@ class WeDevs_Dokan {
 
         wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
 
+        // var_dump('lol');
 
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+
 
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
                 wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-extra' );
                 wp_enqueue_style( 'dokan-style' );
+                wp_enqueue_style( 'dokan-magnific-popup' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -320,6 +328,7 @@ class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'underscore' );
                 wp_enqueue_script( 'post' );
+                wp_enqueue_script( 'dokan-tag-it' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
                 wp_enqueue_script( 'form-validate' );
                 wp_enqueue_script( 'dokan-tabs-scripts' );
@@ -327,6 +336,7 @@ class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-flot' );
                 wp_enqueue_script( 'chosen' );
                 wp_enqueue_media();
+                wp_enqueue_script( 'dokan-popup' );
 
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
