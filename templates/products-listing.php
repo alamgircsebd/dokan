@@ -1,3 +1,4 @@
+<?php global $post; ?>
 <div class="dokan-dashboard-wrap">
     <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
 
@@ -75,7 +76,7 @@
 
                         $original_post = $post;
                         $product_query = new WP_Query( apply_filters( 'dokan_product_listing_query', $args ) );
-                        
+
                         if ( $product_query->have_posts() ) {
                             while ($product_query->have_posts()) {
                                 $product_query->the_post();
@@ -210,7 +211,7 @@
 
                 $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
                 $base_url = dokan_get_navigation_url('products');
-                
+
                 if ( $product_query->max_num_pages > 1 ) {
                     echo '<div class="pagination-wrap">';
                     $page_links = paginate_links( array(

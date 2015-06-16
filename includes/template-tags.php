@@ -287,8 +287,14 @@ function dokan_order_listing_status_filter() {
                 <?php printf( __( 'Refunded (%d)', 'dokan' ), $orders_counts->{'wc-refunded'} ); ?></span>
             </a>
         </li>
+
+        <?php do_action( 'dokan_status_listing_item', $orders_counts ); ?>
     </ul>
     <?php
+}
+
+function dokan_nav_sort_by_pos( $a, $b ) {
+    return $a['pos'] - $b['pos'];
 }
 
 /**
@@ -302,37 +308,38 @@ function dokan_get_dashboard_nav() {
         'dashboard' => array(
             'title' => __( 'Dashboard', 'dokan'),
             'icon'  => '<i class="fa fa-tachometer"></i>',
-            'url'   => dokan_get_navigation_url()
+            'url'   => dokan_get_navigation_url(),
+            'pos'   => 10
         ),
         'product' => array(
             'title' => __( 'Products', 'dokan'),
             'icon'  => '<i class="fa fa-briefcase"></i>',
-            'url'   => dokan_get_navigation_url( 'products' )
+            'url'   => dokan_get_navigation_url( 'products' ),
+            'pos'   => 30
         ),
-        'order' => array(
+        'orders' => array(
             'title' => __( 'Orders', 'dokan'),
             'icon'  => '<i class="fa fa-shopping-cart"></i>',
-            'url'   => dokan_get_navigation_url( 'orders' )
-        ),
-        'coupon' => array(
-            'title' => __( 'Coupons', 'dokan'),
-            'icon'  => '<i class="fa fa-gift"></i>',
-            'url'   => dokan_get_navigation_url( 'coupons' )
+            'url'   => dokan_get_navigation_url( 'orders' ),
+            'pos'   => 50
         ),
         'report' => array(
             'title' => __( 'Reports', 'dokan'),
             'icon'  => '<i class="fa fa-line-chart"></i>',
-            'url'   => dokan_get_navigation_url( 'reports' )
+            'url'   => dokan_get_navigation_url( 'reports' ),
+            'pos'   => 70
         ),
         'reviews' => array(
             'title' => __( 'Reviews', 'dokan'),
             'icon'  => '<i class="fa fa-comments-o"></i>',
-            'url'   => dokan_get_navigation_url( 'reviews' )
+            'url'   => dokan_get_navigation_url( 'reviews' ),
+            'pos'   => 90
         ),
         'withdraw' => array(
             'title' => __( 'Withdraw', 'dokan'),
             'icon'  => '<i class="fa fa-upload"></i>',
-            'url'   => dokan_get_navigation_url( 'withdraw' )
+            'url'   => dokan_get_navigation_url( 'withdraw' ),
+            'pos'   => 110
         ),
     );
 
@@ -341,50 +348,57 @@ function dokan_get_dashboard_nav() {
     $settings = array(
         'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
         'icon'  => '<i class="fa fa-cog"></i>',
-        'url'   => dokan_get_navigation_url( 'settings/store' )
+        'url'   => dokan_get_navigation_url( 'settings/store' ),
+        'pos'   => 150,
     );
 
     $settings_sub = array(
         'back' => array(
             'title' => __( 'Back to Dashboard', 'dokan'),
             'icon'  => '<i class="fa fa-long-arrow-left"></i>',
-            'url'   => dokan_get_navigation_url()
+            'url'   => dokan_get_navigation_url(),
+            'pos'   => 10
         ),
         'store' => array(
             'title' => __( 'Store', 'dokan'),
             'icon'  => '<i class="fa fa-university"></i>',
-            'url'   => dokan_get_navigation_url( 'settings/store' )
+            'url'   => dokan_get_navigation_url( 'settings/store' ),
+            'pos'   => 30
         ),
         'payment' => array(
             'title' => __( 'Payment', 'dokan'),
             'icon'  => '<i class="fa fa-credit-card"></i>',
-            'url'   => dokan_get_navigation_url( 'settings/payment' )
+            'url'   => dokan_get_navigation_url( 'settings/payment' ),
+            'pos'   => 50
         )
     );
 
     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
     $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-    
+
     if ( $enable_shipping == 'yes' ) {
         $settings_sub['shipping'] = array(
             'title' => __( 'Shipping', 'dokan'),
             'icon'  => '<i class="fa fa-truck"></i>',
-            'url'   => dokan_get_navigation_url( 'settings/shipping' )
+            'url'   => dokan_get_navigation_url( 'settings/shipping' ),
+            'pos'   => 70
         );
     }
     $settings_sub['social'] = array(
         'title' => __( 'Social Profile', 'dokan'),
         'icon'  => '<i class="fa fa-share-alt-square"></i>',
-        'url'   => dokan_get_navigation_url( 'settings/social' )
+        'url'   => dokan_get_navigation_url( 'settings/social' ),
+        'pos'   => 90
     );
     if ( dokan_get_option( 'store_seo', 'dokan_general', 'on' ) === 'on' ) {
         $settings_sub['seo'] = array(
             'title' => __( 'Store SEO', 'dokan' ),
             'icon'  => '<i class="fa fa-globe"></i>',
-            'url'   => dokan_get_navigation_url( 'settings/seo' )
+            'url'   => dokan_get_navigation_url( 'settings/seo' ),
+            'pos'   => 110
         );
     }
-    
+
     /**
      * Filter to get the seller dashboard settings navigation.
      *
@@ -394,7 +408,14 @@ function dokan_get_dashboard_nav() {
      */
     $settings['sub']  = apply_filters( 'dokan_get_dashboard_settings_nav', $settings_sub );
 
+
+    uasort( $settings['sub'], 'dokan_nav_sort_by_pos' );
+
     $urls['settings'] = $settings;
+
+    $nav_urls = apply_filters( 'dokan_get_seller_dashboard_nav', $urls );
+
+    uasort( $nav_urls, 'dokan_nav_sort_by_pos' );
 
     /**
      * Filter to get the final seller dashboard navigation.
@@ -403,7 +424,7 @@ function dokan_get_dashboard_nav() {
      *
      * @param array $urls.
      */
-    return apply_filters( 'dokan_get_seller_dashboard_nav', $urls );
+    return $nav_urls;
 }
 
 /**
@@ -570,14 +591,13 @@ function dokan_seller_reg_form_fields() {
 
 add_action( 'register_form', 'dokan_seller_reg_form_fields' );
 
-function dokan_seller_not_enabled_notice() {
-    ?>
-        <div class="dokan-alert dokan-alert-warning">
-            <strong><?php _e( 'Error!', 'dokan' ); ?></strong>
-            <?php _e( 'Your account is not enabled for selling, please contact the admin', 'dokan' ); ?>
-        </div>
-    <?php
-}
+if ( !function_exists( 'dokan_seller_not_enabled_notice' ) ) :
+
+    function dokan_seller_not_enabled_notice() {
+        dokan_get_template_part( 'global/seller-warning' );
+    }
+
+endif;
 
 if ( !function_exists( 'dokan_header_user_menu' ) ) :
 

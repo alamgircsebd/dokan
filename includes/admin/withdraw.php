@@ -1,5 +1,5 @@
 <?php
-$dokan_admin_withdraw = Dokan_Template_Withdraw::init();
+$dokan_admin_withdraw = Dokan_Admin_Withdraw::init();
 $counts = dokan_get_withdraw_count();
 
 $status = isset( $_GET['status'] ) ? $_GET['status'] : 'pending';

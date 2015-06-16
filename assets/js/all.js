@@ -105,7 +105,7 @@ jQuery(function($) {
         $('#dokan-order-notes').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
 
         var data = {
-            action: 'woocommerce_delete_order_note',
+            action: 'dokan_delete_order_note',
             note_id: $(note).attr('rel'),
             security: $('#delete-note-security').val()
         };
@@ -162,7 +162,7 @@ jQuery(function($) {
         if (answer){
 
             var self = $(this),
-                el = self.closest('.panel');
+                el = self.closest('.dokan-panel');
 
             var product = self.attr('rel').split(",")[0];
             var file = self.attr('rel').split(",")[1];
@@ -172,7 +172,7 @@ jQuery(function($) {
                 $(el).block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
 
                 var data = {
-                    action: 'woocommerce_revoke_access_to_download',
+                    action: 'dokan_revoke_access_to_download',
                     product_id: product,
                     download_id: file,
                     order_id: self.data('order-id'),

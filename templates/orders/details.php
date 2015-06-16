@@ -45,10 +45,18 @@ $order    = new WC_Order( $order_id );
                                                 $_product   = $order->get_product_from_item( $item );
                                                 $item_meta  = $order->get_item_meta( $item_id );
 
-                                                include 'order-item-html.php';
+                                                dokan_get_template_part( 'orders/order-item-html', '', array(
+                                                    'item_id' => $item_id,
+                                                    '_product' => $_product,
+                                                    'item' => $item
+                                                ) );
                                             break;
                                             case 'fee' :
-                                                include 'order-fee-html.php';
+                                                dokan_get_template_part( 'orders/order-fee-html', '', array(
+                                                    'item_id' => $item_id,
+                                                    'item_meta' => $item_meta
+                                                ) );
+
                                             break;
                                         }
 
@@ -131,7 +139,9 @@ $order    = new WC_Order( $order_id );
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'Downloadable Product Permission', 'dokan' ); ?></strong></div>
                     <div class="dokan-panel-body">
-                        <?php include dirname( __FILE__ ) . '/downloadable.php'; ?>
+                        <?php
+                            dokan_get_template_part( 'orders/downloadable', '', array( 'order'=> $order ) );
+                        ?>
                     </div>
                 </div>
             </div>
@@ -281,7 +291,7 @@ $order    = new WC_Order( $order_id );
                                     <input type="hidden" name="security" value="<?php echo wp_create_nonce('add-order-note'); ?>">
                                     <input type="hidden" name="delete-note-security" id="delete-note-security" value="<?php echo wp_create_nonce('delete-order-note'); ?>">
                                     <input type="hidden" name="post_id" value="<?php echo $order->id; ?>">
-                                    <input type="hidden" name="action" value="woocommerce_add_order_note">
+                                    <input type="hidden" name="action" value="dokan_add_order_note">
                                     <input type="submit" name="add_order_note" class="add_note btn btn-sm btn-theme" value="<?php esc_attr_e( 'Add Note', 'dokan' ); ?>">
                                 </div>
                             </form>

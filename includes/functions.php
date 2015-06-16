@@ -611,28 +611,45 @@ function dokan_posted_textarea( $key ) {
  *
  * Looks at the theme directory first
  */
-function dokan_get_template_part( $slug, $name = '' ) {
+function dokan_get_template_part( $slug, $name = '', $args = array() ) {
     $dokan = WeDevs_Dokan::init();
+
+    $defaults = array(
+        'pro' => false
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+    if ( $args && is_array( $args ) ) {
+        extract( $args );
+    }
 
     $template = '';
 
     // Look in yourtheme/dokan/slug-name.php and yourtheme/dokan/slug.php
     $template = locate_template( array( $dokan->template_path() . "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}.php" ) );
 
-    // Get default slug-name.php
-    if ( ! $template && $name && file_exists( $dokan->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
-        $template = $dokan->plugin_path() . "/templates/{$slug}-{$name}.php";
+    $template_path = $dokan->plugin_path() . '/templates';
+
+    // search for Pro templates only
+    if ( $pro !== false ) {
+        $template_path = $dokan->plugin_path() . '/pro/templates';
     }
 
-    if ( ! $template && !$name && file_exists( $dokan->plugin_path() . "/templates/{$slug}.php" ) ) {
-        $template = $dokan->plugin_path() . "/templates/{$slug}.php";
+    // Get default slug-name.php
+    if ( ! $template && $name && file_exists( $template_path . "/{$slug}-{$name}.php" ) ) {
+        $template = $template_path . "/{$slug}-{$name}.php";
+    }
+
+    if ( ! $template && !$name && file_exists( $template_path . "/{$slug}.php" ) ) {
+        $template = $template_path . "/{$slug}.php";
     }
 
     // Allow 3rd party plugin filter template file from their plugin
     $template = apply_filters( 'dokan_get_template_part', $template, $slug, $name );
 
     if ( $template ) {
-        load_template( $template, false );
+        include( $template );
     }
 }
 
@@ -1491,44 +1508,6 @@ function dokan_admin_toolbar() {
 }
 
 // Hook into the 'wp_before_admin_bar_render' action
-add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );
-
-/**
- * Returns Current User Profile progress bar HTML
- *
- * @since 2.1
- *
- * @return output
- */
-function dokan_get_profile_progressbar() {
-    global $current_user;
-
-    $profile_info = dokan_get_store_info( $current_user->ID );
-    $progress     = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : 0;
-    $next_todo    = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : __('Start with adding a Banner to gain profile progress','dokan');
-
-    ob_start();
-
-    if (  strlen( trim( $next_todo ) ) != 0 ) { ?>
-        <div class="dokan-panel dokan-panel-default dokan-profile-completeness">
-            <div class="dokan-panel-body">
-            <div class="dokan-progress">
-                <div class="dokan-progress-bar dokan-progress-bar-info dokan-progress-bar-striped" role="progressbar"
-                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $progress ?>%">
-                    <?php echo $progress . __( '% Profile complete', 'dokan' ) ?>
-                </div>
-            </div>
-
-            <div class="dokan-alert dokan-alert-info dokan-panel-alert"><?php echo $next_todo; ?></div>
-           </div>
-        </div>
-    <?php
-    }
-
-    $output = ob_get_clean();
-
-    return $output;
-}
 
 /**
  * Display a monthly dropdown for filtering product listing on seller dashboard

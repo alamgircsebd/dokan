@@ -46,6 +46,8 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_dokan-mark-order-complete', array( $this, 'complete_order' ) );
         add_action( 'wp_ajax_dokan-mark-order-processing', array( $this, 'process_order' ) );
         add_action( 'wp_ajax_dokan_grant_access_to_download', array( $this, 'grant_access_to_download' ) );
+        add_action( 'wp_ajax_dokan_add_order_note', array( $this, 'add_order_note' ) );
+        add_action( 'wp_ajax_dokan_delete_order_note', array( $this, 'delete_order_note' ) );
 
         add_action( 'wp_ajax_dokan_change_status', array( $this, 'change_order_status' ) );
 
@@ -55,6 +57,8 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_dokan_link_all_variations', array( $this, 'link_all_variations' ) );
         add_action( 'wp_ajax_dokan_pre_define_attribute', array( $this, 'dokan_pre_define_attribute' ) );
         add_action( 'wp_ajax_dokan_save_attributes', array( $this, 'save_attributes' ) );
+        add_action( 'wp_ajax_dokan_revoke_access_to_download', array( $this, 'revoke_access_to_download' ) );
+        add_action( 'wp_ajax_nopriv_dokan_revoke_access_to_download', array( $this, 'revoke_access_to_download' ) );
 
         add_action( 'wp_ajax_dokan_toggle_seller', array( $this, 'toggle_seller_status' ) );
 
@@ -575,6 +579,89 @@ class Dokan_Ajax {
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );
         exit;
+    }
+
+    function revoke_access_to_download() {
+        check_ajax_referer( 'revoke-access', 'security' );
+
+        if ( ! current_user_can( 'dokandar' ) ) {
+            die(-1);
+        }
+
+        global $wpdb;
+
+        $download_id = $_POST['download_id'];
+        $product_id  = intval( $_POST['product_id'] );
+        $order_id    = intval( $_POST['order_id'] );
+
+        $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE order_id = %d AND product_id = %d AND download_id = %s;", $order_id, $product_id, $download_id ) );
+
+        do_action( 'woocommerce_ajax_revoke_access_to_product_download', $download_id, $product_id, $order_id );
+
+        die();
+    }
+
+    /**
+     * Add order note via ajax
+     */
+    public function add_order_note() {
+
+        check_ajax_referer( 'add-order-note', 'security' );
+
+        if ( !is_user_logged_in() ) {
+            die(-1);
+        }
+        if ( ! current_user_can( 'dokandar' ) ) {
+            die(-1);
+        }
+
+        $post_id   = absint( $_POST['post_id'] );
+        $note      = wp_kses_post( trim( stripslashes( $_POST['note'] ) ) );
+        $note_type = $_POST['note_type'];
+
+        $is_customer_note = $note_type == 'customer' ? 1 : 0;
+
+        if ( $post_id > 0 ) {
+            $order      = wc_get_order( $post_id );
+            $comment_id = $order->add_order_note( $note, $is_customer_note );
+
+            echo '<li rel="' . esc_attr( $comment_id ) . '" class="note ';
+            if ( $is_customer_note ) {
+                echo 'customer-note';
+            }
+            echo '"><div class="note_content">';
+            echo wpautop( wptexturize( $note ) );
+            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete note', 'woocommerce' ).'</a></p>';
+            echo '</li>';
+        }
+
+        // Quit out
+        die();
+    }
+
+    /**
+     * Delete order note via ajax
+     */
+    public function delete_order_note() {
+
+        check_ajax_referer( 'delete-order-note', 'security' );
+
+        if ( !is_user_logged_in() ) {
+            die(-1);
+        }
+
+        if ( ! current_user_can( 'dokandar' ) ) {
+            die(-1);
+        }
+
+        $note_id = (int) $_POST['note_id'];
+
+        if ( $note_id > 0 ) {
+            wp_delete_comment( $note_id );
+        }
+
+        // Quit out
+        die();
     }
 
 
@@ -1229,7 +1316,7 @@ class Dokan_Ajax {
     }
 
 
-    /**    
+    /**
      * get state by shipping country
      *
      * @return
@@ -1242,7 +1329,7 @@ class Dokan_Ajax {
 
         $country = $_POST['country_id'];
         ob_start(); ?>
-        <?php 
+        <?php
         if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
             <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan' ); ?></label>
             <select name="dokan-shipping-state" class="dokan-shipping-state dokan-form-control" id="dokan-shipping-state">
@@ -1261,10 +1348,10 @@ class Dokan_Ajax {
                     ?></option>
                 <?php endforeach ?>
             </select>
-        <?php 
+        <?php
         }
         $content = ob_get_clean();
-        
+
         wp_send_json_success( $content );
     }
 
@@ -1275,7 +1362,7 @@ class Dokan_Ajax {
      */
     function get_calculated_shipping_cost() {
         global $post;
-        
+
         $dps_country_rates = get_user_meta( $_POST['author_id'], '_dps_country_rates', true );
         $dps_state_rates   = get_user_meta( $_POST['author_id'], '_dps_state_rates', true );
         // Store wide shipping info
@@ -1300,7 +1387,7 @@ class Dokan_Ajax {
         $flag = '';
         ob_start(); ?>
 
-        <?php 
+        <?php
         if ( $country != '' ) {
             if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
                 _e( 'Please select a State from the dropdown', 'dokan' );
@@ -1314,7 +1401,7 @@ class Dokan_Ajax {
             _e( 'Please select a country from the dropdown', 'dokan' );
         }
         $content = ob_get_clean();
-        
+
         wp_send_json_success( $content );
     }
 }

@@ -403,9 +403,15 @@ class WeDevs_Dokan {
 
         require_once $inc_dir . 'wc-functions.php';
 
+        // Load free or pro moduels
+        if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
+            include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
+        } else {
+            //include_once DOKAN_DIR . '/includes/free/loader.php';
+        }
+
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
-            require_once $inc_dir . 'admin/announcement.php';
             require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
@@ -476,13 +482,16 @@ class WeDevs_Dokan {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
             Dokan_Admin_Ajax::init();
-            new Dokan_Announcement();
             new Dokan_Update();
             new Dokan_Upgrade();
         } else {
             new Dokan_Pageviews();
         }
 
+        new Dokan_Template_Main();
+        new Dokan_Template_Dashboard();
+        new Dokan_Template_Orders();
+        Dokan_Template_Withdraw::init();
         new Dokan_Rewrites();
         Dokan_Email::init();
         Dokan_Template_Shortcodes::init();
