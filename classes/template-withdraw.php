@@ -12,10 +12,26 @@
 class Dokan_Template_Withdraw extends Dokan_Withdraw {
 
     public static $validate;
+    public $current_status;
 
+    /**
+     * Load Autometically When class initiate
+     *
+     * Trigger all actions
+     *
+     * @since 2.4
+     */
     public function __construct() {
+
+        $this->current_status = isset( $_GET['type'] ) ? $_GET['type'] : 'pending';
+
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
         add_action( 'dokan_withdraw_content_area_header', array( $this, 'dokan_withdraw_header_render' ), 10 );
+        add_action( 'dokan_withdraw_content', array( $this, 'dokan_render_withdraw_error' ), 10 );
+        add_action( 'dokan_withdraw_content', array( $this, 'dokan_withdraw_status_filter' ), 15 );
+        add_action( 'dokan_withdraw_content', array( $this, 'dokan_show_seller_balance' ), 20 );
+        add_action( 'dokan_withdraw_content', array( $this, 'dokan_withdraw_form_and_listing' ), 20 );
+
     }
 
     /**
@@ -34,8 +50,50 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         return $instance;
     }
 
+    /**
+     * Dokan Withdraw header Template render
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function dokan_withdraw_header_render() {
         dokan_get_template_part( 'withdraw/header' );
+    }
+
+    /**
+     * Render Withdraw Error Template
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function dokan_render_withdraw_error() {
+        if ( is_wp_error( self::$validate) ) {
+            $messages = self::$validate->get_error_messages();
+
+            foreach( $messages as $message ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => true, 'message' => $message ) );
+            }
+        }
+    }
+
+    public function dokan_withdraw_status_filter() {
+        dokan_get_template_part( 'withdraw/status-listing', '', array( 'current' => $this->current_status ) );
+    }
+
+    public function dokan_show_seller_balance() {
+        $message = sprintf( __( 'Current Balance: %s', 'dokan' ), dokan_get_seller_balance( get_current_user_id() ) );
+        dokan_get_template_part( 'global/dokan-warning', '', array( 'message' => $message, 'deleted' => false ) );
+    }
+
+    public function dokan_withdraw_form_and_listing() {
+
+        if ( $this->current_status == 'pending' ) {
+            $this->withdraw_form( self::$validate );
+        } elseif ( $this->current_status == 'approved' ) {
+            $this->user_approved_withdraws( get_current_user_id() );
+        }
     }
 
     /**
@@ -155,42 +213,9 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
     function withdraw_requests( $user_id ) {
         $withdraw_requests = $this->get_withdraw_requests( $user_id );
 
-        if ( $withdraw_requests ) {
-            ?>
-            <table class="table table-striped">
-                <tr>
-                    <th><?php _e( 'Amount', 'dokan' ); ?></th>
-                    <th><?php _e( 'Method', 'dokan' ); ?></th>
-                    <th><?php _e( 'Date', 'dokan' ); ?></th>
-                    <th><?php _e( 'Cancel', 'dokan' ); ?></th>
-                    <th><?php _e( 'Status', 'dokan' ); ?></th>
-                </tr>
-
-                <?php foreach ( $withdraw_requests as $request ) { ?>
-
-                    <tr>
-                        <td><?php echo wc_price( $request->amount ); ?></td>
-                        <td><?php echo dokan_withdraw_get_method_title( $request->method ); ?></td>
-                        <td><?php echo dokan_format_time( $request->date ); ?></td>
-                        <td>
-                            <?php
-                            $url = add_query_arg( array(
-                                'action' => 'dokan_cancel_withdrow',
-                                'id'     => $request->id
-                            ), dokan_get_navigation_url( 'withdraw' ) );
-                            ?>
-                            <a href="<?php echo wp_nonce_url( $url, 'dokan_cancel_withdrow' ); ?>">
-                                <?php _e( 'Cancel', 'dokan' ); ?>
-                            </a>
-                        </td>
-                        <td><?php echo $this->request_status( $request->status ); ?></td>
-                    </tr>
-
-                <?php } ?>
-
-            </table>
-            <?php
-        }
+        dokan_get_template_part( 'withdraw/pending-request-listing', '', array(
+            'withdraw_requests' => $withdraw_requests
+        ) );
     }
 
     /**
@@ -217,12 +242,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         }
 
         if ( ! empty( $message ) ) {
-            ?>
-            <div class="dokan-alert dokan-alert-danger">
-                <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-                <strong><?php echo $message; ?></strong>
-            </div>
-            <?php
+            dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => true, 'message' => $message ) );
         }
     }
 
@@ -240,24 +260,32 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         $this->show_alert_messages();
 
         $balance = $this->get_user_balance( $current_user->ID );
+
         if ( $balance < 0 ) {
-            printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', sprintf( __( 'You already withdrawed %s. This amount will deducted from your next balance.', 'dokan' ), wc_price( $balance ) ) );
+            dokon_get_template_part( 'global/dokan-error', '', array(
+                'deleted'=> false,
+                'message' => sprintf( __( 'You already withdrawed %s. This amount will deducted from your next balance.', 'dokan' ), wc_price( $balance ) )
+            ) );
         }
 
         if ( $this->has_pending_request( $current_user->ID ) ) {
-            ?>
-            <div class="dokan-alert dokan-alert-warning">
-                <p><strong><?php _e( 'You\'ve already pending withdraw request(s).', 'dokan' ); ?></strong></p>
-                <p><?php _e( 'Until it\'s been cancelled or approved, you can\'t submit any new request.', 'dokan' ) ?></p>
-            </div>
 
-            <?php
+            $pending_warning = sprintf( "<p>%s</p><p>%s</p>", __( 'You\'ve already pending withdraw request(s).', 'dokan' ), __( 'Until it\'s been cancelled or approved, you can\'t submit any new request.', 'dokan' ) );
+
+            dokan_get_template_part( 'global/dokan-error', '', array(
+                'deleted' => false,
+                'message' => $pending_warning
+            ) );
+
             $this->withdraw_requests( $current_user->ID );
             return;
 
         } else if ( !$this->has_withdraw_balance( $current_user->ID ) ) {
 
-            printf( '<div class="dokan-alert dokan-alert-danger">%s</div>', __( 'You don\'t have sufficient balance for a withdraw request!', 'dokan' ) );
+            dokan_get_template_part( 'global/dokan-error', '', array(
+                'deleted' => false,
+                'message' => __( 'You don\'t have sufficient balance for a withdraw request!', 'dokan' )
+            ) );
 
             return;
         }
@@ -271,50 +299,12 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
             $amount          = '';
             $withdraw_method = '';
         }
-        ?>
-        <div class="dokan-alert dokan-alert-danger" style="display: none;">
-            <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
-            <strong class="jquery_error_place"></strong>
-        </div>
 
-        <span class="ajax_table_shown"></span>
-        <form class="dokan-form-horizontal withdraw" role="form" method="post">
-
-            <div class="dokan-form-group">
-                <label for="withdraw-amount" class="dokan-w3 dokan-control-label">
-                    <?php _e( 'Withdraw Amount', 'dokan' ); ?>
-                </label>
-
-                <div class="dokan-w5 dokan-text-left">
-                    <div class="dokan-input-group">
-                        <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                        <input name="witdraw_amount" required number min="<?php echo esc_attr( dokan_get_option( 'withdraw_limit', 'dokan_selling', 50 ) ); ?>" class="dokan-form-control" id="withdraw-amount" name="price" type="number" placeholder="0.00" value="<?php echo $amount; ?>"  >
-                    </div>
-                </div>
-            </div>
-
-            <div class="dokan-form-group">
-                <label for="withdraw-method" class="dokan-w3 dokan-control-label">
-                    <?php _e( 'Payment Method', 'dokan' ); ?>
-                </label>
-
-                <div class="dokan-w5 dokan-text-left">
-                    <select class="dokan-form-control" required name="withdraw_method" id="withdraw-method">
-                        <?php foreach ( $payment_methods as $method_name ) { ?>
-                            <option <?php selected( $withdraw_method, $method_name );  ?>value="<?php echo esc_attr( $method_name ); ?>"><?php echo dokan_withdraw_get_method_title( $method_name ); ?></option>
-                        <?php } ?>
-                    </select>
-                </div>
-            </div>
-
-            <div class="dokan-form-group">
-                <div class="dokan-w3 ajax_prev" style="margin-left:23%; width: 200px;">
-                    <?php wp_nonce_field( 'dokan_withdraw', 'dokan_withdraw_nonce' ); ?>
-                    <input type="submit" class="dokan-btn dokan-btn-theme" value="<?php esc_attr_e( 'Submit Request', 'dokan' ); ?>" name="withdraw_submit">
-                </div>
-            </div>
-        </form>
-        <?php
+        dokan_get_template_part( 'withdraw/request-form', '', array(
+            'amount' => $amount,
+            'withdraw_method' => $withdraw_method,
+            'payment_methods' => $payment_methods
+        ) );
     }
 
     /**
@@ -328,33 +318,18 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         $requests = $this->get_withdraw_requests( $user_id, 1, 100 );
 
         if ( $requests ) {
-            ?>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th><?php _e( 'Amount', 'dokan' ); ?></th>
-                        <th><?php _e( 'Method', 'dokan' ); ?></th>
-                        <th><?php _e( 'Date', 'dokan' ); ?></th>
-                    </tr>
-                </thead>
-                <tbody>
 
-                <?php foreach ( $requests as $row ) { ?>
-                    <tr>
-                        <td><?php echo wc_price( $row->amount ); ?></td>
-                        <td><?php echo dokan_withdraw_get_method_title( $row->method ); ?></td>
-                        <td><?php echo date_i18n( 'M j, Y g:ia', strtotime( $row->date ) ); ?></td>
-                    </tr>
-                <?php } ?>
+            dokan_get_template_part( 'withdraw/approved-request-listing', '', array(
+                'requests' => $requests
+            ) );
 
-                </tbody>
-            </table>
+        } else {
 
-        <?php } else { ?>
-            <div class="dokan-alert dokan-alert-warning">
-                <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php _e( 'Sorry, no transactions found!', 'dokan' ); ?>
-            </div>
-            <?php
+            dokan_get_template_part( 'global/dokan-warning', '', array(
+                'deleted' => false,
+                'message' => _e( 'Sorry, no transactions found!', 'dokan' )
+            ) );
+
         }
     }
 

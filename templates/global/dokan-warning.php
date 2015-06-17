@@ -1,13 +1,13 @@
 <?php
 /**
- * Dokan Error template
+ * Dokan Warning template
  *
  * @since 2.4
  *
  * @package dokan
  */
 ?>
-<div class="dokan-alert dokan-alert-danger">
+<div class="dokan-alert dokan-alert-warning">
     <?php if ( $deleted ): ?>
         <button type="button" class="dokan-close" data-dismiss="alert">&times;</button>
     <?php endif ?>

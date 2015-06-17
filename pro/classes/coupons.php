@@ -102,7 +102,7 @@ class Dokan_Pro_Coupons {
                 $messages = self::$validated->get_error_messages();
 
                 foreach ( $messages as $message ) {
-                    dokan_get_template_part('global/dokan-error', '', array( 'message' => $message ) );
+                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => true, 'message' => $message ) );
                 }
             }
             $this->add_coupons_form( self::$validated );
@@ -328,7 +328,6 @@ class Dokan_Pro_Coupons {
 
         $coupon_query = new WP_Query( $args );
         $all_coupons  = $coupon_query->get_posts();
-
 
         if ( $all_coupons ) {
             $this->total_query_result = $coupon_query->found_posts;
