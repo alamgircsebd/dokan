@@ -216,10 +216,10 @@ class Dokan_Template_Shortcodes {
             if ( !self::$errors ) {
 
                 if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
-                    $product_status = dokan_get_new_post_status();
+                    
                     $post_data = apply_filters( 'dokan_insert_product_post_data', array(
                         'post_type'    => 'product',
-                        'post_status'  => $product_status,
+                        'post_status'  => 'draft',
                         'post_title'   => $post_title,
                         'post_content' => $post_content,
                         'post_excerpt' => $post_excerpt,
@@ -229,12 +229,13 @@ class Dokan_Template_Shortcodes {
 
                 } else {
                     $post_id = (int)$_POST['dokan_product_id'];
+                    $product_status = dokan_get_new_post_status();
                     $product_info = apply_filters( 'dokan_update_product_post_data', array(
                         'ID'             => $post_id,
                         'post_title'     => sanitize_text_field( $_POST['post_title'] ),
                         'post_content'   => $_POST['post_content'],
                         'post_excerpt'   => $_POST['post_excerpt'],
-                        'post_status'    => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
+                        'post_status'    => isset( $_POST['post_status'] ) ? ( $_POST['post_status'] == 'draft' ) ? $product_status : $_POST['post_status'] : 'pending',
                         'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
                     ) );
 
@@ -321,10 +322,10 @@ class Dokan_Template_Shortcodes {
 
             if ( !self::$errors ) {
 
-                $product_status = dokan_get_new_post_status();
+                
                 $post_data = apply_filters( 'dokan_insert_product_post_data', array(
                         'post_type'    => 'product',
-                        'post_status'  => $product_status,
+                        'post_status'  => 'draft',
                         'post_title'   => $post_title,
                         'post_content' => $post_content,
                         'post_excerpt' => $post_excerpt,
@@ -365,7 +366,7 @@ class Dokan_Template_Shortcodes {
                     do_action( 'dokan_new_product_added', $product_id, $post_data );
 
                     if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
-                        Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                        Dokan_Email::init()->new_product_added( $product_id, 'draft' );
                     }
 
                     wp_redirect( dokan_edit_product_url( $product_id ) );
@@ -408,12 +409,13 @@ class Dokan_Template_Shortcodes {
 
             if ( !self::$errors ) {
 
+                $product_status = dokan_get_new_post_status();
                 $product_info = array(
                     'ID'             => $post_id,
                     'post_title'     => sanitize_text_field( $_POST['post_title'] ),
                     'post_content'   => $_POST['post_content'],
                     'post_excerpt'   => $_POST['post_excerpt'],
-                    'post_status'    => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
+                    'post_status'    => isset( $_POST['post_status'] ) ? ( $_POST['post_status'] == 'draft' ) ? $product_status : $_POST['post_status'] : 'pending',
                     'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
                 );
 
