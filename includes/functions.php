@@ -1745,32 +1745,9 @@ function dokan_get_social_profile_fields() {
  * @return void
  */
 
-function dokan_seller_address_fields( $verified = false ) {
+function dokan_seller_address_fields( $verified = false, $required = false ) {
 
     $disabled = $verified ? 'disabled' : '';
-
-    $seller_address_fields = array(
-        'street_1' => array(
-            'required' => 1,
-        ),
-        'street_2' => array(
-            'required' => 0,
-        ),
-        //make 'street_2' => false, if needed to be removed
-        'city'     => array(
-            'required' => 1,
-        ),
-        'zip'      => array(
-            'required' => 1,
-        ),
-        'country'  => array(
-            'required' => 1,
-        ),
-        'state'    => array(
-            'required' => 0,
-        ),
-    );
-
 
     /**
      * Filter the seller Address fields
@@ -1779,7 +1756,29 @@ function dokan_seller_address_fields( $verified = false ) {
      *
      * @param array $dokan_seller_address
      */
-    $seller_address_fields = apply_filters( 'dokan_seller_address_fields', $seller_address_fields );
+    $seller_address_fields = apply_filters( 'dokan_seller_address_fields', array(
+
+            'street_1' => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'street_2' => array(
+                'required' => 0,
+            ),
+            //make 'street_2' => false, if needed to be removed
+            'city'     => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'zip'      => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'country'  => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'state'    => array(
+                'required' => 0,
+            ),
+        )
+    );
 
     $profile_info = dokan_get_store_info( get_current_user_id() );
 
