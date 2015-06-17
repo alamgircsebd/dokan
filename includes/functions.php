@@ -1893,7 +1893,6 @@ function dokan_seller_address_fields( $verified = false, $required = false ) {
             ?>
                 <div  id="dokan-states-box" class="dokan-form-group">
                     <label class="dokan-w3 control-label" for="dokan_address[state]"><?php _e( 'State ', 'dokan' ); ?>
-                        <span class="required"> *</span>
                     </label>
                 <?php if ( $is_input ) { ?>
                     <input <?php echo $disabled ?> name="dokan_address[state]" class="dokan-form-control <?php echo $address_state_class ?>" id="dokan_address_state" value="<?php echo $address_state ?>"/>
