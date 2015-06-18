@@ -84,11 +84,6 @@ class Dokan_Template_Shortcodes {
             return;
         }
 
-        if ( isset( $wp->query_vars['reviews'] ) ) {
-            dokan_get_template_part( 'reviews' );
-            return;
-        }
-
         if ( isset( $wp->query_vars['withdraw'] ) ) {
             dokan_get_template_part( 'withdraw/withdraw' );
             return;

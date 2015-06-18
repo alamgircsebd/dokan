@@ -327,7 +327,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
 
             dokan_get_template_part( 'global/dokan-warning', '', array(
                 'deleted' => false,
-                'message' => _e( 'Sorry, no transactions found!', 'dokan' )
+                'message' => __( 'Sorry, no transactions found!', 'dokan' )
             ) );
 
         }

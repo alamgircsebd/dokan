@@ -329,12 +329,7 @@ function dokan_get_dashboard_nav() {
             'url'   => dokan_get_navigation_url( 'reports' ),
             'pos'   => 70
         ),
-        'reviews' => array(
-            'title' => __( 'Reviews', 'dokan'),
-            'icon'  => '<i class="fa fa-comments-o"></i>',
-            'url'   => dokan_get_navigation_url( 'reviews' ),
-            'pos'   => 90
-        ),
+
         'withdraw' => array(
             'title' => __( 'Withdraw', 'dokan'),
             'icon'  => '<i class="fa fa-upload"></i>',

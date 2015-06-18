@@ -87,10 +87,24 @@ class Dokan_Pro_Coupons {
         }
     }
 
+    /**
+     * Render Coupon Header template
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function dokan_coupon_header_render() {
         dokan_get_template_part( 'coupon/header', '', array( 'pro' => true, 'is_edit_page' => $this->is_edit_page ) );
     }
 
+    /**
+     * Render Coupon Content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function dokan_coupon_content_render() {
         if ( !dokan_is_seller_enabled( get_current_user_id() ) ) {
             echo dokan_seller_not_enabled_notice();

@@ -30,12 +30,12 @@ class Dokan_Ajax {
      */
     function init_ajax() {
         //withdraw note
-        $withdraw = Dokan_Template_Withdraw::init();
+        $withdraw = Dokan_Admin_Withdraw::init();
         add_action( 'wp_ajax_note', array( $withdraw, 'note_update' ) );
         add_action( 'wp_ajax_withdraw_ajax_submission', array( $withdraw, 'withdraw_ajax' ) );
 
         // reviews
-        $reviews = Dokan_Template_reviews::init();
+        $reviews = Dokan_Pro_Reviews::init();
         add_action( 'wp_ajax_dokan_comment_status', array( $reviews, 'ajax_comment_status' ) );
         add_action( 'wp_ajax_dokan_update_comment', array( $reviews, 'ajax_update_comment' ) );
 
