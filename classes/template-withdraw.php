@@ -632,7 +632,7 @@ class Dokan_Template_Withdraw {
                                 window.location = resp.data.url;
                             } else {
                                 self.closest( 'tr' ).removeClass('custom-spinner');    
-                                alert( 'Somthig wrong magi' );
+                                alert( 'Somthig wrong...!!!' );
                             }
                         });
 

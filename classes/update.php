@@ -9,7 +9,7 @@
 class Dokan_Update {
 
     const base_url     = 'https://wedevs.com/';
-    const update_check = 'http://api.wedevs.com/update_check';
+    const api_endpoint = 'http://api.wedevs.com/';
     const product_id   = 'dokan';
     const option       = 'dokan_license';
     const slug         = 'dokan';
@@ -106,6 +106,17 @@ class Dokan_Update {
             }
 
             if ( $status && $status->success ) {
+
+                // notice if validity expires
+                if ( isset( $status->update ) ) {
+                    $update = strtotime( $status->update );
+
+                    if ( time() > $update ) {
+                        echo '<div class="error">';
+                        echo '<p>Your <strong>Dokan</strong> License has been expired. Please <a href="https://wedevs.com/account/" target="_blank">renew your license</a>.</p>';
+                        echo '</div>';
+                    }
+                }
                 return;
             }
 
@@ -129,22 +140,26 @@ class Dokan_Update {
      * @return object
      */
     function activation( $request = 'check' ) {
+        global $wp_version;
+
         if ( ! $option = $this->get_license_key() ) {
             return;
         }
 
-        $args = array(
-            'request'     => $request,
-            'email'       => $option['email'],
-            'licence_key' => $option['key'],
-            'product_id'  => self::product_id,
-            'instance'    => home_url()
+        $params = array(
+            'timeout'    => ( ( defined( 'DOING_CRON' ) && DOING_CRON ) ? 30 : 3 ),
+            'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
+            'body'       => array(
+                'request'     => $request,
+                'email'       => $option['email'],
+                'licence_key' => $option['key'],
+                'product_id'  => self::product_id,
+                'instance'    => home_url()
+            )
         );
 
-        $base_url   = add_query_arg( 'wc-api', 'software-api', self::base_url );
-        $target_url = $base_url . '&' . http_build_query( $args, '', '&' );
-        $response   = wp_remote_get( $target_url, array( 'timeout' => 15 ) );
-        $update     = wp_remote_retrieve_body( $response );
+        $response = wp_remote_post( self::api_endpoint . 'activation', $params );
+        $update   = wp_remote_retrieve_body( $response );
 
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
             if ( is_wp_error( $response ) ) {
@@ -156,6 +171,8 @@ class Dokan_Update {
                 echo '<div class="error"><p><strong>Dokan Activation Error:</strong> ' . $response['response']['code'] .' - ' . $response['response']['message'] . '</p></div>';
                 return false;
             }
+
+            printf('<pre>%s</pre>', print_r( $response, true ) );
         }
 
         return json_decode( $update );
@@ -281,7 +298,7 @@ class Dokan_Update {
             )
         );
 
-        $response = wp_remote_post( self::update_check, $params );
+        $response = wp_remote_post( self::api_endpoint . 'update_check', $params );
         $update   = wp_remote_retrieve_body( $response );
 
         if ( is_wp_error( $response ) || $response['response']['code'] != 200 ) {
@@ -378,7 +395,33 @@ class Dokan_Update {
 
                     <?php submit_button( __( 'Save & Activate', 'dokan' ) ); ?>
                 </form>
-            <?php } else { ?>
+            <?php } else {
+
+                if ( isset( $license_status->update ) ) {
+                    $update = strtotime( $license_status->update );
+                    $expired = false;
+
+                    if ( time() > $update ) {
+                        $string = __( 'has been expired %s ago', 'dokan' );
+                        $expired = true;
+                    } else {
+                        $string = __( 'will expire in %s', 'dokan' );
+                    }
+                    // $expired = true;
+                    ?>
+                    <div class="updated <?php echo $expired ? 'error' : ''; ?>">
+                        <p>
+                            <strong><?php _e( 'Validity:', 'dokan' ); ?></strong>
+                            <?php printf( 'Your license %s.', sprintf( $string, human_time_diff( $update, time() ) ) ); ?>
+                        </p>
+
+                        <?php if ( $expired ) { ?>
+                            <p><a href="https://wedevs.com/account/" target="_blank" class="button-primary"><?php _e( 'Renew License', 'wpuf' ); ?></a></p>
+                        <?php } ?>
+                    </div>
+                    <?php
+                }
+                ?>
 
                 <div class="updated">
                     <p><?php _e( 'Plugin is activated', 'dokan' ); ?></p>
