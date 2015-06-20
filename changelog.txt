@@ -8,6 +8,8 @@ v2.3 -> June 4, 2015
 - [new] Add shipping calculator on single product page shipping tab
 - [new] Add new tab on seller store page to show terms and conditions
 - [tweak] Store address field change to multiple-fields on seller dashboard store settings
+- [tweak] New Products on "draft" status by default
+- [tweak] Address field can be not required
 - [fix] Fix styling issue in seller dashboard shipping settings options
 - [fix] Fix some text domain for translation issues on several pages
 - [fix] Fix empty title and empty category error on seller dashboard product edit page

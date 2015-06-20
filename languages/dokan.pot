@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Dokan - Multi-vendor Marketplace 2.3\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-06-04 14:52:24+00:00\n"
+"POT-Creation-Date: 2015-06-20 10:35:25+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,12 +41,12 @@ msgstr ""
 msgid "Store name"
 msgstr ""
 
-#: classes/admin-user-profile.php:82 includes/functions.php:1799
+#: classes/admin-user-profile.php:82 includes/functions.php:1798
 #: templates/update-account.php:58
 msgid "Address"
 msgstr ""
 
-#: classes/admin-user-profile.php:89 classes/template-shortcodes.php:919
+#: classes/admin-user-profile.php:89 classes/template-shortcodes.php:922
 #: includes/admin/sellers.php:21 includes/admin/sellers.php:96
 #: includes/template-tags.php:545 templates/update-account.php:63
 msgid "Phone"
@@ -900,101 +900,101 @@ msgstr ""
 msgid "Details about your product..."
 msgstr ""
 
-#: classes/template-shortcodes.php:200 classes/template-shortcodes.php:306
-#: classes/template-shortcodes.php:393
+#: classes/template-shortcodes.php:200 classes/template-shortcodes.php:307
+#: classes/template-shortcodes.php:394
 msgid "Please enter product title"
 msgstr ""
 
-#: classes/template-shortcodes.php:206 classes/template-shortcodes.php:312
-#: classes/template-shortcodes.php:399
+#: classes/template-shortcodes.php:206 classes/template-shortcodes.php:313
+#: classes/template-shortcodes.php:400
 msgid "Please select a category"
 msgstr ""
 
-#: classes/template-shortcodes.php:210 classes/template-shortcodes.php:316
-#: classes/template-shortcodes.php:403
+#: classes/template-shortcodes.php:210 classes/template-shortcodes.php:317
+#: classes/template-shortcodes.php:404
 msgid "Please select atleast one category"
 msgstr ""
 
-#: classes/template-shortcodes.php:546 classes/template-shortcodes.php:615
+#: classes/template-shortcodes.php:548 classes/template-shortcodes.php:617
 msgid "Order No"
 msgstr ""
 
-#: classes/template-shortcodes.php:547 classes/template-shortcodes.php:616
+#: classes/template-shortcodes.php:549 classes/template-shortcodes.php:618
 #: templates/orders/order-details.php:20
 msgid "Order Items"
 msgstr ""
 
-#: classes/template-shortcodes.php:548 classes/template-shortcodes.php:617
+#: classes/template-shortcodes.php:550 classes/template-shortcodes.php:619
 msgid "Shipping method"
 msgstr ""
 
-#: classes/template-shortcodes.php:549 classes/template-shortcodes.php:618
+#: classes/template-shortcodes.php:551 classes/template-shortcodes.php:620
 msgid "Shipping Cost"
 msgstr ""
 
-#: classes/template-shortcodes.php:550 classes/template-shortcodes.php:619
+#: classes/template-shortcodes.php:552 classes/template-shortcodes.php:621
 msgid "Payment method"
 msgstr ""
 
-#: classes/template-shortcodes.php:551 classes/template-shortcodes.php:620
+#: classes/template-shortcodes.php:553 classes/template-shortcodes.php:622
 #: includes/admin/reports.php:190 templates/orders/listing.php:18
 msgid "Order Total"
 msgstr ""
 
-#: classes/template-shortcodes.php:552 classes/template-shortcodes.php:621
+#: classes/template-shortcodes.php:554 classes/template-shortcodes.php:623
 msgid "Order Status"
 msgstr ""
 
-#: classes/template-shortcodes.php:553 classes/template-shortcodes.php:622
+#: classes/template-shortcodes.php:555 classes/template-shortcodes.php:624
 msgid "Order Date"
 msgstr ""
 
-#: classes/template-shortcodes.php:554 classes/template-shortcodes.php:623
+#: classes/template-shortcodes.php:556 classes/template-shortcodes.php:625
 msgid "Customer Name"
 msgstr ""
 
-#: classes/template-shortcodes.php:555 classes/template-shortcodes.php:624
+#: classes/template-shortcodes.php:557 classes/template-shortcodes.php:626
 msgid "Customer Email"
 msgstr ""
 
-#: classes/template-shortcodes.php:556 classes/template-shortcodes.php:625
+#: classes/template-shortcodes.php:558 classes/template-shortcodes.php:627
 msgid "Customer Phone"
 msgstr ""
 
-#: classes/template-shortcodes.php:557 classes/template-shortcodes.php:626
+#: classes/template-shortcodes.php:559 classes/template-shortcodes.php:628
 msgid "Customer IP"
 msgstr ""
 
-#: classes/template-shortcodes.php:891 templates/orders/order-tax-html.php:8
+#: classes/template-shortcodes.php:893 templates/orders/order-tax-html.php:8
 msgid "N/A"
 msgstr ""
 
-#: classes/template-shortcodes.php:904
+#: classes/template-shortcodes.php:906
 msgid "No Image"
 msgstr ""
 
-#: classes/template-shortcodes.php:919
+#: classes/template-shortcodes.php:922
 msgid "P:"
 msgstr ""
 
-#: classes/template-shortcodes.php:924 templates/settings/payment.php:17
+#: classes/template-shortcodes.php:927 templates/settings/payment.php:17
 #: templates/settings/seo.php:13 templates/settings/shipping.php:35
 #: templates/settings/social.php:18 templates/settings/store.php:22
 #: templates/settings.php:21
 msgid "Visit Store"
 msgstr ""
 
-#: classes/template-shortcodes.php:944 includes/admin/sellers.php:122
+#: classes/template-shortcodes.php:947 includes/admin/sellers.php:122
 #: includes/template-tags.php:109
 msgid "&larr; Previous"
 msgstr ""
 
-#: classes/template-shortcodes.php:945 includes/admin/sellers.php:123
+#: classes/template-shortcodes.php:948 includes/admin/sellers.php:123
 #: includes/template-tags.php:120
 msgid "Next &rarr;"
 msgstr ""
 
-#: classes/template-shortcodes.php:966
+#: classes/template-shortcodes.php:969
 msgid "No seller found!"
 msgstr ""
 
@@ -1205,63 +1205,79 @@ msgstr ""
 msgid "Pleae activate your copy"
 msgstr ""
 
-#: classes/update.php:121
+#: classes/update.php:132
 msgid "Dokan Error:"
 msgstr ""
 
-#: classes/update.php:303
+#: classes/update.php:320
 msgid "Empty email address"
 msgstr ""
 
-#: classes/update.php:307
+#: classes/update.php:324
 msgid "Empty license key"
 msgstr ""
 
-#: classes/update.php:325
+#: classes/update.php:342
 msgid "Settings Saved"
 msgstr ""
 
-#: classes/update.php:341
+#: classes/update.php:358
 msgid "Plugin Activation"
 msgstr ""
 
-#: classes/update.php:344
+#: classes/update.php:361
 msgid ""
 "Enter the E-mail address that was used for purchasing the plugin and the "
 "license key."
 msgstr ""
 
-#: classes/update.php:345
+#: classes/update.php:362
 msgid ""
 "We recommend you to enter those details to get regular <strong>plugin "
 "update and support</strong>."
 msgstr ""
 
-#: classes/update.php:364
+#: classes/update.php:381
 msgid "E-mail Address"
 msgstr ""
 
-#: classes/update.php:367
+#: classes/update.php:384
 msgid "Enter your purchase Email address"
 msgstr ""
 
-#: classes/update.php:371
+#: classes/update.php:388
 msgid "License Key"
 msgstr ""
 
-#: classes/update.php:374
+#: classes/update.php:391
 msgid "Enter your license key"
 msgstr ""
 
-#: classes/update.php:379
+#: classes/update.php:396
 msgid "Save & Activate"
 msgstr ""
 
-#: classes/update.php:384
+#: classes/update.php:405
+msgid "has been expired %s ago"
+msgstr ""
+
+#: classes/update.php:408
+msgid "will expire in %s"
+msgstr ""
+
+#: classes/update.php:414
+msgid "Validity:"
+msgstr ""
+
+#: classes/update.php:419
+msgid "Renew License"
+msgstr ""
+
+#: classes/update.php:427
 msgid "Plugin is activated"
 msgstr ""
 
-#: classes/update.php:388
+#: classes/update.php:431
 msgid "Delete License"
 msgstr ""
 
@@ -2172,27 +2188,27 @@ msgstr ""
 msgid "Flickr"
 msgstr ""
 
-#: includes/functions.php:1804
+#: includes/functions.php:1803
 msgid "Street "
 msgstr ""
 
-#: includes/functions.php:1817
+#: includes/functions.php:1816
 msgid "Street 2"
 msgstr ""
 
-#: includes/functions.php:1833
+#: includes/functions.php:1832
 msgid "City"
 msgstr ""
 
-#: includes/functions.php:1846
+#: includes/functions.php:1845
 msgid "Post/ZIP Code"
 msgstr ""
 
-#: includes/functions.php:1867
+#: includes/functions.php:1866
 msgid "Country "
 msgstr ""
 
-#: includes/functions.php:1896
+#: includes/functions.php:1895
 msgid "State "
 msgstr ""
 
