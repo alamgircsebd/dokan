@@ -60,11 +60,6 @@ class Dokan_Template_Shortcodes {
             return sprintf( __( 'Please install <a href="%s"><strong>WooCommerce</strong></a> plugin first', 'dokan' ), 'http://wordpress.org/plugins/woocommerce/' );
         }
 
-        if ( isset( $wp->query_vars['reports'] ) ) {
-            dokan_get_template_part( 'reports' );
-            return;
-        }
-
         if ( isset( $wp->query_vars['products'] ) ) {
             dokan_get_template_part( 'products' );
             return;

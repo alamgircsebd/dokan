@@ -323,18 +323,12 @@ function dokan_get_dashboard_nav() {
             'url'   => dokan_get_navigation_url( 'orders' ),
             'pos'   => 50
         ),
-        'report' => array(
-            'title' => __( 'Reports', 'dokan'),
-            'icon'  => '<i class="fa fa-line-chart"></i>',
-            'url'   => dokan_get_navigation_url( 'reports' ),
-            'pos'   => 70
-        ),
 
         'withdraw' => array(
             'title' => __( 'Withdraw', 'dokan'),
             'icon'  => '<i class="fa fa-upload"></i>',
             'url'   => dokan_get_navigation_url( 'withdraw' ),
-            'pos'   => 110
+            'pos'   => 70
         ),
     );
 

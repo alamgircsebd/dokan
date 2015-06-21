@@ -1,6 +1,6 @@
 <?php
 /**
- * Dokan Dahsbarod Review Main Template
+ * Dokan Dahsbarod Reports Main Template
  *
  * @since 2.4
  *
@@ -14,48 +14,47 @@
 
         /**
          *  dokan_dashboard_content_before hook
-         *  dokan_dashboard_review_content_before hook
+         *  dokan_dashboard_report_content_before
          *
          *  @hooked get_dashboard_side_navigation
          *
          *  @since 2.4
          */
         do_action( 'dokan_dashboard_content_before' );
-        do_action( 'dokan_dashboard_review_content_before' );
+        do_action( 'dokan_dashboard_report_content_before' );
     ?>
 
-    <div class="dokan-dashboard-content dokan-reviews-content">
+    <div class="dokan-dashboard-content dokan-reports-content">
 
         <?php
 
             /**
-             *  dokan_review_content_inside_before hook
+             *  dokan_report_content_inside_before hook
              *
              *  @since 2.4
              */
-            do_action( 'dokan_review_content_inside_before' );
+            do_action( 'dokan_report_content_inside_before' );
         ?>
 
-
-        <article class="dokan-reviews-area">
+        <article class="dokan-reports-area">
 
             <?php
+
                 /**
-                 * dokan_review_content_area_header hook
+                 * dokan_report_content_area_header hook
                  *
-                 * @hooked dokan_review_header_render
+                 * @hooked dokan_report_header_render
                  *
                  * @since 2.4
                  */
-                do_action( 'dokan_review_content_area_header' );
-
+                do_action( 'dokan_report_content_area_header' );
 
                 /**
                  * dokan_review_content hook
                  *
                  * @since 2.4
                  */
-                do_action( 'dokan_review_content' );
+                do_action( 'dokan_report_content' );
 
             ?>
 
@@ -64,25 +63,25 @@
         <?php
 
             /**
-             *  dokan_review_content_inside_after hook
+             *  dokan_report_content_inside_after hook
              *
              *  @since 2.4
              */
-            do_action( 'dokan_review_content_inside_after' );
+            do_action( 'dokan_report_content_inside_after' );
         ?>
 
-    </div><!-- .dokan-dashboard-content -->
+    </div> <!-- .dokan-dashboard-content -->
 
     <?php
 
         /**
          *  dokan_dashboard_content_after hook
-         *  dokan_dashboard_review_content_after hook
+         *  dokan_dashboard_report_content_after hook
          *
          *  @since 2.4
          */
         do_action( 'dokan_dashboard_content_after' );
-        do_action( 'dokan_dashboard_review_content_after' );
+        do_action( 'dokan_dashboard_report_content_after' );
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->

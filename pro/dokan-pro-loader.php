@@ -78,6 +78,7 @@ class Dokan_Pro_Loader {
         new Dokan_Pro_Dashboard();
         new Dokan_Pro_Coupons();
         new Dokan_Pro_Reviews();
+        new Dokan_Pro_Reports();
         new Dokan_Pro_Withdraws();
 
     }
