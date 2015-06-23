@@ -13,7 +13,7 @@ $seo = Dokan_Store_Seo::init();
                     <small>&rarr; <a href="<?php echo dokan_get_store_url( get_current_user_id() ); ?>"><?php _e( 'Visit Store', 'dokan' ); ?></a></small>
                 </h1>
             </header><!-- .dokan-dashboard-header -->
-            
+
             <?php $seo->frontend_meta_form(); ?>
 
         </article>

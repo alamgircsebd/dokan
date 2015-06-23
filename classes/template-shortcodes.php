@@ -101,26 +101,26 @@ class Dokan_Template_Shortcodes {
                     dokan_get_template_part( 'settings/store' );
                     break;
 
-                case 'social':
-                    dokan_get_template_part( 'settings/social' );
-                    break;
+                // case 'social':
+                //     dokan_get_template_part( 'settings/social' );
+                //     break;
 
-                case 'shipping':
-                    $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings', array( 'enabled' => 'yes' ) );
-                    $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+                // case 'shipping':
+                //     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings', array( 'enabled' => 'yes' ) );
+                //     $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
-                    if ( $enable_shipping == 'yes') {
-                        dokan_get_template_part( 'settings/shipping' );
-                    }
-                    break;
+                //     if ( $enable_shipping == 'yes') {
+                //         dokan_get_template_part( 'settings/shipping' );
+                //     }
+                //     break;
 
                 case 'payment':
-                    dokan_get_template_part( 'settings/payment' );
+                    dokan_get_template_part( 'settings/store' );
                     break;
 
-                case 'seo':
-                    dokan_get_template_part( 'settings/seo' );
-                    break;
+                // case 'seo':
+                //     dokan_get_template_part( 'settings/seo' );
+                //     break;
 
                 default:
                     /**

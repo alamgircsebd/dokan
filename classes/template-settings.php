@@ -6,6 +6,27 @@
  */
 class Dokan_Template_Settings {
 
+    public $current_user;
+    public $profile_info;
+    /**
+     * Loading autometically when class initiate
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    function __construct() {
+        $this->current_user = get_current_user_id();
+        $this->profile_info = dokan_get_store_info( $this->current_user );
+
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_header' ), 10 );
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_help' ), 12 );
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_load_progressbar' ), 14 );
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_store_errors' ), 16 );
+        add_action( 'dokan_settings_content', array( $this, 'render_settings_content' ), 10 );
+    }
+
+
     public static function init() {
         static $instance = false;
 
@@ -14,6 +35,86 @@ class Dokan_Template_Settings {
         }
 
         return $instance;
+    }
+
+    public function render_settings_header() {
+        global $wp;
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store' ) {
+            $heading = __( 'Settings', 'dokan' );
+        } elseif ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
+            $heading = __( 'Payment Settings', 'dokan' );
+        } else {
+            $heading = apply_filter( 'dokan_dashboard_settings_heading_title', __( 'Settings', 'dokan' ) );
+        }
+
+        dokan_get_template_part( 'settings/header', '', array( 'heading' => $heading ) );
+    }
+
+    public function render_settings_help() {
+        global $wp;
+        $help_text ='';
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
+            $help_text = __( 'These are the withdraw methods available for you. Please update your payment informations below to submit withdraw requests and get your store payments seamlessly.', 'dokan' );
+        }
+
+        if ( $help_text ) {
+            dokan_get_template_part( 'global/dokan-help', '', array(
+                'help_text' => $help_text
+            ));
+        }
+    }
+
+    public function render_settings_load_progressbar() {
+        echo '<div class="dokan-ajax-response">';
+        echo dokan_get_profile_progressbar();
+        echo '</div>';
+    }
+
+    public function render_settings_store_errors() {
+        $validate = $this->validate();
+
+        if ( is_wp_error( $validate ) ) {
+            $messages = $validate->get_error_messages();
+
+            foreach( $messages as $message ) {
+                dokan_get_template_part( 'global/dokan-error', '', array( 'message' => $message ) );
+            }
+        }
+    }
+
+    public function render_settings_content() {
+        global $wp;
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store' ) {
+            $this->load_store_content();
+        }
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
+            $this->load_payment_content();
+        }
+    }
+
+    public function load_store_content() {
+        $validate = $this->validate();
+
+        dokan_get_template_part( 'settings/store-form', '', array(
+            'current_user' => $this->current_user,
+            'profile_info' => $this->profile_info,
+            'validate'     => $validate,
+        ) );
+
+    }
+
+    public function load_payment_content() {
+        $methods = dokan_withdraw_get_active_methods();
+
+        dokan_get_template_part( 'settings/payment', '', array(
+            'methods'      => $methods,
+            'current_user' => $this->current_user,
+            'profile_info' => $this->profile_info,
+        ) );
     }
 
     /**

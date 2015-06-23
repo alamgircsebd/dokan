@@ -496,6 +496,7 @@ class WeDevs_Dokan {
         Dokan_Email::init();
         Dokan_Template_Shortcodes::init();
         Dokan_Template_Shipping::init();
+        Dokan_Template_Settings::init();
     }
 
     function redirect_if_not_logged_seller() {
