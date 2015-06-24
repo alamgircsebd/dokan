@@ -6,8 +6,9 @@
  */
 class Dokan_Template_Settings {
 
-    public $current_user;
+    public $currentuser;
     public $profile_info;
+
     /**
      * Loading autometically when class initiate
      *
@@ -16,17 +17,23 @@ class Dokan_Template_Settings {
      * @return void
      */
     function __construct() {
-        $this->current_user = get_current_user_id();
-        $this->profile_info = dokan_get_store_info( $this->current_user );
+
+        $this->currentuser = get_current_user_id();
+        $this->profile_info = dokan_get_store_info( get_current_user_id() );
 
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_header' ), 10 );
-        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_help' ), 12 );
-        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_load_progressbar' ), 14 );
-        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_store_errors' ), 16 );
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_help' ), 15 );
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_load_progressbar' ), 20 );
+        add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_store_errors' ), 25 );
         add_action( 'dokan_settings_content', array( $this, 'render_settings_content' ), 10 );
     }
 
-
+    /**
+     * Initializes the Dokan_Template_Settings() class
+     *
+     * Checks for an existing WeDevs_Dokan_Template_Settings() instance
+     * and if it doesn't find one, creates it.
+     */
     public static function init() {
         static $instance = false;
 
@@ -37,6 +44,13 @@ class Dokan_Template_Settings {
         return $instance;
     }
 
+    /**
+     * Render Settings Header
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function render_settings_header() {
         global $wp;
 
@@ -45,12 +59,19 @@ class Dokan_Template_Settings {
         } elseif ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
             $heading = __( 'Payment Settings', 'dokan' );
         } else {
-            $heading = apply_filter( 'dokan_dashboard_settings_heading_title', __( 'Settings', 'dokan' ) );
+            $heading = apply_filters( 'dokan_dashboard_settings_heading_title', __( 'Settings', 'dokan' ), $wp->query_vars['settings'] );
         }
 
         dokan_get_template_part( 'settings/header', '', array( 'heading' => $heading ) );
     }
 
+    /**
+     * Render Settings help
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function render_settings_help() {
         global $wp;
         $help_text ='';
@@ -59,19 +80,47 @@ class Dokan_Template_Settings {
             $help_text = __( 'These are the withdraw methods available for you. Please update your payment informations below to submit withdraw requests and get your store payments seamlessly.', 'dokan' );
         }
 
-        if ( $help_text ) {
+        if ( $help_text = apply_filters( 'dokan_dashboard_settings_helper_text', $help_text, $wp->query_vars['settings'] ) ) {
+
             dokan_get_template_part( 'global/dokan-help', '', array(
                 'help_text' => $help_text
             ));
         }
     }
 
+    /**
+     * Render Settings Progressbar
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function render_settings_load_progressbar() {
-        echo '<div class="dokan-ajax-response">';
-        echo dokan_get_profile_progressbar();
-        echo '</div>';
+        global $wp;
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store' ) {
+            echo '<div class="dokan-ajax-response">';
+            echo dokan_get_profile_progressbar();
+            echo '</div>';
+        }
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
+            echo '<div class="dokan-ajax-response">';
+            echo dokan_get_profile_progressbar();
+            echo '</div>';
+        }
+
+        do_action( 'dokan_settings_render_profile_progressbar', $wp->query_vars );
+
     }
 
+    /**
+     * Render Settings Store Errors
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function render_settings_store_errors() {
         $validate = $this->validate();
 
@@ -84,6 +133,13 @@ class Dokan_Template_Settings {
         }
     }
 
+    /**
+     * Render Settings Content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function render_settings_content() {
         global $wp;
 
@@ -94,31 +150,49 @@ class Dokan_Template_Settings {
         if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
             $this->load_payment_content();
         }
+
+        do_action( 'dokan_render_settings_content', $wp->query_vars );
     }
 
+    /**
+     * Load Store Content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function load_store_content() {
         $validate = $this->validate();
 
         dokan_get_template_part( 'settings/store-form', '', array(
-            'current_user' => $this->current_user,
+            'current_user' => $this->currentuser,
             'profile_info' => $this->profile_info,
             'validate'     => $validate,
         ) );
 
     }
 
+    /**
+     * Load Payment Content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function load_payment_content() {
         $methods = dokan_withdraw_get_active_methods();
 
         dokan_get_template_part( 'settings/payment', '', array(
             'methods'      => $methods,
-            'current_user' => $this->current_user,
+            'current_user' => $this->currentuser,
             'profile_info' => $this->profile_info,
         ) );
     }
 
     /**
      * Save settings via ajax
+     *
+     * @since 2.4
      *
      * @return void
      */
@@ -317,6 +391,9 @@ class Dokan_Template_Settings {
 
     /**
      * validate payment settings
+     *
+     * @since 2.4
+     *
      * @return bool|WP_Error
      */
     function payment_validate() {
@@ -614,6 +691,13 @@ class Dokan_Template_Settings {
         return $track_val;
     }
 
+    /**
+     * Dokan Get Category Format
+     *
+     * @since 1.0
+     *
+     * @return array
+     */
     function get_dokan_categories() {
         $dokan_category = array(
             'book'       => __( 'Book', 'dokan' ),

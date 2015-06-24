@@ -67,7 +67,7 @@ class Dokan_Pro_Reviews {
             'title' => __( 'Reviews', 'dokan'),
             'icon'  => '<i class="fa fa-comments-o"></i>',
             'url'   => dokan_get_navigation_url( 'reviews' ),
-            'pos'   => 75
+            'pos'   => 65
         );
 
         return $urls;

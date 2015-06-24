@@ -95,47 +95,8 @@ class Dokan_Template_Shortcodes {
         }
 
         if ( isset( $wp->query_vars['settings'] ) ) {
-            switch ($wp->query_vars['settings']) {
-
-                case 'store':
-                    dokan_get_template_part( 'settings/store' );
-                    break;
-
-                // case 'social':
-                //     dokan_get_template_part( 'settings/social' );
-                //     break;
-
-                // case 'shipping':
-                //     $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings', array( 'enabled' => 'yes' ) );
-                //     $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-
-                //     if ( $enable_shipping == 'yes') {
-                //         dokan_get_template_part( 'settings/shipping' );
-                //     }
-                //     break;
-
-                case 'payment':
-                    dokan_get_template_part( 'settings/store' );
-                    break;
-
-                // case 'seo':
-                //     dokan_get_template_part( 'settings/seo' );
-                //     break;
-
-                default:
-                    /**
-                     * Allow plugins too hook into here and add their
-                     * own settings pages
-                     *
-                     * @since 2.2
-                     */
-                    $template_path = apply_filters( 'dokan_settings_template', false, $wp->query_vars['settings'] );
-
-                    if ( $template_path !== false && file_exists( $template_path ) ) {
-                        require_once $template_path;
-                    }
-                    break;
-            }
+            dokan_get_template_part('settings/store');
+            return;
         }
 
         if ( isset( $wp->query_vars['page'] ) ) {

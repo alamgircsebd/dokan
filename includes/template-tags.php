@@ -294,7 +294,11 @@ function dokan_order_listing_status_filter() {
 }
 
 function dokan_nav_sort_by_pos( $a, $b ) {
-    return $a['pos'] - $b['pos'];
+    if ( isset( $a['pos'] ) && isset( $b['pos'] ) ) {
+        return $a['pos'] - $b['pos'];
+    } else {
+        return 199;
+    }
 }
 
 /**
@@ -338,7 +342,7 @@ function dokan_get_dashboard_nav() {
         'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
         'icon'  => '<i class="fa fa-cog"></i>',
         'url'   => dokan_get_navigation_url( 'settings/store' ),
-        'pos'   => 150,
+        'pos'   => 200,
     );
 
     $settings_sub = array(

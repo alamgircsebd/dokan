@@ -488,15 +488,18 @@ class WeDevs_Dokan {
             new Dokan_Pageviews();
         }
 
-        new Dokan_Template_Main();
-        new Dokan_Template_Dashboard();
-        new Dokan_Template_Orders();
-        Dokan_Template_Withdraw::init();
         new Dokan_Rewrites();
         Dokan_Email::init();
-        Dokan_Template_Shortcodes::init();
-        Dokan_Template_Shipping::init();
-        Dokan_Template_Settings::init();
+
+        if ( is_user_logged_in() ) {
+            new Dokan_Template_Main();
+            new Dokan_Template_Dashboard();
+            new Dokan_Template_Orders();
+            Dokan_Template_Withdraw::init();
+            Dokan_Template_Shortcodes::init();
+            Dokan_Template_Shipping::init();
+            Dokan_Template_Settings::init();
+        }
     }
 
     function redirect_if_not_logged_seller() {
