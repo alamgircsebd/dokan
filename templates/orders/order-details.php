@@ -20,7 +20,7 @@ $order    = new WC_Order( $order_id );
                     <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
                     <div class="dokan-panel-body" id="woocommerce-order-items">
 
-                        <!-- <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
+                        <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
                             <thead>
                                 <tr>
                                     <th class="item" colspan="2"><?php _e( 'Item', 'dokan' ); ?></th>
@@ -99,10 +99,6 @@ $order    = new WC_Order( $order_id );
                             </table>
                             <?php
                         }
-                        ?> -->
-                        <?php 
-                        $data  = get_post_meta( $order_id );
-                        include( 'views/html-order-items.php' );
                         ?>
                     </div>
                 </div>
