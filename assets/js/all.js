@@ -209,19 +209,11 @@ jQuery(function($) {
         init: function() {
 
             $( '#woocommerce-order-items' )
-                // .on( 'click', 'button.add-line-item', this.add_line_item )
                 .on( 'click', 'button.refund-items', this.refund_items )
                 .on( 'click', '.cancel-action', this.cancel )
-                // .on( 'click', 'button.add-order-item', this.add_item )
-                // .on( 'click', 'button.add-order-fee', this.add_fee )
-                // .on( 'click', 'button.add-order-shipping', this.add_shipping )
-                // .on( 'click', 'button.add-order-tax', this.add_tax )
                 .on( 'click', 'input.check-column', this.bulk_actions.check_column )
                 .on( 'click', '.do_bulk_action', this.bulk_actions.do_bulk_action )
-                // .on( 'click', 'button.calculate-action', this.calculate_totals )
                 .on( 'click', 'button.save-action', this.save_line_items )
-                // .on( 'click', 'a.delete-order-tax', this.delete_tax )
-                // .on( 'click', 'button.calculate-tax-action', this.calculate_tax )
                 .on( 'click', 'a.edit-order-item', this.edit_item )
                 .on( 'click', 'a.delete-order-item', this.delete_item )
 
@@ -341,12 +333,6 @@ jQuery(function($) {
             $( this ).trigger( 'quantity_changed' );
         },
 
-        // add_line_item: function() {
-        //     $( 'div.wc-order-add-item' ).slideDown();
-        //     $( 'div.wc-order-bulk-actions' ).slideUp();
-        //     return false;
-        // },
-
         refund_items: function() {
             $( 'div.wc-order-refund-items' ).slideDown();
             $( 'div.wc-order-bulk-actions' ).slideUp();
@@ -370,55 +356,6 @@ jQuery(function($) {
 
             return false;
         },
-
-        // add_item: function() {
-        //     $( this ).WCBackboneModal({
-        //         template: '#wc-modal-add-products'
-        //     });
-
-        //     return false;
-        // },
-
-        // add_fee: function() {
-        //     dokan_seller_meta_boxes_order_items.block();
-
-        //     var data = {
-        //         action:   'woocommerce_add_order_fee',
-        //         order_id: woocommerce_admin_meta_boxes.post_id,
-        //         security: woocommerce_admin_meta_boxes.order_item_nonce
-        //     };
-
-        //     $.post( woocommerce_admin_meta_boxes.ajax_url, data, function( response ) {
-        //         $( 'table.woocommerce_order_items tbody#order_fee_line_items' ).append( response );
-        //         dokan_seller_meta_boxes_order_items.unblock();
-        //     });
-
-        //     return false;
-        // },
-
-        // add_shipping: function() {
-        //     dokan_seller_meta_boxes_order_items.block();
-
-        //     var data = {
-        //         action:   'woocommerce_add_order_shipping',
-        //         order_id: woocommerce_admin_meta_boxes.post_id,
-        //         security: woocommerce_admin_meta_boxes.order_item_nonce
-        //     };
-
-        //     $.post( woocommerce_admin_meta_boxes.ajax_url, data, function( response ) {
-        //         $( 'table.woocommerce_order_items tbody#order_shipping_line_items' ).append( response );
-        //         dokan_seller_meta_boxes_order_items.unblock();
-        //     });
-
-        //     return false;
-        // },
-
-        // add_tax: function() {
-        //     $( this ).WCBackboneModal({
-        //         template: '#wc-modal-add-tax'
-        //     });
-        //     return false;
-        // },
 
         edit_item: function() {
             $( this ).closest( 'tr' ).find( '.view' ).hide();
@@ -457,125 +394,6 @@ jQuery(function($) {
             return false;
         },
 
-        // delete_tax: function() {
-        //     if ( window.confirm( woocommerce_admin_meta_boxes.i18n_delete_tax ) ) {
-        //         dokan_seller_meta_boxes_order_items.block();
-
-        //         var data = {
-        //             action:   'woocommerce_remove_order_tax',
-        //             rate_id:  $( this ).attr( 'data-rate_id' ),
-        //             order_id: woocommerce_admin_meta_boxes.post_id,
-        //             security: woocommerce_admin_meta_boxes.order_item_nonce
-        //         };
-
-        //         $.ajax({
-        //             url:  woocommerce_admin_meta_boxes.ajax_url,
-        //             data: data,
-        //             type: 'POST',
-        //             success: function( response ) {
-        //                 $( '#woocommerce-order-items .inside' ).empty();
-        //                 $( '#woocommerce-order-items .inside' ).append( response );
-        //                 wc_meta_boxes_order.init_tiptip();
-        //                 dokan_seller_meta_boxes_order_items.unblock();
-        //             }
-        //         });
-        //     }
-        //     return false;
-        // },
-
-        // calculate_tax: function() {
-        //     if ( window.confirm( woocommerce_admin_meta_boxes.calc_line_taxes ) ) {
-        //         dokan_seller_meta_boxes_order_items.block();
-
-        //         var shipping_country = $( '#_shipping_country' ).val();
-        //         var billing_country  = $( '#_billing_country' ).val();
-        //         var country          = woocommerce_admin_meta_boxes.base_country;
-        //         var state            = '';
-        //         var postcode         = '';
-        //         var city             = '';
-
-        //         if ( shipping_country ) {
-        //             country  = shipping_country;
-        //             state    = $( '#_shipping_state' ).val();
-        //             postcode = $( '#_shipping_postcode' ).val();
-        //             city     = $( '#_shipping_city' ).val();
-        //         } else if ( billing_country ) {
-        //             country  = billing_country;
-        //             state    = $( '#_billing_state' ).val();
-        //             postcode = $( '#_billing_postcode' ).val();
-        //             city     = $( '#_billing_city' ).val();
-        //         }
-
-        //         var data = {
-        //             action:   'woocommerce_calc_line_taxes',
-        //             order_id: woocommerce_admin_meta_boxes.post_id,
-        //             items:    $( 'table.woocommerce_order_items :input[name], .wc-order-totals-items :input[name]' ).serialize(),
-        //             country:  country,
-        //             state:    state,
-        //             postcode: postcode,
-        //             city:     city,
-        //             security: woocommerce_admin_meta_boxes.calc_totals_nonce
-        //         };
-
-        //         $.ajax({
-        //             url:  woocommerce_admin_meta_boxes.ajax_url,
-        //             data: data,
-        //             type: 'POST',
-        //             success: function( response ) {
-        //                 $( '#woocommerce-order-items .inside' ).empty();
-        //                 $( '#woocommerce-order-items .inside' ).append( response );
-        //                 wc_meta_boxes_order.init_tiptip();
-        //                 dokan_seller_meta_boxes_order_items.unblock();
-        //             }
-        //         });
-        //     }
-
-        //     return false;
-        // },
-
-        // calculate_totals: function() {
-        //     if ( window.confirm( woocommerce_admin_meta_boxes.calc_totals ) ) {
-
-        //         dokan_seller_meta_boxes_order_items.block();
-
-        //         // Get row totals
-        //         var line_totals    = 0;
-        //         var tax            = 0;
-        //         var shipping       = 0;
-
-        //         $( '.woocommerce_order_items tr.shipping input.line_total' ).each(function() {
-        //             var cost  = $( this ).val() || '0';
-        //             cost      = accounting.unformat( cost, woocommerce_admin.mon_decimal_point );
-        //             shipping  = shipping + parseFloat( cost );
-        //         });
-
-        //         $( '.woocommerce_order_items input.line_tax' ).each(function() {
-        //             var cost = $( this ).val() || '0';
-        //             cost     = accounting.unformat( cost, woocommerce_admin.mon_decimal_point );
-        //             tax      = tax + parseFloat( cost );
-        //         });
-
-        //         $( '.woocommerce_order_items tr.item, .woocommerce_order_items tr.fee' ).each(function() {
-        //             var line_total = $( this ).find( 'input.line_total' ).val() || '0';
-        //             line_totals    = line_totals + accounting.unformat( line_total.replace( ',', '.' ) );
-        //         });
-
-        //         // Tax
-        //         if ( 'yes' === woocommerce_admin_meta_boxes.round_at_subtotal ) {
-        //             tax = parseFloat( accounting.toFixed( tax, woocommerce_admin_meta_boxes.rounding_precision ) );
-        //         }
-
-        //         // Set Total
-        //         $( '#_order_total' )
-        //             .val( accounting.formatNumber( line_totals + tax + shipping, woocommerce_admin_meta_boxes.currency_format_num_decimals, '', woocommerce_admin.mon_decimal_point ) )
-        //             .change();
-
-        //         $( 'button.save-action' ).click();
-        //     }
-
-        //     return false;
-        // },
-
         save_line_items: function() {
             var data = {
                 order_id: dokan_refund.post_id,
@@ -593,7 +411,7 @@ jQuery(function($) {
                 success: function( response ) {
                     $( '#woocommerce-order-items .inside' ).empty();
                     $( '#woocommerce-order-items .inside' ).append( response );
-                    wc_meta_boxes_order.init_tiptip();
+                    // wc_meta_boxes_order.init_tiptip();
                     dokan_seller_meta_boxes_order_items.unblock();
                 }
             });
@@ -962,103 +780,6 @@ jQuery(function($) {
                 } );
             }
         },
-
-        // backbone: {
-
-        //     init: function( e, target ) {
-        //         if ( '#wc-modal-add-products' === target ) {
-        //             $( 'body' ).trigger( 'wc-enhanced-select-init' );
-        //         }
-        //     },
-
-        //     response: function( e, target, data ) {
-        //         if ( '#wc-modal-add-tax' === target ) {
-        //             var rate_id = data.add_order_tax;
-        //             var manual_rate_id = '';
-
-        //             if ( data.manual_tax_rate_id ) {
-        //                 manual_rate_id = data.manual_tax_rate_id;
-        //             }
-
-        //             dokan_seller_meta_boxes_order_items.backbone.add_tax( rate_id, manual_rate_id );
-        //         }
-        //         if ( '#wc-modal-add-products' === target ) {
-        //             dokan_seller_meta_boxes_order_items.backbone.add_item( data.add_order_items );
-        //         }
-        //     },
-
-        //     add_item: function( add_item_ids ) {
-        //         add_item_ids = add_item_ids.split( ',' );
-
-        //         if ( add_item_ids ) {
-
-        //             var count = add_item_ids.length;
-
-        //             dokan_seller_meta_boxes_order_items.block();
-
-        //             $.each( add_item_ids, function( index, value ) {
-
-        //                 var data = {
-        //                     action:      'woocommerce_add_order_item',
-        //                     item_to_add: value,
-        //                     order_id:    woocommerce_admin_meta_boxes.post_id,
-        //                     security:    woocommerce_admin_meta_boxes.order_item_nonce
-        //                 };
-
-        //                 $.post( woocommerce_admin_meta_boxes.ajax_url, data, function( response ) {
-        //                     $( 'table.woocommerce_order_items tbody#order_line_items' ).append( response );
-
-        //                     if ( !--count ) {
-        //                         wc_meta_boxes_order.init_tiptip();
-        //                         dokan_seller_meta_boxes_order_items.unblock();
-        //                     }
-        //                 });
-
-        //             });
-
-        //         }
-        //     },
-
-        //     add_tax: function( rate_id, manual_rate_id ) {
-        //         if ( manual_rate_id ) {
-        //             rate_id = manual_rate_id;
-        //         }
-
-        //         if ( ! rate_id ) {
-        //             return false;
-        //         }
-
-        //         var rates = $( '.order-tax-id' ).map( function() {
-        //             return $( this ).val();
-        //         }).get();
-
-        //         // Test if already exists
-        //         if ( -1 === $.inArray( rate_id, rates ) ) {
-        //             dokan_seller_meta_boxes_order_items.block();
-
-        //             var data = {
-        //                 action:   'woocommerce_add_order_tax',
-        //                 rate_id:  rate_id,
-        //                 order_id: woocommerce_admin_meta_boxes.post_id,
-        //                 security: woocommerce_admin_meta_boxes.order_item_nonce
-        //             };
-
-        //             $.ajax({
-        //                 url:  woocommerce_admin_meta_boxes.ajax_url,
-        //                 data: data,
-        //                 type: 'POST',
-        //                 success: function( response ) {
-        //                     $( '#woocommerce-order-items .inside' ).empty();
-        //                     $( '#woocommerce-order-items .inside' ).append( response );
-        //                     wc_meta_boxes_order.init_tiptip();
-        //                     dokan_seller_meta_boxes_order_items.unblock();
-        //                 }
-        //             });
-        //         } else {
-        //             window.alert( woocommerce_admin_meta_boxes.i18n_tax_rate_already_exists );
-        //         }
-        //     }
-        // },
     };
 
     dokan_seller_meta_boxes_order_items.init();
