@@ -1991,3 +1991,4 @@ function dokan_get_toc_url( $store_id ) {
     return apply_filters( 'dokan_get_toc_url', $userstore ."toc" );
 }
 
+

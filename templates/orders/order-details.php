@@ -18,9 +18,9 @@ $order    = new WC_Order( $order_id );
             <div class="" style="width:100%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
-                    <div class="dokan-panel-body">
+                    <div class="dokan-panel-body" id="woocommerce-order-items">
 
-                        <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
+                        <!-- <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
                             <thead>
                                 <tr>
                                     <th class="item" colspan="2"><?php _e( 'Item', 'dokan' ); ?></th>
@@ -99,8 +99,11 @@ $order    = new WC_Order( $order_id );
                             </table>
                             <?php
                         }
+                        ?> -->
+                        <?php 
+                        $data  = get_post_meta( $order_id );
+                        include( 'views/html-order-items.php' );
                         ?>
-
                     </div>
                 </div>
             </div>
@@ -159,9 +162,9 @@ $order    = new WC_Order( $order_id );
                                     <select id="order_status" name="order_status" class="form-control">
                                         <?php
                                         foreach ( $statuses as $status => $label ) {
-                                            if( $status == 'wc-refunded' ) {
-                                                continue;
-                                            }
+                                            // if( $status == 'wc-refunded' ) {
+                                            //     continue;
+                                            // }
                                             echo '<option value="' . esc_attr( $status ) . '" ' . selected( $status, $order->post_status, false ) . '>' . esc_html__( $label, 'dokan' ) . '</option>';
                                         }
                                         ?>
