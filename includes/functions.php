@@ -1991,4 +1991,19 @@ function dokan_get_toc_url( $store_id ) {
     return apply_filters( 'dokan_get_toc_url', $userstore ."toc" );
 }
 
+      
+add_action( 'woocommerce_login_form_start', 'save_redirect_url');
+add_filter( 'woocommerce_login_redirect', 'login_redirect' , 1, 3 );
+    
+function save_redirect_url(){        
+    $_SESSION['dokan_redirect_url'] = wp_get_referer();
+}
+
+function login_redirect( $redirect_to, $user ) {
+
+    if ( isset($_SESSION['dokan_redirect_url']) ){
+        $redirect_to = $_SESSION['dokan_redirect_url'];
+    }
+    return $redirect_to;
+}
 
