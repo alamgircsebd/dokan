@@ -5,29 +5,45 @@
  * @author weDves
  */
 
-class Dokan_Template_Shipping {
+class Dokan_Pro_Shipping {
 
+    /**
+     * Load autometically when class inistantiate
+     *
+     * @since 2.4
+     *
+     * @uses actions|filter hooks
+     */
+    public function __construct() {
+        add_action( 'woocommerce_shipping_init', array( $this, 'include_shipping' ) );
+        add_action( 'woocommerce_shipping_methods', array( $this, 'register_shipping' ) );
+        add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
+        add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
+        add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
+
+    }
+
+    /**
+     * Inistantiate the Dokan_Pro_Shipping class
+     *
+     * @since 2.4
+     *
+     * @return object
+     */
     public static function init() {
         static $instance = false;
 
         if ( !$instance ) {
-            $instance = new Dokan_Template_Shipping();
+            $instance = new Dokan_Pro_Shipping();
         }
 
         return $instance;
     }
 
-    public function __construct() {
-
-        add_action( 'woocommerce_shipping_init', array($this, 'include_shipping' ) );
-        add_action( 'woocommerce_shipping_methods', array($this, 'register_shipping' ) );
-        add_action( 'woocommerce_product_tabs', array($this, 'register_product_tab' ) );
-        add_action( 'woocommerce_after_checkout_validation', array($this, 'validate_country' ) );
-    }
-
-
     /**
      * Include main shipping integration
+     *
+     * @since 2.0
      *
      * @return void
      */
@@ -38,7 +54,10 @@ class Dokan_Template_Shipping {
     /**
      * Register shipping method
      *
+     * @since 2.0
+     *
      * @param array $methods
+     *
      * @return array
      */
     function register_shipping( $methods ) {
@@ -50,7 +69,10 @@ class Dokan_Template_Shipping {
     /**
      * Validate the shipping area
      *
+     * @since 2.0
+     *
      * @param  array $posted
+     *
      * @return void
      */
     function validate_country( $posted ) {
@@ -91,7 +113,7 @@ class Dokan_Template_Shipping {
                 continue;
             }
 
-            if( Dokan_WC_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
+            if ( Dokan_WC_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
                 continue;
             }
 
@@ -135,11 +157,117 @@ class Dokan_Template_Shipping {
         }
     }
 
+    /**
+     *  Handle Shipping post submit
+     *
+     *  @since  2.0
+     *
+     *  @return void
+     */
+    function handle_shipping() {
 
-     /**
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( isset( $_POST['dokan_update_shipping_options'] ) && wp_verify_nonce( $_POST['dokan_shipping_form_field_nonce'], 'dokan_shipping_form_field' ) ) {
+
+            $user_id = get_current_user_id();
+            $s_rates = array();
+            $rates = array();
+
+            if ( isset( $_POST['dps_enable_shipping'] ) ) {
+                update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );
+            }
+
+            if ( isset( $_POST['dokan_shipping_type'] ) ) {
+                update_user_meta( $user_id, '_dokan_shipping_type', $_POST['dokan_shipping_type'] );
+            }
+
+            if ( isset( $_POST['dps_shipping_type_price'] ) ) {
+                update_user_meta( $user_id, '_dps_shipping_type_price', $_POST['dps_shipping_type_price'] );
+            }
+
+            if ( isset( $_POST['dps_additional_product'] ) ) {
+                update_user_meta( $user_id, '_dps_additional_product', $_POST['dps_additional_product'] );
+            }
+
+            if ( isset( $_POST['dps_additional_qty'] ) ) {
+                update_user_meta( $user_id, '_dps_additional_qty', $_POST['dps_additional_qty'] );
+            }
+
+            if ( isset( $_POST['dps_pt'] ) ) {
+                update_user_meta( $user_id, '_dps_pt', $_POST['dps_pt'] );
+            }
+
+            if ( isset( $_POST['dps_ship_policy'] ) ) {
+                update_user_meta( $user_id, '_dps_ship_policy', $_POST['dps_ship_policy'] );
+            }
+
+            if ( isset( $_POST['dps_refund_policy'] ) ) {
+                update_user_meta( $user_id, '_dps_refund_policy', $_POST['dps_refund_policy'] );
+            }
+
+            if ( isset( $_POST['dps_form_location'] ) ) {
+                update_user_meta( $user_id, '_dps_form_location', $_POST['dps_form_location'] );
+            }
+
+            if ( isset( $_POST['dps_country_to'] ) ) {
+
+                foreach ($_POST['dps_country_to'] as $key => $value) {
+                    $country = $value;
+                    $c_price = floatval( $_POST['dps_country_to_price'][$key] );
+
+                    if( !$c_price && empty( $c_price ) ) {
+                        $c_price = 0;
+                    }
+
+                    if ( !empty( $value ) ) {
+                        $rates[$country] = $c_price;
+                    }
+                }
+            }
+
+            update_user_meta( $user_id, '_dps_country_rates', $rates );
+
+            if ( isset( $_POST['dps_state_to'] ) ) {
+                foreach ( $_POST['dps_state_to'] as $country_code => $states ) {
+
+                    foreach ( $states as $key_val => $name ) {
+                        $country_c = $country_code;
+                        $state_code = $name;
+                        $s_price = floatval( $_POST['dps_state_to_price'][$country_c][$key_val] );
+
+                        if ( !$s_price || empty( $s_price ) ) {
+                            $s_price = 0;
+                        }
+
+                        if ( !empty( $name ) ) {
+                            $s_rates[$country_c][$state_code] = $s_price;
+                        }
+                    }
+                }
+            }
+
+            update_user_meta( $user_id, '_dps_state_rates', $s_rates );
+
+            $shipping_url = dokan_get_navigation_url( 'settings/shipping' );
+            wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
+            exit();
+        }
+    }
+
+    /**
      * Adds a seller tab in product single page
      *
+     * @since 2.0
+     *
      * @param array $tabs
+     *
      * @return array
      */
     function register_product_tab( $tabs ) {
@@ -173,12 +301,14 @@ class Dokan_Template_Shipping {
 
     /**
      * Callback for Register_prouduct_tab function
-     * @return [type] [description]
+     *
+     * @since 2.0
+     *
+     * @return void
      */
     function shipping_tab() {
         global $post;
-
-        $dps_processing        = get_user_meta( $post->post_author, '_dps_pt', true );
+        $dps_processing    = get_user_meta( $post->post_author, '_dps_pt', true );
         $from              = get_user_meta( $post->post_author, '_dps_form_location', true );
         $dps_country_rates = get_user_meta( $post->post_author, '_dps_country_rates', true );
         $dps_state_rates   = get_user_meta( $post->post_author, '_dps_state_rates', true );
@@ -270,8 +400,4 @@ class Dokan_Template_Shipping {
         <?php } ?>
         <?php
     }
-
-
-
-
 }

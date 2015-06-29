@@ -34,11 +34,6 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_note', array( $withdraw, 'note_update' ) );
         add_action( 'wp_ajax_withdraw_ajax_submission', array( $withdraw, 'withdraw_ajax' ) );
 
-        // reviews
-        $reviews = Dokan_Pro_Reviews::init();
-        add_action( 'wp_ajax_dokan_comment_status', array( $reviews, 'ajax_comment_status' ) );
-        add_action( 'wp_ajax_dokan_update_comment', array( $reviews, 'ajax_update_comment' ) );
-
         //settings
         $settings = Dokan_Template_Settings::init();
         add_action( 'wp_ajax_dokan_settings', array( $settings, 'ajax_settings' ) );

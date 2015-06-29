@@ -7,7 +7,7 @@
  *
  * @since 2.3
  */
-class Dokan_Store_Seo {
+class Dokan_Pro_Store_Seo {
 
     public $feedback    = false;
     private $store_info = false;
@@ -21,7 +21,7 @@ class Dokan_Store_Seo {
         static $instance = false;
 
         if ( !$instance ) {
-            $instance = new Dokan_Store_Seo();
+            $instance = new Dokan_Pro_Store_Seo();
         }
 
         return $instance;
@@ -428,4 +428,4 @@ class Dokan_Store_Seo {
 
 }
 
-$seo = Dokan_Store_Seo::init();
+$seo = Dokan_Pro_Store_Seo::init();

@@ -42,6 +42,7 @@ class Dokan_Pro_Loader {
         define( 'DOKAN_PRO_DIR', dirname( __FILE__) );
         define( 'DOKAN_PRO_ADMIN_DIR', dirname( __FILE__).'/admin' );
         define( 'DOKAN_PRO_INC', dirname( __FILE__).'/includes' );
+        define( 'DOKAN_PRO_CLASS', dirname( __FILE__).'/classes' );
     }
 
     /**
@@ -59,6 +60,8 @@ class Dokan_Pro_Loader {
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
+        require_once DOKAN_PRO_CLASS . '/store-seo.php';
+
     }
 
     /**
@@ -76,12 +79,15 @@ class Dokan_Pro_Loader {
         }
 
         if ( is_user_logged_in() ) {
+            new Dokan_Pro_Ajax();
             new Dokan_Pro_Dashboard();
             new Dokan_Pro_Coupons();
             new Dokan_Pro_Reviews();
             new Dokan_Pro_Reports();
             new Dokan_Pro_Withdraws();
             new Dokan_Pro_Settings();
+            Dokan_Pro_Shipping::init();
+            Dokan_Pro_Notice::init();
         }
 
     }

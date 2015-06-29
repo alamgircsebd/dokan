@@ -1,7 +1,7 @@
 <?php
 $notice_id = get_query_var( 'single-announcement' );
 $notice = array();
-$template_notice = Dokan_Template_Notice::init();
+$template_notice = Dokan_Pro_Notice::init();
 
 if( is_numeric( $notice_id ) ) {
     $notice = $template_notice ->get_single_announcement( $notice_id );

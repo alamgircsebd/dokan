@@ -419,8 +419,6 @@ class WeDevs_Dokan {
             require_once $inc_dir . 'template-tags.php';
         }
 
-        require_once $classes_dir. 'store-seo.php';
-
     }
 
     /**
@@ -495,9 +493,9 @@ class WeDevs_Dokan {
             new Dokan_Template_Main();
             new Dokan_Template_Dashboard();
             new Dokan_Template_Orders();
+            Dokan_Template_Products::init();
             Dokan_Template_Withdraw::init();
             Dokan_Template_Shortcodes::init();
-            Dokan_Template_Shipping::init();
             Dokan_Template_Settings::init();
         }
     }

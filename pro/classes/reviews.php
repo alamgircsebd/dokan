@@ -33,6 +33,10 @@ class Dokan_Pro_Reviews {
         add_action( 'dokan_review_listing_table_body', array( $this, 'dokan_render_listing_table_body' ), 10 );
         add_action( 'dokan_review_content_inside_after', array( $this, 'dokan_render_listing_table_script_template' ), 10 );
         add_action( 'template_redirect', array( $this, 'handle_status' ), 10 );
+
+        add_action( 'wp_ajax_dokan_comment_status', array( $this, 'ajax_comment_status' ) );
+        add_action( 'wp_ajax_dokan_update_comment', array( $this, 'ajax_update_comment' ) );
+
     }
 
     /**

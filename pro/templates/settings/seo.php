@@ -1,5 +1,5 @@
 <?php
-$seo = Dokan_Store_Seo::init();
+$seo = Dokan_Pro_Store_Seo::init();
 ?>
 
 <div class="dokan-store-seo-wrapper">

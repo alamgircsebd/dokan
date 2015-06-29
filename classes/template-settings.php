@@ -96,22 +96,11 @@ class Dokan_Template_Settings {
      * @return void
      */
     public function render_settings_load_progressbar() {
-        global $wp;
-
-        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store' ) {
-            echo '<div class="dokan-ajax-response">';
-            echo dokan_get_profile_progressbar();
-            echo '</div>';
-        }
-
-        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
-            echo '<div class="dokan-ajax-response">';
-            echo dokan_get_profile_progressbar();
-            echo '</div>';
-        }
-
-        do_action( 'dokan_settings_render_profile_progressbar', $wp->query_vars );
-
+        ?>
+            <div class="dokan-ajax-response">
+                <?php do_action( 'dokan_settings_load_ajax_response') ?>
+            </div>
+        <?php
     }
 
     /**
@@ -232,13 +221,11 @@ class Dokan_Template_Settings {
         // we are good to go
         $save_data = $this->insert_settings_info();
 
-        $progress_bar = dokan_get_profile_progressbar();
         $success_msg = __( 'Your information has been saved successfully', 'dokan' ) ;
 
-        $data = array(
-            'progress' => $progress_bar,
+        $data = apply_filters( 'dokan_ajax_settings_response', array(
             'msg'      => $success_msg,
-        );
+        ) );
 
         wp_send_json_success( $data );
     }

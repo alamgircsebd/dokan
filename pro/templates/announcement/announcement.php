@@ -1,5 +1,5 @@
 <?php
-    $announcement = Dokan_Template_Notice::init();
+    $announcement = Dokan_Pro_Notice::init();
 
 ?>
 

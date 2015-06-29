@@ -27,6 +27,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         add_filter( 'dokan_dashboard_settings_heading_title', array( $this, 'load_settings_header' ), 10, 2 );
         add_filter( 'dokan_dashboard_settings_helper_text', array( $this, 'load_settings_helper_text' ), 10, 2 );
 
+        add_action( 'dokan_ajax_settings_response', array( $this, 'add_progressbar_in_settings_save_response' ), 10 );
+        add_action( 'dokan_settings_load_ajax_response', array( $this, 'render_pro_settings_load_progressbar' ), 25 );
         add_action( 'dokan_settings_render_profile_progressbar', array( $this, 'load_settings_progressbar' ), 10, 2 );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_shipping_status_message' ), 25 );
         add_action( 'dokan_render_settings_content', array( $this, 'load_settings_content' ), 10 );
@@ -138,14 +140,37 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      *
      * @return void
      */
-    public function load_settings_progressbar( $query_vars ) {
+    public function render_pro_settings_load_progressbar() {
+        global $wp;
 
-        if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'social' ) {
-            echo '<div class="dokan-ajax-response">';
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store' ) {
             echo dokan_get_profile_progressbar();
-            echo '</div>';
         }
 
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'payment' ) {
+            echo dokan_get_profile_progressbar();
+        }
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'social' ) {
+            echo dokan_get_profile_progressbar();
+        }
+
+    }
+
+    /**
+     * Add progressbar in settings save feedback message
+     *
+     * @since 2.4
+     *
+     * @param array $message
+     *
+     * @return array
+     */
+    public function add_progressbar_in_settings_save_response( $message ) {
+        $progress_bar = dokan_get_profile_progressbar();
+        $message['progress'] = $progress_bar;
+
+        return $message;
     }
 
     /**

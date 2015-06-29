@@ -43,7 +43,7 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 	}
 
 	public function get_announcement_widget() {
-		$template_notice = Dokan_Template_Notice::init();
+		$template_notice = Dokan_Pro_Notice::init();
         $query = $template_notice->get_announcement_by_users( apply_filters( 'dokan_announcement_list_number', 3 ) );
 
 		dokan_get_template_part( 'dashboard/announcement-widget', '', array(

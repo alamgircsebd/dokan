@@ -6,25 +6,50 @@
  *
  * @author weDevs
  */
-class Dokan_Template_Notice {
+class Dokan_Pro_Notice {
 
     private $perpage = 10;
     private $total_query_result;
 
     /**
-     * Initializes the Dokan_Template_Notice() class
+     * Load autometically when class initiate
      *
-     * Checks for an existing Dokan_Template_Notice() instance
+     * @since 2.4
+     *
+     * @uses action hook
+     * @uses filter hook
+     */
+    function __construct() {
+        add_action( 'dokan_load_custom_template', array( $this, 'load_announcement_template' ), 10 );
+    }
+
+    /**
+     * Initializes the Dokan_Pro_Notice() class
+     *
+     * Checks for an existing Dokan_Pro_Notice() instance
      * and if it doesn't find one, creates it.
      */
     public static function init() {
         static $instance = false;
 
         if ( !$instance ) {
-            $instance = new Dokan_Template_Notice();
+            $instance = new Dokan_Pro_Notice();
         }
 
         return $instance;
+    }
+
+    public function load_announcement_template( $query_vars ) {
+
+        if ( isset( $query_vars['announcement'] ) ) {
+            dokan_get_template_part( 'announcement/announcement', '', array( 'pro' => true ) );
+            return;
+        }
+        if ( isset( $query_vars['single-announcement'] ) ) {
+            dokan_get_template_part( 'announcement/single-announcement', '', array( 'pro' => true ) );
+            return;
+        }
+
     }
 
     /**
