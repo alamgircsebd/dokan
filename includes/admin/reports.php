@@ -236,7 +236,7 @@
                 $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
                         LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
                         WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where
-                        ORDER BY do.order_id DESC LIMIT 0, 20";
+                        ORDER BY do.order_id DESC LIMIT $offset, $limit";
 
                 $all_logs = $wpdb->get_results( $sql );
                 foreach ( $all_logs as $log ) {
@@ -292,7 +292,8 @@
                     'prev_text' => __( '&laquo;', 'aag' ),
                     'next_text' => __( '&raquo;', 'aag' ),
                     'total'     => $num_of_pages,
-                    'current'   => $pagenum
+                    'current'   => $pagenum,
+                    'add_args'  => false
                 ) );
 
                 if ( $page_links ) {
