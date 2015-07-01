@@ -490,9 +490,10 @@ class WeDevs_Dokan {
         Dokan_Email::init();
 
         if ( is_user_logged_in() ) {
-            new Dokan_Template_Main();
-            new Dokan_Template_Dashboard();
-            new Dokan_Template_Orders();
+            Dokan_Template_Main::init();
+            Dokan_Template_Dashboard::init();
+            Dokan_Template_Products::init();
+            Dokan_Template_Orders::init();
             Dokan_Template_Products::init();
             Dokan_Template_Withdraw::init();
             Dokan_Template_Shortcodes::init();

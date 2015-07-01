@@ -2,7 +2,7 @@
 $action = isset( $_GET['action'] ) ? $_GET['action'] : 'listing';
 
 if ( $action == 'edit' ) {
-    include dirname( __FILE__ ) . '/product-edit.php';
+    dokan_get_template_part( 'products/product-edit');
 } else {
-    include dirname( __FILE__ ) . '/products-listing.php';
+    dokan_get_template_part( 'products/products-listing');
 }

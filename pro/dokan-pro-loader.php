@@ -79,8 +79,9 @@ class Dokan_Pro_Loader {
         }
 
         if ( is_user_logged_in() ) {
-            new Dokan_Pro_Ajax();
+            Dokan_Pro_Ajax::init();
             new Dokan_Pro_Dashboard();
+            Dokan_Pro_Products::init();
             new Dokan_Pro_Coupons();
             new Dokan_Pro_Reviews();
             new Dokan_Pro_Reports();
@@ -111,7 +112,7 @@ class Dokan_Pro_Loader {
      * @return void
      */
     public function load_filters() {
-
+        add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
     }
 
     /**
@@ -132,6 +133,26 @@ class Dokan_Pro_Loader {
                 require_once $file_path;
             }
         }
+    }
+
+    /**
+     * Load Pro rewirite query vars
+     *
+     * @since 2.4
+     *
+     * @param  array $query_vars
+     *
+     * @return array
+     */
+    public function load_query_var( $query_vars ) {
+        $query_vars[] = 'coupons';
+        $query_vars[] = 'reports';
+        $query_vars[] = 'reviews';
+        $query_vars[] = 'announcement';
+        $query_vars[] = 'single-announcement';
+        $query_vars[] = 'account-migration';
+
+        return $query_vars;
     }
 
 }

@@ -81,7 +81,7 @@ class Dokan_Withdraw {
     /**
      * Check if a user has already pending withdraw request
      *
-     * @param  int   $user_id
+     * @param  integer   $user_id
      *
      * @return boolean
      */
@@ -106,10 +106,10 @@ class Dokan_Withdraw {
     /**
      * Get withdraw request of a user
      *
-     * @param  int   $user_id
-     * @param  int   $status
-     * @param  int   $limit
-     * @param  int   $offset
+     * @param  integer   $user_id
+     * @param  integer   $status
+     * @param  integer   $limit
+     * @param  integer   $offset
      *
      * @return array
      */
@@ -127,7 +127,7 @@ class Dokan_Withdraw {
     /**
      * Delete an withdraw request
      *
-     * @param  int
+     * @param  integer
      *
      * @return void
      */
@@ -142,7 +142,7 @@ class Dokan_Withdraw {
      *
      * @param  string
      *
-     * @return int
+     * @return integer
      */
     function get_status_code( $status ) {
         switch ( $status ) {
@@ -186,7 +186,7 @@ class Dokan_Withdraw {
     /**
      * Check if a user has sufficient withdraw balance
      *
-     * @param  int   $user_id
+     * @param  integer   $user_id
      *
      * @return boolean
      */
@@ -205,7 +205,7 @@ class Dokan_Withdraw {
     /**
      * Get the system withdraw limit
      *
-     * @return int
+     * @return integer
      */
     function get_withdraw_limit() {
         return (int) dokan_get_option( 'withdraw_limit', 'dokan_selling', '50' );
@@ -214,9 +214,9 @@ class Dokan_Withdraw {
     /**
      * Get a sellers balance
      *
-     * @param  int  $user_id
+     * @param  integer  $user_id
      *
-     * @return int
+     * @return integer
      */
     function get_user_balance( $user_id ) {
         return dokan_get_seller_balance( $user_id, false );

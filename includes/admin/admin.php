@@ -180,6 +180,13 @@ class Dokan_Admin_Settings {
                 ),
             ),
             'dokan_selling' => array(
+                'seller_enable_terms_and_conditions' => array(
+                    'name'    => 'seller_enable_terms_and_conditions',
+                    'label'   => __( 'Terms and Conditions', 'dokan' ),
+                    'desc'    => __( 'Enable terms and conditions for seller store', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'off'
+                 ),
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
                     'label'   => __( 'New Seller Enable Selling', 'dokan' ),

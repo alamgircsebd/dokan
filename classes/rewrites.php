@@ -48,14 +48,8 @@ class Dokan_Rewrites {
             'products',
             'new-product',
             'orders',
-            'coupons',
-            'reports',
-            'reviews',
             'withdraw',
-            'announcement',
-            'single-announcement',
             'settings',
-            'account-migration'
         ) );
 
         foreach ( $this->query_vars as $var ) {
@@ -101,7 +95,8 @@ class Dokan_Rewrites {
     /**
      * Register the query var
      *
-     * @param array   $vars
+     * @param array  $vars
+     *
      * @return array
      */
     function register_query_var( $vars ) {
@@ -121,7 +116,8 @@ class Dokan_Rewrites {
     /**
      * Include store template
      *
-     * @param type    $template
+     * @param type  $template
+     *
      * @return string
      */
     function store_template( $template ) {
@@ -256,6 +252,7 @@ class Dokan_Rewrites {
      * Account migration template on my account
      *
      * @param string  $file path of the template
+     *
      * @return string
      */
     function account_migration_template( $file ) {

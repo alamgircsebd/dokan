@@ -6,6 +6,7 @@
  *
  * @package dokan
  */
+
 ?>
 <form id="dokan_comments-form" action="" method="post">
     <table id="dokan-comments-table" class="table">

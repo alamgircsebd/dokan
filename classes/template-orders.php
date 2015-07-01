@@ -4,7 +4,7 @@
  *
  * @since 2.4
  *
- * @author weDves
+ * @author weDves <info@wedevs.com>
  */
 class Dokan_Template_Orders {
 
@@ -15,19 +15,46 @@ class Dokan_Template_Orders {
      * @since 2.4
      */
     function __construct() {
-
         add_action( 'template_redirect', array( $this, 'handle_order_export' ) );
+        add_action( 'dokan_order_inside_content', array( $this, 'order_listing_status_filter' ), 10 );
+        add_action( 'dokan_order_inside_content', array( $this, 'order_main_content' ), 15 );
+    }
 
-        add_action( 'dokan_order_inside_content', array( $this, 'dokan_order_listing_status_filter' ), 10 );
-        add_action( 'dokan_order_inside_content', array( $this, 'dokan_order_main_content' ), 15 );
+    /**
+     * Singleton method
+     *
+     * @return self
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_Template_Orders();
+        }
+
+        return $instance;
     }
 
 
-    public function dokan_order_listing_status_filter() {
+    /**
+     * Render Order listing status filter template
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function order_listing_status_filter() {
         dokan_get_template_part( 'orders/orders-status-filter' );
     }
 
-    public function dokan_order_main_content() {
+    /**
+     * Get Order Main Content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function order_main_content() {
         $order_id = isset( $_GET['order_id'] ) ? intval( $_GET['order_id'] ) : 0;
 
         if ( $order_id ) {
@@ -42,6 +69,7 @@ class Dokan_Template_Orders {
      * Export user orders to CSV format
      *
      * @since 1.4
+     *
      * @return void
      */
     function handle_order_export() {
@@ -194,4 +222,5 @@ class Dokan_Template_Orders {
             exit();
         }
     }
+
 }

@@ -38,6 +38,28 @@ class Dokan_Template_Dashboard {
 
     }
 
+    /**
+     * Singleton method
+     *
+     * @return self
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_Template_Dashboard();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * Get Seller Dhasboard Notice
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function show_seller_dashboard_notice() {
         $user_id = get_current_user_id();
 
@@ -46,6 +68,13 @@ class Dokan_Template_Dashboard {
         }
     }
 
+    /**
+     * Get big counter widget in dashboard
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function get_big_counter_widgets() {
 
         dokan_get_template_part( 'dashboard/big-counter-widget', '', array(
@@ -57,6 +86,13 @@ class Dokan_Template_Dashboard {
         );
     }
 
+    /**
+     * Get order widget in Dashboard
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function get_orders_widgets() {
 
         $order_data = array(
@@ -76,6 +112,13 @@ class Dokan_Template_Dashboard {
         );
     }
 
+    /**
+     * Get product widgets in dashboard
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function get_products_widgets() {
         dokan_get_template_part( 'dashboard/products-widget', '', array(
                 'post_counts'=> $this->post_counts,
@@ -84,34 +127,80 @@ class Dokan_Template_Dashboard {
         );
     }
 
+    /**
+     * Get sales report chart widget in dashboard
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     public function get_sales_report_chart_widget() {
         dokan_get_template_part( 'dashboard/sales-chart-widget', '' );
     }
 
-
+    /**
+     * Get orders Count
+     *
+     * @since 2.4
+     *
+     * @return integer
+     */
     public function get_orders_count() {
         return dokan_count_orders( $this->user_id );
     }
 
+    /**
+     * Get Post Count
+     *
+     * @since 2.4
+     *
+     * @return integer
+     */
     public function get_post_counts() {
         return dokan_count_posts( 'product', $this->user_id );
     }
 
+    /**
+     * Get Comments Count
+     *
+     * @since 2.4
+     *
+     * @return integer
+     */
     public function get_comment_counts() {
         return dokan_count_comments( 'product', $this->user_id );
     }
 
+    /**
+     * Get Pageview Count
+     *
+     * @since 2.4
+     *
+     * @return integer
+     */
     public function get_pageviews() {
         return (int) dokan_author_pageviews( $this->user_id );
     }
 
+    /**
+     * Get Author Sales Count
+     *
+     * @since 2.4
+     *
+     * @return integer
+     */
     public function get_earning() {
         return dokan_author_total_sales( $this->user_id );
     }
 
+    /**
+     * Get Seller Balance
+     *
+     * @since 2.4
+     *
+     * @return integer
+     */
     public function get_seller_balance($value='') {
         return dokan_get_seller_balance( $this->user_id );
     }
-
-
 }

@@ -8,12 +8,12 @@
 *  @author weDevs <info@wedevs.com>
 */
 class Dokan_Admin_Ajax {
-	
+
 	/**
 	 *  Load autometically all actions
 	 */
 	function __construct() {
-        add_action( 'wp_ajax_dokan_withdraw_form_action', array( $this, 'handle_withdraw_action' ) );	
+        add_action( 'wp_ajax_dokan_withdraw_form_action', array( $this, 'handle_withdraw_action' ) );
 	}
 
 	/**
@@ -34,16 +34,16 @@ class Dokan_Admin_Ajax {
 
 	/**
 	 *  Handle withdraw action via ajax
-	 *  
+	 *
 	 *  @return json success|error|data
 	 */
 	function handle_withdraw_action() {
-        
+
         parse_str( $_POST['formData'], $postdata );
-        
+
         if( !wp_verify_nonce( $postdata['dokan_withdraw_admin_bulk_action_nonce'], 'dokan_withdraw_admin_bulk_action' ) ) {
             wp_send_json_error();
-        } 
+        }
 
         $withdraw = Dokan_Template_Withdraw::init();
 
@@ -52,14 +52,14 @@ class Dokan_Admin_Ajax {
         $withdraw_id = $_POST['withdraw_id'];
 
         switch ( $bulk_action ) {
-        
+
             case 'delete':
 
                 $withdraw->delete_withdraw( $withdraw_id );
-        
+
                 $url = admin_url( 'admin.php?page=dokan-withdraw&message=trashed&status=' . $status );
                 wp_send_json_success( array( 'url'=> $url ) );
-                
+
                 break;
 
             case 'cancel':

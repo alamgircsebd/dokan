@@ -14,6 +14,11 @@ class Dokan_Update {
     const option       = 'dokan_license';
     const slug         = 'dokan';
 
+    /**
+     * Load autometically when class initiate
+     *
+     * @since 2.4
+     */
     function __construct() {
 
         // bail out if it's a local server
@@ -182,6 +187,7 @@ class Dokan_Update {
      * Integrates into plugin update api check
      *
      * @param object $transient
+     *
      * @return object
      */
     function check_update( $transient ) {
@@ -266,6 +272,7 @@ class Dokan_Update {
      *
      * @global string $wp_version
      * @global object $wpdb
+     *
      * @return boolean
      */
     function get_info() {

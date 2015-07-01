@@ -48,7 +48,7 @@ class Dokan_Pro_Shipping {
      * @return void
      */
     function include_shipping() {
-        require_once DOKAN_INC_DIR . '/shipping-gateway/shipping.php';
+        require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
     }
 
     /**

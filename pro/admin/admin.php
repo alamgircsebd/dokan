@@ -98,13 +98,6 @@ class Dokan_Pro_Admin_Settings {
 
         $new_settings_fields['dokan_selling'] = array(
 
-            'seller_enable_terms_and_conditions' => array(
-                'name'    => 'seller_enable_terms_and_conditions',
-                'label'   => __( 'Terms and Conditions', 'dokan' ),
-                'desc'    => __( 'Enable terms and conditions for seller store', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'off'
-             ),
             'product_style' => array(
                 'name'    => 'product_style',
                 'label'   => __( 'Add/Edit Product Style', 'dokan' ),

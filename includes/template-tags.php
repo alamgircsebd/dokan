@@ -154,22 +154,12 @@ function dokan_product_listing_status_filter() {
     $permalink = dokan_get_navigation_url( 'products' );
     $status_class = isset( $_GET['post_status'] ) ? $_GET['post_status'] : 'all';
     $post_counts = dokan_count_posts( 'product', get_current_user_id() );
-    ?>
-    <ul class="dokan-listing-filter dokan-left subsubsub">
-        <li<?php echo $status_class == 'all' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo $permalink; ?>"><?php printf( __( 'All (%d)', 'dokan' ), $post_counts->total ); ?></a>
-        </li>
-        <li<?php echo $status_class == 'publish' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'post_status' => 'publish' ), $permalink ); ?>"><?php printf( __( 'Online (%d)', 'dokan' ), $post_counts->publish ); ?></a>
-        </li>
-        <li<?php echo $status_class == 'pending' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'post_status' => 'pending' ), $permalink ); ?>"><?php printf( __( 'Pending Review (%d)', 'dokan' ), $post_counts->pending ); ?></a>
-        </li>
-        <li<?php echo $status_class == 'draft' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'post_status' => 'draft' ), $permalink ); ?>"><?php printf( __( 'Draft (%d)', 'dokan' ), $post_counts->draft ); ?></a>
-        </li>
-    </ul> <!-- .post-statuses-filter -->
-    <?php
+
+    dokan_get_template_part( 'products/listing-status-filter', '', array(
+        'permalink'    => $permalink,
+        'status_class' => $status_class,
+        'post_counts'  => $post_counts,
+    ) );
 }
 
 function dokan_order_listing_status_filter() {
@@ -315,7 +305,7 @@ function dokan_get_dashboard_nav() {
             'url'   => dokan_get_navigation_url(),
             'pos'   => 10
         ),
-        'product' => array(
+        'products' => array(
             'title' => __( 'Products', 'dokan'),
             'icon'  => '<i class="fa fa-briefcase"></i>',
             'url'   => dokan_get_navigation_url( 'products' ),
