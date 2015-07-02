@@ -57,12 +57,7 @@ class Dokan_Template_Shortcodes {
         }
 
         if ( isset( $wp->query_vars['new-product'] ) ) {
-            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-                dokan_get_template_part( 'products/new-product' );
-            } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
-                dokan_get_template_part( 'products/new-product-single' );
-            }
-            return;
+            do_action( 'dokan_render_new_product_template', $wp->query_vars );
         }
 
         if ( isset( $wp->query_vars['orders'] ) ) {

@@ -13,6 +13,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
      * Constructor for your shipping class
      *
      * @access public
+     *
      * @return void
      */
     public function __construct() {
@@ -35,9 +36,8 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
      */
     function init() {
         // Load the settings API
-        $this->init_form_fields(); // This is part of the settings API. Override the method to add your own settings
-        $this->init_settings(); // This is part of the settings API. Loads settings you previously init.
-
+        $this->init_form_fields();
+        $this->init_settings();
 
         // Save settings in admin if you have any defined
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -77,14 +77,15 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
             ),
 
         );
-
     }
 
     /**
      * calculate_shipping function.
      *
      * @access public
+     *
      * @param mixed $package
+     *
      * @return void
      */
     public function calculate_shipping( $package ) {
@@ -114,7 +115,8 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     /**
      * Check if shipping for this product is enabled
      *
-     * @param  int  $product_id
+     * @param integet $product_id
+     *
      * @return boolean
      */
     public static function is_product_disable_shipping( $product_id ) {
@@ -130,7 +132,8 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     /**
      * Check if shipping for this product is enabled
      *
-     * @param  int  $product_id
+     * @param  integet  $product_id
+     *
      * @return boolean
      */
     public static function is_shipping_enabled_for_seller( $seller_id ) {
@@ -147,7 +150,8 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     /**
      * Get product shipping costs
      *
-     * @param  int $product_id
+     * @param  integer $product_id
+     *
      * @return array
      */
     public static function get_seller_country_shipping_costs( $seller_id ) {
@@ -163,6 +167,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
      *
      * @param  array $products
      * @param  array $destination
+     *
      * @return float
      */
     public function calculate_per_seller( $products, $destination_country, $destination_state  ) {
@@ -171,7 +176,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
         $seller_products = array();
 
-        foreach ($products as $product) {
+        foreach ( $products as $product ) {
             $seller_id                     = get_post_field( 'post_author', $product['product_id'] );
             $seller_products[$seller_id][] = $product;
         }
@@ -180,7 +185,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
             foreach ( $seller_products as $seller_id => $products ) {
 
-                if( !self::is_shipping_enabled_for_seller( $seller_id ) ) {
+                if ( !self::is_shipping_enabled_for_seller( $seller_id ) ) {
                     continue;
                 }
 
@@ -216,7 +221,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                         $price[ $seller_id ]['qty'][] = 0;
                     }
 
-                    if( count( $products) > 1 ) {
+                    if ( count( $products) > 1 ) {
                         $price[ $seller_id ]['add_product'] = $default_shipping_add_price * ( count( $products) - 1 );
                     } else {
                         $price[ $seller_id ]['add_product'] = 0;
@@ -252,12 +257,12 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                 }
             }
         }
+
         if ( !empty( $price ) ) {
             foreach ( $price as $s_id => $value ) {
                 $amount = $amount + ( array_sum( $value['addition_price'] )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
             }
         }
-
 
         return apply_filters( 'dokan_shipping_calculate_amount', $amount, $price, $products, $destination_country, $destination_state );
     }

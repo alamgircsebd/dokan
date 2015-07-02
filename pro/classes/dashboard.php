@@ -24,15 +24,25 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 
 		$this->comment_counts = $this->get_comment_counts();
 
-		add_action( 'dokan_dashboard_before_widgets', array( $this, 'dokan_show_profile_progressbar' ), 10 );
+		add_action( 'dokan_dashboard_before_widgets', array( $this, 'show_profile_progressbar' ), 10 );
 		add_action( 'dokan_dashboard_left_widgets', array( $this, 'get_review_widget' ) , 16 );
 		add_action( 'dokan_dashboard_right_widgets', array( $this, 'get_announcement_widget' ) , 12);
 	}
 
-	public function dokan_show_profile_progressbar() {
+    /**
+     * Show Profile progressbar
+     *
+     * @return void
+     */
+	public function show_profile_progressbar() {
 		echo dokan_get_profile_progressbar();
 	}
 
+    /**
+     * Get Review Widget
+     *
+     * @return void
+     */
 	public function get_review_widget() {
 		dokan_get_template_part( 'dashboard/review-widget', '', array(
 				'pro' => true,
@@ -42,6 +52,11 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 		);
 	}
 
+    /**
+     * Get announcement widget
+     *
+     * @return void
+     */
 	public function get_announcement_widget() {
 		$template_notice = Dokan_Pro_Notice::init();
         $query = $template_notice->get_announcement_by_users( apply_filters( 'dokan_announcement_list_number', 3 ) );

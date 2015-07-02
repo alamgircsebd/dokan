@@ -1,3 +1,13 @@
+<?php
+/**
+ * Dokan Admin Dashboard Tools Template
+ *
+ * @since 2.4
+ *
+ * @package dokan
+ */
+?>
+
 <div class="wrap">
     <h2><?php _e( 'Dokan Tools', 'dokan' ); ?></h2>
 

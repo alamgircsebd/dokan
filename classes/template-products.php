@@ -22,8 +22,10 @@ class Dokan_Template_Products {
      *  @uses filters
      */
     function __construct() {
+        add_action( 'dokan_render_product_listing_template', array( $this, 'render_product_listing_template' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
+        add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
     }
 
     /**
@@ -39,6 +41,28 @@ class Dokan_Template_Products {
         }
 
         return $instance;
+    }
+
+    public function render_new_product_template( $query_vars ) {
+
+        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+            if ( isset( $query_vars['new-product'] ) ) {
+                dokan_get_template_part( 'products/new-product-single' );
+            }
+        }
+    }
+
+    /**
+     * Render Product Listing Template
+     *
+     * @since 2.4
+     *
+     * @param  string $action
+     *
+     * @return void
+     */
+    public function render_product_listing_template( $action ) {
+        dokan_get_template_part( 'products/products-listing');
     }
 
     /**

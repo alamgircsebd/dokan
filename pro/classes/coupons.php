@@ -148,7 +148,13 @@ class Dokan_Pro_Coupons {
         $this->coupun_delete();
     }
 
-
+    /**
+     * Coupon Delete Functionality
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     function coupun_delete() {
 
         if ( !isset( $_GET['post'] ) || !isset( $_GET['action'] ) ) {
@@ -166,6 +172,13 @@ class Dokan_Pro_Coupons {
         wp_redirect( add_query_arg( array('message' => 'delete_succefully'), dokan_get_navigation_url( 'coupons' ) ) );
     }
 
+    /**
+     * Validate Coupon handler form
+     *
+     * @since 2.4
+     *
+     * @return object WP_Error|error
+     */
     function validate() {
 
         if ( !isset( $_POST['coupon_creation'] ) ) {
@@ -222,7 +235,13 @@ class Dokan_Pro_Coupons {
         }
     }
 
-
+    /**
+     * Create Coupon hanlder function
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     function coupons_create() {
 
         if ( !isset( $_POST['coupon_creation'] ) ) {
@@ -301,6 +320,11 @@ class Dokan_Pro_Coupons {
         }
     }
 
+    /**
+     * Render coupon Message
+     *
+     * @return void
+     */
     function message() {
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'delete_succefully' ) {
             dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been deleted successfully!', 'dokan' ) ) );
@@ -316,6 +340,13 @@ class Dokan_Pro_Coupons {
 
     }
 
+    /**
+     * Render listing of coupon
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     function list_user_coupons() {
         //click add coupon then hide this function
         if( isset( $_GET['view'] ) && $_GET['view'] == 'add_coupons'  ) {
@@ -354,6 +385,11 @@ class Dokan_Pro_Coupons {
         }
     }
 
+    /**
+     * Coupon Pagination
+     *
+     * @return [type] [description]
+     */
     function pagination() {
 
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
@@ -379,6 +415,11 @@ class Dokan_Pro_Coupons {
         }
     }
 
+    /**
+     * Get coupon product list
+     *
+     * @return object
+     */
     function coupon_products_list() {
 
         $args = array(
@@ -393,6 +434,13 @@ class Dokan_Pro_Coupons {
         return $query->posts;
     }
 
+    /**
+     * Render Add Coupon Form
+     *
+     * @param object $validated
+     *
+     * @return void
+     */
     function add_coupons_form( $validated ) {
 
         //intial time hide this function

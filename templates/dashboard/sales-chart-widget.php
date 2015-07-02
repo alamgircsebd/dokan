@@ -15,7 +15,7 @@
     <div class="widget-title"><i class="fa fa-credit-card"></i> <?php _e( 'Sales', 'dokan' ); ?></div>
 
     <?php
-	    require_once DOKAN_DIR . '/includes/reports.php';
+	    require_once DOKAN_PRO_INC . '/reports.php';
 	    dokan_dashboard_sales_overview();
     ?>
 </div> <!-- .sells-graph -->

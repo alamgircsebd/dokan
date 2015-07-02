@@ -20,8 +20,7 @@ class Dokan_Pro_Reports {
     public function __construct() {
         add_filter( 'dokan_get_seller_dashboard_nav', array( $this, 'add_reports_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_reports_template' ) );
-
-        add_action( 'dokan_report_content_area_header', array( $this, 'dokan_report_header_render' ) );
+        add_action( 'dokan_report_content_area_header', array( $this, 'report_header_render' ) );
         add_action( 'dokan_report_content', array( $this, 'render_review_content' ) );
     }
 
@@ -71,15 +70,20 @@ class Dokan_Pro_Reports {
      *
      * @return void
      */
-    public function dokan_report_header_render() {
+    public function report_header_render() {
         dokan_get_template_part( 'report/header', '', array( 'pro' => true ) );
     }
 
+    /**
+     * Render Review Content
+     *
+     * @return [type] [description]
+     */
     public function render_review_content() {
 
         global $woocommerce;
 
-        require_once DOKAN_INC_DIR . '/reports.php';
+        require_once DOKAN_PRO_INC . '/reports.php';
 
         $charts = dokan_get_reports_charts();
         $link = dokan_get_navigation_url( 'reports' );

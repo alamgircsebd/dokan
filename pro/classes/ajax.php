@@ -57,6 +57,7 @@ class Dokan_Pro_Ajax {
      * Singleton object
      *
      * @staticvar boolean $instance
+     *
      * @return \self
      */
     public static function init() {
@@ -234,7 +235,7 @@ class Dokan_Pro_Ajax {
 
         $dps_country_rates = get_user_meta( $_POST['author_id'], '_dps_country_rates', true );
         $dps_state_rates   = get_user_meta( $_POST['author_id'], '_dps_state_rates', true );
-        // Store wide shipping info
+
         $store_shipping_type_price    = (float)get_user_meta( $_POST['author_id'], '_dps_shipping_type_price', true );
         $additional_product_cost      = (float)get_post_meta( $_POST['product_id'], '_additional_price', true );
         $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
@@ -247,27 +248,38 @@ class Dokan_Pro_Ajax {
         } else {
             $country = '';
         }
+
         if ( isset( $_POST['quantity'] ) && $_POST['quantity'] > 0 ) {
             $quantity = $_POST['quantity'];
         } else {
             $quantity = 1;
         }
+
         $additional_quantity_cost = ( $quantity - 1 ) * $additional_qty_price;
         $flag = '';
         ob_start(); ?>
 
         <?php
         if ( $country != '' ) {
+
             if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
+
                 _e( 'Please select a State from the dropdown', 'dokan' );
+
             } else if ( !isset( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
+
                 echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+
             } else if ( isset( $_POST['state'] ) && !empty( $_POST['state'] ) ) {
+
                 $state = $_POST['state'];
                 echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+
             }
         } else {
+
             _e( 'Please select a country from the dropdown', 'dokan' );
+
         }
         $content = ob_get_clean();
 

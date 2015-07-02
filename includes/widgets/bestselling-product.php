@@ -39,7 +39,7 @@ class Dokan_Best_Selling_Widget extends WP_Widget {
 
             while ( $r->have_posts()) {
                 $r->the_post();
-                wc_get_template( 'content-widget-product.php', array( 'show_rating' => $show_rating ) );
+                dokan_get_template_part( 'global/content-widget-products', '', array( 'show_rating' => $show_rating ) );
             }
 
             echo '</ul>';

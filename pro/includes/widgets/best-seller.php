@@ -1,20 +1,22 @@
 <?php
 
 /**
- * new WordPress Widget format
- * Wordpress 2.8 and above
- * @see http://codex.wordpress.org/Widgets_API#Developing_Widgets
+ * Dokan Best Seller Widget Class
+ *
+ * @since 1.0
+ *
+ * @package dokan
  */
-class Dokan_Feature_Seller_Widget extends WP_Widget {
+class Dokan_Best_Seller_Widget extends WP_Widget {
 
     /**
      * Constructor
      *
      * @return void
-     **/
+     */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-feature-seller-widget', 'description' => 'Dokan feature seller widget' );
-        $this->WP_Widget( 'dokan-feature-seller-widget', 'Dokan: Feature Sellers', $widget_ops );
+        $widget_ops = array( 'classname' => 'dokan-best-seller-widget', 'description' => 'Dokan best seller widget' );
+        $this->WP_Widget( 'dokan-best-seller-widget', 'Dokan: Best Sellers', $widget_ops );
     }
 
     /**
@@ -22,8 +24,9 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
      *
      * @param array  An array of standard parameters for widgets in this theme
      * @param array  An array of settings for this widget instance
+     *
      * @return void Echoes it's output
-     **/
+     */
     function widget( $args, $instance ) {
 
         extract( $args, EXTR_SKIP );
@@ -31,7 +34,7 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
         $title = apply_filters( 'widget_title', $instance['title'] );
         $limit = absint( $instance['count'] ) ? absint( $instance['count'] ) : 10;
 
-        $sellers = dokan_get_feature_sellers( $limit );
+        $seller = dokan_get_best_sellers( $limit );
 
         echo $before_widget;
 
@@ -39,14 +42,13 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
             echo $args['before_title'] . $title . $args['after_title'];
         }
         ?>
-        <ul class="dokan-feature-sellers">
+        <ul class="dokan-best-sellers">
             <?php
 
-            if ( $sellers ) {
+            if ( $seller ) {
 
-                foreach ($sellers as $key => $seller) {
-                    $store_info = dokan_get_store_info( $seller->ID );
-                    $rating = dokan_get_seller_rating( $seller->ID );
+                foreach ( $seller as $key => $value ) {
+                    $rating = dokan_get_seller_rating( $value->seller_id );
                     $display_rating = $rating['rating'];
 
                     if ( ! $rating['count'] ) {
@@ -54,13 +56,12 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
                     }
                     ?>
                     <li>
-                        <a href="<?php echo dokan_get_store_url( $seller->ID ); ?>">
-                            <?php echo esc_html( $store_info['store_name'] ); ?>
+                        <a href="<?php echo dokan_get_store_url( $value->seller_id ); ?>">
+                            <?php echo $value->display_name; ?>
                         </a><br />
                         <i class='fa fa-star'></i>
                         <?php echo $display_rating; ?>
                     </li>
-
                     <?php
                 }
             }
@@ -77,11 +78,11 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
      *
      * @param array  An array of new settings as submitted by the admin
      * @param array  An array of the previous settings
+     *
      * @return array The validated and (if necessary) amended settings
-     **/
+     */
     function update( $new_instance, $old_instance ) {
 
-        // update logic goes here
         $updated_instance = $new_instance;
         return $updated_instance;
     }
@@ -90,11 +91,12 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
      * Displays the form for this widget on the Widgets page of the WP Admin area.
      *
      * @param array  An array of the current settings for this widget
+     *
      * @return void Echoes it's output
-     **/
+     */
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title' => __( 'Feature Seller', 'dokan' ),
+            'title' => __( 'Best Seller', 'dokan' ),
             'count' => __( '3', 'dokan' )
         ) );
 
@@ -113,4 +115,4 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
     }
 }
 
-add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_Feature_Seller_Widget' );" ) );
+add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_Best_Seller_Widget' );" ) );

@@ -61,14 +61,15 @@ if ( ! $from_shortcode ) {
     get_header();
 }
 ?>
+
 <?php
 
     /**
-     *  dokan_dashboard_content_before hook
+     *  dokan_dashboard_wrap_before hook
      *
      *  @since 2.4
      */
-    do_action( 'dokan_dashboard_wrap_before' );
+    do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
 ?>
 
 <div class="dokan-dashboard-wrap">
@@ -77,12 +78,14 @@ if ( ! $from_shortcode ) {
 
         /**
          *  dokan_dashboard_content_before hook
+         *  dokan_before_product_content_area hook
          *
          *  @hooked get_dashboard_side_navigation
          *
          *  @since 2.4
          */
         do_action( 'dokan_dashboard_content_before' );
+        do_action( 'dokan_before_product_content_area' );
     ?>
 
     <div class="dokan-dashboard-content dokan-product-edit">
@@ -90,14 +93,13 @@ if ( ! $from_shortcode ) {
         <?php
 
             /**
-             *  dokan_dashboard_content_before hook
-             *
-             *  @hooked get_dashboard_side_navigation
+             *  dokan_dashboard_content_inside_before hook
+             *  dokan_product_content_area hook
              *
              *  @since 2.4
              */
             do_action( 'dokan_dashboard_content_inside_before' );
-            do_action( 'dokan_before_new_product' );
+            do_action( 'dokan_before_product_content_area' );
         ?>
 
         <header class="dokan-dashboard-header dokan-clearfix">
@@ -497,6 +499,7 @@ if ( ! $from_shortcode ) {
 
                                 <?php do_action( 'dokan_product_edit_after_downloadable', $post, $post_id ); ?>
                                 <?php do_action( 'dokan_product_edit_after_sidebar', $post, $post_id ); ?>
+                                <?php do_action( 'dokan_single_product_edit_after_sidebar', $post, $post_id ); ?>
 
                             </div><!-- .dokan-side-right -->
                         </div><!-- .dokan-product-inventory -->
@@ -574,16 +577,31 @@ if ( ! $from_shortcode ) {
 
             <?php } ?>
         </div> <!-- #primary .content-area -->
+
+        <?php
+
+            /**
+             *  dokan_dashboard_content_inside_after hook
+             *  dokan_before_product_content_area hook
+             *
+             *  @since 2.4
+             */
+            do_action( 'dokan_dashboard_content_inside_after' );
+            do_action( 'dokan_before_product_content_area' );
+        ?>
+
     </div>
 
     <?php
 
         /**
          *  dokan_dashboard_content_after hook
+         *  dokan_after_product_content_area hook
          *
          *  @since 2.4
          */
         do_action( 'dokan_dashboard_content_after' );
+        do_action( 'dokan_after_product_content_area' );
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->

@@ -1,8 +1,7 @@
 <?php
 
 /**
- *  General Fnctions for Dokan Por
- *  features
+ *  General Fnctions for Dokan Pro features
  *
  *  @since 2.4
  *

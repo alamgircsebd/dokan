@@ -1,3 +1,13 @@
+<?php
+/**
+ * Dokan Admin Dahsboard Report Template
+ *
+ * @since 1.0
+ *
+ * @package dokan
+ */
+?>
+
 <div class="wrap">
     <?php
     $tab  = isset( $_GET['tab'] ) ? $_GET['tab'] : 'report';

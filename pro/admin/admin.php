@@ -23,7 +23,7 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
         add_action( 'admin_init', array($this, 'tools_page_handler') );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
-        add_action( 'wp_before_admin_bar_render', array( $this, 'dokan_pro_admin_toolbar' ) );
+        add_action( 'wp_before_admin_bar_render', array( $this, 'render_pro_admin_toolbar' ) );
     }
 
     /**
@@ -295,7 +295,7 @@ class Dokan_Pro_Admin_Settings {
         }
     }
 
-    function dokan_pro_admin_toolbar() {
+    function render_pro_admin_toolbar() {
 
         global $wp_admin_bar;
 

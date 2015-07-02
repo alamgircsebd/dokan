@@ -26,11 +26,11 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         $this->current_status = isset( $_GET['type'] ) ? $_GET['type'] : 'pending';
 
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
-        add_action( 'dokan_withdraw_content_area_header', array( $this, 'dokan_withdraw_header_render' ), 10 );
-        add_action( 'dokan_withdraw_content', array( $this, 'dokan_render_withdraw_error' ), 10 );
-        add_action( 'dokan_withdraw_content', array( $this, 'dokan_withdraw_status_filter' ), 15 );
-        add_action( 'dokan_withdraw_content', array( $this, 'dokan_show_seller_balance' ), 20 );
-        add_action( 'dokan_withdraw_content', array( $this, 'dokan_withdraw_form_and_listing' ), 20 );
+        add_action( 'dokan_withdraw_content_area_header', array( $this, 'withdraw_header_render' ), 10 );
+        add_action( 'dokan_withdraw_content', array( $this, 'render_withdraw_error' ), 10 );
+        add_action( 'dokan_withdraw_content', array( $this, 'withdraw_status_filter' ), 15 );
+        add_action( 'dokan_withdraw_content', array( $this, 'show_seller_balance' ), 20 );
+        add_action( 'dokan_withdraw_content', array( $this, 'withdraw_form_and_listing' ), 20 );
 
     }
 
@@ -57,7 +57,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
      *
      * @return void
      */
-    public function dokan_withdraw_header_render() {
+    public function withdraw_header_render() {
         dokan_get_template_part( 'withdraw/header' );
     }
 
@@ -68,7 +68,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
      *
      * @return void
      */
-    public function dokan_render_withdraw_error() {
+    public function render_withdraw_error() {
         if ( is_wp_error( self::$validate) ) {
             $messages = self::$validate->get_error_messages();
 
@@ -78,16 +78,37 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         }
     }
 
-    public function dokan_withdraw_status_filter() {
+    /**
+     * Render WIthdraw Status Filter template
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function withdraw_status_filter() {
         dokan_get_template_part( 'withdraw/status-listing', '', array( 'current' => $this->current_status ) );
     }
 
-    public function dokan_show_seller_balance() {
+    /**
+     * Show Seller balance
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
+    public function show_seller_balance() {
         $message = sprintf( __( 'Current Balance: %s', 'dokan' ), dokan_get_seller_balance( get_current_user_id() ) );
         dokan_get_template_part( 'global/dokan-warning', '', array( 'message' => $message, 'deleted' => false ) );
     }
 
-    public function dokan_withdraw_form_and_listing() {
+    /**
+     * Get Withdraw form and listing
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function withdraw_form_and_listing() {
 
         if ( $this->current_status == 'pending' ) {
             $this->withdraw_form( self::$validate );

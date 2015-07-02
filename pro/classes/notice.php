@@ -4,12 +4,13 @@
  *
  * @since  2.1
  *
- * @author weDevs
+ * @author weDevs  <info@wedevs.com>
  */
 class Dokan_Pro_Notice {
 
     private $perpage = 10;
     private $total_query_result;
+    public $notice_id;
 
     /**
      * Load autometically when class initiate
@@ -20,7 +21,11 @@ class Dokan_Pro_Notice {
      * @uses filter hook
      */
     function __construct() {
+
         add_action( 'dokan_load_custom_template', array( $this, 'load_announcement_template' ), 10 );
+        add_action( 'dokan_announcement_content_area_header', array( $this, 'load_header_template' ) );
+        add_action( 'dokan_announcement_content', array( $this, 'load_announcement_content' ), 10 );
+        add_action( 'dokan_single_announcement_content', array( $this, 'load_single_announcement_content' ), 10 );
     }
 
     /**
@@ -42,14 +47,62 @@ class Dokan_Pro_Notice {
     public function load_announcement_template( $query_vars ) {
 
         if ( isset( $query_vars['announcement'] ) ) {
-            dokan_get_template_part( 'announcement/announcement', '', array( 'pro' => true ) );
+            dokan_get_template_part( 'announcement/announcement', '', array( 'pro' => true, 'announcement' => $this ) );
             return;
         }
         if ( isset( $query_vars['single-announcement'] ) ) {
             dokan_get_template_part( 'announcement/single-announcement', '', array( 'pro' => true ) );
             return;
         }
+    }
 
+    /**
+     * Render Announcement listing template header
+     *
+     * @since 2.2
+     *
+     * @return void
+     */
+    public function load_header_template() {
+        dokan_get_template_part( 'announcement/header', '', array( 'pro' => true ) );
+    }
+
+    /**
+     * Load announcement Content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function load_announcement_content() {
+        $this->show_announcement_template();
+    }
+
+    /**
+     * Load Single announcement content
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function load_single_announcement_content() {
+
+        $this->notice_id =  get_query_var( 'single-announcement' );
+
+        if ( is_numeric( $this->notice_id ) ) {
+            $notice = $this->get_single_announcement( $this->notice_id );
+        }
+
+        if ( $notice ) {
+            $notice_data = reset( $notice );
+            if( $notice_data->status == 'unread' ) {
+                $template_notice->update_notice_status( $notice_id, 'read' );
+            }
+            dokan_get_template_part( 'announcement/single-notice', '', array( 'pro' => true, 'notice_data' => $notice_data ) );
+
+        } else {
+            dokan_get_template_part( 'announcement/no-announcement', '', array( 'pro' => true ) );
+        }
     }
 
     /**
@@ -94,57 +147,9 @@ class Dokan_Pro_Notice {
 
         $query = $this->get_announcement_by_users();
 
-        // var_dump($query);
-        ?>
-        <div class="dokan-announcement-wrapper">
-            <?php
-            if( $query->posts ) {
-                $i = 0;
-                foreach ( $query->posts as $notice ) {
-                    $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-announcement' ).''.$notice->ID );
-                    ?>
-                    <div class="dokan-announcement-wrapper-item <?php echo ( $notice->status == 'unread' ) ? 'dokan-announcement-uread' : '' ?>">
-                        <div class="announcement-action">
-                            <a href="#" class="remove_announcement" data-notice_row = <?php echo $notice->id; ?>><i class="fa fa-times"></i></a>
-                        </div>
-                        <div class="dokan-annnouncement-date dokan-left">
-                            <div class="announcement-day"><?php echo date('d', strtotime( $notice->post_date ) ) ?></div>
-                            <div class="announcement-month"><?php echo strtoupper( date('l', strtotime( $notice->post_date ) ) ); ?></div>
-                            <div class="announcement-year"><?php echo date('Y', strtotime( $notice->post_date ) ) ?></div>
-                        </div>
-                        <div class="dokan-announcement-content-wrap dokan-left">
-                            <div class="dokan-announcement-heading">
-                                <a href="<?php echo $notice_url; ?>">
-                                    <h3><?php echo $notice->post_title; ?></h3>
-                                </a>
-                            </div>
-
-                            <div class="dokan-announcement-content">
-                                <?php echo wp_trim_words( $notice->post_content, '15', sprintf('<p><a href="%s">%s</a></p>', $notice_url , __( ' See More', 'dokan' ) ) );  ?>
-                            </div>
-                        </div>
-                        <div class="dokan-clearfix"></div>
-                    </div>
-                    <?php
-                    $i++;
-                }
-            } else {
-                ?>
-                <div class="dokan-no-announcement">
-                    <div class="annoument-no-wrapper">
-                        <i class="fa fa-bell dokan-announcement-icon"></i>
-                        <p><?php _e( 'No announcement found', 'dokan' ) ?></p>
-                    </div>
-                </div>
-
-                <?php
-            }
-            ?>
-        </div>
-        <?php
+        dokan_get_template_part( 'announcement/listing-announcement', '', array( 'pro' => true, 'notices' => $query->posts ) );
 
         wp_reset_postdata();
-
         $this->get_pagination( $query );
 
     }

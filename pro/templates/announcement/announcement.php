@@ -1,35 +1,83 @@
 <?php
-    $announcement = Dokan_Pro_Notice::init();
-
+/**
+ * Dokan Announcement Template
+ *
+ * @since 2.2
+ *
+ * @package dokan
+ */
 ?>
 
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'announcement' ) ); ?>
-    <?php //var_dump( $urls = dokan_get_dashboard_nav() ); ?>
+
+    <?php
+
+        /**
+         *  dokan_dashboard_content_before hook
+         *  dokan_dashboard_announcement_content_before
+         *
+         *  @hooked get_dashboard_side_navigation
+         *
+         *  @since 2.4
+         */
+        do_action( 'dokan_dashboard_content_before' );
+        do_action( 'dokan_dashboard_announcement_content_before' );
+    ?>
 
     <div class="dokan-dashboard-content dokan-notice-listing">
 
-        <?php do_action( 'dokan_before_listing_notice' ); ?>
+        <?php
 
-            <article class="dokan-notice-listing-area">
-                <header class="dokan-dashboard-header dokan-clearfix">
-                    <span class="left-header-content">
-                        <h1 class="entry-title"><?php _e( 'Announcement', 'dokan' ); ?></h1>
-                    </span>
-                </header>
+            /**
+             *  dokan_before_listing_notice hook
+             *
+             *  @since 2.4
+             */
+            do_action( 'dokan_before_listing_notice' );
+        ?>
 
-                <div class="notice-listing-top dokan-clearfix">
-                    <!-- Listing filters -->
-                </div>
+        <article class="dokan-notice-listing-area">
 
-                <?php // show errors ?>
+            <?php
 
-                <?php $announcement->show_announcement_template(); ?>
-                <!-- Table for linsting  -->
+                /**
+                 * dokan_announcement_content_area_header hook
+                 *
+                 * @since 2.4
+                 */
+                do_action( 'dokan_announcement_content_area_header' );
 
-                <!-- Pagination styles -->
-            </article>
+                /**
+                 * dokan_announcement_content hook
+                 *
+                 * @since 2.4
+                 */
+                do_action( 'dokan_announcement_content' );
 
-        <?php do_action( 'dokan_after_listing_notice' ); ?>
+            ?>
+
+        </article>
+
+        <?php
+
+            /**
+             *  dokan_after_listing_notice hook
+             *
+             *  @since 2.4
+             */
+            do_action( 'dokan_after_listing_notice' );
+        ?>
     </div><!-- #primary .content-area -->
+
+    <?php
+
+        /**
+         *  dokan_dashboard_content_after hook
+         *  dokan_dashboard_announcement_content_after hook
+         *
+         *  @since 2.4
+         */
+        do_action( 'dokan_dashboard_content_after' );
+        do_action( 'dokan_dashboard_announcement_content_after' );
+    ?>
 </div><!-- .dokan-dashboard-wrap -->

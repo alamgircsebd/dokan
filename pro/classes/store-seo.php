@@ -12,11 +12,24 @@ class Dokan_Pro_Store_Seo {
     public $feedback    = false;
     private $store_info = false;
 
+    /**
+     * Load autometically when class initiate
+     *
+     * @uses actions hook
+     * @uses filter hook
+     */
     public function __construct() {
 
         $this->init_hooks();
     }
 
+    /**
+     * * Singleton object
+     *
+     * @staticvar boolean $instance
+     *
+     * @return \self
+     */
     public static function init() {
         static $instance = false;
 
@@ -83,15 +96,13 @@ class Dokan_Pro_Store_Seo {
         }
     }
 
-    /*
+    /**
      * prints out default meta tags from user meta
      *
-     * @since 1.0.0
-     * @param none
+     * @since 2.3
      *
      * @return void
      */
-
     function print_tags() {
         //get values of title,desc and keywords
         $meta_values = $this->store_info;
@@ -116,7 +127,7 @@ class Dokan_Pro_Store_Seo {
     /**
      * Prints out social tags
      *
-     * @since 1.0.0
+     * @since 2.3
      */
     function print_social_tags() {
         $meta_values = $this->store_info;
@@ -160,11 +171,13 @@ class Dokan_Pro_Store_Seo {
     /**
      * Generic meta replacer for meta tags
      *
-     * @since 1.0.0
+     * @since 2.3
      *
-     * @param string val, string meta_name, string meta_type
+     * @param string $val_default
+     * @param string $meta
+     * @param string $type
      *
-     * @return string meta
+     * @return string $meta
      */
     function replace_meta( $val_default, $meta, $type = '' ) {
 
@@ -187,8 +200,9 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace title meta of other SEO plugin
      *
-     * @param title
-     * @since 1.0.0
+     * @since 2.3
+     *
+     * @param string $title
      *
      * @return string title
      */
@@ -199,11 +213,11 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace keywords meta of other SEO plugin
      *
-     * @param keywords
+     * @since 2.3
      *
-     * @since 1.0.0
+     * @param string $keywords
      *
-     * @return keywords
+     * @return string $keywords
      */
     function replace_keywords( $keywords ) {
         return $this->replace_meta( $keywords, 'keywords', 'meta' );
@@ -212,11 +226,11 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace description meta of other SEO plugin
      *
-     * @param desc
+     * @since 2.3
      *
-     * @since 1.0.0
+     * @param string $desc
      *
-     * @return desc
+     * @return string $desc
      */
     function replace_desc( $desc ) {
         return $this->replace_meta( $desc, 'desc', 'meta' );
@@ -225,7 +239,11 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace OG tag title for WP_SEO
      *
-     * @since 1.0.0
+     * @since 2.3
+     *
+     * @param string $title
+     *
+     * @return string $title
      */
     function replace_og_title( $title ) {
         return $this->replace_meta( $title, 'title', 'og' );
@@ -234,7 +252,11 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace OG tag description for WP_SEO
      *
-     * @since 1.0.0
+     * @since 2.3
+     *
+     * @param string $desc
+     *
+     * @return string $desc
      */
     function replace_og_desc( $desc ) {
         return $this->replace_meta( $desc, 'desc', 'og' );
@@ -243,7 +265,11 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace OG tag Image for WP_SEO
      *
-     * @since 1.0.0
+     * @since 2.3
+     *
+     * @param string $img
+     *
+     * @return string $img
      */
     function replace_og_img( $img ) {
         $img_default = $img;
@@ -262,6 +288,13 @@ class Dokan_Pro_Store_Seo {
             return $img_default;
     }
 
+    /**
+     * Print og img
+     *
+     * @since 2.3
+     *
+     * @return void
+     */
     function print_og_img() {
         $meta_values = $this->store_info;
 
@@ -279,7 +312,9 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace twitter tag title for WP_SEO
      *
-     * @param  string
+     * @since 2.3
+     *
+     * @param string $val_default
      *
      * @return string
      */
@@ -290,7 +325,9 @@ class Dokan_Pro_Store_Seo {
     /**
      * replace twitter tag description for WP_SEO
      *
-     * @param  string
+     * @since 2.3
+     *
+     * @param string $val_default
      *
      * @return string
      */
@@ -301,7 +338,9 @@ class Dokan_Pro_Store_Seo {
     /**
      * Replace twitter image tag for WP_SEO
      *
-     * @param  string
+     * @since 2.3
+     *
+     * @param string $img
      *
      * @return string
      */
@@ -327,6 +366,8 @@ class Dokan_Pro_Store_Seo {
     /**
      * Prints out twitter image tag
      *
+     * @since 2.3
+     *
      * @return void
      */
     function print_twitter_img() {
@@ -345,6 +386,8 @@ class Dokan_Pro_Store_Seo {
 
     /**
      * Print SEO meta input form on frontend
+     *
+     * @since 2.3
      *
      * @return void
      */
@@ -378,9 +421,11 @@ class Dokan_Pro_Store_Seo {
     /**
      * Check meta data and print
      *
-     * @param  boolean|string  $val
+     * @since 2.3
      *
-     * @return string
+     * @param string|boolean $val
+     *
+     * @return string|empty
      */
     function print_saved_meta( $val ) {
         if ( $val == false )
@@ -392,7 +437,9 @@ class Dokan_Pro_Store_Seo {
     /**
      * Submit handler for settings form
      *
-     * @return void
+     * @since 2.3
+     *
+     * @return json
      */
     function dokan_seo_form_handler() {
         parse_str( $_POST['data'], $postdata );

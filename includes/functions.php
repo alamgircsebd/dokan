@@ -697,7 +697,7 @@ function dokan_get_template( $template_name, $args = array(), $template_path = '
  * @param string $default_path (default: '')
  * @return string
  */
-function dokan_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+function dokan_locate_template( $template_name, $template_path = '', $default_path = '', $pro = false ) {
     $dokan = WeDevs_Dokan::init();
 
     if ( ! $template_path ) {
@@ -706,7 +706,14 @@ function dokan_locate_template( $template_name, $template_path = '', $default_pa
 
     if ( ! $default_path ) {
         $default_path = $dokan->plugin_path() . '/templates/';
+
+        // search for Pro templates only
+        if ( $pro !== false ) {
+            $default_path = $dokan->plugin_path() . '/pro/templates/';
+        }
+
     }
+
 
     // Look within passed path within the theme - this is priority
     $template = locate_template(

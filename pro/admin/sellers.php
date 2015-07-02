@@ -1,3 +1,13 @@
+<?php
+/**
+ * Dokan Admin Dashboard Seller Log Template
+ *
+ * @since 2.4
+ *
+ * @package dokan
+ */
+?>
+
 <div class="wrap">
     <h2><?php _e( 'Seller Listing', 'dokan' ); ?></h2>
 

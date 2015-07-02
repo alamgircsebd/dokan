@@ -18,9 +18,12 @@ class Dokan_Pro_Products {
      * @uses filters
      */
     public function __construct() {
-        add_action( 'dokan_product_edit_after_sidebar', array( $this, 'load_variations_content' ), 10, 2);
+        add_action( 'dokan_single_product_edit_after_sidebar', array( $this, 'load_variations_content' ), 10, 2);
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2);
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_shipping_tax_content' ), 10, 2);
+        add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 10, 2);
+        add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
+
     }
 
     /**
@@ -38,6 +41,18 @@ class Dokan_Pro_Products {
         }
 
         return $instance;
+    }
+
+    public function load_product_edit_template( $action ) {
+        dokan_get_template_part( 'products/product-edit', '', array( 'pro' => true ) );
+    }
+
+    public function render_new_product_template( $query_vars ) {
+        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+            if ( isset( $query_vars['new-product'] ) ) {
+                dokan_get_template_part( 'products/new-product', '', array( 'pro' => true ) );
+            }
+        }
     }
 
     /**
@@ -153,6 +168,4 @@ class Dokan_Pro_Products {
 
         return $classes_options;
     }
-
-
 }

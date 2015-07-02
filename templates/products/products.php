@@ -2,7 +2,7 @@
 $action = isset( $_GET['action'] ) ? $_GET['action'] : 'listing';
 
 if ( $action == 'edit' ) {
-    dokan_get_template_part( 'products/product-edit');
+    do_action( 'dokan_render_product_edit_template', $action );
 } else {
-    dokan_get_template_part( 'products/products-listing');
+    do_action( 'dokan_render_product_listing_template', $action );
 }

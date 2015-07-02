@@ -60,6 +60,10 @@ class Dokan_Pro_Loader {
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
+        require_once DOKAN_PRO_INC . '/widgets/store-location.php';
+        require_once DOKAN_PRO_INC . '/widgets/store-contact.php';
+        require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
+        require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
 
     }
@@ -101,7 +105,7 @@ class Dokan_Pro_Loader {
      * @return void [description]
      */
     public function load_actions() {
-
+        add_action( 'woocommerce_after_my_account', array( $this, 'dokan_account_migration_button' ) );
     }
 
     /**
@@ -113,6 +117,7 @@ class Dokan_Pro_Loader {
      */
     public function load_filters() {
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
+        add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
     }
 
     /**
@@ -154,6 +159,38 @@ class Dokan_Pro_Loader {
 
         return $query_vars;
     }
+
+    /**
+     * Dokan Account Migration Button render
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    function dokan_account_migration_button() {
+        $user = wp_get_current_user();
+
+        if ( dokan_is_user_customer( $user->ID ) ) {
+            dokan_get_template_part( 'global/account-migration-btn', '', array( 'pro' => true ) );
+        }
+    }
+
+    /**
+     * Account migration template on my account
+     *
+     * @param string  $file path of the template
+     *
+     * @return string
+     */
+    function account_migration_template( $file ) {
+
+        if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) ) {
+            $file = dokan_locate_template( 'global/update-account.php', '', '', true );
+        }
+
+        return $file;
+    }
+
 
 }
 

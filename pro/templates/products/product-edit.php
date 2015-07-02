@@ -47,10 +47,47 @@ if ( ! $from_shortcode ) {
     get_header();
 }
 ?>
+
+<?php
+
+    /**
+     *  dokan_edit_product_wrap_before hook
+     *
+     *  @since 2.4
+     */
+    do_action( 'dokan_edit_product_wrap_before', $post, $post_id );
+?>
+
 <div class="dokan-dashboard-wrap">
-    <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'product' ) ); ?>
+
+    <?php
+
+        /**
+         *  dokan_dashboard_content_before hook
+         *  dokan_before_edit_product_content_area hook
+         *
+         *  @hooked get_dashboard_side_navigation
+         *
+         *  @since 2.4
+         */
+        do_action( 'dokan_dashboard_content_before' );
+        do_action( 'dokan_before_edit_product_content_area' );
+    ?>
 
     <div class="dokan-dashboard-content dokan-product-edit">
+
+        <?php
+
+            /**
+             *  dokan_dashboard_content_inside_before hook
+             *  dokan_before_edit_product_inside_content_area hook
+             *
+             *  @since 2.4
+             */
+            do_action( 'dokan_dashboard_content_inside_before' );
+            do_action( 'dokan_before_edit_product_inside_content_area' );
+        ?>
+
         <div class="dokan-product-edit-area">
 
             <header class="dokan-pro-edit-breadcrumb">
@@ -86,11 +123,11 @@ if ( ! $from_shortcode ) {
                                 <?php } ?>
                             </div>
                         <?php } ?>
-                        <?php if ( Dokan_Template_Shortcodes::$errors ) { ?>
+                        <?php if ( Dokan_Template_Products::$errors ) { ?>
                             <div class="dokan-alert dokan-alert-danger">
                                 <a class="dokan-close" data-dismiss="alert">&times;</a>
 
-                                <?php foreach ( Dokan_Template_Shortcodes::$errors as $error) { ?>
+                                <?php foreach ( Dokan_Template_Products::$errors as $error) { ?>
 
                                     <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
 
@@ -341,21 +378,21 @@ if ( ! $from_shortcode ) {
 
                                 <div id="product-options">
 
-                                    <?php dokan_get_template_part( 'edit/options' ); ?>
+                                    <?php dokan_get_template_part( 'products/edit/options', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id ) ); ?>
                                     <?php do_action( 'dokan_product_edit_after_options' ); ?>
 
                                 </div> <!-- #product-options -->
 
                                 <div id="product-inventory">
 
-                                    <?php dokan_get_template_part( 'edit/inventory' ); ?>
+                                    <?php dokan_get_template_part( 'products/edit/inventory', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id )  ); ?>
                                     <?php do_action( 'dokan_product_edit_after_inventory' ); ?>
 
                                 </div> <!-- #product-inventory -->
 
                                 <div id="product-shipping">
 
-                                    <?php dokan_get_template_part( 'edit/shipping' ); ?>
+                                    <?php dokan_get_template_part( 'products/edit/shipping', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id )  ); ?>
                                     <?php do_action( 'dokan_product_edit_after_shipping' ); ?>
 
                                 </div>
@@ -365,8 +402,8 @@ if ( ! $from_shortcode ) {
                                 <div class="show_if_simple" id="product-attributes">
 
                                     <?php
-                                        dokan_get_template_part( 'edit/attributes' );
-                                        dokan_get_template_part( 'edit/templates-js' );
+                                        dokan_get_template_part( 'products/edit/attributes', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id )  );
+                                        dokan_get_template_part( 'products/edit/templates-js', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id )  );
                                     ?>
 
                                     <?php do_action( 'dokan_product_edit_after_attributes' ); ?>
@@ -392,14 +429,53 @@ if ( ! $from_shortcode ) {
 
                     <div class="dokan-product-edit-right dokan-edit-sidebar">
 
-                        <?php dokan_get_template_part( 'edit/sidebar' ); ?>
+                        <?php dokan_get_template_part( 'products/edit/sidebar', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id )  ); ?>
 
                     </div> <!-- .dokan-edit-sidebar -->
                 </div> <!-- .product-edit-container -->
             </form>
         </div> <!-- .row -->
+
+        <?php
+
+            /**
+             *  dokan_dashboard_content_inside_after hook
+             *  dokan_after_edit_product_inside_content_area hook
+             *
+             *  @since 2.4
+             */
+            do_action( 'dokan_dashboard_content_inside_after' );
+            do_action( 'dokan_after_edit_product_inside_content_area' );
+        ?>
+
     </div> <!-- #primary .content-area -->
+
+    <?php
+
+        /**
+         *  dokan_dashboard_content_after hook
+         *  dokan_after_edit_product_content_area hook
+         *
+         *  @hooked get_dashboard_side_navigation
+         *
+         *  @since 2.4
+         */
+        do_action( 'dokan_dashboard_content_after' );
+        do_action( 'dokan_after_edit_product_content_area' );
+    ?>
+
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php
+
+    /**
+     *  dokan_edit_product_wrap_after hook
+     *
+     *  @since 2.4
+     */
+    do_action( 'dokan_edit_product_wrap_after', $post, $post_id );
+?>
+
 
 <script>
     (function($){
