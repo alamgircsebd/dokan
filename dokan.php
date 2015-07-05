@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace
 Plugin URI: https://wedevs.com/products/plugins/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.3-rc1
+Version: 2.3
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -286,7 +286,7 @@ class WeDevs_Dokan {
         );
 
         $form_validate_messages = array(
-            'required'        => __( "This field is required from localization.", 'dokan' ),
+            'required'        => __( "This field is required", 'dokan' ),
             'remote'          => __( "Please fix this field.", 'dokan' ),
             'email'           => __( "Please enter a valid email address." , 'dokan' ),
             'url'             => __( "Please enter a valid URL." , 'dokan' ),

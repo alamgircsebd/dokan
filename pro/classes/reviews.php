@@ -12,6 +12,7 @@ class Dokan_Pro_Reviews {
     private $spam;
     private $trash;
     private $post_type;
+    public $custom_store_url = '';
 
     /**
      * Load autometically when class inistantiate
@@ -22,6 +23,7 @@ class Dokan_Pro_Reviews {
      */
     public function __construct() {
         $this->quick_edit = ( dokan_get_option( 'review_edit', 'dokan_selling', 'off' ) == 'on' ) ? true : false;
+        $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
 
         add_filter( 'dokan_get_seller_dashboard_nav', array( $this, 'add_review_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_review_template' ) );
@@ -36,6 +38,11 @@ class Dokan_Pro_Reviews {
 
         add_action( 'wp_ajax_dokan_comment_status', array( $this, 'ajax_comment_status' ) );
         add_action( 'wp_ajax_dokan_update_comment', array( $this, 'ajax_update_comment' ) );
+
+        // Store page review
+        add_filter( 'dokan_store_tabs', array( $this, 'add_review_tab_in_store' ), 10, 2 );
+        add_action( 'init', array( $this, 'register_review_rule' ) );
+        add_filter( 'template_include', array( $this, 'store_review_template' ) );
 
     }
 
@@ -642,5 +649,40 @@ class Dokan_Pro_Reviews {
             $wpdb->posts.post_type='$post_type'"
         );
     }
+
+    public function add_review_tab_in_store( $tabs, $store_id ) {
+        $tabs['reviews'] = array(
+            'title' => __( 'Reviews', 'dokan' ),
+            'url'   => dokan_get_review_url( $store_id )
+        );
+
+        return $tabs;
+    }
+
+    public function register_review_rule() {
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&store_review=true', 'top' );
+        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
+    }
+
+    /**
+     * Returns the store review template
+     *
+     * @param string  $template
+     *
+     * @return string
+     */
+    public function store_review_template( $template ) {
+
+        if ( ! function_exists( 'WC' ) ) {
+            return $template;
+        }
+
+        if ( get_query_var( 'store_review' ) ) {
+            return dokan_locate_template( 'store-reviews.php', '', '', true );
+        }
+
+        return $template;
+    }
+
 
 }

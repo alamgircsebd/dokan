@@ -59,7 +59,7 @@ get_header( 'shop' );
         <?php dokan_get_template_part( 'store-header' ); ?>
 
         <?php
-        $dokan_template_reviews = Dokan_Template_reviews::init();
+        $dokan_template_reviews = Dokan_Pro_Reviews::init();
         $id                     = $store_user->ID;
         $post_type              = 'product';
         $limit                  = 20;

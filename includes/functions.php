@@ -963,10 +963,6 @@ function dokan_get_store_tabs( $store_id ) {
             'title' => __( 'Products', 'dokan' ),
             'url'   => dokan_get_store_url( $store_id )
         ),
-        'reviews' => array(
-            'title' => __( 'Reviews', 'dokan' ),
-            'url'   => dokan_get_review_url( $store_id )
-        ),
     );
 
     $store_info = dokan_get_store_info( $store_id );
