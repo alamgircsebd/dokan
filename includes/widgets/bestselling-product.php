@@ -32,21 +32,8 @@ class Dokan_Best_Selling_Widget extends WP_Widget {
             echo $args['before_title'] . $title . $args['after_title'];
         }
 
-        if ( $r->have_posts() ) {
+        dokan_get_template_part( 'widgets/widget-content-product', '', array( 'r' => $r, 'show_rating' => $show_rating ) );
 
-
-            echo '<ul class="dokan-bestselling-product-widget product_list_widget">';
-
-            while ( $r->have_posts()) {
-                $r->the_post();
-                dokan_get_template_part( 'global/content-widget-products', '', array( 'show_rating' => $show_rating ) );
-            }
-
-            echo '</ul>';
-
-        } else {
-            echo "<p>No products found</p>";
-        }
         echo $args['after_widget'];
 
         wp_reset_postdata();

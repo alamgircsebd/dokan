@@ -44,11 +44,8 @@ class Dokan_Template_Products {
     }
 
     public function render_new_product_template( $query_vars ) {
-
-        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-            if ( isset( $query_vars['new-product'] ) ) {
-                dokan_get_template_part( 'products/new-product-single' );
-            }
+        if ( isset( $query_vars['new-product'] ) ) {
+            dokan_get_template_part( 'products/new-product-single' );
         }
     }
 

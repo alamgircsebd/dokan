@@ -1669,33 +1669,9 @@ function dokan_get_social_profile_fields() {
  *
  * @return void
  */
-
-function dokan_seller_address_fields( $verified = false ) {
+function dokan_seller_address_fields( $verified = false, $required = false ) {
 
     $disabled = $verified ? 'disabled' : '';
-
-    $seller_address_fields = array(
-        'street_1' => array(
-            'required' => 1,
-        ),
-        'street_2' => array(
-            'required' => 0,
-        ),
-        //make 'street_2' => false, if needed to be removed
-        'city'     => array(
-            'required' => 1,
-        ),
-        'zip'      => array(
-            'required' => 1,
-        ),
-        'country'  => array(
-            'required' => 1,
-        ),
-        'state'    => array(
-            'required' => 0,
-        ),
-    );
-
 
     /**
      * Filter the seller Address fields
@@ -1704,7 +1680,28 @@ function dokan_seller_address_fields( $verified = false ) {
      *
      * @param array $dokan_seller_address
      */
-    $seller_address_fields = apply_filters( 'dokan_seller_address_fields', $seller_address_fields );
+    $seller_address_fields = apply_filters( 'dokan_seller_address_fields', array(
+
+            'street_1' => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'street_2' => array(
+                'required' => 0,
+            ),
+            'city'     => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'zip'      => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'country'  => array(
+                'required' => $required ? 1 : 0,
+            ),
+            'state'    => array(
+                'required' => 0,
+            ),
+        )
+    );
 
     $profile_info = dokan_get_store_info( get_current_user_id() );
 
@@ -1797,4 +1794,39 @@ function dokan_get_toc_url( $store_id ) {
     $userstore = dokan_get_store_url( $store_id );
     return apply_filters( 'dokan_get_toc_url', $userstore ."toc" );
 }
+
+/**
+ * Save Redirect URL
+ *
+ * @since 2.4
+ *
+ * @return void [save redirect_url in session]
+ */
+function dokan_save_redirect_url(){
+    $_SESSION['dokan_redirect_url'] = wp_get_referer();
+}
+
+add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
+
+/**
+ * Login Redirect
+ *
+ * @since 2.4
+ *
+ * @param  string $redirect_to [url]
+ * @param  object $user
+ *
+ * @return string [url]
+ */
+function dokan_after_login_redirect( $redirect_to, $user ) {
+
+    if ( isset($_SESSION['dokan_redirect_url']) ){
+        $redirect_to = $_SESSION['dokan_redirect_url'];
+    }
+    return $redirect_to;
+}
+
+add_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect' , 1, 2 );
+
+
 

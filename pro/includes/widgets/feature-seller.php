@@ -41,35 +41,11 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
         if ( ! empty( $title ) ) {
             echo $args['before_title'] . $title . $args['after_title'];
         }
-        ?>
-        <ul class="dokan-feature-sellers">
-            <?php
 
-            if ( $sellers ) {
-
-                foreach ( $sellers as $key => $seller ) {
-                    $store_info = dokan_get_store_info( $seller->ID );
-                    $rating = dokan_get_seller_rating( $seller->ID );
-                    $display_rating = $rating['rating'];
-
-                    if ( ! $rating['count'] ) {
-                        $display_rating = __( 'No ratings found yet!', 'dokan' );
-                    }
-                    ?>
-                    <li>
-                        <a href="<?php echo dokan_get_store_url( $seller->ID ); ?>">
-                            <?php echo esc_html( $store_info['store_name'] ); ?>
-                        </a><br />
-                        <i class='fa fa-star'></i>
-                        <?php echo $display_rating; ?>
-                    </li>
-
-                    <?php
-                }
-            }
-            ?>
-        </ul>
-        <?php
+        dokan_get_template_part( 'widget/feature-seller', '', array(
+            'pro' => true,
+            'sellers' => $sellers,
+        ) );
 
         echo $after_widget;
     }

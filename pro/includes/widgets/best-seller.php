@@ -41,33 +41,11 @@ class Dokan_Best_Seller_Widget extends WP_Widget {
         if ( ! empty( $title ) ) {
             echo $args['before_title'] . $title . $args['after_title'];
         }
-        ?>
-        <ul class="dokan-best-sellers">
-            <?php
 
-            if ( $seller ) {
-
-                foreach ( $seller as $key => $value ) {
-                    $rating = dokan_get_seller_rating( $value->seller_id );
-                    $display_rating = $rating['rating'];
-
-                    if ( ! $rating['count'] ) {
-                        $display_rating = __( 'No ratings found yet!', 'dokan' );
-                    }
-                    ?>
-                    <li>
-                        <a href="<?php echo dokan_get_store_url( $value->seller_id ); ?>">
-                            <?php echo $value->display_name; ?>
-                        </a><br />
-                        <i class='fa fa-star'></i>
-                        <?php echo $display_rating; ?>
-                    </li>
-                    <?php
-                }
-            }
-            ?>
-        </ul>
-        <?php
+        dokan_get_template_part( 'widgets/best-seller', '', array(
+            'pro' => true,
+            'seller' => $seller,
+        ) );
 
         echo $after_widget;
     }

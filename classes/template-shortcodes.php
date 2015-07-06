@@ -212,9 +212,9 @@ class Dokan_Template_Shortcodes {
                                 <h3><a href="<?php echo $store_url; ?>"><?php echo $store_name; ?></a></h3>
 
                                 <address>
-                                    <?php if ( isset( $store_info['address'] ) ) {
-                                        $address = esc_html( $store_info['address'] );
-                                        echo nl2br( $address );
+
+                                    <?php if ( isset( $store_info['address'] ) && !empty( $store_info['address'] ) ) {
+                                        echo dokan_get_seller_address( $seller->ID );
                                     } ?>
 
                                     <?php if ( isset( $store_info['phone'] ) && !empty( $store_info['phone'] ) ) { ?>

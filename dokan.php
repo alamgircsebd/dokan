@@ -401,8 +401,6 @@ class WeDevs_Dokan {
         // Load free or pro moduels
         if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
-        } else {
-            //include_once DOKAN_DIR . '/includes/free/loader.php';
         }
 
         if ( is_admin() ) {
