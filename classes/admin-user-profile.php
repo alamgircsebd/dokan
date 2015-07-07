@@ -16,6 +16,13 @@ class Dokan_Admin_User_Profile {
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
     }
 
+    /**
+     * Enqueue Script in admin profile
+     *
+     * @param  string $page
+     *
+     * @return void
+     */
     function enqueue_scripts( $page ) {
         if ( in_array( $page, array( 'profile.php', 'user-edit.php' )) ) {
             wp_enqueue_media();
@@ -26,6 +33,7 @@ class Dokan_Admin_User_Profile {
      * Add fields to user profile
      *
      * @param WP_User $user
+     *
      * @return void|false
      */
     function add_meta_fields( $user ) {
@@ -255,6 +263,7 @@ class Dokan_Admin_User_Profile {
      * Save user data
      *
      * @param int $user_id
+     *
      * @return void
      */
     function save_meta_fields( $user_id ) {

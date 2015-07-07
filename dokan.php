@@ -286,7 +286,7 @@ class WeDevs_Dokan {
         );
 
         $form_validate_messages = array(
-            'required'        => __( "This field is required from localization.", 'dokan' ),
+            'required'        => __( "This field is required", 'dokan' ),
             'remote'          => __( "Please fix this field.", 'dokan' ),
             'email'           => __( "Please enter a valid email address." , 'dokan' ),
             'url'             => __( "Please enter a valid URL." , 'dokan' ),
@@ -391,27 +391,24 @@ class WeDevs_Dokan {
         require_once $inc_dir . 'functions.php';
         require_once $inc_dir . 'widgets/menu-category.php';
         require_once $inc_dir . 'widgets/store-menu-category.php';
-        require_once $inc_dir . 'widgets/best-seller.php';
-        require_once $inc_dir . 'widgets/feature-seller.php';
         require_once $inc_dir . 'widgets/bestselling-product.php';
         require_once $inc_dir . 'widgets/top-rated-product.php';
-        require_once $inc_dir . 'widgets/store-location.php';
-        require_once $inc_dir . 'widgets/store-contact.php';
         require_once $inc_dir . 'widgets/store-menu.php';
-
         require_once $inc_dir . 'wc-functions.php';
+
+        // Load free or pro moduels
+        if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
+            include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
+        }
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
-            require_once $inc_dir . 'admin/announcement.php';
             require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
             require_once $inc_dir . 'wc-template.php';
             require_once $inc_dir . 'template-tags.php';
         }
-
-        require_once $classes_dir. 'store-seo.php';
 
     }
 
@@ -474,7 +471,6 @@ class WeDevs_Dokan {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
             Dokan_Admin_Ajax::init();
-            new Dokan_Announcement();
             new Dokan_Update();
             new Dokan_Upgrade();
         } else {
@@ -483,8 +479,17 @@ class WeDevs_Dokan {
 
         new Dokan_Rewrites();
         Dokan_Email::init();
-        Dokan_Template_Shortcodes::init();
-        Dokan_Template_Shipping::init();
+
+        if ( is_user_logged_in() ) {
+            Dokan_Template_Main::init();
+            Dokan_Template_Dashboard::init();
+            Dokan_Template_Products::init();
+            Dokan_Template_Orders::init();
+            Dokan_Template_Products::init();
+            Dokan_Template_Withdraw::init();
+            Dokan_Template_Shortcodes::init();
+            Dokan_Template_Settings::init();
+        }
     }
 
     function redirect_if_not_logged_seller() {

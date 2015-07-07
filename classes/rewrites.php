@@ -19,14 +19,12 @@ class Dokan_Rewrites {
         add_action( 'init', array( $this, 'register_rule' ) );
 
         add_filter( 'template_include', array( $this, 'store_template' ) );
-        add_filter( 'template_include', array( $this, 'store_review_template' ) );
         add_filter( 'template_include', array( $this,  'product_edit_template' ) );
         add_filter( 'template_include', array( $this,  'store_toc_template' ) );
 
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
 
-        add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
     }
 
     /**
@@ -48,14 +46,8 @@ class Dokan_Rewrites {
             'products',
             'new-product',
             'orders',
-            'coupons',
-            'reports',
-            'reviews',
             'withdraw',
-            'announcement',
-            'single-announcement',
             'settings',
-            'account-migration'
         ) );
 
         foreach ( $this->query_vars as $var ) {
@@ -86,9 +78,6 @@ class Dokan_Rewrites {
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]', 'top' );
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]', 'top' );
 
-        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&store_review=true', 'top' );
-        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
-
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&term_section=true', 'top' );
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/section/?([0-9]{1,})/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&term=$matches[2]&paged=$matches[3]&term_section=true', 'top' );
 
@@ -101,7 +90,8 @@ class Dokan_Rewrites {
     /**
      * Register the query var
      *
-     * @param array   $vars
+     * @param array  $vars
+     *
      * @return array
      */
     function register_query_var( $vars ) {
@@ -121,7 +111,8 @@ class Dokan_Rewrites {
     /**
      * Include store template
      *
-     * @param type    $template
+     * @param type  $template
+     *
      * @return string
      */
     function store_template( $template ) {
@@ -200,26 +191,6 @@ class Dokan_Rewrites {
     }
 
     /**
-     * Returns the store review template
-     *
-     * @param string  $template
-     *
-     * @return string
-     */
-    function store_review_template( $template ) {
-
-        if ( ! $this->is_woo_installed() ) {
-            return $template;
-        }
-
-        if ( get_query_var( 'store_review' ) ) {
-            return dokan_locate_template( 'store-reviews.php' );
-        }
-
-        return $template;
-    }
-
-    /**
      * Store query filter
      *
      * Handles the product filtering by category in store page
@@ -250,20 +221,5 @@ class Dokan_Rewrites {
                 );
             }
         }
-    }
-
-    /**
-     * Account migration template on my account
-     *
-     * @param string  $file path of the template
-     * @return string
-     */
-    function account_migration_template( $file ) {
-
-        if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) ) {
-            return dokan_locate_template( 'update-account.php' );
-        }
-
-        return $file;
     }
 }

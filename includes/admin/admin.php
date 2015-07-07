@@ -5,7 +5,7 @@ if ( !class_exists( 'WeDevs_Settings_API' ) ) {
 }
 
 /**
- * WordPress settings API demo class
+ * WordPress settings API For Dokan Admin Settings class
  *
  * @author Tareq Hasan
  */
@@ -13,34 +13,69 @@ class Dokan_Admin_Settings {
 
     private $settings_api;
 
+    /**
+     * Constructor for the Dokan_Admin_Settings class
+     *
+     * Sets up all the appropriate hooks and actions
+     * within our plugin.
+     *
+     * @return void
+     */
     function __construct() {
         $this->settings_api = new WeDevs_Settings_API();
 
         add_action( 'admin_init', array($this, 'do_updates') );
         add_action( 'admin_init', array($this, 'admin_init') );
-        add_action( 'admin_init', array($this, 'tools_page_handler') );
 
         add_action( 'admin_menu', array($this, 'admin_menu') );
         add_action( 'admin_notices', array($this, 'update_notice' ) );
+        add_action( 'wp_before_admin_bar_render', array( $this, 'dokan_admin_toolbar' ) );
     }
 
     /**
+     * Get Post Type array
+     *
+     * @since 1.0
+     *
+     * @param  string $post_type
+     *
+     * @return array
+     */
+    public static function get_post_type( $post_type ) {
+        $pages_array = array( '-1' => __( '- select -', 'dokan' ) );
+        $pages = get_posts( array('post_type' => $post_type, 'numberposts' => -1) );
+
+        if ( $pages ) {
+            foreach ($pages as $page) {
+                $pages_array[$page->ID] = $page->post_title;
+            }
+        }
+
+        return $pages_array;
+    }
+
+
+    /**
      * Dashboard scripts and styles
+     *
+     * @since 1.0
      *
      * @return void
      */
     function dashboard_script() {
         wp_enqueue_style( 'dokan-admin-dash', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
 
-        $this->report_scripts();
+        self::report_scripts();
     }
 
     /**
      * Reporting scripts
      *
+     * @since 1.0
+     *
      * @return void
      */
-    function report_scripts() {
+    public static function report_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
         wp_enqueue_style( 'dokan-chosen-style' );
@@ -52,23 +87,14 @@ class Dokan_Admin_Settings {
     }
 
     /**
-     * Seller announcement scripts
+     * Initialize Settings tab and sections content
      *
-     * @since 2.1
+     * @since 1.0
      *
      * @return void
      */
-    function announcement_scripts() {
-        global $post_type;
-
-        if ( 'dokan_announcement' == $post_type ) {
-            wp_enqueue_style( 'dokan-chosen-style' );
-            wp_enqueue_script( 'chosen' );
-        }
-    }
-
     function admin_init() {
-        Dokan_Template_Withdraw::init()->bulk_action_handler();
+        Dokan_Admin_Withdraw::init()->bulk_action_handler();
 
         //set the settings
         $this->settings_api->set_sections( $this->get_settings_sections() );
@@ -78,6 +104,13 @@ class Dokan_Admin_Settings {
         $this->settings_api->admin_init();
     }
 
+    /**
+     * Load admin Menu
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     function admin_menu() {
         $menu_position = apply_filters( 'doakn_menu_position', 17 );
         $capability    = apply_filters( 'doakn_menu_capability', 'manage_options' );
@@ -91,24 +124,22 @@ class Dokan_Admin_Settings {
         $dashboard = add_menu_page( __( 'Dokan', 'dokan' ), __( 'Dokan', 'dokan' ), $capability, 'dokan', array($this, 'dashboard'), 'dashicons-vault', $menu_position );
         add_submenu_page( 'dokan', __( 'Dokan Dashboard', 'dokan' ), __( 'Dashboard', 'dokan' ), $capability, 'dokan', array($this, 'dashboard') );
         add_submenu_page( 'dokan', __( 'Withdraw', 'dokan' ), $withdraw_text, $capability, 'dokan-withdraw', array($this, 'withdraw_page') );
-        add_submenu_page( 'dokan', __( 'Sellers Listing', 'dokan' ), __( 'All Sellers', 'dokan' ), $capability, 'dokan-sellers', array($this, 'seller_listing') );
-        $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array($this, 'report_page') );
-        $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
 
-        do_action( 'dokan_admin_menu' );
+        do_action( 'dokan_admin_menu', $capability, $menu_position );
 
-        add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array($this, 'tools_page') );
         add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
         add_submenu_page( 'dokan', __( 'Add Ons', 'dokan' ), __( 'Add-ons', 'dokan' ), $capability, 'dokan-addons', array($this, 'addon_page') );
 
         add_action( $dashboard, array($this, 'dashboard_script' ) );
-        add_action( $report, array($this, 'report_scripts' ) );
-        // add_action( $announcement, array($this, 'announcement_scripts' ) );
-        add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
-        add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
-
     }
 
+    /**
+     * Get all settings Sections
+     *
+     * @since 1.0
+     *
+     * @return array
+     */
     function get_settings_sections() {
         $sections = array(
             array(
@@ -127,27 +158,16 @@ class Dokan_Admin_Settings {
         return apply_filters( 'dokan_settings_sections', $sections );
     }
 
-    function get_post_type( $post_type ) {
-        $pages_array = array( '-1' => __( '- select -', 'dokan' ) );
-        $pages = get_posts( array('post_type' => $post_type, 'numberposts' => -1) );
-
-        if ( $pages ) {
-            foreach ($pages as $page) {
-                $pages_array[$page->ID] = $page->post_title;
-            }
-        }
-
-        return $pages_array;
-    }
-
     /**
      * Returns all the settings fields
+     *
+     * @since 1.0
      *
      * @return array settings fields
      */
     function get_settings_fields() {
-        $pages_array = $this->get_post_type( 'page' );
-        $slider_array = $this->get_post_type( 'dokan_slider' );
+        $pages_array = self::get_post_type( 'page' );
+        $slider_array = self::get_post_type( 'dokan_slider' );
 
         $settings_fields = array(
             'dokan_general' => array(
@@ -155,41 +175,6 @@ class Dokan_Admin_Settings {
                     'name'    => 'admin_access',
                     'label'   => __( 'Admin area access', 'dokan' ),
                     'desc'    => __( 'Disable sellers and customers from accessing wp-admin area', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'on'
-                ),
-                'store_map' => array(
-                    'name'    => 'store_map',
-                    'label'   => __( 'Show Map on Store Page', 'dokan' ),
-                    'desc'    => __( 'Enable showing Store location map on store left sidebar', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'on'
-                ),
-                'contact_seller' => array(
-                    'name'    => 'contact_seller',
-                    'label'   => __( 'Show Contact Form on Store Page', 'dokan' ),
-                    'desc'    => __( 'Enable showing contact seller form on store left sidebar', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'on'
-                ),
-                'enable_theme_store_sidebar' => array(
-                    'name'    => 'enable_theme_store_sidebar',
-                    'label'   => __( 'Enable Store Sidebar From Theme', 'dokan' ),
-                    'desc'    => __( 'Enable showing Store Sidebar From Your Theme.', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'off'
-                ),
-                'product_add_mail' => array(
-                    'name'    => 'product_add_mail',
-                    'label'   => __( 'Product Mail Notification', 'dokan' ),
-                    'desc'    => __( 'Email notification on new product submission', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'on'
-                ),
-                'store_seo' => array(
-                    'name'    => 'store_seo',
-                    'label'   => __( 'Enable Store SEO', 'dokan' ),
-                    'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
@@ -208,39 +193,6 @@ class Dokan_Admin_Settings {
                     'desc'    => __( 'Make selling status enable for new registred seller', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
-                ),
-                'product_style' => array(
-                    'name'    => 'product_style',
-                    'label'   => __( 'Add/Edit Product Style', 'dokan' ),
-                    'desc'    => __( 'The style you prefer for seller to add or edit products. ', 'dokan' ),
-                    'type'    => 'select',
-                    'default' => 'old',
-                    'options' => array(
-                        'old' => __( 'Tab View', 'dokan' ),
-                        'new' => __( 'Flat View', 'dokan' )
-                    )
-                ),
-                'product_category_style' => array(
-                    'name'    => 'product_category_style',
-                    'label'   => __( 'Category Selection', 'dokan' ),
-                    'desc'    => __( 'What option do you prefer for seller to select product category? ', 'dokan' ),
-                    'type'    => 'select',
-                    'default' => 'single',
-                    'options' => array(
-                        'single' => __( 'Single', 'dokan' ),
-                        'multiple' => __( 'Multiple', 'dokan' )
-                    )
-                ),
-                'product_status' => array(
-                    'name'    => 'product_status',
-                    'label'   => __( 'New Product Status', 'dokan' ),
-                    'desc'    => __( 'Product status when a seller creates a product', 'dokan' ),
-                    'type'    => 'select',
-                    'default' => 'pending',
-                    'options' => array(
-                        'publish' => __( 'Published', 'dokan' ),
-                        'pending' => __( 'Pending Review', 'dokan' )
-                    )
                 ),
                 'seller_percentage' => array(
                     'name'    => 'seller_percentage',
@@ -264,41 +216,12 @@ class Dokan_Admin_Settings {
                     'default' => array( 'paypal' => 'paypal' ),
                     'options' => dokan_withdraw_get_methods()
                 ),
-                'withdraw_order_status' => array(
-                    'name'    => 'withdraw_order_status',
-                    'label'   => __( 'Order Status for Withdraw', 'dokan' ),
-                    'desc'    => __( 'Order status for which seller can make a withdraw request.', 'dokan' ),
-                    'type'    => 'multicheck',
-                    'default' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
-                    'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) )
-                ),
                 'withdraw_limit' => array(
                     'name'    => 'withdraw_limit',
                     'label'   => __( 'Minimum Withdraw Limit', 'dokan' ),
                     'desc'    => __( 'Minimum balance required to make a withdraw request', 'dokan' ),
                     'default' => '50',
                     'type'    => 'text',
-                ),
-                'withdraw_date_limit' => array(
-                    'name'    => 'withdraw_date_limit',
-                    'label'   => __( 'Withdraw Threshold', 'dokan' ),
-                    'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
-                    'default' => '0',
-                    'type'    => 'text',
-                ),
-                'custom_store_url' => array(
-                    'name'    => 'custom_store_url',
-                    'label'   => __( 'Seller Store URL', 'dokan' ),
-                    'desc'    => sprintf( __( 'Define seller store URL (%s<strong>[this-text]</strong>/[seller-name])', 'dokan' ), site_url( '/' ) ),
-                    'default' => 'store',
-                    'type'    => 'text',
-                ),
-                'review_edit' => array(
-                    'name'    => 'review_edit',
-                    'label'   => __( 'Review Editing', 'dokan' ),
-                    'desc'    => __( 'Seller can edit product reviews', 'dokan' ),
-                    'type'    => 'checkbox',
-                    'default' => 'off'
                 ),
             ),
             'dokan_pages' => array(
@@ -320,10 +243,13 @@ class Dokan_Admin_Settings {
         return apply_filters( 'dokan_settings_fields', $settings_fields );
     }
 
-    function dashboard() {
-        include dirname(__FILE__) . '/dashboard.php';
-    }
-
+    /**
+     * Render Settings Page
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     function settings_page() {
         echo '<div class="wrap">';
         settings_errors();
@@ -334,88 +260,88 @@ class Dokan_Admin_Settings {
         echo '</div>';
     }
 
+    /**
+     * Load Dashboard Template
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
+    function dashboard() {
+        include dirname(__FILE__) . '/dashboard.php';
+    }
+
+    /**
+     * Load withdraw template
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     function withdraw_page() {
         include dirname(__FILE__) . '/withdraw.php';
     }
 
-    function seller_listing() {
-        include dirname(__FILE__) . '/sellers.php';
-    }
-
-    function report_page() {
-        global $wpdb;
-
-        include dirname(__FILE__) . '/reports.php';
-    }
-
+    /**
+     * Laad Addon template
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     function addon_page() {
         include dirname(__FILE__) . '/add-on.php';
     }
 
-    function tools_page() {
-        include dirname(__FILE__) . '/tools.php';
-    }
+    /**
+     * Add Menu in Dashboard Top bar
+     * @return array [top menu bar]
+     */
+    function dokan_admin_toolbar() {
+        global $wp_admin_bar;
 
-    function tools_page_handler() {
-        if ( isset( $_GET['dokan_action'] ) && current_user_can( 'manage_options' ) ) {
-            $action = $_GET['dokan_action'];
-
-            check_admin_referer( 'dokan-tools-action' );
-
-            switch ($action) {
-                case 'dokan_install_pages':
-
-                    $pages = array(
-                        array(
-                            'post_title' => __( 'Dashboard', 'dokan' ),
-                            'slug'       => 'dashboard',
-                            'page_id'    => 'dashboard',
-                            'content'    => '[dokan-dashboard]'
-                        ),
-                        array(
-                            'post_title' => __( 'Store List', 'dokan' ),
-                            'slug'       => 'store-listing',
-                            'page_id'    => 'my_orders',
-                            'content'    => '[dokan-stores]'
-                        ),
-                    );
-
-                    foreach ($pages as $page) {
-                        $page_id = wp_insert_post( array(
-                            'post_title'     => $page['post_title'],
-                            'post_name'      => $page['slug'],
-                            'post_content'   => $page['content'],
-                            'post_status'    => 'publish',
-                            'post_type'      => 'page',
-                            'comment_status' => 'closed'
-                        ) );
-
-                        if ( $page['slug'] == 'dashboard' ) {
-                            update_option( 'dokan_pages', array( 'dashboard' => $page_id ) );
-                        }
-                    }
-
-                    flush_rewrite_rules();
-
-                    wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
-                    exit;
-
-                    break;
-
-                case 'regen_sync_table':
-                    dokan_generate_sync_table();
-
-                    wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=regenerated' ) );
-                    exit;
-                    break;
-
-                default:
-                    # code...
-                    break;
-            }
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
         }
+
+        $args = array(
+            'id'     => 'dokan',
+            'title'  => __( 'Dokan', 'admin' ),
+            'href'   => admin_url( 'admin.php?page=dokan' )
+        );
+
+        $wp_admin_bar->add_menu( $args );
+
+        $wp_admin_bar->add_menu( array(
+            'id'     => 'dokan-dashboard',
+            'parent' => 'dokan',
+            'title'  => __( 'Dokan Dashboard', 'dokan' ),
+            'href'   => admin_url( 'admin.php?page=dokan' )
+        ) );
+
+        $wp_admin_bar->add_menu( array(
+            'id'     => 'dokan-withdraw',
+            'parent' => 'dokan',
+            'title'  => __( 'Withdraw', 'dokan' ),
+            'href'   => admin_url( 'admin.php?page=dokan-withdraw' )
+        ) );
+
+        $wp_admin_bar->add_menu( array(
+            'id'     => 'dokan-settings',
+            'parent' => 'dokan',
+            'title'  => __( 'Settings', 'dokan' ),
+            'href'   => admin_url( 'admin.php?page=dokan-settings' )
+        ) );
+
     }
 
+    /**
+     * Doing Updates and upgrade
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     public function do_updates() {
         if ( isset( $_GET['dokan_do_update'] ) && $_GET['dokan_do_update'] == 'true' ) {
             $installer = new Dokan_Installer();
@@ -423,6 +349,13 @@ class Dokan_Admin_Settings {
         }
     }
 
+    /**
+     * Check is dokan need any update
+     *
+     * @since 1.0
+     *
+     * @return boolean
+     */
     public function is_dokan_needs_update() {
         $installed_version = get_option( 'dokan_theme_version' );
 
@@ -438,6 +371,13 @@ class Dokan_Admin_Settings {
         return false;
     }
 
+    /**
+     * Show update notice in dokan dashboard
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     public function update_notice() {
         if ( ! $this->is_dokan_needs_update() ) {
             return;

@@ -15,10 +15,6 @@ function dokan_withdraw_register_methods() {
             'title'    => __( 'Bank Transfer', 'dokan' ),
             'callback' => 'dokan_withdraw_method_bank'
         ),
-        'skrill' => array(
-            'title'    => __( 'Skrill', 'dokan' ),
-            'callback' => 'dokan_withdraw_method_skrill'
-        ),
     );
 
     return apply_filters( 'dokan_withdraw_methods', $methods );
