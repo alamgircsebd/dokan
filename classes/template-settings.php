@@ -18,9 +18,6 @@ class Dokan_Template_Settings {
      */
     function __construct() {
 
-        $this->currentuser = get_current_user_id();
-        $this->profile_info = dokan_get_store_info( get_current_user_id() );
-
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_header' ), 10 );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_help' ), 15 );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_load_progressbar' ), 20 );
@@ -152,10 +149,12 @@ class Dokan_Template_Settings {
      */
     public function load_store_content() {
         $validate = $this->validate();
+        $currentuser = get_current_user_id();
+        $profile_info = dokan_get_store_info( get_current_user_id() );
 
         dokan_get_template_part( 'settings/store-form', '', array(
-            'current_user' => $this->currentuser,
-            'profile_info' => $this->profile_info,
+            'current_user' => $currentuser,
+            'profile_info' => $profile_info,
             'validate'     => $validate,
         ) );
 
@@ -170,11 +169,13 @@ class Dokan_Template_Settings {
      */
     public function load_payment_content() {
         $methods = dokan_withdraw_get_active_methods();
+        $currentuser = get_current_user_id();
+        $profile_info = dokan_get_store_info( get_current_user_id() );
 
         dokan_get_template_part( 'settings/payment', '', array(
             'methods'      => $methods,
-            'current_user' => $this->currentuser,
-            'profile_info' => $this->profile_info,
+            'current_user' => $currentuser,
+            'profile_info' => $profile_info,
         ) );
     }
 

@@ -18,7 +18,7 @@ class Dokan_Pro_Reports {
      * @uses actions|filter hooks
      */
     public function __construct() {
-        add_filter( 'dokan_get_seller_dashboard_nav', array( $this, 'add_reports_menu' ) );
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_reports_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_reports_template' ) );
         add_action( 'dokan_report_content_area_header', array( $this, 'report_header_render' ) );
         add_action( 'dokan_report_content', array( $this, 'render_review_content' ) );

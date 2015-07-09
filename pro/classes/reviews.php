@@ -25,7 +25,7 @@ class Dokan_Pro_Reviews {
         $this->quick_edit = ( dokan_get_option( 'review_edit', 'dokan_selling', 'off' ) == 'on' ) ? true : false;
         $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
 
-        add_filter( 'dokan_get_seller_dashboard_nav', array( $this, 'add_review_menu' ) );
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_review_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_review_template' ) );
 
         add_action( 'dokan_review_content_area_header', array( $this, 'dokan_review_header_render' ), 10 );
