@@ -25,6 +25,25 @@ class Dokan_Pro_Reports {
     }
 
     /**
+     * Singleton object
+     *
+     * @staticvar boolean $instance
+     *
+     * @return \self
+     */
+    public static function init() {
+
+        static $instance = false;
+
+        if ( !$instance ) {
+            $instance = new Dokan_Pro_Reports();
+        }
+
+        return $instance;
+    }
+
+
+    /**
      * Add Report Menu
      *
      * @since 2.4

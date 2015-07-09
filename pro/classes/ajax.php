@@ -65,7 +65,7 @@ class Dokan_Pro_Ajax {
         static $instance = false;
 
         if ( !$instance ) {
-            $instance = new Dokan_Pro_Ajax;
+            $instance = new Dokan_Pro_Ajax();
         }
 
         return $instance;

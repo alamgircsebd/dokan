@@ -84,13 +84,13 @@ class Dokan_Pro_Loader {
 
         if ( is_user_logged_in() ) {
             Dokan_Pro_Ajax::init();
-            new Dokan_Pro_Dashboard();
+            Dokan_Pro_Dashboard::init();
             Dokan_Pro_Products::init();
-            new Dokan_Pro_Coupons();
-            new Dokan_Pro_Reviews();
-            new Dokan_Pro_Reports();
-            new Dokan_Pro_Withdraws();
-            new Dokan_Pro_Settings();
+            Dokan_Pro_Coupons::init();
+            Dokan_Pro_Reviews::init();
+            Dokan_Pro_Reports::init();
+            Dokan_Pro_Withdraws::init();
+            Dokan_Pro_Settings::init();
             Dokan_Pro_Shipping::init();
             Dokan_Pro_Notice::init();
         }

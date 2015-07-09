@@ -30,6 +30,25 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 	}
 
     /**
+     * Singleton object
+     *
+     * @staticvar boolean $instance
+     *
+     * @return \self
+     */
+    public static function init() {
+
+        static $instance = false;
+
+        if ( !$instance ) {
+            $instance = new Dokan_Pro_Dashboard();
+        }
+
+        return $instance;
+    }
+
+
+    /**
      * Show Profile progressbar
      *
      * @return void
