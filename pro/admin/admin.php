@@ -283,10 +283,10 @@ class Dokan_Pro_Admin_Settings {
                     break;
 
                 case 'regen_sync_table':
-                    dokan_generate_sync_table();
+                    // dokan_generate_sync_table();
 
-                    wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=regenerated' ) );
-                    exit;
+                    // wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=regenerated' ) );
+                    // exit;
                     break;
 
                 default:

@@ -56,6 +56,7 @@ class Dokan_Pro_Loader {
 
         if ( is_admin() ) {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
+            require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
         }
 
@@ -78,6 +79,7 @@ class Dokan_Pro_Loader {
     public function inistantiate() {
 
         if ( is_admin() ) {
+            Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
             new Dokan_Announcement();
         }

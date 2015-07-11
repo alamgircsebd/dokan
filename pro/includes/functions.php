@@ -37,4 +37,3 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 }
 
-
