@@ -109,7 +109,11 @@ class Dokan_Template_Products {
                 }
             }
 
-            self::$errors = apply_filters( 'dokan_can_add_product', $errors );
+            if ( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
+                self::$errors = apply_filters( 'dokan_can_add_product', $errors );
+            } else {
+                self::$errors = apply_filters( 'dokan_can_edit_product', $errors );
+            }
 
             if ( !self::$errors ) {
 
