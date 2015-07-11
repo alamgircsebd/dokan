@@ -78,7 +78,8 @@ class Dokan_Pro_Store_Seo {
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
             add_filter( 'wpseo_metakeywords', array( $this, 'replace_keywords' ) );
             add_filter( 'wpseo_metadesc', array( $this, 'replace_desc' ) );
-
+            
+            add_filter( 'wpseo_opengraph_url', array( $this, 'replace_og_url' ) );
             add_filter( 'wpseo_opengraph_title', array( $this, 'replace_og_title' ) );
             add_filter( 'wpseo_opengraph_desc', array( $this, 'replace_og_desc' ) );
             add_filter( 'wpseo_opengraph_image', array( $this, 'replace_og_img' ) );
@@ -136,12 +137,19 @@ class Dokan_Pro_Store_Seo {
             return;
         }
 
+        $seller = get_userdata( get_query_var( 'author' ) );
+
+        $og_url        = dokan_get_store_url( $seller->ID );
         $og_title      = $meta_values['store_seo']['dokan-seo-og-title'];
         $og_desc       = $meta_values['store_seo']['dokan-seo-og-desc'];
         $og_img        = $meta_values['store_seo']['dokan-seo-og-image'];
         $twitter_title = $meta_values['store_seo']['dokan-seo-twitter-title'];
         $twitter_desc  = $meta_values['store_seo']['dokan-seo-twitter-desc'];
         $twitter_img   = $meta_values['store_seo']['dokan-seo-twitter-image'];
+
+        if ( $og_url ) {
+            echo PHP_EOL . '<meta property="og:url" content="' . $og_url . '">';
+        }
 
         if ( $og_title ) {
             echo PHP_EOL . '<meta property="og:title" content="' . $this->print_saved_meta( $og_title ) . '"/>';
@@ -471,6 +479,12 @@ class Dokan_Pro_Store_Seo {
         update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
 
         wp_send_json_success( __( 'Your changes has been updated!', 'dokan' ) );
+    }
+    
+    function replace_og_url(){
+        $seller = get_userdata( get_query_var( 'author' ) );
+        $og_url = dokan_get_store_url( $seller->ID );
+        return $og_url;
     }
 
 }
