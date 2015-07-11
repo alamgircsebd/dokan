@@ -65,7 +65,7 @@ class Dokan_Pro_Admin_Ajax {
             }
             $sql = "SELECT * FROM " . $table_name;
             $generated = $wpdb->get_results( $sql );
-            // re-calculate stats
+            
             $done        = count( $generated );
             wp_send_json_success( array(
                 'offset'  => $_POST['offset'] + 1,

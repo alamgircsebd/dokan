@@ -61,7 +61,7 @@
                 var form = $(this),
                     submit = form.find('input[type=submit]'),
                     loader = form.find('.regen-sync-loader');
-                    responseDiv = $('.regen-sync-response span');
+                    responseDiv = $('.regen-sync-response');
 
                     // ajaxdir = "<?php admin_url( 'admin-ajax.php'); ?>";
 
@@ -72,7 +72,7 @@
                     if ( resp.success ) {
                         responseDiv.html( '<span>' + resp.data.message + '</span>' );
                         if ( resp.data.done != 'All' ) {
-                            form.find('input[name="project"]').val() = resp.data.offset;
+                            form.find('input[name="offset"]').val( resp.data.offset );
                             form.submit();
                             return;
                         } else {
@@ -86,6 +86,12 @@
             })
         });
     </script>
+
+    <?php 
+    // $args = array( 'posts_per_page' => 3, 'offset'=> 5, 'post_type' => 'shop_order', 'post_status' => 'any' );
+
+    //     $orders = get_posts( $args );
+    //     var_dump($orders) ?>
 
     <div class="metabox-holder">
         <div class="postbox">
