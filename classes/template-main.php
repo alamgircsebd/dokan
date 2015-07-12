@@ -51,10 +51,13 @@ class Dokan_Template_Main {
                 $active_menu = 'products';
             }
 
+            if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
+                $active_menu = 'products';
+            }
     	} else {
     		$active_menu = 'dashboard';
     	}
 
-    	dokan_get_template_part( 'global/dashboard-nav', '', array( 'active_menu' => $active_menu ) );
+    	dokan_get_template_part( 'global/dashboard-nav', '', array( 'active_menu' => apply_filters( 'dokan_dashboard_nav_active', $active_menu ) ) );
     }
 }
