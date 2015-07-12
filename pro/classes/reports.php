@@ -54,7 +54,7 @@ class Dokan_Pro_Reports {
      */
     public function add_reports_menu( $urls ) {
 
-        $urls['report'] = array(
+        $urls['reports'] = array(
             'title' => __( 'Reports', 'dokan'),
             'icon'  => '<i class="fa fa-line-chart"></i>',
             'url'   => dokan_get_navigation_url( 'reports' ),
