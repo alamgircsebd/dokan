@@ -1,12 +1,12 @@
 <?php
 
 /**
-* Dokan Pro Product Class
-*
-* @since 2.4
-*
-* @package dokan
-*/
+ * Dokan Pro Product Class
+ *
+ * @since 2.4
+ *
+ * @package dokan
+ */
 class Dokan_Pro_Products {
 
     /**

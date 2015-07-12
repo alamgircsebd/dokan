@@ -1,14 +1,14 @@
 <?php
 
 /**
-*  Dashboard Template Class
-*
-*  A template for frontend dashboard rendering items
-*
-*  @since 2.4
-*
-*  @author weDevs <info@wedevs.com>
-*/
+ * Dashboard Template Class
+ *
+ * A template for frontend dashboard rendering items
+ *
+ * @since 2.4
+ *
+ * @author weDevs <info@wedevs.com>
+ */
 class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 
 	/**

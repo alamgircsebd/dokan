@@ -1,12 +1,12 @@
 <?php
 
 /**
-*  Ajax handling for Dokan in Admin area
-*
-*  @since 2.2
-*
-*  @author weDevs <info@wedevs.com>
-*/
+ * Ajax handling for Dokan in Admin area
+ *
+ * @since 2.2
+ *
+ * @author weDevs <info@wedevs.com>
+ */
 class Dokan_Pro_Admin_Ajax {
 
 	/**
@@ -69,7 +69,7 @@ class Dokan_Pro_Admin_Ajax {
             }
             $sql = "SELECT * FROM " . $table_name;
             $generated = $wpdb->get_results( $sql );
-            
+
             $done        = count( $generated );
             wp_send_json_success( array(
                 'offset'  => $offset + 1,

@@ -1,13 +1,13 @@
 <?php
 
 /**
-* Dokan Pro Report Class
-*
-* @since 2.4
-*
-* @package dokan
-*
-*/
+ * Dokan Pro Report Class
+ *
+ * @since 2.4
+ *
+ * @package dokan
+ *
+ */
 class Dokan_Pro_Reports {
 
     /**

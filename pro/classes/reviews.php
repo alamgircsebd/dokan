@@ -4,7 +4,6 @@
  *
  * @author Asaquzzaman
  */
-
 class Dokan_Pro_Reviews {
 
     private $limit = 15;

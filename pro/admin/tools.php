@@ -99,7 +99,7 @@
 
         <div class="postbox">
             <h3><?php _e( 'Regenerate Order Sync Table', 'dokan' ); ?></h3>
-            
+
             <div class="inside">
                 <p><?php _e( 'This tool will delete all orders from the Dokan\'s sync table and re-build it.', 'dokan' ); ?></p>
                 <div class="regen-sync-response"></div>

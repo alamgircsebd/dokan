@@ -1,15 +1,15 @@
 <?php
 
 /**
-*  Dokan Pro Feature Loader
-*
-*  Load all pro functionality in this class
-*  if pro folder exist then autometically load this class file
-*
-*  @since 2.4
-*
-*  @author weDevs <info@wedevs.com>
-*/
+ * Dokan Pro Feature Loader
+ *
+ * Load all pro functionality in this class
+ * if pro folder exist then autometically load this class file
+ *
+ * @since 2.4
+ *
+ * @author weDevs <info@wedevs.com>
+ */
 
 class Dokan_Pro_Loader {
 

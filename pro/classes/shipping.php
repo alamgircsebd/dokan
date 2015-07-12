@@ -2,9 +2,8 @@
 /**
  * Dokan Shipping Class
  *
- * @author weDves
+ * @author weDevs
  */
-
 class Dokan_Pro_Shipping {
 
     /**

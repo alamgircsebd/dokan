@@ -1,12 +1,12 @@
 <?php
 
 /**
-*  Dokan Pro Template Settings class
-*
-*  @since 2.4
-*
-*  @package dokan
-*/
+ * Dokan Pro Template Settings class
+ *
+ * @since 2.4
+ *
+ * @package dokan
+ */
 class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
     /**
