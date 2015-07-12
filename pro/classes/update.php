@@ -91,7 +91,7 @@ class Dokan_Update {
             return;
         }
 
-        $error = __( 'Pleae activate your copy', 'dokan' );
+        $error = __( 'Please activate your copy', 'dokan' );
 
         $license_status = get_option( 'dokan_license_status' );
 

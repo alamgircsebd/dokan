@@ -58,6 +58,7 @@ class Dokan_Pro_Loader {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
+            require_once DOKAN_PRO_CLASS . '/update.php';
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
@@ -82,6 +83,7 @@ class Dokan_Pro_Loader {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
             new Dokan_Announcement();
+            new Dokan_Update();
         }
 
         if ( is_user_logged_in() ) {

@@ -475,7 +475,6 @@ final class WeDevs_Dokan {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
             Dokan_Admin_Ajax::init();
-            new Dokan_Update();
             new Dokan_Upgrade();
         } else {
             new Dokan_Pageviews();
