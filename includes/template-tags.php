@@ -157,17 +157,17 @@ function dokan_product_listing_status_filter() {
 function dokan_order_listing_status_filter() {
     $orders_url = dokan_get_navigation_url( 'orders' );
 
-    $status_class = isset( $_GET['order_status'] ) ? $_GET['order_status'] : 'all';
-    $orders_counts = dokan_count_orders( get_current_user_id() );
-    $order_date = ( isset( $_GET['order_date'] ) ) ? $_GET['order_date'] : '';
-    $date_filter = array();
-    $all_order_url = array();
-    $complete_order_url = array();
+    $status_class         = isset( $_GET['order_status'] ) ? $_GET['order_status'] : 'all';
+    $orders_counts        = dokan_count_orders( get_current_user_id() );
+    $order_date           = ( isset( $_GET['order_date'] ) ) ? $_GET['order_date'] : '';
+    $date_filter          = array();
+    $all_order_url        = array();
+    $complete_order_url   = array();
     $processing_order_url = array();
-    $pending_order_url = array();
-    $on_hold_order_url = array();
-    $canceled_order_url = array();
-    $refund_order_url = array();
+    $pending_order_url    = array();
+    $on_hold_order_url    = array();
+    $canceled_order_url   = array();
+    $refund_order_url     = array();
     ?>
 
     <ul class="list-inline order-statuses-filter">
@@ -318,8 +318,6 @@ function dokan_get_dashboard_nav() {
         ),
     );
 
-    $urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
-
     $settings = array(
         'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
         'icon'  => '<i class="fa fa-cog"></i>',
@@ -362,7 +360,7 @@ function dokan_get_dashboard_nav() {
 
     $urls['settings'] = $settings;
 
-    $nav_urls = apply_filters( 'dokan_get_seller_dashboard_nav', $urls );
+    $nav_urls = apply_filters( 'dokan_get_dashboard_nav', $urls );
 
     uasort( $nav_urls, 'dokan_nav_sort_by_pos' );
 

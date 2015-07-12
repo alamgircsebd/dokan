@@ -35,6 +35,25 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
     }
 
     /**
+     * Singleton object
+     *
+     * @staticvar boolean $instance
+     *
+     * @return \self
+     */
+    public static function init() {
+
+        static $instance = false;
+
+        if ( !$instance ) {
+            $instance = new Dokan_Pro_Settings();
+        }
+
+        return $instance;
+    }
+
+
+    /**
      * Load Settings Menu for Pro
      *
      * @since 2.4

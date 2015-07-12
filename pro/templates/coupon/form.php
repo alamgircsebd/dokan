@@ -15,7 +15,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'Coupon Title', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="title" name="title" required value="<?php echo esc_attr( $post_title ); ?>" placeholder="Title" class="dokan-form-control input-md" type="text">
+            <input id="title" name="title" required value="<?php echo esc_attr( $post_title ); ?>" placeholder="<?php _e( 'Title', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
@@ -40,7 +40,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="amount"><?php _e( 'Amount', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="amount" required value="<?php echo esc_attr( $amount ); ?>" name="amount" placeholder="Amount" class="dokan-form-control input-md" type="text">
+            <input id="amount" required value="<?php echo esc_attr( $amount ); ?>" name="amount" placeholder="<?php _e( 'Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
@@ -68,7 +68,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <select id="product" required name="product_drop_down[]" class="dokan-form-control" multiple>
+            <select id="product" required name="product_drop_down[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $products_id ) ) {
@@ -111,7 +111,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Exclude products', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <select id="coupon_exclude_categories" name="exclude_product_ids[]" class="dokan-form-control" multiple>
+            <select id="coupon_exclude_categories" name="exclude_product_ids[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $exclude_products ) ) {

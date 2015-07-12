@@ -24,7 +24,7 @@ class Dokan_Pro_Coupons {
 
         $this->is_edit_page =  isset( $_GET['view'] ) && $_GET['view'] == 'add_coupons';
 
-        add_filter( 'dokan_get_seller_dashboard_nav', array( $this, 'add_coupon_menu' ) );
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_coupon_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_coupon_template' ) );
         add_action( 'template_redirect', array( $this, 'handle_coupons' ) );
 
