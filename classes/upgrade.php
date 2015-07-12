@@ -70,10 +70,10 @@ class Dokan_Upgrade {
             return;
         }
 
-        $installed_version = get_option( 'dokan_theme_version', '2.4' );
+        $installed_version = get_option( 'dokan_theme_version', '2.3' );
         $ignore            = get_option( '_dokan_addon_update_nag_ignore', 'no' );
 
-        if ( version_compare( $installed_version, '2.4', '<=' ) && $ignore != 'yes' ) {
+        if ( version_compare( $installed_version, '2.4', '>=' ) && $ignore != 'yes' ) {
             ?>
             <div class="notice notice-warning">
                 <p><strong><?php _e( 'Please Update Dokan Add-ons', 'dokan' ); ?></strong></p>
