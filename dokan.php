@@ -397,7 +397,7 @@ class WeDevs_Dokan {
         require_once $inc_dir . 'wc-functions.php';
 
         // Load free or pro moduels
-        if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
+        if ( !file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
         }
 
