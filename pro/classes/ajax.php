@@ -1091,5 +1091,4 @@ class Dokan_Pro_Ajax {
     }
 
 
-
 }
