@@ -144,7 +144,7 @@ module.exports = function(grunt) {
                 dest: 'build/dokan.php',
                 replacements: [
                     {
-                        from: 'Dokan (lite)',
+                        from: 'Dokan (Lite) - Multi-vendor Marketplace',
                         to: 'Dokan - Multi-vendor Marketplace'
                     },
                     {

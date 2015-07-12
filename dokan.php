@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Dokan (lite)
+Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
 Version: 2.4
@@ -207,6 +207,7 @@ final class WeDevs_Dokan {
 
         // add_action( 'admin_init', array( $this, 'install_theme' ) );
         add_action( 'admin_init', array( $this, 'block_admin_access' ) );
+        add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( $this, 'plugin_action_links' ) );
     }
 
     public function register_scripts() {
@@ -608,6 +609,38 @@ final class WeDevs_Dokan {
         }
 
         return $title;
+    }
+
+    /**
+     * Returns if the plugin is in PRO version
+     *
+     * @since 2.4
+     *
+     * @return boolean
+     */
+    public function is_pro() {
+        return $this->is_pro;
+    }
+
+    /**
+     * Plugin action links
+     *
+     * @param  array  $links
+     *
+     * @since  2.4
+     *
+     * @return array
+     */
+    function plugin_action_links( $links ) {
+
+        if ( ! $this->is_pro() ) {
+            $links[] = '<a href="https://wedevs.com/products/plugins/dokan/" target="_blank">' . __( 'Get PRO', 'dokan' ) . '</a>';
+        }
+
+        $links[] = '<a href="' . admin_url( 'admin.php?page=dokan-settings' ) . '">' . __( 'Settings', 'dokan' ) . '</a>';
+        $links[] = '<a href="http://docs.wedevs.com/category/plugins/dokan-plugins/" target="_blank">' . __( 'Documentation', 'dokan' ) . '</a>';
+
+        return $links;
     }
 
 } // WeDevs_Dokan
