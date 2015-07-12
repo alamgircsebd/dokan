@@ -138,6 +138,23 @@ module.exports = function(grunt) {
             }
         },
 
+        replace: {
+            example: {
+                src: ['build/dokan.php'],
+                dest: 'build/dokan.php',
+                replacements: [
+                    {
+                        from: 'Dokan (lite)',
+                        to: 'Dokan - Multi-vendor Marketplace'
+                    },
+                    {
+                        from: 'https://wordpress.org/plugins/dokan-lite/',
+                        to: 'https://wedevs.com/products/plugins/dokan/'
+                    }
+                ]
+            }
+        },
+
         //Compress build directory into <name>.zip and <name>-<version>.zip
         compress: {
             main: {
@@ -163,6 +180,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-clean' );
     grunt.loadNpmTasks( 'grunt-contrib-copy' );
     grunt.loadNpmTasks( 'grunt-contrib-compress' );
+    grunt.loadNpmTasks( 'grunt-text-replace' );
 
     grunt.registerTask( 'default', [
         'less',
@@ -183,6 +201,7 @@ module.exports = function(grunt) {
     grunt.registerTask( 'zip', [
         'clean',
         'copy',
+        'replace',
         'compress'
     ])
 };

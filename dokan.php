@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Dokan - Multi-vendor Marketplace
-Plugin URI: https://wedevs.com/products/plugins/dokan/
+Plugin Name: Dokan (lite)
+Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.3
+Version: 2.4
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.3' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -84,7 +84,9 @@ spl_autoload_register( 'dokan_autoload' );
  *
  * @class WeDevs_Dokan The class that holds the entire WeDevs_Dokan plugin
  */
-class WeDevs_Dokan {
+final class WeDevs_Dokan {
+
+    private $is_pro = false;
 
     /**
      * Constructor for the WeDevs_Dokan class
@@ -399,6 +401,8 @@ class WeDevs_Dokan {
         // Load free or pro moduels
         if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
+
+            $this->is_pro = true;
         }
 
         if ( is_admin() ) {
