@@ -105,7 +105,7 @@
                 <div class="regen-sync-response"></div>
                 <form id="regen-sync-table" action="" method="post">
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
-                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 10 ); ?>">
+                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">
                     <input type="hidden" name="action" value="regen_sync_table">
                     <input type="submit" class="button button-primary" value="<?php _e( 'Re-build', 'dokan' ); ?>" >
