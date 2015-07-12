@@ -58,6 +58,6 @@ class Dokan_Template_Main {
     		$active_menu = 'dashboard';
     	}
 
-    	dokan_get_template_part( 'global/dashboard-nav', '', array( 'active_menu' => apply_filters( 'dokan_dashboard_nav_active', $active_menu ) ) );
+    	dokan_get_template_part( 'global/dashboard-nav', '', array( 'active_menu' => apply_filters( 'dokan_dashboard_nav_active', $active_menu, $request, $active ) ) );
     }
 }
