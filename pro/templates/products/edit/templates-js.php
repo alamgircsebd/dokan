@@ -33,7 +33,7 @@
             <div class="attribute-options">
                 <ul class="option-couplet list-unstyled ">
                     <li>
-                        <input type="text" class="option" placeholder="Option..." name="attribute_values[<%= row %>][0]">
+                        <input type="text" class="option" placeholder="<?php esc_attr_e( 'Option...', 'dokan' ); ?>" name="attribute_values[<%= row %>][0]">
 
                         <span class="item-action actions">
                             <a href="#" class="row-add">+</a>
@@ -51,7 +51,7 @@
 
 <script type="text/html" id="tmpl-sc-category-item">
     <li>
-        <input type="text" class="option" placeholder="Option..." name="attribute_values[<%= row %>][<%= col %>]">
+        <input type="text" class="option" placeholder="<?php esc_attr_e( 'Option...', 'dokan' ); ?>" name="attribute_values[<%= row %>][<%= col %>]">
 
         <span class="actions item-action">
             <a href="#" class="row-add">+</a>
