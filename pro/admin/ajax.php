@@ -44,31 +44,35 @@ class Dokan_Pro_Admin_Ajax {
             wp_send_json_error();
         }
         $limit         = $_POST['limit'];
+        $offset         = $_POST['offset'];
 
         $table_name = $wpdb->prefix . 'dokan_orders';
 
-        if ( $_POST['offset'] == 0 ) {
+        if ( $offset == 0 ) {
             $wpdb->query( 'TRUNCATE TABLE ' . $table_name );
         }
 
-        $args = array( 'posts_per_page' => $limit, 'offset'=> $_POST['offset'], 'post_type' => 'shop_order', 'post_status' => 'any' );
+        $sql = "SELECT ID FROM wp_posts
+                WHERE post_type LIKE 'shop_order'
+                AND ID NOT IN(
+                    SELECT post_parent FROM wp_posts
+                    WHERE post_type LIKE 'shop_order'
+                    GROUP BY post_parent
+                )
+                LIMIT %d,%d";
 
-        $orders = get_posts( $args );
+        $orders = $wpdb->get_results( $wpdb->prepare($sql, $offset * $limit, $limit ) );
 
         if ( $orders ) {
             foreach ( $orders as $order) {
-                if ( count( get_posts( array( 'post_parent' => $order->ID, 'post_type' => $order->post_type, 'post_status' => 'any' ) ) ) ) {
-                    return;
-                } else {
-                    dokan_sync_order_table( $order->ID );
-                }
+                dokan_sync_order_table( $order->ID );
             }
             $sql = "SELECT * FROM " . $table_name;
             $generated = $wpdb->get_results( $sql );
             
             $done        = count( $generated );
             wp_send_json_success( array(
-                'offset'  => $_POST['offset'] + 1,
+                'offset'  => $offset + 1,
                 'done'    => $done,
                 'message' => sprintf( __( '%d order sync completed', 'dokan' ), $done )
             ) );

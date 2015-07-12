@@ -79,19 +79,13 @@
                             submit.removeAttr('disabled');
                             loader.hide();
                             responseDiv.html('');
-                            window.location.reload();
+                            // window.location.reload();
                         }
                     }
                 });
             })
         });
     </script>
-
-    <?php 
-    // $args = array( 'posts_per_page' => 3, 'offset'=> 5, 'post_type' => 'shop_order', 'post_status' => 'any' );
-
-    //     $orders = get_posts( $args );
-    //     var_dump($orders) ?>
 
     <div class="metabox-holder">
         <div class="postbox">
@@ -111,7 +105,7 @@
                 <div class="regen-sync-response"></div>
                 <form id="regen-sync-table" action="" method="post">
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
-                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 3 ); ?>">
+                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 10 ); ?>">
                     <input type="hidden" name="offset" value="0">
                     <input type="hidden" name="action" value="regen_sync_table">
                     <input type="submit" class="button button-primary" value="<?php _e( 'Re-build', 'dokan' ); ?>" >
