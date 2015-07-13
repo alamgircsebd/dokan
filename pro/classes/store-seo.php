@@ -78,7 +78,7 @@ class Dokan_Pro_Store_Seo {
             add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
             add_filter( 'wpseo_metakeywords', array( $this, 'replace_keywords' ) );
             add_filter( 'wpseo_metadesc', array( $this, 'replace_desc' ) );
-            
+
             add_filter( 'wpseo_opengraph_url', array( $this, 'replace_og_url' ) );
             add_filter( 'wpseo_opengraph_title', array( $this, 'replace_og_title' ) );
             add_filter( 'wpseo_opengraph_desc', array( $this, 'replace_og_desc' ) );
@@ -480,7 +480,7 @@ class Dokan_Pro_Store_Seo {
 
         wp_send_json_success( __( 'Your changes has been updated!', 'dokan' ) );
     }
-    
+
     function replace_og_url(){
         $seller = get_userdata( get_query_var( 'author' ) );
         $og_url = dokan_get_store_url( $seller->ID );

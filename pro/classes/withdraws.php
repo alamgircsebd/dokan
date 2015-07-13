@@ -1,12 +1,12 @@
 <?php
 
 /**
-*  Withdraw Fnctionality class
-*
-*  @since 2.4
-*
-*  @author weDevs <info@wedevs.com>
-*/
+ * Withdraw Fnctionality class
+ *
+ * @since 2.4
+ *
+ * @author weDevs <info@wedevs.com>
+ */
 class Dokan_Pro_Withdraws {
 
 	/**

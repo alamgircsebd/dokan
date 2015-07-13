@@ -1,14 +1,14 @@
 <?php
 
 /**
-*  Class Dokan_Pro_Admin_Settings
-*
-*  Class for load Admin functionality for Pro Version
-*
-*  @since 2.4
-*
-*  @author weDevs <info@wedevs.com>
-*/
+ * Class Dokan_Pro_Admin_Settings
+ *
+ * Class for load Admin functionality for Pro Version
+ *
+ * @since 2.4
+ *
+ * @author weDevs <info@wedevs.com>
+ */
 class Dokan_Pro_Admin_Settings {
 
     /**

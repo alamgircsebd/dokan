@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Dokan - Multi-vendor Marketplace
-Plugin URI: https://wedevs.com/products/plugins/dokan/
+Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
+Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.3
+Version: 2.4
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.3' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -84,7 +84,9 @@ spl_autoload_register( 'dokan_autoload' );
  *
  * @class WeDevs_Dokan The class that holds the entire WeDevs_Dokan plugin
  */
-class WeDevs_Dokan {
+final class WeDevs_Dokan {
+
+    private $is_pro = false;
 
     /**
      * Constructor for the WeDevs_Dokan class
@@ -205,6 +207,7 @@ class WeDevs_Dokan {
 
         // add_action( 'admin_init', array( $this, 'install_theme' ) );
         add_action( 'admin_init', array( $this, 'block_admin_access' ) );
+        add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), array( $this, 'plugin_action_links' ) );
     }
 
     public function register_scripts() {
@@ -399,6 +402,8 @@ class WeDevs_Dokan {
         // Load free or pro moduels
         if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
+
+            $this->is_pro = true;
         }
 
         if ( is_admin() ) {
@@ -471,7 +476,6 @@ class WeDevs_Dokan {
         if ( is_admin() ) {
             new Dokan_Admin_User_Profile();
             Dokan_Admin_Ajax::init();
-            new Dokan_Update();
             new Dokan_Upgrade();
         } else {
             new Dokan_Pageviews();
@@ -605,6 +609,38 @@ class WeDevs_Dokan {
         }
 
         return $title;
+    }
+
+    /**
+     * Returns if the plugin is in PRO version
+     *
+     * @since 2.4
+     *
+     * @return boolean
+     */
+    public function is_pro() {
+        return $this->is_pro;
+    }
+
+    /**
+     * Plugin action links
+     *
+     * @param  array  $links
+     *
+     * @since  2.4
+     *
+     * @return array
+     */
+    function plugin_action_links( $links ) {
+
+        if ( ! $this->is_pro() ) {
+            $links[] = '<a href="https://wedevs.com/products/plugins/dokan/" target="_blank">' . __( 'Get PRO', 'dokan' ) . '</a>';
+        }
+
+        $links[] = '<a href="' . admin_url( 'admin.php?page=dokan-settings' ) . '">' . __( 'Settings', 'dokan' ) . '</a>';
+        $links[] = '<a href="http://docs.wedevs.com/category/plugins/dokan-plugins/" target="_blank">' . __( 'Documentation', 'dokan' ) . '</a>';
+
+        return $links;
     }
 
 } // WeDevs_Dokan

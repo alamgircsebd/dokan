@@ -34,12 +34,12 @@
             </thead>
             <tbody>
                 <?php
-                $paged = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-                $limit = 20;
-                $count = 0;
-                $offset = ( $paged - 1 ) * $limit;
+                $paged       = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+                $limit       = 20;
+                $count       = 0;
+                $offset      = ( $paged - 1 ) * $limit;
                 $user_search = new WP_User_Query( array( 'role' => 'seller', 'number' => $limit, 'offset' => $offset ) );
-                $sellers = (array) $user_search->get_results();
+                $sellers     = (array) $user_search->get_results();
                 $post_counts = count_many_users_posts( wp_list_pluck( $sellers, 'ID' ), 'product' );
 
                 if ( $sellers ) {
