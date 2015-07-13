@@ -3,7 +3,13 @@
 v2.4 -> July 13, 2015
 ---------------------
  - [new] Code re-write, re-organized
- - [fix]
+ - [new] Customer support System for sellers
+ - [tweak] After login redirect users to the page they were instead of my account
+ - [tweak] Dokan order sycn table from backend tools done by ajax step by step
+ - [fix] New Product status change as admin settings rather than "draft"
+ - [fix] Pageination fix on admin earning log
+ - [fix] Translation fix on template-js
+ - [fix] Fix undefine state error from store and store listing
 
 v2.3 -> June 4, 2015
 ---------------------

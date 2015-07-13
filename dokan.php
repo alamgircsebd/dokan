@@ -405,6 +405,9 @@ final class WeDevs_Dokan {
 
             $this->is_pro = true;
         }
+        // else {
+        //     include_once DOKAN_DIR . '/free/dokan-free-loader.php';
+        // }
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
