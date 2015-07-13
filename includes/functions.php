@@ -1745,7 +1745,7 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
         $zip          = isset( $address['zip'] ) ? $address['zip'] : '';
         $country_code = isset( $address['country'] ) ? $address['country'] : '';
         $state_code   = isset( $address['state'] ) ? $address['state'] : '';
-        $state_code   = ( $address['state'] == 'N/A' ) ? '' : $address['state'];
+        $state_code   = isset( $address['state'] ) ? ( $address['state'] == 'N/A' ) ? '' : $address['state'] : '';
 
         $country_name = isset( $countries[$country_code] ) ? $countries[$country_code] : '';
         $state_name   = isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code;
