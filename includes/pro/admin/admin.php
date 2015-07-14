@@ -242,56 +242,40 @@ class Dokan_Pro_Admin_Settings {
 
             check_admin_referer( 'dokan-tools-action' );
 
-            switch ($action) {
-                case 'dokan_install_pages':
+            $pages = array(
+                array(
+                    'post_title' => __( 'Dashboard', 'dokan' ),
+                    'slug'       => 'dashboard',
+                    'page_id'    => 'dashboard',
+                    'content'    => '[dokan-dashboard]'
+                ),
+                array(
+                    'post_title' => __( 'Store List', 'dokan' ),
+                    'slug'       => 'store-listing',
+                    'page_id'    => 'my_orders',
+                    'content'    => '[dokan-stores]'
+                ),
+            );
 
-                    $pages = array(
-                        array(
-                            'post_title' => __( 'Dashboard', 'dokan' ),
-                            'slug'       => 'dashboard',
-                            'page_id'    => 'dashboard',
-                            'content'    => '[dokan-dashboard]'
-                        ),
-                        array(
-                            'post_title' => __( 'Store List', 'dokan' ),
-                            'slug'       => 'store-listing',
-                            'page_id'    => 'my_orders',
-                            'content'    => '[dokan-stores]'
-                        ),
-                    );
+            foreach ($pages as $page) {
+                $page_id = wp_insert_post( array(
+                    'post_title'     => $page['post_title'],
+                    'post_name'      => $page['slug'],
+                    'post_content'   => $page['content'],
+                    'post_status'    => 'publish',
+                    'post_type'      => 'page',
+                    'comment_status' => 'closed'
+                ) );
 
-                    foreach ($pages as $page) {
-                        $page_id = wp_insert_post( array(
-                            'post_title'     => $page['post_title'],
-                            'post_name'      => $page['slug'],
-                            'post_content'   => $page['content'],
-                            'post_status'    => 'publish',
-                            'post_type'      => 'page',
-                            'comment_status' => 'closed'
-                        ) );
-
-                        if ( $page['slug'] == 'dashboard' ) {
-                            update_option( 'dokan_pages', array( 'dashboard' => $page_id ) );
-                        }
-                    }
-
-                    flush_rewrite_rules();
-
-                    wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
-                    exit;
-
-                    break;
-
-                case 'regen_sync_table':
-                    // dokan_generate_sync_table();
-
-                    // wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=regenerated' ) );
-                    // exit;
-                    break;
-
-                default:
-                    break;
+                if ( $page['slug'] == 'dashboard' ) {
+                    update_option( 'dokan_pages', array( 'dashboard' => $page_id ) );
+                }
             }
+
+            flush_rewrite_rules();
+
+            wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
+            exit;
         }
     }
 

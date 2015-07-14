@@ -400,14 +400,14 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'wc-functions.php';
 
         // Load free or pro moduels
-        if ( file_exists( DOKAN_DIR . '/pro/dokan-pro-loader.php' ) ) {
-            include_once DOKAN_DIR . '/pro/dokan-pro-loader.php';
+        if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
+            include_once DOKAN_INC_DIR . '/pro/dokan-pro-loader.php';
 
             $this->is_pro = true;
         }
-        // else {
-        //     include_once DOKAN_DIR . '/free/dokan-free-loader.php';
-        // }
+        else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
+            include_once DOKAN_INC_DIR . '/free/dokan-free-loader.php';
+        }
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';

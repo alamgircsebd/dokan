@@ -136,7 +136,7 @@ class Dokan_Pro_Loader {
     public function dokan_pro_autoload( $class ) {
         if ( stripos( $class, 'Dokan_Pro_' ) !== false ) {
             $class_name = str_replace( array( 'Dokan_Pro_', '_' ), array( '', '-' ), $class );
-            $file_path =  DOKAN_PRO_DIR . '/classes/' . strtolower( $class_name ) . '.php';
+            $file_path =  DOKAN_PRO_CLASS . '/' . strtolower( $class_name ) . '.php';
 
             if ( file_exists( $file_path ) ) {
                 require_once $file_path;
