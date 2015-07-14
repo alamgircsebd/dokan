@@ -633,7 +633,7 @@ function dokan_get_template_part( $slug, $name = '', $args = array() ) {
 
     // search for Pro templates only
     if ( $pro !== false ) {
-        $template_path = $dokan->plugin_path() . '/pro/templates';
+        $template_path = $dokan->plugin_path() . '/includes/pro/templates';
     }
 
     // Get default slug-name.php
