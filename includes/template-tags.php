@@ -517,3 +517,17 @@ function dokan_header_user_menu() {
 }
 
 endif;
+
+
+add_action( 'template_redirect', 'dokan_myorder_login_check');
+
+function dokan_myorder_login_check(){
+    global $post;
+    
+    $my_order_page_id = dokan_get_option( 'my_orders', 'dokan_pages' );
+    
+    if ( $my_order_page_id == $post->ID ){
+        dokan_redirect_login();
+    }
+    
+}
