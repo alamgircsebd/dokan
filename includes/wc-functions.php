@@ -154,9 +154,9 @@ function dokan_variable_product_type_options() {
 
             <p class="toolbar">
 
-                <button type="button" class="btn btn-sm btn-success button-primary add_variation" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Add Variation', 'dokan' ); ?></button>
+                <button type="button" class="dokan-btn dokan-btn-sm dokan-btn-success button-primary add_variation" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Add Variation', 'dokan' ); ?></button>
 
-                <button type="button" class="btn btn-sm btn-default link_all_variations" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Link all variations', 'dokan' ); ?></button>
+                <button type="button" class="dokan-btn dokan-btn-sm dokan-btn-default link_all_variations" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Link all variations', 'dokan' ); ?></button>
 
                 <strong><?php _e( 'Default selections:', 'dokan' ); ?></strong>
                 <?php
