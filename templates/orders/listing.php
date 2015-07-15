@@ -11,7 +11,7 @@ $user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $order_date,
 
 if ( $user_orders ) {
     ?>
-    <table class="dokan-table table-striped">
+    <table class="dokan-table dokan-table-striped">
         <thead>
             <tr>
                 <th><?php _e( 'Order', 'dokan' ); ?></th>

@@ -22,7 +22,7 @@
 
 .label-variant(@color) {
   background-color: @color;
-  
+
   &[href] {
     &:hover,
     &:focus {
@@ -89,5 +89,21 @@
 }
 
 .dokan-label-danger {
+  .label-variant(@label-danger-bg);
+}
+
+.dokan-success {
+  .label-variant(@label-success-bg);
+}
+
+.dokan-info {
+  .label-variant(@label-info-bg);
+}
+
+.dokan-warning {
+  .label-variant(@label-warning-bg);
+}
+
+.dokan-danger {
   .label-variant(@label-danger-bg);
 }

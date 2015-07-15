@@ -241,6 +241,20 @@ a.dokan-btn-sm,
     }
 }
 
+.dokan-table-striped {
+  > tbody > tr:nth-of-type(odd) {
+    background-color: @table-bg-accent;
+  }
+}
+
+
+.table-row-variant(active; @table-bg-active);
+.table-row-variant(success; @state-success-bg);
+.table-row-variant(info; @state-info-bg);
+.table-row-variant(warning; @state-warning-bg);
+.table-row-variant(danger; @state-danger-bg);
+
+
 .chart-tooltip {
     position: absolute;
     display: none;
@@ -478,7 +492,7 @@ table.my_account_orders{
             td.order-actions{
                 a.button{
                     margin-right: 10px;
-                }  
+                }
             }
         }
     }
