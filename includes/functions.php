@@ -709,7 +709,7 @@ function dokan_locate_template( $template_name, $template_path = '', $default_pa
 
         // search for Pro templates only
         if ( $pro !== false ) {
-            $default_path = $dokan->plugin_path() . '/pro/templates/';
+            $default_path = $dokan->plugin_path() . '/includes/pro/templates/';
         }
 
     }

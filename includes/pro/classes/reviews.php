@@ -40,8 +40,8 @@ class Dokan_Pro_Reviews {
 
         // Store page review
         add_filter( 'dokan_store_tabs', array( $this, 'add_review_tab_in_store' ), 10, 2 );
-        add_action( 'init', array( $this, 'register_review_rule' ) );
-        add_filter( 'template_include', array( $this, 'store_review_template' ) );
+        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'register_review_rule' ) );
+        add_filter( 'template_include', array( $this, 'store_review_template' ), 99 );
 
     }
 
