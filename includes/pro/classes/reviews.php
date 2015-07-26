@@ -27,6 +27,7 @@ class Dokan_Pro_Reviews {
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_review_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_review_template' ) );
 
+        add_action( 'dokan_review_content_inside_before', array( $this, 'show_seller_enable_message' ) );
         add_action( 'dokan_review_content_area_header', array( $this, 'dokan_review_header_render' ), 10 );
         add_action( 'dokan_review_content', array( $this, 'dokan_review_content_render' ), 10 );
         add_action( 'dokan_review_content_status_filter', array( $this, 'dokan_review_status_filter' ), 10, 2);
@@ -60,6 +61,21 @@ class Dokan_Pro_Reviews {
         }
 
         return $instance;
+    }
+
+    /**
+     * Show Seller Enable Error Message
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function show_seller_enable_message() {
+        $user_id = get_current_user_id();
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            echo dokan_seller_not_enabled_notice();
+        }
     }
 
     /**

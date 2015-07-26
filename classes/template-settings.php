@@ -18,6 +18,7 @@ class Dokan_Template_Settings {
      */
     function __construct() {
 
+        add_action( 'dokan_settings_content_inside_before', array( $this, 'show_enable_seller_message' ) );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_header' ), 10 );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_help' ), 15 );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_settings_load_progressbar' ), 20 );
@@ -41,6 +42,20 @@ class Dokan_Template_Settings {
         return $instance;
     }
 
+    /**
+     * Show Seller Enable Error Message
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function show_enable_seller_message() {
+        $user_id = get_current_user_id();
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            echo dokan_seller_not_enabled_notice();
+        }
+    }
     /**
      * Render Settings Header
      *
