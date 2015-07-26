@@ -105,7 +105,7 @@ class Dokan_Template_Products {
                 }
             } else {
                 if( !isset( $_POST['product_cat'] ) && empty( $_POST['product_cat'] ) ) {
-                    $errors[] = __( 'Please select atleast one category', 'dokan' );
+                    $errors[] = __( 'Please select at least one category', 'dokan' );
                 }
             }
 
@@ -215,7 +215,7 @@ class Dokan_Template_Products {
                 }
             } else {
                 if( !isset( $_POST['product_cat'] ) && empty( $_POST['product_cat'] ) ) {
-                    $errors[] = __( 'Please select atleast one category', 'dokan' );
+                    $errors[] = __( 'Please select at least one category', 'dokan' );
                 }
             }
 
