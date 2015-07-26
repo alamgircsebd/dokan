@@ -57,6 +57,7 @@ class Dokan_Template_Shortcodes {
 
         if ( isset( $wp->query_vars['new-product'] ) ) {
             do_action( 'dokan_render_new_product_template', $wp->query_vars );
+            return;
         }
 
         if ( isset( $wp->query_vars['orders'] ) ) {

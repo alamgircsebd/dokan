@@ -29,7 +29,7 @@
             /**
              *  dokan_dashboard_content_before hook
              *
-             *  @hooked get_dashboard_side_navigation
+             *  @hooked show_seller_dashboard_notice
              *
              *  @since 2.4
              */

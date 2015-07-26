@@ -26,6 +26,7 @@ class Dokan_Template_Products {
         add_action( 'template_redirect', array( $this, 'handle_all_submit' ), 11 );
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
+        add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
     }
 
     /**
@@ -43,8 +44,31 @@ class Dokan_Template_Products {
         return $instance;
     }
 
+    /**
+     * Render New Product Template for only free version
+     *
+     * @since 2.4
+     *
+     * @param  array $query_vars
+     *
+     * @return void
+     */
     public function render_new_product_template( $query_vars ) {
-        if ( isset( $query_vars['new-product'] ) ) {
+
+        if ( isset( $query_vars['new-product'] ) && !WeDevs_Dokan::init()->is_pro() ) {
+            dokan_get_template_part( 'products/new-product-single' );
+        }
+    }
+
+    /**
+     * Load Product Edit Template
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function load_product_edit_template() {
+        if ( !WeDevs_Dokan::init()->is_pro() ) {
             dokan_get_template_part( 'products/new-product-single' );
         }
     }

@@ -178,9 +178,11 @@ class Dokan_Rewrites {
         }
 
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
-            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' && WeDevs_Dokan::init()->is_pro() ) {
                 $edit_product_url = dokan_locate_template( 'products/product-edit.php', '', '', true );
-            } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
+            } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' && WeDevs_Dokan::init()->is_pro() ) {
+                $edit_product_url = dokan_locate_template( 'products/new-product-single.php' );
+            } else {
                 $edit_product_url = dokan_locate_template( 'products/new-product-single.php' );
             }
 
