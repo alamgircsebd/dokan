@@ -36,6 +36,13 @@
             do_action( 'dokan_before_new_product_inside_content_area' );
         ?>
 
+        <header class="dokan-dashboard-header dokan-clearfix">
+            <h1 class="entry-title">
+                <?php _e( 'Add New Product', 'dokan' ); ?>
+            </h1>
+        </header><!-- .entry-header -->
+
+
         <div class="dokan-new-product-area">
             <?php if ( Dokan_Template_Products::$errors ) { ?>
                 <div class="dokan-alert dokan-alert-danger">
