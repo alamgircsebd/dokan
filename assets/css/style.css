@@ -1988,7 +1988,6 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   margin: 0;
 }
 .dokan-single-store .profile-frame {
-  height: 300px;
   padding: 0px;
   margin-bottom: 60px;
   position: relative;
@@ -2057,6 +2056,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   display: none;
 }
 .dokan-single-store .profile-frame .dokan-store-tabs ul {
+  background-color: #fff;
   border-width: 0 1px 1px 1px;
   border-color: #ededed #ededed #ededed #ededed;
   border-style: solid;
