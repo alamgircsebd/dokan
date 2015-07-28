@@ -96,7 +96,7 @@ class Dokan_Pro_Notice {
         if ( $notice ) {
             $notice_data = reset( $notice );
             if( $notice_data->status == 'unread' ) {
-                $template_notice->update_notice_status( $notice_id, 'read' );
+                $this->update_notice_status( $this->notice_id, 'read' );
             }
             dokan_get_template_part( 'announcement/single-notice', '', array( 'pro' => true, 'notice_data' => $notice_data ) );
 
