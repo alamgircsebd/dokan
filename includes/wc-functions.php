@@ -154,9 +154,9 @@ function dokan_variable_product_type_options() {
 
             <p class="toolbar">
 
-                <button type="button" class="btn btn-sm btn-success button-primary add_variation" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Add Variation', 'dokan' ); ?></button>
+                <button type="button" class="dokan-btn dokan-btn-sm dokan-btn-success button-primary add_variation" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Add Variation', 'dokan' ); ?></button>
 
-                <button type="button" class="btn btn-sm btn-default link_all_variations" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Link all variations', 'dokan' ); ?></button>
+                <button type="button" class="dokan-btn dokan-btn-sm dokan-btn-default link_all_variations" <?php disabled( $variation_attribute_found, false ); ?>><?php _e( 'Link all variations', 'dokan' ); ?></button>
 
                 <strong><?php _e( 'Default selections:', 'dokan' ); ?></strong>
                 <?php
@@ -921,10 +921,10 @@ function dokan_new_process_product_meta( $post_id ) {
 
         // Save Shipping meta data if enable shipping
         if ( $is_virtual == 'no' ) {
-            update_post_meta( $post_id, '_weight', stripslashes( $_POST['_weight'] ) );
-            update_post_meta( $post_id, '_length', stripslashes( $_POST['_length'] ) );
-            update_post_meta( $post_id, '_width', stripslashes( $_POST['_width'] ) );
-            update_post_meta( $post_id, '_height', stripslashes( $_POST['_height'] ) );
+            update_post_meta( $post_id, '_weight', isset( $_POST['_weight'] ) ? stripslashes( $_POST['_weight'] ) : '' );
+            update_post_meta( $post_id, '_length', isset( $_POST['_length'] ) ? stripslashes( $_POST['_length'] ) : '' );
+            update_post_meta( $post_id, '_width', isset( $_POST['_width'] ) ? stripslashes( $_POST['_width'] ) : '' );
+            update_post_meta( $post_id, '_height', isset( $_POST['_height'] ) ? stripslashes( $_POST['_height'] ) : '' );
         } else {
             update_post_meta( $post_id, '_weight', '' );
             update_post_meta( $post_id, '_length', '' );
@@ -948,8 +948,10 @@ function dokan_new_process_product_meta( $post_id ) {
         }
 
         // Save shipping class
-        $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
-        wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
+        if ( isset( $_POST['product_shipping_class'] ) ) {
+            $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
+            wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
+        }
     }
 
     // Unique SKU
@@ -2210,7 +2212,7 @@ function dokan_on_create_seller( $user_id, $data ) {
         'social'         => array(),
         'payment'        => array(),
         'phone'          => $_POST['phone'],
-        'show_email'     => 'no',        
+        'show_email'     => 'no',
         'location'       => '',
         'find_address'   => '',
         'dokan_category' => '',

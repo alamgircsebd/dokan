@@ -11,7 +11,7 @@ $user_orders  = dokan_get_seller_orders( $seller_id, $order_status, $order_date,
 
 if ( $user_orders ) {
     ?>
-    <table class="dokan-table table-striped">
+    <table class="dokan-table dokan-table-striped">
         <thead>
             <tr>
                 <th><?php _e( 'Order', 'dokan' ); ?></th>
@@ -130,7 +130,7 @@ if ( $user_orders ) {
     <?php
     $order_count = dokan_get_seller_orders_number( $seller_id, $order_status );
     $num_of_pages = ceil( $order_count / $limit );
-    $base_url  = dokan_get_navigation_url( 'orders' );   
+    $base_url  = dokan_get_navigation_url( 'orders' );
     if ( $num_of_pages > 1 ) {
         echo '<div class="pagination-wrap">';
         $page_links = paginate_links( array(

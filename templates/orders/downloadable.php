@@ -1,3 +1,6 @@
+<?php
+global $wpdb;
+?>
 <div class="order_download_permissions wc-metaboxes-wrapper">
 
     <div class="panel-group" id="accordion">

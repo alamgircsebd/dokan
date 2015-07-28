@@ -1,0 +1,13 @@
+bin
+node_modules
+includes/pro
+tests
+nbproject
+Gruntfile.js
+package.json
+docs.md
+changelog.txt
+.gitignore
+.travis.yml
+phpunit.xml
+.svnignore

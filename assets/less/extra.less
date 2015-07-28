@@ -241,6 +241,20 @@ a.dokan-btn-sm,
     }
 }
 
+.dokan-table-striped {
+  > tbody > tr:nth-of-type(odd) {
+    background-color: @table-bg-accent;
+  }
+}
+
+
+.table-row-variant(active; @table-bg-active);
+.table-row-variant(success; @state-success-bg);
+.table-row-variant(info; @state-info-bg);
+.table-row-variant(warning; @state-warning-bg);
+.table-row-variant(danger; @state-danger-bg);
+
+
 .chart-tooltip {
     position: absolute;
     display: none;
@@ -463,11 +477,18 @@ input.tagit-hidden-field {
     }
 }
 
-#dokan_store_tnc_enable{
-    display: inline-block;
-    width: 20px;
-}
-
 .dokan_tock_check {
     width: auto;
+}
+
+table.my_account_orders{
+    tbody{
+        tr{
+            td.order-actions{
+                a.button{
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
 }

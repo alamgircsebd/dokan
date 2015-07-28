@@ -611,28 +611,45 @@ function dokan_posted_textarea( $key ) {
  *
  * Looks at the theme directory first
  */
-function dokan_get_template_part( $slug, $name = '' ) {
+function dokan_get_template_part( $slug, $name = '', $args = array() ) {
     $dokan = WeDevs_Dokan::init();
+
+    $defaults = array(
+        'pro' => false
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+    if ( $args && is_array( $args ) ) {
+        extract( $args );
+    }
 
     $template = '';
 
     // Look in yourtheme/dokan/slug-name.php and yourtheme/dokan/slug.php
     $template = locate_template( array( $dokan->template_path() . "{$slug}-{$name}.php", $dokan->template_path() . "{$slug}.php" ) );
 
-    // Get default slug-name.php
-    if ( ! $template && $name && file_exists( $dokan->plugin_path() . "/templates/{$slug}-{$name}.php" ) ) {
-        $template = $dokan->plugin_path() . "/templates/{$slug}-{$name}.php";
+    $template_path = $dokan->plugin_path() . '/templates';
+
+    // search for Pro templates only
+    if ( $pro !== false ) {
+        $template_path = $dokan->plugin_path() . '/includes/pro/templates';
     }
 
-    if ( ! $template && !$name && file_exists( $dokan->plugin_path() . "/templates/{$slug}.php" ) ) {
-        $template = $dokan->plugin_path() . "/templates/{$slug}.php";
+    // Get default slug-name.php
+    if ( ! $template && $name && file_exists( $template_path . "/{$slug}-{$name}.php" ) ) {
+        $template = $template_path . "/{$slug}-{$name}.php";
+    }
+
+    if ( ! $template && !$name && file_exists( $template_path . "/{$slug}.php" ) ) {
+        $template = $template_path . "/{$slug}.php";
     }
 
     // Allow 3rd party plugin filter template file from their plugin
     $template = apply_filters( 'dokan_get_template_part', $template, $slug, $name );
 
     if ( $template ) {
-        load_template( $template, false );
+        include( $template );
     }
 }
 
@@ -680,7 +697,7 @@ function dokan_get_template( $template_name, $args = array(), $template_path = '
  * @param string $default_path (default: '')
  * @return string
  */
-function dokan_locate_template( $template_name, $template_path = '', $default_path = '' ) {
+function dokan_locate_template( $template_name, $template_path = '', $default_path = '', $pro = false ) {
     $dokan = WeDevs_Dokan::init();
 
     if ( ! $template_path ) {
@@ -689,7 +706,14 @@ function dokan_locate_template( $template_name, $template_path = '', $default_pa
 
     if ( ! $default_path ) {
         $default_path = $dokan->plugin_path() . '/templates/';
+
+        // search for Pro templates only
+        if ( $pro !== false ) {
+            $default_path = $dokan->plugin_path() . '/includes/pro/templates/';
+        }
+
     }
+
 
     // Look within passed path within the theme - this is priority
     $template = locate_template(
@@ -938,10 +962,6 @@ function dokan_get_store_tabs( $store_id ) {
         'products' => array(
             'title' => __( 'Products', 'dokan' ),
             'url'   => dokan_get_store_url( $store_id )
-        ),
-        'reviews' => array(
-            'title' => __( 'Reviews', 'dokan' ),
-            'url'   => dokan_get_review_url( $store_id )
         ),
     );
 
@@ -1491,44 +1511,6 @@ function dokan_admin_toolbar() {
 }
 
 // Hook into the 'wp_before_admin_bar_render' action
-add_action( 'wp_before_admin_bar_render', 'dokan_admin_toolbar' );
-
-/**
- * Returns Current User Profile progress bar HTML
- *
- * @since 2.1
- *
- * @return output
- */
-function dokan_get_profile_progressbar() {
-    global $current_user;
-
-    $profile_info = dokan_get_store_info( $current_user->ID );
-    $progress     = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : 0;
-    $next_todo    = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : __('Start with adding a Banner to gain profile progress','dokan');
-
-    ob_start();
-
-    if (  strlen( trim( $next_todo ) ) != 0 ) { ?>
-        <div class="dokan-panel dokan-panel-default dokan-profile-completeness">
-            <div class="dokan-panel-body">
-            <div class="dokan-progress">
-                <div class="dokan-progress-bar dokan-progress-bar-info dokan-progress-bar-striped" role="progressbar"
-                     aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $progress ?>%">
-                    <?php echo $progress . __( '% Profile complete', 'dokan' ) ?>
-                </div>
-            </div>
-
-            <div class="dokan-alert dokan-alert-info dokan-panel-alert"><?php echo $next_todo; ?></div>
-           </div>
-        </div>
-    <?php
-    }
-
-    $output = ob_get_clean();
-
-    return $output;
-}
 
 /**
  * Display a monthly dropdown for filtering product listing on seller dashboard
@@ -1595,64 +1577,7 @@ function dokan_product_listing_filter_months_dropdown( $user_id ) {
  *
  */
 function dokan_product_listing_filter() {
-    do_action( 'dokan_product_listing_filter_before_form' );
-    ?>
-
-    <form class="dokan-form-inline dokan-w6" method="get" >
-
-        <div class="dokan-form-group">
-            <?php dokan_product_listing_filter_months_dropdown( get_current_user_id() ); ?>
-        </div>
-
-        <div class="dokan-form-group">
-            <?php
-            wp_dropdown_categories( array(
-                'show_option_none' => __( '- Select a category -', 'dokan' ),
-                'hierarchical'     => 1,
-                'hide_empty'       => 0,
-                'name'             => 'product_cat',
-                'id'               => 'product_cat',
-                'taxonomy'         => 'product_cat',
-                'title_li'         => '',
-                'class'            => 'product_cat dokan-form-control chosen',
-                'exclude'          => '',
-                'selected'         => isset( $_GET['product_cat'] ) ? $_GET['product_cat'] : '-1',
-            ) );
-            ?>
-        </div>
-
-        <?php
-        if ( isset( $_GET['product_search_name'] ) ) { ?>
-            <input type="hidden" name="product_search_name" value="<?php echo $_GET['product_search_name']; ?>">
-        <?php }
-        ?>
-
-        <button type="submit" name="product_listing_filter" value="ok" class="dokan-btn dokan-btn-theme"><?php _e( 'Filter', 'dokan'); ?></button>
-
-    </form>
-    <?php do_action( 'dokan_product_listing_filter_before_search_form' ); ?>
-    <form method="get" class="dokan-form-inline dokan-w6">
-
-        <button type="submit" name="product_listing_search" value="ok" class="dokan-btn dokan-btn-theme dokan-right"><?php _e( 'Search', 'dokan'); ?></button>
-
-        <?php wp_nonce_field( 'dokan_product_search', 'dokan_product_search_nonce' ); ?>
-
-        <div class="dokan-form-group dokan-right">
-            <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Search Products" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
-        </div>
-
-        <?php
-        if ( isset( $_GET['product_cat'] ) ) { ?>
-            <input type="hidden" name="product_cat" value="<?php echo $_GET['product_cat']; ?>">
-        <?php }
-
-        if ( isset( $_GET['date'] ) ) { ?>
-            <input type="hidden" name="date" value="<?php echo $_GET['date']; ?>">
-        <?php }
-        ?>
-    </form>
-    <?php
-    do_action( 'dokan_product_listing_filter_after_form' );
+    dokan_get_template_part( 'products/listing-filter' );
 }
 
 /**
@@ -1744,7 +1669,6 @@ function dokan_get_social_profile_fields() {
  *
  * @return void
  */
-
 function dokan_seller_address_fields( $verified = false, $required = false ) {
 
     $disabled = $verified ? 'disabled' : '';
@@ -1764,7 +1688,6 @@ function dokan_seller_address_fields( $verified = false, $required = false ) {
             'street_2' => array(
                 'required' => 0,
             ),
-            //make 'street_2' => false, if needed to be removed
             'city'     => array(
                 'required' => $required ? 1 : 0,
             ),
@@ -1782,130 +1705,11 @@ function dokan_seller_address_fields( $verified = false, $required = false ) {
 
     $profile_info = dokan_get_store_info( get_current_user_id() );
 
-
-
-    $address         = isset( $profile_info['address'] ) ? $profile_info['address'] : '';
-    $address_street1 = isset( $profile_info['address']['street_1'] ) ? $profile_info['address']['street_1'] : '';
-    $address_street2 = isset( $profile_info['address']['street_2'] ) ? $profile_info['address']['street_2'] : '';
-    $address_city    = isset( $profile_info['address']['city'] ) ? $profile_info['address']['city'] : '';
-    $address_zip     = isset( $profile_info['address']['zip'] ) ? $profile_info['address']['zip'] : '';
-    $address_country = isset( $profile_info['address']['country'] ) ? $profile_info['address']['country'] : '';
-    $address_state   = isset( $profile_info['address']['state'] ) ? $profile_info['address']['state'] : '';
-    ?>
-    <input type="hidden" id="dokan_selected_country" value="<?php echo $address_country?>" />
-    <input type="hidden" id="dokan_selected_state" value="<?php echo $address_state?>" />
-    <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="setting_address"><?php _e( 'Address', 'dokan' ); ?></label>
-
-        <div class="dokan-w5 dokan-text-left dokan-address-fields">
-            <?php if ( $seller_address_fields['street_1'] ) { ?>
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 control-label" for="dokan_address[street_1]"><?php _e( 'Street ', 'dokan' ); ?>
-                        <?php
-                        $required_attr = '';
-                        if ( $seller_address_fields['street_1']['required'] ) {
-                            $required_attr = 'required'; ?>
-                            <span class="required"> *</span>
-                        <?php } ?>
-                    </label>
-                    <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[street_1]" value="<?php echo esc_attr( $address_street1 ); ?>" name="dokan_address[street_1]" placeholder="Street address" class="dokan-form-control input-md" type="text">
-                </div>
-            <?php }
-            if ( $seller_address_fields['street_2'] ) { ?>
-                <div class="dokan-form-group">
-                    <label class="dokan-w3 control-label" for="dokan_address[street_2]"><?php _e( 'Street 2', 'dokan' ); ?>
-                        <?php
-                        $required_attr = '';
-                        if ( $seller_address_fields['street_2']['required'] ) {
-                            $required_attr = 'required'; ?>
-                            <span class="required"> *</span>
-                        <?php } ?>
-                    </label>
-                    <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[street_2]" value="<?php echo esc_attr( $address_street2 ); ?>" name="dokan_address[street_2]" placeholder="Apartment, suite, unit etc. (optional)" class="dokan-form-control input-md" type="text">
-                </div>
-            <?php }
-            if ( $seller_address_fields['city'] || $seller_address_fields['zip'] ) {
-            ?>
-                <div class="dokan-from-group">
-                    <?php if ( $seller_address_fields['city'] ) { ?>
-                        <div class="dokan-form-group dokan-w6 dokan-left dokan-right-margin-30">
-                            <label class="control-label" for="dokan_address[city]"><?php _e( 'City', 'dokan' ); ?>
-                                <?php
-                                $required_attr = '';
-                                if ( $seller_address_fields['city']['required'] ) {
-                                    $required_attr = 'required'; ?>
-                                    <span class="required"> *</span>
-                                <?php } ?>
-                            </label>
-                            <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[city]" value="<?php echo esc_attr( $address_city ); ?>" name="dokan_address[city]" placeholder="Town / City" class="dokan-form-control input-md" type="text">
-                        </div>
-                    <?php }
-                    if ( $seller_address_fields['zip'] ) { ?>
-                        <div class="dokan-form-group dokan-w5 dokan-left">
-                            <label class="control-label" for="dokan_address[zip]"><?php _e( 'Post/ZIP Code', 'dokan' ); ?>
-                                <?php
-                                $required_attr = '';
-                                if ( $seller_address_fields['zip']['required'] ) {
-                                    $required_attr = 'required'; ?>
-                                    <span class="required"> *</span>
-                                <?php } ?>
-                            </label>
-                            <input <?php echo $required_attr; ?> <?php echo $disabled ?> id="dokan_address[zip]" value="<?php echo esc_attr( $address_zip ); ?>" name="dokan_address[zip]" placeholder="Postcode / Zip" class="dokan-form-control input-md" type="text">
-                        </div>
-                    <?php } ?>
-                    <div class="dokan-clearfix"></div>
-                </div>
-            <?php }
-
-            if ( $seller_address_fields['country'] ) {
-                $country_obj   = new WC_Countries();
-                $countries     = $country_obj->countries;
-                $states        = $country_obj->states;
-            ?>
-                <div class="dokan-form-group">
-                    <label class="control-label" for="dokan_address[country]"><?php _e( 'Country ', 'dokan' ); ?>
-                        <?php
-                        $required_attr = '';
-                        if ( $seller_address_fields['country']['required'] ) {
-                            $required_attr = 'required'; ?>
-                            <span class="required"> *</span>
-                        <?php } ?>
-                    </label>
-                    <select <?php echo $required_attr; ?> <?php echo $disabled ?> name="dokan_address[country]" class="country_to_state dokan-form-control" id="dokan_address_country">
-                        <?php dokan_country_dropdown( $countries, $address_country, false ); ?>
-                    </select>
-                </div>
-            <?php }
-            if ( $seller_address_fields['state'] ) {
-                $address_state_class = '';
-                $is_input            = false;
-                $no_states           = false;
-                if ( isset( $states[$address_country] ) ) {
-                    if ( empty( $states[$address_country] ) ) {
-                        $address_state_class = 'dokan-hide';
-                        $no_states           = true;
-                    } else {
-
-                    }
-                } else {
-                    $is_input = true;
-                }
-            ?>
-                <div  id="dokan-states-box" class="dokan-form-group">
-                    <label class="dokan-w3 control-label" for="dokan_address[state]"><?php _e( 'State ', 'dokan' ); ?>
-                    </label>
-                <?php if ( $is_input ) { ?>
-                    <input <?php echo $disabled ?> name="dokan_address[state]" class="dokan-form-control <?php echo $address_state_class ?>" id="dokan_address_state" value="<?php echo $address_state ?>"/>
-                <?php } else { ?>
-                    <select <?php echo $disabled ?> name="dokan_address[state]" class="dokan-form-control" id="dokan_address_state">
-                        <?php dokan_state_dropdown( $states[$address_country], $address_state ) ?>
-                    </select>
-                <?php } ?>
-                </div>
-            <?php } ?>
-        </div>
-    </div>
-    <?php
+    dokan_get_template_part( 'settings/address-form', '', array(
+        'disabled' => $disabled,
+        'seller_address_fields' => $seller_address_fields,
+        'profile_info' => $profile_info,
+    ) );
 }
 
 /**
@@ -1941,7 +1745,7 @@ function dokan_get_seller_address( $seller_id = '', $get_array = false ) {
         $zip          = isset( $address['zip'] ) ? $address['zip'] : '';
         $country_code = isset( $address['country'] ) ? $address['country'] : '';
         $state_code   = isset( $address['state'] ) ? $address['state'] : '';
-        $state_code   = ( $address['state'] == 'N/A' ) ? '' : $address['state'];
+        $state_code   = isset( $address['state'] ) ? ( $address['state'] == 'N/A' ) ? '' : $address['state'] : '';
 
         $country_name = isset( $countries[$country_code] ) ? $countries[$country_code] : '';
         $state_name   = isset( $states[$country_code][$state_code] ) ? $states[$country_code][$state_code] : $state_code;
@@ -1990,4 +1794,39 @@ function dokan_get_toc_url( $store_id ) {
     $userstore = dokan_get_store_url( $store_id );
     return apply_filters( 'dokan_get_toc_url', $userstore ."toc" );
 }
+
+/**
+ * Save Redirect URL
+ *
+ * @since 2.4
+ *
+ * @return void [save redirect_url in session]
+ */
+function dokan_save_redirect_url(){
+    $_SESSION['dokan_redirect_url'] = wp_get_referer();
+}
+
+add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
+
+/**
+ * Login Redirect
+ *
+ * @since 2.4
+ *
+ * @param  string $redirect_to [url]
+ * @param  object $user
+ *
+ * @return string [url]
+ */
+function dokan_after_login_redirect( $redirect_to, $user ) {
+
+    if ( isset($_SESSION['dokan_redirect_url']) ){
+        $redirect_to = $_SESSION['dokan_redirect_url'];
+    }
+    return $redirect_to;
+}
+
+add_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect' , 1, 2 );
+
+
 

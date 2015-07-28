@@ -502,7 +502,7 @@ jQuery(function($) {
             e.preventDefault();
 
             if( $(this).closest('table.dps-shipping-states').find( 'tr' ).length == 1 ){
-                console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
+                //console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
                 $(this).closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
             }
 
@@ -573,21 +573,24 @@ jQuery(function($) {
 //dokan store seo form submit
 (function($){
 
-    var wrapper = $( '.dokan-dashboard-content.dokan-settings-content.dokan-store-seo-wrapper' );
+    var wrapper = $( '.dokan-store-seo-wrapper' );
     var Dokan_Store_SEO = {
 
         init : function() {
-            wrapper.on( 'click', 'input#dokan-store-seo-form-submit', this.form.validate );
+            wrapper.on( 'submit', 'form#dokan-store-seo-form', this.form.validate );
         },
+
         form : {
 
-            validate : function(){
+            validate : function(e){
+                e.preventDefault();
+
                 var self = $( this ),
                 data = {
                     action: 'dokan_seo_form_handler',
-                    data: self.closest( '#dokan-store-seo-form' ).serialize(),
+                    data: self.serialize(),
                 };
-                console.log(data.data);
+                //console.log(data.data);
                 Dokan_Store_SEO.form.submit( data );
 
                 return false;

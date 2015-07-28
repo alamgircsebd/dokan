@@ -16,6 +16,13 @@ class Dokan_Admin_User_Profile {
         add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
     }
 
+    /**
+     * Enqueue Script in admin profile
+     *
+     * @param  string $page
+     *
+     * @return void
+     */
     function enqueue_scripts( $page ) {
         if ( in_array( $page, array( 'profile.php', 'user-edit.php' )) ) {
             wp_enqueue_media();
@@ -26,6 +33,7 @@ class Dokan_Admin_User_Profile {
      * Add fields to user profile
      *
      * @param WP_User $user
+     *
      * @return void|false
      */
     function add_meta_fields( $user ) {
@@ -46,6 +54,28 @@ class Dokan_Admin_User_Profile {
 
         $social_fields     = dokan_get_social_profile_fields();
 
+        $address           = isset( $store_settings['address'] ) ? $store_settings['address'] : '';
+        $address_street1   = isset( $store_settings['address']['street_1'] ) ? $store_settings['address']['street_1'] : '';
+        $address_street2   = isset( $store_settings['address']['street_2'] ) ? $store_settings['address']['street_2'] : '';
+        $address_city      = isset( $store_settings['address']['city'] ) ? $store_settings['address']['city'] : '';
+        $address_zip       = isset( $store_settings['address']['zip'] ) ? $store_settings['address']['zip'] : '';
+        $address_country   = isset( $store_settings['address']['country'] ) ? $store_settings['address']['country'] : '';
+        $address_state     = isset( $store_settings['address']['state'] ) ? $store_settings['address']['state'] : '';
+
+        $country_state     = array(
+            'country' => array(
+                'label'       => __( 'Country', 'dokan' ),
+                'description' => '',
+                'class'       => 'js_field-country',
+                'type'        => 'select',
+                'options'     => array( '' => __( 'Select a country&hellip;', 'dokan' ) ) + WC()->countries->get_allowed_countries()
+            ),
+            'state' => array(
+                'label'       => __( 'State/County', 'dokan' ),
+                'description' => __( 'State/County or state code', 'dokan' ),
+                'class'       => 'js_field-state'
+            ),
+        );
         ?>
         <h3><?php _e( 'Dokan Options', 'dokan' ); ?></h3>
 
@@ -79,11 +109,65 @@ class Dokan_Admin_User_Profile {
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Address', 'dokan' ); ?></th>
+                    <th><?php _e( 'Address 1', 'dokan' ); ?></th>
                     <td>
-                        <textarea name="dokan_store_address" rows="4" cols="30"><?php echo esc_textarea( $store_settings['address'] ); ?></textarea>
+                        <input type="text" name="dokan_store_address[street_1]" class="regular-text" value="<?php echo esc_attr( $address_street1 ) ?>">
                     </td>
                 </tr>
+
+                <tr>
+                    <th><?php _e( 'Address 2', 'dokan' ); ?></th>
+                    <td>
+                        <input type="text" name="dokan_store_address[street_2]" class="regular-text" value="<?php echo esc_attr( $address_street2 ) ?>">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><?php _e( 'Town/City', 'dokan' ); ?></th>
+                    <td>
+                        <input type="text" name="dokan_store_address[city]" class="regular-text" value="<?php echo esc_attr( $address_city ) ?>">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th><?php _e( 'Zip Code', 'dokan' ); ?></th>
+                    <td>
+                        <input type="text" name="dokan_store_address[zip]" class="regular-text" value="<?php echo esc_attr( $address_zip ) ?>">
+                    </td>
+                </tr>
+
+                <?php foreach ( $country_state as $key => $field ) : ?>
+                    <tr>
+                        <th><label for="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
+                        <td>
+                            <?php if ( ! empty( $field['type'] ) && 'select' == $field['type'] ) : ?>
+                                <select name="dokan_store_address[<?php echo esc_attr( $key ); ?>]" id="<?php echo esc_attr( $key ); ?>" class="<?php echo ( ! empty( $field['class'] ) ? $field['class'] : '' ); ?>" style="width: 25em;">
+                                    <?php
+                                        if ( $key == 'country') {
+                                            $selected = esc_attr( $address_country );
+                                        } else {
+                                            $selected = esc_attr( $address_state );
+                                        }
+                                        foreach ( $field['options'] as $option_key => $option_value ) : ?>
+                                        <option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( $selected, $option_key, true ); ?>><?php echo esc_attr( $option_value ); ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            <?php else : ?>
+                                <?php
+                                if ( $key == 'country') {
+                                    $value = esc_attr( $address_country );
+                                } else {
+                                    $value = esc_attr( $address_state );
+                                }
+                                ?>
+                                <input type="text" name="dokan_store_address[<?php echo esc_attr( $key ); ?>]" id="<?php echo esc_attr( $key ); ?>" value="<?php echo $value; ?>" class="<?php echo ( ! empty( $field['class'] ) ? $field['class'] : 'regular-text' ); ?>" />
+                            <?php endif; ?>
+
+                            <span class="description"><?php echo wp_kses_post( $field['description'] ); ?></span>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+
 
                 <tr>
                     <th><?php _e( 'Phone', 'dokan' ); ?></th>
@@ -255,6 +339,7 @@ class Dokan_Admin_User_Profile {
      * Save user data
      *
      * @param int $user_id
+     *
      * @return void
      */
     function save_meta_fields( $user_id ) {
@@ -277,7 +362,7 @@ class Dokan_Admin_User_Profile {
 
         $store_settings['banner']     = intval( $_POST['dokan_banner'] );
         $store_settings['store_name'] = sanitize_text_field( $_POST['dokan_store_name'] );
-        $store_settings['address']    = wp_kses_post( $_POST['dokan_store_address'] );
+        $store_settings['address']    = isset( $_POST['dokan_store_address'] ) ? $_POST['dokan_store_address'] : array();
         $store_settings['phone']      = sanitize_text_field( $_POST['dokan_store_phone'] );
 
         // social settings

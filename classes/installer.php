@@ -51,6 +51,9 @@ class Dokan_Installer {
                 update_option( 'dokan_theme_version', $version );
             }
         }
+
+        // finally update to the latest version
+        update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
     }
 
     /**
