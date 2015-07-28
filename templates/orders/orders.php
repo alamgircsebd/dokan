@@ -10,6 +10,7 @@
  */
 ?>
 <div class="dokan-dashboard-wrap">
+
     <?php
 
         /**
@@ -29,13 +30,12 @@
         <?php
 
             /**
-             *  dokan_dashboard_content_before hook
+             *  dokan_order_content_inside_before hook
              *
-             *  @hooked get_dashboard_side_navigation
+             *  @hooked show_seller_enable_message
              *
              *  @since 2.4
              */
-            do_action( 'dokan_dashboard_content_inside_before' );
             do_action( 'dokan_order_content_inside_before' );
         ?>
 
@@ -57,5 +57,31 @@
             ?>
 
         </article>
+
+
+        <?php
+
+            /**
+             *  dokan_order_content_inside_after hook
+             *
+             *  @since 2.4
+             */
+            do_action( 'dokan_order_content_inside_after' );
+        ?>
+
     </div> <!-- #primary .content-area -->
+
+    <?php
+
+        /**
+         *  dokan_dashboard_content_after hook
+         *  dokan_order_content_after hook
+         *
+         *  @since 2.4
+         */
+        do_action( 'dokan_dashboard_content_after' );
+        do_action( 'dokan_order_content_after' );
+
+    ?>
+
 </div><!-- .dokan-dashboard-wrap -->

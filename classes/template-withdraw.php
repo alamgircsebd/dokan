@@ -26,6 +26,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         $this->current_status = isset( $_GET['type'] ) ? $_GET['type'] : 'pending';
 
         add_action( 'template_redirect', array( $this, 'handle_withdraws' ) );
+        add_action( 'dokan_withdraw_content_inside_before', array( $this, 'show_seller_enable_message' ) );
         add_action( 'dokan_withdraw_content_area_header', array( $this, 'withdraw_header_render' ), 10 );
         add_action( 'dokan_withdraw_content', array( $this, 'render_withdraw_error' ), 10 );
         add_action( 'dokan_withdraw_content', array( $this, 'withdraw_status_filter' ), 15 );
@@ -48,6 +49,21 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         }
 
         return $instance;
+    }
+
+    /**
+     * Show Seller Enable Error Message
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function show_seller_enable_message() {
+        $user_id = get_current_user_id();
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            echo dokan_seller_not_enabled_notice();
+        }
     }
 
     /**

@@ -18,6 +18,7 @@ class Dokan_Pro_Reports {
      * @uses actions|filter hooks
      */
     public function __construct() {
+        add_action( 'dokan_report_content_inside_before', array( $this, 'show_seller_enable_message' ) );
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_reports_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_reports_template' ) );
         add_action( 'dokan_report_content_area_header', array( $this, 'report_header_render' ) );
@@ -42,6 +43,20 @@ class Dokan_Pro_Reports {
         return $instance;
     }
 
+    /**
+     * Show Seller Enable Error Message
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function show_seller_enable_message() {
+        $user_id = get_current_user_id();
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            echo dokan_seller_not_enabled_notice();
+        }
+    }
 
     /**
      * Add Report Menu

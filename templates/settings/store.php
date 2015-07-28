@@ -29,7 +29,7 @@
         <?php
 
             /**
-             *  dokan_settings_store_content_inside_before hook
+             *  dokan_settings_content_inside_before hook
              *
              *  @since 2.4
              */

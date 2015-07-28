@@ -46,7 +46,7 @@
                 <?php dokan_product_listing_filter(); ?>
             </div>
 
-            <table class="table table-striped product-listing-table">
+            <table class="dokan-table dokan-table-striped product-listing-table">
                 <thead>
                     <tr>
                         <th><?php _e( 'Image', 'dokan' ); ?></th>
@@ -267,7 +267,7 @@
              *
              *  @since 2.4
              */
-            do_action( 'dokan_dashboard_content_inside_before' );
+            do_action( 'dokan_dashboard_content_inside_after' );
             do_action( 'dokan_after_listing_product' );
         ?>
 

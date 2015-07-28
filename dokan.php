@@ -64,6 +64,8 @@ if ( !defined( 'DOKAN_LOAD_SCRIPTS' ) ) {
  * `Dokan_Installer` becomes => installer.php
  * `Dokan_Template_Report` becomes => template-report.php
  *
+ * @since 1.0
+ *
  * @param string  $class requested class name
  */
 function dokan_autoload( $class ) {
@@ -203,7 +205,7 @@ final class WeDevs_Dokan {
 
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
-        add_action( 'login_enqueue_scripts', array( $this, 'login_scripts' ) );
+        add_action( 'login_enqueue_scripts', array( $this, 'login_scripts') );
 
         // add_action( 'admin_init', array( $this, 'install_theme' ) );
         add_action( 'admin_init', array( $this, 'block_admin_access' ) );
@@ -441,7 +443,9 @@ final class WeDevs_Dokan {
      *
      * @global string $pagenow
      * @global object $wpdb
+     *
      * @param string  $where
+     *
      * @return string
      */
     function hide_others_uploads( $where ) {
@@ -499,6 +503,13 @@ final class WeDevs_Dokan {
         }
     }
 
+    /**
+     * Redirect if not logged Seller
+     *
+     * @since 2.4
+     *
+     * @return void [redirection]
+     */
     function redirect_if_not_logged_seller() {
         global $post;
 
@@ -537,6 +548,13 @@ final class WeDevs_Dokan {
         }
     }
 
+    /**
+     * Load jquery in login page
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
     function login_scripts() {
         wp_enqueue_script( 'jquery' );
     }
@@ -548,6 +566,13 @@ final class WeDevs_Dokan {
         wp_enqueue_script( 'dokan_slider_admin', DOKAN_PLUGIN_ASSEST.'/js/admin.js', array( 'jquery' ) );
     }
 
+    /**
+     * Load table prefix for withdraw and orders table
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
     function load_table_prifix() {
         global $wpdb;
 
@@ -587,6 +612,7 @@ final class WeDevs_Dokan {
      *
      * @param string  $title Default title text for current view.
      * @param string  $sep   Optional separator.
+     *
      * @return string The filtered title.
      */
     function wp_title( $title, $sep ) {
@@ -648,6 +674,11 @@ final class WeDevs_Dokan {
 
 } // WeDevs_Dokan
 
+/**
+ * Load Dokan Plugin when all plugins loaded
+ *
+ * @return void
+ */
 function dokan_load_plugin() {
     $dokan = WeDevs_Dokan::init();
 

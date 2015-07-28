@@ -93,13 +93,11 @@ if ( ! $from_shortcode ) {
         <?php
 
             /**
-             *  dokan_dashboard_content_inside_before hook
-             *  dokan_product_content_area hook
+             *  dokan_product_content_inside_area_before hook
              *
              *  @since 2.4
              */
-            do_action( 'dokan_dashboard_content_inside_before' );
-            do_action( 'dokan_before_product_content_area' );
+            do_action( 'dokan_product_content_inside_area_before' );
         ?>
 
         <header class="dokan-dashboard-header dokan-clearfix">
@@ -566,8 +564,7 @@ if ( ! $from_shortcode ) {
                     </form>
 
                 <?php } else { ?>
-
-                    <?php dokan_seller_not_enabled_notice(); ?>
+                    <div class="dokan-alert dokan-alert"></div>
 
                 <?php } ?>
 
@@ -581,15 +578,12 @@ if ( ! $from_shortcode ) {
         <?php
 
             /**
-             *  dokan_dashboard_content_inside_after hook
-             *  dokan_before_product_content_area hook
+             *  dokan_product_content_inside_area_after hook
              *
              *  @since 2.4
              */
-            do_action( 'dokan_dashboard_content_inside_after' );
-            do_action( 'dokan_before_product_content_area' );
+            do_action( 'dokan_product_content_inside_area_after' );
         ?>
-
     </div>
 
     <?php

@@ -36,7 +36,7 @@ class Dokan_Free_Admin_Settings {
      */
     public function load_admin_settings( $capability, $menu_position ) {
 
-        add_submenu_page( 'dokan', __( 'Pro Features', 'dokan' ), __( 'Pro Features', 'dokan' ), $capability, 'dokan-pro-features', array($this, 'pro_features') );
+        add_submenu_page( 'dokan', __( 'PRO Features', 'dokan' ), __( 'PRO Features', 'dokan' ), $capability, 'dokan-pro-features', array($this, 'pro_features') );
     }
 
     /**
@@ -61,7 +61,7 @@ class Dokan_Free_Admin_Settings {
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-pro-features',
             'parent' => 'dokan',
-            'title'  => __( 'Pro Features', 'dokan' ),
+            'title'  => __( 'PRO Features', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan-pro-features' )
         ) );
     }

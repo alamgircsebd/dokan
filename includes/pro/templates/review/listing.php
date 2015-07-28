@@ -9,7 +9,7 @@
 
 ?>
 <form id="dokan_comments-form" action="" method="post">
-    <table id="dokan-comments-table" class="table">
+    <table id="dokan-comments-table" class="dokan-table dokan-table-striped">
         <thead>
             <tr>
                 <th class="col-check"><input class="dokan-check-all" type="checkbox" ></th>

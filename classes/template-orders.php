@@ -16,6 +16,7 @@ class Dokan_Template_Orders {
      */
     function __construct() {
         add_action( 'template_redirect', array( $this, 'handle_order_export' ) );
+        add_action( 'dokan_order_content_inside_before', array( $this, 'show_seller_enable_message' ) );
         add_action( 'dokan_order_inside_content', array( $this, 'order_listing_status_filter' ), 10 );
         add_action( 'dokan_order_inside_content', array( $this, 'order_main_content' ), 15 );
     }
@@ -35,6 +36,20 @@ class Dokan_Template_Orders {
         return $instance;
     }
 
+    /**
+     * Show Seller Enable Error Message
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function show_seller_enable_message() {
+        $user_id = get_current_user_id();
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            echo dokan_seller_not_enabled_notice();
+        }
+    }
 
     /**
      * Render Order listing status filter template
