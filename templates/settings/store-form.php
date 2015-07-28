@@ -117,7 +117,7 @@
         </div>
 
         <div class="dokan-form-group">
-            <label class="dokan-w3 dokan-control-label" for="setting_phone"><?php _e( 'Email', 'dokan' ); ?></label>
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'Email', 'dokan' ); ?></label>
             <div class="dokan-w5 dokan-text-left">
                 <div class="checkbox">
                     <label>
@@ -151,11 +151,11 @@
         if ( $tnc_enable == 'on' ) :
             ?>
             <div class="dokan-form-group">
-                <label class="dokan-w3 dokan-control-label" for="dokan_store_tnc_enable"><?php _e( 'Terms and Conditions', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label"><?php _e( 'Terms and Conditions', 'dokan' ); ?></label>
                 <div class="dokan-w5 dokan-text-left dokan_tock_check">
                     <div class="checkbox">
                         <label>
-                            <input id="dokan_store_tnc_enable" value="on" <?php echo $enable_tnc == 'on' ? 'checked':'' ; ?> name="dokan_store_tnc_enable" class="dokan-form-control" type="checkbox"><?php _e( 'Show terms and conditions in store page', 'dokan' ); ?>
+                            <input type="checkbox" id="dokan_store_tnc_enable" value="on" <?php echo $enable_tnc == 'on' ? 'checked':'' ; ?> name="dokan_store_tnc_enable" ><?php _e( 'Show terms and conditions in store page', 'dokan' ); ?>
                         </label>
                     </div>
                 </div>

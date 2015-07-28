@@ -1984,6 +1984,9 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   font-weight: normal;
   font-size: 12px;
 }
+.dokan-settings-content .dokan-settings-area .dokan-form-group .checkbox {
+  margin-top: 0px;
+}
 .dokan-single-store {
   margin: 0;
 }
@@ -3142,10 +3145,6 @@ input.tagit-hidden-field {
 }
 .dokan-shipping-calculate-wrapper button.dokan-shipping-calculator {
   margin-top: 33px;
-}
-#dokan_store_tnc_enable {
-  display: inline-block;
-  width: 20px;
 }
 .dokan_tock_check {
   width: auto;
