@@ -64,15 +64,15 @@ $social_fields = dokan_get_social_profile_fields();
             <?php } ?>
         </div> <!-- .profile-info -->
     </div> <!-- .profile-info-box -->
-
-    <?php if ( $store_tabs ) { ?>
-        <div class="dokan-store-tabs">
-            <ul class="dokan-list-inline">
-                <?php foreach( $store_tabs as $key => $tab ) { ?>
-                    <li><a href="<?php echo esc_url( $tab['url'] ); ?>"><?php echo $tab['title']; ?></a></li>
-                <?php } ?>
-                <?php do_action( 'dokan_after_store_tabs', $store_user->ID ); ?>
-            </ul>
-        </div>
-    <?php } ?>
 </div> <!-- .profile-frame -->
+
+<?php if ( $store_tabs ) { ?>
+    <div class="dokan-store-tabs">
+        <ul class="dokan-list-inline">
+            <?php foreach( $store_tabs as $key => $tab ) { ?>
+                <li><a href="<?php echo esc_url( $tab['url'] ); ?>"><?php echo $tab['title']; ?></a></li>
+            <?php } ?>
+            <?php do_action( 'dokan_after_store_tabs', $store_user->ID ); ?>
+        </ul>
+    </div>
+<?php } ?>

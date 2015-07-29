@@ -127,6 +127,7 @@ module.exports = function(grunt) {
                     '!.gitignore',
                     '!.gitmodules',
                     '!npm-debug.log',
+                    '!plugin-deploy.sh',
                     '!assets/less/**',
                     '!tests/**',
                     '!**/Gruntfile.js',

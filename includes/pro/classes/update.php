@@ -208,7 +208,7 @@ class Dokan_Update {
                 $obj->package = $remote_info->latest_url;
             }
 
-            $basefile = plugin_basename( dirname( dirname( __FILE__ ) ) . '/dokan.php' );
+            $basefile = plugin_basename( DOKAN_DIR . '/dokan.php' );
             $transient->response[$basefile] = $obj;
         }
 
@@ -254,7 +254,7 @@ class Dokan_Update {
     function get_current_plugin_info() {
         require_once ABSPATH . '/wp-admin/includes/plugin.php';
 
-        $plugin_data    = get_plugin_data( dirname( dirname( __FILE__ ) ) . '/dokan.php' );
+        $plugin_data    = get_plugin_data( DOKAN_DIR . '/dokan.php' );
         $plugin_name    = $plugin_data['Name'];
         $plugin_version = $plugin_data['Version'];
 
