@@ -1,5 +1,11 @@
 ==================== Plugin Version ====================
 
+v2.4 -> July 29, 2015
+---------------------
+- [fix] plugin updater fix: wrong plugin file path
+- [fix] Store banner min-height issue
+- [fix] added validation on settings/store phone field
+
 v2.4 -> July 28, 2015
 ---------------------
  - [new] Code re-write, re-organized
