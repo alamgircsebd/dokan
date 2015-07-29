@@ -1992,16 +1992,17 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 }
 .dokan-single-store .profile-frame {
   padding: 0px;
-  margin-bottom: 60px;
   position: relative;
   background-size: 100% auto;
   background-color: #eee;
+  min-height: 300px;
 }
 .dokan-single-store .profile-frame .profile-info-box {
   height: 100%;
   background: rgba(0, 0, 0, 0.65);
   color: #fff;
   width: 40%;
+  min-height: 300px;
 }
 .dokan-single-store .profile-frame .profile-info-box a {
   color: #ccc;
@@ -2058,25 +2059,26 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-single-store .profile-frame .profile-info-box .profile-info .seller-rating {
   display: none;
 }
-.dokan-single-store .profile-frame .dokan-store-tabs ul {
+.dokan-single-store .dokan-store-tabs ul {
   background-color: #fff;
   border-width: 0 1px 1px 1px;
   border-color: #ededed #ededed #ededed #ededed;
   border-style: solid;
   margin: 0;
   padding: 0;
+  margin-bottom: 60px;
 }
-.dokan-single-store .profile-frame .dokan-store-tabs ul li {
+.dokan-single-store .dokan-store-tabs ul li {
   display: inline-block;
   border-right: 1px solid #ededed;
 }
-.dokan-single-store .profile-frame .dokan-store-tabs ul li a {
+.dokan-single-store .dokan-store-tabs ul li a {
   text-decoration: none;
   color: #666;
   padding: 10px 15px;
   display: inline-block;
 }
-.dokan-single-store .profile-frame .dokan-store-tabs ul li a:hover {
+.dokan-single-store .dokan-store-tabs ul li a:hover {
   background: #eee;
 }
 .dokan-single-store .store-review-wrap h2.headline {
