@@ -85,6 +85,9 @@ class Dokan_Pro_Loader {
             new Dokan_Announcement();
             new Dokan_Update();
         }
+        
+        Dokan_Pro_Ajax::init();
+        Dokan_Pro_Shipping::init();
 
         if ( is_user_logged_in() ) {
             Dokan_Pro_Dashboard::init();
@@ -96,9 +99,6 @@ class Dokan_Pro_Loader {
             Dokan_Pro_Settings::init();
             Dokan_Pro_Notice::init();
         }
-        
-        Dokan_Pro_Ajax::init();
-        Dokan_Pro_Shipping::init();
     }
 
     /**

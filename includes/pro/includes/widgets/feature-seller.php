@@ -42,7 +42,7 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
             echo $args['before_title'] . $title . $args['after_title'];
         }
 
-        dokan_get_template_part( 'widget/feature-seller', '', array(
+        dokan_get_template_part( 'widgets/feature-seller', '', array(
             'pro' => true,
             'sellers' => $sellers,
         ) );
