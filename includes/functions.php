@@ -1820,14 +1820,19 @@ add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
  * @return string [url]
  */
 function dokan_after_login_redirect( $redirect_to, $user ) {
-
-    if ( isset($_SESSION['dokan_redirect_url']) ){
+    
+    if ( user_can( $user, 'dokandar' ) ) {
+        $seller_dashboard = dokan_get_option( 'dashboard', 'dokan_pages' );
+        
+        if ( $seller_dashboard != -1 ) {
+            $redirect_to = get_permalink( $seller_dashboard );
+        }
+    }
+    elseif ( isset( $_SESSION['dokan_redirect_url'] ) ) {
         $redirect_to = $_SESSION['dokan_redirect_url'];
     }
+
     return $redirect_to;
 }
 
 add_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect' , 1, 2 );
-
-
-
