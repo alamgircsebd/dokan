@@ -207,6 +207,10 @@ class Dokan_Rewrites {
         $author = get_query_var( $this->custom_store_url );
 
         if ( !is_admin() && $query->is_main_query() && !empty( $author ) ) {
+            $seller_info  = get_user_by( 'slug', $author );
+            $store_info   = dokan_get_store_info( $seller_info->data->ID );
+            $post_per_page = isset( $store_info['store_ppp'] ) && !empty( $store_info['store_ppp'] ) ? $store_info['store_ppp'] : 10;
+            set_query_var( 'posts_per_page', $post_per_page );
             $query->set( 'post_type', 'product' );
             $query->set( 'author_name', $author );
             $query->query['term_section'] = isset( $query->query['term_section'] ) ? $query->query['term_section'] : array();

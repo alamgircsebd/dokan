@@ -457,6 +457,7 @@ class Dokan_Template_Settings {
             //update store setttings info
             $dokan_settings = array(
                 'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
+                'store_ppp'    => absint( $_POST['dokan_store_ppp'] ),
                 'address'      => isset( $_POST['dokan_address'] ) ? $_POST['dokan_address'] : $prev_dokan_settings['address'],
                 'location'     => sanitize_text_field( $_POST['location'] ),
                 'find_address' => sanitize_text_field( $_POST['find_address'] ),
