@@ -87,13 +87,6 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
-            'store_seo' => array(
-                'name'    => 'store_seo',
-                'label'   => __( 'Enable Store SEO', 'dokan' ),
-                'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'on'
-            ),
         );
 
         $new_settings_fields['dokan_selling'] = array(
@@ -131,6 +124,24 @@ class Dokan_Pro_Admin_Settings {
                     'pending' => __( 'Pending Review', 'dokan' )
                 )
             ),
+            'store_seo' => array(
+                'name'    => 'store_seo',
+                'label'   => __( 'Enable Store SEO', 'dokan' ),
+                'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'on'
+            ),
+            'review_edit' => array(
+                'name'    => 'review_edit',
+                'label'   => __( 'Review Editing', 'dokan' ),
+                'desc'    => __( 'Seller can edit product reviews', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'off'
+            ),
+        );
+
+        $new_settings_fields['dokan_withdraw'] = array(
+
             'withdraw_order_status' => array(
                 'name'    => 'withdraw_order_status',
                 'label'   => __( 'Order Status for Withdraw', 'dokan' ),
@@ -146,24 +157,11 @@ class Dokan_Pro_Admin_Settings {
                 'default' => '0',
                 'type'    => 'text',
             ),
-            'custom_store_url' => array(
-                'name'    => 'custom_store_url',
-                'label'   => __( 'Seller Store URL', 'dokan' ),
-                'desc'    => sprintf( __( 'Define seller store URL (%s<strong>[this-text]</strong>/[seller-name])', 'dokan' ), site_url( '/' ) ),
-                'default' => 'store',
-                'type'    => 'text',
-            ),
-            'review_edit' => array(
-                'name'    => 'review_edit',
-                'label'   => __( 'Review Editing', 'dokan' ),
-                'desc'    => __( 'Seller can edit product reviews', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'off'
-            ),
         );
 
         $settings_fields['dokan_general'] = array_merge( $settings_fields['dokan_general'], $new_settings_fields['dokan_general'] );
         $settings_fields['dokan_selling'] = array_merge( $settings_fields['dokan_selling'], $new_settings_fields['dokan_selling'] );
+        $settings_fields['dokan_withdraw'] = array_merge( $settings_fields['dokan_withdraw'], $new_settings_fields['dokan_withdraw'] );
 
         return $settings_fields;
     }

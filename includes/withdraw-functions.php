@@ -44,7 +44,7 @@ function dokan_withdraw_get_methods() {
  * @return array
  */
 function dokan_withdraw_get_active_methods() {
-    $methods = dokan_get_option( 'withdraw_methods', 'dokan_selling', array( 'paypal' ) );
+    $methods = dokan_get_option( 'withdraw_methods', 'dokan_withdraw', array( 'paypal' ) );
 
     return $methods;
 }
@@ -211,7 +211,7 @@ function dokan_get_withdraw_count() {
  *
  */
 function dokan_withdraw_get_active_order_status() {
-    $order_status = dokan_get_option( 'withdraw_order_status', 'dokan_selling', array( 'wc-completed' ) );
+    $order_status = dokan_get_option( 'withdraw_order_status', 'dokan_withdraw', array( 'wc-completed' ) );
 
     return apply_filters( 'dokan_withdraw_active_status', $order_status );
 }

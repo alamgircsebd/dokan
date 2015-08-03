@@ -14,7 +14,7 @@ class Dokan_Rewrites {
      * Hook into the functions
      */
     public function __construct() {
-        $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+        $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
 
         add_action( 'init', array( $this, 'register_rule' ) );
 

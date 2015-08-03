@@ -61,7 +61,7 @@ function dokan_is_product_author( $product_id = 0 ) {
  * @return boolean
  */
 function dokan_is_store_page() {
-    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
     if ( get_query_var( $custom_store_url ) ) {
         return true;
     }
@@ -870,7 +870,7 @@ function dokan_is_seller_trusted( $user_id ) {
  */
 function dokan_get_store_url( $user_id ) {
     $userdata = get_userdata( $user_id );
-    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
     return sprintf( '%s/%s/', home_url( '/' . $custom_store_url ), $userdata->user_nicename );
 }
 
@@ -967,7 +967,7 @@ function dokan_get_store_tabs( $store_id ) {
     );
 
     $store_info = dokan_get_store_info( $store_id );
-    $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_selling', 'off' );
+    $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_general', 'off' );
 
     if ( isset($store_info['enable_tnc']) && $store_info['enable_tnc'] == 'on' && $tnc_enable == 'on' ) {
         $tabs['terms_and_conditions'] = array(

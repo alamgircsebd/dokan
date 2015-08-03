@@ -347,7 +347,7 @@ final class WeDevs_Dokan {
         }
 
         // store and my account page
-        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
         if ( get_query_var( $custom_store_url ) || get_query_var( 'store_review' ) || is_account_page() ) {
 
             if ( DOKAN_LOAD_STYLE ) {

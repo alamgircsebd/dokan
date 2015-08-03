@@ -151,6 +151,10 @@ class Dokan_Admin_Settings {
                 'title' => __( 'Selling Options', 'dokan' )
             ),
             array(
+                'id'    => 'dokan_withdraw',
+                'title' => __( 'Withdraw Options', 'dokan' )
+            ),
+            array(
                 'id'    => 'dokan_pages',
                 'title' => __( 'Page Settings', 'dokan' )
             )
@@ -178,8 +182,13 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
-            ),
-            'dokan_selling' => array(
+                'custom_store_url' => array(
+                    'name'    => 'custom_store_url',
+                    'label'   => __( 'Seller Store URL', 'dokan' ),
+                    'desc'    => sprintf( __( 'Define seller store URL (%s<strong>[this-text]</strong>/[seller-name])', 'dokan' ), site_url( '/' ) ),
+                    'default' => 'store',
+                    'type'    => 'text',
+                ),
                 'seller_enable_terms_and_conditions' => array(
                     'name'    => 'seller_enable_terms_and_conditions',
                     'label'   => __( 'Terms and Conditions', 'dokan' ),
@@ -187,6 +196,8 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'off'
                  ),
+            ),
+            'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
                     'label'   => __( 'New Seller Enable Selling', 'dokan' ),
@@ -208,6 +219,8 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
+            ),
+            'dokan_withdraw' => array(
                 'withdraw_methods' => array(
                     'name'    => 'withdraw_methods',
                     'label'   => __( 'Withdraw Methods', 'dokan' ),

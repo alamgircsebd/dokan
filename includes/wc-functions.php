@@ -2407,7 +2407,7 @@ function dokan_get_seller_balance( $seller_id, $formatted = true ) {
     $status        = dokan_withdraw_get_active_order_status_in_comma();
     $cache_key     = 'dokan_seller_balance_' . $seller_id;
     $earning       = wp_cache_get( $cache_key, 'dokan' );
-    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_selling', 0 );
+    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_withdraw', 0 );
     $date          = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$threshold_day.' days' ) );
 
     if ( false === $earning ) {
