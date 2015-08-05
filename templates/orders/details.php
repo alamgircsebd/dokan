@@ -46,6 +46,7 @@ $order    = new WC_Order( $order_id );
                                                 $item_meta  = $order->get_item_meta( $item_id );
 
                                                 dokan_get_template_part( 'orders/order-item-html', '', array(
+                                                    'order' => $order,
                                                     'item_id' => $item_id,
                                                     '_product' => $_product,
                                                     'item' => $item

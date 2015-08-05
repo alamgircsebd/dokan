@@ -1924,14 +1924,9 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
             ) );
 
             if ( $item_id ) {
-                wc_add_order_item_meta( $item_id, '_qty', $item['qty'] );
-                wc_add_order_item_meta( $item_id, '_tax_class', $item['tax_class'] );
-                wc_add_order_item_meta( $item_id, '_product_id', $item['product_id'] );
-                wc_add_order_item_meta( $item_id, '_variation_id', $item['variation_id'] );
-                wc_add_order_item_meta( $item_id, '_line_subtotal', $item['line_subtotal'] );
-                wc_add_order_item_meta( $item_id, '_line_total', $item['line_total'] );
-                wc_add_order_item_meta( $item_id, '_line_tax', $item['line_tax'] );
-                wc_add_order_item_meta( $item_id, '_line_subtotal_tax', $item['line_subtotal_tax'] );
+                foreach ($item['item_meta'] as $meta_key => $meta_value) {
+                    wc_add_order_item_meta( $item_id, $meta_key, $meta_value[0] );
+                }
             }
         } // foreach
 
