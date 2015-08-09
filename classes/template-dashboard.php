@@ -200,7 +200,7 @@ class Dokan_Template_Dashboard {
      *
      * @return integer
      */
-    public function get_seller_balance($value='') {
+    public function get_seller_balance() {
         return dokan_get_seller_balance( $this->user_id );
     }
 }
