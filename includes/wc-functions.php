@@ -520,16 +520,14 @@ function dokan_process_product_meta( $post_id ) {
 
     if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
         update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
-        update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
-        update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
-        update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
     } else {
         update_post_meta( $post_id, '_overwrite_shipping', 'no' );
-        update_post_meta( $post_id, '_additional_price', '' );
-        update_post_meta( $post_id, '_additional_qty', '' );
-        update_post_meta( $post_id, '_dps_processing_time', '' );
     }
-
+    
+    update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
+    update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
+    update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
+    
     // Save shipping class
     $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
     wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
@@ -937,16 +935,14 @@ function dokan_new_process_product_meta( $post_id ) {
 
         if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
             update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
-            update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
-            update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
-            update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
         } else {
             update_post_meta( $post_id, '_overwrite_shipping', 'no' );
-            update_post_meta( $post_id, '_additional_price', '' );
-            update_post_meta( $post_id, '_additional_qty', '' );
-            update_post_meta( $post_id, '_dps_processing_time', '' );
         }
 
+        update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
+        update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
+        update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
+        
         // Save shipping class
         if ( isset( $_POST['product_shipping_class'] ) ) {
             $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
