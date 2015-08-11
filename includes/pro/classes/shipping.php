@@ -313,17 +313,9 @@ class Dokan_Pro_Shipping {
         $dps_processing    = get_user_meta( $post->post_author, '_dps_pt', true );
         $from              = get_user_meta( $post->post_author, '_dps_form_location', true );
         $dps_country_rates = get_user_meta( $post->post_author, '_dps_country_rates', true );
-        // $dps_state_rates   = get_user_meta( $post->post_author, '_dps_state_rates', true );
         $shipping_policy   = get_user_meta( $post->post_author, '_dps_ship_policy', true );
         $refund_policy     = get_user_meta( $post->post_author, '_dps_refund_policy', true );
 
-        // Store wide shipping info
-        // $store_shipping_type_price    = (float)get_user_meta( $post->post_author, '_dps_shipping_type_price', true );
-        // $additional_product_cost      = (float)get_post_meta( $post->ID, '_additional_price', true );
-        // $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
-        // $additional_qty_product_price = get_post_meta( $post->ID, '_additional_qty', true );
-        // $dps_additional_qty           = get_user_meta( $post->post_author, '_dps_additional_qty', true );
-        // $additional_qty_price         = ( $additional_qty_product_price ) ? $additional_qty_product_price : $dps_additional_qty;
         $product_processing_time      = get_post_meta( $post->ID, '_dps_processing_time', true );
         $processing_time              = $dps_processing;
 
@@ -333,7 +325,6 @@ class Dokan_Pro_Shipping {
 
         $country_obj = new WC_Countries();
         $countries   = $country_obj->countries;
-        // $states      = $country_obj->states;
         ?>
 
         <?php if ( $processing_time ) { ?>
