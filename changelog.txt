@@ -1,6 +1,22 @@
 ==================== Plugin Version ====================
 
-v2.4 -> July 29, 2015
+v2.4.2 -> August 11, 2015
+---------------------
+- [tweak] New hook on store header: dokan_store_before_social 
+- [tweak] Rearrange dokan admin settings fields 
+- [tweak] Add field on seller store settings to manage store product per page 
+- [tweak] Sellers redirected to dashboard after login 
+- [fix] Feature seller widget display template path
+- [fix] Best seller widget display seller name changed to store name
+- [fix] Fix problem with showing variation data on order details
+- [fix] Update "dokan_create_seller_order" function to save variation order meta on sub-order
+- [fix] Update "dokan_post_input_box" function to add option for making text field and number field required 
+- [fix] Fix balance separator problem on withdraw
+- [fix] Fix total sales balance display on seller dashboard page
+- [fix] Keep value saved of oveerride shipping fields meta even when the option uncheckd
+- [fix] English language phrases correction on several place
+
+v2.4.1 -> July 29, 2015
 ---------------------
 - [fix] plugin updater fix: wrong plugin file path
 - [fix] Store banner min-height issue
