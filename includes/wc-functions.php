@@ -2612,3 +2612,11 @@ add_action( 'phpmailer_init', 'dokan_exclude_child_customer_receipt' );
 class DokanFakeMailer {
     public function Send() {}
 }
+
+add_filter( 'woocommerce_dashboard_status_widget_sales_query', 'dokan_filter_woocommerce_dashboard_status_widget_sales_query' );
+
+function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) {
+    global $wpdb;
+    $query['where']  .= " AND posts.ID NOT IN ( SELECT post_parent FROM {$wpdb->posts} WHERE post_type IN ( '" . implode( "','", array_merge( wc_get_order_types( 'sales-reports' ), array( 'shop_order_refund' ) ) ) . "' ) )";
+    return $query;
+}
