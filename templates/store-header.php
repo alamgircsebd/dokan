@@ -51,6 +51,8 @@ $social_fields = dokan_get_social_profile_fields();
                 </li>
             </ul>
 
+            <?php do_action( 'dokan_store_before_social', $store_user, $store_info ); ?>
+
             <?php if ( $social_fields ) { ?>
                 <ul class="store-social">
                     <?php foreach( $social_fields as $key => $field ) { ?>
