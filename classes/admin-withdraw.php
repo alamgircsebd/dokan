@@ -323,7 +323,7 @@ class Dokan_Admin_Withdraw extends Dokan_Withdraw {
             ?>
                 <tr>
                     <td colspan="8">
-                        <?php _e( 'No result found', 'dokan' ) ?>
+                        <?php _e( 'No results found', 'dokan' ) ?>
                     </td>
                 </tr>
                 <?php

@@ -1301,7 +1301,7 @@ function dokan_get_best_sellers( $limit = 5 ) {
 }
 
 /**
- * Get feature sellers list
+ * Get featured sellers list
  *
  * @param  integer $limit
  * @return array

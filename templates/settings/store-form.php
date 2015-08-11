@@ -65,7 +65,7 @@
                 <i class="fa fa-cloud-upload"></i>
 
                 <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
-                <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixel. )', 'dokan' ); ?></p>
+                <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixels. )', 'dokan' ); ?></p>
             </div>
         </div> <!-- .dokan-banner -->
 

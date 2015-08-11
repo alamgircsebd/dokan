@@ -15,8 +15,8 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-feature-seller-widget', 'description' => 'Dokan feature seller widget' );
-        $this->WP_Widget( 'dokan-feature-seller-widget', 'Dokan: Feature Sellers', $widget_ops );
+        $widget_ops = array( 'classname' => 'dokan-feature-seller-widget', 'description' => 'Dokan featured seller widget' );
+        $this->WP_Widget( 'dokan-feature-seller-widget', 'Dokan: Featured Sellers', $widget_ops );
     }
 
     /**
@@ -75,7 +75,7 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
      */
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title' => __( 'Feature Seller', 'dokan' ),
+            'title' => __( 'Featured Seller', 'dokan' ),
             'count' => __( '3', 'dokan' )
         ) );
 
