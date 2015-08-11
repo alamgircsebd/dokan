@@ -15,6 +15,7 @@ v2.4.2 -> August 11, 2015
 - [fix] Fix total sales balance display on seller dashboard page
 - [fix] Keep value saved of oveerride shipping fields meta even when the option uncheckd
 - [fix] English language phrases correction on several place
+- [fix] Fix calculation of sub-orders in WooCommerce dashboard status widget sales query
 
 v2.4.1 -> July 29, 2015
 ---------------------
