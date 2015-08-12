@@ -1,6 +1,6 @@
 <?php
 /**
- * Dokan Feature Seller Widget Content Template
+ * Dokan Featured Seller Widget Content Template
  *
  * @since 2.4
  *

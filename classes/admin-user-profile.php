@@ -95,7 +95,7 @@ class Dokan_Admin_User_Profile {
 
                             <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
                                 <a href="#" class="dokan-banner-drag button button-primary"><?php _e( 'Upload banner', 'dokan' ); ?></a>
-                                <p class="description"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixel. )', 'dokan' ); ?></p>
+                                <p class="description"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixels. )', 'dokan' ); ?></p>
                             </div>
                         </div> <!-- .dokan-banner -->
                     </td>
@@ -209,7 +209,7 @@ class Dokan_Admin_User_Profile {
                             <?php _e( 'Publish product directly', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'Instead going pending, products will be published directly', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Instead of being pending, products will be published directly', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
@@ -218,20 +218,20 @@ class Dokan_Admin_User_Profile {
                     <td>
                         <input type="text" class="small-text" name="dokan_seller_percentage" value="<?php echo esc_attr( $seller_percentage ); ?>">
 
-                        <p class="description"><?php _e( 'How much amount (%) will get from each order', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'How much amount (%) seller will get from each order', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Feature Seller', 'wedevs' ); ?></th>
+                    <th><?php _e( 'Featured Seller', 'wedevs' ); ?></th>
                     <td>
                         <label for="dokan_feature">
                             <input type="hidden" name="dokan_feature" value="no">
                             <input name="dokan_feature" type="checkbox" id="dokan_feature" value="yes" <?php checked( $feature_seller, 'yes' ); ?> />
-                            <?php _e( 'Make feature seller', 'wedevs' ); ?>
+                            <?php _e( 'Make a featured seller', 'wedevs' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'This seller will be marked as a feature seller.', 'wedevs' ) ?></p>
+                        <p class="description"><?php _e( 'This seller will be marked as a featured seller.', 'wedevs' ) ?></p>
                     </td>
                 </tr>
 

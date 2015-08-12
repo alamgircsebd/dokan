@@ -11,7 +11,6 @@ class Dokan_Pro_Reviews {
     private $spam;
     private $trash;
     private $post_type;
-    public $custom_store_url = '';
 
     /**
      * Load autometically when class inistantiate
@@ -22,7 +21,6 @@ class Dokan_Pro_Reviews {
      */
     public function __construct() {
         $this->quick_edit = ( dokan_get_option( 'review_edit', 'dokan_selling', 'off' ) == 'on' ) ? true : false;
-        $this->custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
 
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_review_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_review_template' ) );
@@ -41,7 +39,6 @@ class Dokan_Pro_Reviews {
 
         // Store page review
         add_filter( 'dokan_store_tabs', array( $this, 'add_review_tab_in_store' ), 10, 2 );
-        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'register_review_rule' ) );
         add_filter( 'template_include', array( $this, 'store_review_template' ), 99 );
 
     }
@@ -672,11 +669,6 @@ class Dokan_Pro_Reviews {
         );
 
         return $tabs;
-    }
-
-    public function register_review_rule() {
-        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&store_review=true', 'top' );
-        add_rewrite_rule( $this->custom_store_url.'/([^/]+)/reviews/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&store_review=true', 'top' );
     }
 
     /**

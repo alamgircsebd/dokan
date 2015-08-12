@@ -233,15 +233,22 @@ class Dokan_Pro_Ajax {
     function get_calculated_shipping_cost() {
         global $post;
 
+        $_overwrite_shipping      = get_post_meta( $_POST['product_id'], '_overwrite_shipping', true );
+
         $dps_country_rates = get_user_meta( $_POST['author_id'], '_dps_country_rates', true );
         $dps_state_rates   = get_user_meta( $_POST['author_id'], '_dps_state_rates', true );
 
         $store_shipping_type_price    = (float)get_user_meta( $_POST['author_id'], '_dps_shipping_type_price', true );
         $additional_product_cost      = (float)get_post_meta( $_POST['product_id'], '_additional_price', true );
-        $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
+        $base_shipping_type_price     = (float)$store_shipping_type_price;
         $additional_qty_product_price = get_post_meta( $_POST['product_id'], '_additional_qty', true );
         $dps_additional_qty           = get_user_meta( $_POST['author_id'], '_dps_additional_qty', true );
-        $additional_qty_price         = ( $additional_qty_product_price ) ? $additional_qty_product_price : $dps_additional_qty;
+        $additional_qty_price         = $dps_additional_qty;
+
+        if ( $_overwrite_shipping == 'yes' ) {
+            $base_shipping_type_price     = ( (float)$store_shipping_type_price + ( ($additional_product_cost) ? (float)$additional_product_cost : 0 ) );
+            $additional_qty_price         = ( $additional_qty_product_price ) ? $additional_qty_product_price : $dps_additional_qty;
+        }
 
         if ( isset( $_POST['country_id'] ) || !empty( $_POST['country_id'] ) ) {
             $country = $_POST['country_id'];

@@ -61,7 +61,7 @@ function dokan_is_product_author( $product_id = 0 ) {
  * @return boolean
  */
 function dokan_is_store_page() {
-    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
     if ( get_query_var( $custom_store_url ) ) {
         return true;
     }
@@ -260,12 +260,10 @@ function dokan_author_total_sales( $seller_id ) {
 
     if ( $earnings === false ) {
 
-        $sql = "SELECT SUM(oim.meta_value) as earnings
-                FROM {$wpdb->prefix}woocommerce_order_items AS oi
-                LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta AS oim ON oim.order_item_id = oi.order_item_id
-                LEFT JOIN {$wpdb->prefix}dokan_orders do ON oi.order_id = do.order_id
-                WHERE do.seller_id = %d AND oim.meta_key = '_line_total' AND do.order_status IN ('wc-completed', 'wc-processing', 'wc-on-hold')";
-
+        $sql = "SELECT SUM(order_total) as earnings
+            FROM {$wpdb->prefix}dokan_orders as do LEFT JOIN {$wpdb->prefix}posts as p ON do.order_id = p.ID
+            WHERE seller_id = %d AND order_status IN('wc-completed', 'wc-processing', 'wc-on-hold')";
+            
         $count = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
         $earnings = $count->earnings;
 
@@ -425,11 +423,12 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
     $name        = isset( $attr['name'] ) ? esc_attr( $attr['name'] ) : $meta_key;
     $value       = isset( $attr['value'] ) ? $attr['value'] : get_post_meta( $post_id, $meta_key, true );
     $size        = isset( $attr['size'] ) ? $attr['size'] : 30;
+    $required    = isset( $attr['required'] ) ? 'required="required"' : '';
 
     switch ($type) {
         case 'text':
             ?>
-            <input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>">
+            <input <?php echo $required; ?> type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>">
             <?php
             break;
 
@@ -470,7 +469,7 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
             $min = isset( $attr['min'] ) ? $attr['min'] : 0;
             $step = isset( $attr['step'] ) ? $attr['step'] : 'any';
             ?>
-            <input type="number" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>" min="<?php echo esc_attr( $min ); ?>" step="<?php echo esc_attr( $step ); ?>" size="<?php echo esc_attr( $size ); ?>">
+            <input <?php echo $required; ?> type="number" name="<?php echo $name; ?>" id="<?php echo $name; ?>" value="<?php echo esc_attr( $value ); ?>" class="<?php echo $class; ?>" placeholder="<?php echo $placeholder; ?>" min="<?php echo esc_attr( $min ); ?>" step="<?php echo esc_attr( $step ); ?>" size="<?php echo esc_attr( $size ); ?>">
             <?php
             break;
 
@@ -869,7 +868,7 @@ function dokan_is_seller_trusted( $user_id ) {
  */
 function dokan_get_store_url( $user_id ) {
     $userdata = get_userdata( $user_id );
-    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+    $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
     return sprintf( '%s/%s/', home_url( '/' . $custom_store_url ), $userdata->user_nicename );
 }
 
@@ -966,7 +965,7 @@ function dokan_get_store_tabs( $store_id ) {
     );
 
     $store_info = dokan_get_store_info( $store_id );
-    $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_selling', 'off' );
+    $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_general', 'off' );
 
     if ( isset($store_info['enable_tnc']) && $store_info['enable_tnc'] == 'on' && $tnc_enable == 'on' ) {
         $tabs['terms_and_conditions'] = array(
@@ -1302,7 +1301,7 @@ function dokan_get_best_sellers( $limit = 5 ) {
 }
 
 /**
- * Get feature sellers list
+ * Get featured sellers list
  *
  * @param  integer $limit
  * @return array
@@ -1819,14 +1818,19 @@ add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
  * @return string [url]
  */
 function dokan_after_login_redirect( $redirect_to, $user ) {
-
-    if ( isset($_SESSION['dokan_redirect_url']) ){
+    
+    if ( user_can( $user, 'dokandar' ) ) {
+        $seller_dashboard = dokan_get_option( 'dashboard', 'dokan_pages' );
+        
+        if ( $seller_dashboard != -1 ) {
+            $redirect_to = get_permalink( $seller_dashboard );
+        }
+    }
+    elseif ( isset( $_SESSION['dokan_redirect_url'] ) ) {
         $redirect_to = $_SESSION['dokan_redirect_url'];
     }
+
     return $redirect_to;
 }
 
 add_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect' , 1, 2 );
-
-
-

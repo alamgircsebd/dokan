@@ -61,7 +61,7 @@ class Dokan_Pro_Store_Seo {
             return;
         }
 
-        if ( dokan_get_option( 'store_seo', 'dokan_general' ) === 'off' ) {
+        if ( dokan_get_option( 'store_seo', 'dokan_selling' ) === 'off' ) {
             return;
         }
 

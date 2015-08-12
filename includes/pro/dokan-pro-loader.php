@@ -85,9 +85,11 @@ class Dokan_Pro_Loader {
             new Dokan_Announcement();
             new Dokan_Update();
         }
+        
+        Dokan_Pro_Ajax::init();
+        Dokan_Pro_Shipping::init();
 
         if ( is_user_logged_in() ) {
-            Dokan_Pro_Ajax::init();
             Dokan_Pro_Dashboard::init();
             Dokan_Pro_Products::init();
             Dokan_Pro_Coupons::init();
@@ -95,10 +97,8 @@ class Dokan_Pro_Loader {
             Dokan_Pro_Reports::init();
             Dokan_Pro_Withdraws::init();
             Dokan_Pro_Settings::init();
-            Dokan_Pro_Shipping::init();
             Dokan_Pro_Notice::init();
         }
-
     }
 
     /**

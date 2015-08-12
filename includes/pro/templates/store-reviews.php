@@ -75,7 +75,7 @@ get_header( 'shop' );
                 <ol class="commentlist">
                     <?php
                     if ( count( $comments ) == 0 ) {
-                        echo '<span colspan="5">' . __( 'No Result Found', 'dokan' ) . '</span>';
+                        echo '<span colspan="5">' . __( 'No Results Found', 'dokan' ) . '</span>';
                     } else {
 
                         foreach ($comments as $single_comment) {

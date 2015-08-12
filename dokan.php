@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.4.1
+Version: 2.4.2
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.4.1' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4.2' );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -260,7 +260,7 @@ final class WeDevs_Dokan {
                     'notAvailable' => __( 'Not Available', 'dokan' )
                 ),
                 'delete_confirm' => __('Are you sure?', 'dokan' ),
-                'wrong_message' => __('Something wrong, Please try again.', 'dokan' ),
+                'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
             );
             wp_localize_script( 'jquery', 'dokan', $localize_script );
         }
@@ -285,9 +285,9 @@ final class WeDevs_Dokan {
                 'notAvailable' => __( 'Not Available', 'dokan' )
             ),
             'delete_confirm' => __('Are you sure?', 'dokan' ),
-            'wrong_message' => __('Something wrong, Please try again.', 'dokan' ),
-            'duplicates_attribute_messg' => __( 'Sorry this attribute option already exist, Try another one.', 'dokan' ),
-            'variation_unset_warning' => __( 'Warning! This product will not have any variation by unchecked this option.', 'dokan' ),
+            'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
+            'duplicates_attribute_messg' => __( 'Sorry this attribute option already exists, Try another one.', 'dokan' ),
+            'variation_unset_warning' => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
         );
 
         $form_validate_messages = array(
@@ -347,7 +347,7 @@ final class WeDevs_Dokan {
         }
 
         // store and my account page
-        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_selling', 'store' );
+        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
         if ( get_query_var( $custom_store_url ) || get_query_var( 'store_review' ) || is_account_page() ) {
 
             if ( DOKAN_LOAD_STYLE ) {

@@ -13,6 +13,7 @@
     $gravatar   = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
     $banner     = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
     $storename  = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';
+    $store_ppp  = isset( $profile_info['store_ppp'] ) ? esc_attr( $profile_info['store_ppp'] ) : '';
     $phone      = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
     $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
 
@@ -64,7 +65,7 @@
                 <i class="fa fa-cloud-upload"></i>
 
                 <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
-                <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixel. )', 'dokan' ); ?></p>
+                <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixels. )', 'dokan' ); ?></p>
             </div>
         </div> <!-- .dokan-banner -->
 
@@ -91,6 +92,14 @@
 
             <div class="dokan-w5 dokan-text-left">
                 <input id="dokan_store_name" required value="<?php echo $storename; ?>" name="dokan_store_name" placeholder="<?php _e( 'store name', 'dokan'); ?>" class="dokan-form-control" type="text">
+            </div>
+        </div>
+
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label" for="dokan_store_ppp"><?php _e( 'Store Product Per Page', 'dokan' ); ?></label>
+
+            <div class="dokan-w5 dokan-text-left">
+                <input id="dokan_store_ppp" required value="<?php echo $store_ppp; ?>" name="dokan_store_ppp" placeholder="10" class="dokan-form-control" type="number">
             </div>
         </div>
          <!--address-->

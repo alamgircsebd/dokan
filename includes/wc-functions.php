@@ -520,16 +520,14 @@ function dokan_process_product_meta( $post_id ) {
 
     if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
         update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
-        update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
-        update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
-        update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
     } else {
         update_post_meta( $post_id, '_overwrite_shipping', 'no' );
-        update_post_meta( $post_id, '_additional_price', '' );
-        update_post_meta( $post_id, '_additional_qty', '' );
-        update_post_meta( $post_id, '_dps_processing_time', '' );
     }
-
+    
+    update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
+    update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
+    update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
+    
     // Save shipping class
     $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
     wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
@@ -937,16 +935,14 @@ function dokan_new_process_product_meta( $post_id ) {
 
         if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
             update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
-            update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
-            update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
-            update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
         } else {
             update_post_meta( $post_id, '_overwrite_shipping', 'no' );
-            update_post_meta( $post_id, '_additional_price', '' );
-            update_post_meta( $post_id, '_additional_qty', '' );
-            update_post_meta( $post_id, '_dps_processing_time', '' );
         }
 
+        update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
+        update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
+        update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
+        
         // Save shipping class
         if ( isset( $_POST['product_shipping_class'] ) ) {
             $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
@@ -1924,14 +1920,9 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
             ) );
 
             if ( $item_id ) {
-                wc_add_order_item_meta( $item_id, '_qty', $item['qty'] );
-                wc_add_order_item_meta( $item_id, '_tax_class', $item['tax_class'] );
-                wc_add_order_item_meta( $item_id, '_product_id', $item['product_id'] );
-                wc_add_order_item_meta( $item_id, '_variation_id', $item['variation_id'] );
-                wc_add_order_item_meta( $item_id, '_line_subtotal', $item['line_subtotal'] );
-                wc_add_order_item_meta( $item_id, '_line_total', $item['line_total'] );
-                wc_add_order_item_meta( $item_id, '_line_tax', $item['line_tax'] );
-                wc_add_order_item_meta( $item_id, '_line_subtotal_tax', $item['line_subtotal_tax'] );
+                foreach ($item['item_meta'] as $meta_key => $meta_value) {
+                    wc_add_order_item_meta( $item_id, $meta_key, $meta_value[0] );
+                }
             }
         } // foreach
 
@@ -2407,7 +2398,7 @@ function dokan_get_seller_balance( $seller_id, $formatted = true ) {
     $status        = dokan_withdraw_get_active_order_status_in_comma();
     $cache_key     = 'dokan_seller_balance_' . $seller_id;
     $earning       = wp_cache_get( $cache_key, 'dokan' );
-    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_selling', 0 );
+    $threshold_day = dokan_get_option( 'withdraw_date_limit', 'dokan_withdraw', 0 );
     $date          = date( 'Y-m-d', strtotime( date('Y-m-d') . ' -'.$threshold_day.' days' ) );
 
     if ( false === $earning ) {
@@ -2426,7 +2417,7 @@ function dokan_get_seller_balance( $seller_id, $formatted = true ) {
         return wc_price( $earning );
     }
 
-    return number_format_i18n( $earning, 2 );
+    return $earning;
 }
 
 /**
@@ -2620,4 +2611,12 @@ add_action( 'phpmailer_init', 'dokan_exclude_child_customer_receipt' );
  */
 class DokanFakeMailer {
     public function Send() {}
+}
+
+add_filter( 'woocommerce_dashboard_status_widget_sales_query', 'dokan_filter_woocommerce_dashboard_status_widget_sales_query' );
+
+function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) {
+    global $wpdb;
+    $query['where']  .= " AND posts.ID NOT IN ( SELECT post_parent FROM {$wpdb->posts} WHERE post_type IN ( '" . implode( "','", array_merge( wc_get_order_types( 'sales-reports' ), array( 'shop_order_refund' ) ) ) . "' ) )";
+    return $query;
 }

@@ -83,7 +83,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             'pos'   => 90
         );
 
-        if ( dokan_get_option( 'store_seo', 'dokan_general', 'on' ) === 'on' ) {
+        if ( dokan_get_option( 'store_seo', 'dokan_selling', 'on' ) === 'on' ) {
             $sub_settins['seo'] = array(
                 'title' => __( 'Store SEO', 'dokan' ),
                 'icon'  => '<i class="fa fa-globe"></i>',
