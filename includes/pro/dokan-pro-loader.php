@@ -85,7 +85,7 @@ class Dokan_Pro_Loader {
             new Dokan_Announcement();
             new Dokan_Update();
         }
-        
+
         Dokan_Pro_Ajax::init();
         Dokan_Pro_Shipping::init();
 
@@ -188,7 +188,7 @@ class Dokan_Pro_Loader {
      */
     function account_migration_template( $file ) {
 
-        if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) ) {
+        if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) && basename( $file ) == 'my-account.php' ) {
             $file = dokan_locate_template( 'global/update-account.php', '', '', true );
         }
 
