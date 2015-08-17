@@ -99,6 +99,8 @@ class Dokan_Pro_Loader {
             Dokan_Pro_Settings::init();
             Dokan_Pro_Notice::init();
         }
+
+        Dokan_Pro_Store::init();
     }
 
     /**

@@ -37,10 +37,6 @@ class Dokan_Pro_Reviews {
         add_action( 'wp_ajax_dokan_comment_status', array( $this, 'ajax_comment_status' ) );
         add_action( 'wp_ajax_dokan_update_comment', array( $this, 'ajax_update_comment' ) );
 
-        // Store page review
-        add_filter( 'dokan_store_tabs', array( $this, 'add_review_tab_in_store' ), 10, 2 );
-        add_filter( 'template_include', array( $this, 'store_review_template' ), 99 );
-
     }
 
     /**
@@ -661,35 +657,5 @@ class Dokan_Pro_Reviews {
             $wpdb->posts.post_type='$post_type'"
         );
     }
-
-    public function add_review_tab_in_store( $tabs, $store_id ) {
-        $tabs['reviews'] = array(
-            'title' => __( 'Reviews', 'dokan' ),
-            'url'   => dokan_get_review_url( $store_id )
-        );
-
-        return $tabs;
-    }
-
-    /**
-     * Returns the store review template
-     *
-     * @param string  $template
-     *
-     * @return string
-     */
-    public function store_review_template( $template ) {
-
-        if ( ! function_exists( 'WC' ) ) {
-            return $template;
-        }
-
-        if ( get_query_var( 'store_review' ) ) {
-            return dokan_locate_template( 'store-reviews.php', '', '', true );
-        }
-
-        return $template;
-    }
-
 
 }
