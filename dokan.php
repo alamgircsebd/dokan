@@ -173,6 +173,35 @@ final class WeDevs_Dokan {
 
         $installer = new Dokan_Installer();
         $installer->do_install();
+        set_transient( '_dokan_welcome_page_redirect', true, 30 );
+    }
+    
+    function welcome_screen_do_activation_redirect() {
+        // Bail if no activation redirect
+        if ( !get_transient( '_dokan_welcome_page_redirect' ) ) {
+            return;
+        }
+
+        // Delete the redirect transient
+        delete_transient( '_dokan_welcome_page_redirect' );
+        
+        // Redirect to welcome page
+        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-resync-screen' ), admin_url( 'index.php' ) ) );
+    }
+    
+    
+    function welcome_screen_pages() {
+        add_dashboard_page(
+        'Welcome To Dokan', 'Welcome To Dokan', 'read', 'dokan-resync-screen', array( $this,'welcome_screen_content')
+        );
+    }
+
+    function welcome_screen_content() {
+        include_once DOKAN_INC_DIR . '/admin/welcome.php';
+    }
+    
+    function welcome_screen_remove_menus() {
+        remove_submenu_page( 'index.php', 'dokan-resync-screen' );
     }
 
     /**
@@ -195,11 +224,14 @@ final class WeDevs_Dokan {
 
     function init_actions() {
 
+        add_action( 'admin_init', array( $this, 'welcome_screen_do_activation_redirect' ) );
+        add_action( 'admin_menu', array( $this, 'welcome_screen_pages' ) );
+        add_action( 'admin_head', array( $this, 'welcome_screen_remove_menus' ) );
         // Localize our plugin
-        add_action( 'admin_init', array( $this, 'load_table_prifix' ) );
+        add_action( 'admin_init', array( $this, 'load_table_prifix' ) );        
 
         add_action( 'init', array( $this, 'localization_setup' ) );
-        add_action( 'init', array( $this, 'register_scripts' ) );
+        add_action( 'init', array( $this, 'register_scripts' ) );        
 
         add_action( 'template_redirect', array( $this, 'redirect_if_not_logged_seller' ), 11 );
 
