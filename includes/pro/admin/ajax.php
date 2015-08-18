@@ -92,7 +92,7 @@ class Dokan_Pro_Admin_Ajax {
             wp_send_json_success( array(
                 'offset'  => 0,
                 'done'    => $done,
-                'message' => sprintf( __( '%s order sync completed', 'dokan' ), $done )
+                'message' => sprintf( __( '%s orders sync completed', 'dokan' ), $done )
             ) );
         }
     }
