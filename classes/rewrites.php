@@ -84,7 +84,7 @@ class Dokan_Rewrites {
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/toc?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&toc=true', 'top' );
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/toc/page/?([0-9]{1,})/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]&paged=$matches[2]&toc=true', 'top' );
 
-        do_action( 'dokan_rewrite_rules_loaded' );
+        do_action( 'dokan_rewrite_rules_loaded', $this->custom_store_url );
     }
 
     /**
@@ -96,7 +96,6 @@ class Dokan_Rewrites {
      */
     function register_query_var( $vars ) {
         $vars[] = $this->custom_store_url;
-        $vars[] = 'store_review';
         $vars[] = 'edit';
         $vars[] = 'term_section';
         $vars[] = 'toc';
