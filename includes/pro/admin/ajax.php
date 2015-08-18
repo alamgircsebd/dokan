@@ -52,10 +52,10 @@ class Dokan_Pro_Admin_Ajax {
             $wpdb->query( 'TRUNCATE TABLE ' . $table_name );
         }
 
-        $sql = "SELECT ID FROM wp_posts
+        $sql = "SELECT ID FROM " . $wpdb->prefix . "posts
                 WHERE post_type LIKE 'shop_order'
                 AND ID NOT IN(
-                    SELECT post_parent FROM wp_posts
+                    SELECT post_parent FROM " . $wpdb->prefix . "posts
                     WHERE post_type LIKE 'shop_order'
                     GROUP BY post_parent
                 )
