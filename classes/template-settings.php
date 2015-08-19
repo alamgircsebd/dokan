@@ -266,13 +266,13 @@ class Dokan_Template_Settings {
         $dokan_name = sanitize_text_field( $_POST['dokan_store_name'] );
 
         if ( empty( $dokan_name ) ) {
-            $error->add( 'dokan_name', __( 'Dokan name required', 'dokan' ) );
+            $error->add( 'dokan_name', __( 'Store name required', 'dokan' ) );
         }
 
         if ( isset( $_POST['setting_category'] ) ) {
 
             if ( !is_array( $_POST['setting_category'] ) || !count( $_POST['setting_category'] ) ) {
-                $error->add( 'dokan_type', __( 'Dokan type required', 'dokan' ) );
+                $error->add( 'dokan_type', __( 'Store type required', 'dokan' ) );
             }
         }
 
@@ -328,7 +328,7 @@ class Dokan_Template_Settings {
         if ( isset( $_POST['setting_category'] ) ) {
 
             if ( !is_array( $_POST['setting_category'] ) || !count( $_POST['setting_category'] ) ) {
-                $error->add( 'dokan_type', __( 'Dokan type required', 'dokan' ) );
+                $error->add( 'dokan_type', __( 'Store type required', 'dokan' ) );
             }
         }
 
@@ -367,13 +367,13 @@ class Dokan_Template_Settings {
         $dokan_name = sanitize_text_field( $_POST['dokan_store_name'] );
 
         if ( empty( $dokan_name ) ) {
-            $error->add( 'dokan_name', __( 'Dokan name required', 'dokan' ) );
+            $error->add( 'dokan_name', __( 'Store name required', 'dokan' ) );
         }
 
         if ( isset( $_POST['setting_category'] ) ) {
 
             if ( !is_array( $_POST['setting_category'] ) || !count( $_POST['setting_category'] ) ) {
-                $error->add( 'dokan_type', __( 'Dokan type required', 'dokan' ) );
+                $error->add( 'dokan_type', __( 'Store type required', 'dokan' ) );
             }
         }
 
