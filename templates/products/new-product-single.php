@@ -364,12 +364,12 @@ if ( ! $from_shortcode ) {
 
                         <div class="dokan-product-short-description">
                             <label for="post_excerpt" class="form-label"><?php _e( 'Short Description', 'dokan' ); ?></label>
-                            <?php wp_editor( esc_textarea( wpautop( $post_excerpt ) ), 'post_excerpt', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_excerpt') ); ?>
+                            <?php wp_editor( $post_excerpt , 'post_excerpt', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_excerpt') ); ?>
                         </div>
 
                         <div class="dokan-product-description">
                             <label for="post_content" class="form-label"><?php _e( 'Description', 'dokan' ); ?></label>
-                            <?php wp_editor( esc_textarea( wpautop( $post_content ) ), 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
+                            <?php wp_editor( $post_content , 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content') ); ?>
                         </div>
 
                         <?php do_action( 'dokan_new_product_form' ); ?>
