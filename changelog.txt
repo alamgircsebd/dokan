@@ -4,6 +4,7 @@ v2.4.3 -> August 23, 2015
 ---------------------
 - [tweak] Welcome page on activation with resync button added 
 - [tweak] Visual Progress bar added for resync Order progress 
+- [fix] Sub-order duplicate issue fixed
 - [fix] Fix wp editor compatible to 4.3 
 - [fix] Compitable with WordPress 4.3 widget __construct functions 
 - [fix] Fix table name in sync table sql 
