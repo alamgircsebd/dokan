@@ -1849,9 +1849,12 @@ function dokan_save_variations( $post_id ) {
  * @return void
  */
 function dokan_create_sub_order( $parent_order_id ) {
-
+   
     $parent_order = new WC_Order( $parent_order_id );
     $order_items = $parent_order->get_items();
+    if(  get_post_meta( $parent_order_id, 'has_sub_order' ) == true ){
+        return;
+    }
 
     $sellers = array();
     foreach ($order_items as $item) {
