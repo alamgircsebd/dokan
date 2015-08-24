@@ -189,21 +189,28 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                     continue;
                 }
 
+                $default_shipping_price     = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
+                $default_shipping_add_price = get_user_meta( $seller_id, '_dps_additional_product', true );
+
+                $downloadable_count = 0;
                 foreach ( $products as $product ) {
 
                     if ( self::is_product_disable_shipping( $product['product_id'] ) ) {
-                        continue 2;
+                        continue;
                     }
 
-                    $is_virtual      = get_post_meta( $product['product_id'], '_virtual', true );
-                    $is_downloadable = get_post_meta( $product['product_id'], '_downloadable', true );
+                    if ( isset( $product['variation_id'] ) ) {
+                        $downloadable_count++;
+                        $is_virtual      = get_post_meta( $product['variation_id'], '_virtual', true );
+                        $is_downloadable = get_post_meta( $product['variation_id'], '_downloadable', true );
+                    } else {
+                        $is_virtual      = get_post_meta( $product['product_id'], '_virtual', true );
+                        $is_downloadable = get_post_meta( $product['product_id'], '_downloadable', true );
+                    }
 
                     if ( ( $is_virtual == 'yes' ) || ( $is_downloadable == 'yes' ) ) {
-                        continue 2;
+                        continue;
                     }
-
-                    $default_shipping_price     = get_user_meta( $seller_id, '_dps_shipping_type_price', true );
-                    $default_shipping_add_price = get_user_meta( $seller_id, '_dps_additional_product', true );
 
                     if ( get_post_meta( $product['product_id'], '_overwrite_shipping', true ) == 'yes' ) {
                         $default_shipping_qty_price = get_post_meta( $product['product_id'], '_additional_qty', true );
@@ -221,12 +228,12 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                         $price[ $seller_id ]['qty'][] = 0;
                     }
 
-                    if ( count( $products) > 1 ) {
-                        $price[ $seller_id ]['add_product'] = $default_shipping_add_price * ( count( $products) - 1 );
-                    } else {
-                        $price[ $seller_id ]['add_product'] = 0;
-                    }
+                }
 
+                if ( count( $products) > 1 ) {
+                    $price[ $seller_id ]['add_product'] = $default_shipping_add_price * ( count( $products) - ( 1 + $downloadable_count ) );
+                } else {
+                    $price[ $seller_id ]['add_product'] = 0;
                 }
 
                 $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
