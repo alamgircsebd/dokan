@@ -236,6 +236,10 @@ function dokan_delete_sync_order( $order_id ) {
  */
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
+    
+    if(  get_post_meta( $order_id, 'has_sub_order' ) == true ){
+        return;
+    }
 
     $order          = new WC_Order( $order_id );
     $seller_id      = dokan_get_seller_id_by_order( $order_id );
