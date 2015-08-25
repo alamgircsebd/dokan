@@ -275,7 +275,7 @@ function dokan_author_total_sales( $seller_id ) {
 
 /**
  * Generate dokan sync table
- *
+ * @deprecated since 2.4.3  
  * @global WPDB $wpdb
  */
 function dokan_generate_sync_table() {

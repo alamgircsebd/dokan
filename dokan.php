@@ -173,6 +173,21 @@ final class WeDevs_Dokan {
 
         $installer = new Dokan_Installer();
         $installer->do_install();
+        $woo_order_count = count(
+                                get_posts( 
+                                    array( 
+                                        'post_type'      => 'shop_order',
+                                        'post_status'    => 'any',
+                                        'posts_per_page' => -1
+                                    )
+                                )
+                            );
+        if ( $woo_order_count ) {
+            if( $woo_order_count === dokan_total_orders() ){
+                return;
+            }
+        }
+
         set_transient( '_dokan_welcome_page_redirect', true, 30 );
     }
     
