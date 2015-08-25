@@ -19,7 +19,7 @@ class Dokan_Installer {
         $this->create_tables();
         $this->product_design();
 
-        dokan_generate_sync_table();
+        //dokan_generate_sync_table();
 
         flush_rewrite_rules();
 
