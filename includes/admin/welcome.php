@@ -52,6 +52,7 @@
             var total_orders = 0;
             $('form#regen-sync-table').on('submit', function(e) {
                 e.preventDefault();
+                
                 var form = $(this),
                     submit = form.find('input[type=submit]'),
                     loader = form.find('.regen-sync-loader');
@@ -70,6 +71,7 @@
                 };
 
                 $.post( ajaxurl, s_data, function(resp) {
+                    
                     if ( resp.success ) {
                         if( resp.data.total_orders != 0 ){                            
                             total_orders = resp.data.total_orders;
@@ -80,7 +82,7 @@
                         
                         $('#regen-pro').width(completed+'%');
                         if(!$.isNumeric(completed)){
-                            $('#regen-pro').html('Finished');
+                            $('#regen-pro').html('Finished');                            
                         }else{
                             $('#regen-pro').html(completed+'%');
                         }
@@ -96,7 +98,8 @@
                             return;
                         } else {
                             submit.removeAttr('disabled');
-                            loader.hide();                            
+                            loader.hide();
+                            form.find('input[name="offset"]').val( 0 );
                             //responseDiv.html('');
                             // window.location.reload();
                         }
@@ -120,7 +123,7 @@
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
                     <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">                   
-                    <input type="submit" class="button button-primary" value="<?php _e( 'Re-build (recommended)', 'dokan' ); ?>" >
+                    <input id="btn-rebuild" type="submit" class="button button-primary" value="<?php _e( 'Re-build', 'dokan' ); ?>" >
                     <span class="regen-sync-loader" style="display:none"></span>
                 </form>
             </div>
