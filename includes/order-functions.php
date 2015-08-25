@@ -441,13 +441,14 @@ function dokan_sync_order_table( $order_id ) {
 }
 /**
  * Get toal number of orders in Dokan order table
- * @return  int Order count
+ * @since 2.4.3
+ * @return  int Order_count
  */
 
-function dokan_total_orders(){
+function dokan_total_orders() {
     global $wpdb;
-    
-    $order_count = $wpdb->get_var( "SELECT COUNT(id) FROM ".$wpdb->prefix."dokan_orders " );
-    
+
+    $order_count = $wpdb->get_var( "SELECT COUNT(id) FROM " . $wpdb->prefix . "dokan_orders " );
+
     return (int) $order_count;
 }
