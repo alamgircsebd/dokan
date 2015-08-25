@@ -44,6 +44,7 @@ if ( !defined( '__DIR__' ) ) {
 }
 
 define( 'DOKAN_PLUGIN_VERSION', '2.4.2' );
+define( 'DOKAN_FILE', __FILE__ );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
 define( 'DOKAN_LIB_DIR', __DIR__ . '/lib' );
@@ -173,66 +174,6 @@ final class WeDevs_Dokan {
 
         $installer = new Dokan_Installer();
         $installer->do_install();
-        $woo_order_count = count(get_posts( 
-                                    array( 
-                                        'post_type'      => 'shop_order',
-                                        'post_status'    => 'any',
-                                        'posts_per_page' => -1
-                                    )
-                                ));
-        if ( $woo_order_count ) {
-            if( $woo_order_count === dokan_total_orders() ){
-                return;
-            }
-        }
-        set_transient( '_dokan_welcome_page_redirect', true, 30 );
-    }
-    
-    /**
-     * Redirect to Welcome page if  transient is valid
-     * @since 2.4.3      
-     * @return void
-     */
-    function welcome_screen_do_activation_redirect() {
-        // Bail if no activation redirect
-        if ( !get_transient( '_dokan_welcome_page_redirect' ) ) {
-            return;
-        }
-
-        // Delete the redirect transient
-        delete_transient( '_dokan_welcome_page_redirect' );
-        
-        // Redirect to welcome page
-        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-resync-screen' ), admin_url( 'index.php' ) ) );
-    }
-    
-    /**
-     * Register dashboard page for welcome page
-     * @since 2.4.3
-     * @return void
-     */
-    function welcome_screen_pages() {
-        add_dashboard_page(
-        'Welcome To Dokan', 'Welcome To Dokan', 'read', 'dokan-resync-screen', array( $this,'welcome_screen_content')
-        );
-    }
-    
-    /**
-     * Include welcome page template
-     * @since 2.4.3
-     * @return void
-     */
-    function welcome_screen_content() {
-        include_once DOKAN_INC_DIR . '/admin/welcome.php';
-    }
-    
-    /**
-     * Remove the welcome page dashboard menu
-     * @since 2.4.3
-     * @return void
-     */
-    function welcome_screen_remove_menus() {
-        remove_submenu_page( 'index.php', 'dokan-resync-screen' );
     }
 
     /**
@@ -255,14 +196,11 @@ final class WeDevs_Dokan {
 
     function init_actions() {
 
-        add_action( 'admin_init', array( $this, 'welcome_screen_do_activation_redirect' ) );
-        add_action( 'admin_menu', array( $this, 'welcome_screen_pages' ) );
-        add_action( 'admin_head', array( $this, 'welcome_screen_remove_menus' ) );
         // Localize our plugin
-        add_action( 'admin_init', array( $this, 'load_table_prifix' ) );        
+        add_action( 'admin_init', array( $this, 'load_table_prifix' ) );
 
         add_action( 'init', array( $this, 'localization_setup' ) );
-        add_action( 'init', array( $this, 'register_scripts' ) );        
+        add_action( 'init', array( $this, 'register_scripts' ) );
 
         add_action( 'template_redirect', array( $this, 'redirect_if_not_logged_seller' ), 11 );
 
@@ -751,3 +689,4 @@ add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
 
 register_activation_hook( __FILE__, array( 'WeDevs_Dokan', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WeDevs_Dokan', 'deactivate' ) );
+add_action( 'activated_plugin', array( 'Dokan_Installer', 'welcome_page_redirect' ) );
