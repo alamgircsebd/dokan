@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.2\n"
+"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.3\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-08-12 16:44:54+00:00\n"
+"POT-Creation-Date: 2015-08-25 13:03:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -106,7 +106,7 @@ msgstr ""
 msgid "Instead of being pending, products will be published directly"
 msgstr ""
 
-#: classes/admin-user-profile.php:217 includes/admin/admin.php:210
+#: classes/admin-user-profile.php:217 includes/admin/admin.php:220
 msgid "Seller Percentage"
 msgstr ""
 
@@ -255,14 +255,14 @@ msgid "Apply"
 msgstr ""
 
 #: classes/admin-withdraw.php:373 includes/pro/admin/reports.php:302
-#: includes/pro/classes/coupons.php:403 includes/pro/classes/reviews.php:306
-#: includes/pro/classes/reviews.php:363
+#: includes/pro/classes/coupons.php:403 includes/pro/classes/reviews.php:302
+#: includes/pro/classes/reviews.php:359
 msgid "&laquo;"
 msgstr ""
 
 #: classes/admin-withdraw.php:374 includes/pro/admin/reports.php:303
-#: includes/pro/classes/coupons.php:404 includes/pro/classes/reviews.php:307
-#: includes/pro/classes/reviews.php:364
+#: includes/pro/classes/coupons.php:404 includes/pro/classes/reviews.php:303
+#: includes/pro/classes/reviews.php:360
 msgid "&raquo;"
 msgstr ""
 
@@ -401,24 +401,24 @@ msgstr ""
 msgid "[%s] Your product has been approved!"
 msgstr ""
 
-#: classes/installer.php:104 includes/admin-functions.php:52
+#: classes/installer.php:118 includes/admin-functions.php:52
 #: includes/admin-functions.php:553 includes/admin-functions.php:566
 #: includes/pro/admin/reports.php:199 includes/wc-template.php:13
 #: templates/my-orders.php:31
 msgid "Seller"
 msgstr ""
 
-#: classes/installer.php:133 includes/admin/admin.php:125
-#: includes/admin/admin.php:243 includes/pro/admin/admin.php:245
+#: classes/installer.php:147 includes/admin/admin.php:128
+#: includes/admin/admin.php:253 includes/pro/admin/admin.php:245
 #: includes/template-tags.php:295
 msgid "Dashboard"
 msgstr ""
 
-#: classes/installer.php:139 includes/pro/admin/admin.php:251
+#: classes/installer.php:153 includes/pro/admin/admin.php:251
 msgid "Store List"
 msgstr ""
 
-#: classes/installer.php:145 includes/admin/admin.php:249
+#: classes/installer.php:159 includes/admin/admin.php:259
 #: templates/global/header-menu.php:46
 msgid "My Orders"
 msgstr ""
@@ -496,8 +496,9 @@ msgid "Please select atleast one category"
 msgstr ""
 
 #: classes/template-settings.php:70 classes/template-settings.php:74
-#: dokan.php:669 includes/admin/admin.php:130 includes/admin/admin.php:345
-#: includes/functions.php:1507 includes/pro/admin/admin.php:322
+#: dokan.php:670 includes/admin/admin.php:133 includes/admin/admin.php:377
+#: includes/admin/welcome.php:20 includes/functions.php:1507
+#: includes/pro/admin/admin.php:322
 msgid "Settings"
 msgstr ""
 
@@ -517,12 +518,12 @@ msgid "Your information has been saved successfully"
 msgstr ""
 
 #: classes/template-settings.php:269 classes/template-settings.php:370
-msgid "Dokan name required"
+msgid "Store name required"
 msgstr ""
 
 #: classes/template-settings.php:275 classes/template-settings.php:331
 #: classes/template-settings.php:376
-msgid "Dokan type required"
+msgid "Store type required"
 msgstr ""
 
 #: classes/template-settings.php:282 classes/template-settings.php:339
@@ -676,105 +677,105 @@ msgstr ""
 msgid "Accepted"
 msgstr ""
 
-#: dokan.php:259 dokan.php:284
+#: dokan.php:260 dokan.php:285
 msgid "Available"
 msgstr ""
 
-#: dokan.php:260 dokan.php:285
+#: dokan.php:261 dokan.php:286
 msgid "Not Available"
 msgstr ""
 
-#: dokan.php:262 dokan.php:287
+#: dokan.php:263 dokan.php:288
 msgid "Are you sure?"
 msgstr ""
 
-#: dokan.php:263 dokan.php:288
+#: dokan.php:264 dokan.php:289
 msgid "Something is wrong, Please try again."
 msgstr ""
 
-#: dokan.php:289
+#: dokan.php:290
 msgid "Sorry this attribute option already exists, Try another one."
 msgstr ""
 
-#: dokan.php:290
+#: dokan.php:291
 msgid ""
 "Warning! This product will not have any variations if this option is not "
 "checked."
 msgstr ""
 
-#: dokan.php:294
+#: dokan.php:295
 msgid "This field is required"
 msgstr ""
 
-#: dokan.php:295
+#: dokan.php:296
 msgid "Please fix this field."
 msgstr ""
 
-#: dokan.php:296
+#: dokan.php:297
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: dokan.php:297
+#: dokan.php:298
 msgid "Please enter a valid URL."
 msgstr ""
 
-#: dokan.php:298
+#: dokan.php:299
 msgid "Please enter a valid date."
 msgstr ""
 
-#: dokan.php:299
+#: dokan.php:300
 msgid "Please enter a valid date (ISO)."
 msgstr ""
 
-#: dokan.php:300
+#: dokan.php:301
 msgid "Please enter a valid number."
 msgstr ""
 
-#: dokan.php:301
+#: dokan.php:302
 msgid "Please enter only digits."
 msgstr ""
 
-#: dokan.php:302
+#: dokan.php:303
 msgid "Please enter a valid credit card number."
 msgstr ""
 
-#: dokan.php:303
+#: dokan.php:304
 msgid "Please enter the same value again."
 msgstr ""
 
-#: dokan.php:304
+#: dokan.php:305
 msgid "Please enter no more than {0} characters."
 msgstr ""
 
-#: dokan.php:305
+#: dokan.php:306
 msgid "Please enter at least {0} characters."
 msgstr ""
 
-#: dokan.php:306
+#: dokan.php:307
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr ""
 
-#: dokan.php:307
+#: dokan.php:308
 msgid "Please enter a value between {0} and {1}."
 msgstr ""
 
-#: dokan.php:308
+#: dokan.php:309
 msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 
-#: dokan.php:309
+#: dokan.php:310
 msgid "Please enter a value greater than or equal to {0}."
 msgstr ""
 
-#: dokan.php:634
+#: dokan.php:635
 msgid "Page %s"
 msgstr ""
 
-#: dokan.php:666
+#: dokan.php:667
 msgid "Get PRO"
 msgstr ""
 
-#: dokan.php:670
+#: dokan.php:671 includes/admin/welcome.php:21
 msgid "Documentation"
 msgstr ""
 
@@ -782,128 +783,132 @@ msgstr ""
 msgid "Dokan - Add-ons"
 msgstr ""
 
-#: includes/admin/admin.php:45
+#: includes/admin/admin.php:48
 msgid "- select -"
 msgstr ""
 
-#: includes/admin/admin.php:118 includes/admin/admin.php:126
-#: includes/admin/admin.php:338 includes/admin/dashboard.php:72
+#: includes/admin/admin.php:121 includes/admin/admin.php:129
+#: includes/admin/admin.php:370 includes/admin/dashboard.php:72
 #: includes/functions.php:1486 includes/pro/admin/admin.php:301
 #: includes/template-tags.php:314 templates/withdraw/header.php:11
 msgid "Withdraw"
 msgstr ""
 
-#: includes/admin/admin.php:121
+#: includes/admin/admin.php:124
 msgid "Withdraw %s"
 msgstr ""
 
-#: includes/admin/admin.php:124 includes/admin/admin.php:322
+#: includes/admin/admin.php:127 includes/admin/admin.php:354
 #: includes/functions.php:1470
 msgid "Dokan"
 msgstr ""
 
-#: includes/admin/admin.php:125 includes/admin/admin.php:331
+#: includes/admin/admin.php:128 includes/admin/admin.php:363
 #: includes/admin/dashboard.php:96 includes/functions.php:1479
 #: includes/pro/admin/admin.php:294
 msgid "Dokan Dashboard"
 msgstr ""
 
-#: includes/admin/admin.php:131
+#: includes/admin/admin.php:134
 msgid "Add Ons"
 msgstr ""
 
-#: includes/admin/admin.php:131
+#: includes/admin/admin.php:134
 msgid "Add-ons"
 msgstr ""
 
-#: includes/admin/admin.php:147
+#: includes/admin/admin.php:141 includes/admin/welcome.php:12
+msgid "Welcome to Dokan"
+msgstr ""
+
+#: includes/admin/admin.php:157
 msgid "General"
 msgstr ""
 
-#: includes/admin/admin.php:151
+#: includes/admin/admin.php:161
 msgid "Selling Options"
 msgstr ""
 
-#: includes/admin/admin.php:155
+#: includes/admin/admin.php:165
 msgid "Withdraw Options"
 msgstr ""
 
-#: includes/admin/admin.php:159
+#: includes/admin/admin.php:169
 msgid "Page Settings"
 msgstr ""
 
-#: includes/admin/admin.php:180
+#: includes/admin/admin.php:190
 msgid "Admin area access"
 msgstr ""
 
-#: includes/admin/admin.php:181
+#: includes/admin/admin.php:191
 msgid "Disable sellers and customers from accessing wp-admin area"
 msgstr ""
 
-#: includes/admin/admin.php:187
+#: includes/admin/admin.php:197
 msgid "Seller Store URL"
 msgstr ""
 
-#: includes/admin/admin.php:188
+#: includes/admin/admin.php:198
 msgid "Define seller store URL (%s<strong>[this-text]</strong>/[seller-name])"
 msgstr ""
 
-#: includes/admin/admin.php:194 includes/functions.php:972
+#: includes/admin/admin.php:204 includes/functions.php:972
 #: templates/settings/store-form.php:163
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/admin.php:195
+#: includes/admin/admin.php:205
 msgid "Enable terms and conditions for seller store"
 msgstr ""
 
-#: includes/admin/admin.php:203
+#: includes/admin/admin.php:213
 msgid "New Seller Enable Selling"
 msgstr ""
 
-#: includes/admin/admin.php:204
+#: includes/admin/admin.php:214
 msgid "Make selling status enable for new registred seller"
 msgstr ""
 
-#: includes/admin/admin.php:211
+#: includes/admin/admin.php:221
 msgid "How much amount (%) a seller will get from each order"
 msgstr ""
 
-#: includes/admin/admin.php:217
+#: includes/admin/admin.php:227
 msgid "Order Status Change"
 msgstr ""
 
-#: includes/admin/admin.php:218
+#: includes/admin/admin.php:228
 msgid "Seller can change order status"
 msgstr ""
 
-#: includes/admin/admin.php:226
+#: includes/admin/admin.php:236
 msgid "Withdraw Methods"
 msgstr ""
 
-#: includes/admin/admin.php:227
+#: includes/admin/admin.php:237
 msgid "Withdraw methods for sellers"
 msgstr ""
 
-#: includes/admin/admin.php:234
+#: includes/admin/admin.php:244
 msgid "Minimum Withdraw Limit"
 msgstr ""
 
-#: includes/admin/admin.php:235
+#: includes/admin/admin.php:245
 msgid "Minimum balance required to make a withdraw request"
 msgstr ""
 
-#: includes/admin/admin.php:400
+#: includes/admin/admin.php:432
 msgid ""
 "<strong>Dokan Data Update Required</strong> &#8211; We need to update your "
 "install to the latest version"
 msgstr ""
 
-#: includes/admin/admin.php:401
+#: includes/admin/admin.php:433
 msgid "Run the updater"
 msgstr ""
 
-#: includes/admin/admin.php:406
+#: includes/admin/admin.php:438
 msgid ""
 "It is strongly recommended that you backup your database before proceeding. "
 "Are you sure you wish to run the updater now?"
@@ -944,6 +949,75 @@ msgstr ""
 #: includes/admin/dashboard.php:110 includes/pro/includes/reports.php:14
 #: includes/reports.php:14
 msgid "Overview"
+msgstr ""
+
+#: includes/admin/welcome.php:15
+msgid "Thank you for installing Dokan!"
+msgstr ""
+
+#: includes/admin/welcome.php:16
+msgid "Dokan %s makes it even easier to start your own multivendor marketplace."
+msgstr ""
+
+#: includes/admin/welcome.php:40
+msgid "Order Synchronization"
+msgstr ""
+
+#: includes/admin/welcome.php:43
+msgid ""
+"Seems like you have some unsynchronized orders. This tool will re-build "
+"Dokan's sync table."
+msgstr ""
+
+#: includes/admin/welcome.php:44
+msgid "Don't worry, any existing orders will not be deleted."
+msgstr ""
+
+#: includes/admin/welcome.php:54
+msgid "Skip"
+msgstr ""
+
+#: includes/admin/welcome.php:55
+msgid "Synchronize Orders"
+msgstr ""
+
+#: includes/admin/welcome.php:65
+msgid "Flat view style for product add and edit"
+msgstr ""
+
+#: includes/admin/welcome.php:66
+msgid ""
+"New Flat view for add or edit product is a single page design to add new "
+"products from one place. To switch the new product upload screen, you can "
+"go to wp-admin → Dokan → Settings → Selling Options → Add Edit Product "
+"Style."
+msgstr ""
+
+#: includes/admin/welcome.php:70
+msgid "Store SEO manage system for sellers store"
+msgstr ""
+
+#: includes/admin/welcome.php:71
+msgid ""
+"From now on, whenever someone shares the store page, the images and texts "
+"written on the settings will appear on the social sites. So your sellers "
+"can get more traffic from search engines and social sites."
+msgstr ""
+
+#: includes/admin/welcome.php:75
+msgid "Shipping calculator on single product page"
+msgstr ""
+
+#: includes/admin/welcome.php:76
+msgid ""
+"From this version, the customers can calculate the shipping cost right from "
+"the product page, before adding them to cart and also know about if that "
+"product ships to his location or not. So this means less cart abandonment "
+"and more conversion."
+msgstr ""
+
+#: includes/admin/welcome.php:82
+msgid "Changelog"
 msgstr ""
 
 #: includes/admin/withdraw.php:8
@@ -1360,12 +1434,16 @@ msgid ""
 "will inactive this option"
 msgstr ""
 
-#: includes/pro/admin/ajax.php:77
-msgid "%d order sync completed"
+#: includes/pro/admin/ajax.php:78
+msgid "%d orders sync completed out of %d"
 msgstr ""
 
-#: includes/pro/admin/ajax.php:84
-msgid "%s order sync completed"
+#: includes/pro/admin/ajax.php:81
+msgid "Go to Dashboard &rarr;"
+msgstr ""
+
+#: includes/pro/admin/ajax.php:85
+msgid "All orders has been synchronized. %s"
 msgstr ""
 
 #: includes/pro/admin/announcement.php:21
@@ -1613,29 +1691,29 @@ msgstr ""
 msgid "Order sync table has been regenerated!"
 msgstr ""
 
-#: includes/pro/admin/tools.php:92
+#: includes/pro/admin/tools.php:134
 msgid "Page Installation"
 msgstr ""
 
-#: includes/pro/admin/tools.php:95
+#: includes/pro/admin/tools.php:137
 msgid "Clicking this button will create required pages for the plugin."
 msgstr ""
 
-#: includes/pro/admin/tools.php:96
+#: includes/pro/admin/tools.php:138
 msgid "Install Dokan Pages"
 msgstr ""
 
-#: includes/pro/admin/tools.php:101
+#: includes/pro/admin/tools.php:143
 msgid "Regenerate Order Sync Table"
 msgstr ""
 
-#: includes/pro/admin/tools.php:104
+#: includes/pro/admin/tools.php:146
 msgid ""
 "This tool will delete all orders from the Dokan's sync table and re-build "
 "it."
 msgstr ""
 
-#: includes/pro/admin/tools.php:111
+#: includes/pro/admin/tools.php:155
 msgid "Re-build"
 msgstr ""
 
@@ -1814,14 +1892,14 @@ msgstr ""
 msgid "Next &raquo;"
 msgstr ""
 
-#: includes/pro/classes/reviews.php:90 includes/pro/classes/reviews.php:667
+#: includes/pro/classes/reviews.php:86 includes/pro/classes/store.php:83
 #: includes/pro/templates/dashboard/review-widget.php:14
 #: includes/pro/templates/products/edit/options.php:10
 #: includes/pro/templates/review/header.php:11
 msgid "Reviews"
 msgstr ""
 
-#: includes/pro/classes/reviews.php:553
+#: includes/pro/classes/reviews.php:549
 msgid "You can not edit reviews!"
 msgstr ""
 
@@ -2118,13 +2196,13 @@ msgstr ""
 
 #: includes/pro/includes/shipping-gateway/shipping.php:70
 #: includes/pro/templates/products/edit/inventory.php:64
-#: includes/pro/templates/products/product-shipping-content.php:116
+#: includes/pro/templates/products/product-shipping-content.php:122
 msgid "Tax Status"
 msgstr ""
 
 #: includes/pro/includes/shipping-gateway/shipping.php:74
 #: includes/pro/templates/products/edit/inventory.php:67
-#: includes/pro/templates/products/product-shipping-content.php:119
+#: includes/pro/templates/products/product-shipping-content.php:125
 msgid "Taxable"
 msgstr ""
 
@@ -2466,12 +2544,12 @@ msgid "Allow but notify customer"
 msgstr ""
 
 #: includes/pro/templates/products/edit/inventory.php:68
-#: includes/pro/templates/products/product-shipping-content.php:120
+#: includes/pro/templates/products/product-shipping-content.php:126
 msgid "Shipping only"
 msgstr ""
 
 #: includes/pro/templates/products/edit/inventory.php:76
-#: includes/pro/templates/products/product-shipping-content.php:128
+#: includes/pro/templates/products/product-shipping-content.php:134
 msgid "Tax Class"
 msgstr ""
 
@@ -2586,23 +2664,23 @@ msgid "Override Shipping"
 msgstr ""
 
 #: includes/pro/templates/products/edit/shipping.php:51
-#: includes/pro/templates/products/product-shipping-content.php:76
+#: includes/pro/templates/products/product-shipping-content.php:81
 msgid "Override default shipping cost for this product"
 msgstr ""
 
 #: includes/pro/templates/products/edit/shipping.php:56
-#: includes/pro/templates/products/product-shipping-content.php:80
+#: includes/pro/templates/products/product-shipping-content.php:85
 msgid "Additional cost"
 msgstr ""
 
 #: includes/pro/templates/products/edit/shipping.php:64
-#: includes/pro/templates/products/product-shipping-content.php:85
+#: includes/pro/templates/products/product-shipping-content.php:90
 #: includes/pro/templates/settings/shipping.php:84
 msgid "Per Qty Additional Price"
 msgstr ""
 
 #: includes/pro/templates/products/edit/shipping.php:72
-#: includes/pro/templates/products/product-shipping-content.php:90
+#: includes/pro/templates/products/product-shipping-content.php:95
 #: includes/pro/templates/settings/shipping.php:97
 msgid "Processing Time"
 msgstr ""
@@ -2992,25 +3070,25 @@ msgstr ""
 msgid "Manage shipping and tax for this product"
 msgstr ""
 
-#: includes/pro/templates/products/product-shipping-content.php:30
+#: includes/pro/templates/products/product-shipping-content.php:35
 msgid "This product required shipping"
 msgstr ""
 
-#: includes/pro/templates/products/product-shipping-content.php:46
+#: includes/pro/templates/products/product-shipping-content.php:51
 msgid "Shipping Class"
 msgstr ""
 
-#: includes/pro/templates/products/product-shipping-content.php:60
+#: includes/pro/templates/products/product-shipping-content.php:65
 msgid "No shipping class"
 msgstr ""
 
-#: includes/pro/templates/products/product-shipping-content.php:69
+#: includes/pro/templates/products/product-shipping-content.php:74
 msgid ""
 "Shipping classes are used by certain shipping methods to group similar "
 "products."
 msgstr ""
 
-#: includes/pro/templates/products/product-shipping-content.php:111
+#: includes/pro/templates/products/product-shipping-content.php:117
 msgid "This product required Tax"
 msgstr ""
 
@@ -3339,7 +3417,7 @@ msgstr ""
 
 #: includes/pro/templates/widgets/best-seller.php:22
 #: includes/pro/templates/widgets/feature-seller.php:22
-#: includes/wc-functions.php:2456
+#: includes/wc-functions.php:2459
 msgid "No ratings found yet!"
 msgstr ""
 
@@ -3493,55 +3571,55 @@ msgstr ""
 msgid "Product SKU must be unique."
 msgstr ""
 
-#: includes/wc-functions.php:1893
+#: includes/wc-functions.php:1896
 msgid "Order &ndash; %s"
 msgstr ""
 
-#: includes/wc-functions.php:2134
+#: includes/wc-functions.php:2137
 msgid "Cheating, eh?"
 msgstr ""
 
-#: includes/wc-functions.php:2143
+#: includes/wc-functions.php:2146
 msgid "Please enter your first name."
 msgstr ""
 
-#: includes/wc-functions.php:2148
+#: includes/wc-functions.php:2151
 msgid "Please enter your last name."
 msgstr ""
 
-#: includes/wc-functions.php:2152
+#: includes/wc-functions.php:2155
 msgid "Please enter your phone number."
 msgstr ""
 
-#: includes/wc-functions.php:2461
+#: includes/wc-functions.php:2464
 msgid "Rated %s out of %d"
 msgstr ""
 
-#: includes/wc-functions.php:2542
+#: includes/wc-functions.php:2545
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/wc-functions.php:2543
+#: includes/wc-functions.php:2546
 msgid "Enter your last name"
 msgstr ""
 
-#: includes/wc-functions.php:2544
+#: includes/wc-functions.php:2547
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/wc-functions.php:2545
+#: includes/wc-functions.php:2548
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/wc-functions.php:2546
+#: includes/wc-functions.php:2549
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:2581
+#: includes/wc-functions.php:2584
 msgid "Your {site_title} order receipt from {order_date}"
 msgstr ""
 
-#: includes/wc-functions.php:2582
+#: includes/wc-functions.php:2585
 msgid "Your {site_title} order from {order_date} is complete"
 msgstr ""
 
@@ -4288,7 +4366,7 @@ msgstr ""
 
 #: includes/pro/includes/shipping-gateway/shipping.php:75
 #: includes/pro/templates/products/edit/inventory.php:69
-#: includes/pro/templates/products/product-shipping-content.php:121
+#: includes/pro/templates/products/product-shipping-content.php:127
 msgctxt "Tax status"
 msgid "None"
 msgstr ""
@@ -4303,7 +4381,7 @@ msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
 
-#: includes/wc-functions.php:1893
+#: includes/wc-functions.php:1896
 msgctxt "Order date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
