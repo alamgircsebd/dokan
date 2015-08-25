@@ -2626,8 +2626,8 @@ function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) 
 
 function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
     
-    if ( !isset( $rates['flat_rate'] ) || !isset( $rates['international_delivery'] ) ) {
-        return;
+    if ( !isset( $rates['flat_rate'] ) && !isset( $rates['international_delivery'] ) ) {
+        return $rates;
     }
 
     foreach ( $package['contents'] as $product ) {
