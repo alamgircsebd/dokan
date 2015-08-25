@@ -40,25 +40,24 @@ class Dokan_Pro_Admin_Ajax {
     function regen_sync_order_table() {
         global $wpdb;
 
-        if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'regen_sync_table' ) ) {
+        parse_str( $_POST['data'], $data );
+
+        if ( ! wp_verify_nonce( $data['_wpnonce'], 'regen_sync_table' ) ) {
             wp_send_json_error();
         }
-        $limit         = $_POST['limit'];
-        $offset         = $_POST['offset'];
 
-        $table_name = $wpdb->prefix . 'dokan_orders';
+        $limit        = $data['limit'];
+        $offset       = $data['offset'];
+        $total_orders = isset( $_POST['total_orders'] ) ? $_POST['total_orders'] : 0;
 
         if ( $offset == 0 ) {
-            $wpdb->query( 'TRUNCATE TABLE ' . $table_name );
+            $wpdb->query( 'TRUNCATE TABLE ' . $wpdb->dokan_orders );
+            $total_orders = $wpdb->get_var( "SELECT count(ID) FROM " . $wpdb->posts . "
+                WHERE post_type = 'shop_order'"  );
         }
 
-        $sql = "SELECT ID FROM wp_posts
-                WHERE post_type LIKE 'shop_order'
-                AND ID NOT IN(
-                    SELECT post_parent FROM wp_posts
-                    WHERE post_type LIKE 'shop_order'
-                    GROUP BY post_parent
-                )
+        $sql = "SELECT ID FROM " . $wpdb->posts . "
+                WHERE post_type = 'shop_order'
                 LIMIT %d,%d";
 
         $orders = $wpdb->get_results( $wpdb->prepare($sql, $offset * $limit, $limit ) );
@@ -67,21 +66,23 @@ class Dokan_Pro_Admin_Ajax {
             foreach ( $orders as $order) {
                 dokan_sync_order_table( $order->ID );
             }
-            $sql = "SELECT * FROM " . $table_name;
+
+            $sql = "SELECT * FROM " . $wpdb->dokan_orders;
             $generated = $wpdb->get_results( $sql );
 
             $done        = count( $generated );
             wp_send_json_success( array(
-                'offset'  => $offset + 1,
-                'done'    => $done,
-                'message' => sprintf( __( '%d order sync completed', 'dokan' ), $done )
+                'offset'       => $offset + 1,
+                'total_orders' => $total_orders,
+                'done'         => $done,
+                'message'      => sprintf( __( '%d orders sync completed out of %d', 'dokan' ), $done, $total_orders )
             ) );
         } else {
-            $done        = 'All';
+            $dashboard_link = sprintf( '<a href="%s">%s</a>', admin_url( 'admin.php?page=dokan' ), __( 'Go to Dashboard &rarr;', 'dokan' ) );
             wp_send_json_success( array(
                 'offset'  => 0,
-                'done'    => $done,
-                'message' => sprintf( __( '%s order sync completed', 'dokan' ), $done )
+                'done'    => 'All',
+                'message' => sprintf( __( 'All orders has been synchronized. %s', 'dokan' ), $dashboard_link )
             ) );
         }
     }

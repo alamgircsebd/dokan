@@ -156,7 +156,7 @@
 
         <!--terms and conditions enable or not -->
         <?php
-        $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_selling', 'off' );
+        $tnc_enable = dokan_get_option( 'seller_enable_terms_and_conditions', 'dokan_general', 'off' );
         if ( $tnc_enable == 'on' ) :
             ?>
             <div class="dokan-form-group">
@@ -172,14 +172,14 @@
             <div class="dokan-form-group" id="dokan_tnc_text">
                 <label class="dokan-w3 dokan-control-label" for="dokan_store_tnc"><?php _e( 'TOC Details', 'dokan' ); ?></label>
                 <div class="dokan-w8 dokan-text-left">
-                    <?php
-                    $settings = array(
-                        'editor_height' => 200,
-                        'media_buttons' => false,
-                        'teeny' => true,
-                        'quicktags' => false
-                    );
-                    wp_editor( $store_tnc, 'dokan_store_tnc', $settings);
+                    <?php                    
+                        $settings = array(
+                            'editor_height' => 200,
+                            'media_buttons' => false,
+                            'teeny'         => true,
+                            'quicktags'     => false
+                        );
+                        wp_editor( $store_tnc, 'dokan_store_tnc', $settings );
                     ?>
                 </div>
             </div>

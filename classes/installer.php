@@ -19,11 +19,11 @@ class Dokan_Installer {
         $this->create_tables();
         $this->product_design();
 
-        dokan_generate_sync_table();
-
         flush_rewrite_rules();
 
         update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
+
+        // $this->welcome_page_redirect();
     }
 
     /**
@@ -65,6 +65,20 @@ class Dokan_Installer {
      */
     function woocommerce_settings() {
         update_option( 'woocommerce_enable_myaccount_registration', 'yes' );
+    }
+
+    /**
+     * Redirect to Welcome page if  transient is valid
+     *
+     * @since 2.4.3
+     *
+     * @return void
+     */
+    public static function welcome_page_redirect( $plugin ) {
+        if ( plugin_basename( DOKAN_FILE ) == $plugin ) {
+            wp_redirect( admin_url( 'index.php?page=dokan-welcome' ) );
+            exit;
+        }
     }
 
     /**

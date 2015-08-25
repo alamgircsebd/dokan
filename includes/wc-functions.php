@@ -523,11 +523,11 @@ function dokan_process_product_meta( $post_id ) {
     } else {
         update_post_meta( $post_id, '_overwrite_shipping', 'no' );
     }
-    
+
     update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
     update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
     update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
-    
+
     // Save shipping class
     $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
     wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class');
@@ -942,7 +942,7 @@ function dokan_new_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : '' ) );
         update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : '' ) );
         update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : '' ) );
-        
+
         // Save shipping class
         if ( isset( $_POST['product_shipping_class'] ) ) {
             $product_shipping_class = $_POST['product_shipping_class'] > 0 && $product_type != 'external' ? absint( $_POST['product_shipping_class'] ) : '';
@@ -1852,6 +1852,9 @@ function dokan_create_sub_order( $parent_order_id ) {
 
     $parent_order = new WC_Order( $parent_order_id );
     $order_items = $parent_order->get_items();
+    if(  get_post_meta( $parent_order_id, 'has_sub_order' ) == true ){
+        return;
+    }
 
     $sellers = array();
     foreach ($order_items as $item) {
@@ -2615,8 +2618,51 @@ class DokanFakeMailer {
 
 add_filter( 'woocommerce_dashboard_status_widget_sales_query', 'dokan_filter_woocommerce_dashboard_status_widget_sales_query' );
 
+/**
+ * Woocommerce Admin dashboard Sales Report Synced with Dokan Dashboard report
+ *
+ * @since 2.4.3
+ *
+ * @global WPDB $wpdb
+ * @param array $query
+ *
+ * @return $query
+ */
 function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) {
     global $wpdb;
+
     $query['where']  .= " AND posts.ID NOT IN ( SELECT post_parent FROM {$wpdb->posts} WHERE post_type IN ( '" . implode( "','", array_merge( wc_get_order_types( 'sales-reports' ), array( 'shop_order_refund' ) ) ) . "' ) )";
+
     return $query;
 }
+
+/**
+ * Flat Rate Shipping made compatible for Orders with multiple seller
+ *
+ * @since 2.4.3
+ *
+ * @param array $rates
+ * @param array $package
+ *
+ * @return $rates
+ */
+function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
+
+    if ( !isset( $rates['flat_rate'] ) && !isset( $rates['international_delivery'] ) ) {
+        return $rates;
+    }
+
+    foreach ( $package['contents'] as $product ) {
+        $sellers[] = get_post_field( 'post_author', $product['product_id'] );
+    }
+
+    $sellers = array_unique( $sellers );
+
+    $selllers_count = count( $sellers );
+
+    $rates['flat_rate']->cost = $rates['flat_rate']->cost * $selllers_count;
+
+    return $rates;
+}
+
+add_filter( 'woocommerce_package_rates', 'dokan_multiply_flat_rate_price_by_seller', 1,2);

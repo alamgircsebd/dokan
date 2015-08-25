@@ -237,6 +237,10 @@ function dokan_delete_sync_order( $order_id ) {
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
 
+    if(  get_post_meta( $order_id, 'has_sub_order' ) == true ){
+        return;
+    }
+
     $order          = new WC_Order( $order_id );
     $seller_id      = dokan_get_seller_id_by_order( $order_id );
     $percentage     = dokan_get_seller_percentage( $seller_id );
@@ -434,4 +438,18 @@ function dokan_sync_order_table( $order_id ) {
             '%s',
         )
     );
+}
+/**
+ * Get toal number of orders in Dokan order table
+ *
+ * @since 2.4.3
+ *
+ * @return  int Order_count
+ */
+function dokan_total_orders() {
+    global $wpdb;
+
+    $order_count = $wpdb->get_var( "SELECT COUNT(id) FROM " . $wpdb->prefix . "dokan_orders " );
+
+    return (int) $order_count;
 }

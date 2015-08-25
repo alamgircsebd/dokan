@@ -10,7 +10,7 @@ class Dokan_Best_Selling_Widget extends WP_Widget {
      **/
     public function __construct() {
         $widget_ops = array( 'classname' => 'woocommerce widget_products dokan-best-selling', 'description' => 'A Widget for displaying Best Selling Products for dokan' );
-        $this->WP_Widget( 'dokan-best-selling-widget', 'Dokan: Best Selling Widget', $widget_ops );
+        parent::__construct( 'dokan-best-selling-widget', 'Dokan: Best Selling Widget', $widget_ops );
     }
 
     /**

@@ -28,6 +28,9 @@ class Dokan_Admin_Settings {
         add_action( 'admin_init', array($this, 'admin_init') );
 
         add_action( 'admin_menu', array($this, 'admin_menu') );
+
+        add_action( 'admin_head', array( $this, 'welcome_page_remove' ) );
+
         add_action( 'admin_notices', array($this, 'update_notice' ) );
         add_action( 'wp_before_admin_bar_render', array( $this, 'dokan_admin_toolbar' ) );
     }
@@ -129,6 +132,13 @@ class Dokan_Admin_Settings {
 
         add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
         add_submenu_page( 'dokan', __( 'Add Ons', 'dokan' ), __( 'Add-ons', 'dokan' ), $capability, 'dokan-addons', array($this, 'addon_page') );
+
+        /**
+         * Welcome page
+         *
+         * @since 2.4.3
+         */
+        add_dashboard_page( __( 'Welcome to Dokan', 'dokan' ), __( 'Welcome to Dokan', 'dokan' ), $capability, 'dokan-welcome', array( $this, 'welcome_page' ) );
 
         add_action( $dashboard, array($this, 'dashboard_script' ) );
     }
@@ -304,6 +314,28 @@ class Dokan_Admin_Settings {
      */
     function addon_page() {
         include dirname(__FILE__) . '/add-on.php';
+    }
+
+    /**
+     * Include welcome page template
+     *
+     * @since 2.4.3
+     *
+     * @return void
+     */
+    function welcome_page() {
+        include_once DOKAN_INC_DIR . '/admin/welcome.php';
+    }
+
+    /**
+     * Remove the welcome page dashboard menu
+     *
+     * @since 2.4.3
+     *
+     * @return void
+     */
+    function welcome_page_remove() {
+        remove_submenu_page( 'index.php', 'dokan-welcome' );
     }
 
     /**

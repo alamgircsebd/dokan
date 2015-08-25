@@ -16,7 +16,7 @@ class Dokan_Feature_Seller_Widget extends WP_Widget {
      */
     public function __construct() {
         $widget_ops = array( 'classname' => 'dokan-feature-seller-widget', 'description' => 'Dokan featured seller widget' );
-        $this->WP_Widget( 'dokan-feature-seller-widget', 'Dokan: Featured Sellers', $widget_ops );
+        parent::__construct( 'dokan-feature-seller-widget', 'Dokan: Featured Sellers', $widget_ops );
     }
 
     /**
