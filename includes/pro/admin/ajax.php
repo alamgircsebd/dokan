@@ -54,21 +54,11 @@ class Dokan_Pro_Admin_Ajax {
         if ( $offset == 0 ) {
             $wpdb->query( 'TRUNCATE TABLE ' . $table_name );
             $total_orders = $wpdb->get_var( "SELECT count(ID) FROM " . $wpdb->prefix . "posts
-                WHERE post_type LIKE 'shop_order'
-                AND ID NOT IN(
-                    SELECT post_parent FROM " . $wpdb->prefix . "posts
-                    WHERE post_type LIKE 'shop_order'
-                    GROUP BY post_parent
-                )"  );
+                WHERE post_type LIKE 'shop_order'"  );
         }
         
         $sql = "SELECT ID FROM " . $wpdb->prefix . "posts
                 WHERE post_type LIKE 'shop_order'
-                AND ID NOT IN(
-                    SELECT post_parent FROM " . $wpdb->prefix . "posts
-                    WHERE post_type LIKE 'shop_order'
-                    GROUP BY post_parent
-                )
                 LIMIT %d,%d";
 
         $orders = $wpdb->get_results( $wpdb->prepare($sql, $offset * $limit, $limit ) );
