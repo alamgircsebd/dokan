@@ -200,7 +200,6 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                     }
 
                     if ( isset( $product['variation_id'] ) ) {
-                        $downloadable_count++;
                         $is_virtual      = get_post_meta( $product['variation_id'], '_virtual', true );
                         $is_downloadable = get_post_meta( $product['variation_id'], '_downloadable', true );
                     } else {
@@ -209,6 +208,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                     }
 
                     if ( ( $is_virtual == 'yes' ) || ( $is_downloadable == 'yes' ) ) {
+                        $downloadable_count++;
                         continue;
                     }
 
