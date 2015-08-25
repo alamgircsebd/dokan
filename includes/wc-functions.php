@@ -2618,11 +2618,26 @@ class DokanFakeMailer {
 
 add_filter( 'woocommerce_dashboard_status_widget_sales_query', 'dokan_filter_woocommerce_dashboard_status_widget_sales_query' );
 
+/**
+ * Woocommerce Admin dashboard Sales Report Synced with Dokan Dashboard report
+ * @since 2.4.3
+ * @global WPDB $wpdb
+ * @param array $query
+ * @return $query
+ */
 function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) {
     global $wpdb;
     $query['where']  .= " AND posts.ID NOT IN ( SELECT post_parent FROM {$wpdb->posts} WHERE post_type IN ( '" . implode( "','", array_merge( wc_get_order_types( 'sales-reports' ), array( 'shop_order_refund' ) ) ) . "' ) )";
     return $query;
 }
+
+/**
+ * Flat Rate Shipping made compatible for Orders with multiple seller
+ * @since 2.4.3
+ * @param array $rates
+ * @param array $package
+ * @return $rates
+ */
 
 function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
     

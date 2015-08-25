@@ -173,24 +173,26 @@ final class WeDevs_Dokan {
 
         $installer = new Dokan_Installer();
         $installer->do_install();
-        $woo_order_count = count(
-                                get_posts( 
+        $woo_order_count = count(get_posts( 
                                     array( 
                                         'post_type'      => 'shop_order',
                                         'post_status'    => 'any',
                                         'posts_per_page' => -1
                                     )
-                                )
-                            );
+                                ));
         if ( $woo_order_count ) {
             if( $woo_order_count === dokan_total_orders() ){
                 return;
             }
         }
-
         set_transient( '_dokan_welcome_page_redirect', true, 30 );
     }
     
+    /**
+     * Redirect to Welcome page if  transient is valid
+     * @since 2.4.3      
+     * @return void
+     */
     function welcome_screen_do_activation_redirect() {
         // Bail if no activation redirect
         if ( !get_transient( '_dokan_welcome_page_redirect' ) ) {
@@ -204,17 +206,31 @@ final class WeDevs_Dokan {
         wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-resync-screen' ), admin_url( 'index.php' ) ) );
     }
     
-    
+    /**
+     * Register dashboard page for welcome page
+     * @since 2.4.3
+     * @return void
+     */
     function welcome_screen_pages() {
         add_dashboard_page(
         'Welcome To Dokan', 'Welcome To Dokan', 'read', 'dokan-resync-screen', array( $this,'welcome_screen_content')
         );
     }
-
+    
+    /**
+     * Include welcome page template
+     * @since 2.4.3
+     * @return void
+     */
     function welcome_screen_content() {
         include_once DOKAN_INC_DIR . '/admin/welcome.php';
     }
     
+    /**
+     * Remove the welcome page dashboard menu
+     * @since 2.4.3
+     * @return void
+     */
     function welcome_screen_remove_menus() {
         remove_submenu_page( 'index.php', 'dokan-resync-screen' );
     }
