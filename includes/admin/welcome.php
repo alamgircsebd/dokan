@@ -16,6 +16,15 @@
         <?php printf( __( 'Dokan %s makes it even easier to start your own multivendor marketplace.', 'dokan' ), DOKAN_PLUGIN_VERSION ); ?>
     </div>
 
+    <ul class="action-buttons">
+        <li><a class="button button-primary" href="<?php echo admin_url( 'admin.php?page=dokan-settings' ); ?>"><?php _e( 'Settings', 'dokan' ); ?></a></li>
+        <li><a class="button" href="http://docs.wedevs.com/category/plugins/dokan-plugins/" target="_blank"><?php _e( 'Documentation', 'dokan' ); ?></a></li>
+        <li>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://wedevs.com/products/plugins/dokan/" data-text="#Dokan is the easiest way to start your own multi-vendor e-commerce website" data-via="weDevs" data-size="large" data-hashtags="dokan">Tweet</a>
+            <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </li>
+    </ul>
+
     <?php
     $order_count = get_posts( array(
         'post_type'      => 'shop_order',
@@ -82,6 +91,16 @@
 </div>
 
 <style type="text/css">
+    ul.action-buttons {
+        margin: 0;
+        display: block;
+        overflow: hidden;
+    }
+
+    ul.action-buttons li {
+        display: inline;
+    }
+
     .regen-sync-response span {
         color: #8a6d3b;
         background-color: #fcf8e3;
