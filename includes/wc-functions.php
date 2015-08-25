@@ -2623,3 +2623,24 @@ function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) 
     $query['where']  .= " AND posts.ID NOT IN ( SELECT post_parent FROM {$wpdb->posts} WHERE post_type IN ( '" . implode( "','", array_merge( wc_get_order_types( 'sales-reports' ), array( 'shop_order_refund' ) ) ) . "' ) )";
     return $query;
 }
+
+function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
+    
+    if ( !isset( $rates['flat_rate'] ) || !isset( $rates['international_delivery'] ) ) {
+        return;
+    }
+
+    foreach ( $package['contents'] as $product ) {
+        $sellers[] = get_post_field( 'post_author', $product['product_id'] );
+    }
+
+    $sellers = array_unique( $sellers );
+
+    $selllers_count = count( $sellers );
+    
+    $rates['flat_rate']->cost = $rates['flat_rate']->cost * $selllers_count;
+
+    return $rates;
+}
+
+add_filter( 'woocommerce_package_rates', 'dokan_multiply_flat_rate_price_by_seller', 1,2);
