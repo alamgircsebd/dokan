@@ -62,18 +62,18 @@
 
     <div class="feature-section three-col">
         <div class="col">
-            <h3>Something</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem animi deleniti est tenetur asperiores pariatur autem error praesentium, sunt alias quos assumenda, id dolorum vero rem obcaecati enim optio dolorem.</p>
+            <h3><?php _e( 'Flat view style for product add and edit', 'dokan' ); ?></h3>
+            <p><?php _e( 'New Flat view for add or edit product is a single page design to add new products from one place. To switch the new product upload screen, you can go to wp-admin → Dokan → Settings → Selling Options → Add Edit Product Style.', 'dokan' ); ?></p>
         </div>
 
         <div class="col">
-            <h3>Something</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem animi deleniti est tenetur asperiores pariatur autem error praesentium, sunt alias quos assumenda, id dolorum vero rem obcaecati enim optio dolorem.</p>
+            <h3><?php _e( 'Store SEO manage system for sellers store', 'dokan' ); ?></h3>
+            <p><?php _e( 'From now on, whenever someone shares the store page, the images and texts written on the settings will appear on the social sites. So your sellers can get more traffic from search engines and social sites.', 'dokan' ); ?></p>
         </div>
 
         <div class="col">
-            <h3>Something</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem animi deleniti est tenetur asperiores pariatur autem error praesentium, sunt alias quos assumenda, id dolorum vero rem obcaecati enim optio dolorem.</p>
+            <h3><?php _e( 'Shipping calculator on single product page', 'dokan' ); ?></h3>
+            <p><?php _e( 'From this version, the customers can calculate the shipping cost right from the product page, before adding them to cart and also know about if that product ships to his location or not. So this means less cart abandonment and more conversion.', 'dokan' ); ?></p>
         </div>
     </div>
 
@@ -149,6 +149,9 @@
     .changelog-content {
         max-height: 200px;
         overflow: scroll;
+    }
+    #wpbody-content .metabox-holder {
+        padding-top: 35px;
     }
 </style>
 <script type="text/javascript">
