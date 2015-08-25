@@ -19,10 +19,9 @@ class Dokan_Installer {
         $this->create_tables();
         $this->product_design();
 
-        //dokan_generate_sync_table();
-
         flush_rewrite_rules();
 
+        set_transient( '_dokan_welcome_page_redirect', true, 30 );
         update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
     }
 

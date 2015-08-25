@@ -236,7 +236,7 @@ function dokan_delete_sync_order( $order_id ) {
  */
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
-    
+
     if(  get_post_meta( $order_id, 'has_sub_order' ) == true ){
         return;
     }
@@ -441,10 +441,11 @@ function dokan_sync_order_table( $order_id ) {
 }
 /**
  * Get toal number of orders in Dokan order table
+ *
  * @since 2.4.3
+ *
  * @return  int Order_count
  */
-
 function dokan_total_orders() {
     global $wpdb;
 
