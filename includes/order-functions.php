@@ -453,3 +453,50 @@ function dokan_total_orders() {
 
     return (int) $order_count;
 }
+
+/**
+ * Return array of sellers with items
+ * 
+ * @since 2.4.4
+ * 
+ * @param type $id
+ * 
+ * @return array $sellers_with_items
+ */
+function dokan_get_sellers_by( $order_id ) {
+
+    $order       = new WC_Order( $order_id );
+    $order_items = $order->get_items();
+
+    $sellers = array();
+    foreach ( $order_items as $item ) {
+        $seller_id             = get_post_field( 'post_author', $item['product_id'] );
+        $sellers[$seller_id][] = $item;
+    }
+
+    return $sellers;
+}
+
+/**
+ * 
+ * @global object $wpdb
+ * @param type $parent_order_id
+ * @return type
+ */
+function dokan_get_suborder_ids_by ($parent_order_id){
+    
+    global $wpdb;
+     
+     $sql = "SELECT ID FROM " . $wpdb->prefix . "posts
+             WHERE post_type = 'shop_order'
+             AND post_parent = " . $parent_order_id;
+     
+     $sub_orders = $wpdb->get_results($sql);
+
+    if ( ! $sub_orders ) {
+        return null;
+    }
+    
+    return $sub_orders;
+
+}
