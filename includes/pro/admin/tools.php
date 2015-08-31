@@ -68,7 +68,7 @@
             border-radius: 10px;
             text-align: center;            
             color:#FFF;
-        }
+        }      
     </style>
     <script type="text/javascript">
         jQuery(function($) {
@@ -195,10 +195,38 @@
                 
                 $.post( ajaxurl, s_data, function(resp) {
                     if ( resp.success ) {
-                       alert(resp.data.msg);
+                       $('.duplicate-orders-wrapper').html(resp.data.html);
+                       $('.duplicate-orders-wrapper').show();
+                       
                     }
                 });
             }
+            
+            $('.duplicate-orders-wrapper').on('click', 'a.dokan-order-action-delete', function(e) {
+                        e.preventDefault();
+                        var self = $(this);
+                       
+                        self.closest( 'tr' ).addClass('custom-spinner');
+                        data = {
+                            action: 'dokan_duplicate_order_delete',
+                            formData : $('#dokan-duplicate-orders-action').serialize(),
+                            order_id : self.closest( 'tr' ).data( 'order-id' )
+                        }
+                           console.log(data);
+                        $.post(ajaxurl, data, function( resp ) {
+
+                            if( resp.success ) {
+                                self.closest( 'tr' ).removeClass('custom-spinner');
+                                self.closest( 'tr' ).hide();
+                                
+                                //alert(resp.data.html);
+                            } else {
+                                self.closest( 'tr' ).removeClass('custom-spinner');
+                                alert( 'Something wrong' );
+                            }
+                        });
+
+                    });
                         
         });
     </script>
@@ -250,5 +278,9 @@
                 </form>
             </div>
         </div>
+
+        <div class="postbox duplicate-orders-wrapper" style="display: none">
+            
+
+        </div>
     </div>
-</div>

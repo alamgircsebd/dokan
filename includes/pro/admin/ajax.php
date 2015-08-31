@@ -16,6 +16,7 @@ class Dokan_Pro_Admin_Ajax {
         add_action( 'wp_ajax_regen_sync_table', array( $this, 'regen_sync_order_table' ) );
         add_action( 'wp_ajax_check_duplicate_suborders', array( $this, 'check_duplicate_suborders' ) );
         add_action( 'wp_ajax_print_duplicate_suborders', array( $this, 'print_duplicate_suborders' ) );
+        add_action( 'wp_ajax_dokan_duplicate_order_delete', array( $this, 'dokan_duplicate_order_delete' ) );
 	}
 
 	/**
@@ -190,6 +191,29 @@ class Dokan_Pro_Admin_Ajax {
         }
         $duplicate_orders = isset( $_SESSION['dokan_duplicate_order_ids'] ) ? $_SESSION['dokan_duplicate_order_ids'] : array();
         
+        ob_start();
         
+        require_once DOKAN_INC_DIR.'/pro/admin/duplicate-order-list.php';
+        
+        $html = ob_get_clean();
+        
+        wp_send_json_success( array(
+            'html'  => $html,
+        ) );
+        
+        
+    }
+    function dokan_duplicate_order_delete(){
+        
+        $duplicate_order_id = (int) $_POST['order_id'];
+        if(!$duplicate_order_id){
+            wp_send_json_error();
+        }
+        
+        if ( wp_delete_post( $duplicate_order_id ) ) {
+            wp_send_json_success( array(
+                'status' => 'deleted',
+            ) );
+        }
     }
 }
