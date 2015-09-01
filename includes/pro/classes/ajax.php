@@ -293,6 +293,113 @@ class Dokan_Pro_Ajax {
         wp_send_json_success( $content );
     }
 
+     /**
+     * Save attributes from edit product page
+     *
+     * @return void
+     */
+    function save_attributes() {
+
+        // Get post data
+        parse_str( $_POST['data'], $data );
+        $post_id = absint( $_POST['post_id'] );
+
+        // Save Attributes
+        $attributes = array();
+
+        if ( isset( $data['attribute_names'] ) ) {
+
+            $attribute_names  = array_map( 'stripslashes', $data['attribute_names'] );
+            $attribute_values = isset( $data['attribute_values'] ) ? $data['attribute_values'] : array();
+
+            if ( isset( $data['attribute_visibility'] ) )
+                $attribute_visibility = $data['attribute_visibility'];
+
+            if ( isset( $data['attribute_variation'] ) )
+                $attribute_variation = $data['attribute_variation'];
+
+            $attribute_is_taxonomy = $data['attribute_is_taxonomy'];
+            $attribute_position = $data['attribute_position'];
+
+            $attribute_names_count = sizeof( $attribute_names );
+
+            for ( $i=0; $i < $attribute_names_count; $i++ ) {
+                if ( ! $attribute_names[ $i ] )
+                    continue;
+
+                $is_visible     = isset( $attribute_visibility[ $i ] ) ? 1 : 0;
+                $is_variation   = isset( $attribute_variation[ $i ] ) ? 1 : 0;
+                $is_taxonomy    = $attribute_is_taxonomy[ $i ] ? 1 : 0;
+
+                if ( $is_taxonomy ) {
+
+                    if ( isset( $attribute_values[ $i ] ) ) {
+
+                        // Select based attributes - Format values (posted values are slugs)
+                        if ( is_array( $attribute_values[ $i ] ) ) {
+                            $values = array_map( 'sanitize_title', $attribute_values[ $i ] );
+
+                        // Text based attributes - Posted values are term names - don't change to slugs
+                        } else {
+                            $values = array_map( 'stripslashes', array_map( 'strip_tags', explode( WC_DELIMITER, $attribute_values[ $i ] ) ) );
+                        }
+
+                        // Remove empty items in the array
+                        $values = array_filter( $values, 'strlen' );
+
+                    } else {
+                        $values = array();
+                    }
+
+                    // Update post terms
+                    if ( taxonomy_exists( $attribute_names[ $i ] ) )
+                        wp_set_object_terms( $post_id, $values, $attribute_names[ $i ] );
+
+                    if ( $values ) {
+                        // Add attribute to array, but don't set values
+                        $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                            'name'          => wc_clean( $attribute_names[ $i ] ),
+                            'value'         => '',
+                            'position'      => $attribute_position[ $i ],
+                            'is_visible'    => $is_visible,
+                            'is_variation'  => $is_variation,
+                            'is_taxonomy'   => $is_taxonomy
+                        );
+                    }
+
+                } elseif ( isset( $attribute_values[ $i ] ) ) {
+
+                    // Text based, separate by pipe
+                    $values = implode( ' ' . WC_DELIMITER . ' ', array_map( 'wc_clean', array_map( 'stripslashes', $attribute_values[ $i ] ) ) );
+
+                    // Custom attribute - Add attribute to array and set the values
+                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                        'name'          => wc_clean( $attribute_names[ $i ] ),
+                        'value'         => $values,
+                        'position'      => $attribute_position[ $i ],
+                        'is_visible'    => $is_visible,
+                        'is_variation'  => $is_variation,
+                        'is_taxonomy'   => $is_taxonomy
+                    );
+                }
+
+             }
+        }
+
+        if ( ! function_exists( 'attributes_cmp' ) ) {
+            function attributes_cmp( $a, $b ) {
+                if ( $a['position'] == $b['position'] ) return 0;
+                return ( $a['position'] < $b['position'] ) ? -1 : 1;
+            }
+        }
+        uasort( $attributes, 'attributes_cmp' );
+
+        update_post_meta( $post_id, '_product_attributes', $attributes );
+
+        die();
+    }
+
+
     /**
      * Save attributes from edit product page
      *
