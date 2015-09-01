@@ -252,7 +252,7 @@
                 </div>
                 <form id="regen-sync-table" action="" method="post">
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
-                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 5 ); ?>">
+                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">                   
                     <input type="submit" class="button button-primary" value="<?php _e( 'Re-build', 'dokan' ); ?>" >
                     <span class="regen-sync-loader" style="display:none"></span>
@@ -271,7 +271,7 @@
                 </div>
                 <form id="duplicate-order-check" action="" method="post">
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
-                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'duplicate-order-check-limit', 20 ); ?>">
+                    <input type="hidden" name="limit" value="<?php echo apply_filters( 'duplicate-order-check-limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">                   
                     <input type="submit" class="button button-primary" value="<?php _e( 'Check', 'dokan' ); ?>" >
                     <span class="duplicate-sync-loader" style="display:none"></span>

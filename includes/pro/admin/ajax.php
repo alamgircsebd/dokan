@@ -55,11 +55,11 @@ class Dokan_Pro_Admin_Ajax {
 
         if ( $offset == 0 ) {
             $wpdb->query( 'TRUNCATE TABLE ' . $wpdb->dokan_orders );
-            $total_orders = $wpdb->get_var( "SELECT count(ID) FROM " . $wpdb->posts . "
+            $total_orders = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->posts
                 WHERE post_type = 'shop_order'"  );
         }
 
-        $sql = "SELECT ID FROM " . $wpdb->posts . "
+        $sql = "SELECT ID FROM $wpdb->posts
                 WHERE post_type = 'shop_order'
                 LIMIT %d,%d";
 
@@ -118,23 +118,15 @@ class Dokan_Pro_Admin_Ajax {
         if ( $offset == 0 ) {
             
             unset($_SESSION['dokan_duplicate_order_ids']);
-            $total_orders = $wpdb->get_var( "SELECT count(ID) FROM " . $wpdb->prefix . "posts
-                WHERE post_type = 'shop_order'
-                AND ID IN(
-                    SELECT post_parent FROM " . $wpdb->prefix . "posts
-                    WHERE post_type = 'shop_order'
-                    GROUP BY post_parent
-                )" );
+            $total_orders = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->posts AS p
+                LEFT JOIN $wpdb->postmeta AS m ON p.ID = m.post_id 
+                WHERE post_type = 'shop_order' AND m.meta_key = 'has_sub_order'" );
         }
 
-        $sql = "SELECT ID FROM " . $wpdb->prefix . "posts
-                WHERE post_type = 'shop_order'
-                AND ID IN(
-                    SELECT post_parent FROM " . $wpdb->prefix . "posts
-                    WHERE post_type = 'shop_order'
-                    GROUP BY post_parent
-                )
-                 LIMIT %d,%d";
+        $sql = "SELECT ID FROM $wpdb->posts AS p
+                LEFT JOIN $wpdb->postmeta AS m ON p.ID = m.post_id 
+                WHERE post_type = 'shop_order' AND m.meta_key = 'has_sub_order'
+                LIMIT %d,%d";
 
         $orders = $wpdb->get_results( $wpdb->prepare( $sql, $offset * $limit, $limit ) );
         
