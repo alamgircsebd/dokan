@@ -1,16 +1,24 @@
 
+v2.4.4 -> September 2, 2015
+---------------------
+- [new] Seller balance resync by checking unexpected order button added on tools page
+- [fix] Make some text translatable on contact seller widget
+- [fix] Optimise sql query to make regenerate process fast
+- [fix] Fix WooCommerce deactivate dependency issue
+- [fix] Fix plugin bulk activate issue with dokan welcome page
+
 v2.4.3 -> August 25, 2015
 ---------------------
 - [new] Welcome page on activation with resync button added
 - [tweak] Visual Progress bar added for resync Order progress
 - [fix] Sub-order duplicate issue fixed
 - [fix] Fix wp editor compatible to 4.3
-- [fix] Compitable with WordPress 4.3 widget __construct functions
+- [fix] Compatible with WordPress 4.3 widget __construct functions
 - [fix] Fix table name in sync table sql
-- [fix] Fix store reveiw rewrite problem, Move store functinality in Dokan_Pro_Store class
+- [fix] Fix store review rewrite problem, Move store functionality in Dokan_Pro_Store class
 - [fix] Fix seller migration template loader
 - [fix] Fix same seller multiple product type shipping issue
-- [fix] Fix flat rate shipping issue for multi saller
+- [fix] Fix flat rate shipping issue for multi seller
 
 v2.4.2 -> August 12, 2015
 ---------------------

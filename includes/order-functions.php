@@ -237,7 +237,7 @@ function dokan_delete_sync_order( $order_id ) {
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
 
-    if(  get_post_meta( $order_id, 'has_sub_order' ) == true ){
+    if ( get_post_meta( $order_id, 'has_sub_order', true ) == true ) {
         return;
     }
 
