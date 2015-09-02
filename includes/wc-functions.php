@@ -1850,18 +1850,12 @@ function dokan_save_variations( $post_id ) {
  */
 function dokan_create_sub_order( $parent_order_id ) {
 
-    $parent_order = new WC_Order( $parent_order_id );
-    $order_items = $parent_order->get_items();
     if(  get_post_meta( $parent_order_id, 'has_sub_order' ) == true ){
         return;
     }
 
-    $sellers = array();
-    foreach ($order_items as $item) {
-        $seller_id = get_post_field( 'post_author', $item['product_id'] );
-        $sellers[$seller_id][] = $item;
-    }
-
+    $sellers = dokan_get_sellers_by( $parent_order_id );
+   
     // return if we've only ONE seller
     if ( count( $sellers ) == 1 ) {
         $temp = array_keys( $sellers );

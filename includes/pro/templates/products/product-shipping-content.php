@@ -21,6 +21,11 @@
     </div>
 
     <div class="dokan-side-right">
+        <?php
+            $dokan_shipping_option  = get_option( 'woocommerce_dokan_product_shipping_settings' );
+            $dokan_shipping_enabled = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+            $store_shipping         = get_user_meta( get_current_user_id(), '_dps_shipping_enable', true );
+        ?>
         <?php if( 'yes' == get_option('woocommerce_calc_shipping') ): ?>
             <div class="dokan-clearfix hide_if_downloadable dokan-shipping-container">
                 <input type="hidden" name="product_shipping_class" value="0">
@@ -69,32 +74,33 @@
                         <p class="help-block"><?php _e( 'Shipping classes are used by certain shipping methods to group similar products.', 'dokan' ); ?></p>
                     </div>
                 </div>
+                <?php if( $dokan_shipping_enabled == 'yes' && $store_shipping == 'yes' ) : ?>
+                    <div class="show_if_needs_shipping dokan-shipping-product-options">
 
-                <div class="show_if_needs_shipping dokan-shipping-product-options">
+                        <div class="dokan-form-group">
+                            <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
+                        </div>
 
-                    <div class="dokan-form-group">
-                        <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
+                        <div class="dokan-form-group show_if_override">
+                            <label class="dokan-control-label" for="_additional_product_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
+                            <input id="_additional_product_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
+                        </div>
+
+                        <div class="dokan-form-group show_if_override">
+                            <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
+                            <input id="additional_qty" value="<?php echo ( $_additional_qty ) ? $_additional_qty : $dps_additional_qty; ?>" name="_additional_qty" placeholder="1.99" class="dokan-form-control" type="number" step="any">
+                        </div>
+
+                        <div class="dokan-form-group show_if_override">
+                            <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Processing Time', 'dokan' ); ?></label>
+                            <select name="_dps_processing_time" id="_dps_processing_time" class="dokan-form-control">
+                                <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
+                                      <option value="<?php echo $processing_key; ?>" <?php selected( $porduct_shipping_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
                     </div>
-
-                    <div class="dokan-form-group show_if_override">
-                        <label class="dokan-control-label" for="_additional_product_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
-                        <input id="_additional_product_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
-                    </div>
-
-                    <div class="dokan-form-group show_if_override">
-                        <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
-                        <input id="additional_qty" value="<?php echo ( $_additional_qty ) ? $_additional_qty : $dps_additional_qty; ?>" name="_additional_qty" placeholder="1.99" class="dokan-form-control" type="number" step="any">
-                    </div>
-
-                    <div class="dokan-form-group show_if_override">
-                        <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Processing Time', 'dokan' ); ?></label>
-                        <select name="_dps_processing_time" id="_dps_processing_time" class="dokan-form-control">
-                            <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
-                                  <option value="<?php echo $processing_key; ?>" <?php selected( $porduct_shipping_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </div>
-                </div>
+                <?php endif; ?>
             </div>
         <?php endif; ?>
 
