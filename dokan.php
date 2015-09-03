@@ -103,6 +103,12 @@ final class WeDevs_Dokan {
      * @uses add_action()
      */
     public function __construct() {
+        
+        if ( ! function_exists( 'WC' ) ) {
+            add_action( 'admin_notices', array( $this, 'add_woocommerce_activation_notice' ) );
+            return;
+        }
+    
         global $wpdb;
 
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
@@ -122,6 +128,16 @@ final class WeDevs_Dokan {
         $this->init_ajax();
 
         do_action( 'dokan_loaded' );
+    }
+    
+    /**
+     * Show wordpress error notice if Woocommerce not found
+     * 
+     * @since 2.4.4
+     * 
+     */
+    function add_woocommerce_activation_notice() {
+        echo '<div class="error"><p>' . sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>';
     }
 
     /**
@@ -681,6 +697,7 @@ final class WeDevs_Dokan {
  * @return void
  */
 function dokan_load_plugin() {
+    
     $dokan = WeDevs_Dokan::init();
 
 }
