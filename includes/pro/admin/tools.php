@@ -227,6 +227,50 @@
                         });
 
                     });
+                    
+        $('.duplicate-orders-wrapper').on('click', 'input.dokan-duplicate-orders-allcheck', function(e) {   
+           
+            $('input.order-checkbox').attr( 'checked',this.checked);
+            $('input.dokan-duplicate-orders-allcheck').attr( 'checked',this.checked);
+             
+        });
+        
+        $('.duplicate-orders-wrapper').on('click', 'input.dokan-bulk-action', function(e) {
+                        e.preventDefault();
+                        
+                        if( $('select[name="dokan_duplicate_order_bulk_select"]').val() != 'delete'){
+                            return;
+                        }
+                        
+                        var self = $(this);
+                       
+                        self.closest( 'table' ).addClass('custom-spinner');
+                        data = {
+                            action: 'dokan_duplicate_orders_bulk_delete',
+                            formData : $('#dokan-duplicate-orders-action').serialize(),                            
+                        }
+                        console.log(data);
+                        $.post(ajaxurl, data, function( resp ) {
+
+                            if( resp.success ) {
+                                if( resp.data.status == 1 ){
+                                    var d_orders = $.parseJSON(resp.data.deleted);
+                                
+                                    $.each(d_orders, function ( key, val ){
+                                        $('#row-'+val).remove();
+                                        console.log('row-'+val);
+                                    });
+                               
+                                } 
+                                alert(resp.data.msg);
+                            
+                            } else {
+                               alert( 'Something went wrong !!!' );
+                            }
+                        });
+
+                    });
+             
                         
         });
     </script>

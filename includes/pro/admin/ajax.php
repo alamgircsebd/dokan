@@ -9,17 +9,18 @@
  */
 class Dokan_Pro_Admin_Ajax {
 
-	/**
-	 *  Load autometically all actions
-	 */
-	function __construct() {
+    /**
+     *  Load autometically all actions
+     */
+    function __construct() {
         add_action( 'wp_ajax_regen_sync_table', array( $this, 'regen_sync_order_table' ) );
         add_action( 'wp_ajax_check_duplicate_suborders', array( $this, 'check_duplicate_suborders' ) );
         add_action( 'wp_ajax_print_duplicate_suborders', array( $this, 'print_duplicate_suborders' ) );
         add_action( 'wp_ajax_dokan_duplicate_order_delete', array( $this, 'dokan_duplicate_order_delete' ) );
-	}
+        add_action( 'wp_ajax_dokan_duplicate_orders_bulk_delete', array( $this, 'dokan_duplicate_orders_bulk_delete' ) );
+    }
 
-	/**
+    /**
      * Initializes the Dokan_Template_Withdraw class
      *
      * Checks for an existing Dokan_Template_Withdraw instance
@@ -35,11 +36,11 @@ class Dokan_Pro_Admin_Ajax {
         return $instance;
     }
 
-	/**
-	 *  Handle sync order table via ajax
-	 *
-	 *  @return json success|error|data
-	 */
+    /**
+     *  Handle sync order table via ajax
+     *
+     *  @return json success|error|data
+     */
     function regen_sync_order_table() {
         global $wpdb;
 
@@ -95,6 +96,7 @@ class Dokan_Pro_Admin_Ajax {
      * 
      * @since 2.4.4
      * 
+     * @return json success|error|data
      */
     function check_duplicate_suborders(){
         if(session_id() == ''){
@@ -167,16 +169,19 @@ class Dokan_Pro_Admin_Ajax {
             wp_send_json_success( array(
                     'offset'  => 0,
                     'done'    => 'All',
-                    'message' => sprintf( __( 'All orders has been synchronized. %s', 'dokan' ), $dashboard_link )
-                ) );
-            
+                    'message' => sprintf( __( 'All orders are checked and no duplicate was found. %s', 'dokan' ), $dashboard_link )
+            ) );            
         }
-//            foreach ( $duplicate_orders as $duplicate_id ) {
-//                wp_delete_post( (int) $duplicate_id->ID );
-//            }
-        
     }
     
+    /**
+     * Print Duplicate Suborder table
+     * 
+     * @since 2.4.4
+     * 
+     * @return json success|error|data
+     * 
+     */
     function print_duplicate_suborders() {
         if(session_id() == ''){
             session_start();
@@ -192,20 +197,65 @@ class Dokan_Pro_Admin_Ajax {
         wp_send_json_success( array(
             'html'  => $html,
         ) );
-        
-        
     }
-    function dokan_duplicate_order_delete(){
+    
+    /**
+     * Delete Duplicate orders 
+     * 
+     * @since 2.4.4
+     * 
+     * @return json success|error|data
+     */
+    function dokan_duplicate_order_delete() {
         
-        $duplicate_order_id = (int) $_POST['order_id'];
-        if(!$duplicate_order_id){
+        parse_str( $_POST['formData'], $data );
+        if ( ! wp_verify_nonce( $data['dokan_duplicate_orders_bulk_action_nonce'], 'dokan_duplicate_orders_bulk_action' ) ) {
             wp_send_json_error();
         }
         
+        $duplicate_order_id = (int) $_POST['order_id'];
+        
+        if ( !$duplicate_order_id ) {
+            wp_send_json_error();
+        }
+
         if ( wp_delete_post( $duplicate_order_id ) ) {
             wp_send_json_success( array(
                 'status' => 'deleted',
             ) );
         }
     }
+    
+    /**
+     * Delete orders in Bulk
+     * 
+     * @since 2.4.4
+     * 
+     * @return json success|error|data
+     */
+    function dokan_duplicate_orders_bulk_delete() {
+         
+        parse_str( $_POST['formData'], $data );
+        if ( !wp_verify_nonce( $data['dokan_duplicate_orders_bulk_action_nonce'], 'dokan_duplicate_orders_bulk_action' ) ) {
+            wp_send_json_error();
+        }
+
+        if ( isset( $data['id'] ) ) {
+            foreach ( $data['id'] as $order_id ) {
+                wp_delete_post( $order_id );
+                $deleted_orders[] = (int) $order_id;
+            }
+            wp_send_json_success( array(
+                'status'  => 1,
+                'deleted' => json_encode($deleted_orders),
+                'msg'     => 'Selected Orders Deleted Successfully'
+            ) );
+        } else {
+            wp_send_json_success( array(
+                'status' => 0,
+                'msg'    => 'Select Orders to Delete'
+            ) );
+        }
+    }
+
 }

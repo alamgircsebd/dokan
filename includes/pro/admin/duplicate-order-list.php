@@ -1,3 +1,11 @@
+<?php 
+//$duplicate_orders = array(
+//    object 
+//    
+//);
+
+?>
+
 <div class="wrap">
     <h2><?php _e( 'Duplicate Orders', 'dokan' ); ?></h2>
 
@@ -40,10 +48,11 @@
             foreach ( $duplicate_orders as $d_order ) {
                 $order = new WC_Order( $d_order->ID );                
             ?>
-                    <tr class="<?php echo ( $count % 2 ) == 0 ? 'alternate': 'odd'; ?>" data-order-id="<?php echo $order->id;?>">
+                    <tr id="row-<?php echo $order->id ?>" class="<?php echo ( $count % 2 ) == 0 ? 'alternate': 'odd'; ?>" data-order-id="<?php echo $order->id;?>">
                         <th class="check-column">
-                            <input type="checkbox" name="id[<?php echo $order->id;?>]" value="<?php echo $order->id;?>">                           
-                        </th>    
+                            <input type="checkbox" class="order-checkbox" name="id[<?php echo $order->id;?>]" value="<?php echo $order->id;?>">                           
+                        </th>
+                    <input type="hidden" value="<?php echo $order->id; ?>">
                         <td class="order_actions" data-colname="Order">
                             <div class="tips">
                                 <a href="<?php echo admin_url('post.php?post='.$order->id.'&action=edit')?>" class="row-title">
@@ -92,32 +101,15 @@
             <div class="tablenav bottom">
 
                 <div class="alignleft actions bulkactions">
-                    <select name="dokan_withdraw_bulk">
+                    <select name="dokan_duplicate_order_bulk_select">
                         <option value="-1" selected="selected"><?php _e( 'Bulk Actions', 'dokan' ); ?></option>
-
                         <?php if ( $duplicate_orders ) { ?>
                             <option value="delete"><?php _e( 'Delete', 'dokan' ); ?></option>
                             
                         <?php } ?>
                     </select>
+                    <input type="submit" class="dokan-bulk-action" value="<?php _e( 'Apply' , 'dokan' ) ?>">
                </div>
-
-                <?php /*if ( $duplicate_orders ) {
-                    $counts = dokan_get_withdraw_count();
-                    $num_of_pages = ceil( $counts[$status] / $limit );
-                    $page_links = paginate_links( array(
-                        'base'      => add_query_arg( 'paged', '%#%' ),
-                        'format'    => '',
-                        'prev_text' => __( '&laquo;', 'aag' ),
-                        'next_text' => __( '&raquo;', 'aag' ),
-                        'total'     => $num_of_pages,
-                        'current'   => $pagenum
-                    ) );
-
-                    if ( $page_links ) {
-                        echo '<div class="tablenav-pages">' . $page_links . '</div>';
-                    }
-                } */?>
             </div>
 
         </form>
@@ -140,6 +132,11 @@
         filter: alpha(opacity=40);
         width: 20px;
         height: 20px;
+    }
+    .dokan-duplicate-orders-allcheck {
+        position: relative;
+        top: 5px;
+        left: 3px;
     }
    
 </style>
