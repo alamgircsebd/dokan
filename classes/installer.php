@@ -22,8 +22,8 @@ class Dokan_Installer {
         flush_rewrite_rules();
 
         update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
-
-        // $this->welcome_page_redirect();
+        
+        set_transient( '_dokan_welcome_page_redirect', true, 30 );
     }
 
     /**
@@ -75,10 +75,14 @@ class Dokan_Installer {
      * @return void
      */
     public static function welcome_page_redirect( $plugin ) {
-        if ( plugin_basename( DOKAN_FILE ) == $plugin ) {
-            wp_redirect( admin_url( 'index.php?page=dokan-welcome' ) );
-            exit;
+        
+        if ( !get_transient( '_dokan_welcome_page_redirect' ) ) {
+            return;
         }
+        // Delete the redirect transient
+        delete_transient( '_dokan_welcome_page_redirect' );
+        
+        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-welcome' ), admin_url( 'index.php' ) ) );
     }
 
     /**
