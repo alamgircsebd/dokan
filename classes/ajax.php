@@ -45,6 +45,7 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_dokan_delete_order_note', array( $this, 'delete_order_note' ) );
         add_action( 'wp_ajax_dokan_change_status', array( $this, 'change_order_status' ) );
         add_action( 'wp_ajax_dokan_contact_seller', array( $this, 'contact_seller' ) );
+        add_action( 'wp_ajax_nopriv_dokan_contact_seller', array( $this, 'contact_seller' ) );
 
         add_action( 'wp_ajax_dokan_revoke_access_to_download', array( $this, 'revoke_access_to_download' ) );
         add_action( 'wp_ajax_nopriv_dokan_revoke_access_to_download', array( $this, 'revoke_access_to_download' ) );
