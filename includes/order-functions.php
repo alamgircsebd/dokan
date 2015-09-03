@@ -208,7 +208,7 @@ function dokan_on_child_order_status_change( $order_id, $old_status, $new_status
     // mark the parent order as complete
     if ( $all_complete ) {
         $parent_order = new WC_Order( $parent_order_id );
-        $parent_order->update_status( 'wc-completed', __( 'Mark parent order completed as all child orders are completed.', 'dokan' ) );
+        $parent_order->update_status( 'wc-completed', __( 'Mark parent order completed when all child orders are completed.', 'dokan' ) );
     }
 }
 
@@ -237,7 +237,7 @@ function dokan_delete_sync_order( $order_id ) {
 function dokan_sync_insert_order( $order_id ) {
     global $wpdb;
 
-    if(  get_post_meta( $order_id, 'has_sub_order' ) == true ){
+    if ( get_post_meta( $order_id, 'has_sub_order', true ) == true ) {
         return;
     }
 
@@ -452,4 +452,51 @@ function dokan_total_orders() {
     $order_count = $wpdb->get_var( "SELECT COUNT(id) FROM " . $wpdb->prefix . "dokan_orders " );
 
     return (int) $order_count;
+}
+
+/**
+ * Return array of sellers with items
+ * 
+ * @since 2.4.4
+ * 
+ * @param type $id
+ * 
+ * @return array $sellers_with_items
+ */
+function dokan_get_sellers_by( $order_id ) {
+
+    $order       = new WC_Order( $order_id );
+    $order_items = $order->get_items();
+
+    $sellers = array();
+    foreach ( $order_items as $item ) {
+        $seller_id             = get_post_field( 'post_author', $item['product_id'] );
+        $sellers[$seller_id][] = $item;
+    }
+
+    return $sellers;
+}
+
+/**
+ * 
+ * @global object $wpdb
+ * @param type $parent_order_id
+ * @return type
+ */
+function dokan_get_suborder_ids_by ($parent_order_id){
+    
+    global $wpdb;
+     
+     $sql = "SELECT ID FROM " . $wpdb->prefix . "posts
+             WHERE post_type = 'shop_order'
+             AND post_parent = " . $parent_order_id;
+     
+     $sub_orders = $wpdb->get_results($sql);
+
+    if ( ! $sub_orders ) {
+        return null;
+    }
+    
+    return $sub_orders;
+
 }

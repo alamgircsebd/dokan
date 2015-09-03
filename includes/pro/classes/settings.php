@@ -212,7 +212,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
             $help_text = sprintf ( '<p>%s</p><p>%s</p>',
                 __( 'This page contains your store-wide shipping settings, costs, shipping and refund policy.', 'dokan' ),
-                __( 'You can enable/disable shipping for your products. Also you can override these shipping costs from an individual product.', 'dokan' )
+                __( 'You can enable/disable shipping for your products. Also you can override these shipping costs while creating or editing a product.', 'dokan' )
             );
         }
 

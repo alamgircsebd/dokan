@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.4.3
+Version: 2.4.4
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.4.3' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4.4' );
 define( 'DOKAN_FILE', __FILE__ );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
@@ -103,6 +103,12 @@ final class WeDevs_Dokan {
      * @uses add_action()
      */
     public function __construct() {
+
+        if ( ! function_exists( 'WC' ) ) {
+            add_action( 'admin_notices', array( $this, 'add_woocommerce_activation_notice' ) );
+            return;
+        }
+
         global $wpdb;
 
         $wpdb->dokan_withdraw = $wpdb->prefix . 'dokan_withdraw';
@@ -122,6 +128,16 @@ final class WeDevs_Dokan {
         $this->init_ajax();
 
         do_action( 'dokan_loaded' );
+    }
+
+    /**
+     * Show wordpress error notice if Woocommerce not found
+     *
+     * @since 2.4.4
+     *
+     */
+    function add_woocommerce_activation_notice() {
+        echo '<div class="error"><p>' . sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>';
     }
 
     /**
@@ -261,7 +277,7 @@ final class WeDevs_Dokan {
                     'notAvailable' => __( 'Not Available', 'dokan' )
                 ),
                 'delete_confirm' => __('Are you sure?', 'dokan' ),
-                'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
+                'wrong_message' => __('Something went wrong. Please try again.', 'dokan' ),
             );
             wp_localize_script( 'jquery', 'dokan', $localize_script );
         }
@@ -287,7 +303,7 @@ final class WeDevs_Dokan {
             ),
             'delete_confirm' => __('Are you sure?', 'dokan' ),
             'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
-            'duplicates_attribute_messg' => __( 'Sorry this attribute option already exists, Try another one.', 'dokan' ),
+            'duplicates_attribute_messg' => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
             'variation_unset_warning' => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
         );
 
@@ -681,6 +697,7 @@ final class WeDevs_Dokan {
  * @return void
  */
 function dokan_load_plugin() {
+
     $dokan = WeDevs_Dokan::init();
 
 }

@@ -11,14 +11,14 @@
 <form id="dokan-form-contact-seller" action="" method="post" class="seller-form clearfix">
     <div class="ajax-response"></div>
     <ul>
-        <li class="form-group">
-            <input type="text" name="name" value="" placeholder="<?php esc_attr_e( 'Your Name', 'dokan' ); ?>" class="form-control" minlength="5" required="required">
+        <li class="dokan-form-group">
+            <input type="text" name="name" value="" placeholder="<?php esc_attr_e( 'Your Name', 'dokan' ); ?>" class="dokan-form-control" minlength="5" required="required">
         </li>
-        <li class="form-group">
-            <input type="email" name="email" value="" placeholder="<?php esc_attr_e( 'you@example.com', 'dokan' ); ?>" class="form-control" required="required">
+        <li class="dokan-form-group">
+            <input type="email" name="email" value="" placeholder="<?php esc_attr_e( 'you@example.com', 'dokan' ); ?>" class="dokan-form-control" required="required">
         </li>
-        <li class="form-group">
-            <textarea  name="message" maxlength="1000" cols="25" rows="6" value="" placeholder="<?php esc_attr_e( 'Type your messsage...', 'dokan' ); ?>" class="form-control" required="required"></textarea>
+        <li class="dokan-form-group">
+            <textarea  name="message" maxlength="1000" cols="25" rows="6" value="" placeholder="<?php esc_attr_e( 'Type your messsage...', 'dokan' ); ?>" class="dokan-form-control" required="required"></textarea>
         </li>
     </ul>
 
