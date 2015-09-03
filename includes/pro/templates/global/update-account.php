@@ -60,7 +60,7 @@ $cu_slug = get_user_meta( $user_id, 'nickname', true );
         </p>
 
         <p class="form-row form-group form-row-wide">
-            <label for="shop-phone"><?php _e( 'Phone', 'dokan' ); ?><span class="required">*</span></label>
+            <label for="shop-phone"><?php _e( 'Phone Number', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr( $_POST['phone'] ); ?>" required="required" />
         </p>
 

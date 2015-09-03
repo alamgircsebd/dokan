@@ -270,7 +270,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
                 break;
 
             case 'request_success':
-                $message = __( 'Your request has been received successfully and is under review!', 'dokan' );
+                $message = __( 'Your request has been received successfully and being reviewed!', 'dokan' );
                 break;
 
             case 'request_error':
@@ -301,13 +301,13 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         if ( $balance < 0 ) {
             dokon_get_template_part( 'global/dokan-error', '', array(
                 'deleted'=> false,
-                'message' => sprintf( __( 'You already withdrawed %s. This amount will deducted from your next balance.', 'dokan' ), wc_price( $balance ) )
+                'message' => sprintf( __( 'You already withdrawed %s. This amount will deducted from your balance.', 'dokan' ), wc_price( $balance ) )
             ) );
         }
 
         if ( $this->has_pending_request( $current_user->ID ) ) {
 
-            $pending_warning = sprintf( "<p>%s</p><p>%s</p>", __( 'You\'ve already pending withdraw request(s).', 'dokan' ), __( 'Until it\'s been cancelled or approved, you can\'t submit any new request.', 'dokan' ) );
+            $pending_warning = sprintf( "<p>%s</p><p>%s</p>", __( 'You already have pending withdraw request(s).', 'dokan' ), __( 'Please submit your request after approval or cancellation of your previous request.', 'dokan' ) );
 
             dokan_get_template_part( 'global/dokan-error', '', array(
                 'deleted' => false,
@@ -364,7 +364,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
 
             dokan_get_template_part( 'global/dokan-warning', '', array(
                 'deleted' => false,
-                'message' => __( 'Sorry, no transactions found!', 'dokan' )
+                'message' => __( 'Sorry, no transactions were found!', 'dokan' )
             ) );
 
         }

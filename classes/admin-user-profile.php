@@ -170,7 +170,7 @@ class Dokan_Admin_User_Profile {
 
 
                 <tr>
-                    <th><?php _e( 'Phone', 'dokan' ); ?></th>
+                    <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
                     <td>
                         <input type="text" name="dokan_store_phone" class="regular-text" value="<?php echo esc_attr( $store_settings['phone'] ); ?>">
                     </td>
@@ -209,16 +209,16 @@ class Dokan_Admin_User_Profile {
                             <?php _e( 'Publish product directly', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'Instead of being pending, products will be published directly', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Bypass pending, publish products directly', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Seller Percentage', 'dokan' ); ?></th>
+                    <th><?php _e( 'Seller Commission %', 'dokan' ); ?></th>
                     <td>
                         <input type="text" class="small-text" name="dokan_seller_percentage" value="<?php echo esc_attr( $seller_percentage ); ?>">
 
-                        <p class="description"><?php _e( 'How much amount (%) seller will get from each order', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Enter commission % seller will get from each order', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
@@ -228,7 +228,7 @@ class Dokan_Admin_User_Profile {
                         <label for="dokan_feature">
                             <input type="hidden" name="dokan_feature" value="no">
                             <input name="dokan_feature" type="checkbox" id="dokan_feature" value="yes" <?php checked( $feature_seller, 'yes' ); ?> />
-                            <?php _e( 'Make a featured seller', 'wedevs' ); ?>
+                            <?php _e( 'Mark as featured seller', 'wedevs' ); ?>
                         </label>
 
                         <p class="description"><?php _e( 'This seller will be marked as a featured seller.', 'wedevs' ) ?></p>

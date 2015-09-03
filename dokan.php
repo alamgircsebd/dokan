@@ -277,7 +277,7 @@ final class WeDevs_Dokan {
                     'notAvailable' => __( 'Not Available', 'dokan' )
                 ),
                 'delete_confirm' => __('Are you sure?', 'dokan' ),
-                'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
+                'wrong_message' => __('Something went wrong. Please try again.', 'dokan' ),
             );
             wp_localize_script( 'jquery', 'dokan', $localize_script );
         }
@@ -303,7 +303,7 @@ final class WeDevs_Dokan {
             ),
             'delete_confirm' => __('Are you sure?', 'dokan' ),
             'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
-            'duplicates_attribute_messg' => __( 'Sorry this attribute option already exists, Try another one.', 'dokan' ),
+            'duplicates_attribute_messg' => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
             'variation_unset_warning' => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
         );
 

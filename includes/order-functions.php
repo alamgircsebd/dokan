@@ -208,7 +208,7 @@ function dokan_on_child_order_status_change( $order_id, $old_status, $new_status
     // mark the parent order as complete
     if ( $all_complete ) {
         $parent_order = new WC_Order( $parent_order_id );
-        $parent_order->update_status( 'wc-completed', __( 'Mark parent order completed as all child orders are completed.', 'dokan' ) );
+        $parent_order->update_status( 'wc-completed', __( 'Mark parent order completed when all child orders are completed.', 'dokan' ) );
     }
 }
 
