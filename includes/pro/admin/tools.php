@@ -79,10 +79,7 @@
                     submit = form.find('input[type=submit]'),
                     loader = form.find('.regen-sync-loader');
                     responseDiv = $('.regen-sync-response');
-                    
-
-                    // ajaxdir = "<?php admin_url( 'admin-ajax.php'); ?>";
-
+                
                 submit.attr('disabled', 'disabled');
                 loader.show();
                 
@@ -119,9 +116,7 @@
                             return;
                         } else {
                             submit.removeAttr('disabled');
-                            loader.hide();                            
-                            //responseDiv.html('');
-                            // window.location.reload();
+                            loader.hide();
                         }
                     }
                 });
@@ -179,8 +174,7 @@
                             if ( resp.data.duplicate == true ){
                                 get_duplicate_orders_list();
                             }
-                            //responseDiv.html('');
-                            // window.location.reload();
+                          
                         }
                     }
                 });
@@ -212,7 +206,7 @@
                             formData : $('#dokan-duplicate-orders-action').serialize(),
                             order_id : self.closest( 'tr' ).data( 'order-id' )
                         }
-                           console.log(data);
+                        
                         $.post(ajaxurl, data, function( resp ) {
 
                             if( resp.success ) {
@@ -249,7 +243,7 @@
                             action: 'dokan_duplicate_orders_bulk_delete',
                             formData : $('#dokan-duplicate-orders-action').serialize(),                            
                         }
-                        console.log(data);
+                        
                         $.post(ajaxurl, data, function( resp ) {
 
                             if( resp.success ) {
@@ -257,8 +251,7 @@
                                     var d_orders = $.parseJSON(resp.data.deleted);
                                 
                                     $.each(d_orders, function ( key, val ){
-                                        $('#row-'+val).remove();
-                                        console.log('row-'+val);
+                                        $('#row-'+val).remove();                                        
                                     });
                                
                                 } 

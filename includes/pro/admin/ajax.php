@@ -10,7 +10,7 @@
 class Dokan_Pro_Admin_Ajax {
 
     /**
-     *  Load autometically all actions
+     * Load autometically all actions
      */
     function __construct() {
         add_action( 'wp_ajax_regen_sync_table', array( $this, 'regen_sync_order_table' ) );
@@ -37,9 +37,9 @@ class Dokan_Pro_Admin_Ajax {
     }
 
     /**
-     *  Handle sync order table via ajax
+     * Handle sync order table via ajax
      *
-     *  @return json success|error|data
+     * @return json success|error|data
      */
     function regen_sync_order_table() {
         global $wpdb;
