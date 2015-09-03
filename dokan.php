@@ -681,8 +681,19 @@ final class WeDevs_Dokan {
  * @return void
  */
 function dokan_load_plugin() {
+    
+    if ( ! function_exists( 'WC' ) ) {
+        add_action( 'admin_notices', 'need_woocommerce_notice' ); 
+        return;
+    }
+    
+    
     $dokan = WeDevs_Dokan::init();
 
+}
+
+function need_woocommerce_notice(){
+    echo $message = '<div class="error"><p>' .sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!' , 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>';
 }
 
 add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
