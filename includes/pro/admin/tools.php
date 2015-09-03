@@ -197,73 +197,72 @@
             }
             
             $('.duplicate-orders-wrapper').on('click', 'a.dokan-order-action-delete', function(e) {
-                        e.preventDefault();
-                        var self = $(this);
-                       
-                        self.closest( 'tr' ).addClass('custom-spinner');
-                        data = {
-                            action: 'dokan_duplicate_order_delete',
-                            formData : $('#dokan-duplicate-orders-action').serialize(),
-                            order_id : self.closest( 'tr' ).data( 'order-id' )
-                        }
+                e.preventDefault();
+                var self = $(this);
+               
+                self.closest( 'tr' ).addClass('custom-spinner');
+                data = {
+                    action: 'dokan_duplicate_order_delete',
+                    formData : $('#dokan-duplicate-orders-action').serialize(),
+                    order_id : self.closest( 'tr' ).data( 'order-id' )
+                }
+                
+                $.post(ajaxurl, data, function( resp ) {
+
+                    if( resp.success ) {
+                        self.closest( 'tr' ).removeClass('custom-spinner');
+                        self.closest( 'tr' ).hide();
                         
-                        $.post(ajaxurl, data, function( resp ) {
+                        //alert(resp.data.html);
+                    } else {
+                        self.closest( 'tr' ).removeClass('custom-spinner');
+                        alert( 'Something wrong' );
+                    }
+                });
 
-                            if( resp.success ) {
-                                self.closest( 'tr' ).removeClass('custom-spinner');
-                                self.closest( 'tr' ).hide();
-                                
-                                //alert(resp.data.html);
-                            } else {
-                                self.closest( 'tr' ).removeClass('custom-spinner');
-                                alert( 'Something wrong' );
-                            }
-                        });
-
-                    });
+            });
                     
-        $('.duplicate-orders-wrapper').on('click', 'input.dokan-duplicate-orders-allcheck', function(e) {   
-           
-            $('input.order-checkbox').attr( 'checked',this.checked);
-            $('input.dokan-duplicate-orders-allcheck').attr( 'checked',this.checked);
-             
-        });
-        
-        $('.duplicate-orders-wrapper').on('click', 'input.dokan-bulk-action', function(e) {
-                        e.preventDefault();
+            $('.duplicate-orders-wrapper').on('click', 'input.dokan-duplicate-orders-allcheck', function(e) {   
+               
+                $('input.order-checkbox').attr( 'checked',this.checked);
+                $('input.dokan-duplicate-orders-allcheck').attr( 'checked',this.checked);
+                 
+            });
+            
+            $('.duplicate-orders-wrapper').on('click', 'input.dokan-bulk-action', function(e) {
+                e.preventDefault();
+                
+                if( $('select[name="dokan_duplicate_order_bulk_select"]').val() != 'delete'){
+                    return;
+                }
+                
+                var self = $(this);
+               
+                self.closest( 'table' ).addClass('custom-spinner');
+                data = {
+                    action: 'dokan_duplicate_orders_bulk_delete',
+                    formData : $('#dokan-duplicate-orders-action').serialize(),                            
+                }
+                
+                $.post(ajaxurl, data, function( resp ) {
+
+                    if( resp.success ) {
+                        if( resp.data.status == 1 ){
+                            var d_orders = $.parseJSON(resp.data.deleted);
                         
-                        if( $('select[name="dokan_duplicate_order_bulk_select"]').val() != 'delete'){
-                            return;
-                        }
-                        
-                        var self = $(this);
+                            $.each(d_orders, function ( key, val ){
+                                $('#row-'+val).remove();                                        
+                            });
                        
-                        self.closest( 'table' ).addClass('custom-spinner');
-                        data = {
-                            action: 'dokan_duplicate_orders_bulk_delete',
-                            formData : $('#dokan-duplicate-orders-action').serialize(),                            
-                        }
-                        
-                        $.post(ajaxurl, data, function( resp ) {
+                        } 
+                        alert(resp.data.msg);
+                    
+                    } else {
+                       alert( '<?php echo esc_js( __( 'Something went wrong!', 'dokan' ) ); ?>' );
+                    }
+                });
 
-                            if( resp.success ) {
-                                if( resp.data.status == 1 ){
-                                    var d_orders = $.parseJSON(resp.data.deleted);
-                                
-                                    $.each(d_orders, function ( key, val ){
-                                        $('#row-'+val).remove();                                        
-                                    });
-                               
-                                } 
-                                alert(resp.data.msg);
-                            
-                            } else {
-                               alert( 'Something went wrong !!!' );
-                            }
-                        });
-
-                    });
-             
+            });
                         
         });
     </script>
@@ -298,7 +297,7 @@
         </div>
 <!--    check for duplicate orders first-->
         <div class="postbox">
-            <h3><?php _e( 'Check for duplicate orders', 'dokan' ); ?></h3>
+            <h3><?php _e( 'Check for Duplicate Orders', 'dokan' ); ?></h3>
 
             <div class="inside">
                 <p><?php _e( 'This tool will check for duplicate orders from the Dokan\'s sync table.', 'dokan' ); ?></p>
@@ -310,14 +309,11 @@
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
                     <input type="hidden" name="limit" value="<?php echo apply_filters( 'duplicate-order-check-limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">                   
-                    <input type="submit" class="button button-primary" value="<?php _e( 'Check', 'dokan' ); ?>" >
+                    <input type="submit" class="button button-primary" value="<?php _e( 'Check Orders', 'dokan' ); ?>" >
                     <span class="duplicate-sync-loader" style="display:none"></span>
                 </form>
             </div>
         </div>
 
-        <div class="postbox duplicate-orders-wrapper" style="display: none">
-            
-
-        </div>
+        <div class="postbox duplicate-orders-wrapper" style="display: none"></div>
     </div>
