@@ -1,5 +1,5 @@
 
-v2.4.4 -> September 2, 2015
+v2.4.4 -> September 4, 2015
 ---------------------
 - [new] Seller balance resync by checking unexpected order button added on tools page
 - [fix] Make some text translatable on contact seller widget
