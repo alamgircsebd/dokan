@@ -139,7 +139,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
         <div class="dokan-form-group">
             <label class="dokan-w4 dokan-control-label" for="dps_form_location">
                 <?php _e( 'Ships from:', 'dokan' ); ?>
-                <span class="dokan-tooltips-help tips" title="<?php _e( 'The place you send the products for delivery. Most of the time it as store location', 'dokan' ); ?>">
+                <span class="dokan-tooltips-help tips" title="<?php _e( 'Location from where the products are shipped for delivery. Usually it is same as the store.', 'dokan' ); ?>">
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>
@@ -178,7 +178,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                         </td>
                                         <td class="dps_shipping_location_cost">
                                             <label for=""><?php _e( 'Cost', 'dokan' ); ?>
-                                            <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. Else add the states below', 'dokan' ); ?>">
+                                            <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. If not, manually add the states below', 'dokan' ); ?>">
                                             <i class="fa fa-question-circle"></i></span></label>
                                             <div class="dokan-input-group">
                                                 <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
@@ -282,7 +282,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                     </td>
                                     <td class="dps_shipping_location_cost">
                                         <label for=""><?php _e( 'Cost', 'dokan' ); ?>
-                                        <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. Else add the states below', 'dokan' ); ?>">
+                                        <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. If not, manually add the states below', 'dokan' ); ?>">
                                         <i class="fa fa-question-circle"></i></span></label>
                                         <div class="dokan-input-group">
                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
@@ -340,7 +340,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                 </td>
                 <td class="dps_shipping_location_cost">
                     <label for=""><?php _e( 'Cost', 'dokan' ); ?>
-                    <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. Else add the states below', 'dokan' ); ?>">
+                    <span class="dokan-tooltips-help tips" title="<?php _e( 'If the shipping price is same for all the states, use this field. If not, manually add the states below', 'dokan' ); ?>">
                     <i class="fa fa-question-circle"></i></span></label>
                     <div class="dokan-input-group">
                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>

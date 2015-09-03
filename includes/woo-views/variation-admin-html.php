@@ -225,7 +225,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 				<td class="options">
 					<label class="checkbox"><input type="checkbox" class="checkbox" name="variable_enabled[<?php echo $loop; ?>]" <?php checked( $variation_post_status, 'publish' ); ?> /> <?php _e( 'Enabled', 'dokan' ); ?></label>
 
-					<label class="checkbox"><input type="checkbox" class="checkbox variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enable this option if access is given to a downloadable file upon purchase of a product', 'dokan' ); ?>" href="#">[?]</a></label>
+					<label class="checkbox"><input type="checkbox" class="checkbox variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enable this option if access will be given to a downloadable file upon the purchase of a product', 'dokan' ); ?>" href="#">[?]</a></label>
 
 					<label class="checkbox"><input type="checkbox" class="checkbox variable_is_virtual" name="variable_is_virtual[<?php echo $loop; ?>]" <?php checked( isset( $_virtual ) ? $_virtual : '', 'yes' ); ?> /> <?php _e( 'Virtual', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enable this option if a product is not shipped or there is no shipping cost', 'dokan' ); ?>" href="#">[?]</a></label>
 

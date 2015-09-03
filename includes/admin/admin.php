@@ -217,7 +217,7 @@ class Dokan_Admin_Settings {
                 ),
                 'seller_percentage' => array(
                     'name'    => 'seller_percentage',
-                    'label'   => __( 'Seller Percentage', 'dokan' ),
+                    'label'   => __( 'Seller Commission %', 'dokan' ),
                     'desc'    => __( 'How much amount (%) a seller will get from each order', 'dokan' ),
                     'default' => '90',
                     'type'    => 'text',

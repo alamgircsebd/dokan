@@ -187,15 +187,15 @@ class Dokan_Admin_Withdraw extends Dokan_Withdraw {
 
             switch ( $_GET['message'] ) {
             case 'trashed':
-                $message = __( 'Requests deleted!', 'dokan' );
+                $message = __( 'Requests DELETED!', 'dokan' );
                 break;
 
             case 'cancelled':
-                $message = __( 'Requests cancelled!', 'dokan' );
+                $message = __( 'Requests CANCELLED!', 'dokan' );
                 break;
 
             case 'approved':
-                $message = __( 'Requests approved!', 'dokan' );
+                $message = __( 'Requests APPROVED!', 'dokan' );
                 break;
             }
 
