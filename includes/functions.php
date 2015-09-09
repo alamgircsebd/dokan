@@ -183,11 +183,11 @@ function dokan_count_posts( $post_type, $user_id ) {
  * @return array
  */
 function dokan_count_comments( $post_type, $user_id ) {
-    global $wpdb, $current_user;
+    global $wpdb;
 
     $cache_key = 'dokan-count-comments-' . $post_type . '-' . $user_id;
     $counts = wp_cache_get( $cache_key, 'dokan' );
-
+    
     if ( $counts === false ) {
         $query = "SELECT c.comment_approved, COUNT( * ) AS num_comments
             FROM $wpdb->comments as c, $wpdb->posts as p
