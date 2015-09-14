@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.4\n"
+"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.5\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-09-03 20:15:22+00:00\n"
+"POT-Creation-Date: 2015-09-14 08:48:57+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3492,7 +3492,7 @@ msgstr ""
 
 #: includes/pro/templates/widgets/best-seller.php:22
 #: includes/pro/templates/widgets/feature-seller.php:22
-#: includes/wc-functions.php:2453
+#: includes/wc-functions.php:2455
 msgid "No ratings found yet!"
 msgstr ""
 
@@ -3646,55 +3646,55 @@ msgstr ""
 msgid "Product SKU must be unique."
 msgstr ""
 
-#: includes/wc-functions.php:1890
+#: includes/wc-functions.php:1892
 msgid "Order &ndash; %s"
 msgstr ""
 
-#: includes/wc-functions.php:2131
+#: includes/wc-functions.php:2133
 msgid "Cheating, eh?"
 msgstr ""
 
-#: includes/wc-functions.php:2140
+#: includes/wc-functions.php:2142
 msgid "Please enter your first name."
 msgstr ""
 
-#: includes/wc-functions.php:2145
+#: includes/wc-functions.php:2147
 msgid "Please enter your last name."
 msgstr ""
 
-#: includes/wc-functions.php:2149
+#: includes/wc-functions.php:2151
 msgid "Please enter your phone number."
 msgstr ""
 
-#: includes/wc-functions.php:2458
+#: includes/wc-functions.php:2460
 msgid "Rated %s out of %d"
 msgstr ""
 
-#: includes/wc-functions.php:2539
+#: includes/wc-functions.php:2541
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/wc-functions.php:2540
+#: includes/wc-functions.php:2542
 msgid "Enter your last name"
 msgstr ""
 
-#: includes/wc-functions.php:2541
+#: includes/wc-functions.php:2543
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/wc-functions.php:2542
+#: includes/wc-functions.php:2544
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/wc-functions.php:2543
+#: includes/wc-functions.php:2545
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:2578
+#: includes/wc-functions.php:2580
 msgid "Your {site_title} order receipt from {order_date}"
 msgstr ""
 
-#: includes/wc-functions.php:2579
+#: includes/wc-functions.php:2581
 msgid "Your {site_title} order from {order_date} is complete"
 msgstr ""
 
@@ -4451,7 +4451,7 @@ msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
 
-#: includes/wc-functions.php:1890
+#: includes/wc-functions.php:1892
 msgctxt "Order date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""
