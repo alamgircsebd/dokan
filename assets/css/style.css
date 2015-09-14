@@ -3854,6 +3854,19 @@ select.dokan-form-control {
 :: Responsive Styles
 -------------------------------------------------- */
 @media (max-width: 767px) {
+  li.product {
+    width: 100% !important;
+  }
+  .dokan-primary {
+    width: 100% !important;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .dokan-secondary {
+    width: 100%;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
   .dokan-dashboard .dokan-dash-sidebar,
   .dokan-dashboard .dokan-dashboard-content {
     float: none;

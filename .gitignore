@@ -7,3 +7,4 @@ includes/.DS_Store
 .idea
 /includes/.DS_Store
 plugin-deploy.sh
+secret.json
