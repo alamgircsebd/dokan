@@ -1,5 +1,6 @@
 'use strict';
 module.exports = function(grunt) {
+    var pkg = grunt.file.readJSON('package.json');
 
     grunt.initConfig({
         // setting folder templates
@@ -127,6 +128,7 @@ module.exports = function(grunt) {
                     '!.gitignore',
                     '!.gitmodules',
                     '!npm-debug.log',
+                    '!secret.json',
                     '!plugin-deploy.sh',
                     '!assets/less/**',
                     '!tests/**',
@@ -161,7 +163,7 @@ module.exports = function(grunt) {
             main: {
                 options: {
                     mode: 'zip',
-                    archive: './build/dokan.zip'
+                    archive: './build/dokan-plugin-v' + pkg.version + '.zip'
                 },
                 expand: true,
                 cwd: 'build/',
@@ -169,6 +171,38 @@ module.exports = function(grunt) {
                 dest: 'dokan'
             }
         },
+
+        secret: grunt.file.readJSON('secret.json'),
+        sshconfig: {
+            "myhost": grunt.file.readJSON('secret.json')
+        },
+        sftp: {
+            upload: {
+                files: {
+                    "./": 'build/dokan-plugin-v' + pkg.version + '.zip'
+                },
+                options: {
+                    path: '<%= secret.path %>',
+                    config: 'myhost',
+                    showProgress: true,
+                    srcBasePath: "build/"
+                }
+            }
+        },
+        sshexec: {
+            updateVersion: {
+                command: '<%= secret.sql %> version=\'' + pkg.version + '\' WHERE id=<%= secret.id %>"',
+                options: {
+                    config: 'myhost'
+                }
+            },
+            updateVersionNames: {
+                command: '<%= secret.updateFiles %> ' + pkg.version,
+                options: {
+                    config: 'myhost'
+                }
+            },
+        }
     });
 
     // Load NPM tasks to be used here
@@ -182,6 +216,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-copy' );
     grunt.loadNpmTasks( 'grunt-contrib-compress' );
     grunt.loadNpmTasks( 'grunt-text-replace' );
+    grunt.loadNpmTasks( 'grunt-ssh' );
 
     grunt.registerTask( 'default', [
         'less',
