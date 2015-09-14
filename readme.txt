@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.wedevs.com/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, vendor, seller, store, sell, online
 Requires at least: 3.6
-Tested up to: 4.1
+Tested up to: 4.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -144,6 +144,51 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+
+= v2.4.5 -> September 14, 2015 =
+
+ * [fix] Fix responsive style issue for store page
+ * [fix] Fix undefine parent order object issue on creat sub-order
+ * [fix] Fix seller dashboard product comments count on widget
+
+= v2.4.4 -> September 4, 2015 =
+
+ * [new] Seller balance resync by checking unexpected order button added on tools page
+ * [fix] Make some text translatable on contact seller widget
+ * [fix] Optimise sql query to make regenerate process fast
+ * [fix] Fix WooCommerce deactivate dependency issue
+ * [fix] Fix plugin bulk activate issue with dokan welcome page
+
+= v2.4.3 -> August 25, 2015 =
+
+ * [new] Welcome page on activation with resync button added
+ * [tweak] Visual Progress bar added for resync Order progress
+ * [fix] Sub-order duplicate issue fixed
+ * [fix] Fix wp editor compatible to 4.3
+ * [fix] Compatible with WordPress 4.3 widget __construct functions
+ * [fix] Fix table name in sync table sql
+ * [fix] Fix store review rewrite problem, Move store functionality in Dokan_Pro_Store class
+ * [fix] Fix seller migration template loader
+ * [fix] Fix same seller multiple product type shipping issue
+ * [fix] Fix flat rate shipping issue for multi seller
+
+= v2.4.2 -> August 12, 2015 =
+
+ * [tweak] New hook on store header: dokan_store_before_social
+ * [tweak] Re-arrange dokan admin settings fields
+ * [tweak] Add field on seller store settings to manage store product per page
+ * [tweak] Sellers redirected to dashboard after login
+ * [fix] Feature seller widget display template path
+ * [fix] Best seller widget display seller name changed to store name
+ * [fix] Fix problem with showing variation data on order details
+ * [fix] Update "dokan_create_seller_order" function to save variation order meta on sub-order
+ * [fix] Update "dokan_post_input_box" function to add option for making text field and number field required
+ * [fix] Fix balance separator problem on withdraw
+ * [fix] Fix total sales balance display on seller dashboard page
+ * [fix] Keep value saved of oveerride shipping fields meta even when the option uncheckd
+ * [fix] English language phrases correction on several place
+ * [fix] Fix calculation of sub-orders in WooCommerce dashboard status widget sales query
 
 = 2.4.1 (August 1, 2015) =
  * [new] Pro version rewrite to Free
