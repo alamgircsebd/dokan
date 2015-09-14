@@ -1,4 +1,10 @@
 
+v2.4.5 -> September 14, 2015
+---------------------
+- [fix] Fix responsive style issue for store page
+- [fix] Fix undefine parent order object issue on creat sub-order 
+- [fix] Fix seller dashboard product comments count on widget 
+
 v2.4.4 -> September 4, 2015
 ---------------------
 - [new] Seller balance resync by checking unexpected order button added on tools page
