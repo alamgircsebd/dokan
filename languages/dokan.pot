@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.3\n"
+"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.4\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-08-25 13:03:04+00:00\n"
+"POT-Creation-Date: 2015-09-03 20:15:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -79,7 +79,7 @@ msgstr ""
 #: includes/pro/templates/global/update-account.php:63
 #: includes/template-tags.php:618
 #: templates/global/seller-registration-form.php:38
-msgid "Phone"
+msgid "Phone Number"
 msgstr ""
 
 #: classes/admin-user-profile.php:191
@@ -103,15 +103,15 @@ msgid "Publish product directly"
 msgstr ""
 
 #: classes/admin-user-profile.php:212
-msgid "Instead of being pending, products will be published directly"
+msgid "Bypass pending, publish products directly"
 msgstr ""
 
 #: classes/admin-user-profile.php:217 includes/admin/admin.php:220
-msgid "Seller Percentage"
+msgid "Seller Commission %"
 msgstr ""
 
 #: classes/admin-user-profile.php:221
-msgid "How much amount (%) seller will get from each order"
+msgid "Enter commission % seller will get from each order"
 msgstr ""
 
 #: classes/admin-user-profile.php:226
@@ -120,7 +120,7 @@ msgid "Featured Seller"
 msgstr ""
 
 #: classes/admin-user-profile.php:231
-msgid "Make a featured seller"
+msgid "Mark as featured seller"
 msgstr ""
 
 #: classes/admin-user-profile.php:234
@@ -128,15 +128,15 @@ msgid "This seller will be marked as a featured seller."
 msgstr ""
 
 #: classes/admin-withdraw.php:190
-msgid "Requests deleted!"
+msgid "Requests DELETED!"
 msgstr ""
 
 #: classes/admin-withdraw.php:194
-msgid "Requests cancelled!"
+msgid "Requests CANCELLED!"
 msgstr ""
 
 #: classes/admin-withdraw.php:198
-msgid "Requests approved!"
+msgid "Requests APPROVED!"
 msgstr ""
 
 #: classes/admin-withdraw.php:219 classes/admin-withdraw.php:233
@@ -144,6 +144,8 @@ msgid "User Name"
 msgstr ""
 
 #: classes/admin-withdraw.php:220 classes/admin-withdraw.php:234
+#: includes/pro/admin/duplicate-order-list.php:30
+#: includes/pro/admin/duplicate-order-list.php:41
 #: includes/pro/templates/coupon/form.php:41
 #: includes/pro/templates/coupon/form.php:43
 #: templates/withdraw/approved-request-listing.php:14
@@ -201,6 +203,8 @@ msgid "Pending"
 msgstr ""
 
 #: classes/admin-withdraw.php:279 classes/admin-withdraw.php:358
+#: includes/pro/admin/duplicate-order-list.php:79
+#: includes/pro/admin/duplicate-order-list.php:107
 #: includes/pro/admin/sellers.php:116
 #: includes/pro/templates/products/edit/sidebar.php:168
 #: includes/pro/templates/products/edit/variation-popup.php:169
@@ -226,10 +230,13 @@ msgid "cancel"
 msgstr ""
 
 #: classes/admin-withdraw.php:326
+#: includes/pro/admin/duplicate-order-list.php:93
 msgid "No results found"
 msgstr ""
 
-#: classes/admin-withdraw.php:338 includes/pro/admin/sellers.php:115
+#: classes/admin-withdraw.php:338
+#: includes/pro/admin/duplicate-order-list.php:105
+#: includes/pro/admin/sellers.php:115
 msgid "Bulk Actions"
 msgstr ""
 
@@ -250,7 +257,9 @@ msgstr ""
 msgid "Download PayPal mass payment file"
 msgstr ""
 
-#: classes/admin-withdraw.php:364 includes/pro/admin/sellers.php:119
+#: classes/admin-withdraw.php:364
+#: includes/pro/admin/duplicate-order-list.php:111
+#: includes/pro/admin/sellers.php:119
 msgid "Apply"
 msgstr ""
 
@@ -266,11 +275,11 @@ msgstr ""
 msgid "&raquo;"
 msgstr ""
 
-#: classes/ajax.php:69
+#: classes/ajax.php:70
 msgid "<br><strong> Seller:</strong> %s"
 msgstr ""
 
-#: classes/ajax.php:84 classes/template-settings.php:207
+#: classes/ajax.php:85 classes/template-settings.php:207
 #: classes/template-settings.php:215 classes/template-settings.php:221
 #: classes/template-settings.php:227 classes/template-settings.php:261
 #: classes/template-settings.php:323 classes/template-settings.php:362
@@ -281,31 +290,32 @@ msgstr ""
 msgid "Are you cheating?"
 msgstr ""
 
-#: classes/ajax.php:119 classes/ajax.php:153
+#: classes/ajax.php:120 classes/ajax.php:154
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: classes/ajax.php:123 classes/ajax.php:157
+#: classes/ajax.php:124 classes/ajax.php:158
 msgid "You have taken too long. Please go back and retry."
 msgstr ""
 
-#: classes/ajax.php:132 classes/ajax.php:166
+#: classes/ajax.php:133 classes/ajax.php:167
 msgid "You do not have permission to change this order"
 msgstr ""
 
-#: classes/ajax.php:217
+#: classes/ajax.php:218
 msgid "File %d"
 msgstr ""
 
-#: classes/ajax.php:266 includes/template-tags.php:140
+#: classes/ajax.php:267 includes/pro/admin/tools.php:261
+#: includes/template-tags.php:140
 msgid "Something went wrong!"
 msgstr ""
 
-#: classes/ajax.php:274
+#: classes/ajax.php:275
 msgid "Email sent successfully!"
 msgstr ""
 
-#: classes/ajax.php:329 templates/orders/details.php:264
+#: classes/ajax.php:330 templates/orders/details.php:264
 msgid "Delete note"
 msgstr ""
 
@@ -401,24 +411,24 @@ msgstr ""
 msgid "[%s] Your product has been approved!"
 msgstr ""
 
-#: classes/installer.php:118 includes/admin-functions.php:52
+#: classes/installer.php:122 includes/admin-functions.php:52
 #: includes/admin-functions.php:553 includes/admin-functions.php:566
 #: includes/pro/admin/reports.php:199 includes/wc-template.php:13
 #: templates/my-orders.php:31
 msgid "Seller"
 msgstr ""
 
-#: classes/installer.php:147 includes/admin/admin.php:128
+#: classes/installer.php:151 includes/admin/admin.php:128
 #: includes/admin/admin.php:253 includes/pro/admin/admin.php:245
 #: includes/template-tags.php:295
 msgid "Dashboard"
 msgstr ""
 
-#: classes/installer.php:153 includes/pro/admin/admin.php:251
+#: classes/installer.php:157 includes/pro/admin/admin.php:251
 msgid "Store List"
 msgstr ""
 
-#: classes/installer.php:159 includes/admin/admin.php:259
+#: classes/installer.php:163 includes/admin/admin.php:259
 #: templates/global/header-menu.php:46
 msgid "My Orders"
 msgstr ""
@@ -474,7 +484,7 @@ msgid "Customer IP"
 msgstr ""
 
 #: classes/template-products.php:106
-msgid "Details about your product..."
+msgid "Details of your product ..."
 msgstr ""
 
 #: classes/template-products.php:122 classes/template-products.php:232
@@ -488,15 +498,12 @@ msgid "Please select a category"
 msgstr ""
 
 #: classes/template-products.php:132 classes/template-products.php:242
-msgid "Please select at least one category"
-msgstr ""
-
 #: classes/template-products.php:329
-msgid "Please select atleast one category"
+msgid "Please select AT LEAST ONE category"
 msgstr ""
 
 #: classes/template-settings.php:70 classes/template-settings.php:74
-#: dokan.php:670 includes/admin/admin.php:133 includes/admin/admin.php:377
+#: dokan.php:686 includes/admin/admin.php:133 includes/admin/admin.php:377
 #: includes/admin/welcome.php:20 includes/functions.php:1507
 #: includes/pro/admin/admin.php:322
 msgid "Settings"
@@ -616,7 +623,7 @@ msgid "Your request has been cancelled successfully!"
 msgstr ""
 
 #: classes/template-withdraw.php:273
-msgid "Your request has been received successfully and is under review!"
+msgid "Your request has been received successfully and being reviewed!"
 msgstr ""
 
 #: classes/template-withdraw.php:277
@@ -624,15 +631,17 @@ msgid "Unknown error!"
 msgstr ""
 
 #: classes/template-withdraw.php:304
-msgid "You already withdrawed %s. This amount will deducted from your next balance."
+msgid "You already withdrawed %s. This amount will deducted from your balance."
 msgstr ""
 
 #: classes/template-withdraw.php:310
-msgid "You've already pending withdraw request(s)."
+msgid "You already have pending withdraw request(s)."
 msgstr ""
 
 #: classes/template-withdraw.php:310
-msgid "Until it's been cancelled or approved, you can't submit any new request."
+msgid ""
+"Please submit your request after approval or cancellation of your previous "
+"request."
 msgstr ""
 
 #: classes/template-withdraw.php:324
@@ -640,7 +649,7 @@ msgid "You don't have sufficient balance for a withdraw request!"
 msgstr ""
 
 #: classes/template-withdraw.php:367
-msgid "Sorry, no transactions found!"
+msgid "Sorry, no transactions were found!"
 msgstr ""
 
 #: classes/upgrade.php:50
@@ -677,105 +686,113 @@ msgstr ""
 msgid "Accepted"
 msgstr ""
 
-#: dokan.php:260 dokan.php:285
+#: dokan.php:140
+msgid "<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!"
+msgstr ""
+
+#: dokan.php:276 dokan.php:301
 msgid "Available"
 msgstr ""
 
-#: dokan.php:261 dokan.php:286
+#: dokan.php:277 dokan.php:302
 msgid "Not Available"
 msgstr ""
 
-#: dokan.php:263 dokan.php:288
+#: dokan.php:279 dokan.php:304
 msgid "Are you sure?"
 msgstr ""
 
-#: dokan.php:264 dokan.php:289
+#: dokan.php:280
+msgid "Something went wrong. Please try again."
+msgstr ""
+
+#: dokan.php:305
 msgid "Something is wrong, Please try again."
 msgstr ""
 
-#: dokan.php:290
-msgid "Sorry this attribute option already exists, Try another one."
+#: dokan.php:306
+msgid "Sorry, this attribute option already exists, Try a different one."
 msgstr ""
 
-#: dokan.php:291
+#: dokan.php:307
 msgid ""
 "Warning! This product will not have any variations if this option is not "
 "checked."
 msgstr ""
 
-#: dokan.php:295
+#: dokan.php:311
 msgid "This field is required"
 msgstr ""
 
-#: dokan.php:296
+#: dokan.php:312
 msgid "Please fix this field."
 msgstr ""
 
-#: dokan.php:297
+#: dokan.php:313
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: dokan.php:298
+#: dokan.php:314
 msgid "Please enter a valid URL."
 msgstr ""
 
-#: dokan.php:299
+#: dokan.php:315
 msgid "Please enter a valid date."
 msgstr ""
 
-#: dokan.php:300
+#: dokan.php:316
 msgid "Please enter a valid date (ISO)."
 msgstr ""
 
-#: dokan.php:301
+#: dokan.php:317
 msgid "Please enter a valid number."
 msgstr ""
 
-#: dokan.php:302
+#: dokan.php:318
 msgid "Please enter only digits."
 msgstr ""
 
-#: dokan.php:303
+#: dokan.php:319
 msgid "Please enter a valid credit card number."
 msgstr ""
 
-#: dokan.php:304
+#: dokan.php:320
 msgid "Please enter the same value again."
 msgstr ""
 
-#: dokan.php:305
+#: dokan.php:321
 msgid "Please enter no more than {0} characters."
 msgstr ""
 
-#: dokan.php:306
+#: dokan.php:322
 msgid "Please enter at least {0} characters."
 msgstr ""
 
-#: dokan.php:307
+#: dokan.php:323
 msgid "Please enter a value between {0} and {1} characters long."
 msgstr ""
 
-#: dokan.php:308
+#: dokan.php:324
 msgid "Please enter a value between {0} and {1}."
 msgstr ""
 
-#: dokan.php:309
+#: dokan.php:325
 msgid "Please enter a value less than or equal to {0}."
 msgstr ""
 
-#: dokan.php:310
+#: dokan.php:326
 msgid "Please enter a value greater than or equal to {0}."
 msgstr ""
 
-#: dokan.php:635
+#: dokan.php:651
 msgid "Page %s"
 msgstr ""
 
-#: dokan.php:667
+#: dokan.php:683
 msgid "Get PRO"
 msgstr ""
 
-#: dokan.php:671 includes/admin/welcome.php:21
+#: dokan.php:687 includes/admin/welcome.php:21
 msgid "Documentation"
 msgstr ""
 
@@ -1073,6 +1090,8 @@ msgid "Total"
 msgstr ""
 
 #: includes/admin-functions.php:51
+#: includes/pro/admin/duplicate-order-list.php:31
+#: includes/pro/admin/duplicate-order-list.php:42
 msgid "Actions"
 msgstr ""
 
@@ -1081,6 +1100,7 @@ msgid "Sub Order"
 msgstr ""
 
 #: includes/admin-functions.php:79
+#: includes/pro/admin/duplicate-order-list.php:64
 msgid "Sub Order of"
 msgstr ""
 
@@ -1292,7 +1312,7 @@ msgid "Flickr"
 msgstr ""
 
 #: includes/order-functions.php:211
-msgid "Mark parent order completed as all child orders are completed."
+msgid "Mark parent order completed when all child orders are completed."
 msgstr ""
 
 #: includes/pro/admin/admin.php:41
@@ -1434,16 +1454,28 @@ msgid ""
 "will inactive this option"
 msgstr ""
 
-#: includes/pro/admin/ajax.php:78
+#: includes/pro/admin/ajax.php:82
 msgid "%d orders sync completed out of %d"
 msgstr ""
 
-#: includes/pro/admin/ajax.php:81
+#: includes/pro/admin/ajax.php:85 includes/pro/admin/ajax.php:168
 msgid "Go to Dashboard &rarr;"
 msgstr ""
 
-#: includes/pro/admin/ajax.php:85
+#: includes/pro/admin/ajax.php:89
 msgid "All orders has been synchronized. %s"
+msgstr ""
+
+#: includes/pro/admin/ajax.php:157
+msgid "%d orders checked out of %d"
+msgstr ""
+
+#: includes/pro/admin/ajax.php:164
+msgid "All orders are checked and we found some duplicate orders"
+msgstr ""
+
+#: includes/pro/admin/ajax.php:172
+msgid "All orders are checked and no duplicate was found. %s"
 msgstr ""
 
 #: includes/pro/admin/announcement.php:21
@@ -1530,6 +1562,34 @@ msgstr ""
 
 #: includes/pro/admin/announcement.php:198
 msgid "No seller assigned!"
+msgstr ""
+
+#: includes/pro/admin/duplicate-order-list.php:10
+msgid "Duplicate Orders"
+msgstr ""
+
+#: includes/pro/admin/duplicate-order-list.php:28
+#: includes/pro/admin/duplicate-order-list.php:39
+msgid "Order No."
+msgstr ""
+
+#: includes/pro/admin/duplicate-order-list.php:29
+#: includes/pro/admin/duplicate-order-list.php:40
+msgid "Seller Name"
+msgstr ""
+
+#: includes/pro/admin/duplicate-order-list.php:60
+msgid "by"
+msgstr ""
+
+#: includes/pro/admin/duplicate-order-list.php:73
+msgid " via "
+msgstr ""
+
+#: includes/pro/admin/duplicate-order-list.php:78 templates/my-orders.php:88
+#: templates/orders/listing.php:107 templates/products/products-listing.php:122
+#: templates/sub-orders.php:59
+msgid "View"
 msgstr ""
 
 #: includes/pro/admin/reports.php:17 includes/pro/classes/reports.php:73
@@ -1691,30 +1751,42 @@ msgstr ""
 msgid "Order sync table has been regenerated!"
 msgstr ""
 
-#: includes/pro/admin/tools.php:134
+#: includes/pro/admin/tools.php:272
 msgid "Page Installation"
 msgstr ""
 
-#: includes/pro/admin/tools.php:137
+#: includes/pro/admin/tools.php:275
 msgid "Clicking this button will create required pages for the plugin."
 msgstr ""
 
-#: includes/pro/admin/tools.php:138
+#: includes/pro/admin/tools.php:276
 msgid "Install Dokan Pages"
 msgstr ""
 
-#: includes/pro/admin/tools.php:143
+#: includes/pro/admin/tools.php:281
 msgid "Regenerate Order Sync Table"
 msgstr ""
 
-#: includes/pro/admin/tools.php:146
+#: includes/pro/admin/tools.php:284
 msgid ""
 "This tool will delete all orders from the Dokan's sync table and re-build "
 "it."
 msgstr ""
 
-#: includes/pro/admin/tools.php:155
+#: includes/pro/admin/tools.php:293
 msgid "Re-build"
+msgstr ""
+
+#: includes/pro/admin/tools.php:300
+msgid "Check for Duplicate Orders"
+msgstr ""
+
+#: includes/pro/admin/tools.php:303
+msgid "This tool will check for duplicate orders from the Dokan's sync table."
+msgstr ""
+
+#: includes/pro/admin/tools.php:312
+msgid "Check Orders"
 msgstr ""
 
 #: includes/pro/classes/ajax.php:92 includes/pro/classes/ajax.php:118
@@ -1757,12 +1829,12 @@ msgstr ""
 msgid "Please select a country from the dropdown"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:484 includes/wc-functions.php:1346
+#: includes/pro/classes/ajax.php:591 includes/wc-functions.php:1346
 #: includes/wc-functions.php:1389 includes/wc-functions.php:1656
 msgid "Variation #%s of %s"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:788
+#: includes/pro/classes/ajax.php:895
 #: includes/pro/templates/products/edit/variation-popup.php:126
 #: includes/pro/templates/products/edit/variation-popup.php:141
 #: includes/woo-views/variation-admin-html.php:136
@@ -1770,14 +1842,14 @@ msgstr ""
 msgid "Same as parent"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:789 includes/pro/classes/products.php:177
+#: includes/pro/classes/ajax.php:896 includes/pro/classes/products.php:177
 #: includes/pro/templates/products/edit/inventory.php:6
 #: includes/pro/templates/products/edit/load_variation_template.php:16
 #: includes/wc-functions.php:26
 msgid "Standard"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:798
+#: includes/pro/classes/ajax.php:905
 #: includes/pro/templates/products/edit/inventory.php:53
 #: includes/pro/templates/products/edit/variation-popup.php:54
 #: includes/woo-views/variation-admin-html.php:70
@@ -1785,11 +1857,11 @@ msgstr ""
 msgid "Do not allow"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:799
+#: includes/pro/classes/ajax.php:906
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:800
+#: includes/pro/classes/ajax.php:907
 #: includes/pro/templates/products/edit/inventory.php:55
 #: includes/pro/templates/products/edit/variation-popup.php:56
 #: includes/woo-views/variation-admin-html.php:72
@@ -1797,40 +1869,40 @@ msgstr ""
 msgid "Allow"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:804
+#: includes/pro/classes/ajax.php:911
 #: includes/pro/templates/products/edit/variation-popup.php:64
 #: includes/woo-views/variation-admin-html.php:80
 #: templates/products/products-listing.php:140
 msgid "In stock"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:805
+#: includes/pro/classes/ajax.php:912
 #: includes/pro/templates/products/edit/variation-popup.php:65
 #: includes/woo-views/variation-admin-html.php:81
 #: templates/products/products-listing.php:142
 msgid "Out of stock"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:1042
+#: includes/pro/classes/ajax.php:1149
 #: includes/pro/templates/products/edit/attributes.php:56
 #: includes/pro/templates/products/edit/templates-js.php:11
 #: includes/woo-views/variation-admin-html.php:6
 msgid "Remove"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:1053
+#: includes/pro/classes/ajax.php:1160
 #: includes/pro/templates/products/edit/attributes.php:74
 #: includes/pro/templates/products/edit/templates-js.php:21
 msgid "Visible on the product page"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:1060
+#: includes/pro/classes/ajax.php:1167
 #: includes/pro/templates/products/edit/attributes.php:87
 #: includes/pro/templates/products/edit/templates-js.php:27
 msgid "Used for variations"
 msgstr ""
 
-#: includes/pro/classes/ajax.php:1071 includes/pro/classes/ajax.php:1082
+#: includes/pro/classes/ajax.php:1178 includes/pro/classes/ajax.php:1189
 #: includes/pro/templates/products/edit/attributes.php:101
 #: includes/pro/templates/products/edit/attributes.php:115
 #: includes/pro/templates/products/edit/templates-js.php:36
@@ -1939,7 +2011,7 @@ msgstr ""
 #: includes/pro/classes/settings.php:215
 msgid ""
 "You can enable/disable shipping for your products. Also you can override "
-"these shipping costs from an individual product."
+"these shipping costs while creating or editing a product."
 msgstr ""
 
 #: includes/pro/classes/settings.php:286
@@ -2015,75 +2087,75 @@ msgstr ""
 msgid "Dokan Error:"
 msgstr ""
 
-#: includes/pro/classes/update.php:320
+#: includes/pro/classes/update.php:325
 msgid "Empty email address"
 msgstr ""
 
-#: includes/pro/classes/update.php:324
+#: includes/pro/classes/update.php:329
 msgid "Empty license key"
 msgstr ""
 
-#: includes/pro/classes/update.php:342
+#: includes/pro/classes/update.php:347
 msgid "Settings Saved"
 msgstr ""
 
-#: includes/pro/classes/update.php:358
+#: includes/pro/classes/update.php:363
 msgid "Plugin Activation"
 msgstr ""
 
-#: includes/pro/classes/update.php:361
+#: includes/pro/classes/update.php:366
 msgid ""
 "Enter the E-mail address that was used for purchasing the plugin and the "
 "license key."
 msgstr ""
 
-#: includes/pro/classes/update.php:362
+#: includes/pro/classes/update.php:367
 msgid ""
 "We recommend you to enter those details to get regular <strong>plugin "
 "update and support</strong>."
 msgstr ""
 
-#: includes/pro/classes/update.php:381
+#: includes/pro/classes/update.php:386
 msgid "E-mail Address"
 msgstr ""
 
-#: includes/pro/classes/update.php:384
+#: includes/pro/classes/update.php:389
 msgid "Enter your purchase Email address"
 msgstr ""
 
-#: includes/pro/classes/update.php:388
+#: includes/pro/classes/update.php:393
 msgid "License Key"
 msgstr ""
 
-#: includes/pro/classes/update.php:391
+#: includes/pro/classes/update.php:396
 msgid "Enter your license key"
 msgstr ""
 
-#: includes/pro/classes/update.php:396
+#: includes/pro/classes/update.php:401
 msgid "Save & Activate"
 msgstr ""
 
-#: includes/pro/classes/update.php:405
+#: includes/pro/classes/update.php:410
 msgid "has been expired %s ago"
 msgstr ""
 
-#: includes/pro/classes/update.php:408
+#: includes/pro/classes/update.php:413
 msgid "will expire in %s"
 msgstr ""
 
-#: includes/pro/classes/update.php:414
+#: includes/pro/classes/update.php:419
 msgid "Validity:"
 msgstr ""
 
-#: includes/pro/classes/update.php:419
+#: includes/pro/classes/update.php:424
 msgid "Renew License"
 msgstr ""
 
-#: includes/pro/classes/update.php:427
+#: includes/pro/classes/update.php:432
 msgid "Plugin is activated"
 msgstr ""
 
-#: includes/pro/classes/update.php:431
+#: includes/pro/classes/update.php:436
 msgid "Delete License"
 msgstr ""
 
@@ -2221,6 +2293,9 @@ msgid "Title:"
 msgstr ""
 
 #: includes/pro/includes/widgets/best-seller.php:89
+msgid "No. of Seller:"
+msgstr ""
+
 #: includes/pro/includes/widgets/feature-seller.php:90
 msgid "No of Seller:"
 msgstr ""
@@ -2979,7 +3054,7 @@ msgid "Product name.."
 msgstr ""
 
 #: includes/pro/templates/products/new-product.php:97
-msgid "Short description about the product..."
+msgid "Short description of the product..."
 msgstr ""
 
 #: includes/pro/templates/products/new-product.php:105
@@ -3101,7 +3176,7 @@ msgid "e.g. Multiple sizes and/or colors"
 msgstr ""
 
 #: includes/pro/templates/products/product-variation.php:25
-msgid "Enter you variation attribute option name"
+msgid "Enter your variation attribute option name"
 msgstr ""
 
 #: includes/pro/templates/products/product-variation.php:26
@@ -3360,8 +3435,8 @@ msgstr ""
 
 #: includes/pro/templates/settings/shipping.php:142
 msgid ""
-"The place you send the products for delivery. Most of the time it as store "
-"location"
+"Location from where the products are shipped for delivery. Usually it is "
+"same as the store."
 msgstr ""
 
 #: includes/pro/templates/settings/shipping.php:159
@@ -3381,8 +3456,8 @@ msgstr ""
 #: includes/pro/templates/settings/shipping.php:285
 #: includes/pro/templates/settings/shipping.php:343
 msgid ""
-"If the shipping price is same for all the states, use this field. Else add "
-"the states below"
+"If the shipping price is same for all the states, use this field. If not, "
+"manually add the states below"
 msgstr ""
 
 #: includes/pro/templates/settings/shipping.php:203
@@ -3417,7 +3492,7 @@ msgstr ""
 
 #: includes/pro/templates/widgets/best-seller.php:22
 #: includes/pro/templates/widgets/feature-seller.php:22
-#: includes/wc-functions.php:2459
+#: includes/wc-functions.php:2453
 msgid "No ratings found yet!"
 msgstr ""
 
@@ -3571,55 +3646,55 @@ msgstr ""
 msgid "Product SKU must be unique."
 msgstr ""
 
-#: includes/wc-functions.php:1896
+#: includes/wc-functions.php:1890
 msgid "Order &ndash; %s"
 msgstr ""
 
-#: includes/wc-functions.php:2137
+#: includes/wc-functions.php:2131
 msgid "Cheating, eh?"
 msgstr ""
 
-#: includes/wc-functions.php:2146
+#: includes/wc-functions.php:2140
 msgid "Please enter your first name."
 msgstr ""
 
-#: includes/wc-functions.php:2151
+#: includes/wc-functions.php:2145
 msgid "Please enter your last name."
 msgstr ""
 
-#: includes/wc-functions.php:2155
+#: includes/wc-functions.php:2149
 msgid "Please enter your phone number."
 msgstr ""
 
-#: includes/wc-functions.php:2464
+#: includes/wc-functions.php:2458
 msgid "Rated %s out of %d"
 msgstr ""
 
-#: includes/wc-functions.php:2545
+#: includes/wc-functions.php:2539
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/wc-functions.php:2546
+#: includes/wc-functions.php:2540
 msgid "Enter your last name"
 msgstr ""
 
-#: includes/wc-functions.php:2547
+#: includes/wc-functions.php:2541
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/wc-functions.php:2548
+#: includes/wc-functions.php:2542
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/wc-functions.php:2549
+#: includes/wc-functions.php:2543
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:2584
+#: includes/wc-functions.php:2578
 msgid "Your {site_title} order receipt from {order_date}"
 msgstr ""
 
-#: includes/wc-functions.php:2585
+#: includes/wc-functions.php:2579
 msgid "Your {site_title} order from {order_date} is complete"
 msgstr ""
 
@@ -3749,8 +3824,8 @@ msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:228
 msgid ""
-"Enable this option if access is given to a downloadable file upon purchase "
-"of a product"
+"Enable this option if access will be given to a downloadable file upon the "
+"purchase of a product"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:230
@@ -3874,11 +3949,6 @@ msgstr ""
 
 #: templates/my-orders.php:77
 msgid "Pay"
-msgstr ""
-
-#: templates/my-orders.php:88 templates/orders/listing.php:107
-#: templates/products/products-listing.php:122 templates/sub-orders.php:59
-msgid "View"
 msgstr ""
 
 #: templates/my-orders.php:106
@@ -4381,7 +4451,7 @@ msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
 
-#: includes/wc-functions.php:1896
+#: includes/wc-functions.php:1890
 msgctxt "Order date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""

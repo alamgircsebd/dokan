@@ -28,7 +28,7 @@
                     <th><?php _e( 'E-mail', 'dokan' ); ?></th>
                     <th><?php _e( 'Products', 'dokan' ); ?></th>
                     <th><?php _e( 'Balance', 'dokan' ); ?></th>
-                    <th><?php _e( 'Phone', 'dokan' ); ?></th>
+                    <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
                     <th><?php _e( 'Status', 'dokan' ); ?></th>
                 </tr>
             </thead>
@@ -103,7 +103,7 @@
                     <th><?php _e( 'E-mail', 'dokan' ); ?></th>
                     <th><?php _e( 'Products', 'dokan' ); ?></th>
                     <th><?php _e( 'Balance', 'dokan' ); ?></th>
-                    <th><?php _e( 'Phone', 'dokan' ); ?></th>
+                    <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
                     <th><?php _e( 'Status', 'dokan' ); ?></th>
                 </tr>
             </tfoot>

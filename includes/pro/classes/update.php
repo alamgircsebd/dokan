@@ -224,6 +224,11 @@ class Dokan_Update {
      * @return \stdClass|boolean
      */
     function check_info( $false, $action, $args ) {
+
+        if ( 'plugin_information' != $action ) {
+            return $false;
+        }
+
         if ( self::slug == $args->slug ) {
 
             $remote_info = $this->get_info();
