@@ -174,7 +174,12 @@ module.exports = function(grunt) {
 
         secret: grunt.file.readJSON('secret.json'),
         sshconfig: {
-            "myhost": grunt.file.readJSON('secret.json')
+            "myhost": {
+                host: '<%= secret.host %>',
+                username: '<%= secret.username %>',
+                agent: process.env.SSH_AUTH_SOCK,
+                agentForward: true
+            }
         },
         sftp: {
             upload: {
@@ -192,6 +197,13 @@ module.exports = function(grunt) {
         sshexec: {
             updateVersion: {
                 command: '<%= secret.updateFiles %> ' + pkg.version,
+                options: {
+                    config: 'myhost'
+                }
+            },
+
+            uptime: {
+                command: 'uptime',
                 options: {
                     config: 'myhost'
                 }
