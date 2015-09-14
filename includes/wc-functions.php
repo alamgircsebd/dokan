@@ -1854,6 +1854,8 @@ function dokan_create_sub_order( $parent_order_id ) {
         return;
     }
 
+    $parent_order = new WC_Order( $parent_order_id );
+
     $sellers = dokan_get_sellers_by( $parent_order_id );
    
     // return if we've only ONE seller
