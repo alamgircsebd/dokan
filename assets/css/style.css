@@ -3854,13 +3854,13 @@ select.dokan-form-control {
 :: Responsive Styles
 -------------------------------------------------- */
 @media (max-width: 767px) {
-  li.product {
-    width: 100% !important;
-  }
   .dokan-primary {
     width: 100% !important;
     padding-left: 15px;
     padding-right: 15px;
+  }
+  .dokan-primary li.product {
+    width: 100% !important;
   }
   .dokan-secondary {
     width: 100%;
@@ -3888,6 +3888,13 @@ select.dokan-form-control {
   }
   .dokan-single-store .profile-frame .profile-info-box {
     width: 60%;
+  }
+  ul.dokan-seller-wrap {
+    text-align: center;
+  }
+  ul.dokan-seller-wrap li.dokan-single-seller {
+    width: 90% !important;
+    margin-bottom: 50px;
   }
 }
 @media (max-width: 430px) {
