@@ -39,17 +39,24 @@ if ( $user_orders ) {
                     </td>
                     <td class="dokan-order-customer">
                         <?php
-                        if ( $the_order->user_id )
+
+                        // reset user info
+                        $user_info = '';
+
+                        if ( $the_order->user_id ) {
                             $user_info = get_userdata( $the_order->user_id );
+                        }
 
                         if ( !empty( $user_info ) ) {
 
                             $user = '';
 
-                            if ( $user_info->first_name || $user_info->last_name )
+                            if ( $user_info->first_name || $user_info->last_name ) {
                                 $user .= esc_html( $user_info->first_name . ' ' . $user_info->last_name );
-                            else
+                            } else {
                                 $user .= esc_html( $user_info->display_name );
+                            }
+
                         } else {
                             $user = __( 'Guest', 'dokan' );
                         }
