@@ -10,8 +10,8 @@
 ?>
 
 <script type="text/html" id="tmpl-dokan-single-attribute">
-    <div id="doakn-single-attribute-wrapper" class="white-popup">
-        <form action="" method="post" id="doakn-single-attribute-form">
+    <div id="dokan-single-attribute-wrapper" class="white-popup">
+        <form action="" method="post" id="dokan-single-attribute-form">
             <table class="dokan-table dokan-single-attribute-options-table">
                 <thead>
                     <tr>

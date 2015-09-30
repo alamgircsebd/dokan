@@ -14,7 +14,7 @@ $order    = new WC_Order( $order_id );
 <div class="dokan-clearfix">
     <div class="dokan-w7" style="margin-right:3%;">
 
-        <div class="doakn-clearfix">
+        <div class="dokan-clearfix">
             <div class="" style="width:100%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>

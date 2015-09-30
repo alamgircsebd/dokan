@@ -1,6 +1,6 @@
 <?php
 /**
- * Doakn Review Underscores Script Template
+ * Dokan Review Underscores Script Template
  *
  * @since 2.4
  *

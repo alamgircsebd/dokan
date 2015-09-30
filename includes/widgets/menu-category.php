@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Category walker for generating doakn category
+ * Category walker for generating dokan category
  */
 class Dokan_Category_Walker extends Walker {
 

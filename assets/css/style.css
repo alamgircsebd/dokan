@@ -1426,7 +1426,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   height: 30px;
   padding: 0px;
 }
-#doakn-single-attribute-wrapper {
+#dokan-single-attribute-wrapper {
   padding: 25px;
 }
 .white-popup {
@@ -1605,10 +1605,10 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-reports-content .dokan-reports-area table.table .progress {
   margin-bottom: 0;
 }
-.dokan-reports-content .dokan-reports-area .doakn-reports-main h3 {
+.dokan-reports-content .dokan-reports-area .dokan-reports-main h3 {
   margin: 0 0 15px 0;
 }
-.dokan-reports-content .dokan-reports-area .doakn-reports-main .chart-placeholder.main {
+.dokan-reports-content .dokan-reports-area .dokan-reports-main .chart-placeholder.main {
   height: 435px;
 }
 .dokan-reports-content .dokan-reports-area .chart-tooltip {

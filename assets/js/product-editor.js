@@ -76,7 +76,7 @@
             $('body').on('click', 'button.remove_single_attribute', this.newProductDesign.removeSingleAttributeOption );
             $('body').on('click', 'a.dokan_add_new_variation', this.newProductDesign.addSingleVariationOption );
 
-            $('body').on('submit', 'form#doakn-single-attribute-form', this.newProductDesign.saveProductAttributes );
+            $('body').on('submit', 'form#dokan-single-attribute-form', this.newProductDesign.saveProductAttributes );
             $('body').on('submit', 'form#dokan-single-variation-form', this.newProductDesign.saveProductVariations );
 
             $('body').on('change', 'input.variable_is_downloadable', this.newProductDesign.showHideDownload );
