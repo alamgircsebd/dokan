@@ -88,15 +88,21 @@ jQuery(function($) {
         }
     });
     
-    $( '.tc_check_box' ).on( 'click', function () {
+   $( '.tc_check_box' ).on( 'click', function () {
         var chk_value = $( this ).val();
         console.log( chk_value );
         if ( $( this ).prop( "checked" ) ) {
             $( 'input[name=register]' ).removeAttr( 'disabled' );
+            $( 'input[name=dokan_migration]' ).removeAttr( 'disabled' );
         } else {
             $( 'input[name=register]' ).attr( 'disabled', 'disabled' );
+            $( 'input[name=dokan_migration]' ).attr( 'disabled', 'disabled' );
         }
     } );
+    
+    if ( $( '.tc_check_box' ).length > 0 ){
+        $( 'input[name=dokan_migration]' ).attr( 'disabled', 'disabled' );
+    }
 
     $('#company-name').on('focusout', function() {
         var value = $(this).val().toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
