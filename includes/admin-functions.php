@@ -547,18 +547,25 @@ add_action( 'pending_to_publish', 'dokan_send_notification_on_product_publish' )
  *
  * @param object $post
  */
-function dokan_seller_meta_box($post) {
+function dokan_seller_meta_box( $post ) {
     global $user_ID;
+    $admin_user = get_user_by( 'id', $user_ID );
+    $selected   = empty( $post->ID ) ? $user_ID : $post->post_author;
+    $user_query = new WP_User_Query( array( 'role' => 'seller' ) );
+    $sellers    = $user_query->get_results();
     ?>
     <label class="screen-reader-text" for="post_author_override"><?php _e('Seller'); ?></label>
-
+    <select name="post_author_override" id="post_author_override" class="">
+        <?php if ( ! $sellers ): ?>
+            <option value="<?php echo $admin_user->ID ?>"><?php echo $admin_user->display_name; ?></option>
+        <?php else: ?>
+            <option value="<?php echo $user_ID; ?>" <?php selected( $selected, $user_ID ); ?>><?php echo $admin_user->display_name; ?></option>
+            <?php foreach ( $sellers as $key => $user): ?>
+                <option value="<?php echo $user->ID ?>" <?php selected( $selected, $user->ID ); ?>><?php echo $user->display_name; ?></option>
+            <?php endforeach ?>
+        <?php endif ?>
+    </select>
      <?php
-    wp_dropdown_users( array(
-        'role' => 'seller',
-        'name' => 'post_author_override',
-        'selected' => empty($post->ID) ? $user_ID : $post->post_author,
-        'include_selected' => true
-    ) );
 }
 
 function dokan_add_seller_meta_box(){

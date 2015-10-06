@@ -259,6 +259,12 @@ class Dokan_Admin_Settings {
                     'label'   => __( 'My Orders', 'dokan' ),
                     'type'    => 'select',
                     'options' => $pages_array
+                ),
+                'reg_tc_page' => array(
+                    'name'    => 'reg_tc_page',
+                    'label'   => __( 'Terms and Conditions Page', 'dokan' ),
+                    'type'    => 'select',
+                    'options' => $pages_array
                 )
             )
         );

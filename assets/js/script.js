@@ -79,10 +79,24 @@ jQuery(function($) {
 
         if ( value === 'seller') {
             $('.show_if_seller').slideDown();
-        } else {
+            if ( $( '.tc_check_box' ).length > 0 )
+                $('input[name=register]').attr('disabled','disabled');
+        } else {            
             $('.show_if_seller').slideUp();
+            if ( $( '.tc_check_box' ).length > 0 )
+                $( 'input[name=register]' ).removeAttr( 'disabled' );
         }
     });
+    
+    $( '.tc_check_box' ).on( 'click', function () {
+        var chk_value = $( this ).val();
+        console.log( chk_value );
+        if ( $( this ).prop( "checked" ) ) {
+            $( 'input[name=register]' ).removeAttr( 'disabled' );
+        } else {
+            $( 'input[name=register]' ).attr( 'disabled', 'disabled' );
+        }
+    } );
 
     $('#company-name').on('focusout', function() {
         var value = $(this).val().toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
