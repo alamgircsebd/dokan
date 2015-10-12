@@ -38,7 +38,21 @@
         <label for="shop-phone"><?php _e( 'Phone Number', 'dokan' ); ?><span class="required">*</span></label>
         <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $postdata['phone'] ) ) echo esc_attr($postdata['phone']); ?>" required="required" />
     </p>
-
+    <?php 
+        
+        $show_toc = dokan_get_option( 'enable_tc_on_reg', 'dokan_general' );
+        
+        if ( $show_toc == 'on' ) {
+            $toc_page_id = dokan_get_option( 'reg_tc_page', 'dokan_pages' );
+            if ( $toc_page_id != -1 ) {
+                $toc_page_url = get_permalink( $toc_page_id );
+    ?>
+            <p class="form-row form-group form-row-wide">
+                <input class="tc_check_box" type="checkbox" id="tc_agree" name="tc_agree" required="required">
+                <label style="display: inline" for="tc_agree"><?php _e( 'I have read and agree to the <a target="_blank" href='.$toc_page_url.'>Terms &amp; Conditions</a>.' , 'dokan' ) ?></label>
+            </p>    
+            <?php } ?>
+        <?php } ?>
     <?php  do_action( 'dokan_seller_registration_field_after' ); ?>
 
 </div>

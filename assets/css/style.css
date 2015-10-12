@@ -1426,7 +1426,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   height: 30px;
   padding: 0px;
 }
-#doakn-single-attribute-wrapper {
+#dokan-single-attribute-wrapper {
   padding: 25px;
 }
 .white-popup {
@@ -1605,10 +1605,10 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-reports-content .dokan-reports-area table.table .progress {
   margin-bottom: 0;
 }
-.dokan-reports-content .dokan-reports-area .doakn-reports-main h3 {
+.dokan-reports-content .dokan-reports-area .dokan-reports-main h3 {
   margin: 0 0 15px 0;
 }
-.dokan-reports-content .dokan-reports-area .doakn-reports-main .chart-placeholder.main {
+.dokan-reports-content .dokan-reports-area .dokan-reports-main .chart-placeholder.main {
   height: 435px;
 }
 .dokan-reports-content .dokan-reports-area .chart-tooltip {
@@ -1987,13 +1987,17 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-settings-content .dokan-settings-area .dokan-form-group .checkbox {
   margin-top: 0px;
 }
+.dokan-store.dokan-theme-twentytwelve .site-content {
+  float: none;
+  width: 100%;
+}
 .dokan-single-store {
   margin: 0;
 }
 .dokan-single-store .profile-frame {
   padding: 0px;
   position: relative;
-  background-size: 100% auto;
+  background-size: cover;
   background-color: #eee;
   min-height: 300px;
 }
@@ -3854,13 +3858,13 @@ select.dokan-form-control {
 :: Responsive Styles
 -------------------------------------------------- */
 @media (max-width: 767px) {
-  li.product {
-    width: 100% !important;
-  }
   .dokan-primary {
     width: 100% !important;
     padding-left: 15px;
     padding-right: 15px;
+  }
+  .dokan-primary li.product {
+    width: 100% !important;
   }
   .dokan-secondary {
     width: 100%;
@@ -3888,6 +3892,13 @@ select.dokan-form-control {
   }
   .dokan-single-store .profile-frame .profile-info-box {
     width: 60%;
+  }
+  ul.dokan-seller-wrap {
+    text-align: center;
+  }
+  ul.dokan-seller-wrap li.dokan-single-seller {
+    width: 90% !important;
+    margin-bottom: 50px;
   }
 }
 @media (max-width: 430px) {

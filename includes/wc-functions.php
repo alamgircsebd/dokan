@@ -312,9 +312,8 @@ function dokan_variable_product_type_options() {
                     jQuery(el).block({ message: null, overlayCSS: { background: '#fff url(<?php echo $woocommerce->plugin_url(); ?>/assets/images/ajax-loader.gif) no-repeat center', opacity: 0.6 } });
 
                     var data = {
-                        action: 'woocommerce_remove_variations',
+                        action: 'dokan_remove_variation',
                         variation_ids: variation,
-                        security: '<?php echo wp_create_nonce("delete-variations"); ?>'
                     };
 
                     jQuery.post('<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {

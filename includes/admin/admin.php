@@ -115,8 +115,8 @@ class Dokan_Admin_Settings {
      * @return void
      */
     function admin_menu() {
-        $menu_position = apply_filters( 'doakn_menu_position', 17 );
-        $capability    = apply_filters( 'doakn_menu_capability', 'manage_options' );
+        $menu_position = apply_filters( 'dokan_menu_position', 17 );
+        $capability    = apply_filters( 'dokan_menu_capability', 'manage_options' );
         $withdraw      = dokan_get_withdraw_count();
         $withdraw_text = __( 'Withdraw', 'dokan' );
 
@@ -257,6 +257,12 @@ class Dokan_Admin_Settings {
                 'my_orders' => array(
                     'name'    => 'my_orders',
                     'label'   => __( 'My Orders', 'dokan' ),
+                    'type'    => 'select',
+                    'options' => $pages_array
+                ),
+                'reg_tc_page' => array(
+                    'name'    => 'reg_tc_page',
+                    'label'   => __( 'Terms and Conditions Page', 'dokan' ),
                     'type'    => 'select',
                     'options' => $pages_array
                 )

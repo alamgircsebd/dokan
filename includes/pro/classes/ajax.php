@@ -39,6 +39,7 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_dokan_link_all_variations', array( $this, 'link_all_variations' ) );
         add_action( 'wp_ajax_dokan_pre_define_attribute', array( $this, 'dokan_pre_define_attribute' ) );
         add_action( 'wp_ajax_dokan_save_attributes', array( $this, 'save_attributes' ) );
+        add_action( 'wp_ajax_dokan_remove_variation', array( $this, 'remove_variation' ) );
 
         // Single product Design ajax
         add_action( 'wp_ajax_dokan_save_attributes_options', array( $this, 'save_attributes_options') );
@@ -512,6 +513,28 @@ class Dokan_Pro_Ajax {
         update_post_meta( $post_id, '_product_attributes', $attributes );
 
         wp_send_json_success();
+
+        die();
+    }
+
+    /**
+     * Delete variations via ajax function
+     */
+    public function remove_variation() {
+
+        if ( ! current_user_can( 'dokandar' ) ) {
+            die(-1);
+        }
+
+        $variation_ids = (array) $_POST['variation_ids'];
+
+        foreach ( $variation_ids as $variation_id ) {
+            $variation = get_post( $variation_id );
+
+            if ( $variation && 'product_variation' == $variation->post_type ) {
+                wp_delete_post( $variation_id );
+            }
+        }
 
         die();
     }

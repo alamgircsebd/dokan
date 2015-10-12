@@ -454,7 +454,7 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
             </ul>
         </div>
 
-        <div class="doakn-reports-main report-right dokan-right">
+        <div class="dokan-reports-main report-right dokan-right">
             <div class="postbox">
                 <h3><span><?php echo $heading; ?></span></h3>
 

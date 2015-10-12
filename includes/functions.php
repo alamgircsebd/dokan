@@ -187,7 +187,7 @@ function dokan_count_comments( $post_type, $user_id ) {
 
     $cache_key = 'dokan-count-comments-' . $post_type . '-' . $user_id;
     $counts = wp_cache_get( $cache_key, 'dokan' );
-    
+
     if ( $counts === false ) {
         $query = "SELECT c.comment_approved, COUNT( * ) AS num_comments
             FROM $wpdb->comments as c, $wpdb->posts as p
@@ -263,7 +263,7 @@ function dokan_author_total_sales( $seller_id ) {
         $sql = "SELECT SUM(order_total) as earnings
             FROM {$wpdb->prefix}dokan_orders as do LEFT JOIN {$wpdb->prefix}posts as p ON do.order_id = p.ID
             WHERE seller_id = %d AND order_status IN('wc-completed', 'wc-processing', 'wc-on-hold')";
-            
+
         $count = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
         $earnings = $count->earnings;
 
@@ -275,7 +275,7 @@ function dokan_author_total_sales( $seller_id ) {
 
 /**
  * Generate dokan sync table
- * @deprecated since 2.4.3  
+ * @deprecated since 2.4.3
  * @global WPDB $wpdb
  */
 function dokan_generate_sync_table() {
@@ -1818,10 +1818,10 @@ add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
  * @return string [url]
  */
 function dokan_after_login_redirect( $redirect_to, $user ) {
-    
+
     if ( user_can( $user, 'dokandar' ) ) {
         $seller_dashboard = dokan_get_option( 'dashboard', 'dokan_pages' );
-        
+
         if ( $seller_dashboard != -1 ) {
             $redirect_to = get_permalink( $seller_dashboard );
         }

@@ -66,6 +66,13 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
+            'store_seo' => array(
+                'name'    => 'store_seo',
+                'label'   => __( 'Enable Store SEO', 'dokan' ),
+                'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'on'
+            ),
             'contact_seller' => array(
                 'name'    => 'contact_seller',
                 'label'   => __( 'Show Contact Form on Store Page', 'dokan' ),
@@ -84,6 +91,13 @@ class Dokan_Pro_Admin_Settings {
                 'name'    => 'product_add_mail',
                 'label'   => __( 'Product Mail Notification', 'dokan' ),
                 'desc'    => __( 'Email notification on new product submission', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'on'
+            ),
+            'enable_tc_on_reg' => array(
+                'name'    => 'enable_tc_on_reg',
+                'label'   => __( 'Enable Terms and Condition', 'dokan' ),
+                'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan' ),
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
@@ -123,14 +137,7 @@ class Dokan_Pro_Admin_Settings {
                     'publish' => __( 'Published', 'dokan' ),
                     'pending' => __( 'Pending Review', 'dokan' )
                 )
-            ),
-            'store_seo' => array(
-                'name'    => 'store_seo',
-                'label'   => __( 'Enable Store SEO', 'dokan' ),
-                'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'on'
-            ),
+            ),            
             'review_edit' => array(
                 'name'    => 'review_edit',
                 'label'   => __( 'Review Editing', 'dokan' ),
