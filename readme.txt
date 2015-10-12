@@ -146,6 +146,17 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 == Changelog ==
 
 
+= v2.4.6 -> October 12, 2015 =
+
+- [tweak] Added terms and condition option field on Registration form
+- [fix] Remove required for product per page field on store settings
+- [fix] Fix delete variation product issue on tab view for seller
+- [fix] Fix redudant data for guest users
+- [fix] Fix responsive issue on front page product listing
+- [fix] Seller store banner size to cover
+- [fix] Store template fix for twentytwelve theme
+
+
 = v2.4.5 -> September 14, 2015 =
 
  * [fix] Fix responsive style issue for store page
