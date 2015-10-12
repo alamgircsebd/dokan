@@ -1987,13 +1987,17 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-settings-content .dokan-settings-area .dokan-form-group .checkbox {
   margin-top: 0px;
 }
+.dokan-store.dokan-theme-twentytwelve .site-content {
+  float: none;
+  width: 100%;
+}
 .dokan-single-store {
   margin: 0;
 }
 .dokan-single-store .profile-frame {
   padding: 0px;
   position: relative;
-  background-size: 100% auto;
+  background-size: cover;
   background-color: #eee;
   min-height: 300px;
 }

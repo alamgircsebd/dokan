@@ -617,6 +617,8 @@ final class WeDevs_Dokan {
             $classes[] = 'dokan-store';
         }
 
+        $classes[] = 'dokan-theme-' . get_option( 'template' );
+
         return $classes;
     }
 
