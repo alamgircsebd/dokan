@@ -22,12 +22,12 @@ function dokan_get_reports_charts() {
                 'function'    => 'dokan_daily_sales'
             ),
             "top_sellers"       => array(
-                'title'       => __( 'Top sellers', 'dokan' ),
+                'title'       => __( 'Top selling', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_top_sellers'
             ),
             "top_earners"       => array(
-                'title'       => __( 'Top earners', 'dokan' ),
+                'title'       => __( 'Top earning', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_top_earners'
             )
