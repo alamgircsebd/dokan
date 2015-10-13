@@ -28,11 +28,13 @@ class Dokan_Rewrites {
     }
     
     public function store_page_breadcrumb( $crumbs ){
+        if(  dokan_is_store_page()){
+            $author = get_query_var( $this->custom_store_url );
+            $seller_info = get_user_by( 'slug', $author );
+            $crumbs[1]   = array( ucwords($this->custom_store_url) , site_url().'/'.$this->custom_store_url );
+            $crumbs[2]   = array( $author, dokan_get_store_url( $seller_info->data->ID ) );
+        }
         
-        $author = get_query_var( $this->custom_store_url );
-        $seller_info = get_user_by( 'slug', $author );
-        $crumbs[1]   = array( ucwords($this->custom_store_url) , site_url().'/'.$this->custom_store_url );
-        $crumbs[2]   = array( $author, dokan_get_store_url( $seller_info->data->ID ) );
        
         return $crumbs;
     }
