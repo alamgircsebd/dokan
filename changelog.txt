@@ -1,17 +1,19 @@
 
-v2.4.6 -> October 14, 2015
+v2.4.6 -> October 12, 2015
 ---------------------
-- [tweak] Added terms and condition option field on Registration form 
-- [fix] Remove required for product per page field on store settings 
+- [tweak] Added terms and condition option field on Registration form
+- [fix] Remove required for product per page field on store settings
 - [fix] Fix delete variation product issue on tab view for seller
-- [fix] Fix redudant data for guest users 
-- [fix] Fix responsive issue on front page product listing  
+- [fix] Fix redudant data for guest users
+- [fix] Fix responsive issue on front page product listing
+- [fix] Seller store banner size to cover
+- [fix] Store template fix for twentytwelve theme
 
 v2.4.5 -> September 14, 2015
 ---------------------
 - [fix] Fix responsive style issue for store page
-- [fix] Fix undefine parent order object issue on creat sub-order 
-- [fix] Fix seller dashboard product comments count on widget 
+- [fix] Fix undefine parent order object issue on creat sub-order
+- [fix] Fix seller dashboard product comments count on widget
 
 v2.4.4 -> September 4, 2015
 ---------------------
