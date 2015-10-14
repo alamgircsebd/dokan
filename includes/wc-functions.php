@@ -1849,8 +1849,18 @@ function dokan_save_variations( $post_id ) {
  */
 function dokan_create_sub_order( $parent_order_id ) {
 
-    if(  get_post_meta( $parent_order_id, 'has_sub_order' ) == true ){
-        return;
+    if ( get_post_meta( $parent_order_id, 'has_sub_order' ) == true ) {
+        $args = array(
+            'post_parent' => $parent_order_id,
+            'post_type'   => 'shop_order',
+            'numberposts' => -1,
+            'post_status' => 'any'
+        );
+        $child_orders = get_children( $args );
+
+        foreach ( $child_orders as $child ) {
+            wp_delete_post( $child->ID );
+        }
     }
 
     $parent_order = new WC_Order( $parent_order_id );
