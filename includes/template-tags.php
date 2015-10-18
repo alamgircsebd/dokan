@@ -547,7 +547,7 @@ function dokan_myorder_login_check(){
 }
 
 //Render Store listing shortcode as it appears without logged in
-add_shortcode( 'dokan-stores', array( $this, 'store_listing' ) );
+add_shortcode( 'dokan-stores', 'store_listing' );
 
  /**
  * Displays the store lists
