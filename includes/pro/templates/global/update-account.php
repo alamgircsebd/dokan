@@ -73,15 +73,15 @@ $cu_slug = get_user_meta( $user_id, 'nickname', true );
                 ?>
                 <p class="form-row form-group form-row-wide">
                     <input class="tc_check_box" type="checkbox" id="tc_agree" name="tc_agree" required="required">
-                    <label style="display: inline" for="tc_agree"><?php _e( 'I have read and agree to the <a target="_blank" href=' . $toc_page_url . '>Terms &amp; Conditions</a>.', 'dokan' ) ?></label>
-                </p>    
+                    <label style="display: inline" for="tc_agree"><?php sprintf( __( 'I have read and agree to the <a target="_blank" href="%s">Terms &amp; Conditions</a>.', 'dokan' ), $toc_page_url ); ?></label>
+                </p>
             <?php } ?>
         <?php } ?>
 
         <p class="form-row">
         <?php wp_nonce_field( 'account_migration', 'dokan_nonce' ); ?>
-        <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
-        <input type="submit" class="dokan-btn dokan-btn-default" name="dokan_migration" value="<?php _e( 'Become a Seller', 'dokan' ); ?>" />
+            <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
+            <input type="submit" class="dokan-btn dokan-btn-default" name="dokan_migration" value="<?php _e( 'Become a Seller', 'dokan' ); ?>" />
         </p>
     </div>
 </form>

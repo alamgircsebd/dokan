@@ -513,7 +513,6 @@ final class WeDevs_Dokan {
             Dokan_Template_Dashboard::init();
             Dokan_Template_Products::init();
             Dokan_Template_Orders::init();
-            Dokan_Template_Products::init();
             Dokan_Template_Withdraw::init();
             Dokan_Template_Shortcodes::init();
             Dokan_Template_Settings::init();
