@@ -27,6 +27,15 @@ class Dokan_Rewrites {
         add_filter( 'woocommerce_get_breadcrumb', array( $this, 'store_page_breadcrumb'), 10 ,1  );
     }
     
+    /**
+     * Generate breadcrumb for store page
+     * 
+     * @since 2.4.7
+     * 
+     * @param array $crumbs
+     * 
+     * @return array $crumbs
+     */
     public function store_page_breadcrumb( $crumbs ){
         if(  dokan_is_store_page()){
             $author = get_query_var( $this->custom_store_url );
