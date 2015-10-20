@@ -1956,8 +1956,9 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         $discount = dokan_sub_order_get_total_coupon( $order_id );
 
         // calculate the total
-        $order_in_total = $order_total + $shipping_cost + $order_tax - $discount;
-
+        $order_in_total = $order_total + $shipping_cost + $order_tax;
+        //$order_in_total = $order_total + $shipping_cost + $order_tax - $discount;
+                
         // set order meta
         update_post_meta( $order_id, '_payment_method',         $parent_order->payment_method );
         update_post_meta( $order_id, '_payment_method_title',   $parent_order->payment_method_title );
