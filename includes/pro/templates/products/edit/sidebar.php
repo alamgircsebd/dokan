@@ -163,10 +163,7 @@ $_downloadable   = get_post_meta( $post->ID, '_downloadable', true );
                         ?>
                         <li class="image" data-attachment_id="<?php echo $image_id; ?>">
                             <img src="<?php echo $attachment_image[0]; ?>" alt="">
-
-                            <ul class="actions">
-                                <li><a href="#" class="delete" title="<?php esc_attr_e( 'Delete image', 'dokan' ); ?>"><?php _e( 'Delete', 'dokan' ); ?></a></li>
-                            </ul>
+                            <a href="#" class="action-delete">&times;</a>
                         </li>
                         <?php
                     }

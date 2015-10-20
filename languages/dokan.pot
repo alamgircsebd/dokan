@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.6\n"
+"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.7\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-10-12 13:37:17+00:00\n"
+"POT-Creation-Date: 2015-10-20 09:33:24+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -74,9 +74,10 @@ msgstr ""
 msgid "Zip Code"
 msgstr ""
 
-#: classes/admin-user-profile.php:173 classes/template-shortcodes.php:234
-#: includes/pro/admin/sellers.php:31 includes/pro/admin/sellers.php:106
+#: classes/admin-user-profile.php:173 includes/pro/admin/sellers.php:31
+#: includes/pro/admin/sellers.php:106
 #: includes/pro/templates/global/update-account.php:63
+#: includes/template-tags.php:618
 #: templates/global/seller-registration-form.php:38
 msgid "Phone Number"
 msgstr ""
@@ -205,7 +206,6 @@ msgstr ""
 #: includes/pro/admin/duplicate-order-list.php:79
 #: includes/pro/admin/duplicate-order-list.php:107
 #: includes/pro/admin/sellers.php:116
-#: includes/pro/templates/products/edit/sidebar.php:168
 #: includes/pro/templates/products/edit/variation-popup.php:169
 #: includes/pro/templates/products/edit/variation-popup.php:191
 #: includes/woo-views/html-product-download.php:18
@@ -502,7 +502,7 @@ msgid "Please select AT LEAST ONE category"
 msgstr ""
 
 #: classes/template-settings.php:70 classes/template-settings.php:74
-#: dokan.php:688 includes/admin/admin.php:133 includes/admin/admin.php:383
+#: dokan.php:687 includes/admin/admin.php:133 includes/admin/admin.php:383
 #: includes/admin/welcome.php:20 includes/functions.php:1507
 #: includes/pro/admin/admin.php:329
 msgid "Settings"
@@ -593,38 +593,8 @@ msgstr ""
 msgid "Electronic"
 msgstr ""
 
-#: classes/template-shortcodes.php:51
+#: classes/template-shortcodes.php:50
 msgid "Please install <a href=\"%s\"><strong>WooCommerce</strong></a> plugin first"
-msgstr ""
-
-#: classes/template-shortcodes.php:206 templates/orders/order-tax-html.php:8
-msgid "N/A"
-msgstr ""
-
-#: classes/template-shortcodes.php:219
-msgid "No Image"
-msgstr ""
-
-#: classes/template-shortcodes.php:234
-msgid "P:"
-msgstr ""
-
-#: classes/template-shortcodes.php:239 templates/settings/header.php:13
-msgid "Visit Store"
-msgstr ""
-
-#: classes/template-shortcodes.php:258 includes/pro/admin/sellers.php:132
-#: includes/template-tags.php:109
-msgid "&larr; Previous"
-msgstr ""
-
-#: classes/template-shortcodes.php:259 includes/pro/admin/sellers.php:133
-#: includes/template-tags.php:120
-msgid "Next &rarr;"
-msgstr ""
-
-#: classes/template-shortcodes.php:279
-msgid "No seller found!"
 msgstr ""
 
 #: classes/template-withdraw.php:116
@@ -813,15 +783,15 @@ msgstr ""
 msgid "Please enter a value greater than or equal to {0}."
 msgstr ""
 
-#: dokan.php:653
+#: dokan.php:652
 msgid "Page %s"
 msgstr ""
 
-#: dokan.php:685
+#: dokan.php:684
 msgid "Get PRO"
 msgstr ""
 
-#: dokan.php:689 includes/admin/welcome.php:21
+#: dokan.php:688 includes/admin/welcome.php:21
 msgid "Documentation"
 msgstr ""
 
@@ -997,7 +967,6 @@ msgid "Dokan News Updates"
 msgstr ""
 
 #: includes/admin/dashboard.php:110 includes/pro/includes/reports.php:14
-#: includes/reports.php:14
 msgid "Overview"
 msgstr ""
 
@@ -1158,12 +1127,12 @@ msgid "Total: "
 msgstr ""
 
 #: includes/admin-functions.php:385 includes/admin-functions.php:694
-#: includes/pro/includes/reports.php:563 includes/reports.php:563
+#: includes/pro/includes/reports.php:563 includes/reports.php:347
 msgid "Number of orders"
 msgstr ""
 
 #: includes/admin-functions.php:392 includes/admin-functions.php:701
-#: includes/pro/includes/reports.php:570 includes/reports.php:570
+#: includes/pro/includes/reports.php:570 includes/reports.php:354
 msgid "sales"
 msgstr ""
 
@@ -1656,22 +1625,19 @@ msgstr ""
 
 #: includes/pro/admin/reports.php:76 includes/pro/admin/reports.php:116
 #: includes/pro/includes/reports.php:326 includes/pro/includes/reports.php:692
-#: includes/pro/includes/reports.php:796 includes/reports.php:326
-#: includes/reports.php:692 includes/reports.php:796
+#: includes/pro/includes/reports.php:796
 msgid "From:"
 msgstr ""
 
 #: includes/pro/admin/reports.php:80 includes/pro/admin/reports.php:121
 #: includes/pro/includes/reports.php:330 includes/pro/includes/reports.php:697
-#: includes/pro/includes/reports.php:801 includes/reports.php:330
-#: includes/reports.php:697 includes/reports.php:801
+#: includes/pro/includes/reports.php:801
 msgid "To:"
 msgstr ""
 
 #: includes/pro/admin/reports.php:83 includes/pro/admin/reports.php:124
 #: includes/pro/admin/reports.php:139 includes/pro/includes/reports.php:333
 #: includes/pro/includes/reports.php:701 includes/pro/includes/reports.php:805
-#: includes/reports.php:333 includes/reports.php:701 includes/reports.php:805
 msgid "Show"
 msgstr ""
 
@@ -1768,6 +1734,16 @@ msgstr ""
 
 #: includes/pro/admin/sellers.php:91
 msgid "No users found!"
+msgstr ""
+
+#: includes/pro/admin/sellers.php:132 includes/template-tags.php:109
+#: includes/template-tags.php:642
+msgid "&larr; Previous"
+msgstr ""
+
+#: includes/pro/admin/sellers.php:133 includes/template-tags.php:120
+#: includes/template-tags.php:643
+msgid "Next &rarr;"
 msgstr ""
 
 #: includes/pro/admin/tools.php:12
@@ -2199,72 +2175,70 @@ msgid "Start with adding a Banner to gain profile progress"
 msgstr ""
 
 #: includes/pro/includes/reports.php:11 includes/pro/includes/reports.php:709
-#: includes/pro/includes/reports.php:812 includes/reports.php:11
-#: includes/reports.php:709 includes/reports.php:812
+#: includes/pro/includes/reports.php:812
 #: templates/dashboard/big-counter-widget.php:30
 #: templates/dashboard/sales-chart-widget.php:15
 msgid "Sales"
 msgstr ""
 
-#: includes/pro/includes/reports.php:20 includes/reports.php:20
+#: includes/pro/includes/reports.php:20
 msgid "Sales by day"
 msgstr ""
 
-#: includes/pro/includes/reports.php:25 includes/reports.php:25
-msgid "Top sellers"
+#: includes/pro/includes/reports.php:25
+msgid "Top selling"
 msgstr ""
 
-#: includes/pro/includes/reports.php:30 includes/reports.php:30
-msgid "Top earners"
+#: includes/pro/includes/reports.php:30
+msgid "Top earning"
 msgstr ""
 
-#: includes/pro/includes/reports.php:288 includes/reports.php:288
+#: includes/pro/includes/reports.php:288
 msgid "This month's sales"
 msgstr ""
 
-#: includes/pro/includes/reports.php:338 includes/reports.php:338
+#: includes/pro/includes/reports.php:338
 msgid "Sales in this period"
 msgstr ""
 
-#: includes/pro/includes/reports.php:424 includes/reports.php:424
+#: includes/pro/includes/reports.php:424
 msgid "%s sales in this period"
 msgstr ""
 
-#: includes/pro/includes/reports.php:428 includes/reports.php:428
+#: includes/pro/includes/reports.php:428
 msgid "%s average daily sales"
 msgstr ""
 
-#: includes/pro/includes/reports.php:432 includes/reports.php:432
+#: includes/pro/includes/reports.php:432
 msgid "%s orders placed"
 msgstr ""
 
-#: includes/pro/includes/reports.php:436 includes/reports.php:436
+#: includes/pro/includes/reports.php:436
 msgid "%s items purchased"
 msgstr ""
 
-#: includes/pro/includes/reports.php:440 includes/reports.php:440
+#: includes/pro/includes/reports.php:440
 msgid "%s charged for shipping"
 msgstr ""
 
-#: includes/pro/includes/reports.php:444 includes/reports.php:444
+#: includes/pro/includes/reports.php:444
 msgid "%s worth of coupons used"
 msgstr ""
 
-#: includes/pro/includes/reports.php:553 includes/reports.php:553
+#: includes/pro/includes/reports.php:553 includes/reports.php:337
 msgid "Number of items sold"
 msgstr ""
 
 #: includes/pro/includes/reports.php:708 includes/pro/includes/reports.php:811
-#: includes/pro/templates/coupon/form.php:69 includes/reports.php:708
-#: includes/reports.php:811
+#: includes/pro/templates/coupon/form.php:69
 msgid "Product"
 msgstr ""
 
-#: includes/pro/includes/reports.php:723 includes/reports.php:723
+#: includes/pro/includes/reports.php:723
 msgid "Product does not exist"
 msgstr ""
 
-#: includes/pro/includes/reports.php:827 includes/reports.php:827
+#: includes/pro/includes/reports.php:827
 msgid "Product no longer exists"
 msgstr ""
 
@@ -2571,6 +2545,12 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
+#: includes/pro/templates/global/update-account.php:76
+msgid ""
+"I have read and agree to the <a target=\"_blank\" href=\"%s\">Terms &amp; "
+"Conditions</a>."
+msgstr ""
+
 #: includes/pro/templates/products/edit/attributes.php:1
 #: includes/pro/templates/products/product-edit.php:168
 msgid "Attributes"
@@ -2844,12 +2824,7 @@ msgstr ""
 msgid "Image Gallery"
 msgstr ""
 
-#: includes/pro/templates/products/edit/sidebar.php:168
-#: templates/products/new-product-single.php:348
-msgid "Delete image"
-msgstr ""
-
-#: includes/pro/templates/products/edit/sidebar.php:180
+#: includes/pro/templates/products/edit/sidebar.php:177
 msgid "+ Add product images"
 msgstr ""
 
@@ -3523,7 +3498,7 @@ msgstr ""
 
 #: includes/pro/templates/widgets/best-seller.php:22
 #: includes/pro/templates/widgets/feature-seller.php:22
-#: includes/wc-functions.php:2454
+#: includes/wc-functions.php:2465
 msgid "No ratings found yet!"
 msgstr ""
 
@@ -3596,6 +3571,26 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
+#: includes/template-tags.php:590 templates/orders/order-tax-html.php:8
+msgid "N/A"
+msgstr ""
+
+#: includes/template-tags.php:603
+msgid "No Image"
+msgstr ""
+
+#: includes/template-tags.php:618
+msgid "P:"
+msgstr ""
+
+#: includes/template-tags.php:623 templates/settings/header.php:13
+msgid "Visit Store"
+msgstr ""
+
+#: includes/template-tags.php:663
+msgid "No seller found!"
+msgstr ""
+
 #: includes/wc-functions.php:42
 msgid ""
 "Before adding variations, add and save some attributes on the "
@@ -3657,55 +3652,55 @@ msgstr ""
 msgid "Product SKU must be unique."
 msgstr ""
 
-#: includes/wc-functions.php:1891
+#: includes/wc-functions.php:1901
 msgid "Order &ndash; %s"
 msgstr ""
 
-#: includes/wc-functions.php:2132
+#: includes/wc-functions.php:2143
 msgid "Cheating, eh?"
 msgstr ""
 
-#: includes/wc-functions.php:2141
+#: includes/wc-functions.php:2152
 msgid "Please enter your first name."
 msgstr ""
 
-#: includes/wc-functions.php:2146
+#: includes/wc-functions.php:2157
 msgid "Please enter your last name."
 msgstr ""
 
-#: includes/wc-functions.php:2150
+#: includes/wc-functions.php:2161
 msgid "Please enter your phone number."
 msgstr ""
 
-#: includes/wc-functions.php:2459
+#: includes/wc-functions.php:2470
 msgid "Rated %s out of %d"
 msgstr ""
 
-#: includes/wc-functions.php:2540
+#: includes/wc-functions.php:2551
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/wc-functions.php:2541
+#: includes/wc-functions.php:2552
 msgid "Enter your last name"
 msgstr ""
 
-#: includes/wc-functions.php:2542
+#: includes/wc-functions.php:2553
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/wc-functions.php:2543
+#: includes/wc-functions.php:2554
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/wc-functions.php:2544
+#: includes/wc-functions.php:2555
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:2579
+#: includes/wc-functions.php:2590
 msgid "Your {site_title} order receipt from {order_date}"
 msgstr ""
 
-#: includes/wc-functions.php:2580
+#: includes/wc-functions.php:2591
 msgid "Your {site_title} order from {order_date} is complete"
 msgstr ""
 
@@ -4192,6 +4187,10 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
+#: templates/products/new-product-single.php:348
+msgid "Delete image"
+msgstr ""
+
 #: templates/products/new-product-single.php:359
 msgid "+ Add more images"
 msgstr ""
@@ -4462,7 +4461,7 @@ msgctxt "Next post link"
 msgid "&rarr;"
 msgstr ""
 
-#: includes/wc-functions.php:1891
+#: includes/wc-functions.php:1901
 msgctxt "Order date parsed by strftime"
 msgid "%b %d, %Y @ %I:%M %p"
 msgstr ""

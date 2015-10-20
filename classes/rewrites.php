@@ -24,7 +24,28 @@ class Dokan_Rewrites {
 
         add_filter( 'query_vars', array( $this, 'register_query_var' ) );
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
-
+        add_filter( 'woocommerce_get_breadcrumb', array( $this, 'store_page_breadcrumb'), 10 ,1  );
+    }
+    
+    /**
+     * Generate breadcrumb for store page
+     * 
+     * @since 2.4.7
+     * 
+     * @param array $crumbs
+     * 
+     * @return array $crumbs
+     */
+    public function store_page_breadcrumb( $crumbs ){
+        if(  dokan_is_store_page()){
+            $author = get_query_var( $this->custom_store_url );
+            $seller_info = get_user_by( 'slug', $author );
+            $crumbs[1]   = array( ucwords($this->custom_store_url) , site_url().'/'.$this->custom_store_url );
+            $crumbs[2]   = array( $author, dokan_get_store_url( $seller_info->data->ID ) );
+        }
+        
+       
+        return $crumbs;
     }
 
     /**
@@ -202,7 +223,7 @@ class Dokan_Rewrites {
      */
     function store_query_filter( $query ) {
         global $wp_query;
-
+        
         $author = get_query_var( $this->custom_store_url );
 
         if ( !is_admin() && $query->is_main_query() && !empty( $author ) ) {
