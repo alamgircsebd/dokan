@@ -275,11 +275,11 @@ class Dokan_Pro_Reviews {
 
         $status = $this->page_status();
 
-        if ( $status == '1' ) {
-            $query = "$wpdb->comments.comment_approved IN ('1','0') AND";
-        } else {
-            $query = "$wpdb->comments.comment_approved='$status' AND";
-        }
+        // if ( $status == '1' ) {
+        //     $query = "$wpdb->comments.comment_approved IN ('1','0') AND";
+        // } else {
+        //     $query = "$wpdb->comments.comment_approved='$status' AND";
+        // }
 
         $total = $wpdb->get_var(
             "SELECT COUNT(*)
@@ -287,7 +287,7 @@ class Dokan_Pro_Reviews {
             WHERE   $wpdb->posts.post_author='$current_user->ID' AND
             $wpdb->posts.post_status='publish' AND
             $wpdb->comments.comment_post_ID=$wpdb->posts.ID AND
-            $query
+            $wpdb->comments.comment_approved='$status' AND
             $wpdb->posts.post_type='$post_type'"
         );
 
@@ -334,11 +334,11 @@ class Dokan_Pro_Reviews {
         global $wpdb;
         // $status = $this->page_status();
 
-        if ( $status == '1' ) {
-            $query = "$wpdb->comments.comment_approved IN ('1','0') AND";
-        } else {
-            $query = "$wpdb->comments.comment_approved='$status' AND";
-        }
+        // if ( $status == '1' ) {
+        //     $query = "$wpdb->comments.comment_approved IN ('1','0') AND";
+        // } else {
+        //     $query = "$wpdb->comments.comment_approved='$status' AND";
+        // }
 
         $total = $wpdb->get_var(
             "SELECT COUNT(*)
@@ -346,7 +346,7 @@ class Dokan_Pro_Reviews {
             WHERE   $wpdb->posts.post_author='$id' AND
             $wpdb->posts.post_status='publish' AND
             $wpdb->comments.comment_post_ID=$wpdb->posts.ID AND
-            $query
+            $wpdb->comments.comment_approved='$status' AND
             $wpdb->posts.post_type='$post_type'"
         );
 
@@ -465,11 +465,11 @@ class Dokan_Pro_Reviews {
         $pagenum     = max( 1, $page_number );
         $offset      = ( $pagenum - 1 ) * $limit;
 
-        if ( $status == '1' ) {
-            $query = "c.comment_approved IN ('1','0') AND";
-        } else {
-            $query = "c.comment_approved='$status' AND";
-        }
+        // if ( $status == '1' ) {
+        //     $query = "c.comment_approved IN ('1','0') AND";
+        // } else {
+        //     $query = "c.comment_approved='$status' AND";
+        // }
 
         $comments = $wpdb->get_results(
             "SELECT c.comment_content, c.comment_ID, c.comment_author,
@@ -480,7 +480,7 @@ class Dokan_Pro_Reviews {
             WHERE p.post_author='$id' AND
                 p.post_status='publish' AND
                 c.comment_post_ID=p.ID AND
-                $query
+                c.comment_approved='$status' AND
                 p.post_type='$post_type'  ORDER BY c.comment_ID DESC
             LIMIT $offset,$limit"
         );
