@@ -260,13 +260,13 @@ class Dokan_Email {
      * @param string $status
      */
     function new_product_added( $product_id, $status = 'pending' ) {
-        $template = dokan_get_template_part( 'emails/new-product-pending' );
+        $template = 'emails/new-product-pending';
 
         if ( $status == 'publish' ) {
-            $template = dokan_get_template_part( 'emails/new-product' );
+            $template = 'emails/new-product';
         }
         ob_start();
-        echo $template;
+        dokan_get_template_part($template);
         $body = ob_get_clean();
 
         $product = get_product( $product_id );
