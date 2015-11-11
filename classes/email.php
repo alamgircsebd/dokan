@@ -79,9 +79,8 @@ class Dokan_Email {
      * @param string $message
      */
     function contact_seller( $seller_email, $from_name, $from_email, $message ) {
-        $template = DOKAN_INC_DIR . '/emails/contact-seller.php';
         ob_start();
-        include $template;
+        dokan_get_template_part( 'emails/contact-seller' );
         $body = ob_get_clean();
 
         $find = array(
@@ -160,9 +159,8 @@ class Dokan_Email {
      * @param string $method
      */
     function new_withdraw_request( $user, $amount, $method ) {
-        $template = DOKAN_INC_DIR . '/emails/withdraw-new.php';
         ob_start();
-        include $template;
+        dokan_get_template_part( 'emails/withdraw-new' );
         $body = ob_get_clean();
 
         $subject = sprintf( __( '[%s] New Withdraw Request', 'dokan' ), $this->get_from_name() );
@@ -181,9 +179,8 @@ class Dokan_Email {
      * @param string $method
      */
     function withdraw_request_approve( $user_id, $amount, $method ) {
-        $template = DOKAN_INC_DIR . '/emails/withdraw-approve.php';
         ob_start();
-        include $template;
+        dokan_get_template_part( 'emails/withdraw-approve' );
         $body = ob_get_clean();
 
         $user = get_user_by( 'id', $user_id );
@@ -204,9 +201,8 @@ class Dokan_Email {
      * @param string $note
      */
     function withdraw_request_cancel( $user_id, $amount, $method, $note = '' ) {
-        $template = DOKAN_INC_DIR . '/emails/withdraw-cancel.php';
         ob_start();
-        include $template;
+        dokan_get_template_part( 'emails/withdraw-cancel' );
         $body = ob_get_clean();
 
         $user = get_user_by( 'id', $user_id );
@@ -224,10 +220,9 @@ class Dokan_Email {
      * @param int $seller_id
      */
     function new_seller_registered_mail( $seller_id ) {
-        $template = DOKAN_INC_DIR . '/emails/new-seller-registered.php';
-
+        
         ob_start();
-        include $template;
+        dokan_get_template_part( 'emails/new-seller-registered' );
         $body = ob_get_clean();
 
         $seller = get_user_by( 'id', $seller_id );
@@ -265,13 +260,13 @@ class Dokan_Email {
      * @param string $status
      */
     function new_product_added( $product_id, $status = 'pending' ) {
-        $template = DOKAN_INC_DIR . '/emails/new-product-pending.php';
+        $template = dokan_get_template_part( 'emails/new-product-pending' );
 
         if ( $status == 'publish' ) {
-            $template = DOKAN_INC_DIR . '/emails/new-product.php';
+            $template = dokan_get_template_part( 'emails/new-product' );
         }
         ob_start();
-        include $template;
+        echo $template;
         $body = ob_get_clean();
 
         $product = get_product( $product_id );
@@ -316,11 +311,8 @@ class Dokan_Email {
      * @param WP_User $seller
      */
     function product_published( $post, $seller ) {
-
-        $template = DOKAN_INC_DIR . '/emails/product-published.php';
-
         ob_start();
-        include $template;
+        dokan_get_template_part( 'emails/product-published' );
         $body = ob_get_clean();
 
         $product = get_product( $post->ID );
