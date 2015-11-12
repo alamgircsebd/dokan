@@ -19,7 +19,7 @@ class Dokan_Pro_Store_Seo {
      * @uses filter hook
      */
     public function __construct() {
-
+        
         $this->init_hooks();
     }
 
@@ -61,7 +61,7 @@ class Dokan_Pro_Store_Seo {
             return;
         }
 
-        if ( dokan_get_option( 'store_seo', 'dokan_selling' ) === 'off' ) {
+        if ( dokan_get_option( 'store_seo', 'dokan_general' ) === 'off' ) {
             return;
         }
 
