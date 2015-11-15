@@ -1,4 +1,13 @@
 
+v2.4.8 -> November 15, 2015
+---------------------
+- [tweak] Email template override system added
+- [fix] Change dokan SEO admin option section
+- [fix] Ajaxurl fixed to prevent conflict
+- [fix] Fix Arrow (reverted) for pagination
+- [fix] Hide unapprove comment from store review tab
+- [fix] Update cart discount meta on suborder create
+
 v2.4.7 -> October 20, 2015
 ---------------------
 - [fix] Fix Coupon discount redundancy 
