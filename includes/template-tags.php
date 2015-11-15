@@ -120,7 +120,7 @@ function dokan_page_navi( $before = '', $after = '', $wp_query ) {
     next_posts_link( __('Next &rarr;', 'dokan') );
     echo '</li>';
     if ( $end_page < $max_page ) {
-        $last_page_text = "&larr;";
+        $last_page_text = "&rarr;";
         echo '<li class="next"><a href="' . get_pagenum_link( $max_page ) . '" title="Last">' . $last_page_text . '</a></li>';
     }
     echo '</ul></div>' . $after . "";

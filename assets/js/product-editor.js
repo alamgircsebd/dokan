@@ -351,7 +351,7 @@
                         return;
                     }
                     self.closest('.dokan-attribute-content-wrapper').find('span.dokan-loading').removeClass('dokan-hide');
-                    $.post( ajaxurl, data, function( resp ) {
+                    $.post( dokan.ajaxurl, data, function( resp ) {
                         if ( resp.success ) {
                             var wrap_data = (resp.data).trim();
                             attr_wrap.val('');
@@ -452,7 +452,7 @@
                     $('.dokan-variation-container').addClass('dokan-blur-effect');
                     $('.dokan-variation-container').append('<div class="dokan-variation-loader"></div>');
 
-                    $.post( ajaxurl, data, function( resp ) {
+                    $.post( dokan.ajaxurl, data, function( resp ) {
                         if( resp.success ) {
                             $('.dokan-variation-container').load(loadUrl+' .dokan-variation-container', function() {
                                 $('#_create_variation').trigger('change');
@@ -627,7 +627,7 @@
                         return;
                     }
                     self.closest('table.dokan-single-attribute-options-table').find('span.dokan-loading').removeClass('dokan-hide');
-                    $.post( ajaxurl, data, function( resp ) {
+                    $.post( dokan.ajaxurl, data, function( resp ) {
                         if ( resp.success ) {
                             var wrap_data = (resp.data).trim();
                             attr_wrap.val('');
@@ -664,7 +664,7 @@
                     loadUrl = window.location.href;
 
                 self.find('.dokan-save-single-attr-loader').removeClass('dokan-hide');
-                $.post( ajaxurl, data, function( resp ) {
+                $.post( dokan.ajaxurl, data, function( resp ) {
                     if( resp.success ) {
                         $('.dokan-variation-container').addClass('dokan-blur-effect');
                         $('.dokan-variation-container').append('<div class="dokan-variation-loader"></div>');
@@ -694,7 +694,7 @@
                 self.closest('.dokan-variation-action-wrapper').find('.dokan-loading').removeClass('dokan-hide');
                 $('.dokan-variation-container').addClass('dokan-blur-effect');
                 $('.dokan-variation-container').append('<div class="dokan-variation-loader"></div>');
-                $.post( ajaxurl, data, function( resp ) {
+                $.post( dokan.ajaxurl, data, function( resp ) {
                     $('.dokan-variation-container').load( loadUrl+' .dokan-variation-container', function() {
                         $('#_create_variation').trigger('change');
                         self.closest('.dokan-variation-action-wrapper').find('.dokan-loading').addClass('dokan-hide');
@@ -717,7 +717,7 @@
 
                 self.find('.dokan-loading').removeClass('dokan-hide');
 
-                $.post( ajaxurl, data, function( resp ) {
+                $.post( dokan.ajaxurl, data, function( resp ) {
                     if( resp.success ) {
                         $('.dokan-variation-container').addClass('dokan-blur-effect');
                         $('.dokan-variation-container').append('<div class="dokan-variation-loader"></div>');
@@ -778,7 +778,7 @@
 
                     $('#product-attributes .toolbar').block({ message: null, overlayCSS: { background: '#fff', opacity: 0.6 } });
 
-                    $.post( ajaxurl, data, function(resp) {
+                    $.post( dokan.ajaxurl, data, function(resp) {
                         if ( resp.success ) {
                             variantsHolder.append(resp.data).children(':last').hide().fadeIn();
                         }
