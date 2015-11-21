@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.wedevs.com/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, vendor, seller, store, sell, online
 Requires at least: 3.6
-Tested up to: 4.3
+Tested up to: 4.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -144,6 +144,15 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+= v2.4.8 -> November 21, 2015 =
+---------------------
+- [tweak] Email template override system added
+- [fix] Change dokan SEO admin option section
+- [fix] Ajaxurl fixed to prevent conflict
+- [fix] Fix Arrow (reverted) for pagination
+- [fix] Hide unapprove comment from store review tab
+- [fix] Update cart discount meta on suborder create
 
 = v2.4.7 -> October 20, 2015 =
 ---------------------

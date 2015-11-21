@@ -1965,7 +1965,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
 
         update_post_meta( $order_id, '_order_shipping',         woocommerce_format_decimal( $shipping_cost ) );
         update_post_meta( $order_id, '_order_discount',         woocommerce_format_decimal( $discount ) );
-        update_post_meta( $order_id, '_cart_discount',          '0' );
+        update_post_meta( $order_id, '_cart_discount',          woocommerce_format_decimal( $discount ) );
         update_post_meta( $order_id, '_order_tax',              woocommerce_format_decimal( $order_tax ) );
         update_post_meta( $order_id, '_order_shipping_tax',     '0' );
         update_post_meta( $order_id, '_order_total',            woocommerce_format_decimal( $order_in_total ) );

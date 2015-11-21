@@ -41,11 +41,11 @@ function dokan_admin_dash_metabox_glance() {
         <ul>
             <li class="seller-count">
                 <div class="dashicons dashicons-businessman"></div>
-                <a href="<?php echo admin_url( 'admin.php?page=dokan-sellers' ); ?>"><?php printf( _n( __( '%d Total Seller', 'dokan' ), __( '%d Total Sellers', 'dokan' ), $total_seller, 'dokan' ), $total_seller ); ?></a>
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>"><?php printf( _n( __( '%d Total Seller', 'dokan' ), __( '%d Total Sellers', 'dokan' ), $total_seller, 'dokan' ), $total_seller ); ?></a>
             </li>
             <li class="seller-count mark-green">
                 <div class="dashicons dashicons-awards"></div>
-                <a href="<?php echo admin_url( 'admin.php?page=dokan-sellers' ); ?>">
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>">
                     <?php
                     if ( $seller_counts['yes'] ) {
                         printf( _n( __( '%d Active Seller', 'dokan' ), __( '%d Active Sellers', 'dokan' ), $seller_counts['yes'], 'dokan' ), $seller_counts['yes'] );
@@ -56,7 +56,7 @@ function dokan_admin_dash_metabox_glance() {
             </li>
             <li class="seller-count <?php echo ($seller_counts['no'] < 1) ? 'mark-green' : 'mark-red'; ?>">
                 <div class="dashicons dashicons-editor-help"></div>
-                <a href="<?php echo admin_url( 'admin.php?page=dokan-sellers' ); ?>">
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>">
                     <?php
                     if ( $seller_counts['no'] ) {
                         printf( _n( __( '%d Pending Seller', 'dokan' ), __( '%d Pending Sellers', 'dokan' ), $seller_counts['no'], 'dokan' ), $seller_counts['no'] );
@@ -74,15 +74,15 @@ function dokan_admin_dash_metabox_glance() {
         <ul>
             <li class="withdraw-pending <?php echo ($withdraw_counts['pending'] < 1) ? 'mark-green' : 'mark-red'; ?>">
                 <div class="dashicons dashicons-visibility"></div>
-                <a href="<?php echo admin_url( 'admin.php?page=dokan-withdraw' ); ?>"><?php printf( __( '%d Pending Withdraw', 'dokan' ), $withdraw_counts['pending'] ); ?></a>
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-withdraw' ) : ''; ?>"><?php printf( __( '%d Pending Withdraw', 'dokan' ), $withdraw_counts['pending'] ); ?></a>
             </li>
             <li class="withdraw-completed mark-green">
                 <div class="dashicons dashicons-yes"></div>
-                <a href="<?php echo admin_url( 'admin.php?page=dokan-withdraw&amp;status=completed' ); ?>"><?php printf( __( '%d Completed Withdraw', 'dokan' ), $withdraw_counts['completed'] ); ?></a>
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-withdraw&amp;status=completed' ) : ''; ?>"><?php printf( __( '%d Completed Withdraw', 'dokan' ), $withdraw_counts['completed'] ); ?></a>
             </li>
             <li class="withdraw-cancelled">
                 <div class="dashicons dashicons-dismiss"></div>
-                <a href="<?php echo admin_url( 'admin.php?page=dokan-withdraw&amp;status=cancelled' ); ?>"><?php printf( __( '%d Cancelled Withdraw', 'dokan' ), $withdraw_counts['cancelled'] ); ?></a>
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-withdraw&amp;status=cancelled' ) : ''; ?>"><?php printf( __( '%d Cancelled Withdraw', 'dokan' ), $withdraw_counts['cancelled'] ); ?></a>
             </li>
         </ul>
     </div>

@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.7\n"
+"Project-Id-Version: Dokan (Lite) - Multi-vendor Marketplace 2.4.8\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2015-10-20 09:33:24+00:00\n"
+"POT-Creation-Date: 2015-11-21 09:22:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -382,31 +382,31 @@ msgstr ""
 msgid "Footer Widget link hover"
 msgstr ""
 
-#: classes/email.php:107
+#: classes/email.php:106
 msgid "\"%s\" sent you a message from your \"%s\" store"
 msgstr ""
 
-#: classes/email.php:168
+#: classes/email.php:166
 msgid "[%s] New Withdraw Request"
 msgstr ""
 
-#: classes/email.php:190
+#: classes/email.php:187
 msgid "[%s] Your Withdraw Request has been approved"
 msgstr ""
 
-#: classes/email.php:213
+#: classes/email.php:209
 msgid "[%s] Your Withdraw Request has been cancelled"
 msgstr ""
 
-#: classes/email.php:252
+#: classes/email.php:247
 msgid "[%s] New Seller Registered"
 msgstr ""
 
-#: classes/email.php:305
+#: classes/email.php:300
 msgid "[%s] New Product Added"
 msgstr ""
 
-#: classes/email.php:347
+#: classes/email.php:339
 msgid "[%s] Your product has been approved!"
 msgstr ""
 
