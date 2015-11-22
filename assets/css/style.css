@@ -937,6 +937,12 @@ body {
   height: 30px;
   padding: 0px;
 }
+.product-edit-new-container table.dokan-attribute-options-table tbody tr td button.clear_attributes {
+  height: 30px;
+  padding: 2px;
+  font-size: 12px;
+  padding: 4px;
+}
 .product-edit-new-container .dokan-variations-table {
   margin-top: 20px;
 }

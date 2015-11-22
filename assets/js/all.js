@@ -266,6 +266,7 @@ jQuery(function($) {
 
             $('.dokan-variation-container').on('click', 'a.add_attribute_option', this.newProductDesign.addAttributeOption );
             $('.dokan-variation-container').on('click', 'button.remove_attribute', this.newProductDesign.removeAttributeOption );
+            $('.dokan-variation-container').on('click', 'button.clear_attributes', this.newProductDesign.clearAttributeOptions );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_create_variation', this.newProductDesign.createVariationSection);
             // $('.product-edit-new-container').on('change', 'input[type=checkbox].dokan_create_variation', this.newProductDesign.createVariationWarning);
             $('.product-edit-new-container').on('click', 'a.edit_variation', this.newProductDesign.editSingleVariation );
@@ -310,7 +311,7 @@ jQuery(function($) {
             $('#_overwrite_shipping').trigger('change');
 
             this.loadTagIt();
-
+            
         },
 
         loadTagChosen: function() {
@@ -321,10 +322,13 @@ jQuery(function($) {
             if ( ! jQuery.fn.tagit ) {
                 return;
             }
-
-            $( '.dokan-attribute-option-values' ).tagit({
-                afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
-                afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+            $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
+                $( this ).tagit( {
+                    availableTags: $( this ).data('preset_attr').split(','),
+                    afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                    afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                    autocomplete: {delay: 1, minLength: 1}
+                });
             });
         },
 
@@ -527,9 +531,12 @@ jQuery(function($) {
 
                     attribute_option.insertBefore( $('table.dokan-attribute-options-table').find( 'tr.dokan-attribute-is-variations' ) );
                     attribute_option.find( 'ul.tagit' ).remove();
-                    attribute_option.find('input.dokan-attribute-option-values').tagit({
+                    var new_fields = attribute_option.find('.dokan-attribute-option-values');
+                    new_fields.tagit({
+                        availableTags: new_fields.data('preset_attr').split(','),
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                        autocomplete: { delay: 1, minLength: 1 }
                     });
                 } else {
 
@@ -556,9 +563,13 @@ jQuery(function($) {
                             var wrap_data = (resp.data).trim();
                             attr_wrap.val('');
                             $(wrap_data).insertBefore($('table.dokan-attribute-options-table').find( 'tr.dokan-attribute-is-variations' ));
-                            $('input.dokan-attribute-option-values').tagit({
-                                afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
-                                afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                            $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
+                                $( this ).tagit( {
+                                    availableTags: $( this ).data('preset_attr').split(','),
+                                    afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                                    afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                                    autocomplete: { delay: 1, minLength: 1 }
+                                });
                             });
                             self.closest('.dokan-attribute-content-wrapper').find('span.dokan-loading').addClass('dokan-hide');
                         };
@@ -577,6 +588,12 @@ jQuery(function($) {
 
                 self.closest('tr').remove();
                 Dokan_Editor.reArrangeVariations();
+            },
+            clearAttributeOptions : function(e) {
+                e.preventDefault();
+                var self = $(this),
+                    input = self.closest('tr.dokan-attribute-options').find('td input.dokan-attribute-option-values');
+                input.tagit("removeAll");
             },
 
             createVariationSection: function() {
@@ -770,7 +787,16 @@ jQuery(function($) {
                     callbacks: {
                         open: function() {
                             $('.tips').tooltip();
-                            $( 'body' ).find('.dokan-single-attribute-option-values').tagit();
+                            
+                            var $attribute_options = $( 'body' ).find('.dokan-single-attribute-option-values');
+                            $attribute_options.each( function ( key, val ) {
+                                $( this ).tagit( {
+                                    availableTags: $( this ).data('preset_attr').split(','),
+                                    afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                                    afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                                    autocomplete: { delay: 1, minLength: 1 }
+                                });
+                            });
                         }
                     },
 
@@ -804,7 +830,14 @@ jQuery(function($) {
 
                     $('table.dokan-single-attribute-options-table').find( 'tbody' ).append( attribute_option );
                     attribute_option.find( 'ul.tagit' ).remove();
-                    attribute_option.find('input.dokan-single-attribute-option-values').tagit();
+                    
+                    var new_fields = attribute_option.find('input.dokan-attribute-option-values');
+                    new_fields.find('input.dokan-attribute-option-values').tagit({
+                        availableTags: new_fields.data('preset_attr').split(','),
+                        afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                        afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                        autocomplete: { delay: 1, minLength: 1 }
+                    });
 
                 } else {
 
@@ -832,7 +865,14 @@ jQuery(function($) {
                             var wrap_data = (resp.data).trim();
                             attr_wrap.val('');
                             $('table.dokan-single-attribute-options-table').find( 'tbody' ).append( wrap_data );
-                            $('input.dokan-single-attribute-option-values').tagit();
+                            $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
+                                $( this ).tagit( {
+                                    availableTags: $( this ).data('preset_attr').split(','),
+                                    afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                                    afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
+                                    autocomplete: { delay: 1, minLength: 1 }
+                                } );
+                            } );
                             self.closest('.dokan-single-attribute-options-table').find('span.dokan-loading').addClass('dokan-hide');
                         };
                     });
