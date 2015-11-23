@@ -50,9 +50,9 @@
                             </td>
                             <td colspan="3">
                                 <# if ( attr_val.is_taxonomy ) { #>
-                                    <input type="text" name="attribute_values[]" value="{{ attr_val.term_value.replace(/\|/g, ',' ) }}" data-preset_attr="{{ attr_val.term_value.replace(/\|/g, ',' ) }}" class="dokan-form-control dokan-single-attribute-option-values">
+                                    <input type="text" name="attribute_values[]" value="{{ attr_val.term_value.replace(/ +\|+ /g, ',' ) }}" data-preset_attr="{{ attr_val.term_value.replace(/ +\|+ /g, ',' ) }}" class="dokan-form-control dokan-single-attribute-option-values">
                                 <# } else { #>
-                                    <input type="text" name="attribute_values[]" value="{{ attr_val.value.replace(/\|/g, ',' ) }}" data-preset_attr="{{ attr_val.value.replace(/\|/g, ',' ) }}" class="dokan-form-control dokan-single-attribute-option-values">
+                                    <input type="text" name="attribute_values[]" value="{{ attr_val.value.replace(/ +\|+ /g, ',' ) }}" data-preset_attr="{{ attr_val.value.replace(/ +\|+ /g, ',' ) }}" class="dokan-form-control dokan-single-attribute-option-values">
                                 <# } #>
                             </td>
                             <td><button class="dokan-btn dokan-btn-theme remove_single_attribute"><i class="fa fa-trash-o"></i></button></td>
