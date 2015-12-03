@@ -485,7 +485,11 @@ if ( ! $from_shortcode ) {
 <script>
     (function($){
         $(document).ready(function(){
-            $('#tab-container').easytabs();
+            $('#tab-container').easytabs({
+                animate: true,
+                animationSpeed: 10,                
+                updateHash: false,                         
+            });
             $('#tab-container').bind('easytabs:before', function(){
                 $('select.product_tags').chosen();
                 $('#product_tag_chosen').css({ width: '100%' });
@@ -500,4 +504,3 @@ wp_reset_postdata();
 if ( ! $from_shortcode ) {
     get_footer();
 }
-?>
