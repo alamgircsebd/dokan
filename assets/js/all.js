@@ -533,15 +533,14 @@ jQuery(function($) {
 
                     attribute_option.insertBefore( $('table.dokan-attribute-options-table').find( 'tr.dokan-attribute-is-variations' ) );
                     attribute_option.find( 'ul.tagit' ).remove();
-                    var new_fields = attribute_option.find('.dokan-single-attribute-option-values');
                     
-                    new_fields.each( function ( key, val ) {
-                        $(this).tagit({
-                            availableTags: new_fields.data('preset_attr').split(','),
-                            afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
-                            afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
-                            autocomplete: { delay: 1, minLength: 1 , appendTo : 'div.white-popup' }
-                        });
+                    var new_field = attribute_option.find('.dokan-attribute-option-values');
+                    new_field.removeAttr('data-preset_attr')
+                             .attr('value', '');
+ 
+                    new_field.tagit({                            
+                        afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                        afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
                 } else {
 
@@ -838,7 +837,7 @@ jQuery(function($) {
 
                     if ( attribute_option.find('input.dokan-single-attribute-option-name-label').length == 1 ) {
                         var $attrName  = attribute_option.find('input.dokan-single-attribute-option-name'),
-                            $attrNameLabel = attribute_option.find('input.dokan-single-attribute-option-name');
+                            $attrNameLabel = attribute_option.find('input.dokan-single-attribute-option-name-label');
                         $attrName.remove();
                         $attrNameLabel.removeAttr('disabled data-attribute_name')
                                 .attr('name','attribute_names[]')
@@ -850,16 +849,16 @@ jQuery(function($) {
                     $('table.dokan-single-attribute-options-table').find( 'tbody' ).append( attribute_option );
                     attribute_option.find( 'ul.tagit' ).remove();
                     
-                    var new_fields = attribute_option.find('input.dokan-single-attribute-option-values');
+                    var new_field = attribute_option.find('input.dokan-single-attribute-option-values');                  
                    
-                    new_fields.each( function ( key, val ) {
-                        $( this ).tagit({
-                            availableTags: new_fields.data('preset_attr').split(','),
-                            afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
-                            afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
-                            autocomplete: { delay: 1, minLength: 1 , appendTo : 'div.white-popup' }
+                    new_field.removeAttr('data-preset_attr')
+                             .attr('value', '');
+                         
+                    new_field.tagit({                            
+                        afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
+                        afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
-                });
+
 
                 } else {
 
