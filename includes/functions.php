@@ -70,6 +70,28 @@ function dokan_is_store_page() {
 }
 
 /**
+ * Check if it's a Seller Dashboard page
+ * 
+ * @since 2.4.9
+ *
+ * @return boolean
+ */
+function dokan_is_seller_dashboard(){    
+    $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
+    
+    if ( !$page_id ) {
+        return false;
+    }
+    
+    if ( $page_id == get_the_ID() ) {
+        return true;
+    }
+    
+    return false;
+    
+}
+
+/**
  * Check if current page is store review page
  *
  * @since 2.2
