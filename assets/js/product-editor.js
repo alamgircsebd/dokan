@@ -113,6 +113,30 @@
 
             this.loadTagIt();
             
+            $('body').on('submit', 'form.dokan-product-edit-form', this.inputValidate);            
+            
+        },
+        
+        inputValidate: function( e ) {   
+            e.preventDefault();
+            
+            if ( $( '#post_title' ).val().trim() == '' ) {
+                $( '#post_title' ).focus();
+                $( 'div.dokan-product-title-alert' ).removeClass('hidden');
+                return;
+            }else{
+                $( 'div.dokan-product-title-alert' ).hide();
+            }
+            
+            if ( $( 'select.product_cat' ).val() == -1 ) {                
+                $( 'select.product_cat' ).focus();
+                $( 'div.dokan-product-cat-alert' ).removeClass('hidden');
+                return;
+            }else{
+                $( 'div.dokan-product-cat-alert' ).hide();
+            }            
+            
+            this.submit();            
         },
 
         loadTagChosen: function() {
