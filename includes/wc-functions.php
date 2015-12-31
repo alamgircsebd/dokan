@@ -482,7 +482,11 @@ function dokan_process_product_meta( $post_id ) {
     // Gallery Images
     $attachment_ids = array_filter( explode( ',', woocommerce_clean( $_POST['product_image_gallery'] ) ) );
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
-
+    
+    
+    $_POST['_visibility'] = isset( $_POST['_visibility'] ) ? $_POST['_visibility'] : '';
+    $_POST['_purchase_note'] = isset( $_POST['_purchase_note'] ) ? $_POST['_purchase_note'] : '';
+     
     // Update post meta
     if ( isset( $_POST['_regular_price'] ) ) {
         update_post_meta( $post_id, '_regular_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
@@ -496,8 +500,8 @@ function dokan_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_tax_status', stripslashes( $_POST['_tax_status'] ) );
 
     if ( isset( $_POST['_tax_class'] ) )
-        update_post_meta( $post_id, '_tax_class', stripslashes( $_POST['_tax_class'] ) );
-
+        update_post_meta( $post_id, '_tax_class', stripslashes( $_POST['_tax_class'] ) ); 
+   
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
 
@@ -717,7 +721,8 @@ function dokan_process_product_meta( $post_id ) {
         'ID'           => $post_id,
         'comment_status' => $comment_status,
     ) );
-
+    
+    $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
 
@@ -885,9 +890,14 @@ function dokan_new_process_product_meta( $post_id ) {
     }
 
     // Save extra product options like purchase note, visibility
+    
+    $_POST['_visibility'] = isset( $_POST['_visibility'] ) ? $_POST['_visibility'] : '';
+    $_POST['_purchase_note'] = isset( $_POST['_purchase_note'] ) ? $_POST['_purchase_note'] : '';
+    
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
-
+    
+    $_POST['_enable_reviews'] = isset( $_POST['_enable_reviews'] ) ? $_POST['_enable_reviews'] : '';
     //enable reviews
     if ( $_POST['_enable_reviews'] == 'yes' ) {
         $comment_status = 'open';
@@ -899,7 +909,8 @@ function dokan_new_process_product_meta( $post_id ) {
         'ID'           => $post_id,
         'comment_status' => $comment_status,
     ) );
-
+    
+    $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
 
@@ -950,6 +961,7 @@ function dokan_new_process_product_meta( $post_id ) {
     }
 
     // Unique SKU
+    $_POST['_sku'] = isset( $_POST['_sku'] ) ? $_POST['_sku'] : '';
     $sku     = get_post_meta($post_id, '_sku', true);
     $new_sku = woocommerce_clean( stripslashes( $_POST['_sku'] ) );
     if ( $new_sku == '' ) {
@@ -1103,7 +1115,8 @@ function dokan_new_process_product_meta( $post_id ) {
         if ( $date_to && ! $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
         }
-
+        
+        $_POST['_sale_price'] = isset( $_POST['_sale_price'] ) ? $_POST['_sale_price'] : '';
         // Update price if on sale
         if ( '' !== $_POST['_sale_price'] && '' == $date_to && '' == $date_from ) {
             update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_sale_price'] ) );
@@ -1131,7 +1144,7 @@ function dokan_new_process_product_meta( $post_id ) {
 
     // Product Stock manage Data
     if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) {
-
+        $_POST['_stock_status'] = isset( $_POST['_stock_status'] ) ? $_POST['_stock_status'] : '';
         $manage_stock = 'no';
         $backorders   = 'no';
         $stock        = '';
