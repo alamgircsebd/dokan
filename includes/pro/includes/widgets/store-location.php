@@ -44,12 +44,15 @@ class Dokan_Store_Location extends WP_Widget {
         if ( ! empty( $title ) ) {
             echo $args['before_title'] . $title . $args['after_title'];
         }
-
+        do_action('dokan-store-widget-before-map' , get_query_var( 'author' ));
+        
         dokan_get_template_part( 'widgets/store-map', '', array(
             'pro' => true,
             'store_info' => $store_info,
             'map_location' => $map_location,
         ) );
+        
+        do_action('dokan-store-widget-after-map', get_query_var( 'author' ));
 
         echo $after_widget;
     }
