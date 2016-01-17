@@ -62,6 +62,7 @@ function dokan_is_product_author( $product_id = 0 ) {
  */
 function dokan_is_store_page() {
     $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
+
     if ( get_query_var( $custom_store_url ) ) {
         return true;
     }
@@ -71,24 +72,24 @@ function dokan_is_store_page() {
 
 /**
  * Check if it's a Seller Dashboard page
- * 
+ *
  * @since 2.4.9
  *
  * @return boolean
  */
-function dokan_is_seller_dashboard(){    
+function dokan_is_seller_dashboard() {
     $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
-    
-    if ( !$page_id ) {
+
+    if ( ! $page_id ) {
         return false;
     }
-    
+
     if ( $page_id == get_the_ID() ) {
         return true;
     }
-    
+
     return false;
-    
+
 }
 
 /**
@@ -1049,15 +1050,16 @@ function dokan_get_seller_bank_details( $seller_id ) {
 /**
  * Get seller listing
  *
- * @param int $number
- * @param int $offset
+ * @param array $args
+ *
  * @return array
  */
-function dokan_get_sellers( $number = 10, $offset = 0 ) {
-    $args = apply_filters( 'dokan_seller_list_query', array(
-        'role' => 'seller',
-        'number'     => $number,
-        'offset'     => $offset,
+function dokan_get_sellers( $args = array() ) {
+
+    $defaults = array(
+        'role'       => 'seller',
+        'number'     => 10,
+        'offset'     => 0,
         'orderby'    => 'registered',
         'order'      => 'ASC',
         'meta_query' => array(
@@ -1067,11 +1069,11 @@ function dokan_get_sellers( $number = 10, $offset = 0 ) {
                 'compare' => '='
             )
         )
-    ) );
+    );
+
+    $args = wp_parse_args( $args, $defaults );
 
     $user_query = new WP_User_Query( $args );
-
-
     $sellers    = $user_query->get_results();
 
     return array( 'users' => $sellers, 'count' => $user_query->total_users );

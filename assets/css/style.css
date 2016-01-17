@@ -2112,6 +2112,9 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   width: 100%;
   height: 200px;
 }
+.dokan-seller-listing .dokan-seller-search-form {
+  margin-bottom: 30px;
+}
 ul.dokan-seller-wrap {
   list-style: none;
   margin: 0;
@@ -2129,12 +2132,31 @@ ul.dokan-seller-wrap li.dokan-single-seller {
   float: left;
   width: 48%;
   list-style: none;
-  margin: 0;
+  margin: 0 0 25px 0;
   padding: 0;
+  border: 1px solid #ededed;
+}
+ul.dokan-seller-wrap li.dokan-single-seller .dokan-store-banner-wrap {
+  background-color: #ededed;
+  border-bottom: 1px solid #ededed;
+}
+ul.dokan-seller-wrap li.dokan-single-seller .dokan-store-banner-wrap img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 0;
 }
 ul.dokan-seller-wrap li.dokan-single-seller:nth-child(2n+1) {
   margin-right: 3%;
   clear: left;
+}
+ul.dokan-seller-wrap li.dokan-single-seller .dokan-store-caption {
+  padding: 20px 20px 10px 20px;
+  background-color: #fff;
+}
+ul.dokan-seller-wrap li.dokan-single-seller .dokan-store-caption h3 {
+  padding: 0;
+  margin: 0 0 15px 0;
 }
 .wp-editor-wrap {
   border: 1px solid #ededed;

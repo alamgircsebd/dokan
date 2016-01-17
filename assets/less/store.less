@@ -164,6 +164,11 @@
 }
 
 // shortcode seller listing
+
+.dokan-seller-listing .dokan-seller-search-form {
+    margin-bottom: 30px;
+}
+
 ul.dokan-seller-wrap {
     .clearfix();
     list-style: none;
@@ -174,18 +179,34 @@ ul.dokan-seller-wrap {
         float: left;
         width: 48%;
         list-style: none;
-        margin: 0;
+        margin: 0 0 25px 0;
         padding: 0;
+        border: 1px solid @borderColor;
+
+        .dokan-store-banner-wrap {
+            background-color: @borderColor;
+            border-bottom: 1px solid @borderColor;
+
+            img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                margin-bottom: 0;
+            }
+        }
 
         &:nth-child(2n+1) {
             margin-right: 3%;
             clear: left;
         }
 
-        .dokan-store-thumbnail {
+        .dokan-store-caption {
+            padding: 20px 20px 10px 20px;
+            background-color: #fff;
 
-            .dokan-store-caption {
-
+            h3 {
+                padding: 0;
+                margin: 0 0 15px 0;
             }
         }
     }
