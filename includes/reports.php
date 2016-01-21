@@ -334,7 +334,7 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
             var order_data = jQuery.parseJSON( '<?php echo $chart_data; ?>' );
             var series = [
                 {
-                    label: "<?php echo esc_js( __( 'Number of items sold', 'dokan' ) ) ?>",
+                    label: "<?php echo esc_js( __( 'Sales total', 'dokan' ) ) ?>",
                     data: order_data.order_amounts,
                     shadowSize: 0,
                     hoverable: true,

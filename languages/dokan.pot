@@ -2226,7 +2226,7 @@ msgid "%s worth of coupons used"
 msgstr ""
 
 #: includes/pro/includes/reports.php:553 includes/reports.php:337
-msgid "Number of items sold"
+msgid "Sales total"
 msgstr ""
 
 #: includes/pro/includes/reports.php:708 includes/pro/includes/reports.php:811
