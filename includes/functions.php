@@ -331,13 +331,13 @@ if ( !function_exists( 'dokan_get_seller_percentage' ) ) :
  * @return int
  */
 function dokan_get_seller_percentage( $seller_id = 0 ) {
-    $global_percentage = (int) dokan_get_option( 'seller_percentage', 'dokan_selling', '90' );
+    $global_percentage = (float) dokan_get_option( 'seller_percentage', 'dokan_selling', '90' );
 
     if ( ! $seller_id ) {
         return $global_percentage;
     }
 
-    $seller_percentage = (int) get_user_meta( $seller_id, 'dokan_seller_percentage', true );
+    $seller_percentage = (float) get_user_meta( $seller_id, 'dokan_seller_percentage', true );
     if ( $seller_percentage ) {
         return $seller_percentage;
     }
