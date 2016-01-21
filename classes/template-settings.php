@@ -657,7 +657,8 @@ class Dokan_Template_Settings {
 
         // Calculate Payment method val for Paypal
         if ( isset( $dokan_settings['payment']['paypal'] ) ) {
-            if ( $dokan_settings['payment']['paypal']['email'] != false ) {
+            $p_email = isset($dokan_settings['payment']['paypal']['email']) ? $dokan_settings['payment']['paypal']['email'] : false;
+            if ( $p_email != false ) {
 
                 $profile_val         = $profile_val + $payment_method_val;
                 $track_val['paypal'] = $payment_method_val;
@@ -667,8 +668,9 @@ class Dokan_Template_Settings {
 
         // Calculate Payment method val for skrill
         if ( isset( $dokan_settings['payment']['skrill'] ) ) {
-            if ( $dokan_settings['payment']['skrill']['email'] != false ) {
-
+            
+            $s_email = isset( $dokan_settings['payment']['skrill']['email'] ) ? $dokan_settings['payment']['skrill']['email'] : false;
+            if ( $s_email != false ) {
                 $profile_val         = $profile_val + $payment_method_val;
                 $track_val['skrill'] = $payment_method_val;
                 $payment_method_val  = 0;
