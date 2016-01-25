@@ -1463,20 +1463,25 @@ function dokan_get_processing_time_value( $index ) {
  * @param WC_Order $order
  * @return array
  */
-function dokan_wc_email_recipient_add_seller( $admin_email, $order ) {
-    $emails = array( $admin_email );
+function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
-    $seller_id = dokan_get_seller_id_by_order( $order->id );
+    if ( $order ) {
 
-    if ( $seller_id ) {
-        $seller_email = get_user_by( 'id', $seller_id )->user_email;
+        $seller_id = dokan_get_seller_id_by_order( $order->id );
 
-        if ( $admin_email != $seller_email ) {
-            array_push( $emails, $seller_email );
+        if ( $seller_id ) {
+
+            $seller_email = get_user_by( 'id', $seller_id )->user_email;
+
+            if ( $email != $seller_email ) {
+                
+                $email .= ',' . $seller_email;
+
+            }
         }
     }
 
-    return $emails;
+    return $email;
 }
 
 add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
