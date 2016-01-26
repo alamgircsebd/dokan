@@ -1824,19 +1824,6 @@ function dokan_get_toc_url( $store_id ) {
 }
 
 /**
- * Save Redirect URL
- *
- * @since 2.4
- *
- * @return void [save redirect_url in session]
- */
-function dokan_save_redirect_url(){
-    $_SESSION['dokan_redirect_url'] = wp_get_referer();
-}
-
-add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
-
-/**
  * Login Redirect
  *
  * @since 2.4
@@ -1847,7 +1834,7 @@ add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
  * @return string [url]
  */
 function dokan_after_login_redirect( $redirect_to, $user ) {
-
+    
     if ( user_can( $user, 'dokandar' ) ) {
         $seller_dashboard = dokan_get_option( 'dashboard', 'dokan_pages' );
 
@@ -1855,10 +1842,11 @@ function dokan_after_login_redirect( $redirect_to, $user ) {
             $redirect_to = get_permalink( $seller_dashboard );
         }
     }
-    elseif ( isset( $_SESSION['dokan_redirect_url'] ) ) {
-        $redirect_to = $_SESSION['dokan_redirect_url'];
+    
+    if ( isset( $_GET['redirect_to'] ) && !empty( $_GET['redirect_to'] ) ) {
+        $redirect_to = esc_url( $_GET['redirect_to'] );
     }
-
+    
     return $redirect_to;
 }
 
