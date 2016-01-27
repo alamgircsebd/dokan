@@ -2312,7 +2312,7 @@ function dokan_get_latest_products( $per_page = 9 , $seller_id = '' ) {
  * @param int $per_page
  * @return \WP_Query
  */
-function dokan_get_best_selling_products( $per_page = 8 ) {
+function dokan_get_best_selling_products( $per_page = 8, $seller_id = '' ) {
 
     $args = array(
         'post_type'           => 'product',
@@ -2329,6 +2329,10 @@ function dokan_get_best_selling_products( $per_page = 8 ) {
             ),
         )
     );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
 
     $best_selling_query = new WP_Query( apply_filters( 'dokan_best_selling_query', $args ) );
 
@@ -2345,7 +2349,7 @@ function dokan_get_best_selling_products( $per_page = 8 ) {
  * @param int $per_page
  * @return \WP_Query
  */
-function dokan_get_top_rated_products( $per_page = 8 ) {
+function dokan_get_top_rated_products( $per_page = 8 , $seller_id = '') {
 
     $args = array(
         'post_type'             => 'product',
@@ -2360,6 +2364,10 @@ function dokan_get_top_rated_products( $per_page = 8 ) {
             )
         )
     );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
 
     add_filter( 'posts_clauses', array( 'WC_Shortcodes', 'order_by_rating_post_clauses' ) );
 
@@ -2381,7 +2389,7 @@ function dokan_get_top_rated_products( $per_page = 8 ) {
  * @param type $paged
  * @return \WP_Query
  */
-function dokan_get_on_sale_products( $per_page = 10, $paged = 1 ) {
+function dokan_get_on_sale_products( $per_page = 10, $paged = 1, $seller_id = '' ) {
     // Get products on sale
     $product_ids_on_sale = wc_get_product_ids_on_sale();
 
@@ -2405,6 +2413,10 @@ function dokan_get_on_sale_products( $per_page = 10, $paged = 1 ) {
             )
         )
     );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
 
     return new WP_Query( apply_filters( 'dokan_on_sale_products_query', $args ) );
 }

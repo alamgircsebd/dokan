@@ -271,7 +271,16 @@ class Dokan_Ajax {
         $contact_name = trim( strip_tags( $posted['name'] ) );
 
         Dokan_Email::init()->contact_seller( $seller->user_email, $contact_name, $posted['email'], $posted['message'] );
-
+        
+        do_action( 'dokan_contact_seller_email_sent', array(
+            'to'           => $seller->user_email,
+            'subject'      => '',
+            'message'      => $posted['message'],
+            'sender_email' => $posted['email'],
+            'sender_name'  => $contact_name,
+            'headers'      => '',
+        ) );
+        
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );
         exit;
