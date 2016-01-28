@@ -223,15 +223,15 @@ class Dokan_Admin_User_Profile {
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Featured Seller', 'wedevs' ); ?></th>
+                    <th><?php _e( 'Featured Seller', 'dokan' ); ?></th>
                     <td>
                         <label for="dokan_feature">
                             <input type="hidden" name="dokan_feature" value="no">
                             <input name="dokan_feature" type="checkbox" id="dokan_feature" value="yes" <?php checked( $feature_seller, 'yes' ); ?> />
-                            <?php _e( 'Mark as featured seller', 'wedevs' ); ?>
+                            <?php _e( 'Mark as featured seller', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'This seller will be marked as a featured seller.', 'wedevs' ) ?></p>
+                        <p class="description"><?php _e( 'This seller will be marked as a featured seller.', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
