@@ -367,7 +367,7 @@ function dokan_get_order_status_translated( $status ) {
 
         case 'pending':
         case 'wc-pending':
-            return __( 'Pending', 'dokan' );
+            return __( 'Pending Payment', 'dokan' );
             break;
 
         case 'on-hold':

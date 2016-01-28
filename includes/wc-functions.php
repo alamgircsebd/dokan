@@ -1213,46 +1213,88 @@ function dokan_new_process_product_meta( $post_id ) {
         delete_post_meta( $post_id, '_crosssell_ids' );
     }
 
-    // Save Downloadable options meta if product is downloadable
-    if ( $is_downloadable == 'yes' ) {
+    // Downloadable options
+    if ( 'yes' == $is_downloadable ) {
 
         $_download_limit = absint( $_POST['_download_limit'] );
-        if ( ! $_download_limit )
+        if ( ! $_download_limit ) {
             $_download_limit = ''; // 0 or blank = unlimited
-
-        $_download_expiry = absint( $_POST['_download_expiry'] );
-        if ( ! $_download_expiry )
-            $_download_expiry = ''; // 0 or blank = unlimited
-
-        // file paths will be stored in an array keyed off md5(file path)
-        if ( isset( $_POST['_wc_file_urls'] ) ) {
-            $files = array();
-
-            $file_names    = isset( $_POST['_wc_file_names'] ) ? array_map( 'wc_clean', $_POST['_wc_file_names'] ) : array();
-            $file_urls     = isset( $_POST['_wc_file_urls'] ) ? array_map( 'esc_url_raw', array_map( 'trim', $_POST['_wc_file_urls'] ) ) : array();
-            $file_url_size = sizeof( $file_urls );
-
-            for ( $i = 0; $i < $file_url_size; $i ++ ) {
-                if ( ! empty( $file_urls[ $i ] ) )
-                    $files[ md5( $file_urls[ $i ] ) ] = array(
-                        'name' => $file_names[ $i ],
-                        'file' => $file_urls[ $i ]
-                    );
-            }
-
-            // grant permission to any newly added files on any existing orders for this product prior to saving
-            do_action( 'woocommerce_process_product_file_download_paths', $post_id, 0, $files );
-
-            update_post_meta( $post_id, '_downloadable_files', $files );
         }
 
+        $_download_expiry = absint( $_POST['_download_expiry'] );
+        if ( ! $_download_expiry ) {
+            $_download_expiry = ''; // 0 or blank = unlimited
+        }
+
+        // file paths will be stored in an array keyed off md5(file path)
+        $files = array();
+
+        if ( isset( $_POST['_wc_file_urls'] ) ) {
+            $file_names         = isset( $_POST['_wc_file_names'] ) ? $_POST['_wc_file_names'] : array();
+            $file_urls          = isset( $_POST['_wc_file_urls'] )  ? wp_unslash( array_map( 'trim', $_POST['_wc_file_urls'] ) ) : array();
+            $file_url_size      = sizeof( $file_urls );
+            $allowed_file_types = apply_filters( 'woocommerce_downloadable_file_allowed_mime_types', get_allowed_mime_types() );
+
+            for ( $i = 0; $i < $file_url_size; $i ++ ) {
+                if ( ! empty( $file_urls[ $i ] ) ) {
+                    // Find type and file URL
+                    if ( 0 === strpos( $file_urls[ $i ], 'http' ) ) {
+                        $file_is  = 'absolute';
+                        $file_url = esc_url_raw( $file_urls[ $i ] );
+                    } elseif ( '[' === substr( $file_urls[ $i ], 0, 1 ) && ']' === substr( $file_urls[ $i ], -1 ) ) {
+                        $file_is  = 'shortcode';
+                        $file_url = wc_clean( $file_urls[ $i ] );
+                    } else {
+                        $file_is = 'relative';
+                        $file_url = wc_clean( $file_urls[ $i ] );
+                    }
+
+                    $file_name = wc_clean( $file_names[ $i ] );
+                    $file_hash = md5( $file_url );
+
+                    // Validate the file extension
+                    if ( in_array( $file_is, array( 'absolute', 'relative' ) ) ) {
+                        $file_type  = wp_check_filetype( strtok( $file_url, '?' ), $allowed_file_types );
+                        $parsed_url = parse_url( $file_url, PHP_URL_PATH );
+                        $extension  = pathinfo( $parsed_url, PATHINFO_EXTENSION );
+
+                        if ( ! empty( $extension ) && ! in_array( $file_type['type'], $allowed_file_types ) ) {
+                            WC_Admin_Meta_Boxes::add_error( sprintf( __( 'The downloadable file %s cannot be used as it does not have an allowed file type. Allowed types include: %s', 'woocommerce' ), '<code>' . basename( $file_url ) . '</code>', '<code>' . implode( ', ', array_keys( $allowed_file_types ) ) . '</code>' ) );
+                            continue;
+                        }
+                    }
+
+                    // Validate the file exists
+                    if ( 'relative' === $file_is ) {
+                        $_file_url = $file_url;
+                        if ( '..' === substr( $file_url, 0, 2 ) || '/' !== substr( $file_url, 0, 1 ) ) {
+                            $_file_url = realpath( ABSPATH . $file_url );
+                        }
+
+                        if ( ! apply_filters( 'woocommerce_downloadable_file_exists', file_exists( $_file_url ), $file_url ) ) {
+                            WC_Admin_Meta_Boxes::add_error( sprintf( __( 'The downloadable file %s cannot be used as it does not exist on the server.', 'woocommerce' ), '<code>' . $file_url . '</code>' ) );
+                            continue;
+                        }
+                    }
+
+                    $files[ $file_hash ] = array(
+                        'name' => $file_name,
+                        'file' => $file_url
+                    );
+                }
+            }
+        }
+
+        // grant permission to any newly added files on any existing orders for this product prior to saving
+        do_action( 'woocommerce_process_product_file_download_paths', $post_id, 0, $files );
+
+        update_post_meta( $post_id, '_downloadable_files', $files );
         update_post_meta( $post_id, '_download_limit', $_download_limit );
         update_post_meta( $post_id, '_download_expiry', $_download_expiry );
 
-        if ( isset( $_POST['_download_limit'] ) )
-            update_post_meta( $post_id, '_download_limit', esc_attr( $_download_limit ) );
-        if ( isset( $_POST['_download_expiry'] ) )
-            update_post_meta( $post_id, '_download_expiry', esc_attr( $_download_expiry ) );
+        if ( isset( $_POST['_download_type'] ) ) {
+            update_post_meta( $post_id, '_download_type', wc_clean( $_POST['_download_type'] ) );
+        }
     }
 
     // Save variations
