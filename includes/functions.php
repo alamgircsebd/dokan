@@ -1461,22 +1461,26 @@ function dokan_get_processing_time_value( $index ) {
  *
  * @param string  $admin_email
  * @param WC_Order $order
+ *
  * @return array
  */
-function dokan_wc_email_recipient_add_seller( $admin_email, $order ) {
-    $emails = array( $admin_email );
+function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
-    $seller_id = dokan_get_seller_id_by_order( $order->id );
+    if ( $order ) {
 
-    if ( $seller_id ) {
-        $seller_email = get_user_by( 'id', $seller_id )->user_email;
+        $seller_id = dokan_get_seller_id_by_order( $order->id );
 
-        if ( $admin_email != $seller_email ) {
-            array_push( $emails, $seller_email );
+        if ( $seller_id ) {
+
+            $seller_email = get_user_by( 'id', $seller_id )->user_email;
+
+            if ( $email != $seller_email ) {
+                $email .= ',' . $seller_email;
+            }
         }
     }
 
-    return $emails;
+    return $email;
 }
 
 add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
@@ -1819,19 +1823,6 @@ function dokan_get_toc_url( $store_id ) {
 }
 
 /**
- * Save Redirect URL
- *
- * @since 2.4
- *
- * @return void [save redirect_url in session]
- */
-function dokan_save_redirect_url(){
-    $_SESSION['dokan_redirect_url'] = wp_get_referer();
-}
-
-add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
-
-/**
  * Login Redirect
  *
  * @since 2.4
@@ -1850,8 +1841,9 @@ function dokan_after_login_redirect( $redirect_to, $user ) {
             $redirect_to = get_permalink( $seller_dashboard );
         }
     }
-    elseif ( isset( $_SESSION['dokan_redirect_url'] ) ) {
-        $redirect_to = $_SESSION['dokan_redirect_url'];
+
+    if ( isset( $_GET['redirect_to'] ) && !empty( $_GET['redirect_to'] ) ) {
+        $redirect_to = esc_url( $_GET['redirect_to'] );
     }
 
     return $redirect_to;
