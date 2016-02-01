@@ -1286,7 +1286,7 @@ function dokan_new_process_product_meta( $post_id ) {
         }
 
         // grant permission to any newly added files on any existing orders for this product prior to saving
-        do_action( 'woocommerce_process_product_file_download_paths', $post_id, 0, $files );
+        dokan_process_product_file_download_paths( $post_id, 0, $files );
 
         update_post_meta( $post_id, '_downloadable_files', $files );
         update_post_meta( $post_id, '_download_limit', $_download_limit );
@@ -1888,6 +1888,62 @@ function dokan_save_variations( $post_id ) {
     }
 
     update_post_meta( $post_id, '_default_attributes', $default_attributes );
+}
+
+
+/**
+ * Grant downloadable file access to any newly added files on any existing.
+ * orders for this product that have previously been granted downloadable file access.
+ *
+ * @param int $product_id product identifier
+ * @param int $variation_id optional product variation identifier
+ * @param array $downloadable_files newly set files
+ */
+function dokan_process_product_file_download_paths( $product_id, $variation_id, $downloadable_files ) {
+    global $wpdb;
+
+    if ( $variation_id ) {
+        $product_id = $variation_id;
+    }
+    
+    $product               = wc_get_product( $product_id );
+    $existing_download_ids = array_keys( (array) $product->get_files() );
+    $updated_download_ids  = array_keys( (array) $downloadable_files );
+    $new_download_ids      = array_filter( array_diff( $updated_download_ids, $existing_download_ids ) );
+    $removed_download_ids  = array_filter( array_diff( $existing_download_ids, $updated_download_ids ) );
+
+    if ( ! empty( $new_download_ids ) || ! empty( $removed_download_ids ) ) {
+        // determine whether downloadable file access has been granted via the typical order completion, or via the admin ajax method
+        $existing_permissions = $wpdb->get_results( $wpdb->prepare( "SELECT * from {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE product_id = %d GROUP BY order_id", $product_id ) );
+
+        foreach ( $existing_permissions as $existing_permission ) {
+            $order = wc_get_order( $existing_permission->order_id );
+
+            if ( ! empty( $order->id ) ) {
+                // Remove permissions
+                if ( ! empty( $removed_download_ids ) ) {
+                    foreach ( $removed_download_ids as $download_id ) {
+                        if ( apply_filters( 'woocommerce_process_product_file_download_paths_remove_access_to_old_file', true, $download_id, $product_id, $order ) ) {
+                            $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE order_id = %d AND product_id = %d AND download_id = %s", $order->id, $product_id, $download_id ) );
+                        }
+                    }
+                }
+                // Add permissions
+                if ( ! empty( $new_download_ids ) ) {
+
+                    foreach ( $new_download_ids as $download_id ) {
+
+                        if ( apply_filters( 'woocommerce_process_product_file_download_paths_grant_access_to_new_file', true, $download_id, $product_id, $order ) ) {
+                            // grant permission if it doesn't already exist
+                            if ( ! $wpdb->get_var( $wpdb->prepare( "SELECT 1=1 FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE order_id = %d AND product_id = %d AND download_id = %s", $order->id, $product_id, $download_id ) ) ) {
+                                wc_downloadable_file_permission( $download_id, $product_id, $order );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 
