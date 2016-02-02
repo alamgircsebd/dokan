@@ -521,7 +521,7 @@ function dokan_get_sellers_by( $order_id ) {
         $sellers[$seller_id][] = $item;
     }
 
-    return $sellers;
+    return array_unique( $sellers );
 }
 
 /**
