@@ -525,6 +525,23 @@ function dokan_get_sellers_by( $order_id ) {
 }
 
 /**
+ * Return unique array of seller_ids from an order
+ * 
+ * @since 2.4.9
+ * 
+ * @param type $order_id
+ * 
+ * @return array $seller_ids
+ */
+function dokan_get_seller_ids_by( $order_id ) {
+
+    $sellers = dokan_get_sellers_by( $order_id );
+
+    return array_unique( array_keys( $sellers ) );
+
+}
+
+/**
  * 
  * @global object $wpdb
  * @param type $parent_order_id
