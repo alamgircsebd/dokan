@@ -57,16 +57,18 @@
                             </td>
                             <?php
                             if ( $attribute['is_taxonomy'] ) {
-                                $tax = get_taxonomy( $attribute['name'] );
-                                $attribute_name = $tax->labels->name;
-                                $options = wp_get_post_terms( $post_id, $attribute['name'], array('fields' => 'names') );
+                                $tax = get_taxonomy( $attribute['name'] );                                
+                                $options = wp_get_post_terms( $post_id, $attribute['name'], array( 'fields' => 'names' ) );
+                                $preset_options = get_terms( $attribute['name'], 'orderby=name&hide_empty=0' );
+                                $att_val = wp_list_pluck( $preset_options, 'name' );
                             } else {
                                 $attribute_name = $attribute['name'];
                                 $options = array_map( 'trim', explode('|', $attribute['value'] ) );
+                                $att_val = $options;                                
                             }
                             ?>
-                            <td colspan="4"><input type="text" name="attribute_values[]" value="<?php echo implode( ',', $options ); ?>" class="dokan-form-control dokan-attribute-option-values"></td>
-                            <td><button class="dokan-btn dokan-btn-theme remove_attribute"><i class="fa fa-trash-o"></i></button></td>
+                            <td colspan="4"><input type="text" name="attribute_values[]" value="<?php echo implode( ',', $options ); ?>" data-preset_attr="<?php echo implode( ',', $att_val ); ?>" class="dokan-form-control dokan-attribute-option-values"></td>
+                            <td><button class="dokan-btn dokan-btn-theme clear_attributes"><?php _e( 'Clear All' , 'dokan' ); ?></button><button class="dokan-btn dokan-btn-theme remove_attribute"><i class="fa fa-trash-o"></i></button></td>
                         </tr>
                     <?php endforeach; ?>
                     <?php else: ?>
@@ -75,7 +77,7 @@
                                 <input type="text" name="attribute_names[]" value="" class="dokan-form-control dokan-attribute-option-name">
                                 <input type="hidden" name="attribute_is_taxonomy[]" value="0">
                             </td>
-                            <td colspan="4"><input type="text" name="attribute_values[]" value="" class="dokan-form-control dokan-attribute-option-values"></td>
+                            <td colspan="4"><input type="text" name="attribute_values[]" value="" data-preset_attr="" class="dokan-form-control dokan-attribute-option-values"></td>
                             <td><button class="dokan-btn dokan-btn-theme remove_attribute"><i class="fa fa-trash-o"></i></button></td>
                         </tr>
                     <?php endif ?>

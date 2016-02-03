@@ -69,13 +69,16 @@ class Dokan_Pro_Store_Seo {
 
         if ( class_exists( 'All_in_One_SEO_Pack' ) ) {
 
-            add_filter( 'aioseop_title', array( $this, 'replace_title' ), 500 );
+            add_filter( 'aioseop_title', array( $this, 'replace_title' ), 100 );
             add_filter( 'aioseop_keywords', array( $this, 'replace_keywords' ), 100 );
             add_filter( 'aioseop_description', array( $this, 'replace_desc' ), 100 );
             add_action( 'wp_head', array( $this, 'print_social_tags' ), 1 );
         } elseif ( class_exists( 'WPSEO_Frontend' ) ) {
-
-            add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
+            
+           //For WP > 4.4
+            add_filter( 'wpseo_title', array( $this, 'replace_title' ), 100 );
+            //For WP < 4.4
+            add_filter( 'wp_title', array( $this, 'replace_title' ), 100 );
             add_filter( 'wpseo_metakeywords', array( $this, 'replace_keywords' ) );
             add_filter( 'wpseo_metadesc', array( $this, 'replace_desc' ) );
 
@@ -91,7 +94,7 @@ class Dokan_Pro_Store_Seo {
             add_action( 'wpseo_twitter', array( $this, 'print_twitter_img' ), 20 );
         } else {
 
-            add_filter( 'wp_title', array( $this, 'replace_title' ), 500 );
+            add_filter( 'wp_title', array( $this, 'replace_title' ), 100 );
             add_action( 'wp_head', array( $this, 'print_tags' ), 1 );
             add_action( 'wp_head', array( $this, 'print_social_tags' ), 1 );
         }

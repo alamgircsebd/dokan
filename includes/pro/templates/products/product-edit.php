@@ -297,8 +297,8 @@ if ( ! $from_shortcode ) {
                                                         if ( $term ) {
                                                             $product_cat = reset( $term );
                                                         }
-
-                                                        wp_dropdown_categories( array(
+                                                        
+                                                        $category_args = array(
                                                             'show_option_none' => __( '- Select a category -', 'dokan' ),
                                                             'hierarchical'     => 1,
                                                             'hide_empty'       => 0,
@@ -309,8 +309,10 @@ if ( ! $from_shortcode ) {
                                                             'class'            => 'product_cat dokan-form-control chosen',
                                                             'exclude'          => '',
                                                             'selected'         => $product_cat,
-                                                        ) );
-                                                        ?>
+                                                        );
+
+                                                        wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
+                                                ?>
                                                     </div>
                                                 <?php elseif ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'multiple' ): ?>
                                                     <div class="dokan-form-group dokan-list-category-box">
@@ -485,7 +487,11 @@ if ( ! $from_shortcode ) {
 <script>
     (function($){
         $(document).ready(function(){
-            $('#tab-container').easytabs();
+            $('#tab-container').easytabs({
+                animate: true,
+                animationSpeed: 10,                
+                updateHash: false,                         
+            });
             $('#tab-container').bind('easytabs:before', function(){
                 $('select.product_tags').chosen();
                 $('#product_tag_chosen').css({ width: '100%' });
@@ -500,4 +506,3 @@ wp_reset_postdata();
 if ( ! $from_shortcode ) {
     get_footer();
 }
-?>

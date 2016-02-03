@@ -46,6 +46,8 @@ class Dokan_Pro_Admin_Settings {
         add_action( $report, array($this, 'report_scripts' ) );
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
+
+        add_submenu_page( 'dokan', __( 'Help', 'dokan' ), __( '<span style="color:#f18500">Help</span>', 'dokan' ), $capability, 'dokan-help', array($this, 'help_page') );
     }
 
     /**
@@ -137,7 +139,7 @@ class Dokan_Pro_Admin_Settings {
                     'publish' => __( 'Published', 'dokan' ),
                     'pending' => __( 'Pending Review', 'dokan' )
                 )
-            ),            
+            ),
             'review_edit' => array(
                 'name'    => 'review_edit',
                 'label'   => __( 'Review Editing', 'dokan' ),
@@ -232,6 +234,17 @@ class Dokan_Pro_Admin_Settings {
      */
     function tools_page() {
         include dirname(__FILE__) . '/tools.php';
+    }
+
+    /**
+     * Plugin help page
+     *
+     * @since 2.4.9
+     *
+     * @return void
+     */
+    function help_page() {
+        include dirname(__FILE__) . '/help.php';
     }
 
     /**

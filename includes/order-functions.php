@@ -351,6 +351,53 @@ function dokan_get_order_status_class( $status ) {
     }
 }
 
+
+/**
+ * Get translated string of order status
+ *
+ * @param string $status
+ * @return string
+ */
+function dokan_get_order_status_translated( $status ) {
+    switch ($status) {
+        case 'completed':
+        case 'wc-completed':
+            return __( 'Completed', 'dokan' );
+            break;
+
+        case 'pending':
+        case 'wc-pending':
+            return __( 'Pending Payment', 'dokan' );
+            break;
+
+        case 'on-hold':
+        case 'wc-on-hold':
+            return __( 'On-hold', 'dokan' );
+            break;
+
+        case 'processing':
+        case 'wc-processing':
+            return __( 'Processing', 'dokan' );
+            break;
+
+        case 'refunded':
+        case 'wc-refunded':
+            return __( 'Refunded', 'dokan' );
+            break;
+
+        case 'cancelled':
+        case 'wc-cancelled':
+            return __( 'Cancelled', 'dokan' );
+            break;
+
+        case 'failed':
+        case 'wc-failed':
+            return __( 'Failed', 'dokan' );
+            break;
+    }
+}
+
+
 /**
  * Get product items list from order
  *
@@ -475,6 +522,23 @@ function dokan_get_sellers_by( $order_id ) {
     }
 
     return $sellers;
+}
+
+/**
+ * Return unique array of seller_ids from an order
+ * 
+ * @since 2.4.9
+ * 
+ * @param type $order_id
+ * 
+ * @return array $seller_ids
+ */
+function dokan_get_seller_ids_by( $order_id ) {
+
+    $sellers = dokan_get_sellers_by( $order_id );
+
+    return array_unique( array_keys( $sellers ) );
+
 }
 
 /**

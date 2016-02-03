@@ -35,10 +35,12 @@ get_header( 'shop' );
 
                     if ( class_exists( 'Dokan_Store_Location' ) ) {
                         the_widget( 'Dokan_Store_Category_Menu', array( 'title' => __( 'Store Category', 'dokan' ) ), $args );
-                        if( dokan_get_option( 'store_map', 'dokan_general', 'on' ) == 'on' ) {
+
+                        if ( dokan_get_option( 'store_map', 'dokan_general', 'on' ) == 'on' ) {
                             the_widget( 'Dokan_Store_Location', array( 'title' => __( 'Store Location', 'dokan' ) ), $args );
                         }
-                        if( dokan_get_option( 'contact_seller', 'dokan_general', 'on' ) == 'on' ) {
+
+                        if ( dokan_get_option( 'contact_seller', 'dokan_general', 'on' ) == 'on' ) {
                             the_widget( 'Dokan_Store_Contact_Form', array( 'title' => __( 'Contact Seller', 'dokan' ) ), $args );
                         }
                     }

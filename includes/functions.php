@@ -62,11 +62,34 @@ function dokan_is_product_author( $product_id = 0 ) {
  */
 function dokan_is_store_page() {
     $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
+
     if ( get_query_var( $custom_store_url ) ) {
         return true;
     }
 
     return false;
+}
+
+/**
+ * Check if it's a Seller Dashboard page
+ *
+ * @since 2.4.9
+ *
+ * @return boolean
+ */
+function dokan_is_seller_dashboard() {
+    $page_id = dokan_get_option( 'dashboard', 'dokan_pages' );
+
+    if ( ! $page_id ) {
+        return false;
+    }
+
+    if ( $page_id == get_the_ID() ) {
+        return true;
+    }
+
+    return false;
+
 }
 
 /**
@@ -331,13 +354,13 @@ if ( !function_exists( 'dokan_get_seller_percentage' ) ) :
  * @return int
  */
 function dokan_get_seller_percentage( $seller_id = 0 ) {
-    $global_percentage = (int) dokan_get_option( 'seller_percentage', 'dokan_selling', '90' );
+    $global_percentage = (float) dokan_get_option( 'seller_percentage', 'dokan_selling', '90' );
 
     if ( ! $seller_id ) {
         return $global_percentage;
     }
 
-    $seller_percentage = (int) get_user_meta( $seller_id, 'dokan_seller_percentage', true );
+    $seller_percentage = (float) get_user_meta( $seller_id, 'dokan_seller_percentage', true );
     if ( $seller_percentage ) {
         return $seller_percentage;
     }
@@ -1027,15 +1050,16 @@ function dokan_get_seller_bank_details( $seller_id ) {
 /**
  * Get seller listing
  *
- * @param int $number
- * @param int $offset
+ * @param array $args
+ *
  * @return array
  */
-function dokan_get_sellers( $number = 10, $offset = 0 ) {
-    $args = apply_filters( 'dokan_seller_list_query', array(
-        'role' => 'seller',
-        'number'     => $number,
-        'offset'     => $offset,
+function dokan_get_sellers( $args = array() ) {
+
+    $defaults = array(
+        'role'       => 'seller',
+        'number'     => 10,
+        'offset'     => 0,
         'orderby'    => 'registered',
         'order'      => 'ASC',
         'meta_query' => array(
@@ -1045,11 +1069,11 @@ function dokan_get_sellers( $number = 10, $offset = 0 ) {
                 'compare' => '='
             )
         )
-    ) );
+    );
+
+    $args = wp_parse_args( $args, $defaults );
 
     $user_query = new WP_User_Query( $args );
-
-
     $sellers    = $user_query->get_results();
 
     return array( 'users' => $sellers, 'count' => $user_query->total_users );
@@ -1437,22 +1461,26 @@ function dokan_get_processing_time_value( $index ) {
  *
  * @param string  $admin_email
  * @param WC_Order $order
+ *
  * @return array
  */
-function dokan_wc_email_recipient_add_seller( $admin_email, $order ) {
-    $emails = array( $admin_email );
+function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
-    $seller_id = dokan_get_seller_id_by_order( $order->id );
+    if ( $order ) {
 
-    if ( $seller_id ) {
-        $seller_email = get_user_by( 'id', $seller_id )->user_email;
+        $seller_id = dokan_get_seller_id_by_order( $order->id );
 
-        if ( $admin_email != $seller_email ) {
-            array_push( $emails, $seller_email );
+        if ( $seller_id ) {
+
+            $seller_email = get_user_by( 'id', $seller_id )->user_email;
+
+            if ( $email != $seller_email ) {
+                $email .= ',' . $seller_email;
+            }
         }
     }
 
-    return $emails;
+    return $email;
 }
 
 add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
@@ -1795,19 +1823,6 @@ function dokan_get_toc_url( $store_id ) {
 }
 
 /**
- * Save Redirect URL
- *
- * @since 2.4
- *
- * @return void [save redirect_url in session]
- */
-function dokan_save_redirect_url(){
-    $_SESSION['dokan_redirect_url'] = wp_get_referer();
-}
-
-add_action( 'woocommerce_login_form_start', 'dokan_save_redirect_url');
-
-/**
  * Login Redirect
  *
  * @since 2.4
@@ -1826,8 +1841,9 @@ function dokan_after_login_redirect( $redirect_to, $user ) {
             $redirect_to = get_permalink( $seller_dashboard );
         }
     }
-    elseif ( isset( $_SESSION['dokan_redirect_url'] ) ) {
-        $redirect_to = $_SESSION['dokan_redirect_url'];
+
+    if ( isset( $_GET['redirect_to'] ) && !empty( $_GET['redirect_to'] ) ) {
+        $redirect_to = esc_url( $_GET['redirect_to'] );
     }
 
     return $redirect_to;

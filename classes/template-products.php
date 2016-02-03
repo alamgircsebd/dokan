@@ -203,10 +203,13 @@ class Dokan_Template_Products {
                     update_post_meta( $product_id, '_visibility', 'visible' );
 
                     dokan_new_process_product_meta( $product_id );
-
-                    if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
-                        do_action( 'dokan_new_product_added', $product_id, $post_data );
+                    
+                    if( isset( $_POST['dokan_product_id'] ) && !empty( $_POST['dokan_product_id'] ) ) {                        
+                        do_action( 'dokan_product_updated', $product_id );
+                    }  else {
+                        do_action( 'dokan_new_product_added', $product_id );
                     }
+                    
 
                     if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
                         if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {

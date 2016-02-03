@@ -259,18 +259,30 @@ class Dokan_Ajax {
         $posted = $_POST;
 
         check_ajax_referer( 'dokan_contact_seller' );
-        // print_r($posted);
+
+        $contact_name    = sanitize_text_field( $posted['name'] );
+        $contact_email   = sanitize_text_field( $posted['email'] );
+        $contact_message = strip_tags( $posted['message'] );
+        $error_template  = '<div class="alert alert-danger">%s</div>';
+
+        if ( empty( $contact_name ) ) {
+            $message = sprintf( $error_template, __( 'Please provide your name.', 'dokan' ) );
+            wp_send_json_error( $message );
+        }
+
+        if ( empty( $contact_name ) ) {
+            $message = sprintf( $error_template, __( 'Please provide your name.', 'dokan' ) );
+            wp_send_json_error( $message );
+        }
 
         $seller = get_user_by( 'id', (int) $posted['seller_id'] );
 
         if ( !$seller ) {
-            $message = sprintf( '<div class="alert alert-success">%s</div>', __( 'Something went wrong!', 'dokan' ) );
+            $message = sprintf( $error_template, __( 'Something went wrong!', 'dokan' ) );
             wp_send_json_error( $message );
         }
 
-        $contact_name = trim( strip_tags( $posted['name'] ) );
-
-        Dokan_Email::init()->contact_seller( $seller->user_email, $contact_name, $posted['email'], $posted['message'] );
+        Dokan_Email::init()->contact_seller( $seller->user_email, $contact_name, $contact_email, $contact_message );
 
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );

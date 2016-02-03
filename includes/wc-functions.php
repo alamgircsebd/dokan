@@ -482,7 +482,11 @@ function dokan_process_product_meta( $post_id ) {
     // Gallery Images
     $attachment_ids = array_filter( explode( ',', woocommerce_clean( $_POST['product_image_gallery'] ) ) );
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
-
+    
+    
+    $_POST['_visibility'] = isset( $_POST['_visibility'] ) ? $_POST['_visibility'] : '';
+    $_POST['_purchase_note'] = isset( $_POST['_purchase_note'] ) ? $_POST['_purchase_note'] : '';
+     
     // Update post meta
     if ( isset( $_POST['_regular_price'] ) ) {
         update_post_meta( $post_id, '_regular_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
@@ -496,8 +500,8 @@ function dokan_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_tax_status', stripslashes( $_POST['_tax_status'] ) );
 
     if ( isset( $_POST['_tax_class'] ) )
-        update_post_meta( $post_id, '_tax_class', stripslashes( $_POST['_tax_class'] ) );
-
+        update_post_meta( $post_id, '_tax_class', stripslashes( $_POST['_tax_class'] ) ); 
+   
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
 
@@ -717,7 +721,8 @@ function dokan_process_product_meta( $post_id ) {
         'ID'           => $post_id,
         'comment_status' => $comment_status,
     ) );
-
+    
+    $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
 
@@ -885,9 +890,14 @@ function dokan_new_process_product_meta( $post_id ) {
     }
 
     // Save extra product options like purchase note, visibility
+    
+    $_POST['_visibility'] = isset( $_POST['_visibility'] ) ? $_POST['_visibility'] : '';
+    $_POST['_purchase_note'] = isset( $_POST['_purchase_note'] ) ? $_POST['_purchase_note'] : '';
+    
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
-
+    
+    $_POST['_enable_reviews'] = isset( $_POST['_enable_reviews'] ) ? $_POST['_enable_reviews'] : '';
     //enable reviews
     if ( $_POST['_enable_reviews'] == 'yes' ) {
         $comment_status = 'open';
@@ -899,7 +909,8 @@ function dokan_new_process_product_meta( $post_id ) {
         'ID'           => $post_id,
         'comment_status' => $comment_status,
     ) );
-
+    
+    $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
 
@@ -950,6 +961,7 @@ function dokan_new_process_product_meta( $post_id ) {
     }
 
     // Unique SKU
+    $_POST['_sku'] = isset( $_POST['_sku'] ) ? $_POST['_sku'] : '';
     $sku     = get_post_meta($post_id, '_sku', true);
     $new_sku = woocommerce_clean( stripslashes( $_POST['_sku'] ) );
     if ( $new_sku == '' ) {
@@ -1103,7 +1115,8 @@ function dokan_new_process_product_meta( $post_id ) {
         if ( $date_to && ! $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
         }
-
+        
+        $_POST['_sale_price'] = isset( $_POST['_sale_price'] ) ? $_POST['_sale_price'] : '';
         // Update price if on sale
         if ( '' !== $_POST['_sale_price'] && '' == $date_to && '' == $date_from ) {
             update_post_meta( $post_id, '_price', wc_format_decimal( $_POST['_sale_price'] ) );
@@ -1131,7 +1144,7 @@ function dokan_new_process_product_meta( $post_id ) {
 
     // Product Stock manage Data
     if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) {
-
+        $_POST['_stock_status'] = isset( $_POST['_stock_status'] ) ? $_POST['_stock_status'] : '';
         $manage_stock = 'no';
         $backorders   = 'no';
         $stock        = '';
@@ -1200,46 +1213,88 @@ function dokan_new_process_product_meta( $post_id ) {
         delete_post_meta( $post_id, '_crosssell_ids' );
     }
 
-    // Save Downloadable options meta if product is downloadable
-    if ( $is_downloadable == 'yes' ) {
+    // Downloadable options
+    if ( 'yes' == $is_downloadable ) {
 
         $_download_limit = absint( $_POST['_download_limit'] );
-        if ( ! $_download_limit )
+        if ( ! $_download_limit ) {
             $_download_limit = ''; // 0 or blank = unlimited
-
-        $_download_expiry = absint( $_POST['_download_expiry'] );
-        if ( ! $_download_expiry )
-            $_download_expiry = ''; // 0 or blank = unlimited
-
-        // file paths will be stored in an array keyed off md5(file path)
-        if ( isset( $_POST['_wc_file_urls'] ) ) {
-            $files = array();
-
-            $file_names    = isset( $_POST['_wc_file_names'] ) ? array_map( 'wc_clean', $_POST['_wc_file_names'] ) : array();
-            $file_urls     = isset( $_POST['_wc_file_urls'] ) ? array_map( 'esc_url_raw', array_map( 'trim', $_POST['_wc_file_urls'] ) ) : array();
-            $file_url_size = sizeof( $file_urls );
-
-            for ( $i = 0; $i < $file_url_size; $i ++ ) {
-                if ( ! empty( $file_urls[ $i ] ) )
-                    $files[ md5( $file_urls[ $i ] ) ] = array(
-                        'name' => $file_names[ $i ],
-                        'file' => $file_urls[ $i ]
-                    );
-            }
-
-            // grant permission to any newly added files on any existing orders for this product prior to saving
-            do_action( 'woocommerce_process_product_file_download_paths', $post_id, 0, $files );
-
-            update_post_meta( $post_id, '_downloadable_files', $files );
         }
 
+        $_download_expiry = absint( $_POST['_download_expiry'] );
+        if ( ! $_download_expiry ) {
+            $_download_expiry = ''; // 0 or blank = unlimited
+        }
+
+        // file paths will be stored in an array keyed off md5(file path)
+        $files = array();
+
+        if ( isset( $_POST['_wc_file_urls'] ) ) {
+            $file_names         = isset( $_POST['_wc_file_names'] ) ? $_POST['_wc_file_names'] : array();
+            $file_urls          = isset( $_POST['_wc_file_urls'] )  ? wp_unslash( array_map( 'trim', $_POST['_wc_file_urls'] ) ) : array();
+            $file_url_size      = sizeof( $file_urls );
+            $allowed_file_types = apply_filters( 'woocommerce_downloadable_file_allowed_mime_types', get_allowed_mime_types() );
+
+            for ( $i = 0; $i < $file_url_size; $i ++ ) {
+                if ( ! empty( $file_urls[ $i ] ) ) {
+                    // Find type and file URL
+                    if ( 0 === strpos( $file_urls[ $i ], 'http' ) ) {
+                        $file_is  = 'absolute';
+                        $file_url = esc_url_raw( $file_urls[ $i ] );
+                    } elseif ( '[' === substr( $file_urls[ $i ], 0, 1 ) && ']' === substr( $file_urls[ $i ], -1 ) ) {
+                        $file_is  = 'shortcode';
+                        $file_url = wc_clean( $file_urls[ $i ] );
+                    } else {
+                        $file_is = 'relative';
+                        $file_url = wc_clean( $file_urls[ $i ] );
+                    }
+
+                    $file_name = wc_clean( $file_names[ $i ] );
+                    $file_hash = md5( $file_url );
+
+                    // Validate the file extension
+                    if ( in_array( $file_is, array( 'absolute', 'relative' ) ) ) {
+                        $file_type  = wp_check_filetype( strtok( $file_url, '?' ), $allowed_file_types );
+                        $parsed_url = parse_url( $file_url, PHP_URL_PATH );
+                        $extension  = pathinfo( $parsed_url, PATHINFO_EXTENSION );
+
+                        if ( ! empty( $extension ) && ! in_array( $file_type['type'], $allowed_file_types ) ) {
+                            WC_Admin_Meta_Boxes::add_error( sprintf( __( 'The downloadable file %s cannot be used as it does not have an allowed file type. Allowed types include: %s', 'woocommerce' ), '<code>' . basename( $file_url ) . '</code>', '<code>' . implode( ', ', array_keys( $allowed_file_types ) ) . '</code>' ) );
+                            continue;
+                        }
+                    }
+
+                    // Validate the file exists
+                    if ( 'relative' === $file_is ) {
+                        $_file_url = $file_url;
+                        if ( '..' === substr( $file_url, 0, 2 ) || '/' !== substr( $file_url, 0, 1 ) ) {
+                            $_file_url = realpath( ABSPATH . $file_url );
+                        }
+
+                        if ( ! apply_filters( 'woocommerce_downloadable_file_exists', file_exists( $_file_url ), $file_url ) ) {
+                            WC_Admin_Meta_Boxes::add_error( sprintf( __( 'The downloadable file %s cannot be used as it does not exist on the server.', 'woocommerce' ), '<code>' . $file_url . '</code>' ) );
+                            continue;
+                        }
+                    }
+
+                    $files[ $file_hash ] = array(
+                        'name' => $file_name,
+                        'file' => $file_url
+                    );
+                }
+            }
+        }
+
+        // grant permission to any newly added files on any existing orders for this product prior to saving
+        dokan_process_product_file_download_paths( $post_id, 0, $files );
+
+        update_post_meta( $post_id, '_downloadable_files', $files );
         update_post_meta( $post_id, '_download_limit', $_download_limit );
         update_post_meta( $post_id, '_download_expiry', $_download_expiry );
 
-        if ( isset( $_POST['_download_limit'] ) )
-            update_post_meta( $post_id, '_download_limit', esc_attr( $_download_limit ) );
-        if ( isset( $_POST['_download_expiry'] ) )
-            update_post_meta( $post_id, '_download_expiry', esc_attr( $_download_expiry ) );
+        if ( isset( $_POST['_download_type'] ) ) {
+            update_post_meta( $post_id, '_download_type', wc_clean( $_POST['_download_type'] ) );
+        }
     }
 
     // Save variations
@@ -1836,6 +1891,62 @@ function dokan_save_variations( $post_id ) {
 }
 
 
+/**
+ * Grant downloadable file access to any newly added files on any existing.
+ * orders for this product that have previously been granted downloadable file access.
+ *
+ * @param int $product_id product identifier
+ * @param int $variation_id optional product variation identifier
+ * @param array $downloadable_files newly set files
+ */
+function dokan_process_product_file_download_paths( $product_id, $variation_id, $downloadable_files ) {
+    global $wpdb;
+
+    if ( $variation_id ) {
+        $product_id = $variation_id;
+    }
+    
+    $product               = wc_get_product( $product_id );
+    $existing_download_ids = array_keys( (array) $product->get_files() );
+    $updated_download_ids  = array_keys( (array) $downloadable_files );
+    $new_download_ids      = array_filter( array_diff( $updated_download_ids, $existing_download_ids ) );
+    $removed_download_ids  = array_filter( array_diff( $existing_download_ids, $updated_download_ids ) );
+
+    if ( ! empty( $new_download_ids ) || ! empty( $removed_download_ids ) ) {
+        // determine whether downloadable file access has been granted via the typical order completion, or via the admin ajax method
+        $existing_permissions = $wpdb->get_results( $wpdb->prepare( "SELECT * from {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE product_id = %d GROUP BY order_id", $product_id ) );
+
+        foreach ( $existing_permissions as $existing_permission ) {
+            $order = wc_get_order( $existing_permission->order_id );
+
+            if ( ! empty( $order->id ) ) {
+                // Remove permissions
+                if ( ! empty( $removed_download_ids ) ) {
+                    foreach ( $removed_download_ids as $download_id ) {
+                        if ( apply_filters( 'woocommerce_process_product_file_download_paths_remove_access_to_old_file', true, $download_id, $product_id, $order ) ) {
+                            $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE order_id = %d AND product_id = %d AND download_id = %s", $order->id, $product_id, $download_id ) );
+                        }
+                    }
+                }
+                // Add permissions
+                if ( ! empty( $new_download_ids ) ) {
+
+                    foreach ( $new_download_ids as $download_id ) {
+
+                        if ( apply_filters( 'woocommerce_process_product_file_download_paths_grant_access_to_new_file', true, $download_id, $product_id, $order ) ) {
+                            // grant permission if it doesn't already exist
+                            if ( ! $wpdb->get_var( $wpdb->prepare( "SELECT 1=1 FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE order_id = %d AND product_id = %d AND download_id = %s", $order->id, $product_id, $download_id ) ) ) {
+                                wc_downloadable_file_permission( $download_id, $product_id, $order );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 
 /**
  * Monitors a new order and attempts to create sub-orders
@@ -2265,20 +2376,28 @@ function dokan_get_featured_products( $per_page = 9) {
  * @param int $per_page
  * @return \WP_Query
  */
-function dokan_get_latest_products( $per_page = 9) {
-    $featured_query = new WP_Query( apply_filters( 'dokan_get_featured_products', array(
+function dokan_get_latest_products( $per_page = 9 , $seller_id = '' ) {
+    $args = array(
         'posts_per_page'      => $per_page,
         'post_type'           => 'product',
         'ignore_sticky_posts' => 1,
         'meta_query'          => array(
-            array(
-                'key'     => '_visibility',
-                'value'   => array('catalog', 'visible'),
-                'compare' => 'IN'
-            )
-    ) ) ) );
+                                    array(
+                                        'key'     => '_visibility',
+                                        'value'   => array('catalog', 'visible'),
+                                        'compare' => 'IN'
+                                    )
+                                ),
+        );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
+    
+    
+    $latest_query = new WP_Query( apply_filters( 'dokan_get_latest_products', $args ) );
 
-    return $featured_query;
+    return $latest_query;
 }
 
 
@@ -2291,7 +2410,7 @@ function dokan_get_latest_products( $per_page = 9) {
  * @param int $per_page
  * @return \WP_Query
  */
-function dokan_get_best_selling_products( $per_page = 8 ) {
+function dokan_get_best_selling_products( $per_page = 8, $seller_id = '' ) {
 
     $args = array(
         'post_type'           => 'product',
@@ -2308,6 +2427,10 @@ function dokan_get_best_selling_products( $per_page = 8 ) {
             ),
         )
     );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
 
     $best_selling_query = new WP_Query( apply_filters( 'dokan_best_selling_query', $args ) );
 
@@ -2324,7 +2447,7 @@ function dokan_get_best_selling_products( $per_page = 8 ) {
  * @param int $per_page
  * @return \WP_Query
  */
-function dokan_get_top_rated_products( $per_page = 8 ) {
+function dokan_get_top_rated_products( $per_page = 8 , $seller_id = '') {
 
     $args = array(
         'post_type'             => 'product',
@@ -2339,6 +2462,10 @@ function dokan_get_top_rated_products( $per_page = 8 ) {
             )
         )
     );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
 
     add_filter( 'posts_clauses', array( 'WC_Shortcodes', 'order_by_rating_post_clauses' ) );
 
@@ -2360,7 +2487,7 @@ function dokan_get_top_rated_products( $per_page = 8 ) {
  * @param type $paged
  * @return \WP_Query
  */
-function dokan_get_on_sale_products( $per_page = 10, $paged = 1 ) {
+function dokan_get_on_sale_products( $per_page = 10, $paged = 1, $seller_id = '' ) {
     // Get products on sale
     $product_ids_on_sale = wc_get_product_ids_on_sale();
 
@@ -2384,6 +2511,10 @@ function dokan_get_on_sale_products( $per_page = 10, $paged = 1 ) {
             )
         )
     );
+    
+    if ( !empty( $seller_id ) ) {
+        $args['author'] = (int) $seller_id;
+    }
 
     return new WP_Query( apply_filters( 'dokan_on_sale_products_query', $args ) );
 }

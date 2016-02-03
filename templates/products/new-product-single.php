@@ -170,6 +170,9 @@ if ( ! $from_shortcode ) {
                                     <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>">
 
                                     <label for="post_title" class="form-label"><?php _e( 'Title', 'dokan' ); ?></label>
+                                    <div class="dokan-product-title-alert hidden dokan-alert dokan-alert-danger">
+                                            <?php _e('Please choose a Name !!!', 'dokan'); ?>
+                                    </div>
                                     <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => __( 'Product name..', 'dokan' ), 'value' => $post_title ) ); ?>
                                 </div>
 
@@ -221,7 +224,11 @@ if ( ! $from_shortcode ) {
 
                                 <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                                     <div class="dokan-form-group">
+                                        
                                         <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
+                                        <div class="dokan-product-cat-alert hidden dokan-alert dokan-alert-danger">
+                                            <?php _e('Please choose a category !!!', 'dokan'); ?>
+                                        </div>
                                         <?php
                                         $product_cat = -1;
                                         $term = array();
@@ -230,8 +237,8 @@ if ( ! $from_shortcode ) {
                                         if ( $term ) {
                                             $product_cat = reset( $term );
                                         }
-
-                                        wp_dropdown_categories( array(
+                                        
+                                        $category_args =  array(
                                             'show_option_none' => __( '- Select a category -', 'dokan' ),
                                             'hierarchical'     => 1,
                                             'hide_empty'       => 0,
@@ -242,8 +249,10 @@ if ( ! $from_shortcode ) {
                                             'class'            => 'product_cat dokan-form-control chosen',
                                             'exclude'          => '',
                                             'selected'         => $product_cat,
-                                        ) );
-                                        ?>
+                                        );
+
+                                        wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
+                                    ?>
                                     </div>
                                 <?php elseif ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'multiple' ): ?>
                                     <div class="dokan-form-group dokan-list-category-box">
