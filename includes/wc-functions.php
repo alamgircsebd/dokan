@@ -482,11 +482,11 @@ function dokan_process_product_meta( $post_id ) {
     // Gallery Images
     $attachment_ids = array_filter( explode( ',', woocommerce_clean( $_POST['product_image_gallery'] ) ) );
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
-    
-    
+
+
     $_POST['_visibility'] = isset( $_POST['_visibility'] ) ? $_POST['_visibility'] : '';
     $_POST['_purchase_note'] = isset( $_POST['_purchase_note'] ) ? $_POST['_purchase_note'] : '';
-     
+
     // Update post meta
     if ( isset( $_POST['_regular_price'] ) ) {
         update_post_meta( $post_id, '_regular_price', ( $_POST['_regular_price'] === '' ) ? '' : wc_format_decimal( $_POST['_regular_price'] ) );
@@ -500,8 +500,8 @@ function dokan_process_product_meta( $post_id ) {
         update_post_meta( $post_id, '_tax_status', stripslashes( $_POST['_tax_status'] ) );
 
     if ( isset( $_POST['_tax_class'] ) )
-        update_post_meta( $post_id, '_tax_class', stripslashes( $_POST['_tax_class'] ) ); 
-   
+        update_post_meta( $post_id, '_tax_class', stripslashes( $_POST['_tax_class'] ) );
+
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
 
@@ -721,7 +721,7 @@ function dokan_process_product_meta( $post_id ) {
         'ID'           => $post_id,
         'comment_status' => $comment_status,
     ) );
-    
+
     $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
@@ -890,13 +890,13 @@ function dokan_new_process_product_meta( $post_id ) {
     }
 
     // Save extra product options like purchase note, visibility
-    
+
     $_POST['_visibility'] = isset( $_POST['_visibility'] ) ? $_POST['_visibility'] : '';
     $_POST['_purchase_note'] = isset( $_POST['_purchase_note'] ) ? $_POST['_purchase_note'] : '';
-    
+
     update_post_meta( $post_id, '_purchase_note', stripslashes( $_POST['_purchase_note'] ) );
     update_post_meta( $post_id, '_visibility', stripslashes( $_POST['_visibility'] ) );
-    
+
     $_POST['_enable_reviews'] = isset( $_POST['_enable_reviews'] ) ? $_POST['_enable_reviews'] : '';
     //enable reviews
     if ( $_POST['_enable_reviews'] == 'yes' ) {
@@ -909,7 +909,7 @@ function dokan_new_process_product_meta( $post_id ) {
         'ID'           => $post_id,
         'comment_status' => $comment_status,
     ) );
-    
+
     $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
@@ -1115,7 +1115,7 @@ function dokan_new_process_product_meta( $post_id ) {
         if ( $date_to && ! $date_from ) {
             update_post_meta( $post_id, '_sale_price_dates_from', strtotime( 'NOW', current_time( 'timestamp' ) ) );
         }
-        
+
         $_POST['_sale_price'] = isset( $_POST['_sale_price'] ) ? $_POST['_sale_price'] : '';
         // Update price if on sale
         if ( '' !== $_POST['_sale_price'] && '' == $date_to && '' == $date_from ) {
@@ -1905,7 +1905,7 @@ function dokan_process_product_file_download_paths( $product_id, $variation_id, 
     if ( $variation_id ) {
         $product_id = $variation_id;
     }
-    
+
     $product               = wc_get_product( $product_id );
     $existing_download_ids = array_keys( (array) $product->get_files() );
     $updated_download_ids  = array_keys( (array) $downloadable_files );
@@ -1977,7 +1977,7 @@ function dokan_create_sub_order( $parent_order_id ) {
     $parent_order = new WC_Order( $parent_order_id );
 
     $sellers = dokan_get_sellers_by( $parent_order_id );
-   
+
     // return if we've only ONE seller
     if ( count( $sellers ) == 1 ) {
         $temp = array_keys( $sellers );
@@ -2069,7 +2069,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         // calculate the total
         $order_in_total = $order_total + $shipping_cost + $order_tax;
         //$order_in_total = $order_total + $shipping_cost + $order_tax - $discount;
-                
+
         // set order meta
         update_post_meta( $order_id, '_payment_method',         $parent_order->payment_method );
         update_post_meta( $order_id, '_payment_method_title',   $parent_order->payment_method_title );
@@ -2382,25 +2382,22 @@ function dokan_get_latest_products( $per_page = 9 , $seller_id = '' ) {
         'post_type'           => 'product',
         'ignore_sticky_posts' => 1,
         'meta_query'          => array(
-                                    array(
-                                        'key'     => '_visibility',
-                                        'value'   => array('catalog', 'visible'),
-                                        'compare' => 'IN'
-                                    )
-                                ),
-        );
-    
+            array(
+                'key'     => '_visibility',
+                'value'   => array('catalog', 'visible'),
+                'compare' => 'IN'
+            )
+        ),
+    );
+
     if ( !empty( $seller_id ) ) {
         $args['author'] = (int) $seller_id;
     }
-    
-    
+
     $latest_query = new WP_Query( apply_filters( 'dokan_get_latest_products', $args ) );
 
     return $latest_query;
 }
-
-
 
 /**
  * Get best selling products
@@ -2427,7 +2424,7 @@ function dokan_get_best_selling_products( $per_page = 8, $seller_id = '' ) {
             ),
         )
     );
-    
+
     if ( !empty( $seller_id ) ) {
         $args['author'] = (int) $seller_id;
     }
@@ -2462,7 +2459,7 @@ function dokan_get_top_rated_products( $per_page = 8 , $seller_id = '') {
             )
         )
     );
-    
+
     if ( !empty( $seller_id ) ) {
         $args['author'] = (int) $seller_id;
     }
@@ -2475,8 +2472,6 @@ function dokan_get_top_rated_products( $per_page = 8 , $seller_id = '') {
 
     return $top_rated_query;
 }
-
-
 
 /**
  * Get products on-sale
@@ -2511,7 +2506,7 @@ function dokan_get_on_sale_products( $per_page = 10, $paged = 1, $seller_id = ''
             )
         )
     );
-    
+
     if ( !empty( $seller_id ) ) {
         $args['author'] = (int) $seller_id;
     }
