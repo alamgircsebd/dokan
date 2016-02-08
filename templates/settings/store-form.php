@@ -65,7 +65,16 @@
                 <i class="fa fa-cloud-upload"></i>
 
                 <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
-                <p class="help-block"><?php _e( '(Upload a banner for your store. Banner size is (825x300) pixels. )', 'dokan' ); ?></p>
+                <p class="help-block">
+                    <?php
+                    /**
+                     * Filter `dokan_banner_upload_help`
+                     *
+                     * @since 2.4.10
+                     */
+                    echo apply_filters( 'dokan_banner_upload_help', __('Upload a banner for your store. Banner size is (825x300) pixels.', 'dokan' ) );
+                    ?>
+                </p>
             </div>
         </div> <!-- .dokan-banner -->
 
@@ -172,7 +181,7 @@
             <div class="dokan-form-group" id="dokan_tnc_text">
                 <label class="dokan-w3 dokan-control-label" for="dokan_store_tnc"><?php _e( 'TOC Details', 'dokan' ); ?></label>
                 <div class="dokan-w8 dokan-text-left">
-                    <?php                    
+                    <?php
                         $settings = array(
                             'editor_height' => 200,
                             'media_buttons' => false,
@@ -281,7 +290,7 @@
 
         $(function() {
             dokan_address_select.init();
-            
+
             $('#setting_phone').keydown(function(e) {
                 // Allow: backspace, delete, tab, escape, enter and .
                 if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 91, 107, 109, 110, 187, 189, 190]) !== -1 ||
