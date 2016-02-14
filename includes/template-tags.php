@@ -317,13 +317,36 @@ function dokan_get_dashboard_nav() {
             'pos'   => 70
         ),
     );
-
+    
     $settings = array(
         'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
         'icon'  => '<i class="fa fa-cog"></i>',
         'url'   => dokan_get_navigation_url( 'settings/store' ),
         'pos'   => 200,
     );
+    
+    $common_links = array(
+       'store_link' => array(
+            'title' => __( 'Go to Store', 'dokan'),
+            'icon'  => '<i class="fa fa-shopping-cart"></i>',
+            'url'   => dokan_get_store_url( get_current_user_id()),
+            'pos'   => 210
+        ),
+        'edit_account' => array(
+            'title' => __( 'Edit Account', 'dokan'),
+            'icon'  => '<i class="fa fa-user"></i>',
+            'url'   => dokan_get_navigation_url( 'edit-account' ),
+            'pos'   => 220
+        ),
+        'sign_out' => array(
+            'title' => __( 'Sign Out', 'dokan'),
+            'icon'  => '<i class="fa fa-upload"></i>',
+            'url'   => wp_logout_url( site_url() ),
+            'pos'   => 230
+        ),
+    );
+    
+    $urls = array_merge( $urls, $common_links );
 
     $settings_sub = array(
         'back' => array(
@@ -345,6 +368,8 @@ function dokan_get_dashboard_nav() {
             'pos'   => 50
         )
     );
+    
+    $settings_sub = array_merge( $settings_sub, $common_links );
 
     /**
      * Filter to get the seller dashboard settings navigation.

@@ -2798,3 +2798,107 @@ function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
 }
 
 add_filter( 'woocommerce_package_rates', 'dokan_multiply_flat_rate_price_by_seller', 1,2);
+
+
+add_action( 'template_redirect', 'dokan_save_account_details' );
+function dokan_save_account_details(){
+    
+    
+    if ( 'POST' !== strtoupper( $_SERVER[ 'REQUEST_METHOD' ] ) ) {
+			return;
+		}
+
+		if ( empty( $_POST[ 'action' ] ) || 'dokan_save_account_details' !== $_POST[ 'action' ] || empty( $_POST['_wpnonce'] ) || ! wp_verify_nonce( $_POST['_wpnonce'], 'dokan_save_account_details' ) ) {
+			return;
+		}
+
+		$errors       = new WP_Error();
+		$user         = new stdClass();
+
+		$user->ID     = (int) get_current_user_id();
+		$current_user = get_user_by( 'id', $user->ID );
+
+		if ( $user->ID <= 0 ) {
+			return;
+		}
+
+		$account_first_name = ! empty( $_POST[ 'account_first_name' ] ) ? wc_clean( $_POST[ 'account_first_name' ] ) : '';
+		$account_last_name  = ! empty( $_POST[ 'account_last_name' ] ) ? wc_clean( $_POST[ 'account_last_name' ] ) : '';
+		$account_email      = ! empty( $_POST[ 'account_email' ] ) ? sanitize_email( $_POST[ 'account_email' ] ) : '';
+		$pass_cur           = ! empty( $_POST[ 'password_current' ] ) ? $_POST[ 'password_current' ] : '';
+		$pass1              = ! empty( $_POST[ 'password_1' ] ) ? $_POST[ 'password_1' ] : '';
+		$pass2              = ! empty( $_POST[ 'password_2' ] ) ? $_POST[ 'password_2' ] : '';
+		$save_pass          = true;
+
+		$user->first_name   = $account_first_name;
+		$user->last_name    = $account_last_name;
+
+		// Prevent emails being displayed, or leave alone.
+		$user->display_name = is_email( $current_user->display_name ) ? $user->first_name : $current_user->display_name;
+
+		// Handle required fields
+		$required_fields = apply_filters( 'woocommerce_save_account_details_required_fields', array(
+			'account_first_name' => __( 'First Name', 'woocommerce' ),
+			'account_last_name'  => __( 'Last Name', 'woocommerce' ),
+			'account_email'      => __( 'Email address', 'woocommerce' ),
+		) );
+
+		foreach ( $required_fields as $field_key => $field_name ) {
+			if ( empty( $_POST[ $field_key ] ) ) {
+				wc_add_notice( '<strong>' . esc_html( $field_name ) . '</strong> ' . __( 'is a required field.', 'woocommerce' ), 'error' );
+			}
+		}
+
+		if ( $account_email ) {
+			if ( ! is_email( $account_email ) ) {
+				wc_add_notice( __( 'Please provide a valid email address.', 'woocommerce' ), 'error' );
+			} elseif ( email_exists( $account_email ) && $account_email !== $current_user->user_email ) {
+				wc_add_notice( __( 'This email address is already registered.', 'woocommerce' ), 'error' );
+			}
+			$user->user_email = $account_email;
+		}
+
+		if ( ! empty( $pass1 ) && ! wp_check_password( $pass_cur, $current_user->user_pass, $current_user->ID ) ) {
+			wc_add_notice( __( 'Your current password is incorrect.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		}
+
+		if ( ! empty( $pass_cur ) && empty( $pass1 ) && empty( $pass2 ) ) {
+			wc_add_notice( __( 'Please fill out all password fields.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ! empty( $pass1 ) && empty( $pass_cur ) ) {
+			wc_add_notice( __( 'Please enter your current password.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ! empty( $pass1 ) && empty( $pass2 ) ) {
+			wc_add_notice( __( 'Please re-enter your password.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		} elseif ( ( ! empty( $pass1 ) || ! empty( $pass2 ) ) && $pass1 !== $pass2 ) {
+			wc_add_notice( __( 'New passwords do not match.', 'woocommerce' ), 'error' );
+			$save_pass = false;
+		}
+
+		if ( $pass1 && $save_pass ) {
+			$user->user_pass = $pass1;
+		}
+
+		// Allow plugins to return their own errors.
+		do_action_ref_array( 'woocommerce_save_account_details_errors', array( &$errors, &$user ) );
+
+		if ( $errors->get_error_messages() ) {
+			foreach ( $errors->get_error_messages() as $error ) {
+				wc_add_notice( $error, 'error' );
+			}
+		}
+
+		if ( wc_notice_count( 'error' ) === 0 ) {
+
+			wp_update_user( $user ) ;
+
+			wc_add_notice( __( 'Account details changed successfully.', 'woocommerce' ) );
+
+			do_action( 'woocommerce_save_account_details', $user->ID );
+
+			wp_safe_redirect( dokan_get_navigation_url( ' edit-account' ) );
+			exit;
+		}
+}
