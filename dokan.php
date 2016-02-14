@@ -338,6 +338,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-extra' );
                 wp_enqueue_style( 'dokan-style' );
                 wp_enqueue_style( 'dokan-magnific-popup' );
+                wp_enqueue_style( 'woocommerce-general' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -357,6 +358,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'chosen' );
                 wp_enqueue_media();
                 wp_enqueue_script( 'dokan-popup' );
+                wp_enqueue_script( 'wc-password-strength-meter' );
 
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
