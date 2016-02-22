@@ -373,9 +373,11 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-style' );
             }
-
-
+           
             if ( DOKAN_LOAD_SCRIPTS ) {
+                $scheme       = is_ssl() ? 'https' : 'http';
+                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?sensor=true' );
+
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
