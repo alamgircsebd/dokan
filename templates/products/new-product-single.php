@@ -568,6 +568,9 @@ if ( ! $from_shortcode ) {
                         <?php endif; ?>
 
                         <?php wp_nonce_field( 'dokan_add_new_product', 'dokan_add_new_product_nonce' ); ?>
+                        
+                        <!--hidden input for Firefox issue-->
+                        <input type="hidden" name="dokan_add_product" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
                         <input type="submit" name="dokan_add_product" class="dokan-btn dokan-btn-theme dokan-btn-lg btn-block" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
 
                     </form>
