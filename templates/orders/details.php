@@ -12,7 +12,7 @@ $statuses = wc_get_order_statuses();
 $order    = new WC_Order( $order_id );
 ?>
 <div class="dokan-clearfix">
-    <div class="dokan-w7" style="margin-right:3%;">
+    <div class="dokan-w8" style="margin-right:3%;">
 
         <div class="dokan-clearfix">
             <div class="" style="width:100%">
@@ -115,7 +115,7 @@ $order    = new WC_Order( $order_id );
 
             <?php do_action( 'dokan_order_detail_after_order_items', $order ); ?>
 
-            <div class="dokan-left" style="width:49%; margin-right:2%">
+            <div class="dokan-left" style="min-width: 49%; margin-right:2%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'Billing Address', 'dokan' ); ?></strong></div>
                     <div class="dokan-panel-body">
@@ -124,7 +124,7 @@ $order    = new WC_Order( $order_id );
                 </div>
             </div>
 
-            <div class="dokan-left" style="width:49%;">
+            <div class="dokan-left" style="min-width: 49%;">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'Shipping Address', 'dokan' ); ?></strong></div>
                     <div class="dokan-panel-body">
