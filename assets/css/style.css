@@ -36,6 +36,19 @@
   background: #f05025;
   color: #fff;
 }
+.dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.dokan-common-links:hover {
+  background: none !important;
+}
+.dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.dokan-common-links a {
+  display: inline-block !important;
+  width: 33.333333%;
+  padding: 6% 13%;
+  float: left;
+}
+.dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.dokan-common-links a:hover {
+  background: #f05025;
+  color: #fff;
+}
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.active {
   position: relative;
   background: #f05025;
