@@ -1,4 +1,13 @@
 
+v2.4.10 -> February 23, 2016
+---------------------
+- [new] New dashboard menu added for 'store link', 'edit account' and 'sign out'
+- [fix] Remove repeated data rendering on admin panel dokan earning section
+- [fix] Terms and condition not showing on registration issue
+- [fix] Dashboard/orders page single view responsive issue
+- [fix] Product edit and add issue on Firefox and IE browser
+- [fix] Product variation save and update issues
+
 v2.4.9 -> February 01, 2016
 ---------------------
 - [new] Plugin help page added
