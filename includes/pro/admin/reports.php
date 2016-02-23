@@ -169,10 +169,6 @@
                 <ul class="chart-legend">
                     <li>
                         <strong><?php echo wc_price( $earning_total ); ?></strong>
-                        <?php _e( 'Total Earning', 'dokan' ); ?>
-                    </li>
-                    <li>
-                        <strong><?php echo wc_price( $earning_total ); ?></strong>
                         <?php _e( 'Total Earning in this period', 'dokan' ); ?>
                     </li>
                     <li>
