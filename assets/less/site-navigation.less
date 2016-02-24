@@ -30,29 +30,33 @@
 	            }
 
 	            &:hover {
-                        background: @mainColor;
-                        color: #fff;
+                    background: @mainColor;
+                    color: #fff;
+                }
+
+                &.dokan-common-links {
+
+                    &:hover {
+                        background: none !important;
                     }
-                    
-                    &.dokan-common-links {
-                        
+
+                    a {
+                        display: inline-block !important;
+                        width: 33.333333%;
+                        padding: 6% 13%;
+                        float: left;
+                        border-right: 1px solid lighten(#2b2b2b, 10%);
+
                         &:hover {
-                            background: none !important;
+                            background: @mainColor;
+                            color: #fff;
                         }
-                        
-                        a {
-                            
-                            display: inline-block !important;
-                            width: 33.333333%;
-                            padding: 6% 13%;
-                            float: left;
-                            
-                            &:hover {
-                                background: @mainColor;
-                                color: #fff;
-                            }
+
+                        &:last-child {
+                        	border-right: none;
                         }
                     }
+                }
 
 	            &.active {
 	                position: relative;

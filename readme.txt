@@ -145,6 +145,29 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 
 == Changelog ==
 
+= v2.4.10 -> February 24, 2016 =
+---------------------
+- [new] New dashboard menu added for 'store link', 'edit account' and 'sign out'
+- [fix] Remove repeated data rendering on admin panel dokan earning section
+- [fix] Terms and condition not showing on registration issue
+- [fix] Dashboard/orders page single view responsive issue
+- [fix] Product edit and add issue on Firefox and IE browser
+- [fix] Product variation save and update issues
+
+= v2.4.9 -> February 01, 2016 =
+---------------------
+- [new] Plugin help page added
+- [new] Seller search added on store listing
+- [tweak] Some validation on contact seller email handler and after sent hook updated
+- [tweak] Category check added on new product add without reloading page
+- [tweak] Auto suggestion and clear button on flat view variation product attributes input field
+- [fix] Downloadable file change in product after order issue fixed
+- [fix] Order status translation issue on order listing page
+- [fix] Email not send to seller on new order issue fixed
+- [fix] Allow float number for seller percentage
+- [fix] Seo hook updated for Yoast to make compatible with WP 4.4
+- [fix] Browser jump issue in tab view on click of tabs
+
 = v2.4.8 -> November 21, 2015 =
 ---------------------
 - [tweak] Email template override system added

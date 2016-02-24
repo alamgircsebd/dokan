@@ -317,14 +317,14 @@ function dokan_get_dashboard_nav() {
             'pos'   => 70
         ),
     );
-    
+
     $settings = array(
         'title' => __( 'Settings <i class="fa fa-angle-right pull-right"></i>', 'dokan'),
         'icon'  => '<i class="fa fa-cog"></i>',
         'url'   => dokan_get_navigation_url( 'settings/store' ),
         'pos'   => 200,
     );
-    
+
     $settings_sub = array(
         'back' => array(
             'title' => __( 'Back to Dashboard', 'dokan'),
@@ -345,8 +345,8 @@ function dokan_get_dashboard_nav() {
             'pos'   => 50
         )
     );
-    
-   
+
+
     /**
      * Filter to get the seller dashboard settings navigation.
      *
@@ -403,15 +403,15 @@ function dokan_dashboard_nav( $active_menu = '' ) {
 
     foreach ($urls as $key => $item) {
         $class = ( $active_menu == $key ) ? 'active ' . $key : $key;
-        $menu .= sprintf( '<li class="%s"><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );      
+        $menu .= sprintf( '<li class="%s"><a href="%s">%s %s</a></li>', $class, $item['url'], $item['icon'], $item['title'] );
     }
-    $menu .= '<li class="dokan-common-links">
-                <a title="' . __( 'Visit Store', 'dokan' ) . '" class="tips" data-placement="bottom" href="' . dokan_get_store_url( get_current_user_id()) .'"><i class="fa fa-external-link"></i></a>
-                <a title="' . __( 'Edit Account', 'dokan' ) . '" class="tips" data-placement="bottom" href="' . dokan_get_navigation_url( 'edit-account' ) . '"><i class="fa fa-user"></i></a>
-                <a title="' . __( 'Log out', 'dokan' ) . '" class="tips" data-placement="bottom" href="' . wp_logout_url( site_url() ) . '"><i class="fa fa-power-off"></i></a>
-                <div class="dokan-clearfix"></div>    
-            </li>';
-    
+
+    $menu .= '<li class="dokan-common-links dokan-clearfix">
+            <a title="' . __( 'Visit Store', 'dokan' ) . '" class="tips" data-placement="top" href="' . dokan_get_store_url( get_current_user_id()) .'" target="_blank"><i class="fa fa-external-link"></i></a>
+            <a title="' . __( 'Edit Account', 'dokan' ) . '" class="tips" data-placement="top" href="' . dokan_get_navigation_url( 'edit-account' ) . '"><i class="fa fa-user"></i></a>
+            <a title="' . __( 'Log out', 'dokan' ) . '" class="tips" data-placement="top" href="' . wp_logout_url( site_url() ) . '"><i class="fa fa-power-off"></i></a>
+        </li>';
+
     $menu .= '</ul>';
 
     return $menu;
