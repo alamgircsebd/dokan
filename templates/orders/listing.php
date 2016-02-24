@@ -69,8 +69,8 @@ if ( $user_orders ) {
                         if ( '0000-00-00 00:00:00' == $the_order->order_date ) {
                             $t_time = $h_time = __( 'Unpublished', 'dokan' );
                         } else {
-                            $t_time = get_the_time( __( 'Y/m/d g:i:s A', 'dokan' ), $the_order );
-
+                            $t_time = get_the_time( __( 'Y/m/d g:i:s A', 'dokan' ), $the_order->id );
+                            
                             $gmt_time = strtotime( $the_order->order_date . ' UTC' );
                             $time_diff = current_time( 'timestamp', 1 ) - $gmt_time;
 
