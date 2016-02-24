@@ -69,6 +69,7 @@ class Dokan_Rewrites {
             'orders',
             'withdraw',
             'settings',
+            'edit-account'
         ) );
 
         foreach ( $this->query_vars as $var ) {

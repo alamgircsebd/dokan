@@ -79,6 +79,10 @@ class Dokan_Template_Shortcodes {
             dokan_get_template_part( 'dashboard/dashboard' );
             return;
         }
+        if ( isset( $wp->query_vars['edit-account'] ) ) {
+            dokan_get_template_part( 'dashboard/edit-account' );
+            return;
+        }
 
         do_action( 'dokan_load_custom_template', $wp->query_vars );
     }

@@ -52,11 +52,13 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
     <input type="hidden" class="variation_menu_order" name="variation_menu_order[<?php echo $loop; ?>]" value="<?php echo $loop; ?>" />
 </td>
 <td style="width:10% !important;">
-    <input type="number" min="0" step="any" size="5" name="variable_regular_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>" class="dokan-form-control" placeholder="<?php _e( '0.00', 'dokan' ); ?>" size="10"/>
+    <input type="hidden" min="0" step="any" size="5" name="variable_regular_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>" class="dokan-form-control" placeholder="<?php _e( '0.00', 'dokan' ); ?>" size="10"/>
+    <?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>
 </td>
 <td style="width:10% !important;">
     <?php if ( wc_product_sku_enabled() ) : ?>
-        <input type="text" size="5" class="dokan-form-control" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" placeholder="<?php echo esc_attr( $parent_data['sku'] ); ?>" size="10"/>
+        <input type="hidden" size="5" class="dokan-form-control" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" placeholder="<?php echo esc_attr( $parent_data['sku'] ); ?>" size="10"/>
+        <?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>
     <?php else : ?>
         <input type="hidden" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" />
     <?php endif; ?>

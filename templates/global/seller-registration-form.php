@@ -49,7 +49,7 @@
     ?>
             <p class="form-row form-group form-row-wide">
                 <input class="tc_check_box" type="checkbox" id="tc_agree" name="tc_agree" required="required">
-                <label style="display: inline" for="tc_agree"><?php sprintf( __( 'I have read and agree to the <a target="_blank" href="%s">Terms &amp; Conditions</a>.', 'dokan' ), $toc_page_url ); ?></label>
+                <label style="display: inline" for="tc_agree"><?php echo sprintf( __( 'I have read and agree to the <a target="_blank" href="%s">Terms &amp; Conditions</a>.', 'dokan' ), $toc_page_url ); ?></label>
             </p>    
             <?php } ?>
         <?php } ?>

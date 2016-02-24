@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.4.9
+Version: 2.4.10
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.4.9' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4.10' );
 define( 'DOKAN_FILE', __FILE__ );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
@@ -338,6 +338,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-extra' );
                 wp_enqueue_style( 'dokan-style' );
                 wp_enqueue_style( 'dokan-magnific-popup' );
+                wp_enqueue_style( 'woocommerce-general' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -357,6 +358,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'chosen' );
                 wp_enqueue_media();
                 wp_enqueue_script( 'dokan-popup' );
+                wp_enqueue_script( 'wc-password-strength-meter' );
 
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
@@ -372,8 +374,10 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-style' );
             }
 
-
             if ( DOKAN_LOAD_SCRIPTS ) {
+                $scheme       = is_ssl() ? 'https' : 'http';
+                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js' );
+
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
