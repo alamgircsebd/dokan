@@ -1,5 +1,5 @@
 
-v2.4.10 -> February 23, 2016
+v2.4.10 -> February 24, 2016
 ---------------------
 - [new] New dashboard menu added for 'store link', 'edit account' and 'sign out'
 - [fix] Remove repeated data rendering on admin panel dokan earning section
