@@ -20,95 +20,100 @@ $order    = new WC_Order( $order_id );
                     <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
                     <div class="dokan-panel-body" id="woocommerce-order-items">
 
-                        <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
-                            <thead>
-                                <tr>
-                                    <th class="item" colspan="2"><?php _e( 'Item', 'dokan' ); ?></th>
+                        <?php 
+                        if ( !WeDevs_Dokan::init()->is_pro() ) { ?>
+                            <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
+                                <thead>
+                                    <tr>
+                                        <th class="item" colspan="2"><?php _e( 'Item', 'dokan' ); ?></th>
 
-                                    <?php do_action( 'woocommerce_admin_order_item_headers' ); ?>
+                                        <?php do_action( 'woocommerce_admin_order_item_headers' ); ?>
 
-                                    <th class="quantity"><?php _e( 'Qty', 'dokan' ); ?></th>
+                                        <th class="quantity"><?php _e( 'Qty', 'dokan' ); ?></th>
 
-                                    <th class="line_cost"><?php _e( 'Totals', 'dokan' ); ?></th>
-                                </tr>
-                            </thead>
-                            <tbody id="order_items_list">
+                                        <th class="line_cost"><?php _e( 'Totals', 'dokan' ); ?></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="order_items_list">
 
-                                <?php
-                                    // List order items
-                                    $order_items = $order->get_items( apply_filters( 'woocommerce_admin_order_item_types', array( 'line_item', 'fee' ) ) );
+                                    <?php
+                                        // List order items
+                                        $order_items = $order->get_items( apply_filters( 'woocommerce_admin_order_item_types', array( 'line_item', 'fee' ) ) );
 
-                                    foreach ( $order_items as $item_id => $item ) {
+                                        foreach ( $order_items as $item_id => $item ) {
 
-                                        switch ( $item['type'] ) {
-                                            case 'line_item' :
-                                                $_product   = $order->get_product_from_item( $item );
-                                                $item_meta  = $order->get_item_meta( $item_id );
+                                            switch ( $item['type'] ) {
+                                                case 'line_item' :
+                                                    $_product   = $order->get_product_from_item( $item );
+                                                    $item_meta  = $order->get_item_meta( $item_id );
 
-                                                dokan_get_template_part( 'orders/order-item-html', '', array(
-                                                    'order' => $order,
-                                                    'item_id' => $item_id,
-                                                    '_product' => $_product,
-                                                    'item' => $item
-                                                ) );
-                                            break;
-                                            case 'fee' :
-                                                dokan_get_template_part( 'orders/order-fee-html', '', array(
-                                                    'item_id' => $item_id,
-                                                    'item_meta' => $item_meta
-                                                ) );
+                                                    dokan_get_template_part( 'orders/order-item-html', '', array(
+                                                        'order' => $order,
+                                                        'item_id' => $item_id,
+                                                        '_product' => $_product,
+                                                        'item' => $item
+                                                    ) );
+                                                break;
+                                                case 'fee' :
+                                                    dokan_get_template_part( 'orders/order-fee-html', '', array(
+                                                        'item_id' => $item_id,
+                                                        'item_meta' => $item_meta
+                                                    ) );
 
-                                            break;
-                                        }
-
-                                        do_action( 'woocommerce_order_item_' . $item['type'] . '_html', $item_id, $item );
-
-                                    }
-                                ?>
-                            </tbody>
-
-                            <tfoot>
-                                <?php
-                                    if ( $totals = $order->get_order_item_totals() ) {
-                                        foreach ( $totals as $total ) {
-                                            ?>
-                                            <tr>
-                                                <th colspan="2"><?php echo $total['label']; ?></th>
-                                                <td colspan="2" class="value"><?php echo $total['value']; ?></td>
-                                            </tr>
-                                            <?php
-                                        }
-                                    }
-                                ?>
-                            </tfoot>
-
-                        </table>
-
-                        <?php
-                        $coupons = $order->get_items( array( 'coupon' ) );
-
-                        if ( $coupons ) {
-                            ?>
-                            <table class="dokan-table order-items">
-                                <tr>
-                                    <th><?php _e( 'Coupons', 'dokan' ); ?></th>
-                                    <td>
-                                        <ul class="list-inline"><?php
-                                            foreach ( $coupons as $item_id => $item ) {
-
-                                                $post_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item['name'] ) );
-
-                                                $link = dokan_get_coupon_edit_url( $post_id );
-
-                                                echo '<li><a data-html="true" class="tips code" title="' . esc_attr( wc_price( $item['discount_amount'] ) ) . '" href="' . esc_url( $link ) . '"><span>' . esc_html( $item['name'] ). '</span></a></li>';
+                                                break;
                                             }
-                                        ?></ul>
-                                    </td>
-                                </tr>
+
+                                            do_action( 'woocommerce_order_item_' . $item['type'] . '_html', $item_id, $item );
+
+                                        }
+                                    ?>
+                                </tbody>
+
+                                <tfoot>
+                                    <?php
+                                        if ( $totals = $order->get_order_item_totals() ) {
+                                            foreach ( $totals as $total ) {
+                                                ?>
+                                                <tr>
+                                                    <th colspan="2"><?php echo $total['label']; ?></th>
+                                                    <td colspan="2" class="value"><?php echo $total['value']; ?></td>
+                                                </tr>
+                                                <?php
+                                            }
+                                        }
+                                    ?>
+                                </tfoot>
+
                             </table>
+
                             <?php
-                        }
-                        ?>
+                            $coupons = $order->get_items( array( 'coupon' ) );
+
+                            if ( $coupons ) {
+                                ?>
+                                <table class="dokan-table order-items">
+                                    <tr>
+                                        <th><?php _e( 'Coupons', 'dokan' ); ?></th>
+                                        <td>
+                                            <ul class="list-inline"><?php
+                                                foreach ( $coupons as $item_id => $item ) {
+
+                                                    $post_id = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'shop_coupon' AND post_status = 'publish' LIMIT 1;", $item['name'] ) );
+
+                                                    $link = dokan_get_coupon_edit_url( $post_id );
+
+                                                    echo '<li><a data-html="true" class="tips code" title="' . esc_attr( wc_price( $item['discount_amount'] ) ) . '" href="' . esc_url( $link ) . '"><span>' . esc_html( $item['name'] ). '</span></a></li>';
+                                                }
+                                            ?></ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <?php
+                            }
+                        } else {
+                            $data  = get_post_meta( $order_id );
+                            include( DOKAN_INC_DIR . '/pro/templates/orders/views/html-order-items.php' );
+                        } ?>
                     </div>
                 </div>
             </div>
