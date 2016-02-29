@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $who_refunded = new WP_User( $refund->post->post_author );
 ?>
 <tr class="refund <?php echo ( ! empty( $class ) ) ? $class : ''; ?>" data-order_refund_id="<?php echo $refund->id; ?>">
-	<td class="check-column"></td>
+	<!-- <td class="check-column"></td> -->
 
 	<td class="thumb"><div><i class="fa fa-money"></i></div></td>
 

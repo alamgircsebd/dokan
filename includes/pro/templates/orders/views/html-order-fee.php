@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <tr class="fee <?php echo ( ! empty( $class ) ) ? $class : ''; ?>" data-order_item_id="<?php echo $item_id; ?>">
-	<td class="check-column"><input type="checkbox" /></td>
+	<!-- <td class="check-column"><input type="checkbox" /></td> -->
 
 	<td class="thumb"><div><i class="fa fa-ticket"></i></div></td>
 

@@ -47,7 +47,7 @@ if ( wc_tax_enabled() ) {
 	<table cellpadding="0" cellspacing="0" class="woocommerce_order_items dokan-table dokan-table-strip">
 		<thead>
 			<tr>
-				<th><input type="checkbox" class="check-column" /></th>
+				<!-- <th><input type="checkbox" class="check-column" /></th> -->
 				<th class="item sortable" colspan="2" data-sort="string-ins"><?php _e( 'Item', 'woocommerce' ); ?></th>
 
 				<?php do_action( 'woocommerce_admin_order_item_headers' ); ?>
@@ -169,13 +169,7 @@ if ( wc_tax_enabled() ) {
 		<tr>
 			<td class="label"><?php _e( 'Order Total', 'woocommerce' ); ?>:</td>
 			<td class="total">
-				<div class="view"><?php
-					if ( $order->get_total_refunded() > 0 ) {
-						echo '<del>' . strip_tags( $order->get_formatted_order_total() ) . '</del> <ins>' . wc_price( $order->get_total() - $order->get_total_refunded(), array( 'currency' => $order->get_order_currency() ) ) . '</ins>';
-					} else {
-						echo esc_html( strip_tags( $order->get_formatted_order_total() ) );
-					}
-				?></div>
+				<div class="view"><?php echo $order->get_formatted_order_total(); ?></div>
 				<div class="edit" style="display: none;">
 					<input type="text" class="wc_input_price" id="_order_total" name="_order_total" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo ( isset( $data['_order_total'][0] ) ) ? esc_attr( wc_format_localized_price( $data['_order_total'][0] ) ) : ''; ?>" />
 					<div class="clear"></div>
@@ -198,7 +192,7 @@ if ( wc_tax_enabled() ) {
 	<div class="clear"></div>
 </div>
 <div class="wc-order-data-row wc-order-bulk-actions">
-	<p class="bulk-actions">
+	<!-- <p class="bulk-actions">
  		<select>
 			<option value=""><?php _e( 'Actions', 'woocommerce' ); ?></option>
 			<?php if ( $order->is_editable() ) : ?>
@@ -213,30 +207,31 @@ if ( wc_tax_enabled() ) {
 		</select>
 
 		<button type="button" class="button do_bulk_action wc-reload" title="<?php _e( 'Apply', 'woocommerce' ); ?>"><span><?php _e( 'Apply', 'woocommerce' ); ?></span></button>
-	</p>
+	</p> -->
 	<p class="add-items">
-		<?php if ( $order->is_editable() ) : ?>
+		<!-- <?php if ( $order->is_editable() ) : ?>
 			<button type="button" class="button add-line-item"><?php _e( 'Add line item(s)', 'woocommerce' ); ?></button>
 		<?php else : ?>
 			<span class="description tips" data-tip="<?php esc_attr_e( 'To edit this order change the status back to "Pending"', 'woocommerce' ); ?>"><?php _e( 'This order has been paid for and is no longer editable', 'woocommerce' ); ?></span>
 		<?php endif; ?>
 		<?php if ( wc_tax_enabled() && $order->is_editable() ) : ?>
 			<button type="button" class="button add-order-tax"><?php _e( 'Add Tax', 'woocommerce' ); ?></button>
-		<?php endif; ?>
+		<?php endif; ?> -->
 		<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
 			<button type="button" class="button refund-items"><?php _e( 'Refund', 'woocommerce' ); ?></button>
 		<?php endif; ?>
-		<?php
+		<!-- <?php
 			// allow adding custom buttons
 			do_action( 'woocommerce_order_item_add_action_buttons', $order );
 		?>
 		<?php if ( $order->is_editable() ) : ?>
 			<button type="button" class="button button-primary calculate-tax-action"><?php _e( 'Calculate Taxes', 'woocommerce' ); ?></button>
 			<button type="button" class="button button-primary calculate-action"><?php _e( 'Calculate Total', 'woocommerce' ); ?></button>
-		<?php endif; ?>
+		<?php endif; ?> -->
 	</p>
+	<div class="clear"></div>
 </div>
-<div class="wc-order-data-row wc-order-add-item" style="display:none;">
+<!-- <div class="wc-order-data-row wc-order-add-item" style="display:none;">
 	<button type="button" class="button add-order-item"><?php _e( 'Add product(s)', 'woocommerce' ); ?></button>
 	<button type="button" class="button add-order-fee"><?php _e( 'Add fee', 'woocommerce' ); ?></button>
 	<button type="button" class="button add-order-shipping"><?php _e( 'Add shipping cost', 'woocommerce' ); ?></button>
@@ -246,14 +241,14 @@ if ( wc_tax_enabled() ) {
 		// allow adding custom buttons
 		do_action( 'woocommerce_order_item_add_line_buttons', $order );
 	?>
-</div>
+</div> -->
 <?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
 <div class="wc-order-data-row wc-order-refund-items" style="display: none;">
 	<table class="wc-order-totals dokan-table dokan-table-strip">
-		<tr style="display:none;">
+		<!-- <tr style="display:none;">
 			<td class="label"><label for="restock_refunded_items"><?php _e( 'Restock refunded items', 'woocommerce' ); ?>:</label></td>
 			<td class="total"><input type="checkbox" id="restock_refunded_items" name="restock_refunded_items" checked="checked" /></td>
-		</tr>
+		</tr> -->
 		<tr>
 			<td class="label"><?php _e( 'Amount already refunded', 'woocommerce' ); ?>:</td>
 			<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => $order->get_order_currency() ) ); ?></td>
@@ -284,11 +279,12 @@ if ( wc_tax_enabled() ) {
 		$gateway_supports_refunds = false !== $payment_gateway && $payment_gateway->supports( 'refunds' );
 		$gateway_name             = false !== $payment_gateway ? ( ! empty( $payment_gateway->method_title ) ? $payment_gateway->method_title : $payment_gateway->get_title() ) : __( 'Payment Gateway', 'woocommerce' );
 		?>
-		<button type="button" <?php echo $gateway_supports_refunds ? '' : 'disabled="disabled"'; ?> class="button <?php echo $gateway_supports_refunds ? 'button-primary do-api-refund' : 'tips disabled'; ?>" <?php echo $gateway_supports_refunds ? '' : 'data-tip="' . esc_attr__( 'The payment gateway used to place this order does not support automatic refunds.', 'woocommerce' ) . '"'; ?>><?php printf( _x( 'Refund %s via %s', 'Refund $amount', 'woocommerce' ), $refund_amount, $gateway_name ); ?></button>
+		<!-- <button type="button" <?php echo $gateway_supports_refunds ? '' : 'disabled="disabled"'; ?> class="button <?php echo $gateway_supports_refunds ? 'button-primary do-api-refund' : 'tips disabled'; ?>" <?php echo $gateway_supports_refunds ? '' : 'data-tip="' . esc_attr__( 'The payment gateway used to place this order does not support automatic refunds.', 'woocommerce' ) . '"'; ?>><?php printf( _x( 'Refund %s via %s', 'Refund $amount', 'woocommerce' ), $refund_amount, $gateway_name ); ?></button> -->
 		<button type="button" class="button button-primary do-manual-refund tips" data-tip="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', 'woocommerce' ); ?>"><?php printf( _x( 'Refund %s manually', 'Refund $amount manually', 'woocommerce' ), $refund_amount ); ?></button>
 		<button type="button" class="button cancel-action"><?php _e( 'Cancel', 'woocommerce' ); ?></button>
 		<div class="clear"></div>
 	</div>
+	<div class="clear"></div>
 </div>
 <?php endif; ?>
 

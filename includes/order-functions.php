@@ -486,6 +486,79 @@ function dokan_sync_order_table( $order_id ) {
         )
     );
 }
+
+/**
+ * Insert a order in sync table once a order is created
+ *
+ * @global object $wpdb
+ * @param int $order_id
+ * @since 2.4.11
+ */
+function dokan_sync_refund_order( $order_id ) {
+    global $wpdb;
+
+    $order          = new WC_Order( $order_id );
+
+    $seller_id      = dokan_get_seller_id_by_order( $order_id );
+    $percentage     = dokan_get_seller_percentage( $seller_id );
+
+    //Total calculation
+    $order_total    = $order->get_total();
+
+    if ( $total_refunded = $order->get_total_refunded() ) {
+        $order_total = $order_total - $total_refunded;
+    }
+
+    //Shipping calculation
+    $order_shipping = $order->get_total_shipping();
+    
+    foreach ( $order->get_items() as $item ) {
+        $total_shipping_refunded = 0;
+        if ( $shipping_refunded = $order->get_total_refunded_for_item( $item['product_id'], 'shipping' ) ) {
+            $total_shipping_refunded += $shipping_refunded;
+        }
+    }
+    $order_shipping = $order_shipping - $total_shipping_refunded;
+
+    //Tax calculation
+    $order_tax      = $order->get_total_tax();
+
+    if ( $tax_refunded = $order->get_total_tax_refunded() ) {
+        $order_tax = $order_tax - $tax_refunded;
+    }
+
+
+    $extra_cost     = $order_shipping + $order_tax;
+    $order_cost     = $order_total - $extra_cost;
+
+    $order_status   = $order->post_status;
+
+    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+    $net_amount     = apply_filters( 'dokan_order_refunded_net_amount', $net_amount, $order );
+
+    $wpdb->update( $wpdb->prefix . 'dokan_orders',
+        array(
+            'order_total'  => $order_total,
+            'net_amount'   => $net_amount,
+            'order_status' => $order_status,
+        ),
+        array(
+            'order_id'     => $order_id
+        ),
+        array(
+            '%f',
+            '%f',
+            '%s',
+        )
+    );
+}
+add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10 );
+
+function dokan_delete_refund_order( $refund_id, $order_id ) {
+    dokan_sync_refund_order( $order_id );
+}
+add_action( 'woocommerce_refund_deleted', 'dokan_delete_refund_order', 10, 2 );
+
 /**
  * Get toal number of orders in Dokan order table
  *
