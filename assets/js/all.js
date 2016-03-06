@@ -335,7 +335,7 @@ jQuery(function($) {
             }else{
                 $( 'div.dokan-product-cat-alert' ).hide();
             }            
-            
+            $( 'input[type=submit]' ).attr( 'disabled', 'disabled' );
             this.submit();            
         },
 
