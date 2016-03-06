@@ -267,7 +267,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
         if ( !empty( $price ) ) {
             foreach ( $price as $s_id => $value ) {
-                $amount = $amount + ( array_sum( $value['addition_price'] )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
+                $amount = $amount + ( array_sum( isset( $value['addition_price'] ) ? $value['addition_price'] : 0 )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
             }
         }
 
