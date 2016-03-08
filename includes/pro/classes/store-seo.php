@@ -46,9 +46,10 @@ class Dokan_Pro_Store_Seo {
      * @return void
      */
     function init_hooks() {
-
+        add_action( 'init', array( $this, 'register_sitemap' ) );
         add_action( 'wp_ajax_dokan_seo_form_handler', array( $this, 'dokan_seo_form_handler' ) );
         add_action( 'template_redirect', array( $this, 'output_meta_tags' ) );
+        add_filter( 'wpseo_sitemap_index', array( $this, 'add_sellers_sitemap' ), 100 );
     }
 
     /**
@@ -99,7 +100,60 @@ class Dokan_Pro_Store_Seo {
             add_action( 'wp_head', array( $this, 'print_social_tags' ), 1 );
         }
     }
-
+    
+   /**
+    * Register dokan_sellers sitemap on yoast SEO
+    */
+    function register_sitemap() {
+        global $wpseo_sitemaps;
+        
+        if ( is_a( $wpseo_sitemaps, 'WPSEO_Sitemaps' ) ) {
+            $wpseo_sitemaps->register_sitemap( 'dokan_sellers', array( $this, 'sitemap_output' ) );
+        }
+       
+    }
+    /**
+     * Add dokan_sellers sitemap url to sitemap_index list
+     */
+    function add_sellers_sitemap(){
+       
+        ob_start();
+        ?>
+        <sitemap>
+        <loc><?php echo wpseo_xml_sitemaps_base_url( 'dokan_sellers-sitemap.xml' ) ?></loc>
+        
+        </sitemap>
+        <?php
+        
+        return ob_get_clean();
+    }
+    
+    /**
+     * Generate output for dokan_sellers sitemap
+     */
+    function sitemap_output(){
+        global $wpseo_sitemaps;
+        
+        $seller_q = new WP_User_Query( array(
+            'role' => 'seller',
+            'meta_key' => 'dokan_enable_selling',
+            'meta_value'=>'yes',
+        ) );
+        $sellers = $seller_q->get_results();
+        ob_start();
+        ?>
+                <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        <?php foreach ( $sellers as $seller ) { ?>
+                <url>
+                    <loc><?php echo dokan_get_store_url( $seller->ID ) ?></loc>
+                </url>
+        <?php } ?>
+                </urlset>
+        <?php
+        $sitemap = ob_get_clean();
+        $wpseo_sitemaps->set_sitemap( $sitemap );
+    }
+    
     /**
      * prints out default meta tags from user meta
      *
