@@ -2332,13 +2332,40 @@ function dokan_on_create_seller( $user_id, $data ) {
     );
 
     update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
+    update_user_meta( $user_id, 'display_name', strip_tags( $_POST['shopname'] ) );
+
+    wp_update_user( array(
+        'ID' => $user_id,
+        'display_name' => strip_tags( $_POST['shopname'] ),
+    ) );
 
     Dokan_Email::init()->new_seller_registered_mail( $user_id );
 }
 
 add_action( 'woocommerce_created_customer', 'dokan_on_create_seller', 10, 2);
 
+/**
+ * Change seller display name to store name
+ *
+ * @since 2.4.10 [Change seller display name to store name]
+ * 
+ * @param string $display_name
+ * 
+ * @return string $display_name
+ */
+function dokan_seller_displayname ( $display_name ) {
 
+    if ( dokan_is_user_seller ( get_current_user_id() ) ) {
+
+        $seller_info = dokan_get_store_info ( get_current_user_id() );
+        $display_name = ( !empty( $seller_info['store_name'] ) ) ? $seller_info['store_name'] : $display_name;
+    
+    }
+
+    return $display_name;
+}
+
+add_filter( 'pre_user_display_name', 'dokan_seller_displayname' );
 
 /**
  * Get featured products
