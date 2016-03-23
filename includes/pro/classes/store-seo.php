@@ -143,9 +143,15 @@ class Dokan_Pro_Store_Seo {
         ob_start();
         ?>
                 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        <?php foreach ( $sellers as $seller ) { ?>
+        <?php foreach ( $sellers as $seller ) { 
+                $product = dokan_get_latest_products( 1, $seller->ID );
+                $last_modified = $product->post->post_modified;
+            ?>
                 <url>
                     <loc><?php echo dokan_get_store_url( $seller->ID ) ?></loc>
+                    <priority><?php echo apply_filters( 'dokan_yoast_store_sitemap_priority', 0.8 )  ?></priority>
+                    <changefreq><?php echo apply_filters( 'dokan_yoast_store_sitemap_changefreq', 'weekly' )  ?></changefreq>
+                    <lastmod><?php echo $last_modified ?></lastmod>
                 </url>
         <?php } ?>
                 </urlset>
