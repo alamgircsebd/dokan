@@ -32,7 +32,7 @@
                 <div class="dokan-form-group">
                     <label class="dokan-checkbox-inline" for="_disable_shipping">
                         <input type="checkbox" id="_disable_shipping" name="_disable_shipping" <?php checked( $_disable_shipping, 'no' ); ?>>
-                        <?php _e( 'This product required shipping', 'dokan' ); ?>
+                        <?php _e( 'This product requires shipping', 'dokan' ); ?>
                     </label>
                 </div>
 
@@ -114,7 +114,7 @@
                 <label for="_required_tax" class="dokan-form-label">
                 <input type="hidden" name="_required_tax" value="no">
                 <input type="checkbox" id="_required_tax" name="_required_tax" value="yes" <?php checked( $_required_tax, 'yes' ); ?>>
-                <?php _e( 'This product required Tax', 'dokan' ); ?>
+                <?php _e( 'The product requires Tax', 'dokan' ); ?>
                 </label>
             </div>
             <div class="show_if_needs_tax dokan-tax-product-options">
