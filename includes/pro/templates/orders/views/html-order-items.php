@@ -192,63 +192,20 @@ if ( wc_tax_enabled() ) {
 	<div class="clear"></div>
 </div>
 <div class="wc-order-data-row wc-order-bulk-actions">
-	<!-- <p class="bulk-actions">
- 		<select>
-			<option value=""><?php _e( 'Actions', 'woocommerce' ); ?></option>
-			<?php if ( $order->is_editable() ) : ?>
-				<optgroup label="<?php _e( 'Edit', 'woocommerce' ); ?>">
-					<option value="delete"><?php _e( 'Delete selected line item(s)', 'woocommerce' ); ?></option>
-				</optgroup>
-			<?php endif; ?>
-			<optgroup label="<?php _e( 'Stock Actions', 'woocommerce' ); ?>">
-				<option value="reduce_stock"><?php _e( 'Reduce line item stock', 'woocommerce' ); ?></option>
-				<option value="increase_stock"><?php _e( 'Increase line item stock', 'woocommerce' ); ?></option>
-			</optgroup>
-		</select>
 
-		<button type="button" class="button do_bulk_action wc-reload" title="<?php _e( 'Apply', 'woocommerce' ); ?>"><span><?php _e( 'Apply', 'woocommerce' ); ?></span></button>
-	</p> -->
 	<p class="add-items">
-		<!-- <?php if ( $order->is_editable() ) : ?>
-			<button type="button" class="button add-line-item"><?php _e( 'Add line item(s)', 'woocommerce' ); ?></button>
-		<?php else : ?>
-			<span class="description tips" data-tip="<?php esc_attr_e( 'To edit this order change the status back to "Pending"', 'woocommerce' ); ?>"><?php _e( 'This order has been paid for and is no longer editable', 'woocommerce' ); ?></span>
-		<?php endif; ?>
-		<?php if ( wc_tax_enabled() && $order->is_editable() ) : ?>
-			<button type="button" class="button add-order-tax"><?php _e( 'Add Tax', 'woocommerce' ); ?></button>
-		<?php endif; ?> -->
+		
 		<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
 			<button type="button" class="button refund-items"><?php _e( 'Refund', 'woocommerce' ); ?></button>
 		<?php endif; ?>
-		<!-- <?php
-			// allow adding custom buttons
-			do_action( 'woocommerce_order_item_add_action_buttons', $order );
-		?>
-		<?php if ( $order->is_editable() ) : ?>
-			<button type="button" class="button button-primary calculate-tax-action"><?php _e( 'Calculate Taxes', 'woocommerce' ); ?></button>
-			<button type="button" class="button button-primary calculate-action"><?php _e( 'Calculate Total', 'woocommerce' ); ?></button>
-		<?php endif; ?> -->
 	</p>
 	<div class="clear"></div>
 </div>
-<!-- <div class="wc-order-data-row wc-order-add-item" style="display:none;">
-	<button type="button" class="button add-order-item"><?php _e( 'Add product(s)', 'woocommerce' ); ?></button>
-	<button type="button" class="button add-order-fee"><?php _e( 'Add fee', 'woocommerce' ); ?></button>
-	<button type="button" class="button add-order-shipping"><?php _e( 'Add shipping cost', 'woocommerce' ); ?></button>
-	<button type="button" class="button cancel-action"><?php _e( 'Cancel', 'woocommerce' ); ?></button>
-	<button type="button" class="button button-primary save-action"><?php _e( 'Save', 'woocommerce' ); ?></button>
-	<?php
-		// allow adding custom buttons
-		do_action( 'woocommerce_order_item_add_line_buttons', $order );
-	?>
-</div> -->
+
 <?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
 <div class="wc-order-data-row wc-order-refund-items" style="display: none;">
 	<table class="wc-order-totals dokan-table dokan-table-strip">
-		<!-- <tr style="display:none;">
-			<td class="label"><label for="restock_refunded_items"><?php _e( 'Restock refunded items', 'woocommerce' ); ?>:</label></td>
-			<td class="total"><input type="checkbox" id="restock_refunded_items" name="restock_refunded_items" checked="checked" /></td>
-		</tr> -->
+
 		<tr>
 			<td class="label"><?php _e( 'Amount already refunded', 'woocommerce' ); ?>:</td>
 			<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => $order->get_order_currency() ) ); ?></td>

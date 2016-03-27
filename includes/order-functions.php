@@ -494,7 +494,7 @@ function dokan_sync_order_table( $order_id ) {
  * @param int $order_id
  * @since 2.4.11
  */
-function dokan_sync_refund_order( $order_id ) {
+function dokan_sync_refund_order( $order_id, $refund_id ) {
     global $wpdb;
 
     $order          = new WC_Order( $order_id );
@@ -551,8 +551,11 @@ function dokan_sync_refund_order( $order_id ) {
             '%s',
         )
     );
+    $refund = new WC_Order_Refund( $refund_id );
+    $user = get_userdata( $seller_id );
+    Dokan_Email::init()->new_refund_request( $user, $order_id, $refund );
 }
-add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10 );
+add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10, 2 );
 
 function dokan_delete_refund_order( $refund_id, $order_id ) {
     dokan_sync_refund_order( $order_id );
