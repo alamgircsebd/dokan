@@ -598,7 +598,7 @@ function dokan_store_listing( $atts ) {
         }
     }
 
-    $sellers = dokan_get_sellers( $seller_args );
+    $sellers = dokan_get_sellers( apply_filters( 'dokan_seller_listing_args', $seller_args ) );
 
     /**
      * Filter for store listing args

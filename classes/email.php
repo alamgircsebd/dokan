@@ -180,6 +180,47 @@ class Dokan_Email {
 
 
     /**
+     * Send admin email notification when a new refund request is made
+     *
+     * @param WP_User $user
+     * @param float $amount
+     * @param string $method
+     */
+    function new_refund_request( $user, $order_id, $refund ) {
+        ob_start();
+        dokan_get_template_part( 'emails/refund-new' );
+        $body = ob_get_clean();
+        $find = array(
+            '%username%',
+            '%amount%',
+            '%reason%',
+            '%order_id%',
+            '%profile_url%',
+            '%order_page%',
+            '%site_name%',
+            '%site_url%',
+        );
+
+        $replace = array(
+            $user->user_login,
+            $refund->get_refund_amount(),
+            esc_html( $refund->get_refund_reason() ),
+            $order_id,
+            admin_url( 'user-edit.php?user_id=' . $user->ID ),
+            admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
+            $this->get_from_name(),
+            home_url(),
+        );
+
+        $subject = sprintf( __( '[%s] New Refund Request', 'dokan' ), $this->get_from_name() );
+        $body = str_replace( $find, $replace, $body);
+
+        $this->send( $this->admin_email(), $subject, $body );
+        do_action( 'after_new_refund_request', $this->admin_email(), $subject, $body );
+    }
+
+
+    /**
      * Send email to user once a withdraw request is approved
      *
      * @param int $user_id
