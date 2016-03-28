@@ -1,14 +1,14 @@
 === Dokan Multivendor (Lite) ===
 Contributors: tareq1988, wedevs
-Donate Link: http://tareq.wedevs.com/donate/
-Tags: woocommerce, multivendor, multi-vendor, paypal, vendor, seller, store, sell, online
+Donate Link: http://tareq.co/donate/
+Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
 Tested up to: 4.4.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The multi-vendor plugin for WooCommerce. Start your own marketplace in minutes!
+The pioneer multi-vendor plugin for WordPress. Start your own marketplace in minutes!
 
 == Description ==
 
