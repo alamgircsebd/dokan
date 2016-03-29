@@ -9,8 +9,10 @@ Order ID: %order_id%
 Username: %username%
 Profile: %profile_url%
 
-You can approve or deny it by going here:
+View the order details by going here:
 %order_page%
+
+You can process to pay the customer
 
 ---
 Sent from %site_name%

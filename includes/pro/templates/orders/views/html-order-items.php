@@ -137,7 +137,7 @@ if ( wc_tax_enabled() ) {
 	?>
 	<table class="wc-order-totals">
 		<tr>
-			<td class="label"><?php _e( 'Discount', 'woocommerce' ); ?> <span class="tips" data-tip="<?php _e( 'This is the total discount. Discounts are defined per line item.', 'woocommerce' ); ?>">[?]</span>:</td>
+			<td><?php _e( 'Discount', 'woocommerce' ); ?> <span class="tips" data-tip="<?php _e( 'This is the total discount. Discounts are defined per line item.', 'woocommerce' ); ?>">[?]</span>:</td>
 			<td class="total">
 				<?php echo wc_price( $order->get_total_discount(), array( 'currency' => $order->get_order_currency() ) ); ?>
 			</td>
@@ -147,7 +147,7 @@ if ( wc_tax_enabled() ) {
 		<?php do_action( 'woocommerce_admin_order_totals_after_discount', $order->id ); ?>
 
 		<tr>
-			<td class="label"><?php _e( 'Shipping', 'woocommerce' ); ?> <span class="tips" data-tip="<?php _e( 'This is the shipping and handling total costs for the order.', 'woocommerce' ); ?>">[?]</span>:</td>
+			<td><?php _e( 'Shipping', 'woocommerce' ); ?> <span class="tips" data-tip="<?php _e( 'This is the shipping and handling total costs for the order.', 'woocommerce' ); ?>">[?]</span>:</td>
 			<td class="total"><?php echo wc_price( $order->get_total_shipping(), array( 'currency' => $order->get_order_currency() ) ); ?></td>
 			<td width="1%"></td>
 		</tr>
@@ -157,7 +157,7 @@ if ( wc_tax_enabled() ) {
 		<?php if ( wc_tax_enabled() ) : ?>
 			<?php foreach ( $order->get_tax_totals() as $code => $tax ) : ?>
 				<tr>
-					<td class="label"><?php echo $tax->label; ?>:</td>
+					<td><?php echo $tax->label; ?>:</td>
 					<td class="total"><?php echo $tax->formatted_amount; ?></td>
 					<td width="1%"></td>
 				</tr>
@@ -167,7 +167,7 @@ if ( wc_tax_enabled() ) {
 		<?php do_action( 'woocommerce_admin_order_totals_after_tax', $order->id ); ?>
 
 		<tr>
-			<td class="label"><?php _e( 'Order Total', 'woocommerce' ); ?>:</td>
+			<td><?php _e( 'Order Total', 'woocommerce' ); ?>:</td>
 			<td class="total">
 				<div class="view"><?php echo $order->get_formatted_order_total(); ?></div>
 				<div class="edit" style="display: none;">
@@ -181,7 +181,7 @@ if ( wc_tax_enabled() ) {
 		<?php do_action( 'woocommerce_admin_order_totals_after_total', $order->id ); ?>
 
 		<tr>
-			<td class="label refunded-total"><?php _e( 'Refunded', 'woocommerce' ); ?>:</td>
+			<td class="refunded-total"><?php _e( 'Refunded', 'woocommerce' ); ?>:</td>
 			<td class="total refunded-total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => $order->get_order_currency() ) ); ?></td>
 			<td width="1%"></td>
 		</tr>
@@ -207,22 +207,22 @@ if ( wc_tax_enabled() ) {
 	<table class="wc-order-totals dokan-table dokan-table-strip">
 
 		<tr>
-			<td class="label"><?php _e( 'Amount already refunded', 'woocommerce' ); ?>:</td>
+			<td><?php _e( 'Amount already refunded', 'woocommerce' ); ?>:</td>
 			<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => $order->get_order_currency() ) ); ?></td>
 		</tr>
 		<tr>
-			<td class="label"><?php _e( 'Total available to refund', 'woocommerce' ); ?>:</td>
+			<td><?php _e( 'Total available to refund', 'woocommerce' ); ?>:</td>
 			<td class="total"><?php echo wc_price( $order->get_total() - $order->get_total_refunded(), array( 'currency' => $order->get_order_currency() ) ); ?></td>
 		</tr>
 		<tr>
-			<td class="label"><label for="refund_amount"><?php _e( 'Refund amount', 'woocommerce' ); ?>:</label></td>
+			<td><label for="refund_amount"><?php _e( 'Refund amount', 'woocommerce' ); ?>:</label></td>
 			<td class="total">
 				<input type="text" class="text" id="refund_amount" name="refund_amount" class="wc_input_price" />
 				<div class="clear"></div>
 			</td>
 		</tr>
 		<tr>
-			<td class="label"><label for="refund_reason"><?php _e( 'Reason for refund (optional)', 'woocommerce' ); ?>:</label></td>
+			<td><label for="refund_reason"><?php _e( 'Reason for refund (optional)', 'woocommerce' ); ?>:</label></td>
 			<td class="total">
 				<input type="text" class="text" id="refund_reason" name="refund_reason" />
 				<div class="clear"></div>
