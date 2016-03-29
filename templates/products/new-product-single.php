@@ -5,6 +5,11 @@ global $post;
 $from_shortcode = false;
 
 if( isset( $post->ID ) && $post->ID && $post->post_type == 'product' ) {
+
+    if ( $post->post_author != get_current_user_id() ) {
+        wp_die( __( 'Access Denied', 'dokan' ) );
+    }
+    
     $post_id = $post->ID;
     $post_title = $post->post_title;
     $post_content = $post->post_content;
@@ -29,12 +34,6 @@ if ( isset( $_GET['product_id'] ) ) {
     $post_status    = $post->post_status;
     $product        = get_product( $post_id );
     $from_shortcode = true;
-}
-
-if ( !$post_id ) {
-    if ( $post->post_author != get_current_user_id() ) {
-        wp_die( __( 'Access Denied', 'dokan' ) );
-    }
 }
 
 $_regular_price         = get_post_meta( $post_id, '_regular_price', true );
