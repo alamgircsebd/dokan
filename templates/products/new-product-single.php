@@ -31,8 +31,10 @@ if ( isset( $_GET['product_id'] ) ) {
     $from_shortcode = true;
 }
 
-if ( $post->post_author != $seller_id ) {
-    wp_die( __( 'Access Denied', 'dokan' ) );
+if ( !$post_id ) {
+    if ( $post->post_author != get_current_user_id() ) {
+        wp_die( __( 'Access Denied', 'dokan' ) );
+    }
 }
 
 $_regular_price         = get_post_meta( $post_id, '_regular_price', true );
@@ -50,10 +52,6 @@ if ( !empty( $_sale_price_dates_from ) && !empty( $_sale_price_dates_to ) ) {
 }
 
 $_featured          = get_post_meta( $post_id, '_featured', true );
-// $_weight            = get_post_meta( $post_id, '_weight', true );
-// $_length            = get_post_meta( $post_id, '_length', true );
-// $_width             = get_post_meta( $post_id, '_width', true );
-// $_height            = get_post_meta( $post_id, '_height', true );
 $_downloadable      = get_post_meta( $post_id, '_downloadable', true );
 $_stock             = get_post_meta( $post_id, '_stock', true );
 $_stock_status      = get_post_meta( $post_id, '_stock_status', true );
