@@ -9,10 +9,12 @@ Order ID: %order_id%
 Username: %username%
 Profile: %profile_url%
 
-View the order details by going here:
+You can view the order details by going here:
 %order_page%
 
-You can process to pay the customer
+%parent_order%
+
+Please process to pay the customer.
 
 ---
 Sent from %site_name%

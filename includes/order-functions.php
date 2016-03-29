@@ -562,6 +562,25 @@ function dokan_delete_refund_order( $refund_id, $order_id ) {
 }
 add_action( 'woocommerce_refund_deleted', 'dokan_delete_refund_order', 10, 2 );
 
+
+/**
+ * Get if an order is a sub order or not
+ *
+ * @since 2.4.11
+ *
+ * @return  int boolean
+ */
+function dokan_is_sub_order( $order_id ) {
+    $parent_order_id =  wp_get_post_parent_id( $order_id );
+    if ( 0 != $parent_order_id ) {
+        return true;
+    } else {
+        return false;
+    }
+    
+}
+
+
 /**
  * Get toal number of orders in Dokan order table
  *

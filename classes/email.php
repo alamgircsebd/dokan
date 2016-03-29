@@ -183,8 +183,8 @@ class Dokan_Email {
      * Send admin email notification when a new refund request is made
      *
      * @param WP_User $user
-     * @param float $amount
-     * @param string $method
+     * @param int $order_id
+     * @param object $refund
      */
     function new_refund_request( $user, $order_id, $refund ) {
         ob_start();
@@ -197,6 +197,7 @@ class Dokan_Email {
             '%order_id%',
             '%profile_url%',
             '%order_page%',
+            '%parent_order%',
             '%site_name%',
             '%site_url%',
         );
@@ -208,6 +209,7 @@ class Dokan_Email {
             $order_id,
             admin_url( 'user-edit.php?user_id=' . $user->ID ),
             admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
+            (dokan_is_sub_order($order_id)) ? 'This is a sub order of <a href="' . admin_url( 'post.php?post=' . wp_get_post_parent_id( $order_id ) . '&action=edit' ) . '">#' . wp_get_post_parent_id( $order_id ) . '</a>. Please create the same refund on parent order also.' : '',
             $this->get_from_name(),
             home_url(),
         );
