@@ -31,6 +31,10 @@ if ( isset( $_GET['product_id'] ) ) {
     $from_shortcode = true;
 }
 
+if ( $post->post_author != $seller_id ) {
+    wp_die( __( 'Access Denied', 'dokan' ) );
+}
+
 $_regular_price         = get_post_meta( $post_id, '_regular_price', true );
 $_sale_price            = get_post_meta( $post_id, '_sale_price', true );
 $is_discount            = !empty( $_sale_price ) ? true : false;
