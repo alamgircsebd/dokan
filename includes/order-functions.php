@@ -568,7 +568,9 @@ add_action( 'woocommerce_refund_deleted', 'dokan_delete_refund_order', 10, 2 );
  *
  * @since 2.4.11
  *
- * @return  int boolean
+ * @param int $order_id
+ *
+ * @return boolean
  */
 function dokan_is_sub_order( $order_id ) {
     $parent_order_id =  wp_get_post_parent_id( $order_id );
