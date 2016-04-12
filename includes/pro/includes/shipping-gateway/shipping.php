@@ -146,6 +146,24 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
         return false;
     }
 
+    /**
+     * Check if seller has any shipping enable product in this order
+     *
+     * @param  array $products
+     *
+     * @return boolean
+     */
+    public static function has_shipping_enabled_products( $products ) {
+
+        foreach ( $products as $product ) {
+            if ( !self::is_product_disable_shipping( $product['product_id'] ) ) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+
 
     /**
      * Get product shipping costs
@@ -186,6 +204,10 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
             foreach ( $seller_products as $seller_id => $products ) {
 
                 if ( !self::is_shipping_enabled_for_seller( $seller_id ) ) {
+                    continue;
+                }
+
+                if ( !self::has_shipping_enabled_products( $products ) ) {
                     continue;
                 }
 
