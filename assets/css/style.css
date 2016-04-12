@@ -1582,11 +1582,17 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-orders-content .dokan-orders-area .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
   min-height: 27px;
 }
+.dokan-panel .dokan-panel-body .woocommerce_order_items_wrapper table.woocommerce_order_items tbody tr td div small.refunded {
+  color: #f05025;
+}
 .dokan-panel .dokan-panel-body .wc-order-data-row table.wc-order-totals {
   float: right;
 }
 .dokan-panel .dokan-panel-body .wc-order-data-row table.wc-order-totals tbody tr td.label {
   color: #000;
+}
+.dokan-panel .dokan-panel-body .wc-order-data-row table.wc-order-totals tbody tr td.refunded-total {
+  color: #f05025;
 }
 .dokan-panel .dokan-panel-body .wc-order-data-row .add-items {
   padding-top: 10px;
@@ -1594,12 +1600,6 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 }
 .dokan-panel .dokan-panel-body .wc-order-data-row .refund-actions {
   float: right;
-}
-.dokan-panel .dokan-panel-body .wc-order-data-row table.wc-order-totals tbody tr td.refunded-total {
-  color: #f05025;
-}
-.dokan-panel .dokan-panel-body .woocommerce_order_items_wrapper table.woocommerce_order_items tbody tr td div small.refunded {
-  color: #f05025;
 }
 .dokan-reports-content .dokan-reports-area h1 {
   margin: 0px 0px 20px;
@@ -3939,6 +3939,11 @@ select.dokan-form-control {
   .dokan-dashboard .dokan-dashboard-content {
     float: none;
     width: 100%;
+  }
+  .dokan-dashboard .product-edit-new-container .dokan-edit-row .dokan-side-left,
+  .dokan-dashboard .product-edit-new-container .dokan-edit-row .dokan-side-right {
+    float: none;
+    width: auto;
   }
   .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li {
     display: inline-block;

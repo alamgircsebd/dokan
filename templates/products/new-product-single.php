@@ -171,7 +171,7 @@ if ( ! $from_shortcode ) {
                                     <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>">
 
                                     <label for="post_title" class="form-label"><?php _e( 'Title', 'dokan' ); ?></label>
-                                    <div class="dokan-product-title-alert hidden dokan-alert dokan-alert-danger">
+                                    <div class="dokan-product-title-alert dokan-hide dokan-alert dokan-alert-danger">
                                             <?php _e('Please choose a Name !!!', 'dokan'); ?>
                                     </div>
                                     <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => __( 'Product name..', 'dokan' ), 'value' => $post_title ) ); ?>
@@ -227,7 +227,7 @@ if ( ! $from_shortcode ) {
                                     <div class="dokan-form-group">
                                         
                                         <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
-                                        <div class="dokan-product-cat-alert hidden dokan-alert dokan-alert-danger">
+                                        <div class="dokan-product-cat-alert dokan-hide dokan-alert dokan-alert-danger">
                                             <?php _e('Please choose a category !!!', 'dokan'); ?>
                                         </div>
                                         <?php

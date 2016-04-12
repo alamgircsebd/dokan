@@ -199,6 +199,7 @@ jQuery(function($) {
 
 });
 
+
 /*global woocommerce_admin_meta_boxes, woocommerce_admin, accounting */
 ;(function($) {
     /**
@@ -468,13 +469,14 @@ jQuery(function($) {
                         line_item_qtys:         JSON.stringify( line_item_qtys, null, '' ),
                         line_item_totals:       JSON.stringify( line_item_totals, null, '' ),
                         line_item_tax_totals:   JSON.stringify( line_item_tax_totals, null, '' ),
-                        api_refund:             false,
+                        api_refund:             $( this ).is( '.do-api-refund' ),
                         restock_refunded_items: $( '#restock_refunded_items:checked' ).size() ? 'true' : 'false',
                         security:               dokan_refund.order_item_nonce
                     };
 
                     $.post( dokan_refund.ajax_url, data, function( response ) {
                         if ( true === response.success ) {
+                            console.log(response);
                             dokan_seller_meta_boxes_order_items.reload_items();
 
                             if ( 'fully_refunded' === response.data.status ) {
@@ -783,7 +785,6 @@ jQuery(function($) {
     dokan_seller_meta_boxes_order_items.init();
 
 })(jQuery);
-
 ;(function($){
 
     var variantsHolder = $('#variants-holder');
@@ -908,7 +909,7 @@ jQuery(function($) {
             
             if ( $( '#post_title' ).val().trim() == '' ) {
                 $( '#post_title' ).focus();
-                $( 'div.dokan-product-title-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-title-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-title-alert' ).hide();
@@ -916,7 +917,7 @@ jQuery(function($) {
             
             if ( $( 'select.product_cat' ).val() == -1 ) {                
                 $( 'select.product_cat' ).focus();
-                $( 'div.dokan-product-cat-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-cat-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-cat-alert' ).hide();
