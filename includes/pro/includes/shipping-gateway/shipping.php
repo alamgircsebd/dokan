@@ -149,18 +149,20 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     /**
      * Check if seller has any shipping enable product in this order
      *
+     * @since  2.4.11 
+     *
      * @param  array $products
      *
      * @return boolean
      */
-    public static function has_shipping_enabled_products( $products ) {
+    public function has_shipping_enabled_product( $products ) {
 
         foreach ( $products as $product ) {
             if ( !self::is_product_disable_shipping( $product['product_id'] ) ) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
@@ -207,7 +209,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                     continue;
                 }
 
-                if ( !self::has_shipping_enabled_products( $products ) ) {
+                if ( ! $this->has_shipping_enabled_product( $products ) ) {
                     continue;
                 }
 
