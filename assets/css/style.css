@@ -3940,6 +3940,11 @@ select.dokan-form-control {
     float: none;
     width: 100%;
   }
+  .dokan-dashboard .product-edit-new-container .dokan-edit-row .dokan-side-left,
+  .dokan-dashboard .product-edit-new-container .dokan-edit-row .dokan-side-right {
+    float: none;
+    width: auto;
+  }
   .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li {
     display: inline-block;
     border-right: 1px solid #454545;
