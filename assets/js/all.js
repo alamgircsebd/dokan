@@ -199,6 +199,7 @@ jQuery(function($) {
 
 });
 
+
 /*global woocommerce_admin_meta_boxes, woocommerce_admin, accounting */
 ;(function($) {
     /**
@@ -784,7 +785,6 @@ jQuery(function($) {
     dokan_seller_meta_boxes_order_items.init();
 
 })(jQuery);
-
 ;(function($){
 
     var variantsHolder = $('#variants-holder');
@@ -909,7 +909,7 @@ jQuery(function($) {
             
             if ( $( '#post_title' ).val().trim() == '' ) {
                 $( '#post_title' ).focus();
-                $( 'div.dokan-product-title-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-title-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-title-alert' ).hide();
@@ -917,7 +917,7 @@ jQuery(function($) {
             
             if ( $( 'select.product_cat' ).val() == -1 ) {                
                 $( 'select.product_cat' ).focus();
-                $( 'div.dokan-product-cat-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-cat-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-cat-alert' ).hide();

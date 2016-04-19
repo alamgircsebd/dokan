@@ -146,6 +146,26 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
         return false;
     }
 
+    /**
+     * Check if seller has any shipping enable product in this order
+     *
+     * @since  2.4.11 
+     *
+     * @param  array $products
+     *
+     * @return boolean
+     */
+    public function has_shipping_enabled_product( $products ) {
+
+        foreach ( $products as $product ) {
+            if ( !self::is_product_disable_shipping( $product['product_id'] ) ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     /**
      * Get product shipping costs
@@ -186,6 +206,10 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
             foreach ( $seller_products as $seller_id => $products ) {
 
                 if ( !self::is_shipping_enabled_for_seller( $seller_id ) ) {
+                    continue;
+                }
+
+                if ( ! $this->has_shipping_enabled_product( $products ) ) {
                     continue;
                 }
 
@@ -267,7 +291,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
         if ( !empty( $price ) ) {
             foreach ( $price as $s_id => $value ) {
-                $amount = $amount + ( array_sum( isset( $value['addition_price'] ) ? $value['addition_price'] : 0 )+$value['default']+array_sum( $value['qty'] )+$value['add_product']+ ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
+                $amount = $amount + ( ( isset( $value['addition_price'] ) ? array_sum( $value['addition_price'] ) : 0 ) +  ( isset($value['default']) ? $value['default'] : 0 ) + ( isset( $value['qty'] ) ? array_sum( $value['qty'] ) : 0 ) +$value['add_product'] + ( isset($value['state_rates']) ? $value['state_rates'] : 0 ) );
             }
         }
 

@@ -40,9 +40,10 @@ class Dokan_Installer {
         }
 
         $dokan_updates = array(
-            '1.2' => 'dokan-upgrade-1.2.php',
-            '2.1' => 'dokan-upgrade-2.1.php',
-            '2.3' => 'dokan-upgrade-2.3.php',
+            '1.2'       => 'dokan-upgrade-1.2.php',
+            '2.1'       => 'dokan-upgrade-2.1.php',
+            '2.3'       => 'dokan-upgrade-2.3.php',
+            '2.4.11'    => 'dokan-upgrade-2.4.11.php',
         );
 
         foreach ( $dokan_updates as $version => $path ) {
@@ -130,6 +131,7 @@ class Dokan_Installer {
             'moderate_comments'      => true,
             'unfiltered_html'        => true,
             'upload_files'           => true,
+            'edit_shop_orders'       => true,
             'dokandar'               => true
         ) );
 

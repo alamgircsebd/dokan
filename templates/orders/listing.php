@@ -32,7 +32,7 @@ if ( $user_orders ) {
                         <?php echo '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $the_order->get_order_number() ) ) . '</strong></a>'; ?>
                     </td>
                     <td class="dokan-order-total">
-                        <?php echo esc_html( strip_tags( $the_order->get_formatted_order_total() ) ); ?>
+                        <?php echo $the_order->get_formatted_order_total(); ?>
                     </td>
                     <td class="dokan-order-status">
                         <?php echo '<span class="dokan-label dokan-label-' . dokan_get_order_status_class( $the_order->status ) . '">' . esc_html__( dokan_get_order_status_translated( $the_order->status ) ) . '</span>'; ?>

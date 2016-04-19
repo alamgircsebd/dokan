@@ -122,7 +122,7 @@
             
             if ( $( '#post_title' ).val().trim() == '' ) {
                 $( '#post_title' ).focus();
-                $( 'div.dokan-product-title-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-title-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-title-alert' ).hide();
@@ -130,7 +130,7 @@
             
             if ( $( 'select.product_cat' ).val() == -1 ) {                
                 $( 'select.product_cat' ).focus();
-                $( 'div.dokan-product-cat-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-cat-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-cat-alert' ).hide();
