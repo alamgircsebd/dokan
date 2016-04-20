@@ -172,6 +172,9 @@ class Dokan_Template_Products {
                     /** set images **/
                     if ( $featured_image ) {
                         set_post_thumbnail( $product_id, $featured_image );
+                    }else{
+                        
+                        delete_post_thumbnail( $product_id);
                     }
 
                     if( isset( $_POST['product_tag'] ) && !empty( $_POST['product_tag'] ) ) {
