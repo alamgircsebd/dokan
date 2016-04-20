@@ -223,6 +223,39 @@ class Dokan_Email {
 
 
     /**
+     * Send admin email notification when a new refund request is cancle
+     *
+     * @param string $seller_mail
+     * @param int $order_id
+     * @param int $refund_id
+     */
+    function delete_refund_request( $seller_mail, $order_id, $refund_id ) {
+        ob_start();
+        dokan_get_template_part( 'emails/refund-delete' );
+        $body = ob_get_clean();
+        $find = array(
+            '%order_id%',
+            '%order_page%',
+            '%site_name%',
+            '%site_url%',
+        );
+
+        $replace = array(
+            $order_id,
+            home_url() . '/dashboard/orders/?order_id=' . $order_id,
+            $this->get_from_name(),
+            home_url(),
+        );
+
+        $subject = sprintf( __( '[%s] Refund Request Cancled', 'dokan' ), $this->get_from_name() );
+        $body = str_replace( $find, $replace, $body);
+
+        $this->send( $seller_mail, $subject, $body );
+        do_action( 'after_cancle_refund_request', $seller_mail, $subject, $body );
+    }
+
+
+    /**
      * Send email to user once a withdraw request is approved
      *
      * @param int $user_id
