@@ -133,6 +133,9 @@ body {
   border-bottom: 1px solid #ededed;
   padding: 0 0 10px 0;
 }
+.dokan-dashboard header.dokan-dashboard-header .dokan-add-product-link .dokan-btn {
+  margin-right: 10px;
+}
 .dokan-dashboard .dokan-dashboard-content {
   padding: 0 0 0 25px;
   overflow: hidden;

@@ -72,7 +72,7 @@
                      *
                      * @since 2.4.10
                      */
-                    echo apply_filters( 'dokan_banner_upload_help', __('Upload a banner for your store. Banner size is (825x300) pixels.', 'dokan' ) );
+                    echo apply_filters( 'dokan_banner_upload_help', __('Upload a banner for your store. Banner size is (625x300) pixels.', 'dokan' ) );
                     ?>
                 </p>
             </div>
