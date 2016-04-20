@@ -242,16 +242,16 @@ class Dokan_Email {
 
         $replace = array(
             $order_id,
-            home_url() . '/dashboard/orders/?order_id=' . $order_id,
+            is_admin() ? home_url() . '/dashboard/orders/?order_id=' . $order_id : admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
             $this->get_from_name(),
             home_url(),
         );
 
         $subject = sprintf( __( '[%s] Refund Request Cancled', 'dokan' ), $this->get_from_name() );
         $body = str_replace( $find, $replace, $body);
-
-        $this->send( $seller_mail, $subject, $body );
-        do_action( 'after_cancle_refund_request', $seller_mail, $subject, $body );
+        $mail = is_admin() ? $seller_mail : $this->admin_email();
+        $this->send( $mail, $subject, $body );
+        do_action( 'after_cancle_refund_request', $mail, $subject, $body );
     }
 
 

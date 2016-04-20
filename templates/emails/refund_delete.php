@@ -1,6 +1,6 @@
 Hi,
 
-Your refund request for order # %order_id% has been cancled by admin.
+Refund request for order # %order_id% has been cancled.
 
 You can view the order details by going here:
 %order_page%
