@@ -551,14 +551,19 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
             '%s',
         )
     );
-    $refund = new WC_Order_Refund( $refund_id );
+    
     $user = get_userdata( $seller_id );
-    Dokan_Email::init()->new_refund_request( $user, $order_id, $refund );
+    if ( ! null( get_post( $refund_id ) ) ) {
+        $refund = new WC_Order_Refund( $refund_id );
+        Dokan_Email::init()->new_refund_request( $user, $order_id, $refund );
+    } else {
+        Dokan_Email::init()->delete_refund_request( $user->data->user_email, $order_id, $refund_id );
+    }
 }
 add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10, 2 );
 
 function dokan_delete_refund_order( $refund_id, $order_id ) {
-    dokan_sync_refund_order( $order_id );
+    dokan_sync_refund_order( $order_id, $refund_id );
 }
 add_action( 'woocommerce_refund_deleted', 'dokan_delete_refund_order', 10, 2 );
 
