@@ -476,7 +476,6 @@ jQuery(function($) {
 
                     $.post( dokan_refund.ajax_url, data, function( response ) {
                         if ( true === response.success ) {
-                            console.log(response);
                             dokan_seller_meta_boxes_order_items.reload_items();
 
                             if ( 'fully_refunded' === response.data.status ) {

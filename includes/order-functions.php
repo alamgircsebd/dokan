@@ -568,7 +568,7 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
     );
     
     $user = get_userdata( $seller_id );
-    if ( ! null( get_post( $refund_id ) ) ) {
+    if ( get_post( $refund_id ) ) {
         $refund = new WC_Order_Refund( $refund_id );
         Dokan_Email::init()->new_refund_request( $user, $order_id, $refund );
     } else {
