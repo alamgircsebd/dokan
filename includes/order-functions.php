@@ -227,6 +227,19 @@ function dokan_delete_sync_order( $order_id ) {
     $wpdb->delete( $wpdb->prefix . 'dokan_orders', array( 'order_id' => $order_id ) );
 }
 
+/**
+ * Delete a order row from sync table to not insert duplicate
+ *
+ * @global object $wpdb
+ * @param type $order_id, $seller_id
+ *
+ * @since  2.4.11
+ */
+function dokan_delete_sync_duplicate_order( $order_id, $seller_id ) {
+    global $wpdb;
+
+    $wpdb->delete( $wpdb->prefix . 'dokan_orders', array( 'order_id' => $order_id, 'seller_id' => $seller_id ) );
+}
 
 /**
  * Insert a order in sync table once a order is created
@@ -254,6 +267,8 @@ function dokan_sync_insert_order( $order_id ) {
 
     $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
     $net_amount     = apply_filters( 'dokan_order_net_amount', $net_amount, $order );
+
+    dokan_delete_sync_duplicate_order( $order_id, $seller_id );
 
     $wpdb->insert( $wpdb->prefix . 'dokan_orders',
         array(
@@ -553,7 +568,7 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
     );
     
     $user = get_userdata( $seller_id );
-    if ( ! null( get_post( $refund_id ) ) ) {
+    if ( get_post( $refund_id ) ) {
         $refund = new WC_Order_Refund( $refund_id );
         Dokan_Email::init()->new_refund_request( $user, $order_id, $refund );
     } else {

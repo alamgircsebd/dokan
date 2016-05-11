@@ -141,7 +141,9 @@ class Dokan_Template_Products {
             }
 
             if ( !self::$errors ) {
-
+                
+                $_POST['dokan_product_id'] = isset( $_POST['dokan_product_id'] ) ? $_POST['dokan_product_id'] : '';
+                
                 if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
                     $product_status = dokan_get_new_post_status();
                     $post_data = apply_filters( 'dokan_insert_product_post_data', array(

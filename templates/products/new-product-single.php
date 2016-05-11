@@ -168,7 +168,7 @@ if ( ! $from_shortcode ) {
                             <div class="content-half-part">
 
                                 <div class="dokan-form-group">
-                                    <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>">
+                                    <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>"/>
 
                                     <label for="post_title" class="form-label"><?php _e( 'Title', 'dokan' ); ?></label>
                                     <div class="dokan-product-title-alert dokan-hide dokan-alert dokan-alert-danger">
