@@ -1,5 +1,5 @@
 
-v2.4.11 -> March 29, 2016
+v2.4.11 -> May 11, 2016
 ---------------------
 - [new] Refund request from seller to admin by sellers order details page
 - [fix] Checkout issue if flat rate shipping set as null
@@ -7,6 +7,7 @@ v2.4.11 -> March 29, 2016
 - [fix] Multiple submit request on product add/edit
 - [fix] Undefine error on cart page for shipping additional price
 - [fix] Product edit page permission
+- [fix] Remove duplicate insert on dokan order table
 
 v2.4.10 -> February 24, 2016
 ---------------------
