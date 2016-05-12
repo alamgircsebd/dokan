@@ -6,7 +6,7 @@
  *
  * @return void
  */
-function dokan_upgrade_seller_cap_2411() {
+function dokan_upgrade_seller_cap_2410() {
 	global $wp_roles;
 	$wp_roles->add_cap( 'seller', 'edit_shop_orders' );
 }

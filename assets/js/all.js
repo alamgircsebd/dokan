@@ -265,21 +265,20 @@ jQuery(function($) {
         reload_items: function() {
             var data = {
                 order_id: dokan_refund.post_id,
-                action:   'woocommerce_load_order_items',
+                action:   'dokan_load_order_items',
                 security: dokan_refund.order_item_nonce
             };
 
-            dokan_seller_meta_boxes_order_items.block();
+            dokan_seller_meta_boxes_order_items.block();            
 
             $.ajax({
                 url:  dokan_refund.ajax_url,
                 data: data,
                 type: 'POST',
                 success: function( response ) {
-                    $( '#woocommerce-order-items .inside' ).empty();
-                    $( '#woocommerce-order-items .inside' ).append( response );
+                    $( '.dokan-panel-default #woocommerce-order-items' ).empty();
+                    $( '.dokan-panel-default #woocommerce-order-items' ).append( response );
                     // wc_meta_boxes_order.init_tiptip();
-                    dokan_seller_meta_boxes_order_items.unblock();
                 }
             });
         },

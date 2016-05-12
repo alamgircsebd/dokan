@@ -52,6 +52,26 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_nopriv_dokan_remove_single_variation_item', array( $this, 'remove_single_variation_item') );
         add_action( 'wp_ajax_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
         add_action( 'wp_ajax_nopriv_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
+        add_action( 'wp_ajax_dokan_load_order_items', array( $this, 'load_order_items') );
+        add_action( 'wp_ajax_nopriv_dokan_load_order_items', array( $this, 'load_order_items') );
+    }
+
+    public function load_order_items() {
+
+        check_ajax_referer( 'order-item', 'security' );
+
+        if ( ! current_user_can( 'edit_shop_orders' ) ) {
+            die(-1);
+        }
+
+
+        // Return HTML items
+        $order_id = absint( $_POST['order_id'] );
+        $order    = wc_get_order( $order_id );
+        $data     = get_post_meta( $order_id );
+        include( DOKAN_INC_DIR . '/pro/templates/orders/views/html-order-items.php' );
+
+        die();
     }
 
     /**
