@@ -196,7 +196,7 @@ if ( wc_tax_enabled() ) {
 	<p class="add-items">
 		
 		<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
-			<button type="button" class="button refund-items"><?php _e( 'Refund', 'woocommerce' ); ?></button>
+			<button type="button" class="dokan-btn dokan-btn-default refund-items"><?php _e( 'Refund', 'woocommerce' ); ?></button>
 		<?php endif; ?>
 	</p>
 	<div class="clear"></div>
@@ -237,8 +237,8 @@ if ( wc_tax_enabled() ) {
 		$gateway_name             = false !== $payment_gateway ? ( ! empty( $payment_gateway->method_title ) ? $payment_gateway->method_title : $payment_gateway->get_title() ) : __( 'Payment Gateway', 'woocommerce' );
 		?>
 		<!-- <button type="button" <?php echo $gateway_supports_refunds ? '' : 'disabled="disabled"'; ?> class="button <?php echo $gateway_supports_refunds ? 'button-primary do-api-refund' : 'tips disabled'; ?>" <?php echo $gateway_supports_refunds ? '' : 'data-tip="' . esc_attr__( 'The payment gateway used to place this order does not support automatic refunds.', 'woocommerce' ) . '"'; ?>><?php printf( _x( 'Refund %s via %s', 'Refund $amount', 'woocommerce' ), $refund_amount, $gateway_name ); ?></button> -->
-		<button type="button" class="button button-primary do-manual-refund tips" data-tip="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', 'woocommerce' ); ?>"><?php printf( _x( 'Refund %s manually', 'Refund $amount manually', 'woocommerce' ), $refund_amount ); ?></button>
-		<button type="button" class="button cancel-action"><?php _e( 'Cancel', 'woocommerce' ); ?></button>
+		<button type="button" class="dokan-btn dokan-btn-default do-manual-refund tips" data-tip="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', 'woocommerce' ); ?>"><?php printf( _x( 'Refund %s manually', 'Refund $amount manually', 'woocommerce' ), $refund_amount ); ?></button>
+		<button type="button" class="dokan-btn dokan-btn-default cancel-action"><?php _e( 'Cancel', 'woocommerce' ); ?></button>
 		<div class="clear"></div>
 	</div>
 	<div class="clear"></div>

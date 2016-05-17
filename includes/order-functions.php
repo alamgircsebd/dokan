@@ -503,7 +503,7 @@ function dokan_sync_order_table( $order_id ) {
 }
 
 /**
- * Insert a order in sync table once a order is created
+ * Insert a order in sync table once a refund is created
  *
  * @global object $wpdb
  * @param int $order_id
@@ -570,13 +570,21 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
     $user = get_userdata( $seller_id );
     if ( get_post( $refund_id ) ) {
         $refund = new WC_Order_Refund( $refund_id );
-        Dokan_Email::init()->new_refund_request( $user, $order_id, $refund );
+        Dokan_Email::init()->dokan_new_refund( $user->data->user_email, $order_id, $refund );
     } else {
-        Dokan_Email::init()->delete_refund_request( $user->data->user_email, $order_id, $refund_id );
+        Dokan_Email::init()->dokan_delete_refund( $user->data->user_email, $order_id, $refund_id );
     }
 }
 add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10, 2 );
 
+
+/**
+ * Insert a order in sync table once a refund is deleted
+ *
+ * @global object $wpdb
+ * @param int $order_id
+ * @since 2.4.11
+ */
 function dokan_delete_refund_order( $refund_id, $order_id ) {
     dokan_sync_refund_order( $order_id, $refund_id );
 }
