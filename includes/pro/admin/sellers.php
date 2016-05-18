@@ -46,6 +46,7 @@
 
                     foreach ($sellers as $user) {
                         $info = dokan_get_store_info( $user->ID );
+                        $url = dokan_get_store_url($user->ID);
                         $seller_enable = dokan_is_seller_enabled( $user->ID );
                         $edit_link = esc_url( add_query_arg( 'wp_http_referer', urlencode( wp_unslash( $_SERVER['REQUEST_URI'] ) ), get_edit_user_link( $user->ID ) ) );
                         ?>
@@ -67,7 +68,7 @@
                                 </div>
                             </td>
                             <td><?php echo $user->display_name; ?></td>
-                            <td><?php echo empty( $info['store_name'] ) ? '--' : $info['store_name']; ?></td>
+                            <td><?php echo empty( $info['store_name'] ) ? '--' : '<a href= "' . $url . '" target="_BLANK" >' . $info['store_name'] . '</a>'; ?></td>
                             <td><?php echo $user->user_email; ?></td>
                             <td>
                                 <a href="<?php echo admin_url( 'edit.php?post_type=product&author=' . $user->ID ); ?>">
