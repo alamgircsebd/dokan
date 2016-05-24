@@ -342,10 +342,6 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
 
 
     $data = $wpdb->get_results( $sql );
-
-    // echo $sql;
-    // var_dump($data);
-    // var_dump($data, $barwidth, $start_date, $end_date);
     // Prepare data for report
     $order_counts      = dokan_prepare_chart_data( $data, 'order_date', 'total_orders', $chart_interval, $start_date_to_time, $group_by );
     $order_amounts     = dokan_prepare_chart_data( $data, 'order_date', 'order_total', $chart_interval, $start_date_to_time, $group_by );

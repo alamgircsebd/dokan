@@ -185,6 +185,7 @@ final class WeDevs_Dokan {
         $wpdb->dokan_withdraw     = $wpdb->prefix . 'dokan_withdraw';
         $wpdb->dokan_orders       = $wpdb->prefix . 'dokan_orders';
         $wpdb->dokan_announcement = $wpdb->prefix . 'dokan_announcement';
+        $wpdb->dokan_refund       = $wpdb->prefix . 'dokan_refund';
 
         require_once __DIR__ . '/includes/functions.php';
 
@@ -336,7 +337,7 @@ final class WeDevs_Dokan {
                 'mon_decimal_point'             => wc_get_price_decimal_separator(),
                 'remove_item_notice'            => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', 'dokan' ),
                 'i18n_select_items'             => __( 'Please select some items.', 'dokan' ),
-                'i18n_do_refund'                => __( 'Are you sure you wish to process this refund? This action cannot be undone.', 'dokan' ),
+                'i18n_do_refund'                => __( 'Are you sure you wish to process this refund request? This action cannot be undone.', 'dokan' ),
                 'i18n_delete_refund'            => __( 'Are you sure you wish to delete this refund? This action cannot be undone.', 'dokan' ),
                 'remove_item_meta'              => __( 'Remove this item meta?', 'dokan' ),
                 'ajax_url'                      => admin_url( 'admin-ajax.php' ),

@@ -19,10 +19,10 @@ if ( $post->post_author != $seller_id ) {
     wp_die( __( 'Access Denied', 'dokan' ) );
 }
 
-
+// check if seller have subscription pack and product limit to edit draft product
 if ( class_exists( 'Dokan_Product_Subscription' ) ) {
     if ( get_user_meta( $seller_id, 'product_no_with_pack', true ) ) {
-        if ( get_user_meta( $seller_id, 'product_no_with_pack', true ) !< count( get_posts( array( 'post_author' => $seller_id, 'post_type' => 'product', 'posts_per_page' => -1 ) ) ) || 'publish' != $post->post_status ) {
+        if ( get_user_meta( $seller_id, 'product_no_with_pack', true ) <= count( get_posts( array( 'post_author' => $seller_id, 'post_type' => 'product', 'posts_per_page' => -1 ) ) ) || 'publish' != $post->post_status ) {
             wp_die( __( 'Access Denied! You have reached the limit of your subscribed total online product', 'dokan' ) );
         }
     }

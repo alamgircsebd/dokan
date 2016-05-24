@@ -31,7 +31,6 @@ function dokan_variable_product_type_options() {
         }
     }
 
-    // var_dump( $attributes, $tax_classes, $tax_class_options );
     ?>
     <div id="variable_product_options" class="wc-metaboxes-wrapper">
         <div id="variable_product_options_inner">
