@@ -313,6 +313,7 @@ class Dokan_Pro_Admin_Ajax {
                 $seller_id = $postdata['seller_id'][$refund_id];
                 $refund_amount  = $postdata['refund_amount'][$refund_id];
                 $refund_reason    = $postdata['refund_reason'][$refund_id];
+// var_dump($refund_id);die();
 
                 // Dokan_Email::init()->refund_request_approve( $order_id, $amount, $method );
                 $refund->update_status( $refund_id, $order_id, 1 );

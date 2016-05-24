@@ -46,7 +46,7 @@ class Dokan_Pro_Refund {
         // 2 -> cancelled
 
         $wpdb->query( $wpdb->prepare(
-            "UPDATE {$wpdb->dokan_refund}
+            "UPDATE {$wpdb->prefix}dokan_refund
             SET status = %d WHERE order_id=%d AND id = %d",
             $status, $order_id, $row_id
         ) );
