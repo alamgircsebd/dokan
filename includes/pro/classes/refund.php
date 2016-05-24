@@ -66,19 +66,19 @@ class Dokan_Pro_Refund {
         $wpdb->dokan_refund = $wpdb->prefix . 'dokan_refund';
         $data = array(
             'order_id'          => $data['order_id'],
+            'seller_id'         => $data['seller_id'],
             'refund_amount'     => $data['refund_amount'],
             'refund_reason'     => $data['refund_reason'],
-            'item_qtys'         => $data['item_qtys'],
-            'item_totals'       => $data['item_totals'],
-            'item_tax_totals'   => $data['item_tax_totals'],
-            'restock_items'     => $data['restock_items'],
+            'item_qtys'         => $data['line_item_qtys'],
+            'item_totals'       => $data['line_item_totals'],
+            'item_tax_totals'   => $data['line_item_tax_totals'],
+            'restock_items'     => $data['restock_refunded_items'],
             'date'              => current_time( 'mysql' ),
             'status'            => $data['status'],
-            'method'            => $data['method'],
-            'ip'                => $data['ip']
+            'method'            => $data['api_refund'],
         );
 
-        $format = array( '%d', '%f', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%s' );
+        $format = array( '%d', '%d', '%f', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
 
         return $wpdb->insert( $wpdb->dokan_refund, $data, $format );
     }

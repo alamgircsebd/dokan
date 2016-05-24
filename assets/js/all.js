@@ -345,6 +345,7 @@ jQuery(function($) {
 
                     $.post( dokan_refund.ajax_url, data, function( response ) {
                         if ( true === response.success ) {
+                            window.alert( response.data );
                             dokan_seller_meta_boxes_order_items.reload_items();
 
                             if ( 'fully_refunded' === response.data.status ) {
@@ -352,7 +353,7 @@ jQuery(function($) {
                                 window.location.href = window.location.href;
                             }
                         } else {
-                            window.alert( response.data.error );
+                            window.alert( response.data );
                             dokan_seller_meta_boxes_order_items.unblock();
                         }
                     });

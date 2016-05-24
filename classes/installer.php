@@ -308,6 +308,7 @@ class Dokan_Installer {
         $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_refund` (
                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
                `order_id` bigint(20) unsigned NOT NULL,
+               `seller_id` bigint(20) NOT NULL,
                `refund_amount` float(11) NOT NULL,
                `refund_reason` text NULL,
                `item_qtys` varchar(50) NULL,
@@ -317,7 +318,6 @@ class Dokan_Installer {
                `date` timestamp NOT NULL,
                `status` int(1) NOT NULL,
                `method` varchar(30) NOT NULL,
-               `ip` varchar(15) NOT NULL,
               PRIMARY KEY (id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;";
 

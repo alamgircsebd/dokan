@@ -164,9 +164,9 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                             <input type="checkbox" class="dokan-refund-allcheck">
                         </th>
                         <th><?php _e( 'Order ID', 'dokan' ); ?></th>
-                        <th><?php _e( 'Amount', 'dokan' ); ?></th>
-                        <th><?php _e( 'Reason', 'dokan' ); ?></th>
-                        <th><?php _e( 'IP', 'dokan' ); ?></th>
+                        <th><?php _e( 'Seller', 'dokan' ); ?></th>
+                        <th><?php _e( 'Refund Amount', 'dokan' ); ?></th>
+                        <th><?php _e( 'Refund Reason', 'dokan' ); ?></th>
                         <th><?php _e( 'Date', 'dokan' ); ?></th>
                     </tr>
                 </thead>
@@ -176,9 +176,9 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                             <input type="checkbox" class="dokan-refund-allcheck">
                         </th>
                         <th><?php _e( 'Order ID', 'dokan' ); ?></th>
-                        <th><?php _e( 'Amount', 'dokan' ); ?></th>
-                        <th><?php _e( 'Reason', 'dokan' ); ?></th>
-                        <th><?php _e( 'IP', 'dokan' ); ?></th>
+                        <th><?php _e( 'Seller', 'dokan' ); ?></th>
+                        <th><?php _e( 'Refund Amount', 'dokan' ); ?></th>
+                        <th><?php _e( 'Refund Reason', 'dokan' ); ?></th>
                         <th><?php _e( 'Date', 'dokan' ); ?></th>
                     </tr>
                 </tfoot>
@@ -193,8 +193,9 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                         <th class="check-column">
                             <input type="checkbox" name="id[<?php echo $row->id;?>]" value="<?php echo $row->id;?>">
                             <input type="hidden" name="order_id[<?php echo $row->id;?>]" value="<?php echo $row->order_id; ?>">
-                            <input type="hidden" name="refund_reason[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->refund_amount ); ?>">
-                            <input type="hidden" name="refund_amount[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->refund_reason ); ?>">
+                            <input type="hidden" name="seller_id[<?php echo $row->id;?>]" value="<?php echo $row->seller_id; ?>">
+                            <input type="hidden" name="refund_amount[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->refund_amount ); ?>">
+                            <input type="hidden" name="refund_reason[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->refund_reason ); ?>">
                         </th>
                         <td>
                             <strong><a href="<?php echo admin_url( 'post.php?post=' . $row->order_id . '&action=edit' ); ?>"><?php echo '#' . $row->order_id; ?></a></strong>
@@ -222,9 +223,9 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                                 <?php } ?>
                             </div>
                         </td>
+                        <td><?php echo the_author_meta( 'display_name', $row->seller_id ); ?></td>
                         <td><?php echo wc_price( $row->refund_amount ); ?></td>
                         <td><?php echo $row->refund_reason; ?></td>
-                        <td><?php echo $row->ip; ?></td>
                         <td><?php echo date_i18n( 'M j, Y g:ia', strtotime( $row->date ) ); ?></td>
                     </tr>
                     <?php

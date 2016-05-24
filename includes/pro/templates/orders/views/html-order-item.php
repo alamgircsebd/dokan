@@ -174,6 +174,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				}
 			?>
 		</div>
+		<div class="edit" style="display: none;">
+			<?php $item_qty = esc_attr( $item['qty'] ); ?>
+			<input style="width:60px" type="number" step="<?php echo apply_filters( 'woocommerce_quantity_input_step', '1', $_product ); ?>" min="0" autocomplete="off" name="order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" value="<?php echo $item_qty; ?>" data-qty="<?php echo $item_qty; ?>" class="quantity" />
+ 		</div>
 		<div class="refund" style="display: none;">
 			<input style="width:60px" type="number" step="<?php echo apply_filters( 'woocommerce_quantity_input_step', '1', $_product ); ?>" min="0" max="<?php echo $item['qty']; ?>" autocomplete="off" name="refund_order_item_qty[<?php echo absint( $item_id ); ?>]" placeholder="0" size="4" class="refund_order_item_qty" />
 		</div>

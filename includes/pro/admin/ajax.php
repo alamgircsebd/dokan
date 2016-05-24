@@ -18,6 +18,8 @@ class Dokan_Pro_Admin_Ajax {
         add_action( 'wp_ajax_print_duplicate_suborders', array( $this, 'print_duplicate_suborders' ) );
         add_action( 'wp_ajax_dokan_duplicate_order_delete', array( $this, 'dokan_duplicate_order_delete' ) );
         add_action( 'wp_ajax_dokan_duplicate_orders_bulk_delete', array( $this, 'dokan_duplicate_orders_bulk_delete' ) );
+
+        add_action( 'wp_ajax_dokan_refund_form_action', array( $this, 'handle_refund_action' ) );
     }
 
     /**
@@ -256,6 +258,80 @@ class Dokan_Pro_Admin_Ajax {
                 'msg'    => 'Select Orders to Delete'
             ) );
         }
+    }
+
+    /**
+     *  Handle refund action via ajax
+     *  
+     * @since 2.4.11
+     *
+     *  @return json success|error|data
+     */
+    function handle_refund_action() {
+
+        parse_str( $_POST['formData'], $postdata );
+
+        if( !wp_verify_nonce( $postdata['dokan_refund_admin_bulk_action_nonce'], 'dokan_refund_admin_bulk_action' ) ) {
+            wp_send_json_error();
+        }
+
+        $refund = Dokan_Pro_Refund::init();
+
+        $bulk_action = $_POST['status'];
+        $status      = $postdata['status_page'];
+        $refund_id = $_POST['refund_id'];
+
+        switch ( $bulk_action ) {
+
+            case 'delete':
+
+                $refund->delete_refund( $refund_id );
+
+                $url = admin_url( 'admin.php?page=dokan-refund&message=trashed&status=' . $status );
+                wp_send_json_success( array( 'url'=> $url ) );
+
+                break;
+
+            case 'cancel':
+
+                $order_id = $postdata['order_id'][$refund_id];
+                $seller_id = $postdata['seller_id'][$refund_id];
+                $refund_amount  = $postdata['refund_amount'][$refund_id];
+                $refund_reason    = $postdata['refund_reason'][$refund_id];
+
+                // Dokan_Email::init()->refund_request_cancel( $seller_id, $refund_amount, $refund_reason );
+                $refund->update_status( $refund_id, $order_id, 2 );
+
+                $url = admin_url( 'admin.php?page=dokan-refund&message=cancelled&status=' . $status );
+                wp_send_json_success( array( 'url'=> $url ) );
+
+                break;
+
+            case 'approve':
+
+                $order_id = $postdata['order_id'][$refund_id];
+                $seller_id = $postdata['seller_id'][$refund_id];
+                $refund_amount  = $postdata['refund_amount'][$refund_id];
+                $refund_reason    = $postdata['refund_reason'][$refund_id];
+
+                // Dokan_Email::init()->refund_request_approve( $order_id, $amount, $method );
+                $refund->update_status( $refund_id, $order_id, 1 );
+
+                $url = admin_url( 'admin.php?page=dokan-refund&message=approved&status=' . $status );
+                wp_send_json_success( array( 'url'=> $url ) );
+
+                break;
+
+            case 'pending':
+
+                $refund->update_status( $refund_id, $postdata['order_id'][$refund_id], 0 );
+
+                $url = admin_url( 'admin.php?page=dokan-refund&message=pending&status=' . $status );
+                wp_send_json_success( array( 'url'=> $url ) );
+
+                break;
+        }
+
     }
 
 }
