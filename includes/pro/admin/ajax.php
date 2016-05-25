@@ -309,17 +309,20 @@ class Dokan_Pro_Admin_Ajax {
 
             case 'approve':
 
-                $order_id = $postdata['order_id'][$refund_id];
+                $data['order_id'] = $postdata['order_id'][$refund_id];
                 $seller_id = $postdata['seller_id'][$refund_id];
-                $refund_amount  = $postdata['refund_amount'][$refund_id];
-                $refund_reason    = $postdata['refund_reason'][$refund_id];
-// var_dump($refund_id);die();
+                $data['refund_amount']  = $postdata['refund_amount'][$refund_id];
+                $data['refund_reason']  = $postdata['refund_reason'][$refund_id];
+                $data['line_item_qtys']  = $postdata['item_qtys'][$refund_id];
+                $data['line_item_totals']  = $postdata['item_totals'][$refund_id];
+                $data['line_item_tax_totals']  = $postdata['item_tax_totals'][$refund_id];
+                $data['restock_refunded_items']  = $postdata['restock_items'][$refund_id];
 
                 // Dokan_Email::init()->refund_request_approve( $order_id, $amount, $method );
                 $refund->update_status( $refund_id, $order_id, 1 );
 
                 $url = admin_url( 'admin.php?page=dokan-refund&message=approved&status=' . $status );
-                wp_send_json_success( array( 'url'=> $url ) );
+                wp_send_json_success( array( 'url'=> $url, 'data' => $data ) );
 
                 break;
 

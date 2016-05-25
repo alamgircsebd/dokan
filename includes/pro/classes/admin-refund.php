@@ -77,7 +77,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                 $order_id = $_POST['order_id'][$key];
                 $refund_amount  = $_POST['refund_amount'][$key];
 
-                Dokan_Email::init()->refund_request_cancel( $user_id, $refund_amount, $method, $note );
+                // Dokan_Email::init()->refund_request_cancel( $user_id, $refund_amount, $method, $note );
                 $this->update_status( $refund_id, $order_id, 2 );
             }
 
@@ -93,7 +93,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                 $refund_amount  = $_POST['refund_amount'][$key];
                 $method  = $_POST['method'][$key];
 
-                Dokan_Email::init()->refund_request_approve( $order_id, $refund_amount, $method );
+                // Dokan_Email::init()->refund_request_approve( $order_id, $refund_amount, $method );
                 $this->update_status( $refund_id, $order_id, 1 );
             }
 
@@ -196,6 +196,10 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                             <input type="hidden" name="seller_id[<?php echo $row->id;?>]" value="<?php echo $row->seller_id; ?>">
                             <input type="hidden" name="refund_amount[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->refund_amount ); ?>">
                             <input type="hidden" name="refund_reason[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->refund_reason ); ?>">
+                            <input type="hidden" name="item_qtys[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->item_qtys ); ?>">
+                            <input type="hidden" name="item_totals[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->item_totals ); ?>">
+                            <input type="hidden" name="item_tax_totals[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->item_tax_totals ); ?>">
+                            <input type="hidden" name="restock_items[<?php echo $row->id;?>]" value="<?php echo esc_attr( $row->restock_items ); ?>">
                         </th>
                         <td>
                             <strong><a href="<?php echo admin_url( 'post.php?post=' . $row->order_id . '&action=edit' ); ?>"><?php echo '#' . $row->order_id; ?></a></strong>
@@ -205,12 +209,12 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Approve', 'dokan' ); ?></a> | </span>
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="cancel" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a></span>
 
-                                <?php } elseif ( $status == 'completed' ) { ?>
+                                <?php } elseif ( $status == 'completed' ) { //$status == 'completed'?>
 
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="cancel" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a> | </span>
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="pending" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Pending', 'dokan' ); ?></a></span>
 
-                                <?php } elseif ( $status == 'cancelled' ) { ?>
+                                <?php } elseif ( false ) { //$status == 'cancelled'?>
 
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Approve', 'dokan' ); ?></a> | </span>
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="pending" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Pending', 'dokan' ); ?></a></span>
@@ -336,7 +340,17 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                         $.post(url, data, function( resp ) {
 
                             if( resp.success ) {
-                                self.closest( 'tr' ).removeClass('custom-spinner');
+                                if ( self.data('status') == 'approve' ) {
+                                    rdata = resp.data.data;
+                                    rdata.action = 'woocommerce_refund_line_items';
+                                    rdata.api_refund = false;
+                                    rdata.security = dokan_refund.order_item_nonce;
+                                    $.post(url, rdata, function( res ) {
+                                        if( res.success ) {
+                                            self.closest( 'tr' ).removeClass('custom-spinner');
+                                        }
+                                    });
+                                }
                                 window.location = resp.data.url;
                             } else {
                                 self.closest( 'tr' ).removeClass('custom-spinner');

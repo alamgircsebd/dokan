@@ -206,7 +206,7 @@ class Dokan_Pro_Admin_Settings {
     /**
      * Refund request template
      *
-     * @since 2.4
+     * @since 2.4.11
      *
      * @return void
      */
