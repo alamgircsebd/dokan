@@ -347,11 +347,6 @@ jQuery(function($) {
                         if ( true === response.success ) {
                             window.alert( response.data );
                             dokan_seller_meta_boxes_order_items.reload_items();
-
-                            if ( 'fully_refunded' === response.data.status ) {
-                                // Redirect to same page for show the refunded status
-                                window.location.href = window.location.href;
-                            }
                         } else {
                             window.alert( response.data );
                             dokan_seller_meta_boxes_order_items.unblock();

@@ -90,16 +90,13 @@ class Dokan_Pro_Refund {
      *
      * @return boolean
      */
-    function has_pending_refund_request() {
+    function has_pending_refund_request( $order_id ) {
         global $wpdb;
 
         $wpdb->dokan_refund = $wpdb->prefix . 'dokan_refund';
 
-        $status = $wpdb->get_results(
-            "SELECT id
-             FROM $wpdb->dokan_refund
-             WHERE status = 0"
-        );
+        $sql    = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}dokan_refund WHERE status = %d AND order_id = %d", 0, $order_id );
+        $status = $wpdb->get_results( $sql );
 
         if ( $status ) {
             return true;
