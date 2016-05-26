@@ -1,6 +1,6 @@
 Hi,
 
-Your refund request has been processed.
+Your refund request has been %status%.
 
 Order ID: %order_id%
 Refund Amount: %amount%

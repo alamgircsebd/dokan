@@ -566,14 +566,6 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
             '%s',
         )
     );
-    
-    $user = get_userdata( $seller_id );
-    if ( get_post( $refund_id ) ) {
-        $refund = new WC_Order_Refund( $refund_id );
-        Dokan_Email::init()->dokan_new_refund( $user->data->user_email, $order_id, $refund );
-    } else {
-        Dokan_Email::init()->dokan_delete_refund( $user->data->user_email, $order_id, $refund_id );
-    }
 }
 add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10, 2 );
 

@@ -209,7 +209,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Approve', 'dokan' ); ?></a> | </span>
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="cancel" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a></span>
 
-                                <?php } elseif ( $status == 'completed' ) { //$status == 'completed'?>
+                                <?php } elseif ( false ) { //$status == 'completed'?>
 
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="cancel" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a> | </span>
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="pending" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Pending', 'dokan' ); ?></a></span>
@@ -221,8 +221,8 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
 
                                 <?php } ?>
 
-                                <?php if ( $result ) { ?>
-                                    <span class="trash"> | <a href="#" class="dokan-refund-action" data-status="delete" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Delete', 'dokan' ); ?></a></span>
+                                <?php if ( $result && $status == 'completed' ) { ?>
+                                    <span class="trash"><!-- | --><a href="#" class="dokan-refund-action" data-status="delete" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Delete', 'dokan' ); ?></a></span>
 
                                 <?php } ?>
                             </div>
@@ -347,6 +347,20 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                                     rdata.security = dokan_refund.order_item_nonce;
                                     $.post(url, rdata, function( res ) {
                                         if( res.success ) {
+                                            self.closest( 'tr' ).removeClass('custom-spinner');
+                                        }
+                                    });
+                                } else if ( self.data('status') == 'delete' ) {
+                                    var rdata = {
+                                        action:    'woocommerce_delete_refund',
+                                        refund_id: self.data( 'refund_id' ),
+                                        security:  dokan_refund.order_item_nonce,
+                                    };
+                                    $.ajax({
+                                        url:     dokan_refund.ajax_url,
+                                        data:    data,
+                                        type:    'POST',
+                                        success: function( response ) {
                                             self.closest( 'tr' ).removeClass('custom-spinner');
                                         }
                                     });
