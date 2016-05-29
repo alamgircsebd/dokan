@@ -250,7 +250,6 @@ function dokan_get_order_report_data( $args = array(), $start_date, $end_date ) 
     $query_hash = md5( $query_type . $query );
 
     if ( $debug ) {
-        // var_dump( $query );
         printf( '<pre>%s</pre>', print_r( $query, true ) );
     }
 

@@ -52,6 +52,74 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_nopriv_dokan_remove_single_variation_item', array( $this, 'remove_single_variation_item') );
         add_action( 'wp_ajax_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
         add_action( 'wp_ajax_nopriv_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
+        add_action( 'wp_ajax_dokan_load_order_items', array( $this, 'load_order_items') );
+        add_action( 'wp_ajax_nopriv_dokan_load_order_items', array( $this, 'load_order_items') );
+
+        add_action( 'wp_ajax_dokan_refund_request', array( $this, 'dokan_refund_request') );
+        add_action( 'wp_ajax_nopriv_dokan_refund_request', array( $this, 'dokan_refund_request') );
+    }
+
+
+    /**
+     * insert refund request via ajax
+     *
+     * @since 2.4.11
+     *
+     */
+    public function dokan_refund_request() {
+
+        check_ajax_referer( 'order-item', 'security' );
+
+        $seller_id = dokan_get_seller_id_by_order($_POST['order_id']);
+        $_POST['seller_id'] = $seller_id;
+        $_POST['status'] = 0;
+
+        // Validate that the refund can occur
+        $refund_amount          = wc_format_decimal( sanitize_text_field( $_POST['refund_amount'] ), wc_get_price_decimals() );
+        $order       = wc_get_order( $_POST['order_id'] );
+        $order_items = $order->get_items();
+        $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
+        $refund = new Dokan_Pro_Refund;
+        if ( ! $refund_amount || $max_refund < $refund_amount || 0 > $refund_amount ) {
+            $data =  __( 'Invalid refund amount', 'dokan' );
+            wp_send_json_error( $data );
+        } else if ( $refund->has_pending_refund_request( $_POST['order_id'] ) ) {
+            $data =  __( 'You have already a processing refund request for this order.', 'dokan' );
+            wp_send_json_error( $data );
+        } else{ 
+            $refund = new Dokan_Pro_Refund;
+            $refund->insert_refund($_POST);
+            Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
+            $data = __( 'Refund request sent successfully', 'dokan' );
+            wp_send_json_success( $data );
+        }
+
+    }
+
+
+    /**
+     * Load State via ajax for refund
+     *
+     * @since 2.4.11
+     *
+     * @return html Set of states
+     */
+    public function load_order_items() {
+
+        check_ajax_referer( 'order-item', 'security' );
+
+        if ( ! current_user_can( 'edit_shop_orders' ) ) {
+            die(-1);
+        }
+
+
+        // Return HTML items
+        $order_id = absint( $_POST['order_id'] );
+        $order    = wc_get_order( $order_id );
+        $data     = get_post_meta( $order_id );
+        include( DOKAN_INC_DIR . '/pro/templates/orders/views/html-order-items.php' );
+
+        die();
     }
 
     /**

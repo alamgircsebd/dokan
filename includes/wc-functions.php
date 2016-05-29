@@ -31,7 +31,6 @@ function dokan_variable_product_type_options() {
         }
     }
 
-    // var_dump( $attributes, $tax_classes, $tax_class_options );
     ?>
     <div id="variable_product_options" class="wc-metaboxes-wrapper">
         <div id="variable_product_options_inner">
@@ -2332,13 +2331,40 @@ function dokan_on_create_seller( $user_id, $data ) {
     );
 
     update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
+    update_user_meta( $user_id, 'display_name', strip_tags( $_POST['shopname'] ) );
+
+    wp_update_user( array(
+        'ID' => $user_id,
+        'display_name' => strip_tags( $_POST['shopname'] ),
+    ) );
 
     Dokan_Email::init()->new_seller_registered_mail( $user_id );
 }
 
 add_action( 'woocommerce_created_customer', 'dokan_on_create_seller', 10, 2);
 
+/**
+ * Change seller display name to store name
+ *
+ * @since 2.4.10 [Change seller display name to store name]
+ * 
+ * @param string $display_name
+ * 
+ * @return string $display_name
+ */
+function dokan_seller_displayname ( $display_name ) {
 
+    if ( dokan_is_user_seller ( get_current_user_id() ) && !is_admin() ) {
+
+        $seller_info = dokan_get_store_info ( get_current_user_id() );
+        $display_name = ( !empty( $seller_info['store_name'] ) ) ? $seller_info['store_name'] : $display_name;
+    
+    }
+
+    return $display_name;
+}
+
+add_filter( 'pre_user_display_name', 'dokan_seller_displayname' );
 
 /**
  * Get featured products
@@ -2793,7 +2819,15 @@ function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
 
     $selllers_count = count( $sellers );
 
-    $rates['flat_rate']->cost = $rates['flat_rate']->cost * $selllers_count;
+    if ( ! is_null( $rates['flat_rate'] ) ) {
+
+        $rates['flat_rate']->cost = $rates['flat_rate']->cost * $selllers_count;
+
+    } elseif ( ! is_null( $rates['international_delivery'] ) ) {
+
+        $rates['international_delivery']->cost = $rates['international_delivery']->cost * $selllers_count;
+
+    }
 
     return $rates;
 }

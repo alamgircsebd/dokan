@@ -38,6 +38,7 @@ class Dokan_Pro_Admin_Settings {
      */
     public function load_admin_settings( $capability, $menu_position ) {
 
+        add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), __( 'Refund Request', 'dokan' ), $capability, 'dokan-refund', array($this, 'refund_request') );
         add_submenu_page( 'dokan', __( 'Sellers Listing', 'dokan' ), __( 'All Sellers', 'dokan' ), $capability, 'dokan-sellers', array($this, 'seller_listing') );
         $report       = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array($this, 'report_page') );
         $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
@@ -200,6 +201,17 @@ class Dokan_Pro_Admin_Settings {
             wp_enqueue_style( 'dokan-chosen-style' );
             wp_enqueue_script( 'chosen' );
         }
+    }
+
+    /**
+     * Refund request template
+     *
+     * @since 2.4.11
+     *
+     * @return void
+     */
+    function refund_request() {
+        include dirname(__FILE__) . '/refund.php';
     }
 
     /**

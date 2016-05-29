@@ -1,14 +1,14 @@
 === Dokan Multivendor (Lite) ===
 Contributors: tareq1988, wedevs
-Donate Link: http://tareq.wedevs.com/donate/
-Tags: woocommerce, multivendor, multi-vendor, paypal, vendor, seller, store, sell, online
-Requires at least: 3.6
-Tested up to: 4.4
+Donate Link: http://tareq.co/donate/
+Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
+Requires at least: 4.4
+Tested up to: 4.4.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-The multi-vendor plugin for WooCommerce. Start your own marketplace in minutes!
+The pioneer multi-vendor plugin for WordPress. Start your own marketplace in minutes!
 
 == Description ==
 
@@ -118,10 +118,13 @@ A. Right now we have options for only changing the store banner page. We are wor
 A. Yes it does! We have [an add-on](http://wedevs.com/plugin/dokan/paypal-adaptive-payments/) that brings PayPal adaptive payment support.
 
 = Q. Will it be possible to take a cut or commission from the sales? =
-A. Yes, that's how Dokan works. In every sales, you can cut a commision from a order. That's configurable from Dokan settings.
+A. Yes, that's how Dokan works. In every sales, you can cut a commission from a order. That's configurable from Dokan settings.
 
 = Q. Can Dokan be used in a single seller mode? =
 A. Obviously, you can use this on a single seller site to give them a nice front-end experience.
+
+= Q. How to upgrade to the Pro version?
+A. You just delete the free version and install and activate the pro version. Nothing complicated! All your data will be safe on the database and some extra features will be added. You can even ask the support team to help you to migrate.
 
 
 == Screenshots ==
@@ -145,6 +148,18 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 
 == Changelog ==
 
+
+= v2.4.11 -> May 29, 2016 =
+---------------------
+- [new] Refund request from seller to admin by sellers order details page
+- [new] Tracker added
+- [fix] Checkout issue if flat rate shipping set as null
+- [fix] Change seller display name to store name
+- [fix] Multiple submit request on product add/edit
+- [fix] Undefine error on cart page for shipping additional price
+- [fix] Product edit page permission
+- [fix] Remove duplicate insert on dokan order table
+
 = v2.4.10 -> February 24, 2016 =
 ---------------------
 - [new] New dashboard menu added for 'store link', 'edit account' and 'sign out'
@@ -165,16 +180,16 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 - [fix] Order status translation issue on order listing page
 - [fix] Email not send to seller on new order issue fixed
 - [fix] Allow float number for seller percentage
-- [fix] Seo hook updated for Yoast to make compatible with WP 4.4
+- [fix] SEO hook updated for YOAST to make compatible with WP 4.4
 - [fix] Browser jump issue in tab view on click of tabs
 
 = v2.4.8 -> November 21, 2015 =
 ---------------------
 - [tweak] Email template override system added
 - [fix] Change dokan SEO admin option section
-- [fix] Ajaxurl fixed to prevent conflict
+- [fix] Ajax url fixed to prevent conflict
 - [fix] Fix Arrow (reverted) for pagination
-- [fix] Hide unapprove comment from store review tab
+- [fix] Hide unapproved comment from store review tab
 - [fix] Update cart discount meta on suborder create
 
 = v2.4.7 -> October 20, 2015 =
@@ -192,32 +207,32 @@ A. Obviously, you can use this on a single seller site to give them a nice front
 - [tweak] Added terms and condition option field on Registration form
 - [fix] Remove required for product per page field on store settings
 - [fix] Fix delete variation product issue on tab view for seller
-- [fix] Fix redudant data for guest users
+- [fix] Fix redundant data for guest users
 - [fix] Fix responsive issue on front page product listing
 - [fix] Seller store banner size to cover
-- [fix] Store template fix for twentytwelve theme
+- [fix] Store template fix for Twenty Twelve theme
 
 
 = v2.4.5 -> September 14, 2015 =
 
  * [fix] Fix responsive style issue for store page
- * [fix] Fix undefine parent order object issue on creat sub-order
+ * [fix] Fix undefined parent order object issue on creat sub-order
  * [fix] Fix seller dashboard product comments count on widget
 
 = v2.4.4 -> September 4, 2015 =
 
- * [new] Seller balance resync by checking unexpected order button added on tools page
+ * [new] Seller balance re-sync by checking unexpected order button added on tools page
  * [fix] Make some text translatable on contact seller widget
- * [fix] Optimise sql query to make regenerate process fast
+ * [fix] Optimize sql query to make regenerate process fast
  * [fix] Fix WooCommerce deactivate dependency issue
  * [fix] Fix plugin bulk activate issue with dokan welcome page
 
 = v2.4.3 -> August 25, 2015 =
 
- * [new] Welcome page on activation with resync button added
- * [tweak] Visual Progress bar added for resync Order progress
+ * [new] Welcome page on activation with re-sync button added
+ * [tweak] Visual Progress bar added for re-sync Order progress
  * [fix] Sub-order duplicate issue fixed
- * [fix] Fix wp editor compatible to 4.3
+ * [fix] Fix WP editor compatible to 4.3
  * [fix] Compatible with WordPress 4.3 widget __construct functions
  * [fix] Fix table name in sync table sql
  * [fix] Fix store review rewrite problem, Move store functionality in Dokan_Pro_Store class
@@ -238,7 +253,7 @@ A. Obviously, you can use this on a single seller site to give them a nice front
  * [fix] Update "dokan_post_input_box" function to add option for making text field and number field required
  * [fix] Fix balance separator problem on withdraw
  * [fix] Fix total sales balance display on seller dashboard page
- * [fix] Keep value saved of oveerride shipping fields meta even when the option uncheckd
+ * [fix] Keep value saved of override shipping fields meta even when the option unchecked
  * [fix] English language phrases correction on several place
  * [fix] Fix calculation of sub-orders in WooCommerce dashboard status widget sales query
 

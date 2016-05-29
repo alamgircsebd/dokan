@@ -121,6 +121,77 @@ class Dokan_Email {
 
 
     /**
+     * Send seller email notification when a new refund request is made
+     *
+     * @param WP_User $seller_mail
+     * @param int $order_id
+     * @param object $refund
+     */
+    function dokan_refund_seller_mail( $seller_mail, $order_id, $status, $amount, $refund_reason ) {
+        ob_start();
+        dokan_get_template_part( 'emails/refund-seller-mail' );
+        $body = ob_get_clean();
+        $find = array(
+            '%status%',
+            '%order_id%',
+            '%amount%',
+            '%reason%',
+            '%order_page%',
+            '%site_name%',
+            '%site_url%',
+        );
+
+        $replace = array(
+            $status,
+            $order_id,
+            $amount,
+            $refund_reason,
+            home_url() . '?page=dokan-refund&status=pending',
+            $this->get_from_name(),
+            home_url(),
+        );
+
+        $subject = sprintf( __( '[%s] Refund Request %s', 'dokan' ), $this->get_from_name(), $status );
+        $body = str_replace( $find, $replace, $body);
+
+        $this->send( $seller_mail, $subject, $body );
+        do_action( 'dokan_after_refund_seller_mail', $seller_mail, $subject, $body );
+    }
+
+
+    /**
+     * Send admin email notification when a new refund request is cancle
+     *
+     * @param string $seller_mail
+     * @param int $order_id
+     * @param int $refund_id
+     */
+    function dokan_refund_request( $order_id ) {
+        ob_start();
+        dokan_get_template_part( 'emails/refund-request' );
+        $body = ob_get_clean();
+        $find = array(
+            '%order_id%',
+            '%refund_page%',
+            '%site_name%',
+            '%site_url%',
+        );
+
+        $replace = array(
+            $order_id,
+            admin_url( 'admin.php?page=dokan-refund&status=pending' ),
+            $this->get_from_name(),
+            home_url(),
+        );
+
+        $subject = sprintf( __( '[%s] New Refund Request', 'dokan' ), $this->get_from_name() );
+        $body = str_replace( $find, $replace, $body);
+        $this->send( $this->admin_email(), $subject, $body );
+        do_action( 'after_dokan_refund_request', $this->admin_email(), $subject, $body );
+    }
+
+
+    /**
      * Prepare body for withdraw email
      *
      * @param string $body

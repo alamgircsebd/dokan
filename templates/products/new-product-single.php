@@ -5,6 +5,11 @@ global $post;
 $from_shortcode = false;
 
 if( isset( $post->ID ) && $post->ID && $post->post_type == 'product' ) {
+
+    if ( $post->post_author != get_current_user_id() ) {
+        wp_die( __( 'Access Denied', 'dokan' ) );
+    }
+    
     $post_id = $post->ID;
     $post_title = $post->post_title;
     $post_content = $post->post_content;
@@ -46,10 +51,6 @@ if ( !empty( $_sale_price_dates_from ) && !empty( $_sale_price_dates_to ) ) {
 }
 
 $_featured          = get_post_meta( $post_id, '_featured', true );
-// $_weight            = get_post_meta( $post_id, '_weight', true );
-// $_length            = get_post_meta( $post_id, '_length', true );
-// $_width             = get_post_meta( $post_id, '_width', true );
-// $_height            = get_post_meta( $post_id, '_height', true );
 $_downloadable      = get_post_meta( $post_id, '_downloadable', true );
 $_stock             = get_post_meta( $post_id, '_stock', true );
 $_stock_status      = get_post_meta( $post_id, '_stock_status', true );
@@ -167,10 +168,10 @@ if ( ! $from_shortcode ) {
                             <div class="content-half-part">
 
                                 <div class="dokan-form-group">
-                                    <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>">
+                                    <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>"/>
 
                                     <label for="post_title" class="form-label"><?php _e( 'Title', 'dokan' ); ?></label>
-                                    <div class="dokan-product-title-alert hidden dokan-alert dokan-alert-danger">
+                                    <div class="dokan-product-title-alert dokan-hide dokan-alert dokan-alert-danger">
                                             <?php _e('Please choose a Name !!!', 'dokan'); ?>
                                     </div>
                                     <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => __( 'Product name..', 'dokan' ), 'value' => $post_title ) ); ?>
@@ -226,7 +227,7 @@ if ( ! $from_shortcode ) {
                                     <div class="dokan-form-group">
                                         
                                         <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
-                                        <div class="dokan-product-cat-alert hidden dokan-alert dokan-alert-danger">
+                                        <div class="dokan-product-cat-alert dokan-hide dokan-alert dokan-alert-danger">
                                             <?php _e('Please choose a category !!!', 'dokan'); ?>
                                         </div>
                                         <?php

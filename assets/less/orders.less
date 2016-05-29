@@ -162,6 +162,11 @@
 }
 .dokan-panel {
 	.dokan-panel-body {
+		.woocommerce_order_items_wrapper {
+			table.woocommerce_order_items tbody tr td div small.refunded {
+				color: #f05025;
+			}
+		}
 		.wc-order-data-row {
 			table.wc-order-totals {
 				float: right;
@@ -169,6 +174,16 @@
 				tbody tr td.label {
 					color: #000;
 				}
+				tbody tr td.refunded-total {
+					color: #f05025;
+				}
+			}
+			.add-items {
+				padding-top: 10px;
+				float: right;
+			}
+			.refund-actions {
+				float: right;
 			}
 		}
 	}

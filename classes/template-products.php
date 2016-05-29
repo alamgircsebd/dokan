@@ -110,10 +110,11 @@ class Dokan_Template_Products {
         }
 
         if ( isset( $_POST['dokan_add_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_product_nonce'], 'dokan_add_new_product' ) ) {
-
+            
             $post_title     = trim( $_POST['post_title'] );
             $post_content   = trim( $_POST['post_content'] );
             $post_excerpt   = isset( $_POST['post_excerpt'] ) ? trim( $_POST['post_excerpt'] ) : '';
+            $_POST['_regular_price'] = isset(  $_POST['_regular_price'] ) ?  $_POST['_regular_price'] : '';
             $price          = floatval( $_POST['_regular_price'] );
             $featured_image = absint( $_POST['feat_image_id'] );
 
@@ -140,7 +141,9 @@ class Dokan_Template_Products {
             }
 
             if ( !self::$errors ) {
-
+                
+                $_POST['dokan_product_id'] = isset( $_POST['dokan_product_id'] ) ? $_POST['dokan_product_id'] : '';
+                
                 if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
                     $product_status = dokan_get_new_post_status();
                     $post_data = apply_filters( 'dokan_insert_product_post_data', array(
@@ -152,7 +155,7 @@ class Dokan_Template_Products {
                     ) );
 
                     $product_id = wp_insert_post( $post_data );
-
+                    
                 } else {
                     $post_id = (int)$_POST['dokan_product_id'];
                     $product_info = apply_filters( 'dokan_update_product_post_data', array(
@@ -172,6 +175,9 @@ class Dokan_Template_Products {
                     /** set images **/
                     if ( $featured_image ) {
                         set_post_thumbnail( $product_id, $featured_image );
+                    }else{
+                        
+                        delete_post_thumbnail( $product_id);
                     }
 
                     if( isset( $_POST['product_tag'] ) && !empty( $_POST['product_tag'] ) ) {
@@ -188,14 +194,17 @@ class Dokan_Template_Products {
                             wp_set_object_terms( $product_id, $cat_ids, 'product_cat' );
                         }
                     }
-
-                    /** Set Product type by default simple */
-                    if( isset( $_POST['_create_variation'] ) && $_POST['_create_variation'] == 'yes' ) {
-                        wp_set_object_terms( $product_id, 'variable', 'product_type' );
+                    
+                    if ( isset( $_POST['product-type'] ) ) {
+                        wp_set_object_terms( $product_id, $_POST['product-type'], 'product_type' );
                     } else {
-                        wp_set_object_terms( $product_id, 'simple', 'product_type' );
+                        /** Set Product type by default simple */
+                        if ( isset( $_POST['_create_variation'] ) && $_POST['_create_variation'] == 'yes' ) {
+                            wp_set_object_terms( $product_id, 'variable', 'product_type' );
+                        } else {
+                            wp_set_object_terms( $product_id, 'simple', 'product_type' );
+                        }
                     }
-
 
                     update_post_meta( $product_id, '_regular_price', $price );
                     update_post_meta( $product_id, '_sale_price', '' );
@@ -216,8 +225,12 @@ class Dokan_Template_Products {
                             Dokan_Email::init()->new_product_added( $product_id, $product_status );
                         }
                     }
-
-                    wp_redirect( add_query_arg( array( 'message' => 'success' ), dokan_edit_product_url( $product_id ) ) );
+                    
+                    if ( isset( $_POST['product-type'] ) ) {
+                        wp_set_object_terms( $product_id, $_POST['product-type'], 'product_type' );
+                    }
+                    $redirect_url = apply_filters( 'dokan_add_new_product_redirect', dokan_edit_product_url( $product_id ), $product_id );
+                    wp_redirect( add_query_arg( array( 'message' => 'success' ), $redirect_url ) );
                     exit;
                 }
             }
@@ -282,10 +295,12 @@ class Dokan_Template_Products {
                             wp_set_object_terms( $product_id, $cat_ids, 'product_cat' );
                         }
                     }
-
-                    /** Set Product type by default simple */
-                    wp_set_object_terms( $product_id, 'simple', 'product_type' );
-
+                    if ( isset( $_POST['product-type'] ) ) {
+                        wp_set_object_terms( $product_id, $_POST['product-type'], 'product_type' );
+                    } else {
+                        /** Set Product type by default simple */
+                        wp_set_object_terms( $product_id, 'simple', 'product_type' );
+                    }
                     update_post_meta( $product_id, '_regular_price', $price );
                     update_post_meta( $product_id, '_sale_price', '' );
                     update_post_meta( $product_id, '_price', $price );
@@ -367,9 +382,11 @@ class Dokan_Template_Products {
                         wp_set_object_terms( $post_id, $cat_ids, 'product_cat' );
                     }
                 }
-
-                wp_set_object_terms( $post_id, 'simple', 'product_type' );
-
+                if ( isset( $_POST['product-type'] ) ) {
+                    wp_set_object_terms( $product_id, $_POST['product-type'], 'product_type' );
+                } else {
+                    wp_set_object_terms( $post_id, 'simple', 'product_type' );
+                }
                 /**  Process all variation products meta */
                 dokan_process_product_meta( $post_id );
 
@@ -378,7 +395,7 @@ class Dokan_Template_Products {
                 if ( $featured_image ) {
                     set_post_thumbnail( $post_id, $featured_image );
                 }
-
+                
                 $edit_url = dokan_edit_product_url( $post_id );
                 wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
                 exit;

@@ -122,7 +122,7 @@
             
             if ( $( '#post_title' ).val().trim() == '' ) {
                 $( '#post_title' ).focus();
-                $( 'div.dokan-product-title-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-title-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-title-alert' ).hide();
@@ -130,12 +130,12 @@
             
             if ( $( 'select.product_cat' ).val() == -1 ) {                
                 $( 'select.product_cat' ).focus();
-                $( 'div.dokan-product-cat-alert' ).removeClass('hidden');
+                $( 'div.dokan-product-cat-alert' ).removeClass('dokan-hide');
                 return;
             }else{
                 $( 'div.dokan-product-cat-alert' ).hide();
             }            
-            
+            $( 'input[type=submit]' ).attr( 'disabled', 'disabled' );
             this.submit();            
         },
 
@@ -150,6 +150,7 @@
             
             $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
                 $( this ).tagit( {
+                    allowSpaces: true,
                     availableTags: $( this ).data('preset_attr').split(','),
                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -362,7 +363,8 @@
                     new_field.removeAttr('data-preset_attr')
                              .attr('value', '');
  
-                    new_field.tagit({                            
+                    new_field.tagit({  
+                        allowSpaces: true,
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
@@ -394,6 +396,7 @@
                             
                             $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -633,6 +636,7 @@
                             
                             $attribute_options.each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -678,7 +682,8 @@
                     new_field.removeAttr('data-preset_attr')
                              .attr('value', '');
                          
-                    new_field.tagit({                            
+                    new_field.tagit({  
+                        allowSpaces: true,
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
@@ -713,6 +718,7 @@
                             
                             $( 'input.dokan-single-attribute-option-values' ).each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
