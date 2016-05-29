@@ -148,6 +148,18 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+
+= v2.4.11 -> May 29, 2016 =
+---------------------
+- [new] Refund request from seller to admin by sellers order details page
+- [new] Tracker added
+- [fix] Checkout issue if flat rate shipping set as null
+- [fix] Change seller display name to store name
+- [fix] Multiple submit request on product add/edit
+- [fix] Undefine error on cart page for shipping additional price
+- [fix] Product edit page permission
+- [fix] Remove duplicate insert on dokan order table
+
 = v2.4.10 -> February 24, 2016 =
 ---------------------
 - [new] New dashboard menu added for 'store link', 'edit account' and 'sign out'

@@ -19,9 +19,9 @@
         <table class="widefat withdraw-table">
             <thead>
                 <tr>
-                    <th class="check-column">
+                    <td class="check-column">
                         <input type="checkbox" class="dokan-withdraw-allcheck">
-                    </th>
+                    </td>
                     <th><?php _e( 'Username', 'dokan' ); ?></th>
                     <th><?php _e( 'Name', 'dokan' ); ?></th>
                     <th><?php _e( 'Shop Name', 'dokan' ); ?></th>
@@ -95,9 +95,9 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="check-column">
+                    <td class="check-column">
                         <input type="checkbox" class="dokan-withdraw-allcheck">
-                    </th>
+                    </td>
                     <th><?php _e( 'Username', 'dokan' ); ?></th>
                     <th><?php _e( 'Name', 'dokan' ); ?></th>
                     <th><?php _e( 'Shop Name', 'dokan' ); ?></th>

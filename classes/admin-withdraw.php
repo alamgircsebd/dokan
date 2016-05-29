@@ -187,15 +187,15 @@ class Dokan_Admin_Withdraw extends Dokan_Withdraw {
 
             switch ( $_GET['message'] ) {
             case 'trashed':
-                $message = __( 'Requests DELETED!', 'dokan' );
+                $message = __( 'Requests Deleted!', 'dokan' );
                 break;
 
             case 'cancelled':
-                $message = __( 'Requests CANCELLED!', 'dokan' );
+                $message = __( 'Requests Cancelled!', 'dokan' );
                 break;
 
             case 'approved':
-                $message = __( 'Requests APPROVED!', 'dokan' );
+                $message = __( 'Requests Approved!', 'dokan' );
                 break;
             }
 
@@ -213,9 +213,9 @@ class Dokan_Admin_Withdraw extends Dokan_Withdraw {
             <table class="widefat withdraw-table">
                 <thead>
                     <tr>
-                        <th class="check-column">
+                        <td class="check-column">
                             <input type="checkbox" class="dokan-withdraw-allcheck">
-                        </th>
+                        </td>
                         <th><?php _e( 'User Name', 'dokan' ); ?></th>
                         <th><?php _e( 'Amount', 'dokan' ); ?></th>
                         <th><?php _e( 'Method', 'dokan' ); ?></th>
@@ -227,9 +227,9 @@ class Dokan_Admin_Withdraw extends Dokan_Withdraw {
                 </thead>
                 <tfoot>
                     <tr>
-                        <th class="check-column">
+                        <td class="check-column">
                             <input type="checkbox" class="dokan-withdraw-allcheck">
-                        </th>
+                        </td>
                         <th><?php _e( 'User Name', 'dokan' ); ?></th>
                         <th><?php _e( 'Amount', 'dokan' ); ?></th>
                         <th><?php _e( 'Method', 'dokan' ); ?></th>
@@ -240,7 +240,7 @@ class Dokan_Admin_Withdraw extends Dokan_Withdraw {
                     </tr>
                 </tfoot>
 
-            <?php
+        <?php
         if ( $result ) {
             $count = 0;
             foreach ( $result as $key => $row ) {
