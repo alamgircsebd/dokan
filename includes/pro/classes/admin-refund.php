@@ -134,15 +134,15 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
 
             switch ( $_GET['message'] ) {
             case 'trashed':
-                $message = __( 'Requests DELETED!', 'dokan' );
+                $message = __( 'Request Deleted!', 'dokan' );
                 break;
 
             case 'cancelled':
-                $message = __( 'Requests CANCELLED!', 'dokan' );
+                $message = __( 'Request Cancelled!', 'dokan' );
                 break;
 
             case 'approved':
-                $message = __( 'Requests APPROVED!', 'dokan' );
+                $message = __( 'Request Approved!', 'dokan' );
                 break;
             }
 
@@ -160,9 +160,9 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
             <table class="widefat refund-table">
                 <thead>
                     <tr>
-                        <th class="check-column">
+                        <td class="check-column">
                             <input type="checkbox" class="dokan-refund-allcheck">
-                        </th>
+                        </td>
                         <th><?php _e( 'Order ID', 'dokan' ); ?></th>
                         <th><?php _e( 'Seller', 'dokan' ); ?></th>
                         <th><?php _e( 'Refund Amount', 'dokan' ); ?></th>
@@ -173,9 +173,9 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                 </thead>
                 <tfoot>
                     <tr>
-                        <th class="check-column">
+                        <td class="check-column">
                             <input type="checkbox" class="dokan-refund-allcheck">
-                        </th>
+                        </td>
                         <th><?php _e( 'Order ID', 'dokan' ); ?></th>
                         <th><?php _e( 'Seller', 'dokan' ); ?></th>
                         <th><?php _e( 'Refund Amount', 'dokan' ); ?></th>
@@ -210,7 +210,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                     <td>
                         <strong><a href="<?php echo admin_url( 'post.php?post=' . $row->order_id . '&action=edit' ); ?>"><?php echo '#' . $row->order_id; ?></a></strong>
                         <div class="row-actions">
-                            <?php if ( $status == 'pending' ) { 
+                            <?php if ( $status == 'pending' ) {
 
                                 if ( $gateway_supports_refunds ) { ?>
                                     <span class="edit"><a href="#" class="dokan-refund-action do-api-refund" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php printf( _x( 'Refund via %s', 'Refund', 'dokan' ), $gateway_name ); ?></a> | </span>
