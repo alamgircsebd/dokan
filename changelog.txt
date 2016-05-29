@@ -1,7 +1,8 @@
 
-v2.4.11 -> May 11, 2016
+v2.4.11 -> May 29, 2016
 ---------------------
 - [new] Refund request from seller to admin by sellers order details page
+- [new] Tracker added
 - [fix] Checkout issue if flat rate shipping set as null
 - [fix] Change seller display name to store name
 - [fix] Multiple submit request on product add/edit

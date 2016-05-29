@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.4.10
+Version: 2.4.11
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.4.10' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4.11' );
 define( 'DOKAN_FILE', __FILE__ );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
@@ -448,6 +448,7 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/top-rated-product.php';
         require_once $inc_dir . 'widgets/store-menu.php';
         require_once $inc_dir . 'wc-functions.php';
+        require_once $lib_dir . 'class-wedevs-insights.php';
 
         // Load free or pro moduels
         if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
@@ -537,6 +538,7 @@ final class WeDevs_Dokan {
         }
 
         new Dokan_Rewrites();
+        new Dokan_Tracker();
         Dokan_Email::init();
 
         if ( is_user_logged_in() ) {
