@@ -199,7 +199,6 @@ jQuery(function($) {
 
 });
 
-
 /*global woocommerce_admin_meta_boxes, woocommerce_admin, accounting */
 ;(function($) {
     /**
@@ -446,6 +445,7 @@ jQuery(function($) {
     dokan_seller_meta_boxes_order_items.init();
 
 })(jQuery);
+
 
 ;(function($){
 
@@ -1750,18 +1750,18 @@ jQuery(function($) {
             var self = $(this),
                 comment_id = self.data('comment_id'),
                 comment_status = self.data('cmt_status'),
-                page_status = self.data('page_status'),
-                post_type = self.data('post_type'),
-                curr_page = self.data('curr_page'),
+				page_status = self.data('page_status'),
+				post_type = self.data('post_type'),
+				curr_page = self.data('curr_page'),
                 tr = self.closest('tr'),
                 data = {
                     'action': 'dokan_comment_status',
                     'comment_id': comment_id,
                     'comment_status': comment_status,
-                    'page_status': page_status,
-                    'post_type': post_type,
-                    'curr_page': curr_page,
-                    'nonce': dokan.nonce
+					'page_status': page_status,
+					'post_type': post_type,
+					'curr_page': curr_page,
+					'nonce': dokan.nonce
                 };
 
 
@@ -1786,11 +1786,11 @@ jQuery(function($) {
 
                 if(resp.data['pending'] == null) resp.data['pending'] = 0;
                 if(resp.data['spam'] == null) resp.data['spam'] = 0;
-                if(resp.data['trash'] == null) resp.data['trash'] = 0;
+				if(resp.data['trash'] == null) resp.data['trash'] = 0;
 
                 $('.comments-menu-pending').text(resp.data['pending']);
                 $('.comments-menu-spam').text(resp.data['spam']);
-                $('.comments-menu-trash').text(resp.data['trash']);
+				$('.comments-menu-trash').text(resp.data['trash']);
             });
         },
 
@@ -1838,8 +1838,8 @@ jQuery(function($) {
                     'email': parent.find('input.dokan-cmt-author-email').val(),
                     'url': parent.find('input.dokan-cmt-author-url').val(),
                     'status': parent.find('input.dokan-cmt-status').val(),
-                    'nonce': dokan.nonce,
-                    'post_type' : parent.find('input.dokan-cmt-post-type').val(),
+					'nonce': dokan.nonce,
+					'post_type' : parent.find('input.dokan-cmt-post-type').val(),
                 };
 
             $.post(dokan.ajaxurl, data, function(res) {
