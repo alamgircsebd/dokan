@@ -211,21 +211,12 @@ jQuery(function($) {
             $( '#woocommerce-order-items' )
                 .on( 'click', 'button.refund-items', this.refund_items )
                 .on( 'click', '.cancel-action', this.cancel )
-                .on( 'click', 'input.check-column', this.bulk_actions.check_column )
-                .on( 'click', '.do_bulk_action', this.bulk_actions.do_bulk_action )
-                .on( 'click', 'button.save-action', this.save_line_items )
-                .on( 'click', 'a.edit-order-item', this.edit_item )
-                .on( 'click', 'a.delete-order-item', this.delete_item )
 
                 // Refunds
-                .on( 'click', '.delete_refund', this.refunds.delete_refund )
                 .on( 'click', 'button.do-api-refund, button.do-manual-refund', this.refunds.do_refund )
                 .on( 'change', '.refund input.refund_line_total, .refund input.refund_line_tax', this.refunds.input_changed )
                 .on( 'change keyup', '.wc-order-refund-items #refund_amount', this.refunds.amount_changed )
                 .on( 'change', 'input.refund_order_item_qty', this.refunds.refund_quantity_changed )
-
-                // Qty
-                .on( 'change', 'input.quantity', this.quantity_changed )
 
                 // Subtotal/total
                 .on( 'keyup', '.woocommerce_order_items .split-input input:eq(0)', function() {
@@ -238,14 +229,6 @@ jQuery(function($) {
                 .on( 'keyup', '.woocommerce_order_items .split-input input:eq(1)', function() {
                     $( this ).removeClass( 'match-total' );
                 })
-
-                // Meta
-                .on( 'click', 'button.add_order_item_meta', this.item_meta.add )
-                .on( 'click', 'button.remove_order_item_meta', this.item_meta.remove );
-
-            // $( 'body' )
-            //     .on( 'wc_backbone_modal_loaded', this.backbone.init )
-            //     .on( 'wc_backbone_modal_response', this.backbone.response );
         },
 
         block: function() {
@@ -265,72 +248,22 @@ jQuery(function($) {
         reload_items: function() {
             var data = {
                 order_id: dokan_refund.post_id,
-                action:   'woocommerce_load_order_items',
+                action:   'dokan_load_order_items',
                 security: dokan_refund.order_item_nonce
             };
 
-            dokan_seller_meta_boxes_order_items.block();
+            dokan_seller_meta_boxes_order_items.block();            
 
             $.ajax({
                 url:  dokan_refund.ajax_url,
                 data: data,
                 type: 'POST',
                 success: function( response ) {
-                    $( '#woocommerce-order-items .inside' ).empty();
-                    $( '#woocommerce-order-items .inside' ).append( response );
+                    $( '.dokan-panel-default #woocommerce-order-items' ).empty();
+                    $( '.dokan-panel-default #woocommerce-order-items' ).append( response );
                     // wc_meta_boxes_order.init_tiptip();
-                    dokan_seller_meta_boxes_order_items.unblock();
                 }
             });
-        },
-
-        // When the qty is changed, increase or decrease costs
-        quantity_changed: function() {
-            var $row          = $( this ).closest( 'tr.item' );
-            var qty           = $( this ).val();
-            var o_qty         = $( this ).attr( 'data-qty' );
-            var line_total    = $( 'input.line_total', $row );
-            var line_subtotal = $( 'input.line_subtotal', $row );
-
-            // Totals
-            var unit_total = accounting.unformat( line_total.attr( 'data-total' ), dokan_refund.mon_decimal_point ) / o_qty;
-            line_total.val(
-                parseFloat( accounting.formatNumber( unit_total * qty, dokan_refund.rounding_precision, '' ) )
-                    .toString()
-                    .replace( '.', dokan_refund.mon_decimal_point )
-            );
-
-            var unit_subtotal = accounting.unformat( line_subtotal.attr( 'data-subtotal' ), dokan_refund.mon_decimal_point ) / o_qty;
-            line_subtotal.val(
-                parseFloat( accounting.formatNumber( unit_subtotal * qty, dokan_refund.rounding_precision, '' ) )
-                    .toString()
-                    .replace( '.', dokan_refund.mon_decimal_point )
-            );
-
-            // Taxes
-            $( 'td.line_tax', $row ).each(function() {
-                var line_total_tax = $( 'input.line_tax', $( this ) );
-                var unit_total_tax = accounting.unformat( line_total_tax.attr( 'data-total_tax' ), dokan_refund.mon_decimal_point ) / o_qty;
-                if ( 0 < unit_total_tax ) {
-                    line_total_tax.val(
-                        parseFloat( accounting.formatNumber( unit_total_tax * qty, dokan_refund.rounding_precision, '' ) )
-                            .toString()
-                            .replace( '.', dokan_refund.mon_decimal_point )
-                    );
-                }
-
-                var line_subtotal_tax = $( 'input.line_subtotal_tax', $( this ) );
-                var unit_subtotal_tax = accounting.unformat( line_subtotal_tax.attr( 'data-subtotal_tax' ), dokan_refund.mon_decimal_point ) / o_qty;
-                if ( 0 < unit_subtotal_tax ) {
-                    line_subtotal_tax.val(
-                        parseFloat( accounting.formatNumber( unit_subtotal_tax * qty, dokan_refund.rounding_precision, '' ) )
-                            .toString()
-                            .replace( '.', dokan_refund.mon_decimal_point )
-                    );
-                }
-            });
-
-            $( this ).trigger( 'quantity_changed' );
         },
 
         refund_items: function() {
@@ -353,70 +286,6 @@ jQuery(function($) {
             if ( 'true' === $( this ).attr( 'data-reload' ) ) {
                 dokan_seller_meta_boxes_order_items.reload_items();
             }
-
-            return false;
-        },
-
-        edit_item: function() {
-            $( this ).closest( 'tr' ).find( '.view' ).hide();
-            $( this ).closest( 'tr' ).find( '.edit' ).show();
-            $( this ).hide();
-            $( 'button.add-line-item' ).click();
-            $( 'button.cancel-action' ).attr( 'data-reload', true );
-            return false;
-        },
-
-        delete_item: function() {
-            var answer = window.confirm( dokan_refund.remove_item_notice );
-
-            if ( answer ) {
-                var $item         = $( this ).closest( 'tr.item, tr.fee, tr.shipping' );
-                var order_item_id = $item.attr( 'data-order_item_id' );
-
-                dokan_seller_meta_boxes_order_items.block();
-
-                var data = {
-                    order_item_ids: order_item_id,
-                    action:         'woocommerce_remove_order_item',
-                    security:       dokan_refund.order_item_nonce
-                };
-
-                $.ajax({
-                    url:     dokan_refund.ajax_url,
-                    data:    data,
-                    type:    'POST',
-                    success: function( response ) {
-                        $item.remove();
-                        dokan_seller_meta_boxes_order_items.unblock();
-                    }
-                });
-            }
-            return false;
-        },
-
-        save_line_items: function() {
-            var data = {
-                order_id: dokan_refund.post_id,
-                items:    $( 'table.woocommerce_order_items :input[name], .wc-order-totals-items :input[name]' ).serialize(),
-                action:   'woocommerce_save_order_items',
-                security: dokan_refund.order_item_nonce
-            };
-
-            dokan_seller_meta_boxes_order_items.block();
-
-            $.ajax({
-                url:  dokan_refund.ajax_url,
-                data: data,
-                type: 'POST',
-                success: function( response ) {
-                    $( '#woocommerce-order-items .inside' ).empty();
-                    $( '#woocommerce-order-items .inside' ).append( response );
-                    // wc_meta_boxes_order.init_tiptip();
-                    dokan_seller_meta_boxes_order_items.unblock();
-                }
-            });
-
-            $( this ).trigger( 'items_saved' );
 
             return false;
         },
@@ -462,7 +331,7 @@ jQuery(function($) {
                     });
 
                     var data = {
-                        action:                 'woocommerce_refund_line_items',
+                        action:                 'dokan_refund_request',
                         order_id:               dokan_refund.post_id,
                         refund_amount:          refund_amount,
                         refund_reason:          refund_reason,
@@ -476,45 +345,16 @@ jQuery(function($) {
 
                     $.post( dokan_refund.ajax_url, data, function( response ) {
                         if ( true === response.success ) {
+                            window.alert( response.data );
                             dokan_seller_meta_boxes_order_items.reload_items();
-
-                            if ( 'fully_refunded' === response.data.status ) {
-                                // Redirect to same page for show the refunded status
-                                window.location.href = window.location.href;
-                            }
                         } else {
-                            window.alert( response.data.error );
+                            window.alert( response.data );
                             dokan_seller_meta_boxes_order_items.unblock();
                         }
                     });
                 } else {
                     dokan_seller_meta_boxes_order_items.unblock();
                 }
-            },
-
-            delete_refund: function() {
-                if ( window.confirm( dokan_refund.i18n_delete_refund ) ) {
-                    var $refund   = $( this ).closest( 'tr.refund' );
-                    var refund_id = $refund.attr( 'data-order_refund_id' );
-
-                    dokan_seller_meta_boxes_order_items.block();
-
-                    var data = {
-                        action:    'woocommerce_delete_refund',
-                        refund_id: refund_id,
-                        security:  dokan_refund.order_item_nonce,
-                    };
-
-                    $.ajax({
-                        url:     dokan_refund.ajax_url,
-                        data:    data,
-                        type:    'POST',
-                        success: function( response ) {
-                            dokan_seller_meta_boxes_order_items.reload_items();
-                        }
-                    });
-                }
-                return false;
             },
 
             input_changed: function() {
@@ -601,189 +441,12 @@ jQuery(function($) {
                 $( this ).trigger( 'refund_quantity_changed' );
             }
         },
-
-        item_meta: {
-
-            add: function() {
-                var $button = $( this );
-                var $item = $button.closest( 'tr.item' );
-
-                var data = {
-                    order_item_id: $item.attr( 'data-order_item_id' ),
-                    action:        'woocommerce_add_order_item_meta',
-                    security:      dokan_refund.order_item_nonce
-                };
-
-                dokan_seller_meta_boxes_order_items.block();
-
-                $.ajax({
-                    url: dokan_refund.ajax_url,
-                    data: data,
-                    type: 'POST',
-                    success: function( response ) {
-                        $item.find('tbody.meta_items').append( response );
-                        dokan_seller_meta_boxes_order_items.unblock();
-                    }
-                });
-
-                return false;
-            },
-
-            remove: function() {
-                if ( window.confirm( dokan_refund.remove_item_meta ) ) {
-                    var $row = $( this ).closest( 'tr' );
-
-                    var data = {
-                        meta_id:  $row.attr( 'data-meta_id' ),
-                        action:   'woocommerce_remove_order_item_meta',
-                        security: dokan_refund.order_item_nonce
-                    };
-
-                    dokan_seller_meta_boxes_order_items.block();
-
-                    $.ajax({
-                        url: dokan_refund.ajax_url,
-                        data: data,
-                        type: 'POST',
-                        success: function( response ) {
-                            $row.hide();
-                            dokan_seller_meta_boxes_order_items.unblock();
-                        }
-                    });
-                }
-                return false;
-            }
-        },
-
-        bulk_actions: {
-
-            check_column: function(){
-                if ( $( this ).is( ':checked' ) ) {
-                    $( '#woocommerce-order-items' ).find( '.check-column input' ).attr( 'checked', 'checked' );
-                } else {
-                    $( '#woocommerce-order-items' ).find( '.check-column input' ).removeAttr( 'checked' );
-                }
-            },
-
-            do_bulk_action: function() {
-                var action        = $( this ).closest( '.bulk-actions' ).find( 'select' ).val();
-                var selected_rows = $( '#woocommerce-order-items' ).find( '.check-column input:checked' );
-                var item_ids      = [];
-
-                $( selected_rows ).each( function() {
-                    var $item = $( this ).closest( 'tr' );
-
-                    if ( $item.attr( 'data-order_item_id' ) ) {
-                        item_ids.push( $item.attr( 'data-order_item_id' ) );
-                    }
-                } );
-
-                if ( item_ids.length === 0 ) {
-                    window.alert( dokan_refund.i18n_select_items );
-                    return;
-                }
-
-                if ( dokan_seller_meta_boxes_order_items.bulk_actions[ action ] ) {
-                    dokan_seller_meta_boxes_order_items.bulk_actions[action]( selected_rows, item_ids );
-                }
-
-                return false;
-            },
-
-            delete: function( selected_rows, item_ids ) {
-                if ( window.confirm( dokan_refund.remove_item_notice ) ) {
-
-                    dokan_seller_meta_boxes_order_items.block();
-
-                    var data = {
-                        order_item_ids: item_ids,
-                        action:         'woocommerce_remove_order_item',
-                        security:       dokan_refund.order_item_nonce
-                    };
-
-                    $.ajax({
-                        url: dokan_refund.ajax_url,
-                        data: data,
-                        type: 'POST',
-                        success: function( response ) {
-                            $( selected_rows ).each(function() {
-                                $( this ).closest( 'tr' ).remove();
-                            });
-                            dokan_seller_meta_boxes_order_items.unblock();
-                        }
-                    });
-                }
-            },
-
-            increase_stock: function( selected_rows, item_ids ) {
-                dokan_seller_meta_boxes_order_items.block();
-
-                var quantities = {};
-
-                $( selected_rows ).each(function() {
-
-                    var $item = $( this ).closest( 'tr.item, tr.fee' );
-                    var $qty  = $item.find( 'input.quantity' );
-
-                    quantities[ $item.attr( 'data-order_item_id' ) ] = $qty.val();
-                });
-
-                var data = {
-                    order_id:       dokan_refund.post_id,
-                    order_item_ids: item_ids,
-                    order_item_qty: quantities,
-                    action:         'woocommerce_increase_order_item_stock',
-                    security:       dokan_refund.order_item_nonce
-                };
-
-                $.ajax({
-                    url: dokan_refund.ajax_url,
-                    data: data,
-                    type: 'POST',
-                    success: function( response ) {
-                        window.alert( response );
-                        dokan_seller_meta_boxes_order_items.unblock();
-                    }
-                });
-            },
-
-            reduce_stock: function( selected_rows, item_ids ) {
-                dokan_seller_meta_boxes_order_items.block();
-
-                var quantities = {};
-
-                $( selected_rows ).each(function() {
-
-                    var $item = $( this ).closest( 'tr.item, tr.fee' );
-                    var $qty  = $item.find( 'input.quantity' );
-
-                    quantities[ $item.attr( 'data-order_item_id' ) ] = $qty.val();
-                });
-
-                var data = {
-                    order_id:       dokan_refund.post_id,
-                    order_item_ids: item_ids,
-                    order_item_qty: quantities,
-                    action:         'woocommerce_reduce_order_item_stock',
-                    security:       dokan_refund.order_item_nonce
-                };
-
-                $.ajax({
-                    url: dokan_refund.ajax_url,
-                    data: data,
-                    type: 'POST',
-                    success: function( response ) {
-                        window.alert( response );
-                        dokan_seller_meta_boxes_order_items.unblock();
-                    }
-                } );
-            }
-        },
     };
 
     dokan_seller_meta_boxes_order_items.init();
 
 })(jQuery);
+
 ;(function($){
 
     var variantsHolder = $('#variants-holder');
@@ -936,6 +599,7 @@ jQuery(function($) {
             
             $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
                 $( this ).tagit( {
+                    allowSpaces: true,
                     availableTags: $( this ).data('preset_attr').split(','),
                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -1148,7 +812,8 @@ jQuery(function($) {
                     new_field.removeAttr('data-preset_attr')
                              .attr('value', '');
  
-                    new_field.tagit({                            
+                    new_field.tagit({  
+                        allowSpaces: true,
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
@@ -1180,6 +845,7 @@ jQuery(function($) {
                             
                             $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -1419,6 +1085,7 @@ jQuery(function($) {
                             
                             $attribute_options.each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -1464,7 +1131,8 @@ jQuery(function($) {
                     new_field.removeAttr('data-preset_attr')
                              .attr('value', '');
                          
-                    new_field.tagit({                            
+                    new_field.tagit({  
+                        allowSpaces: true,
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
@@ -1499,6 +1167,7 @@ jQuery(function($) {
                             
                             $( 'input.dokan-single-attribute-option-values' ).each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -2081,18 +1750,18 @@ jQuery(function($) {
             var self = $(this),
                 comment_id = self.data('comment_id'),
                 comment_status = self.data('cmt_status'),
-				page_status = self.data('page_status'),
-				post_type = self.data('post_type'),
-				curr_page = self.data('curr_page'),
+                page_status = self.data('page_status'),
+                post_type = self.data('post_type'),
+                curr_page = self.data('curr_page'),
                 tr = self.closest('tr'),
                 data = {
                     'action': 'dokan_comment_status',
                     'comment_id': comment_id,
                     'comment_status': comment_status,
-					'page_status': page_status,
-					'post_type': post_type,
-					'curr_page': curr_page,
-					'nonce': dokan.nonce
+                    'page_status': page_status,
+                    'post_type': post_type,
+                    'curr_page': curr_page,
+                    'nonce': dokan.nonce
                 };
 
 
@@ -2117,11 +1786,11 @@ jQuery(function($) {
 
                 if(resp.data['pending'] == null) resp.data['pending'] = 0;
                 if(resp.data['spam'] == null) resp.data['spam'] = 0;
-				if(resp.data['trash'] == null) resp.data['trash'] = 0;
+                if(resp.data['trash'] == null) resp.data['trash'] = 0;
 
                 $('.comments-menu-pending').text(resp.data['pending']);
                 $('.comments-menu-spam').text(resp.data['spam']);
-				$('.comments-menu-trash').text(resp.data['trash']);
+                $('.comments-menu-trash').text(resp.data['trash']);
             });
         },
 
@@ -2169,8 +1838,8 @@ jQuery(function($) {
                     'email': parent.find('input.dokan-cmt-author-email').val(),
                     'url': parent.find('input.dokan-cmt-author-url').val(),
                     'status': parent.find('input.dokan-cmt-status').val(),
-					'nonce': dokan.nonce,
-					'post_type' : parent.find('input.dokan-cmt-post-type').val(),
+                    'nonce': dokan.nonce,
+                    'post_type' : parent.find('input.dokan-cmt-post-type').val(),
                 };
 
             $.post(dokan.ajaxurl, data, function(res) {

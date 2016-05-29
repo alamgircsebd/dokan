@@ -121,6 +121,77 @@ class Dokan_Email {
 
 
     /**
+     * Send seller email notification when a new refund request is made
+     *
+     * @param WP_User $seller_mail
+     * @param int $order_id
+     * @param object $refund
+     */
+    function dokan_refund_seller_mail( $seller_mail, $order_id, $status, $amount, $refund_reason ) {
+        ob_start();
+        dokan_get_template_part( 'emails/refund-seller-mail' );
+        $body = ob_get_clean();
+        $find = array(
+            '%status%',
+            '%order_id%',
+            '%amount%',
+            '%reason%',
+            '%order_page%',
+            '%site_name%',
+            '%site_url%',
+        );
+
+        $replace = array(
+            $status,
+            $order_id,
+            $amount,
+            $refund_reason,
+            home_url() . '?page=dokan-refund&status=pending',
+            $this->get_from_name(),
+            home_url(),
+        );
+
+        $subject = sprintf( __( '[%s] Refund Request %s', 'dokan' ), $this->get_from_name(), $status );
+        $body = str_replace( $find, $replace, $body);
+
+        $this->send( $seller_mail, $subject, $body );
+        do_action( 'dokan_after_refund_seller_mail', $seller_mail, $subject, $body );
+    }
+
+
+    /**
+     * Send admin email notification when a new refund request is cancle
+     *
+     * @param string $seller_mail
+     * @param int $order_id
+     * @param int $refund_id
+     */
+    function dokan_refund_request( $order_id ) {
+        ob_start();
+        dokan_get_template_part( 'emails/refund-request' );
+        $body = ob_get_clean();
+        $find = array(
+            '%order_id%',
+            '%refund_page%',
+            '%site_name%',
+            '%site_url%',
+        );
+
+        $replace = array(
+            $order_id,
+            admin_url( 'admin.php?page=dokan-refund&status=pending' ),
+            $this->get_from_name(),
+            home_url(),
+        );
+
+        $subject = sprintf( __( '[%s] New Refund Request', 'dokan' ), $this->get_from_name() );
+        $body = str_replace( $find, $replace, $body);
+        $this->send( $this->admin_email(), $subject, $body );
+        do_action( 'after_dokan_refund_request', $this->admin_email(), $subject, $body );
+    }
+
+
+    /**
      * Prepare body for withdraw email
      *
      * @param string $body
@@ -176,82 +247,6 @@ class Dokan_Email {
 
         $this->send( $this->admin_email(), $subject, $body );
         do_action( 'after_new_withdraw_request', $this->admin_email(), $subject, $body );
-    }
-
-
-    /**
-     * Send admin email notification when a new refund request is made
-     *
-     * @param WP_User $user
-     * @param int $order_id
-     * @param object $refund
-     */
-    function new_refund_request( $user, $order_id, $refund ) {
-        ob_start();
-        dokan_get_template_part( 'emails/refund-new' );
-        $body = ob_get_clean();
-        $find = array(
-            '%username%',
-            '%amount%',
-            '%reason%',
-            '%order_id%',
-            '%profile_url%',
-            '%order_page%',
-            '%parent_order%',
-            '%site_name%',
-            '%site_url%',
-        );
-
-        $replace = array(
-            $user->user_login,
-            $refund->get_refund_amount(),
-            esc_html( $refund->get_refund_reason() ),
-            $order_id,
-            admin_url( 'user-edit.php?user_id=' . $user->ID ),
-            admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
-            (dokan_is_sub_order($order_id)) ? 'This is a sub order of <a href="' . admin_url( 'post.php?post=' . wp_get_post_parent_id( $order_id ) . '&action=edit' ) . '">#' . wp_get_post_parent_id( $order_id ) . '</a>. Please create the same refund on parent order also.' : '',
-            $this->get_from_name(),
-            home_url(),
-        );
-
-        $subject = sprintf( __( '[%s] New Refund Request', 'dokan' ), $this->get_from_name() );
-        $body = str_replace( $find, $replace, $body);
-
-        $this->send( $this->admin_email(), $subject, $body );
-        do_action( 'after_new_refund_request', $this->admin_email(), $subject, $body );
-    }
-
-
-    /**
-     * Send admin email notification when a new refund request is cancle
-     *
-     * @param string $seller_mail
-     * @param int $order_id
-     * @param int $refund_id
-     */
-    function delete_refund_request( $seller_mail, $order_id, $refund_id ) {
-        ob_start();
-        dokan_get_template_part( 'emails/refund-delete' );
-        $body = ob_get_clean();
-        $find = array(
-            '%order_id%',
-            '%order_page%',
-            '%site_name%',
-            '%site_url%',
-        );
-
-        $replace = array(
-            $order_id,
-            is_admin() ? home_url() . '/dashboard/orders/?order_id=' . $order_id : admin_url( 'post.php?post=' . $order_id . '&action=edit' ),
-            $this->get_from_name(),
-            home_url(),
-        );
-
-        $subject = sprintf( __( '[%s] Refund Request Cancled', 'dokan' ), $this->get_from_name() );
-        $body = str_replace( $find, $replace, $body);
-        $mail = is_admin() ? $seller_mail : $this->admin_email();
-        $this->send( $mail, $subject, $body );
-        do_action( 'after_cancle_refund_request', $mail, $subject, $body );
     }
 
 

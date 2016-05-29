@@ -37,3 +37,40 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 }
 
+
+/**
+ * Get refund counts, used in admin area
+ *
+ *  @since 2.4.11
+ *
+ * @global WPDB $wpdb
+ * @return array
+ */
+function dokan_get_refund_count() {
+    global $wpdb;
+
+    $cache_key = 'dokan_refund_count';
+    $counts = wp_cache_get( $cache_key );
+
+    if ( false === $counts ) {
+
+        $counts = array( 'pending' => 0, 'completed' => 0, 'cancelled' => 0 );
+        $sql = "SELECT COUNT(id) as count, status FROM {$wpdb->prefix}dokan_refund GROUP BY status";
+        $result = $wpdb->get_results( $sql );
+
+        if ( $result ) {
+            foreach ($result as $row) {
+                if ( $row->status == '0' ) {
+                    $counts['pending'] = (int) $row->count;
+                } elseif ( $row->status == '1' ) {
+                    $counts['completed'] = (int) $row->count;
+                } elseif ( $row->status == '2' ) {
+                    $counts['cancelled'] = (int) $row->count;
+                }
+            }
+        }
+    }
+
+    return $counts;
+}
+

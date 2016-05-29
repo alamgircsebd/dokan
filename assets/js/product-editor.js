@@ -150,6 +150,7 @@
             
             $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
                 $( this ).tagit( {
+                    allowSpaces: true,
                     availableTags: $( this ).data('preset_attr').split(','),
                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -362,7 +363,8 @@
                     new_field.removeAttr('data-preset_attr')
                              .attr('value', '');
  
-                    new_field.tagit({                            
+                    new_field.tagit({  
+                        allowSpaces: true,
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
@@ -394,6 +396,7 @@
                             
                             $( 'input.dokan-attribute-option-values' ).each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -633,6 +636,7 @@
                             
                             $attribute_options.each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,
@@ -678,7 +682,8 @@
                     new_field.removeAttr('data-preset_attr')
                              .attr('value', '');
                          
-                    new_field.tagit({                            
+                    new_field.tagit({  
+                        allowSpaces: true,
                         afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                         afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,                            
                     });
@@ -713,6 +718,7 @@
                             
                             $( 'input.dokan-single-attribute-option-values' ).each( function ( key, val ) {
                                 $( this ).tagit( {
+                                    allowSpaces: true,
                                     availableTags: $( this ).data('preset_attr').split(','),
                                     afterTagAdded: Dokan_Editor.tagIt.afterTagAdded,
                                     afterTagRemoved: Dokan_Editor.tagIt.afterTagRemoved,

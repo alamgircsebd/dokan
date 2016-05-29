@@ -23,7 +23,7 @@
                     <thead>
                         <tr>
                             <th><?php _e( 'Option Name', 'dokan' ) ?> <span class="tips" title="" data-original-title="<?php _e( 'Enter your variation attribute option name', 'dokan' ); ?>">[?]</span></th>
-                            <th width="22%"><?php _e( 'Option Values', 'dokan' ) ?> <span class="tips" title="" data-original-title="<?php _e( 'Enter attribute options values corresponding options name', 'dokan') ?>">[?]</span></th>
+                            <th width="22%"><?php _e( 'Option Values', 'dokan' ) ?> <span class="tips" title="" data-original-title="<?php _e( 'Enter attribute option values seprated by \'|\' or tab ', 'dokan') ?>">[?]</span></th>
                             <th width="7%">
                                 <span class="dokan-loading dokan-attr-option-loading dokan-hide"></span>
                             </th>
