@@ -2600,8 +2600,13 @@ function dokan_get_seller_rating( $seller_id ) {
         ORDER BY wc.comment_post_ID";
 
     $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
+    
+    $rating_value = apply_filters( 'dokan_seller_rating_value', array(
+        'rating' => number_format( $result->average, 2 ),
+        'count'  => (int) $result->count
+    ), $seller_id );
 
-    return array( 'rating' => number_format( $result->average, 2), 'count' => (int) $result->count );
+    return $rating_value;
 }
 
 
