@@ -88,7 +88,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
      *
      * @return void
      */
-    public function calculate_shipping( $package ) {
+    public function calculate_shipping( $package = array() ) {
         $products = $package['contents'];
         $destination_country = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
         $destination_state = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
