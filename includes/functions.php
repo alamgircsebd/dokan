@@ -1470,14 +1470,16 @@ function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
     if ( $order ) {
 
-        $seller_id = dokan_get_seller_id_by_order( $order->id );
+        $sellers = dokan_get_seller_id_by_order( $order->id );
 
-        if ( $seller_id ) {
+        if ( $sellers ) {
+            foreach ( $sellers as $seller_id) {
+                $seller = get_userdata( $seller_id );
+                $seller_email = $seller->user_email;
 
-            $seller_email = get_user_by( 'id', $seller_id )->user_email;
-
-            if ( $email != $seller_email ) {
-                $email .= ',' . $seller_email;
+                if ( $email != $seller_email ) {
+                    $email .= ',' . $seller_email;
+                }
             }
         }
     }
