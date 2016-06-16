@@ -19,8 +19,7 @@ jQuery(function($) {
             tb_show('', 'media-upload.php?post_id=0&amp;type=image&amp;TB_iframe=true');
 
             window.send_to_editor = function (html) {
-                var url = $(html).attr('href');
-
+                var url = $(html).attr('src');
                 //if we find an image, get the src
                 if($(html).find('img').length > 0) {
                     url = $(html).find('img').attr('src');
