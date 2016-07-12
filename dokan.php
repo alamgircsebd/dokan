@@ -403,7 +403,9 @@ final class WeDevs_Dokan {
 
             if ( DOKAN_LOAD_SCRIPTS ) {
                 $scheme       = is_ssl() ? 'https' : 'http';
-                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js' );
+                $api_key = dokan_get_option( 'gmap_api_key', 'dokan_general' );
+
+                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
 
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
