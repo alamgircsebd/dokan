@@ -7,9 +7,6 @@
 ?>
 <?php
 
-    $scheme = is_ssl() ? 'https' : 'http';
-    wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js' );
-
     $gravatar   = isset( $profile_info['gravatar'] ) ? absint( $profile_info['gravatar'] ) : 0;
     $banner     = isset( $profile_info['banner'] ) ? absint( $profile_info['banner'] ) : 0;
     $storename  = isset( $profile_info['store_name'] ) ? esc_attr( $profile_info['store_name'] ) : '';

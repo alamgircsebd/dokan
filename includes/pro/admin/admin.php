@@ -74,6 +74,12 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
+            'gmap_api_key' => array(
+                'name'    => 'gmap_api_key',
+                'label'   => __( 'Google Map API key', 'dokan' ),
+                'desc'    => __( '<a href="https://developers.google.com/maps/documentation/javascript/" target="_blank">API Key</a> is needed to display map on store page', 'dokan' ),
+                'type'    => 'text',
+            ),
             'store_seo' => array(
                 'name'    => 'store_seo',
                 'label'   => __( 'Enable Store SEO', 'dokan' ),
