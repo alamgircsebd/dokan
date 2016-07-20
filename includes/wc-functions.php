@@ -168,10 +168,10 @@ function dokan_variable_product_type_options() {
                             continue;
 
                         // Get current value for variation (if set)
-                        $variation_selected_value = isset( $default_attributes[ sanitize_title( $attribute['name'] ) ] ) ? $default_attributes[ sanitize_title( $attribute['name'] ) ] : '';
+                        $variation_selected_value = isset( $default_attributes[ $attribute['name'] ] ) ? $default_attributes[ $attribute['name'] ] : '';
 
                         // Name will be something like attribute_pa_color
-                        echo '<select name="default_attribute_' . sanitize_title( $attribute['name'] ) . '"><option value="">' . __( 'No default', 'dokan' ) . ' ' . esc_html( wc_attribute_label( $attribute['name'] ) ) . '&hellip;</option>';
+                        echo '<select name="default_attribute_' . $attribute['name'] . '"><option value="">' . __( 'No default', 'dokan' ) . ' ' . esc_html( wc_attribute_label( $attribute['name'] ) ) . '&hellip;</option>';
 
                         // Get terms for attribute taxonomy or value if its a custom attribute
                         if ( $attribute['is_taxonomy'] ) {
@@ -186,7 +186,7 @@ function dokan_variable_product_type_options() {
                             $options = array_map( 'trim', explode( '|', $attribute['value'] ) );
 
                             foreach ( $options as $option )
-                                echo '<option ' . selected( sanitize_title( $variation_selected_value ), sanitize_title( $option ), false ) . ' value="' . esc_attr( sanitize_title( $option ) ) . '">' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option ) )  . '</option>';
+                                echo '<option ' . selected( $variation_selected_value , $option , false ) . ' value="' . esc_attr( $option ) . '">' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option ) )  . '</option>';
 
                         }
 
@@ -468,7 +468,7 @@ function dokan_process_product_meta( $post_id ) {
     add_post_meta( $post_id, 'total_sales', '0', true );
 
     // Get types
-    $product_type       = empty( $_POST['_product_type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['_product_type'] ) );
+    $product_type       = empty( $_POST['_product_type'] ) ? 'simple' : stripslashes( $_POST['_product_type'] );
     $is_downloadable    = isset( $_POST['_downloadable'] ) ? 'yes' : 'no';
     $is_virtual         = ( $is_downloadable == 'yes' ) ? 'yes' : 'no';
 
@@ -594,7 +594,7 @@ function dokan_process_product_meta( $post_id ) {
 
                     // Select based attributes - Format values (posted values are slugs)
                     if ( is_array( $attribute_values[ $i ] ) ) {
-                        $values = array_map( 'sanitize_title', $attribute_values[ $i ] );
+                        $values = $attribute_values[ $i ];
 
                     // Text based attributes - Posted values are term names - don't change to slugs
                     } else {
@@ -614,7 +614,7 @@ function dokan_process_product_meta( $post_id ) {
 
                 if ( $values ) {
                     // Add attribute to array, but don't set values
-                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                    $attributes[ $attribute_names[ $i ] ] = array(
                         'name'          => woocommerce_clean( $attribute_names[ $i ] ),
                         'value'         => '',
                         'position'      => $attribute_position[ $i ],
@@ -630,7 +630,7 @@ function dokan_process_product_meta( $post_id ) {
                 $values = implode( ' | ', array_map( 'woocommerce_clean', $attribute_values[$i] ) );
 
                 // Custom attribute - Add attribute to array and set the values
-                $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                $attributes[ $attribute_names[ $i ] ] = array(
                     'name'          => woocommerce_clean( $attribute_names[ $i ] ),
                     'value'         => $values,
                     'position'      => $attribute_position[ $i ],
@@ -1025,7 +1025,7 @@ function dokan_new_process_product_meta( $post_id ) {
 
                         // Select based attributes - Format values (posted values are slugs)
                         if ( is_array( $attribute_values[ $i ] ) ) {
-                            $values = array_map( 'sanitize_title', $attribute_values[ $i ] );
+                            $values = $attribute_values[ $i ];
 
                         // Text based attributes - Posted values are term names - don't change to slugs
                         } else {
@@ -1045,7 +1045,7 @@ function dokan_new_process_product_meta( $post_id ) {
 
                     if ( $values ) {
                         // Add attribute to array, but don't set values
-                        $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                        $attributes[ $attribute_names[ $i ] ] = array(
                             'name'          => woocommerce_clean( $attribute_names[ $i ] ),
                             'value'         => '',
                             'position'      => $attribute_position[ $i ],
@@ -1061,7 +1061,7 @@ function dokan_new_process_product_meta( $post_id ) {
                     $values = implode( ' | ', array_map( 'woocommerce_clean', $attribute_values[$i] ) );
 
                     // Custom attribute - Add attribute to array and set the values
-                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                    $attributes[ $attribute_names[ $i ] ] = array(
                         'name'          => woocommerce_clean( $attribute_names[ $i ] ),
                         'value'         => $values,
                         'position'      => $attribute_position[ $i ],
@@ -1405,8 +1405,8 @@ function dokan_new_save_variations( $post_id ) {
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
-                        $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? sanitize_title( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                        $attribute_key = 'attribute_' . $attribute['name'];
+                        $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? stripslashes( $_POST[ $attribute_key ][ $i ] ) : '';
                         $updated_attribute_keys[] = $attribute_key;
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
@@ -1582,8 +1582,8 @@ function dokan_new_save_variations( $post_id ) {
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
-                        $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? sanitize_title( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                        $attribute_key = 'attribute_' . $attribute['name'];
+                        $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? stripslashes( $_POST[ $attribute_key ][ $i ] ) : '';
                         $updated_attribute_keys[] = $attribute_key;
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
@@ -1611,13 +1611,13 @@ function dokan_new_save_variations( $post_id ) {
         if ( $attribute['is_variation'] ) {
 
             // Don't use wc_clean as it destroys sanitized characters
-            if ( isset( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) )
-                $value = sanitize_title( trim( stripslashes( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+            if ( isset( $_POST[ 'default_attribute_' . $attribute['name'] ] ) )
+                $value = trim( stripslashes( $_POST[ 'default_attribute_' . $attribute['name'] ] ) );
             else
                 $value = '';
 
             if ( $value )
-                $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+                $default_attributes[ $attribute['name'] ] = $value;
         }
     }
 
@@ -1849,8 +1849,8 @@ function dokan_save_variations( $post_id ) {
             foreach ( $attributes as $attribute ) {
 
                 if ( $attribute['is_variation'] ) {
-                    $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
-                    $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? sanitize_title( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                    $attribute_key = 'attribute_' . $attribute['name'];
+                    $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? stripslashes( $_POST[ $attribute_key ][ $i ] ) : '';
                     $updated_attribute_keys[] = $attribute_key;
                     update_post_meta( $variation_id, $attribute_key, $value );
                 }
@@ -1877,13 +1877,13 @@ function dokan_save_variations( $post_id ) {
         if ( $attribute['is_variation'] ) {
 
             // Don't use wc_clean as it destroys sanitized characters
-            if ( isset( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) )
-                $value = sanitize_title( trim( stripslashes( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+            if ( isset( $_POST[ 'default_attribute_' . $attribute['name'] ] ) )
+                $value = trim( stripslashes( $_POST[ 'default_attribute_' . $attribute['name'] ] ) );
             else
                 $value = '';
 
             if ( $value )
-                $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+                $default_attributes[ $attribute['name'] ] = $value;
         }
     }
 
