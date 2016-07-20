@@ -137,7 +137,7 @@ class Dokan_Template_Products {
                     $errors[] = __( 'Please select AT LEAST ONE category', 'dokan' );
                 }
             }
-            if (
+            if ( ! empty( $sku ) &&
                 $wpdb->get_var( $wpdb->prepare("
                     SELECT $wpdb->posts.ID
                     FROM $wpdb->posts

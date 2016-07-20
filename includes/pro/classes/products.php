@@ -204,7 +204,7 @@ class Dokan_Pro_Products {
                 'id'           => '_per_product_commission',
                 'label'        => __( 'Commission (%)', 'dokan' ),
                 'wrapper_class'=> 'per-product-commission',
-                'description'  => __( 'Enter admin commission (%) for this product', 'dokan' ),
+                'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
                 'data_type' => 'price'
             ) 
         );
@@ -219,9 +219,10 @@ class Dokan_Pro_Products {
      *
      * @return void
      */
-    function save_per_product_commission_options( $post_id  ) {
+    function save_per_product_commission_options( $post_id ) {
+
         if ( isset( $_POST['_per_product_commission'] ) && ! empty( $_POST['_per_product_commission'] ) ) {
-            update_post_meta( $post_id, '_per_product_commission', floatval( $_POST['_per_product_commission'] ) );
+            update_post_meta( $post_id, '_per_product_commission', (float) $_POST['_per_product_commission'] );
         }
     }
 }

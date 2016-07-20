@@ -254,19 +254,13 @@ function dokan_sync_insert_order( $order_id ) {
         return;
     }
 
-    $order          = new WC_Order( $order_id );
-    $seller_id      = dokan_get_seller_id_by_order( $order_id );
-    $percentage     = dokan_get_seller_percentage( $seller_id );
-
-    $order_total    = $order->get_total();
-    $order_shipping = $order->get_total_shipping();
-    $order_tax      = $order->get_total_tax();
-    $extra_cost     = $order_shipping + $order_tax;
-    $order_cost     = $order_total - $extra_cost;
-    $order_status   = $order->post_status;
-
-    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
-    $net_amount     = apply_filters( 'dokan_order_net_amount', $net_amount, $order );
+    $order              = new WC_Order( $order_id );
+    $seller_id          = dokan_get_seller_id_by_order( $order_id );
+    $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
+    $order_total        = $order->get_total();
+    $order_status       = $order->post_status;
+    $net_amount         = $order_total - $admin_commission;
+    $net_amount         = apply_filters( 'dokan_order_net_amount', $net_amount, $order );
 
     dokan_delete_sync_duplicate_order( $order_id, $seller_id );
 
@@ -548,7 +542,6 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
         $order_tax = $order_tax - $tax_refunded;
     }
 
-
     $extra_cost     = $order_shipping + $order_tax;
     $order_cost     = $order_total - $extra_cost;
 
@@ -688,4 +681,31 @@ function dokan_get_suborder_ids_by ($parent_order_id){
     
     return $sub_orders;
 
+}
+
+/**
+ * Return admin commisson from an order
+ * 
+ * @since 2.4.12
+ * 
+ * @param object $order
+ * 
+ * @return float $commission
+ */
+function dokan_get_admin_commission_by( $order, $seller_id ) {
+    if ( get_posts( array( 'post_parent' => $order->id, 'post_type' => 'order' ) ) ) {
+        return;
+    }
+
+    $admin_commission = 0;
+    foreach ( $order->get_items() as $item_id => $item ) {
+        $product_id = (int) $item['product_id'];
+        $qty = (int) $item['qty'];
+        $admin_percentage = 100 - dokan_get_seller_percentage( $seller_id, $product_id );
+        $admin_commission += ( get_post_meta( $product_id,'_price',true) * $admin_percentage * $qty ) / 100;
+        // below this line test code for refund case
+        // var_dump($item['product_id'],$order->get_qty_refunded_for_item($item_id),$order->get_total_refunded_for_item($item_id));
+    }
+
+    return apply_filters( 'dokan_order_admin_commission', $admin_commission, $order );
 }

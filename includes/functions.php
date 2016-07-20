@@ -353,7 +353,13 @@ if ( !function_exists( 'dokan_get_seller_percentage' ) ) :
  * @param int $seller_id
  * @return int
  */
-function dokan_get_seller_percentage( $seller_id = 0 ) {
+function dokan_get_seller_percentage( $seller_id = 0, $product_id = 0 ) {
+    if ( $product_id ) {
+        $_per_product_commission = get_post_meta( $product_id, '_per_product_commission', true );
+        if ( $_per_product_commission ) {
+            return (float) $_per_product_commission;
+        }
+    }
     $global_percentage = (float) dokan_get_option( 'seller_percentage', 'dokan_selling', '90' );
 
     if ( ! $seller_id ) {
