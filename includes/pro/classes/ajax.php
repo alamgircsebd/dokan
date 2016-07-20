@@ -406,7 +406,7 @@ class Dokan_Pro_Ajax {
 
                         // Select based attributes - Format values (posted values are slugs)
                         if ( is_array( $attribute_values[ $i ] ) ) {
-                            $values = array_map( 'sanitize_title', $attribute_values[ $i ] );
+                            $values = $attribute_values[ $i ];
 
                         // Text based attributes - Posted values are term names - don't change to slugs
                         } else {
@@ -426,7 +426,7 @@ class Dokan_Pro_Ajax {
 
                     if ( $values ) {
                         // Add attribute to array, but don't set values
-                        $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                        $attributes[ $attribute_names[ $i ] ] = array(
                             'name'          => wc_clean( $attribute_names[ $i ] ),
                             'value'         => '',
                             'position'      => $attribute_position[ $i ],
@@ -442,7 +442,7 @@ class Dokan_Pro_Ajax {
                     $values = implode( ' ' . WC_DELIMITER . ' ', array_map( 'wc_clean', array_map( 'stripslashes', $attribute_values[ $i ] ) ) );
 
                     // Custom attribute - Add attribute to array and set the values
-                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                    $attributes[ $attribute_names[ $i ] ] = array(
                         'name'          => wc_clean( $attribute_names[ $i ] ),
                         'value'         => $values,
                         'position'      => $attribute_position[ $i ],
@@ -521,7 +521,7 @@ class Dokan_Pro_Ajax {
 
                         // Select based attributes - Format values (posted values are slugs)
                         if ( is_array( $attribute_values[ $i ] ) ) {
-                            $values = array_map( 'sanitize_title', $attribute_values[ $i ] );
+                            $values = $attribute_values[ $i ];
 
                         // Text based attributes - Posted values are term names - don't change to slugs
                         } else {
@@ -541,7 +541,7 @@ class Dokan_Pro_Ajax {
 
                     if ( $values ) {
                         // Add attribute to array, but don't set values
-                        $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                        $attributes[ $attribute_names[ $i ] ] = array(
                             'name'          => wc_clean( $attribute_names[ $i ] ),
                             'value'         => '',
                             'position'      => $attribute_position[ $i ],
@@ -557,7 +557,7 @@ class Dokan_Pro_Ajax {
                     $values = implode( ' ' . WC_DELIMITER . ' ', array_map( 'wc_clean', array_map( 'stripslashes', $attribute_values[ $i ] ) ) );
 
                     // Custom attribute - Add attribute to array and set the values
-                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
+                    $attributes[ $attribute_names[ $i ] ] = array(
                         'name'          => wc_clean( $attribute_names[ $i ] ),
                         'value'         => $values,
                         'position'      => $attribute_position[ $i ],
@@ -821,8 +821,8 @@ class Dokan_Pro_Ajax {
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
-                        $value         = isset( $postdata[ $attribute_key ][ $i ] ) ? sanitize_title( stripslashes( $postdata[ $attribute_key ][ $i ] ) ) : '';
+                        $attribute_key = 'attribute_' . $attribute['name'];
+                        $value         = isset( $postdata[ $attribute_key ][ $i ] ) ? stripslashes( $postdata[ $attribute_key ][ $i ] ) : '';
                         $updated_attribute_keys[] = $attribute_key;
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
@@ -849,13 +849,13 @@ class Dokan_Pro_Ajax {
             if ( $attribute['is_variation'] ) {
 
                 // Don't use wc_clean as it destroys sanitized characters
-                if ( isset( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) )
-                    $value = sanitize_title( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                if ( isset( $postdata[ 'default_attribute_' . $attribute['name'] ] ) )
+                    $value = trim( stripslashes( $postdata[ 'default_attribute_' . $attribute['name'] ] ) );
                 else
                     $value = '';
 
                 if ( $value )
-                    $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+                    $default_attributes[ $attribute['name'] ] = $value;
             }
         }
 
@@ -1081,7 +1081,7 @@ class Dokan_Pro_Ajax {
 
             if ( ! $attribute['is_variation'] ) continue;
 
-            $attribute_field_name = 'attribute_' . sanitize_title( $attribute['name'] );
+            $attribute_field_name = 'attribute_' . $attribute['name'] ;
 
             if ( $attribute['is_taxonomy'] ) {
                 $post_terms = wp_get_post_terms( $post_id, $attribute['name'] );
@@ -1093,7 +1093,7 @@ class Dokan_Pro_Ajax {
                 $options = explode( WC_DELIMITER, $attribute['value'] );
             }
 
-            $options = array_map( 'sanitize_title', array_map( 'trim', $options ) );
+            $options = array_map( 'trim', $options );
 
             $variations[ $attribute_field_name ] = $options;
         }
