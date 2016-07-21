@@ -322,7 +322,7 @@ function dokan_generate_sync_table() {
 
     if ( $orders ) {
         foreach ($orders as $order) {
-            $percentage = dokan_get_seller_percentage( $order->seller_id );
+            $admin_commission   = dokan_get_admin_commission_by( $order, $order->seller_id );
 
             $wpdb->insert(
                 $table_name,
@@ -330,7 +330,7 @@ function dokan_generate_sync_table() {
                     'order_id'     => $order->order_id,
                     'seller_id'    => $order->seller_id,
                     'order_total'  => $order->order_total,
-                    'net_amount'   => ($order->order_total * $percentage)/100,
+                    'net_amount'   => $order_total - $admin_commission;
                     'order_status' => $order->order_status,
                 ),
                 array(

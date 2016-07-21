@@ -256,9 +256,9 @@ function dokan_sync_insert_order( $order_id ) {
 
     $order              = new WC_Order( $order_id );
     $seller_id          = dokan_get_seller_id_by_order( $order_id );
-    $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
     $order_total        = $order->get_total();
     $order_status       = $order->post_status;
+    $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
     $net_amount         = $order_total - $admin_commission;
     $net_amount         = apply_filters( 'dokan_order_net_amount', $net_amount, $order );
 
@@ -448,40 +448,16 @@ function dokan_sync_order_table( $order_id ) {
     global $wpdb;
 
     $order          = new WC_Order( $order_id );
-
     $seller_id      = dokan_get_seller_id_by_order( $order_id );
-    $percentage     = dokan_get_seller_percentage( $seller_id );
-    //Total calculation
-
     $order_total    = $order->get_total();
 
-    if ( $total_refunded = $order->get_total_refunded() ) {
-        $order_total = $order_total - $total_refunded;
+    if ( $order->get_total_refunded() ) {
+        $order_total = $order_total - $order->get_total_refunded();
     }
 
-    //Shipping calculation
-    $order_shipping = $order->get_total_shipping();
-
-    foreach ( $order->get_items() as $item ) {
-        $total_shipping_refunded = 0;
-        if ( $shipping_refunded = $order->get_total_refunded_for_item( $item['product_id'], 'shipping' ) ) {
-            $total_shipping_refunded += $shipping_refunded;
-        }
-    }
-
-    $order_shipping = $order_shipping - $total_shipping_refunded;
-
-    //Tax calculation
-    $order_tax      = $order->get_total_tax();
-
-    if ( $tax_refunded = $order->get_total_tax_refunded() ) {
-        $order_tax = $order_tax - $tax_refunded;
-    }
-
-    $extra_cost     = $order_shipping + $order_tax;
-    $order_cost     = $order_total - $extra_cost;
     $order_status   = $order->post_status;
-    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+    $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
+    $net_amount         = $order_total - $admin_commission;
     $net_amount     = apply_filters( 'dokan_sync_order_net_amount', $net_amount, $order );
 
     $wpdb->insert( $wpdb->prefix . 'dokan_orders',
@@ -513,41 +489,16 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
     global $wpdb;
 
     $order          = new WC_Order( $order_id );
-
     $seller_id      = dokan_get_seller_id_by_order( $order_id );
-    $percentage     = dokan_get_seller_percentage( $seller_id );
-
-    //Total calculation
     $order_total    = $order->get_total();
 
-    if ( $total_refunded = $order->get_total_refunded() ) {
-        $order_total = $order_total - $total_refunded;
+    if ( $order->get_total_refunded() ) {
+        $order_total = $order_total - $order->get_total_refunded();
     }
-
-    //Shipping calculation
-    $order_shipping = $order->get_total_shipping();
-    
-    foreach ( $order->get_items() as $item ) {
-        $total_shipping_refunded = 0;
-        if ( $shipping_refunded = $order->get_total_refunded_for_item( $item['product_id'], 'shipping' ) ) {
-            $total_shipping_refunded += $shipping_refunded;
-        }
-    }
-    $order_shipping = $order_shipping - $total_shipping_refunded;
-
-    //Tax calculation
-    $order_tax      = $order->get_total_tax();
-
-    if ( $tax_refunded = $order->get_total_tax_refunded() ) {
-        $order_tax = $order_tax - $tax_refunded;
-    }
-
-    $extra_cost     = $order_shipping + $order_tax;
-    $order_cost     = $order_total - $extra_cost;
 
     $order_status   = $order->post_status;
-
-    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+    $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
+    $net_amount         = $order_total - $admin_commission;
     $net_amount     = apply_filters( 'dokan_order_refunded_net_amount', $net_amount, $order );
 
     $wpdb->update( $wpdb->prefix . 'dokan_orders',
@@ -693,19 +644,36 @@ function dokan_get_suborder_ids_by ($parent_order_id){
  * @return float $commission
  */
 function dokan_get_admin_commission_by( $order, $seller_id ) {
-    if ( get_posts( array( 'post_parent' => $order->id, 'post_type' => 'order' ) ) ) {
+
+    if ( get_posts( array( 'post_parent' => $order->id, 'post_type' => 'shop_order' ) ) ) {
         return;
     }
 
     $admin_commission = 0;
+    $refund_t = 0;
+    $commissions = array();
+    $i = 0;
+    $total_line = 0;
+
     foreach ( $order->get_items() as $item_id => $item ) {
-        $product_id = (int) $item['product_id'];
-        $qty = (int) $item['qty'];
-        $admin_percentage = 100 - dokan_get_seller_percentage( $seller_id, $product_id );
-        $admin_commission += ( get_post_meta( $product_id,'_price',true) * $admin_percentage * $qty ) / 100;
-        // below this line test code for refund case
-        // var_dump($item['product_id'],$order->get_qty_refunded_for_item($item_id),$order->get_total_refunded_for_item($item_id));
+
+        $refund_t += $order->get_total_refunded_for_item( $item_id );
+        $commissions[$i]['total_line'] = $item['line_total'] - $order->get_total_refunded_for_item( $item_id );
+        $commissions[$i]['admin_percentage'] = 100 - dokan_get_seller_percentage( $seller_id, $item['product_id'] );
+        $total_line += $commissions[$i]['total_line'];
+
+        $i++;
+
     }
 
+    $refund_t += $order->get_total_tax_refunded() + $order->get_total_shipping_refunded();
+    $refund_ut = $order->get_total_refunded() - $refund_t;
+
+    foreach ( $commissions as $commission ) {
+
+        $commission['ut_amount'] = $refund_ut * ( $commission['total_line'] / $total_line );
+        $admin_commission += ( $commission['total_line'] + $commission['ut_amount'] ) * $commission['admin_percentage'] /100;
+    }
+    
     return apply_filters( 'dokan_order_admin_commission', $admin_commission, $order );
 }

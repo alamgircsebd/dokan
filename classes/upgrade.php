@@ -19,10 +19,10 @@ class Dokan_Upgrade {
      */
     function __construct() {
         add_action( 'admin_notices', array( $this, 'upgrade_notice' ) );
-        add_action( 'admin_notices', array( $this, 'addon_upgrade_notice' ) );
+        // add_action( 'admin_notices', array( $this, 'addon_upgrade_notice' ) );
 
         add_action( 'admin_init', array( $this, 'upgrade_action_perform' ) );
-        add_action( 'admin_init', array( $this, 'addon_upgrade_notice_hide' ) );
+        // add_action( 'admin_init', array( $this, 'addon_upgrade_notice_hide' ) );
     }
 
     /**
