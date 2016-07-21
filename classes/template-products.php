@@ -120,10 +120,9 @@ class Dokan_Template_Products {
             $_POST['_regular_price'] = isset(  $_POST['_regular_price'] ) ?  $_POST['_regular_price'] : '';
             $price          = floatval( $_POST['_regular_price'] );
             $featured_image = absint( $_POST['feat_image_id'] );
-            $sku            = trim( $_POST['_sku'] );
+            $sku            = isset( $_POST['_sku'] ) ? trim( $_POST['_sku'] ) : '';
 
             if ( empty( $post_title ) ) {
-
                 $errors[] = __( 'Please enter product title', 'dokan' );
             }
 
