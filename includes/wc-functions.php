@@ -480,7 +480,7 @@ function dokan_process_product_meta( $post_id ) {
     update_post_meta( $post_id, '_create_variation', 'no' );
 
     // Gallery Images
-    $attachment_ids = array_filter( explode( ',', woocommerce_clean( $_POST['product_image_gallery'] ) ) );
+    $attachment_ids = array_filter( explode( ',', wc_clean( $_POST['product_image_gallery'] ) ) );
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
 
 
@@ -537,7 +537,7 @@ function dokan_process_product_meta( $post_id ) {
 
     // Unique SKU
     $sku                = get_post_meta($post_id, '_sku', true);
-    $new_sku            = woocommerce_clean( stripslashes( $_POST['_sku'] ) );
+    $new_sku            = wc_clean( stripslashes( $_POST['_sku'] ) );
     if ( $new_sku == '' ) {
         update_post_meta( $post_id, '_sku', '' );
     } elseif ( $new_sku !== $sku ) {
@@ -615,7 +615,7 @@ function dokan_process_product_meta( $post_id ) {
                 if ( $values ) {
                     // Add attribute to array, but don't set values
                     $attributes[ $attribute_names[ $i ] ] = array(
-                        'name'          => woocommerce_clean( $attribute_names[ $i ] ),
+                        'name'          => wc_clean( $attribute_names[ $i ] ),
                         'value'         => '',
                         'position'      => $attribute_position[ $i ],
                         'is_visible'    => $is_visible,
@@ -627,11 +627,11 @@ function dokan_process_product_meta( $post_id ) {
             } elseif ( isset( $attribute_values[ $i ] ) ) {
 
                 // Text based, separate by pipe
-                $values = implode( ' | ', array_map( 'woocommerce_clean', $attribute_values[$i] ) );
+                $values = implode( ' | ', array_map( 'wc_clean', $attribute_values[$i] ) );
 
                 // Custom attribute - Add attribute to array and set the values
                 $attributes[ $attribute_names[ $i ] ] = array(
-                    'name'          => woocommerce_clean( $attribute_names[ $i ] ),
+                    'name'          => wc_clean( $attribute_names[ $i ] ),
                     'value'         => $values,
                     'position'      => $attribute_position[ $i ],
                     'is_visible'    => $is_visible,
@@ -877,7 +877,7 @@ function dokan_new_process_product_meta( $post_id ) {
     update_post_meta( $post_id, '_virtual', $is_virtual );
 
     // Gallery Images
-    $attachment_ids = array_filter( explode( ',', woocommerce_clean( $_POST['product_image_gallery'] ) ) );
+    $attachment_ids = array_filter( explode( ',', wc_clean( $_POST['product_image_gallery'] ) ) );
     update_post_meta( $post_id, '_product_image_gallery', implode( ',', $attachment_ids ) );
 
     // Update post meta
@@ -963,7 +963,7 @@ function dokan_new_process_product_meta( $post_id ) {
     // Unique SKU
     $_POST['_sku'] = isset( $_POST['_sku'] ) ? $_POST['_sku'] : '';
     $sku     = get_post_meta($post_id, '_sku', true);
-    $new_sku = woocommerce_clean( stripslashes( $_POST['_sku'] ) );
+    $new_sku = wc_clean( stripslashes( $_POST['_sku'] ) );
     if ( $new_sku == '' ) {
         update_post_meta( $post_id, '_sku', '' );
     } elseif ( $new_sku !== $sku ) {
@@ -1046,7 +1046,7 @@ function dokan_new_process_product_meta( $post_id ) {
                     if ( $values ) {
                         // Add attribute to array, but don't set values
                         $attributes[ $attribute_names[ $i ] ] = array(
-                            'name'          => woocommerce_clean( $attribute_names[ $i ] ),
+                            'name'          => wc_clean( $attribute_names[ $i ] ),
                             'value'         => '',
                             'position'      => $attribute_position[ $i ],
                             'is_visible'    => $is_visible,
@@ -1058,11 +1058,11 @@ function dokan_new_process_product_meta( $post_id ) {
                 } elseif ( isset( $attribute_values[ $i ] ) ) {
 
                     // Text based, separate by pipe
-                    $values = implode( ' | ', array_map( 'woocommerce_clean', $attribute_values[$i] ) );
+                    $values = implode( ' | ', array_map( 'wc_clean', $attribute_values[$i] ) );
 
                     // Custom attribute - Add attribute to array and set the values
                     $attributes[ $attribute_names[ $i ] ] = array(
-                        'name'          => woocommerce_clean( $attribute_names[ $i ] ),
+                        'name'          => wc_clean( $attribute_names[ $i ] ),
                         'value'         => $values,
                         'position'      => $attribute_position[ $i ],
                         'is_visible'    => $is_visible,
