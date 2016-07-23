@@ -330,7 +330,7 @@ function dokan_generate_sync_table() {
                     'order_id'     => $order->order_id,
                     'seller_id'    => $order->seller_id,
                     'order_total'  => $order->order_total,
-                    'net_amount'   => $order_total - $admin_commission;
+                    'net_amount'   => $order_total - $admin_commission,
                     'order_status' => $order->order_status,
                 ),
                 array(
