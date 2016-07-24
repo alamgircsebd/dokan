@@ -129,6 +129,18 @@
     </div>
 
     <div class="dokan-form-group">
+        <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Show on store', 'dokan' ); ?></label>
+        <div class="dokan-w7 dokan-text-left">
+            <div class="checkbox">
+                <label for="checkboxes-3">
+                    <input name="show_on_store" <?php echo $show_on_store; ?> id="checkboxes-3" value="yes" type="checkbox">
+                    <?php _e( 'Check this box if you want to show this coupon in store page.', 'dokan' );?>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="dokan-form-group">
         <div class="dokan-w5 ajax_prev dokan-text-left" style="margin-left:23%">
             <input type="submit" id="" name="coupon_creation" value="<?php echo $button_name; ?>" class="dokan-btn dokan-btn-danger dokan-btn-theme">
         </div>

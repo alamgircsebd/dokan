@@ -289,6 +289,7 @@ class Dokan_Pro_Coupons {
 
         $apply_before_tax = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
         $exclude_sale_items = isset( $_POST['exclude_sale_items'] ) ? 'yes' : 'no';
+        $show_on_store = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
         $minimum_amount = sanitize_text_field( $_POST['minium_ammount'] );
 
         if ( isset( $_POST['product_drop_down'] ) ) {
@@ -312,6 +313,7 @@ class Dokan_Pro_Coupons {
         update_post_meta( $post_id, 'apply_before_tax', $apply_before_tax );
         update_post_meta( $post_id, 'free_shipping', 'no' );
         update_post_meta( $post_id, 'exclude_sale_items', $exclude_sale_items );
+        update_post_meta( $post_id, 'show_on_store', $show_on_store );
         update_post_meta( $post_id, 'minimum_amount', $minimum_amount );
         update_post_meta( $post_id, 'customer_email', $customer_email );
 
@@ -472,6 +474,7 @@ class Dokan_Pro_Coupons {
             $exclide_sale_item = get_post_meta( $post->ID, 'exclude_sale_items', true );
             $minimum_amount    = get_post_meta( $post->ID, 'minimum_amount', true );
             $customer_email    = get_post_meta( $post->ID, 'customer_email', true );
+            $show_on_store = get_post_meta( $post->ID, 'show_on_store', true );
         }
 
         $post_id     = isset( $post->ID ) ? $post->ID : '';
@@ -504,6 +507,12 @@ class Dokan_Pro_Coupons {
             $exclide_sale_item = 'checked';
         } else {
             $exclide_sale_item = '';
+        }
+
+        if ( isset( $show_on_store ) && $show_on_store == 'yes' ) {
+            $show_on_store = 'checked';
+        } else {
+            $show_on_store = '';
         }
 
         $minimum_amount = isset( $minimum_amount ) ? $minimum_amount : '';
@@ -546,11 +555,16 @@ class Dokan_Pro_Coupons {
                 $apply_before_tax = '';
             }
 
-
             if ( isset( $_POST['exclude_sale_items'] ) && $_POST['exclude_sale_items'] == 'yes' ) {
                 $exclide_sale_item = 'checked';
             } else {
                 $exclide_sale_item = '';
+            }
+
+            if ( isset( $_POST['show_on_store'] ) && $_POST['show_on_store'] == 'yes' ) {
+                $show_on_store = 'checked';
+            } else {
+                $show_on_store = '';
             }
 
             $minimum_amount = $_POST['minium_ammount'];
@@ -575,8 +589,9 @@ class Dokan_Pro_Coupons {
             'customer_email' => $customer_email,
             'button_name' => $button_name,
             'exclide_sale_item' => $exclide_sale_item,
+            'show_on_store' => $show_on_store,
             'all_products' => $this->coupon_products_list(),
-            'products_id' => $products_id
+            'products_id' => $products_id,
         ) );
     }
 }
