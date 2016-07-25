@@ -72,7 +72,15 @@
                         'author'         => get_current_user_id(),
                         'orderby'        => 'post_date',
                         'order'          => 'DESC',
-                        'paged'          => $pagenum
+                        'paged'          => $pagenum,
+                        'tax_query'      => array(
+                                                array(
+                                                    'taxonomy' => 'product_type',
+                                                    'field'    => 'slug',
+                                                    'terms'    => apply_filters( 'dokan_product_listing_exclude_type', array() ),
+                                                    'operator' => 'NOT IN',
+                                                ),
+                                            ),
                     );
 
                     if ( isset( $_GET['post_status']) && in_array( $_GET['post_status'], $post_statuses ) ) {
@@ -84,14 +92,12 @@
                     }
 
                     if( isset( $_GET['product_cat'] ) && $_GET['product_cat'] != -1 ) {
-                        $args['tax_query']= array(
-                            array(
-                                'taxonomy' => 'product_cat',
-                                'field' => 'id',
-                                'terms' => (int)  $_GET['product_cat'],
-                                'include_children' => false,
-                            )
-                        );
+                        $args['tax_query'][] = array(
+                                                    'taxonomy' => 'product_cat',
+                                                    'field' => 'id',
+                                                    'terms' => (int)  $_GET['product_cat'],
+                                                    'include_children' => false,
+                                                );
                     }
 
                     if ( isset( $_GET['product_search_name']) && !empty( $_GET['product_search_name'] ) ) {
