@@ -348,7 +348,7 @@ final class WeDevs_Dokan {
                 'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
                 'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
                 'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-                'rounding_precision'            => WC_ROUNDING_PRECISION,
+                'rounding_precision'            => wc_get_rounding_precision(),
             );
 
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
@@ -637,7 +637,7 @@ final class WeDevs_Dokan {
                 'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
                 'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
                 'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-                'rounding_precision'            => WC_ROUNDING_PRECISION,
+                'rounding_precision'            => wc_get_rounding_precision(),
             );
 
             wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );
