@@ -2115,7 +2115,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   border-style: solid;
   margin: 0;
   padding: 0;
-  margin-bottom: 60px;
+  margin-bottom: 20px;
 }
 .dokan-single-store .dokan-store-tabs ul li {
   display: inline-block;
@@ -2133,6 +2133,23 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-single-store .store-review-wrap h2.headline {
   font-size: 17px;
   margin-bottom: 15px;
+}
+.dokan-single-store .store-coupon-wrap {
+  margin-bottom: 20px;
+}
+.dokan-single-store .store-coupon-wrap .store-coupon {
+  color: #fff;
+  margin: 5px;
+  border: 1px solid #ededed;
+  text-align: center;
+  background-color: #f05025;
+  padding-bottom: 5px;
+}
+.dokan-single-store .store-coupon-wrap .store-coupon .coupon-title {
+  font-size: 24px;
+  padding-top: 15px;
+  font-weight: 500;
+  font-family: 'Open Sans', sans-serif;
 }
 .dokan-store-sidebar input[type=text],
 .dokan-store-sidebar input[type=email],

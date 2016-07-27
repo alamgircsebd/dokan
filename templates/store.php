@@ -61,6 +61,32 @@ get_header( 'shop' );
 
             <?php do_action( 'dokan_store_profile_frame_after', $store_user, $store_info ); ?>
 
+            <?php 
+            if ( dokan_get_seller_coupon( $store_user->ID, 'yes' ) ) {
+                $seller_coupon = dokan_get_seller_coupon( $store_user->ID, 'yes' );
+                foreach ( $seller_coupon as $coupon ) {
+                    $coupon_type = get_post_meta( $coupon->ID, 'discount_type', true );
+                    $coupon_amount = get_post_meta( $coupon->ID, 'coupon_amount', true );
+                    if ( 'percent_product' == $coupon_type ) {
+                        $coupon_amount_formated = $coupon_amount . '%';
+                    } else {
+                        $coupon_amount_formated = get_woocommerce_currency_symbol() . $coupon_amount;
+                    }
+                    ?>
+                    <div class="store-coupon-wrap dokan-w4">
+                        <div class="store-coupon">
+                            <p class="coupon-title">
+                                <?php printf( __( '%s Discount', 'dokan' ), $coupon_amount_formated ); ?>   
+                            </p>
+                            <p>
+                                <?php printf( __( 'Coupon Code: %s', 'dokan' ), $coupon->post_title ); ?>
+                            </p>
+                        </div>
+                    </div>
+                    <?php
+                }
+            } ?>
+
             <?php if ( have_posts() ) { ?>
 
                 <div class="seller-items">
