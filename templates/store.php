@@ -73,19 +73,27 @@ get_header( 'shop' );
                         $coupon_amount_formated = get_woocommerce_currency_symbol() . $coupon_amount;
                     }
                     ?>
-                    <div class="store-coupon-wrap dokan-w4">
-                        <div class="store-coupon">
-                            <p class="coupon-title">
-                                <?php printf( __( '%s Discount', 'dokan' ), $coupon_amount_formated ); ?>   
-                            </p>
-                            <p>
-                                <?php printf( __( 'Coupon Code: %s', 'dokan' ), $coupon->post_title ); ?>
-                            </p>
+                    <div class="store-coupon-wrap">
+                        <div class="code">
+                            <span>
+                                <span>
+                                    <div class="coupon-title"><?php printf( __( '%s Discount', 'dokan' ), $coupon_amount_formated ); ?></div>
+                                    <div class="coupon-body"><?php printf( __( 'Coupon Code: <strong>%s</strong>', 'dokan' ), $coupon->post_title ); ?></div>
+                                </span>
+                            </span>
                         </div>
                     </div>
                     <?php
                 }
             } ?>
+
+            <div class="dokan-coupon-content">
+                <div>
+                    <div>
+                        
+                    </div>
+                </div>
+            </div>
 
             <?php if ( have_posts() ) { ?>
 
