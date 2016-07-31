@@ -594,7 +594,7 @@ function dokan_store_listing( $atts ) {
 
         if ( '' != $search_term ) {
             $seller_args['search']         = $search_term;
-            $seller_args['search_columns'] = array( 'user_login', 'user_nicename', 'display_name');
+            $seller_args['search_columns'] = array( 'display_name' );
         }
     }
 

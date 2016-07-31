@@ -508,6 +508,7 @@ class Dokan_Template_Settings {
         $dokan_settings['profile_completion'] = $profile_completeness;
 
         update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
+        update_user_meta( $store_id, 'dokan_store_name', $dokan_settings['store_name'] );
 
         do_action( 'dokan_store_profile_saved', $store_id );
 

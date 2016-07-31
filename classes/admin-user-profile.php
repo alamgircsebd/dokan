@@ -380,6 +380,11 @@ class Dokan_Admin_User_Profile {
         update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
         update_user_meta( $user_id, 'dokan_feature_seller', $feature_seller );
 
+        wp_update_user( array(
+            'ID' => $user_id,
+            'display_name' => $store_settings['store_name'],
+        ) );
+
         do_action( 'dokan_process_seller_meta_fields', $user_id );
     }
 }
