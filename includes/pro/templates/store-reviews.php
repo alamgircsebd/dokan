@@ -55,6 +55,7 @@ get_header( 'shop' );
 
         <?php dokan_get_template_part( 'store-header' ); ?>
 
+
         <?php
         $dokan_template_reviews = Dokan_Pro_Reviews::init();
         $id                     = $store_user->ID;
@@ -67,11 +68,14 @@ get_header( 'shop' );
         <div id="reviews">
             <div id="comments">
 
+              <?php do_action( 'dokan_review_tab_before_comments' ); ?>
+
                 <h2 class="headline"><?php _e( 'Seller Review', 'dokan' ); ?></h2>
 
                 <ol class="commentlist">
                     <?php echo $dokan_template_reviews->render_store_tab_comment_list( $comments ); ?>
                 </ol>
+
             </div>
         </div>
 
