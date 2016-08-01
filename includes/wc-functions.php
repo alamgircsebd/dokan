@@ -2331,11 +2331,7 @@ function dokan_on_create_seller( $user_id, $data ) {
     );
 
     update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
-
-    wp_update_user( array(
-        'ID' => $user_id,
-        'display_name' => $dokan_settings['store_name'],
-    ) );
+    update_user_meta( $user_id, 'dokan_store_name', $dokan_settings['store_name'] );
 
     Dokan_Email::init()->new_seller_registered_mail( $user_id );
 }
@@ -2683,11 +2679,8 @@ function dokan_user_update_to_seller( $user, $data ) {
     );
 
     update_user_meta( $user_id, 'dokan_profile_settings', $dokan_settings );
-    
-    wp_update_user( array(
-        'ID' => $user_id,
-        'display_name' => $dokan_settings['store_name'],
-    ) );
+    update_user_meta( $user_id, 'dokan_store_name', $dokan_settings['store_name'] );
+
 
     $publishing = dokan_get_option( 'product_status', 'dokan_selling' );
     $percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );

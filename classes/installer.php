@@ -44,6 +44,7 @@ class Dokan_Installer {
             '2.1'       => 'dokan-upgrade-2.1.php',
             '2.3'       => 'dokan-upgrade-2.3.php',
             '2.4.11'    => 'dokan-upgrade-2.4.11.php',
+            '2.4.12'    => 'dokan-upgrade-2.4.12.php',
         );
 
         foreach ( $dokan_updates as $version => $path ) {
