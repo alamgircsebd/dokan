@@ -73,7 +73,7 @@ get_header( 'shop' );
                 <h2 class="headline"><?php _e( 'Seller Review', 'dokan' ); ?></h2>
 
                 <ol class="commentlist">
-                    <?php echo $dokan_template_reviews->render_store_tab_comment_list( $comments ); ?>
+                    <?php echo $dokan_template_reviews->render_store_tab_comment_list( $comments , $store_user->ID); ?>
                 </ol>
 
             </div>
