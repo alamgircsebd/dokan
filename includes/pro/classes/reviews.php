@@ -658,7 +658,7 @@ class Dokan_Pro_Reviews {
         );
     }
     
-    function render_store_tab_comment_list( $comments ) {
+    function render_store_tab_comment_list( $comments, $store_id ) {
         
         ob_start();
         if ( count( $comments ) == 0 ) {
@@ -710,7 +710,7 @@ class Dokan_Pro_Reviews {
         
         $review_list = ob_get_clean();
         
-        return apply_filters( 'dokan_seller_tab_reviews_list', $review_list );
+        return apply_filters( 'dokan_seller_tab_reviews_list', $review_list, $store_id );
     }
 
 }
