@@ -126,7 +126,7 @@
                             'shipping'  => __( 'Shipping only', 'dokan' ),
                             'none'      => _x( 'None', 'Tax status', 'dokan' )
                             ) ), 'select'
-                        ); ?>`
+                        ); ?>
                     </div>
                 </div>
 
