@@ -148,6 +148,18 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+= v2.4.12 -> August 08, 2016 =
+---------------------
+- [new] Product base admin commission
+- [new] Sellers coupon show on store
+- [tweak] Added Settings for gMap API key
+- [fix] Product with same sku
+- [fix] Product permalink, defaults to 'product'
+- [fix] Image upload attribute undefined issue
+- [fix] Multiple seller order mail
+- [fix] Product sku search
+- [fix] Store search by store name
+
 
 = v2.4.11 -> May 29, 2016 =
 ---------------------
