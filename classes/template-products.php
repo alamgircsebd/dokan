@@ -109,6 +109,9 @@ class Dokan_Template_Products {
             return;
         }
 
+
+        global $wpdb;
+
         if ( isset( $_POST['dokan_add_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_product_nonce'], 'dokan_add_new_product' ) ) {
             
             $post_title     = trim( $_POST['post_title'] );
@@ -117,9 +120,9 @@ class Dokan_Template_Products {
             $_POST['_regular_price'] = isset(  $_POST['_regular_price'] ) ?  $_POST['_regular_price'] : '';
             $price          = floatval( $_POST['_regular_price'] );
             $featured_image = absint( $_POST['feat_image_id'] );
+            $sku            = isset( $_POST['_sku'] ) ? trim( $_POST['_sku'] ) : '';
 
             if ( empty( $post_title ) ) {
-
                 $errors[] = __( 'Please enter product title', 'dokan' );
             }
 
@@ -132,6 +135,18 @@ class Dokan_Template_Products {
                 if( !isset( $_POST['product_cat'] ) && empty( $_POST['product_cat'] ) ) {
                     $errors[] = __( 'Please select AT LEAST ONE category', 'dokan' );
                 }
+            }
+            if ( ! empty( $sku ) &&
+                $wpdb->get_var( $wpdb->prepare("
+                    SELECT $wpdb->posts.ID
+                    FROM $wpdb->posts
+                    LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
+                    WHERE $wpdb->posts.post_type = 'product'
+                    AND $wpdb->posts.post_status = 'publish'
+                    AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
+                 ", $sku ) )
+                ) {
+                $errors[] = __( 'Product SKU must be unique.', 'dokan' );
             }
 
             if ( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {

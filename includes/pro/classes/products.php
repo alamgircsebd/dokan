@@ -23,6 +23,10 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_shipping_tax_content' ), 10, 2);
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
+        // Add per product commission option in backend for addmin
+        add_action( 'woocommerce_product_options_pricing', array($this,'add_per_product_commission_options' ),15 );
+        add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
+        add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
     }
 
     /**
@@ -184,5 +188,41 @@ class Dokan_Pro_Products {
         }
 
         return $classes_options;
+    }
+
+    /**
+     * add per product commission options
+     *
+     * @since 2.4.12
+     *
+     * @return void
+     */
+    function add_per_product_commission_options() {
+
+        woocommerce_wp_text_input( 
+            array( 
+                'id'           => '_per_product_commission',
+                'label'        => __( 'Commission (%)', 'dokan' ),
+                'wrapper_class'=> 'per-product-commission',
+                'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
+                'data_type' => 'price'
+            ) 
+        );
+    }
+
+    /**
+     * save per product commission options
+     *
+     * @since 2.4.12
+     *
+     * @param  integer $post_id
+     *
+     * @return void
+     */
+    function save_per_product_commission_options( $post_id ) {
+
+        if ( isset( $_POST['_per_product_commission'] ) && ! empty( $_POST['_per_product_commission'] ) ) {
+            update_post_meta( $post_id, '_per_product_commission', (float) $_POST['_per_product_commission'] );
+        }
     }
 }

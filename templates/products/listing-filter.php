@@ -52,7 +52,7 @@
         <?php wp_nonce_field( 'dokan_product_search', 'dokan_product_search_nonce' ); ?>
 
         <div class="dokan-form-group dokan-right">
-            <input type="text" class="dokan-form-control" name="product_search_name" placeholder="Search Products" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
+            <input type="text" class="dokan-form-control" name="product_search_name" placeholder="<?php _e( 'Search Products', 'dokan' ) ?>" value="<?php echo isset( $_GET['product_search_name'] ) ? $_GET['product_search_name'] : '' ?>">
         </div>
 
         <?php

@@ -40,7 +40,8 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '<%= dirs.js %>',
                 src: [
-                    '*.js',
+                    'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'reviews.js', 'script.js',
+                    'single-product-shipping.js', 'tabulous.js', 'tag-it-custom.js'
                 ],
                 dest: '<%= dirs.js %>/',
                 ext: '.min.js'
@@ -59,26 +60,40 @@ module.exports = function(grunt) {
         },
 
         concat: {
-            '<%= dirs.js %>/all.js': [
-                '<%= dirs.js %>/admin.js',
-                '<%= dirs.js %>/orders.js',
-                '<%= dirs.js %>/product-editor.js',
-                '<%= dirs.js %>/reviews.js',
-                '<%= dirs.js %>/script.js',
-                '<%= dirs.js %>/settings.js',
-            ],
-            '<%= dirs.js %>/flot-all.min.js': [
-                '<%= dirs.js %>/jquery.flot.min.js',
-                '<%= dirs.js %>/jquery.flot.pie.min.js',
-                '<%= dirs.js %>/jquery.flot.resize.min.js',
-                '<%= dirs.js %>/jquery.flot.stack.min.js',
-                '<%= dirs.js %>/jquery.flot.time.min.js',
-            ],
-            '<%= dirs.css %>/dokan-extra.css': [
-                '<%= dirs.css %>/chosen.min.css',
-                '<%= dirs.css %>/icomoon.css',
-                '<%= dirs.css %>/tabulous.css'
-            ]
+            all_js: {
+                files: {
+                    '<%= dirs.js %>/all.js': [
+                        '<%= dirs.js %>/admin.js',
+                        '<%= dirs.js %>/orders.js',
+                        '<%= dirs.js %>/product-editor.js',
+                        '<%= dirs.js %>/reviews.js',
+                        '<%= dirs.js %>/script.js',
+                        '<%= dirs.js %>/settings.js',
+                    ],
+                }
+            },
+
+            flot: {
+                files: {
+                    '<%= dirs.js %>/flot-all.min.js': [
+                        '<%= dirs.js %>/jquery.flot.min.js',
+                        '<%= dirs.js %>/jquery.flot.pie.min.js',
+                        '<%= dirs.js %>/jquery.flot.resize.min.js',
+                        '<%= dirs.js %>/jquery.flot.stack.min.js',
+                        '<%= dirs.js %>/jquery.flot.time.min.js',
+                    ],
+                }
+            },
+
+            dokan_extra: {
+                files: {
+                    '<%= dirs.css %>/dokan-extra.css': [
+                        '<%= dirs.css %>/chosen.min.css',
+                        '<%= dirs.css %>/icomoon.css',
+                        '<%= dirs.css %>/tabulous.css'
+                    ]
+                }
+            }
         },
 
         // Generate POT files.
@@ -104,6 +119,18 @@ module.exports = function(grunt) {
                 options: {
                     livereload: true
                 }
+            },
+
+            js: {
+                files: [
+                    '<%= dirs.js %>/admin.js',
+                    '<%= dirs.js %>/orders.js',
+                    '<%= dirs.js %>/product-editor.js',
+                    '<%= dirs.js %>/reviews.js',
+                    '<%= dirs.js %>/script.js',
+                    '<%= dirs.js %>/settings.js',
+                ],
+                tasks: ['concat:all_js']
             }
         },
 

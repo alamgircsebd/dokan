@@ -657,5 +657,60 @@ class Dokan_Pro_Reviews {
             $wpdb->posts.post_type='$post_type'"
         );
     }
+    
+    function render_store_tab_comment_list( $comments, $store_id ) {
+        
+        ob_start();
+        if ( count( $comments ) == 0 ) {
+            echo '<span colspan="5">' . __( 'No Results Found', 'dokan' ) . '</span>';
+        } else {
+            foreach ( $comments as $single_comment ) {
+                if ( $single_comment->comment_approved ) {
+                    $GLOBALS['comment'] = $single_comment;
+                    $comment_date       = get_comment_date( 'l, F jS, Y \a\t g:i a', $single_comment->comment_ID );
+                    $comment_author_img = get_avatar( $single_comment->comment_author_email, 180 );
+                    $permalink          = get_comment_link( $single_comment );
+                    ?>
+
+                    <li <?php comment_class(); ?> itemtype="http://schema.org/Review" itemscope="" itemprop="reviews">
+                        <div class="review_comment_container">
+                            <div class="dokan-review-author-img"><?php echo $comment_author_img; ?></div>
+                            <div class="comment-text">
+                                <a href="<?php echo $permalink; ?>">
+                                    <?php
+                                    if ( get_option( 'woocommerce_enable_review_rating' ) == 'yes' ) :
+                                        $rating = intval( get_comment_meta( $single_comment->comment_ID, 'rating', true ) );
+                                    ?>
+                                        <div class="dokan-rating">
+                                            <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf( __( 'Rated %d out of 5', 'dokan' ), $rating ) ?>">
+                                                <span style="width:<?php echo ( intval( get_comment_meta( $single_comment->comment_ID, 'rating', true ) ) / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo $rating; ?></strong> <?php _e( 'out of 5', 'dokan' ); ?></span>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </a>
+                                <p>
+                                    <strong itemprop="author"><?php echo $single_comment->comment_author; ?></strong>
+                                    <em class="verified"><?php echo $single_comment->user_id == 0 ? '(Guest)' : ''; ?></em>
+                                    –
+                                    <a href="<?php echo $permalink; ?>">
+                                        <time datetime="<?php echo date( 'c', strtotime( $comment_date ) ); ?>" itemprop="datePublished"><?php echo $comment_date; ?></time>
+                                    </a>
+                                </p>
+                                <div class="description" itemprop="description">
+                                    <p><?php echo $single_comment->comment_content; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <?php
+                }
+            }
+        }
+        
+        $review_list = ob_get_clean();
+        
+        return apply_filters( 'dokan_seller_tab_reviews_list', $review_list, $store_id );
+    }
 
 }

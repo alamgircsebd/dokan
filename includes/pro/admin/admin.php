@@ -37,8 +37,13 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     public function load_admin_settings( $capability, $menu_position ) {
+        $refund      = dokan_get_refund_count();
+        $refund_text = __( 'Refund Request', 'dokan' );
 
-        add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), __( 'Refund Request', 'dokan' ), $capability, 'dokan-refund', array($this, 'refund_request') );
+        if ( $refund['pending'] ) {
+            $refund_text = sprintf( __( 'Refund Request %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>');
+        }
+        add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array($this, 'refund_request') );
         add_submenu_page( 'dokan', __( 'Sellers Listing', 'dokan' ), __( 'All Sellers', 'dokan' ), $capability, 'dokan-sellers', array($this, 'seller_listing') );
         $report       = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array($this, 'report_page') );
         $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
@@ -68,6 +73,12 @@ class Dokan_Pro_Admin_Settings {
                 'desc'    => __( 'Enable showing Store location map on store left sidebar', 'dokan' ),
                 'type'    => 'checkbox',
                 'default' => 'on'
+            ),
+            'gmap_api_key' => array(
+                'name'    => 'gmap_api_key',
+                'label'   => __( 'Google Map API key', 'dokan' ),
+                'desc'    => __( '<a href="https://developers.google.com/maps/documentation/javascript/" target="_blank">API Key</a> is needed to display map on store page', 'dokan' ),
+                'type'    => 'text',
             ),
             'store_seo' => array(
                 'name'    => 'store_seo',

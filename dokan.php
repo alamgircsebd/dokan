@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.4.11
+Version: 2.4.12
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.4.11' );
+define( 'DOKAN_PLUGIN_VERSION', '2.4.12' );
 define( 'DOKAN_FILE', __FILE__ );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
@@ -254,6 +254,7 @@ final class WeDevs_Dokan {
 
         wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
+
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
         }
@@ -348,7 +349,7 @@ final class WeDevs_Dokan {
                 'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
                 'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
                 'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-                'rounding_precision'            => WC_ROUNDING_PRECISION,
+                'rounding_precision'            => wc_get_rounding_precision(),
             );
 
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
@@ -369,6 +370,11 @@ final class WeDevs_Dokan {
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
+
+                $scheme       = is_ssl() ? 'https' : 'http';
+                $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
+
+                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
 
                 wp_enqueue_script( 'jquery' );
                 wp_enqueue_script( 'jquery-ui' );
@@ -403,7 +409,9 @@ final class WeDevs_Dokan {
 
             if ( DOKAN_LOAD_SCRIPTS ) {
                 $scheme       = is_ssl() ? 'https' : 'http';
-                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js' );
+                $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
+
+                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
 
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
@@ -630,7 +638,7 @@ final class WeDevs_Dokan {
                 'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
                 'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
                 'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-                'rounding_precision'            => WC_ROUNDING_PRECISION,
+                'rounding_precision'            => wc_get_rounding_precision(),
             );
 
             wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );

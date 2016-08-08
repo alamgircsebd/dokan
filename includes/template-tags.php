@@ -591,10 +591,19 @@ function dokan_store_listing( $atts ) {
     // if search is enabled, perform a search
     if ( 'yes' == $attr['search'] ) {
         $search_term = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
-
         if ( '' != $search_term ) {
-            $seller_args['search']         = $search_term;
-            $seller_args['search_columns'] = array( 'user_login', 'user_nicename', 'display_name');
+            $seller_args['meta_query']   = array( 
+                    array(
+                        'key'     => 'dokan_store_name',
+                        'value'   => $search_term,
+                        'compare' => 'LIKE'
+                    ),
+                    array(
+                        'key'     => 'dokan_enable_selling',
+                        'value'   => 'yes',
+                        'compare' => '='
+                    )
+                );
         }
     }
 

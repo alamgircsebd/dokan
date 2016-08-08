@@ -31,6 +31,19 @@ class Dokan_Tracker extends WeDevs_Insights {
     }
 
     /**
+     * Check if this is the pro version
+     *
+     * @return boolean
+     */
+    private function is_pro() {
+        if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the extra data
      *
      * @return array
@@ -38,7 +51,8 @@ class Dokan_Tracker extends WeDevs_Insights {
     protected function get_extra_data() {
         $data = array(
             'products' => $this->get_post_count( 'product' ),
-            'orders'   => $this->get_order_count()
+            'orders'   => $this->get_order_count(),
+            'is_pro'   => $this->is_pro() ? 'yes' : 'no'
         );
 
         return $data;

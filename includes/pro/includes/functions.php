@@ -37,7 +37,6 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 }
 
-
 /**
  * Get refund counts, used in admin area
  *
@@ -74,3 +73,31 @@ function dokan_get_refund_count() {
     return $counts;
 }
 
+
+/**
+ * Get get seller coupon
+ *
+ *  @since 2.4.12
+ *
+ * @param int $seller_id
+ *
+ * @return array
+ */
+function dokan_get_seller_coupon( $seller_id, $show_on_store = false ) {
+    $args = array(
+        'post_type'   => 'shop_coupon',
+        'post_status' => 'publish',
+        'author'      => $seller_id,
+    );
+
+    if ( $show_on_store ) {
+        $args['meta_query'][] = array(
+            'key'   => 'show_on_store',
+            'value' => 'yes',
+        );
+    }
+
+    $coupons = get_posts( $args );
+
+    return $coupons;
+}
