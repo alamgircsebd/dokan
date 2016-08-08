@@ -57,6 +57,7 @@ class Dokan_Ajax {
 
         add_filter( 'woocommerce_cart_item_name', array($this, 'seller_info_checkout'), 10, 2 );
 
+        add_filter( 'wp_ajax_dokan_seller_listing_search', array($this, 'seller_listing_search') );
         add_filter( 'wp_ajax_nopriv_dokan_seller_listing_search', array($this, 'seller_listing_search') );
     }
 
