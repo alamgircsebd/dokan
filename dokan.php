@@ -252,7 +252,12 @@ final class WeDevs_Dokan {
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
-        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), false, null, true );
+
+        wp_register_script( 'customize-base', site_url( 'wp-includes/js/customize-base.js' ), array( 'jquery' ), null, true );
+        wp_register_script( 'customize-model', site_url( 'wp-includes/js/customize-models.js' ), array( 'jquery' ), null, true );
+
+
+        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), array( 'imgareaselect', 'customize-base', 'customize-model' ), null, true );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
@@ -333,6 +338,12 @@ final class WeDevs_Dokan {
         wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
 
         if ( $this->is_pro() ) {
+            $general_settings = get_option( 'dokan_general', [] );
+            $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+            $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+            $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+            $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
+
             $dokan_refund = array(
                 'mon_decimal_point'             => wc_get_price_decimal_separator(),
                 'remove_item_notice'            => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', 'dokan' ),
@@ -349,6 +360,9 @@ final class WeDevs_Dokan {
                 'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
                 'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
                 'rounding_precision'            => wc_get_rounding_precision(),
+                'store_banner_dimension'        => [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width' => $has_flex_width, 'flex-height' => $has_flex_height ],
+                'selectAndCrop'                 => __( 'Select and Crop' ),
+                'chooseImage'                   => __( 'Choose Image', 'dokan' )
             );
 
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
@@ -369,7 +383,7 @@ final class WeDevs_Dokan {
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
-                
+
                 $scheme       = is_ssl() ? 'https' : 'http';
                 $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
 
@@ -393,8 +407,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'wc-password-strength-meter' );
 
                 wp_enqueue_script( 'dokan-script' );
-                wp_localize_script( 'jquery', 'dokan', $localize_script );
-            }
+                wp_localize_script( 'jquery', 'dokan', $localize_script );            }
         }
 
         // store and my account page

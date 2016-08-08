@@ -115,6 +115,18 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
+            'store_banner_width' => array(
+                'name'    => 'store_banner_width',
+                'label'   => __( 'Store Banner width', 'dokan' ),
+                'type'    => 'text',
+                'default' => 625
+            ),
+            'store_banner_height' => array(
+                'name'    => 'store_banner_height',
+                'label'   => __( 'Store Banner height', 'dokan' ),
+                'type'    => 'text',
+                'default' => 300
+            ),
         );
 
         $new_settings_fields['dokan_selling'] = array(
