@@ -15,10 +15,11 @@
         <form role="search" method="get" class="dokan-seller-search-form" action="">
             <label>
                 <span class="screen-reader-text"><?php _e( 'Search Seller', 'dokan' ); ?></span>
-                <input type="search" id="search" class="search-field" placeholder="<?php esc_attr_e( 'Search seller &hellip;', 'dokan' ); ?>" value="<?php echo esc_attr( $search_query ); ?>" name="dokan_seller_search" title="<?php esc_attr_e( 'Search seller &hellip;', 'dokan' ); ?>" />
-                <input type="hidden" id="pagination_base" name="pagination_base" value="<?php echo $pagination_base ?>" />
-                <input type="hidden" id="nonce" name="nonce" value="<?php echo wp_create_nonce( 'dokan-seller-listing-search' ); ?>" />
             </label>
+            <input type="search" id="search" class="search-field dokan-seller-search" placeholder="<?php esc_attr_e( 'Search &hellip;', 'dokan' ); ?>" value="<?php echo esc_attr( $search_query ); ?>" name="dokan_seller_search" title="<?php esc_attr_e( 'Search seller &hellip;', 'dokan' ); ?>" />
+            <input type="hidden" id="pagination_base" name="pagination_base" value="<?php echo $pagination_base ?>" />
+            <input type="hidden" id="nonce" name="nonce" value="<?php echo wp_create_nonce( 'dokan-seller-listing-search' ); ?>" />
+            <div class="dokan-overlay" style="display: none;"><span class="dokan-ajax-loader"></span></div>
         </form>
 
     <?php } ?>
