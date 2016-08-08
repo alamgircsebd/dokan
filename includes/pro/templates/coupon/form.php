@@ -66,9 +66,9 @@
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
+        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <select id="product" required name="product_drop_down[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
+            <select id="product-dropdown" name="product_drop_down[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $products_id ) ) {
@@ -151,7 +151,7 @@
     <script type="text/javascript">
 
     jQuery(function($){
-        $("#product").chosen({width: "95%"});
+        $("#product-dropdown").chosen({width: "95%"});
         $("#coupon_exclude_categories").chosen({width: "95%"});
     });
 

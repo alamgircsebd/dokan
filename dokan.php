@@ -254,6 +254,7 @@ final class WeDevs_Dokan {
 
         wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), false, null, true );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
+
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
         }
@@ -369,7 +370,7 @@ final class WeDevs_Dokan {
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
-                
+
                 $scheme       = is_ssl() ? 'https' : 'http';
                 $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
 
