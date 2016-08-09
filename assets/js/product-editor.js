@@ -437,7 +437,6 @@
                     input = self.closest('tr.dokan-attribute-options').find('td input.dokan-attribute-option-values');
                 input.tagit("removeAll");
                 input.focus();
-                console.log(input);
             },
             clearSingleAttributeOptions : function(e , option) {
                 e.preventDefault();
@@ -446,7 +445,6 @@
                     input = self.closest('tr.dokan-single-attribute-options').find('td input.dokan-single-attribute-option-values');
                 input.tagit("removeAll");
                 $(input).focus();
-                console.log(input);
             },
 
             createVariationSection: function() {
@@ -477,8 +475,6 @@
 
                 var variant_single_template = wp.template( 'dokan-single-variations' );
                 var variation_single = variant_single_template( variation_data );
-
-                console.log( variation_data );
 
                 $.magnificPopup.open({
                     items: {

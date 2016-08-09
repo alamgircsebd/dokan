@@ -8,7 +8,7 @@ jQuery(function($) {
     window.WeDevs_Admin = {
 
         /**
-         * Image Upload Helper Function 
+         * Image Upload Helper Function
          **/
         imageUpload: function (e) {
             e.preventDefault();
@@ -42,7 +42,7 @@ jQuery(function($) {
             self.parent('.image_placeholder').siblings('input.image_url').val('');
             self.parent('.image_placeholder').empty();
         }
-    } 
+    }
 });
 jQuery(function($) {
 
@@ -250,7 +250,7 @@ jQuery(function($) {
                 security: dokan_refund.order_item_nonce
             };
 
-            dokan_seller_meta_boxes_order_items.block();            
+            dokan_seller_meta_boxes_order_items.block();
 
             $.ajax({
                 url:  dokan_refund.ajax_url,
@@ -885,7 +885,6 @@ jQuery(function($) {
                     input = self.closest('tr.dokan-attribute-options').find('td input.dokan-attribute-option-values');
                 input.tagit("removeAll");
                 input.focus();
-                console.log(input);
             },
             clearSingleAttributeOptions : function(e , option) {
                 e.preventDefault();
@@ -894,7 +893,6 @@ jQuery(function($) {
                     input = self.closest('tr.dokan-single-attribute-options').find('td input.dokan-single-attribute-option-values');
                 input.tagit("removeAll");
                 $(input).focus();
-                console.log(input);
             },
 
             createVariationSection: function() {
@@ -925,8 +923,6 @@ jQuery(function($) {
 
                 var variant_single_template = wp.template( 'dokan-single-variations' );
                 var variation_single = variant_single_template( variation_data );
-
-                console.log( variation_data );
 
                 $.magnificPopup.open({
                     items: {
@@ -1962,7 +1958,6 @@ jQuery(function($) {
 
    $( '.tc_check_box' ).on( 'click', function () {
         var chk_value = $( this ).val();
-        console.log( chk_value );
         if ( $( this ).prop( "checked" ) ) {
             $( 'input[name=register]' ).removeAttr( 'disabled' );
             $( 'input[name=dokan_migration]' ).removeAttr( 'disabled' );
@@ -2560,7 +2555,6 @@ jQuery(function($) {
             e.preventDefault();
 
             if( $(this).closest('table.dps-shipping-states').find( 'tr' ).length == 1 ){
-                //console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
                 $(this).closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
             }
 
@@ -2648,7 +2642,7 @@ jQuery(function($) {
                     action: 'dokan_seo_form_handler',
                     data: self.serialize(),
                 };
-                //console.log(data.data);
+
                 Dokan_Store_SEO.form.submit( data );
 
                 return false;
