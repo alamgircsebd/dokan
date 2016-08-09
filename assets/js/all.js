@@ -8,7 +8,7 @@ jQuery(function($) {
     window.WeDevs_Admin = {
 
         /**
-         * Image Upload Helper Function
+         * Image Upload Helper Function 
          **/
         imageUpload: function (e) {
             e.preventDefault();
@@ -42,7 +42,7 @@ jQuery(function($) {
             self.parent('.image_placeholder').siblings('input.image_url').val('');
             self.parent('.image_placeholder').empty();
         }
-    }
+    } 
 });
 jQuery(function($) {
 
@@ -250,7 +250,7 @@ jQuery(function($) {
                 security: dokan_refund.order_item_nonce
             };
 
-            dokan_seller_meta_boxes_order_items.block();
+            dokan_seller_meta_boxes_order_items.block();            
 
             $.ajax({
                 url:  dokan_refund.ajax_url,
@@ -924,6 +924,7 @@ jQuery(function($) {
                 var variant_single_template = wp.template( 'dokan-single-variations' );
                 var variation_single = variant_single_template( variation_data );
 
+                console.log( variation_data );
                 $.magnificPopup.open({
                     items: {
                         src: variation_single.trim(),

@@ -476,6 +476,7 @@
                 var variant_single_template = wp.template( 'dokan-single-variations' );
                 var variation_single = variant_single_template( variation_data );
 
+                console.log( variation_data );
                 $.magnificPopup.open({
                     items: {
                         src: variation_single.trim(),
