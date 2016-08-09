@@ -1,4 +1,5 @@
 jQuery(function($) {
+    var api = wp.customize;
 
     $('.datepicker').datepicker({
         dateFormat: 'yy-mm-dd'
@@ -81,13 +82,13 @@ jQuery(function($) {
             $('.show_if_seller').slideDown();
             if ( $( '.tc_check_box' ).length > 0 )
                 $('input[name=register]').attr('disabled','disabled');
-        } else {            
+        } else {
             $('.show_if_seller').slideUp();
             if ( $( '.tc_check_box' ).length > 0 )
                 $( 'input[name=register]' ).removeAttr( 'disabled' );
         }
     });
-    
+
    $( '.tc_check_box' ).on( 'click', function () {
         var chk_value = $( this ).val();
         console.log( chk_value );
@@ -99,7 +100,7 @@ jQuery(function($) {
             $( 'input[name=dokan_migration]' ).attr( 'disabled', 'disabled' );
         }
     } );
-    
+
     if ( $( '.tc_check_box' ).length > 0 ){
         $( 'input[name=dokan_migration]' ).attr( 'disabled', 'disabled' );
     }
@@ -197,6 +198,8 @@ jQuery(function($) {
         $(element).closest('.form-group').removeClass('has-error');
     };
 
+    var api = wp.customize;
+
     var Dokan_Settings = {
         init: function() {
             var self = this;
@@ -213,79 +216,243 @@ jQuery(function($) {
             return false;
         },
 
+        calculateImageSelectOptions: function(attachment, controller) {
+            var xInit = parseInt(dokan_refund.store_banner_dimension.width, 10),
+                yInit = parseInt(dokan_refund.store_banner_dimension.height, 10),
+                flexWidth = !! parseInt(dokan_refund.store_banner_dimension['flex-width'], 10),
+                flexHeight = !! parseInt(dokan_refund.store_banner_dimension['flex-height'], 10),
+                ratio, xImg, yImg, realHeight, realWidth,
+                imgSelectOptions;
+
+            realWidth = attachment.get('width');
+            realHeight = attachment.get('height');
+
+            this.headerImage = new api.HeaderTool.ImageModel();
+            this.headerImage.set({
+                themeWidth: xInit,
+                themeHeight: yInit,
+                themeFlexWidth: flexWidth,
+                themeFlexHeight: flexHeight,
+                imageWidth: realWidth,
+                imageHeight: realHeight
+            });
+
+            controller.set( 'canSkipCrop', ! this.headerImage.shouldBeCropped() );
+
+            ratio = xInit / yInit;
+            xImg = realWidth;
+            yImg = realHeight;
+
+            if ( xImg / yImg > ratio ) {
+                yInit = yImg;
+                xInit = yInit * ratio;
+            } else {
+                xInit = xImg;
+                yInit = xInit / ratio;
+            }
+
+            imgSelectOptions = {
+                handles: true,
+                keys: true,
+                instance: true,
+                persistent: true,
+                imageWidth: realWidth,
+                imageHeight: realHeight,
+                x1: 0,
+                y1: 0,
+                x2: xInit,
+                y2: yInit
+            };
+
+            if (flexHeight === false && flexWidth === false) {
+                imgSelectOptions.aspectRatio = xInit + ':' + yInit;
+            }
+            if (flexHeight === false ) {
+                imgSelectOptions.maxHeight = yInit;
+            }
+            if (flexWidth === false ) {
+                imgSelectOptions.maxWidth = xInit;
+            }
+
+            return imgSelectOptions;
+        },
+
+        onSelect: function() {
+            this.frame.setState('cropper');
+        },
+
+        onCropped: function(croppedImage) {
+            var url = croppedImage.url,
+                attachmentId = croppedImage.attachment_id,
+                w = croppedImage.width,
+                h = croppedImage.height;
+            this.setImageFromURL(url, attachmentId, w, h);
+        },
+
+        onSkippedCrop: function(selection) {
+            var url = selection.get('url'),
+                w = selection.get('width'),
+                h = selection.get('height');
+            this.setImageFromURL(url, selection.id, w, h);
+        },
+
+        setImageFromURL: function(url, attachmentId, width, height) {
+            if ( $(this.uploadBtn).hasClass('dokan-banner-drag') ) {
+                var wrap = $(this.uploadBtn).closest('.dokan-banner');
+                wrap.find('input.dokan-file-field').val(attachmentId);
+                wrap.find('img.dokan-banner-img').attr('src', url);
+                $(this.uploadBtn).parent().siblings('.image-wrap', wrap).removeClass('dokan-hide');
+                $(this.uploadBtn).parent('.button-area').addClass('dokan-hide');
+
+            } else if ( $(this.uploadBtn).hasClass('dokan-gravatar-drag') ) {
+                var wrap = $(this.uploadBtn).closest('.dokan-gravatar');
+                wrap.find('input.dokan-file-field').val(attachmentId);
+                wrap.find('img.dokan-gravatar-img').attr('src', url);
+                $(this.uploadBtn).parent().siblings('.gravatar-wrap', wrap).removeClass('dokan-hide');
+                $(this.uploadBtn).parent('.gravatar-button-area').addClass('dokan-hide');
+            }
+        },
+
+        removeImage: function() {
+            api.HeaderTool.currentHeader.trigger('hide');
+            api.HeaderTool.CombinedList.trigger('control:removeImage');
+        },
 
         imageUpload: function(e) {
             e.preventDefault();
 
             var file_frame,
-                self = $(this);
+                settings = Dokan_Settings;
 
-            // If the media frame already exists, reopen it.
-            if ( file_frame ) {
-                file_frame.open();
-                return;
-            }
+            settings.uploadBtn = this;
 
-            // Create the media frame.
-            file_frame = wp.media.frames.file_frame = wp.media({
-                title: jQuery( this ).data( 'uploader_title' ),
+            settings.frame = wp.media({
+                multiple: false,
                 button: {
-                    text: jQuery( this ).data( 'uploader_button_text' )
+                    text: dokan_refund.selectAndCrop,
+                    close: false
                 },
-                multiple: false
+                states: [
+                    new wp.media.controller.Library({
+                        title:     dokan_refund.chooseImage,
+                        library:   wp.media.query({ type: 'image' }),
+                        multiple:  false,
+                        date:      false,
+                        priority:  20,
+                        suggestedWidth: dokan_refund.store_banner_dimension.width,
+                        suggestedHeight: dokan_refund.store_banner_dimension.height
+                    }),
+                    new wp.media.controller.Cropper({
+                        suggestedWidth: 5000,
+                        imgSelectOptions: settings.calculateImageSelectOptions
+                    })
+                ]
             });
 
-            // When an image is selected, run a callback.
-            file_frame.on( 'select', function() {
-                var attachment = file_frame.state().get('selection').first().toJSON();
+            settings.frame.on('select', settings.onSelect, settings);
+            settings.frame.on('cropped', settings.onCropped, settings);
+            settings.frame.on('skippedcrop', settings.onSkippedCrop, settings);
 
-                var wrap = self.closest('.dokan-banner');
-                wrap.find('input.dokan-file-field').val(attachment.id);
-                wrap.find('img.dokan-banner-img').attr('src', attachment.url);
-                self.parent().siblings('.image-wrap', wrap).removeClass('dokan-hide');
-
-                self.parent('.button-area').addClass('dokan-hide');
-            });
-
-            // Finally, open the modal
-            file_frame.open();
+            settings.frame.open();
 
         },
+
+        calculateImageSelectOptionsProfile: function(attachment, controller) {
+            var xInit = 100,
+                yInit = 100,
+                flexWidth = !! parseInt(dokan_refund.store_banner_dimension['flex-width'], 10),
+                flexHeight = !! parseInt(dokan_refund.store_banner_dimension['flex-height'], 10),
+                ratio, xImg, yImg, realHeight, realWidth,
+                imgSelectOptions;
+
+            realWidth = attachment.get('width');
+            realHeight = attachment.get('height');
+
+            this.headerImage = new api.HeaderTool.ImageModel();
+            this.headerImage.set({
+                themeWidth: xInit,
+                themeHeight: yInit,
+                themeFlexWidth: flexWidth,
+                themeFlexHeight: flexHeight,
+                imageWidth: realWidth,
+                imageHeight: realHeight
+            });
+
+            controller.set( 'canSkipCrop', ! this.headerImage.shouldBeCropped() );
+
+            ratio = xInit / yInit;
+            xImg = realWidth;
+            yImg = realHeight;
+
+            if ( xImg / yImg > ratio ) {
+                yInit = yImg;
+                xInit = yInit * ratio;
+            } else {
+                xInit = xImg;
+                yInit = xInit / ratio;
+            }
+
+            imgSelectOptions = {
+                handles: true,
+                keys: true,
+                instance: true,
+                persistent: true,
+                imageWidth: realWidth,
+                imageHeight: realHeight,
+                x1: 0,
+                y1: 0,
+                x2: xInit,
+                y2: yInit
+            };
+
+            if (flexHeight === false && flexWidth === false) {
+                imgSelectOptions.aspectRatio = xInit + ':' + yInit;
+            }
+            if (flexHeight === false ) {
+                imgSelectOptions.maxHeight = yInit;
+            }
+            if (flexWidth === false ) {
+                imgSelectOptions.maxWidth = xInit;
+            }
+
+            return imgSelectOptions;
+        },
+
         gragatarImageUpload: function(e) {
             e.preventDefault();
 
             var file_frame,
-                self = $(this);
+                settings = Dokan_Settings;
 
-            // If the media frame already exists, reopen it.
-            if ( file_frame ) {
-                file_frame.open();
-                return;
-            }
+            settings.uploadBtn = this;
 
-            // Create the media frame.
-            file_frame = wp.media.frames.file_frame = wp.media({
-                title: jQuery( this ).data( 'uploader_title' ),
+            settings.frame = wp.media({
+                multiple: false,
                 button: {
-                    text: jQuery( this ).data( 'uploader_button_text' )
+                    text: dokan_refund.selectAndCrop,
+                    close: false
                 },
-                multiple: false
+                states: [
+                    new wp.media.controller.Library({
+                        title:     dokan_refund.chooseImage,
+                        library:   wp.media.query({ type: 'image' }),
+                        multiple:  false,
+                        date:      false,
+                        priority:  20,
+                        suggestedWidth: 100,
+                        suggestedHeight: 100
+                    }),
+                    new wp.media.controller.Cropper({
+                        imgSelectOptions: settings.calculateImageSelectOptionsProfile
+                    })
+                ]
             });
 
-            // When an image is selected, run a callback.
-            file_frame.on( 'select', function() {
-                var attachment = file_frame.state().get('selection').first().toJSON();
+            settings.frame.on('select', settings.onSelect, settings);
+            settings.frame.on('cropped', settings.onCropped, settings);
+            settings.frame.on('skippedcrop', settings.onSkippedCrop, settings);
 
-                var wrap = self.closest('.dokan-gravatar');
-                wrap.find('input.dokan-file-field').val(attachment.id);
-                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);
-                self.parent().siblings('.gravatar-wrap', wrap).removeClass('dokan-hide');
-                self.parent('.gravatar-button-area').addClass('dokan-hide');
-
-            });
-
-            // Finally, open the modal
-            file_frame.open();
+            settings.frame.open();
 
         },
 

@@ -69,7 +69,16 @@
                      *
                      * @since 2.4.10
                      */
-                    echo apply_filters( 'dokan_banner_upload_help', __('Upload a banner for your store. Banner size is (625x300) pixels.', 'dokan' ) );
+                    $general_settings = get_option( 'dokan_general', [] );
+                    $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+                    $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+
+                    $help_text = sprintf(
+                        __('Upload a banner for your store. Banner size is (%sx%s) pixels.', 'dokan' ),
+                        $banner_width, $banner_height
+                    );
+
+                    echo apply_filters( 'dokan_banner_upload_help', $help_text );
                     ?>
                 </p>
             </div>
