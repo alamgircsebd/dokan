@@ -2511,7 +2511,7 @@ function dokan_more_product_from_seller( $seller_id = 0, $posts_per_page = 6 ) {
 function check_more_seller_product_tab(  ) {
     global   $post;
     $store_info    = dokan_get_store_info(  $post->post_author );
-    if($store_info['show_more_ptab'] == 'yes'){
+    if( isset( $store_info['show_more_ptab'] ) AND $store_info['show_more_ptab'] == 'yes' ){
         return true;
     }else {
         return false;
@@ -2529,11 +2529,11 @@ function check_more_seller_product_tab(  ) {
  */
 function dokan_more_from_seller_tab( $tabs ) {
     if( check_more_seller_product_tab()){
-    $tabs['more_seller_product'] = array(
-            'title' 	=> __( 'More Product fromthis Seller', 'dokan' ),
-            'priority' 	=> 99,
-            'callback' 	=> 'dokan_more_product_from_seller',
-    );
+        $tabs['more_seller_product'] = array(
+                'title' 	=> __( 'More Product fromthis Seller', 'dokan' ),
+                'priority' 	=> 99,
+                'callback' 	=> 'dokan_more_product_from_seller',
+        );
     }
     return $tabs;
 
