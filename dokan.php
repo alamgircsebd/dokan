@@ -263,6 +263,7 @@ final class WeDevs_Dokan {
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
         }
+        wp_register_script( 'dokan-frontend-script', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), false, null, true );
     }
 
     /**
@@ -275,6 +276,15 @@ final class WeDevs_Dokan {
      * @uses wp_enqueue_style
      */
     public function scripts() {
+
+        wp_enqueue_script( 'dokan-frontend-script' );
+
+        $dokan_plugin = array(
+            'url'     => plugins_url( '', __FILE__ ),
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+        );
+
+        wp_localize_script( 'dokan-frontend-script', 'dokan_plugin', $dokan_plugin );
 
         if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
             wp_enqueue_script( 'dokan-product-shipping' );
@@ -481,12 +491,13 @@ final class WeDevs_Dokan {
             include_once DOKAN_INC_DIR . '/free/dokan-free-loader.php';
         }
 
+        require_once $inc_dir . 'wc-template.php';
+
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
             require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
-            require_once $inc_dir . 'wc-template.php';
             require_once $inc_dir . 'template-tags.php';
         }
 
