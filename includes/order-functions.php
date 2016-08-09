@@ -654,6 +654,7 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
     $commissions = array();
     $i = 0;
     $total_line = 0;
+    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'seller' );
 
     foreach ( $order->get_items() as $item_id => $item ) {
 
@@ -673,6 +674,12 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
 
         $commission['ut_amount'] = $refund_ut * ( $commission['total_line'] / $total_line );
         $admin_commission += ( $commission['total_line'] + $commission['ut_amount'] ) * $commission['admin_percentage'] /100;
+    }
+
+    if ( 'admin' == $commission_recipient ) {
+        $total_extra = $order->get_total_tax() + $order->get_total_shipping();
+        $net_extra   = $total_extra - ( $order->get_total_tax_refunded() + $order->get_total_shipping_refunded() );
+        $admin_commission += $net_extra;
     }
     
     return apply_filters( 'dokan_order_admin_commission', $admin_commission, $order );
