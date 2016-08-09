@@ -473,6 +473,7 @@ jQuery(function($) {
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_manage_stock', this.newProductDesign.showManageStock );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_required_shipping', this.newProductDesign.showShippingWrapper );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_required_tax', this.newProductDesign.showTaxWrapper );
+            $('.product-edit-new-container').on('change', 'input[type=checkbox]#_is_lot_discount', this.newProductDesign.showLotDiscountWrapper );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_downloadable', this.newProductDesign.downloadable );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_has_attribute', this.newProductDesign.showVariationSection );
 
@@ -562,7 +563,7 @@ jQuery(function($) {
             this.loadTagIt();
             
             $('body').on('submit', 'form.dokan-product-edit-form', this.inputValidate);            
-            
+            $( '.hide_if_lot_discount' ).hide();
         },
         
         inputValidate: function( e ) {   
@@ -748,6 +749,14 @@ jQuery(function($) {
                     $('.show_if_needs_tax').slideDown('fast');
                 } else {
                     $('.show_if_needs_tax').slideUp('fast');
+                }
+            },
+
+            showLotDiscountWrapper: function(){
+                if ( $(this ).is(':checked') ) {
+                    $('.show_if_needs_lot_discount' ).slideDown('slow');
+                } else {
+                    $('.show_if_needs_lot_discount' ).slideUp('slow');
                 }
             },
 

@@ -2945,3 +2945,57 @@ function dokan_save_account_details(){
 }
 
 add_action( 'template_redirect', 'dokan_save_account_details' );
+
+/**
+ * discount amount for lot quantity
+ *
+ * @return float
+ */
+function doakn_discount_for_lot_quantity() {
+    $total_discount_amount_for_lot = 0;
+    $flag_for_lot_discount = false;
+    foreach ( WC()->cart->get_cart() as $cart_data ) {
+        $product_id = $cart_data['product_id'];
+        $row_item_quantity = $cart_data['quantity'];
+        $line_total = $cart_data['line_total'];
+        $is_lot_discount = get_post_meta($product_id, '_is_lot_discount', true);
+        if ( $is_lot_discount == 'yes' ) {
+            $lot_discount_percentage = get_post_meta($product_id, '_lot_discount_amount', true);
+            $lot_discount_quantity = get_post_meta($product_id, '_lot_discount_quantity', true);
+            if ( $row_item_quantity >= $lot_discount_quantity ) {
+                $total_discount_amount_for_lot = $total_discount_amount_for_lot + ( $line_total * $lot_discount_percentage / 100 );
+                $flag_for_lot_discount = true;
+            }
+        }
+    }
+    if ( $flag_for_lot_discount == false ) {
+        $total_discount_amount_for_lot = 0;
+    }
+    return apply_filters( 'return_calculated_lot_discount', $total_discount_amount_for_lot );
+}
+
+/**
+ * display discount amount for lot quantity
+ *
+ * @return void
+ */
+function dokan_display_quantity_discount() { ?>
+    <?php $total_discount_amount_for_lot = doakn_discount_for_lot_quantity();?>
+    <tr class="cart-discount">
+        <th><?php _e( 'Quantity discount', 'dokan' );?></th>
+        <td><?php echo wc_price($total_discount_amount_for_lot);?></td>
+    </tr>
+    <?php
+}
+add_action( 'woocommerce_cart_totals_before_order_total', 'dokan_display_quantity_discount');
+
+/**
+ * calculate final total after lot quantity discount
+ *
+ * @return float
+ */
+function calculate_totals($total){
+    $total_discount_amount_for_lot = doakn_discount_for_lot_quantity();
+    return $total - $total_discount_amount_for_lot;
+}
+add_filter('woocommerce_calculated_total', 'calculate_totals');
