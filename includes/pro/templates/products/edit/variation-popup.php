@@ -18,7 +18,7 @@
                                             <select name="attribute_{{index}}[]">
                                                 <option value=""><?php _e( 'Any ', 'dokan' ); ?>{{title.name}}…</option>
                                                     <# _.each( title.term, function( term_val, term_key ) {
-                                                            if( !_.isUndefined( data['attribute_' + index ] ) && term_val == data['attribute_' + index ][0] ) {
+                                                            if( !_.isUndefined( data['attribute_' + index ] ) && term_key == data['attribute_' + index ][0] ) {
                                                                 var selected = 'selected="selected"';
                                                             } else {
                                                                 var selected = '';

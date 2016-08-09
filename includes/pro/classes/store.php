@@ -18,6 +18,8 @@ class Dokan_Pro_Store {
      */
     function __construct() {
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'load_rewrite_rules' ) );
+        add_action( 'dokan_store_profile_frame_after', array( $this, 'show_store_coupons' ), 10, 2 );
+
         add_filter( 'dokan_query_var_filter', array( $this, 'load_store_review_query_var' ), 10, 2 );
         add_filter( 'dokan_store_tabs', array( $this, 'add_review_tab_in_store' ), 10, 2 );
         add_filter( 'template_include', array( $this, 'store_review_template' ), 99 );
@@ -107,6 +109,64 @@ class Dokan_Pro_Store {
         }
 
         return $template;
+    }
+
+    /**
+     * Show seller coupons in the store page
+     *
+     * @param  WP_User  $store_user
+     * @param  array    $store_info
+     *
+     * @since 2.4.12
+     *
+     * @return void
+     */
+    public function show_store_coupons( $store_user, $store_info ) {
+        $seller_coupons = dokan_get_seller_coupon( $store_user->ID, true );
+
+        if ( ! $seller_coupons ) {
+            return;
+        }
+
+        $current_time = current_time( 'timestamp' );
+
+        echo '<div class="store-coupon-wrap">';
+
+        foreach ( $seller_coupons as $coupon ) {
+            $coup = new WC_Coupon( $coupon->post_title );
+
+            if ( ! $coup->is_valid() ) {
+                continue;
+            }
+
+            if ( 'percent_product' == $coup->type ) {
+                $coupon_amount_formated = $coup->amount . '%';
+            } else {
+                $coupon_amount_formated = wc_price( $coup->amount );
+            }
+            ?>
+
+                <div class="code">
+                    <span class="outside">
+                        <span class="inside">
+                            <div class="coupon-title"><?php printf( __( '%s Discount', 'dokan' ), $coupon_amount_formated ); ?></div>
+                            <div class="coupon-body">
+                                <?php if ( !empty( $coupon->post_content ) ) { ?>
+                                    <span class="coupon-details"><?php echo esc_html( $coupon->post_content ); ?></span>
+                                <?php } ?>
+                                <span class="coupon-code"><?php printf( __( 'Coupon Code: <strong>%s</strong>', 'dokan' ), $coupon->post_title ); ?></span>
+
+                                <?php if ( $coup->expiry_date ) { ?>
+                                    <span class="expiring-in">(<?php printf( __( 'Expiring in %s', 'dokan' ), human_time_diff( $current_time, $coup->expiry_date ) ); ?>)</span>
+                                <?php } ?>
+                            </div>
+                        </span>
+                    </span>
+                </div>
+            <?php
+        }
+
+        echo '</div>';
     }
 
 }

@@ -2039,6 +2039,9 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-single-store {
   margin: 0;
 }
+.dokan-single-store.dokan-w8 {
+  width: 72%;
+}
 .dokan-single-store .profile-frame {
   padding: 0px;
   position: relative;
@@ -2134,12 +2137,25 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   font-size: 17px;
   margin-bottom: 15px;
 }
+.dokan-single-store .store-coupon-wrap {
+  margin-bottom: 10px;
+}
+.dokan-single-store .store-coupon-wrap:before,
+.dokan-single-store .store-coupon-wrap:after {
+  content: " ";
+  display: table;
+}
+.dokan-single-store .store-coupon-wrap:after {
+  clear: both;
+}
 .dokan-single-store .store-coupon-wrap .code:before,
 .dokan-single-store .store-coupon-wrap .code a:before,
-.dokan-single-store .store-coupon-wrap .code span:before,
+.dokan-single-store .store-coupon-wrap .code span.outside:before,
+.dokan-single-store .store-coupon-wrap .code span.inside:before,
 .dokan-single-store .store-coupon-wrap .code:after,
 .dokan-single-store .store-coupon-wrap .code a:after,
-.dokan-single-store .store-coupon-wrap .code span:after {
+.dokan-single-store .store-coupon-wrap .code span.outside:after,
+.dokan-single-store .store-coupon-wrap .code span.inside:after {
   content: "";
   display: block;
   position: absolute;
@@ -2157,7 +2173,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
 .dokan-single-store .store-coupon-wrap .code {
   overflow: hidden;
   vertical-align: middle;
-  margin: 0 8px 20px 0;
+  margin: 0 15px 15px 0;
   background: #ececec;
   color: #21759A;
   text-shadow: 0 1px 0 #ddd;
@@ -2169,6 +2185,7 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   -webkit-box-shadow: 0 2px 0 0 #dddddd;
   box-shadow: 0 2px 0 0 #dddddd;
   font-weight: bold;
+  max-width: 250px;
 }
 .dokan-single-store .store-coupon-wrap .code:before {
   bottom: 5px;
@@ -2180,49 +2197,61 @@ table.dokan-single-attribute-options-table tbody tr td button.remove_attribute {
   left: 0;
   margin: 0 0 0 -4px;
 }
-.dokan-single-store .store-coupon-wrap .code span {
+.dokan-single-store .store-coupon-wrap .code span.outside {
   float: left;
   padding: 0 4px;
   color: #21759A;
 }
-.dokan-single-store .store-coupon-wrap .code span:before {
+.dokan-single-store .store-coupon-wrap .code span.outside:before {
   bottom: 5px;
   right: 0;
   margin: 0 -4px 0 0;
 }
-.dokan-single-store .store-coupon-wrap .code span:after {
+.dokan-single-store .store-coupon-wrap .code span.outside:after {
   content: "";
   top: 5px;
   right: 0;
   margin: 0 -4px 0 0;
 }
-.dokan-single-store .store-coupon-wrap .code span span {
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside {
   border: 1px dashed #ccc;
-  padding: .5em 6px;
+  padding: 15px 10px;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   -o-border-radius: 2px;
   border-radius: 2px;
+  float: left;
+  text-align: center;
 }
-.dokan-single-store .store-coupon-wrap .code span span .coupon-title {
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside .coupon-title {
   font-size: 20px;
   padding-bottom: 15px;
   font-weight: 500;
   text-align: center;
-  font-family: 'Open Sans', sans-serif;
 }
-.dokan-single-store .store-coupon-wrap .code span span .coupon-body {
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside .coupon-body {
   font-size: 14px;
   font-weight: 500;
-  text-align: center;
-  font-family: 'Open Sans', sans-serif;
 }
-.dokan-single-store .store-coupon-wrap .code span span:before {
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside .coupon-details {
+  display: block;
+  color: #666;
+  line-height: 20px;
+  margin-bottom: 10px;
+}
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside .expiring-in {
+  font-size: 13px;
+  font-style: italic;
+  display: block;
+  color: #999;
+  margin-top: 5px;
+}
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside:before {
   top: 50%;
   left: 0;
   margin: -2px 0 0 -4px;
 }
-.dokan-single-store .store-coupon-wrap .code span span:after {
+.dokan-single-store .store-coupon-wrap .code span.outside span.inside:after {
   top: 50%;
   right: 0;
   margin: -2px -4px 0 0;
