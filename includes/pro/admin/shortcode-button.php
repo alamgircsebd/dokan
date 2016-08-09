@@ -27,23 +27,23 @@ class Dokan_shortcodes_button {
     function localize_shortcodes() {
         
         $shortcodes = array(
-            array(
-                'title'   => 'Dokan Dashboard',
+            'dokan-dashboard'            => array(
+                'title'   => 'Dokan Dasboard',
                 'content' => '[dokan-dashboard]'
             ),
-            array(
-                'title'   => 'Store Listing',
+            'dokan-stores'               => array(
+                'title'   => 'Stores List',
                 'content' => '[dokan-stores]'
             ),
-            array(
+            'dokan-best-selling-product' => array(
                 'title'   => 'Best Selling Product',
                 'content' => '[dokan-best-selling-product]'
             ),
-            array(
+            'dokan-top-rated-product'    => array(
                 'title'   => 'Top Rated Product',
                 'content' => '[dokan-top-rated-product]'
             ),
-            array(
+            'dokan-my-orders'            => array(
                 'title'   => 'Dokan My Orders',
                 'content' => '[dokan-my-orders]'
             )
