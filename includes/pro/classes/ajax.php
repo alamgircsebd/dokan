@@ -86,7 +86,7 @@ class Dokan_Pro_Ajax {
         } else if ( $refund->has_pending_refund_request( $_POST['order_id'] ) ) {
             $data =  __( 'You have already a processing refund request for this order.', 'dokan' );
             wp_send_json_error( $data );
-        } else{ 
+        } else{
             $refund = new Dokan_Pro_Refund;
             $refund->insert_refund($_POST);
             Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
@@ -679,7 +679,7 @@ class Dokan_Pro_Ajax {
                 $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
-                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'woocommerce' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
+                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
 
                 // Update or Add post
                 if ( ! $variation_id ) {
@@ -818,14 +818,24 @@ class Dokan_Pro_Ajax {
 
                 // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
+                $k = 0;
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
                         $attribute_key = 'attribute_' . $attribute['name'];
-                        $value         = isset( $postdata[ $attribute_key ][ $i ] ) ? stripslashes( $postdata[ $attribute_key ][ $i ] ) : '';
                         $updated_attribute_keys[] = $attribute_key;
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            // Don't use wc_clean as it destroys sanitized characters
+                            $value = isset( $postdata['attribute_value'][$i][$k] ) ? sanitize_title( stripslashes( $postdata['attribute_value'][$i][$k] ) ) : '';
+                        } else {
+                            $value = isset( $postdata['attribute_value'][$i][$k] ) ? wc_clean( stripslashes( $postdata['attribute_value'][$i][$k] ) ) : '';
+                        }
+
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
+
+                    $k++;
                 }
 
                 // Remove old taxonomies attributes so data is kept up to date - first get attribute key names

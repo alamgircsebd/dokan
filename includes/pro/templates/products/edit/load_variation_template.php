@@ -71,7 +71,7 @@ if ( $attributes ) {
         }
         unset(  $attribute['value'] );
         $attribute['name'] = wc_attribute_label( $attribute['name'] );
-        $filter_attributes[$item] = $attribute;
+        $filter_attributes[sanitize_title( $item ) ] = $attribute;
     }
 
     foreach( $attributes as $item => $attribute ) {
