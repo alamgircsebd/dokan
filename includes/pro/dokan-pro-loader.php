@@ -58,6 +58,7 @@ class Dokan_Pro_Loader {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
+            require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
             require_once DOKAN_PRO_CLASS . '/update.php';
         }
 
