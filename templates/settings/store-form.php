@@ -13,6 +13,7 @@
     $store_ppp  = isset( $profile_info['store_ppp'] ) ? esc_attr( $profile_info['store_ppp'] ) : '';
     $phone      = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
     $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
+    $show_more_ptab = isset( $profile_info['show_more_ptab'] ) ? esc_attr( $profile_info['show_more_ptab'] ) : 'yes';
 
     $address         = isset( $profile_info['address'] ) ? $profile_info['address'] : '';
     $address_street1 = isset( $profile_info['address']['street_1'] ) ? $profile_info['address']['street_1'] : '';
@@ -142,6 +143,19 @@
                 </div>
             </div>
         </div>
+
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'Product Tab', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <div class="checkbox">
+                    <label>
+                        <input type="hidden" name="setting_show_more_ptab" value="no">
+                        <input type="checkbox" name="setting_show_more_ptab" value="yes"<?php checked( $show_email, 'yes' ); ?>> <?php _e( 'Show Seller More Product Tab', 'dokan' ); ?>
+                    </label>
+                </div>
+            </div>
+        </div>
+
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e( 'Map', 'dokan' ); ?></label>

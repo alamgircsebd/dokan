@@ -2342,9 +2342,9 @@ add_action( 'woocommerce_created_customer', 'dokan_on_create_seller', 10, 2);
  * Change seller display name to store name
  *
  * @since 2.4.10 [Change seller display name to store name]
- * 
+ *
  * @param string $display_name
- * 
+ *
  * @return string $display_name
  */
 function dokan_seller_displayname ( $display_name ) {
@@ -2353,7 +2353,7 @@ function dokan_seller_displayname ( $display_name ) {
 
         $seller_info = dokan_get_store_info ( get_current_user_id() );
         $display_name = ( !empty( $seller_info['store_name'] ) ) ? $seller_info['store_name'] : $display_name;
-    
+
     }
 
     return $display_name;
@@ -2457,6 +2457,88 @@ function dokan_get_best_selling_products( $per_page = 8, $seller_id = '' ) {
 }
 
 
+/**
+ *  Show more product from current seller
+ *
+ * @since 2.5
+ * @global object $product
+ * @global object $post
+ * @param int $seller_id
+ * @param int $posts_per_page
+ */
+function dokan_more_product_from_seller( $seller_id = 0, $posts_per_page = 6 ) {
+
+    global $product, $post;
+    if($seller_id==0){
+        $seller_id = $post->post_author ;
+    }
+    if(! abs($posts_per_page) ){
+        $posts_per_page = 4 ;
+    }
+    $args = array(
+            'post_type'            => 'product',
+            'posts_per_page'       => $posts_per_page,
+            'orderby'              => 'rand',
+            'post__not_in'         => array( $post->ID ),
+            'author'               => $seller_id
+    );
+
+    $products = new WP_Query( $args );
+
+    if ( $products->have_posts() ) {
+        woocommerce_product_loop_start();
+
+            while ( $products->have_posts() ) {
+                $products->the_post();
+                wc_get_template_part( 'content', 'product' );
+            }
+
+        woocommerce_product_loop_end();
+    } else {
+        _e('No product has been found!', 'dokan');
+    }
+
+    wp_reset_postdata();
+}
+
+/**
+ * Check More product from Seller tab is active or not.
+ *
+ * @since 2.5
+ * @global object $post
+ * @return boolean
+ */
+function check_more_seller_product_tab(  ) {
+    global   $post;
+    $store_info    = dokan_get_store_info(  $post->post_author );
+    if($store_info['show_more_ptab'] == 'yes'){
+        return true;
+    }else {
+        return false;
+    }
+}
+
+/**
+ * Set More product from seller tab
+ *
+ * on Single Product Page
+ *
+ * @since 2.5
+ * @param array $tabs
+ * @return int
+ */
+function dokan_more_from_seller_tab( $tabs ) {
+    if( check_more_seller_product_tab()){
+    $tabs['more_seller_product'] = array(
+            'title' 	=> __( 'More Product fromthis Seller', 'dokan' ),
+            'priority' 	=> 99,
+            'callback' 	=> 'dokan_more_product_from_seller',
+    );
+    }
+    return $tabs;
+
+}
+add_action( 'woocommerce_product_tabs', 'dokan_more_from_seller_tab', 10 );
 
 /**
  * Get top rated products
@@ -2595,7 +2677,7 @@ function dokan_get_seller_rating( $seller_id ) {
         ORDER BY wc.comment_post_ID";
 
     $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
-    
+
     $rating_value = apply_filters( 'dokan_seller_rating_value', array(
         'rating' => number_format( $result->average, 2 ),
         'count'  => (int) $result->count
