@@ -48,7 +48,11 @@ class Dokan_shortcodes_button {
                 'content' => '[dokan-my-orders]'
             )
         );
+        
+        $assets_url = DOKAN_PLUGIN_ASSEST;
+        
         wp_localize_script( 'dokan_slider_admin', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
+        wp_localize_script( 'dokan_slider_admin', 'dokan_assets_url', $assets_url );
     }
 
     /**
