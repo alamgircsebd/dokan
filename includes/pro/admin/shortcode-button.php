@@ -7,9 +7,25 @@ class Dokan_shortcodes_button {
         
         add_filter( 'mce_external_plugins',  array( $this, 'enqueue_plugin_scripts' ) );
         add_filter( 'mce_buttons',  array( $this, 'register_buttons_editor' ) );
-
+        
+        add_action( 'admin_enqueue_scripts', array( $this, 'localize_shortcodes' ) , 90  );
     }
     
+    function localize_shortcodes() {
+        
+        $shortcodes = array( 
+            array(
+                'title' => 'Dokan Dashboard',
+                'content' => '[dokan-dashboard]'
+            ),
+            array(
+                'title' => 'Store Listing',
+                'content' => '[dokan-stores]'
+            ),
+        );
+        wp_localize_script( 'dokan_slider_admin', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
+    }
+
     /**
      * * Singleton object
      *
