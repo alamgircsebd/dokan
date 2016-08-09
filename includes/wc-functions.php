@@ -1429,22 +1429,50 @@ function dokan_new_save_variations( $post_id ) {
 
         for ( $i = 0; $i <= $max_loop; $i ++ ) {
 
-            if ( ! isset( $variable_post_id[ $i ] ) )
+            if ( ! isset( $variable_post_id[ $i ] ) ) {
                 continue;
+            }
 
             $variation_id = absint( $variable_post_id[ $i ] );
+
+            // Virtal/Downloadable
+            $is_downloadable = isset( $variable_is_downloadable[ $i ] ) ? 'yes' : 'no';
+
+            if ( isset( $variable_is_virtual[ $i ] ) ) {
+                $is_virtual = 'yes';
+            } else {
+                if ( $is_downloadable == 'yes' ) {
+                    $is_virtual = 'yes';
+                } else {
+                    $is_virtual = 'no';
+                }
+            }
+
+            // Enabled or disabled
+            $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
+            $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
             if( isset( $_POST['_variation_product_update'] ) && $_POST['_variation_product_update'] == 'yes' ) {
 
                 $regular_price  = wc_format_decimal( $variable_regular_price[ $i ] );
                 update_post_meta( $variation_id, '_regular_price', $regular_price );
                 update_post_meta( $variation_id, '_sku', wc_clean( $variable_sku[ $i ] ) );
-                update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
+                update_post_meta( $variation_id, '_price', $regular_price );
 
                 $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
 
                 $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
                 $wpdb->update( $wpdb->posts, array( 'post_status' => $post_status, 'post_title' => $variation_post_title, 'menu_order' => $variable_menu_order[ $i ] ), array( 'ID' => $variation_id ) );
+
+                update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
+                update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
+                update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );
+                update_post_meta( $variation_id, '_manage_stock', $manage_stock );
+
+                // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
+                if ( ! empty( $variable_stock_status[ $i ] ) ) {
+                    wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
+                }
 
                 // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
@@ -1474,24 +1502,6 @@ function dokan_new_save_variations( $post_id ) {
                 }
 
             } else {
-
-                // Virtal/Downloadable
-                $is_downloadable = isset( $variable_is_downloadable[ $i ] ) ? 'yes' : 'no';
-
-                if ( isset( $variable_is_virtual[ $i ] ) ) {
-                    $is_virtual = 'yes';
-                } else {
-
-                    if ( $is_downloadable == 'yes' ) {
-                        $is_virtual = 'yes';
-                    } else {
-                        $is_virtual = 'no';
-                    }
-                }
-
-                // Enabled or disabled
-                $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
-                $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
                 $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
