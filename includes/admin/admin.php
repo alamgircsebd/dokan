@@ -211,7 +211,7 @@ class Dokan_Admin_Settings {
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
                     'label'   => __( 'New Seller Enable Selling', 'dokan' ),
-                    'desc'    => __( 'Make selling status enable for new registred seller', 'dokan' ),
+                    'desc'    => __( 'Make selling status enable for new registered seller', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),

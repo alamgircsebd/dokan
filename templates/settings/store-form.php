@@ -14,6 +14,11 @@
     $phone      = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
     $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
 
+    $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling', array('') );
+    $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? esc_attr( $profile_info['show_min_order_discount'] ) : 'no';
+    $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? esc_attr( $profile_info['setting_minimum_order_amount'] ) : 0;
+    $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? esc_attr( $profile_info['setting_order_percentage'] ) : 0;
+
     $address         = isset( $profile_info['address'] ) ? $profile_info['address'] : '';
     $address_street1 = isset( $profile_info['address']['street_1'] ) ? $profile_info['address']['street_1'] : '';
     $address_street2 = isset( $profile_info['address']['street_2'] ) ? $profile_info['address']['street_2'] : '';
@@ -130,6 +135,27 @@
                 <input id="setting_phone" value="<?php echo $phone; ?>" name="setting_phone" placeholder="<?php _e( '+123456..', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
             </div>
         </div>
+
+        <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("order-discount", $is_enable_op_discount ) == "order-discount" ) : ?>
+            <div class="dokan-form-group">
+                <label class="dokan-w3 dokan-control-label"><?php _e( 'Discount ', 'dokan' ); ?></label>
+                <div class="dokan-w5 dokan-text-left">
+                    <div class="checkbox">
+                        <label class="dokan-control-label" for="lbl_setting_minimum_quantity">
+                            <input type="hidden" name="setting_show_minimum_discount_option" value="no">
+                            <input id="lbl_setting_minimum_quantity" type="checkbox" name="setting_show_minimum_order_discount_option" value="yes"<?php checked( $is_enable_order_discount, 'yes' ); ?>>
+                            <?php _e( 'Enable storewide discount', 'dokan' ); ?>
+                        </label>
+                    </div>
+                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
+                        <input id="setting_minimum_order_amount" value="<?php echo $setting_minimum_order_amount; ?>" name="setting_minimum_order_amount" placeholder="<?php _e( 'Minimum Order Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                    </div>
+                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
+                        <input id="setting_order_percentage" value="<?php echo $setting_order_percentage; ?>" name="setting_order_percentage" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label"><?php _e( 'Email', 'dokan' ); ?></label>

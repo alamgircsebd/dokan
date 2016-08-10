@@ -456,17 +456,20 @@ class Dokan_Template_Settings {
 
             //update store setttings info
             $dokan_settings = array(
-                'store_name'   => sanitize_text_field( $_POST['dokan_store_name'] ),
-                'store_ppp'    => absint( $_POST['dokan_store_ppp'] ),
-                'address'      => isset( $_POST['dokan_address'] ) ? $_POST['dokan_address'] : $prev_dokan_settings['address'],
-                'location'     => sanitize_text_field( $_POST['location'] ),
-                'find_address' => sanitize_text_field( $_POST['find_address'] ),
-                'banner'       => absint( $_POST['dokan_banner'] ),
-                'phone'        => sanitize_text_field( $_POST['setting_phone'] ),
-                'show_email'   => sanitize_text_field( $_POST['setting_show_email'] ),
-                'gravatar'     => absint( $_POST['dokan_gravatar'] ),
-                'enable_tnc'   => isset( $_POST['dokan_store_tnc_enable'] ) ? $_POST['dokan_store_tnc_enable'] : '',
-                'store_tnc'    => isset( $_POST['dokan_store_tnc'] ) ? $_POST['dokan_store_tnc']: ''
+                'store_name'                   => sanitize_text_field( $_POST['dokan_store_name'] ),
+                'store_ppp'                    => absint( $_POST['dokan_store_ppp'] ),
+                'address'                      => isset( $_POST['dokan_address'] ) ? $_POST['dokan_address'] : $prev_dokan_settings['address'],
+                'location'                     => sanitize_text_field( $_POST['location'] ),
+                'find_address'                 => sanitize_text_field( $_POST['find_address'] ),
+                'banner'                       => absint( $_POST['dokan_banner'] ),
+                'phone'                        => sanitize_text_field( $_POST['setting_phone'] ),
+                'show_min_order_discount'      => $_POST['setting_show_minimum_order_discount_option'],
+                'setting_minimum_order_amount' => sanitize_text_field( $_POST['setting_minimum_order_amount'] ),
+                'setting_order_percentage'     => sanitize_text_field( $_POST['setting_order_percentage'] ),
+                'show_email'                   => sanitize_text_field( $_POST['setting_show_email'] ),
+                'gravatar'                     => absint( $_POST['dokan_gravatar'] ),
+                'enable_tnc'                   => isset( $_POST['dokan_store_tnc_enable'] ) ? $_POST['dokan_store_tnc_enable'] : '',
+                'store_tnc'                    => isset( $_POST['dokan_store_tnc'] ) ? $_POST['dokan_store_tnc'] : ''
             );
 
         } elseif ( wp_verify_nonce( $_POST['_wpnonce'], 'dokan_payment_settings_nonce' ) ) {
