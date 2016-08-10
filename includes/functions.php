@@ -1474,6 +1474,10 @@ function dokan_get_processing_time_value( $index ) {
  */
 function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
+    if ( get_post_meta( $order->id, 'has_sub_order', true ) == true ) {
+        return;
+    }
+    
     if ( $order ) {
 
         $sellers = dokan_get_seller_id_by_order( $order->id );
