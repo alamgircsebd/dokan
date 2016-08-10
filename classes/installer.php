@@ -21,9 +21,13 @@ class Dokan_Installer {
 
         flush_rewrite_rules();
 
+        $was_installed_before = get_option( 'dokan_theme_version', false );
+
         update_option( 'dokan_theme_version', DOKAN_PLUGIN_VERSION );
-        
-        set_transient( '_dokan_welcome_page_redirect', true, 30 );
+
+        if ( ! $was_installed_before ) {
+            set_transient( '_dokan_setup_page_redirect', true, 30 );
+        }
     }
 
     /**
@@ -70,21 +74,41 @@ class Dokan_Installer {
     }
 
     /**
-     * Redirect to Welcome page if  transient is valid
+     * Redirect to Setup page if transient is valid
      *
-     * @since 2.4.3
+     * @since 2.5
      *
      * @return void
      */
-    public static function welcome_page_redirect( $plugin ) {
-        
-        if ( !get_transient( '_dokan_welcome_page_redirect' ) ) {
+    public static function setup_page_redirect( $plugin ) {
+
+        if ( !get_transient( '_dokan_setup_page_redirect' ) ) {
             return;
         }
         // Delete the redirect transient
-        delete_transient( '_dokan_welcome_page_redirect' );
-        
-        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-welcome' ), admin_url( 'index.php' ) ) );
+        delete_transient( '_dokan_setup_page_redirect' );
+
+        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-setup' ), admin_url( 'index.php' ) ) );
+        exit;
+    }
+
+    /**
+     * Redirect to seller setup page if transient is valid
+     *
+     * @since 2.5
+     *
+     * @return void
+     */
+    public static function seller_setup_page_redirect( $plugin ) {
+
+        // if ( !get_transient( '_dokan_setup_page_redirect' ) ) {
+        //     return;
+        // }
+        // // Delete the redirect transient
+        // delete_transient( '_dokan_setup_page_redirect' );
+
+        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-setup' ), admin_url( 'index.php' ) ) );
+        exit;
     }
 
     /**
