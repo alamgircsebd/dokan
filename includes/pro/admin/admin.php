@@ -170,6 +170,14 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'checkbox',
                 'default' => 'off'
             ),
+            'discount_edit' => array(
+                'name'    => 'discount_edit',
+                'label'   => __( 'Discount Editing', 'dokan' ),
+                'desc'    => __( 'Seller can edit product and order discount', 'dokan' ),
+                'type'    => 'multicheck',
+                'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
+                'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
+            )
         );
 
         $new_settings_fields['dokan_withdraw'] = array(

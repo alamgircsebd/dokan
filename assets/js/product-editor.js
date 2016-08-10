@@ -26,6 +26,7 @@
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_required_shipping', this.newProductDesign.showShippingWrapper );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_required_tax', this.newProductDesign.showTaxWrapper );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_is_lot_discount', this.newProductDesign.showLotDiscountWrapper );
+            $('.dokan-form-horizontal').on('change', 'input[type=checkbox]#lbl_setting_minimum_quantity', this.newProductDesign.showStoreWideDiscountWrapper );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_downloadable', this.newProductDesign.downloadable );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_has_attribute', this.newProductDesign.showVariationSection );
 
@@ -116,6 +117,7 @@
 
             $('body').on('submit', 'form.dokan-product-edit-form', this.inputValidate);
             $( '.hide_if_lot_discount' ).hide();
+            $( '.hide_if_order_discount' ).hide();
         },
 
         inputValidate: function( e ) {
@@ -305,10 +307,18 @@
             },
 
             showLotDiscountWrapper: function(){
-                if ( $(this ).is(':checked') ) {
+                if ( $( this ).is(':checked') ) {
                     $('.show_if_needs_lot_discount' ).slideDown('slow');
                 } else {
                     $('.show_if_needs_lot_discount' ).slideUp('slow');
+                }
+            },
+
+            showStoreWideDiscountWrapper: function(){
+                if ( $( this ).is(':checked') ) {
+                    $('.show_if_needs_sw_discount' ).slideDown('slow');
+                } else {
+                    $('.show_if_needs_sw_discount' ).slideUp('slow');
                 }
             },
 
