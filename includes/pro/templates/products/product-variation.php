@@ -57,14 +57,14 @@
                             </td>
                             <?php
                             if ( $attribute['is_taxonomy'] ) {
-                                $tax = get_taxonomy( $attribute['name'] );                                
+                                $tax = get_taxonomy( $attribute['name'] );
                                 $options = wp_get_post_terms( $post_id, $attribute['name'], array( 'fields' => 'names' ) );
                                 $preset_options = get_terms( $attribute['name'], 'orderby=name&hide_empty=0' );
                                 $att_val = wp_list_pluck( $preset_options, 'name' );
                             } else {
                                 $attribute_name = $attribute['name'];
                                 $options = array_map( 'trim', explode('|', $attribute['value'] ) );
-                                $att_val = $options;                                
+                                $att_val = $options;
                             }
                             ?>
                             <td colspan="4"><input type="text" name="attribute_values[]" value="<?php echo implode( ',', $options ); ?>" data-preset_attr="<?php echo implode( ',', $att_val ); ?>" class="dokan-form-control dokan-attribute-option-values"></td>

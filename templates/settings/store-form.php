@@ -13,6 +13,7 @@
     $store_ppp  = isset( $profile_info['store_ppp'] ) ? esc_attr( $profile_info['store_ppp'] ) : '';
     $phone      = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
     $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
+    $show_more_ptab = isset( $profile_info['show_more_ptab'] ) ? esc_attr( $profile_info['show_more_ptab'] ) : 'yes';
 
     $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling', array('') );
     $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? esc_attr( $profile_info['show_min_order_discount'] ) : 'no';
@@ -74,7 +75,16 @@
                      *
                      * @since 2.4.10
                      */
-                    echo apply_filters( 'dokan_banner_upload_help', __('Upload a banner for your store. Banner size is (625x300) pixels.', 'dokan' ) );
+                    $general_settings = get_option( 'dokan_general', [] );
+                    $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+                    $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+
+                    $help_text = sprintf(
+                        __('Upload a banner for your store. Banner size is (%sx%s) pixels.', 'dokan' ),
+                        $banner_width, $banner_height
+                    );
+
+                    echo apply_filters( 'dokan_banner_upload_help', $help_text );
                     ?>
                 </p>
             </div>
@@ -168,6 +178,19 @@
                 </div>
             </div>
         </div>
+
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'Product Tab', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <div class="checkbox">
+                    <label>
+                        <input type="hidden" name="setting_show_more_ptab" value="no">
+                        <input type="checkbox" name="setting_show_more_ptab" value="yes"<?php checked( $show_email, 'yes' ); ?>> <?php _e( 'Show Seller More Product Tab', 'dokan' ); ?>
+                    </label>
+                </div>
+            </div>
+        </div>
+
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e( 'Map', 'dokan' ); ?></label>

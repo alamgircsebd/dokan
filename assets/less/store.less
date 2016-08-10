@@ -13,6 +13,10 @@
 .dokan-single-store {
     margin: 0;
 
+    &.dokan-w8 {
+        width: 72%;
+    }
+
     .profile-frame {
 
         padding: 0px;
@@ -138,8 +142,13 @@
     }
 
     .store-coupon-wrap {
+        .clearfix();
+        margin-bottom: 10px;
 
-        .code, .code a, .code span {
+        .code,
+        .code a,
+        .code span.outside,
+        .code span.inside {
             &:before, &:after {
                 content: "";
                 display: block;
@@ -159,7 +168,7 @@
         .code {
             overflow: hidden;
             vertical-align: middle;
-            margin: 0 8px 20px 0;
+            margin: 0 15px 15px 0;
 
             background: #ececec;
             color: #21759A;
@@ -173,6 +182,7 @@
             -webkit-box-shadow: 0 2px 0 0 #dddddd;
             box-shadow: 0 2px 0 0 #dddddd;
             font-weight: bold;
+            max-width: 250px;
 
             &:before {
                 bottom: 5px;
@@ -184,41 +194,61 @@
                 left: 0;
                 margin: 0 0 0 -4px;
             }
-            span {
+
+            span.outside {
                 float: left;
                 padding: 0 4px;
                 color: #21759A;
+
                 &:before {
                     bottom: 5px;
                     right: 0;
                     margin: 0 -4px 0 0;
                 }
+
                 &:after {
                     content: "";
                     top: 5px;
                     right: 0;
                     margin: 0 -4px 0 0;
                 }
-                span {
-                .coupon-title {
-                    font-size: 20px;
-                    padding-bottom: 15px;
-                    font-weight: 500;
-                    text-align: center;
-                    font-family: 'Open Sans', sans-serif;
-                }
-                .coupon-body {
-                    font-size: 14px;
-                    font-weight: 500;
-                    text-align: center;
-                    font-family: 'Open Sans', sans-serif;
-                }
+
+                span.inside {
                     border: 1px dashed #ccc;
-                    padding: .5em 6px;
+                    padding: 15px 10px;
                     -webkit-border-radius:2px;
                     -moz-border-radius:2px;
                     -o-border-radius:2px;
                     border-radius:2px;
+                    float: left;
+                    text-align: center;
+
+                    .coupon-title {
+                        font-size: 20px;
+                        padding-bottom: 15px;
+                        font-weight: 500;
+                        text-align: center;
+                    }
+                    .coupon-body {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+
+                    .coupon-details {
+                        display: block;
+                        color: #666;
+                        line-height: 20px;
+                        margin-bottom: 10px;
+                    }
+
+                    .expiring-in {
+                        font-size: 13px;
+                        font-style: italic;
+                        display: block;
+                        color: #999;
+                        margin-top: 5px;
+                    }
+
                     &:before {
                         top: 50%;
                         left: 0;

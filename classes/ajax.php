@@ -56,6 +56,9 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_nopriv_shop_url', array($this, 'shop_url_check') );
 
         add_filter( 'woocommerce_cart_item_name', array($this, 'seller_info_checkout'), 10, 2 );
+
+        add_filter( 'wp_ajax_dokan_seller_listing_search', array($this, 'seller_listing_search') );
+        add_filter( 'wp_ajax_nopriv_dokan_seller_listing_search', array($this, 'seller_listing_search') );
     }
 
     /**
@@ -418,6 +421,61 @@ class Dokan_Ajax {
                 wp_update_post( array( 'ID' => $pro->ID, 'post_status' => 'pending' ) );
             }
         }
+    }
+
+    /**
+     * Search seller listing
+     *
+     * @return void
+     */
+    public function seller_listing_search() {
+        if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-seller-listing-search' ) ) {
+            wp_send_json_error( __( 'Error: Nonce verification failed', 'dokan' ) );
+        }
+
+        $paged  = 1;
+        $limit  = 10;
+        $offset = ( $paged - 1 ) * $limit;
+
+        $seller_args = array(
+            'number' => $limit,
+            'offset' => $offset
+        );
+
+        $search_term = isset( $_REQUEST['search_term'] ) ? sanitize_text_field( $_REQUEST['search_term'] ) : '';
+        $pagination_base = isset( $_REQUEST['pagination_base'] ) ? sanitize_text_field( $_REQUEST['pagination_base'] ) : '';
+
+        if ( '' != $search_term ) {
+
+            $seller_args['search']         = "*{$search_term}*";
+            $seller_args['search_columns'] = array( 'display_name' );
+
+            $seller_args['meta_query'] = array(
+                array(
+                    'key'     => 'dokan_enable_selling',
+                    'value'   => 'yes',
+                    'compare' => '='
+                )
+            );
+        }
+
+        $sellers = dokan_get_sellers( $seller_args );
+
+        $template_args = apply_filters( 'dokan_store_list_args', array(
+            'sellers'         => $sellers,
+            'limit'           => $limit,
+            'paged'           => $paged,
+            'image_size'      => 'medium',
+            'search'          => 'yes',
+            'pagination_base' => $pagination_base,
+            'search_query'    => $search_term,
+        ) );
+
+        ob_start();
+        dokan_get_template_part( 'store-lists-loop', false, $template_args );
+        $content = ob_get_clean();
+
+        wp_send_json_success( $content );
     }
 
 }

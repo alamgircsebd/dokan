@@ -11,7 +11,7 @@
 ?>
  <div class="dashboard-widget dokan-announcement-widget">
     <div class="widget-title">
-        <i class="icon-briefcase"></i> <?php _e( 'Latest Announcement', 'dokan' ); ?>
+        <i class="fa fa-bullhorn" aria-hidden="true"></i> <?php _e( 'Latest Announcement', 'dokan' ); ?>
 
         <span class="pull-right">
             <a href="<?php echo $announcement_url; ?>"><?php _e( 'See All', 'dokan' ); ?></a>

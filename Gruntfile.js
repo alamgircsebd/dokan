@@ -40,7 +40,8 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '<%= dirs.js %>',
                 src: [
-                    '*.js',
+                    'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'reviews.js', 'script.js',
+                    'single-product-shipping.js', 'tabulous.js', 'tag-it-custom.js'
                 ],
                 dest: '<%= dirs.js %>/',
                 ext: '.min.js'

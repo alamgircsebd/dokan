@@ -26,25 +26,24 @@ class Dokan_Rewrites {
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
         add_filter( 'woocommerce_get_breadcrumb', array( $this, 'store_page_breadcrumb'), 10 ,1  );
     }
-    
+
     /**
      * Generate breadcrumb for store page
-     * 
+     *
      * @since 2.4.7
-     * 
+     *
      * @param array $crumbs
-     * 
+     *
      * @return array $crumbs
      */
     public function store_page_breadcrumb( $crumbs ){
-        if(  dokan_is_store_page()){
-            $author = get_query_var( $this->custom_store_url );
+        if (  dokan_is_store_page() ) {
+            $author      = get_query_var( $this->custom_store_url );
             $seller_info = get_user_by( 'slug', $author );
             $crumbs[1]   = array( ucwords($this->custom_store_url) , site_url().'/'.$this->custom_store_url );
             $crumbs[2]   = array( $author, dokan_get_store_url( $seller_info->data->ID ) );
         }
-        
-       
+
         return $crumbs;
     }
 
@@ -81,20 +80,20 @@ class Dokan_Rewrites {
             $base = substr( $permalinks['product_base'], 1 );
         }
 
-        if ( !empty( $base ) ) {
+        // default base is product
+        $base = empty( $base ) ? 'product' : $base;
 
-            // special treatment for product cat
-            if ( stripos( $base, 'product_cat' ) ) {
+        // special treatment for product cat
+        if ( stripos( $base, 'product_cat' ) ) {
 
-                // get the category base. usually: shop
-                $base_array = explode( '/', ltrim( $base, '/' ) ); // remove first '/' and explode
-                $cat_base = isset( $base_array[0] ) ? $base_array[0] : 'shop';
+            // get the category base. usually: shop
+            $base_array = explode( '/', ltrim( $base, '/' ) ); // remove first '/' and explode
+            $cat_base = isset( $base_array[0] ) ? $base_array[0] : 'shop';
 
-                add_rewrite_rule( $cat_base . '/(.+?)/([^/]+)(/[0-9]+)?/edit?$', 'index.php?product_cat=$matches[1]&product=$matches[2]&page=$matches[3]&edit=true', 'top' );
+            add_rewrite_rule( $cat_base . '/(.+?)/([^/]+)(/[0-9]+)?/edit?$', 'index.php?product_cat=$matches[1]&product=$matches[2]&page=$matches[3]&edit=true', 'top' );
 
-            } else {
-                add_rewrite_rule( $base . '/([^/]+)(/[0-9]+)?/edit/?$', 'index.php?product=$matches[1]&page=$matches[2]&edit=true', 'top' );
-            }
+        } else {
+            add_rewrite_rule( $base . '/([^/]+)(/[0-9]+)?/edit/?$', 'index.php?product=$matches[1]&page=$matches[2]&edit=true', 'top' );
         }
 
         add_rewrite_rule( $this->custom_store_url.'/([^/]+)/?$', 'index.php?'.$this->custom_store_url.'=$matches[1]', 'top' );
@@ -224,7 +223,7 @@ class Dokan_Rewrites {
      */
     function store_query_filter( $query ) {
         global $wp_query;
-        
+
         $author = get_query_var( $this->custom_store_url );
 
         if ( !is_admin() && $query->is_main_query() && !empty( $author ) ) {

@@ -467,6 +467,7 @@ class Dokan_Template_Settings {
                 'setting_minimum_order_amount' => sanitize_text_field( $_POST['setting_minimum_order_amount'] ),
                 'setting_order_percentage'     => sanitize_text_field( $_POST['setting_order_percentage'] ),
                 'show_email'                   => sanitize_text_field( $_POST['setting_show_email'] ),
+                'show_more_ptab'   => sanitize_text_field( $_POST['setting_show_more_ptab'] ),
                 'gravatar'                     => absint( $_POST['dokan_gravatar'] ),
                 'enable_tnc'                   => isset( $_POST['dokan_store_tnc_enable'] ) ? $_POST['dokan_store_tnc_enable'] : '',
                 'store_tnc'                    => isset( $_POST['dokan_store_tnc'] ) ? $_POST['dokan_store_tnc'] : ''
@@ -672,7 +673,7 @@ class Dokan_Template_Settings {
 
         // Calculate Payment method val for skrill
         if ( isset( $dokan_settings['payment']['skrill'] ) ) {
-            
+
             $s_email = isset( $dokan_settings['payment']['skrill']['email'] ) ? $dokan_settings['payment']['skrill']['email'] : false;
             if ( $s_email != false ) {
                 $profile_val         = $profile_val + $payment_method_val;

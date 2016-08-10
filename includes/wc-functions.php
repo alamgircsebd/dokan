@@ -569,11 +569,13 @@ function dokan_process_product_meta( $post_id ) {
         $attribute_values = $_POST['attribute_values'];
         update_post_meta( $post_id, '_has_attribute', 'yes' );
 
-        if ( isset( $_POST['attribute_visibility'] ) )
+        if ( isset( $_POST['attribute_visibility'] ) ) {
             $attribute_visibility = $_POST['attribute_visibility'];
+        }
 
-        if ( isset( $_POST['attribute_variation'] ) )
+        if ( isset( $_POST['attribute_variation'] ) ) {
             $attribute_variation = $_POST['attribute_variation'];
+        }
 
         $attribute_is_taxonomy = $_POST['attribute_is_taxonomy'];
         $attribute_position = $_POST['attribute_position'];
@@ -581,8 +583,9 @@ function dokan_process_product_meta( $post_id ) {
         $attribute_names_count = sizeof( $attribute_names );
 
         for ( $i=0; $i < $attribute_names_count; $i++ ) {
-            if ( ! $attribute_names[ $i ] )
+            if ( ! $attribute_names[ $i ] ) {
                 continue;
+            }
 
             $is_visible     = isset( $attribute_visibility[ $i ] ) ? 1 : 0;
             $is_variation   = isset( $attribute_variation[ $i ] ) ? 1 : 0;
@@ -590,11 +593,14 @@ function dokan_process_product_meta( $post_id ) {
 
             if ( $is_taxonomy ) {
 
+                $values_are_slugs = false;
+
                 if ( isset( $attribute_values[ $i ] ) ) {
 
                     // Select based attributes - Format values (posted values are slugs)
                     if ( is_array( $attribute_values[ $i ] ) ) {
-                        $values = $attribute_values[ $i ];
+                        $values           = array_map( 'sanitize_title', $attribute_values[ $i ] );
+                        $values_are_slugs = true;
 
                     // Text based attributes - Posted values are term names - don't change to slugs
                     } else {
@@ -609,12 +615,27 @@ function dokan_process_product_meta( $post_id ) {
                 }
 
                 // Update post terms
-                if ( taxonomy_exists( $attribute_names[ $i ] ) )
+                if ( taxonomy_exists( $attribute_names[ $i ] ) ) {
+
+                    foreach( $values as $key => $value ) {
+                        $term = get_term_by( $values_are_slugs ? 'slug' : 'name', trim( $value ), $attribute_names[ $i ] );
+
+                        if ( $term ) {
+                            $values[ $key ] = intval( $term->term_id );
+                        } else {
+                            $term = wp_insert_term( trim( $value ), $attribute_names[ $i ] );
+                            if ( isset( $term->term_id ) ) {
+                                $values[ $key ] = intval($term->term_id);
+                            }
+                        }
+                    }
+
                     wp_set_object_terms( $post_id, $values, $attribute_names[ $i ] );
+                }
 
                 if ( $values ) {
                     // Add attribute to array, but don't set values
-                    $attributes[ $attribute_names[ $i ] ] = array(
+                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
                         'name'          => wc_clean( $attribute_names[ $i ] ),
                         'value'         => '',
                         'position'      => $attribute_position[ $i ],
@@ -626,11 +647,12 @@ function dokan_process_product_meta( $post_id ) {
 
             } elseif ( isset( $attribute_values[ $i ] ) ) {
 
-                // Text based, separate by pipe
-                $values = implode( ' | ', array_map( 'wc_clean', $attribute_values[$i] ) );
+                // Text based, possibly separated by pipes (WC_DELIMITER). Preserve line breaks in non-variation attributes.
+                $values = $is_variation ? wc_clean( $attribute_values[ $i ] ) : implode( "\n", array_map( 'wc_clean', explode( "\n", $attribute_values[ $i ] ) ) );
+                $values = implode( ' | ', wc_get_text_attributes( $values ) );
 
                 // Custom attribute - Add attribute to array and set the values
-                $attributes[ $attribute_names[ $i ] ] = array(
+                $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
                     'name'          => wc_clean( $attribute_names[ $i ] ),
                     'value'         => $values,
                     'position'      => $attribute_position[ $i ],
@@ -649,12 +671,27 @@ function dokan_process_product_meta( $post_id ) {
             return ( $a['position'] < $b['position'] ) ? -1 : 1;
         }
     }
+
     uasort( $attributes, 'attributes_cmp' );
+
+    /**
+     * Unset removed attributes by looping over previous values and
+     * unsetting the terms.
+     */
+    $old_attributes = array_filter( (array) maybe_unserialize( get_post_meta( $post_id, '_product_attributes', true ) ) );
+
+    if ( ! empty( $old_attributes ) ) {
+        foreach ( $old_attributes as $key => $value ) {
+            if ( empty( $attributes[ $key ] ) && ! empty( $value['is_taxonomy'] ) && taxonomy_exists( $key ) ) {
+                wp_set_object_terms( $post_id, array(), $key );
+            }
+        }
+    }
 
     update_post_meta( $post_id, '_product_attributes', $attributes );
 
     // Sales and prices
-    if ( in_array( $product_type, array( 'variable' ) ) ) {
+    if ( in_array( $product_type, array( 'variable', 'grouped' ) ) ) {
 
         // Variable products have no prices
         update_post_meta( $post_id, '_regular_price', '' );
@@ -723,9 +760,9 @@ function dokan_process_product_meta( $post_id ) {
     ) );
 
     $_POST['_sold_individually'] = isset( $_POST['_sold_individually'] ) ? $_POST['_sold_individually'] : false;
+
     // Sold Individuall
     update_post_meta( $post_id, '_sold_individually', $_POST['_sold_individually'] );
-
 
     // Stock Data
     if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) {
@@ -799,7 +836,7 @@ function dokan_process_product_meta( $post_id ) {
     }
 
     // Downloadable options
-    if ( $is_downloadable == 'yes' ) {
+    if ( 'yes' ==  $is_downloadable  ) {
 
         $_download_limit = absint( $_POST['_download_limit'] );
         if ( ! $_download_limit )
@@ -1012,20 +1049,23 @@ function dokan_new_process_product_meta( $post_id ) {
             $attribute_names_count = sizeof( $attribute_names );
 
             for ( $i=0; $i < $attribute_names_count; $i++ ) {
-                if ( ! $attribute_names[ $i ] )
+                if ( ! $attribute_names[ $i ] ) {
                     continue;
+                }
 
                 $is_visible     = isset( $attribute_visibility[ $i ] ) ? 1 : 0;
                 $is_variation   = isset( $attribute_variation[ $i ] ) ? 1 : 0;
                 $is_taxonomy    = $attribute_is_taxonomy[ $i ] ? 1 : 0;
 
                 if ( $is_taxonomy ) {
+                    $values_are_slugs = false;
 
                     if ( isset( $attribute_values[ $i ] ) ) {
 
                         // Select based attributes - Format values (posted values are slugs)
                         if ( is_array( $attribute_values[ $i ] ) ) {
-                            $values = $attribute_values[ $i ];
+                            $values           = array_map( 'sanitize_title', $attribute_values[ $i ] );
+                            $values_are_slugs = true;
 
                         // Text based attributes - Posted values are term names - don't change to slugs
                         } else {
@@ -1040,12 +1080,27 @@ function dokan_new_process_product_meta( $post_id ) {
                     }
 
                     // Update post terms
-                    if ( taxonomy_exists( $attribute_names[ $i ] ) )
-                        wp_set_object_terms( $post_id, $values, $attribute_names[ $i ] );
+                    if ( taxonomy_exists( $attribute_names[ $i ] ) ) {
 
-                    if ( $values ) {
+                        foreach( $values as $key => $value ) {
+                            $term = get_term_by( $values_are_slugs ? 'slug' : 'name', trim( $value ), $attribute_names[ $i ] );
+
+                            if ( $term ) {
+                                $values[ $key ] = intval( $term->term_id );
+                            } else {
+                                $term = wp_insert_term( trim( $value ), $attribute_names[ $i ] );
+                                if ( isset( $term->term_id ) ) {
+                                    $values[ $key ] = intval($term->term_id);
+                                }
+                            }
+                        }
+
+                        wp_set_object_terms( $post_id, $values, $attribute_names[ $i ] );
+                    }
+
+                    if ( ! empty( $values ) ) {
                         // Add attribute to array, but don't set values
-                        $attributes[ $attribute_names[ $i ] ] = array(
+                        $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
                             'name'          => wc_clean( $attribute_names[ $i ] ),
                             'value'         => '',
                             'position'      => $attribute_position[ $i ],
@@ -1057,11 +1112,12 @@ function dokan_new_process_product_meta( $post_id ) {
 
                 } elseif ( isset( $attribute_values[ $i ] ) ) {
 
-                    // Text based, separate by pipe
-                    $values = implode( ' | ', array_map( 'wc_clean', $attribute_values[$i] ) );
+                    // Text based, possibly separated by pipes (WC_DELIMITER). Preserve line breaks in non-variation attributes.
+                    $values = $is_variation ? wc_clean( $attribute_values[ $i ] ) : implode( "\n", array_map( 'wc_clean', explode( "\n", $attribute_values[ $i ] ) ) );
+                    $values = implode( ' | ', array_map( 'wc_clean', $values ) );
 
                     // Custom attribute - Add attribute to array and set the values
-                    $attributes[ $attribute_names[ $i ] ] = array(
+                    $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
                         'name'          => wc_clean( $attribute_names[ $i ] ),
                         'value'         => $values,
                         'position'      => $attribute_position[ $i ],
@@ -1073,14 +1129,22 @@ function dokan_new_process_product_meta( $post_id ) {
             }
         }
 
-        if ( ! function_exists( 'attributes_cmp' ) ) {
-            function attributes_cmp( $a, $b ) {
-                if ( $a['position'] == $b['position'] ) return 0;
-                return ( $a['position'] < $b['position'] ) ? -1 : 1;
+        uasort( $attributes, 'wc_product_attribute_uasort_comparison' );
+
+        /**
+         * Unset removed attributes by looping over previous values and
+         * unsetting the terms.
+         */
+        $old_attributes = array_filter( (array) maybe_unserialize( get_post_meta( $post_id, '_product_attributes', true ) ) );
+
+        if ( ! empty( $old_attributes ) ) {
+            foreach ( $old_attributes as $key => $value ) {
+                if ( empty( $attributes[ $key ] ) && ! empty( $value['is_taxonomy'] ) && taxonomy_exists( $key ) ) {
+                    wp_set_object_terms( $post_id, array(), $key );
+                }
             }
         }
 
-        uasort( $attributes, 'attributes_cmp' );
         update_post_meta( $post_id, '_product_attributes', $attributes );
     }
 
@@ -1187,31 +1251,13 @@ function dokan_new_process_product_meta( $post_id ) {
     }
 
 
-    // Upsells product meta
-    if ( isset( $_POST['upsell_ids'] ) ) {
-        $upsells = array();
-        $ids = $_POST['upsell_ids'];
-        foreach ( $ids as $id )
-            if ( $id && $id > 0 )
-                $upsells[] = $id;
+    // Cross sells and upsells
+    $upsells    = isset( $_POST['upsell_ids'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['upsell_ids'] ) ) ) : array();
+    $crosssells = isset( $_POST['crosssell_ids'] ) ? array_filter( array_map( 'intval', explode( ',', $_POST['crosssell_ids'] ) ) ) : array();
 
-        update_post_meta( $post_id, '_upsell_ids', $upsells );
-    } else {
-        delete_post_meta( $post_id, '_upsell_ids' );
-    }
+    update_post_meta( $post_id, '_upsell_ids', $upsells );
+    update_post_meta( $post_id, '_crosssell_ids', $crosssells );
 
-    // Cross sells product meta
-    if ( isset( $_POST['crosssell_ids'] ) ) {
-        $crosssells = array();
-        $ids = $_POST['crosssell_ids'];
-        foreach ( $ids as $id )
-            if ( $id && $id > 0 )
-                $crosssells[] = $id;
-
-        update_post_meta( $post_id, '_crosssell_ids', $crosssells );
-    } else {
-        delete_post_meta( $post_id, '_crosssell_ids' );
-    }
 
     // Downloadable options
     if ( 'yes' == $is_downloadable ) {
@@ -1383,31 +1429,67 @@ function dokan_new_save_variations( $post_id ) {
 
         for ( $i = 0; $i <= $max_loop; $i ++ ) {
 
-            if ( ! isset( $variable_post_id[ $i ] ) )
+            if ( ! isset( $variable_post_id[ $i ] ) ) {
                 continue;
+            }
 
             $variation_id = absint( $variable_post_id[ $i ] );
+
+            // Virtal/Downloadable
+            $is_downloadable = isset( $variable_is_downloadable[ $i ] ) ? 'yes' : 'no';
+
+            if ( isset( $variable_is_virtual[ $i ] ) ) {
+                $is_virtual = 'yes';
+            } else {
+                if ( $is_downloadable == 'yes' ) {
+                    $is_virtual = 'yes';
+                } else {
+                    $is_virtual = 'no';
+                }
+            }
+
+            // Enabled or disabled
+            $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
+            $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
             if( isset( $_POST['_variation_product_update'] ) && $_POST['_variation_product_update'] == 'yes' ) {
 
                 $regular_price  = wc_format_decimal( $variable_regular_price[ $i ] );
                 update_post_meta( $variation_id, '_regular_price', $regular_price );
                 update_post_meta( $variation_id, '_sku', wc_clean( $variable_sku[ $i ] ) );
-                update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
+                update_post_meta( $variation_id, '_price', $regular_price );
 
                 $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
 
                 $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
                 $wpdb->update( $wpdb->posts, array( 'post_status' => $post_status, 'post_title' => $variation_post_title, 'menu_order' => $variable_menu_order[ $i ] ), array( 'ID' => $variation_id ) );
 
+                update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
+                update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
+                update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );
+                update_post_meta( $variation_id, '_manage_stock', $manage_stock );
+
+                // Only update stock status to user setting if changed by the user, but do so before looking at stock levels at variation level
+                if ( ! empty( $variable_stock_status[ $i ] ) ) {
+                    wc_update_product_stock_status( $variation_id, $variable_stock_status[ $i ] );
+                }
+
                 // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
-                foreach ( $attributes as $attribute ) {
 
+                foreach ( $attributes as $attribute ) {
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . $attribute['name'];
-                        $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? stripslashes( $_POST[ $attribute_key ][ $i ] ) : '';
+
+                        $attribute_key            = 'attribute_' . sanitize_title( $attribute['name'] );
                         $updated_attribute_keys[] = $attribute_key;
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            // Don't use wc_clean as it destroys sanitized characters
+                            $value = isset( $_POST[ $attribute_key ][ $i ] ) ? sanitize_title( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                        } else {
+                            $value = isset( $_POST[ $attribute_key ][ $i ] ) ? wc_clean( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                        }
+
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
                 }
@@ -1420,24 +1502,6 @@ function dokan_new_save_variations( $post_id ) {
                 }
 
             } else {
-
-                // Virtal/Downloadable
-                $is_downloadable = isset( $variable_is_downloadable[ $i ] ) ? 'yes' : 'no';
-
-                if ( isset( $variable_is_virtual[ $i ] ) ) {
-                    $is_virtual = 'yes';
-                } else {
-
-                    if ( $is_downloadable == 'yes' ) {
-                        $is_virtual = 'yes';
-                    } else {
-                        $is_virtual = 'no';
-                    }
-                }
-
-                // Enabled or disabled
-                $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
-                $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
                 $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
@@ -1577,16 +1641,26 @@ function dokan_new_save_variations( $post_id ) {
                 $variable_shipping_class[ $i ] = ! empty( $variable_shipping_class[ $i ] ) ? (int) $variable_shipping_class[ $i ] : '';
                 wp_set_object_terms( $variation_id, $variable_shipping_class[ $i ], 'product_shipping_class');
 
-                // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
-                foreach ( $attributes as $attribute ) {
 
+                $k = 0;
+                foreach ( $attributes as $attribute ) {
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . $attribute['name'];
-                        $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? stripslashes( $_POST[ $attribute_key ][ $i ] ) : '';
+
+                        $attribute_key            = 'attribute_' . sanitize_title( $attribute['name'] );
                         $updated_attribute_keys[] = $attribute_key;
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            // Don't use wc_clean as it destroys sanitized characters
+                            $value = isset( $_POST['attribute_value'][$i][$k] ) ? sanitize_title( stripslashes( $_POST['attribute_value'][$i][$k] ) ) : '';
+                        } else {
+                            $value = isset( $_POST['attribute_value'][$i][$k] ) ? wc_clean( stripslashes( $_POST['attribute_value'][$i][$k] ) ) : '';
+                        }
+
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
+
+                    $k++;
                 }
 
                 // Remove old taxonomies attributes so data is kept up to date - first get attribute key names
@@ -1609,19 +1683,25 @@ function dokan_new_save_variations( $post_id ) {
 
     foreach ( $attributes as $attribute ) {
         if ( $attribute['is_variation'] ) {
+            $value = '';
 
-            // Don't use wc_clean as it destroys sanitized characters
-            if ( isset( $_POST[ 'default_attribute_' . $attribute['name'] ] ) )
-                $value = trim( stripslashes( $_POST[ 'default_attribute_' . $attribute['name'] ] ) );
-            else
-                $value = '';
+            if ( isset( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) {
+                if ( $attribute['is_taxonomy'] ) {
+                    // Don't use wc_clean as it destroys sanitized characters
+                    $value = sanitize_title( trim( stripslashes( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                } else {
+                    $value = wc_clean( trim( stripslashes( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                }
+            }
 
-            if ( $value )
-                $default_attributes[ $attribute['name'] ] = $value;
+            if ( $value ) {
+                $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+            }
         }
     }
 
     update_post_meta( $post_id, '_default_attributes', $default_attributes );
+
 }
 
 function dokan_create_new_variation( $post_id, $post_status ) {
@@ -2342,9 +2422,9 @@ add_action( 'woocommerce_created_customer', 'dokan_on_create_seller', 10, 2);
  * Change seller display name to store name
  *
  * @since 2.4.10 [Change seller display name to store name]
- * 
+ *
  * @param string $display_name
- * 
+ *
  * @return string $display_name
  */
 function dokan_seller_displayname ( $display_name ) {
@@ -2353,7 +2433,7 @@ function dokan_seller_displayname ( $display_name ) {
 
         $seller_info = dokan_get_store_info ( get_current_user_id() );
         $display_name = ( !empty( $seller_info['store_name'] ) ) ? $seller_info['store_name'] : $display_name;
-    
+
     }
 
     return $display_name;
@@ -2457,6 +2537,88 @@ function dokan_get_best_selling_products( $per_page = 8, $seller_id = '' ) {
 }
 
 
+/**
+ *  Show more product from current seller
+ *
+ * @since 2.5
+ * @global object $product
+ * @global object $post
+ * @param int $seller_id
+ * @param int $posts_per_page
+ */
+function dokan_more_product_from_seller( $seller_id = 0, $posts_per_page = 6 ) {
+
+    global $product, $post;
+    if($seller_id==0){
+        $seller_id = $post->post_author ;
+    }
+    if(! abs($posts_per_page) ){
+        $posts_per_page = 4 ;
+    }
+    $args = array(
+            'post_type'            => 'product',
+            'posts_per_page'       => $posts_per_page,
+            'orderby'              => 'rand',
+            'post__not_in'         => array( $post->ID ),
+            'author'               => $seller_id
+    );
+
+    $products = new WP_Query( $args );
+
+    if ( $products->have_posts() ) {
+        woocommerce_product_loop_start();
+
+            while ( $products->have_posts() ) {
+                $products->the_post();
+                wc_get_template_part( 'content', 'product' );
+            }
+
+        woocommerce_product_loop_end();
+    } else {
+        _e('No product has been found!', 'dokan');
+    }
+
+    wp_reset_postdata();
+}
+
+/**
+ * Check More product from Seller tab is active or not.
+ *
+ * @since 2.5
+ * @global object $post
+ * @return boolean
+ */
+function check_more_seller_product_tab(  ) {
+    global   $post;
+    $store_info    = dokan_get_store_info(  $post->post_author );
+    if( isset( $store_info['show_more_ptab'] ) AND $store_info['show_more_ptab'] == 'yes' ){
+        return true;
+    }else {
+        return false;
+    }
+}
+
+/**
+ * Set More product from seller tab
+ *
+ * on Single Product Page
+ *
+ * @since 2.5
+ * @param array $tabs
+ * @return int
+ */
+function dokan_more_from_seller_tab( $tabs ) {
+    if( check_more_seller_product_tab()){
+        $tabs['more_seller_product'] = array(
+                'title' 	=> __( 'More Product fromthis Seller', 'dokan' ),
+                'priority' 	=> 99,
+                'callback' 	=> 'dokan_more_product_from_seller',
+        );
+    }
+    return $tabs;
+
+}
+add_action( 'woocommerce_product_tabs', 'dokan_more_from_seller_tab', 10 );
 
 /**
  * Get top rated products
@@ -2595,7 +2757,7 @@ function dokan_get_seller_rating( $seller_id ) {
         ORDER BY wc.comment_post_ID";
 
     $result = $wpdb->get_row( $wpdb->prepare( $sql, $seller_id ) );
-    
+
     $rating_value = apply_filters( 'dokan_seller_rating_value', array(
         'rating' => number_format( $result->average, 2 ),
         'count'  => (int) $result->count
