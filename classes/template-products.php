@@ -395,6 +395,25 @@ class Dokan_Template_Products {
                     'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
                 );
 
+                $is_lot_discount     = isset( $_POST['_is_lot_discount'] ) ? $_POST['_is_lot_discount'] : 'no';
+                if ( $is_lot_discount == 'yes' ) {
+                    $lot_discount_quantity = isset($_POST['_lot_discount_quantity']) ? $_POST['_lot_discount_quantity'] : 0;
+                    $lot_discount_amount   = isset($_POST['_lot_discount_amount']) ? $_POST['_lot_discount_amount'] : 0;
+                    if ( $lot_discount_quantity == '0' || $lot_discount_amount == '0' ) {
+                        update_post_meta( $post_id, '_lot_discount_quantity', $lot_discount_quantity);
+                        update_post_meta( $post_id, '_lot_discount_amount', $lot_discount_amount);
+                        update_post_meta( $post_id, '_is_lot_discount', 'no');
+                    } else {
+                        update_post_meta( $post_id, '_lot_discount_quantity', $lot_discount_quantity);
+                        update_post_meta( $post_id, '_lot_discount_amount', $lot_discount_amount);
+                        update_post_meta( $post_id, '_is_lot_discount', $is_lot_discount);
+                    }
+                } else if ( $is_lot_discount == 'no' ) {
+                    update_post_meta( $post_id, '_lot_discount_quantity', 0);
+                    update_post_meta( $post_id, '_lot_discount_amount', 0);
+                    update_post_meta( $post_id, '_is_lot_discount', 'no');
+                }
+
                 wp_update_post( $product_info );
 
                 /** Set Product tags */

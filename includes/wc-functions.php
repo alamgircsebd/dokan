@@ -3187,15 +3187,19 @@ function dokan_discount_for_minimum_order() {
  */
 function dokan_display_quantity_discount() { ?>
     <?php $total_discount_amount_for_lot = doakn_discount_for_lot_quantity();?>
-    <tr class="cart-discount">
-        <th><?php _e( 'Quantity discount', 'dokan' );?></th>
-        <td><?php echo wc_price($total_discount_amount_for_lot);?></td>
-    </tr>
+    <?php if ( $total_discount_amount_for_lot > 0 ) : ?>
+        <tr class="cart-discount">
+            <th><?php _e( 'Quantity discount', 'dokan' );?></th>
+            <td><?php echo wc_price($total_discount_amount_for_lot);?></td>
+        </tr>
+    <?php endif;?>
     <?php $total_discount_amount_for_order = dokan_discount_for_minimum_order();?>
-    <tr class="cart-discount">
-        <th><?php _e( 'Order discount', 'dokan' );?></th>
-        <td><?php echo wc_price($total_discount_amount_for_order);?></td>
-    </tr>
+    <?php if ( $total_discount_amount_for_order > 0 ) : ?>
+        <tr class="cart-discount">
+            <th><?php _e( 'Order discount', 'dokan' );?></th>
+            <td><?php echo wc_price($total_discount_amount_for_order);?></td>
+        </tr>
+    <?php endif;?>
     <?php
 }
 add_action( 'woocommerce_cart_totals_before_order_total', 'dokan_display_quantity_discount');
