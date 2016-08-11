@@ -2969,9 +2969,14 @@ function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) 
  * @return $rates
  */
 function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
+    global $wpdb;
 
-    if ( !isset( $rates['flat_rate'] ) && !isset( $rates['international_delivery'] ) ) {
-        return $rates;
+    $package_zone = sprintf( '%s:%s', $package['destination']['country'], $package['destination']['state'] );
+    $query        = sprintf( 'SELECT zone_id FROM %s WHERE location_code = "%s"', $wpdb->prefix . 'woocommerce_shipping_zone_locations', $package_zone );
+    $zone_id      = $wpdb->get_var( $query );
+
+    if ( ! is_wp_error( $zone_id ) ) {
+        $flat_rate    = 'flat_rate:' . $zone_id;
     }
 
     foreach ( $package['contents'] as $product ) {
@@ -2982,9 +2987,9 @@ function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
 
     $selllers_count = count( $sellers );
 
-    if ( ! is_null( $rates['flat_rate'] ) ) {
+    if ( ! is_null( $rates[$flat_rate] ) ) {
 
-        $rates['flat_rate']->cost = $rates['flat_rate']->cost * $selllers_count;
+        $rates[$flat_rate]->cost = $rates[$flat_rate]->cost * $selllers_count;
 
     } elseif ( ! is_null( $rates['international_delivery'] ) ) {
 
