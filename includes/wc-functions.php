@@ -3162,10 +3162,10 @@ function dokan_discount_for_minimum_order() {
             }
         }
         $seller_info               = dokan_get_store_info( $u_seller_ids );
-        $is_min_order_discount     = $seller_info['show_min_order_discount'];
+        $is_min_order_discount     = isset( $seller_info['show_min_order_discount'] ) ? $seller_info['show_min_order_discount'] : 'no';
         if ( $is_min_order_discount == "yes" ) {
-            $min_order_discount            = $seller_info['setting_minimum_order_amount'];
-            $min_order_discount_percentage = $seller_info['setting_order_percentage'];
+            $min_order_discount            = isset( $seller_info['setting_minimum_order_amount'] ) ? $seller_info['setting_minimum_order_amount'] : 0;
+            $min_order_discount_percentage = isset( $seller_info['setting_order_percentage'] ) ? $seller_info['setting_order_percentage'] : 0;
             if ( $total_order_amount >= $min_order_discount ) {
                 $total_discount_amount_for_min_order = $total_discount_amount_for_min_order + ( $total_order_amount * $min_order_discount_percentage / 100);
                 $flag_for_order_discount = true;
