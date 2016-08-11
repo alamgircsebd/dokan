@@ -24,7 +24,7 @@
         foreach( $coupons as $key => $post ) {
             ?>
             <tr>
-                <td class="coupon-code">
+                <td class="coupon-code" data-title="<?php _e('Code', 'dokan'); ?>">
                     <?php $edit_url =  wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'edit', 'view' => 'add_coupons'), dokan_get_navigation_url( 'coupons' ) ), '_coupon_nonce', 'coupon_nonce_url' ); ?>
                     <div class="code">
                         <a href="<?php echo $edit_url; ?>"><span><?php echo esc_attr( $post->post_title ); ?></span></a>
@@ -38,7 +38,7 @@
                     </div>
                 </td>
 
-                <td>
+                <td data-title="<?php _e('Coupon type', 'dokan'); ?>">
                     <?php
                     $discount_type = get_post_meta( $post->ID, 'discount_type', true );
                     $type = '';
@@ -53,11 +53,11 @@
                     ?>
                 </td>
 
-                <td>
+                <td data-title="<?php _e('Coupon amount', 'dokan'); ?>">
                     <?php echo esc_attr( get_post_meta( $post->ID, 'coupon_amount', true ) ); ?>
                 </td>
 
-                <td>
+                <td data-title="<?php _e('Product IDs', 'dokan'); ?>">
                     <?php
                         $product_ids = get_post_meta( $post->ID, 'product_ids', true );
                         $product_ids = $product_ids ? array_map( 'absint', explode( ',', $product_ids ) ) : array();
@@ -69,7 +69,7 @@
                     ?>
                 </td>
 
-                <td>
+                <td data-title="<?php _e('Usage / Limit', 'dokan'); ?>">
                     <?php
 
                         $usage_count = absint( get_post_meta( $post->ID, 'usage_count', true ) );
@@ -82,7 +82,7 @@
                      ?>
                 </td>
 
-                <td>
+                <td data-title="<?php _e('Expiry date', 'dokan'); ?>">
                     <?php
                         $expiry_date = get_post_meta($post->ID, 'expiry_date', true);
 
@@ -92,6 +92,7 @@
                             echo '&ndash;';
                     ?>
                 </td>
+                <td class="diviader"></td>
             </tr>
             <?php
         }
