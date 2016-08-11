@@ -13,7 +13,7 @@
 
 <div class="dashboard-widget products">
     <div class="widget-title">
-        <i class="icon-briefcase"></i> <?php _e( 'Products', 'dokan' ); ?>
+        <i class="fa fa-briefcase" aria-hidden="true"></i> <?php _e( 'Products', 'dokan' ); ?>
 
         <span class="pull-right">
             <a href="<?php echo dokan_get_navigation_url( 'new-product' ); ?>"><?php _e( '+ Add new product', 'dokan' ); ?></a>

@@ -681,7 +681,7 @@ class Dokan_Pro_Ajax {
                 $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
-                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'woocommerce' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
+                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
 
                 // Update or Add post
                 if ( ! $variation_id ) {
@@ -820,12 +820,20 @@ class Dokan_Pro_Ajax {
 
                 // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
+
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . $attribute['name'];
-                        $value         = isset( $postdata[ $attribute_key ][ $i ] ) ? stripslashes( $postdata[ $attribute_key ][ $i ] ) : '';
+                        $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
                         $updated_attribute_keys[] = $attribute_key;
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            // Don't use wc_clean as it destroys sanitized characters
+                            $value = isset( $postdata[$attribute_key][$i] ) ? sanitize_title( stripslashes( $postdata[$attribute_key][$i] ) ) : '';
+                        } else {
+                            $value = isset( $postdata[$attribute_key][$i] ) ? wc_clean( stripslashes( $postdata[$attribute_key][$i] ) ) : '';
+                        }
+
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
                 }
@@ -849,15 +857,20 @@ class Dokan_Pro_Ajax {
 
         foreach ( $attributes as $attribute ) {
             if ( $attribute['is_variation'] ) {
+                $value = '';
 
-                // Don't use wc_clean as it destroys sanitized characters
-                if ( isset( $postdata[ 'default_attribute_' . $attribute['name'] ] ) )
-                    $value = trim( stripslashes( $postdata[ 'default_attribute_' . $attribute['name'] ] ) );
-                else
-                    $value = '';
+                if ( isset( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) {
+                    if ( $attribute['is_taxonomy'] ) {
+                        // Don't use wc_clean as it destroys sanitized characters
+                        $value = sanitize_title( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                    } else {
+                        $value = wc_clean( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                    }
+                }
 
-                if ( $value )
-                    $default_attributes[ $attribute['name'] ] = $value;
+                if ( $value ) {
+                    $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+                }
             }
         }
 

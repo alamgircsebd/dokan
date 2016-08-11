@@ -91,7 +91,6 @@ jQuery(function($) {
 
    $( '.tc_check_box' ).on( 'click', function () {
         var chk_value = $( this ).val();
-        console.log( chk_value );
         if ( $( this ).prop( "checked" ) ) {
             $( 'input[name=register]' ).removeAttr( 'disabled' );
             $( 'input[name=dokan_migration]' ).removeAttr( 'disabled' );
@@ -689,7 +688,6 @@ jQuery(function($) {
             e.preventDefault();
 
             if( $(this).closest('table.dps-shipping-states').find( 'tr' ).length == 1 ){
-                //console.log($(this).closest('.dps-shipping-location-content').find('input,select'));
                 $(this).closest('.dps-shipping-location-content').find('td.dps_shipping_location_cost').show();
             }
 
@@ -777,7 +775,7 @@ jQuery(function($) {
                     action: 'dokan_seo_form_handler',
                     data: self.serialize(),
                 };
-                //console.log(data.data);
+
                 Dokan_Store_SEO.form.submit( data );
 
                 return false;
