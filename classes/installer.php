@@ -93,25 +93,6 @@ class Dokan_Installer {
     }
 
     /**
-     * Redirect to seller setup page if transient is valid
-     *
-     * @since 2.5
-     *
-     * @return void
-     */
-    public static function seller_setup_page_redirect( $plugin ) {
-
-        // if ( !get_transient( '_dokan_setup_page_redirect' ) ) {
-        //     return;
-        // }
-        // // Delete the redirect transient
-        // delete_transient( '_dokan_setup_page_redirect' );
-
-        wp_safe_redirect( add_query_arg( array( 'page' => 'dokan-setup' ), admin_url( 'index.php' ) ) );
-        exit;
-    }
-
-    /**
      * Update product new style options
      *
      * when user first install this plugin
