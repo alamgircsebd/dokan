@@ -476,15 +476,15 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/store-menu.php';
         require_once $inc_dir . 'wc-functions.php';
         require_once $lib_dir . 'class-wedevs-insights.php';
-        require_once $inc_dir . '/admin/class-setup-wizard.php';
+        require_once $inc_dir . '/admin/setup-wizard.php';
+        require_once $classes_dir . 'seller-setup-wizard.php';
 
         // Load free or pro moduels
         if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/pro/dokan-pro-loader.php';
 
             $this->is_pro = true;
-        }
-        else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
+        } else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/free/dokan-free-loader.php';
         }
 

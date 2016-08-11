@@ -10,10 +10,10 @@
  */
 class Dokan_Setup_Wizard {
     /** @var string Currenct Step */
-    private $step   = '';
+    protected $step   = '';
 
     /** @var array Steps for the setup wizard */
-    private $steps  = array();
+    protected $steps  = array();
 
     /**
      * Hook in tabs.
@@ -118,6 +118,7 @@ class Dokan_Setup_Wizard {
 
     public function get_next_step_link() {
         $keys = array_keys( $this->steps );
+
         return add_query_arg( 'step', $keys[ array_search( $this->step, array_keys( $this->steps ) ) + 1 ] );
     }
 
@@ -135,9 +136,60 @@ class Dokan_Setup_Wizard {
             <?php wp_print_scripts( 'wc-setup' ); ?>
             <?php do_action( 'admin_print_styles' ); ?>
             <?php do_action( 'admin_head' ); ?>
+            <style type="text/css">
+                .wc-setup-steps {
+                    justify-content: center;
+                }
+                .wc-setup-content a {
+                    color: #f39132;
+                }
+                .wc-setup-steps li.active:before {
+                    border-color: #f39132;
+                }
+                .wc-setup-steps li.active {
+                    border-color: #f39132;
+                    color: #f39132;
+                }
+                .wc-setup-steps li.done:before {
+                    border-color: #f39132;
+                }
+                .wc-setup-steps li.done {
+                    border-color: #f39132;
+                    color: #f39132;
+                }
+                .wc-setup .wc-setup-actions .button-primary, .wc-setup .wc-setup-actions .button-primary, .wc-setup .wc-setup-actions .button-primary {
+                    background: #f39132 !important;
+                }
+                .wc-setup .wc-setup-actions .button-primary:active, .wc-setup .wc-setup-actions .button-primary:focus, .wc-setup .wc-setup-actions .button-primary:hover {
+                    background: #ff6b00 !important;
+                    border-color: #ff6b00 !important;
+                }
+                .wc-setup-content .wc-setup-next-steps ul .setup-product a, .wc-setup-content .wc-setup-next-steps ul .setup-product a, .wc-setup-content .wc-setup-next-steps ul .setup-product a {
+                    background: #f39132 !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 0 #f39132;
+                }
+                .wc-setup-content .wc-setup-next-steps ul .setup-product a:active, .wc-setup-content .wc-setup-next-steps ul .setup-product a:focus, .wc-setup-content .wc-setup-next-steps ul .setup-product a:hover {
+                    background: #ff6b00 !important;
+                    border-color: #ff6b00 !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 0 #ff6b00;
+                }
+                .wc-setup .wc-setup-actions .button-primary {
+                    border-color: #f39132 !important;
+                }
+                .wc-setup-content .wc-setup-next-steps ul .setup-product a {
+                    border-color: #f39132 !important;
+                }
+                ul.wc-wizard-payment-gateways li.wc-wizard-gateway .wc-wizard-gateway-enable input:checked+label:before {
+                    background: #f39132 !important;
+                    border-color: #f39132 !important;
+                }
+            </style>
         </head>
         <body class="wc-setup wp-core-ui">
-            <h1 id="wc-logo">Dokan</h1>
+            <?php
+                $logo_url = ( ! empty( $this->custom_logo ) ) ? $this->custom_logo : plugins_url( 'assets/images/dokan-logo.png', DOKAN_FILE );
+            ?>
+            <h1 id="wc-logo"><a href="https://wedevs.com/products/plugins/dokan/"><img src="<?php echo $logo_url; ?>" alt="Dokan" /></a></h1>
         <?php
     }
 
@@ -190,7 +242,7 @@ class Dokan_Setup_Wizard {
     public function dokan_setup_introduction() {
         ?>
         <h1><?php _e( 'Welcome to the world of Dokan!', 'dokan' ); ?></h1>
-        <p><?php _e( 'Thank you for choosing Dokan to power your online store! This quick setup wizard will help you configure the basic settings. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'dokan' ); ?></p>
+        <p><?php _e( 'Thank you for choosing Dokan to power your online marketplace! This quick setup wizard will help you configure the basic settings. <strong>It’s completely optional and shouldn’t take longer than three minutes.</strong>', 'dokan' ); ?></p>
         <p><?php _e( 'No time right now? If you don’t want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!', 'dokan' ); ?></p>
         <p class="wc-setup-actions step">
             <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button-primary button button-large button-next"><?php _e( 'Let\'s Go!', 'dokan' ); ?></a>
@@ -421,7 +473,7 @@ class Dokan_Setup_Wizard {
         $options = get_option( 'dokan_withdraw', [] );
 
         $options['withdraw_methods']      = ! empty( $_POST['withdraw_methods'] ) ? $_POST['withdraw_methods'] : [];
-        $options['withdraw_limit']        = ! empty( $_POST['withdraw_limit'] ) ? sanitize_text_field( $_POST['withdraw_limit'] ) : [];
+        $options['withdraw_limit']        = ! empty( $_POST['withdraw_limit'] ) ? sanitize_text_field( $_POST['withdraw_limit'] ) : 0;
         $options['withdraw_order_status'] = ! empty( $_POST['withdraw_order_status'] ) ? $_POST['withdraw_order_status'] : [];
 
         update_option( 'dokan_withdraw', $options );
