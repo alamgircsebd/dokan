@@ -160,6 +160,13 @@ jQuery(function($) {
     var dokan_seller_meta_boxes_order_items = {
         init: function() {
 
+            $('#tracking-modal').on('shown.bs.modal', function () {
+                $('#tracking-modal').focus();
+            });
+            $( "#shipped-date" ).datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+
             $( '#woocommerce-order-items' )
                 .on( 'click', 'button.refund-items', this.refund_items )
                 .on( 'click', '.cancel-action', this.cancel )
