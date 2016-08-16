@@ -1,9 +1,33 @@
 <?php
 /**
+ * Dokan get seller amount from order total
+ *
+ * @param int $order_id
+ * 
+ * @return float
+ */
+function dokan_get_seller_amount_from_order( $order_id ) {
+
+    $order          = new WC_Order( $order_id );
+    $seller_id      = dokan_get_seller_id_by_order( $order_id );
+    $percentage     = dokan_get_seller_percentage( $seller_id );
+    
+    $order_total    = $order->get_total();
+    $order_shipping = $order->get_total_shipping();
+    $order_tax      = $order->get_total_tax();
+    $extra_cost     = $order_shipping + $order_tax;
+    $order_cost     = $order_total - $extra_cost;
+    $order_status   = $order->post_status;
+    
+    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+return $net_amount;
+}
+/**
  * Get all the orders from a specific seller
  *
  * @global object $wpdb
  * @param int $seller_id
+ * 
  * @return array
  */
 function dokan_get_seller_orders( $seller_id, $status = 'all', $order_date = NULL, $limit = 10, $offset = 0 ) {
@@ -39,6 +63,7 @@ function dokan_get_seller_orders( $seller_id, $status = 'all', $order_date = NUL
  *
  * @global object $wpdb
  * @param int $seller_id
+ * 
  * @return array
  */
 function dokan_get_seller_orders_by_date( $start_date, $end_date, $seller_id = false, $status = 'all' ) {

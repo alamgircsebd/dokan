@@ -112,9 +112,12 @@ function dokan_seller_sales_statement() {
                     $type       = __( 'Order', 'dokan' );
                     $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
                     $id         = $statement->order_id;
-                    $sales      = wc_price( $statement->order_total );
-                    $amount     = wc_price( $statement->net_amount );
-                    $net_amount = $net_amount + $statement->net_amount;
+                    $gross_amount = get_post_meta( $statement->order_id, '_order_total', true );
+                    $sales      = wc_price( $gross_amount );
+                    $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
+                    $amount     = wc_price( $seller_amount );
+                    $net_amount = $net_amount + $seller_amount;
+                    
                     $net_amount_print = wc_price( $net_amount );
 
                 } else if ( isset( $statement->refund_amount ) ) {
