@@ -240,7 +240,7 @@ final class WeDevs_Dokan {
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-magnific-popup', plugins_url( 'assets/css/magnific-popup.css', __FILE__ ), false, null );
-        wp_register_style( 'bootstrap', plugins_url( 'assets/css/bootstrap.css', __FILE__ ), false, null );
+        wp_register_style( 'modalcss', plugins_url( 'assets/css/modalcss.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
@@ -250,7 +250,7 @@ final class WeDevs_Dokan {
         wp_register_script( 'dokan-tag-it', plugins_url( 'assets/js/tag-it.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'dokan-popup', plugins_url( 'assets/js/jquery.magnific-popup.min.js', __FILE__ ), array( 'jquery' ), null, true );
-        wp_register_script( 'bootstrap', plugins_url( 'assets/js/bootstrap.js', __FILE__ ), false, null, true );
+        wp_register_script( 'modaljs', plugins_url( 'assets/js/modaljs.js', __FILE__ ), false, null, true );
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
@@ -393,7 +393,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-style' );
                 wp_enqueue_style( 'dokan-magnific-popup' );
                 wp_enqueue_style( 'woocommerce-general' );
-                wp_enqueue_style( 'bootstrap' );
+                wp_enqueue_style( 'modalcss' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -410,7 +410,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'underscore' );
                 wp_enqueue_script( 'post' );
                 wp_enqueue_script( 'dokan-tag-it' );
-                wp_enqueue_script( 'bootstrap' );
+                wp_enqueue_script( 'modaljs' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
                 wp_enqueue_script( 'form-validate' );
                 wp_enqueue_script( 'dokan-tabs-scripts' );
