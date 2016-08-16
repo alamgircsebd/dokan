@@ -317,31 +317,35 @@ $order    = new WC_Order( $order_id );
                                             </button>
                                             <h2 class="modal-title" id="myModalLabel"><?php _e('Shipment Tracking','dokan');?></h2>
                                         </div>
-                                        <div class="modal-body">
-                                            <h5><?php _e('Shipping Provider','dokan');?></h5>
-                                            <select name="shipping_provider" class="form-control">
-                                                <optgroup label="Australia">
-                                                    <option><?php _e('Australia','dokan');?></option>
-                                                    <option><?php _e('Fedex','dokan');?></option>
-                                                </optgroup>
-                                                <optgroup label="Canada">
-                                                    <option><?php _e('Canada Post','dokan');?></option>
-                                                </optgroup>
-                                            </select>
-                                            <h5><?php _e('Tracking Number','dokan');?></h5>
-                                            <input type="text" name="tracking_number" value="">
-                                            <h5><?php _e('Date Shipped','dokan');?></h5>
-                                            <input type="text" id="shipped-date" name="shipped_date" value="" placeholder="YYYY-MM-DD">
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','dokan');?></button>
-                                            <button type="button" class="btn btn-primary"><?php _e('Add Tracking Details','dokan');?></button>
-                                        </div>
+                                        <form id="add-shipping-tracking-form" method="post">
+                                            <div class="modal-body">
+                                                <h5><?php _e('Shipping Provider','dokan');?></h5>
+                                                <select name="shipping_provider" id="shipping_provider" class="form-control">
+                                                    <optgroup label="Australia">
+                                                        <option><?php _e('Australia','dokan');?></option>
+                                                        <option><?php _e('Fedex','dokan');?></option>
+                                                    </optgroup>
+                                                    <optgroup label="Canada">
+                                                        <option><?php _e('Canada Post','dokan');?></option>
+                                                    </optgroup>
+                                                </select>
+                                                <h5><?php _e('Tracking Number','dokan');?></h5>
+                                                <input type="text" name="tracking_number" id="tracking_number" value="">
+                                                <h5><?php _e('Date Shipped','dokan');?></h5>
+                                                <input type="text" name="shipped_date" id="shipped-date" value="" placeholder="YYYY-MM-DD">
+                                                <input type="hidden" name="security" id="security" value="<?php echo wp_create_nonce('add-shipping-tracking-info'); ?>">
+                                                <input type="hidden" name="post_id" id="post-id" value="<?php echo $order->id; ?>">
+                                                <input type="hidden" name="action" id="action" value="dokan_add_shipping_tracking_info">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','dokan');?></button>
+                                                <input id="add-tracking-details" type="button" class="btn btn-primary" value="<?php _e('Add Tracking Details','dokan');?>">
+                                            </div>
+                                        </form>
+
                                     </div>
                                 </div>
                             </div>
-
-
 
                         </div> <!-- .add_note -->
 
