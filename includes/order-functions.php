@@ -35,6 +35,98 @@ function dokan_get_seller_orders( $seller_id, $status = 'all', $order_date = NUL
 }
 
 /**
+ * Get all the orders from a specific date range
+ *
+ * @global object $wpdb
+ * @param int $seller_id
+ * @return array
+ */
+function dokan_get_seller_orders_by_date( $start_date, $end_date, $seller_id = false, $status = 'all' ) {
+    global $wpdb;
+
+    $seller_id = ! $seller_id ? get_current_user_id() : intval( $seller_id );
+    $start_date = date( 'Y-m-d', strtotime( $start_date ) );
+    $end_date = date( 'Y-m-d', strtotime( $end_date ) );
+
+    $cache_key = md5( 'dokan-seller-orders-' . $end_date . '-' . $end_date. '-' . $seller_id );
+    $orders = wp_cache_get( $cache_key, 'dokan' );
+
+    //if ( $orders === false ) {
+        $status_where = ( $status == 'all' ) ? '' : $wpdb->prepare( ' AND order_status = %s', $status );
+        $date_query = $wpdb->prepare( ' AND DATE( p.post_date ) >= %s AND DATE( p.post_date ) <= %s', $start_date, $end_date );
+        $sql = "SELECT do.*, p.post_date
+                FROM {$wpdb->prefix}dokan_orders AS do
+                LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+                WHERE
+                    do.seller_id = %d AND
+                    p.post_status != 'trash'
+                    $date_query
+                    $status_where
+                GROUP BY do.order_id
+                ORDER BY p.post_date ASC";
+        $orders = $wpdb->get_results( $wpdb->prepare( $sql, $seller_id ) );
+
+        wp_cache_set( $cache_key, $orders, 'dokan' );
+    //}
+
+    return $orders;
+}
+
+/**
+ * Get seller refund by date range
+ * 
+ * @param  string  $start_date 
+ * @param  string  $end_date   
+ * @param  int $seller_id  
+ * 
+ * @return object
+ */
+function dokan_get_seller_refund_by_date( $start_date, $end_date, $seller_id = false ) {
+    global $wpdb;
+
+    $seller_id           = ! $seller_id ? get_current_user_id() : intval( $seller_id );
+    $refund_status_where = $wpdb->prepare( ' AND status = %d', 1 );
+    $refund_date_query   = $wpdb->prepare( ' AND DATE( date ) >= %s AND DATE( date ) <= %s', $start_date, $end_date );
+    
+    $refund_sql = "SELECT *
+            FROM {$wpdb->prefix}dokan_refund 
+            WHERE
+                seller_id = %d 
+                $refund_date_query
+                $refund_status_where
+            ORDER BY date ASC";
+
+    return $wpdb->get_results( $wpdb->prepare( $refund_sql, $seller_id ) );
+}
+
+/**
+ * Get seller withdraw by date range
+ * 
+ * @param  string  $start_date 
+ * @param  string  $end_date   
+ * @param  int $seller_id  
+ * 
+ * @return object
+ */
+function dokan_get_seller_withdraw_by_date( $start_date, $end_date, $seller_id = false ) {
+    global $wpdb;
+
+    $seller_id             = ! $seller_id ? get_current_user_id() : intval( $seller_id );
+    $withdraw_status_where = $wpdb->prepare( ' AND status = %d', 1 );
+    $withdraw_date_query   = $wpdb->prepare( ' AND DATE( date ) >= %s AND DATE( date ) <= %s', $start_date, $end_date );
+    
+    $withdraw_sql = "SELECT *
+            FROM {$wpdb->prefix}dokan_withdraw 
+            WHERE
+                user_id = %d 
+                $withdraw_date_query
+                $withdraw_status_where
+            ORDER BY date ASC";
+
+    return $wpdb->get_results( $wpdb->prepare( $withdraw_sql, $seller_id ) );
+}
+
+/**
  * Get the orders total from a specific seller
  *
  * @global object $wpdb

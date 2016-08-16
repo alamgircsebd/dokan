@@ -30,11 +30,141 @@ function dokan_get_reports_charts() {
                 'title'       => __( 'Top earning', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_top_earners'
+            ),
+             "sales_statement"       => array(
+                'title'       => __( 'Statement', 'dokan' ),
+                'description' => '',
+                'function'    => 'dokan_seller_sales_statement'
             )
         )
     );
 
     return apply_filters( 'dokan_reports_charts', $charts );
+}
+
+
+/**
+ * Seller sales statement
+ *
+ * @since  
+ * 
+ * @return 
+ */
+function dokan_seller_sales_statement() {
+    $start_date = date( 'Y-m-01', current_time('timestamp') );
+    $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+
+    if ( isset( $_GET['dokan_report_filter'] ) ) {
+        $start_date = $_GET['start_date'];
+        $end_date = $_GET['end_date'];
+    }
+    ?>
+
+    <form method="get" class="dokan-form-inline report-filter dokan-clearfix" action="">
+        <div class="dokan-form-group">
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+        </div>
+
+        <div class="dokan-form-group">
+            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
+            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
+
+            <input type="hidden" name="chart" value="sales_statement">
+            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
+        </div>
+        <input type="submit" name="dokan_statement_export_all"  class="dokan-btn dokan-right dokan-btn-sm dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Export All', 'dokan' ); ?>">
+    </form>
+    <?php
+    
+    $order     = dokan_get_seller_orders_by_date( $start_date, $end_date );
+    $refund    = dokan_get_seller_refund_by_date( $start_date, $end_date );
+    $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $end_date );
+
+    $table_data = array_merge( $order, $refund, $widthdraw );
+    $statements = [];
+
+    foreach (  $table_data as $key => $data ) {
+        $date = isset( $data->post_date ) ? strtotime( $data->post_date ) : strtotime( $data->date );
+        $statements[$date] = $data;
+    }
+    
+    ksort( $statements );
+    
+    ?>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th><?php _e( 'Date', 'dokan' ); ?></th>
+                <th><?php _e( 'ID', 'dokan' ); ?></th>
+                <th><?php _e( 'Type', 'dokan' ); ?></th>
+                <th><?php _e( 'Sales', 'dokan' ); ?></th>
+                <th><?php _e( 'Amounts', 'dokan' ); ?></th>
+                <th><?php _e( 'Balance', 'dokan' ); ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            $net_amount = 0;
+
+            foreach ( $statements as $key => $statement ) {
+                if ( isset( $statement->post_date ) ) {
+                    $type       = __( 'Order', 'dokan' );
+                    $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
+                    $id         = $statement->order_id;
+                    $sales      = wc_price( $statement->order_total );
+                    $amount     = wc_price( $statement->net_amount );
+                    $net_amount = $net_amount + $statement->net_amount;
+                    $net_amount_print = wc_price( $net_amount );
+
+                } else if ( isset( $statement->refund_amount ) ) {
+                    $type   = __( 'Refund', 'dokan' );
+                    $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
+                    $id     = $statement->order_id;
+                    $sales  = wc_price( 0 );
+                    $amount = '<span style="color: #f05025;">-'.wc_price( $statement->refund_amount ).'</span>';
+                    $net_amount = $net_amount - $statement->refund_amount;
+                    $net_amount_print = wc_price( $net_amount );
+
+                } else {
+                    $type       = __( 'Withdraw', 'dokan' );
+                    $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
+                    $id         = $statement->id;
+                    $sales      = wc_price( 0 );
+                    $amount     = '<span style="color: #f05025;">-'.wc_price( $statement->amount ).'</span>';
+                    $net_amount = $net_amount - $statement->amount;
+                    $net_amount_print = wc_price( $net_amount );
+                }
+
+
+                ?>
+                <tr>
+                    <td><?php echo date( 'Y-m-d', $key ); ?></td>
+                    <td><a href="<?php echo $url; ?>">#<?php echo $id; ?></a></td>
+                    <td><?php echo $type; ?></td>
+                    <td><?php echo $sales; ?></td>
+                    <td><?php echo $amount; ?></td>
+                    <td><?php echo $net_amount_print; ?></td>
+                </tr>
+                <?php
+            }
+
+            if ( ! count( $statements ) ) {                 
+                ?>
+                <tr>
+                    <td colspan="6"><?php _e( 'No Result found!', 'dokan' ); ?></td>
+                </tr>
+                <?php
+            }
+
+            ?>
+        </tbody>
+    </table>
+
+    <?php
+
+    //var_dump( $start_date, $end_date, $reports ); return;
+
 }
 
 
