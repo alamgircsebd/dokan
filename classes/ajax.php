@@ -47,6 +47,8 @@ class Dokan_Ajax {
         add_action( 'wp_ajax_dokan_contact_seller', array( $this, 'contact_seller' ) );
         add_action( 'wp_ajax_nopriv_dokan_contact_seller', array( $this, 'contact_seller' ) );
 
+        add_action( 'wp_ajax_dokan_add_shipping_tracking_info', array( $this, 'add_shipping_tracking_info' ) );
+
         add_action( 'wp_ajax_dokan_revoke_access_to_download', array( $this, 'revoke_access_to_download' ) );
         add_action( 'wp_ajax_nopriv_dokan_revoke_access_to_download', array( $this, 'revoke_access_to_download' ) );
 
@@ -343,6 +345,68 @@ class Dokan_Ajax {
             echo '"><div class="note_content">';
             echo wpautop( wptexturize( $note ) );
             echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete note', 'woocommerce' ).'</a></p>';
+            echo '</li>';
+        }
+
+        // Quit out
+        die();
+    }
+
+    /**
+     * Add shipping tracking info via ajax
+     */
+    public function add_shipping_tracking_info() {
+
+        check_ajax_referer( 'add-shipping-tracking-info', 'security' );
+
+        if ( !is_user_logged_in() ) {
+            die(-1);
+        }
+        if ( ! current_user_can( 'dokandar' ) ) {
+            die(-1);
+        }
+
+        $post_id           = absint( $_POST['post_id'] );
+        $shipping_provider = $_POST['shipping_provider'];
+        $shipping_number   = ( trim( stripslashes( $_POST['shipping_number'] ) ) );
+        $shipped_date      = ( trim( $_POST['shipped_date'] ) );
+
+        $ship_info = 'Shipping provider: ' . $shipping_provider . '<br />' . 'Shipping number: ' . $shipping_number . '<br />' . 'Shipped date: ' . $shipped_date;
+
+        if ( $shipping_number == '' ){
+            die();
+        }
+
+        if ( $post_id > 0 ) {
+            //$order      = wc_get_order( $post_id );
+            //$comment_id = $order->add_order_note( $note, $is_customer_note );
+
+            $time = current_time('mysql');
+
+            $data = array(
+                'comment_post_ID'      => $post_id,
+                'comment_author'       => 'WooCommerce',
+                'comment_author_email' => '',
+                'comment_author_url'   => '',
+                'comment_content'      => $ship_info,
+                'comment_type'         => 'order_note',
+                'comment_parent'       => 0,
+                'user_id'              => get_current_user_id(),
+                'comment_author_IP'    => $_SERVER['REMOTE_ADDR'],
+                'comment_agent'        => $_SERVER['HTTP_USER_AGENT'],
+                'comment_date'         => $time,
+                'comment_approved'     => 1,
+            );
+
+            $comment_id = wp_insert_comment($data);
+
+            echo '<li rel="' . esc_attr( $comment_id ) . '" class="note ';
+            //if ( $is_customer_note ) {
+                echo 'customer-note';
+            //}
+            echo '"><div class="note_content">';
+            echo wpautop( wptexturize( $ship_info ) );
+            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete', 'woocommerce' ).'</a></p>';
             echo '</li>';
         }
 

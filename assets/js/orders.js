@@ -166,6 +166,8 @@ jQuery(function($) {
             $( "#shipped-date" ).datepicker({
                 dateFormat: "yy-mm-dd"
             });
+            //saving note
+            $( 'body' ).on('click','#add-tracking-details', this.insertShippingTrackingInfo);
 
             $( '#woocommerce-order-items' )
                 .on( 'click', 'button.refund-items', this.refund_items )
@@ -188,6 +190,30 @@ jQuery(function($) {
                 .on( 'keyup', '.woocommerce_order_items .split-input input:eq(1)', function() {
                     $( this ).removeClass( 'match-total' );
                 })
+        },
+
+        insertShippingTrackingInfo: function(e){
+            e.preventDefault();
+
+            var shipping_tracking_info = {
+                shipping_provider: $('#shipping_provider').val(),
+                shipping_number: $('#tracking_number').val(),
+                shipped_date: $('#shipped-date').val(),
+                action: $('#action').val(),
+                post_id: $('#post-id').val(),
+                security: $('#security').val()
+            };
+
+            $('#dokan-order-notes').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+            $.post( dokan.ajaxurl, shipping_tracking_info, function(response) {
+                $('ul.order_notes').prepend( response );
+                $('#dokan-order-notes').unblock();
+                $('#tracking-modal').modal('hide');
+            });
+
+            return false;
+
         },
 
         block: function() {
