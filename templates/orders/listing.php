@@ -27,17 +27,17 @@ if ( $user_orders ) {
             foreach ($user_orders as $order) {
                 $the_order = new WC_Order( $order->order_id );
                 ?>
-                <tr>
-                    <td class="dokan-order-id">
+                <tr >
+                    <td class="dokan-order-id" data-title="<?php _e( 'Order', 'dokan' ); ?>" >
                         <?php echo '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $the_order->id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $the_order->get_order_number() ) ) . '</strong></a>'; ?>
                     </td>
-                    <td class="dokan-order-total">
+                    <td class="dokan-order-total" data-title="<?php _e( 'Order Total', 'dokan' ); ?>" >
                         <?php echo $the_order->get_formatted_order_total(); ?>
                     </td>
-                    <td class="dokan-order-status">
+                    <td class="dokan-order-status" data-title="<?php _e( 'Status', 'dokan' ); ?>" >
                         <?php echo '<span class="dokan-label dokan-label-' . dokan_get_order_status_class( $the_order->status ) . '">' . esc_html__( dokan_get_order_status_translated( $the_order->status ) ) . '</span>'; ?>
                     </td>
-                    <td class="dokan-order-customer">
+                    <td class="dokan-order-customer" data-title="<?php _e( 'Customer', 'dokan' ); ?>" >
                         <?php
 
                         // reset user info
@@ -64,13 +64,13 @@ if ( $user_orders ) {
                         echo $user;
                         ?>
                     </td>
-                    <td class="dokan-order-date">
+                    <td class="dokan-order-date" data-title="<?php _e( 'Date', 'dokan' ); ?>" >
                         <?php
                         if ( '0000-00-00 00:00:00' == $the_order->order_date ) {
                             $t_time = $h_time = __( 'Unpublished', 'dokan' );
                         } else {
                             $t_time = get_the_time( __( 'Y/m/d g:i:s A', 'dokan' ), $the_order->id );
-                            
+
                             $gmt_time = strtotime( $the_order->order_date . ' UTC' );
                             $time_diff = current_time( 'timestamp', 1 ) - $gmt_time;
 
@@ -83,7 +83,7 @@ if ( $user_orders ) {
                         echo '<abbr title="' . esc_attr( $t_time ) . '">' . esc_html( apply_filters( 'post_date_column_time', $h_time, $the_order->id ) ) . '</abbr>';
                         ?>
                     </td>
-                    <td class="dokan-order-action" width="17%">
+                    <td class="dokan-order-action" width="17%" data-title="<?php _e( 'Action', 'dokan' ); ?>" >
                         <?php
                         do_action( 'woocommerce_admin_order_actions_start', $the_order );
 
@@ -126,6 +126,7 @@ if ( $user_orders ) {
                         do_action( 'woocommerce_admin_order_actions_end', $the_order );
                         ?>
                     </td>
+                    <td class="diviader"></td>
                 </tr>
 
             <?php } ?>

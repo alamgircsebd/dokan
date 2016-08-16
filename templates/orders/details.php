@@ -300,7 +300,51 @@ $order    = new WC_Order( $order_id );
                                     <input type="submit" name="add_order_note" class="add_note btn btn-sm btn-theme" value="<?php esc_attr_e( 'Add Note', 'dokan' ); ?>">
                                 </div>
                             </form>
+
+                            <div class="clearfix dokan-form-group" style="margin-top: 10px;">
+                                <!-- Trigger the modal with a button -->
+                                <input type="button" data-toggle="modal" data-target="#tracking-modal" id="add-tracking-number" name="add_tracking_number" class="dokan-btn dokan-btn-success grant_access" value="<?php esc_attr_e( 'Tracking Number', 'dokan' ); ?>">
+
+                            </div>
+
+                            <!-- Modal -->
+                            <div class="modal fade" id="tracking-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                            <h2 class="modal-title" id="myModalLabel"><?php _e('Shipment Tracking','dokan');?></h2>
+                                        </div>
+                                        <div class="modal-body">
+                                            <h5><?php _e('Shipping Provider','dokan');?></h5>
+                                            <select name="shipping_provider" class="form-control">
+                                                <optgroup label="Australia">
+                                                    <option><?php _e('Australia','dokan');?></option>
+                                                    <option><?php _e('Fedex','dokan');?></option>
+                                                </optgroup>
+                                                <optgroup label="Canada">
+                                                    <option><?php _e('Canada Post','dokan');?></option>
+                                                </optgroup>
+                                            </select>
+                                            <h5><?php _e('Tracking Number','dokan');?></h5>
+                                            <input type="text" name="tracking_number" value="">
+                                            <h5><?php _e('Date Shipped','dokan');?></h5>
+                                            <input type="text" id="shipped-date" name="shipped_date" value="" placeholder="YYYY-MM-DD">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close','dokan');?></button>
+                                            <button type="button" class="btn btn-primary"><?php _e('Add Tracking Details','dokan');?></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
                         </div> <!-- .add_note -->
+
                     </div> <!-- .dokan-panel-body -->
                 </div> <!-- .dokan-panel -->
             </div>

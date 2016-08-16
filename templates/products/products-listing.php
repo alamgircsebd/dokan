@@ -116,10 +116,10 @@
                             $product = get_product( $post->ID );
                             ?>
                             <tr<?php echo $tr_class; ?>>
-                                <td>
+                                <td data-title="<?php _e( 'Image', 'dokan' ); ?>">
                                     <a href="<?php echo dokan_edit_product_url( $post->ID ); ?>"><?php echo $product->get_image(); ?></a>
                                 </td>
-                                <td>
+                                <td data-title="<?php _e( 'Name', 'dokan' ); ?>">
                                     <p><a href="<?php echo dokan_edit_product_url( $post->ID ); ?>"><?php echo $product->get_title(); ?></a></p>
 
                                     <div class="row-actions">
@@ -128,10 +128,10 @@
                                         <span class="view"><a href="<?php echo get_permalink( $product->ID ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                     </div>
                                 </td>
-                                <td class="post-status">
+                                <td class="post-status" data-title="<?php _e( 'Status', 'dokan' ); ?>">
                                     <label class="dokan-label <?php echo $post->post_status; ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></label>
                                 </td>
-                                <td>
+                                <td data-title="<?php _e( 'SKU', 'dokan' ); ?>">
                                     <?php
                                     if ( $product->get_sku() ) {
                                         echo $product->get_sku();
@@ -140,7 +140,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td>
+                                <td data-title="<?php _e( 'Stock', 'dokan' ); ?>">
                                     <?php
                                     if ( $product->is_in_stock() ) {
                                         echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
@@ -153,7 +153,7 @@
                                     endif;
                                     ?>
                                 </td>
-                                <td>
+                                <td data-title="<?php _e( 'Price', 'dokan' ); ?>">
                                     <?php
                                     if ( $product->get_price_html() ) {
                                         echo $product->get_price_html();
@@ -162,7 +162,7 @@
                                     }
                                     ?>
                                 </td>
-                                <td>
+                                <td data-title="<?php _e( 'Type', 'dokan' ); ?>">
                                     <?php
                                         if( $product->product_type == 'grouped' ):
                                             echo '<span class="product-type tips grouped" title="' . __( 'Grouped', 'woocommerce' ) . '"></span>';
@@ -186,10 +186,10 @@
                                         endif;
                                     ?>
                                 </td>
-                                <td>
+                                <td data-title="<?php _e( 'Views', 'dokan' ); ?>">
                                     <?php echo (int) get_post_meta( $post->ID, 'pageview', true ); ?>
                                 </td>
-                                <td class="post-date">
+                                <td class="post-date" data-title="<?php _e( 'Date', 'dokan' ); ?>">
                                     <?php
                                     if ( '0000-00-00 00:00:00' == $post->post_date ) {
                                         $t_time = $h_time = __( 'Unpublished', 'dokan' );
@@ -209,7 +209,7 @@
                                     }
 
                                     echo '<abbr title="' . $t_time . '">' . apply_filters( 'post_date_column_time', $h_time, $post, 'date', 'all' ) . '</abbr>';
-                                    echo '<br />';
+                                    echo '<div class="status">';
                                     if ( 'publish' == $post->post_status ) {
                                         _e( 'Published', 'dokan' );
                                     } elseif ( 'future' == $post->post_status ) {
@@ -222,7 +222,9 @@
                                         _e( 'Last Modified', 'dokan' );
                                     }
                                     ?>
+                                    </div>
                                 </td>
+                                <td class="diviader"></td>
                             </tr>
 
                         <?php } ?>

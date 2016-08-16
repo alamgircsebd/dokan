@@ -3,6 +3,10 @@ global $post;
 
 $_downloadable   = get_post_meta( $post->ID, '_downloadable', true );
 
+$_is_lot_discount       = get_post_meta( $post->ID, '_is_lot_discount', true );
+$_lot_discount_quantity = get_post_meta( $post->ID, '_lot_discount_quantity', true );
+$_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true );
+
 ?>
 <div class="update-button-wrap">
     <input type="submit" name="update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
@@ -140,6 +144,28 @@ $_downloadable   = get_post_meta( $post->ID, '_downloadable', true );
 </aside> <!-- .downloadable -->
 
 <?php do_action( 'dokan_product_edit_after_downloadable' ); ?>
+
+<aside class="downloadable downloadable_files product_lot_discount">
+    <div class="dokan-side-head">
+        <label class="dokan-checkbox-inline dokan-form-label" for="_is_lot_discount">
+            <input type="checkbox" id="_is_lot_discount" name="_is_lot_discount" value="yes" <?php checked( $_is_lot_discount, 'yes' ); ?>>
+            <?php _e( 'Enable bulk discount', 'dokan' );?>
+        </label>
+    </div> <!-- .dokan-side-head -->
+
+    <div class="show_if_needs_lot_discount <?php echo ($_is_lot_discount=='yes') ? '' : 'hide_if_lot_discount' ;?>">
+        <ul class="list-unstyled ">
+            <li class="dokan-form-group">
+                <label class="form-label dokan-form-label" for="_lot_discount_quantity"><?php _e('Minimum quantity', 'dokan');?></label>
+                <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( '0', 'dokan' ) ), 'number' ); ?>
+                <label class="form-label dokan-form-label" for="_lot_discount_quantity"><?php _e('Discount %', 'dokan');?></label>
+                <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( '0 %', 'dokan' ) ), 'number' ); ?>
+            </li>
+        </ul>
+    </div> <!-- .dokan-side-body -->
+</aside> <!-- .downloadable -->
+
+<?php do_action( 'dokan_product_edit_after_discount' ); ?>
 
 <aside class="product-gallery">
     <div class="dokan-side-head">

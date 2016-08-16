@@ -13,7 +13,7 @@ $attribute_taxonomies = wc_get_attribute_taxonomies();
 // Get tax classes
 $tax_classes = array_filter( array_map('trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
 $tax_class_options = array();
-$tax_class_options[''] = __( 'Standard', 'woocommerce' );
+$tax_class_options[''] = __( 'Standard', 'dokan' );
 if ( $tax_classes ) {
     foreach ( $tax_classes as $class ) {
         $tax_class_options[ sanitize_title( $class ) ] = esc_attr( $class );
@@ -71,7 +71,7 @@ if ( $attributes ) {
         }
         unset(  $attribute['value'] );
         $attribute['name'] = wc_attribute_label( $attribute['name'] );
-        $filter_attributes[$item] = $attribute;
+        $filter_attributes[sanitize_title( $item ) ] = $attribute;
     }
 
     foreach( $attributes as $item => $attribute ) {

@@ -79,30 +79,34 @@ function dokan_get_refund_count() {
  *
  *  @since 2.4.12
  *
- * @param int $seller_id 
- * 
+ * @param int $seller_id
+ *
  * @return array
  */
-function dokan_get_seller_coupon( $seller_id, $show_on_store = '' ) {
+function dokan_get_seller_coupon( $seller_id, $show_on_store = false ) {
     $args = array(
-        'post_type'     => 'shop_coupon',
-        'post_status'   => 'publish',
-        'author'        => $seller_id,
-        'meta_query'    => array(
-            array(
-                'key' => 'expiry_date',
-                'value' => date("Y-m-d"),
-                'compare' => '>='
-            )
-        ),
+        'post_type'   => 'shop_coupon',
+        'post_status' => 'publish',
+        'author'      => $seller_id,
     );
+
     if ( $show_on_store ) {
         $args['meta_query'][] = array(
-            'key' => 'show_on_store',
-            'value' => $show_on_store,
+            'key'   => 'show_on_store',
+            'value' => 'yes',
         );
     }
+
     $coupons = get_posts( $args );
 
     return $coupons;
+}
+
+/**
+ * check array is index or associative
+ *
+ * @return bool
+ */
+function isAssoc($arr) {
+    return array_keys($arr) !== range(0, count($arr) - 1);
 }

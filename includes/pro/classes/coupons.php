@@ -267,11 +267,11 @@ class Dokan_Pro_Coupons {
         } else {
 
             $post = array(
-                'ID' => $_POST['post_id'],
-                'post_title' => $_POST['title'],
+                'ID'           => $_POST['post_id'],
+                'post_title'   => $_POST['title'],
                 'post_content' => $_POST['description'],
-                'post_status' => 'publish',
-                'post_type' => 'shop_coupon',
+                'post_status'  => 'publish',
+                'post_type'    => 'shop_coupon',
             );
             $post_id = wp_update_post( $post );
             $message = 'coupon_update';
@@ -281,16 +281,16 @@ class Dokan_Pro_Coupons {
             return;
         }
 
-        $customer_email = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $_POST['email_restrictions'] ) ) ) );
-        $type = sanitize_text_field( $_POST['discount_type'] );
-        $amount = sanitize_text_field( $_POST['amount'] );
-        $usage_limit = empty( $_POST['usage_limit'] ) ? '' : absint( $_POST['usage_limit'] );
-        $expiry_date = sanitize_text_field( $_POST['expire'] );
+        $customer_email     = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $_POST['email_restrictions'] ) ) ) );
+        $type               = sanitize_text_field( $_POST['discount_type'] );
+        $amount             = sanitize_text_field( $_POST['amount'] );
+        $usage_limit        = empty( $_POST['usage_limit'] ) ? '' : absint( $_POST['usage_limit'] );
+        $expiry_date        = sanitize_text_field( $_POST['expire'] );
 
-        $apply_before_tax = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
+        $apply_before_tax   = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
         $exclude_sale_items = isset( $_POST['exclude_sale_items'] ) ? 'yes' : 'no';
-        $show_on_store = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
-        $minimum_amount = sanitize_text_field( $_POST['minium_ammount'] );
+        $show_on_store      = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
+        $minimum_amount     = sanitize_text_field( $_POST['minium_ammount'] );
 
         if ( isset( $_POST['product_drop_down'] ) ) {
             $product_ids = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_drop_down'] ) ) );
@@ -575,23 +575,23 @@ class Dokan_Pro_Coupons {
         $exclude_products = explode( ',', $exclude_products );
 
         dokan_get_template_part( 'coupon/form', '', array(
-            'pro' => true,
-            'post_id' => $post_id,
-            'post_title' => $post_title,
-            'discount_type' => $discount_type,
-            'description' => $description,
-            'amount' => $amount,
-            'products' => $products,
-            'exclude_products' => $exclude_products,
-            'usage_limit' => $usage_limit,
-            'expire' => $expire,
-            'minimum_amount' => $minimum_amount,
-            'customer_email' => $customer_email,
-            'button_name' => $button_name,
+            'pro'               => true,
+            'post_id'           => $post_id,
+            'post_title'        => $post_title,
+            'discount_type'     => $discount_type,
+            'description'       => $description,
+            'amount'            => $amount,
+            'products'          => $products,
+            'exclude_products'  => $exclude_products,
+            'usage_limit'       => $usage_limit,
+            'expire'            => $expire,
+            'minimum_amount'    => $minimum_amount,
+            'customer_email'    => $customer_email,
+            'button_name'       => $button_name,
             'exclide_sale_item' => $exclide_sale_item,
-            'show_on_store' => $show_on_store,
-            'all_products' => $this->coupon_products_list(),
-            'products_id' => $products_id,
+            'show_on_store'     => $show_on_store,
+            'all_products'      => $this->coupon_products_list(),
+            'products_id'       => $products_id,
         ) );
     }
 }

@@ -57,6 +57,8 @@ class Dokan_Pro_Ajax {
 
         add_action( 'wp_ajax_dokan_refund_request', array( $this, 'dokan_refund_request') );
         add_action( 'wp_ajax_nopriv_dokan_refund_request', array( $this, 'dokan_refund_request') );
+
+        add_action( 'wp_ajax_custom-header-crop', array( $this, 'crop_store_banner' ) );
     }
 
 
@@ -86,7 +88,7 @@ class Dokan_Pro_Ajax {
         } else if ( $refund->has_pending_refund_request( $_POST['order_id'] ) ) {
             $data =  __( 'You have already a processing refund request for this order.', 'dokan' );
             wp_send_json_error( $data );
-        } else{ 
+        } else{
             $refund = new Dokan_Pro_Refund;
             $refund->insert_refund($_POST);
             Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
@@ -679,7 +681,7 @@ class Dokan_Pro_Ajax {
                 $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
-                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'woocommerce' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
+                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
 
                 // Update or Add post
                 if ( ! $variation_id ) {
@@ -818,12 +820,20 @@ class Dokan_Pro_Ajax {
 
                 // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
+
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . $attribute['name'];
-                        $value         = isset( $postdata[ $attribute_key ][ $i ] ) ? stripslashes( $postdata[ $attribute_key ][ $i ] ) : '';
+                        $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
                         $updated_attribute_keys[] = $attribute_key;
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            // Don't use wc_clean as it destroys sanitized characters
+                            $value = isset( $postdata[$attribute_key][$i] ) ? sanitize_title( stripslashes( $postdata[$attribute_key][$i] ) ) : '';
+                        } else {
+                            $value = isset( $postdata[$attribute_key][$i] ) ? wc_clean( stripslashes( $postdata[$attribute_key][$i] ) ) : '';
+                        }
+
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
                 }
@@ -847,15 +857,20 @@ class Dokan_Pro_Ajax {
 
         foreach ( $attributes as $attribute ) {
             if ( $attribute['is_variation'] ) {
+                $value = '';
 
-                // Don't use wc_clean as it destroys sanitized characters
-                if ( isset( $postdata[ 'default_attribute_' . $attribute['name'] ] ) )
-                    $value = trim( stripslashes( $postdata[ 'default_attribute_' . $attribute['name'] ] ) );
-                else
-                    $value = '';
+                if ( isset( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) {
+                    if ( $attribute['is_taxonomy'] ) {
+                        // Don't use wc_clean as it destroys sanitized characters
+                        $value = sanitize_title( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                    } else {
+                        $value = wc_clean( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                    }
+                }
 
-                if ( $value )
-                    $default_attributes[ $attribute['name'] ] = $value;
+                if ( $value ) {
+                    $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+                }
             }
         }
 
@@ -1297,5 +1312,163 @@ class Dokan_Pro_Ajax {
         return wp_send_json_success( $response );
     }
 
+    /**
+     * Gets attachment uploaded by Media Manager, crops it, then saves it as a
+     * new object. Returns JSON-encoded object details.
+     *
+     * @since 2.5
+     *
+     * @return void
+     */
+    public function crop_store_banner() {
+        check_ajax_referer( 'image_editor-' . $_POST['id'], 'nonce' );
+
+        if ( !current_user_can( 'edit_post', $_POST['id'] ) ) {
+            wp_send_json_error();
+        }
+
+        $crop_details = $_POST['cropDetails'];
+
+        $dimensions = $this->get_header_dimensions( array(
+            'height' => $crop_details['height'],
+            'width'  => $crop_details['width'],
+        ) );
+
+        $attachment_id = absint( $_POST['id'] );
+
+        $cropped = wp_crop_image(
+            $attachment_id,
+            (int) $crop_details['x1'],
+            (int) $crop_details['y1'],
+            (int) $crop_details['width'],
+            (int) $crop_details['height'],
+            (int) $dimensions['dst_width'],
+            (int) $dimensions['dst_height']
+        );
+
+        if ( ! $cropped || is_wp_error( $cropped ) ) {
+            wp_send_json_error( array( 'message' => __( 'Image could not be processed. Please go back and try again.' ) ) );
+        }
+
+        /** This filter is documented in wp-admin/custom-header.php */
+        $cropped = apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication
+
+        $object = $this->create_attachment_object( $cropped, $attachment_id );
+
+        unset( $object['ID'] );
+
+        $new_attachment_id = $this->insert_attachment( $object, $cropped );
+
+        $object['attachment_id'] = $new_attachment_id;
+        $object['url']           = wp_get_attachment_url( $new_attachment_id );;
+        $object['width']         = $dimensions['dst_width'];
+        $object['height']        = $dimensions['dst_height'];
+
+        wp_send_json_success( $object );
+    }
+
+    /**
+     * Calculate width and height based on what the currently selected theme supports.
+     *
+     * @since 2.5
+     *
+     * @param array $dimensions
+     *
+     * @return array dst_height and dst_width of header image.
+     */
+    final public function get_header_dimensions( $dimensions ) {
+        $general_settings = get_option( 'dokan_general', [] );
+
+        $max_width = 0;
+        $width = absint( $dimensions['width'] );
+        $height = absint( $dimensions['height'] );
+        $theme_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+        $theme_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+        $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+        $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
+        $has_max_width = ! empty( $general_settings['store_banner_max_width'] ) ? $general_settings['store_banner_max_width'] : false;
+        $dst = array( 'dst_height' => null, 'dst_width' => null );
+
+        // For flex, limit size of image displayed to 1500px unless theme says otherwise
+        if ( $has_flex_width ) {
+            $max_width = 625;
+        }
+
+        if ( $has_max_width ) {
+            $max_width = max( $max_width, get_theme_support( 'custom-header', 'max-width' ) );
+        }
+        $max_width = max( $max_width, $theme_width );
+
+        if ( $has_flex_height && ( ! $has_flex_width || $width > $max_width ) ) {
+            $dst['dst_height'] = absint( $height * ( $max_width / $width ) );
+        }
+        elseif ( $has_flex_height && $has_flex_width ) {
+            $dst['dst_height'] = $height;
+        }
+        else {
+            $dst['dst_height'] = $theme_height;
+        }
+
+        if ( $has_flex_width && ( ! $has_flex_height || $width > $max_width ) ) {
+            $dst['dst_width'] = absint( $width * ( $max_width / $width ) );
+        }
+        elseif ( $has_flex_width && $has_flex_height ) {
+            $dst['dst_width'] = $width;
+        }
+        else {
+            $dst['dst_width'] = $theme_width;
+        }
+
+        return $dst;
+    }
+
+    /**
+     * Create an attachment 'object'.
+     *
+     * @since 2.5
+     *
+     * @param string $cropped              Cropped image URL.
+     * @param int    $parent_attachment_id Attachment ID of parent image.
+     *
+     * @return array Attachment object.
+     */
+    final public function create_attachment_object( $cropped, $parent_attachment_id ) {
+        $parent = get_post( $parent_attachment_id );
+        $parent_url = wp_get_attachment_url( $parent->ID );
+        $url = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+
+        $size = @getimagesize( $cropped );
+        $image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
+
+        $object = array(
+            'ID' => $parent_attachment_id,
+            'post_title' => basename($cropped),
+            'post_mime_type' => $image_type,
+            'guid' => $url,
+            'context' => 'custom-header'
+        );
+
+        return $object;
+    }
+
+
+    /**
+     * Insert an attachment and its metadata.
+     *
+     * @since 2.5
+     *
+     * @param array  $object  Attachment object.
+     * @param string $cropped Cropped image URL.
+     *
+     * @return int Attachment ID.
+     */
+    final public function insert_attachment( $object, $cropped ) {
+        $attachment_id = wp_insert_attachment( $object, $cropped );
+        $metadata = wp_generate_attachment_metadata( $attachment_id, $cropped );
+
+        $metadata = apply_filters( 'wp_header_image_attachment_metadata', $metadata );
+        wp_update_attachment_metadata( $attachment_id, $metadata );
+        return $attachment_id;
+    }
 
 }

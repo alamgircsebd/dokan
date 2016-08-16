@@ -50,12 +50,16 @@ if ( !empty( $_sale_price_dates_from ) && !empty( $_sale_price_dates_to ) ) {
     $show_schedule = true;
 }
 
-$_featured          = get_post_meta( $post_id, '_featured', true );
-$_downloadable      = get_post_meta( $post_id, '_downloadable', true );
-$_stock             = get_post_meta( $post_id, '_stock', true );
-$_stock_status      = get_post_meta( $post_id, '_stock_status', true );
-$_visibility        = get_post_meta( $post_id, '_visibility', true );
-$_enable_reviews    = $post->comment_status;
+$_featured              = get_post_meta( $post_id, '_featured', true );
+$_downloadable          = get_post_meta( $post_id, '_downloadable', true );
+$_is_lot_discount       = get_post_meta( $post_id, '_is_lot_discount', true );
+$_lot_discount_quantity = get_post_meta( $post_id, '_lot_discount_quantity', true );
+$_lot_discount_amount   = get_post_meta( $post_id, '_lot_discount_amount', true );
+$is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', array('') );
+$_stock                 = get_post_meta( $post_id, '_stock', true );
+$_stock_status          = get_post_meta( $post_id, '_stock_status', true );
+$_visibility            = get_post_meta( $post_id, '_visibility', true );
+$_enable_reviews        = $post->comment_status;
 
 
 if ( ! $from_shortcode ) {
@@ -513,6 +517,29 @@ if ( ! $from_shortcode ) {
                         </div><!-- .dokan-product-inventory -->
 
                         <?php do_action( 'dokan_product_edit_after_inventory_variants', $post, $post_id ); ?>
+
+                        <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
+                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix">
+                                <div class="dokan-side-left">
+                                    <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
+                                </div>
+
+                                <div class="dokan-side-right">
+                                    <?php //if ( $post_id ) : ?>
+                                        <label class="dokan-checkbox-inline dokan-form-label" for="_is_lot_discount">
+                                            <input type="checkbox" id="_is_lot_discount" name="_is_lot_discount" value="yes" <?php checked( $_is_lot_discount, 'yes' ); ?>>
+                                            <?php _e( 'Enable bulk discount', 'dokan' ); ?>
+                                        </label>
+                                        <div class="show_if_needs_lot_discount <?php echo ($_is_lot_discount=='yes') ? '' : 'hide_if_lot_discount' ;?>">
+                                            <label class="form-label dokan-form-label" for="_lot_discount_quantity"><?php _e('Minimum quantity', 'dokan');?></label>
+                                            <?php dokan_post_input_box( $post_id, '_lot_discount_quantity', array( 'placeholder' => __( '0', 'dokan' ) ), 'number' ); ?>
+                                            <label class="form-label dokan-form-label" for="_lot_discount_quantity"><?php _e('Discount %', 'dokan');?></label>
+                                            <?php dokan_post_input_box( $post_id, '_lot_discount_amount', array( 'placeholder' => __( '0 %', 'dokan' ) ), 'number' ); ?>
+                                        </div>
+                                    <?php //endif;?>
+                                </div>
+                            </div>
+                        <?php endif;?>
 
                         <div class="dokan-other-options dokan-edit-row dokan-clearfix">
                             <div class="dokan-side-left">

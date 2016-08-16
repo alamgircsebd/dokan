@@ -206,12 +206,20 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'off'
                  ),
+                'extra_fee_recipient' => array(
+                    'name'    => 'extra_fee_recipient',
+                    'label'   => __( 'Extra Fee Recipient', 'dokan' ),
+                    'desc'    => __( 'Extra fees like shipping and tax will go to', 'dokan' ),
+                    'type'    => 'select',
+                    'options' => array( 'seller' => __( 'Seller', 'dokan' ), 'admin' => __( 'Admin', 'dokan' ) ),
+                    'default' => 'seller'
+                )
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
                     'label'   => __( 'New Seller Enable Selling', 'dokan' ),
-                    'desc'    => __( 'Make selling status enable for new registred seller', 'dokan' ),
+                    'desc'    => __( 'Make selling status enable for new registered seller', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
