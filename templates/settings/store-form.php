@@ -47,6 +47,8 @@
         $address_state   = $_POST['dokan_address']['state'];
     }
 
+    $dokan_appearance = get_option( 'dokan_appearance' );
+
 ?>
 <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
 
@@ -54,43 +56,45 @@
 
         <?php wp_nonce_field( 'dokan_store_settings_nonce' ); ?>
 
-        <div class="dokan-banner">
+        <?php if ( ! empty( $dokan_appearance['store_header_template'] ) && 'layout3' !== $dokan_appearance['store_header_template'] ): ?>
+            <div class="dokan-banner">
 
-            <div class="image-wrap<?php echo $banner ? '' : ' dokan-hide'; ?>">
-                <?php $banner_url = $banner ? wp_get_attachment_url( $banner ) : ''; ?>
-                <input type="hidden" class="dokan-file-field" value="<?php echo $banner; ?>" name="dokan_banner">
-                <img class="dokan-banner-img" src="<?php echo esc_url( $banner_url ); ?>">
+                <div class="image-wrap<?php echo $banner ? '' : ' dokan-hide'; ?>">
+                    <?php $banner_url = $banner ? wp_get_attachment_url( $banner ) : ''; ?>
+                    <input type="hidden" class="dokan-file-field" value="<?php echo $banner; ?>" name="dokan_banner">
+                    <img class="dokan-banner-img" src="<?php echo esc_url( $banner_url ); ?>">
 
-                <a class="close dokan-remove-banner-image">&times;</a>
-            </div>
+                    <a class="close dokan-remove-banner-image">&times;</a>
+                </div>
 
-            <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
-                <i class="fa fa-cloud-upload"></i>
+                <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
+                    <i class="fa fa-cloud-upload"></i>
 
-                <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
-                <p class="help-block">
-                    <?php
-                    /**
-                     * Filter `dokan_banner_upload_help`
-                     *
-                     * @since 2.4.10
-                     */
-                    $general_settings = get_option( 'dokan_general', [] );
-                    $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
-                    $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+                    <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
+                    <p class="help-block">
+                        <?php
+                        /**
+                         * Filter `dokan_banner_upload_help`
+                         *
+                         * @since 2.4.10
+                         */
+                        $general_settings = get_option( 'dokan_general', [] );
+                        $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+                        $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
 
-                    $help_text = sprintf(
-                        __('Upload a banner for your store. Banner size is (%sx%s) pixels.', 'dokan' ),
-                        $banner_width, $banner_height
-                    );
+                        $help_text = sprintf(
+                            __('Upload a banner for your store. Banner size is (%sx%s) pixels.', 'dokan' ),
+                            $banner_width, $banner_height
+                        );
 
-                    echo apply_filters( 'dokan_banner_upload_help', $help_text );
-                    ?>
-                </p>
-            </div>
-        </div> <!-- .dokan-banner -->
+                        echo apply_filters( 'dokan_banner_upload_help', $help_text );
+                        ?>
+                    </p>
+                </div>
+            </div> <!-- .dokan-banner -->
 
-        <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
+            <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
+        <?php endif; ?>
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
