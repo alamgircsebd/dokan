@@ -22,7 +22,13 @@
             <div class="dokan-overlay" style="display: none;"><span class="dokan-ajax-loader"></span></div>
         </form>
 
-    <?php } ?>
+    <?php }
+    else 
+    {
+        $search_query = null;
+    }
+       
+    ?>
 
     <div id="dokan-seller-listing-wrap">
         <?php
