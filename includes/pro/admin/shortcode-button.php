@@ -37,7 +37,7 @@ class Dokan_shortcodes_button {
             ),
             'dokan-best-selling-product' => array(
                 'title'   => 'Best Selling Product',
-                'content' => '[dokan-best-selling-product]'
+                'content' => '[dokan-best-selling-product no_of_product="5" seller_id="" ]'
             ),
             'dokan-top-rated-product'    => array(
                 'title'   => 'Top Rated Product',
