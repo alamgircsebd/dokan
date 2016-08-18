@@ -105,8 +105,10 @@ final class WeDevs_Dokan {
     public function __construct() {
 
         if ( ! function_exists( 'WC' ) ) {
-            add_action( 'admin_notices', array( $this, 'add_woocommerce_activation_notice' ) );
-            return;
+            require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+            deactivate_plugins( plugin_basename( __FILE__ ) );
+
+            wp_die( '<div class="error"><p>' . sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>' );
         }
 
         global $wpdb;
@@ -128,16 +130,6 @@ final class WeDevs_Dokan {
         $this->init_ajax();
 
         do_action( 'dokan_loaded' );
-    }
-
-    /**
-     * Show wordpress error notice if Woocommerce not found
-     *
-     * @since 2.4.4
-     *
-     */
-    function add_woocommerce_activation_notice() {
-        echo '<div class="error"><p>' . sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>';
     }
 
     /**
@@ -180,6 +172,10 @@ final class WeDevs_Dokan {
      * Nothing being called here yet.
      */
     public static function activate() {
+        if ( ! function_exists( 'WC' ) ) {
+            return;
+        }
+
         global $wpdb;
 
         $wpdb->dokan_withdraw     = $wpdb->prefix . 'dokan_withdraw';
@@ -484,14 +480,15 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/store-menu.php';
         require_once $inc_dir . 'wc-functions.php';
         require_once $lib_dir . 'class-wedevs-insights.php';
+        require_once $inc_dir . '/admin/setup-wizard.php';
+        require_once $classes_dir . 'seller-setup-wizard.php';
 
         // Load free or pro moduels
         if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/pro/dokan-pro-loader.php';
 
             $this->is_pro = true;
-        }
-        else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
+        } else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/free/dokan-free-loader.php';
         }
 
@@ -789,13 +786,11 @@ final class WeDevs_Dokan {
  * @return void
  */
 function dokan_load_plugin() {
-
-    $dokan = WeDevs_Dokan::init();
-
+    WeDevs_Dokan::init();
 }
 
 add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
 
 register_activation_hook( __FILE__, array( 'WeDevs_Dokan', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WeDevs_Dokan', 'deactivate' ) );
-add_action( 'activated_plugin', array( 'Dokan_Installer', 'welcome_page_redirect' ) );
+add_action( 'activated_plugin', array( 'Dokan_Installer', 'setup_page_redirect' ) );
