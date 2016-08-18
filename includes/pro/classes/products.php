@@ -203,7 +203,7 @@ class Dokan_Pro_Products {
             array( 
                 'id'           => '_per_product_commission',
                 'label'        => __( 'Commission (%)', 'dokan' ),
-                'wrapper_class'=> 'per-product-commission',
+                'wrapper_class'=> 'per-product-commission show_if_simple',
                 'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
                 'data_type' => 'price'
             ) 
