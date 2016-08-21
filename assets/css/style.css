@@ -1094,7 +1094,7 @@ body {
   padding: 10px;
 }
 .product-edit-container .dokan-edit-sidebar .dokan-side-body .dokan-form-control {
-  width: 90%;
+  /*width: 90%;*/
 }
 .product-edit-container .dokan-edit-sidebar .downloadable_files td {
   border-top: none;
