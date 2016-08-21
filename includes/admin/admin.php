@@ -130,7 +130,7 @@ class Dokan_Admin_Settings {
 
         do_action( 'dokan_admin_menu', $capability, $menu_position );
 
-        add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
+        $settings = add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
         add_submenu_page( 'dokan', __( 'Add Ons', 'dokan' ), __( 'Add-ons', 'dokan' ), $capability, 'dokan-addons', array($this, 'addon_page') );
 
         /**
@@ -141,6 +141,7 @@ class Dokan_Admin_Settings {
         add_dashboard_page( __( 'Welcome to Dokan', 'dokan' ), __( 'Welcome to Dokan', 'dokan' ), $capability, 'dokan-welcome', array( $this, 'welcome_page' ) );
 
         add_action( $dashboard, array($this, 'dashboard_script' ) );
+        add_action( $settings, array($this, 'dashboard_script' ) );
     }
 
     /**
@@ -167,6 +168,10 @@ class Dokan_Admin_Settings {
             array(
                 'id'    => 'dokan_pages',
                 'title' => __( 'Page Settings', 'dokan' )
+            ),
+            array(
+                'id'    => 'dokan_appearance',
+                'title' => __( 'Appearance', 'dokan' )
             )
         );
         return apply_filters( 'dokan_settings_sections', $sections );
@@ -274,7 +279,21 @@ class Dokan_Admin_Settings {
                     'type'    => 'select',
                     'options' => $pages_array
                 )
-            )
+            ),
+            'dokan_appearance' => array(
+                'store_header_template' => array(
+                    'name'    => 'store_header_template',
+                    'label'   => __( 'Store Header Template', 'dokan' ),
+                    'type'    => 'radio_image',
+                    'options' => array(
+                        'default' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/default.png',
+                        'layout1' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout1.png',
+                        'layout2' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout2.png',
+                        'layout3' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout3.png'
+                    ),
+                    'default' => 'default',
+                )
+            ),
         );
 
         return apply_filters( 'dokan_settings_fields', $settings_fields );

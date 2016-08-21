@@ -8,7 +8,7 @@ jQuery(function($) {
     window.WeDevs_Admin = {
 
         /**
-         * Image Upload Helper Function 
+         * Image Upload Helper Function
          **/
         imageUpload: function (e) {
             e.preventDefault();
@@ -42,8 +42,26 @@ jQuery(function($) {
             self.parent('.image_placeholder').siblings('input.image_url').val('');
             self.parent('.image_placeholder').empty();
         }
-    } 
+    }
+
+    // settings api - radio_image
+    $('.dokan-settings-radio-image button').on('click', function (e) {
+        e.preventDefault();
+
+        var btn = $(this),
+            template = btn.data('template'),
+            input = btn.data('input'),
+            container = btn.parents('.dokan-settings-radio-image-container');
+
+        $('#' + input).val(template);
+
+        container.find('.active').removeClass('active').addClass('not-active');
+
+        btn.parents('.dokan-settings-radio-image').addClass('active').removeClass('not-active');
+    });
 });
+
+
 jQuery(function($) {
 
     $('.tips').tooltip();
@@ -2268,8 +2286,8 @@ jQuery(function($) {
         },
 
         calculateImageSelectOptionsProfile: function(attachment, controller) {
-            var xInit = 100,
-                yInit = 100,
+            var xInit = 150,
+                yInit = 150,
                 flexWidth = !! parseInt(dokan_refund.store_banner_dimension['flex-width'], 10),
                 flexHeight = !! parseInt(dokan_refund.store_banner_dimension['flex-height'], 10),
                 ratio, xImg, yImg, realHeight, realWidth,
@@ -2349,8 +2367,8 @@ jQuery(function($) {
                         multiple:  false,
                         date:      false,
                         priority:  20,
-                        suggestedWidth: 100,
-                        suggestedHeight: 100
+                        suggestedWidth: 150,
+                        suggestedHeight: 150
                     }),
                     new wp.media.controller.Cropper({
                         imgSelectOptions: settings.calculateImageSelectOptionsProfile
@@ -2745,6 +2763,24 @@ jQuery(function($) {
         }else {
             $('#dokan_tnc_text').hide();
         }
+    });
+
+})(jQuery);
+
+;(function($) {
+    function resize_dummy_image() {
+        var width = dokan_refund.store_banner_dimension.width,
+            height = (dokan_refund.store_banner_dimension.height / dokan_refund.store_banner_dimension.width) * $('#dokan-content').width();
+
+        $('.profile-info-img.dummy-image').css({
+            height: height
+        });
+    }
+
+    resize_dummy_image();
+
+    $(window).on('resize', function (e) {
+        resize_dummy_image();
     });
 
 })(jQuery);
