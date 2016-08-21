@@ -2610,7 +2610,7 @@ function check_more_seller_product_tab(  ) {
 function dokan_more_from_seller_tab( $tabs ) {
     if( check_more_seller_product_tab()){
         $tabs['more_seller_product'] = array(
-                'title' 	=> __( 'More Product fromthis Seller', 'dokan' ),
+                'title' 	=> __( 'More Product', 'dokan' ),
                 'priority' 	=> 99,
                 'callback' 	=> 'dokan_more_product_from_seller',
         );
