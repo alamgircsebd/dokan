@@ -1,7 +1,7 @@
 <div class="dokan-seller-listing">
 
     <?php
-        global $post;
+//        global $post;
         $pagination_base = str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) );
 
         if ( $search == 'yes' ) {
@@ -39,6 +39,9 @@
                 'paged'           => $paged,
                 'search_query'    => $search_query,
                 'pagination_base' => $pagination_base,
+                'per_row'         => $per_row,
+                'search_enabled'  => $search,
+                'image_size'      => $image_size,
             );
 
             echo dokan_get_template_part( 'store-lists-loop', false, $template_args );
