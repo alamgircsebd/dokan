@@ -1,7 +1,7 @@
 <div class="dokan-seller-listing">
 
     <?php
-//        global $post;
+        global $post;
         $pagination_base = str_replace( $post->ID, '%#%', esc_url( get_pagenum_link( $post->ID ) ) );
 
         if ( $search == 'yes' ) {
