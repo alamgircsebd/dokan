@@ -2987,11 +2987,11 @@ function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
 
     $selllers_count = count( $sellers );
 
-    if ( ! is_null( $rates[$flat_rate] ) ) {
+    if ( isset( $rates[$flat_rate] ) && ! is_null( $rates[$flat_rate] ) ) {
 
         $rates[$flat_rate]->cost = $rates[$flat_rate]->cost * $selllers_count;
 
-    } elseif ( ! is_null( $rates['international_delivery'] ) ) {
+    } elseif ( isset( $rates['international_delivery'] ) && ! is_null( $rates['international_delivery'] ) ) {
 
         $rates['international_delivery']->cost = $rates['international_delivery']->cost * $selllers_count;
 
