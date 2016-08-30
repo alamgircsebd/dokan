@@ -565,7 +565,7 @@ function dokan_myorder_login_check(){
  * @return string
  */
 function dokan_store_listing( $atts ) {
-    global $post;
+//    global $post;
 
     /**
      * Filter return the number of store listing number per page.
@@ -576,9 +576,9 @@ function dokan_store_listing( $atts ) {
      */
     $attr = shortcode_atts( apply_filters( 'dokan_store_listing_per_page', array(
         'per_page' => 10,
-        'search'   => 'yes'
+        'search'   => 'yes',
+        'per_row'  => 3
     ) ), $atts );
-
     $paged   = max( 1, get_query_var( 'paged' ) );
     $limit   = $attr['per_page'];
     $offset  = ( $paged - 1 ) * $limit;
@@ -618,9 +618,9 @@ function dokan_store_listing( $atts ) {
         'offset'     => $offset,
         'paged'      => $paged,
         'image_size' => 'medium',
-        'search'     => $attr['search']
+        'search'     => $attr['search'],
+        'per_row'    => $attr['per_row']
     ) );
-
     ob_start();
     dokan_get_template_part( 'store-lists', false, $template_args );
     $content = ob_get_clean();

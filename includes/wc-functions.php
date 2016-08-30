@@ -2054,9 +2054,9 @@ function dokan_create_sub_order( $parent_order_id ) {
         }
     }
 
-    $parent_order = new WC_Order( $parent_order_id );
-
-    $sellers = dokan_get_sellers_by( $parent_order_id );
+    $parent_order         = new WC_Order( $parent_order_id );
+    $parent_shipping_tax  = $parent_order->get_shipping_tax();
+    $sellers              = dokan_get_sellers_by( $parent_order_id );
 
     // return if we've only ONE seller
     if ( count( $sellers ) == 1 ) {
@@ -2140,14 +2140,16 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         }
 
         // do shipping
-        $shipping_cost = dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_products );
+        $shipping_values = dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_products );
+        $shipping_cost   = $shipping_values['cost'];
+        $shipping_tax    = $shipping_values['tax'];
 
         // add coupons if any
         dokan_create_sub_order_coupon( $parent_order, $order_id, $product_ids );
         $discount = dokan_sub_order_get_total_coupon( $order_id );
 
         // calculate the total
-        $order_in_total = $order_total + $shipping_cost + $order_tax;
+        $order_in_total = $order_total + $shipping_cost + $order_tax + $shipping_tax;
         //$order_in_total = $order_total + $shipping_cost + $order_tax - $discount;
 
         // set order meta
@@ -2158,7 +2160,7 @@ function dokan_create_seller_order( $parent_order, $seller_id, $seller_products 
         update_post_meta( $order_id, '_order_discount',         woocommerce_format_decimal( $discount ) );
         update_post_meta( $order_id, '_cart_discount',          woocommerce_format_decimal( $discount ) );
         update_post_meta( $order_id, '_order_tax',              woocommerce_format_decimal( $order_tax ) );
-        update_post_meta( $order_id, '_order_shipping_tax',     '0' );
+        update_post_meta( $order_id, '_order_shipping_tax',     woocommerce_format_decimal( $shipping_tax ) );
         update_post_meta( $order_id, '_order_total',            woocommerce_format_decimal( $order_in_total ) );
         update_post_meta( $order_id, '_order_key',              apply_filters('woocommerce_generate_order_key', uniqid('order_') ) );
         update_post_meta( $order_id, '_customer_user',          $parent_order->customer_user );
@@ -2300,6 +2302,8 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
 
             $method = $pack['rates'][$shipping_method['method_id']];
             $cost = wc_format_decimal( $method->cost );
+            // we assumed that the key will be always 1, if different conditinos appear in future, we'll update the script
+            $tax  = wc_format_decimal( $method->taxes[1] );
 
             $item_id = wc_add_order_item( $order_id, array(
                 'order_item_name'       => $method->label,
@@ -2311,7 +2315,7 @@ function dokan_create_sub_order_shipping( $parent_order, $order_id, $seller_prod
                 wc_add_order_item_meta( $item_id, 'cost', $cost );
             }
 
-            return $cost;
+            return array( 'cost' => $cost, 'tax' => $tax );
         };
     }
 
@@ -2969,15 +2973,9 @@ function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) 
  * @return $rates
  */
 function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
-    global $wpdb;
 
-    $package_zone = sprintf( '%s:%s', $package['destination']['country'], $package['destination']['state'] );
-    $query        = sprintf( 'SELECT zone_id FROM %s WHERE location_code = "%s"', $wpdb->prefix . 'woocommerce_shipping_zone_locations', $package_zone );
-    $zone_id      = $wpdb->get_var( $query );
-
-    if ( ! is_wp_error( $zone_id ) ) {
-        $flat_rate    = 'flat_rate:' . $zone_id;
-    }
+    $flat_rate_array = preg_grep("/^flat_rate:*/", array_keys( $rates ) );
+    $flat_rate       = $flat_rate_array[0];
 
     foreach ( $package['contents'] as $product ) {
         $sellers[] = get_post_field( 'post_author', $product['product_id'] );
@@ -2990,12 +2988,19 @@ function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
     if ( isset( $rates[$flat_rate] ) && ! is_null( $rates[$flat_rate] ) ) {
 
         $rates[$flat_rate]->cost = $rates[$flat_rate]->cost * $selllers_count;
+ 
+        // we assumed taxes key will always be 1, if different condition appears in future, we'll update the script
+        if ( isset( $rates[$flat_rate]->taxes[1] ) ) {
+            $rates[$flat_rate]->taxes[1] = $rates[$flat_rate]->taxes[1] * $selllers_count;
+        }
 
     } elseif ( isset( $rates['international_delivery'] ) && ! is_null( $rates['international_delivery'] ) ) {
-
+ 
         $rates['international_delivery']->cost = $rates['international_delivery']->cost * $selllers_count;
-
-    }
+        // we assumed taxes key will always be 1, if different condition appears in future, we'll update the script
+        $rates['international_delivery']->taxes[1] = $rates['international_delivery']->taxes[1] * $selllers_count;
+ 
+     }
 
     return $rates;
 }
