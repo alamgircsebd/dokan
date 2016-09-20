@@ -2136,7 +2136,8 @@ jQuery(function($) {
             $('a.dokan-banner-drag').on('click', this.imageUpload);
             $('a.dokan-remove-banner-image').on('click', this.removeBanner);
 
-            $('a.dokan-gravatar-drag').on('click', this.gragatarImageUpload);
+            $('a.dokan-pro-gravatar-drag').on('click', this.gragatarImageUpload);
+            $('a.dokan-gravatar-drag').on('click', this.simpleImageUpload);
             $('a.dokan-remove-gravatar-image').on('click', this.removeGravatar);
 
             this.validateForm(self);
@@ -2345,7 +2346,43 @@ jQuery(function($) {
 
             return imgSelectOptions;
         },
+        
+        simpleImageUpload : function(e) {
+            e.preventDefault();
+             var file_frame,
+                self = $(this);
 
+            // If the media frame already exists, reopen it.
+            if ( file_frame ) {
+                file_frame.open();
+                return;
+            }
+
+            // Create the media frame.
+            file_frame = wp.media.frames.file_frame = wp.media({
+                title: jQuery( this ).data( 'uploader_title' ),
+                button: {
+                    text: jQuery( this ).data( 'uploader_button_text' )
+                },
+                multiple: false
+            });
+
+            // When an image is selected, run a callback.
+            file_frame.on( 'select', function() {
+                var attachment = file_frame.state().get('selection').first().toJSON();
+
+                var wrap = self.closest('.dokan-gravatar');
+                wrap.find('input.dokan-file-field').val(attachment.id);
+                wrap.find('img.dokan-gravatar-img').attr('src', attachment.url);
+                self.parent().siblings('.gravatar-wrap', wrap).removeClass('dokan-hide');
+                self.parent('.gravatar-button-area').addClass('dokan-hide');
+
+            });
+
+            // Finally, open the modal
+            file_frame.open();
+        },
+        
         gragatarImageUpload: function(e) {
             e.preventDefault();
 
