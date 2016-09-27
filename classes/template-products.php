@@ -137,22 +137,31 @@ class Dokan_Template_Products {
                     $errors[] = __( 'Please select AT LEAST ONE category', 'dokan' );
                 }
             }
-            if ( ! empty( $sku ) &&
-                $wpdb->get_var( $wpdb->prepare("
+            
+            $_sku_post_id = $wpdb->get_var( $wpdb->prepare("
                     SELECT $wpdb->posts.ID
                     FROM $wpdb->posts
                     LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
                     WHERE $wpdb->posts.post_type = 'product'
                     AND $wpdb->posts.post_status = 'publish'
                     AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-                 ", $sku ) )
-                ) {
-                $errors[] = __( 'Product SKU must be unique.', 'dokan' );
-            }
+                 ", $sku ) );
+            
+            
 
             if ( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
+               
+                if ( ! empty( $sku ) && $_sku_post_id ) {
+                    $errors[] = __( 'Product SKU must be unique.', 'dokan' );
+                }
+                
                 self::$errors = apply_filters( 'dokan_can_add_product', $errors );
+                
             } else {
+                 if ( ! empty( $sku ) && $_sku_post_id != (int) $_POST['dokan_product_id']  ) {
+                    $errors[] = __( 'Product SKU must be unique.', 'dokan' );
+                }
+                
                 self::$errors = apply_filters( 'dokan_can_edit_product', $errors );
             }
 
@@ -228,7 +237,7 @@ class Dokan_Template_Products {
                     update_post_meta( $product_id, '_visibility', 'visible' );
 
                     dokan_new_process_product_meta( $product_id );
-                    
+                   
                     if( isset( $_POST['dokan_product_id'] ) && !empty( $_POST['dokan_product_id'] ) ) {                        
                         do_action( 'dokan_product_updated', $product_id );
                     }  else {
