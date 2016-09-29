@@ -1481,15 +1481,24 @@ function dokan_wc_email_recipient_add_seller( $email, $order ) {
     if ( $order ) {
 
         $sellers = dokan_get_seller_id_by_order( $order->id );
-
-        if ( $sellers ) {
-            foreach ( $sellers as $seller_id) {
-                $seller = get_userdata( $seller_id );
+        
+        //if more than 1 seller
+        if ( count( $sellers ) > 1 ) {
+            foreach ( $sellers as $seller_id ) {
+                $seller       = get_userdata( $seller_id );
                 $seller_email = $seller->user_email;
 
                 if ( $email != $seller_email ) {
                     $email .= ',' . $seller_email;
                 }
+            }
+        } else {
+            //if single seller is returned
+            $seller       = get_userdata( $sellers );
+            $seller_email = $seller->user_email;
+
+            if ( $email != $seller_email ) {
+                $email .= ',' . $seller_email;
             }
         }
     }

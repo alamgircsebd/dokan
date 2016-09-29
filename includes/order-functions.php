@@ -432,10 +432,7 @@ function dokan_get_seller_id_by_order( $order_id ) {
         return $seller_id;
         
     } else if ( count( $sellers ) == 1 ) {
-        
-        $seller_id[] = reset( $sellers )->seller_id;
-        
-        return $seller_id;
+        return (int) reset( $sellers )->seller_id;
     }
     return 0;
 }
