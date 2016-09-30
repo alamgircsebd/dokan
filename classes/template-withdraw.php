@@ -299,7 +299,7 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         $balance = $this->get_user_balance( $current_user->ID );
 
         if ( $balance < 0 ) {
-            dokon_get_template_part( 'global/dokan-error', '', array(
+            dokan_get_template_part( 'global/dokan-error', '', array(
                 'deleted'=> false,
                 'message' => sprintf( __( 'You already withdrawed %s. This amount will deducted from your balance.', 'dokan' ), wc_price( $balance ) )
             ) );
