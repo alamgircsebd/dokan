@@ -22,7 +22,14 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
 
     // define the woocommerce_registration_redirect callback
     public function filter_woocommerce_registration_redirect( $var ) {
-        return site_url( '?page=dokan-seller-setup' );
+        $url  = $var;
+        $user = wp_get_current_user();
+
+        if ( in_array( 'seller', $user->roles ) ) {
+            $url = site_url( '?page=dokan-seller-setup' );
+        }
+
+        return $url;
     }
 
     /**
