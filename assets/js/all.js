@@ -2232,8 +2232,7 @@ jQuery(function($) {
                 wrap.find('img.dokan-banner-img').attr('src', url);
                 $(this.uploadBtn).parent().siblings('.image-wrap', wrap).removeClass('dokan-hide');
                 $(this.uploadBtn).parent('.button-area').addClass('dokan-hide');
-
-            } else if ( $(this.uploadBtn).hasClass('dokan-gravatar-drag') ) {
+            } else if ( $(this.uploadBtn).hasClass('dokan-pro-gravatar-drag') ) {
                 var wrap = $(this.uploadBtn).closest('.dokan-gravatar');
                 wrap.find('input.dokan-file-field').val(attachmentId);
                 wrap.find('img.dokan-gravatar-img').attr('src', url);
@@ -2346,7 +2345,7 @@ jQuery(function($) {
 
             return imgSelectOptions;
         },
-        
+
         simpleImageUpload : function(e) {
             e.preventDefault();
              var file_frame,
@@ -2382,7 +2381,7 @@ jQuery(function($) {
             // Finally, open the modal
             file_frame.open();
         },
-        
+
         gragatarImageUpload: function(e) {
             e.preventDefault();
 
