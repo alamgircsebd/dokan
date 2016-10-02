@@ -7,7 +7,7 @@ $social_fields = dokan_get_social_profile_fields();
 $dokan_appearance = get_option( 'dokan_appearance' );
 $profile_layout = empty( $dokan_appearance['store_header_template'] ) ? 'default' : $dokan_appearance['store_header_template'];
 
-$store_address = dokan_get_seller_address( $store_user->ID, TRUE );
+$store_address = dokan_get_seller_address( $store_user->ID, FALSE );
 
 if ( ! empty( $store_address['state'] ) && ! empty( $store_address['country'] ) ) {
     $short_address = $store_address['state'] . ', ' . $store_address['country'];
@@ -64,7 +64,6 @@ if ( 'layout3' === $profile_layout ) {
                     <?php } ?>
 
                     <ul class="dokan-store-info">
-
                         <?php if ( isset( $store_info['address'] ) && !empty( $store_info['address'] ) ) { ?>
                             <li class="dokan-store-address"><i class="fa fa-map-marker"></i>
                                 <?php echo $store_address; ?>
