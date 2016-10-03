@@ -872,13 +872,9 @@
                 var row = $('.inputs-box').length;
 
                 if ( check == '' ) {
-
-                    var category = _.template( $('#tmpl-sc-category').html(), { row: row } );
-
-                    variantsHolder.append(category).children(':last').hide().fadeIn();
-
+                    var category = wp.template('sc-category');
+                    variantsHolder.append( category( { row:row } ) ).children(':last').hide().fadeIn();
                 } else {
-
                     var data = {
                         row: row,
                         name: check,

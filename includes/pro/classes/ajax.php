@@ -1081,29 +1081,29 @@ class Dokan_Pro_Ajax {
 
         check_ajax_referer( 'link-variations', 'security' );
 
-        @set_time_limit(0);
+        wc_set_time_limit( 0 );
 
         $post_id = intval( $_POST['post_id'] );
 
-        if ( ! $post_id ) die();
+        if ( ! $post_id ) {
+            die();
+        }
 
         $variations = array();
 
-        $_product = get_product( $post_id, array( 'product_type' => 'variable' ) );
+        $_product = wc_get_product( $post_id, array( 'product_type' => 'variable' ) );
 
         // Put variation attributes into an array
         foreach ( $_product->get_attributes() as $attribute ) {
 
-            if ( ! $attribute['is_variation'] ) continue;
+            if ( ! $attribute['is_variation'] ) {
+                continue;
+            }
 
-            $attribute_field_name = 'attribute_' . $attribute['name'] ;
+            $attribute_field_name = 'attribute_' . sanitize_title( $attribute['name'] );
 
             if ( $attribute['is_taxonomy'] ) {
-                $post_terms = wp_get_post_terms( $post_id, $attribute['name'] );
-                $options = array();
-                foreach ( $post_terms as $term ) {
-                    $options[] = $term->slug;
-                }
+                $options = wc_get_product_terms( $post_id, $attribute['name'], array( 'fields' => 'slugs' ) );
             } else {
                 $options = explode( WC_DELIMITER, $attribute['value'] );
             }
@@ -1114,7 +1114,9 @@ class Dokan_Pro_Ajax {
         }
 
         // Quit out if none were found
-        if ( sizeof( $variations ) == 0 ) die();
+        if ( sizeof( $variations ) == 0 ) {
+            die();
+        }
 
         // Get existing variations so we don't create duplicates
         $available_variations = array();
@@ -1129,84 +1131,24 @@ class Dokan_Pro_Ajax {
 
         // Created posts will all have the following data
         $variation_post_data = array(
-            'post_title' => 'Product #' . $post_id . ' Variation',
+            'post_title'   => 'Product #' . $post_id . ' Variation',
             'post_content' => '',
-            'post_status' => 'publish',
-            'post_author' => get_current_user_id(),
-            'post_parent' => $post_id,
-            'post_type' => 'product_variation'
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+            'post_parent'  => $post_id,
+            'post_type'    => 'product_variation'
         );
 
-        // Now find all combinations and create posts
-        if ( ! function_exists( 'array_cartesian' ) ) {
-            /**
-             * @param array $input
-             * @return array
-             */
-            function array_cartesian( $input ) {
-                $result = array();
-
-                while ( list( $key, $values ) = each( $input ) ) {
-                    // If a sub-array is empty, it doesn't affect the cartesian product
-                    if ( empty( $values ) ) {
-                        continue;
-                    }
-
-                    // Special case: seeding the product array with the values from the first sub-array
-                    if ( empty( $result ) ) {
-                        foreach ( $values as $value ) {
-                            $result[] = array( $key => $value );
-                        }
-                    }
-                    else {
-                        // Second and subsequent input sub-arrays work like this:
-                        //   1. In each existing array inside $product, add an item with
-                        //      key == $key and value == first item in input sub-array
-                        //   2. Then, for each remaining item in current input sub-array,
-                        //      add a copy of each existing array inside $product with
-                        //      key == $key and value == first item in current input sub-array
-
-                        // Store all items to be added to $product here; adding them on the spot
-                        // inside the foreach will result in an infinite loop
-                        $append = array();
-                        foreach( $result as &$product ) {
-                            // Do step 1 above. array_shift is not the most efficient, but it
-                            // allows us to iterate over the rest of the items with a simple
-                            // foreach, making the code short and familiar.
-                            $product[ $key ] = array_shift( $values );
-
-                            // $product is by reference (that's why the key we added above
-                            // will appear in the end result), so make a copy of it here
-                            $copy = $product;
-
-                            // Do step 2 above.
-                            foreach( $values as $item ) {
-                                $copy[ $key ] = $item;
-                                $append[] = $copy;
-                            }
-
-                            // Undo the side effecst of array_shift
-                            array_unshift( $values, $product[ $key ] );
-                        }
-
-                        // Out of the foreach, we can add to $results now
-                        $result = array_merge( $result, $append );
-                    }
-                }
-
-                return $result;
-            }
-        }
-
-        $variation_ids = array();
-        $added = 0;
-        $possible_variations = array_cartesian( $variations );
+        $variation_ids       = array();
+        $added               = 0;
+        $possible_variations = wc_array_cartesian( $variations );
 
         foreach ( $possible_variations as $variation ) {
 
             // Check if variation already exists
-            if ( in_array( $variation, $available_variations ) )
+            if ( in_array( $variation, $available_variations ) ) {
                 continue;
+            }
 
             $variation_id = wp_insert_post( $variation_post_data );
 
@@ -1216,6 +1158,9 @@ class Dokan_Pro_Ajax {
                 update_post_meta( $variation_id, $key, $value );
             }
 
+            // Save stock status
+            update_post_meta( $variation_id, '_stock_status', 'instock' );
+
             $added++;
 
             do_action( 'product_variation_linked', $variation_id );
@@ -1224,7 +1169,7 @@ class Dokan_Pro_Ajax {
                 break;
         }
 
-        wc_delete_product_transients( $post_id );
+        delete_transient( 'wc_product_children_' . $post_id );
 
         echo $added;
 
