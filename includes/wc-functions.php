@@ -649,7 +649,7 @@ function dokan_process_product_meta( $post_id ) {
 
                 // Text based, possibly separated by pipes (WC_DELIMITER). Preserve line breaks in non-variation attributes.
                 $values = $is_variation ? wc_clean( $attribute_values[ $i ] ) : implode( "\n", array_map( 'wc_clean', explode( "\n", $attribute_values[ $i ] ) ) );
-                $values = implode( ' | ', wc_get_text_attributes( $values ) );
+                $values = implode( ' | ', array_map( 'wc_clean', $values ) );
 
                 // Custom attribute - Add attribute to array and set the values
                 $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
@@ -878,8 +878,9 @@ function dokan_process_product_meta( $post_id ) {
     }
 
     // Save variations
-    if ( $product_type == 'variable' )
+    if ( $product_type == 'variable' ) {
         dokan_save_variations( $post_id );
+    }
 
     // Do action for product type
     do_action( 'woocommerce_process_product_meta_' . $product_type, $post_id );
@@ -1761,8 +1762,9 @@ function dokan_save_variations( $post_id ) {
 
         for ( $i = 0; $i <= $max_loop; $i ++ ) {
 
-            if ( ! isset( $variable_post_id[ $i ] ) )
+            if ( ! isset( $variable_post_id[ $i ] ) ) {
                 continue;
+            }
 
             $variation_id = absint( $variable_post_id[ $i ] );
 
@@ -1779,7 +1781,6 @@ function dokan_save_variations( $post_id ) {
                     $is_virtual = 'no';
                 }
             }
-            // $is_virtual = isset(  ) ? 'yes' : 'no';
 
             // Enabled or disabled
             $post_status = isset( $variable_enabled[ $i ] ) ? 'publish' : 'private';
@@ -1821,7 +1822,6 @@ function dokan_save_variations( $post_id ) {
 
             // Update post meta
             update_post_meta( $variation_id, '_sku', wc_clean( $variable_sku[ $i ] ) );
-            //update_post_meta( $variation_id, '_stock', wc_clean( $variable_stock[ $i ] ) );
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[ $i ] ) );
             update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
             update_post_meta( $variation_id, '_downloadable', wc_clean( $is_downloadable ) );
@@ -1840,15 +1840,21 @@ function dokan_save_variations( $post_id ) {
                 delete_post_meta( $variation_id, '_stock' );
             }
 
-            if ( isset( $variable_weight[ $i ] ) )
+            if ( isset( $variable_weight[ $i ] ) ) {
                 update_post_meta( $variation_id, '_weight', ( $variable_weight[ $i ] === '' ) ? '' : wc_format_decimal( $variable_weight[ $i ] ) );
-            if ( isset( $variable_length[ $i ] ) )
-                update_post_meta( $variation_id, '_length', ( $variable_length[ $i ] === '' ) ? '' : wc_format_decimal( $variable_length[ $i ] ) );
-            if ( isset( $variable_width[ $i ] ) )
-                update_post_meta( $variation_id, '_width', ( $variable_width[ $i ] === '' ) ? '' : wc_format_decimal( $variable_width[ $i ] ) );
-            if ( isset( $variable_height[ $i ] ) )
-                update_post_meta( $variation_id, '_height', ( $variable_height[ $i ] === '' ) ? '' : wc_format_decimal( $variable_height[ $i ] ) );
+            }
 
+            if ( isset( $variable_length[ $i ] ) ) {
+                update_post_meta( $variation_id, '_length', ( $variable_length[ $i ] === '' ) ? '' : wc_format_decimal( $variable_length[ $i ] ) );
+            }
+
+            if ( isset( $variable_width[ $i ] ) ) {
+                update_post_meta( $variation_id, '_width', ( $variable_width[ $i ] === '' ) ? '' : wc_format_decimal( $variable_width[ $i ] ) );
+            }
+
+            if ( isset( $variable_height[ $i ] ) ) {
+                update_post_meta( $variation_id, '_height', ( $variable_height[ $i ] === '' ) ? '' : wc_format_decimal( $variable_height[ $i ] ) );
+            }
 
             // Price handling
             $regular_price  = wc_format_decimal( $variable_regular_price[ $i ] );
@@ -1924,14 +1930,20 @@ function dokan_save_variations( $post_id ) {
             $variable_shipping_class[ $i ] = ! empty( $variable_shipping_class[ $i ] ) ? (int) $variable_shipping_class[ $i ] : '';
             wp_set_object_terms( $variation_id, $variable_shipping_class[ $i ], 'product_shipping_class');
 
-            // Update taxonomies - don't use wc_clean as it destroys sanitized characters
+            // Update Attributes
             $updated_attribute_keys = array();
             foreach ( $attributes as $attribute ) {
-
                 if ( $attribute['is_variation'] ) {
-                    $attribute_key = 'attribute_' . $attribute['name'];
-                    $value         = isset( $_POST[ $attribute_key ][ $i ] ) ? stripslashes( $_POST[ $attribute_key ][ $i ] ) : '';
+                    $attribute_key            = 'attribute_' . sanitize_title( $attribute['name'] );
                     $updated_attribute_keys[] = $attribute_key;
+
+                    if ( $attribute['is_taxonomy'] ) {
+                        // Don't use wc_clean as it destroys sanitized characters
+                        $value = isset( $_POST[ $attribute_key ][ $i ] ) ? sanitize_title( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                    } else {
+                        $value = isset( $_POST[ $attribute_key ][ $i ] ) ? wc_clean( stripslashes( $_POST[ $attribute_key ][ $i ] ) ) : '';
+                    }
+
                     update_post_meta( $variation_id, $attribute_key, $value );
                 }
             }
@@ -1955,15 +1967,20 @@ function dokan_save_variations( $post_id ) {
 
     foreach ( $attributes as $attribute ) {
         if ( $attribute['is_variation'] ) {
+            $value = '';
 
-            // Don't use wc_clean as it destroys sanitized characters
-            if ( isset( $_POST[ 'default_attribute_' . $attribute['name'] ] ) )
-                $value = trim( stripslashes( $_POST[ 'default_attribute_' . $attribute['name'] ] ) );
-            else
-                $value = '';
+            if ( isset( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) {
+                if ( $attribute['is_taxonomy'] ) {
+                    // Don't use wc_clean as it destroys sanitized characters
+                    $value = sanitize_title( trim( stripslashes( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                } else {
+                    $value = wc_clean( trim( stripslashes( $_POST[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                }
+            }
 
-            if ( $value )
-                $default_attributes[ $attribute['name'] ] = $value;
+            if ( $value ) {
+                $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+            }
         }
     }
 
@@ -2988,18 +3005,18 @@ function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
     if ( isset( $rates[$flat_rate] ) && ! is_null( $rates[$flat_rate] ) ) {
 
         $rates[$flat_rate]->cost = $rates[$flat_rate]->cost * $selllers_count;
- 
+
         // we assumed taxes key will always be 1, if different condition appears in future, we'll update the script
         if ( isset( $rates[$flat_rate]->taxes[1] ) ) {
             $rates[$flat_rate]->taxes[1] = $rates[$flat_rate]->taxes[1] * $selllers_count;
         }
 
     } elseif ( isset( $rates['international_delivery'] ) && ! is_null( $rates['international_delivery'] ) ) {
- 
+
         $rates['international_delivery']->cost = $rates['international_delivery']->cost * $selllers_count;
         // we assumed taxes key will always be 1, if different condition appears in future, we'll update the script
         $rates['international_delivery']->taxes[1] = $rates['international_delivery']->taxes[1] * $selllers_count;
- 
+
      }
 
     return $rates;
