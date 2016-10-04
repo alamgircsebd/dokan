@@ -7,12 +7,17 @@ $social_fields = dokan_get_social_profile_fields();
 $dokan_appearance = get_option( 'dokan_appearance' );
 $profile_layout = empty( $dokan_appearance['store_header_template'] ) ? 'default' : $dokan_appearance['store_header_template'];
 
-$store_address = dokan_get_seller_address( $store_user->ID, FALSE );
+$store_address = dokan_get_seller_address( $store_user->ID, TRUE );
 
 if ( ! empty( $store_address['state'] ) && ! empty( $store_address['country'] ) ) {
     $short_address = $store_address['state'] . ', ' . $store_address['country'];
-    $store_address = apply_filters( 'dokan_store_header_adress', $short_address, $store_address );
+} else if ( ! empty( $store_address['country'] ) ) {
+    $short_address = $store_address['country'];
+} else {
+    $short_address = '';
 }
+
+$store_address = apply_filters( 'dokan_store_header_adress', $short_address, $store_address );
 
 $general_settings = get_option( 'dokan_general', [] );
 $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
@@ -64,7 +69,7 @@ if ( 'layout3' === $profile_layout ) {
                     <?php } ?>
 
                     <ul class="dokan-store-info">
-                        <?php if ( isset( $store_info['address'] ) && !empty( $store_info['address'] ) ) { ?>
+                        <?php if ( isset( $store_address ) && !empty( $store_address ) ) { ?>
                             <li class="dokan-store-address"><i class="fa fa-map-marker"></i>
                                 <?php echo $store_address; ?>
                             </li>

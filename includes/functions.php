@@ -1481,7 +1481,7 @@ function dokan_wc_email_recipient_add_seller( $email, $order ) {
     if ( $order ) {
 
         $sellers = dokan_get_seller_id_by_order( $order->id );
-        
+
         //if more than 1 seller
         if ( count( $sellers ) > 1 ) {
             foreach ( $sellers as $seller_id ) {
@@ -1748,7 +1748,7 @@ function dokan_seller_address_fields( $verified = false, $required = false ) {
                 'required' => $required ? 1 : 0,
             ),
             'state'    => array(
-                'required' => 0,
+                'required' => 1,
             ),
         )
     );
