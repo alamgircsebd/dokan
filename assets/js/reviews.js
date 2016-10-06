@@ -85,8 +85,11 @@
                     'status': tr.find('.dokan-cmt-hid-status').text(),
                 };
 
+            // console.log( data );
+            commentTemplate =  wp.template( 'dokan-edit-comment-row' );
+            // console.log( commentTemplate( data ) );
 
-            tr.after( _.template(table_form, data) );
+            tr.after( commentTemplate( data ) );
         },
 
         closeForm: function(e) {

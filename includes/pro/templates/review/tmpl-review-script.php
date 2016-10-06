@@ -7,29 +7,29 @@
  * @package dokan
  */
 ?>
-<script type="text/template" id="dokan-edit-comment-row">
+<script type="text/html" id="tmpl-dokan-edit-comment-row">
     <tr class="dokan-comment-edit-row">
         <td colspan="5">
             <table>
                 <tr class="dokan-comment-edit-contact">
                     <td>
                         <label for="author"><?php _e( 'Name', 'dokan' ); ?></label>
-                        <input type="text" class="dokan-cmt-author" value="<%= author %>" name="newcomment_author">
+                        <input type="text" class="dokan-cmt-author" value="{{ data.author }}" name="newcomment_author">
                     </td>
                     <td>
                         <label for="author-email"><?php _e( 'E-mail', 'dokan' ); ?></label>
-                        <input type="text" class="dokan-cmt-author-email" value="<%= email %>" name="newcomment_author_email">
+                        <input type="text" class="dokan-cmt-author-email" value="{{ data.email }}" name="newcomment_author_email">
                     </td>
                     <td>
                         <label for="author-url"><?php _e( 'URL', 'dokan' ); ?></label>
-                        <input type="text" class="dokan-cmt-author-url" value="<%= url %>" name="newcomment_author_url">
+                        <input type="text" class="dokan-cmt-author-url" value="{{ data.url }}" name="newcomment_author_url">
                     </td>
                 </tr>
                 <tr class="dokan-comment-edit-body">
                     <td colspan="3">
-                        <textarea class="dokan-cmt-body" name="newcomment_body" cols="50" rows="8"><%= body %></textarea>
-                        <input type="hidden" class="dokan-cmt-id" value="<%= id %>" >
-                        <input type="hidden" class="dokan-cmt-status" value="<%= status %>" >
+                        <textarea class="dokan-cmt-body" name="newcomment_body" cols="50" rows="8">{{ data.body }}</textarea>
+                        <input type="hidden" class="dokan-cmt-id" value="{{ data.id }}" >
+                        <input type="hidden" class="dokan-cmt-status" value="{{ data.status }}" >
                         <input type="hidden" class="dokan-cmt-post-type" value="product">
                     </td>
                 </tr>
