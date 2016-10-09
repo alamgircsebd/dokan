@@ -76,8 +76,7 @@ function dokan_get_seller_orders_by_date( $start_date, $end_date, $seller_id = f
 
     $cache_key = md5( 'dokan-seller-orders-' . $end_date . '-' . $end_date. '-' . $seller_id );
     $orders = wp_cache_get( $cache_key, 'dokan' );
-
-    //if ( $orders === false ) {
+    if ( $orders === false ) {
         $status_where = ( $status == 'all' ) ? '' : $wpdb->prepare( ' AND order_status = %s', $status );
         $date_query = $wpdb->prepare( ' AND DATE( p.post_date ) >= %s AND DATE( p.post_date ) <= %s', $start_date, $end_date );
         $sql = "SELECT do.*, p.post_date
@@ -93,7 +92,7 @@ function dokan_get_seller_orders_by_date( $start_date, $end_date, $seller_id = f
         $orders = $wpdb->get_results( $wpdb->prepare( $sql, $seller_id ) );
 
         wp_cache_set( $cache_key, $orders, 'dokan' );
-    //}
+    }
 
     return $orders;
 }

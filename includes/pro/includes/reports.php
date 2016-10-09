@@ -76,7 +76,7 @@ function dokan_seller_sales_statement() {
     </form>
     <?php
     
-    $order     = dokan_get_seller_orders_by_date( $start_date, $end_date );
+    $order     = dokan_get_seller_orders_by_date( $start_date, $end_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
     $refund    = dokan_get_seller_refund_by_date( $start_date, $end_date );
     $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $end_date );
 
