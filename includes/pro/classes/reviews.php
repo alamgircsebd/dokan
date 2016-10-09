@@ -620,19 +620,21 @@ class Dokan_Pro_Reviews {
      * @return void
      */
     function review_comments_menu( $post_type, $counts ) {
-        $url      = dokan_get_navigation_url( 'reviews' );
-        $pending  = isset( $counts->moderated ) ? $counts->moderated : 0;
-        $spam     = isset( $counts->spam ) ? $counts->spam : 0;
-        $trash    = isset( $counts->trash ) ? $counts->trash : 0;
-        $approved = isset( $counts->approved ) ? $counts->approved : 0;
+        $url          = dokan_get_navigation_url( 'reviews' );
+        $pending      = isset( $counts->moderated ) ? $counts->moderated : 0;
+        $spam         = isset( $counts->spam ) ? $counts->spam : 0;
+        $trash        = isset( $counts->trash ) ? $counts->trash : 0;
+        $approved     = isset( $counts->approved ) ? $counts->approved : 0;
+        $status_class = ( isset( $_GET['comment_status'] ) && ! empty( $_GET['comment_status'] ) ) ? $_GET['comment_status'] : 'approved';
 
         dokan_get_template_part( 'review/status-filter', '', array(
-            'pro'      => true,
-            'url'      => $url,
-            'pending'  => $pending,
-            'spam'     => $spam,
-            'trash'    => $trash,
-            'approved' => $approved
+            'pro'          => true,
+            'url'          => $url,
+            'pending'      => $pending,
+            'spam'         => $spam,
+            'trash'        => $trash,
+            'approved'     => $approved,
+            'status_class' => $status_class
         ) );
     }
 
