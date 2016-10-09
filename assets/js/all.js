@@ -1850,8 +1850,10 @@ jQuery(function($) {
 
                 if(resp.data['pending'] == null) resp.data['pending'] = 0;
                 if(resp.data['spam'] == null) resp.data['spam'] = 0;
-				if(resp.data['trash'] == null) resp.data['trash'] = 0;
+                if(resp.data['trash'] == null) resp.data['trash'] = 0;
+				if(resp.data['approved'] == null) resp.data['approved'] = 0;
 
+                $('.comments-menu-approved').text(resp.data['approved']);
                 $('.comments-menu-pending').text(resp.data['pending']);
                 $('.comments-menu-spam').text(resp.data['spam']);
 				$('.comments-menu-trash').text(resp.data['trash']);

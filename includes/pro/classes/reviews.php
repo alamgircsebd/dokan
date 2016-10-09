@@ -10,6 +10,7 @@ class Dokan_Pro_Reviews {
     private $pending;
     private $spam;
     private $trash;
+    private $approved;
     private $post_type;
 
     /**
@@ -102,7 +103,6 @@ class Dokan_Pro_Reviews {
      * @return void [require once template]
      */
     public function load_review_template( $query_vars ) {
-
         if ( isset( $query_vars['reviews'] ) ) {
             dokan_get_template_part( 'review/reviews', '', array( 'pro'=>true ) );
             return;
@@ -125,6 +125,29 @@ class Dokan_Pro_Reviews {
     }
 
     /**
+     * Counting spam, pending, trash and save it private variable
+     *
+     * @since 2.4
+     *
+     * @global object $wpdb
+     * @global object $current_user
+     *
+     * @param string  $post_type
+     *
+     * @return void
+     */
+    function get_count( $post_type ) {
+        global $wpdb, $current_user;
+
+        $counts = dokan_count_comments( $post_type, $current_user->ID );
+
+        $this->pending  = $counts->moderated;
+        $this->spam     = $counts->spam;
+        $this->trash    = $counts->trash;
+        $this->approved = $counts->approved;
+    }
+
+    /**
      * Hanlde Ajax Comment Status
      *
      * @since 2.4
@@ -132,6 +155,7 @@ class Dokan_Pro_Reviews {
      * @return josn
      */
     function ajax_comment_status() {
+        global $current_user;
 
         if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) && !is_user_logged_in() ) {
             wp_send_json_error();
@@ -152,15 +176,19 @@ class Dokan_Pro_Reviews {
 
         $comment = get_comment( $comment_id );
 
-        $this->get_count( $post_type );
+        $cache_key = 'dokan-count-comments-' . $post_type . '-' . $current_user->ID;
+        wp_cache_delete( $cache_key, 'dokan' );
+
+        $counts = dokan_count_comments( $post_type, $current_user->ID );
 
         ob_start();
         $this->render_row( $comment, $post_type  );
         $html = array(
-            'pending' => $this->pending,
-            'spam'    => $this->spam,
-            'trash'   => $this->trash,
-            'content' => ob_get_clean()
+            'pending'  => $counts->moderated,
+            'spam'     => $counts->spam,
+            'trash'    => $counts->trash,
+            'approved' => $counts->approved,
+            'content'  => ob_get_clean()
         );
 
         wp_send_json_success( $html );
@@ -186,9 +214,11 @@ class Dokan_Pro_Reviews {
             $post_type       = 'product';
 
             $counts        = dokan_count_comments( $post_type, $current_user->ID );
-            $this->pending = $counts->moderated;
-            $this->spam    = $counts->spam;
-            $this->trash   = $counts->trash;
+
+            $this->pending  = $counts->moderated;
+            $this->spam     = $counts->spam;
+            $this->trash    = $counts->trash;
+            $this->approved = $counts->approved;
 
             dokan_get_template_part( 'review/content', '', array(
                 'pro' => true,
@@ -275,12 +305,6 @@ class Dokan_Pro_Reviews {
 
         $status = $this->page_status();
 
-        // if ( $status == '1' ) {
-        //     $query = "$wpdb->comments.comment_approved IN ('1','0') AND";
-        // } else {
-        //     $query = "$wpdb->comments.comment_approved='$status' AND";
-        // }
-
         $total = $wpdb->get_var(
             "SELECT COUNT(*)
             FROM $wpdb->comments, $wpdb->posts
@@ -317,7 +341,6 @@ class Dokan_Pro_Reviews {
         }
     }
 
-
     /**
      * Review Pagination
      *
@@ -332,13 +355,6 @@ class Dokan_Pro_Reviews {
      */
     function review_pagination( $id, $post_type, $limit, $status ) {
         global $wpdb;
-        // $status = $this->page_status();
-
-        // if ( $status == '1' ) {
-        //     $query = "$wpdb->comments.comment_approved IN ('1','0') AND";
-        // } else {
-        //     $query = "$wpdb->comments.comment_approved='$status' AND";
-        // }
 
         $total = $wpdb->get_var(
             "SELECT COUNT(*)
@@ -465,12 +481,6 @@ class Dokan_Pro_Reviews {
         $pagenum     = max( 1, $page_number );
         $offset      = ( $pagenum - 1 ) * $limit;
 
-        // if ( $status == '1' ) {
-        //     $query = "c.comment_approved IN ('1','0') AND";
-        // } else {
-        //     $query = "c.comment_approved='$status' AND";
-        // }
-
         $comments = $wpdb->get_results(
             "SELECT c.comment_content, c.comment_ID, c.comment_author,
                 c.comment_author_email, c.comment_author_url,
@@ -544,7 +554,6 @@ class Dokan_Pro_Reviews {
      * @return josn
      */
     function ajax_update_comment() {
-
         if ( ! $this->quick_edit ) {
             wp_send_json_error( __( 'You can not edit reviews!', 'dokan' ) );
         }
@@ -552,8 +561,6 @@ class Dokan_Pro_Reviews {
         if ( !wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) ) {
             wp_send_json_error();
         }
-
-
 
         $comment_id = absint( $_POST['comment_id'] );
         $commentarr = array(
@@ -581,7 +588,6 @@ class Dokan_Pro_Reviews {
      * @since 2.4
      */
     function handle_status() {
-
         if ( !isset( $_POST['comt_stat_sub'] ) ) {
             return;
         }
@@ -607,7 +613,6 @@ class Dokan_Pro_Reviews {
         $current_status = isset( $_GET['comment_status'] ) ? $_GET['comment_status'] : '';
         $redirect_to = add_query_arg( array( 'comment_status' => $current_status ), dokan_get_navigation_url('reviews') );
         wp_redirect( $redirect_to );
-
     }
 
     /**
@@ -620,17 +625,19 @@ class Dokan_Pro_Reviews {
      * @return void
      */
     function review_comments_menu( $post_type, $counts ) {
-        $url     = dokan_get_navigation_url( 'reviews' );
-        $pending = isset( $counts->moderated ) ? $counts->moderated : 0;
-        $spam    = isset( $counts->spam ) ? $counts->spam : 0;
-        $trash   = isset( $counts->trash ) ? $counts->trash : 0;
+        $url      = dokan_get_navigation_url( 'reviews' );
+        $pending  = isset( $counts->moderated ) ? $counts->moderated : 0;
+        $spam     = isset( $counts->spam ) ? $counts->spam : 0;
+        $trash    = isset( $counts->trash ) ? $counts->trash : 0;
+        $approved = isset( $counts->approved ) ? $counts->approved : 0;
 
         dokan_get_template_part( 'review/status-filter', '', array(
-            'pro' => true,
-            'url' => $url,
-            'pending' => $pending,
-            'spam' => $spam,
-            'trash' => $trash,
+            'pro'      => true,
+            'url'      => $url,
+            'pending'  => $pending,
+            'spam'     => $spam,
+            'trash'    => $trash,
+            'approved' => $approved
         ) );
     }
 
@@ -657,9 +664,9 @@ class Dokan_Pro_Reviews {
             $wpdb->posts.post_type='$post_type'"
         );
     }
-    
+
     function render_store_tab_comment_list( $comments, $store_id ) {
-        
+
         ob_start();
         if ( count( $comments ) == 0 ) {
             echo '<span colspan="5">' . __( 'No Results Found', 'dokan' ) . '</span>';
@@ -707,9 +714,9 @@ class Dokan_Pro_Reviews {
                 }
             }
         }
-        
+
         $review_list = ob_get_clean();
-        
+
         return apply_filters( 'dokan_seller_tab_reviews_list', $review_list, $store_id );
     }
 
