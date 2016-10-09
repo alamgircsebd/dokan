@@ -9,7 +9,7 @@ if( isset( $post->ID ) && $post->ID && $post->post_type == 'product' ) {
     if ( $post->post_author != get_current_user_id() ) {
         wp_die( __( 'Access Denied', 'dokan' ) );
     }
-    
+
     $post_id = $post->ID;
     $post_title = $post->post_title;
     $post_content = $post->post_content;
@@ -135,9 +135,7 @@ if ( ! $from_shortcode ) {
                     <a class="dokan-close" data-dismiss="alert">&times;</a>
 
                     <?php foreach ( Dokan_Template_Products::$errors as $error) { ?>
-
                         <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
-
                     <?php } ?>
                 </div>
             <?php } ?>
@@ -159,7 +157,6 @@ if ( ! $from_shortcode ) {
             if ( $can_sell ) {
 
                 if ( dokan_is_seller_enabled( get_current_user_id() ) ) { ?>
-
                     <form class="dokan-product-edit-form" role="form" method="post">
 
                         <?php if ( $post_id ): ?>
@@ -229,7 +226,7 @@ if ( ! $from_shortcode ) {
 
                                 <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                                     <div class="dokan-form-group">
-                                        
+
                                         <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
                                         <div class="dokan-product-cat-alert dokan-hide dokan-alert dokan-alert-danger">
                                             <?php _e('Please choose a category !!!', 'dokan'); ?>
@@ -242,7 +239,7 @@ if ( ! $from_shortcode ) {
                                         if ( $term ) {
                                             $product_cat = reset( $term );
                                         }
-                                        
+
                                         $category_args =  array(
                                             'show_option_none' => __( '- Select a category -', 'dokan' ),
                                             'hierarchical'     => 1,
@@ -602,16 +599,16 @@ if ( ! $from_shortcode ) {
                         <?php endif; ?>
 
                         <?php wp_nonce_field( 'dokan_add_new_product', 'dokan_add_new_product_nonce' ); ?>
-                        
+
                         <!--hidden input for Firefox issue-->
                         <input type="hidden" name="dokan_add_product" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
                         <input type="submit" name="dokan_add_product" class="dokan-btn dokan-btn-theme dokan-btn-lg btn-block" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
 
                     </form>
-
                 <?php } else { ?>
-                    <div class="dokan-alert dokan-alert"></div>
-
+                    <div class="dokan-alert dokan-alert">
+                        <?php echo dokan_seller_not_enabled_notice(); ?>
+                    </div>
                 <?php } ?>
 
             <?php } else { ?>
