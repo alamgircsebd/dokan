@@ -1,4 +1,4 @@
-v2.5 -> September 19, 2016
+v2.5 -> October 9, 2016
 ---------------------
 - [new] Setup Wizard on Admin panel
 - [new] Multiple header templates for store template
@@ -8,7 +8,10 @@ v2.5 -> September 19, 2016
 - [new] added option to choose tax and shipping receiver as admin or seller.
 - [tweak] dokan store listing shortcode has more options
 - [tweak] flat rate shipping synced with zone ID
+- [tweak] Fixed Tab view variation products
+- [tweak] Added active states in product review status filter
 - [fix] Fixed front-end variation issue for other languages
+- [fix] Fixed product add while selling is disabled for sellers
 
 v2.4.12 -> August 08, 2016
 ---------------------
