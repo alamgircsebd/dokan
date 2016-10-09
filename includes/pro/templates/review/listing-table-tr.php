@@ -54,9 +54,6 @@
                     <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" data-comment_id="<?php echo $comment->comment_ID; ?>" data-cmt_status="1" class="dokan-cmt-action"><?php _e( 'Approve', 'dokan' ); ?></a></li>
                 <?php } ?>
 
-                <?php if ( $quick_edit ) { ?>
-                    <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" class="dokan-cmt-edit"><?php _e( 'Quick Edit', 'dokan' ); ?></a></li>
-                <?php } ?>
                 <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" data-comment_id="<?php echo $comment->comment_ID; ?>" data-cmt_status="spam" class="dokan-cmt-action"><?php _e( 'Spam', 'dokan' ); ?></a></li>
                 <li><a href="#" data-curr_page="<?php echo $page_status; ?>" data-post_type="<?php echo $post_type; ?>" data-page_status="1" data-comment_id="<?php echo $comment->comment_ID; ?>" data-cmt_status="trash" class="dokan-cmt-action"><?php _e( 'Trash', 'dokan' ); ?></a></li>
 
@@ -69,12 +66,7 @@
         <a href="<?php echo $permalink; ?>"><?php _e( 'View Comment', 'dokan' ); ?></a>
 
         <div style="display:none">
-            <div class="dokan-cmt-hid-email"><?php echo esc_attr( $comment->comment_author_email ); ?></div>
-            <div class="dokan-cmt-hid-author"><?php echo esc_attr( $comment->comment_author ); ?></div>
-            <div class="dokan-cmt-hid-url"><?php echo esc_attr( $comment->comment_author_url ); ?></div>
-            <div class="dokan-cmt-hid-id"><?php echo esc_attr( $comment->comment_ID ); ?></div>
             <div class="dokan-cmt-hid-status"><?php echo esc_attr( $comment->comment_approved ); ?></div>
-            <textarea class="dokan-cmt-hid-body"><?php echo esc_textarea( $comment->comment_content ); ?></textarea>
         </div>
     </td>
     <td>

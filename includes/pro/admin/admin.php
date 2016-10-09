@@ -163,13 +163,6 @@ class Dokan_Pro_Admin_Settings {
                     'pending' => __( 'Pending Review', 'dokan' )
                 )
             ),
-            'review_edit'            => array(
-                'name'    => 'review_edit',
-                'label'   => __( 'Review Editing', 'dokan' ),
-                'desc'    => __( 'Seller can edit product reviews', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'off'
-            ),
             'discount_edit' => array(
                 'name'    => 'discount_edit',
                 'label'   => __( 'Discount Editing', 'dokan' ),

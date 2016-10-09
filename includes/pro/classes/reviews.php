@@ -21,8 +21,6 @@ class Dokan_Pro_Reviews {
      * @uses actions|filter hooks
      */
     public function __construct() {
-        $this->quick_edit = ( dokan_get_option( 'review_edit', 'dokan_selling', 'off' ) == 'on' ) ? true : false;
-
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_review_menu' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_review_template' ) );
 
@@ -37,7 +35,6 @@ class Dokan_Pro_Reviews {
 
         add_action( 'wp_ajax_dokan_comment_status', array( $this, 'ajax_comment_status' ) );
         add_action( 'wp_ajax_dokan_update_comment', array( $this, 'ajax_update_comment' ) );
-
     }
 
     /**
@@ -527,8 +524,7 @@ class Dokan_Pro_Reviews {
             'permalink' => $permalink,
             'page_status' => $page_status,
             'post_type' => $post_type,
-            'comment_status' => $comment_status,
-            'quick_edit' => $this->quick_edit,
+            'comment_status' => $comment_status
         ) );
     }
 
@@ -578,7 +574,6 @@ class Dokan_Pro_Reviews {
         ob_start();
         $this->render_row( $comment, $_POST['post_type'] );
         $html = ob_get_clean();
-
         wp_send_json_success( $html );
     }
 
