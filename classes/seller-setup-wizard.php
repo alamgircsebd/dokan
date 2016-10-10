@@ -44,6 +44,12 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
             return;
         }
 
+        $dokan_appearance = get_option( 'dokan_appearance', [] );
+
+        if ( isset( $dokan_appearance['setup_wizard_logo_url'] ) && ! empty( $dokan_appearance['setup_wizard_logo_url'] ) ) {
+            $this->custom_logo = $dokan_appearance['setup_wizard_logo_url'];
+        }
+
         $this->store_id   = get_current_user_id();
         $this->store_info = dokan_get_store_info( $this->store_id );
 
