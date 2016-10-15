@@ -630,6 +630,9 @@ body {
   font-weight: normal;
   cursor: pointer;
 }
+.product-edit-new-container label input[type=checkbox] {
+  margin-right: 5px;
+}
 .product-edit-new-container label.form-label {
   font-weight: bold;
   margin-bottom: 5px;
@@ -742,19 +745,18 @@ body {
   border: 1px solid #ccc;
 }
 .product-edit-new-container .dokan-edit-row {
-  padding: 25px 0;
+  padding: 10px 0;
   border-top: 1px solid #ededed;
-  margin-top: 25px;
+  margin-top: 30px;
 }
-.product-edit-new-container .dokan-edit-row .dokan-side-left {
-  float: left;
-  width: 25%;
+.product-edit-new-container .dokan-edit-row .dokan-section-heading {
+  margin: 10px 0px 25px;
 }
-.product-edit-new-container .dokan-edit-row .dokan-side-left h2 {
-  margin-bottom: 10px;
-  font-size: 16px;
+.product-edit-new-container .dokan-edit-row .dokan-section-heading h2 {
+  margin: 0px 0px 10px 0px;
+  font-size: 22px;
 }
-.product-edit-new-container .dokan-edit-row .dokan-side-left p {
+.product-edit-new-container .dokan-edit-row .dokan-section-heading p {
   margin-bottom: 15px;
   line-height: 1.42;
   color: #888;
@@ -4281,7 +4283,7 @@ textarea.dokan-form-control {
   height: auto;
 }
 select.dokan-form-control {
-  height: 32px;
+  height: 37px;
 }
 .dokan-radio-inline + .dokan-radio-inline,
 .dokan-checkbox-inline + .dokan-checkbox-inline {

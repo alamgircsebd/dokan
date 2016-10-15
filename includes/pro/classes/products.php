@@ -20,7 +20,7 @@ class Dokan_Pro_Products {
     public function __construct() {
         add_action( 'dokan_single_product_edit_after_sidebar', array( $this, 'load_variations_content' ), 10, 2);
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2);
-        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_shipping_tax_content' ), 10, 2);
+        add_action( 'dokan_product_edit_after_sidebar', array( $this, 'load_shipping_tax_content' ), 10, 2);
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
         // Add per product commission option in backend for addmin
@@ -199,14 +199,14 @@ class Dokan_Pro_Products {
      */
     function add_per_product_commission_options() {
 
-        woocommerce_wp_text_input( 
-            array( 
+        woocommerce_wp_text_input(
+            array(
                 'id'           => '_per_product_commission',
                 'label'        => __( 'Commission (%)', 'dokan' ),
                 'wrapper_class'=> 'per-product-commission show_if_simple',
                 'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
                 'data_type' => 'price'
-            ) 
+            )
         );
     }
 
