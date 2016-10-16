@@ -15,7 +15,9 @@
     $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
     $show_more_ptab = isset( $profile_info['show_more_ptab'] ) ? esc_attr( $profile_info['show_more_ptab'] ) : 'yes';
 
-    $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling', array('') );
+    $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
+    $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
+    
     $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? esc_attr( $profile_info['show_min_order_discount'] ) : 'no';
     $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? esc_attr( $profile_info['setting_minimum_order_amount'] ) : 0;
     $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? esc_attr( $profile_info['setting_order_percentage'] ) : 0;
