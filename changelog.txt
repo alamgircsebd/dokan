@@ -1,11 +1,13 @@
 v2.5 -> October 9, 2016
 ---------------------
 - [new] Setup Wizard on Admin panel
+- [new] Setup Wizard for seller settings after new seller registration
 - [new] Multiple header templates for store template
 - [new] Added DOKAN shortcode insert button on post/page editor
 - [new] Added store search option on store listing page
 - [new] Added detailed income and withdraw statement for sellers
 - [new] added option to choose tax and shipping receiver as admin or seller.
+- [new] show seller payment options on user profile in back-end.
 - [tweak] dokan store listing shortcode has more options
 - [tweak] flat rate shipping synced with zone ID
 - [tweak] Fixed Tab view variation products
