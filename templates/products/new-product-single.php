@@ -181,9 +181,11 @@ if ( ! $from_shortcode ) {
                                 <div class="dokan-form-group">
                                     <label for="post_title" class="form-label"><?php _e( 'Product Type', 'dokan' ); ?></label>
                                     <select name="product_type" class="dokan-form-control" id="product_type">
-                                        <option value=""><?php _e( '-Select your product type-', 'dokan' ) ?></option>
+                                        <option value=""><?php _e( '--Select your product type--', 'dokan' ) ?></option>
                                         <option value="simple"><?php _e( 'Simple', 'dokan' ) ?></option>
                                         <option value="variable"><?php _e( 'Variable', 'dokan' ) ?></option>
+                                        <option value="downloadable"><?php _e( 'Downloadable', 'dokan' ) ?></option>
+                                        <option value="download_virtual"><?php _e( 'Downloadable and virtual', 'dokan' ) ?></option>
                                     </select>
                                 </div>
 
@@ -400,8 +402,8 @@ if ( ! $from_shortcode ) {
 
                         <div class="dokan-product-inventory dokan-edit-row">
                             <div class="dokan-section-heading">
-                                <h2><?php _e( 'Inventory, Shipping and Tax', 'dokan' ); ?></h2>
-                                <p><?php _e( 'Manage inventory, shipping and tax for this product.', 'dokan' ); ?></p>
+                                <h2><?php _e( 'Inventory', 'dokan' ); ?></h2>
+                                <p><?php _e( 'Manage inventory for this product.', 'dokan' ); ?></p>
                                 <div class="dokan-clearfix"></div>
                             </div>
 
@@ -452,10 +454,78 @@ if ( ! $from_shortcode ) {
 
                                 <?php do_action( 'dokan_product_edit_after_downloadable', $post, $post_id ); ?>
                                 <?php do_action( 'dokan_product_edit_after_sidebar', $post, $post_id ); ?>
-                                <?php //do_action( 'dokan_single_product_edit_after_sidebar', $post, $post_id ); ?>
+                                <?php do_action( 'dokan_single_product_edit_after_sidebar', $post, $post_id ); ?>
 
                             </div><!-- .dokan-side-right -->
                         </div><!-- .dokan-product-inventory -->
+
+                        <div class="dokan-other-options dokan-edit-row dokan-clearfix">
+                            <div class="dokan-section-heading">
+                                <h2><?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
+                            </div>
+
+                            <div class="dokan-section-content">
+                                <div class="dokan-divider-top dokan-clearfix">
+
+                                    <?php if ( $post_id ): ?>
+                                        <?php do_action( 'dokan_product_edit_before_sidebar' ); ?>
+                                    <?php endif; ?>
+
+                                    <div class="dokan-side-body dokan-download-wrapper">
+                                        <table class="dokan-table">
+                                            <tfoot>
+                                                <tr>
+                                                    <th colspan="3">
+                                                        <a href="#" class="insert-file-row dokan-btn dokan-btn-sm dokan-btn-success" data-row="<?php
+                                                            $file = array(
+                                                                'file' => '',
+                                                                'name' => ''
+                                                            );
+                                                            ob_start();
+                                                            include DOKAN_INC_DIR . '/woo-views/html-product-download.php';
+                                                            echo esc_attr( ob_get_clean() );
+                                                        ?>"><?php _e( 'Add File', 'dokan' ); ?></a>
+                                                    </th>
+                                                </tr>
+                                            </tfoot>
+                                            <thead>
+                                                <tr>
+                                                    <th><?php _e( 'Name', 'dokan' ); ?> <span class="tips" title="<?php _e( 'This is the name of the download shown to the customer.', 'dokan' ); ?>">[?]</span></th>
+                                                    <th><?php _e( 'File URL', 'dokan' ); ?> <span class="tips" title="<?php _e( 'This is the URL or absolute path to the file which customers will get access to.', 'dokan' ); ?>">[?]</span></th>
+                                                    <th><?php _e( 'Action', 'dokan' ); ?></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+                                                $downloadable_files = get_post_meta( $post_id, '_downloadable_files', true );
+
+                                                if ( $downloadable_files ) {
+                                                    foreach ( $downloadable_files as $key => $file ) {
+                                                        include DOKAN_INC_DIR . '/woo-views/html-product-download.php';
+                                                    }
+                                                }
+                                                ?>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="dokan-clearfix">
+                                            <div class="content-half-part">
+                                                <label for="_download_limit" class="form-label"><?php _e( 'Download Limit', 'dokan' ); ?></label>
+                                                <?php dokan_post_input_box( $post_id, '_download_limit', array( 'placeholder' => __( 'e.g. 4', 'dokan' ) ) ); ?>
+                                            </div><!-- .content-half-part -->
+
+                                            <div class="content-half-part">
+                                                <label for="_download_expiry" class="form-label"><?php _e( 'Download Expiry', 'dokan' ); ?></label>
+                                                <?php dokan_post_input_box( $post_id, '_download_expiry', array( 'placeholder' => __( 'Number of days', 'dokan' ) ) ); ?>
+                                            </div><!-- .content-half-part -->
+                                        </div>
+
+                                    </div> <!-- .dokan-side-body -->
+                                </div> <!-- .downloadable -->
+
+                            </div>
+
+                        </div>
 
                         <?php do_action( 'dokan_product_edit_after_inventory_variants', $post, $post_id ); ?>
 
@@ -466,7 +536,7 @@ if ( ! $from_shortcode ) {
                                 </div>
 
                                 <div class="dokan-section-content">
-                                    <label class="dokan-checkbox-inline form-label" for="_is_lot_discount">
+                                    <label class="form-label" for="_is_lot_discount">
                                         <input type="checkbox" id="_is_lot_discount" name="_is_lot_discount" value="yes" <?php checked( $_is_lot_discount, 'yes' ); ?>>
                                         <?php _e( 'Enable bulk discount', 'dokan' ); ?>
                                     </label>

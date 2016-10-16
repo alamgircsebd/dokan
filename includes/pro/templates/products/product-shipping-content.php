@@ -11,7 +11,11 @@
 <?php do_action( 'dokan_product_options_shipping_before', $post_id ); ?>
 
 <?php if ( 'yes' == get_option( 'woocommerce_calc_shipping' ) || 'yes' == get_option( 'woocommerce_calc_taxes' ) ): ?>
-<div class="dokan-product-shipping-tax dokan-clearfix <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
+<div class="dokan-product-shipping-tax dokan-edit-row dokan-clearfix <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
+    <div class="dokan-section-heading">
+        <h2><?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
+        <p><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>
+    </div>
 
     <div class="dokan-side-content">
         <?php
@@ -103,14 +107,7 @@
 
         <?php if ( 'yes' == get_option( 'woocommerce_calc_taxes' ) ) { ?>
         <div class="dokan-clearfix dokan-tax-container">
-            <div class="dokan-form-group">
-                <label for="_required_tax" class="dokan-form-label">
-                <input type="hidden" name="_required_tax" value="no">
-                <input type="checkbox" id="_required_tax" name="_required_tax" value="yes" <?php checked( $_required_tax, 'yes' ); ?>>
-                <?php _e( 'The product requires Tax', 'dokan' ); ?>
-                </label>
-            </div>
-            <div class="show_if_needs_tax dokan-tax-product-options">
+            <div class="dokan-tax-product-options">
                 <div class="dokan-form-group dokan-w">
                     <label class="dokan-control-label" for="_tax_status"><?php _e( 'Tax Status', 'dokan' ); ?></label>
                     <div class="dokan-text-left">

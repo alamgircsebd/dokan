@@ -18,9 +18,9 @@ class Dokan_Pro_Products {
      * @uses filters
      */
     public function __construct() {
-        add_action( 'dokan_single_product_edit_after_sidebar', array( $this, 'load_variations_content' ), 10, 2);
+        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_shipping_tax_content' ), 10, 2);
+        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_variations_content' ), 15, 2);
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2);
-        add_action( 'dokan_product_edit_after_sidebar', array( $this, 'load_shipping_tax_content' ), 10, 2);
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
         // Add per product commission option in backend for addmin

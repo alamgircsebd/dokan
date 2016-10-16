@@ -118,6 +118,71 @@
             $('body').on('submit', 'form.dokan-product-edit-form', this.inputValidate);
             $( '.hide_if_lot_discount' ).hide();
             $( '.hide_if_order_discount' ).hide();
+
+            this.attribute.sortable();
+            $('.product-edit-new-container .dokan-product-attribute-wrapper').on( 'click', 'a.dokan-product-toggle-attribute, .dokan-product-attribute-heading', this.attribute.toggleAttribute );
+
+        },
+
+        attribute: {
+            toggleAttribute: function(e) {
+                e.preventDefault();
+                var self = $(this),
+                    list = self.closest('li'),
+                    item = list.find('.dokan-product-attribute-item');
+
+                if ( $(item).hasClass('dokan-hide') ) {
+                    self.closest('.dokan-product-attribute-heading').css({ borderBottom: '1px solid #e3e3e3' });
+                    $(item).slideDown( 200, function() {
+                        self.find('i.fa').removeClass('fa-flip-horizointal').addClass('fa-flip-vertical');
+                        $(this).removeClass('dokan-hide');
+                        if ( ! $(e.target).hasClass( 'dokan-product-attribute-heading' ) ) {
+                            self.find( 'a.dokan-product-toggle-attribute' ).css('top', '12px');
+                        } else if ( $(e.target).hasClass( 'dokan-product-attribute-heading' ) ) {
+                            self.find( 'a.dokan-product-toggle-attribute' ).css('top', '12px');
+                        }
+                    });
+                } else {
+                    $(item).slideUp( 200, function() {
+                        $(this).addClass('dokan-hide');
+                        self.find('i.fa').removeClass('fa-flip-vertical').addClass('fa-flip-horizointal');
+                        if ( ! $(e.target).hasClass('dokan-product-attribute-heading') ) {
+                            self.find('a.dokan-product-toggle-attribute').css('top', '7px');
+                        } else if ( $(e.target).hasClass( 'dokan-product-attribute-heading' ) ) {
+                            self.find('a.dokan-product-toggle-attribute').css('top', '7px');
+                        }
+                        self.closest('.dokan-product-attribute-heading').css({ borderBottom: 'none' });
+
+                    })
+                }
+            },
+
+            sortable: function() {
+                $('.dokan-product-attribute-wrapper ul').sortable({
+                    items: 'li.product-attribute-list',
+                    cursor: 'move',
+                    scrollSensitivity:40,
+                    forcePlaceholderSize: true,
+                    forceHelperSize: false,
+                    helper: 'clone',
+                    opacity: 0.65,
+                    placeholder: 'dokan-sortable-placeholder',
+                    start:function(event,ui){
+                        ui.item.css('background-color','#f6f6f6');
+                    },
+                    stop:function(event,ui){
+                        ui.item.removeAttr('style');
+                    },
+                    update: function(event, ui) {
+                        var attachment_ids = '';
+
+                        $('.dokan-product-attribute-wrapper ul li.product-attribute-list').css('cursor','default').each(function( i ) {
+                            $(this).find('input[name="attribute_position[]"]').val(i);
+                        });
+
+                    }
+                });
+            }
         },
 
         inputValidate: function( e ) {
