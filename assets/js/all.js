@@ -722,6 +722,13 @@ jQuery(function($) {
                 return false;
             },
 
+            reArrangeAttribute: function() {
+                var attributeWrapper = $('.dokan-product-attribute-wrapper').find('ul.dokan-attribute-option-list');
+                attributeWrapper.find( 'li.product-attribute-list' ).css( 'cursor', 'default' ).each(function( i ) {
+                    $(this).find('input[name="attribute_position[]"]').val(i);
+                });
+            },
+
             addNewExtraAttr: function(e) {
                 e.preventDefault();
 
@@ -749,7 +756,6 @@ jQuery(function($) {
 
                     });
                 }
-
             },
 
             addNewAttribute: function(e) {
@@ -772,9 +778,7 @@ jQuery(function($) {
                         var attributeWrapper = $('.dokan-product-attribute-wrapper').find('ul.dokan-attribute-option-list');
                         attributeWrapper.append( resp.data );
                         Dokan_Editor.loadSelect2();
-                        attributeWrapper.find( 'li.product-attribute-list' ).css( 'cursor', 'default' ).each(function( i ) {
-                            $(this).find('input[name="attribute_position[]"]').val(i);
-                        });
+                        Dokan_Editor.attribute.reArrangeAttribute();
                     };
 
                     self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').addClass('dokan-hide');
@@ -789,16 +793,15 @@ jQuery(function($) {
             removeAttribute: function(evt) {
                 evt.stopPropagation();
 
-                console.log('remove asche');
-
                 if ( window.confirm( dokan.remove_attribute ) ) {
                     var $parent = $( this ).closest('li.product-attribute-list');
-                    $parent.fadeOut( 300, function() {
-                        $(this).remove();
 
+                    $parent.fadeOut( 300, function() {
                         if ( $parent.is( '.taxonomy' ) ) {
                             $( 'select.dokan_attribute_taxonomy' ).find( 'option[value="' + $parent.data( 'taxonomy' ) + '"]' ).removeAttr( 'disabled' );
                         }
+                        $(this).remove();
+                        Dokan_Editor.attribute.reArrangeAttribute();
                     });
                 }
 

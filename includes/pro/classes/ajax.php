@@ -962,6 +962,7 @@ class Dokan_Pro_Ajax {
             'attribute_taxonomy' => $attribute_taxonomy,
             'attribute_label'    => $attribute_label,
             'attribute'          => $attribute,
+            'metabox_class'      => $metabox_class
         ) );
         $content = ob_get_clean();
         wp_send_json_success( $content );
