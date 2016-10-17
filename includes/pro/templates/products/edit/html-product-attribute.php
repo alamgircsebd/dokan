@@ -1,4 +1,4 @@
-<li class="product-attribute-list" data-taxonomy="<?php echo esc_attr( $taxonomy ); ?>">
+<li class="product-attribute-list <?php echo esc_attr( implode( ' ', $metabox_class ) ); ?>" data-taxonomy="<?php echo esc_attr( $taxonomy ); ?>">
     <div class="dokan-product-attribute-heading">
         <span><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;<strong><?php echo ! empty( $attribute_label ) ? esc_html( $attribute_label ) : _e( 'Attribute Name', 'dokan' ) ; ?></strong></span>
         <a href="#" class="dokan-product-remove-attribute"><?php _e( 'Remove', 'dokan' ); ?></a>
@@ -51,7 +51,7 @@
 					<div class="dokan-pre-defined-attribute-btn-group">
 						<button class="dokan-btn dokan-btn-default plus dokan-select-all-attributes"><?php _e( 'Select all', 'dokan' ); ?></button>
 						<button class="dokan-btn dokan-btn-default minus dokan-select-no-attributes"><?php _e( 'Select none', 'dokan' ); ?></button>
-						<button class="dokan-btn dokan-btn-default fr plus dokan-add-new-attribute"><?php _e( 'Add new', 'dokan' ); ?></button>
+						<!-- <button class="dokan-btn dokan-btn-default fr plus dokan-add-new-attribute"><?php _e( 'Add new', 'dokan' ); ?></button> -->
 					</div>
 				<?php elseif ( 'text' == $attribute_taxonomy->attribute_type ) : ?>
 

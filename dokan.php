@@ -325,7 +325,8 @@ final class WeDevs_Dokan {
             'wrong_message'              => __('Something is wrong, Please try again.', 'dokan' ),
             'duplicates_attribute_messg' => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
             'variation_unset_warning'    => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
-            'new_attribute_prompt'       => __( 'Enter a name for the new attribute term:', 'dokan' )
+            'new_attribute_prompt'       => __( 'Enter a name for the new attribute term:', 'dokan' ),
+            'remove_attribute'           => __( 'Remove this attribute?', 'dokan' )
         );
 
         $form_validate_messages = array(

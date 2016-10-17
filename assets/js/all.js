@@ -626,6 +626,7 @@ jQuery(function($) {
             $('.dokan-product-attribute-wrapper ul.dokan-attribute-option-list').on( 'click', 'button.dokan-select-all-attributes', this.attribute.selectAllAttr );
             $('.dokan-product-attribute-wrapper ul.dokan-attribute-option-list').on( 'click', 'button.dokan-select-no-attributes', this.attribute.selectNoneAttr );
             $('.dokan-product-attribute-wrapper ul.dokan-attribute-option-list').on( 'click', 'button.dokan-add-new-attribute', this.attribute.addNewExtraAttr );
+            $('.product-edit-new-container .dokan-product-attribute-wrapper').on( 'click', 'a.dokan-product-remove-attribute', this.attribute.removeAttribute );
         },
 
         loadSelect2: function() {
@@ -636,6 +637,7 @@ jQuery(function($) {
 
             toggleAttribute: function(e) {
                 e.preventDefault();
+
                 var self = $(this),
                     list = self.closest('li'),
                     item = list.find('.dokan-product-attribute-item');
@@ -646,7 +648,7 @@ jQuery(function($) {
                         self.find('i.fa').removeClass('fa-flip-horizointal').addClass('fa-flip-vertical');
                         $(this).removeClass('dokan-hide');
                         if ( ! $(e.target).hasClass( 'dokan-product-attribute-heading' ) ) {
-                            self.find( 'a.dokan-product-toggle-attribute' ).css('top', '12px');
+                            $(e.target).closest('a').css('top', '12px');
                         } else if ( $(e.target).hasClass( 'dokan-product-attribute-heading' ) ) {
                             self.find( 'a.dokan-product-toggle-attribute' ).css('top', '12px');
                         }
@@ -656,7 +658,7 @@ jQuery(function($) {
                         $(this).addClass('dokan-hide');
                         self.find('i.fa').removeClass('fa-flip-vertical').addClass('fa-flip-horizointal');
                         if ( ! $(e.target).hasClass('dokan-product-attribute-heading') ) {
-                            self.find('a.dokan-product-toggle-attribute').css('top', '7px');
+                            $(e.target).closest('a').css('top', '7px');
                         } else if ( $(e.target).hasClass( 'dokan-product-attribute-heading' ) ) {
                             self.find('a.dokan-product-toggle-attribute').css('top', '7px');
                         }
@@ -664,6 +666,7 @@ jQuery(function($) {
 
                     })
                 }
+                return false;
             },
 
             sortable: function() {
@@ -722,7 +725,7 @@ jQuery(function($) {
             addNewExtraAttr: function(e) {
                 e.preventDefault();
 
-                var $wrapper           = $( this ).closest( 'li.product-attribute-list' );
+                var $wrapper           = $(this).closest( 'li.product-attribute-list' );
                 var attribute          = $wrapper.data( 'taxonomy' );
                 var new_attribute_name = window.prompt( dokan.new_attribute_prompt );
 
@@ -735,8 +738,8 @@ jQuery(function($) {
                         _wpnonce : dokan.nonce
                     };
 
-                    $.post( dokan.ajax_url, data, function( response ) {
-
+                    $.post( dokan.ajaxurl, data, function( response ) {
+                        console.log(response);
                         if ( response.error ) {
                             window.alert( response.error );
                         } else if ( response.slug ) {
@@ -744,11 +747,7 @@ jQuery(function($) {
                             $wrapper.find( 'select.dokan_attribute_values' ).change();
                         }
 
-                        $( '.product_attributes' ).unblock();
                     });
-
-                } else {
-                    $( '.product_attributes' ).unblock();
                 }
 
             },
@@ -785,6 +784,25 @@ jQuery(function($) {
                         attrWrap.val( '' );
                     }
                 });
+            },
+
+            removeAttribute: function(evt) {
+                evt.stopPropagation();
+
+                console.log('remove asche');
+
+                if ( window.confirm( dokan.remove_attribute ) ) {
+                    var $parent = $( this ).closest('li.product-attribute-list');
+                    $parent.fadeOut( 300, function() {
+                        $(this).remove();
+
+                        if ( $parent.is( '.taxonomy' ) ) {
+                            $( 'select.dokan_attribute_taxonomy' ).find( 'option[value="' + $parent.data( 'taxonomy' ) + '"]' ).removeAttr( 'disabled' );
+                        }
+                    });
+                }
+
+                return false;
             }
         },
 
