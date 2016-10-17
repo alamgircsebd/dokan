@@ -50,8 +50,12 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_nopriv_dokan_add_new_variations_options', array( $this, 'add_new_variations_options') );
         add_action( 'wp_ajax_dokan_remove_single_variation_item', array( $this, 'remove_single_variation_item') );
         add_action( 'wp_ajax_nopriv_dokan_remove_single_variation_item', array( $this, 'remove_single_variation_item') );
-        add_action( 'wp_ajax_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
-        add_action( 'wp_ajax_nopriv_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
+        // add_action( 'wp_ajax_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
+        // add_action( 'wp_ajax_nopriv_dokan_get_pre_attribute', array( $this, 'add_predefined_attribute') );
+        add_action( 'wp_ajax_dokan_get_pre_attribute', array( $this, 'add_attr_predefined_attribute') );
+        add_action( 'wp_ajax_nopriv_dokan_get_pre_attribute', array( $this, 'add_attr_predefined_attribute') );
+        add_action( 'wp_ajax_dokan_add_new_attribute', array( $this, 'add_new_attribute') );
+        add_action( 'wp_ajax_nopriv_dokan_add_new_attribute', array( $this, 'add_new_attribute') );
         add_action( 'wp_ajax_dokan_load_order_items', array( $this, 'load_order_items') );
         add_action( 'wp_ajax_nopriv_dokan_load_order_items', array( $this, 'load_order_items') );
 
@@ -925,6 +929,78 @@ class Dokan_Pro_Ajax {
         }
 
         wp_send_json_success();
+    }
+
+    function add_attr_predefined_attribute() {
+        check_ajax_referer( 'dokan_reviews' );
+
+        global $wc_product_attributes;
+
+        $thepostid     = 0;
+        $taxonomy      = sanitize_text_field( $_POST['taxonomy'] );
+        $attribute     = array(
+            'name'         => $taxonomy,
+            'value'        => '',
+            'is_visible'   => apply_filters( 'dokan_attribute_default_visibility', 1 ),
+            'is_variation' => apply_filters( 'dokan_attribute_default_is_variation', 0 ),
+            'is_taxonomy'  => $taxonomy ? 1 : 0
+        );
+
+        if ( $taxonomy ) {
+            $attribute_taxonomy = $wc_product_attributes[ $taxonomy ];
+            $metabox_class[]    = 'taxonomy';
+            $metabox_class[]    = $taxonomy;
+            $attribute_label    = wc_attribute_label( $taxonomy );
+        } else {
+            $attribute_label = '';
+        }
+        ob_start();
+        dokan_get_template_part( 'products/edit/html-product-attribute', '', array(
+            'pro'                => true,
+            'thepostid'          => $thepostid,
+            'taxonomy'           => $taxonomy,
+            'attribute_taxonomy' => $attribute_taxonomy,
+            'attribute_label'    => $attribute_label,
+            'attribute'          => $attribute,
+        ) );
+        $content = ob_get_clean();
+        wp_send_json_success( $content );
+    }
+
+    /**
+     * Add new attribute from predifined attribute
+     *
+     * @since 2.5
+     *
+     * @return void
+     */
+    function add_new_attribute() {
+        check_ajax_referer( 'dokan_reviews' );
+
+        if ( ! current_user_can( 'dokandar' ) ) {
+            die(-1);
+        }
+
+        $taxonomy = esc_attr( $_POST['taxonomy'] );
+        $term     = wc_clean( $_POST['term'] );
+
+        if ( taxonomy_exists( $taxonomy ) ) {
+
+            $result = wp_insert_term( $term, $taxonomy );
+
+            if ( is_wp_error( $result ) ) {
+                wp_send_json( array(
+                    'error' => $result->get_error_message()
+                ) );
+            } else {
+                $term = get_term_by( 'id', $result['term_id'], $taxonomy );
+                wp_send_json( array(
+                    'term_id' => $term->term_id,
+                    'name'    => $term->name,
+                    'slug'    => $term->slug
+                ) );
+            }
+        }
     }
 
     /**

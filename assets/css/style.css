@@ -5,6 +5,14 @@
  * in this less file which compile to style.css
  * file in assets/css directoryS
  */
+.dokan-spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('../images/spinner-2x.gif') center center no-repeat;
+  z-index: 99;
+  background-size: 20px;
+}
 .dokan-dashboard .dokan-dash-sidebar {
   width: 17%;
   float: left;
@@ -999,46 +1007,53 @@ body {
   line-height: 20px;
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper .dokan-attribute-type {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper .dokan-attribute-type select {
   margin-right: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper .dokan-attribute-type .dokan-attribute-spinner {
+  margin-left: 10px;
+  margin-top: 5px;
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul {
   padding-left: 0px;
   margin-left: 0px;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list {
   border-bottom: 1px solid #e3e3e3;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li:first-child {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list:first-child {
   border-top: 1px solid #e3e3e3;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li .dokan-product-attribute-heading {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-heading {
   padding: 10px 0px;
   cursor: move;
   position: relative;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li .dokan-product-attribute-heading a.dokan-product-remove-attribute {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-heading a.dokan-product-remove-attribute {
   position: absolute;
   top: 9px;
   right: 0px;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li .dokan-product-attribute-heading a.dokan-product-toggle-attribute {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-heading a.dokan-product-toggle-attribute {
   position: absolute;
   top: 7px;
   right: 66px;
   color: #222;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li .dokan-product-attribute-item {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-item {
   padding: 10px 0px;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li .dokan-product-attribute-item .dokan-product-attribute-name {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-item .dokan-product-attribute-name {
   margin-bottom: 10px;
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li .dokan-product-attribute-item .checkbox-item {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-item .checkbox-item {
   font-weight: normal !important;
   margin-bottom: 0px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-item .dokan-pre-defined-attribute-btn-group {
+  margin-top: 10px;
 }
 .product-edit-container {
   font-size: 13px;

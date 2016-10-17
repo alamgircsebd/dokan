@@ -88,10 +88,11 @@ class Dokan_Pro_Products {
      */
     public function load_variations_content( $post, $post_id ) {
 
-        $_has_attribute     = get_post_meta( $post_id, '_has_attribute', true );
-        $_create_variations = get_post_meta( $post_id, '_create_variation', true );
-        $product_attributes = get_post_meta( $post_id, '_product_attributes', true );
+        $_has_attribute       = get_post_meta( $post_id, '_has_attribute', true );
+        $_create_variations   = get_post_meta( $post_id, '_create_variation', true );
+        $product_attributes   = get_post_meta( $post_id, '_product_attributes', true );
         $attribute_taxonomies = wc_get_attribute_taxonomies();
+
 
         dokan_get_template_part( 'products/product-variation', '', array(
             'pro'                  => true,
@@ -120,8 +121,9 @@ class Dokan_Pro_Products {
             echo '</div>';
         }
 
-        dokan_get_template_part( 'products/edit/variation-table', '', array( 'pro' => true, 'post_id' => $post_id ) );
-        dokan_get_template_part( 'products/edit/variation-attribute-popup', '', array( 'pro' => true, 'post_id' => $post_id ) );
+        dokan_get_template_part( 'products/edit/tmpl-add-attribute', '', array( 'pro' => true, 'post_id' => $post_id ) );
+        // dokan_get_template_part( 'products/edit/variation-table', '', array( 'pro' => true, 'post_id' => $post_id ) );
+        // dokan_get_template_part( 'products/edit/variation-attribute-popup', '', array( 'pro' => true, 'post_id' => $post_id ) );
     }
 
     /**

@@ -16,108 +16,22 @@
     <div class="dokan-section-content">
         <div class="dokan-product-attribute-wrapper">
             <div class="dokan-attribute-type">
-                 <select name="predefined_attribute" id="predefined_attribute" class="dokan-w5 dokan-form-control" data-predefined_attr='<?php echo json_encode( $attribute_taxonomies ); ?>'>
+                <select name="predefined_attribute" id="predefined_attribute" class="dokan-w5 dokan-form-control dokan_attribute_taxonomy" data-predefined_attr='<?php echo json_encode( $attribute_taxonomies ); ?>'>
                     <option value=""><?php _e( 'Custom Attribute', 'dokan' ); ?></option>
                     <?php
-                    if ( !empty( $attribute_taxonomies ) ) { ?>
-                        <?php foreach ( $attribute_taxonomies as $key => $value ) { ?>
-                            <option value="<?php echo $value->attribute_name; ?>"><?php echo $value->attribute_label; ?></option>
-                        <?php }
-                    }?>
+                    if ( ! empty( $attribute_taxonomies ) ) {
+                        foreach ( $attribute_taxonomies as $tax ) {
+                            $attribute_taxonomy_name = wc_attribute_taxonomy_name( $tax->attribute_name );
+                            $label = $tax->attribute_label ? $tax->attribute_label : $tax->attribute_name;
+                            echo '<option value="' . esc_attr( $attribute_taxonomy_name ) . '">' . esc_html( $label ) . '</option>';
+                        }
+                    }
+                    ?>
                 </select>
-                <a href="#" class="dokan-btn dokan-btn-default add_attribute_option"><?php _e( 'Add Option', 'dokan' ) ?></a>
+                <a href="#" class="dokan-btn dokan-btn-default add_new_attribute"><?php _e( 'Add attribute', 'dokan' ) ?></a>
+                <span class="dokan-spinner dokan-attribute-spinner dokan-hide"></span>
             </div>
-            <ul>
-                <li class="product-attribute-list">
-                    <div class="dokan-product-attribute-heading">
-                        <span><i class="fa fa-bars" aria-hidden="true"></i> <strong>Title 1</strong></span>
-                        <input type="hidden" name="attribute_position[]" value="">
-                        <a href="#" class="dokan-product-remove-attribute"><?php _e( 'Remove', 'dokan' ); ?></a>
-                        <a href="#" class="dokan-product-toggle-attribute">
-                            <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                    <div class="dokan-product-attribute-item dokan-clearfix dokan-hide">
-                        <div class="content-half-part">
-                            <label class="form-label" for="">Name</label>
-                            <input type="text" class="dokan-form-control dokan-product-attribute-name" name="" value="">
-
-                            <label for="" class="checkbox-item form-label">
-                                <input type="checkbox" name="" value="1">  Visible on the product page
-                            </label>
-
-                            <label for="" class="checkbox-item form-label">
-                                <input type="checkbox" name="" value="1">  Use for variations
-                            </label>
-                        </div>
-
-                        <div class="content-half-part">
-                            <label for="" class="form-label">Values</label>
-                            <textarea class="dokan-form-control" name="" id="" cols="30" rows="3"></textarea>
-                        </div>
-                    </div>
-                </li>
-
-                <li class="product-attribute-list">
-                    <div class="dokan-product-attribute-heading">
-                        <span><i class="fa fa-bars" aria-hidden="true"></i> <strong>Title 2</strong></span>
-                        <input type="hidden" name="attribute_position[]" value="">
-                        <a href="#" class="dokan-product-remove-attribute"><?php _e( 'Remove', 'dokan' ); ?></a>
-                        <a href="#" class="dokan-product-toggle-attribute">
-                            <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                    <div class="dokan-product-attribute-item dokan-clearfix dokan-hide">
-                        <div class="content-half-part">
-                            <label class="form-label" for="">Name</label>
-                            <input type="text" class="dokan-form-control dokan-product-attribute-name" name="" value="">
-
-                            <label for="" class="checkbox-item form-label">
-                                <input type="checkbox" name="" value="1">  Visible on the product page
-                            </label>
-
-                            <label for="" class="checkbox-item form-label">
-                                <input type="checkbox" name="" value="1">  Use for variations
-                            </label>
-                        </div>
-
-                        <div class="content-half-part">
-                            <label for="" class="form-label">Values</label>
-                            <textarea class="dokan-form-control" name="" id="" cols="30" rows="3"></textarea>
-                        </div>
-                    </div>
-                </li>
-
-                <li class="product-attribute-list">
-                    <div class="dokan-product-attribute-heading">
-                        <span><i class="fa fa-bars" aria-hidden="true"></i> <strong>Title 3</strong></span>
-                        <input type="hidden" name="attribute_position[]" value="">
-                        <a href="#" class="dokan-product-remove-attribute"><?php _e( 'Remove', 'dokan' ); ?></a>
-                        <a href="#" class="dokan-product-toggle-attribute">
-                            <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
-                        </a>
-                    </div>
-                    <div class="dokan-product-attribute-item dokan-clearfix dokan-hide">
-                        <div class="content-half-part">
-                            <label class="form-label" for="">Name</label>
-                            <input type="text" class="dokan-form-control dokan-product-attribute-name" name="" value="">
-
-                            <label for="" class="checkbox-item form-label">
-                                <input type="checkbox" name="" value="1">  Visible on the product page
-                            </label>
-
-                            <label for="" class="checkbox-item form-label">
-                                <input type="checkbox" name="" value="1">  Use for variations
-                            </label>
-                        </div>
-
-                        <div class="content-half-part">
-                            <label for="" class="form-label">Values</label>
-                            <textarea class="dokan-form-control" name="" id="" cols="30" rows="3"></textarea>
-                        </div>
-                    </div>
-                </li>
-            </ul>
+            <ul class="dokan-attribute-option-list"></ul>
         </div>
     </div>
 

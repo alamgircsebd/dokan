@@ -237,6 +237,7 @@ final class WeDevs_Dokan {
         wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-magnific-popup', plugins_url( 'assets/css/magnific-popup.css', __FILE__ ), false, null );
         wp_register_style( 'modalcss', plugins_url( 'assets/css/modalcss.css', __FILE__ ), false, null );
+        wp_register_style( 'select2-css', plugins_url( 'assets/css/select2.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
@@ -249,13 +250,14 @@ final class WeDevs_Dokan {
         wp_register_script( 'modaljs', plugins_url( 'assets/js/modaljs.js', __FILE__ ), false, null, true );
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
+        wp_register_script( 'select2-js', plugins_url( 'assets/js/select2.full.min.js', __FILE__ ), array( 'jquery' ), null, true  );
 
         // these two is required for image croping functionalities written in dokan-script
         wp_register_script( 'customize-base', site_url( 'wp-includes/js/customize-base.js' ), array( 'jquery', 'json2', 'underscore' ), null, true );
         wp_register_script( 'customize-model', site_url( 'wp-includes/js/customize-models.js' ), array( 'underscore', 'backbone' ), null, true );
 
 
-        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), array( 'imgareaselect', 'customize-base', 'customize-model' ), null, true );
+        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), array( 'imgareaselect', 'customize-base', 'customize-model'  ), null, true );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
 
         if ( $this->is_pro() ) {
@@ -311,18 +313,19 @@ final class WeDevs_Dokan {
             return;
         }
 
-        $localize_script = array(
-            'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-            'nonce'       => wp_create_nonce( 'dokan_reviews' ),
-            'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
-            'seller'      => array(
-                'available'    => __( 'Available', 'dokan' ),
-                'notAvailable' => __( 'Not Available', 'dokan' )
-            ),
-            'delete_confirm' => __('Are you sure?', 'dokan' ),
-            'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
+        $localize_script             = array(
+            'ajaxurl'                    => admin_url( 'admin-ajax.php' ),
+            'nonce'                      => wp_create_nonce( 'dokan_reviews' ),
+            'ajax_loader'                => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+            'seller'                     => array(
+                'available'                  => __( 'Available', 'dokan' ),
+                'notAvailable'               => __( 'Not Available', 'dokan' )
+                ),
+            'delete_confirm'             => __('Are you sure?', 'dokan' ),
+            'wrong_message'              => __('Something is wrong, Please try again.', 'dokan' ),
             'duplicates_attribute_messg' => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
-            'variation_unset_warning' => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
+            'variation_unset_warning'    => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
+            'new_attribute_prompt'       => __( 'Enter a name for the new attribute term:', 'dokan' )
         );
 
         $form_validate_messages = array(
@@ -381,7 +384,6 @@ final class WeDevs_Dokan {
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
-
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
                 wp_enqueue_style( 'fontawesome' );
@@ -390,6 +392,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-magnific-popup' );
                 wp_enqueue_style( 'woocommerce-general' );
                 wp_enqueue_style( 'modalcss' );
+                wp_enqueue_style( 'select2-css' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -398,7 +401,6 @@ final class WeDevs_Dokan {
                 $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
 
                 wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
-
                 wp_enqueue_script( 'jquery' );
                 wp_enqueue_script( 'jquery-ui' );
                 wp_enqueue_script( 'jquery-ui-autocomplete' );
@@ -413,6 +415,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-chart' );
                 wp_enqueue_script( 'jquery-flot' );
                 wp_enqueue_script( 'chosen' );
+                wp_enqueue_script( 'select2-js' );
                 wp_enqueue_media();
                 wp_enqueue_script( 'dokan-popup' );
                 wp_enqueue_script( 'wc-password-strength-meter' );
