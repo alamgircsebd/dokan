@@ -30,7 +30,7 @@
         $report_sub_head = apply_filters( 'dokan_admin_report_sub', array(
             'day'    => __( 'By Day', 'dokan' ),
             'month'  => __( 'By Month', 'dokan' ),
-            'seller' => __( 'By Seller', 'dokan' )
+            'seller' => __( 'By Seller', 'dokan' ),
         ) );
 
         $head_count = count( $report_sub_head );

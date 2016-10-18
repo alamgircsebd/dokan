@@ -186,7 +186,60 @@ class Dokan_Admin_User_Profile {
                     </tr>
 
                 <?php } ?>
+                    
+                <tr>
+                    <th><?php _e( 'Payment Options : ', 'dokan' ); ?></th>
+                </tr>
 
+                <?php if( isset( $store_settings['payment']['paypal']['email'] ) ) { ?>
+                    <tr>
+                        <th><?php _e( 'Paypal Email ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['paypal']['email'] ); ?>">
+                        </td>
+                    </tr>
+                <?php } ?>
+                <?php if( isset( $store_settings['payment']['skrill']['email'] ) ) { ?>
+                    <tr>
+                        <th><?php _e( 'Skrill Email ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['skrill']['email'] ); ?>">
+                        </td>
+                    </tr>
+                <?php } ?>
+                    
+                <?php if( isset( $store_settings['payment']['bank'] ) ) { ?>
+                    <tr>
+                        <th><?php _e( 'Bank name ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['bank_name'] ); ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php _e( 'Account Name ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['ac_name'] ); ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php _e( 'Account Number ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['ac_number'] ); ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php _e( 'Bank Address ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['bank_addr'] ); ?>">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?php _e( 'Bank Swift ', 'dokan' ); ?></th>
+                        <td>
+                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['swift'] ); ?>">
+                        </td>
+                    </tr>
+                <?php } ?>
                 <tr>
                     <th><?php _e( 'Selling', 'dokan' ); ?></th>
                     <td>

@@ -114,13 +114,14 @@ class Dokan_Template_Products {
 
         if ( isset( $_POST['dokan_add_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_product_nonce'], 'dokan_add_new_product' ) ) {
             
-            $post_title     = trim( $_POST['post_title'] );
-            $post_content   = trim( $_POST['post_content'] );
-            $post_excerpt   = isset( $_POST['post_excerpt'] ) ? trim( $_POST['post_excerpt'] ) : '';
+            $post_title              = trim( $_POST['post_title'] );
+            $post_content            = trim( $_POST['post_content'] );
+            $post_excerpt            = isset( $_POST['post_excerpt'] ) ? trim( $_POST['post_excerpt'] ) : '';
             $_POST['_regular_price'] = isset(  $_POST['_regular_price'] ) ?  $_POST['_regular_price'] : '';
-            $price          = floatval( $_POST['_regular_price'] );
-            $featured_image = absint( $_POST['feat_image_id'] );
-            $sku            = isset( $_POST['_sku'] ) ? trim( $_POST['_sku'] ) : '';
+            $price                   = floatval( $_POST['_regular_price'] );
+            $featured_image          = absint( $_POST['feat_image_id'] );
+            $sku                     = isset( $_POST['_sku'] ) ? trim( $_POST['_sku'] ) : '';
+            $is_lot_discount         = isset( $_POST['_is_lot_discount'] ) ? $_POST['_is_lot_discount'] : 'no';
 
             if ( empty( $post_title ) ) {
                 $errors[] = __( 'Please enter product title', 'dokan' );
@@ -136,22 +137,31 @@ class Dokan_Template_Products {
                     $errors[] = __( 'Please select AT LEAST ONE category', 'dokan' );
                 }
             }
-            if ( ! empty( $sku ) &&
-                $wpdb->get_var( $wpdb->prepare("
+            
+            $_sku_post_id = $wpdb->get_var( $wpdb->prepare("
                     SELECT $wpdb->posts.ID
                     FROM $wpdb->posts
                     LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
                     WHERE $wpdb->posts.post_type = 'product'
                     AND $wpdb->posts.post_status = 'publish'
                     AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
-                 ", $sku ) )
-                ) {
-                $errors[] = __( 'Product SKU must be unique.', 'dokan' );
-            }
+                 ", $sku ) );
+            
+            
 
             if ( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
+               
+                if ( ! empty( $sku ) && $_sku_post_id ) {
+                    $errors[] = __( 'Product SKU must be unique.', 'dokan' );
+                }
+                
                 self::$errors = apply_filters( 'dokan_can_add_product', $errors );
+                
             } else {
+                 if ( ! empty( $sku ) && $_sku_post_id != (int) $_POST['dokan_product_id']  ) {
+                    $errors[] = __( 'Product SKU must be unique.', 'dokan' );
+                }
+                
                 self::$errors = apply_filters( 'dokan_can_edit_product', $errors );
             }
 
@@ -227,18 +237,35 @@ class Dokan_Template_Products {
                     update_post_meta( $product_id, '_visibility', 'visible' );
 
                     dokan_new_process_product_meta( $product_id );
-                    
+                   
                     if( isset( $_POST['dokan_product_id'] ) && !empty( $_POST['dokan_product_id'] ) ) {                        
                         do_action( 'dokan_product_updated', $product_id );
                     }  else {
                         do_action( 'dokan_new_product_added', $product_id );
                     }
-                    
 
                     if( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
                         if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
                             Dokan_Email::init()->new_product_added( $product_id, $product_status );
                         }
+                    }
+
+                    if ( $is_lot_discount == 'yes' ) {
+                        $lot_discount_quantity = isset($_POST['_lot_discount_quantity']) ? $_POST['_lot_discount_quantity'] : 0;
+                        $lot_discount_amount   = isset($_POST['_lot_discount_amount']) ? $_POST['_lot_discount_amount'] : 0;
+                        if ( $lot_discount_quantity == '0' || $lot_discount_amount == '0' ) {
+                            update_post_meta( $product_id, '_lot_discount_quantity', $lot_discount_quantity);
+                            update_post_meta( $product_id, '_lot_discount_amount', $lot_discount_amount);
+                            update_post_meta( $product_id, '_is_lot_discount', 'no');
+                        } else {
+                            update_post_meta( $product_id, '_lot_discount_quantity', $lot_discount_quantity);
+                            update_post_meta( $product_id, '_lot_discount_amount', $lot_discount_amount);
+                            update_post_meta( $product_id, '_is_lot_discount', $is_lot_discount);
+                        }
+                    } else if ( $is_lot_discount == 'no' ) {
+                        update_post_meta( $product_id, '_lot_discount_quantity', 0);
+                        update_post_meta( $product_id, '_lot_discount_amount', 0);
+                        update_post_meta( $product_id, '_is_lot_discount', 'no');
                     }
                     
                     if ( isset( $_POST['product-type'] ) ) {
@@ -249,6 +276,7 @@ class Dokan_Template_Products {
                     exit;
                 }
             }
+
         }
 
         if ( isset( $_POST['add_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_product_nonce'], 'dokan_add_new_product' ) ) {
@@ -375,6 +403,25 @@ class Dokan_Template_Products {
                     'post_status'    => isset( $_POST['post_status'] ) ? $_POST['post_status'] : 'pending',
                     'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
                 );
+
+                $is_lot_discount     = isset( $_POST['_is_lot_discount'] ) ? $_POST['_is_lot_discount'] : 'no';
+                if ( $is_lot_discount == 'yes' ) {
+                    $lot_discount_quantity = isset($_POST['_lot_discount_quantity']) ? $_POST['_lot_discount_quantity'] : 0;
+                    $lot_discount_amount   = isset($_POST['_lot_discount_amount']) ? $_POST['_lot_discount_amount'] : 0;
+                    if ( $lot_discount_quantity == '0' || $lot_discount_amount == '0' ) {
+                        update_post_meta( $post_id, '_lot_discount_quantity', $lot_discount_quantity);
+                        update_post_meta( $post_id, '_lot_discount_amount', $lot_discount_amount);
+                        update_post_meta( $post_id, '_is_lot_discount', 'no');
+                    } else {
+                        update_post_meta( $post_id, '_lot_discount_quantity', $lot_discount_quantity);
+                        update_post_meta( $post_id, '_lot_discount_amount', $lot_discount_amount);
+                        update_post_meta( $post_id, '_is_lot_discount', $is_lot_discount);
+                    }
+                } else if ( $is_lot_discount == 'no' ) {
+                    update_post_meta( $post_id, '_lot_discount_quantity', 0);
+                    update_post_meta( $post_id, '_lot_discount_amount', 0);
+                    update_post_meta( $post_id, '_is_lot_discount', 'no');
+                }
 
                 wp_update_post( $product_info );
 

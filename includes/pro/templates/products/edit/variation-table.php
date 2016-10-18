@@ -29,7 +29,8 @@
                     <td>
                         {{ el.join(' - ') }}
                         <# _.each( data.variation_title, function( title, index ) { #>
-                            <input type="hidden" name="attribute_{{ title.replace(' ','_').toLowerCase() }}[{{i}}]" value="{{el[index].toLowerCase()}}">
+                            <input type="hidden" name="attribute_title[{{i}}][{{index}}]" value="{{title}}">
+                            <input type="hidden" name="attribute_value[{{i}}][{{index}}]" value="{{el[index]}}">
                             <input type="hidden" name="variation_menu_order[{{i}}]" value="{{i}}">
                         <# }); #>
                     </td>

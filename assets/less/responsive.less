@@ -6,6 +6,74 @@
 }
 
 @media (max-width: 767px) {
+    .dokan-table{
+        border: none;
+
+        text-align: left;
+        width: 100%;
+        max-width: 100%;
+
+        thead {
+            display: none;
+        }
+        tbody{
+            display: table-row-group;
+            vertical-align: middle;
+            border-color: inherit;
+            tr{
+                vertical-align: inherit;
+                display: block;
+                td{
+
+                    display: block;
+                    padding: 6px 12px;
+                    text-align: left;
+                    border-color: #ededed;
+                    border-style: solid;
+                    border-width: 0px 1px 1px 1px;
+                    background: #fff;
+
+                }
+                td:before{
+                    content: attr(data-title) ": ";
+                    padding-right: 20px !important;
+                    float: left;
+                    font-weight: bold;
+                }
+                .post-date {
+                    .status{
+                        float: right;
+                    }
+                }
+
+
+                .diviader{
+                    background: transparent !important;
+                    border: none !important;
+                    height: 15px;
+                    background: none;
+                }
+                .diviader:before{
+                    content:" ";
+                }
+                td:first-child{
+                    border-top-width:  1px;
+
+                }
+                .dokan-order-action{
+                    width: 100%;
+                }
+            }
+            tr:nth-of-type(odd){
+
+            }
+            .row-actions{
+                visibility: visible !important;
+            }
+
+        }
+
+    }
     .dokan-primary {
         width: 100% !important;
         padding-left: 15px;
@@ -54,10 +122,6 @@
     }
 
     // store page
-    .dokan-single-store .profile-frame .profile-info-box {
-        width: 60%;
-    }
-
     ul.dokan-seller-wrap {
         text-align: center;
         li.dokan-single-seller {
@@ -74,12 +138,12 @@
             float: none;
             width: 100%;
         }
-        
+
         .dashboard-content-area {
             .dokan-announcement-widget {
                 .dokan-right {
-                    float: right !important; 
-                } 
+                    float: right !important;
+                }
                 .dokan-left {
                     float: left !important;
                 }

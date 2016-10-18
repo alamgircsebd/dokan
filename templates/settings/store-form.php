@@ -13,6 +13,14 @@
     $store_ppp  = isset( $profile_info['store_ppp'] ) ? esc_attr( $profile_info['store_ppp'] ) : '';
     $phone      = isset( $profile_info['phone'] ) ? esc_attr( $profile_info['phone'] ) : '';
     $show_email = isset( $profile_info['show_email'] ) ? esc_attr( $profile_info['show_email'] ) : 'no';
+    $show_more_ptab = isset( $profile_info['show_more_ptab'] ) ? esc_attr( $profile_info['show_more_ptab'] ) : 'yes';
+
+    $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
+    $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
+    
+    $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? esc_attr( $profile_info['show_min_order_discount'] ) : 'no';
+    $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? esc_attr( $profile_info['setting_minimum_order_amount'] ) : 0;
+    $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? esc_attr( $profile_info['setting_order_percentage'] ) : 0;
 
     $address         = isset( $profile_info['address'] ) ? $profile_info['address'] : '';
     $address_street1 = isset( $profile_info['address']['street_1'] ) ? $profile_info['address']['street_1'] : '';
@@ -41,6 +49,8 @@
         $address_state   = $_POST['dokan_address']['state'];
     }
 
+    $dokan_appearance = get_option( 'dokan_appearance' );
+
 ?>
 <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
 
@@ -48,34 +58,45 @@
 
         <?php wp_nonce_field( 'dokan_store_settings_nonce' ); ?>
 
-        <div class="dokan-banner">
+        <?php if ( ! empty( $dokan_appearance['store_header_template'] ) && 'layout3' !== $dokan_appearance['store_header_template'] ): ?>
+            <div class="dokan-banner">
 
-            <div class="image-wrap<?php echo $banner ? '' : ' dokan-hide'; ?>">
-                <?php $banner_url = $banner ? wp_get_attachment_url( $banner ) : ''; ?>
-                <input type="hidden" class="dokan-file-field" value="<?php echo $banner; ?>" name="dokan_banner">
-                <img class="dokan-banner-img" src="<?php echo esc_url( $banner_url ); ?>">
+                <div class="image-wrap<?php echo $banner ? '' : ' dokan-hide'; ?>">
+                    <?php $banner_url = $banner ? wp_get_attachment_url( $banner ) : ''; ?>
+                    <input type="hidden" class="dokan-file-field" value="<?php echo $banner; ?>" name="dokan_banner">
+                    <img class="dokan-banner-img" src="<?php echo esc_url( $banner_url ); ?>">
 
-                <a class="close dokan-remove-banner-image">&times;</a>
-            </div>
+                    <a class="close dokan-remove-banner-image">&times;</a>
+                </div>
 
-            <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
-                <i class="fa fa-cloud-upload"></i>
+                <div class="button-area<?php echo $banner ? ' dokan-hide' : ''; ?>">
+                    <i class="fa fa-cloud-upload"></i>
 
-                <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
-                <p class="help-block">
-                    <?php
-                    /**
-                     * Filter `dokan_banner_upload_help`
-                     *
-                     * @since 2.4.10
-                     */
-                    echo apply_filters( 'dokan_banner_upload_help', __('Upload a banner for your store. Banner size is (625x300) pixels.', 'dokan' ) );
-                    ?>
-                </p>
-            </div>
-        </div> <!-- .dokan-banner -->
+                    <a href="#" class="dokan-banner-drag dokan-btn dokan-btn-info dokan-theme"><?php _e( 'Upload banner', 'dokan' ); ?></a>
+                    <p class="help-block">
+                        <?php
+                        /**
+                         * Filter `dokan_banner_upload_help`
+                         *
+                         * @since 2.4.10
+                         */
+                        $general_settings = get_option( 'dokan_general', [] );
+                        $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+                        $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
 
-        <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
+                        $help_text = sprintf(
+                            __('Upload a banner for your store. Banner size is (%sx%s) pixels.', 'dokan' ),
+                            $banner_width, $banner_height
+                        );
+
+                        echo apply_filters( 'dokan_banner_upload_help', $help_text );
+                        ?>
+                    </p>
+                </div>
+            </div> <!-- .dokan-banner -->
+
+            <?php do_action( 'dokan_settings_after_banner', $current_user, $profile_info ); ?>
+        <?php endif; ?>
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label" for="dokan_gravatar"><?php _e( 'Profile Picture', 'dokan' ); ?></label>
@@ -88,7 +109,7 @@
                     <a class="dokan-close dokan-remove-gravatar-image">&times;</a>
                 </div>
                 <div class="gravatar-button-area<?php echo $gravatar ? ' dokan-hide' : ''; ?>">
-                    <a href="#" class="dokan-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
+                    <a href="#" class="dokan-pro-gravatar-drag dokan-btn dokan-btn-default"><i class="fa fa-cloud-upload"></i> <?php _e( 'Upload Photo', 'dokan' ); ?></a>
                 </div>
             </div>
         </div>
@@ -131,6 +152,27 @@
             </div>
         </div>
 
+        <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("order-discount", $is_enable_op_discount ) == "order-discount" ) : ?>
+            <div class="dokan-form-group">
+                <label class="dokan-w3 dokan-control-label"><?php _e( 'Discount ', 'dokan' ); ?></label>
+                <div class="dokan-w5 dokan-text-left">
+                    <div class="checkbox">
+                        <label class="dokan-control-label" for="lbl_setting_minimum_quantity">
+                            <input type="hidden" name="setting_show_minimum_discount_option" value="no">
+                            <input id="lbl_setting_minimum_quantity" type="checkbox" name="setting_show_minimum_order_discount_option" value="yes"<?php checked( $is_enable_order_discount, 'yes' ); ?>>
+                            <?php _e( 'Enable storewide discount', 'dokan' ); ?>
+                        </label>
+                    </div>
+                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
+                        <input id="setting_minimum_order_amount" value="<?php echo $setting_minimum_order_amount; ?>" name="setting_minimum_order_amount" placeholder="<?php _e( 'Minimum Order Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                    </div>
+                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
+                        <input id="setting_order_percentage" value="<?php echo $setting_order_percentage; ?>" name="setting_order_percentage" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                    </div>
+                </div>
+            </div>
+        <?php endif;?>
+
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label"><?php _e( 'Email', 'dokan' ); ?></label>
             <div class="dokan-w5 dokan-text-left">
@@ -142,6 +184,19 @@
                 </div>
             </div>
         </div>
+
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'More product', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <div class="checkbox">
+                    <label>
+                        <input type="hidden" name="setting_show_more_ptab" value="no">
+                        <input type="checkbox" name="setting_show_more_ptab" value="yes"<?php checked( $show_email, 'yes' ); ?>> <?php _e( 'Enable tab on product single page view', 'dokan' ); ?>
+                    </label>
+                </div>
+            </div>
+        </div>
+
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label" for="setting_map"><?php _e( 'Map', 'dokan' ); ?></label>

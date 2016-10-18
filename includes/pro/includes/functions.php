@@ -101,3 +101,12 @@ function dokan_get_seller_coupon( $seller_id, $show_on_store = false ) {
 
     return $coupons;
 }
+
+/**
+ * check array is index or associative
+ *
+ * @return bool
+ */
+function isAssoc($arr) {
+    return array_keys($arr) !== range(0, count($arr) - 1);
+}

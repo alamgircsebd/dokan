@@ -565,7 +565,7 @@ function dokan_myorder_login_check(){
  * @return string
  */
 function dokan_store_listing( $atts ) {
-    global $post;
+//    global $post;
 
     /**
      * Filter return the number of store listing number per page.
@@ -576,9 +576,10 @@ function dokan_store_listing( $atts ) {
      */
     $attr = shortcode_atts( apply_filters( 'dokan_store_listing_per_page', array(
         'per_page' => 10,
-        'search'   => 'yes'
+        'search'   => 'yes',
+        'per_row'  => 3,
+        'featured'  => 'no'
     ) ), $atts );
-
     $paged   = max( 1, get_query_var( 'paged' ) );
     $limit   = $attr['per_page'];
     $offset  = ( $paged - 1 ) * $limit;
@@ -587,24 +588,30 @@ function dokan_store_listing( $atts ) {
         'number' => $limit,
         'offset' => $offset
     );
-
+    
     // if search is enabled, perform a search
     if ( 'yes' == $attr['search'] ) {
         $search_term = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
         if ( '' != $search_term ) {
-            $seller_args['meta_query']   = array( 
-                    array(
-                        'key'     => 'dokan_store_name',
-                        'value'   => $search_term,
-                        'compare' => 'LIKE'
-                    ),
-                    array(
-                        'key'     => 'dokan_enable_selling',
-                        'value'   => 'yes',
-                        'compare' => '='
-                    )
-                );
+            $seller_args['search']         = "*{$search_term}*";
+            $seller_args['search_columns'] = array( 'display_name' );
+
+            $seller_args['meta_query'] = array(
+                array(
+                    'key'     => 'dokan_enable_selling',
+                    'value'   => 'yes',
+                    'compare' => '='
+                )
+            );
         }
+    }
+    
+    if ( $attr['featured'] == 'yes' ) {
+        $seller_args['meta_query'][] = array(
+                                        'key'     => 'dokan_feature_seller',
+                                        'value'   => 'yes',
+                                        'compare' => '='
+                                    );
     }
 
     $sellers = dokan_get_sellers( apply_filters( 'dokan_seller_listing_args', $seller_args ) );
@@ -620,9 +627,9 @@ function dokan_store_listing( $atts ) {
         'offset'     => $offset,
         'paged'      => $paged,
         'image_size' => 'medium',
-        'search'     => $attr['search']
+        'search'     => $attr['search'],
+        'per_row'    => $attr['per_row']
     ) );
-
     ob_start();
     dokan_get_template_part( 'store-lists', false, $template_args );
     $content = ob_get_clean();

@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.4.2
+Tested up to: 4.6.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -147,6 +147,23 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+= v2.5 -> October 18, 2016 =
+---------------------
+- [new] Setup Wizard on Admin panel
+- [new] Setup Wizard for seller settings after new seller registration
+- [new] Multiple header templates for store template
+- [new] Added DOKAN shortcode insert button on post/page editor
+- [new] Added store search option on store listing page
+- [new] Added detailed income and withdraw statement for sellers
+- [new] Added option to choose tax and shipping receiver as admin or seller.
+- [new] Show seller payment options on user profile in back-end.
+- [tweak] Dokan store listing shortcode has more options
+- [tweak] Flat rate shipping synced with zone ID
+- [tweak] Fixed Tab view variation products
+- [tweak] Added active states in product review status filter
+- [fix] Fixed front-end variation issue for other languages
+- [fix] Fixed product add while selling is disabled for sellers
 
 = v2.4.12 -> August 08, 2016 =
 ---------------------

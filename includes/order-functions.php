@@ -1,9 +1,34 @@
 <?php
 /**
+ * Dokan get seller amount from order total
+ *
+ * @param int $order_id
+ *
+ * @return float
+ */
+function dokan_get_seller_amount_from_order( $order_id ) {
+
+    $order          = new WC_Order( $order_id );
+    $seller_id      = dokan_get_seller_id_by_order( $order_id );
+    $percentage     = dokan_get_seller_percentage( $seller_id );
+
+    $order_total    = $order->get_total();
+    $order_shipping = $order->get_total_shipping();
+    $order_tax      = $order->get_total_tax();
+    $extra_cost     = $order_shipping + $order_tax;
+    $order_cost     = $order_total - $extra_cost;
+    $order_status   = $order->post_status;
+
+    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+
+    return $net_amount;
+}
+/**
  * Get all the orders from a specific seller
  *
  * @global object $wpdb
  * @param int $seller_id
+ *
  * @return array
  */
 function dokan_get_seller_orders( $seller_id, $status = 'all', $order_date = NULL, $limit = 10, $offset = 0 ) {
@@ -32,6 +57,98 @@ function dokan_get_seller_orders( $seller_id, $status = 'all', $order_date = NUL
     }
 
     return $orders;
+}
+
+/**
+ * Get all the orders from a specific date range
+ *
+ * @global object $wpdb
+ * @param int $seller_id
+ *
+ * @return array
+ */
+function dokan_get_seller_orders_by_date( $start_date, $end_date, $seller_id = false, $status = 'all' ) {
+    global $wpdb;
+
+    $seller_id = ! $seller_id ? get_current_user_id() : intval( $seller_id );
+    $start_date = date( 'Y-m-d', strtotime( $start_date ) );
+    $end_date = date( 'Y-m-d', strtotime( $end_date ) );
+
+    $cache_key = md5( 'dokan-seller-orders-' . $end_date . '-' . $end_date. '-' . $seller_id );
+    $orders = wp_cache_get( $cache_key, 'dokan' );
+    if ( $orders === false ) {
+        $status_where = ( $status == 'all' ) ? '' : $wpdb->prepare( ' AND order_status = %s', $status );
+        $date_query = $wpdb->prepare( ' AND DATE( p.post_date ) >= %s AND DATE( p.post_date ) <= %s', $start_date, $end_date );
+        $sql = "SELECT do.*, p.post_date
+                FROM {$wpdb->prefix}dokan_orders AS do
+                LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+                WHERE
+                    do.seller_id = %d AND
+                    p.post_status != 'trash'
+                    $date_query
+                    $status_where
+                GROUP BY do.order_id
+                ORDER BY p.post_date ASC";
+        $orders = $wpdb->get_results( $wpdb->prepare( $sql, $seller_id ) );
+
+        wp_cache_set( $cache_key, $orders, 'dokan' );
+    }
+
+    return $orders;
+}
+
+/**
+ * Get seller refund by date range
+ *
+ * @param  string  $start_date
+ * @param  string  $end_date
+ * @param  int $seller_id
+ *
+ * @return object
+ */
+function dokan_get_seller_refund_by_date( $start_date, $end_date, $seller_id = false ) {
+    global $wpdb;
+
+    $seller_id           = ! $seller_id ? get_current_user_id() : intval( $seller_id );
+    $refund_status_where = $wpdb->prepare( ' AND status = %d', 1 );
+    $refund_date_query   = $wpdb->prepare( ' AND DATE( date ) >= %s AND DATE( date ) <= %s', $start_date, $end_date );
+
+    $refund_sql = "SELECT *
+            FROM {$wpdb->prefix}dokan_refund
+            WHERE
+                seller_id = %d
+                $refund_date_query
+                $refund_status_where
+            ORDER BY date ASC";
+
+    return $wpdb->get_results( $wpdb->prepare( $refund_sql, $seller_id ) );
+}
+
+/**
+ * Get seller withdraw by date range
+ *
+ * @param  string  $start_date
+ * @param  string  $end_date
+ * @param  int $seller_id
+ *
+ * @return object
+ */
+function dokan_get_seller_withdraw_by_date( $start_date, $end_date, $seller_id = false ) {
+    global $wpdb;
+
+    $seller_id             = ! $seller_id ? get_current_user_id() : intval( $seller_id );
+    $withdraw_status_where = $wpdb->prepare( ' AND status = %d', 1 );
+    $withdraw_date_query   = $wpdb->prepare( ' AND DATE( date ) >= %s AND DATE( date ) <= %s', $start_date, $end_date );
+
+    $withdraw_sql = "SELECT *
+            FROM {$wpdb->prefix}dokan_withdraw
+            WHERE
+                user_id = %d
+                $withdraw_date_query
+                $withdraw_status_where
+            ORDER BY date ASC";
+
+    return $wpdb->get_results( $wpdb->prepare( $withdraw_sql, $seller_id ) );
 }
 
 /**
@@ -313,10 +430,14 @@ function dokan_get_seller_id_by_order( $order_id ) {
         }
 
         return $seller_id;
-        
+
     } else if ( count( $sellers ) == 1 ) {
-        return (int) reset( $sellers )->seller_id;
+
+        $seller_id = reset( $sellers )->seller_id;
+
+        return $seller_id;
     }
+
     return 0;
 }
 
@@ -551,7 +672,7 @@ function dokan_is_sub_order( $order_id ) {
     } else {
         return false;
     }
-    
+
 }
 
 
@@ -572,11 +693,11 @@ function dokan_total_orders() {
 
 /**
  * Return array of sellers with items
- * 
+ *
  * @since 2.4.4
- * 
+ *
  * @param type $id
- * 
+ *
  * @return array $sellers_with_items
  */
 function dokan_get_sellers_by( $order_id ) {
@@ -595,11 +716,11 @@ function dokan_get_sellers_by( $order_id ) {
 
 /**
  * Return unique array of seller_ids from an order
- * 
+ *
  * @since 2.4.9
- * 
+ *
  * @param type $order_id
- * 
+ *
  * @return array $seller_ids
  */
 function dokan_get_seller_ids_by( $order_id ) {
@@ -611,36 +732,36 @@ function dokan_get_seller_ids_by( $order_id ) {
 }
 
 /**
- * 
+ *
  * @global object $wpdb
  * @param type $parent_order_id
  * @return type
  */
 function dokan_get_suborder_ids_by ($parent_order_id){
-    
+
     global $wpdb;
-     
+
      $sql = "SELECT ID FROM " . $wpdb->prefix . "posts
              WHERE post_type = 'shop_order'
              AND post_parent = " . $parent_order_id;
-     
+
      $sub_orders = $wpdb->get_results($sql);
 
     if ( ! $sub_orders ) {
         return null;
     }
-    
+
     return $sub_orders;
 
 }
 
 /**
  * Return admin commisson from an order
- * 
+ *
  * @since 2.4.12
- * 
+ *
  * @param object $order
- * 
+ *
  * @return float $commission
  */
 function dokan_get_admin_commission_by( $order, $seller_id ) {
@@ -654,6 +775,7 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
     $commissions = array();
     $i = 0;
     $total_line = 0;
+    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'seller' );
 
     foreach ( $order->get_items() as $item_id => $item ) {
 
@@ -674,6 +796,12 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
         $commission['ut_amount'] = $refund_ut * ( $commission['total_line'] / $total_line );
         $admin_commission += ( $commission['total_line'] + $commission['ut_amount'] ) * $commission['admin_percentage'] /100;
     }
-    
+
+    if ( 'admin' == $commission_recipient ) {
+        $total_extra = $order->get_total_tax() + $order->get_total_shipping();
+        $net_extra   = $total_extra - ( $order->get_total_tax_refunded() + $order->get_total_shipping_refunded() );
+        $admin_commission += $net_extra;
+    }
+
     return apply_filters( 'dokan_order_admin_commission', $admin_commission, $order );
 }

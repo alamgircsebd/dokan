@@ -57,6 +57,8 @@ class Dokan_Pro_Ajax {
 
         add_action( 'wp_ajax_dokan_refund_request', array( $this, 'dokan_refund_request') );
         add_action( 'wp_ajax_nopriv_dokan_refund_request', array( $this, 'dokan_refund_request') );
+
+        add_action( 'wp_ajax_custom-header-crop', array( $this, 'crop_store_banner' ) );
     }
 
 
@@ -86,7 +88,7 @@ class Dokan_Pro_Ajax {
         } else if ( $refund->has_pending_refund_request( $_POST['order_id'] ) ) {
             $data =  __( 'You have already a processing refund request for this order.', 'dokan' );
             wp_send_json_error( $data );
-        } else{ 
+        } else{
             $refund = new Dokan_Pro_Refund;
             $refund->insert_refund($_POST);
             Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
@@ -679,7 +681,7 @@ class Dokan_Pro_Ajax {
                 $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
-                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'woocommerce' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
+                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
 
                 // Update or Add post
                 if ( ! $variation_id ) {
@@ -818,12 +820,20 @@ class Dokan_Pro_Ajax {
 
                 // Update taxonomies - don't use wc_clean as it destroys sanitized characters
                 $updated_attribute_keys = array();
+
                 foreach ( $attributes as $attribute ) {
 
                     if ( $attribute['is_variation'] ) {
-                        $attribute_key = 'attribute_' . $attribute['name'];
-                        $value         = isset( $postdata[ $attribute_key ][ $i ] ) ? stripslashes( $postdata[ $attribute_key ][ $i ] ) : '';
+                        $attribute_key = 'attribute_' . sanitize_title( $attribute['name'] );
                         $updated_attribute_keys[] = $attribute_key;
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            // Don't use wc_clean as it destroys sanitized characters
+                            $value = isset( $postdata[$attribute_key][$i] ) ? sanitize_title( stripslashes( $postdata[$attribute_key][$i] ) ) : '';
+                        } else {
+                            $value = isset( $postdata[$attribute_key][$i] ) ? wc_clean( stripslashes( $postdata[$attribute_key][$i] ) ) : '';
+                        }
+
                         update_post_meta( $variation_id, $attribute_key, $value );
                     }
                 }
@@ -847,15 +857,20 @@ class Dokan_Pro_Ajax {
 
         foreach ( $attributes as $attribute ) {
             if ( $attribute['is_variation'] ) {
+                $value = '';
 
-                // Don't use wc_clean as it destroys sanitized characters
-                if ( isset( $postdata[ 'default_attribute_' . $attribute['name'] ] ) )
-                    $value = trim( stripslashes( $postdata[ 'default_attribute_' . $attribute['name'] ] ) );
-                else
-                    $value = '';
+                if ( isset( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) {
+                    if ( $attribute['is_taxonomy'] ) {
+                        // Don't use wc_clean as it destroys sanitized characters
+                        $value = sanitize_title( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                    } else {
+                        $value = wc_clean( trim( stripslashes( $postdata[ 'default_attribute_' . sanitize_title( $attribute['name'] ) ] ) ) );
+                    }
+                }
 
-                if ( $value )
-                    $default_attributes[ $attribute['name'] ] = $value;
+                if ( $value ) {
+                    $default_attributes[ sanitize_title( $attribute['name'] ) ] = $value;
+                }
             }
         }
 
@@ -1066,29 +1081,29 @@ class Dokan_Pro_Ajax {
 
         check_ajax_referer( 'link-variations', 'security' );
 
-        @set_time_limit(0);
+        wc_set_time_limit( 0 );
 
         $post_id = intval( $_POST['post_id'] );
 
-        if ( ! $post_id ) die();
+        if ( ! $post_id ) {
+            die();
+        }
 
         $variations = array();
 
-        $_product = get_product( $post_id, array( 'product_type' => 'variable' ) );
+        $_product = wc_get_product( $post_id, array( 'product_type' => 'variable' ) );
 
         // Put variation attributes into an array
         foreach ( $_product->get_attributes() as $attribute ) {
 
-            if ( ! $attribute['is_variation'] ) continue;
+            if ( ! $attribute['is_variation'] ) {
+                continue;
+            }
 
-            $attribute_field_name = 'attribute_' . $attribute['name'] ;
+            $attribute_field_name = 'attribute_' . sanitize_title( $attribute['name'] );
 
             if ( $attribute['is_taxonomy'] ) {
-                $post_terms = wp_get_post_terms( $post_id, $attribute['name'] );
-                $options = array();
-                foreach ( $post_terms as $term ) {
-                    $options[] = $term->slug;
-                }
+                $options = wc_get_product_terms( $post_id, $attribute['name'], array( 'fields' => 'slugs' ) );
             } else {
                 $options = explode( WC_DELIMITER, $attribute['value'] );
             }
@@ -1099,7 +1114,9 @@ class Dokan_Pro_Ajax {
         }
 
         // Quit out if none were found
-        if ( sizeof( $variations ) == 0 ) die();
+        if ( sizeof( $variations ) == 0 ) {
+            die();
+        }
 
         // Get existing variations so we don't create duplicates
         $available_variations = array();
@@ -1114,84 +1131,24 @@ class Dokan_Pro_Ajax {
 
         // Created posts will all have the following data
         $variation_post_data = array(
-            'post_title' => 'Product #' . $post_id . ' Variation',
+            'post_title'   => 'Product #' . $post_id . ' Variation',
             'post_content' => '',
-            'post_status' => 'publish',
-            'post_author' => get_current_user_id(),
-            'post_parent' => $post_id,
-            'post_type' => 'product_variation'
+            'post_status'  => 'publish',
+            'post_author'  => get_current_user_id(),
+            'post_parent'  => $post_id,
+            'post_type'    => 'product_variation'
         );
 
-        // Now find all combinations and create posts
-        if ( ! function_exists( 'array_cartesian' ) ) {
-            /**
-             * @param array $input
-             * @return array
-             */
-            function array_cartesian( $input ) {
-                $result = array();
-
-                while ( list( $key, $values ) = each( $input ) ) {
-                    // If a sub-array is empty, it doesn't affect the cartesian product
-                    if ( empty( $values ) ) {
-                        continue;
-                    }
-
-                    // Special case: seeding the product array with the values from the first sub-array
-                    if ( empty( $result ) ) {
-                        foreach ( $values as $value ) {
-                            $result[] = array( $key => $value );
-                        }
-                    }
-                    else {
-                        // Second and subsequent input sub-arrays work like this:
-                        //   1. In each existing array inside $product, add an item with
-                        //      key == $key and value == first item in input sub-array
-                        //   2. Then, for each remaining item in current input sub-array,
-                        //      add a copy of each existing array inside $product with
-                        //      key == $key and value == first item in current input sub-array
-
-                        // Store all items to be added to $product here; adding them on the spot
-                        // inside the foreach will result in an infinite loop
-                        $append = array();
-                        foreach( $result as &$product ) {
-                            // Do step 1 above. array_shift is not the most efficient, but it
-                            // allows us to iterate over the rest of the items with a simple
-                            // foreach, making the code short and familiar.
-                            $product[ $key ] = array_shift( $values );
-
-                            // $product is by reference (that's why the key we added above
-                            // will appear in the end result), so make a copy of it here
-                            $copy = $product;
-
-                            // Do step 2 above.
-                            foreach( $values as $item ) {
-                                $copy[ $key ] = $item;
-                                $append[] = $copy;
-                            }
-
-                            // Undo the side effecst of array_shift
-                            array_unshift( $values, $product[ $key ] );
-                        }
-
-                        // Out of the foreach, we can add to $results now
-                        $result = array_merge( $result, $append );
-                    }
-                }
-
-                return $result;
-            }
-        }
-
-        $variation_ids = array();
-        $added = 0;
-        $possible_variations = array_cartesian( $variations );
+        $variation_ids       = array();
+        $added               = 0;
+        $possible_variations = wc_array_cartesian( $variations );
 
         foreach ( $possible_variations as $variation ) {
 
             // Check if variation already exists
-            if ( in_array( $variation, $available_variations ) )
+            if ( in_array( $variation, $available_variations ) ) {
                 continue;
+            }
 
             $variation_id = wp_insert_post( $variation_post_data );
 
@@ -1201,6 +1158,9 @@ class Dokan_Pro_Ajax {
                 update_post_meta( $variation_id, $key, $value );
             }
 
+            // Save stock status
+            update_post_meta( $variation_id, '_stock_status', 'instock' );
+
             $added++;
 
             do_action( 'product_variation_linked', $variation_id );
@@ -1209,7 +1169,7 @@ class Dokan_Pro_Ajax {
                 break;
         }
 
-        wc_delete_product_transients( $post_id );
+        delete_transient( 'wc_product_children_' . $post_id );
 
         echo $added;
 
@@ -1297,5 +1257,163 @@ class Dokan_Pro_Ajax {
         return wp_send_json_success( $response );
     }
 
+    /**
+     * Gets attachment uploaded by Media Manager, crops it, then saves it as a
+     * new object. Returns JSON-encoded object details.
+     *
+     * @since 2.5
+     *
+     * @return void
+     */
+    public function crop_store_banner() {
+        check_ajax_referer( 'image_editor-' . $_POST['id'], 'nonce' );
+
+        if ( !current_user_can( 'edit_post', $_POST['id'] ) ) {
+            wp_send_json_error();
+        }
+
+        $crop_details = $_POST['cropDetails'];
+
+        $dimensions = $this->get_header_dimensions( array(
+            'height' => $crop_details['height'],
+            'width'  => $crop_details['width'],
+        ) );
+
+        $attachment_id = absint( $_POST['id'] );
+
+        $cropped = wp_crop_image(
+            $attachment_id,
+            (int) $crop_details['x1'],
+            (int) $crop_details['y1'],
+            (int) $crop_details['width'],
+            (int) $crop_details['height'],
+            (int) $dimensions['dst_width'],
+            (int) $dimensions['dst_height']
+        );
+
+        if ( ! $cropped || is_wp_error( $cropped ) ) {
+            wp_send_json_error( array( 'message' => __( 'Image could not be processed. Please go back and try again.' ) ) );
+        }
+
+        /** This filter is documented in wp-admin/custom-header.php */
+        $cropped = apply_filters( 'wp_create_file_in_uploads', $cropped, $attachment_id ); // For replication
+
+        $object = $this->create_attachment_object( $cropped, $attachment_id );
+
+        unset( $object['ID'] );
+
+        $new_attachment_id = $this->insert_attachment( $object, $cropped );
+
+        $object['attachment_id'] = $new_attachment_id;
+        $object['url']           = wp_get_attachment_url( $new_attachment_id );;
+        $object['width']         = $dimensions['dst_width'];
+        $object['height']        = $dimensions['dst_height'];
+
+        wp_send_json_success( $object );
+    }
+
+    /**
+     * Calculate width and height based on what the currently selected theme supports.
+     *
+     * @since 2.5
+     *
+     * @param array $dimensions
+     *
+     * @return array dst_height and dst_width of header image.
+     */
+    final public function get_header_dimensions( $dimensions ) {
+        $general_settings = get_option( 'dokan_general', [] );
+
+        $max_width = 0;
+        $width = absint( $dimensions['width'] );
+        $height = absint( $dimensions['height'] );
+        $theme_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+        $theme_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+        $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+        $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
+        $has_max_width = ! empty( $general_settings['store_banner_max_width'] ) ? $general_settings['store_banner_max_width'] : false;
+        $dst = array( 'dst_height' => null, 'dst_width' => null );
+
+        // For flex, limit size of image displayed to 1500px unless theme says otherwise
+        if ( $has_flex_width ) {
+            $max_width = 625;
+        }
+
+        if ( $has_max_width ) {
+            $max_width = max( $max_width, get_theme_support( 'custom-header', 'max-width' ) );
+        }
+        $max_width = max( $max_width, $theme_width );
+
+        if ( $has_flex_height && ( ! $has_flex_width || $width > $max_width ) ) {
+            $dst['dst_height'] = absint( $height * ( $max_width / $width ) );
+        }
+        elseif ( $has_flex_height && $has_flex_width ) {
+            $dst['dst_height'] = $height;
+        }
+        else {
+            $dst['dst_height'] = $theme_height;
+        }
+
+        if ( $has_flex_width && ( ! $has_flex_height || $width > $max_width ) ) {
+            $dst['dst_width'] = absint( $width * ( $max_width / $width ) );
+        }
+        elseif ( $has_flex_width && $has_flex_height ) {
+            $dst['dst_width'] = $width;
+        }
+        else {
+            $dst['dst_width'] = $theme_width;
+        }
+
+        return $dst;
+    }
+
+    /**
+     * Create an attachment 'object'.
+     *
+     * @since 2.5
+     *
+     * @param string $cropped              Cropped image URL.
+     * @param int    $parent_attachment_id Attachment ID of parent image.
+     *
+     * @return array Attachment object.
+     */
+    final public function create_attachment_object( $cropped, $parent_attachment_id ) {
+        $parent = get_post( $parent_attachment_id );
+        $parent_url = wp_get_attachment_url( $parent->ID );
+        $url = str_replace( basename( $parent_url ), basename( $cropped ), $parent_url );
+
+        $size = @getimagesize( $cropped );
+        $image_type = ( $size ) ? $size['mime'] : 'image/jpeg';
+
+        $object = array(
+            'ID' => $parent_attachment_id,
+            'post_title' => basename($cropped),
+            'post_mime_type' => $image_type,
+            'guid' => $url,
+            'context' => 'custom-header'
+        );
+
+        return $object;
+    }
+
+
+    /**
+     * Insert an attachment and its metadata.
+     *
+     * @since 2.5
+     *
+     * @param array  $object  Attachment object.
+     * @param string $cropped Cropped image URL.
+     *
+     * @return int Attachment ID.
+     */
+    final public function insert_attachment( $object, $cropped ) {
+        $attachment_id = wp_insert_attachment( $object, $cropped );
+        $metadata = wp_generate_attachment_metadata( $attachment_id, $cropped );
+
+        $metadata = apply_filters( 'wp_header_image_attachment_metadata', $metadata );
+        wp_update_attachment_metadata( $attachment_id, $metadata );
+        return $attachment_id;
+    }
 
 }

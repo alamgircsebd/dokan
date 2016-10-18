@@ -4,9 +4,6 @@
 
         init: function() {
             $('#dokan-comments-table').on('click', '.dokan-cmt-action', this.setCommentStatus);
-            $('#dokan-comments-table').on('click', 'button.dokan-cmt-close-form', this.closeForm);
-            $('#dokan-comments-table').on('click', 'button.dokan-cmt-submit-form', this.submitForm);
-            $('#dokan-comments-table').on('click', '.dokan-cmt-edit', this.populateForm);
             $('.dokan-check-all').on('click', this.toggleCheckbox);
         },
 
@@ -56,75 +53,19 @@
 
                 if(resp.data['pending'] == null) resp.data['pending'] = 0;
                 if(resp.data['spam'] == null) resp.data['spam'] = 0;
-				if(resp.data['trash'] == null) resp.data['trash'] = 0;
+                if(resp.data['trash'] == null) resp.data['trash'] = 0;
+				if(resp.data['approved'] == null) resp.data['approved'] = 0;
 
+                $('.comments-menu-approved').text(resp.data['approved']);
                 $('.comments-menu-pending').text(resp.data['pending']);
                 $('.comments-menu-spam').text(resp.data['spam']);
 				$('.comments-menu-trash').text(resp.data['trash']);
             });
-        },
-
-        populateForm: function(e) {
-            e.preventDefault();
-
-            var tr = $(this).closest('tr');
-
-            // toggle the edit area
-            if ( tr.next().hasClass('dokan-comment-edit-row')) {
-                tr.next().remove();
-                return;
-            }
-
-            var table_form = $('#dokan-edit-comment-row').html(),
-                data = {
-                    'author': tr.find('.dokan-cmt-hid-author').text(),
-                    'email': tr.find('.dokan-cmt-hid-email').text(),
-                    'url': tr.find('.dokan-cmt-hid-url').text(),
-                    'body': tr.find('.dokan-cmt-hid-body').text(),
-                    'id': tr.find('.dokan-cmt-hid-id').text(),
-                    'status': tr.find('.dokan-cmt-hid-status').text(),
-                };
-
-
-            tr.after( _.template(table_form, data) );
-        },
-
-        closeForm: function(e) {
-            e.preventDefault();
-
-            $(this).closest('tr.dokan-comment-edit-row').remove();
-        },
-
-        submitForm: function(e) {
-            e.preventDefault();
-
-            var self = $(this),
-                parent = self.closest('tr.dokan-comment-edit-row'),
-                data = {
-                    'action': 'dokan_update_comment',
-                    'comment_id': parent.find('input.dokan-cmt-id').val(),
-                    'content': parent.find('textarea.dokan-cmt-body').val(),
-                    'author': parent.find('input.dokan-cmt-author').val(),
-                    'email': parent.find('input.dokan-cmt-author-email').val(),
-                    'url': parent.find('input.dokan-cmt-author-url').val(),
-                    'status': parent.find('input.dokan-cmt-status').val(),
-					'nonce': dokan.nonce,
-					'post_type' : parent.find('input.dokan-cmt-post-type').val(),
-                };
-
-            $.post(dokan.ajaxurl, data, function(res) {
-                if ( res.success === true) {
-                    parent.prev().replaceWith(res.data);
-                    parent.remove();
-                } else {
-                    alert( res.data );
-                }
-            });
         }
+
     };
 
     $(function(){
-
         Dokan_Comments.init();
     });
 

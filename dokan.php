@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Lite) - Multi-vendor Marketplace
 Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.4.12
+Version: 2.5
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -43,7 +43,7 @@ if ( !defined( '__DIR__' ) ) {
     define( '__DIR__', dirname( __FILE__ ) );
 }
 
-define( 'DOKAN_PLUGIN_VERSION', '2.4.12' );
+define( 'DOKAN_PLUGIN_VERSION', '2.5' );
 define( 'DOKAN_FILE', __FILE__ );
 define( 'DOKAN_DIR', __DIR__ );
 define( 'DOKAN_INC_DIR', __DIR__ . '/includes' );
@@ -105,8 +105,10 @@ final class WeDevs_Dokan {
     public function __construct() {
 
         if ( ! function_exists( 'WC' ) ) {
-            add_action( 'admin_notices', array( $this, 'add_woocommerce_activation_notice' ) );
-            return;
+            require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+            deactivate_plugins( plugin_basename( __FILE__ ) );
+
+            wp_die( '<div class="error"><p>' . sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>' );
         }
 
         global $wpdb;
@@ -128,16 +130,6 @@ final class WeDevs_Dokan {
         $this->init_ajax();
 
         do_action( 'dokan_loaded' );
-    }
-
-    /**
-     * Show wordpress error notice if Woocommerce not found
-     *
-     * @since 2.4.4
-     *
-     */
-    function add_woocommerce_activation_notice() {
-        echo '<div class="error"><p>' . sprintf( __( '<b>Dokan</b> requires %sWoocommerce%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://wordpress.org/plugins/woocommerce/">', '</a>' ) . '</p></div>';
     }
 
     /**
@@ -180,6 +172,10 @@ final class WeDevs_Dokan {
      * Nothing being called here yet.
      */
     public static function activate() {
+        if ( ! function_exists( 'WC' ) ) {
+            return;
+        }
+
         global $wpdb;
 
         $wpdb->dokan_withdraw     = $wpdb->prefix . 'dokan_withdraw';
@@ -240,6 +236,7 @@ final class WeDevs_Dokan {
         wp_register_style( 'dokan-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-magnific-popup', plugins_url( 'assets/css/magnific-popup.css', __FILE__ ), false, null );
+        wp_register_style( 'modalcss', plugins_url( 'assets/css/modalcss.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
@@ -249,15 +246,22 @@ final class WeDevs_Dokan {
         wp_register_script( 'dokan-tag-it', plugins_url( 'assets/js/tag-it.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'chosen', plugins_url( 'assets/js/chosen.jquery.min.js', __FILE__ ), array( 'jquery' ), null, true );
         wp_register_script( 'dokan-popup', plugins_url( 'assets/js/jquery.magnific-popup.min.js', __FILE__ ), array( 'jquery' ), null, true );
+        wp_register_script( 'modaljs', plugins_url( 'assets/js/modaljs.js', __FILE__ ), false, null, true );
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
 
-        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), false, null, true );
+        // these two is required for image croping functionalities written in dokan-script
+        wp_register_script( 'customize-base', site_url( 'wp-includes/js/customize-base.js' ), array( 'jquery', 'json2', 'underscore' ), null, true );
+        wp_register_script( 'customize-model', site_url( 'wp-includes/js/customize-models.js' ), array( 'underscore', 'backbone' ), null, true );
+
+
+        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), array( 'imgareaselect', 'customize-base', 'customize-model' ), null, true );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
 
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
         }
+        wp_register_script( 'dokan-frontend-script', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), false, null, true );
     }
 
     /**
@@ -270,6 +274,15 @@ final class WeDevs_Dokan {
      * @uses wp_enqueue_style
      */
     public function scripts() {
+
+        wp_enqueue_script( 'dokan-frontend-script' );
+
+        $dokan_plugin = array(
+            'url'     => plugins_url( '', __FILE__ ),
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+        );
+
+        wp_localize_script( 'dokan-frontend-script', 'dokan_plugin', $dokan_plugin );
 
         if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
             wp_enqueue_script( 'dokan-product-shipping' );
@@ -334,6 +347,12 @@ final class WeDevs_Dokan {
         wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
 
         if ( $this->is_pro() ) {
+            $general_settings = get_option( 'dokan_general', [] );
+            $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+            $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+            $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+            $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
+
             $dokan_refund = array(
                 'mon_decimal_point'             => wc_get_price_decimal_separator(),
                 'remove_item_notice'            => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', 'dokan' ),
@@ -350,6 +369,9 @@ final class WeDevs_Dokan {
                 'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
                 'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
                 'rounding_precision'            => wc_get_rounding_precision(),
+                'store_banner_dimension'        => [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width' => $has_flex_width, 'flex-height' => $has_flex_height ],
+                'selectAndCrop'                 => __( 'Select and Crop' ),
+                'chooseImage'                   => __( 'Choose Image', 'dokan' )
             );
 
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
@@ -367,6 +389,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-style' );
                 wp_enqueue_style( 'dokan-magnific-popup' );
                 wp_enqueue_style( 'woocommerce-general' );
+                wp_enqueue_style( 'modalcss' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -383,6 +406,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'underscore' );
                 wp_enqueue_script( 'post' );
                 wp_enqueue_script( 'dokan-tag-it' );
+                wp_enqueue_script( 'modaljs' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
                 wp_enqueue_script( 'form-validate' );
                 wp_enqueue_script( 'dokan-tabs-scripts' );
@@ -394,8 +418,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'wc-password-strength-meter' );
 
                 wp_enqueue_script( 'dokan-script' );
-                wp_localize_script( 'jquery', 'dokan', $localize_script );
-            }
+                wp_localize_script( 'jquery', 'dokan', $localize_script );            }
         }
 
         // store and my account page
@@ -457,23 +480,25 @@ final class WeDevs_Dokan {
         require_once $inc_dir . 'widgets/store-menu.php';
         require_once $inc_dir . 'wc-functions.php';
         require_once $lib_dir . 'class-wedevs-insights.php';
+        require_once $inc_dir . '/admin/setup-wizard.php';
+        require_once $classes_dir . 'seller-setup-wizard.php';
 
         // Load free or pro moduels
         if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/pro/dokan-pro-loader.php';
 
             $this->is_pro = true;
-        }
-        else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
+        } else if ( file_exists( DOKAN_INC_DIR . '/free/dokan-free-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/free/dokan-free-loader.php';
         }
+
+        require_once $inc_dir . 'wc-template.php';
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
             require_once $inc_dir . 'admin/ajax.php';
             require_once $inc_dir . 'admin-functions.php';
         } else {
-            require_once $inc_dir . 'wc-template.php';
             require_once $inc_dir . 'template-tags.php';
         }
 
@@ -761,13 +786,11 @@ final class WeDevs_Dokan {
  * @return void
  */
 function dokan_load_plugin() {
-
-    $dokan = WeDevs_Dokan::init();
-
+    WeDevs_Dokan::init();
 }
 
 add_action( 'plugins_loaded', 'dokan_load_plugin', 5 );
 
 register_activation_hook( __FILE__, array( 'WeDevs_Dokan', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WeDevs_Dokan', 'deactivate' ) );
-add_action( 'activated_plugin', array( 'Dokan_Installer', 'welcome_page_redirect' ) );
+add_action( 'activated_plugin', array( 'Dokan_Installer', 'setup_page_redirect' ) );

@@ -8,7 +8,7 @@ jQuery(function($) {
     window.WeDevs_Admin = {
 
         /**
-         * Image Upload Helper Function 
+         * Image Upload Helper Function
          **/
         imageUpload: function (e) {
             e.preventDefault();
@@ -42,5 +42,22 @@ jQuery(function($) {
             self.parent('.image_placeholder').siblings('input.image_url').val('');
             self.parent('.image_placeholder').empty();
         }
-    } 
+    }
+
+    // settings api - radio_image
+    $('.dokan-settings-radio-image button').on('click', function (e) {
+        e.preventDefault();
+
+        var btn = $(this),
+            template = btn.data('template'),
+            input = btn.data('input'),
+            container = btn.parents('.dokan-settings-radio-image-container');
+
+        $('#' + input).val(template);
+
+        container.find('.active').removeClass('active').addClass('not-active');
+
+        btn.parents('.dokan-settings-radio-image').addClass('active').removeClass('not-active');
+    });
 });
+

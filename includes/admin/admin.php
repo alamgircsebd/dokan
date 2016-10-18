@@ -1,7 +1,7 @@
 <?php
 
-if ( !class_exists( 'WeDevs_Settings_API' ) ) {
-    require_once DOKAN_LIB_DIR . '/class.settings-api.php';
+if ( !class_exists( 'Dokan_Settings_API' ) ) {
+    require_once DOKAN_LIB_DIR . '/class.dokan-settings-api.php';
 }
 
 /**
@@ -22,7 +22,7 @@ class Dokan_Admin_Settings {
      * @return void
      */
     function __construct() {
-        $this->settings_api = new WeDevs_Settings_API();
+        $this->settings_api = new Dokan_Settings_API();
 
         add_action( 'admin_init', array($this, 'do_updates') );
         add_action( 'admin_init', array($this, 'admin_init') );
@@ -130,7 +130,7 @@ class Dokan_Admin_Settings {
 
         do_action( 'dokan_admin_menu', $capability, $menu_position );
 
-        add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
+        $settings = add_submenu_page( 'dokan', __( 'Settings', 'dokan' ), __( 'Settings', 'dokan' ), $capability, 'dokan-settings', array($this, 'settings_page') );
         add_submenu_page( 'dokan', __( 'Add Ons', 'dokan' ), __( 'Add-ons', 'dokan' ), $capability, 'dokan-addons', array($this, 'addon_page') );
 
         /**
@@ -141,6 +141,7 @@ class Dokan_Admin_Settings {
         add_dashboard_page( __( 'Welcome to Dokan', 'dokan' ), __( 'Welcome to Dokan', 'dokan' ), $capability, 'dokan-welcome', array( $this, 'welcome_page' ) );
 
         add_action( $dashboard, array($this, 'dashboard_script' ) );
+        add_action( $settings, array($this, 'dashboard_script' ) );
     }
 
     /**
@@ -167,6 +168,10 @@ class Dokan_Admin_Settings {
             array(
                 'id'    => 'dokan_pages',
                 'title' => __( 'Page Settings', 'dokan' )
+            ),
+            array(
+                'id'    => 'dokan_appearance',
+                'title' => __( 'Appearance', 'dokan' )
             )
         );
         return apply_filters( 'dokan_settings_sections', $sections );
@@ -206,12 +211,20 @@ class Dokan_Admin_Settings {
                     'type'    => 'checkbox',
                     'default' => 'off'
                  ),
+                'extra_fee_recipient' => array(
+                    'name'    => 'extra_fee_recipient',
+                    'label'   => __( 'Extra Fee Recipient', 'dokan' ),
+                    'desc'    => __( 'Extra fees like shipping and tax will go to', 'dokan' ),
+                    'type'    => 'select',
+                    'options' => array( 'seller' => __( 'Seller', 'dokan' ), 'admin' => __( 'Admin', 'dokan' ) ),
+                    'default' => 'seller'
+                )
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
                     'label'   => __( 'New Seller Enable Selling', 'dokan' ),
-                    'desc'    => __( 'Make selling status enable for new registred seller', 'dokan' ),
+                    'desc'    => __( 'Make selling status enable for new registered seller', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
@@ -266,7 +279,27 @@ class Dokan_Admin_Settings {
                     'type'    => 'select',
                     'options' => $pages_array
                 )
-            )
+            ),
+            'dokan_appearance' => array(
+                'setup_wizard_logo_url' => array(
+                    'name'    => 'setup_wizard_logo_url',
+                    'label'   => __( 'Seller Setup Wizard Logo', 'dokan' ),
+                    'type'    => 'file',
+                    'desc'    => __( 'Recommended Logo size ( 270px X 90px ). If no logo is uploaded, site title is shown by default.', 'dokan' ),
+                ),
+                'store_header_template' => array(
+                    'name'    => 'store_header_template',
+                    'label'   => __( 'Store Header Template', 'dokan' ),
+                    'type'    => 'radio_image',
+                    'options' => array(
+                        'default' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/default.png',
+                        'layout1' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout1.png',
+                        'layout2' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout2.png',
+                        'layout3' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout3.png'
+                    ),
+                    'default' => 'default',
+                ),
+            ),
         );
 
         return apply_filters( 'dokan_settings_fields', $settings_fields );

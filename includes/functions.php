@@ -898,7 +898,7 @@ function dokan_is_seller_trusted( $user_id ) {
 function dokan_get_store_url( $user_id ) {
     $userdata = get_userdata( $user_id );
     $user_nicename = ( !false == $userdata ) ? $userdata->user_nicename : '';
-    
+
     $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
     return sprintf( '%s/%s/', home_url( '/' . $custom_store_url ), $user_nicename );
 }
@@ -1474,18 +1474,31 @@ function dokan_get_processing_time_value( $index ) {
  */
 function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
+    if ( get_post_meta( $order->id, 'has_sub_order', true ) == true ) {
+        return $email;
+    }
+
     if ( $order ) {
 
         $sellers = dokan_get_seller_id_by_order( $order->id );
 
-        if ( $sellers ) {
-            foreach ( $sellers as $seller_id) {
-                $seller = get_userdata( $seller_id );
+        //if more than 1 seller
+        if ( count( $sellers ) > 1 ) {
+            foreach ( $sellers as $seller_id ) {
+                $seller       = get_userdata( $seller_id );
                 $seller_email = $seller->user_email;
 
                 if ( $email != $seller_email ) {
                     $email .= ',' . $seller_email;
                 }
+            }
+        } else {
+            //if single seller is returned
+            $seller       = get_userdata( $sellers );
+            $seller_email = $seller->user_email;
+
+            if ( $email != $seller_email ) {
+                $email .= ',' . $seller_email;
             }
         }
     }
@@ -1735,7 +1748,7 @@ function dokan_seller_address_fields( $verified = false, $required = false ) {
                 'required' => $required ? 1 : 0,
             ),
             'state'    => array(
-                'required' => 0,
+                'required' => 1,
             ),
         )
     );
