@@ -283,8 +283,9 @@ class Dokan_Admin_Settings {
             'dokan_appearance' => array(
                 'setup_wizard_logo_url' => array(
                     'name'    => 'setup_wizard_logo_url',
-                    'label'   => __( 'Seller Setup Wizard Logo URL', 'dokan' ),
+                    'label'   => __( 'Seller Setup Wizard Logo', 'dokan' ),
                     'type'    => 'file',
+                    'desc'    => __( 'Choose a logo for seller setup wizard, otherwise it will assume the dokan\'s default logo', 'dokan' ),
                 ),
                 'store_header_template' => array(
                     'name'    => 'store_header_template',
