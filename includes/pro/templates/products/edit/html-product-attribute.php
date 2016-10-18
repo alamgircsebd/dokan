@@ -8,7 +8,7 @@
     </div>
     <div class="dokan-product-attribute-item dokan-clearfix dokan-hide">
         <div class="content-half-part">
-            <label class="form-label" for="">Name</label>
+            <label class="form-label" for=""><?php _e( 'Name', 'dokan' ); ?></label>
             <?php if ( $attribute['is_taxonomy'] ) : ?>
 				<strong><?php echo esc_html( $attribute_label ); ?></strong>
 				<input type="hidden" name="attribute_names[]" value="<?php echo esc_attr( $taxonomy ); ?>" />

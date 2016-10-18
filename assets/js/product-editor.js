@@ -277,9 +277,18 @@
                 $.post( dokan.ajaxurl, data, function( resp ) {
                     if ( resp.success ) {
                         var attributeWrapper = $('.dokan-product-attribute-wrapper').find('ul.dokan-attribute-option-list');
-                        attributeWrapper.append( resp.data );
+                        $html = $.parseHTML(resp.data);
+                        $($html).find('.dokan-product-attribute-item').removeClass('dokan-hide');
+                        $($html).find('i.fa.fa-sort-desc').removeClass('fa-flip-horizointal').addClass('fa-flip-vertical');
+                        $($html).find('a.dokan-product-toggle-attribute').css('top','12px');
+                        $($html).find('.dokan-product-attribute-heading').css({ borderBottom: '1px solid #e3e3e3' });
+
+                        attributeWrapper.append( $html );
                         Dokan_Editor.loadSelect2();
                         Dokan_Editor.attribute.reArrangeAttribute();
+
+                        // $('a.dokan-product-toggle-attribute').trigger('click');
+
                     };
 
                     self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').addClass('dokan-hide');
