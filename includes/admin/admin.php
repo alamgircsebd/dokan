@@ -285,7 +285,7 @@ class Dokan_Admin_Settings {
                     'name'    => 'setup_wizard_logo_url',
                     'label'   => __( 'Seller Setup Wizard Logo', 'dokan' ),
                     'type'    => 'file',
-                    'desc'    => __( 'Choose a logo for seller setup wizard, otherwise it will assume the dokan\'s default logo', 'dokan' ),
+                    'desc'    => __( 'Recommended Logo size ( 270px X 90px ). If no logo is uploaded, site title is shown by default.', 'dokan' ),
                 ),
                 'store_header_template' => array(
                     'name'    => 'store_header_template',
