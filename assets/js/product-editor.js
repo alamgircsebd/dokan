@@ -119,6 +119,8 @@
             $( '.hide_if_lot_discount' ).hide();
             $( '.hide_if_order_discount' ).hide();
 
+            // For new desing in product page
+            $( '.dokan-product-listing' ).on( 'click', 'a.dokan-add-new-product', this.addProduct );
             this.loadSelect2();
             this.attribute.sortable();
             $('.product-edit-new-container .dokan-product-attribute-wrapper').on( 'click', 'a.dokan-product-toggle-attribute, .dokan-product-attribute-heading', this.attribute.toggleAttribute );
@@ -132,6 +134,28 @@
 
         loadSelect2: function() {
             $('.dokan-select2').select2();
+        },
+
+        addProduct: function (e) {
+            e.preventDefault();
+
+            var productTemplate = wp.template( 'dokan-add-new-product' );
+
+            console.log( productTemplate() );
+
+            $.magnificPopup.open({
+                items: {
+                    src: productTemplate().trim(),
+                    type: 'inline'
+                },
+                callbacks: {
+                    open: function() {
+                        Dokan_Editor.loadSelect2();
+                    }
+                }
+            });
+
+
         },
 
         attribute: {
@@ -685,7 +709,6 @@
                 var variant_single_template = wp.template( 'dokan-single-variations' );
                 var variation_single = variant_single_template( variation_data );
 
-                console.log( variation_data );
                 $.magnificPopup.open({
                     items: {
                         src: variation_single.trim(),

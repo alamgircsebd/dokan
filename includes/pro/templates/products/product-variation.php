@@ -29,19 +29,24 @@
                     ?>
                 </select>
                 <a href="#" class="dokan-btn dokan-btn-default add_new_attribute"><?php _e( 'Add attribute', 'dokan' ) ?></a>
+                <a href="#" class="dokan-btn dokan-btn-default dokan-save-attribute"><?php _e( 'Save attribute', 'dokan' ) ?></a>
                 <span class="dokan-spinner dokan-attribute-spinner dokan-hide"></span>
+
             </div>
             <ul class="dokan-attribute-option-list"></ul>
         </div>
 
         <div class="dokan-product-variation-wrapper">
+            <div class="dokan-alert dokan-alert-info">
+                <?php echo sprintf( '%s <a href="%s">%s</a>', __( 'Before adding a variation you need to add some variation attributes on the Attributes tab.', 'dokan' ), esc_url('https://docs.woocommerce.com/document/variable-product/'), __( 'Learn More', 'dokan' ) ) ?>
+            </div>
             <div class="dokan-variation-type">
                 <select id="dokan-create-<!-- variation" class="dokan-form-control dokan-w5 dokan-create-variation" style="margin-right: 10px;">
                     <option value="create_custom"><?php _e( 'Add new variation', 'dokan' ) ?></option>
                     <option value="link_all_variations"><?php _e( 'Create variations from all attributes', 'dokan' ) ?></option>
                     <option value="delete_all_variation"><?php _e( 'Delete all variations', 'dokan' ) ?></option>
                 </select>
-                <a href="#" class="dokan- -->btn dokan-btn-default dokan_process_variation"><?php _e( 'Go', 'dokan' ) ?></a>
+                <a href="#" class="dokan-btn dokan-btn-default dokan_process_variation"><?php _e( 'Go', 'dokan' ) ?></a>
 
                 <!-- <a href="#" class="dokan-btn dokan-btn-default dokan_create_all_variation"><?php _e( 'Create variation for all attribute', 'dokan' ) ?></a> -->
                 <!-- <a href="#" class="dokan-btn dokan-btn-default dokan_create_custom_variation"><?php _e( 'Add Custom variation', 'dokan' ) ?></a> -->
