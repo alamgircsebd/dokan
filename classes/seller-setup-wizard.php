@@ -54,7 +54,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         $this->store_id   = get_current_user_id();
         $this->store_info = dokan_get_store_info( $this->store_id );
 
-        $this->steps = array(
+        $steps = array(
             'introduction' => array(
                 'name'    =>  __( 'Introduction', 'dokan' ),
                 'view'    => array( $this, 'dokan_setup_introduction' ),
@@ -76,6 +76,8 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
                 'handler' => ''
             )
         );
+        
+        $this->steps = add_filter( 'dokan_seller_wizard_steps', $steps );
         $this->step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
 
         $this->enqueue_scripts();
