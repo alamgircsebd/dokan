@@ -556,6 +556,11 @@ jQuery(function($) {
             $('.product-edit-new-container, .product-edit-container').on('click', 'a.dokan-feat-image-btn', this.featuredImage.addImage );
             $('.product-edit-new-container, .product-edit-container').on('click', 'a.dokan-remove-feat-image', this.featuredImage.removeImage );
 
+            // featured image
+            $( 'body' ).on( 'click', 'a.dokan-feat-image-btn', this.featuredImage.addImage );
+            $( 'body' ).on( 'click', 'a.dokan-remove-feat-image', this.featuredImage.removeImage );
+
+
             // download links
 
             // post status change
@@ -619,7 +624,9 @@ jQuery(function($) {
             $( '.hide_if_order_discount' ).hide();
 
             // For new desing in product page
-            $( '.dokan-product-listing' ).on( 'click', 'a.dokan-add-new-product', this.addProduct );
+            $( '.dokan-product-listing' ).on( 'click', 'a.dokan-add-new-product', this.addProductPopup );
+            $( 'body' ).on( 'click', 'input#dokan-create-new-product-btn', this.createNewProduct );
+
             this.loadSelect2();
             this.attribute.sortable();
             $('.product-edit-new-container .dokan-product-attribute-wrapper').on( 'click', 'a.dokan-product-toggle-attribute, .dokan-product-attribute-heading', this.attribute.toggleAttribute );
@@ -635,24 +642,59 @@ jQuery(function($) {
             $('.dokan-select2').select2();
         },
 
-        addProduct: function (e) {
+        addProductPopup: function (e) {
             e.preventDefault();
 
             var productTemplate = wp.template( 'dokan-add-new-product' );
 
-            console.log( productTemplate() );
-
             $.magnificPopup.open({
+                fixedContentPos: true,
                 items: {
                     src: productTemplate().trim(),
                     type: 'inline'
                 },
                 callbacks: {
                     open: function() {
+                        $(this.content).closest('.mfp-wrap').removeAttr('tabindex');
                         Dokan_Editor.loadSelect2();
+                        $('body').on('change', 'input[type=checkbox].sale-schedule', Dokan_Editor.newProductDesign.showDiscountSchedule );
+                        $('.sale_price_dates_from, .sale_price_dates_to').on('focus', function() {
+                            $(this).css('z-index', '99999');
+                        });
+                        Dokan_Editor.variants.dates();
                     }
                 }
             });
+        },
+
+        createNewProduct: function (e) {
+            e.preventDefault();
+
+            var self = $(this),
+                form = self.closest('form#dokan-add-new-product-form');
+
+            form.find( 'span.dokan-show-add-product-error' ).html('');
+            form.find( 'span.dokan-add-new-product-spinner' ).css( 'display', 'inline-block' );
+
+            if ( form.find( 'input[name="post_title"]' ).val() == '' ) {
+                $( 'span.dokan-show-add-product-error' ).html( 'Product title is required' );
+                form.find( 'span.dokan-add-new-product-spinner' ).css( 'display', 'none' );
+                return;
+            }
+
+            if ( form.find( 'select[name="product_cat"]' ).val() == '-1' ) {
+                $( 'span.dokan-show-add-product-error' ).html( 'Product category is required' );
+                form.find( 'span.dokan-add-new-product-spinner' ).css( 'display', 'none' );
+                return;
+            }
+
+            var data = {
+                action:   'dokan_create_new_product',
+                postdata: form.serialize(),
+                _wpnonce : dokan.nonce
+            };
+
+            $.post( dokan.ajaxurl, data, function( response ) {
 
 
         },
@@ -894,7 +936,7 @@ jQuery(function($) {
 
         showDiscountSchedule: function(e) {
             e.preventDefault();
-
+            console.log('Aise bal amr');
             $('.sale-schedule-container').slideToggle('fast');
         },
 
