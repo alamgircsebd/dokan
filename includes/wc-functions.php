@@ -2992,7 +2992,7 @@ function dokan_filter_woocommerce_dashboard_status_widget_sales_query( $query ) 
 function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
 
     $flat_rate_array = preg_grep("/^flat_rate:*/", array_keys( $rates ) );
-    $flat_rate       = $flat_rate_array[0];
+    $flat_rate       = isset( $flat_rate_array[0] ) ? $flat_rate_array[0] : '';
 
     foreach ( $package['contents'] as $product ) {
         $sellers[] = get_post_field( 'post_author', $product['product_id'] );
