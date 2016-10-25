@@ -142,15 +142,15 @@
                     </div>
 
                     <div class="dokan-form-group">
-                        <textarea name="post" id="" class="dokan-form-control" rows="5" placeholder="<?php _e( 'Enter some short description about this product...') ?>"></textarea>
+                        <textarea name="post_excerpt" id="" class="dokan-form-control" rows="5" placeholder="<?php _e( 'Enter some short description about this product...') ?>"></textarea>
                     </div>
                 </div>
             </div>
             <div class="product-container-footer">
                 <span class="dokan-show-add-product-error"></span>
                 <span class="dokan-spinner dokan-add-new-product-spinner dokan-hide"></span>
-                <input type="submit" id="dokan-create-new-product-btn" class="dokan-btn dokan-btn-default" value="<?php _e( 'Create product', 'dokan' ) ?>">
-                <input type="submit" id="dokan-create-and-add-new-product-btn" class="dokan-btn dokan-btn-theme" value="<?php _e( 'Create & add new', 'dokan' ) ?>">
+                <input type="submit" id="dokan-create-new-product-btn" class="dokan-btn dokan-btn-default" data-btn_id="create_new" value="<?php _e( 'Create product', 'dokan' ) ?>">
+                <input type="submit" id="dokan-create-and-add-new-product-btn" class="dokan-btn dokan-btn-theme" data-btn_id="create_and_new" value="<?php _e( 'Create & add new', 'dokan' ) ?>">
             </div>
         </form>
     </div>

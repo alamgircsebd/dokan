@@ -61,6 +61,27 @@ class Dokan_Ajax {
 
         add_filter( 'wp_ajax_dokan_seller_listing_search', array($this, 'seller_listing_search') );
         add_filter( 'wp_ajax_nopriv_dokan_seller_listing_search', array($this, 'seller_listing_search') );
+
+        add_action( 'wp_ajax_dokan_create_new_product', array( $this, 'create_product' ) );
+        add_action( 'wp_ajax_nopriv_dokan_create_new_product', array( $this, 'create_product' ) );
+    }
+
+    function create_product() {
+        check_ajax_referer( 'dokan_reviews' );
+
+        parse_str( $_POST['postdata'], $postdata );
+
+        $response = dokan_insert_product( $postdata );
+
+        if ( is_wp_error( $response ) ) {
+            wp_send_json_error( $response->get_error_message() );
+        }
+
+        if ( is_int( $response ) ) {
+            wp_send_json_success( dokan_edit_product_url( $response ) );
+        } else {
+            wp_send_json_error( __( 'Something wrong, please try again later', 'dokan' ) );
+        }
     }
 
     /**

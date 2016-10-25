@@ -110,6 +110,9 @@ class Dokan_Template_Products {
             return;
         }
 
+        $product = doakn_create_pro();
+
+
         if ( isset( $_POST['dokan_add_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_product_nonce'], 'dokan_add_new_product' ) ) {
             $post_title              = trim( $_POST['post_title'] );
             $post_content            = trim( $_POST['post_content'] );
@@ -143,8 +146,6 @@ class Dokan_Template_Products {
                     AND $wpdb->posts.post_status = 'publish'
                     AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
                  ", $sku ) );
-
-
 
             if ( isset( $_POST['dokan_product_id'] ) && empty( $_POST['dokan_product_id'] ) ) {
 

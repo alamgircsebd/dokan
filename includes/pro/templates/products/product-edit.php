@@ -310,7 +310,7 @@ if ( ! $from_shortcode ) {
                                                         if ( $term ) {
                                                             $product_cat = reset( $term );
                                                         }
-                                                        
+
                                                         $category_args = array(
                                                             'show_option_none' => __( '- Select a category -', 'dokan' ),
                                                             'hierarchical'     => 1,
@@ -380,7 +380,7 @@ if ( ! $from_shortcode ) {
 
                                             </div>
                                         </div>
-                                        
+
                                         <div class="dokan-rich-text-wrap">
                                             <div>
                                                 <?php wp_editor( $post->post_content , 'post_content', array('editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => false, 'editor_class' => 'post_content') ); ?>
@@ -502,8 +502,8 @@ if ( ! $from_shortcode ) {
         $(document).ready(function(){
             $('#tab-container').easytabs({
                 animate: true,
-                animationSpeed: 10,                
-                updateHash: false,                         
+                animationSpeed: 10,
+                updateHash: false,
             });
             $('#tab-container').bind('easytabs:before', function(){
                 $('select.product_tags').chosen();

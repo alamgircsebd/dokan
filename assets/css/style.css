@@ -1055,6 +1055,9 @@ body {
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-attribute-wrapper ul li.product-attribute-list .dokan-product-attribute-item .dokan-pre-defined-attribute-btn-group {
   margin-top: 10px;
 }
+.product-edit-new-container .dokan-product-type-container .content-half-part.virtual-checkbox {
+  padding-left: 10px;
+}
 .product-edit-container {
   font-size: 13px;
 }

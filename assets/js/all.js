@@ -610,7 +610,7 @@ jQuery(function($) {
                 return false;
             });
 
-            this.loadTagChosen();
+            // this.loadTagChosen();
             this.newProductDesign.shipping.showHideOverride();
             this.newProductDesign.shipping.disableOverride();
             this.shipping.disableOverride();
@@ -625,7 +625,7 @@ jQuery(function($) {
 
             // For new desing in product page
             $( '.dokan-product-listing' ).on( 'click', 'a.dokan-add-new-product', this.addProductPopup );
-            $( 'body' ).on( 'click', 'input#dokan-create-new-product-btn', this.createNewProduct );
+            $( 'body' ).on( 'click', '.product-container-footer input[type="submit"]', this.createNewProduct );
 
             this.loadSelect2();
             this.attribute.sortable();
@@ -644,9 +644,11 @@ jQuery(function($) {
 
         addProductPopup: function (e) {
             e.preventDefault();
+            Dokan_Editor.openProductPopup();
+        },
 
+        openProductPopup: function() {
             var productTemplate = wp.template( 'dokan-add-new-product' );
-
             $.magnificPopup.open({
                 fixedContentPos: true,
                 items: {
@@ -671,10 +673,12 @@ jQuery(function($) {
             e.preventDefault();
 
             var self = $(this),
-                form = self.closest('form#dokan-add-new-product-form');
+                form = self.closest('form#dokan-add-new-product-form'),
+                btn_id = self.attr('data-btn_id');
 
             form.find( 'span.dokan-show-add-product-error' ).html('');
             form.find( 'span.dokan-add-new-product-spinner' ).css( 'display', 'inline-block' );
+
 
             if ( form.find( 'input[name="post_title"]' ).val() == '' ) {
                 $( 'span.dokan-show-add-product-error' ).html( 'Product title is required' );
@@ -694,9 +698,21 @@ jQuery(function($) {
                 _wpnonce : dokan.nonce
             };
 
-            $.post( dokan.ajaxurl, data, function( response ) {
-
-
+            $.post( dokan.ajaxurl, data, function( resp ) {
+                if ( resp.success ) {
+                    if ( btn_id == 'create_new' ) {
+                        $.magnificPopup.close();
+                        window.location.href = resp.data;
+                    } else {
+                        $('.dokan-dahsboard-product-listing-wrapper').load( window.location.href + ' table.product-listing-table' );
+                        $.magnificPopup.close();
+                        Dokan_Editor.openProductPopup();
+                    }
+                } else {
+                    $( 'span.dokan-show-add-product-error' ).html( resp.data );
+                }
+                form.find( 'span.dokan-add-new-product-spinner' ).css( 'display', 'none' );
+            });
         },
 
         attribute: {
