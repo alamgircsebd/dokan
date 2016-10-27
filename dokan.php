@@ -345,36 +345,39 @@ final class WeDevs_Dokan {
         );
 
         wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
+        
+        //localize script for refund and dashboard image options
+        $general_settings = get_option( 'dokan_general', [] );
+        $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+        $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+        $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+        $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
 
+        $dokan_refund = array(
+            'mon_decimal_point'             => wc_get_price_decimal_separator(),
+            'remove_item_notice'            => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', 'dokan' ),
+            'i18n_select_items'             => __( 'Please select some items.', 'dokan' ),
+            'i18n_do_refund'                => __( 'Are you sure you wish to process this refund request? This action cannot be undone.', 'dokan' ),
+            'i18n_delete_refund'            => __( 'Are you sure you wish to delete this refund? This action cannot be undone.', 'dokan' ),
+            'remove_item_meta'              => __( 'Remove this item meta?', 'dokan' ),
+            'ajax_url'                      => admin_url( 'admin-ajax.php' ),
+            'order_item_nonce'              => wp_create_nonce( 'order-item' ),
+            'post_id'                       => isset( $_GET['order_id'] ) ? $_GET['order_id'] : '',
+            'currency_format_num_decimals'  => wc_get_price_decimals(),
+            'currency_format_symbol'        => get_woocommerce_currency_symbol(),
+            'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
+            'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
+            'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
+            'rounding_precision'            => wc_get_rounding_precision(),
+            'store_banner_dimension'        => [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width' => $has_flex_width, 'flex-height' => $has_flex_height ],
+            'selectAndCrop'                 => __( 'Select and Crop' ),
+            'chooseImage'                   => __( 'Choose Image', 'dokan' )
+        );
+
+        wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
+        
         if ( $this->is_pro() ) {
-            $general_settings = get_option( 'dokan_general', [] );
-            $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
-            $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
-            $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
-            $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
-
-            $dokan_refund = array(
-                'mon_decimal_point'             => wc_get_price_decimal_separator(),
-                'remove_item_notice'            => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', 'dokan' ),
-                'i18n_select_items'             => __( 'Please select some items.', 'dokan' ),
-                'i18n_do_refund'                => __( 'Are you sure you wish to process this refund request? This action cannot be undone.', 'dokan' ),
-                'i18n_delete_refund'            => __( 'Are you sure you wish to delete this refund? This action cannot be undone.', 'dokan' ),
-                'remove_item_meta'              => __( 'Remove this item meta?', 'dokan' ),
-                'ajax_url'                      => admin_url( 'admin-ajax.php' ),
-                'order_item_nonce'              => wp_create_nonce( 'order-item' ),
-                'post_id'                       => isset( $_GET['order_id'] ) ? $_GET['order_id'] : '',
-                'currency_format_num_decimals'  => wc_get_price_decimals(),
-                'currency_format_symbol'        => get_woocommerce_currency_symbol(),
-                'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
-                'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
-                'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-                'rounding_precision'            => wc_get_rounding_precision(),
-                'store_banner_dimension'        => [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width' => $has_flex_width, 'flex-height' => $has_flex_height ],
-                'selectAndCrop'                 => __( 'Select and Crop' ),
-                'chooseImage'                   => __( 'Choose Image', 'dokan' )
-            );
-
-            wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
+            //include Earning statement script
             wp_enqueue_script( 'accounting' );
         }
 
