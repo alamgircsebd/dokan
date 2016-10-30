@@ -681,20 +681,21 @@
                     }
 
                     .dokan-product-attribute-heading {
-                        padding: 10px 0px;
+                        padding: 10px 10px;
                         cursor: move;
                         position: relative;
+                        background-color: rgba(241,241,241, 0.61);
 
                         a.dokan-product-remove-attribute {
                             position: absolute;
                             top: 9px;
-                            right: 0px;
+                            right: 10px;
                         }
 
                         a.dokan-product-toggle-attribute {
                             position: absolute;
                             top: 7px;
-                            right: 66px;
+                            right: 76px;
                             color: #222;
                         }
                     }
@@ -715,6 +716,55 @@
                             margin-top: 10px;
                         }
                     }
+                }
+            }
+        }
+
+        .dokan-product-variation-wrapper {
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+
+            .dokan-variation-top-toolbar {
+                vertical-align: middle;
+                line-height: 31px;
+                margin-bottom: 20px;
+
+                .dokan-variation-label {
+                    // margin-right: 60px
+                }
+            }
+
+            .dokan-variations-container {
+                margin-bottom: 20px;
+
+                /** Load all variation styles **/
+                .dokan-product-variation-itmes {
+                    h3 {
+                        font-size: inherit;
+                        position: relative;
+                    }
+                }
+
+            }
+
+            .dokan-variation-default-toolbar {
+                text-align: right;
+
+                span.dokan-variation-default-label,
+                .dokan-variation-default-select {
+                    margin-right: 5px;
+                }
+
+                .float-none {
+                    display: inline-block;
+                    float: none !important;
+                }
+            }
+
+            .dokan-variation-action-toolbar {
+                select.variation-actions {
+                    margin-right: 5px;
                 }
             }
         }

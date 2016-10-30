@@ -164,7 +164,7 @@ if ( ! $from_shortcode ) {
                             <div class="content-half-part">
 
                                 <div class="dokan-form-group">
-                                    <input type="hidden" name="dokan_product_id" value="<?php echo $post_id; ?>"/>
+                                    <input type="hidden" name="dokan_product_id" id="dokan-edit-product-id" value="<?php echo $post_id; ?>"/>
 
                                     <label for="post_title" class="form-label"><?php _e( 'Title', 'dokan' ); ?></label>
                                     <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => __( 'Product name..', 'dokan' ), 'value' => $post_title ) ); ?>
@@ -463,14 +463,13 @@ if ( ! $from_shortcode ) {
                         <div class="dokan-other-options dokan-edit-row dokan-clearfix">
                             <div class="dokan-section-heading">
                                 <h2><?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
+                                <p><?php _e( 'Configure your downloadable product settings', 'dokan' ); ?></p>
                             </div>
 
                             <div class="dokan-section-content">
                                 <div class="dokan-divider-top dokan-clearfix">
 
-                                    <?php if ( $post_id ): ?>
-                                        <?php do_action( 'dokan_product_edit_before_sidebar' ); ?>
-                                    <?php endif; ?>
+                                    <?php do_action( 'dokan_product_edit_before_sidebar' ); ?>
 
                                     <div class="dokan-side-body dokan-download-wrapper">
                                         <table class="dokan-table">
@@ -560,6 +559,7 @@ if ( ! $from_shortcode ) {
                         <div class="dokan-other-options dokan-edit-row dokan-clearfix">
                             <div class="dokan-section-heading">
                                 <h2><?php _e( 'Other Options', 'dokan' ); ?></h2>
+                                <p><?php _e( 'Set your extra product options', 'dokan' ); ?></p>
                             </div>
 
                             <div class="dokan-section-content">

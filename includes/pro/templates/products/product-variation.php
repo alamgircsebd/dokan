@@ -15,6 +15,57 @@
     </div>
     <div class="dokan-section-content">
         <div class="dokan-product-attribute-wrapper">
+
+            <ul class="dokan-attribute-option-list">
+                <?php
+                global $wc_product_attributes;
+
+                // Product attributes - taxonomies and custom, ordered, with visibility and variation attributes set
+                $attributes           = maybe_unserialize( get_post_meta( $post_id, '_product_attributes', true ) );
+
+                // Output All Set Attributes
+                if ( ! empty( $attributes ) ) {
+                    $attribute_keys  = array_keys( $attributes );
+                    $attribute_total = sizeof( $attribute_keys );
+
+                    for ( $i = 0; $i < $attribute_total; $i ++ ) {
+                        $attribute     = $attributes[ $attribute_keys[ $i ] ];
+                        $position      = empty( $attribute['position'] ) ? 0 : absint( $attribute['position'] );
+                        $taxonomy      = '';
+                        $metabox_class = array();
+
+                        if ( $attribute['is_taxonomy'] ) {
+                            $taxonomy = $attribute['name'];
+
+                            if ( ! taxonomy_exists( $taxonomy ) ) {
+                                continue;
+                            }
+
+                            $attribute_taxonomy = $wc_product_attributes[ $taxonomy ];
+                            $metabox_class[]    = 'taxonomy';
+                            $metabox_class[]    = $taxonomy;
+                            $attribute_label    = wc_attribute_label( $taxonomy );
+                        } else {
+                            $attribute_label    = apply_filters( 'woocommerce_attribute_label', $attribute['name'], $attribute['name'], false );
+                        }
+
+                        dokan_get_template_part( 'products/edit/html-product-attribute', '', array(
+                            'pro'                => true,
+                            'thepostid'          => $post_id,
+                            'taxonomy'           => $taxonomy,
+                            'attribute_taxonomy' => isset( $attribute_taxonomy ) ? $attribute_taxonomy : null,
+                            'attribute_label'    => $attribute_label,
+                            'attribute'          => $attribute,
+                            'metabox_class'      => $metabox_class,
+                            'position'           => $position,
+                            'i'                  => $i
+                        ) );
+
+                    }
+                }
+                ?>
+            </ul>
+
             <div class="dokan-attribute-type">
                 <select name="predefined_attribute" id="predefined_attribute" class="dokan-w5 dokan-form-control dokan_attribute_taxonomy" data-predefined_attr='<?php echo json_encode( $attribute_taxonomies ); ?>'>
                     <option value=""><?php _e( 'Custom Attribute', 'dokan' ); ?></option>
@@ -31,27 +82,11 @@
                 <a href="#" class="dokan-btn dokan-btn-default add_new_attribute"><?php _e( 'Add attribute', 'dokan' ) ?></a>
                 <a href="#" class="dokan-btn dokan-btn-default dokan-save-attribute"><?php _e( 'Save attribute', 'dokan' ) ?></a>
                 <span class="dokan-spinner dokan-attribute-spinner dokan-hide"></span>
-
             </div>
-            <ul class="dokan-attribute-option-list"></ul>
         </div>
 
         <div class="dokan-product-variation-wrapper">
-            <div class="dokan-alert dokan-alert-info">
-                <?php echo sprintf( '%s <a href="%s">%s</a>', __( 'Before adding a variation you need to add some variation attributes on the Attributes tab.', 'dokan' ), esc_url('https://docs.woocommerce.com/document/variable-product/'), __( 'Learn More', 'dokan' ) ) ?>
-            </div>
-            <div class="dokan-variation-type">
-                <select id="dokan-create-<!-- variation" class="dokan-form-control dokan-w5 dokan-create-variation" style="margin-right: 10px;">
-                    <option value="create_custom"><?php _e( 'Add new variation', 'dokan' ) ?></option>
-                    <option value="link_all_variations"><?php _e( 'Create variations from all attributes', 'dokan' ) ?></option>
-                    <option value="delete_all_variation"><?php _e( 'Delete all variations', 'dokan' ) ?></option>
-                </select>
-                <a href="#" class="dokan-btn dokan-btn-default dokan_process_variation"><?php _e( 'Go', 'dokan' ) ?></a>
-
-                <!-- <a href="#" class="dokan-btn dokan-btn-default dokan_create_all_variation"><?php _e( 'Create variation for all attribute', 'dokan' ) ?></a> -->
-                <!-- <a href="#" class="dokan-btn dokan-btn-default dokan_create_custom_variation"><?php _e( 'Add Custom variation', 'dokan' ) ?></a> -->
-                <span class="dokan-spinner dokan-attribute-spinner dokan-hide"></span>
-            </div>
+            <?php dokan_product_output_variations(); ?>
         </div>
     </div>
 </div>

@@ -314,19 +314,44 @@ final class WeDevs_Dokan {
         }
 
         $localize_script             = array(
-            'ajaxurl'                    => admin_url( 'admin-ajax.php' ),
-            'nonce'                      => wp_create_nonce( 'dokan_reviews' ),
-            'ajax_loader'                => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
-            'seller'                     => array(
-                'available'                  => __( 'Available', 'dokan' ),
-                'notAvailable'               => __( 'Not Available', 'dokan' )
-                ),
-            'delete_confirm'             => __('Are you sure?', 'dokan' ),
-            'wrong_message'              => __('Something is wrong, Please try again.', 'dokan' ),
-            'duplicates_attribute_messg' => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
-            'variation_unset_warning'    => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
-            'new_attribute_prompt'       => __( 'Enter a name for the new attribute term:', 'dokan' ),
-            'remove_attribute'           => __( 'Remove this attribute?', 'dokan' )
+            'ajaxurl'                             => admin_url( 'admin-ajax.php' ),
+            'nonce'                               => wp_create_nonce( 'dokan_reviews' ),
+            'ajax_loader'                         => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+            'seller'                              => array(
+            'available'                           => __( 'Available', 'dokan' ),
+            'notAvailable'                        => __( 'Not Available', 'dokan' )
+            ),
+            'delete_confirm'                      => __('Are you sure?', 'dokan' ),
+            'wrong_message'                       => __('Something is wrong, Please try again.', 'dokan' ),
+            'duplicates_attribute_messg'          => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
+            'variation_unset_warning'             => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
+            'new_attribute_prompt'                => __( 'Enter a name for the new attribute term:', 'dokan' ),
+            'remove_attribute'                    => __( 'Remove this attribute?', 'dokan' ),
+            'dokan_placeholder_img_src'           => wc_placeholder_img_src(),
+            'add_variation_nonce'                 => wp_create_nonce( 'add-variation' ),
+            'link_variation_nonce'                => wp_create_nonce( 'link-variations' ),
+            'delete_variations_nonce'             => wp_create_nonce( 'delete-variations' ),
+            'load_variations_nonce'               => wp_create_nonce( 'load-variations' ),
+            'save_variations_nonce'               => wp_create_nonce( 'save-variations' ),
+            'bulk_edit_variations_nonce'          => wp_create_nonce( 'bulk-edit-variations' ),
+            'i18n_link_all_variations'            => esc_js( sprintf( __( 'Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max %d per run).', 'dokan' ), defined( 'WC_MAX_LINKED_VARIATIONS' ) ? WC_MAX_LINKED_VARIATIONS : 50 ) ),
+            'i18n_enter_a_value'                  => esc_js( __( 'Enter a value', 'dokan' ) ),
+            'i18n_enter_menu_order'               => esc_js( __( 'Variation menu order (determines position in the list of variations)', 'dokan' ) ),
+            'i18n_enter_a_value_fixed_or_percent' => esc_js( __( 'Enter a value (fixed or %)', 'dokan' ) ),
+            'i18n_delete_all_variations'          => esc_js( __( 'Are you sure you want to delete all variations? This cannot be undone.', 'dokan' ) ),
+            'i18n_last_warning'                   => esc_js( __( 'Last warning, are you sure?', 'dokan' ) ),
+            'i18n_choose_image'                   => esc_js( __( 'Choose an image', 'dokan' ) ),
+            'i18n_set_image'                      => esc_js( __( 'Set variation image', 'dokan' ) ),
+            'i18n_variation_added'                => esc_js( __( "variation added", 'dokan' ) ),
+            'i18n_variations_added'               => esc_js( __( "variations added", 'dokan' ) ),
+            'i18n_no_variations_added'            => esc_js( __( "No variations added", 'dokan' ) ),
+            'i18n_remove_variation'               => esc_js( __( 'Are you sure you want to remove this variation?', 'dokan' ) ),
+            'i18n_scheduled_sale_start'           => esc_js( __( 'Sale start date (YYYY-MM-DD format or leave blank)', 'dokan' ) ),
+            'i18n_scheduled_sale_end'             => esc_js( __( 'Sale end date (YYYY-MM-DD format or leave blank)', 'dokan' ) ),
+            'i18n_edited_variations'              => esc_js( __( 'Save changes before changing page?', 'dokan' ) ),
+            'i18n_variation_count_single'         => esc_js( __( '%qty% variation', 'dokan' ) ),
+            'i18n_variation_count_plural'         => esc_js( __( '%qty% variations', 'dokan' ) ),
+            'variations_per_page'                 => absint( apply_filters( 'dokan_product_variations_per_page', 15 ) )
         );
 
         $form_validate_messages = array(
@@ -385,6 +410,8 @@ final class WeDevs_Dokan {
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
+
+
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
                 wp_enqueue_style( 'fontawesome' );
@@ -422,7 +449,8 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'wc-password-strength-meter' );
 
                 wp_enqueue_script( 'dokan-script' );
-                wp_localize_script( 'jquery', 'dokan', $localize_script );            }
+                wp_localize_script( 'jquery', 'dokan', $localize_script );
+            }
         }
 
         // store and my account page
