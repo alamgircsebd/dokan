@@ -108,7 +108,7 @@ function dokan_seller_sales_statement() {
             $url              = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
             $id               = $statement->order_id;
             $sales            = wc_price( 0 );
-            $amount           = '<span style="color: #f05025;">-' . wc_price( $statement->refund_amount ) . '</span>';
+            $amount           = '<span style="color: #f05025;">' . wc_price( $statement->refund_amount ) . '</span>';
             $net_amount       = $net_amount - $statement->refund_amount;
             $net_amount_print = wc_price( $net_amount );
         } else {
@@ -116,7 +116,7 @@ function dokan_seller_sales_statement() {
             $url              = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url( 'withdraw' ) );
             $id               = $statement->id;
             $sales            = wc_price( 0 );
-            $amount           = '<span style="color: #f05025;">-' . wc_price( $statement->amount ) . '</span>';
+            $amount           = '<span style="color: #f05025;">' . wc_price( $statement->amount ) . '</span>';
             $net_amount       = $net_amount - $statement->amount;
             $net_amount_print = wc_price( $net_amount );
         }
