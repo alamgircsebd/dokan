@@ -961,7 +961,7 @@ function dokan_top_earners() {
 
     // Get order ids and dates in range
     $order_items = apply_filters( 'woocommerce_reports_top_earners_order_items', $wpdb->get_results( "
-        SELECT order_item_meta_2.meta_value as product_id, SUM( order_item_meta.meta_value ) as line_total FROM {$wpdb->prefix}woocommerce_order_items as order_items
+        SELECT order_item_meta_2.meta_value as product_id, SUM( order_item_meta.meta_value ) as line_total,SUM( do.net_amount ) as total_earning FROM {$wpdb->prefix}woocommerce_order_items as order_items
 
         LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta ON order_items.order_item_id = order_item_meta.order_item_id
         LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta_2 ON order_items.order_item_id = order_item_meta_2.order_item_id
@@ -981,10 +981,11 @@ function dokan_top_earners() {
     " ), $start_date, $end_date );
 
     $found_products = array();
-
+    $total_earnings = array();
     if ( $order_items ) {
         foreach ( $order_items as $order_item ) {
             $found_products[ $order_item->product_id ] = $order_item->line_total;
+            $total_earnings[ $order_item->product_id ] = $order_item->total_earning;
         }
     }
 
@@ -1012,6 +1013,7 @@ function dokan_top_earners() {
             <tr>
                 <th><?php _e( 'Product', 'dokan' ); ?></th>
                 <th colspan="2"><?php _e( 'Sales', 'dokan' ); ?></th>
+                <th><?php _e( 'Earning', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -1032,7 +1034,12 @@ function dokan_top_earners() {
 
                     $orders_link = apply_filters( 'woocommerce_reports_order_link', $orders_link, $product_id, $product_title );
 
-                    echo '<tr><th>' . $product_name . '</th><td width="1%"><span>' . woocommerce_price( $sales ) . '</span></td><td class="bars"><a href="' . esc_url( $orders_link ) . '" style="width:' . esc_attr( $width ) . '%">&nbsp;</a></td></tr>';
+                    echo '<tr>
+                                <th>' . $product_name . '</th>
+                                <td colspan="2"><span>' . wc_price( $sales ) . '</span></td>
+                                <td width="1%"><span>' . wc_price( $total_earnings[ $product_id ] ) . '</span></td>
+                                <td class="bars"><a href="' . esc_url( $orders_link ) . '" style="width:' . esc_attr( $width ) . '%">&nbsp;</a></td>
+                          </tr>';
                 }
             ?>
         </tbody>
