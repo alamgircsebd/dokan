@@ -153,67 +153,78 @@ function dokan_seller_sales_statement() {
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><?php echo $start_date ?></td>
-                <td>--</td>
-                <td><?php _e( 'Opening Balance' , 'dokan' ); ?></td>
-                <td><?php echo '--'; ?></td>
-                <td><?php echo '--'; ?></td>
-                <td><?php echo $net_amount; ?></td>
-            </tr>
-            <?php
-//            $net_amount = 0;
-            $total_sales = 0;
-            $total_earned = 0;
-            foreach ( $statements as $key => $statement ) {
-                if ( isset( $statement->post_date ) ) {
-                    $type       = __( 'Order', 'dokan' );
-                    $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
-                    $id         = $statement->order_id;
-                    $gross_amount = get_post_meta( $statement->order_id, '_order_total', true );
-                    $sales      = wc_price( $gross_amount );
-                    $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
-                    $amount     = wc_price( $seller_amount );
-                    $net_amount = $net_amount + $seller_amount;
-                    
-                    $net_amount_print = wc_price( $net_amount );
-                    
-                    $total_sales += $gross_amount;
-                    $total_earned += $seller_amount;
-                    
-                } else if ( isset( $statement->refund_amount ) ) {
-                    $type   = __( 'Refund', 'dokan' );
-                    $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
-                    $id     = $statement->order_id;
-                    $sales  = wc_price( 0 );
-                    $amount = '<span style="color: #f05025;">-'.wc_price( $statement->refund_amount ).'</span>';
-                    $net_amount = $net_amount - $statement->refund_amount;
-                    $net_amount_print = wc_price( $net_amount );
-
-                } else {
-                    $type       = __( 'Withdraw', 'dokan' );
-                    $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
-                    $id         = $statement->id;
-                    $sales      = wc_price( 0 );
-                    $amount     = '<span style="color: #f05025;">-'.wc_price( $statement->amount ).'</span>';
-                    $net_amount = $net_amount - $statement->amount;
-                    $net_amount_print = wc_price( $net_amount );
-                }
-                
-                ?>
+            <?php if( count( $statements ) ) { ?>
                 <tr>
-                    <td><?php echo date( 'Y-m-d', $key ); ?></td>
-                    <td><a href="<?php echo $url; ?>">#<?php echo $id; ?></a></td>
-                    <td><?php echo $type; ?></td>
-                    <td><?php echo $sales; ?></td>
-                    <td><?php echo $amount; ?></td>
-                    <td><?php echo $net_amount_print; ?></td>
+                    <td><?php echo $start_date ?></td>
+                    <td>--</td>
+                    <td><?php _e( 'Opening Balance' , 'dokan' ); ?></td>
+                    <td><?php echo '--'; ?></td>
+                    <td><?php echo '--'; ?></td>
+                    <td><?php echo wc_price( $net_amount ); ?></td>
                 </tr>
                 <?php
-                
-            }
+    //            $net_amount = 0;
+                $total_sales = 0;
+                $total_earned = 0;
+                foreach ( $statements as $key => $statement ) {
+                    if ( isset( $statement->post_date ) ) {
+                        $type       = __( 'Order', 'dokan' );
+                        $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
+                        $id         = $statement->order_id;
+                        $gross_amount = get_post_meta( $statement->order_id, '_order_total', true );
+                        $sales      = wc_price( $gross_amount );
+                        $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
+                        $amount     = wc_price( $seller_amount );
+                        $net_amount = $net_amount + $seller_amount;
 
-            if ( ! count( $statements ) ) {                 
+                        $net_amount_print = wc_price( $net_amount );
+
+                        $total_sales += $gross_amount;
+                        $total_earned += $seller_amount;
+
+                    } else if ( isset( $statement->refund_amount ) ) {
+                        $type   = __( 'Refund', 'dokan' );
+                        $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
+                        $id     = $statement->order_id;
+                        $sales  = wc_price( 0 );
+                        $amount = '<span style="color: #f05025;">-'.wc_price( $statement->refund_amount ).'</span>';
+                        $net_amount = $net_amount - $statement->refund_amount;
+                        $net_amount_print = wc_price( $net_amount );
+
+                    } else {
+                        $type       = __( 'Withdraw', 'dokan' );
+                        $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
+                        $id         = $statement->id;
+                        $sales      = wc_price( 0 );
+                        $amount     = '<span style="color: #f05025;">-'.wc_price( $statement->amount ).'</span>';
+                        $net_amount = $net_amount - $statement->amount;
+                        $net_amount_print = wc_price( $net_amount );
+                    }
+
+                    ?>
+                    <tr>
+                        <td><?php echo date( 'Y-m-d', $key ); ?></td>
+                        <td><a href="<?php echo $url; ?>">#<?php echo $id; ?></a></td>
+                        <td><?php echo $type; ?></td>
+                        <td><?php echo $sales; ?></td>
+                        <td><?php echo $amount; ?></td>
+                        <td><?php echo $net_amount_print; ?></td>
+                    </tr>
+                    <?php
+
+                }
+                ?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><b><?php _e( 'Total :', 'dokan' ); ?></b></td>
+                    <td><b><?php echo wc_price( $total_sales ); ?></b></td>
+                    <td><b><?php echo wc_price( $total_earned ); ?></b></td>
+                    <td><b><?php echo wc_price( $net_amount ); ?></b></td>
+                </tr>
+            <?php
+            }
+            else {                 
                 ?>
                 <tr>
                     <td colspan="6"><?php _e( 'No Result found!', 'dokan' ); ?></td>
@@ -222,14 +233,7 @@ function dokan_seller_sales_statement() {
             }
 
             ?>
-            <tr>
-                <td></td>
-                <td></td>
-                <td><b><?php _e( 'Total :', 'dokan' ); ?></b></td>
-                <td><b><?php echo wc_price( $total_sales ); ?></b></td>
-                <td><b><?php echo wc_price( $total_earned ); ?></b></td>
-                <td><b><?php echo wc_price( $net_amount ); ?></b></td>
-            </tr>
+            
         </tbody>
     </table>
 

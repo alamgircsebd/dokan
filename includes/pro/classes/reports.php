@@ -51,8 +51,8 @@ class Dokan_Pro_Reports {
             if ( isset( $_GET['end_date'] ) ) {
                 $end_date = $_GET['end_date'];
             }
- 
-            $filename = "Statement-".time();
+           
+            $filename = "Statement-".date( 'Y-m-d',time() );
             header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
             header( "Content-Disposition: attachment; filename=$filename.csv" );
             $currency = get_woocommerce_currency_symbol();
@@ -61,7 +61,7 @@ class Dokan_Pro_Reports {
                 'order_id' => __( 'ID', 'dokan' ),
                 'type'     => __( 'Type', 'dokan' ),
                 'sales'    => __( 'Sales', 'dokan' ),
-                'amount'   => __( 'Amounts', 'dokan' ),
+                'amount'   => __( 'Earned', 'dokan' ),
                 'balance'  => __( 'Balance', 'dokan' ),
             );
 
@@ -69,6 +69,61 @@ class Dokan_Pro_Reports {
                 echo $label .', ';
             }
 
+            echo "\r\n";
+            
+            //calculate opening balance
+            $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $start_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
+            $prev_refunds    = dokan_get_seller_refund_by_date( '2010-01-01', $start_date );
+            $prev_wthdraws   = dokan_get_seller_withdraw_by_date( '2010-01-01', $start_date );
+
+            $old_data = array_merge( $prev_orders, $prev_refunds, $prev_wthdraws );
+            $old_statements = [];
+
+            foreach (  $old_data as $key => $odata ) {
+                $date = isset( $odata->post_date ) ? strtotime( $odata->post_date ) : strtotime( $odata->date );
+                $old_statements[$date] = $odata;
+            }
+            ksort( $old_statements );
+
+            $net_amount = 0;
+
+            foreach ( $old_statements as $key => $statement ) {
+                if ( isset( $statement->post_date ) ) {
+                    $type          = __( 'Order', 'dokan' );
+                    $url           = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
+                    $id            = $statement->order_id;
+                    $gross_amount  = get_post_meta( $statement->order_id, '_order_total', true );
+                    $sales         = wc_price( $gross_amount );
+                    $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
+                    $amount        = wc_price( $seller_amount );
+                    $net_amount    = $net_amount + $seller_amount;
+
+                    $net_amount_print = wc_price( $net_amount );
+                } else if ( isset( $statement->refund_amount ) ) {
+                    $type             = __( 'Refund', 'dokan' );
+                    $url              = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
+                    $id               = $statement->order_id;
+                    $sales            = wc_price( 0 );
+                    $amount           = '<span style="color: #f05025;">' . wc_price( $statement->refund_amount ) . '</span>';
+                    $net_amount       = $net_amount - $statement->refund_amount;
+                    $net_amount_print = wc_price( $net_amount );
+                } else {
+                    $type             = __( 'Withdraw', 'dokan' );
+                    $url              = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url( 'withdraw' ) );
+                    $id               = $statement->id;
+                    $sales            = wc_price( 0 );
+                    $amount           = '<span style="color: #f05025;">' . wc_price( $statement->amount ) . '</span>';
+                    $net_amount       = $net_amount - $statement->amount;
+                    $net_amount_print = wc_price( $net_amount );
+                }
+            }
+            
+            echo $start_date . ', ';
+            echo '#' .'--' . ', ';
+            echo 'Opening Balance' . ', ';
+            echo '--' . ', ';
+            echo '--' . ', ';
+            echo $net_amount . ', ';
             echo "\r\n";
 
             $order     = dokan_get_seller_orders_by_date( $start_date, $end_date );
@@ -84,8 +139,6 @@ class Dokan_Pro_Reports {
             }
             
             ksort( $statements );
-
-            $net_amount = 0;
 
             foreach ( $statements as $key => $statement ) {
                 if ( isset( $statement->post_date ) ) {
