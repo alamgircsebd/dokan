@@ -262,6 +262,7 @@ final class WeDevs_Dokan {
 
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
+            wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', array( 'jquery' ), '2.6.1' );
         }
         wp_register_script( 'dokan-frontend-script', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), false, null, true );
     }
@@ -410,8 +411,6 @@ final class WeDevs_Dokan {
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
 
-
-
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
                 wp_enqueue_style( 'fontawesome' );
@@ -444,6 +443,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-flot' );
                 wp_enqueue_script( 'chosen' );
                 wp_enqueue_script( 'select2-js' );
+                wp_enqueue_script( 'serializejson' );
                 wp_enqueue_media();
                 wp_enqueue_script( 'dokan-popup' );
                 wp_enqueue_script( 'wc-password-strength-meter' );

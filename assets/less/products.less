@@ -740,10 +740,91 @@
 
                 /** Load all variation styles **/
                 .dokan-product-variation-itmes {
-                    h3 {
+
+                    h3.variation-topbar-heading {
+                        margin: 0 !important;
                         font-size: inherit;
                         position: relative;
+                        line-height: 35px;
+                        padding: 8px 10px;
+                        border-bottom: 1px solid #eee;
+                        background-color: rgba(241, 241, 241, 0.61);
+
+                        .actions {
+                            position: absolute;
+                            top: 5px;
+                            right: 15px;
+
+                            i.fa {
+                                margin-right:10px;
+
+                                &.fa-bars {
+                                    cursor: move;
+                                }
+                                &.fa-sort-desc {
+                                    cursor: pointer;
+                                    padding-bottom: 4px;
+                                }
+                            }
+                        }
+
+                        strong {
+                            float:left;
+                            margin-right:10px;
+                        }
+
+                        select {
+                            float: left;
+                            margin-right: 10px;
+                            width: 20%;
+                        }
                     }
+
+                    .dokan-variable-attributes {
+                        margin-top: 15px;
+
+                        .thumbnail-checkbox-options {
+                            margin-bottom: 15px;
+
+                            .upload_image {
+                                width: 130px;
+                                height: 130px;
+                                float:left;
+                            }
+
+                            .options {
+                                float:left;
+                                margin-left:20px;
+
+                                label {
+                                    display:block;
+                                    margin-bottom:10px;
+
+                                    &:last-child {
+                                        margin-bottom: 0px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .variable_pricing {
+                            margin-bottom: 10px;
+                        }
+
+                        .weight-dimension {
+                            margin-bottom: 10px;
+
+                            .dimensions_field {
+                                .doakn-w3 {
+                                    margin-right: 6px;
+                                    &:last-child {
+                                        margin-right: 0px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 }
 
             }

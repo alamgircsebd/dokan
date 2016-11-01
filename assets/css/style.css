@@ -1070,9 +1070,72 @@ body {
   margin-bottom: 20px;
   /** Load all variation styles **/
 }
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3 {
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading {
+  margin: 0 !important;
   font-size: inherit;
   position: relative;
+  line-height: 35px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+  background-color: rgba(241, 241, 241, 0.61);
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions {
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions i.fa {
+  margin-right: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions i.fa.fa-bars {
+  cursor: move;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions i.fa.fa-sort-desc {
+  cursor: pointer;
+  padding-bottom: 4px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading strong {
+  float: left;
+  margin-right: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading select {
+  float: left;
+  margin-right: 10px;
+  width: 20%;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes {
+  margin-top: 15px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .thumbnail-checkbox-options {
+  margin-bottom: 15px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .thumbnail-checkbox-options .upload_image {
+  width: 130px;
+  height: 130px;
+  float: left;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .thumbnail-checkbox-options .options {
+  float: left;
+  margin-left: 20px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .thumbnail-checkbox-options .options label {
+  display: block;
+  margin-bottom: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .thumbnail-checkbox-options .options label:last-child {
+  margin-bottom: 0px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .variable_pricing {
+  margin-bottom: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .weight-dimension {
+  margin-bottom: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .weight-dimension .dimensions_field .doakn-w3 {
+  margin-right: 6px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .dokan-variable-attributes .weight-dimension .dimensions_field .doakn-w3:last-child {
+  margin-right: 0px;
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variation-default-toolbar {
   text-align: right;

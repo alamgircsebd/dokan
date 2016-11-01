@@ -12,11 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 extract( $variation_data );
 ?>
-<div class="woocommerce_variation wc-metabox closed">
-    <h3>
-        <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php _e( 'Remove', 'woocommerce' ); ?></a>
-        <div class="handlediv" title="<?php esc_attr_e( 'Click to toggle', 'woocommerce' ); ?>"></div>
-        <div class="tips sort" data-tip="<?php esc_attr_e( 'Drag and drop, or click to set admin variation order', 'woocommerce' ); ?>"></div>
+<div class="dokan-product-variation-itmes">
+    <h3 class="variation-topbar-heading">
+        <div class="actions">
+            <i class="fa fa-bars sort tips" data-title="<?php _e( 'Drag and drop, or click to set admin variation order', 'dokan' ); ?>" aria-hidden="true" ></i>
+            <i class="fa fa-sort-desc fa-flip-horizointal toggle-variation-content" aria-hidden="true"></i>
+            <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php _e( 'Remove', 'dokan' ); ?></a>
+        </div>
+
         <strong>#<?php echo esc_html( $variation_id ); ?> </strong>
         <?php
             foreach ( $parent_data['attributes'] as $attribute ) {
@@ -30,7 +33,7 @@ extract( $variation_data );
                 $variation_selected_value = isset( $variation_data[ 'attribute_' . sanitize_title( $attribute['name'] ) ] ) ? $variation_data[ 'attribute_' . sanitize_title( $attribute['name'] ) ] : '';
 
                 // Name will be something like attribute_pa_color
-                echo '<select name="attribute_' . sanitize_title( $attribute['name'] ) . '[' . $loop . ']"><option value="">' . __( 'Any', 'woocommerce' ) . ' ' . esc_html( wc_attribute_label( $attribute['name'] ) ) . '&hellip;</option>';
+                echo '<select class="dokan-form-control" name="attribute_' . sanitize_title( $attribute['name'] ) . '[' . $loop . ']"><option value="">' . __( 'Any', 'woocommerce' ) . ' ' . esc_html( wc_attribute_label( $attribute['name'] ) ) . '&hellip;</option>';
 
                 // Get terms for attribute taxonomy or value if its a custom attribute
                 if ( $attribute['is_taxonomy'] ) {
@@ -55,92 +58,113 @@ extract( $variation_data );
                 echo '</select>';
             }
         ?>
+
         <input type="hidden" name="variable_post_id[<?php echo $loop; ?>]" value="<?php echo esc_attr( $variation_id ); ?>" />
         <input type="hidden" class="variation_menu_order" name="variation_menu_order[<?php echo $loop; ?>]" value="<?php echo isset( $menu_order ) ? absint( $menu_order ) : 0; ?>" />
+        <div class="dokan-clearfix"></div>
     </h3>
 
-    <div class="woocommerce_variable_attributes wc-metabox-content" style="display: none;">
+    <div class="dokan-variable-attributes woocommerce_variable_attributes wc-metabox-content" style="display: none;">
         <div class="data">
-            <p class="form-row form-row-first upload_image">
-                <a href="#" class="upload_image_button tips <?php if ( $_thumbnail_id > 0 ) echo 'remove'; ?>" data-tip="<?php if ( $_thumbnail_id > 0 ) { echo __( 'Remove this image', 'woocommerce' ); } else { echo __( 'Upload an image', 'woocommerce' ); } ?>" rel="<?php echo esc_attr( $variation_id ); ?>"><img src="<?php if ( ! empty( $image ) ) echo esc_attr( $image ); else echo esc_attr( wc_placeholder_img_src() ); ?>" /><input type="hidden" name="upload_image_id[<?php echo $loop; ?>]" class="upload_image_id" value="<?php echo esc_attr( $_thumbnail_id ); ?>" /></a>
-            </p>
-            <?php if ( wc_product_sku_enabled() ) : ?>
-                <p class="sku form-row form-row-last">
-                    <label><?php _e( 'SKU', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Enter a SKU for this variation or leave blank to use the parent product SKU.', 'woocommerce' ) ); ?></label>
-                    <input type="text" size="5" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" placeholder="<?php echo esc_attr( $parent_data['sku'] ); ?>" />
-                </p>
-            <?php else : ?>
-                <input type="hidden" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" />
-            <?php endif; ?>
+            <div class="content-half-part thumbnail-checkbox-options">
+                <div class="upload_image">
+                    <a href="#" class="upload_image_button tips <?php if ( $_thumbnail_id > 0 ) echo 'remove'; ?>" data-title="<?php if ( $_thumbnail_id > 0 ) { echo _e( 'Remove this image', 'dokan' ); } else { echo _e( 'Upload an image', 'dokan' ); } ?>" rel="<?php echo esc_attr( $variation_id ); ?>">
+                        <img src="<?php if ( ! empty( $image ) ) echo esc_attr( $image ); else echo esc_attr( wc_placeholder_img_src() ); ?>" />
+                        <input type="hidden" name="upload_image_id[<?php echo $loop; ?>]" class="upload_image_id" value="<?php echo esc_attr( $_thumbnail_id ); ?>" />
+                    </a>
+                </div>
+                <div class="dokan-form-group options">
+                    <label><input type="checkbox" class="" name="variable_enabled[<?php echo $loop; ?>]" <?php checked( $variation->post_status, 'publish' ); ?> /> <?php _e( 'Enabled', 'dokan' ); ?></label>
+                    <label><input type="checkbox" class="variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" title="<?php _e( 'Enable this option if access is given to a downloadable file upon purchase of a product', 'dokan' ); ?>"></i></label>
+                    <label><input type="checkbox" class="variable_is_virtual" name="variable_is_virtual[<?php echo $loop; ?>]" <?php checked( isset( $_virtual ) ? $_virtual : '', 'yes' ); ?> /> <?php _e( 'Virtual', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" title="<?php _e( 'Enable this option if a product is not shipped or there is no shipping cost', 'dokan' ); ?>"></i></label>
 
-            <p class="form-row form-row-full options">
-                <label><input type="checkbox" class="checkbox" name="variable_enabled[<?php echo $loop; ?>]" <?php checked( $variation->post_status, 'publish' ); ?> /> <?php _e( 'Enabled', 'woocommerce' ); ?></label>
+                    <?php if ( get_option( 'woocommerce_manage_stock' ) == 'yes' ) : ?>
+                        <label><input type="checkbox" class="variable_manage_stock" name="variable_manage_stock[<?php echo $loop; ?>]" <?php checked( isset( $_manage_stock ) ? $_manage_stock : '', 'yes' ); ?> /> <?php _e( 'Manage stock?', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enable this option to enable stock management at variation level', 'dokan' ); ?>"></i></label>
+                    <?php endif; ?>
 
-                <label><input type="checkbox" class="checkbox variable_is_downloadable" name="variable_is_downloadable[<?php echo $loop; ?>]" <?php checked( isset( $_downloadable ) ? $_downloadable : '', 'yes' ); ?> /> <?php _e( 'Downloadable', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Enable this option if access is given to a downloadable file upon purchase of a product', 'woocommerce' ) ); ?></label>
+                    <?php do_action( 'dokan_variation_options', $loop, $variation_data, $variation ); ?>
 
-                <label><input type="checkbox" class="checkbox variable_is_virtual" name="variable_is_virtual[<?php echo $loop; ?>]" <?php checked( isset( $_virtual ) ? $_virtual : '', 'yes' ); ?> /> <?php _e( 'Virtual', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Enable this option if a product is not shipped or there is no shipping cost', 'woocommerce' ) ); ?></label>
+                </div>
+                <div class="dokan-clearfix"></div>
+            </div>
 
-                <?php if ( get_option( 'woocommerce_manage_stock' ) == 'yes' ) : ?>
-
-                    <label><input type="checkbox" class="checkbox variable_manage_stock" name="variable_manage_stock[<?php echo $loop; ?>]" <?php checked( isset( $_manage_stock ) ? $_manage_stock : '', 'yes' ); ?> /> <?php _e( 'Manage stock?', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Enable this option to enable stock management at variation level', 'woocommerce' ) ); ?></label>
-
+            <div class="content-half-part">
+                <?php if ( wc_product_sku_enabled() ) : ?>
+                    <div class="sku">
+                        <label><?php _e( 'SKU', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enter a SKU for this variation or leave blank to use the parent product SKU.', 'dokan' ); ?>"></i></label>
+                        <input type="text" class="dokan-form-control" size="5" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" placeholder="<?php echo esc_attr( $parent_data['sku'] ); ?>" />
+                    </div>
+                <?php else : ?>
+                    <input type="hidden" name="variable_sku[<?php echo $loop; ?>]" value="<?php if ( isset( $_sku ) ) echo esc_attr( $_sku ); ?>" />
                 <?php endif; ?>
 
-                <?php do_action( 'woocommerce_variation_options', $loop, $variation_data, $variation ); ?>
-            </p>
+                <div class="stock-status">
+                    <label><?php _e( 'Stock status', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Controls whether or not the product is listed as "in stock" or "out of stock" on the frontend.', 'dokan' ); ?>"></i></label>
+                    <select name="variable_stock_status[<?php echo $loop; ?>]" class="dokan-form-control">
+                        <?php
+                            foreach ( $parent_data['stock_status_options'] as $key => $value ) {
+                                echo '<option value="' . esc_attr( $key === $_stock_status ? '' : $key ) . '" ' . selected( $key === $_stock_status, true, false ) . '>' . esc_html( $value ) . '</option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="dokan-clearfix"></div>
 
             <div class="variable_pricing">
-                <p class="form-row form-row-first">
-                    <label><?php echo __( 'Regular price', 'woocommerce' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
-                    <input type="text" size="5" name="variable_regular_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>" class="wc_input_price" placeholder="<?php esc_attr_e( 'Variation price (required)', 'woocommerce' ); ?>" />
-                </p>
-                <p class="form-row form-row-last">
-                    <label><?php echo __( 'Sale price', 'woocommerce' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?> <a href="#" class="sale_schedule"><?php _e( 'Schedule', 'woocommerce' ); ?></a><a href="#" class="cancel_sale_schedule" style="display:none"><?php _e( 'Cancel schedule', 'woocommerce' ); ?></a></label>
-                    <input type="text" size="5" name="variable_sale_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_sale_price ) ) echo esc_attr( $_sale_price ); ?>" class="wc_input_price" />
-                </p>
-
-                <div class="sale_price_dates_fields" style="display: none">
-                    <p class="form-row form-row-first">
-                        <label><?php _e( 'Sale start date', 'woocommerce' ); ?></label>
-                        <input type="text" class="sale_price_dates_from" name="variable_sale_price_dates_from[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_from ) ? date_i18n( 'Y-m-d', $_sale_price_dates_from ) : ''; ?>" placeholder="<?php echo esc_attr_x( 'From&hellip;', 'placeholder', 'woocommerce' ) ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
-                    </p>
-                    <p class="form-row form-row-last">
-                        <label><?php _e( 'Sale end date', 'woocommerce' ); ?></label>
-                        <input type="text" class="sale_price_dates_to" name="variable_sale_price_dates_to[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_to ) ? date_i18n( 'Y-m-d', $_sale_price_dates_to ) : ''; ?>" placeholder="<?php echo esc_attr_x('To&hellip;', 'placeholder', 'woocommerce') ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
-                    </p>
+                <div class="content-half-part">
+                    <label><?php echo __( 'Regular price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
+                    <input type="text" size="5" name="variable_regular_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Variation price (required)', 'dokan' ); ?>" />
                 </div>
-
+                <div class="content-half-part">
+                    <label><?php echo __( 'Sale price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?> <a href="#" class="sale_schedule"><?php _e( 'Schedule', 'dokan' ); ?></a><a href="#" class="cancel_sale_schedule" style="display:none"><?php _e( 'Cancel schedule', 'dokan' ); ?></a></label>
+                    <input type="text" size="5" name="variable_sale_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_sale_price ) ) echo esc_attr( $_sale_price ); ?>" class="dokan-form-control" />
+                </div>
+                <div class="dokan-clearfix"></div>
+                <div class="sale_price_dates_fields dokan-form-group" style="display: none">
+                    <div class="content-half-part">
+                        <label><?php _e( 'Sale start date', 'dokan' ); ?></label>
+                        <input type="text" class="dokan-form-control sale_price_dates_from" name="variable_sale_price_dates_from[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_from ) ? date_i18n( 'Y-m-d', $_sale_price_dates_from ) : ''; ?>" placeholder="<?php echo esc_attr_x( 'From&hellip;', 'placeholder', 'dokan' ) ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+                    </div>
+                    <div class="content-half-part">
+                        <label><?php _e( 'Sale end date', 'dokan' ); ?></label>
+                        <input type="text" class="dokan-form-control sale_price_dates_to" name="variable_sale_price_dates_to[<?php echo $loop; ?>]" value="<?php echo ! empty( $_sale_price_dates_to ) ? date_i18n( 'Y-m-d', $_sale_price_dates_to ) : ''; ?>" placeholder="<?php echo esc_attr_x('To&hellip;', 'placeholder', 'woocommerce') ?> YYYY-MM-DD" maxlength="10" pattern="[0-9]{4}-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])" />
+                    </div>
+                    <div class="dokan-clearfix"></div>
+                </div>
                 <?php
                     /**
-                     * woocommerce_variation_options_pricing action.
+                     * dokan_variation_options_pricing action.
                      *
-                     * @since 2.5.0
+                     * @since 2.6
                      *
                      * @param int     $loop
                      * @param array   $variation_data
                      * @param WP_Post $variation
                      */
-                    do_action( 'woocommerce_variation_options_pricing', $loop, $variation_data, $variation );
+                    do_action( 'dokan_variation_options_pricing', $loop, $variation_data, $variation );
                 ?>
             </div>
 
             <?php if ( 'yes' == get_option( 'woocommerce_manage_stock' ) ) : ?>
-                <div class="show_if_variation_manage_stock" style="display: none;">
-                    <p class="form-row form-row-first">
-                        <label><?php _e( 'Stock quantity', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Enter a quantity to enable stock management at variation level, or leave blank to use the parent product\'s options.', 'woocommerce' ) ); ?></label>
-                        <input type="number" size="5" name="variable_stock[<?php echo $loop; ?>]" value="<?php if ( isset( $_stock ) ) echo esc_attr( wc_stock_amount( $_stock ) ); ?>" step="any" />
-                    </p>
-                    <p class="form-row form-row-last">
-                        <label><?php _e( 'Allow backorders?', 'woocommerce' ); ?></label>
-                        <select name="variable_backorders[<?php echo $loop; ?>]">
+
+                <div class="dokan-form-group show_if_variation_manage_stock" style="display: none;">
+                    <div class="content-half-part">
+                        <label><?php _e( 'Stock quantity', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enter a quantity to enable stock management at variation level, or leave blank to use the parent product\'s options.', 'dokan' ); ?>"></i></label>
+                        <input type="number" class="dokan-form-control" size="5" name="variable_stock[<?php echo $loop; ?>]" value="<?php if ( isset( $_stock ) ) echo esc_attr( wc_stock_amount( $_stock ) ); ?>" step="any" />
+                    </div>
+                    <div class="content-half-part">
+                        <label><?php _e( 'Allow backorders?', 'dokan' ); ?></label>
+                        <select name="variable_backorders[<?php echo $loop; ?>]" class="dokan-form-control">
                             <?php
                                 foreach ( $parent_data['backorder_options'] as $key => $value ) {
                                     echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key === $_backorders, true, false ) . '>' . esc_html( $value ) . '</option>';
                                 }
                             ?>
                         </select>
-                    </p>
-
+                    </div>
+                    <div class="dokan-clearfix"></div>
                     <?php
                         /**
                          * woocommerce_variation_options_inventory action.
@@ -151,113 +175,106 @@ extract( $variation_data );
                          * @param array   $variation_data
                          * @param WP_Post $variation
                          */
-                        do_action( 'woocommerce_variation_options_inventory', $loop, $variation_data, $variation );
+                        do_action( 'dokan_variation_options_inventory', $loop, $variation_data, $variation );
                     ?>
                 </div>
-            <?php endif; ?>
 
-            <div class="">
-                <p class="form-row form-row-full">
-                    <label><?php _e( 'Stock status', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Controls whether or not the product is listed as "in stock" or "out of stock" on the frontend.', 'woocommerce' ) ); ?></label>
-                    <select name="variable_stock_status[<?php echo $loop; ?>]">
-                        <?php
-                            foreach ( $parent_data['stock_status_options'] as $key => $value ) {
-                                echo '<option value="' . esc_attr( $key === $_stock_status ? '' : $key ) . '" ' . selected( $key === $_stock_status, true, false ) . '>' . esc_html( $value ) . '</option>';
-                            }
-                        ?>
-                    </select>
-                </p>
-            </div>
+            <?php endif; ?>
 
             <?php if ( wc_product_weight_enabled() || wc_product_dimensions_enabled() ) : ?>
-                <div>
+
+                <div class="weight-dimension">
                     <?php if ( wc_product_weight_enabled() ) : ?>
-                        <p class="form-row hide_if_variation_virtual form-row-first">
-                            <label><?php echo __( 'Weight', 'woocommerce' ) . ' (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')'; ?> <?php echo wc_help_tip( __( 'Enter a weight for this variation or leave blank to use the parent product weight.', 'woocommerce' ) ); ?></a></label>
-                            <input type="text" size="5" name="variable_weight[<?php echo $loop; ?>]" value="<?php if ( isset( $_weight ) ) echo esc_attr( $_weight ); ?>" placeholder="<?php echo esc_attr( $parent_data['weight'] ); ?>" class="wc_input_decimal" />
-                        </p>
+                        <div class="content-half-part hide_if_variation_virtual">
+                            <label><?php echo __( 'Weight', 'dokan' ) . ' (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')'; ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enter a weight for this variation or leave blank to use the parent product weight.', 'dokan' ); ?>"></i></label>
+                            <input type="text" size="5" name="variable_weight[<?php echo $loop; ?>]" value="<?php if ( isset( $_weight ) ) echo esc_attr( $_weight ); ?>" placeholder="<?php echo esc_attr( $parent_data['weight'] ); ?>" class="dokan-form-control" />
+                        </div>
                     <?php else : ?>
-                        <p>&nbsp;</p>
-                    <?php endif; ?>
-                    <?php if ( wc_product_dimensions_enabled() ) : ?>
-                        <p class="form-row dimensions_field hide_if_variation_virtual form-row-last">
-                            <label for="product_length"><?php echo __( 'Dimensions (L&times;W&times;H)', 'woocommerce' ) . ' (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')'; ?></label>
-                            <input id="product_length" class="input-text wc_input_decimal" size="6" type="text" name="variable_length[<?php echo $loop; ?>]" value="<?php if ( isset( $_length ) ) echo esc_attr( $_length ); ?>" placeholder="<?php echo esc_attr( $parent_data['length'] ); ?>" />
-                            <input class="input-text wc_input_decimal" size="6" type="text" name="variable_width[<?php echo $loop; ?>]" value="<?php if ( isset( $_width ) ) echo esc_attr( $_width ); ?>" placeholder="<?php echo esc_attr( $parent_data['width'] ); ?>" />
-                            <input class="input-text wc_input_decimal last" size="6" type="text" name="variable_height[<?php echo $loop; ?>]" value="<?php if ( isset( $_height ) ) echo esc_attr( $_height ); ?>" placeholder="<?php echo esc_attr( $parent_data['height'] ); ?>" />
-                        </p>
-                    <?php else : ?>
-                        <p>&nbsp;</p>
+                        <div>&nbsp;</div>
                     <?php endif; ?>
 
-                    <?php
-                        /**
-                         * woocommerce_variation_options_dimensions action.
-                         *
-                         * @since 2.5.0
-                         *
-                         * @param int     $loop
-                         * @param array   $variation_data
-                         * @param WP_Post $variation
-                         */
-                        do_action( 'woocommerce_variation_options_dimensions', $loop, $variation_data, $variation );
-                    ?>
+                    <?php if ( wc_product_dimensions_enabled() ) : ?>
+                        <div class="content-half-part dimensions_field hide_if_variation_virtual">
+                            <label for="product_length"><?php echo __( 'Dimensions (L&times;W&times;H)', 'dokan' ) . ' (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')'; ?></label>
+                            <div class="dokan-form-group">
+                                <input id="product_length" class="dokan-w3 dokan-form-control wc_input_decimal" size="6" type="text" name="variable_length[<?php echo $loop; ?>]" value="<?php if ( isset( $_length ) ) echo esc_attr( $_length ); ?>" placeholder="<?php echo esc_attr( $parent_data['length'] ); ?>" />
+                                <input class="dokan-w3 dokan-form-control wc_input_decimal" size="6" type="text" name="variable_width[<?php echo $loop; ?>]" value="<?php if ( isset( $_width ) ) echo esc_attr( $_width ); ?>" placeholder="<?php echo esc_attr( $parent_data['width'] ); ?>" />
+                                <input class="dokan-w3 dokan-form-control wc_input_decimal last" size="6" type="text" name="variable_height[<?php echo $loop; ?>]" value="<?php if ( isset( $_height ) ) echo esc_attr( $_height ); ?>" placeholder="<?php echo esc_attr( $parent_data['height'] ); ?>" />
+                            </div>
+                        </div>
+                    <?php else : ?>
+                        <div>&nbsp;</div>
+                    <?php endif; ?>
+
+                    <div class="dokan-clearfix"></div>
                 </div>
             <?php endif; ?>
+
             <div>
-                <p class="form-row hide_if_variation_virtual form-row-full"><label><?php _e( 'Shipping class', 'woocommerce' ); ?></label> <?php
-                    $args = array(
-                        'taxonomy'          => 'product_shipping_class',
-                        'hide_empty'        => 0,
-                        'show_option_none'  => __( 'Same as parent', 'woocommerce' ),
-                        'name'              => 'variable_shipping_class[' . $loop . ']',
-                        'id'                => '',
-                        'selected'          => isset( $shipping_class ) ? esc_attr( $shipping_class ) : '',
-                        'echo'              => 0
-                    );
-
-                    echo wp_dropdown_categories( $args );
-                ?></p>
-
-                <?php if ( wc_tax_enabled() ) : ?>
-                    <p class="form-row form-row-full">
-                        <label><?php _e( 'Tax class', 'woocommerce' ); ?></label>
-                        <select name="variable_tax_class[<?php echo $loop; ?>]">
-                            <option value="parent" <?php selected( is_null( $_tax_class ), true ); ?>><?php _e( 'Same as parent', 'woocommerce' ); ?></option>
-                            <?php
-                            foreach ( $parent_data['tax_class_options'] as $key => $value )
-                                echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key === $_tax_class, true, false ) . '>' . esc_html( $value ) . '</option>';
-                        ?></select>
-                    </p>
-
+                <div class="dokan-form-group hide_if_variation_virtual">
+                    <label><?php _e( 'Shipping class', 'dokan' ); ?></label>
                     <?php
-                        /**
-                         * woocommerce_variation_options_tax action.
-                         *
-                         * @since 2.5.0
-                         *
-                         * @param int     $loop
-                         * @param array   $variation_data
-                         * @param WP_Post $variation
-                         */
-                        do_action( 'woocommerce_variation_options_tax', $loop, $variation_data, $variation );
+                        $args = array(
+                            'taxonomy'          => 'product_shipping_class',
+                            'hide_empty'        => 0,
+                            'show_option_none'  => __( 'Same as parent', 'dokan' ),
+                            'name'              => 'variable_shipping_class[' . $loop . ']',
+                            'id'                => '',
+                            'class'             => 'dokan-form-control',
+                            'selected'          => isset( $shipping_class ) ? esc_attr( $shipping_class ) : '',
+                            'echo'              => 0
+                        );
+
+                        echo wp_dropdown_categories( $args );
                     ?>
+                </div>
+                <?php if ( wc_tax_enabled() ) : ?>
+
+
+                <div class="dokan-form-group form-row-full">
+                    <label><?php _e( 'Tax class', 'dokan' ); ?></label>
+                    <select class="dokan-form-control" name="variable_tax_class[<?php echo $loop; ?>]">
+                        <option value="parent" <?php selected( is_null( $_tax_class ), true ); ?>><?php _e( 'Same as parent', 'dokan' ); ?></option>
+                        <?php
+                        foreach ( $parent_data['tax_class_options'] as $key => $value ) {
+                            echo '<option value="' . esc_attr( $key ) . '" ' . selected( $key === $_tax_class, true, false ) . '>' . esc_html( $value ) . '</option>';
+                        }
+                        ?>
+                    </select>
+
+                </div>
+
+                <?php
+                    /**
+                     * dokan_variation_options_tax action.
+                     *
+                     * @since 2.6
+                     *
+                     * @param int     $loop
+                     * @param array   $variation_data
+                     * @param WP_Post $variation
+                     */
+                    do_action( 'dokan_variation_options_tax', $loop, $variation_data, $variation );
+                ?>
                 <?php endif; ?>
+
             </div>
+
             <div>
-                <p class="form-row form-row-full">
-                    <label><?php _e( 'Variation description', 'woocommerce' ); ?></label>
-                    <textarea name="variable_description[<?php echo $loop; ?>]" rows="3" style="width:100%;"><?php echo isset( $variation_data['_variation_description'] ) ? esc_textarea( $variation_data['_variation_description'] ) : ''; ?></textarea>
+                <p class="dokan-form-group">
+                    <label><?php _e( 'Variation description', 'dokan' ); ?></label>
+                    <textarea class="dokan-form-control" name="variable_description[<?php echo $loop; ?>]" rows="3" style="width:100%;"><?php echo isset( $variation_data['_variation_description'] ) ? esc_textarea( $variation_data['_variation_description'] ) : ''; ?></textarea>
                 </p>
             </div>
+
             <div class="show_if_variation_downloadable" style="display: none;">
-                <div class="form-row form-row-full downloadable_files">
-                    <label><?php _e( 'Downloadable files', 'woocommerce' ); ?></label>
-                    <table class="widefat">
+                <div class="dokan-form-group downloadable_files">
+                    <label><?php _e( 'Downloadable files', 'dokan' ); ?></label>
+                    <table class="dokan-table dokan-table-striped">
                         <thead>
                             <div>
-                                <th><?php _e( 'Name', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'This is the name of the download shown to the customer.', 'woocommerce' ) ); ?></th>
-                                <th colspan="2"><?php _e( 'File URL', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'This is the URL or absolute path to the file which customers will get access to. URLs entered here should already be encoded.', 'woocommerce' ) ); ?></th>
+                                <th><?php _e( 'Name', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'This is the name of the download shown to the customer.', 'dokan' ); ?>"></i></th>
+                                <th colspan="2"><?php _e( 'File URL', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'This is the URL or absolute path to the file which customers will get access to. URLs entered here should already be encoded.', 'dokan' ); ?>"></i></th>
                                 <th>&nbsp;</th>
                             </div>
                         </thead>
@@ -283,7 +300,7 @@ extract( $variation_data );
                         <tfoot>
                             <div>
                                 <th colspan="4">
-                                    <a href="#" class="button insert" data-row="<?php
+                                    <a href="#" class="dokan-btn dokan-btn-default insert-file-row" data-row="<?php
                                         $file = array(
                                             'file' => '',
                                             'name' => ''
@@ -295,37 +312,39 @@ extract( $variation_data );
                                             'variation_id' => $variation_id
                                         ) );
                                         echo esc_attr( ob_get_clean() );
-                                    ?>"><?php _e( 'Add File', 'woocommerce' ); ?></a>
+                                    ?>"><?php _e( 'Add File', 'dokan' ); ?></a>
                                 </th>
                             </div>
                         </tfoot>
                     </table>
                 </div>
             </div>
-            <div class="show_if_variation_downloadable" style="display: none;">
-                <p class="form-row form-row-first">
-                    <label><?php _e( 'Download limit', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Leave blank for unlimited re-downloads.', 'woocommerce' ) ); ?></a></label>
-                    <input type="number" size="5" name="variable_download_limit[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_limit ) ) echo esc_attr( $_download_limit ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'woocommerce' ); ?>" step="1" min="0" />
-                </p>
-                <p class="form-row form-row-last">
-                    <label><?php _e( 'Download expiry', 'woocommerce' ); ?> <?php echo wc_help_tip( __( 'Enter the number of days before a download link expires, or leave blank.', 'woocommerce' ) ); ?></a></label>
-                    <input type="number" size="5" name="variable_download_expiry[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_expiry ) ) echo esc_attr( $_download_expiry ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'woocommerce' ); ?>" step="1" min="0" />
-                </p>
+
+            <div class="dokan-form-group show_if_variation_downloadable" style="display: none;">
+                <div class="content-half-part">
+                    <label><?php _e( 'Download limit', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Leave blank for unlimited re-downloads.', 'dokan' ); ?>"></i></label>
+                    <input type="number" class="dokan-form-control" size="5" name="variable_download_limit[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_limit ) ) echo esc_attr( $_download_limit ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'dokan' ); ?>" step="1" min="0" />
+                </div>
+                <div class="content-half-part">
+                    <label><?php _e( 'Download expiry', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enter the number of days before a download link expires, or leave blank.', 'dokan' ); ?>"></i></label>
+                    <input type="number" class="dokan-form-control" size="5" name="variable_download_expiry[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_expiry ) ) echo esc_attr( $_download_expiry ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'dokan' ); ?>" step="1" min="0" />
+                </div>
 
                 <?php
                     /**
-                     * woocommerce_variation_options_download action.
+                     * dokan_variation_options_download action.
                      *
-                     * @since 2.5.0
+                     * @since 2.6
                      *
                      * @param int     $loop
                      * @param array   $variation_data
                      * @param WP_Post $variation
                      */
-                    do_action( 'woocommerce_variation_options_download', $loop, $variation_data, $variation );
+                    do_action( 'dokan_variation_options_download', $loop, $variation_data, $variation );
                 ?>
+                <div class="dokan-clearfix"></div>
             </div>
-            <?php do_action( 'woocommerce_product_after_variable_attributes', $loop, $variation_data, $variation ); ?>
+            <?php do_action( 'dokan_product_after_variable_attributes', $loop, $variation_data, $variation ); ?>
         </div>
     </div>
 </div>
