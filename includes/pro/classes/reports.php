@@ -155,7 +155,7 @@ class Dokan_Pro_Reports {
                     $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
                     $id     = $statement->order_id;
                     $sales  =  0;
-                    $amount = '-'. $statement->refund_amount;
+                    $amount = $statement->refund_amount;
                     $net_amount = $net_amount - $statement->refund_amount;
                     $net_amount_print =  $net_amount;
 
@@ -164,7 +164,7 @@ class Dokan_Pro_Reports {
                     $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
                     $id         = $statement->id;
                     $sales      =  0;
-                    $amount     = '-'. $statement->amount;
+                    $amount     = $statement->amount;
                     $net_amount = $net_amount - $statement->amount;
                     $net_amount_print =  $net_amount;
                 }
