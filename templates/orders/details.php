@@ -319,16 +319,8 @@ $order    = new WC_Order( $order_id );
                                         </div>
                                         <form id="add-shipping-tracking-form" method="post">
                                             <div class="modal-body">
-                                                <h5><?php _e('Shipping Provider','dokan');?></h5>
-                                                <select name="shipping_provider" id="shipping_provider" class="form-control">
-                                                    <optgroup label="Australia">
-                                                        <option><?php _e('Australia','dokan');?></option>
-                                                        <option><?php _e('Fedex','dokan');?></option>
-                                                    </optgroup>
-                                                    <optgroup label="Canada">
-                                                        <option><?php _e('Canada Post','dokan');?></option>
-                                                    </optgroup>
-                                                </select>
+                                                <h5><?php _e('Shipping Provider Name / URL','dokan');?></h5>
+                                                <input type="text" name="shipping_provider" id="shipping_provider" value="">
                                                 <h5><?php _e('Tracking Number','dokan');?></h5>
                                                 <input type="text" name="tracking_number" id="tracking_number" value="">
                                                 <h5><?php _e('Date Shipped','dokan');?></h5>
