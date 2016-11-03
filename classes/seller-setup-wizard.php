@@ -104,7 +104,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         <head>
             <meta name="viewport" content="width=device-width" />
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title><?php _e( 'Dokan &rsaquo; Setup Wizard', 'dokan' ); ?></title>
+            <title><?php _e( 'Seller &rsaquo; Setup Wizard', 'dokan' ); ?></title>
             <?php wp_print_scripts( 'wc-setup' ); ?>
             <?php do_action( 'admin_print_styles' ); ?>
             <?php do_action( 'admin_head' ); ?>
@@ -161,7 +161,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
             <?php
                 if ( ! empty( $this->custom_logo ) ) {
             ?>
-                <h1 id="wc-logo"><a href="https://wedevs.com/products/plugins/dokan/"><img src="<?php echo $this->custom_logo; ?>" alt="Dokan" /></a></h1>
+                <h1 id="wc-logo"><a href="<?php echo home_url() ?>"><img src="<?php echo $this->custom_logo; ?>" alt="Dokan" /></a></h1>
             <?php
                 } else {
                     echo '<h1 id="wc-logo">' . get_bloginfo( 'name' ) . '</h1>';
