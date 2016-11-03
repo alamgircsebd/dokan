@@ -10,11 +10,12 @@
 
 <div class="dokan-attribute-variation-options dokan-edit-row dokan-clearfix">
     <div class="dokan-section-heading">
-        <h2><?php _e( 'Attribute and Variation', 'dokan' ); ?></h2>
-        <p><?php _e( 'Manage attributes and variations for this variable product.', 'dokan' ); ?></p>
+        <h2><?php _e( 'Attribute', 'dokan' ); ?><span class="show_if_variable"><?php _e( ' and Variation', 'dokan' ) ?></span></h2>
+        <p class="show_if_variable"><?php _e( 'Manage attributes and variations for this variable product.', 'dokan' ); ?></p>
+        <p class="show_if_simple"><?php _e( 'Manage attributes for this simple product.', 'dokan' ); ?></p>
     </div>
     <div class="dokan-section-content">
-        <div class="dokan-product-attribute-wrapper">
+        <div class="dokan-product-attribute-wrapper show_if_simple show_if_variable">
 
             <ul class="dokan-attribute-option-list">
                 <?php
@@ -85,7 +86,7 @@
             </div>
         </div>
 
-        <div class="dokan-product-variation-wrapper">
+        <div class="dokan-product-variation-wrapper show_if_variable">
             <?php dokan_product_output_variations(); ?>
         </div>
     </div>

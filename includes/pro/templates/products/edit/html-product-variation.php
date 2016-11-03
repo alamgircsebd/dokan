@@ -68,7 +68,7 @@ extract( $variation_data );
         <div class="data">
             <div class="content-half-part thumbnail-checkbox-options">
                 <div class="upload_image">
-                    <a href="#" class="upload_image_button tips <?php if ( $_thumbnail_id > 0 ) echo 'remove'; ?>" data-title="<?php if ( $_thumbnail_id > 0 ) { echo _e( 'Remove this image', 'dokan' ); } else { echo _e( 'Upload an image', 'dokan' ); } ?>" rel="<?php echo esc_attr( $variation_id ); ?>">
+                    <a href="#" class="upload_image_button tips <?php if ( $_thumbnail_id > 0 ) echo 'dokan-img-remove'; ?>" title="<?php if ( $_thumbnail_id > 0 ) { echo _e( 'Remove this image', 'dokan' ); } else { echo _e( 'Upload an image', 'dokan' ); } ?>" rel="<?php echo esc_attr( $variation_id ); ?>">
                         <img src="<?php if ( ! empty( $image ) ) echo esc_attr( $image ); else echo esc_attr( wc_placeholder_img_src() ); ?>" />
                         <input type="hidden" name="upload_image_id[<?php echo $loop; ?>]" class="upload_image_id" value="<?php echo esc_attr( $_thumbnail_id ); ?>" />
                     </a>

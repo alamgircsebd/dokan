@@ -96,7 +96,7 @@ class Dokan_Pro_Ajax {
         // Get tax classes
         $tax_classes           = WC_Tax::get_tax_classes();
         $tax_class_options     = array();
-        $tax_class_options[''] = __( 'Standard', 'woocommerce' );
+        $tax_class_options[''] = __( 'Standard', 'dokan' );
 
         if ( ! empty( $tax_classes ) ) {
             foreach ( $tax_classes as $class ) {
@@ -106,15 +106,15 @@ class Dokan_Pro_Ajax {
 
         // Set backorder options
         $backorder_options = array(
-            'no'     => __( 'Do not allow', 'woocommerce' ),
-            'notify' => __( 'Allow, but notify customer', 'woocommerce' ),
-            'yes'    => __( 'Allow', 'woocommerce' )
+            'no'     => __( 'Do not allow', 'dokan' ),
+            'notify' => __( 'Allow, but notify customer', 'dokan' ),
+            'yes'    => __( 'Allow', 'dokan' )
         );
 
         // set stock status options
         $stock_status_options = array(
-            'instock'    => __( 'In stock', 'woocommerce' ),
-            'outofstock' => __( 'Out of stock', 'woocommerce' )
+            'instock'    => __( 'In stock', 'dokan' ),
+            'outofstock' => __( 'Out of stock', 'dokan' )
         );
 
         $parent_data = array(
@@ -267,7 +267,7 @@ class Dokan_Pro_Ajax {
                 echo '<p>' . wp_kses_post( $error ) . '</p>';
             }
 
-            echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">' . __( 'Dismiss this notice.', 'woocommerce' ) . '</span></button>';
+            echo '<button type="button" class="notice-dismiss"><span class="screen-reader-text">' . __( 'Dismiss this notice.', 'dokan' ) . '</span></button>';
             echo '</div>';
 
             delete_option( 'woocommerce_meta_box_errors' );

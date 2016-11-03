@@ -24,7 +24,7 @@
 				<input type="checkbox" <?php checked( $attribute['is_visible'], 1 ); ?> name="attribute_visibility[<?php echo $i; ?>]" value="1" /> <?php _e( 'Visible on the product page', 'dokan' ); ?>
 			</label>
 
-			<label class="checkbox-item form-label">
+			<label class="checkbox-item form-label show_if_variable">
 				<input type="checkbox" <?php checked( $attribute['is_variation'], 1 ); ?> name="attribute_variation[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for variations', 'dokan' ); ?>
 			</label>
         </div>

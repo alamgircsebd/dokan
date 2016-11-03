@@ -178,22 +178,22 @@ if ( ! $from_shortcode ) {
                                     </select>
                                 </div>
 
-                                <div class="dokan-form-group dokan-product-type-container">
+                                <div class="dokan-form-group dokan-product-type-container show_if_simple">
                                     <div class="content-half-part downloadable-checkbox">
                                         <label>
-                                            <input type="checkbox" <?php checked( $is_downloadable, true ); ?> class="_is_downloadable"> <?php _e( 'Downloadable', 'dokan' ); ?>
+                                            <input type="checkbox" <?php checked( $is_downloadable, true ); ?> class="_is_downloadable" id="_downloadable"> <?php _e( 'Downloadable', 'dokan' ); ?>
                                         </label>
                                     </div>
                                     <div class="content-half-part virtual-checkbox">
                                         <label>
-                                            <input type="checkbox" <?php checked( $is_virtual, true ); ?> class="_is_virtual"> <?php _e( 'Virtual', 'dokan' ); ?>
+                                            <input type="checkbox" <?php checked( $is_virtual, true ); ?> class="_is_virtual" id="_virtual"> <?php _e( 'Virtual', 'dokan' ); ?>
                                         </label>
                                     </div>
                                     <div class="dokan-clearfix"></div>
                                 </div>
 
 
-                                <div class="hide_if_variation dokan-clearfix">
+                                <div class="show_if_simple dokan-clearfix">
 
                                     <div class="dokan-form-group dokan-clearfix dokan-price-container">
 
@@ -460,7 +460,7 @@ if ( ! $from_shortcode ) {
                             </div><!-- .dokan-side-right -->
                         </div><!-- .dokan-product-inventory -->
 
-                        <div class="dokan-other-options dokan-edit-row dokan-clearfix">
+                        <div class="dokan-other-options dokan-edit-row dokan-clearfix show_if_downloadable">
                             <div class="dokan-section-heading">
                                 <h2><?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Configure your downloadable product settings', 'dokan' ); ?></p>
@@ -530,7 +530,7 @@ if ( ! $from_shortcode ) {
                         <?php do_action( 'dokan_product_edit_after_inventory_variants', $post, $post_id ); ?>
 
                         <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
-                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix">
+                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix show_if_simple">
                                 <div class="dokan-section-heading">
                                     <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
                                 </div>

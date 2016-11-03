@@ -334,7 +334,6 @@
                     };
 
                     $.post( dokan.ajaxurl, data, function( response ) {
-                        console.log(response);
                         if ( response.error ) {
                             window.alert( response.error );
                         } else if ( response.slug ) {
@@ -412,10 +411,24 @@
                         action:   'dokan_save_attributes'
                     };
 
-                self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').removeClass('dokan-hide');
+                // self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').removeClass('dokan-hide');
+                $( '.dokan-product-attribute-wrapper' ).block({
+                    message: null,
+                    fadeIn: 50,
+                    fadeOut: 1000,
+                    overlayCSS: {
+                        background: '#fff',
+                        opacity: 0.6
+                    }
+                });
 
                 $.post( dokan.ajaxurl, data, function( resp ) {
-                    self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').addClass('dokan-hide');
+                    // Load variations panel.
+                    $( '#dokan-variable-product-options' ).load( window.location.toString() + ' #dokan-variable-product-options-inner', function() {
+                        $( '#dokan-variable-product-options' ).trigger( 'reload' );
+                        $( '.dokan-product-attribute-wrapper' ).unblock();
+                    });
+                    // self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').addClass('dokan-hide');
                 });
 
             }
@@ -424,29 +437,7 @@
         variations: {
 
             doVariationAction: function(e) {
-                e.preventDefault();
 
-                var do_variation_action = $( '.dokan-variation-action-toolbar select.variation-actions' ).val(),
-                    data       = {},
-                    changes    = 0,
-                    value;
-
-                switch ( do_variation_action ) {
-                    case 'add_variation' :
-                        Dokan_Editor.variations.add_variation();
-                        return;
-                    case 'link_all_variations' :
-                        Dokan_Editor.variations.link_all_variations();
-                        return;
-                    case 'delete_all' :
-                        if ( window.confirm( woocommerce_admin_meta_boxes_variations.i18n_delete_all_variations ) ) {
-                            if ( window.confirm( woocommerce_admin_meta_boxes_variations.i18n_last_warning ) ) {
-                                data.allowed = true;
-                                changes      = parseInt( $( '#variable_product_options' ).find( '.woocommerce_variations' ).attr( 'data-total' ), 10 ) * -1;
-                            }
-                    }
-                    break;
-                }
             },
 
             add_variation: function() {
@@ -511,7 +502,6 @@
 
         showDiscountSchedule: function(e) {
             e.preventDefault();
-            console.log('Aise bal amr');
             $('.sale-schedule-container').slideToggle('fast');
         },
 
@@ -918,7 +908,7 @@
                 var post_id                = $button.attr('rel');
                 var $parent                = $button.closest('.upload_image');
                 setting_variation_image    = $parent;
-                placeholder_iamge          = $parent.find('span.variation_placeholder_image').data('placeholder_image');
+                placeholder_iamge          = dokan.dokan_placeholder_img_src;
                 setting_variation_image_id = post_id;
 
                 e.preventDefault();
@@ -928,6 +918,9 @@
                     setting_variation_image.find( '.upload_image_id' ).val( '' );
                     setting_variation_image.find( 'img' ).attr( 'src', placeholder_iamge );
                     setting_variation_image.find( '.upload_image_button' ).removeClass( 'dokan-img-remove' );
+                    $button.closest( '.dokan-product-variation-itmes' ).addClass( 'variation-needs-update' );
+                    $( 'button.cancel-variation-changes, button.save-variation-changes' ).removeAttr( 'disabled' );
+                    $( '.dokan-product-variation-wrapper' ).trigger( 'dokan_variations_input_changed' );
 
                 } else {
 
@@ -944,9 +937,9 @@
                     // Create the media frame.
                     variable_image_frame = wp.media.frames.variable_image = wp.media({
                         // Set the title of the modal.
-                        title: 'Choose an image',
+                        title: dokan.i18n_choose_image,
                         button: {
-                            text: 'Set variation image'
+                            text: dokan.i18n_set_image
                         }
                     });
 
@@ -958,8 +951,11 @@
                         setting_variation_image.find( '.upload_image_id' ).val( attachment.id );
                         setting_variation_image.find( '.upload_image_button' ).addClass( 'dokan-img-remove' );
                         setting_variation_image.find( 'img' ).attr( 'src', attachment.url );
+                        $button.closest( '.dokan-product-variation-itmes' ).addClass( 'variation-needs-update' );
+                        $( 'button.cancel-variation-changes, button.save-variation-changes' ).removeAttr( 'disabled' );
+                        $( '.dokan-product-variation-wrapper' ).trigger( 'dokan_variations_input_changed' );
 
-                        wp.media.model.settings.post.id = wp_media_post_id;
+                        wp.media.model.settings.post.id = setting_variation_image_id;
                     });
 
                     // Finally, open the modal.
@@ -1617,17 +1613,81 @@
     // On DOM ready
     $(function() {
         Dokan_Editor.init();
-        $('#_product_type').trigger('change');
-        $('.sale-schedule').trigger('change');
-        $('#_manage_stock').trigger('change');
-        $('#_required_shipping').trigger('change');
-        $('#_disable_shipping').trigger('change');
-        $('#_required_tax').trigger('change');
-        $('#_has_attribute').trigger('change');
-        $('#_create_variation').trigger('change');
-        $('input[type=checkbox].dokan_create_variation').trigger('change');
-        $('#_downloadable').trigger('change');
-        $('input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock' ).change();
+
+        // PRODUCT TYPE SPECIFIC OPTIONS.
+        $( 'select#product_type' ).change( function() {
+
+            // Get value.
+            var select_val = $( this ).val();
+
+            if ( 'variable' === select_val ) {
+                $( 'input#_manage_stock' ).change();
+                $( 'input#_downloadable' ).prop( 'checked', false );
+                $( 'input#_virtual' ).removeAttr( 'checked' );
+            }
+
+            show_and_hide_panels();
+
+            $( document.body ).trigger( 'woocommerce-product-type-change', select_val, $( this ) );
+
+        }).change();
+
+        $('.product-edit-new-container').on('change', 'input#_downloadable, input#_virtual', function() {
+            show_and_hide_panels();
+        });
+
+        function show_and_hide_panels() {
+            var product_type    = $( 'select#product_type' ).val();
+            var is_virtual      = $( 'input#_virtual:checked' ).length;
+            var is_downloadable = $( 'input#_downloadable:checked' ).length;
+
+            // Hide/Show all with rules.
+            var hide_classes = '.hide_if_downloadable, .hide_if_virtual';
+            var show_classes = '.show_if_downloadable, .show_if_virtual';
+
+            $.each( [ 'simple', 'variable' ], function( index, value ) {
+                hide_classes = hide_classes + ', .hide_if_' + value;
+                show_classes = show_classes + ', .show_if_' + value;
+            });
+
+            $( hide_classes ).show();
+            $( show_classes ).hide();
+
+            // Shows rules.
+            if ( is_downloadable ) {
+                $( '.show_if_downloadable' ).show();
+            }
+            if ( is_virtual ) {
+                $( '.show_if_virtual' ).show();
+            }
+
+            $( '.show_if_' + product_type ).show();
+
+            // Hide rules.
+            if ( is_downloadable ) {
+                $( '.hide_if_downloadable' ).hide();
+            }
+            if ( is_virtual ) {
+                $( '.hide_if_virtual' ).hide();
+            }
+
+            $( '.hide_if_' + product_type ).hide();
+
+            $( 'input#_manage_stock' ).change();
+        }
+
+
+        // $('#_product_type').trigger('change');
+        // $('.sale-schedule').trigger('change');
+        // $('#_manage_stock').trigger('change');
+        // $('#_required_shipping').trigger('change');
+        // $('#_disable_shipping').trigger('change');
+        // $('#_required_tax').trigger('change');
+        // $('#_has_attribute').trigger('change');
+        // $('#_create_variation').trigger('change');
+        // $('input[type=checkbox].dokan_create_variation').trigger('change');
+        // $('#_downloadable').trigger('change');
+        // $('input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock' ).change();
     });
 
 })(jQuery);

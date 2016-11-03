@@ -387,6 +387,7 @@
                 width: 40px;
                 height: 40px;
             }
+
         }
     }
 
@@ -689,13 +690,13 @@
                         a.dokan-product-remove-attribute {
                             position: absolute;
                             top: 9px;
-                            right: 10px;
+                            right: 15px;
                         }
 
                         a.dokan-product-toggle-attribute {
                             position: absolute;
                             top: 7px;
-                            right: 76px;
+                            right: 80px;
                             color: #222;
                         }
                     }
@@ -730,8 +731,8 @@
                 line-height: 31px;
                 margin-bottom: 20px;
 
-                .dokan-variation-label {
-                    // margin-right: 60px
+                select.variation-actions {
+                    margin-right: 5px;
                 }
             }
 
@@ -790,6 +791,37 @@
                                 width: 130px;
                                 height: 130px;
                                 float:left;
+
+                                .upload_image_button {
+                                    display: block;
+                                    width: 100%;
+                                    height: 100%;
+                                    margin-right: 20px;
+                                    position: relative;
+                                    cursor: pointer;
+
+                                    &.dokan-img-remove{
+                                        img {
+                                            display: block;
+                                        }
+
+                                        &:before {
+                                            content: "X";
+                                            display: none;
+                                            position: absolute;
+                                            font-size: 50px;
+                                            top: 35%;
+                                            left: 40%;
+                                            color: #f35000;
+                                        }
+
+                                        &:hover {
+                                            &:before {
+                                                display: block;
+                                            }
+                                        }
+                                    }
+                                }
                             }
 
                             .options {
@@ -844,8 +876,27 @@
             }
 
             .dokan-variation-action-toolbar {
-                select.variation-actions {
-                    margin-right: 5px;
+                button.dokan-btn-default[disabled] {
+                    background-color: #fafafa;
+                    color: #b3b3b3;
+                }
+
+                .dokan-variations-pagenav {
+                    .displaying-num,
+                    .expand-close {
+                        font-style: italic;
+                        font-size: 13px;
+                    }
+
+                    span.pagination-links {
+                        margin-left:10px;
+
+                        a {
+                            padding: 0px 8px;
+                            background: #eee;
+                            font-size: 14px;
+                        }
+                    }
                 }
             }
         }
