@@ -322,8 +322,10 @@ final class WeDevs_Dokan {
             'available'                           => __( 'Available', 'dokan' ),
             'notAvailable'                        => __( 'Not Available', 'dokan' )
             ),
-            'delete_confirm'                      => __('Are you sure?', 'dokan' ),
-            'wrong_message'                       => __('Something is wrong, Please try again.', 'dokan' ),
+            'delete_confirm'                      => __( 'Are you sure?', 'dokan' ),
+            'wrong_message'                       => __( 'Something is wrong, Please try again.', 'dokan' ),
+            'i18n_choose_file'                    => __( 'Choose a file', 'dokan' ),
+            'i18n_choose_file_btn_text'           => __( 'Insert file URL', 'dokan' ),
             'duplicates_attribute_messg'          => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
             'variation_unset_warning'             => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
             'new_attribute_prompt'                => __( 'Enter a name for the new attribute term:', 'dokan' ),

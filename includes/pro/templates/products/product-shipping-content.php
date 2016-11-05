@@ -11,7 +11,7 @@
 <?php do_action( 'dokan_product_options_shipping_before', $post_id ); ?>
 
 <?php if ( 'yes' == get_option( 'woocommerce_calc_shipping' ) || 'yes' == get_option( 'woocommerce_calc_taxes' ) ): ?>
-<div class="dokan-product-shipping-tax hide_if_virtual dokan-edit-row dokan-clearfix <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
+<div class="dokan-product-shipping-tax hide_if_virtual dokan-edit-row dokan-clearfix dokan-border-top <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
     <div class="dokan-section-heading">
         <h2><?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
         <p><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>
@@ -24,7 +24,7 @@
             $store_shipping         = get_user_meta( get_current_user_id(), '_dps_shipping_enable', true );
         ?>
         <?php if( 'yes' == get_option('woocommerce_calc_shipping') ): ?>
-            <div class="dokan-clearfix hide_if_downloadable dokan-shipping-container">
+            <div class="dokan-clearfix dokan-shipping-container">
                 <input type="hidden" name="product_shipping_class" value="0">
                 <div class="dokan-form-group">
                     <label class="dokan-checkbox-inline" for="_disable_shipping">

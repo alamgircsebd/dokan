@@ -71,7 +71,7 @@ class Dokan_Ajax {
 
         parse_str( $_POST['postdata'], $postdata );
 
-        $response = dokan_insert_product( $postdata );
+        $response = dokan_save_product( $postdata );
 
         if ( is_wp_error( $response ) ) {
             wp_send_json_error( $response->get_error_message() );

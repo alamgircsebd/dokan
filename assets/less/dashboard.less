@@ -16,8 +16,14 @@ html,body{
 .dokan-dashboard {
 
 	.dokan-dashboard-wrap {
-		.clearfix();
-		display: block;
+		// .clearfix();
+		display: flex;
+		display: -webkit-flex;
+		display: -ms-flexbox;
+
+		flex-wrap: wrap;
+		-webkit-flex-wrap: wrap;
+		-ms-flex-wrap: wrap;
 		overflow: hidden;
 		width: 100%;
 
