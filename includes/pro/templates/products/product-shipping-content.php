@@ -17,7 +17,7 @@
         <p><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>
     </div>
 
-    <div class="dokan-side-content">
+    <div class="dokan-section-content">
         <?php
             $dokan_shipping_option  = get_option( 'woocommerce_dokan_product_shipping_settings' );
             $dokan_shipping_enabled = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
@@ -34,10 +34,10 @@
                 </div>
 
                 <div class="show_if_needs_shipping dokan-shipping-dimention-options">
-                    <?php dokan_post_input_box( $post_id, '_weight', array( 'class' => 'form-control', 'placeholder' => __( 'weight (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                    <?php dokan_post_input_box( $post_id, '_length', array( 'class' => 'form-control', 'placeholder' => __( 'length (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                    <?php dokan_post_input_box( $post_id, '_width', array( 'class' => 'form-control', 'placeholder' => __( 'width (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                    <?php dokan_post_input_box( $post_id, '_height', array( 'class' => 'form-control', 'placeholder' => __( 'height (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_weight', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'weight (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_length', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'length (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_width', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'width (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_height', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'height (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
                     <div class="dokan-clearfix"></div>
                 </div>
 
@@ -78,23 +78,26 @@
                             <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
                         </div>
 
-                        <div class="dokan-form-group show_if_override">
-                            <label class="dokan-control-label" for="_additional_product_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
-                            <input id="_additional_product_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
-                        </div>
+                        <div class="dokan-additional-shipping-wrap show_if_override">
+                            <div class="dokan-form-group dokan-w3">
+                                <label class="dokan-control-label" for="_additional_product_price"><?php _e( 'Additional cost', 'dokan' ); ?></label>
+                                <input id="_additional_product_price" value="<?php echo $_additional_price; ?>" name="_additional_price" placeholder="9.99" class="dokan-form-control" type="number" step="any">
+                            </div>
 
-                        <div class="dokan-form-group show_if_override">
-                            <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
-                            <input id="additional_qty" value="<?php echo ( $_additional_qty ) ? $_additional_qty : $dps_additional_qty; ?>" name="_additional_qty" placeholder="1.99" class="dokan-form-control" type="number" step="any">
-                        </div>
+                            <div class="dokan-form-group dokan-w3">
+                                <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Per Qty Additional Price', 'dokan' ); ?></label>
+                                <input id="additional_qty" value="<?php echo ( $_additional_qty ) ? $_additional_qty : $dps_additional_qty; ?>" name="_additional_qty" placeholder="1.99" class="dokan-form-control" type="number" step="any">
+                            </div>
 
-                        <div class="dokan-form-group show_if_override">
-                            <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Processing Time', 'dokan' ); ?></label>
-                            <select name="_dps_processing_time" id="_dps_processing_time" class="dokan-form-control">
-                                <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
-                                      <option value="<?php echo $processing_key; ?>" <?php selected( $porduct_shipping_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
-                                <?php endforeach ?>
-                            </select>
+                            <div class="dokan-form-group dokan-w3 last-child">
+                                <label class="dokan-control-label" for="dps_additional_qty"><?php _e( 'Processing Time', 'dokan' ); ?></label>
+                                <select name="_dps_processing_time" id="_dps_processing_time" class="dokan-form-control">
+                                    <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
+                                          <option value="<?php echo $processing_key; ?>" <?php selected( $porduct_shipping_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div class="dokan-clearfix"></div>
                         </div>
                     </div>
                 <?php endif; ?>
@@ -104,7 +107,7 @@
         <?php if ( 'yes' == get_option( 'woocommerce_calc_taxes' ) ) { ?>
         <div class="dokan-clearfix dokan-tax-container show_if_variable show_if_simple">
             <div class="dokan-tax-product-options">
-                <div class="dokan-form-group dokan-w">
+                <div class="dokan-form-group content-half-part">
                     <label class="dokan-control-label" for="_tax_status"><?php _e( 'Tax Status', 'dokan' ); ?></label>
                     <div class="dokan-text-left">
                         <?php dokan_post_input_box( $post_id, '_tax_status', array( 'options' => array(
@@ -116,12 +119,14 @@
                     </div>
                 </div>
 
-                <div class="dokan-form-group dokan-w">
+                <div class="dokan-form-group content-half-part">
                     <label class="dokan-control-label" for="_tax_class"><?php _e( 'Tax Class', 'dokan' ); ?></label>
                     <div class="dokan-text-left">
                         <?php dokan_post_input_box( $post_id, '_tax_class', array( 'options' => $classes_options ), 'select' ); ?>
                     </div>
                 </div>
+
+                <div class="dokan-clearfix"></div>
             </div>
         </div>
         <?php } ?>

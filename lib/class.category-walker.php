@@ -1,30 +1,35 @@
-<?php 
+<?php
 
 /**
  *  Dokan Product category Walker Class
  *  @author weDevs
  */
-class DokanCategoryWalker extends Walker_Category{
+class DokanCategoryWalker extends Walker{
 
-    public function start_el(&$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+    /**
+     * @see Walker::$tree_type
+     * @var string
+     */
+    var $tree_type = 'category';
 
-        $args = wp_parse_args(array(
-            'name'    => 'product_cat',
-        ), $args);
+    /**
+     * @see Walker::$db_fields
+     * @var array
+     */
+    var $db_fields = array('parent' => 'parent', 'id' => 'term_id');
 
-        extract($args);
-        
-        ob_start(); ?>   
 
-        <li>
-            <input type="checkbox" <?php echo checked( in_array( $category->term_id, $selected ), true ); ?> id="category-<?php print $category->term_id; ?>" name="<?php print $name; ?>[]" value="<?php print $category->term_id; ?>" />
-            <label for="category-<?php print $category->term_id; ?>">
-                <?php print esc_attr( $category->name ); ?>
-            </label>       
+    function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
+        $pad = str_repeat( '&nbsp;', $depth * 3 );
 
-        <?php // closing LI is added inside end_el
-
-        $output .= ob_get_clean();
+        $cat_name = apply_filters( 'list_cats', $category->name, $category );
+        $output .= "\t<option class=\"level-$depth\" value=\"" . $category->term_id . "\"";
+        if ( in_array( $category->term_id, $args['selected'] ) )
+            $output .= ' selected="selected"';
+        $output .= '>';
+        $output .= $pad . $cat_name;
+        if ( $args['show_count'] )
+            $output .= '&nbsp;&nbsp;(' . $category->count . ')';
+        $output .= "</option>\n";
     }
-
 }

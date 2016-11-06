@@ -167,9 +167,38 @@
 
 .product-edit-new-container {
 
-    .dokan-border-top {
-        border-top: 1px solid #eee;
-        margin-top: 20px;
+    .dokan-edit-row {
+        background: #fff;
+        border: 1px solid #EBEBEB;
+        margin-top: 15px;
+
+        .dokan-section-heading {
+            padding: 10px 15px;
+            border-bottom: 1px solid #EBEBEB;
+            overflow: hidden;
+
+            h2 {
+                margin: 0px;
+                padding: 0px;
+                float: left;
+                font-size: 23px;
+            }
+
+            p {
+                float: left;
+                vertical-align: bottom;
+                margin-bottom: 0px;
+                margin-top: 6px;
+                margin-left: 7px;
+                color: #888;
+                font-style: italic;
+                font-size: 12px;
+            }
+        }
+
+        .dokan-section-content {
+            padding: 15px;
+        }
     }
 
     label {
@@ -230,6 +259,14 @@
 
     .dokan-form-top-area {
         .clearfix();
+
+        .dokan-product-meta {
+            width: 65%;
+        }
+
+        .featured-image {
+            width: 35%;
+        }
     }
 
     .dokan-product-short-description {
@@ -243,8 +280,8 @@
 
     .dokan-new-product-featured-img {
         border: 4px dashed #DDDDDD;
-        height: 280px !important;
-        width: 290px !important;
+        height: 294px !important;
+        width: 100% !important;
         margin-bottom: 10px;
         overflow: hidden;
         position: relative;
@@ -321,17 +358,36 @@
             input {
                 width: 23.3%;
                 float:left;
-                margin-right: 11px;
-                &:last-child {
+                margin-right: 2%;
+
+                &#_height {
                     margin-right:0px;
+                }
+            }
+        }
+
+        .dokan-shipping-product-options {
+            .dokan-additional-shipping-wrap {
+                .dokan-w3 {
+                    width: 32%;
+                    margin-right: 2%;
+
+                    &.last-child {
+                        margin-right:0px;
+                    }
                 }
             }
         }
     }
 
     .dokan-stock-management-wrapper {
-        div {
-            margin-right: 20px;
+        div.dokan-w3 {
+            width: 32%;
+            margin-right: 2%;
+
+            &.last-child {
+                margin-right: 0px;
+            }
         }
     }
 
@@ -404,24 +460,6 @@
             display: inline-block;
             width: 20%;
             margin-right: 5px;
-        }
-    }
-
-    .dokan-list-category-box {
-        border:1px solid #ccc;
-        background:#fff;
-        padding:0px 15px 15px;
-        max-height: 200px;
-        min-height: 45px;
-        overflow: scroll;
-
-        ul.dokan-checkbox-cat {
-            padding:0;
-            margin:0;
-
-            li{
-                line-height: 20px;
-            }
         }
     }
 

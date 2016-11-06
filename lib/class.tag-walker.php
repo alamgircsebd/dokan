@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * Create HTML dropdown list of Categories.

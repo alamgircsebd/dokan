@@ -728,6 +728,7 @@ class Dokan_Pro_Ajax {
              }
         }
 
+
         uasort( $attributes, 'wc_product_attribute_uasort_comparison' );
 
         update_post_meta( $post_id, '_product_attributes', $attributes );
