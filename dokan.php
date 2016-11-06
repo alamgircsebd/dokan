@@ -398,9 +398,11 @@ final class WeDevs_Dokan {
             if ( DOKAN_LOAD_SCRIPTS ) {
 
                 $scheme       = is_ssl() ? 'https' : 'http';
-                $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
-
-                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
+                $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
+                
+                if ( $api_key ) {
+                    wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
+                }
 
                 wp_enqueue_script( 'jquery' );
                 wp_enqueue_script( 'jquery-ui' );
@@ -435,10 +437,11 @@ final class WeDevs_Dokan {
 
             if ( DOKAN_LOAD_SCRIPTS ) {
                 $scheme       = is_ssl() ? 'https' : 'http';
-                $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general' );
+                $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
 
-                wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
-
+                if ( $api_key ) {
+                    wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
+                }
                 wp_enqueue_script( 'jquery-ui-sortable' );
                 wp_enqueue_script( 'jquery-ui-datepicker' );
                 wp_enqueue_script( 'bootstrap-tooltip' );
