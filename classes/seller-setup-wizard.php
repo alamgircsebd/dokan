@@ -44,10 +44,17 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
             return;
         }
 
+        $this->custom_logo = null;
+        $dokan_appearance  = get_option( 'dokan_appearance', [] );
+
+        if ( isset( $dokan_appearance['setup_wizard_logo_url'] ) && ! empty( $dokan_appearance['setup_wizard_logo_url'] ) ) {
+            $this->custom_logo = $dokan_appearance['setup_wizard_logo_url'];
+        }
+
         $this->store_id   = get_current_user_id();
         $this->store_info = dokan_get_store_info( $this->store_id );
 
-        $this->steps = array(
+        $steps = array(
             'introduction' => array(
                 'name'    =>  __( 'Introduction', 'dokan' ),
                 'view'    => array( $this, 'dokan_setup_introduction' ),
@@ -69,6 +76,8 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
                 'handler' => ''
             )
         );
+        
+        $this->steps = add_filter( 'dokan_seller_wizard_steps', $steps );
         $this->step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
 
         $this->enqueue_scripts();
@@ -83,6 +92,80 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         $this->setup_wizard_content();
         $this->setup_wizard_footer();
         exit;
+    }
+
+    /**
+     * Setup Wizard Header.
+     */
+    public function setup_wizard_header() {
+        ?>
+        <!DOCTYPE html>
+        <html <?php language_attributes(); ?>>
+        <head>
+            <meta name="viewport" content="width=device-width" />
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+            <title><?php _e( 'Seller &rsaquo; Setup Wizard', 'dokan' ); ?></title>
+            <?php wp_print_scripts( 'wc-setup' ); ?>
+            <?php do_action( 'admin_print_styles' ); ?>
+            <?php do_action( 'admin_head' ); ?>
+            <style type="text/css">
+                .wc-setup-steps {
+                    justify-content: center;
+                }
+                .wc-setup-content a {
+                    color: #f39132;
+                }
+                .wc-setup-steps li.active:before {
+                    border-color: #f39132;
+                }
+                .wc-setup-steps li.active {
+                    border-color: #f39132;
+                    color: #f39132;
+                }
+                .wc-setup-steps li.done:before {
+                    border-color: #f39132;
+                }
+                .wc-setup-steps li.done {
+                    border-color: #f39132;
+                    color: #f39132;
+                }
+                .wc-setup .wc-setup-actions .button-primary, .wc-setup .wc-setup-actions .button-primary, .wc-setup .wc-setup-actions .button-primary {
+                    background: #f39132 !important;
+                }
+                .wc-setup .wc-setup-actions .button-primary:active, .wc-setup .wc-setup-actions .button-primary:focus, .wc-setup .wc-setup-actions .button-primary:hover {
+                    background: #ff6b00 !important;
+                    border-color: #ff6b00 !important;
+                }
+                .wc-setup-content .wc-setup-next-steps ul .setup-product a, .wc-setup-content .wc-setup-next-steps ul .setup-product a, .wc-setup-content .wc-setup-next-steps ul .setup-product a {
+                    background: #f39132 !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 0 #f39132;
+                }
+                .wc-setup-content .wc-setup-next-steps ul .setup-product a:active, .wc-setup-content .wc-setup-next-steps ul .setup-product a:focus, .wc-setup-content .wc-setup-next-steps ul .setup-product a:hover {
+                    background: #ff6b00 !important;
+                    border-color: #ff6b00 !important;
+                    box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 0 #ff6b00;
+                }
+                .wc-setup .wc-setup-actions .button-primary {
+                    border-color: #f39132 !important;
+                }
+                .wc-setup-content .wc-setup-next-steps ul .setup-product a {
+                    border-color: #f39132 !important;
+                }
+                ul.wc-wizard-payment-gateways li.wc-wizard-gateway .wc-wizard-gateway-enable input:checked+label:before {
+                    background: #f39132 !important;
+                    border-color: #f39132 !important;
+                }
+            </style>
+        </head>
+        <body class="wc-setup wp-core-ui">
+            <?php
+                if ( ! empty( $this->custom_logo ) ) {
+            ?>
+                <h1 id="wc-logo"><a href="<?php echo home_url() ?>"><img src="<?php echo $this->custom_logo; ?>" alt="Dokan" /></a></h1>
+            <?php
+                } else {
+                    echo '<h1 id="wc-logo">' . get_bloginfo( 'name' ) . '</h1>';
+                }
     }
 
     /**

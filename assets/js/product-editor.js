@@ -18,7 +18,6 @@
             $('.product-edit-container').on('click', 'input[type=checkbox]#_downloadable', this.downloadable );
             $('.product-edit-container').on('click', 'a.sale-schedule', this.showDiscountSchedule );
 
-
             // Tab view variants
             $('#product-attributes').on('click', '.add-variant-category', this.variants.addCategory );
             $('#variants-holder').on('click', '.box-header .row-remove', this.variants.removeCategory );
@@ -31,7 +30,7 @@
             this.variants.dates();
             this.variants.initSaleSchedule();
 
-            // // save attributes
+            // save attributes
             $('.save_attributes').on('click', this.variants.save );
 
             // gallery
@@ -83,7 +82,6 @@
 
             // For new desing in product page
             $( '.dokan-product-listing' ).on( 'click', 'a.dokan-add-new-product', this.addProductPopup );
-            // $( 'body' ).on( 'click', '.product-container-footer input[type="submit"]', this.createNewProduct );
 
             this.loadSelect2();
             this.attribute.sortable();
@@ -942,7 +940,6 @@
 
         // PRODUCT TYPE SPECIFIC OPTIONS.
         $( 'select#product_type' ).change( function() {
-
             // Get value.
             var select_val = $( this ).val();
 

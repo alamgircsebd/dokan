@@ -15,11 +15,10 @@
 }
 .dokan-dashboard .dokan-dash-sidebar {
   width: 17%;
-  float: left;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
+  _float: left;
+  flex: 1 auto;
   overflow: hidden;
+  background-color: #242424;
 }
 .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu {
   background: #242424;
@@ -121,6 +120,9 @@ html,
 body {
   -webkit-backface-visibility: hidden;
 }
+div.media-sidebar a.edit-attachment {
+  display: none;
+}
 .dokan-dashboard .dokan-dashboard-wrap {
   display: flex;
   display: -webkit-flex;
@@ -150,7 +152,7 @@ body {
   overflow: hidden;
   margin-top: 0px;
   width: 83%;
-  float: left;
+  flex: 5 auto;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:before,
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area:after {

@@ -306,14 +306,18 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
         }
 
         if ( $this->has_pending_request( $current_user->ID ) ) {
+            
+            $req_success = isset( $_GET['message'] ) ? $_GET['message'] : false;
+            
+            if( !$req_success ) {
+                $pending_warning = sprintf( "<p>%s</p><p>%s</p>", __( 'You already have pending withdraw request(s).', 'dokan' ), __( 'Please submit your request after approval or cancellation of your previous request.', 'dokan' ) );
 
-            $pending_warning = sprintf( "<p>%s</p><p>%s</p>", __( 'You already have pending withdraw request(s).', 'dokan' ), __( 'Please submit your request after approval or cancellation of your previous request.', 'dokan' ) );
-
-            dokan_get_template_part( 'global/dokan-error', '', array(
-                'deleted' => false,
-                'message' => $pending_warning
-            ) );
-
+                dokan_get_template_part( 'global/dokan-error', '', array(
+                    'deleted' => false,
+                    'message' => $pending_warning
+                ) );
+            }
+            
             $this->withdraw_requests( $current_user->ID );
             return;
 

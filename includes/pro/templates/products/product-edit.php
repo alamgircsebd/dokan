@@ -51,7 +51,10 @@ $_downloadable          = get_post_meta( $post_id, '_downloadable', true );
 $_is_lot_discount       = get_post_meta( $post_id, '_is_lot_discount', true );
 $_lot_discount_quantity = get_post_meta( $post_id, '_lot_discount_quantity', true );
 $_lot_discount_amount   = get_post_meta( $post_id, '_lot_discount_amount', true );
-$is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', array( '' ) );
+
+$is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
+$is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
+
 $_stock_status          = get_post_meta( $post_id, '_stock_status', true );
 $_visibility            = get_post_meta( $post_id, '_visibility', true );
 $_enable_reviews        = $post->comment_status;

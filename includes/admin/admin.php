@@ -1,7 +1,7 @@
 <?php
 
-if ( !class_exists( 'WeDevs_Settings_API' ) ) {
-    require_once DOKAN_LIB_DIR . '/class.settings-api.php';
+if ( !class_exists( 'Dokan_Settings_API' ) ) {
+    require_once DOKAN_LIB_DIR . '/class.dokan-settings-api.php';
 }
 
 /**
@@ -22,7 +22,7 @@ class Dokan_Admin_Settings {
      * @return void
      */
     function __construct() {
-        $this->settings_api = new WeDevs_Settings_API();
+        $this->settings_api = new Dokan_Settings_API();
 
         add_action( 'admin_init', array($this, 'do_updates') );
         add_action( 'admin_init', array($this, 'admin_init') );
@@ -281,6 +281,12 @@ class Dokan_Admin_Settings {
                 )
             ),
             'dokan_appearance' => array(
+                'setup_wizard_logo_url' => array(
+                    'name'    => 'setup_wizard_logo_url',
+                    'label'   => __( 'Seller Setup Wizard Logo', 'dokan' ),
+                    'type'    => 'file',
+                    'desc'    => __( 'Recommended Logo size ( 270px X 90px ). If no logo is uploaded, site title is shown by default.', 'dokan' ),
+                ),
                 'store_header_template' => array(
                     'name'    => 'store_header_template',
                     'label'   => __( 'Store Header Template', 'dokan' ),
@@ -292,7 +298,7 @@ class Dokan_Admin_Settings {
                         'layout3' => DOKAN_PLUGIN_ASSEST . '/images/store-header-templates/layout3.png'
                     ),
                     'default' => 'default',
-                )
+                ),
             ),
         );
 
