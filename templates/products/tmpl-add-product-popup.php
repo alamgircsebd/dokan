@@ -1,6 +1,6 @@
 <script type="text/html" id="tmpl-dokan-add-new-product">
     <div id="dokan-add-new-product-popup" class="white-popup">
-        <h2><i class="fa fa-briefcase">&nbsp;</i>&nbsp;Add New Product</h2>
+        <h2><i class="fa fa-briefcase">&nbsp;</i>&nbsp;<?php _e( 'Add New Product', 'dokan' ); ?></h2>
 
         <form action="" method="post" id="dokan-add-new-product-form">
             <div class="product-form-container">

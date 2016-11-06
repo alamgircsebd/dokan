@@ -63,7 +63,6 @@ class Dokan_Ajax {
         add_filter( 'wp_ajax_nopriv_dokan_seller_listing_search', array($this, 'seller_listing_search') );
 
         add_action( 'wp_ajax_dokan_create_new_product', array( $this, 'create_product' ) );
-        add_action( 'wp_ajax_nopriv_dokan_create_new_product', array( $this, 'create_product' ) );
     }
 
     function create_product() {

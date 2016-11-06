@@ -7,6 +7,7 @@ $_virtual   = get_post_meta( $post->ID, '_virtual', true );
 $_is_lot_discount       = get_post_meta( $post->ID, '_is_lot_discount', true );
 $_lot_discount_quantity = get_post_meta( $post->ID, '_lot_discount_quantity', true );
 $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true );
+$is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', array('') );
 
 ?>
 <div class="update-button-wrap">
@@ -155,31 +156,35 @@ $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true
 
 <?php do_action( 'dokan_product_edit_after_downloadable' ); ?>
 
-<aside class="downloadable downloadable_files product_lot_discount">
-    <div class="dokan-side-head">
-        <label class="dokan-checkbox-inline dokan-form-label" for="_is_lot_discount">
-            <input type="checkbox" id="_is_lot_discount" name="_is_lot_discount" value="yes" <?php checked( $_is_lot_discount, 'yes' ); ?>>
-            <?php _e( 'Enable bulk discount', 'dokan' );?>
-        </label>
-    </div> <!-- .dokan-side-head -->
+<?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
+    <aside class="product_lot_discount">
+        <div class="dokan-side-head">
+            <label class="dokan-checkbox-inline dokan-form-label" for="_is_lot_discount">
+                <input type="checkbox" id="_is_lot_discount" name="_is_lot_discount" value="yes" <?php checked( $_is_lot_discount, 'yes' ); ?>>
+                <?php _e( 'Enable bulk discount', 'dokan' );?>
+            </label>
+        </div> <!-- .dokan-side-head -->
 
-    <div class="dokan-side-body show_if_needs_lot_discount <?php echo ($_is_lot_discount=='yes') ? '' : 'hide_if_lot_discount' ;?>">
-        <ul class="list-unstyled ">
-            <li class="dokan-form-group">
-                <div class="dokan-input-group">
-                    <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                    <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( 'Minimum quantity', 'dokan' ), 'min' => 0, 'value' => '' ), 'number' ); ?>
-                </div>
-            </li>
-            <li class="dokan-form-group">
-                <div class="dokan-input-group">
-                    <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( 'Discount %', 'dokan' ), 'min' => 0, 'value' => '' ), 'number' ); ?>
-                    <span class="dokan-input-group-addon"><?php echo '%'; ?></span>
-                </div>
-            </li>
-        </ul>
-    </div> <!-- .dokan-side-body -->
-</aside> <!-- .downloadable -->
+
+            <div class="dokan-side-body show_if_needs_lot_discount <?php echo ($_is_lot_discount=='yes') ? '' : 'hide_if_lot_discount' ;?>">
+                <ul class="list-unstyled ">
+                    <li class="dokan-form-group">
+                        <div class="dokan-input-group">
+                            <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                            <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( 'Minimum quantity', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
+                        </div>
+                    </li>
+                    <li class="dokan-form-group">
+                        <div class="dokan-input-group">
+                            <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( 'Discount %', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_amount ), 'number' ); ?>
+                            <span class="dokan-input-group-addon"><?php echo '%'; ?></span>
+                        </div>
+                    </li>
+                </ul>
+            </div> <!-- .dokan-side-body -->
+
+    </aside> <!-- .downloadable -->
+<?php endif; ?>
 
 <?php do_action( 'dokan_product_edit_after_discount' ); ?>
 
