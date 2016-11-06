@@ -2,6 +2,7 @@
 global $post;
 
 $_downloadable   = get_post_meta( $post->ID, '_downloadable', true );
+$_virtual   = get_post_meta( $post->ID, '_virtual', true );
 
 $_is_lot_discount       = get_post_meta( $post->ID, '_is_lot_discount', true );
 $_lot_discount_quantity = get_post_meta( $post->ID, '_lot_discount_quantity', true );
@@ -9,7 +10,7 @@ $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true
 
 ?>
 <div class="update-button-wrap">
-    <input type="submit" name="update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
+    <input type="submit" name="dokan_update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
 </div>
 
 <div class="toggle-sidebar-container">
@@ -67,7 +68,7 @@ $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true
         <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
 
             <div class="dokan-toggle-select-container dokan-hide">
-                <select name="_product_type" id="_product_type" class="dokan-toggle-select">
+                <select name="product_type" id="product_type" class="dokan-toggle-select">
                     <?php
                     foreach ( $supported_types as $value => $label ) {
                         echo '<option value="' . esc_attr( $value ) . '" ' . selected( $product_type, $value, false ) .'>' . esc_html( $label ) . '</option>';
@@ -85,7 +86,7 @@ $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true
 
 <?php do_action( 'dokan_product_edit_before_sidebar' ); ?>
 
-<aside class="downloadable downloadable_files">
+<aside class="downloadable downloadable_files show_if_simple">
     <div class="dokan-side-head">
         <label class="checkbox-inline">
             <input type="checkbox" id="_downloadable" name="_downloadable" value="yes"<?php checked( $_downloadable, 'yes' ); ?>>
@@ -142,6 +143,15 @@ $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true
         </ul>
     </div> <!-- .dokan-side-body -->
 </aside> <!-- .downloadable -->
+
+<aside class="virtual virtual_product show_if_simple">
+    <div class="dokan-side-head">
+        <label class="checkbox-inline">
+            <input type="checkbox" id="_virtual" name="_virtual" value="yes"<?php checked( $_virtual, 'yes' ); ?>>
+            <?php _e( 'Virtual Product', 'dokan' ); ?>
+        </label>
+    </div> <!-- .dokan-side-head -->
+</aside>
 
 <?php do_action( 'dokan_product_edit_after_downloadable' ); ?>
 

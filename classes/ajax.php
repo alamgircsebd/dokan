@@ -241,7 +241,7 @@ class Dokan_Ajax {
                         if ( isset( $file['name'] ) ) {
                             $file_count = $file['name'];
                         } else {
-                            $file_count = sprintf( __( 'File %d', 'woocommerce' ), $file_counter );
+                            $file_count = sprintf( __( 'File %d', 'dokan' ), $file_counter );
                         }
 
                         include dirname( dirname( __FILE__ ) ) . '/templates/orders/order-download-permission-html.php';
@@ -365,7 +365,7 @@ class Dokan_Ajax {
             }
             echo '"><div class="note_content">';
             echo wpautop( wptexturize( $note ) );
-            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete note', 'woocommerce' ).'</a></p>';
+            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete note', 'dokan' ).'</a></p>';
             echo '</li>';
         }
 
@@ -427,7 +427,7 @@ class Dokan_Ajax {
             //}
             echo '"><div class="note_content">';
             echo wpautop( wptexturize( $ship_info ) );
-            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete', 'woocommerce' ).'</a></p>';
+            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete', 'dokan' ).'</a></p>';
             echo '</li>';
         }
 

@@ -50,7 +50,7 @@ function dokan_save_product( $args ) {
     if( ! $data['ID'] ) {
         $post_data = apply_filters( 'dokan_insert_product_post_data', array(
             'post_type'    => 'product',
-            'post_status'  => $product_status,
+            'post_status'  => $post_status,
             'post_title'   => sanitize_text_field( $data['post_title'] ),
             'post_content' => $data['post_content'],
             'post_excerpt' => $data['post_excerpt'],
@@ -61,7 +61,7 @@ function dokan_save_product( $args ) {
         $post_id = (int)$data['ID'];
         $product_info = apply_filters( 'dokan_update_product_post_data', array(
             'ID'             => $post_id,
-            'post_status'  => $product_status,
+            'post_status'  => $post_status,
             'post_title'   => sanitize_text_field( $data['post_title'] ),
             'post_content' => $data['post_content'],
             'post_excerpt' => $data['post_excerpt'],
@@ -70,8 +70,6 @@ function dokan_save_product( $args ) {
 
         $product_id = wp_update_post( $product_info );
     }
-
-    $product_id = wp_insert_post( $post_data );
 
     if ( $product_id ) {
 

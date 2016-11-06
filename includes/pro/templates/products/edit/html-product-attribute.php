@@ -35,7 +35,7 @@
 			<?php if ( $attribute['is_taxonomy'] ) : ?>
 				<?php if ( 'select' === $attribute_taxonomy->attribute_type ) : ?>
 
-					<select multiple="multiple" style="width:100%" data-placeholder="<?php esc_attr_e( 'Select terms', 'woocommerce' ); ?>" class="dokan_attribute_values dokan-select2" name="attribute_values[<?php echo $i; ?>][]">
+					<select multiple="multiple" style="width:100%" data-placeholder="<?php esc_attr_e( 'Select terms', 'dokan' ); ?>" class="dokan_attribute_values dokan-select2" name="attribute_values[<?php echo $i; ?>][]">
 						<?php
 						$args = array(
 							'orderby'    => 'name',

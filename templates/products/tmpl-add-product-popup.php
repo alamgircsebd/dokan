@@ -29,31 +29,29 @@
                         <input type="text" class="dokan-form-control" name="post_title", placeholder="<?php _e( 'Product name..', 'dokan' ); ?>">
                     </div>
 
-                    <div class="hide_if_variation dokan-clearfix">
+                    <div class="dokan-clearfix">
                         <div class="dokan-form-group dokan-clearfix dokan-price-container">
-                            <div class="content-half-part regular-price">
+                            <div class="content-half-part">
                                 <label for="_regular_price" class="form-label"><?php _e( 'Price', 'dokan' ); ?></label>
 
                                 <div class="dokan-input-group">
                                     <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                    <input type="number" class="dokan-form-control" name="_regular_price" placeholder="0.00">
+                                    <input type="text" class="dokan-form-control" name="_regular_price" placeholder="0.00">
                                 </div>
                             </div>
 
                             <div class="content-half-part sale-price">
-                                <label for="_sale_price" class="form-label"><?php _e( 'Discounted Price', 'dokan' ); ?></label>
+                                <label for="_sale_price" class="form-label">
+                                    <?php _e( 'Discounted Price', 'dokan' ); ?>
+                                    <a href="#" class="sale_schedule"><?php _e( 'Schedule', 'dokan' ); ?></a>
+                                    <a href="#" class="cancel_sale_schedule dokan-hide"><?php _e( 'Cancel', 'dokan' ); ?></a>
+                                </label>
 
                                 <div class="dokan-input-group">
                                     <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                    <input type="number" class="dokan-form-control" name="_sale_price" placeholder="0.00">
+                                    <input type="text" class="dokan-form-control" name="_sale_price" placeholder="0.00">
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="discount-price dokan-form-group">
-                            <label>
-                                <input type="checkbox" class="sale-schedule"> <?php _e( 'Schedule Discounted Price', 'dokan' ); ?>
-                            </label>
                         </div>
 
                         <div class="dokan-hide sale-schedule-container sale_price_dates_fields dokan-clearfix dokan-form-group">

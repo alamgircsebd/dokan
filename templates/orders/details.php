@@ -20,7 +20,7 @@ $order    = new WC_Order( $order_id );
                     <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
                     <div class="dokan-panel-body" id="woocommerce-order-items">
 
-                        <?php 
+                        <?php
                         if ( !WeDevs_Dokan::init()->is_pro() ) { ?>
                             <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
                                 <thead>
@@ -266,7 +266,7 @@ $order    = new WC_Order( $order_id );
                                         <?php echo wpautop( wptexturize( wp_kses_post( $note->comment_content ) ) ); ?>
                                     </div>
                                     <p class="meta">
-                                        <?php printf( __( 'added %s ago', 'dokan' ), human_time_diff( strtotime( $note->comment_date_gmt ), current_time( 'timestamp', 1 ) ) ); ?> <a href="#" class="delete_note"><?php _e( 'Delete note', 'woocommerce' ); ?></a>
+                                        <?php printf( __( 'added %s ago', 'dokan' ), human_time_diff( strtotime( $note->comment_date_gmt ), current_time( 'timestamp', 1 ) ) ); ?> <a href="#" class="delete_note"><?php _e( 'Delete note', 'dokan' ); ?></a>
                                     </p>
                                 </li>
                                 <?php

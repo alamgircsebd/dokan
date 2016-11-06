@@ -4,6 +4,7 @@ global $post;
 $user_id                 = get_current_user_id();
 $processing_time         = dokan_get_shipping_processing_times();
 
+$_disable_shipping       = get_post_meta( $post_id, '_disable_shipping', true ) ? get_post_meta( $post_id, '_disable_shipping', true ) : 'no';
 $_additional_price       = get_post_meta( $post->ID, '_additional_price', true );
 $_additional_qty         = get_post_meta( $post->ID, '_additional_qty', true );
 $_processing_time        = get_post_meta( $post->ID, '_dps_processing_time', true );
@@ -23,7 +24,8 @@ $porduct_shipping_pt     = ( $_processing_time ) ? $_processing_time : $dps_pt;
         <div class="dokan-form-group">
             <label class="dokan-w4 dokan-control-label" for="_disable_shipping"><?php _e( 'Disable Shipping', 'dokan' ); ?></label>
             <div class="dokan-w8 dokan-text-left">
-                <?php dokan_post_input_box( $post->ID, '_disable_shipping', array( 'label' => __( 'Disable shipping for this product', 'dokan' ) ), 'checkbox' ); ?>
+                <input type="checkbox" id="_disable_shipping" name="_disable_shipping"  value="yes" <?php checked( $_disable_shipping, 'yes' ); ?>>
+                <?php _e( 'Disable shipping for this product', 'dokan' ); ?>
             </div>
         </div>
     <?php endif ?>

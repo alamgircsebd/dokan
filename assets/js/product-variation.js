@@ -122,7 +122,7 @@ jQuery( function( $ ) {
             $( '.toggle-variation-content', wrapper ).on( 'click', function(e) {
                 e.preventDefault();
 
-                var self = $(this);
+                var self = $('.toggle-variation-content');
 
                 self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
                     if ( $(this).is( ':visible' ) ) {
