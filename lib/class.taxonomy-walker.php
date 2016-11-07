@@ -4,7 +4,7 @@
  *  Dokan Product category Walker Class
  *  @author weDevs
  */
-class DokanCategoryWalker extends Walker{
+class DokanTaxonomyWalker extends Walker{
 
     /**
      * @see Walker::$tree_type

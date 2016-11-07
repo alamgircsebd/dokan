@@ -637,6 +637,12 @@ div.media-sidebar a.edit-attachment {
   background-color: #FAFAFA;
   border-color: #EBEBEB;
 }
+.dokan-product-edit-area .dokan-product-meta {
+  width: 65%;
+}
+.dokan-product-edit-area .featured-image {
+  width: 35%;
+}
 .product-edit-new-container .dokan-edit-row {
   background: #fff;
   border: 1px solid #EBEBEB;
@@ -653,8 +659,6 @@ div.media-sidebar a.edit-attachment {
 }
 .product-edit-new-container .dokan-edit-row .dokan-section-heading i.fa {
   font-size: 15px;
-  position: relative;
-  top: -1px;
 }
 .product-edit-new-container .dokan-edit-row .dokan-section-heading .dokan-section-toggle {
   float: right;
@@ -665,7 +669,9 @@ div.media-sidebar a.edit-attachment {
   margin: 0px;
   padding: 0px;
   float: left;
-  font-size: 19px;
+  font-size: 16px;
+  font-weight: bold;
+  line-height: 150%;
 }
 .product-edit-new-container .dokan-edit-row .dokan-section-heading p {
   float: left;

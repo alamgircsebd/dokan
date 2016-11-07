@@ -276,14 +276,11 @@ if ( ! $from_shortcode ) {
                                 <?php elseif ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'multiple' ): ?>
                                     <div class="dokan-form-group">
                                         <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
-
                                         <?php
                                         $term = array();
                                         $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
-
-                                        include_once DOKAN_LIB_DIR.'/class.category-walker.php';
-
-                                        $drop_down_tags = wp_dropdown_categories( array(
+                                        include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
+                                        $drop_down_category = wp_dropdown_categories( array(
                                             'show_option_none' => __( '', 'dokan' ),
                                             'hierarchical'     => 1,
                                             'hide_empty'       => 0,
@@ -295,21 +292,10 @@ if ( ! $from_shortcode ) {
                                             'exclude'          => '',
                                             'selected'         => $term,
                                             'echo'             => 0,
-                                            'walker'           => new DokanCategoryWalker()
+                                            'walker'           => new DokanTaxonomyWalker()
                                         ) );
 
-                                        echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product category','dokan' ).'" multiple="multiple" ', $drop_down_tags );
-
-
-                                        // wp_list_categories(array(
-                                        //     'walker'       => new DokanCategoryWalker(),
-                                        //     'title_li'     => '',
-                                        //     'id'           => 'product_cat',
-                                        //     'hide_empty'   => 0,
-                                        //     'taxonomy'     => 'product_cat',
-                                        //     'hierarchical' => 1,
-                                        //     'selected'     => $term
-                                        // ));
+                                        echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product category','dokan' ).'" multiple="multiple" ', $drop_down_category );
                                         ?>
                                     </div>
                                 <?php endif; ?>
@@ -317,7 +303,7 @@ if ( ! $from_shortcode ) {
                                 <div class="dokan-form-group">
                                     <label for="product_tag" class="form-label"><?php _e( 'Tags', 'dokan' ); ?></label>
                                     <?php
-                                    require_once DOKAN_LIB_DIR.'/class.tag-walker.php';
+                                    require_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
                                     $term = wp_get_post_terms( $post_id, 'product_tag', array( 'fields' => 'ids') );
                                     $selected = ( $term ) ? $term : array();
                                     $drop_down_tags = wp_dropdown_categories( array(
@@ -332,7 +318,7 @@ if ( ! $from_shortcode ) {
                                         'exclude'          => '',
                                         'selected'         => $selected,
                                         'echo'             => 0,
-                                        'walker'           => new Dokan_Walker_Tag_Multi()
+                                        'walker'           => new DokanTaxonomyWalker()
                                     ) );
 
                                     echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product tags','dokan' ).'" multiple="multiple" ', $drop_down_tags );

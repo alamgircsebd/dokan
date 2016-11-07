@@ -10,7 +10,7 @@
 
 <div class="dokan-attribute-variation-options dokan-edit-row dokan-clearfix">
     <div class="dokan-section-heading">
-        <h2><i class="fa fa-wpforms" aria-hidden="true"></i> <?php _e( 'Attribute', 'dokan' ); ?><span class="show_if_variable"><?php _e( ' and Variation', 'dokan' ) ?></span></h2>
+        <h2><i class="fa fa-list-alt" aria-hidden="true"></i> <?php _e( 'Attribute', 'dokan' ); ?><span class="show_if_variable"><?php _e( ' and Variation', 'dokan' ) ?></span></h2>
         <p class="show_if_variable"><?php _e( 'Manage attributes and variations for this variable product.', 'dokan' ); ?></p>
         <p class="show_if_simple"><?php _e( 'Manage attributes for this simple product.', 'dokan' ); ?></p>
 

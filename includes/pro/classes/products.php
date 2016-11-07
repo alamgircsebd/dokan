@@ -115,15 +115,7 @@ class Dokan_Pro_Products {
      * @return void
      */
     public function load_variations_js_template( $post, $post_id ) {
-        if ( $post_id ) {
-            echo '<div class="variation-single-content">';
-            dokan_get_template_part( 'products/edit/variation-popup', '', array( 'pro' => true, 'post_id' => $post_id ) );
-            echo '</div>';
-        }
-
         dokan_get_template_part( 'products/edit/tmpl-add-attribute', '', array( 'pro' => true, 'post_id' => $post_id ) );
-        // dokan_get_template_part( 'products/edit/variation-table', '', array( 'pro' => true, 'post_id' => $post_id ) );
-        // dokan_get_template_part( 'products/edit/variation-attribute-popup', '', array( 'pro' => true, 'post_id' => $post_id ) );
     }
 
     /**

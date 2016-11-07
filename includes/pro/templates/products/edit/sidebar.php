@@ -156,7 +156,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ar
 
 <?php do_action( 'dokan_product_edit_after_downloadable' ); ?>
 
-<?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
+<?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists( 'product-discount', $is_enable_op_discount ) == "product-discount" ) : ?>
     <aside class="product_lot_discount">
         <div class="dokan-side-head">
             <label class="dokan-checkbox-inline dokan-form-label" for="_is_lot_discount">
