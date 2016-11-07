@@ -7,7 +7,7 @@ $_virtual   = get_post_meta( $post->ID, '_virtual', true );
 $_is_lot_discount       = get_post_meta( $post->ID, '_is_lot_discount', true );
 $_lot_discount_quantity = get_post_meta( $post->ID, '_lot_discount_quantity', true );
 $_lot_discount_amount   = get_post_meta( $post->ID, '_lot_discount_amount', true );
-$is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', array('') );
+$is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', '' ) ? dokan_get_option( 'discount_edit', 'dokan_selling', '' ) : array();
 
 ?>
 <div class="update-button-wrap">
@@ -167,19 +167,18 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ar
 
 
             <div class="dokan-side-body show_if_needs_lot_discount <?php echo ($_is_lot_discount=='yes') ? '' : 'hide_if_lot_discount' ;?>">
-                <ul class="list-unstyled ">
-                    <li class="dokan-form-group">
-                        <div class="dokan-input-group">
-                            <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                            <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( 'Minimum quantity', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
-                        </div>
-                    </li>
-                    <li class="dokan-form-group">
-                        <div class="dokan-input-group">
-                            <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( 'Discount %', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_amount ), 'number' ); ?>
-                            <span class="dokan-input-group-addon"><?php echo '%'; ?></span>
-                        </div>
-                    </li>
+                <div class="dokan-form-group">
+                    <div class="dokan-input-group">
+                        <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
+                        <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( 'Minimum quantity', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
+                    </div>
+                </div>
+                <div class="dokan-form-group">
+                    <div class="dokan-input-group">
+                        <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( 'Discount %', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_amount ), 'number' ); ?>
+                        <span class="dokan-input-group-addon" style="position: relative;left: -9%;"><?php echo '%'; ?></span>
+                    </div>
+                </div>
                 </ul>
             </div> <!-- .dokan-side-body -->
 
