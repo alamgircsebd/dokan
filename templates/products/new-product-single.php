@@ -408,11 +408,11 @@ if ( ! $from_shortcode ) {
                         <?php do_action( 'dokan_product_edit_after_main' ); ?>
 
                         <div class="dokan-product-inventory dokan-edit-row dokan-border-top">
-                            <div class="dokan-section-heading">
+                            <div class="dokan-section-heading" data-togglehandler="dokan_product_inventory">
                                 <h2><i class="fa fa-cubes" aria-hidden="true"></i> <?php _e( 'Inventory', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Manage inventory for this product.', 'dokan' ); ?></p>
                                 <a href="#" class="dokan-section-toggle">
-                                    <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                    <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
                                 </a>
                                 <div class="dokan-clearfix"></div>
                             </div>
@@ -473,11 +473,11 @@ if ( ! $from_shortcode ) {
                         </div><!-- .dokan-product-inventory -->
 
                         <div class="dokan-download-options dokan-edit-row dokan-clearfix show_if_downloadable dokan-border-top">
-                            <div class="dokan-section-heading">
+                            <div class="dokan-section-heading" data-togglehandler="dokan_download_options">
                                 <h2><i class="fa fa-download" aria-hidden="true"></i> <?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Configure your downloadable product settings', 'dokan' ); ?></p>
                                 <a href="#" class="dokan-section-toggle">
-                                    <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                    <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
                                 </a>
                                 <div class="dokan-clearfix"></div>
                             </div>
@@ -538,20 +538,18 @@ if ( ! $from_shortcode ) {
 
                                     </div> <!-- .dokan-side-body -->
                                 </div> <!-- .downloadable -->
-
                             </div>
-
                         </div>
 
                         <?php do_action( 'dokan_product_edit_after_inventory_variants', $post, $post_id ); ?>
 
                         <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
                             <div class="dokan-discount-options dokan-edit-row dokan-clearfix show_if_simple dokan-border-top">
-                                <div class="dokan-section-heading">
+                                <div class="dokan-section-heading" data-togglehandler="dokan_discount_options">
                                     <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
                                     <p><?php _e( 'Set your discount for this product') ?></p>
                                     <a href="#" class="dokan-section-toggle">
-                                        <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                        <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
                                     </a>
                                     <div class="dokan-clearfix"></div>
                                 </div>
@@ -578,11 +576,11 @@ if ( ! $from_shortcode ) {
                         <?php endif;?>
 
                         <div class="dokan-other-options dokan-edit-row dokan-clearfix dokan-border-top">
-                            <div class="dokan-section-heading">
+                            <div class="dokan-section-heading" data-togglehandler="dokan_other_options">
                                 <h2><i class="fa fa-cog" aria-hidden="true"></i> <?php _e( 'Other Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Set your extra product options', 'dokan' ); ?></p>
                                 <a href="#" class="dokan-section-toggle">
-                                    <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                    <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
                                 </a>
                                 <div class="dokan-clearfix"></div>
                             </div>

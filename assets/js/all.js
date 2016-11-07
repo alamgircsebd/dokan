@@ -586,6 +586,7 @@ jQuery(function($) {
 
             this.loadSelect2();
             this.attribute.sortable();
+            this.checkProductPostboxToggle();
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.dokan-product-toggle-attribute, .dokan-product-attribute-heading', this.attribute.toggleAttribute );
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.add_new_attribute', this.attribute.addNewAttribute );
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'keyup', 'input.dokan-product-attribute-name', this.attribute.dynamicAttrNameChange );
@@ -596,21 +597,52 @@ jQuery(function($) {
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.dokan-save-attribute', this.attribute.saveAttribute );
         },
 
+        checkProductPostboxToggle: function() {
+            var toggle = JSON.parse( localStorage.getItem( 'toggleClasses' ) );
+
+            $.each( toggle, function(el, i) {
+                var wrapper    = $( '.' + el.replace( /_/g, '-' ) ),
+                    content    = wrapper.find( '.dokan-section-content' ),
+                    targetIcon = wrapper.find( 'i.fa-sort-desc' );
+
+                if ( i ) {
+                    content.show();
+                    targetIcon.removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
+                    targetIcon.css( 'marginTop', '9px' );
+                } else {
+                    content.hide();
+                    targetIcon.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
+                    targetIcon.css( 'marginTop', '0px' );
+                }
+            });
+        },
+
         toggleProductSection: function(e) {
             e.preventDefault();
 
             var self = $(this);
+            if ( JSON.parse( localStorage.getItem( 'toggleClasses' ) ) != null ) {
+                var toggleClasses = JSON.parse( localStorage.getItem( 'toggleClasses' ) );
+            } else {
+                var toggleClasses = {};
+            }
+
             self.closest( '.dokan-edit-row' ).find('.dokan-section-content').slideToggle( 300, function() {
                 if( $(this).is( ':visible' ) ) {
                     var targetIcon = self.find( 'i.fa-sort-desc' );
-                    targetIcon.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
-                    targetIcon.css( 'marginTop', '0px' );
-                } else {
-                    var targetIcon = self.find( 'i.fa-sort-desc' );
                     targetIcon.removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
                     targetIcon.css( 'marginTop', '9px' );
+                    toggleClasses[self.data('togglehandler')] = true;
+                } else {
+                    var targetIcon = self.find( 'i.fa-sort-desc' );
+                    targetIcon.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
+                    targetIcon.css( 'marginTop', '0px' );
+                    toggleClasses[self.data('togglehandler')] = false;
                 }
+
+                localStorage.setItem( 'toggleClasses', JSON.stringify( toggleClasses ) );
             });
+
         },
 
         loadSelect2: function() {
@@ -879,7 +911,6 @@ jQuery(function($) {
                         action:   'dokan_save_attributes'
                     };
 
-                // self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').removeClass('dokan-hide');
                 $( '.dokan-product-attribute-wrapper' ).block({
                     message: null,
                     fadeIn: 50,
@@ -897,7 +928,6 @@ jQuery(function($) {
                         $( 'select#product_type' ).trigger('change');
                         $( '.dokan-product-attribute-wrapper' ).unblock();
                     });
-                    // self.closest('.dokan-attribute-type').find('span.dokan-attribute-spinner').addClass('dokan-hide');
                 });
 
             }
@@ -1123,7 +1153,6 @@ jQuery(function($) {
 
                 var this_page = window.location.toString();
 
-                // $('#variants-holder').block({ message: 'saving...' });
                 $('#variants-holder').block({ message: null, overlayCSS: { background: '#fff', opacity: 0.6 } });
                 $.post(ajaxurl, data, function(resp) {
 
@@ -1153,17 +1182,12 @@ jQuery(function($) {
                     });
 
                     if ( sale_schedule_set ) {
-
                         $wrap.find('.sale_schedule').hide();
                         $wrap.find('.sale_price_dates_fields').show();
-
                     } else {
-
                         $wrap.find('.sale_schedule').show();
                         $wrap.find('.sale_price_dates_fields').hide();
-
                     }
-
                 });
             },
 

@@ -660,6 +660,9 @@ div.media-sidebar a.edit-attachment {
 .product-edit-new-container .dokan-edit-row .dokan-section-heading i.fa {
   font-size: 15px;
 }
+.product-edit-new-container .dokan-edit-row .dokan-section-heading i.fa.fa-flip-vertical {
+  margin-top: 9px;
+}
 .product-edit-new-container .dokan-edit-row .dokan-section-heading .dokan-section-toggle {
   float: right;
   color: #888;
