@@ -10,9 +10,15 @@
 
 <div class="dokan-attribute-variation-options dokan-edit-row dokan-clearfix">
     <div class="dokan-section-heading">
-        <h2><?php _e( 'Attribute', 'dokan' ); ?><span class="show_if_variable"><?php _e( ' and Variation', 'dokan' ) ?></span></h2>
+        <h2><i class="fa fa-wpforms" aria-hidden="true"></i> <?php _e( 'Attribute', 'dokan' ); ?><span class="show_if_variable"><?php _e( ' and Variation', 'dokan' ) ?></span></h2>
         <p class="show_if_variable"><?php _e( 'Manage attributes and variations for this variable product.', 'dokan' ); ?></p>
         <p class="show_if_simple"><?php _e( 'Manage attributes for this simple product.', 'dokan' ); ?></p>
+
+        <a href="#" class="dokan-section-toggle">
+            <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+        </a>
+
+        <div class="dokan-clearfix"></div>
     </div>
     <div class="dokan-section-content">
         <div class="dokan-product-attribute-wrapper show_if_simple show_if_variable">
@@ -81,7 +87,7 @@
                     ?>
                 </select>
                 <a href="#" class="dokan-btn dokan-btn-default add_new_attribute"><?php _e( 'Add attribute', 'dokan' ) ?></a>
-                <a href="#" class="dokan-btn dokan-btn-default dokan-save-attribute"><?php _e( 'Save attribute', 'dokan' ) ?></a>
+                <a href="#" class="dokan-btn dokan-btn-default dokan-btn-theme dokan-save-attribute"><?php _e( 'Save attribute', 'dokan' ) ?></a>
                 <span class="dokan-spinner dokan-attribute-spinner dokan-hide"></span>
             </div>
         </div>

@@ -642,23 +642,37 @@ div.media-sidebar a.edit-attachment {
   border: 1px solid #EBEBEB;
   margin-top: 15px;
 }
+.product-edit-new-container .dokan-edit-row.dokan-other-options {
+  margin-bottom: 20px;
+}
 .product-edit-new-container .dokan-edit-row .dokan-section-heading {
   padding: 10px 15px;
   border-bottom: 1px solid #EBEBEB;
   overflow: hidden;
+  cursor: pointer;
+}
+.product-edit-new-container .dokan-edit-row .dokan-section-heading i.fa {
+  font-size: 15px;
+  position: relative;
+  top: -1px;
+}
+.product-edit-new-container .dokan-edit-row .dokan-section-heading .dokan-section-toggle {
+  float: right;
+  color: #888;
+  font-size: 15px;
 }
 .product-edit-new-container .dokan-edit-row .dokan-section-heading h2 {
   margin: 0px;
   padding: 0px;
   float: left;
-  font-size: 23px;
+  font-size: 19px;
 }
 .product-edit-new-container .dokan-edit-row .dokan-section-heading p {
   float: left;
   vertical-align: bottom;
   margin-bottom: 0px;
-  margin-top: 6px;
-  margin-left: 7px;
+  margin-top: 2px;
+  margin-left: 8px;
   color: #888;
   font-style: italic;
   font-size: 12px;

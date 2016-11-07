@@ -514,6 +514,8 @@ jQuery(function($) {
 
             product_type = 'simple';
 
+            $('.product-edit-container').on( 'click', '.dokan-section-heading', this.toggleProductSection );
+
             $('.product-edit-container').on('click', 'input[type=checkbox]#_downloadable', this.downloadable );
             $('.product-edit-container').on('click', 'a.sale-schedule', this.showDiscountSchedule );
 
@@ -592,6 +594,23 @@ jQuery(function($) {
             $( '.dokan-product-attribute-wrapper ul.dokan-attribute-option-list' ).on( 'click', 'button.dokan-add-new-attribute', this.attribute.addNewExtraAttr );
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.dokan-product-remove-attribute', this.attribute.removeAttribute );
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.dokan-save-attribute', this.attribute.saveAttribute );
+        },
+
+        toggleProductSection: function(e) {
+            e.preventDefault();
+
+            var self = $(this);
+            self.closest( '.dokan-edit-row' ).find('.dokan-section-content').slideToggle( 300, function() {
+                if( $(this).is( ':visible' ) ) {
+                    var targetIcon = self.find( 'i.fa-sort-desc' );
+                    targetIcon.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
+                    targetIcon.css( 'marginTop', '0px' );
+                } else {
+                    var targetIcon = self.find( 'i.fa-sort-desc' );
+                    targetIcon.removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
+                    targetIcon.css( 'marginTop', '9px' );
+                }
+            });
         },
 
         loadSelect2: function() {

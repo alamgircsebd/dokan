@@ -286,7 +286,7 @@ function dokan_product_output_variations() {
             </div>
 
             <div class="dokan-variation-action-toolbar">
-                <button class="dokan-btn dokan-btn-default save-variation-changes"><?php _e( 'Save Variations', 'dokan' ) ?></button>
+                <button class="dokan-btn dokan-btn-default dokan-btn-theme save-variation-changes"><?php _e( 'Save Variations', 'dokan' ) ?></button>
                 <button class="dokan-btn dokan-btn-default cancel-variation-changes"><?php _e( 'Cancel', 'dokan' ) ?></button>
 
                 <div class="dokan-variations-pagenav dokan-right">

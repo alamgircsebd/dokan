@@ -423,8 +423,11 @@ if ( ! $from_shortcode ) {
 
                         <div class="dokan-product-inventory dokan-edit-row dokan-border-top">
                             <div class="dokan-section-heading">
-                                <h2><?php _e( 'Inventory', 'dokan' ); ?></h2>
+                                <h2><i class="fa fa-cubes" aria-hidden="true"></i> <?php _e( 'Inventory', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Manage inventory for this product.', 'dokan' ); ?></p>
+                                <a href="#" class="dokan-section-toggle">
+                                    <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                </a>
                                 <div class="dokan-clearfix"></div>
                             </div>
 
@@ -485,8 +488,12 @@ if ( ! $from_shortcode ) {
 
                         <div class="dokan-download-options dokan-edit-row dokan-clearfix show_if_downloadable dokan-border-top">
                             <div class="dokan-section-heading">
-                                <h2><?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
+                                <h2><i class="fa fa-download" aria-hidden="true"></i> <?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Configure your downloadable product settings', 'dokan' ); ?></p>
+                                <a href="#" class="dokan-section-toggle">
+                                    <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                </a>
+                                <div class="dokan-clearfix"></div>
                             </div>
 
                             <div class="dokan-section-content">
@@ -556,6 +563,11 @@ if ( ! $from_shortcode ) {
                             <div class="dokan-discount-options dokan-edit-row dokan-clearfix show_if_simple dokan-border-top">
                                 <div class="dokan-section-heading">
                                     <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
+                                    <p><?php _e( 'Set your discount for this product') ?></p>
+                                    <a href="#" class="dokan-section-toggle">
+                                        <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dokan-clearfix"></div>
                                 </div>
 
                                 <div class="dokan-section-content">
@@ -581,8 +593,12 @@ if ( ! $from_shortcode ) {
 
                         <div class="dokan-other-options dokan-edit-row dokan-clearfix dokan-border-top">
                             <div class="dokan-section-heading">
-                                <h2><?php _e( 'Other Options', 'dokan' ); ?></h2>
+                                <h2><i class="fa fa-cog" aria-hidden="true"></i> <?php _e( 'Other Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Set your extra product options', 'dokan' ); ?></p>
+                                <a href="#" class="dokan-section-toggle">
+                                    <i class="fa fa-sort-desc fa-flip-horizointal" aria-hidden="true"></i>
+                                </a>
+                                <div class="dokan-clearfix"></div>
                             </div>
 
                             <div class="dokan-section-content">
@@ -638,8 +654,8 @@ if ( ! $from_shortcode ) {
 
                         <!--hidden input for Firefox issue-->
                         <input type="hidden" name="dokan_update_product" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
-                        <input type="submit" name="dokan_update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg btn-block" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
-
+                        <input type="submit" name="dokan_update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg dokan-right" value="<?php esc_attr_e( 'Save Product', 'dokan' ); ?>"/>
+                        <div class="dokan-clearfix"></div>
                     </form>
                 <?php } else { ?>
                     <div class="dokan-alert dokan-alert">
