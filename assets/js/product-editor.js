@@ -352,11 +352,14 @@
 
                 var self  = $(this),
                     attrWrap  = self.closest('.dokan-attribute-type').find('select#predefined_attribute'),
-                    attribute = attrWrap.val();
+                    attribute = attrWrap.val(),
+                    size         = $( 'ul.dokan-attribute-option-list .product-attribute-list' ).length;
+
 
                 var data = {
                     action   : 'dokan_get_pre_attribute',
                     taxonomy : attribute,
+                    i        : size,
                     _wpnonce : dokan.nonce
                 };
 

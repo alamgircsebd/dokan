@@ -1200,6 +1200,7 @@ class Dokan_Pro_Ajax {
 
         $thepostid     = 0;
         $taxonomy      = sanitize_text_field( $_POST['taxonomy'] );
+        $i             = absint( $_POST['i'] );
         $attribute     = array(
             'name'         => $taxonomy,
             'value'        => '',
@@ -1219,6 +1220,7 @@ class Dokan_Pro_Ajax {
         ob_start();
         dokan_get_template_part( 'products/edit/html-product-attribute', '', array(
             'pro'                => true,
+            'i'                  => $i,
             'thepostid'          => $thepostid,
             'taxonomy'           => $taxonomy,
             'attribute_taxonomy' => $attribute_taxonomy,
