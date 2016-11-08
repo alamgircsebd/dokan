@@ -57,11 +57,7 @@ class Dokan_Pro_Products {
      */
     public function render_new_product_template( $query_vars ) {
         if ( isset( $query_vars['new-product'] ) ) {
-            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-                dokan_get_template_part( 'products/new-product', '', array( 'pro' => true ) );
-            } else {
-                dokan_get_template_part( 'products/new-product-single' );
-            }
+            dokan_get_template_part( 'products/new-product' );
         }
     }
 

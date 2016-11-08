@@ -615,6 +615,12 @@ div.media-sidebar a.edit-attachment {
 .dokan-new-product-area {
   padding: 0px 15px;
 }
+.dokan-new-product-area .dokan-product-meta {
+  width: 73.43%;
+}
+.dokan-new-product-area .featured-image {
+  width: 25%;
+}
 .dokan-product-edit-area header.dokan-pro-edit-breadcrumb {
   display: block;
   border-bottom: 1px solid #ededed;
