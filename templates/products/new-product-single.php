@@ -175,13 +175,15 @@ if ( ! $from_shortcode ) {
                                     </div>
                                 </div>
 
-                                <div class="dokan-form-group">
-                                    <label for="post_title" class="form-label"><?php _e( 'Product Type', 'dokan' ); ?></label>
-                                    <select name="product_type" class="dokan-form-control" id="product_type">
-                                        <option value="simple" <?php selected( $product_type, 'simple' ) ?>><?php _e( 'Simple', 'dokan' ) ?></option>
-                                        <option value="variable" <?php selected( $product_type, 'variable' ) ?>><?php _e( 'Variable', 'dokan' ) ?></option>
-                                    </select>
-                                </div>
+                                <?php if ( WeDevs_Dokan::init()->is_pro() ): ?>
+                                    <div class="dokan-form-group">
+                                        <label for="product_type" class="form-label"><?php _e( 'Product Type', 'dokan' ); ?></label>
+                                        <select name="product_type" class="dokan-form-control" id="product_type">
+                                            <option value="simple" <?php selected( $product_type, 'simple' ) ?>><?php _e( 'Simple', 'dokan' ) ?></option>
+                                            <option value="variable" <?php selected( $product_type, 'variable' ) ?>><?php _e( 'Variable', 'dokan' ) ?></option>
+                                        </select>
+                                    </div>
+                                <?php endif; ?>
 
                                 <div class="dokan-form-group dokan-product-type-container show_if_simple">
                                     <div class="content-half-part downloadable-checkbox">
@@ -569,9 +571,9 @@ if ( ! $from_shortcode ) {
                                             </div>
                                         </div>
                                         <div class="dokan-form-group content-half-part">
-                                            <label class="dokan-form-label" for="_lot_discount_quantity"><?php _e('Discount %', 'dokan');?></label>
+                                            <label class="dokan-form-label" for="_lot_discount_amount"><?php _e('Discount %', 'dokan');?></label>
                                             <div class="dokan-input-group">
-                                                <input id="_lot_discount_amount" value="<?php echo $_lot_discount_amount; ?>" name="_lot_discount_amount" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control" type="number" min="1" max="100">
+                                                <input id="_lot_discount_amount" value="<?php echo $_lot_discount_amount; ?>" name="_lot_discount_amount" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control" type="number" min="0" max="100">
                                                 <span class="dokan-input-group-addon"><?php echo '%'; ?></span>
                                             </div>
                                         </div>

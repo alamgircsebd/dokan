@@ -358,7 +358,7 @@ final class WeDevs_Dokan {
             'i18n_edited_variations'              => esc_js( __( 'Save changes before changing page?', 'dokan' ) ),
             'i18n_variation_count_single'         => esc_js( __( '%qty% variation', 'dokan' ) ),
             'i18n_variation_count_plural'         => esc_js( __( '%qty% variations', 'dokan' ) ),
-            'variations_per_page'                 => absint( apply_filters( 'dokan_product_variations_per_page', 2 ) )
+            'variations_per_page'                 => absint( apply_filters( 'dokan_product_variations_per_page', 10 ) )
         );
 
         $form_validate_messages = array(
