@@ -679,6 +679,16 @@ jQuery(function($) {
                 }
         });
 
+        $('.dokan-form-horizontal').on('change', 'input[type=checkbox]#lbl_setting_minimum_quantity', function(){
+            var showSWDiscount =  $( '.show_if_needs_sw_discount' );
+            if ( $( this ).is(':checked') ) {
+                showSWDiscount.find('input[type="number"]').val('');
+                showSWDiscount.slideDown('slow');
+            } else {
+                showSWDiscount.slideUp('slow');
+            }
+        } );
+
     });
 })(jQuery);
 
