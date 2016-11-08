@@ -565,11 +565,11 @@ if ( ! $from_shortcode ) {
                                         <label class="form-label form-label" for="_lot_discount_quantity"><?php _e('Minimum quantity', 'dokan');?></label>
                                         <div class="dokan-input-group">
                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                            <?php dokan_post_input_box( $post_id, '_lot_discount_quantity', array( 'placeholder' => __( '0', 'dokan' ), 'min' => 0, 'value' => '' ), 'number' ); ?>
+                                            <?php dokan_post_input_box( $post_id, '_lot_discount_quantity', array( 'placeholder' => __( '0', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
                                         </div>
                                         <label class="form-label form-label" for="_lot_discount_quantity"><?php _e('Discount %', 'dokan');?></label>
                                         <div class="dokan-input-group">
-                                            <?php dokan_post_input_box( $post_id, '_lot_discount_amount', array( 'placeholder' => __( '0 %', 'dokan' ), 'min' => 0, 'value' => '' ), 'number' ); ?>
+                                            <input id="_lot_discount_amount" value="<?php echo $_lot_discount_amount; ?>" name="_lot_discount_amount" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control" type="number" min="1" max="100">
                                             <span class="dokan-input-group-addon"><?php echo '%'; ?></span>
                                         </div>
                                     </div>

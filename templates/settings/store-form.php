@@ -18,9 +18,9 @@
     $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
     $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
     
-    $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? esc_attr( $profile_info['show_min_order_discount'] ) : 'no';
-    $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? esc_attr( $profile_info['setting_minimum_order_amount'] ) : 0;
-    $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? esc_attr( $profile_info['setting_order_percentage'] ) : 0;
+    $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? $profile_info['show_min_order_discount'] : 'no';
+    $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? $profile_info['setting_minimum_order_amount'] : '';
+    $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? $profile_info['setting_order_percentage'] : '';
 
     $address         = isset( $profile_info['address'] ) ? $profile_info['address'] : '';
     $address_street1 = isset( $profile_info['address']['street_1'] ) ? $profile_info['address']['street_1'] : '';
@@ -163,11 +163,13 @@
                             <?php _e( 'Enable storewide discount', 'dokan' ); ?>
                         </label>
                     </div>
-                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
-                        <input id="setting_minimum_order_amount" value="<?php echo $setting_minimum_order_amount; ?>" name="setting_minimum_order_amount" placeholder="<?php _e( 'Minimum Order Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
-                    </div>
-                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
-                        <input id="setting_order_percentage" value="<?php echo $setting_order_percentage; ?>" name="setting_order_percentage" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                    <div class="show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
+                        <div class="dokan-text-left dokan-form-group">
+                            <input id="setting_minimum_order_amount" value="<?php echo $setting_minimum_order_amount; ?>" name="setting_minimum_order_amount" placeholder="<?php _e( 'Minimum Order Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                        </div>
+                        <div class="dokan-text-left dokan-form-group">
+                            <input id="setting_order_percentage" value="<?php echo $setting_order_percentage; ?>" name="setting_order_percentage" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control input-md" type="number" min="1" max="100">
+                        </div>
                     </div>
                 </div>
             </div>

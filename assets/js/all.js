@@ -552,7 +552,9 @@ jQuery(function($) {
             // new product design variations
             $('.product-edit-container').on( 'change', 'input[type=checkbox]#_manage_stock', this.editProduct.showManageStock );
             $( '.product-edit-container' ).on( 'click', 'a.upload_file_button', this.fileDownloadable );
-            $('.product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
+            //$('.product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
+            //$('.product-edit-new-container, .product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.newProductDesign.showLotDiscountWrapper );
+            $('.product-edit-new-container, .product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
             $('body').on( 'click', '.upload_image_button', this.editProduct.loadVariationImage );
 
             // shipping
@@ -950,9 +952,9 @@ jQuery(function($) {
 
             showLotDiscountWrapper: function(){
                 if ( $( this ).is(':checked') ) {
-                    $('.show_if_needs_lot_discount' ).slideDown('slow');
+                    $( '.show_if_needs_lot_discount' ).slideDown('slow');
                 } else {
-                    $('.show_if_needs_lot_discount' ).slideUp('slow');
+                    $( '.show_if_needs_lot_discount' ).slideUp('slow');
                 }
             },
 
@@ -3262,6 +3264,16 @@ jQuery(function($) {
                     });
                 }
         });
+
+        $('.dokan-form-horizontal').on('change', 'input[type=checkbox]#lbl_setting_minimum_quantity', function(){
+            var showSWDiscount =  $( '.show_if_needs_sw_discount' );
+            if ( $( this ).is(':checked') ) {
+                showSWDiscount.find('input[type="number"]').val('');
+                showSWDiscount.slideDown('slow');
+            } else {
+                showSWDiscount.slideUp('slow');
+            }
+        } );
 
     });
 })(jQuery);
