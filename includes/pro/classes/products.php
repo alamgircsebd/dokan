@@ -69,7 +69,12 @@ class Dokan_Pro_Products {
      * @return void
      */
     public function load_product_edit_template() {
-        dokan_get_template_part( 'products/product-edit', '', array( 'pro' => true ) );
+
+        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+            dokan_get_template_part( 'products/product-edit', '', array( 'pro' => true ) );
+        } else {
+            dokan_get_template_part( 'products/new-product-single' );
+        }
     }
 
     /**

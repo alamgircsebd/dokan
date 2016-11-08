@@ -209,6 +209,24 @@ class Dokan_Rewrites {
             return $edit_product_url;
         }
 
+        // if ( isset( $wp->query_vars['products'] )
+        //      && isset( $_GET['product_id'] )
+        //      && !empty( $_GET['product_id'] )
+        //      && isset( $_GET['action'] )
+        //      && $_GET['action'] == 'edit'
+        //     ) {
+        //     if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' && WeDevs_Dokan::init()->is_pro() ) {
+        //         $edit_product_url = dokan_locate_template( 'products/product-edit.php', '', '', true );
+        //     } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' && WeDevs_Dokan::init()->is_pro() ) {
+        //         $edit_product_url = dokan_locate_template( 'products/new-product-single.php' );
+        //     } else {
+        //         $edit_product_url = dokan_locate_template( 'products/new-product-single.php' );
+        //     }
+
+        //     return $edit_product_url;
+        // }
+
+
         return $template;
     }
 

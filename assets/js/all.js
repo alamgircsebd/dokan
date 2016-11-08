@@ -1250,9 +1250,9 @@ jQuery(function($) {
                 // Create the media frame.
                 product_gallery_frame = wp.media.frames.downloadable_file = wp.media({
                     // Set the title of the modal.
-                    title: 'Add Images to Product Gallery',
+                    title: dokan.i18n_choose_gallery,
                     button: {
-                        text: 'Add to gallery',
+                        text: dokan.i18n_choose_gallery_btn_text,
                     },
                     multiple: true
                 });
@@ -1346,9 +1346,9 @@ jQuery(function($) {
 
                 product_featured_frame = wp.media({
                     // Set the title of the modal.
-                    title: 'Upload featured image',
+                    title: dokan.i18n_choose_featured_img,
                     button: {
-                        text: 'Set featured image',
+                        text: dokan.i18n_choose_featured_img_btn_text,
                     }
                 });
 
@@ -1471,7 +1471,6 @@ jQuery(function($) {
                     $('.hide_if_disable').show();
                     Dokan_Editor.editProduct.shipping.showHideOverride();
                 }
-
             }
         }
     };
