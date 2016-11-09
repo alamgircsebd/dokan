@@ -976,6 +976,22 @@ div.media-sidebar a.edit-attachment {
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes {
   cursor: pointer;
+  position: relative;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .actions {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .actions i.fa {
+  margin-right: 10px;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .actions i.fa.fa-bars {
+  cursor: move;
+}
+.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes .actions i.fa.fa-sort-desc {
+  cursor: pointer;
+  padding-bottom: 4px;
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading {
   margin: 0 !important;
@@ -985,21 +1001,6 @@ div.media-sidebar a.edit-attachment {
   padding: 8px 10px;
   border-bottom: 1px solid #eee;
   background-color: rgba(241, 241, 241, 0.61);
-}
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions {
-  position: absolute;
-  top: 5px;
-  right: 15px;
-}
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions i.fa {
-  margin-right: 10px;
-}
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions i.fa.fa-bars {
-  cursor: move;
-}
-.product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading .actions i.fa.fa-sort-desc {
-  cursor: pointer;
-  padding-bottom: 4px;
 }
 .product-edit-new-container .dokan-attribute-variation-options .dokan-product-variation-wrapper .dokan-variations-container .dokan-product-variation-itmes h3.variation-topbar-heading strong {
   float: left;

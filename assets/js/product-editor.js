@@ -53,8 +53,6 @@
             // new product design variations
             $('.product-edit-container').on( 'change', 'input[type=checkbox]#_manage_stock', this.editProduct.showManageStock );
             $( '.product-edit-container' ).on( 'click', 'a.upload_file_button', this.fileDownloadable );
-            //$('.product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
-            //$('.product-edit-new-container, .product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.newProductDesign.showLotDiscountWrapper );
             $('.product-edit-new-container, .product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
             $('body').on( 'click', '.upload_image_button', this.editProduct.loadVariationImage );
 

@@ -591,6 +591,25 @@
                 .dokan-product-variation-itmes {
 
                     cursor: pointer;
+                    position: relative;
+
+                    .actions {
+                        position: absolute;
+                        top: 15px;
+                        right: 15px;
+
+                        i.fa {
+                            margin-right:10px;
+
+                            &.fa-bars {
+                                cursor: move;
+                            }
+                            &.fa-sort-desc {
+                                cursor: pointer;
+                                padding-bottom: 4px;
+                            }
+                        }
+                    }
 
                     h3.variation-topbar-heading {
                         margin: 0 !important;
@@ -600,24 +619,6 @@
                         padding: 8px 10px;
                         border-bottom: 1px solid #eee;
                         background-color: rgba(241, 241, 241, 0.61);
-
-                        .actions {
-                            position: absolute;
-                            top: 5px;
-                            right: 15px;
-
-                            i.fa {
-                                margin-right:10px;
-
-                                &.fa-bars {
-                                    cursor: move;
-                                }
-                                &.fa-sort-desc {
-                                    cursor: pointer;
-                                    padding-bottom: 4px;
-                                }
-                            }
-                        }
 
                         strong {
                             float:left;

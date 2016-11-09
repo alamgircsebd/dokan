@@ -14,11 +14,6 @@ extract( $variation_data );
 ?>
 <div class="dokan-product-variation-itmes">
     <h3 class="variation-topbar-heading">
-        <div class="actions">
-            <i class="fa fa-bars sort tips" data-title="<?php _e( 'Drag and drop, or click to set admin variation order', 'dokan' ); ?>" aria-hidden="true" ></i>
-            <i class="fa fa-sort-desc fa-flip-horizointal toggle-variation-content" aria-hidden="true"></i>
-            <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php _e( 'Remove', 'dokan' ); ?></a>
-        </div>
 
         <strong>#<?php echo esc_html( $variation_id ); ?> </strong>
         <?php
@@ -63,6 +58,11 @@ extract( $variation_data );
         <input type="hidden" class="variation_menu_order" name="variation_menu_order[<?php echo $loop; ?>]" value="<?php echo isset( $menu_order ) ? absint( $menu_order ) : 0; ?>" />
         <div class="dokan-clearfix"></div>
     </h3>
+    <div class="actions">
+        <i class="fa fa-bars sort tips" data-title="<?php _e( 'Drag and drop, or click to set admin variation order', 'dokan' ); ?>" aria-hidden="true" ></i>
+        <i class="fa fa-sort-desc fa-flip-horizointal toggle-variation-content" aria-hidden="true"></i>
+        <a href="#" class="remove_variation delete" rel="<?php echo esc_attr( $variation_id ); ?>"><?php _e( 'Remove', 'dokan' ); ?></a>
+    </div>
 
     <div class="dokan-variable-attributes woocommerce_variable_attributes wc-metabox-content" style="display: none;">
         <div class="data">

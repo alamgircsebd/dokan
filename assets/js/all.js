@@ -552,8 +552,6 @@ jQuery(function($) {
             // new product design variations
             $('.product-edit-container').on( 'change', 'input[type=checkbox]#_manage_stock', this.editProduct.showManageStock );
             $( '.product-edit-container' ).on( 'click', 'a.upload_file_button', this.fileDownloadable );
-            //$('.product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
-            //$('.product-edit-new-container, .product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.newProductDesign.showLotDiscountWrapper );
             $('.product-edit-new-container, .product_lot_discount').on('change', 'input[type=checkbox]#_is_lot_discount', this.editProduct.showLotDiscountWrapper );
             $('body').on( 'click', '.upload_image_button', this.editProduct.loadVariationImage );
 
@@ -1607,7 +1605,7 @@ jQuery( function( $ ) {
                 .on( 'click', '.expand_all', this.expand_all )
                 .on( 'click', '.close_all', this.close_all )
                 // .on( 'click', 'button.notice-dismiss', this.notice_dismiss )
-                .on( 'click', 'h3 .sort', this.set_menu_order )
+                .on( 'click', '.dokan-product-variation-itmes .sort', this.set_menu_order )
                 .on( 'reload', this.reload );
 
             $( 'input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock' ).change();
@@ -1709,10 +1707,26 @@ jQuery( function( $ ) {
                 $( 'button.cancel-variation-changes, button.save-variation-changes', wrapper ).attr( 'disabled', 'disabled' );
             }
 
+
+            $( 'h3.variation-topbar-heading', wrapper ).on( 'click', function(e) {
+                e.preventDefault();
+
+                var self = $(this);
+
+                self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
+                    if ( $(this).is( ':visible' ) ) {
+                        self.closest('.dokan-product-variation-itmes').find( 'i.fa-sort-desc' ).removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
+                    } else {
+                        self.closest('.dokan-product-variation-itmes').find( 'i.fa-sort-desc' ).removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
+                    }
+                });
+
+            });
+
             $( '.toggle-variation-content', wrapper ).on( 'click', function(e) {
                 e.preventDefault();
 
-                var self = $('.toggle-variation-content');
+                var self = $(this);
 
                 self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
                     if ( $(this).is( ':visible' ) ) {
@@ -1721,6 +1735,8 @@ jQuery( function( $ ) {
                         self.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
                     }
                 } );
+
+                return false;
             } );
 
             $('.tips').tooltip();
@@ -2072,7 +2088,9 @@ jQuery( function( $ ) {
          *
          * @return {Bool}
          */
-        remove_variation: function() {
+        remove_variation: function(e) {
+            e.preventDefault();
+
             Dokan_Product_Variation_Ajax.check_for_changes();
 
             if ( window.confirm( dokan.i18n_remove_variation ) ) {
