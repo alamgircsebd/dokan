@@ -76,8 +76,9 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
                 'handler' => ''
             )
         );
-        
-        $this->steps = add_filter( 'dokan_seller_wizard_steps', $steps );
+
+        $this->steps = apply_filters( 'dokan_seller_wizard_steps', $steps );
+
         $this->step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
 
         $this->enqueue_scripts();
