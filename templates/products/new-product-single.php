@@ -183,6 +183,8 @@ if ( ! $from_shortcode ) {
                                             <option value="variable" <?php selected( $product_type, 'variable' ) ?>><?php _e( 'Variable', 'dokan' ) ?></option>
                                         </select>
                                     </div>
+                                <?php else: ?>
+                                    <input type="hidden" id="product_type" name="product_type" value="simple">
                                 <?php endif; ?>
 
                                 <div class="dokan-form-group dokan-product-type-container show_if_simple">
@@ -409,7 +411,7 @@ if ( ! $from_shortcode ) {
                         <?php do_action( 'dokan_new_product_form' ); ?>
                         <?php do_action( 'dokan_product_edit_after_main' ); ?>
 
-                        <div class="dokan-product-inventory dokan-edit-row dokan-border-top">
+                        <div class="dokan-product-inventory dokan-edit-row">
                             <div class="dokan-section-heading" data-togglehandler="dokan_product_inventory">
                                 <h2><i class="fa fa-cubes" aria-hidden="true"></i> <?php _e( 'Inventory', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Manage inventory for this product.', 'dokan' ); ?></p>
@@ -474,7 +476,7 @@ if ( ! $from_shortcode ) {
                             </div><!-- .dokan-side-right -->
                         </div><!-- .dokan-product-inventory -->
 
-                        <div class="dokan-download-options dokan-edit-row dokan-clearfix show_if_downloadable dokan-border-top">
+                        <div class="dokan-download-options dokan-edit-row dokan-clearfix show_if_downloadable">
                             <div class="dokan-section-heading" data-togglehandler="dokan_download_options">
                                 <h2><i class="fa fa-download" aria-hidden="true"></i> <?php _e( 'Downloadable Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Configure your downloadable product settings', 'dokan' ); ?></p>
@@ -546,7 +548,7 @@ if ( ! $from_shortcode ) {
                         <?php do_action( 'dokan_product_edit_after_inventory_variants', $post, $post_id ); ?>
 
                         <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
-                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix show_if_simple dokan-border-top">
+                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix show_if_simple">
                                 <div class="dokan-section-heading" data-togglehandler="dokan_discount_options">
                                     <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
                                     <p><?php _e( 'Set your discount for this product') ?></p>
@@ -583,7 +585,7 @@ if ( ! $from_shortcode ) {
                             </div>
                         <?php endif;?>
 
-                        <div class="dokan-other-options dokan-edit-row dokan-clearfix dokan-border-top">
+                        <div class="dokan-other-options dokan-edit-row dokan-clearfix">
                             <div class="dokan-section-heading" data-togglehandler="dokan_other_options">
                                 <h2><i class="fa fa-cog" aria-hidden="true"></i> <?php _e( 'Other Options', 'dokan' ); ?></h2>
                                 <p><?php _e( 'Set your extra product options', 'dokan' ); ?></p>

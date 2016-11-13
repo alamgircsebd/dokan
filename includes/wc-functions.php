@@ -400,7 +400,12 @@ function dokan_process_product_meta( $post_id ) {
     add_post_meta( $post_id, 'total_sales', '0', true );
 
     // Get types
-    $product_type       = empty( $_POST['product_type'] ) ? 'simple' : stripslashes( $_POST['product_type'] );
+    if ( ! WeDevs_Dokan::init()->is_pro() ) {
+        $product_type = 'simple';
+    } else {
+        $product_type = empty( $_POST['product_type'] ) ? 'simple' : stripslashes( $_POST['product_type'] );
+    }
+
     $is_downloadable    = isset( $_POST['_downloadable'] ) ? 'yes' : 'no';
     $is_virtual         = isset( $_POST['_virtual'] ) ? 'yes' : 'no';
 

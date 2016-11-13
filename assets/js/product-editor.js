@@ -1002,10 +1002,13 @@
 
         $('.product-edit-container').on('change', 'input#_downloadable, input#_virtual', function() {
             show_and_hide_panels();
-        });
+        }).change();
+
+        $( 'input#_downloadable' ).change();
+        $( 'input#_virtual' ).change();
 
         function show_and_hide_panels() {
-            var product_type    = $( 'select#product_type' ).val();
+            var product_type    = $( '#product_type' ).val();
             var is_virtual      = $( 'input#_virtual:checked' ).length;
             var is_downloadable = $( 'input#_downloadable:checked' ).length;
 
