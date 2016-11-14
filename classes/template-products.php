@@ -252,7 +252,7 @@ class Dokan_Template_Products {
                     wp_set_object_terms( $post_id, 'simple', 'product_type' );
                 } else {
                     if ( isset( $_POST['product_type'] ) ) {
-                        wp_set_object_terms( $product_id, $_POST['product_type'], 'product_type' );
+                        wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );
                     } else {
                         wp_set_object_terms( $post_id, 'simple', 'product_type' );
                     }
