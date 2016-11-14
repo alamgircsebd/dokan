@@ -548,7 +548,7 @@ if ( ! $from_shortcode ) {
                         <?php do_action( 'dokan_product_edit_after_inventory_variants', $post, $post_id ); ?>
 
                         <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
-                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix show_if_simple">
+                            <div class="dokan-discount-options dokan-edit-row dokan-clearfix">
                                 <div class="dokan-section-heading" data-togglehandler="dokan_discount_options">
                                     <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
                                     <p><?php _e( 'Set your discount for this product') ?></p>
