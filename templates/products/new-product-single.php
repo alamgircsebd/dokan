@@ -63,7 +63,7 @@ $is_virtual             = ( 'yes' == $_virtual ) ? true : false;
 $_sold_individually     = get_post_meta( $post_id, '_sold_individually', true );
 
 $terms                   = wp_get_object_terms( $post_id, 'product_type' );
-$product_type            = sanitize_title( current( $terms )->name );
+$product_type            = ( ! empty( $terms ) ) ? sanitize_title( current( $terms )->name ): 'simple';
 $variations_class        = ($product_type == 'simple' ) ? 'dokan-hide' : '';
 
 if ( ! $from_shortcode ) {
