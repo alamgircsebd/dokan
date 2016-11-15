@@ -143,7 +143,6 @@ class Dokan_Template_Products {
                     FROM $wpdb->posts
                     LEFT JOIN $wpdb->postmeta ON ($wpdb->posts.ID = $wpdb->postmeta.post_id)
                     WHERE $wpdb->posts.post_type = 'product'
-                    AND $wpdb->posts.post_status = 'publish'
                     AND $wpdb->postmeta.meta_key = '_sku' AND $wpdb->postmeta.meta_value = '%s'
                  ", $sku ) );
             
