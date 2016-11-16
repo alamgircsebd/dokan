@@ -420,6 +420,8 @@ class Dokan_Ajax {
 
             $comment_id = wp_insert_comment($data);
 
+            update_comment_meta($comment_id, 'is_customer_note', true);
+
             echo '<li rel="' . esc_attr( $comment_id ) . '" class="note ';
             //if ( $is_customer_note ) {
                 echo 'customer-note';
