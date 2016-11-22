@@ -21,7 +21,7 @@ class Dokan_Setup_Wizard {
     public function __construct() {
         if ( current_user_can( 'manage_options' ) ) {
             add_action( 'admin_menu', array( $this, 'admin_menus' ) );
-            add_action( 'admin_init', array( $this, 'setup_wizard' ) );
+            add_action( 'admin_init', array( $this, 'setup_wizard' ), 99 );
         }
     }
 
