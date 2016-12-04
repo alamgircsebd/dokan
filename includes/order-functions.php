@@ -775,7 +775,7 @@ function dokan_get_admin_commission_by( $order, $seller_id ) {
     $commissions = array();
     $i = 0;
     $total_line = 0;
-    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'seller' );
+    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
 
     foreach ( $order->get_items() as $item_id => $item ) {
 
