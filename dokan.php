@@ -237,6 +237,7 @@ final class WeDevs_Dokan {
         wp_register_style( 'dokan-chosen-style', plugins_url( 'assets/css/chosen.min.css', __FILE__ ), false, null );
         wp_register_style( 'dokan-magnific-popup', plugins_url( 'assets/css/magnific-popup.css', __FILE__ ), false, null );
         wp_register_style( 'modalcss', plugins_url( 'assets/css/modalcss.css', __FILE__ ), false, null );
+        wp_register_style( 'select2-css', plugins_url( 'assets/css/select2.css', __FILE__ ), false, null );
 
         // register scripts
         wp_register_script( 'jquery-flot', plugins_url( 'assets/js/flot-all.min.js', __FILE__ ), false, null, true );
@@ -249,17 +250,19 @@ final class WeDevs_Dokan {
         wp_register_script( 'modaljs', plugins_url( 'assets/js/modaljs.js', __FILE__ ), false, null, true );
         wp_register_script( 'bootstrap-tooltip', plugins_url( 'assets/js/bootstrap-tooltips.js', __FILE__ ), false, null, true );
         wp_register_script( 'form-validate', plugins_url( 'assets/js/form-validate.js', __FILE__ ), array( 'jquery' ), null, true  );
+        wp_register_script( 'select2-js', plugins_url( 'assets/js/select2.full.min.js', __FILE__ ), array( 'jquery' ), null, true  );
 
         // these two is required for image croping functionalities written in dokan-script
         wp_register_script( 'customize-base', site_url( 'wp-includes/js/customize-base.js' ), array( 'jquery', 'json2', 'underscore' ), null, true );
         wp_register_script( 'customize-model', site_url( 'wp-includes/js/customize-models.js' ), array( 'underscore', 'backbone' ), null, true );
 
 
-        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), array( 'imgareaselect', 'customize-base', 'customize-model' ), null, true );
+        wp_register_script( 'dokan-script', plugins_url( 'assets/js/all.js', __FILE__ ), array( 'imgareaselect', 'customize-base', 'customize-model'  ), null, true );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
 
         if ( $this->is_pro() ) {
             wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
+            wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', array( 'jquery' ), '2.6.1' );
         }
         wp_register_script( 'dokan-frontend-script', plugins_url( 'assets/js/frontend-script.js', __FILE__ ), false, null, true );
     }
@@ -311,18 +314,51 @@ final class WeDevs_Dokan {
             return;
         }
 
-        $localize_script = array(
-            'ajaxurl'     => admin_url( 'admin-ajax.php' ),
-            'nonce'       => wp_create_nonce( 'dokan_reviews' ),
-            'ajax_loader' => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
-            'seller'      => array(
-                'available'    => __( 'Available', 'dokan' ),
-                'notAvailable' => __( 'Not Available', 'dokan' )
-            ),
-            'delete_confirm' => __('Are you sure?', 'dokan' ),
-            'wrong_message' => __('Something is wrong, Please try again.', 'dokan' ),
-            'duplicates_attribute_messg' => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
-            'variation_unset_warning' => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
+        $localize_script             = array(
+            'ajaxurl'                             => admin_url( 'admin-ajax.php' ),
+            'nonce'                               => wp_create_nonce( 'dokan_reviews' ),
+            'ajax_loader'                         => plugins_url( 'assets/images/ajax-loader.gif', __FILE__ ),
+            'seller'                              => array(
+                                                    'available'     => __( 'Available', 'dokan' ),
+                                                    'notAvailable'  => __( 'Not Available', 'dokan' )
+                                                  ),
+            'delete_confirm'                      => __( 'Are you sure?', 'dokan' ),
+            'wrong_message'                       => __( 'Something is wrong, Please try again.', 'dokan' ),
+            'i18n_choose_featured_img'            => __( 'Upload featured image', 'dokan' ),
+            'i18n_choose_file'                    => __( 'Choose a file', 'dokan' ),
+            'i18n_choose_gallery'                 => __( 'Add Images to Product Gallery', 'dokan' ),
+            'i18n_choose_featured_img_btn_text'   => __( 'Set featured image', 'dokan' ),
+            'i18n_choose_file_btn_text'           => __( 'Insert file URL', 'dokan' ),
+            'i18n_choose_gallery_btn_text'        => __( 'Add to gallery', 'dokan' ),
+            'duplicates_attribute_messg'          => __( 'Sorry, this attribute option already exists, Try a different one.', 'dokan' ),
+            'variation_unset_warning'             => __( 'Warning! This product will not have any variations if this option is not checked.', 'dokan' ),
+            'new_attribute_prompt'                => __( 'Enter a name for the new attribute term:', 'dokan' ),
+            'remove_attribute'                    => __( 'Remove this attribute?', 'dokan' ),
+            'dokan_placeholder_img_src'           => wc_placeholder_img_src(),
+            'add_variation_nonce'                 => wp_create_nonce( 'add-variation' ),
+            'link_variation_nonce'                => wp_create_nonce( 'link-variations' ),
+            'delete_variations_nonce'             => wp_create_nonce( 'delete-variations' ),
+            'load_variations_nonce'               => wp_create_nonce( 'load-variations' ),
+            'save_variations_nonce'               => wp_create_nonce( 'save-variations' ),
+            'bulk_edit_variations_nonce'          => wp_create_nonce( 'bulk-edit-variations' ),
+            'i18n_link_all_variations'            => esc_js( sprintf( __( 'Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max %d per run).', 'dokan' ), defined( 'WC_MAX_LINKED_VARIATIONS' ) ? WC_MAX_LINKED_VARIATIONS : 50 ) ),
+            'i18n_enter_a_value'                  => esc_js( __( 'Enter a value', 'dokan' ) ),
+            'i18n_enter_menu_order'               => esc_js( __( 'Variation menu order (determines position in the list of variations)', 'dokan' ) ),
+            'i18n_enter_a_value_fixed_or_percent' => esc_js( __( 'Enter a value (fixed or %)', 'dokan' ) ),
+            'i18n_delete_all_variations'          => esc_js( __( 'Are you sure you want to delete all variations? This cannot be undone.', 'dokan' ) ),
+            'i18n_last_warning'                   => esc_js( __( 'Last warning, are you sure?', 'dokan' ) ),
+            'i18n_choose_image'                   => esc_js( __( 'Choose an image', 'dokan' ) ),
+            'i18n_set_image'                      => esc_js( __( 'Set variation image', 'dokan' ) ),
+            'i18n_variation_added'                => esc_js( __( "variation added", 'dokan' ) ),
+            'i18n_variations_added'               => esc_js( __( "variations added", 'dokan' ) ),
+            'i18n_no_variations_added'            => esc_js( __( "No variations added", 'dokan' ) ),
+            'i18n_remove_variation'               => esc_js( __( 'Are you sure you want to remove this variation?', 'dokan' ) ),
+            'i18n_scheduled_sale_start'           => esc_js( __( 'Sale start date (YYYY-MM-DD format or leave blank)', 'dokan' ) ),
+            'i18n_scheduled_sale_end'             => esc_js( __( 'Sale end date (YYYY-MM-DD format or leave blank)', 'dokan' ) ),
+            'i18n_edited_variations'              => esc_js( __( 'Save changes before changing page?', 'dokan' ) ),
+            'i18n_variation_count_single'         => esc_js( __( '%qty% variation', 'dokan' ) ),
+            'i18n_variation_count_plural'         => esc_js( __( '%qty% variations', 'dokan' ) ),
+            'variations_per_page'                 => absint( apply_filters( 'dokan_product_variations_per_page', 10 ) )
         );
 
         $form_validate_messages = array(
@@ -345,7 +381,7 @@ final class WeDevs_Dokan {
         );
 
         wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
-        
+
         //localize script for refund and dashboard image options
         $general_settings = get_option( 'dokan_general', [] );
         $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
@@ -375,7 +411,7 @@ final class WeDevs_Dokan {
         );
 
         wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
-        
+
         if ( $this->is_pro() ) {
             //include Earning statement script
             wp_enqueue_script( 'accounting' );
@@ -383,7 +419,6 @@ final class WeDevs_Dokan {
 
         // load only in dokan dashboard and edit page
         if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
-
 
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
@@ -393,13 +428,13 @@ final class WeDevs_Dokan {
                 wp_enqueue_style( 'dokan-magnific-popup' );
                 wp_enqueue_style( 'woocommerce-general' );
                 wp_enqueue_style( 'modalcss' );
+                wp_enqueue_style( 'select2-css' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
-
                 $scheme       = is_ssl() ? 'https' : 'http';
                 $api_key      = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
-                
+
                 if ( $api_key ) {
                     wp_enqueue_script( 'google-maps', $scheme . '://maps.google.com/maps/api/js?key=' . $api_key );
                 }
@@ -418,12 +453,15 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-chart' );
                 wp_enqueue_script( 'jquery-flot' );
                 wp_enqueue_script( 'chosen' );
+                wp_enqueue_script( 'select2-js' );
+                wp_enqueue_script( 'serializejson' );
                 wp_enqueue_media();
                 wp_enqueue_script( 'dokan-popup' );
                 wp_enqueue_script( 'wc-password-strength-meter' );
 
                 wp_enqueue_script( 'dokan-script' );
-                wp_localize_script( 'jquery', 'dokan', $localize_script );            }
+                wp_localize_script( 'jquery', 'dokan', $localize_script );
+            }
         }
 
         // store and my account page

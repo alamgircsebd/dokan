@@ -40,7 +40,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '<%= dirs.js %>',
                 src: [
-                    'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'reviews.js', 'script.js',
+                    'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'product-variation.js', 'reviews.js', 'script.js',
                     'single-product-shipping.js', 'tabulous.js', 'tag-it-custom.js'
                 ],
                 dest: '<%= dirs.js %>/',
@@ -66,6 +66,7 @@ module.exports = function(grunt) {
                         '<%= dirs.js %>/admin.js',
                         '<%= dirs.js %>/orders.js',
                         '<%= dirs.js %>/product-editor.js',
+                        '<%= dirs.js %>/product-variation.js',
                         '<%= dirs.js %>/reviews.js',
                         '<%= dirs.js %>/script.js',
                         '<%= dirs.js %>/settings.js',
@@ -126,6 +127,7 @@ module.exports = function(grunt) {
                     '<%= dirs.js %>/admin.js',
                     '<%= dirs.js %>/orders.js',
                     '<%= dirs.js %>/product-editor.js',
+                    '<%= dirs.js %>/product-variation.js',
                     '<%= dirs.js %>/reviews.js',
                     '<%= dirs.js %>/script.js',
                     '<%= dirs.js %>/settings.js',

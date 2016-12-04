@@ -61,6 +61,26 @@ class Dokan_Ajax {
 
         add_filter( 'wp_ajax_dokan_seller_listing_search', array($this, 'seller_listing_search') );
         add_filter( 'wp_ajax_nopriv_dokan_seller_listing_search', array($this, 'seller_listing_search') );
+
+        add_action( 'wp_ajax_dokan_create_new_product', array( $this, 'create_product' ) );
+    }
+
+    function create_product() {
+        check_ajax_referer( 'dokan_reviews' );
+
+        parse_str( $_POST['postdata'], $postdata );
+
+        $response = dokan_save_product( $postdata );
+
+        if ( is_wp_error( $response ) ) {
+            wp_send_json_error( $response->get_error_message() );
+        }
+
+        if ( is_int( $response ) ) {
+            wp_send_json_success( dokan_edit_product_url( $response ) );
+        } else {
+            wp_send_json_error( __( 'Something wrong, please try again later', 'dokan' ) );
+        }
     }
 
     /**
@@ -220,7 +240,7 @@ class Dokan_Ajax {
                         if ( isset( $file['name'] ) ) {
                             $file_count = $file['name'];
                         } else {
-                            $file_count = sprintf( __( 'File %d', 'woocommerce' ), $file_counter );
+                            $file_count = sprintf( __( 'File %d', 'dokan' ), $file_counter );
                         }
 
                         include dirname( dirname( __FILE__ ) ) . '/templates/orders/order-download-permission-html.php';
@@ -344,7 +364,7 @@ class Dokan_Ajax {
             }
             echo '"><div class="note_content">';
             echo wpautop( wptexturize( $note ) );
-            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete note', 'woocommerce' ).'</a></p>';
+            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete note', 'dokan' ).'</a></p>';
             echo '</li>';
         }
 
@@ -400,13 +420,15 @@ class Dokan_Ajax {
 
             $comment_id = wp_insert_comment($data);
 
+            update_comment_meta($comment_id, 'is_customer_note', true);
+
             echo '<li rel="' . esc_attr( $comment_id ) . '" class="note ';
             //if ( $is_customer_note ) {
                 echo 'customer-note';
             //}
             echo '"><div class="note_content">';
             echo wpautop( wptexturize( $ship_info ) );
-            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete', 'woocommerce' ).'</a></p>';
+            echo '</div><p class="meta"><a href="#" class="delete_note">'.__( 'Delete', 'dokan' ).'</a></p>';
             echo '</li>';
         }
 

@@ -18,9 +18,9 @@ class Dokan_Pro_Products {
      * @uses filters
      */
     public function __construct() {
-        add_action( 'dokan_single_product_edit_after_sidebar', array( $this, 'load_variations_content' ), 10, 2);
-        add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2);
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_shipping_tax_content' ), 10, 2);
+        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_variations_content' ), 15, 2);
+        add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2);
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
         // Add per product commission option in backend for addmin
@@ -57,11 +57,7 @@ class Dokan_Pro_Products {
      */
     public function render_new_product_template( $query_vars ) {
         if ( isset( $query_vars['new-product'] ) ) {
-            if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-                dokan_get_template_part( 'products/new-product', '', array( 'pro' => true ) );
-            } else {
-                dokan_get_template_part( 'products/new-product-single' );
-            }
+            dokan_get_template_part( 'products/new-product' );
         }
     }
 
@@ -73,7 +69,12 @@ class Dokan_Pro_Products {
      * @return void
      */
     public function load_product_edit_template() {
-        dokan_get_template_part( 'products/product-edit', '', array( 'pro' => true ) );
+
+        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
+            dokan_get_template_part( 'products/product-edit', '', array( 'pro' => true ) );
+        } else {
+            dokan_get_template_part( 'products/new-product-single' );
+        }
     }
 
     /**
@@ -88,10 +89,11 @@ class Dokan_Pro_Products {
      */
     public function load_variations_content( $post, $post_id ) {
 
-        $_has_attribute     = get_post_meta( $post_id, '_has_attribute', true );
-        $_create_variations = get_post_meta( $post_id, '_create_variation', true );
-        $product_attributes = get_post_meta( $post_id, '_product_attributes', true );
+        $_has_attribute       = get_post_meta( $post_id, '_has_attribute', true );
+        $_create_variations   = get_post_meta( $post_id, '_create_variation', true );
+        $product_attributes   = get_post_meta( $post_id, '_product_attributes', true );
         $attribute_taxonomies = wc_get_attribute_taxonomies();
+
 
         dokan_get_template_part( 'products/product-variation', '', array(
             'pro'                  => true,
@@ -114,14 +116,7 @@ class Dokan_Pro_Products {
      * @return void
      */
     public function load_variations_js_template( $post, $post_id ) {
-        if ( $post_id ) {
-            echo '<div class="variation-single-content">';
-            dokan_get_template_part( 'products/edit/variation-popup', '', array( 'pro' => true, 'post_id' => $post_id ) );
-            echo '</div>';
-        }
-
-        dokan_get_template_part( 'products/edit/variation-table', '', array( 'pro' => true, 'post_id' => $post_id ) );
-        dokan_get_template_part( 'products/edit/variation-attribute-popup', '', array( 'pro' => true, 'post_id' => $post_id ) );
+        dokan_get_template_part( 'products/edit/tmpl-add-attribute', '', array( 'pro' => true, 'post_id' => $post_id ) );
     }
 
     /**
@@ -199,14 +194,14 @@ class Dokan_Pro_Products {
      */
     function add_per_product_commission_options() {
 
-        woocommerce_wp_text_input( 
-            array( 
+        woocommerce_wp_text_input(
+            array(
                 'id'           => '_per_product_commission',
                 'label'        => __( 'Commission (%)', 'dokan' ),
                 'wrapper_class'=> 'per-product-commission show_if_simple',
                 'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
                 'data_type' => 'price'
-            ) 
+            )
         );
     }
 

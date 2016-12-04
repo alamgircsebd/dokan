@@ -7,15 +7,15 @@ jQuery(function($) {
 
     $('.tips').tooltip();
 
-    // set dashboard menu height
-    var dashboardMenu = $('ul.dokan-dashboard-menu'),
-        contentArea = $('.dokan-dashboard-content');
+    // // set dashboard menu height
+    // var dashboardMenu = $('ul.dokan-dashboard-menu'),
+    //     contentArea = $('.dokan-dashboard-content');
 
-    if ( $(window).width() > 767) {
-        if ( contentArea.height() > dashboardMenu.height() ) {
-            dashboardMenu.css({ height: contentArea.height() });
-        }
-    }
+    // if ( $(window).width() > 767) {
+    //     if ( contentArea.height() > dashboardMenu.height() ) {
+    //         dashboardMenu.css({ height: contentArea.height() });
+    //     }
+    // }
 
     function showTooltip(x, y, contents) {
         jQuery('<div class="chart-tooltip">' + contents + '</div>').css({
@@ -678,6 +678,16 @@ jQuery(function($) {
                     });
                 }
         });
+
+        $('.dokan-form-horizontal').on('change', 'input[type=checkbox]#lbl_setting_minimum_quantity', function(){
+            var showSWDiscount =  $( '.show_if_needs_sw_discount' );
+            if ( $( this ).is(':checked') ) {
+                showSWDiscount.find('input[type="number"]').val('');
+                showSWDiscount.slideDown('slow');
+            } else {
+                showSWDiscount.slideUp('slow');
+            }
+        } );
 
     });
 })(jQuery);

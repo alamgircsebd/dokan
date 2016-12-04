@@ -1,3 +1,11 @@
+.dokan-spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('../images/spinner-2x.gif') center center no-repeat;
+  z-index: 99;
+  background-size: 20px;
+}
 .dokan-dashboard .post-box-container {
   width: 49%;
   float: left;
@@ -103,6 +111,14 @@
   display: none;
 }
 
+.dokan-spinner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: url('../images/spinner-2x.gif') center center no-repeat;
+  z-index: 99;
+  background-size: 20px;
+}
 .admin-report-container {
   margin-top: 10px;
 }

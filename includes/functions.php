@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/product-functions.php';
 require_once dirname(__FILE__) . '/order-functions.php';
 require_once dirname(__FILE__) . '/withdraw-functions.php';
 
@@ -788,11 +789,7 @@ function dokan_edit_product_url( $product_id ) {
         return trailingslashit( get_permalink( $product_id ) ). 'edit/';
     }
 
-    if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-        $new_product_url = dokan_get_navigation_url('products');
-    } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
-        $new_product_url = dokan_get_navigation_url('new-product');
-    }
+    $new_product_url = dokan_get_navigation_url('products');
 
     return add_query_arg( array( 'product_id' => $product_id, 'action' => 'edit' ), $new_product_url );
 }

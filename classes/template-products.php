@@ -27,6 +27,7 @@ class Dokan_Template_Products {
         add_action( 'template_redirect', array( $this, 'handle_delete_product' ) );
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
+        add_action( 'dokan_after_listing_product', array( $this, 'load_add_new_product_popup' ), 10 );
     }
 
     /**
@@ -54,7 +55,6 @@ class Dokan_Template_Products {
      * @return void
      */
     public function render_new_product_template( $query_vars ) {
-
         if ( isset( $query_vars['new-product'] ) && !WeDevs_Dokan::init()->is_pro() ) {
             dokan_get_template_part( 'products/new-product-single' );
         }
@@ -92,6 +92,7 @@ class Dokan_Template_Products {
      * @return void
      */
     function handle_all_submit() {
+        global $wpdb;
 
         if ( ! is_user_logged_in() ) {
             return;
@@ -307,12 +308,12 @@ class Dokan_Template_Products {
 
                 $product_status = dokan_get_new_post_status();
                 $post_data = apply_filters( 'dokan_insert_product_post_data', array(
-                        'post_type'    => 'product',
-                        'post_status'  => $product_status,
-                        'post_title'   => $post_title,
-                        'post_content' => $post_content,
-                        'post_excerpt' => $post_excerpt,
-                    ) );
+                    'post_type'    => 'product',
+                    'post_status'  => $product_status,
+                    'post_title'   => $post_title,
+                    'post_content' => $post_content,
+                    'post_excerpt' => $post_excerpt,
+                ) );
 
                 $product_id = wp_insert_post( $post_data );
 
@@ -360,22 +361,9 @@ class Dokan_Template_Products {
             }
         }
 
-
-        if ( isset( $_GET['product_id'] ) ) {
-            $post_id = intval( $_GET['product_id'] );
-        } else {
-            global $post, $product;
-
-            if ( !empty( $post ) ) {
-                $post_id = $post->ID;
-            }
-        }
-
-
-        if ( isset( $_POST['update_product'] ) && wp_verify_nonce( $_POST['dokan_edit_product_nonce'], 'dokan_edit_product' ) ) {
+        if ( isset( $_POST['dokan_update_product'] ) && wp_verify_nonce( $_POST['dokan_edit_product_nonce'], 'dokan_edit_product' ) ) {
             $post_title     = trim( $_POST['post_title'] );
             if ( empty( $post_title ) ) {
-
                 $errors[] = __( 'Please enter product title', 'dokan' );
             }
 
@@ -388,6 +376,12 @@ class Dokan_Template_Products {
                 if( !isset( $_POST['product_cat'] ) && empty( $_POST['product_cat'] ) ) {
                     $errors[] = __( 'Please select AT LEAST ONE category', 'dokan' );
                 }
+            }
+
+            $post_id = isset( $_POST['dokan_product_id'] ) ? intval( $_POST['dokan_product_id'] ) : 0;
+
+            if ( ! $post_id ) {
+                $errors[] = __( 'No product found !', 'dokan' );
             }
 
             self::$errors = apply_filters( 'dokan_can_edit_product', $errors );
@@ -403,6 +397,37 @@ class Dokan_Template_Products {
                     'comment_status' => isset( $_POST['_enable_reviews'] ) ? 'open' : 'closed'
                 );
 
+                wp_update_post( $product_info );
+
+                /** Set Product tags */
+                if( isset( $_POST['product_tag'] ) ) {
+                    $tags_ids = array_map( 'intval', (array)$_POST['product_tag'] );
+                } else {
+                    $tags_ids = array();
+                }
+                wp_set_object_terms( $post_id, $tags_ids, 'product_tag' );
+
+                /** set product category * */
+                if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
+                    wp_set_object_terms( $post_id, (int) $_POST['product_cat'], 'product_cat' );
+                } else {
+                    if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {
+                        $cat_ids = array_map( 'intval', (array)$_POST['product_cat'] );
+                        wp_set_object_terms( $post_id, $cat_ids, 'product_cat' );
+                    }
+                }
+
+                if ( ! WeDevs_Dokan::init()->is_pro() ) {
+                    wp_set_object_terms( $post_id, 'simple', 'product_type' );
+                } else {
+                    if ( isset( $_POST['product_type'] ) ) {
+                        wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );
+                    } else {
+                        wp_set_object_terms( $post_id, 'simple', 'product_type' );
+                    }
+                }
+
+                // Save lot discount options
                 $is_lot_discount     = isset( $_POST['_is_lot_discount'] ) ? $_POST['_is_lot_discount'] : 'no';
                 if ( $is_lot_discount == 'yes' ) {
                     $lot_discount_quantity = isset($_POST['_lot_discount_quantity']) ? $_POST['_lot_discount_quantity'] : 0;
@@ -422,32 +447,6 @@ class Dokan_Template_Products {
                     update_post_meta( $post_id, '_is_lot_discount', 'no');
                 }
 
-                wp_update_post( $product_info );
-
-                /** Set Product tags */
-                if( isset( $_POST['product_tag'] ) ) {
-                    $tags_ids = array_map( 'intval', (array)$_POST['product_tag'] );
-                } else {
-                    $tags_ids = array();
-                }
-                wp_set_object_terms( $post_id, $tags_ids, 'product_tag' );
-
-
-                /** set product category * */
-
-                if( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ) {
-                    wp_set_object_terms( $post_id, (int) $_POST['product_cat'], 'product_cat' );
-                } else {
-                    if( isset( $_POST['product_cat'] ) && !empty( $_POST['product_cat'] ) ) {
-                        $cat_ids = array_map( 'intval', (array)$_POST['product_cat'] );
-                        wp_set_object_terms( $post_id, $cat_ids, 'product_cat' );
-                    }
-                }
-                if ( isset( $_POST['product-type'] ) ) {
-                    wp_set_object_terms( $product_id, $_POST['product-type'], 'product_type' );
-                } else {
-                    wp_set_object_terms( $post_id, 'simple', 'product_type' );
-                }
                 /**  Process all variation products meta */
                 dokan_process_product_meta( $post_id );
 
@@ -455,15 +454,19 @@ class Dokan_Template_Products {
                 $featured_image = absint( $_POST['feat_image_id'] );
                 if ( $featured_image ) {
                     set_post_thumbnail( $post_id, $featured_image );
+                } else {
+                    delete_post_thumbnail( $post_id );
                 }
-                
+
                 $edit_url = dokan_edit_product_url( $post_id );
                 wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
                 exit;
             }
         }
+    }
 
-
+    function load_add_new_product_popup() {
+        dokan_get_template_part( 'products/tmpl-add-product-popup' );
     }
 
     /**

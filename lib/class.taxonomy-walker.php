@@ -1,13 +1,10 @@
-<?php 
+<?php
 
 /**
- * Create HTML dropdown list of Categories.
- *
- * @package WordPress
- * @since 2.1.0
- * @uses Walker
+ *  Dokan Product category Walker Class
+ *  @author weDevs
  */
-class Dokan_Walker_Tag_Multi extends Walker {
+class DokanTaxonomyWalker extends Walker{
 
     /**
      * @see Walker::$tree_type
@@ -21,14 +18,7 @@ class Dokan_Walker_Tag_Multi extends Walker {
      */
     var $db_fields = array('parent' => 'parent', 'id' => 'term_id');
 
-    /**
-     * @see Walker::start_el()
-     *
-     * @param string $output Passed by reference. Used to append additional content.
-     * @param object $category Category data object.
-     * @param int $depth Depth of category. Used for padding.
-     * @param array $args Uses 'selected' and 'show_count' keys, if they exist.
-     */
+
     function start_el( &$output, $category, $depth = 0, $args = array(), $id = 0 ) {
         $pad = str_repeat( '&nbsp;', $depth * 3 );
 
@@ -42,5 +32,4 @@ class Dokan_Walker_Tag_Multi extends Walker {
             $output .= '&nbsp;&nbsp;(' . $category->count . ')';
         $output .= "</option>\n";
     }
-
 }

@@ -1,3 +1,4 @@
+<?php $_sold_individually = get_post_meta( $post_id, '_sold_individually', true ); ?>
 <div class="dokan-form-horizontal">
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Purchase Note', 'dokan' ); ?></label>
@@ -25,11 +26,12 @@
             ) ), 'select' ); ?>
         </div>
     </div>
-    
+
     <div class="dokan-form-group">
-        <label class="dokan-w4 dokan-control-label" for="_enable_reviews"><?php _e( 'Sold Individually', 'dokan' ); ?></label>
+        <label class="dokan-w4 dokan-control-label" for="_sold_individually"><?php _e( 'Sold Individually', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
-            <?php dokan_post_input_box( $post->ID, '_sold_individually', array('label' => __( 'Enable this to only allow one of this item to be bought in a single order', 'dokan' ) ), 'checkbox' ); ?>
+            <input name="_sold_individually" id="_sold_individually" value="yes" type="checkbox" <?php checked( $_sold_individually, 'yes' ); ?>>
+            <?php _e( 'Allow only one quantity of this product to be bought in a single order', 'dokan' ) ?>
         </div>
     </div>
 

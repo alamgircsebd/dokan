@@ -186,7 +186,7 @@ class Dokan_Admin_User_Profile {
                     </tr>
 
                 <?php } ?>
-                    
+
                 <tr>
                     <th><?php _e( 'Payment Options : ', 'dokan' ); ?></th>
                 </tr>
@@ -207,36 +207,36 @@ class Dokan_Admin_User_Profile {
                         </td>
                     </tr>
                 <?php } ?>
-                    
+
                 <?php if( isset( $store_settings['payment']['bank'] ) ) { ?>
                     <tr>
                         <th><?php _e( 'Bank name ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['bank_name'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['bank_name'] ) ? esc_attr( $store_settings['payment']['bank']['bank_name'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Account Name ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['ac_name'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['ac_name'] ) ? esc_attr( $store_settings['payment']['bank']['ac_name'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Account Number ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['ac_number'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['ac_number'] ) ? esc_attr( $store_settings['payment']['bank']['ac_number'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Bank Address ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['bank_addr'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['bank_addr'] ) ? esc_attr( $store_settings['payment']['bank']['bank_addr'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Bank Swift ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['swift'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['swift'] ) ? esc_attr( $store_settings['payment']['bank']['swift'] ) : ''; ?>">
                         </td>
                     </tr>
                 <?php } ?>
