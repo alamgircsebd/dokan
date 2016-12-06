@@ -371,7 +371,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
 
         update_user_meta( $this->store_id, 'dokan_profile_settings', $dokan_settings );
 
-        wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
+        wp_redirect( apply_filters( 'dokan_ww_payment_redirect',esc_url_raw( $this->get_next_step_link() ) ) );
         exit;
     }
 
