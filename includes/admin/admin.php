@@ -218,7 +218,41 @@ class Dokan_Admin_Settings {
                     'type'    => 'select',
                     'options' => array( 'seller' => __( 'Seller', 'dokan' ), 'admin' => __( 'Admin', 'dokan' ) ),
                     'default' => 'seller'
-                )
+                ),
+                'store_map'                  => array(
+                    'name'    => 'store_map',
+                    'label'   => __( 'Show Map on Store Page', 'dokan' ),
+                    'desc'    => __( 'Enable showing Store location map on store left sidebar', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
+                'gmap_api_key'               => array(
+                    'name'  => 'gmap_api_key',
+                    'label' => __( 'Google Map API key', 'dokan' ),
+                    'desc'  => __( '<a href="https://developers.google.com/maps/documentation/javascript/" target="_blank">API Key</a> is needed to display map on store page', 'dokan' ),
+                    'type'  => 'text',
+                ),
+                'store_seo'                  => array(
+                    'name'    => 'store_seo',
+                    'label'   => __( 'Enable Store SEO', 'dokan' ),
+                    'desc'    => __( 'Sellers can manage their Store page SEO', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
+                'contact_seller'             => array(
+                    'name'    => 'contact_seller',
+                    'label'   => __( 'Show Contact Form on Store Page', 'dokan' ),
+                    'desc'    => __( 'Enable showing contact seller form on store left sidebar', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
+                'enable_theme_store_sidebar' => array(
+                    'name'    => 'enable_theme_store_sidebar',
+                    'label'   => __( 'Enable Store Sidebar From Theme', 'dokan' ),
+                    'desc'    => __( 'Enable showing Store Sidebar From Your Theme.', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'off'
+                ),
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
