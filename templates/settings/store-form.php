@@ -17,7 +17,7 @@
 
     $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
     $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
-    
+
     $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? $profile_info['show_min_order_discount'] : 'no';
     $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? $profile_info['setting_minimum_order_amount'] : '';
     $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? $profile_info['setting_order_percentage'] : '';
@@ -369,41 +369,47 @@
             var def_zoomval = 12;
             var def_longval = '<?php echo $def_long; ?>';
             var def_latval = '<?php echo $def_lat; ?>';
-            var curpoint = new google.maps.LatLng(def_latval, def_longval),
-                geocoder   = new window.google.maps.Geocoder(),
-                $map_area = $('#dokan-map'),
-                $input_area = $( '#dokan-map-lat' ),
-                $input_add = $( '#dokan-map-add' ),
-                $find_btn = $( '#dokan-location-find-btn' );
+
+            try {
+                var curpoint = new google.maps.LatLng(def_latval, def_longval),
+                    geocoder   = new window.google.maps.Geocoder(),
+                    $map_area = $('#dokan-map'),
+                    $input_area = $( '#dokan-map-lat' ),
+                    $input_add = $( '#dokan-map-add' ),
+                    $find_btn = $( '#dokan-location-find-btn' );
+
+                $find_btn.on('click', function(e) {
+                    e.preventDefault();
+
+                    geocodeAddress( $input_add.val() );
+                });
+
+                var gmap = new google.maps.Map( $map_area[0], {
+                    center: curpoint,
+                    zoom: def_zoomval,
+                    mapTypeId: window.google.maps.MapTypeId.ROADMAP
+                });
+
+                var marker = new window.google.maps.Marker({
+                    position: curpoint,
+                    map: gmap,
+                    draggable: true
+                });
+
+                window.google.maps.event.addListener( gmap, 'click', function ( event ) {
+                    marker.setPosition( event.latLng );
+                    updatePositionInput( event.latLng );
+                } );
+
+                window.google.maps.event.addListener( marker, 'drag', function ( event ) {
+                    updatePositionInput(event.latLng );
+                } );
+
+            } catch( e ) {
+                console.log( 'Google API not found.' );
+            }
 
             autoCompleteAddress();
-
-            $find_btn.on('click', function(e) {
-                e.preventDefault();
-
-                geocodeAddress( $input_add.val() );
-            });
-
-            var gmap = new google.maps.Map( $map_area[0], {
-                center: curpoint,
-                zoom: def_zoomval,
-                mapTypeId: window.google.maps.MapTypeId.ROADMAP
-            });
-
-            var marker = new window.google.maps.Marker({
-                position: curpoint,
-                map: gmap,
-                draggable: true
-            });
-
-            window.google.maps.event.addListener( gmap, 'click', function ( event ) {
-                marker.setPosition( event.latLng );
-                updatePositionInput( event.latLng );
-            } );
-
-            window.google.maps.event.addListener( marker, 'drag', function ( event ) {
-                updatePositionInput(event.latLng );
-            } );
 
             function updatePositionInput( latLng ) {
                 $input_area.val( latLng.lat() + ',' + latLng.lng() );

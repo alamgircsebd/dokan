@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Dokan Store Contact Seller Widget
+ * Dokan Store Location Widget
  *
  * @since 1.0
  *
  * @package dokan
  */
-class Dokan_Store_Contact_Form extends WP_Widget {
+class Dokan_Store_Location extends WP_Widget {
 
     /**
      * Constructor
@@ -15,8 +15,8 @@ class Dokan_Store_Contact_Form extends WP_Widget {
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-store-contact', 'description' => __( 'Dokan Seller Contact Form', 'dokan' ) );
-        parent::__construct( 'dokan-store-contact-widget', __( 'Dokan: Store Contact Form', 'dokan' ), $widget_ops );
+        $widget_ops = array( 'classname' => 'dokan-store-location', 'description' => __( 'Dokan Seller Store Location', 'dokan' ) );
+        parent::__construct( 'dokan-store-location', __( 'Dokan: Store Location', 'dokan' ), $widget_ops );
     }
 
     /**
@@ -26,7 +26,7 @@ class Dokan_Store_Contact_Form extends WP_Widget {
      * @param array  An array of settings for this widget instance
      *
      * @return void Echoes it's output
-     **/
+     */
     function widget( $args, $instance ) {
 
         if ( ! dokan_is_store_page() ) {
@@ -35,21 +35,23 @@ class Dokan_Store_Contact_Form extends WP_Widget {
 
         extract( $args, EXTR_SKIP );
 
-        $title      = apply_filters( 'widget_title', $instance['title'] );
-        $seller_id  = (int) get_query_var( 'author' );
-        $store_info = dokan_get_store_info( $seller_id );
+        $title        = apply_filters( 'widget_title', $instance['title'] );
+        $store_info   = dokan_get_store_info( get_query_var( 'author' ) );
+        $map_location = isset( $store_info['location'] ) ? esc_attr( $store_info['location'] ) : '';
 
         echo $before_widget;
 
         if ( ! empty( $title ) ) {
             echo $args['before_title'] . $title . $args['after_title'];
         }
-
-        dokan_get_template_part( 'widgets/store-contact-form', '', array(
-            'pro' => true,
-            'seller_id' => $seller_id,
+        do_action('dokan-store-widget-before-map' , get_query_var( 'author' ));
+        
+        dokan_get_template_part( 'widgets/store-map', '', array(
             'store_info' => $store_info,
+            'map_location' => $map_location,
         ) );
+        
+        do_action('dokan-store-widget-after-map', get_query_var( 'author' ));
 
         echo $after_widget;
     }
@@ -79,7 +81,7 @@ class Dokan_Store_Contact_Form extends WP_Widget {
      */
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title' => __( 'Contact Seller', 'dokan' ),
+            'title' => __( 'Store Location', 'dokan' ),
         ) );
 
         $title = $instance['title'];
@@ -92,4 +94,4 @@ class Dokan_Store_Contact_Form extends WP_Widget {
     }
 }
 
-add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_Store_Contact_Form' );" ) );
+add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_Store_Location' );" ) );
