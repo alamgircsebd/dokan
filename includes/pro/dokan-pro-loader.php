@@ -63,8 +63,6 @@ class Dokan_Pro_Loader {
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
-        require_once DOKAN_PRO_INC . '/widgets/store-location.php';
-        require_once DOKAN_PRO_INC . '/widgets/store-contact.php';
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
