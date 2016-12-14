@@ -695,6 +695,9 @@ div.media-sidebar a.edit-attachment {
 .product-edit-new-container .dokan-edit-row .dokan-section-content {
   padding: 15px;
 }
+.product-edit-new-container .dokan-product-edit-form .dokan-new-product-featured-img {
+  height: auto !important;
+}
 .product-edit-new-container label {
   font-weight: normal;
   cursor: pointer;
