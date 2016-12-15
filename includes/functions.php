@@ -523,66 +523,51 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
  * Get user friendly post status based on post
  *
  * @param string $status
- * @return string
+ *
+ * @return string|array
  */
-function dokan_get_post_status( $status ) {
-    switch ($status) {
-        case 'publish':
-            return __( 'Online', 'dokan' );
-            break;
+function dokan_get_post_status( $status = '' ) {
 
-        case 'draft':
-            return __( 'Draft', 'dokan' );
-            break;
+    $statuses = apply_filters( 'dokan_get_post_status', array(
+        'publish' => __( 'Online', 'dokan' ),
+        'draft'   => __( 'Draft', 'dokan' ),
+        'pending' => __( 'Pending Review', 'dokan' )
+    ) );
 
-        case 'pending':
-            return __( 'Pending Review', 'dokan' );
-            break;
-
-        case 'future':
-            return __( 'Scheduled', 'dokan' );
-            break;
-
-        default:
-            return '';
-            break;
+    if ( $status ) {
+        return isset( $statuses[$status] ) ? $statuses[$status] : '';
     }
+
+    return $statuses;
 }
 
 /**
  * Get user friendly post status label based class
  *
  * @param string $status
- * @return string
+ *
+ * @return string|array
  */
-function dokan_get_post_status_label_class( $status ) {
-    switch ( $status ) {
-        case 'publish':
-            return 'dokan-label-success';
-            break;
+function dokan_get_post_status_label_class( $status = '' ) {
 
-        case 'draft':
-            return 'dokan-label-default';
-            break;
+    $labels = apply_filters( 'dokan_get_post_status_label_class', array(
+        'publish' => 'dokan-label-success',
+        'draft'   => 'dokan-label-default',
+        'pending' => 'dokan-label-danger'
+    ) );
 
-        case 'pending':
-            return 'dokan-label-warning';;
-            break;
-
-        case 'future':
-            return 'dokan-label-info';;
-            break;
-
-        default:
-            return '';
-            break;
+    if ( $status ) {
+        return isset( $labels[$status] ) ? $labels[$status] : '';
     }
+
+    return $labels;
 }
 
 /**
  * Get readable product type based on product
  *
  * @param string $status
+ *
  * @return string
  */
 function dokan_get_product_types( $status = '' ) {
@@ -591,7 +576,7 @@ function dokan_get_product_types( $status = '' ) {
         'simple'   => __( 'Simple Product', 'dokan' ),
         'variable' => __( 'Variable Product', 'dokan' ),
         'grouped'  => __( 'Grouped Product', 'dokan' ),
-        'external' => __( 'Scheduled Product', 'dokan' ),
+        'external' => __( 'Scheduled Product', 'dokan' )
     ) );
 
     if ( $status ) {

@@ -12,13 +12,14 @@
     <li<?php echo $status_class == 'all' ? ' class="active"' : ''; ?>>
         <a href="<?php echo $permalink; ?>"><?php printf( __( 'All (%d)', 'dokan' ), $post_counts->total ); ?></a>
     </li>
-    <li<?php echo $status_class == 'publish' ? ' class="active"' : ''; ?>>
-        <a href="<?php echo add_query_arg( array( 'post_status' => 'publish' ), $permalink ); ?>"><?php printf( __( 'Online (%d)', 'dokan' ), $post_counts->publish ); ?></a>
-    </li>
-    <li<?php echo $status_class == 'pending' ? ' class="active"' : ''; ?>>
-        <a href="<?php echo add_query_arg( array( 'post_status' => 'pending' ), $permalink ); ?>"><?php printf( __( 'Pending Review (%d)', 'dokan' ), $post_counts->pending ); ?></a>
-    </li>
-    <li<?php echo $status_class == 'draft' ? ' class="active"' : ''; ?>>
-        <a href="<?php echo add_query_arg( array( 'post_status' => 'draft' ), $permalink ); ?>"><?php printf( __( 'Draft (%d)', 'dokan' ), $post_counts->draft ); ?></a>
-    </li>
+    <?php foreach ( $statuses as $status => $status_label ): ?>
+        <?php
+            if ( empty( $post_counts->{$status} ) ) {
+                continue;
+            }
+        ?>
+        <li<?php echo $status_class == $status ? ' class="active"' : ''; ?>>
+            <a href="<?php echo add_query_arg( array( 'post_status' => $status ), $permalink ); ?>"><?php echo $status_label. ' (' . $post_counts->{$status} . ')'; ?></a>
+        </li>
+    <?php endforeach ?>
 </ul> <!-- .post-statuses-filter -->

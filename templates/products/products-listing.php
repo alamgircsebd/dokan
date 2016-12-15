@@ -130,7 +130,7 @@
                                         </div>
                                     </td>
                                     <td class="post-status" data-title="<?php _e( 'Status', 'dokan' ); ?>">
-                                        <label class="dokan-label <?php echo $post->post_status; ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></label>
+                                        <label class="dokan-label <?php echo dokan_get_post_status_label_class( $post->post_status ); ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></label>
                                     </td>
                                     <td data-title="<?php _e( 'SKU', 'dokan' ); ?>">
                                         <?php
