@@ -585,30 +585,20 @@ function dokan_get_post_status_label_class( $status ) {
  * @param string $status
  * @return string
  */
-function dokan_get_product_types( $status ) {
-    switch ($status) {
-        case 'simple':
-            $name = __( 'Simple Product', 'dokan' );
-            break;
+function dokan_get_product_types( $status = '' ) {
 
-        case 'variable':
-            $name = __( 'Variable Product', 'dokan' );
-            break;
+    $types = apply_filters( 'dokan_get_product_types', array(
+        'simple'   => __( 'Simple Product', 'dokan' ),
+        'variable' => __( 'Variable Product', 'dokan' ),
+        'grouped'  => __( 'Grouped Product', 'dokan' ),
+        'external' => __( 'Scheduled Product', 'dokan' ),
+    ) );
 
-        case 'grouped':
-            $name = __( 'Grouped Product', 'dokan' );
-            break;
-
-        case 'external':
-            $name = __( 'Scheduled', 'dokan' );
-            break;
-
-        default:
-            $name = '';
-            break;
+    if ( $status ) {
+        return isset( $types[$status] ) ? $types[$status] : '';
     }
 
-    return apply_filters( 'dokan_product_status_case', $name, $status );
+    return $types;
 }
 
 /**

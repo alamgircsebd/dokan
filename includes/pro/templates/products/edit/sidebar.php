@@ -65,7 +65,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
         }
         ?>
 
-        <span class="dokan-toggle-selected-display"><?php echo dokan_get_product_status( $product_type ); ?></span>
+        <span class="dokan-toggle-selected-display"><?php echo dokan_get_product_types( $product_type ); ?></span>
         <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
 
             <div class="dokan-toggle-select-container dokan-hide">
