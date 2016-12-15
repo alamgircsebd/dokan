@@ -517,6 +517,7 @@ final class WeDevs_Dokan {
         $classes_dir = __DIR__ . '/classes/';
 
         require_once $inc_dir . 'functions.php';
+        require_once $inc_dir . 'functions-depricated.php';
         require_once $inc_dir . 'widgets/menu-category.php';
         require_once $inc_dir . 'widgets/bestselling-product.php';
         require_once $inc_dir . 'widgets/top-rated-product.php';

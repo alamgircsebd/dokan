@@ -585,7 +585,7 @@ function dokan_get_post_status_label_class( $status ) {
  * @param string $status
  * @return string
  */
-function dokan_get_product_status( $status ) {
+function dokan_get_product_types( $status ) {
     switch ($status) {
         case 'simple':
             $name = __( 'Simple Product', 'dokan' );
