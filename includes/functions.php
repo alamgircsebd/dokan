@@ -159,7 +159,11 @@ function dokan_delete_product_handler() {
         }
 
         wp_delete_post( $product_id );
-        wp_redirect( add_query_arg( array( 'message' => 'product_deleted' ), dokan_get_navigation_url( 'products' ) ) );
+
+        $redirect = apply_filters( 'dokan_add_new_product_redirect', dokan_get_navigation_url( 'products' ), '' );
+
+        wp_redirect( add_query_arg( array( 'message' => 'product_deleted' ),  $redirect ) );
+
         exit;
     }
 }

@@ -115,6 +115,8 @@ class Dokan_Template_Products {
             $post_content   = trim( $_POST['post_content'] );
             $post_excerpt   = trim( $_POST['post_excerpt'] );
             $price          = floatval( $_POST['price'] );
+
+
             $featured_image = absint( $_POST['feat_image_id'] );
 
             if ( empty( $post_title ) ) {
@@ -180,6 +182,7 @@ class Dokan_Template_Products {
                     update_post_meta( $product_id, '_price', $price );
                     update_post_meta( $product_id, '_visibility', 'visible' );
 
+
                     do_action( 'dokan_new_product_added', $product_id, $post_data );
 
                     if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) == 'on' ) {
@@ -194,7 +197,10 @@ class Dokan_Template_Products {
         }
 
         if ( isset( $_POST['dokan_update_product'] ) && wp_verify_nonce( $_POST['dokan_edit_product_nonce'], 'dokan_edit_product' ) ) {
+
             $post_title     = trim( $_POST['post_title'] );
+
+
             if ( empty( $post_title ) ) {
                 $errors[] = __( 'Please enter product title', 'dokan' );
             }
