@@ -292,8 +292,11 @@ class Dokan_Template_Products {
 
                 do_action( 'dokan_product_updated', $post_id );
 
-                $edit_url = dokan_edit_product_url( $post_id );
-                wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
+                //$edit_url = dokan_edit_product_url( $post_id );
+
+                $redirect = apply_filters( 'dokan_add_new_product_redirect', dokan_edit_product_url( $post_id ), $post_id );
+
+                wp_redirect( add_query_arg( array( 'message' => 'success' ), $redirect ) );
                 exit;
             }
         }
