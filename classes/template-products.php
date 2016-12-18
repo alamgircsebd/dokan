@@ -186,7 +186,8 @@ class Dokan_Template_Products {
                         Dokan_Email::init()->new_product_added( $product_id, $product_status );
                     }
 
-                    wp_redirect( dokan_edit_product_url( $product_id ) );
+                    $redirect = apply_filters( 'dokan_add_new_product_redirect', dokan_edit_product_url( $product_id ), $product_id );
+                    wp_redirect( $redirect );
                     exit;
                 }
             }
