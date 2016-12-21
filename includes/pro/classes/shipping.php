@@ -253,7 +253,9 @@ class Dokan_Pro_Shipping {
             }
 
             update_user_meta( $user_id, '_dps_state_rates', $s_rates );
-
+            
+            do_action( 'dokan_after_shipping_options_updated' ,$rates, $s_rates );
+            
             $shipping_url = dokan_get_navigation_url( 'settings/shipping' );
             wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
             exit();
