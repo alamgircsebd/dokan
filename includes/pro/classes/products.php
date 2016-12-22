@@ -24,7 +24,8 @@ class Dokan_Pro_Products {
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
         // Add per product commission option in backend for addmin
-        add_action( 'woocommerce_product_options_pricing', array($this,'add_per_product_commission_options' ),15 );
+        //add_action( 'woocommerce_product_options_pricing', array($this,'add_per_product_commission_options' ),15 );
+        add_action( 'woocommerce_product_options_general_product_data', array($this,'add_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
     }
@@ -102,7 +103,7 @@ class Dokan_Pro_Products {
             '_create_variations'   => $_create_variations,
             'product_attributes'   => $product_attributes,
             'attribute_taxonomies' => $attribute_taxonomies,
-        ) );
+            ) );
     }
 
     /**
@@ -160,7 +161,7 @@ class Dokan_Pro_Products {
             'dps_pt'                  => $dps_pt,
             'classes_options'         => $classes_options,
             'porduct_shipping_pt'     => $porduct_shipping_pt,
-        ) );
+            ) );
     }
 
     /**
@@ -198,11 +199,11 @@ class Dokan_Pro_Products {
             array(
                 'id'           => '_per_product_commission',
                 'label'        => __( 'Commission (%)', 'dokan' ),
-                'wrapper_class'=> 'per-product-commission show_if_simple',
+                'wrapper_class'=> 'per-product-commission show_if_simple show_if_variable',
                 'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
                 'data_type' => 'price'
-            )
-        );
+                )
+            );
     }
 
     /**
