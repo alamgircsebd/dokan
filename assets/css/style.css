@@ -4742,6 +4742,10 @@ select.dokan-form-control {
     float: none;
     width: 100%;
   }
+  .dokan-dashboard .dokan-dash-sidebar article,
+  .dokan-dashboard .dokan-dashboard-content article {
+    overflow: scroll;
+  }
   .dokan-dashboard .dashboard-content-area .dokan-announcement-widget .dokan-right {
     float: right !important;
   }
