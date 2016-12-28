@@ -154,7 +154,7 @@ $order    = new WC_Order( $order_id );
     </div>
 
     <div class="dokan-w4">
-        <div class="row dokan-clearfix">
+        <div class="dokan-clearfix">
             <div class="" style="width:100%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'General Details', 'dokan' ); ?></strong></div>

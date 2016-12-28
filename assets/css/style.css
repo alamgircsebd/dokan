@@ -4642,9 +4642,6 @@ select.dokan-form-control {
     width: 100%;
     max-width: 100%;
   }
-  .dokan-table thead {
-    display: none;
-  }
   .dokan-table tbody {
     display: table-row-group;
     vertical-align: middle;
@@ -4652,11 +4649,10 @@ select.dokan-form-control {
   }
   .dokan-table tbody tr {
     vertical-align: inherit;
-    display: block;
+    width: 100%;
   }
   .dokan-table tbody tr td {
-    display: block;
-    padding: 6px 12px;
+    padding: 6px;
     text-align: left;
     border-color: #ededed;
     border-style: solid;
@@ -4664,7 +4660,6 @@ select.dokan-form-control {
     background: #fff;
   }
   .dokan-table tbody tr td:before {
-    content: attr(data-title) ": ";
     padding-right: 20px !important;
     float: left;
     font-weight: bold;
@@ -4689,6 +4684,12 @@ select.dokan-form-control {
   }
   .dokan-table tbody .row-actions {
     visibility: visible !important;
+  }
+  .dokan-orders-area .dokan-w8 {
+    width: 100% !important;
+  }
+  .dokan-orders-area .dokan-w4 {
+    width: 100% !important;
   }
   .dokan-primary {
     width: 100% !important;
