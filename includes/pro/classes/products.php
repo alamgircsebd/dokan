@@ -25,7 +25,7 @@ class Dokan_Pro_Products {
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
         // Add per product commission option in backend for addmin
         //add_action( 'woocommerce_product_options_pricing', array($this,'add_per_product_commission_options' ),15 );
-        add_action( 'woocommerce_product_options_general_product_data', array($this,'add_per_product_commission_options' ),15 );
+        add_action( 'woocommerce_product_options_advanced', array($this,'add_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
     }
