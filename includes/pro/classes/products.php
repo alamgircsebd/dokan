@@ -198,7 +198,7 @@ class Dokan_Pro_Products {
         woocommerce_wp_text_input(
             array(
                 'id'           => '_per_product_commission',
-                'label'        => __( 'Commission (%)', 'dokan' ),
+                'label'        => __( 'Seller Commission (%)', 'dokan' ),
                 'wrapper_class'=> 'per-product-commission show_if_simple show_if_variable',
                 'description'  => __( 'Enter commission (%) seller will get from this product', 'dokan' ),
                 'data_type' => 'price'
