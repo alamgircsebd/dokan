@@ -7,7 +7,7 @@ Summary of the product:
 
 Title: %title%
 Price: %price%
-Seller: %seller_name% (%seller_url%)
+Vendor: %seller_name% (%seller_url%)
 Category: %category%
 
 The product is currently in "publish" state. So everyone can view the product.

@@ -38,7 +38,7 @@ get_header( 'shop' );
                         }
 
                         if ( dokan_get_option( 'contact_seller', 'dokan_general', 'on' ) == 'on' ) {
-                            the_widget( 'Dokan_Store_Contact_Form', array( 'title' => __( 'Contact Seller', 'dokan' ) ), $args );
+                            the_widget( 'Dokan_Store_Contact_Form', array( 'title' => __( 'Contact Vendor', 'dokan' ) ), $args );
                         }
                     }
 
@@ -81,7 +81,7 @@ get_header( 'shop' );
 
             <?php } else { ?>
 
-                <p class="dokan-info"><?php _e( 'No products were found of this seller!', 'dokan' ); ?></p>
+                <p class="dokan-info"><?php _e( 'No products were found of this vendor!', 'dokan' ); ?></p>
 
             <?php } ?>
         </div>

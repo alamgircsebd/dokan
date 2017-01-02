@@ -104,7 +104,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         <head>
             <meta name="viewport" content="width=device-width" />
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title><?php _e( 'Seller &rsaquo; Setup Wizard', 'dokan' ); ?></title>
+            <title><?php _e( 'Vendor &rsaquo; Setup Wizard', 'dokan' ); ?></title>
             <?php wp_print_scripts( 'wc-setup' ); ?>
             <?php do_action( 'admin_print_styles' ); ?>
             <?php do_action( 'admin_head' ); ?>

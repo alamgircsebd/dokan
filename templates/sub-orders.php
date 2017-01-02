@@ -14,8 +14,8 @@
 
 <div class="dokan-info">
     <strong><?php _e( 'Note:', 'dokan' ); ?></strong>
-    <?php _e( 'This order has products from multiple vendors/sellers. So we divided this order into multiple seller orders.
-    Each order will be handled by their respective seller independently.', 'dokan' ); ?>
+    <?php _e( 'This order has products from multiple vendors. So we divided this order into multiple vendor orders.
+    Each order will be handled by their respective vendor independently.', 'dokan' ); ?>
 </div>
 
 <table class="shop_table my_account_orders table table-striped">

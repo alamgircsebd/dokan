@@ -19,7 +19,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     public function __construct() {
         $this->id                 = 'dokan_product_shipping';
         $this->method_title       = __( 'Dokan Shipping' );
-        $this->method_description = __( 'Enable sellers to set shipping cost per product and per country' );
+        $this->method_description = __( 'Enable vendors to set shipping cost per product and per country' );
 
         $this->enabled      = $this->get_option( 'enabled' );
         $this->title        = $this->get_option( 'title' );

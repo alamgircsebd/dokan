@@ -19,8 +19,8 @@ class Dokan_Announcement {
 	function __construct() {
         $this->assign_type = array(
             ''                => __( '-- Select --', 'dokan' ),
-            'all_seller'      => __( 'All Seller' ),
-            'selected_seller' => __( 'Selected Seller' )
+            'all_seller'      => __( 'All Vendor' ),
+            'selected_seller' => __( 'Selected Vendor' )
         );
 
         add_action( 'init', array($this, 'post_types') );
@@ -111,9 +111,9 @@ class Dokan_Announcement {
                 </tr>
 
                 <tr class="selected_seller_field">
-                    <th><?php _e( 'Select Sellers', 'dokan' ); ?></th>
+                    <th><?php _e( 'Select Vendor', 'dokan' ); ?></th>
                     <td>
-                        <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Sellers...', 'dokan' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
+                        <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Vendors...', 'dokan' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
                             <option></option>
                             <?php
                             foreach ( $sellers as $user ) {
@@ -195,7 +195,7 @@ class Dokan_Announcement {
             if ( $assign_type ) {
                 echo $this->assign_type[$assign_type];
             } else {
-                _e( 'No seller assigned!', 'dokan' );
+                _e( 'No vendor assigned!', 'dokan' );
             }
         }
     }

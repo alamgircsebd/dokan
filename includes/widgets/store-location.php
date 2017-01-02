@@ -15,7 +15,7 @@ class Dokan_Store_Location extends WP_Widget {
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-store-location', 'description' => __( 'Dokan Seller Store Location', 'dokan' ) );
+        $widget_ops = array( 'classname' => 'dokan-store-location', 'description' => __( 'Dokan Vendor Store Location', 'dokan' ) );
         parent::__construct( 'dokan-store-location', __( 'Dokan: Store Location', 'dokan' ), $widget_ops );
     }
 

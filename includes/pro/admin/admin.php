@@ -44,7 +44,7 @@ class Dokan_Pro_Admin_Settings {
             $refund_text = sprintf( __( 'Refund Request %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
         }
         add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
-        add_submenu_page( 'dokan', __( 'Sellers Listing', 'dokan' ), __( 'All Sellers', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
+        add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
         $report       = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
         $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
         add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
@@ -99,7 +99,7 @@ class Dokan_Pro_Admin_Settings {
             'product_style'          => array(
                 'name'    => 'product_style',
                 'label'   => __( 'Add/Edit Product Style', 'dokan' ),
-                'desc'    => __( 'The style you prefer for seller to add or edit products. ', 'dokan' ),
+                'desc'    => __( 'The style you prefer for vendor to add or edit products. ', 'dokan' ),
                 'type'    => 'select',
                 'default' => 'old',
                 'options' => array(
@@ -110,7 +110,7 @@ class Dokan_Pro_Admin_Settings {
             'product_category_style' => array(
                 'name'    => 'product_category_style',
                 'label'   => __( 'Category Selection', 'dokan' ),
-                'desc'    => __( 'What option do you prefer for seller to select product category? ', 'dokan' ),
+                'desc'    => __( 'What option do you prefer for vendor to select product category? ', 'dokan' ),
                 'type'    => 'select',
                 'default' => 'single',
                 'options' => array(
@@ -121,7 +121,7 @@ class Dokan_Pro_Admin_Settings {
             'product_status'         => array(
                 'name'    => 'product_status',
                 'label'   => __( 'New Product Status', 'dokan' ),
-                'desc'    => __( 'Product status when a seller creates a product', 'dokan' ),
+                'desc'    => __( 'Product status when a vendor creates a product', 'dokan' ),
                 'type'    => 'select',
                 'default' => 'pending',
                 'options' => array(
@@ -132,7 +132,7 @@ class Dokan_Pro_Admin_Settings {
             'discount_edit' => array(
                 'name'    => 'discount_edit',
                 'label'   => __( 'Discount Editing', 'dokan' ),
-                'desc'    => __( 'Seller can edit product and order discount', 'dokan' ),
+                'desc'    => __( 'Vendor can edit product and order discount', 'dokan' ),
                 'type'    => 'multicheck',
                 'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
                 'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
@@ -143,7 +143,7 @@ class Dokan_Pro_Admin_Settings {
             'withdraw_order_status' => array(
                 'name'    => 'withdraw_order_status',
                 'label'   => __( 'Order Status for Withdraw', 'dokan' ),
-                'desc'    => __( 'Order status for which seller can make a withdraw request.', 'dokan' ),
+                'desc'    => __( 'Order status for which vendor can make a withdraw request.', 'dokan' ),
                 'type'    => 'multicheck',
                 'default' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
                 'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) )
@@ -370,7 +370,7 @@ class Dokan_Pro_Admin_Settings {
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
-            'title'  => __( 'All Sellers', 'dokan' ),
+            'title'  => __( 'All Vendors', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan-sellers' )
         ) );
 

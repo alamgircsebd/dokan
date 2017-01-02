@@ -1,14 +1,14 @@
 Hello there,
 
-A new seller has been registered to your site (%site_url%).
+A new vendor has been registered to your site (%site_url%).
 
-Seller Details:
+Vendor Details:
 ------------------------
 
-Seller: %seller_name%
-Seller Store: %store_url%
+Vendor: %seller_name%
+Vendor Store: %store_url%
 
-To edit seller access and details visit - %seller_edit%
+To edit vendor access and details visit - %seller_edit%
 
 ---
 %site_name%

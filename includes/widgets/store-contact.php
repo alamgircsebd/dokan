@@ -15,7 +15,7 @@ class Dokan_Store_Contact_Form extends WP_Widget {
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-store-contact', 'description' => __( 'Dokan Seller Contact Form', 'dokan' ) );
+        $widget_ops = array( 'classname' => 'dokan-store-contact', 'description' => __( 'Dokan Vendor Contact Form', 'dokan' ) );
         parent::__construct( 'dokan-store-contact-widget', __( 'Dokan: Store Contact Form', 'dokan' ), $widget_ops );
     }
 
@@ -78,7 +78,7 @@ class Dokan_Store_Contact_Form extends WP_Widget {
      */
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title' => __( 'Contact Seller', 'dokan' ),
+            'title' => __( 'Contact Vendor', 'dokan' ),
         ) );
 
         $title = $instance['title'];

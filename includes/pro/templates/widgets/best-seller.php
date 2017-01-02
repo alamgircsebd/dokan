@@ -33,7 +33,7 @@
         }
     } else {
         ?>
-        <p><?php _e( 'No best seller found', 'dokan' ); ?></p>
+        <p><?php _e( 'No vendor found', 'dokan' ); ?></p>
         <?php
     }
     ?>

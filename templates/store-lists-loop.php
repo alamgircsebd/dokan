@@ -88,5 +88,5 @@ if ( $sellers['users'] ) {
     ?>
 
 <?php } else { ?>
-    <p class="dokan-error"><?php _e( 'No seller found!', 'dokan' ); ?></p>
+    <p class="dokan-error"><?php _e( 'No vendor found!', 'dokan' ); ?></p>
 <?php } ?>

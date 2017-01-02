@@ -260,7 +260,7 @@ class Dokan_Setup_Wizard {
         $extra_fee_recipient = ! empty( $options['extra_fee_recipient'] ) ? $options['extra_fee_recipient'] : 'seller';
 
         $recipients = array(
-            'seller' => __( 'Seller', 'dokan' ),
+            'seller' => __( 'Vendor', 'dokan' ),
             'admin'  => __( 'Admin', 'dokan' ),
         );
         ?>
@@ -268,10 +268,10 @@ class Dokan_Setup_Wizard {
         <form method="post">
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="custom_store_url"><?php _e( 'Seller Store URL', 'dokan' ); ?></label></th>
+                    <th scope="row"><label for="custom_store_url"><?php _e( 'Vendor Store URL', 'dokan' ); ?></label></th>
                     <td>
                         <input type="text" id="custom_store_url" name="custom_store_url" value="<?php echo $custom_store_url; ?>" />
-                        <p class="description"><?php _e( 'Define seller store URL', 'dokan' ); ?> (<?php echo site_url(); ?>/[this-text]/[seller-name])</p>
+                        <p class="description"><?php _e( 'Define vendor store URL', 'dokan' ); ?> (<?php echo site_url(); ?>/[this-text]/[seller-name])</p>
                     </td>
                 </tr>
                 <tr>
@@ -334,24 +334,24 @@ class Dokan_Setup_Wizard {
         <form method="post">
             <table class="form-table">
                 <tr>
-                    <th scope="row"><label for="new_seller_enable_selling"><?php _e( 'New Seller Enable Selling', 'dokan' ); ?></label></th>
+                    <th scope="row"><label for="new_seller_enable_selling"><?php _e( 'New Vendor Enable Selling', 'dokan' ); ?></label></th>
                     <td>
                         <input type="checkbox" name="new_seller_enable_selling" id="new_seller_enable_selling" class="input-checkbox" value="1" <?php echo ( $new_seller_enable_selling == 'on' ) ? 'checked="checked"' : ''; ?>/>
-                        <label for="new_seller_enable_selling"><?php _e( 'Make selling status enable for new registred seller', 'dokan' ); ?></label>
+                        <label for="new_seller_enable_selling"><?php _e( 'Make selling status enable for new registred vendor', 'dokan' ); ?></label>
                     </td>
                 </tr>
                 <tr>
-                    <th scope="row"><label for="seller_percentage"><?php _e( 'Seller Commission %', 'dokan' ); ?></label></th>
+                    <th scope="row"><label for="seller_percentage"><?php _e( 'Vendor Commission %', 'dokan' ); ?></label></th>
                     <td>
                         <input type="text" id="seller_percentage" name="seller_percentage" value="<?php echo $seller_percentage; ?>" />
-                        <p class="description"><?php _e( 'How much amount (%) a seller will get from each order', 'dokan' ); ?></p>
+                        <p class="description"><?php _e( 'How much amount (%) a vendor will get from each order', 'dokan' ); ?></p>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row"><label for="order_status_change"><?php _e( 'Order Status Change', 'dokan' ); ?></label></th>
                     <td>
                         <input type="checkbox" name="order_status_change" id="order_status_change" class="input-checkbox" value="1" <?php echo ( $order_status_change == 'on' ) ? 'checked="checked"' : ''; ?>/>
-                        <label for="order_status_change"><?php _e( 'Seller can change order status', 'dokan' ); ?></label>
+                        <label for="order_status_change"><?php _e( 'Vendor can change order status', 'dokan' ); ?></label>
                     </td>
                 </tr>
                 <tr>
@@ -365,7 +365,7 @@ class Dokan_Setup_Wizard {
                                 }
                             ?>
                         </select>
-                        <p class="description"><?php _e( 'The style you prefer for seller to add or edit products.', 'dokan' ); ?></p>
+                        <p class="description"><?php _e( 'The style you prefer for vendor to add or edit products.', 'dokan' ); ?></p>
                     </td>
                 </tr>
             </table>
@@ -451,7 +451,7 @@ class Dokan_Setup_Wizard {
                         <input type="checkbox" class="input-checkbox" id="withdraw_order_status[wc-processing]" name="withdraw_order_status[wc-processing]" value="wc-processing" <?php echo ( array_key_exists( 'wc-processing', $withdraw_order_status ) ) ? 'checked="true"' : ''; ?>><label> <?php _e( 'Processing', 'dokan' ); ?></label><br />
                         <input type="checkbox" class="input-checkbox" id="withdraw_order_status[wc-on-hold]" name="withdraw_order_status[wc-on-hold]" value="wc-on-hold" <?php echo ( array_key_exists( 'wc-on-hold', $withdraw_order_status ) ) ? 'checked="true"' : ''; ?>><label> <?php _e( 'On-hold', 'dokan' ); ?></label>
 
-                        <p class="description"><?php _e( 'Order status for which seller can make a withdraw request.', 'dokan' ); ?></p>
+                        <p class="description"><?php _e( 'Order status for which vendor can make a withdraw request.', 'dokan' ); ?></p>
                     </td>
                 </tr>
             </table>

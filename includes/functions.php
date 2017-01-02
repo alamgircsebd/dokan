@@ -1517,7 +1517,7 @@ function dokan_admin_toolbar() {
     $wp_admin_bar->add_menu( array(
         'id'     => 'dokan-sellers',
         'parent' => 'dokan',
-        'title'  => __( 'All Sellers', 'dokan' ),
+        'title'  => __( 'All Vendors', 'dokan' ),
         'href'   => admin_url( 'admin.php?page=dokan-sellers' )
     ) );
 

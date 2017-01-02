@@ -267,24 +267,24 @@ class Dokan_Admin_User_Profile {
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Seller Commission %', 'dokan' ); ?></th>
+                    <th><?php _e( 'Vendor Commission %', 'dokan' ); ?></th>
                     <td>
                         <input type="text" class="small-text" name="dokan_seller_percentage" value="<?php echo esc_attr( $seller_percentage ); ?>">
 
-                        <p class="description"><?php _e( 'Enter commission % seller will get from each order', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Enter commission % vendor will get from each order', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Featured Seller', 'dokan' ); ?></th>
+                    <th><?php _e( 'Featured vendor', 'dokan' ); ?></th>
                     <td>
                         <label for="dokan_feature">
                             <input type="hidden" name="dokan_feature" value="no">
                             <input name="dokan_feature" type="checkbox" id="dokan_feature" value="yes" <?php checked( $feature_seller, 'yes' ); ?> />
-                            <?php _e( 'Mark as featured seller', 'dokan' ); ?>
+                            <?php _e( 'Mark as featured vendor', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'This seller will be marked as a featured seller.', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'This vendor will be marked as a featured vendor.', 'dokan' ) ?></p>
                     </td>
                 </tr>
 

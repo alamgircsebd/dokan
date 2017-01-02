@@ -14,7 +14,7 @@
 
         <form role="search" method="get" class="dokan-seller-search-form" action="">
             <label>
-                <span class="screen-reader-text"><?php _e( 'Search Seller', 'dokan' ); ?></span>
+                <span class="screen-reader-text"><?php _e( 'Search vendor', 'dokan' ); ?></span>
             </label>
             <input type="search" id="search" class="search-field dokan-seller-search" placeholder="<?php esc_attr_e( 'Search &hellip;', 'dokan' ); ?>" value="<?php echo esc_attr( $search_query ); ?>" name="dokan_seller_search" title="<?php esc_attr_e( 'Search seller &hellip;', 'dokan' ); ?>" />
             <input type="hidden" id="pagination_base" name="pagination_base" value="<?php echo $pagination_base ?>" />

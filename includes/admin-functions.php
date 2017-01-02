@@ -49,7 +49,7 @@ function dokan_admin_shop_order_edit_columns( $existing_columns ) {
     $columns['order_date']       = __( 'Date', 'dokan' );
     $columns['order_total']      = __( 'Total', 'dokan' );
     $columns['order_actions']    = __( 'Actions', 'dokan' );
-    $columns['seller']        = __( 'Seller', 'dokan' );
+    $columns['seller']        = __( 'Vendor', 'dokan' );
     $columns['suborder']        = __( 'Sub Order', 'dokan' );
 
     return $columns;
@@ -550,7 +550,7 @@ function dokan_seller_meta_box( $post ) {
     $user_query = new WP_User_Query( array( 'role' => 'seller' ) );
     $sellers    = $user_query->get_results();
     ?>
-    <label class="screen-reader-text" for="post_author_override"><?php _e('Seller'); ?></label>
+    <label class="screen-reader-text" for="post_author_override"><?php _e( 'Vendor', 'dokan' ); ?></label>
     <select name="post_author_override" id="post_author_override" class="">
         <?php if ( ! $sellers ): ?>
             <option value="<?php echo $admin_user->ID ?>"><?php echo $admin_user->display_name; ?></option>
@@ -566,7 +566,7 @@ function dokan_seller_meta_box( $post ) {
 
 function dokan_add_seller_meta_box(){
     remove_meta_box( 'authordiv', 'product', 'core' );
-    add_meta_box('sellerdiv', __('Seller'), 'dokan_seller_meta_box', 'product', 'normal', 'core');
+    add_meta_box('sellerdiv', __('Vendor', 'dokan' ), 'dokan_seller_meta_box', 'product', 'normal', 'core');
 }
 
 add_action( 'add_meta_boxes', 'dokan_add_seller_meta_box' );

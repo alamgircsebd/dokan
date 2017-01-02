@@ -8,7 +8,7 @@
  */
 ?>
 
-<h2><?php _e( 'Seller Information', 'dokan' ); ?></h2>
+<h2><?php _e( 'Vendor Information', 'dokan' ); ?></h2>
 
 <ul class="list-unstyled">
 
@@ -23,7 +23,7 @@
 
     <li class="seller-name">
         <span>
-            <?php _e( 'Seller:', 'dokan' ); ?>
+            <?php _e( 'Vendor:', 'dokan' ); ?>
         </span>
 
         <span class="details">

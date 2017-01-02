@@ -28,7 +28,7 @@
                     <th class="order-date"><span class="nobr"><?php _e( 'Date', 'dokan' ); ?></span></th>
                     <th class="order-status"><span class="nobr"><?php _e( 'Status', 'dokan' ); ?></span></th>
                     <th class="order-total"><span class="nobr"><?php _e( 'Total', 'dokan' ); ?></span></th>
-                    <th class="order-total"><span class="nobr"><?php _e( 'Seller', 'dokan' ); ?></span></th>
+                    <th class="order-total"><span class="nobr"><?php _e( 'Vendor', 'dokan' ); ?></span></th>
                     <th class="order-actions">&nbsp;</th>
                 </tr>
             </thead>
@@ -62,7 +62,7 @@
                                     $sellershop = dokan_get_store_info( $seller_id );
                                     echo '<a href="'. dokan_get_store_url( $seller_id ) .'">'. $sellershop['store_name'] .'</a>';
                                 } else {
-                                    _e( 'Multiple Seller', 'dokan' );
+                                    _e( 'Multiple Vendor', 'dokan' );
                                 }
                             ?>
                         </td>
