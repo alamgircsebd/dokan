@@ -471,6 +471,7 @@ final class WeDevs_Dokan {
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'fontawesome' );
                 wp_enqueue_style( 'dokan-style' );
+                wp_enqueue_style( 'select2-css' );
             }
 
             if ( DOKAN_LOAD_SCRIPTS ) {
@@ -487,6 +488,7 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'form-validate' );
                 wp_enqueue_script( 'dokan-script' );
                 wp_localize_script( 'jquery', 'dokan', $localize_script );
+                wp_enqueue_script( 'select2-js' );
             }
         }
 
