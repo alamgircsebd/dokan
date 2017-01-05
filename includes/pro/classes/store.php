@@ -134,8 +134,8 @@ class Dokan_Pro_Store {
 
         foreach ( $seller_coupons as $coupon ) {
             $coup = new WC_Coupon( $coupon->post_title );
-
-            if ( ! $coup->is_valid() ) {
+            
+            if ( !( $coup->expiry_date && current_time( 'timestamp' ) > $coup->expiry_date ) && !$coup->exists  )  {
                 continue;
             }
 
