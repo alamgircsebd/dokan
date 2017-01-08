@@ -19,8 +19,14 @@ function dokan_get_seller_amount_from_order( $order_id ) {
     $order_cost     = $order_total - $extra_cost;
     $order_status   = $order->post_status;
 
-    $net_amount     = ( ( $order_cost * $percentage ) / 100 ) + $extra_cost;
+    $net_amount     = ( ( $order_cost * $percentage ) / 100 );
+    
+    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'seller' );
 
+    if( 'seller' == $commission_recipient ) {
+        $net_amount = $net_amount +$extra_cost;
+    }
+    
     return $net_amount;
 }
 /**
