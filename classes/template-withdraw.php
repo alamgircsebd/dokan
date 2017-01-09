@@ -113,7 +113,11 @@ class Dokan_Template_Withdraw extends Dokan_Withdraw {
      * @return void
      */
     public function show_seller_balance() {
-        $message = sprintf( __( 'Current Balance: %s', 'dokan' ), dokan_get_seller_balance( get_current_user_id() ) );
+        $message = sprintf( __( 'Current Balance: %s <br> Minimum Withdraw amount: %d <br> Withdraw Threshold: %d days ', 'dokan' ), 
+                                dokan_get_seller_balance( get_current_user_id() ),
+                                dokan_get_option( 'withdraw_limit', 'dokan_withdraw', 50 ),
+                                dokan_get_option( 'withdraw_date_limit', 'dokan_withdraw', 50 )
+                                );
         dokan_get_template_part( 'global/dokan-warning', '', array( 'message' => $message, 'deleted' => false ) );
     }
 
