@@ -170,6 +170,8 @@ function dokan_seller_sales_statement() {
     //            $net_amount = 0;
                 $total_sales = 0;
                 $total_earned = 0;
+                $total_shipping = 0;
+                $total_tax = 0;
                 foreach ( $statements as $key => $statement ) {
                     if ( isset( $statement->post_date ) ) {
                         $type            = __( 'Order', 'dokan' );
@@ -190,6 +192,8 @@ function dokan_seller_sales_statement() {
 
                         $total_sales += $gross_amount;
                         $total_earned += $seller_amount;
+                        $total_shipping += $order_amount['shipping'];
+                        $total_tax += $order_amount['tax'];
 
                     } else if ( isset( $statement->refund_amount ) ) {
                         $type   = __( 'Refund', 'dokan' );
@@ -235,6 +239,8 @@ function dokan_seller_sales_statement() {
                     <td><b><?php _e( 'Total :', 'dokan' ); ?></b></td>
                     <td><b><?php echo wc_price( $total_sales ); ?></b></td>
                     <td><b><?php echo wc_price( $total_earned ); ?></b></td>
+                    <td><b><?php echo wc_price( $total_shipping ); ?></b></td>
+                    <td><b><?php echo wc_price( $total_tax ); ?></b></td>
                     <td><b><?php echo wc_price( $net_amount ); ?></b></td>
                 </tr>
             <?php
