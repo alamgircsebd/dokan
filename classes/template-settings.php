@@ -463,7 +463,7 @@ class Dokan_Template_Settings {
                 'find_address'                 => sanitize_text_field( $_POST['find_address'] ),
                 'banner'                       => isset( $_POST['dokan_banner'] ) ? absint( $_POST['dokan_banner'] ) : null,
                 'phone'                        => sanitize_text_field( $_POST['setting_phone'] ),
-                'show_min_order_discount'      => $_POST['setting_show_minimum_order_discount_option'],
+                'show_min_order_discount'      => isset( $_POST['setting_show_minimum_order_discount_option'] ) ? 'yes' : 'no',
                 'setting_minimum_order_amount' => sanitize_text_field( $_POST['setting_minimum_order_amount'] ),
                 'setting_order_percentage'     => sanitize_text_field( $_POST['setting_order_percentage'] ),
                 'show_email'                   => sanitize_text_field( $_POST['setting_show_email'] ),
