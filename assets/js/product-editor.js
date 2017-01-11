@@ -720,17 +720,7 @@
                 var dates = $( ".sale_price_dates_fields input" ).datepicker({
                     defaultDate: "",
                     dateFormat: "yy-mm-dd",
-                    numberOfMonths: 1,
-                    onSelect: function( selectedDate ) {
-                        var option = $(this).is('#_sale_price_dates_from, .sale_price_dates_from') ? "minDate" : "maxDate";
-
-                        var instance = $( this ).data( "datepicker" ),
-                            date = $.datepicker.parseDate(
-                                instance.settings.dateFormat ||
-                                $.datepicker._defaults.dateFormat,
-                                selectedDate, instance.settings );
-                        dates.not( this ).datepicker( "option", option, date );
-                    }
+                    numberOfMonths: 1
                 });
             },
 
