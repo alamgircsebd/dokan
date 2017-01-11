@@ -314,6 +314,12 @@ final class WeDevs_Dokan {
             return;
         }
 
+        $general_settings = get_option( 'dokan_general', [] );
+        $banner_width     = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+        $banner_height    = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+        $has_flex_width   = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+        $has_flex_height  = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
+
         $localize_script             = array(
             'ajaxurl'                             => admin_url( 'admin-ajax.php' ),
             'nonce'                               => wp_create_nonce( 'dokan_reviews' ),
@@ -358,7 +364,10 @@ final class WeDevs_Dokan {
             'i18n_edited_variations'              => esc_js( __( 'Save changes before changing page?', 'dokan' ) ),
             'i18n_variation_count_single'         => esc_js( __( '%qty% variation', 'dokan' ) ),
             'i18n_variation_count_plural'         => esc_js( __( '%qty% variations', 'dokan' ) ),
-            'variations_per_page'                 => absint( apply_filters( 'dokan_product_variations_per_page', 10 ) )
+            'variations_per_page'                 => absint( apply_filters( 'dokan_product_variations_per_page', 10 ) ),
+            'store_banner_dimension'              => [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width' => $has_flex_width, 'flex-height' => $has_flex_height ],
+            'selectAndCrop'                       => __( 'Select and Crop', 'dokan' ),
+            'chooseImage'                         => __( 'Choose Image', 'dokan' )
         );
 
         $form_validate_messages = array(
@@ -383,11 +392,6 @@ final class WeDevs_Dokan {
         wp_localize_script( 'form-validate', 'DokanValidateMsg', $form_validate_messages );
 
         //localize script for refund and dashboard image options
-        $general_settings = get_option( 'dokan_general', [] );
-        $banner_width = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
-        $banner_height = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
-        $has_flex_width = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
-        $has_flex_height = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
 
         $dokan_refund = array(
             'mon_decimal_point'             => wc_get_price_decimal_separator(),
@@ -404,10 +408,7 @@ final class WeDevs_Dokan {
             'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
             'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
             'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
-            'rounding_precision'            => wc_get_rounding_precision(),
-            'store_banner_dimension'        => [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width' => $has_flex_width, 'flex-height' => $has_flex_height ],
-            'selectAndCrop'                 => __( 'Select and Crop' ),
-            'chooseImage'                   => __( 'Choose Image', 'dokan' )
+            'rounding_precision'            => wc_get_rounding_precision()
         );
 
         wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
@@ -454,8 +455,8 @@ final class WeDevs_Dokan {
                 wp_enqueue_script( 'jquery-flot' );
                 wp_enqueue_script( 'chosen' );
                 wp_enqueue_script( 'select2-js' );
-                wp_enqueue_script( 'serializejson' );
                 wp_enqueue_media();
+                wp_enqueue_script( 'serializejson' );
                 wp_enqueue_script( 'dokan-popup' );
                 wp_enqueue_script( 'wc-password-strength-meter' );
 
@@ -533,7 +534,7 @@ final class WeDevs_Dokan {
         require_once $classes_dir . 'seller-setup-wizard.php';
 
         // Load free or pro moduels
-        if ( !file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
+        if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/pro/dokan-pro-loader.php';
 
             $this->is_pro = true;

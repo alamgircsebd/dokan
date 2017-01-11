@@ -2840,10 +2840,10 @@ jQuery(function($) {
         },
 
         calculateImageSelectOptions: function(attachment, controller) {
-            var xInit = parseInt(dokan_refund.store_banner_dimension.width, 10),
-                yInit = parseInt(dokan_refund.store_banner_dimension.height, 10),
-                flexWidth = !! parseInt(dokan_refund.store_banner_dimension['flex-width'], 10),
-                flexHeight = !! parseInt(dokan_refund.store_banner_dimension['flex-height'], 10),
+            var xInit = parseInt(dokan.store_banner_dimension.width, 10),
+                yInit = parseInt(dokan.store_banner_dimension.height, 10),
+                flexWidth = !! parseInt(dokan.store_banner_dimension['flex-width'], 10),
+                flexHeight = !! parseInt(dokan.store_banner_dimension['flex-height'], 10),
                 ratio, xImg, yImg, realHeight, realWidth,
                 imgSelectOptions;
 
@@ -2951,18 +2951,18 @@ jQuery(function($) {
             settings.frame = wp.media({
                 multiple: false,
                 button: {
-                    text: dokan_refund.selectAndCrop,
+                    text: dokan.selectAndCrop,
                     close: false
                 },
                 states: [
                     new wp.media.controller.Library({
-                        title:     dokan_refund.chooseImage,
+                        title:     dokan.chooseImage,
                         library:   wp.media.query({ type: 'image' }),
                         multiple:  false,
                         date:      false,
                         priority:  20,
-                        suggestedWidth: dokan_refund.store_banner_dimension.width,
-                        suggestedHeight: dokan_refund.store_banner_dimension.height
+                        suggestedWidth: dokan.store_banner_dimension.width,
+                        suggestedHeight: dokan.store_banner_dimension.height
                     }),
                     new wp.media.controller.Cropper({
                         suggestedWidth: 5000,
@@ -2982,8 +2982,8 @@ jQuery(function($) {
         calculateImageSelectOptionsProfile: function(attachment, controller) {
             var xInit = 150,
                 yInit = 150,
-                flexWidth = !! parseInt(dokan_refund.store_banner_dimension['flex-width'], 10),
-                flexHeight = !! parseInt(dokan_refund.store_banner_dimension['flex-height'], 10),
+                flexWidth = !! parseInt(dokan.store_banner_dimension['flex-width'], 10),
+                flexHeight = !! parseInt(dokan.store_banner_dimension['flex-height'], 10),
                 ratio, xImg, yImg, realHeight, realWidth,
                 imgSelectOptions;
 
@@ -3087,12 +3087,12 @@ jQuery(function($) {
             settings.frame = wp.media({
                 multiple: false,
                 button: {
-                    text: dokan_refund.selectAndCrop,
+                    text: dokan.selectAndCrop,
                     close: false
                 },
                 states: [
                     new wp.media.controller.Library({
-                        title:     dokan_refund.chooseImage,
+                        title:     dokan.chooseImage,
                         library:   wp.media.query({ type: 'image' }),
                         multiple:  false,
                         date:      false,
@@ -3509,8 +3509,8 @@ jQuery(function($) {
 
 ;(function($) {
     function resize_dummy_image() {
-        var width = dokan_refund.store_banner_dimension.width,
-            height = (dokan_refund.store_banner_dimension.height / dokan_refund.store_banner_dimension.width) * $('#dokan-content').width();
+        var width = dokan.store_banner_dimension.width,
+            height = (dokan.store_banner_dimension.height / dokan.store_banner_dimension.width) * $('#dokan-content').width();
 
         $('.profile-info-img.dummy-image').css({
             height: height
