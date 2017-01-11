@@ -1849,3 +1849,20 @@ function dokan_after_login_redirect( $redirect_to, $user ) {
 }
 
 add_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect' , 1, 2 );
+
+/**
+ * Check if the post belongs to the given user
+ * 
+ * @param int $post_id
+ * @param int $user_id
+ * @return boolean
+ */
+function dokan_is_valid_owner( $post_id, $user_id ) {
+    
+    $author = get_post_field( 'post_author', $post_id );
+    
+    if ( $user_id == $author )
+        return true;
+    
+    return false;
+}
