@@ -6,7 +6,7 @@
  *
  * @return float
  */
-function dokan_get_seller_amount_from_order( $order_id ) {
+function dokan_get_seller_amount_from_order( $order_id, $get_array = false ) {
 
     $order          = new WC_Order( $order_id );
     $seller_id      = dokan_get_seller_id_by_order( $order_id );
@@ -21,12 +21,28 @@ function dokan_get_seller_amount_from_order( $order_id ) {
 
     $net_amount     = ( ( $order_cost * $percentage ) / 100 );
     
-    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'seller' );
-
-    if( 'seller' == $commission_recipient ) {
-        $net_amount = $net_amount +$extra_cost;
+    $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
+    
+    if ( $get_array ) {
+        $amount = array(
+            'net_amount' => $net_amount,
+            'shipping'   => 0,
+            'tax'        => 0,
+        );
+        
+        if ( 'seller' == $commission_recipient ) {
+            $amount['shipping'] = $order_shipping;
+            $amount['tax']      = $order_tax;
+        }
+        
+        return $amount;
     }
     
+    
+    if ( 'seller' == $commission_recipient ) {
+        $net_amount = $net_amount + $extra_cost;
+    }
+
     return $net_amount;
 }
 /**
