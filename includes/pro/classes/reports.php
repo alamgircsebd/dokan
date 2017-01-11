@@ -56,12 +56,14 @@ class Dokan_Pro_Reports {
             header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
             header( "Content-Disposition: attachment; filename=$filename.csv" );
             $currency = get_woocommerce_currency_symbol();
-            $headers = array(
+            $headers  = array(
                 'date'     => __( 'Date', 'dokan' ),
                 'order_id' => __( 'ID', 'dokan' ),
                 'type'     => __( 'Type', 'dokan' ),
                 'sales'    => __( 'Sales', 'dokan' ),
                 'amount'   => __( 'Earned', 'dokan' ),
+                'shipping' => __( 'Shipping', 'dokan' ),
+                'tax'      => __( 'Tax', 'dokan' ),
                 'balance'  => __( 'Balance', 'dokan' ),
             );
 
@@ -123,14 +125,16 @@ class Dokan_Pro_Reports {
             echo 'Opening Balance' . ', ';
             echo '--' . ', ';
             echo '--' . ', ';
+            echo '--' . ', ';
+            echo '--' . ', ';
             echo $net_amount . ', ';
             echo "\r\n";
 
             $order     = dokan_get_seller_orders_by_date( $start_date, $end_date );
             $refund    = dokan_get_seller_refund_by_date( $start_date, $end_date );
-            $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $end_date );
+            $withdraw = dokan_get_seller_withdraw_by_date( $start_date, $end_date );
 
-            $table_data = array_merge( $order, $refund, $widthdraw );
+            $table_data = array_merge( $order, $refund, $withdraw );
             $statements = [];
 
             foreach (  $table_data as $key => $data ) {
@@ -141,25 +145,36 @@ class Dokan_Pro_Reports {
             ksort( $statements );
 
             foreach ( $statements as $key => $statement ) {
+                
                 if ( isset( $statement->post_date ) ) {
+                    
                     $type       = __( 'Order', 'dokan' );
                     $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
                     $id         = $statement->order_id;
                     $sales      =  $statement->order_total;
-                    $amount     =  $statement->net_amount;
-                    $net_amount = $net_amount + $statement->net_amount;
-                    $net_amount_print =  $net_amount;
-
+                    
+                    $order_amount    = dokan_get_seller_amount_from_order( $statement->order_id, true );
+                    $amount          = $order_amount['net_amount'];
+                    $seller_shipping = $order_amount['shipping']; 
+                    $seller_tax      = $order_amount['tax'];
+                    
+                    $net_amount       = $net_amount + $amount + $seller_shipping + $seller_tax;
+                    $net_amount_print = $net_amount;
+                    
                 } else if ( isset( $statement->refund_amount ) ) {
-                    $type   = __( 'Refund', 'dokan' );
-                    $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
-                    $id     = $statement->order_id;
-                    $sales  =  0;
-                    $amount = $statement->refund_amount;
-                    $net_amount = $net_amount - $statement->refund_amount;
-                    $net_amount_print =  $net_amount;
-
+                    
+                    $type             = __( 'Refund', 'dokan' );
+                    $url              = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
+                    $id               = $statement->order_id;
+                    $sales            = 0;
+                    $amount           = $statement->refund_amount;
+                    $net_amount       = $net_amount - $statement->refund_amount;
+                    $net_amount_print = $net_amount;
+                    $seller_shipping  = ' -- ';
+                    $seller_tax       = ' -- ';
+                    
                 } else {
+                    
                     $type       = __( 'Withdraw', 'dokan' );
                     $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
                     $id         = $statement->id;
@@ -167,6 +182,8 @@ class Dokan_Pro_Reports {
                     $amount     = $statement->amount;
                     $net_amount = $net_amount - $statement->amount;
                     $net_amount_print =  $net_amount;
+                    $seller_shipping  = ' -- ';
+                    $seller_tax       = ' -- ';
                 }
 
 
@@ -175,6 +192,8 @@ class Dokan_Pro_Reports {
                 echo $type . ', ';
                 echo $sales . ', ';
                 echo $amount . ', ';
+                echo $seller_shipping . ', ';
+                echo $seller_tax . ', ';
                 echo $net_amount_print . ', ';
                 
                 echo "\r\n";
