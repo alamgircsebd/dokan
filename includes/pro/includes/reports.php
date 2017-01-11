@@ -138,7 +138,7 @@ function dokan_seller_sales_statement() {
     }
     
     ksort( $statements );
-    
+
     ?>
 
     <table class="table table-striped">
@@ -149,6 +149,8 @@ function dokan_seller_sales_statement() {
                 <th><?php _e( 'Type', 'dokan' ); ?></th>
                 <th><?php _e( 'Sales', 'dokan' ); ?></th>
                 <th><?php _e( 'Earned', 'dokan' ); ?></th>
+                <th><?php _e( 'Shipping', 'dokan' ); ?></th>
+                <th><?php _e( 'Tax', 'dokan' ); ?></th>
                 <th><?php _e( 'Balance', 'dokan' ); ?></th>
             </tr>
         </thead>
@@ -160,6 +162,8 @@ function dokan_seller_sales_statement() {
                     <td><?php _e( 'Opening Balance' , 'dokan' ); ?></td>
                     <td><?php echo '--'; ?></td>
                     <td><?php echo '--'; ?></td>
+                    <td><?php echo '--'; ?></td>
+                    <td><?php echo '--'; ?></td>
                     <td><?php echo wc_price( $net_amount ); ?></td>
                 </tr>
                 <?php
@@ -168,14 +172,19 @@ function dokan_seller_sales_statement() {
                 $total_earned = 0;
                 foreach ( $statements as $key => $statement ) {
                     if ( isset( $statement->post_date ) ) {
-                        $type       = __( 'Order', 'dokan' );
-                        $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
-                        $id         = $statement->order_id;
-                        $gross_amount = get_post_meta( $statement->order_id, '_order_total', true );
-                        $sales      = wc_price( $gross_amount );
-                        $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
+                        $type            = __( 'Order', 'dokan' );
+                        $url             = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
+                        $id              = $statement->order_id;
+                        $gross_amount    = get_post_meta( $statement->order_id, '_order_total', true );
+                        $sales           = wc_price( $gross_amount );
+        //                        $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
+                        $order_amount    = dokan_get_seller_amount_from_order( $statement->order_id, true );
+                        $seller_amount   = $order_amount['net_amount'];
+                        $seller_shipping = wc_price( $order_amount['shipping'] ); 
+                        $seller_tax      = wc_price( $order_amount['tax'] );
+
                         $amount     = wc_price( $seller_amount );
-                        $net_amount = $net_amount + $seller_amount;
+                        $net_amount = $net_amount + $seller_amount + $order_amount['shipping'] + $order_amount['tax'];
 
                         $net_amount_print = wc_price( $net_amount );
 
@@ -188,6 +197,8 @@ function dokan_seller_sales_statement() {
                         $id     = $statement->order_id;
                         $sales  = wc_price( 0 );
                         $amount = '<span style="color: #f05025;">'.wc_price( $statement->refund_amount ).'</span>';
+                        $seller_shipping = ' -- ';
+                        $seller_tax      = ' -- ';
                         $net_amount = $net_amount - $statement->refund_amount;
                         $net_amount_print = wc_price( $net_amount );
 
@@ -197,6 +208,8 @@ function dokan_seller_sales_statement() {
                         $id         = $statement->id;
                         $sales      = wc_price( 0 );
                         $amount     = '<span style="color: #f05025;">'.wc_price( $statement->amount ).'</span>';
+                        $seller_shipping = ' -- ';
+                        $seller_tax      = ' -- ';
                         $net_amount = $net_amount - $statement->amount;
                         $net_amount_print = wc_price( $net_amount );
                     }
@@ -208,6 +221,8 @@ function dokan_seller_sales_statement() {
                         <td><?php echo $type; ?></td>
                         <td><?php echo $sales; ?></td>
                         <td><?php echo $amount; ?></td>
+                        <td><?php echo $seller_shipping; ?></td>
+                        <td><?php echo $seller_tax; ?></td>
                         <td><?php echo $net_amount_print; ?></td>
                     </tr>
                     <?php
