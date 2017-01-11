@@ -49,7 +49,7 @@
         $address_state   = $_POST['dokan_address']['state'];
     }
 
-    $dokan_appearance = get_option( 'dokan_appearance' );
+    $dokan_appearance = dokan_get_option( 'store_header_template', 'dokan_appearance', 'default' );
 
 ?>
 <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
@@ -58,7 +58,7 @@
 
         <?php wp_nonce_field( 'dokan_store_settings_nonce' ); ?>
 
-        <?php if ( ! empty( $dokan_appearance['store_header_template'] ) && 'layout3' !== $dokan_appearance['store_header_template'] ): ?>
+        <?php if ( ! empty( $dokan_appearance ) && 'layout3' !== $dokan_appearance ): ?>
             <div class="dokan-banner">
 
                 <div class="image-wrap<?php echo $banner ? '' : ' dokan-hide'; ?>">

@@ -44,10 +44,10 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         }
 
         $this->custom_logo = null;
-        $dokan_appearance  = get_option( 'dokan_appearance', [] );
+        $setup_wizard_logo_url = dokan_get_option( 'setup_wizard_logo_url', 'dokan_appearance', '' );
 
-        if ( isset( $dokan_appearance['setup_wizard_logo_url'] ) && ! empty( $dokan_appearance['setup_wizard_logo_url'] ) ) {
-            $this->custom_logo = $dokan_appearance['setup_wizard_logo_url'];
+        if ( ! empty( $setup_wizard_logo_url ) ) {
+            $this->custom_logo = $setup_wizard_logo_url;
         }
 
         $this->store_id   = get_current_user_id();
