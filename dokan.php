@@ -533,7 +533,7 @@ final class WeDevs_Dokan {
         require_once $classes_dir . 'seller-setup-wizard.php';
 
         // Load free or pro moduels
-        if ( file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
+        if ( !file_exists( DOKAN_INC_DIR . '/pro/dokan-pro-loader.php' ) ) {
             include_once DOKAN_INC_DIR . '/pro/dokan-pro-loader.php';
 
             $this->is_pro = true;
