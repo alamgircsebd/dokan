@@ -20,25 +20,25 @@ function dokan_get_seller_amount_from_order( $order_id, $get_array = false ) {
     $order_status   = $order->post_status;
 
     $net_amount     = ( ( $order_cost * $percentage ) / 100 );
-    
+
     $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
-    
+
     if ( $get_array ) {
         $amount = array(
             'net_amount' => $net_amount,
             'shipping'   => 0,
             'tax'        => 0,
         );
-        
+
         if ( 'seller' == $commission_recipient ) {
             $amount['shipping'] = $order_shipping;
             $amount['tax']      = $order_tax;
         }
-        
+
         return $amount;
     }
-    
-    
+
+
     if ( 'seller' == $commission_recipient ) {
         $net_amount = $net_amount + $extra_cost;
     }
@@ -788,7 +788,7 @@ function dokan_get_suborder_ids_by ($parent_order_id){
  */
 function dokan_get_admin_commission_by( $order, $seller_id ) {
 
-    if ( get_posts( array( 'post_parent' => $order->id, 'post_type' => 'shop_order' ) ) ) {
+    if ( get_posts( array( 'post_parent' => $order->id, 'post_type' => 'shop_order', 'post_status' => 'any' ) ) ) {
         return;
     }
 
