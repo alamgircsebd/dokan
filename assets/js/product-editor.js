@@ -173,6 +173,9 @@
                         });
 
                         Dokan_Editor.variants.dates();
+                        // featured image
+                        $('body, .product-edit-container').on('click', 'a.dokan-feat-image-btn', Dokan_Editor.featuredImage.addImage );
+                        $('body, .product-edit-container').on('click', 'a.dokan-remove-feat-image', Dokan_Editor.featuredImage.removeImage );
                         $( 'body' ).on( 'click', '.product-container-footer input[type="submit"]', Dokan_Editor.createNewProduct );
                     }
                 }
@@ -835,6 +838,28 @@
 
                 if ( product_featured_frame ) {
                     product_featured_frame.open();
+
+                    product_featured_frame.on('select', function() {
+                        var selection = product_featured_frame.state().get('selection');
+
+                        selection.map( function( attachment ) {
+                            attachment = attachment.toJSON();
+
+                            // set the image hidden id
+                            self.siblings('input.dokan-feat-image-id').val(attachment.id);
+
+                            // set the image
+                            var instruction = self.closest('.instruction-inside');
+                            var wrap = instruction.siblings('.image-wrap');
+
+                            // wrap.find('img').attr('src', attachment.sizes.thumbnail.url);
+                            wrap.find('img').attr('src', attachment.url);
+
+                            instruction.addClass('dokan-hide');
+                            wrap.removeClass('dokan-hide');
+                        });
+                    });
+
                     return;
                 }
 
@@ -844,27 +869,6 @@
                     button: {
                         text: dokan.i18n_choose_featured_img_btn_text,
                     }
-                });
-
-                product_featured_frame.on('select', function() {
-                    var selection = product_featured_frame.state().get('selection');
-
-                    selection.map( function( attachment ) {
-                        attachment = attachment.toJSON();
-
-                        // set the image hidden id
-                        self.siblings('input.dokan-feat-image-id').val(attachment.id);
-
-                        // set the image
-                        var instruction = self.closest('.instruction-inside');
-                        var wrap = instruction.siblings('.image-wrap');
-
-                        // wrap.find('img').attr('src', attachment.sizes.thumbnail.url);
-                        wrap.find('img').attr('src', attachment.url);
-
-                        instruction.addClass('dokan-hide');
-                        wrap.removeClass('dokan-hide');
-                    });
                 });
 
                 product_featured_frame.open();
