@@ -9,7 +9,7 @@
 ?>
 
 <div class="wrap">
-    <h2><?php _e( 'Seller Listing', 'dokan' ); ?></h2>
+    <h2><?php _e( 'Vendor Listing', 'dokan' ); ?></h2>
 
     <form action="<?php echo admin_url( 'users.php' ); ?>" method="get" style="margin-top: 15px;">
 

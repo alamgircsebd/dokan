@@ -323,7 +323,7 @@ class Dokan_Email {
         );
 
         $body = str_replace( $find, $replace, $body);
-        $subject = sprintf( __( '[%s] New Seller Registered', 'dokan' ), $this->get_from_name() );
+        $subject = sprintf( __( '[%s] New Vendor Registered', 'dokan' ), $this->get_from_name() );
 
         $this->send( $this->admin_email(), $subject, $body );
         do_action( 'after_new_seller_registered_mail', $this->admin_email(), $subject, $body );

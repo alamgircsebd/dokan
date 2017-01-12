@@ -21,7 +21,12 @@
             <div class="title"><?php _e( 'Order', 'dokan' ); ?></div>
             <div class="count">
                 <?php
-                $total = $orders_count->{'wc-completed'} + $orders_count->{'wc-processing'} + $orders_count->{'wc-on-hold'};
+                $status = dokan_withdraw_get_active_order_status();
+                $total = 0;
+                foreach ( $status as $order_status ){
+                    $total += $orders_count->$order_status;
+                }
+               // $total = $orders_count->{'wc-completed'} + $orders_count->{'wc-processing'} + $orders_count->{'wc-on-hold'};
                 echo number_format_i18n( $total, 0 );
                 ?>
             </div>

@@ -455,10 +455,10 @@ class Dokan_Pro_Coupons {
         $button_name = __( 'Create Coupon', 'dokan' );
 
         if ( isset( $_GET['post'] ) && $_GET['action'] == 'edit' ) {
-            if ( !wp_verify_nonce( $_GET['coupon_nonce_url'], '_coupon_nonce' ) ) {
-                wp_die( __( 'Are you cheating?', 'dokan' ) );
-            }
-
+//            if ( !wp_verify_nonce( $_GET['coupon_nonce_url'], '_coupon_nonce' ) ) {
+//                wp_die( __( 'Are you cheating?', 'dokan' ) );
+//            }
+           
             $post              = get_post( $_GET['post'] );
             $button_name       = __( 'Update Coupon', 'dokan' );
 
@@ -480,6 +480,10 @@ class Dokan_Pro_Coupons {
         $post_id     = isset( $post->ID ) ? $post->ID : '';
         $post_title  = isset( $post->post_title ) ? $post->post_title : '';
         $description = isset( $post->post_content ) ? $post->post_content : '';
+        
+        if ( !dokan_is_valid_owner( $post_id, get_current_user_id() ) ) {
+            wp_redirect( dokan_get_navigation_url( 'coupons' ) );
+        }
 
         $discount_type = isset( $discount_type ) ? $discount_type : '';
         if ( isset( $discount_type ) ) {

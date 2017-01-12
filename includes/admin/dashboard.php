@@ -36,21 +36,21 @@ function dokan_admin_dash_metabox_glance() {
     ?>
 
     <div class="dokan-left">
-        <h4><?php _e( 'Sellers', 'dokan' ); ?></h4>
+        <h4><?php _e( 'Vendors', 'dokan' ); ?></h4>
 
         <ul>
             <li class="seller-count">
                 <div class="dashicons dashicons-businessman"></div>
-                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>"><?php printf( _n( __( '%d Total Seller', 'dokan' ), __( '%d Total Sellers', 'dokan' ), $total_seller, 'dokan' ), $total_seller ); ?></a>
+                <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>"><?php printf( _n( __( '%d Total Vendor', 'dokan' ), __( '%d Total Vendors', 'dokan' ), $total_seller, 'dokan' ), $total_seller ); ?></a>
             </li>
             <li class="seller-count mark-green">
                 <div class="dashicons dashicons-awards"></div>
                 <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>">
                     <?php
                     if ( $seller_counts['yes'] ) {
-                        printf( _n( __( '%d Active Seller', 'dokan' ), __( '%d Active Sellers', 'dokan' ), $seller_counts['yes'], 'dokan' ), $seller_counts['yes'] );
+                        printf( _n( __( '%d Active Vendor', 'dokan' ), __( '%d Active Vendors', 'dokan' ), $seller_counts['yes'], 'dokan' ), $seller_counts['yes'] );
                     } else {
-                        _e( 'No Active Seller', 'dokan' );
+                        _e( 'No Active Vendor', 'dokan' );
                     }  ?>
                 </a>
             </li>
@@ -59,9 +59,9 @@ function dokan_admin_dash_metabox_glance() {
                 <a href="<?php echo WeDevs_Dokan::init()->is_pro() ? admin_url( 'admin.php?page=dokan-sellers' ) : ''; ?>">
                     <?php
                     if ( $seller_counts['no'] ) {
-                        printf( _n( __( '%d Pending Seller', 'dokan' ), __( '%d Pending Sellers', 'dokan' ), $seller_counts['no'], 'dokan' ), $seller_counts['no'] );
+                        printf( _n( __( '%d Pending Vendor', 'dokan' ), __( '%d Pending Vendors', 'dokan' ), $seller_counts['no'], 'dokan' ), $seller_counts['no'] );
                     } else {
-                        _e( 'No Pending Seller', 'dokan' );
+                        _e( 'No Pending Vendor', 'dokan' );
                     }  ?>
                 </a>
             </li>

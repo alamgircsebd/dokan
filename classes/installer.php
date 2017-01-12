@@ -126,7 +126,7 @@ class Dokan_Installer {
             $wp_roles = new WP_Roles();
         }
 
-        add_role( 'seller', __( 'Seller', 'dokan' ), array(
+        add_role( 'seller', __( 'Vendor', 'dokan' ), array(
             'read'                   => true,
             'publish_posts'          => true,
             'edit_posts'             => true,

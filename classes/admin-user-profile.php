@@ -186,7 +186,7 @@ class Dokan_Admin_User_Profile {
                     </tr>
 
                 <?php } ?>
-                    
+
                 <tr>
                     <th><?php _e( 'Payment Options : ', 'dokan' ); ?></th>
                 </tr>
@@ -207,36 +207,36 @@ class Dokan_Admin_User_Profile {
                         </td>
                     </tr>
                 <?php } ?>
-                    
+
                 <?php if( isset( $store_settings['payment']['bank'] ) ) { ?>
                     <tr>
                         <th><?php _e( 'Bank name ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['bank_name'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['bank_name'] ) ? esc_attr( $store_settings['payment']['bank']['bank_name'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Account Name ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['ac_name'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['ac_name'] ) ? esc_attr( $store_settings['payment']['bank']['ac_name'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Account Number ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['ac_number'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['ac_number'] ) ? esc_attr( $store_settings['payment']['bank']['ac_number'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Bank Address ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['bank_addr'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['bank_addr'] ) ? esc_attr( $store_settings['payment']['bank']['bank_addr'] ) : ''; ?>">
                         </td>
                     </tr>
                     <tr>
                         <th><?php _e( 'Bank Swift ', 'dokan' ); ?></th>
                         <td>
-                            <input type="text" disabled class="regular-text" value="<?php echo esc_attr( $store_settings['payment']['bank']['swift'] ); ?>">
+                            <input type="text" disabled class="regular-text" value="<?php echo isset( $store_settings['payment']['bank']['swift'] ) ? esc_attr( $store_settings['payment']['bank']['swift'] ) : ''; ?>">
                         </td>
                     </tr>
                 <?php } ?>
@@ -246,10 +246,10 @@ class Dokan_Admin_User_Profile {
                         <label for="dokan_enable_selling">
                             <input type="hidden" name="dokan_enable_selling" value="no">
                             <input name="dokan_enable_selling" type="checkbox" id="dokan_enable_selling" value="yes" <?php checked( $selling, 'yes' ); ?> />
-                            <?php _e( 'Enable Selling', 'dokan' ); ?>
+                            <?php _e( 'Disable Adding Products', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'Enable or disable product selling capability', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Disable or enable product adding capability', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
@@ -267,24 +267,24 @@ class Dokan_Admin_User_Profile {
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Seller Commission %', 'dokan' ); ?></th>
+                    <th><?php _e( 'Vendor Commission %', 'dokan' ); ?></th>
                     <td>
                         <input type="text" class="small-text" name="dokan_seller_percentage" value="<?php echo esc_attr( $seller_percentage ); ?>">
 
-                        <p class="description"><?php _e( 'Enter commission % seller will get from each order', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Enter commission % vendor will get from each order', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
                 <tr>
-                    <th><?php _e( 'Featured Seller', 'dokan' ); ?></th>
+                    <th><?php _e( 'Featured vendor', 'dokan' ); ?></th>
                     <td>
                         <label for="dokan_feature">
                             <input type="hidden" name="dokan_feature" value="no">
                             <input name="dokan_feature" type="checkbox" id="dokan_feature" value="yes" <?php checked( $feature_seller, 'yes' ); ?> />
-                            <?php _e( 'Mark as featured seller', 'dokan' ); ?>
+                            <?php _e( 'Mark as featured vendor', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'This seller will be marked as a featured seller.', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'This vendor will be marked as a featured vendor.', 'dokan' ) ?></p>
                     </td>
                 </tr>
 

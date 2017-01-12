@@ -25,7 +25,7 @@ $cu_slug = get_user_meta( $user_id, 'nickname', true );
 ?>
 
 
-<h2><?php _e( 'Update account to Seller', 'dokan' ); ?></h2>
+<h2><?php _e( 'Update account to Vendor', 'dokan' ); ?></h2>
 <form method="post" action="">
 
     <div class="dokan-become-seller">
@@ -81,7 +81,7 @@ $cu_slug = get_user_meta( $user_id, 'nickname', true );
         <p class="form-row">
         <?php wp_nonce_field( 'account_migration', 'dokan_nonce' ); ?>
             <input type="hidden" name="user_id" value="<?php echo $user_id ?>">
-            <input type="submit" class="dokan-btn dokan-btn-default" name="dokan_migration" value="<?php _e( 'Become a Seller', 'dokan' ); ?>" />
+            <input type="submit" class="dokan-btn dokan-btn-default" name="dokan_migration" value="<?php _e( 'Become a Vendor', 'dokan' ); ?>" />
         </p>
     </div>
 </form>

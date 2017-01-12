@@ -28,7 +28,6 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         if ( in_array( 'seller', $user->roles ) ) {
             $url = site_url( '?page=dokan-seller-setup' );
         }
-
         return $url;
     }
 
@@ -45,16 +44,16 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         }
 
         $this->custom_logo = null;
-        $dokan_appearance  = get_option( 'dokan_appearance', [] );
+        $setup_wizard_logo_url = dokan_get_option( 'setup_wizard_logo_url', 'dokan_appearance', '' );
 
-        if ( isset( $dokan_appearance['setup_wizard_logo_url'] ) && ! empty( $dokan_appearance['setup_wizard_logo_url'] ) ) {
-            $this->custom_logo = $dokan_appearance['setup_wizard_logo_url'];
+        if ( ! empty( $setup_wizard_logo_url ) ) {
+            $this->custom_logo = $setup_wizard_logo_url;
         }
 
         $this->store_id   = get_current_user_id();
         $this->store_info = dokan_get_store_info( $this->store_id );
 
-        $this->steps = array(
+        $steps = array(
             'introduction' => array(
                 'name'    =>  __( 'Introduction', 'dokan' ),
                 'view'    => array( $this, 'dokan_setup_introduction' ),
@@ -76,6 +75,9 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
                 'handler' => ''
             )
         );
+
+        $this->steps = apply_filters( 'dokan_seller_wizard_steps', $steps );
+
         $this->step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
 
         $this->enqueue_scripts();
@@ -102,7 +104,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         <head>
             <meta name="viewport" content="width=device-width" />
             <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-            <title><?php _e( 'Dokan &rsaquo; Setup Wizard', 'dokan' ); ?></title>
+            <title><?php _e( 'Vendor &rsaquo; Setup Wizard', 'dokan' ); ?></title>
             <?php wp_print_scripts( 'wc-setup' ); ?>
             <?php do_action( 'admin_print_styles' ); ?>
             <?php do_action( 'admin_head' ); ?>
@@ -159,7 +161,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
             <?php
                 if ( ! empty( $this->custom_logo ) ) {
             ?>
-                <h1 id="wc-logo"><a href="https://wedevs.com/products/plugins/dokan/"><img src="<?php echo $this->custom_logo; ?>" alt="Dokan" /></a></h1>
+                <h1 id="wc-logo"><a href="<?php echo home_url() ?>"><img src="<?php echo $this->custom_logo; ?>" alt="Dokan" /></a></h1>
             <?php
                 } else {
                     echo '<h1 id="wc-logo">' . get_bloginfo( 'name' ) . '</h1>';
@@ -183,13 +185,14 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
      * Introduction step.
      */
     public function dokan_setup_introduction() {
+        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
         ?>
         <h1><?php _e( 'Welcome to the Marketplace!', 'dokan' ); ?></h1>
         <p><?php _e( 'Thank you for choosing The Marketplace to power your online store! This quick setup wizard will help you configure the basic settings. <strong>It’s completely optional and shouldn’t take longer than two minutes.</strong>', 'dokan' ); ?></p>
         <p><?php _e( 'No time right now? If you don’t want to go through the wizard, you can skip and return to the Store!', 'dokan' ); ?></p>
         <p class="wc-setup-actions step">
             <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button-primary button button-large button-next"><?php _e( 'Let\'s Go!', 'dokan' ); ?></a>
-            <a href="<?php echo esc_url( site_url( 'store/' . $this->store_info['store_name'] ) ); ?>" class="button button-large"><?php _e( 'Not right now', 'dokan' ); ?></a>
+            <a href="<?php echo esc_url( site_url( $custom_store_url . '/' . $this->store_info['store_name'] ) ); ?>" class="button button-large"><?php _e( 'Not right now', 'dokan' ); ?></a>
         </p>
         <?php
     }
@@ -368,7 +371,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
 
         update_user_meta( $this->store_id, 'dokan_profile_settings', $dokan_settings );
 
-        wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
+        wp_redirect( apply_filters( 'dokan_ww_payment_redirect',esc_url_raw( $this->get_next_step_link() ) ) );
         exit;
     }
 

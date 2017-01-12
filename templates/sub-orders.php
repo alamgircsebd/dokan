@@ -14,8 +14,8 @@
 
 <div class="dokan-info">
     <strong><?php _e( 'Note:', 'dokan' ); ?></strong>
-    <?php _e( 'This order has products from multiple vendors/sellers. So we divided this order into multiple seller orders.
-    Each order will be handled by their respective seller independently.', 'dokan' ); ?>
+    <?php _e( 'This order has products from multiple vendors. So we divided this order into multiple vendor orders.
+    Each order will be handled by their respective vendor independently.', 'dokan' ); ?>
 </div>
 
 <table class="shop_table my_account_orders table table-striped">
@@ -48,7 +48,7 @@
                     <?php echo isset( $statuses[$order->post_status] ) ? $statuses[$order->post_status] : $order->post_status; ?>
                 </td>
                 <td class="order-total">
-                    <?php echo sprintf( _n( '%s for %s item', '%s for %s items', $item_count, 'woocommerce' ), $order->get_formatted_order_total(), $item_count ); ?>
+                    <?php echo sprintf( _n( '%s for %s item', '%s for %s items', $item_count, 'dokan' ), $order->get_formatted_order_total(), $item_count ); ?>
                 </td>
                 <td class="order-actions">
                     <?php

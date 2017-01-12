@@ -14,7 +14,7 @@
         max-width: 100%;
 
         thead {
-            display: none;
+            
         }
         tbody{
             display: table-row-group;
@@ -22,20 +22,16 @@
             border-color: inherit;
             tr{
                 vertical-align: inherit;
-                display: block;
+                width: 100%;
                 td{
-
-                    display: block;
-                    padding: 6px 12px;
+                    padding: 6px;
                     text-align: left;
                     border-color: #ededed;
                     border-style: solid;
                     border-width: 0px 1px 1px 1px;
                     background: #fff;
-
                 }
                 td:before{
-                    content: attr(data-title) ": ";
                     padding-right: 20px !important;
                     float: left;
                     font-weight: bold;
@@ -73,6 +69,14 @@
 
         }
 
+    }
+    .dokan-orders-area{
+        .dokan-w8{
+            width: 100% !important;
+        }
+        .dokan-w4{
+            width: 100% !important;
+        }
     }
     .dokan-primary {
         width: 100% !important;
@@ -137,6 +141,11 @@
         .dokan-dashboard-content {
             float: none;
             width: 100%;
+
+            article {
+                overflow: scroll;
+            }
+
         }
 
         .dashboard-content-area {

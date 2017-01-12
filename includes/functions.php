@@ -1,5 +1,6 @@
 <?php
 
+require_once dirname(__FILE__) . '/product-functions.php';
 require_once dirname(__FILE__) . '/order-functions.php';
 require_once dirname(__FILE__) . '/withdraw-functions.php';
 
@@ -158,7 +159,11 @@ function dokan_delete_product_handler() {
         }
 
         wp_delete_post( $product_id );
-        wp_redirect( add_query_arg( array( 'message' => 'product_deleted' ), dokan_get_navigation_url( 'products' ) ) );
+
+        $redirect = apply_filters( 'dokan_add_new_product_redirect', dokan_get_navigation_url( 'products' ), '' );
+
+        wp_redirect( add_query_arg( array( 'message' => 'product_deleted' ),  $redirect ) );
+
         exit;
     }
 }
@@ -522,92 +527,67 @@ function dokan_post_input_box( $post_id, $meta_key, $attr = array(), $type = 'te
  * Get user friendly post status based on post
  *
  * @param string $status
- * @return string
+ *
+ * @return string|array
  */
-function dokan_get_post_status( $status ) {
-    switch ($status) {
-        case 'publish':
-            return __( 'Online', 'dokan' );
-            break;
+function dokan_get_post_status( $status = '' ) {
 
-        case 'draft':
-            return __( 'Draft', 'dokan' );
-            break;
+    $statuses = apply_filters( 'dokan_get_post_status', array(
+        'publish' => __( 'Online', 'dokan' ),
+        'draft'   => __( 'Draft', 'dokan' ),
+        'pending' => __( 'Pending Review', 'dokan' )
+    ) );
 
-        case 'pending':
-            return __( 'Pending Review', 'dokan' );
-            break;
-
-        case 'future':
-            return __( 'Scheduled', 'dokan' );
-            break;
-
-        default:
-            return '';
-            break;
+    if ( $status ) {
+        return isset( $statuses[$status] ) ? $statuses[$status] : '';
     }
+
+    return $statuses;
 }
 
 /**
  * Get user friendly post status label based class
  *
  * @param string $status
- * @return string
+ *
+ * @return string|array
  */
-function dokan_get_post_status_label_class( $status ) {
-    switch ( $status ) {
-        case 'publish':
-            return 'dokan-label-success';
-            break;
+function dokan_get_post_status_label_class( $status = '' ) {
 
-        case 'draft':
-            return 'dokan-label-default';
-            break;
+    $labels = apply_filters( 'dokan_get_post_status_label_class', array(
+        'publish' => 'dokan-label-success',
+        'draft'   => 'dokan-label-default',
+        'pending' => 'dokan-label-danger'
+    ) );
 
-        case 'pending':
-            return 'dokan-label-warning';;
-            break;
-
-        case 'future':
-            return 'dokan-label-info';;
-            break;
-
-        default:
-            return '';
-            break;
+    if ( $status ) {
+        return isset( $labels[$status] ) ? $labels[$status] : '';
     }
+
+    return $labels;
 }
 
 /**
  * Get readable product type based on product
  *
  * @param string $status
+ *
  * @return string
  */
-function dokan_get_product_status( $status ) {
-    switch ($status) {
-        case 'simple':
-            $name = __( 'Simple Product', 'dokan' );
-            break;
+function dokan_get_product_types( $status = '' ) {
 
-        case 'variable':
-            $name = __( 'Variable Product', 'dokan' );
-            break;
+    $types = apply_filters( 'dokan_get_product_types', array(
+        'simple'   => __( 'Simple Product', 'dokan' ),
+        'variable' => __( 'Variable Product', 'dokan' ),
+        'grouped'  => __( 'Grouped Product', 'dokan' ),
+        'external' => __( 'Scheduled Product', 'dokan' )
+    ) );
 
-        case 'grouped':
-            $name = __( 'Grouped Product', 'dokan' );
-            break;
-
-        case 'external':
-            $name = __( 'Scheduled', 'dokan' );
-            break;
-
-        default:
-            $name = '';
-            break;
+    if ( $status ) {
+        return isset( $types[$status] ) ? $types[$status] : '';
     }
 
-    return apply_filters( 'dokan_product_status_case', $name, $status );
+    return $types;
 }
 
 /**
@@ -788,11 +768,7 @@ function dokan_edit_product_url( $product_id ) {
         return trailingslashit( get_permalink( $product_id ) ). 'edit/';
     }
 
-    if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-        $new_product_url = dokan_get_navigation_url('products');
-    } elseif ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'new' ) {
-        $new_product_url = dokan_get_navigation_url('new-product');
-    }
+    $new_product_url = dokan_get_navigation_url('products');
 
     return add_query_arg( array( 'product_id' => $product_id, 'action' => 'edit' ), $new_product_url );
 }
@@ -1474,11 +1450,11 @@ function dokan_get_processing_time_value( $index ) {
  */
 function dokan_wc_email_recipient_add_seller( $email, $order ) {
 
-    if ( get_post_meta( $order->id, 'has_sub_order', true ) == true ) {
-        return $email;
-    }
-
     if ( $order ) {
+        
+        if ( get_post_meta( $order->id, 'has_sub_order', true ) == true ) {
+            return $email;
+        }
 
         $sellers = dokan_get_seller_id_by_order( $order->id );
 
@@ -1541,7 +1517,7 @@ function dokan_admin_toolbar() {
     $wp_admin_bar->add_menu( array(
         'id'     => 'dokan-sellers',
         'parent' => 'dokan',
-        'title'  => __( 'All Sellers', 'dokan' ),
+        'title'  => __( 'All Vendors', 'dokan' ),
         'href'   => admin_url( 'admin.php?page=dokan-sellers' )
     ) );
 
@@ -1873,3 +1849,20 @@ function dokan_after_login_redirect( $redirect_to, $user ) {
 }
 
 add_filter( 'woocommerce_login_redirect', 'dokan_after_login_redirect' , 1, 2 );
+
+/**
+ * Check if the post belongs to the given user
+ * 
+ * @param int $post_id
+ * @param int $user_id
+ * @return boolean
+ */
+function dokan_is_valid_owner( $post_id, $user_id ) {
+    
+    $author = get_post_field( 'post_author', $post_id );
+    
+    if ( $user_id == $author )
+        return true;
+    
+    return false;
+}

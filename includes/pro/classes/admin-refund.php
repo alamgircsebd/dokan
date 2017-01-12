@@ -164,7 +164,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                             <input type="checkbox" class="dokan-refund-allcheck">
                         </td>
                         <th><?php _e( 'Order ID', 'dokan' ); ?></th>
-                        <th><?php _e( 'Seller', 'dokan' ); ?></th>
+                        <th><?php _e( 'Vendor', 'dokan' ); ?></th>
                         <th><?php _e( 'Refund Amount', 'dokan' ); ?></th>
                         <th><?php _e( 'Refund Reason', 'dokan' ); ?></th>
                         <th><?php _e( 'Payment Gateway', 'dokan' ); ?></th>
@@ -177,7 +177,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                             <input type="checkbox" class="dokan-refund-allcheck">
                         </td>
                         <th><?php _e( 'Order ID', 'dokan' ); ?></th>
-                        <th><?php _e( 'Seller', 'dokan' ); ?></th>
+                        <th><?php _e( 'Vendor', 'dokan' ); ?></th>
                         <th><?php _e( 'Refund Amount', 'dokan' ); ?></th>
                         <th><?php _e( 'Refund Reason', 'dokan' ); ?></th>
                         <th><?php _e( 'Payment Gateway', 'dokan' ); ?></th>

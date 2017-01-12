@@ -28,14 +28,14 @@ if ( $tax_classes ) {
         </div>
     </div>
 
-    <div class="dokan-form-group">
+    <div class="dokan-form-group show_if_stock">
         <label class="dokan-w4 dokan-control-label" for="_stock_qty"><?php _e( 'Stock Qty', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
             <input type="number" name="_stock" id="_stock" step="any" placeholder="10" value="<?php echo wc_stock_amount( get_post_meta( $post->ID, '_stock', true ) ); ?>">
         </div>
     </div>
 
-    <div class="dokan-form-group hide_if_variable">
+    <div class="dokan-form-group hide_if_variable <?php echo ( $product_type == 'simple' ) ? 'show_if_stock' : ''; ?>">
         <label class="dokan-w4 dokan-control-label" for="_stock_status"><?php _e( 'Stock Status', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_stock_status', array( 'options' => array(
@@ -46,7 +46,7 @@ if ( $tax_classes ) {
         </div>
     </div>
 
-    <div class="dokan-form-group">
+    <div class="dokan-form-group show_if_stock">
         <label class="dokan-w4 dokan-control-label" for="_backorders"><?php _e( 'Allow Backorders', 'dokan' ); ?></label>
         <div class="dokan-w4 dokan-text-left">
             <?php dokan_post_input_box( $post->ID, '_backorders', array( 'options' => array(

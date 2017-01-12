@@ -143,14 +143,16 @@ function dokan_product_dashboard_errors() {
 }
 
 function dokan_product_listing_status_filter() {
-    $permalink = dokan_get_navigation_url( 'products' );
+    $permalink    = dokan_get_navigation_url( 'products' );
     $status_class = isset( $_GET['post_status'] ) ? $_GET['post_status'] : 'all';
-    $post_counts = dokan_count_posts( 'product', get_current_user_id() );
+    $post_counts  = dokan_count_posts( 'product', get_current_user_id() );
+    $statuses     = dokan_get_post_status();
 
     dokan_get_template_part( 'products/listing-status-filter', '', array(
         'permalink'    => $permalink,
         'status_class' => $status_class,
         'post_counts'  => $post_counts,
+        'statuses'     => $statuses,
     ) );
 }
 
@@ -409,7 +411,7 @@ function dokan_dashboard_nav( $active_menu = '' ) {
     $menu .= '<li class="dokan-common-links dokan-clearfix">
             <a title="' . __( 'Visit Store', 'dokan' ) . '" class="tips" data-placement="top" href="' . dokan_get_store_url( get_current_user_id()) .'" target="_blank"><i class="fa fa-external-link"></i></a>
             <a title="' . __( 'Edit Account', 'dokan' ) . '" class="tips" data-placement="top" href="' . dokan_get_navigation_url( 'edit-account' ) . '"><i class="fa fa-user"></i></a>
-            <a title="' . __( 'Log out', 'dokan' ) . '" class="tips" data-placement="top" href="' . wp_logout_url( site_url() ) . '"><i class="fa fa-power-off"></i></a>
+            <a title="' . __( 'Log out', 'dokan' ) . '" class="tips" data-placement="top" href="' . wp_logout_url( home_url() ) . '"><i class="fa fa-power-off"></i></a>
         </li>';
 
     $menu .= '</ul>';
@@ -588,7 +590,7 @@ function dokan_store_listing( $atts ) {
         'number' => $limit,
         'offset' => $offset
     );
-    
+
     // if search is enabled, perform a search
     if ( 'yes' == $attr['search'] ) {
         $search_term = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
@@ -605,7 +607,7 @@ function dokan_store_listing( $atts ) {
             );
         }
     }
-    
+
     if ( $attr['featured'] == 'yes' ) {
         $seller_args['meta_query'][] = array(
                                         'key'     => 'dokan_feature_seller',

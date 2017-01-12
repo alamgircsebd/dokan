@@ -1,4 +1,4 @@
-=== Dokan Multivendor (Lite) ===
+=== Dokan Multivendor Marketplace Plugin ===
 Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
@@ -12,78 +12,100 @@ The pioneer multi-vendor plugin for WordPress. Start your own marketplace in min
 
 == Description ==
 
-> #### This is a **Lite** version of the **Dokan** plugin.
-> Get the [**Pro Version**](https://wedevs.com/products/plugins/dokan/?utm_source=wporg&utm_medium=cta&utm_campaign=dokan-lite) which includes bunch of features that were removed from this version.
+Dokan is the best front end multi vendor marketplace on WordPress, powered by WooCommerce. Build your own Amazon, Shopify, eBay, Magento like marketplace in just 30 minutes. Dokan is the fastest way to start ecommerce and earn through commissions with products ranging from digital, physical to variable.
 
-A multi-vendor plugin leveraging the power of WooCommerce.
+**The best Frontend user interface**
 
+We love the philosophy of a complete frontend experience. So, vendors have their personalised dashboard on the store frontend where they can find all what they need. Backend access is restricted to the admin only. This sets Dokan apart on a higher ground. All of our add-ons are frontend compatible. Dokan comes with a free responsive ecommerce theme that has widgets specially made for Dokan.
+
+**It’s fast and easy to use**
+
+Your business operations with Dokan is smooth and fast. Everything will work as you expected because we have designed the experience following the best intuitive practices from popular ecommerce activators like WooCommerce, Bigcommerce etc.
+
+**Reliable yet a growing platform**
+
+We regularly keep our version updated for flawless operation and integration with dependable  services. We just not only keep things compatible, we have a style of adding the most trendy new features to Dokan with every update.
+
+**A really scalable market**
+
+You can have unlimited vendors and vendors can create unlimited products. Currently 4 product types are supported eg. physical product, downloadable product, variable product and bookable products through the [Dokan WC Bookings](https://wedevs.com/products/plugins/dokan/woocommerce-booking-integration/) add on.
+
+**Earn in many ways**
+
+Profit doesn’t only rely on sales. Multiple ways allow earning through vendor commissions or product based commissions. You can also create subscription packs that allow you to charge for product uploads, product limits and time.
+
+**Puts you in control**
+
+As a an admin, you can use Dokan in a way where you can control everything that happens in your marketplace. Product publishing, vendor registration, subscription renewal and every other vendor activity can be re routed through you.
+
+> Get the [**Pro Version**](https://wedevs.com/products/plugins/dokan/?utm_source=wporg&utm_medium=cta&utm_campaign=dokan-lite) with bunch of super features, updates and scope for powerful add-ons.
 
 = Features =
 **Marketplace with Independent Stores**
 
   * Every seller gets their own store with a unique URL and branding.
-  * Show a store banner with contact details
-  * Contact seller and show the store location map. (**Pro feature**)
+  * Beautiful storefront styles with contact details and widgets
+  * Store location map on store front. (Pro feature)
 
-**Dashboard For Each Seller**
+**Frontend Dashboard For Each Seller**
 
-  * Don't need to visit the WordPress admin area.
-  * Sellers can manage their products and orders from your site frontend.
+  * WordPress admin area can be accessed only by admin.
+  * Vendors manage products, orders, withdraws everything from site frontend.
 
 **Earn From Each Sale**
 
-  * As a site owner, get a cut from each sale. That way you and your users both earn money.
-  * Take a percentage from each sale. e.g. 20% goes to site owner for every order.
-  * Per seller percentage override. Take different cut from different seller. (**Pro feature**)
+  * A part of the sale value is sent to admin as commission.
+  * Commission rate can be customized.
+  * Per vendor percentage override. (**Pro feature**)
 
 **Product Management**
 
   * Create and manage your products from the frontend.
-  * Create simple and/or variable products. (**Pro Feature**)
-  * Sellers have option to manage product shipping, attributes. (**Pro Feature**)
-  * Seller can mange downloadable product permission: expiry date and download limit. (**Pro Feature**)
+  * Create variable or downloadable products. (**Pro Feature**)
+  * Vendors have option to manage product shipping, attributes. (**Pro Feature**)
+  * Vendors can manage downloadable product permission, expiry date and download limit. (**Pro Feature**)
 
 **Reports (Pro Feature)**
 
-  * Every seller can see his/her own sales report and see a bird eye view on the sales they are making.
-  * Order overview and filter by Sale by date, Top sellers, Top earners.
-  * Export order reports
+  * Vendors can see their sales report, generate statements and overview from frontend.
+  * Admins can overview orders and filter by sale, by date, top vendors or top earners.
+  * Export order reports to CSV.
 
 **Coupon Management (Pro Feature)**
 
-  * Manage and offer discounts for each products.
+  * Manage and offer discounts for each product.
   * Set expiry and restriction for coupons.
 
 **Manage Product Reviews (Pro Feature)**
 
-  * You can manage the reviews on your products.
-  * Approve/unapprove reviews.
-  * See all the reviews for your products left by customers.
+  * All product reviews are managed by vendors (with admin override)
+  * View all reviews on products left by customers.
 
+**Pro Features Continued
+The admin panel gives you some powerful management tools
+  * Admin can view and manage vendor list
+  * Admin can view his as well as every vendor’s earning reports individually
+  * Dokan Pro has update and support option for customer.
+  * Dokan tools option has page installer and Sync table option
 
-= Additional Pro Features =
+  * Advanced settings for the admin -
+     * **General Settings**
+        *Admin can enable/disable the map on the store page.
+        *Admin can enable/disable the contact form on the store page
+        *Admin can also enable/disable the store sidebar from theme.
 
-  * Admin have additional option inside of his admin panel of Dokan
-     * Admin can view and mange seller list
-     * Admin can view his as well as every seller’s earning reports individually
-     * Dokan Pro has update and support option for customer.
-     * Dokan tools option has page installer and Sync table option
-  * Settings tab has those option like-
-     * **General**
-        * Admin can enable/disable the map on the store page.
-        * Admin can enable/disable the contact form on the store page
-        * Admin can also enable/disable the store sidebar from theme.
      * **Selling Options**
-        * Admin can manage new product status
-        * Admin can set the order status for withdraw
-        * Admin can seth threshold withdraw day for the seller
-        * Admin can change the seller store URL
-        * Admin can also enable/disable the permission of review editing for the seller
+        * Admin can manage new product status.
+        * Admin can set the order status for withdraw.
+        * Admin can seth threshold withdraw day for the vendor.
+        * Admin can change the vendor store URL.
+        * Admin can also enable/disable the permission of review editing for the vendor.
+
   * **Widgets**
-     * Best seller widget
-     * Featured seller widget
-     * Store contact widget
-     * Store location widget
+    * Best vendor widget
+    * Featured vendor widget
+    * Store contact widget
+    * Store location widget
 
 And much more. Checkout the [**Pro Version**](https://wedevs.com/products/plugins/dokan/?utm_source=wporg&utm_medium=footer&utm_campaign=dokan-lite)
 
@@ -147,6 +169,20 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.5.1 -> January 12, 2017
+---------------------
+- [new]   Front-End product template new UI
+- [tweak] All SELLER text is changed to VENDOR
+- [tweak] Updated Seller Earning Statement Report View
+- [tweak] Fixed variable product data saving issues
+- [tweak] Changed Order Tracking options from Select to Text box for sellers
+- [tweak] Improved Responsiveness on seller dashboard pages
+- [tweak] Product commission option is moved to advance tab from general
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Fixed showing error If Google MAP API is not given
+- [fix]   Fixed Extra fee receiver not working issue
 
 = v2.5 -> October 18, 2016 =
 ---------------------

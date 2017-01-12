@@ -26,7 +26,7 @@
                             <input type="checkbox" class="dokan-duplicate-orders-allcheck">
                         </th>
                         <th><?php _e( 'Order No.', 'dokan' ); ?></th>
-                        <th><?php _e( 'Seller Name', 'dokan' ); ?></th>                        
+                        <th><?php _e( 'Vendor Name', 'dokan' ); ?></th>                        
                         <th><?php _e( 'Amount', 'dokan' ); ?></th>
                         <th><?php _e( 'Actions', 'dokan' ); ?></th>                       
                     </tr>
@@ -37,7 +37,7 @@
                             <input type="checkbox" class="dokan-duplicate-orders-allcheck">
                         </th>
                         <th><?php _e( 'Order No.', 'dokan' ); ?></th>
-                        <th><?php _e( 'Seller Name', 'dokan' ); ?></th>                        
+                        <th><?php _e( 'Vendor Name', 'dokan' ); ?></th>                        
                         <th><?php _e( 'Amount', 'dokan' ); ?></th>
                         <th><?php _e( 'Actions', 'dokan' ); ?></th>
                     </tr>

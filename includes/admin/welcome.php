@@ -67,8 +67,8 @@
         </div>
 
         <div class="col">
-            <h3><?php _e( 'Store SEO manage system for sellers store', 'dokan' ); ?></h3>
-            <p><?php _e( 'From now on, whenever someone shares the store page, the images and texts written on the settings will appear on the social sites. So your sellers can get more traffic from search engines and social sites.', 'dokan' ); ?></p>
+            <h3><?php _e( 'Store SEO manage system for vendors store', 'dokan' ); ?></h3>
+            <p><?php _e( 'From now on, whenever someone shares the store page, the images and texts written on the settings will appear on the social sites. So your vendors can get more traffic from search engines and social sites.', 'dokan' ); ?></p>
         </div>
 
         <div class="col">

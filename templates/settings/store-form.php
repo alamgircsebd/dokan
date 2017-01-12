@@ -17,10 +17,10 @@
 
     $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
     $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
-    
-    $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? esc_attr( $profile_info['show_min_order_discount'] ) : 'no';
-    $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? esc_attr( $profile_info['setting_minimum_order_amount'] ) : 0;
-    $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? esc_attr( $profile_info['setting_order_percentage'] ) : 0;
+
+    $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? $profile_info['show_min_order_discount'] : 'no';
+    $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? $profile_info['setting_minimum_order_amount'] : '';
+    $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? $profile_info['setting_order_percentage'] : '';
 
     $address         = isset( $profile_info['address'] ) ? $profile_info['address'] : '';
     $address_street1 = isset( $profile_info['address']['street_1'] ) ? $profile_info['address']['street_1'] : '';
@@ -49,7 +49,7 @@
         $address_state   = $_POST['dokan_address']['state'];
     }
 
-    $dokan_appearance = get_option( 'dokan_appearance' );
+    $dokan_appearance = dokan_get_option( 'store_header_template', 'dokan_appearance', 'default' );
 
 ?>
 <?php do_action( 'dokan_settings_before_form', $current_user, $profile_info ); ?>
@@ -58,7 +58,7 @@
 
         <?php wp_nonce_field( 'dokan_store_settings_nonce' ); ?>
 
-        <?php if ( ! empty( $dokan_appearance['store_header_template'] ) && 'layout3' !== $dokan_appearance['store_header_template'] ): ?>
+        <?php if ( ! empty( $dokan_appearance ) && 'layout3' !== $dokan_appearance ): ?>
             <div class="dokan-banner">
 
                 <div class="image-wrap<?php echo $banner ? '' : ' dokan-hide'; ?>">
@@ -163,11 +163,13 @@
                             <?php _e( 'Enable storewide discount', 'dokan' ); ?>
                         </label>
                     </div>
-                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
-                        <input id="setting_minimum_order_amount" value="<?php echo $setting_minimum_order_amount; ?>" name="setting_minimum_order_amount" placeholder="<?php _e( 'Minimum Order Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
-                    </div>
-                    <div class="dokan-text-left dokan-form-group show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
-                        <input id="setting_order_percentage" value="<?php echo $setting_order_percentage; ?>" name="setting_order_percentage" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                    <div class="show_if_needs_sw_discount <?php echo ($is_enable_order_discount=='yes') ? '' : 'hide_if_order_discount' ;?>">
+                        <div class="dokan-text-left dokan-form-group">
+                            <input id="setting_minimum_order_amount" value="<?php echo $setting_minimum_order_amount; ?>" name="setting_minimum_order_amount" placeholder="<?php _e( 'Minimum Order Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="number">
+                        </div>
+                        <div class="dokan-text-left dokan-form-group">
+                            <input id="setting_order_percentage" value="<?php echo $setting_order_percentage; ?>" name="setting_order_percentage" placeholder="<?php _e( 'Percentage', 'dokan' ); ?>" class="dokan-form-control input-md" type="number" min="1" max="100">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -367,41 +369,47 @@
             var def_zoomval = 12;
             var def_longval = '<?php echo $def_long; ?>';
             var def_latval = '<?php echo $def_lat; ?>';
-            var curpoint = new google.maps.LatLng(def_latval, def_longval),
-                geocoder   = new window.google.maps.Geocoder(),
-                $map_area = $('#dokan-map'),
-                $input_area = $( '#dokan-map-lat' ),
-                $input_add = $( '#dokan-map-add' ),
-                $find_btn = $( '#dokan-location-find-btn' );
+
+            try {
+                var curpoint = new google.maps.LatLng(def_latval, def_longval),
+                    geocoder   = new window.google.maps.Geocoder(),
+                    $map_area = $('#dokan-map'),
+                    $input_area = $( '#dokan-map-lat' ),
+                    $input_add = $( '#dokan-map-add' ),
+                    $find_btn = $( '#dokan-location-find-btn' );
+
+                $find_btn.on('click', function(e) {
+                    e.preventDefault();
+
+                    geocodeAddress( $input_add.val() );
+                });
+
+                var gmap = new google.maps.Map( $map_area[0], {
+                    center: curpoint,
+                    zoom: def_zoomval,
+                    mapTypeId: window.google.maps.MapTypeId.ROADMAP
+                });
+
+                var marker = new window.google.maps.Marker({
+                    position: curpoint,
+                    map: gmap,
+                    draggable: true
+                });
+
+                window.google.maps.event.addListener( gmap, 'click', function ( event ) {
+                    marker.setPosition( event.latLng );
+                    updatePositionInput( event.latLng );
+                } );
+
+                window.google.maps.event.addListener( marker, 'drag', function ( event ) {
+                    updatePositionInput(event.latLng );
+                } );
+
+            } catch( e ) {
+                console.log( 'Google API not found.' );
+            }
 
             autoCompleteAddress();
-
-            $find_btn.on('click', function(e) {
-                e.preventDefault();
-
-                geocodeAddress( $input_add.val() );
-            });
-
-            var gmap = new google.maps.Map( $map_area[0], {
-                center: curpoint,
-                zoom: def_zoomval,
-                mapTypeId: window.google.maps.MapTypeId.ROADMAP
-            });
-
-            var marker = new window.google.maps.Marker({
-                position: curpoint,
-                map: gmap,
-                draggable: true
-            });
-
-            window.google.maps.event.addListener( gmap, 'click', function ( event ) {
-                marker.setPosition( event.latLng );
-                updatePositionInput( event.latLng );
-            } );
-
-            window.google.maps.event.addListener( marker, 'drag', function ( event ) {
-                updatePositionInput(event.latLng );
-            } );
 
             function updatePositionInput( latLng ) {
                 $input_area.val( latLng.lat() + ',' + latLng.lng() );

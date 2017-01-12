@@ -15,7 +15,7 @@ class Dokan_Store_Location extends WP_Widget {
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-store-location', 'description' => __( 'Dokan Seller Store Location', 'dokan' ) );
+        $widget_ops = array( 'classname' => 'dokan-store-location', 'description' => __( 'Dokan Vendor Store Location', 'dokan' ) );
         parent::__construct( 'dokan-store-location', __( 'Dokan: Store Location', 'dokan' ), $widget_ops );
     }
 
@@ -47,7 +47,6 @@ class Dokan_Store_Location extends WP_Widget {
         do_action('dokan-store-widget-before-map' , get_query_var( 'author' ));
         
         dokan_get_template_part( 'widgets/store-map', '', array(
-            'pro' => true,
             'store_info' => $store_info,
             'map_location' => $map_location,
         ) );

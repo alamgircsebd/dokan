@@ -67,7 +67,7 @@
 
     <label class="radio">
         <input type="radio" name="role" value="seller"<?php checked( $role, 'seller' ); ?>>
-        <?php _e( 'I am a seller', 'dokan' ); ?>
+        <?php _e( 'I am a vendor', 'dokan' ); ?>
     </label>
     <?php do_action( 'dokan_registration_form_role', $role ); ?>
 </p>

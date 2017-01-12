@@ -10,7 +10,7 @@ function dokan_product_seller_info( $item_data, $cart_item ) {
     $seller_info = dokan_get_store_info( $cart_item['data']->post->post_author );
 
     $item_data[] = array(
-        'name'  => __( 'Seller', 'dokan' ),
+        'name'  => __( 'Vendor', 'dokan' ),
         'value' => $seller_info['store_name']
     );
 
@@ -29,7 +29,7 @@ add_filter( 'woocommerce_get_item_data', 'dokan_product_seller_info', 10, 2 );
 function dokan_seller_product_tab( $tabs) {
 
     $tabs['seller'] = array(
-        'title'    => __( 'Seller Info', 'dokan' ),
+        'title'    => __( 'Vendor Info', 'dokan' ),
         'priority' => 90,
         'callback' => 'dokan_product_seller_tab'
     );

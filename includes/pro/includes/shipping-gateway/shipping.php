@@ -19,7 +19,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     public function __construct() {
         $this->id                 = 'dokan_product_shipping';
         $this->method_title       = __( 'Dokan Shipping' );
-        $this->method_description = __( 'Enable sellers to set shipping cost per product and per country' );
+        $this->method_description = __( 'Enable vendors to set shipping cost per product and per country' );
 
         $this->enabled      = $this->get_option( 'enabled' );
         $this->title        = $this->get_option( 'title' );
@@ -67,12 +67,12 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
                 'desc_tip'      => true,
             ),
             'tax_status' => array(
-                'title'         => __( 'Tax Status', 'woocommerce' ),
+                'title'         => __( 'Tax Status', 'dokan' ),
                 'type'          => 'select',
                 'default'       => 'taxable',
                 'options'       => array(
-                    'taxable'   => __( 'Taxable', 'woocommerce' ),
-                    'none'      => _x( 'None', 'Tax status', 'woocommerce' )
+                    'taxable'   => __( 'Taxable', 'dokan' ),
+                    'none'      => _x( 'None', 'Tax status', 'dokan' )
                 ),
             ),
 
@@ -149,7 +149,7 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
     /**
      * Check if seller has any shipping enable product in this order
      *
-     * @since  2.4.11 
+     * @since  2.4.11
      *
      * @param  array $products
      *

@@ -20,7 +20,7 @@ $order    = new WC_Order( $order_id );
                     <div class="dokan-panel-heading"><strong><?php printf( __( 'Order', 'dokan' ) . '#%d', $order->id ); ?></strong> &rarr; <?php _e( 'Order Items', 'dokan' ); ?></div>
                     <div class="dokan-panel-body" id="woocommerce-order-items">
 
-                        <?php 
+                        <?php
                         if ( !WeDevs_Dokan::init()->is_pro() ) { ?>
                             <table cellpadding="0" cellspacing="0" class="dokan-table order-items">
                                 <thead>
@@ -154,7 +154,7 @@ $order    = new WC_Order( $order_id );
     </div>
 
     <div class="dokan-w4">
-        <div class="row dokan-clearfix">
+        <div class="dokan-clearfix">
             <div class="" style="width:100%">
                 <div class="dokan-panel dokan-panel-default">
                     <div class="dokan-panel-heading"><strong><?php _e( 'General Details', 'dokan' ); ?></strong></div>
@@ -266,7 +266,7 @@ $order    = new WC_Order( $order_id );
                                         <?php echo wpautop( wptexturize( wp_kses_post( $note->comment_content ) ) ); ?>
                                     </div>
                                     <p class="meta">
-                                        <?php printf( __( 'added %s ago', 'dokan' ), human_time_diff( strtotime( $note->comment_date_gmt ), current_time( 'timestamp', 1 ) ) ); ?> <a href="#" class="delete_note"><?php _e( 'Delete note', 'woocommerce' ); ?></a>
+                                        <?php printf( __( 'added %s ago', 'dokan' ), human_time_diff( strtotime( $note->comment_date_gmt ), current_time( 'timestamp', 1 ) ) ); ?> <a href="#" class="delete_note"><?php _e( 'Delete note', 'dokan' ); ?></a>
                                     </p>
                                 </li>
                                 <?php
@@ -319,16 +319,8 @@ $order    = new WC_Order( $order_id );
                                         </div>
                                         <form id="add-shipping-tracking-form" method="post">
                                             <div class="modal-body">
-                                                <h5><?php _e('Shipping Provider','dokan');?></h5>
-                                                <select name="shipping_provider" id="shipping_provider" class="form-control">
-                                                    <optgroup label="Australia">
-                                                        <option><?php _e('Australia','dokan');?></option>
-                                                        <option><?php _e('Fedex','dokan');?></option>
-                                                    </optgroup>
-                                                    <optgroup label="Canada">
-                                                        <option><?php _e('Canada Post','dokan');?></option>
-                                                    </optgroup>
-                                                </select>
+                                                <h5><?php _e('Shipping Provider Name / URL','dokan');?></h5>
+                                                <input type="text" name="shipping_provider" id="shipping_provider" value="">
                                                 <h5><?php _e('Tracking Number','dokan');?></h5>
                                                 <input type="text" name="tracking_number" id="tracking_number" value="">
                                                 <h5><?php _e('Date Shipped','dokan');?></h5>

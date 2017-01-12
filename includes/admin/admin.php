@@ -193,13 +193,13 @@ class Dokan_Admin_Settings {
                 'admin_access' => array(
                     'name'    => 'admin_access',
                     'label'   => __( 'Admin area access', 'dokan' ),
-                    'desc'    => __( 'Disable sellers and customers from accessing wp-admin area', 'dokan' ),
+                    'desc'    => __( 'Disable vendors and customers from accessing wp-admin area', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
                 'custom_store_url' => array(
                     'name'    => 'custom_store_url',
-                    'label'   => __( 'Seller Store URL', 'dokan' ),
+                    'label'   => __( 'Vendor Store URL', 'dokan' ),
                     'desc'    => sprintf( __( 'Define seller store URL (%s<strong>[this-text]</strong>/[seller-name])', 'dokan' ), site_url( '/' ) ),
                     'default' => 'store',
                     'type'    => 'text',
@@ -207,7 +207,7 @@ class Dokan_Admin_Settings {
                 'seller_enable_terms_and_conditions' => array(
                     'name'    => 'seller_enable_terms_and_conditions',
                     'label'   => __( 'Terms and Conditions', 'dokan' ),
-                    'desc'    => __( 'Enable terms and conditions for seller store', 'dokan' ),
+                    'desc'    => __( 'Enable terms and conditions for vendor store', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'off'
                  ),
@@ -216,29 +216,63 @@ class Dokan_Admin_Settings {
                     'label'   => __( 'Extra Fee Recipient', 'dokan' ),
                     'desc'    => __( 'Extra fees like shipping and tax will go to', 'dokan' ),
                     'type'    => 'select',
-                    'options' => array( 'seller' => __( 'Seller', 'dokan' ), 'admin' => __( 'Admin', 'dokan' ) ),
+                    'options' => array( 'seller' => __( 'Vendor', 'dokan' ), 'admin' => __( 'Admin', 'dokan' ) ),
                     'default' => 'seller'
-                )
+                ),
+                'store_map'                  => array(
+                    'name'    => 'store_map',
+                    'label'   => __( 'Show Map on Store Page', 'dokan' ),
+                    'desc'    => __( 'Enable showing Store location map on store left sidebar', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
+                'gmap_api_key'               => array(
+                    'name'  => 'gmap_api_key',
+                    'label' => __( 'Google Map API key', 'dokan' ),
+                    'desc'  => __( '<a href="https://developers.google.com/maps/documentation/javascript/" target="_blank">API Key</a> is needed to display map on store page', 'dokan' ),
+                    'type'  => 'text',
+                ),
+                'store_seo'                  => array(
+                    'name'    => 'store_seo',
+                    'label'   => __( 'Enable Store SEO', 'dokan' ),
+                    'desc'    => __( 'Vendors can manage their Store page SEO', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
+                'contact_seller'             => array(
+                    'name'    => 'contact_seller',
+                    'label'   => __( 'Show Contact Form on Store Page', 'dokan' ),
+                    'desc'    => __( 'Enable showing contact vendor form on store left sidebar', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'on'
+                ),
+                'enable_theme_store_sidebar' => array(
+                    'name'    => 'enable_theme_store_sidebar',
+                    'label'   => __( 'Enable Store Sidebar From Theme', 'dokan' ),
+                    'desc'    => __( 'Enable showing Store Sidebar From Your Theme.', 'dokan' ),
+                    'type'    => 'checkbox',
+                    'default' => 'off'
+                ),
             ),
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
-                    'label'   => __( 'New Seller Enable Selling', 'dokan' ),
-                    'desc'    => __( 'Make selling status enable for new registered seller', 'dokan' ),
+                    'label'   => __( 'New Vendor Product Upload', 'dokan' ),
+                    'desc'    => __( 'Allow newly registered vendors to upload products', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
                 'seller_percentage' => array(
                     'name'    => 'seller_percentage',
-                    'label'   => __( 'Seller Commission %', 'dokan' ),
-                    'desc'    => __( 'How much amount (%) a seller will get from each order', 'dokan' ),
+                    'label'   => __( 'Vendor Commission %', 'dokan' ),
+                    'desc'    => __( 'How much amount (%) a vendor will get from each order', 'dokan' ),
                     'default' => '90',
                     'type'    => 'text',
                 ),
                 'order_status_change' => array(
                     'name'    => 'order_status_change',
                     'label'   => __( 'Order Status Change', 'dokan' ),
-                    'desc'    => __( 'Seller can change order status', 'dokan' ),
+                    'desc'    => __( 'Vendor can change order status', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
@@ -247,7 +281,7 @@ class Dokan_Admin_Settings {
                 'withdraw_methods' => array(
                     'name'    => 'withdraw_methods',
                     'label'   => __( 'Withdraw Methods', 'dokan' ),
-                    'desc'    => __( 'Withdraw methods for sellers', 'dokan' ),
+                    'desc'    => __( 'Withdraw methods for vendors', 'dokan' ),
                     'type'    => 'multicheck',
                     'default' => array( 'paypal' => 'paypal' ),
                     'options' => dokan_withdraw_get_methods()
@@ -283,7 +317,7 @@ class Dokan_Admin_Settings {
             'dokan_appearance' => array(
                 'setup_wizard_logo_url' => array(
                     'name'    => 'setup_wizard_logo_url',
-                    'label'   => __( 'Seller Setup Wizard Logo', 'dokan' ),
+                    'label'   => __( 'Vendor Setup Wizard Logo', 'dokan' ),
                     'type'    => 'file',
                     'desc'    => __( 'Recommended Logo size ( 270px X 90px ). If no logo is uploaded, site title is shown by default.', 'dokan' ),
                 ),
