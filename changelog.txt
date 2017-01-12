@@ -1,3 +1,17 @@
+v2.5.1 -> January 12, 2017
+---------------------
+- [new]   Front-End product template new UI
+- [tweak] All SELLER text is changed to VENDOR
+- [tweak] Updated Seller Earning Statement Report View
+- [tweak] Fixed variable product data saving issues
+- [tweak] Changed Order Tracking options from Select to Text box for sellers
+- [tweak] Improved Responsiveness on seller dashboard pages
+- [tweak] Product commission option is moved to advance tab from general
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Improved Seller Setup wizard for better UX
+- [fix]   Fixed showing error If Google MAP API is not given
+- [fix]   Fixed Extra fee receiver not working issue
+
 v2.5 -> October 18, 2016
 ---------------------
 - [new] Setup Wizard on Admin panel
