@@ -257,8 +257,8 @@ class Dokan_Admin_Settings {
             'dokan_selling' => array(
                 'new_seller_enable_selling' => array(
                     'name'    => 'new_seller_enable_selling',
-                    'label'   => __( 'New Vendor Enable Selling', 'dokan' ),
-                    'desc'    => __( 'Make selling status enable for new registered vendor', 'dokan' ),
+                    'label'   => __( 'New Vendor Product Upload', 'dokan' ),
+                    'desc'    => __( 'Allow newly registered vendors to upload products', 'dokan' ),
                     'type'    => 'checkbox',
                     'default' => 'on'
                 ),
