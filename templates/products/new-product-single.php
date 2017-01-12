@@ -118,7 +118,7 @@ if ( ! $from_shortcode ) {
 
                 <?php if ( $post->post_status == 'publish' ) { ?>
                     <span class="dokan-right">
-                        <a class="view-product dokan-btn dokan-btn-sm" href="<?php echo get_permalink( $post->ID ); ?>" target="_blank"><?php _e( 'View Product', 'dokan' ); ?></a>
+                        <a class="dokan-btn dokan-btn-theme dokan-btn-sm" href="<?php echo get_permalink( $post->ID ); ?>" target="_blank"><?php _e( 'View Product', 'dokan' ); ?></a>
                     </span>
                 <?php } ?>
 
