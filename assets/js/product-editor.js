@@ -96,6 +96,9 @@
             $( '.dokan-product-attribute-wrapper ul.dokan-attribute-option-list' ).on( 'click', 'button.dokan-add-new-attribute', this.attribute.addNewExtraAttr );
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.dokan-product-remove-attribute', this.attribute.removeAttribute );
             $( '.product-edit-container .dokan-product-attribute-wrapper' ).on( 'click', 'a.dokan-save-attribute', this.attribute.saveAttribute );
+
+            $( 'body' ).on( 'click', '.product-container-footer input[type="submit"]', this.createNewProduct );
+
         },
 
         checkProductPostboxToggle: function() {
@@ -176,7 +179,6 @@
                         // featured image
                         $('body, .product-edit-container').on('click', 'a.dokan-feat-image-btn', Dokan_Editor.featuredImage.addImage );
                         $('body, .product-edit-container').on('click', 'a.dokan-remove-feat-image', Dokan_Editor.featuredImage.removeImage );
-                        $( 'body' ).on( 'click', '.product-container-footer input[type="submit"]', Dokan_Editor.createNewProduct );
                     }
                 }
             });
