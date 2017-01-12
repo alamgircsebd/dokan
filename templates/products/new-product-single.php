@@ -550,7 +550,7 @@ if ( ! $from_shortcode ) {
                         <?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
                             <div class="dokan-discount-options dokan-edit-row dokan-clearfix">
                                 <div class="dokan-section-heading" data-togglehandler="dokan_discount_options">
-                                    <h2><?php _e( 'Discount Options', 'dokan' ); ?></h2>
+                                    <h2><i class="fa fa-gift"></i> <?php _e( 'Discount Options', 'dokan' ); ?></h2>
                                     <p><?php _e( 'Set your discount for this product') ?></p>
                                     <a href="#" class="dokan-section-toggle">
                                         <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
@@ -567,10 +567,7 @@ if ( ! $from_shortcode ) {
                                     <div class="show_if_needs_lot_discount <?php echo ( $_is_lot_discount=='yes') ? '' : 'dokan-hide'; ?>">
                                         <div class="content-half-part">
                                             <label class="dokan-form-label" for="_lot_discount_quantity"><?php _e('Minimum quantity', 'dokan');?></label>
-                                            <div class="dokan-input-group">
-                                                <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                                <?php dokan_post_input_box( $post_id, '_lot_discount_quantity', array( 'placeholder' => __( '0', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
-                                            </div>
+                                            <?php dokan_post_input_box( $post_id, '_lot_discount_quantity', array( 'class'=>'dokan-form-control', 'placeholder' => __( '0', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
                                         </div>
                                         <div class="dokan-form-group content-half-part">
                                             <label class="dokan-form-label" for="_lot_discount_amount"><?php _e('Discount %', 'dokan');?></label>
