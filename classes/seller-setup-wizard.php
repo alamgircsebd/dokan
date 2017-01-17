@@ -17,7 +17,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
      */
     public function __construct() {
         add_filter( 'woocommerce_registration_redirect', array( $this, 'filter_woocommerce_registration_redirect' ), 10, 1 );
-        add_action( 'init', array( $this, 'setup_wizard' ) );
+        add_action( 'init', array( $this, 'setup_wizard' ), 99 );
     }
 
     // define the woocommerce_registration_redirect callback
