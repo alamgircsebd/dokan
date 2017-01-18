@@ -42,6 +42,12 @@ function dokan_save_product( $args ) {
             return new WP_Error( 'no-category', __( 'Please select AT LEAST ONE category', 'dokan' ) );
         }
     }
+    
+    $error = apply_filters( 'dokan_new_product_popup_args' , '' , $data );
+    
+    if ( is_wp_error( $error ) ) {
+        return $error;
+    }
 
     $post_status = ! empty( $data['post_status'] ) ? $data['post_status'] : dokan_get_new_post_status();
 
