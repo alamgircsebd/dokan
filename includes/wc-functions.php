@@ -1892,8 +1892,16 @@ function dokan_get_readable_seller_rating( $seller_id ) {
             </span>
         </span>
 
-        <span class="text"><a href="<?php echo dokan_get_review_url( $seller_id ); ?>"><?php printf( $long_text, $rating['rating'], $rating['count'] ); ?></a></span>
+        <?php
+            $review_text = sprintf( $long_text, $rating['rating'], $rating['count'] );
 
+            if( WeDevs_Dokan::init()->is_pro() ){
+                $review_text = sprintf( '<a href="%s">%s</a>', esc_url( dokan_get_review_url( $seller_id ) ), $review_text );
+            }
+        ?>
+        <span class="text">
+            <?php echo $review_text; ?>
+        </span>
     <?php
 }
 
