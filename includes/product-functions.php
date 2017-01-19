@@ -42,9 +42,9 @@ function dokan_save_product( $args ) {
             return new WP_Error( 'no-category', __( 'Please select AT LEAST ONE category', 'dokan' ) );
         }
     }
-    
+
     $error = apply_filters( 'dokan_new_product_popup_args' , '' , $data );
-    
+
     if ( is_wp_error( $error ) ) {
         return $error;
     }
@@ -183,8 +183,7 @@ function dokan_product_output_variations() {
 
             <div id="dokan-info-message" class="dokan-alert dokan-alert-info">
                 <p>
-                    <?php _e( 'Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> tab.', 'dokan' ); ?>
-                    <a class="button-primary" href="<?php echo esc_url( apply_filters( 'woocommerce_docs_url', 'https://docs.woocommerce.com/document/variable-product/', 'product-variations' ) ); ?>" target="_blank"><?php _e( 'Learn more', 'dokan' ); ?></a>
+                    <?php _e( 'Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> section', 'dokan' ); ?>
                 </p>
             </div>
 
