@@ -481,8 +481,9 @@ class Dokan_Pro_Coupons {
         $post_title  = isset( $post->post_title ) ? $post->post_title : '';
         $description = isset( $post->post_content ) ? $post->post_content : '';
         
-        if ( !dokan_is_valid_owner( $post_id, get_current_user_id() ) ) {
+        if ( !empty( $post_id ) && !dokan_is_valid_owner( $post_id, get_current_user_id() ) ) {
             wp_redirect( dokan_get_navigation_url( 'coupons' ) );
+            exit();
         }
 
         $discount_type = isset( $discount_type ) ? $discount_type : '';
