@@ -1881,7 +1881,7 @@ function dokan_get_readable_seller_rating( $seller_id ) {
         return;
     }
 
-    $long_text = _n( __( '%s rating from %d review', 'dokan' ), __( '%s rating from %d reviews', 'dokan' ), $rating['count'], 'dokan' );
+    $long_text = _n( '%s rating from %d review', '%s rating from %d reviews', $rating['count'], 'dokan' );
     $text = sprintf( __( 'Rated %s out of %d', 'dokan' ), $rating['rating'], number_format( 5 ) );
     $width = ( $rating['rating']/5 ) * 100;
     ?>
