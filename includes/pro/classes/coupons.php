@@ -95,7 +95,8 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     public function dokan_coupon_header_render() {
-        dokan_get_template_part( 'coupon/header', '', array( 'pro' => true, 'is_edit_page' => $this->is_edit_page ) );
+        $is_edit = ( ! empty( $_GET['post'] ) && $this->is_edit_page ) ? true : false;
+        dokan_get_template_part( 'coupon/header', '', array( 'pro' => true, 'is_edit_page' => $this->is_edit_page, 'is_edit' => $is_edit ) );
     }
 
     /**
@@ -458,7 +459,7 @@ class Dokan_Pro_Coupons {
 //            if ( !wp_verify_nonce( $_GET['coupon_nonce_url'], '_coupon_nonce' ) ) {
 //                wp_die( __( 'Are you cheating?', 'dokan' ) );
 //            }
-           
+
             $post              = get_post( $_GET['post'] );
             $button_name       = __( 'Update Coupon', 'dokan' );
 
@@ -480,7 +481,7 @@ class Dokan_Pro_Coupons {
         $post_id     = isset( $post->ID ) ? $post->ID : '';
         $post_title  = isset( $post->post_title ) ? $post->post_title : '';
         $description = isset( $post->post_content ) ? $post->post_content : '';
-        
+
         if ( !empty( $post_id ) && !dokan_is_valid_owner( $post_id, get_current_user_id() ) ) {
             wp_redirect( dokan_get_navigation_url( 'coupons' ) );
             exit();

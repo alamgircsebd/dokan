@@ -66,26 +66,6 @@
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
-        <div class="dokan-w5 dokan-text-left">
-            <select id="product-dropdown" name="product_drop_down[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
-                <?php
-                foreach ( $all_products as $key => $object ) {
-                    if ( in_array( $object->ID, $products_id ) ) {
-                        $select = 'selected';
-                    } else {
-                        $select = '';
-                    }
-                    ?>
-                    <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></option>
-                    <?php
-                }
-                ?>
-            </select>
-        </div>
-    </div>
-
-    <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Exclude Sale Items', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
             <div class="checkbox">
@@ -109,9 +89,29 @@
     </div>
 
     <div class="dokan-form-group">
+        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
+        <div class="dokan-w5 dokan-text-left">
+            <select name="product_drop_down[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
+                <?php
+                foreach ( $all_products as $key => $object ) {
+                    if ( in_array( $object->ID, $products_id ) ) {
+                        $select = 'selected';
+                    } else {
+                        $select = '';
+                    }
+                    ?>
+                    <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></option>
+                    <?php
+                }
+                ?>
+            </select>
+        </div>
+    </div>
+
+    <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Exclude products', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <select id="coupon_exclude_categories" name="exclude_product_ids[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
+            <select name="exclude_product_ids[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $exclude_products ) ) {
@@ -146,13 +146,4 @@
         </div>
     </div>
 
-    </form>
-
-    <script type="text/javascript">
-
-    jQuery(function($){
-        $("#product-dropdown").chosen({width: "95%"});
-        $("#coupon_exclude_categories").chosen({width: "95%"});
-    });
-
-    </script>
+</form>
