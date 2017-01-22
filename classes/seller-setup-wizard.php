@@ -203,14 +203,14 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
      * Introduction step.
      */
     public function dokan_setup_introduction() {
-        $custom_store_url = dokan_get_option( 'custom_store_url', 'dokan_general', 'store' );
+        $dashboard_url = dokan_get_navigation_url();
         ?>
         <h1><?php _e( 'Welcome to the Marketplace!', 'dokan' ); ?></h1>
         <p><?php _e( 'Thank you for choosing The Marketplace to power your online store! This quick setup wizard will help you configure the basic settings. <strong>It’s completely optional and shouldn’t take longer than two minutes.</strong>', 'dokan' ); ?></p>
         <p><?php _e( 'No time right now? If you don’t want to go through the wizard, you can skip and return to the Store!', 'dokan' ); ?></p>
         <p class="wc-setup-actions step">
             <a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button-primary button button-large button-next"><?php _e( 'Let\'s Go!', 'dokan' ); ?></a>
-            <a href="<?php echo esc_url( site_url( $custom_store_url . '/' . $this->store_info['store_name'] ) ); ?>" class="button button-large"><?php _e( 'Not right now', 'dokan' ); ?></a>
+            <a href="<?php echo esc_url( $dashboard_url ); ?>" class="button button-large"><?php _e( 'Not right now', 'dokan' ); ?></a>
         </p>
         <?php
     }
@@ -397,9 +397,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
      * Final step.
      */
     public function dokan_setup_ready() {
-        $options   = get_option( 'dokan_pages', [] );
-        $page_id   = intval( $options['dashboard'] );
-        $page      = get_post( $page_id );
+        $dashboard_url = dokan_get_navigation_url();
         ?>
         <div class="last-step">
             <h1><?php _e( 'Your Store is Ready!', 'dokan' ); ?></h1>
@@ -407,7 +405,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
             <div class="wc-setup-next-steps">
                 <div class="wc-setup-next-steps-first final-button">
                     <ul>
-                        <li class="setup-product"><a class="button button-primary button-large" href="<?php echo esc_url( site_url( $page->post_name ) ); ?>"><?php _e( 'Go to your Store Dashboard!', 'dokan' ); ?></a></li>
+                        <li class="setup-product"><a class="button button-primary button-large" href="<?php echo esc_url( $dashboard_url ); ?>"><?php _e( 'Go to your Store Dashboard!', 'dokan' ); ?></a></li>
                     </ul>
                 </div>
             </div>
