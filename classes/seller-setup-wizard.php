@@ -155,6 +155,24 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
                     background: #f39132 !important;
                     border-color: #f39132 !important;
                 }
+                .last-step{
+                    text-align: center;
+                }
+                .last-step .wc-setup-next-steps-first.final-button ul{
+                    margin: 0px;
+                    padding: 0px;
+                    max-width: 250px;
+                    margin: 0 auto;
+                }
+                .last-step .wc-setup-next-steps-first.final-button{
+                    width: auto;
+                    float: none;
+                }
+                .wc-setup .wc-setup-actions .button{
+                    margin-bottom: 10px;
+                    margin-left: .5em;
+                    margin-right: 0px; 
+                }
             </style>
         </head>
         <body class="wc-setup wp-core-ui">
@@ -383,14 +401,15 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         $page_id   = intval( $options['dashboard'] );
         $page      = get_post( $page_id );
         ?>
-        <h1><?php _e( 'Your Store is Ready!', 'dokan' ); ?></h1>
+        <div class="last-step">
+            <h1><?php _e( 'Your Store is Ready!', 'dokan' ); ?></h1>
 
-        <div class="wc-setup-next-steps">
-            <div class="wc-setup-next-steps-first">
-                <h2><?php _e( 'Next Steps', 'dokan' ); ?></h2>
-                <ul>
-                    <li class="setup-product"><a class="button button-primary button-large" href="<?php echo esc_url( site_url( $page->post_name ) ); ?>"><?php _e( 'Go to your Store Dashboard!', 'dokan' ); ?></a></li>
-                </ul>
+            <div class="wc-setup-next-steps">
+                <div class="wc-setup-next-steps-first final-button">
+                    <ul>
+                        <li class="setup-product"><a class="button button-primary button-large" href="<?php echo esc_url( site_url( $page->post_name ) ); ?>"><?php _e( 'Go to your Store Dashboard!', 'dokan' ); ?></a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         <?php
