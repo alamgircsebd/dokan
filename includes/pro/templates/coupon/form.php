@@ -89,9 +89,9 @@
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
+        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <select name="product_drop_down[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
+            <select name="product_drop_down[]" class="dokan-select2 dokan-coupon-product-select dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $products_id ) ) {
@@ -105,6 +105,8 @@
                 }
                 ?>
             </select>
+            <a href="#" class="dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan' ) ?></a>
+            <a href="#" class="dokan-hide dokan-coupon-product-clear-all"><?php _e( 'Clear', 'dokan' ) ?></a>
         </div>
     </div>
 
@@ -147,3 +149,41 @@
     </div>
 
 </form>
+
+<script>
+    ;( function($) {
+        $( '.dokan-coupon-product-select-all' ).click( function(e) {
+            e.preventDefault();
+            var self = $(this),
+            select = self.closest('div').find('select.dokan-coupon-product-select');
+            select.find('> option').prop( 'selected', 'selected' );
+            select.trigger('change');
+            self.addClass('dokan-hide');
+            $('.dokan-coupon-product-clear-all').removeClass('dokan-hide');
+        });
+
+        $( '.dokan-coupon-product-clear-all' ).click( function(e) {
+            e.preventDefault();
+            var self = $(this),
+            select = self.closest('div').find('select.dokan-coupon-product-select');
+            select.val("");
+            select.trigger('change');
+            self.addClass('dokan-hide');
+            $('.dokan-coupon-product-select-all').removeClass('dokan-hide');
+        });
+
+        $('select.dokan-coupon-product-select').on('change', function(e) {
+            e.preventDefault();
+            var self = $(this);
+            if( self.val() == null ) {
+                $('.dokan-coupon-product-select-all').removeClass('dokan-hide');
+                $('.dokan-coupon-product-clear-all').addClass('dokan-hide');
+            } else {
+                $('.dokan-coupon-product-select-all').addClass('dokan-hide');
+                $('.dokan-coupon-product-clear-all').removeClass('dokan-hide');
+            }
+        });
+
+        $('select.dokan-coupon-product-select').trigger('change');
+    })(jQuery);
+</script>
