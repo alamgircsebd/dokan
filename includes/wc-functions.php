@@ -1953,10 +1953,10 @@ function dokan_user_update_to_seller( $user, $data ) {
 
 
     $publishing = dokan_get_option( 'product_status', 'dokan_selling' );
-    $percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );
+    //$percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );
 
     update_user_meta( $user_id, 'dokan_publishing', $publishing );
-    update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
+    //update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
 
     Dokan_Email::init()->new_seller_registered_mail( $user_id );
 }
