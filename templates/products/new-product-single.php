@@ -177,7 +177,7 @@ if ( ! $from_shortcode ) {
 
                                 <?php if ( WeDevs_Dokan::init()->is_pro() ): ?>
                                     <div class="dokan-form-group">
-                                        <label for="product_type" class="form-label"><?php _e( 'Product Type', 'dokan' ); ?></label>
+                                        <label for="product_type" class="form-label"><?php _e( 'Product Type', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Choose Variable if your product has multiple attributes - like sizes, colors, quality etc', 'dokan' ); ?>"></i></label>
                                         <select name="product_type" class="dokan-form-control" id="product_type">
                                             <option value="simple" <?php selected( $product_type, 'simple' ) ?>><?php _e( 'Simple', 'dokan' ) ?></option>
                                             <option value="variable" <?php selected( $product_type, 'variable' ) ?>><?php _e( 'Variable', 'dokan' ) ?></option>
@@ -190,12 +190,12 @@ if ( ! $from_shortcode ) {
                                 <div class="dokan-form-group dokan-product-type-container show_if_simple">
                                     <div class="content-half-part downloadable-checkbox">
                                         <label>
-                                            <input type="checkbox" <?php checked( $is_downloadable, true ); ?> class="_is_downloadable" name="_downloadable" id="_downloadable"> <?php _e( 'Downloadable', 'dokan' ); ?>
+                                            <input type="checkbox" <?php checked( $is_downloadable, true ); ?> class="_is_downloadable" name="_downloadable" id="_downloadable"> <?php _e( 'Downloadable', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Downloadable products give access to a file upon purchase.', 'dokan' ); ?>"></i>
                                         </label>
                                     </div>
                                     <div class="content-half-part virtual-checkbox">
                                         <label>
-                                            <input type="checkbox" <?php checked( $is_virtual, true ); ?> class="_is_virtual" name="_virtual" id="_virtual"> <?php _e( 'Virtual', 'dokan' ); ?>
+                                            <input type="checkbox" <?php checked( $is_virtual, true ); ?> class="_is_virtual" name="_virtual" id="_virtual"> <?php _e( 'Virtual', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Virtual products are intangible and aren\'t shipped.', 'dokan' ); ?>"></i>
                                         </label>
                                     </div>
                                     <div class="dokan-clearfix"></div>

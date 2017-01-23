@@ -419,7 +419,8 @@ final class WeDevs_Dokan {
         }
 
         // load only in dokan dashboard and edit page
-        if ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+        if ( ( is_page( $page_id ) || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) )
+            || apply_filters( 'dokan_forced_load_scripts', false ) ) {
 
             if ( DOKAN_LOAD_STYLE ) {
                 wp_enqueue_style( 'jquery-ui' );
