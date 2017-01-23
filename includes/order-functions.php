@@ -10,16 +10,12 @@ function dokan_get_seller_amount_from_order( $order_id, $get_array = false ) {
 
     $order          = new WC_Order( $order_id );
     $seller_id      = dokan_get_seller_id_by_order( $order_id );
-    $percentage     = dokan_get_seller_percentage( $seller_id );
-
+    $net_amount     = dokan_get_seller_earnings_by_order( $order, $seller_id );
+    
     $order_total    = $order->get_total();
     $order_shipping = $order->get_total_shipping();
     $order_tax      = $order->get_total_tax();
     $extra_cost     = $order_shipping + $order_tax;
-    $order_cost     = $order_total - $extra_cost;
-    $order_status   = $order->post_status;
-
-    $net_amount     = ( ( $order_cost * $percentage ) / 100 );
 
     $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
 
