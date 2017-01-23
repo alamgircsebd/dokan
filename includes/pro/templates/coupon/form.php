@@ -105,8 +105,8 @@
                 }
                 ?>
             </select>
-            <a href="#" class="dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan' ) ?></a>
-            <a href="#" class="dokan-hide dokan-coupon-product-clear-all"><?php _e( 'Clear', 'dokan' ) ?></a>
+            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan' ) ?></a>
+            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-clear-all"><?php _e( 'Clear', 'dokan' ) ?></a>
         </div>
     </div>
 
@@ -158,8 +158,6 @@
             select = self.closest('div').find('select.dokan-coupon-product-select');
             select.find('> option').prop( 'selected', 'selected' );
             select.trigger('change');
-            self.addClass('dokan-hide');
-            $('.dokan-coupon-product-clear-all').removeClass('dokan-hide');
         });
 
         $( '.dokan-coupon-product-clear-all' ).click( function(e) {
@@ -168,22 +166,6 @@
             select = self.closest('div').find('select.dokan-coupon-product-select');
             select.val("");
             select.trigger('change');
-            self.addClass('dokan-hide');
-            $('.dokan-coupon-product-select-all').removeClass('dokan-hide');
         });
-
-        $('select.dokan-coupon-product-select').on('change', function(e) {
-            e.preventDefault();
-            var self = $(this);
-            if( self.val() == null ) {
-                $('.dokan-coupon-product-select-all').removeClass('dokan-hide');
-                $('.dokan-coupon-product-clear-all').addClass('dokan-hide');
-            } else {
-                $('.dokan-coupon-product-select-all').addClass('dokan-hide');
-                $('.dokan-coupon-product-clear-all').removeClass('dokan-hide');
-            }
-        });
-
-        $('select.dokan-coupon-product-select').trigger('change');
     })(jQuery);
 </script>
