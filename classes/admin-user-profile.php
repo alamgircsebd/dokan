@@ -246,10 +246,10 @@ class Dokan_Admin_User_Profile {
                         <label for="dokan_enable_selling">
                             <input type="hidden" name="dokan_enable_selling" value="no">
                             <input name="dokan_enable_selling" type="checkbox" id="dokan_enable_selling" value="yes" <?php checked( $selling, 'yes' ); ?> />
-                            <?php _e( 'Disable Adding Products', 'dokan' ); ?>
+                            <?php _e( 'Enable Adding Products', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'Disable or enable product adding capability', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Enable or disable product adding capability', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
