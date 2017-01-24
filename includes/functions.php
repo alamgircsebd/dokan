@@ -350,6 +350,32 @@ function dokan_generate_sync_table() {
     } // if
 }
 
+if ( !function_exists( 'dokan_get_seller_earnings_by_order' ) ) {
+    
+ /**
+ * Get Seller's net Earnings from a order
+ * 
+ * @since 2.5.2
+ * 
+ * @param WC_ORDER $order
+ * 
+ * @param int $seller_id
+ * 
+ * @return int $earned
+ */
+    function dokan_get_seller_earnings_by_order( $order, $seller_id ) {
+
+        $products = $order->get_items();
+        $earned   = 0;
+        
+        foreach ( $products as $product ) {
+            $comission = dokan_get_seller_percentage( $seller_id, $product['product_id'] );
+            $earned    = $earned + ( ( $product['line_total'] * $comission ) / 100 );
+        }
+        
+        return $earned;
+    }
+}
 if ( !function_exists( 'dokan_get_seller_percentage' ) ) :
 
 /**
@@ -359,23 +385,24 @@ if ( !function_exists( 'dokan_get_seller_percentage' ) ) :
  * @return int
  */
 function dokan_get_seller_percentage( $seller_id = 0, $product_id = 0 ) {
+    
+    //return product wise percentage
     if ( $product_id ) {
         $_per_product_commission = get_post_meta( $product_id, '_per_product_commission', true );
-        if ( $_per_product_commission ) {
+        if ( $_per_product_commission != '' ) {
             return (float) $_per_product_commission;
         }
     }
-    $global_percentage = (float) dokan_get_option( 'seller_percentage', 'dokan_selling', '90' );
-
-    if ( ! $seller_id ) {
-        return $global_percentage;
+    
+    //return seller wise percentage
+    if ( $seller_id ) {
+        $seller_percentage = get_user_meta( $seller_id, 'dokan_seller_percentage', true );
+        if ( $seller_percentage != '' ) {
+            return (float) $seller_percentage;
+        }
     }
 
-    $seller_percentage = (float) get_user_meta( $seller_id, 'dokan_seller_percentage', true );
-    if ( $seller_percentage ) {
-        return $seller_percentage;
-    }
-
+    $global_percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' , 10 );
     return $global_percentage;
 }
 

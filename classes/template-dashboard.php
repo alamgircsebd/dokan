@@ -31,7 +31,7 @@ class Dokan_Template_Dashboard {
         $this->seller_balance = $this->get_seller_balance();
 
         add_action( 'dokan_dashboard_content_inside_before', array( $this, 'show_seller_dashboard_notice' ), 10 );
-        add_action( 'dokan_dashboard_before_widgets', array( $this, 'get_big_counter_widgets' ), 10 );
+        add_action( 'dokan_dashboard_left_widgets', array( $this, 'get_big_counter_widgets' ), 10 );
         add_action( 'dokan_dashboard_left_widgets', array( $this, 'get_orders_widgets' ), 15 );
         add_action( 'dokan_dashboard_left_widgets', array( $this, 'get_products_widgets' ), 20 );
         add_action( 'dokan_dashboard_right_widgets', array( $this, 'get_sales_report_chart_widget' ), 10 );

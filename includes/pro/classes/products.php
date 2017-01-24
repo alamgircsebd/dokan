@@ -200,8 +200,8 @@ class Dokan_Pro_Products {
                 'id'           => '_per_product_commission',
                 'label'        => __( 'Vendor Commission (%)', 'dokan' ),
                 'wrapper_class'=> 'per-product-commission show_if_simple show_if_variable',
-                'description'  => __( 'Enter commission (%) vendor will get from this product', 'dokan' ),
-                'data_type' => 'price'
+                'description'  => __( 'Override the default commission (%) vendor will get from this product', 'dokan' ),
+                'data_type'    => 'price'
                 )
             );
     }
@@ -217,8 +217,9 @@ class Dokan_Pro_Products {
      */
     function save_per_product_commission_options( $post_id ) {
 
-        if ( isset( $_POST['_per_product_commission'] ) && ! empty( $_POST['_per_product_commission'] ) ) {
-            update_post_meta( $post_id, '_per_product_commission', (float) $_POST['_per_product_commission'] );
+        if ( isset( $_POST['_per_product_commission'] ) ) {
+            $value = empty( $_POST['_per_product_commission'] ) ? '' : (float) $_POST['_per_product_commission'];
+            update_post_meta( $post_id, '_per_product_commission', $value );
         }
     }
 }

@@ -189,24 +189,25 @@ div.media-sidebar a.edit-attachment {
   padding-right: 5px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter {
-  padding: 15px 0;
   text-align: center;
 }
+.dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter ul {
+  margin: 0px;
+}
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter li {
-  width: 20%;
-  display: inline-block;
-  margin: 0px 10px 0px 0px;
-  padding: 0px;
+  width: 100%;
+  display: block;
+  margin: 0 auto;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter .title {
   font-size: 15px;
-  border-bottom: 1px solid #EBEBEB;
-  padding-bottom: 10px;
-  padding-top: 6px;
-  margin-bottom: 25px;
+  padding-top: 10px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.big-counter .count {
   font-size: 18px;
+  border-bottom: 1px solid #EBEBEB;
+  font-weight: 600;
+  padding-bottom: 10px;
 }
 .dokan-dashboard .dokan-dashboard-content article.dashboard-content-area .dashboard-widget.orders {
   overflow: hidden;
@@ -3955,7 +3956,6 @@ button.dokan-close {
   background-color: #000000;
   border-radius: 4px;
   font-weight: normal !important;
-  z-index: 99999 !important;
 }
 .tooltip-arrow {
   position: absolute;

@@ -246,10 +246,10 @@ class Dokan_Admin_User_Profile {
                         <label for="dokan_enable_selling">
                             <input type="hidden" name="dokan_enable_selling" value="no">
                             <input name="dokan_enable_selling" type="checkbox" id="dokan_enable_selling" value="yes" <?php checked( $selling, 'yes' ); ?> />
-                            <?php _e( 'Disable Adding Products', 'dokan' ); ?>
+                            <?php _e( 'Enable Adding Products', 'dokan' ); ?>
                         </label>
 
-                        <p class="description"><?php _e( 'Disable or enable product adding capability', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'Enable or disable product adding capability', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
@@ -271,7 +271,7 @@ class Dokan_Admin_User_Profile {
                     <td>
                         <input type="text" class="small-text" name="dokan_seller_percentage" value="<?php echo esc_attr( $seller_percentage ); ?>">
 
-                        <p class="description"><?php _e( 'Enter commission % vendor will get from each order', 'dokan' ) ?></p>
+                        <p class="description"><?php _e( 'It will overrride the default % vendor gets from each order', 'dokan' ) ?></p>
                     </td>
                 </tr>
 
@@ -406,7 +406,7 @@ class Dokan_Admin_User_Profile {
 
         $selling        = sanitize_text_field( $_POST['dokan_enable_selling'] );
         $publishing     = sanitize_text_field( $_POST['dokan_publish'] );
-        $percentage     = floatval( $_POST['dokan_seller_percentage'] );
+        $percentage     = empty( $_POST['dokan_seller_percentage'] ) ? '' : floatval( $_POST['dokan_seller_percentage'] );
         $feature_seller = sanitize_text_field( $_POST['dokan_feature'] );
         $store_settings = dokan_get_store_info( $user_id );
 
