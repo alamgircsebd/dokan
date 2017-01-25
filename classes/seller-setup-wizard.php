@@ -26,7 +26,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
         $user = wp_get_current_user();
 
         if ( in_array( 'seller', $user->roles ) ) {
-            $url = site_url( '?page=dokan-seller-setup' );
+            $url = apply_filters( 'dokan_seller_setup_wizard_url', site_url( '?page=dokan-seller-setup' ) );
         }
         return $url;
     }
@@ -171,7 +171,7 @@ class Dokan_Seller_Setup_Wizard extends Dokan_Setup_Wizard {
                 .wc-setup .wc-setup-actions .button{
                     margin-bottom: 10px;
                     margin-left: .5em;
-                    margin-right: 0px; 
+                    margin-right: 0px;
                 }
             </style>
         </head>
