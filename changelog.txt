@@ -2,12 +2,13 @@ v2.5.2 -> January 25, 2017
 ---------------------
 - [new]   Added filter 'dokan_new_product_popup_args' to enable custom validation on new product add
 - [new]   Enabled vendors to select all products while creating coupon
+- [fix]   On plugin activation auto flush rewrite rules
 - [fix]   Seller Setup wizard not translating properly in some cases
 - [fix]   Shipping tracking modal not showing while bootstrap loaded is fixed
 - [fix]   Vendor statement enhanced for calculating per product commission
 - [tweak] Seller setup wizard enhanced for responsiveness
 - [tweak] Seller dashboard widgets enhanced for better responsiveness
-- [tweak] Seller dashboard widgets enhanced for better responsiveness
+- [tweak] Add new product pop up enhanced for better responsiveness
 - [tweak] Several other optimizations to codebase for better and stable performance
 
 v2.5.1 -> January 12, 2017
