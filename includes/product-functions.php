@@ -43,6 +43,12 @@ function dokan_save_product( $args ) {
         }
     }
 
+    $error = apply_filters( 'dokan_new_product_popup_args' , '' , $data );
+
+    if ( is_wp_error( $error ) ) {
+        return $error;
+    }
+
     $post_status = ! empty( $data['post_status'] ) ? $data['post_status'] : dokan_get_new_post_status();
 
     $post_data = apply_filters( 'dokan_insert_product_post_data', array(
@@ -177,8 +183,7 @@ function dokan_product_output_variations() {
 
             <div id="dokan-info-message" class="dokan-alert dokan-alert-info">
                 <p>
-                    <?php _e( 'Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> tab.', 'dokan' ); ?>
-                    <a class="button-primary" href="<?php echo esc_url( apply_filters( 'woocommerce_docs_url', 'https://docs.woocommerce.com/document/variable-product/', 'product-variations' ) ); ?>" target="_blank"><?php _e( 'Learn more', 'dokan' ); ?></a>
+                    <?php _e( 'Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> section', 'dokan' ); ?>
                 </p>
             </div>
 

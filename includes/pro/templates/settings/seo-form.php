@@ -14,7 +14,7 @@
 
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-title"><?php _e( 'SEO Title :', 'dokan' ); ?>
-            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'SEO Title is shown as the title of your store page', 'dokan' ); ?>">
+            <span class="dokan-tooltips-help tips" title="" data-placement="bottom" data-original-title="<?php _e( 'SEO Title is shown as the title of your store page', 'dokan' ); ?>">
                 <i class="fa fa-question-circle"></i>
             </span>
         </label>
@@ -25,7 +25,7 @@
 
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-desc"><?php _e( 'Meta Description :', 'dokan' ); ?>
-            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'The meta description is often shown as the black text under the title in a search result. For this to work it has to contain the keyword that was searched for and should be less than 156 chars.', 'dokan' ); ?>">
+            <span class="dokan-tooltips-help tips" title="" data-placement="bottom" data-original-title="<?php _e( 'The meta description is often shown as the black text under the title in a search result. For this to work it has to contain the keyword that was searched for and should be less than 156 chars.', 'dokan' ); ?>">
                 <i class="fa fa-question-circle"></i>
             </span>
         </label>
@@ -36,7 +36,7 @@
 
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="dokan-seo-meta-keywords"><?php _e( 'Meta Keywords :', 'dokan' ); ?>
-            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Insert some comma separated keywords for better ranking of your store page.', 'dokan' ); ?>">
+            <span class="dokan-tooltips-help tips" title="" data-placement="bottom" data-original-title="<?php _e( 'Insert some comma separated keywords for better ranking of your store page.', 'dokan' ); ?>">
                 <i class="fa fa-question-circle"></i>
             </span>
         </label>

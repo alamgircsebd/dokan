@@ -1881,7 +1881,7 @@ function dokan_get_readable_seller_rating( $seller_id ) {
         return;
     }
 
-    $long_text = _n( __( '%s rating from %d review', 'dokan' ), __( '%s rating from %d reviews', 'dokan' ), $rating['count'], 'dokan' );
+    $long_text = _n( '%s rating from %d review', '%s rating from %d reviews', $rating['count'], 'dokan' );
     $text = sprintf( __( 'Rated %s out of %d', 'dokan' ), $rating['rating'], number_format( 5 ) );
     $width = ( $rating['rating']/5 ) * 100;
     ?>
@@ -1892,8 +1892,16 @@ function dokan_get_readable_seller_rating( $seller_id ) {
             </span>
         </span>
 
-        <span class="text"><a href="<?php echo dokan_get_review_url( $seller_id ); ?>"><?php printf( $long_text, $rating['rating'], $rating['count'] ); ?></a></span>
+        <?php
+            $review_text = sprintf( $long_text, $rating['rating'], $rating['count'] );
 
+            if( WeDevs_Dokan::init()->is_pro() ){
+                $review_text = sprintf( '<a href="%s">%s</a>', esc_url( dokan_get_review_url( $seller_id ) ), $review_text );
+            }
+        ?>
+        <span class="text">
+            <?php echo $review_text; ?>
+        </span>
     <?php
 }
 
@@ -1945,10 +1953,10 @@ function dokan_user_update_to_seller( $user, $data ) {
 
 
     $publishing = dokan_get_option( 'product_status', 'dokan_selling' );
-    $percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );
+    //$percentage = dokan_get_option( 'seller_percentage', 'dokan_selling' );
 
     update_user_meta( $user_id, 'dokan_publishing', $publishing );
-    update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
+    //update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
 
     Dokan_Email::init()->new_seller_registered_mail( $user_id );
 }

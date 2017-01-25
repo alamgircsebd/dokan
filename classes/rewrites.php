@@ -26,6 +26,25 @@ class Dokan_Rewrites {
         add_filter( 'pre_get_posts', array( $this, 'store_query_filter' ) );
         add_filter( 'woocommerce_get_breadcrumb', array( $this, 'store_page_breadcrumb'), 10 ,1  );
     }
+    
+    
+    /**
+     * Initializes the Dokan_Rewrites() class
+     *
+     * @since 2.5.2
+     * 
+     * Checks for an existing Dokan_Rewrites() instance
+     * and if it doesn't find one, creates it.
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_Rewrites();
+        }
+
+        return $instance;
+    }
 
     /**
      * Generate breadcrumb for store page

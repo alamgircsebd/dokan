@@ -18,6 +18,11 @@ class Dokan_Installer {
         $this->woocommerce_settings();
         $this->create_tables();
         $this->product_design();
+        
+          
+        if( class_exists( 'Dokan_Rewrites' )){
+            Dokan_Rewrites::init()->register_rule();
+        }
 
         flush_rewrite_rules();
 

@@ -66,26 +66,6 @@
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', '' ); ?><span class="required"> *</span></label>
-        <div class="dokan-w5 dokan-text-left">
-            <select id="product-dropdown" name="product_drop_down[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
-                <?php
-                foreach ( $all_products as $key => $object ) {
-                    if ( in_array( $object->ID, $products_id ) ) {
-                        $select = 'selected';
-                    } else {
-                        $select = '';
-                    }
-                    ?>
-                    <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></option>
-                    <?php
-                }
-                ?>
-            </select>
-        </div>
-    </div>
-
-    <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Exclude Sale Items', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
             <div class="checkbox">
@@ -109,9 +89,31 @@
     </div>
 
     <div class="dokan-form-group">
+        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', 'dokan' ); ?><span class="required"> *</span></label>
+        <div class="dokan-w5 dokan-text-left">
+            <select name="product_drop_down[]" class="dokan-select2 dokan-coupon-product-select dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
+                <?php
+                foreach ( $all_products as $key => $object ) {
+                    if ( in_array( $object->ID, $products_id ) ) {
+                        $select = 'selected';
+                    } else {
+                        $select = '';
+                    }
+                    ?>
+                    <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></option>
+                    <?php
+                }
+                ?>
+            </select>
+            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan' ) ?></a>
+            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-clear-all"><?php _e( 'Clear', 'dokan' ) ?></a>
+        </div>
+    </div>
+
+    <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Exclude products', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <select id="coupon_exclude_categories" name="exclude_product_ids[]" class="dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
+            <select name="exclude_product_ids[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $exclude_products ) ) {
@@ -146,13 +148,24 @@
         </div>
     </div>
 
-    </form>
+</form>
 
-    <script type="text/javascript">
+<script>
+    ;( function($) {
+        $( '.dokan-coupon-product-select-all' ).click( function(e) {
+            e.preventDefault();
+            var self = $(this),
+            select = self.closest('div').find('select.dokan-coupon-product-select');
+            select.find('> option').prop( 'selected', 'selected' );
+            select.trigger('change');
+        });
 
-    jQuery(function($){
-        $("#product-dropdown").chosen({width: "95%"});
-        $("#coupon_exclude_categories").chosen({width: "95%"});
-    });
-
-    </script>
+        $( '.dokan-coupon-product-clear-all' ).click( function(e) {
+            e.preventDefault();
+            var self = $(this),
+            select = self.closest('div').find('select.dokan-coupon-product-select');
+            select.val("");
+            select.trigger('change');
+        });
+    })(jQuery);
+</script>
