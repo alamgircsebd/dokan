@@ -12,3 +12,4 @@ changelog.txt
 debug.log
 phpunit.xml
 .svnignore
+plugin-deploy.sh
