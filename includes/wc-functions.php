@@ -1652,11 +1652,13 @@ function dokan_get_best_selling_products( $per_page = 8, $seller_id = '' ) {
 function dokan_more_product_from_seller( $seller_id = 0, $posts_per_page = 6 ) {
 
     global $product, $post;
-    if($seller_id==0){
-        $seller_id = $post->post_author ;
+    
+    if ( $seller_id == 0 ) {
+        $seller_id = $post->post_author;
     }
-    if(! abs($posts_per_page) ){
-        $posts_per_page = 4 ;
+    
+    if ( !abs( $posts_per_page ) ) {
+        $posts_per_page = 4;
     }
     $args = array(
             'post_type'            => 'product',
