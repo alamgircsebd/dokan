@@ -29,7 +29,7 @@
     if ( $tab == 'report' ) {
         $report_sub_head = apply_filters( 'dokan_admin_report_sub', array(
             'day'    => __( 'By Day', 'dokan' ),
-            'month'  => __( 'By Month', 'dokan' ),
+            'year'   => __( 'By Year', 'dokan' ),
             'seller' => __( 'By Vendor', 'dokan' ),
         ) );
 
@@ -125,7 +125,7 @@
                 </span>
             </form>
 
-        <?php } elseif ( $type == 'month' ) { ?>
+        <?php } elseif ( $type == 'year' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
                     <label for="from"><?php _e( 'Year:', 'dokan' ); ?></label>
@@ -148,8 +148,8 @@
             <?php
             $order_total = $earning_total = $total_orders = 0;
 
-            if ( $type == 'month' ) {
-                $report_data = dokan_admin_report( 'month', $selected_year );
+            if ( $type == 'year' ) {
+                $report_data = dokan_admin_report( 'year', $selected_year );
             } elseif ( $type == 'seller' ) {
                 $report_data = dokan_admin_report_by_seller( $chosen_seller_id );
             } else {

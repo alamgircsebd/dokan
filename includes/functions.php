@@ -1125,7 +1125,7 @@ function dokan_prepare_chart_data( $data, $date_key, $data_key, $interval, $star
             case 'day' :
                 $time = strtotime( date( 'Ymd', strtotime( "+{$i} DAY", $start_date ) ) ) * 1000;
             break;
-            case 'month' :
+            case 'year' :
                 $time = strtotime( date( 'Ym', strtotime( "+{$i} MONTH", $start_date ) ) . '01' ) * 1000;
             break;
         }

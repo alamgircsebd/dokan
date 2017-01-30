@@ -289,7 +289,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
     if ( ! $start_date ) {
         $start_date = date( 'Y-m-d', strtotime( date( 'Ym', current_time( 'timestamp' ) ) . '01' ) );
 
-        if ( $group_by == 'month' ) {
+        if ( $group_by == 'year' ) {
             $start_date = $year . '-01-01';
         }
     }
@@ -297,7 +297,7 @@ function dokan_admin_report( $group_by = 'day', $year = '' ) {
     if ( ! $end_date ) {
         $end_date = date( 'Y-m-d', current_time( 'timestamp' ) );
 
-        if ( $group_by == 'month' && ( $year < $current_year ) ) {
+        if ( $group_by == 'year' && ( $year < $current_year ) ) {
             $end_date = $year . '-12-31';
         }
     }
