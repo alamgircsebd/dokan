@@ -197,7 +197,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: 'build/',
                 src: ['**/*'],
-                dest: 'dokan'
+                dest: 'dokan-pro'
             }
         },
 
