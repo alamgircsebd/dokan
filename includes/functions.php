@@ -110,3 +110,30 @@ function dokan_get_seller_coupon( $seller_id, $show_on_store = false ) {
 function isAssoc($arr) {
     return array_keys($arr) !== range(0, count($arr) - 1);
 }
+
+/**
+* Get refund localize data
+*
+* @since 2.6
+*
+* @return void
+**/
+function dokan_get_refund_localize_data() {
+    return array(
+        'mon_decimal_point'             => wc_get_price_decimal_separator(),
+        'remove_item_notice'            => __( 'Are you sure you want to remove the selected items? If you have previously reduced this item\'s stock, or this order was submitted by a customer, you will need to manually restore the item\'s stock.', 'dokan' ),
+        'i18n_select_items'             => __( 'Please select some items.', 'dokan' ),
+        'i18n_do_refund'                => __( 'Are you sure you wish to process this refund request? This action cannot be undone.', 'dokan' ),
+        'i18n_delete_refund'            => __( 'Are you sure you wish to delete this refund? This action cannot be undone.', 'dokan' ),
+        'remove_item_meta'              => __( 'Remove this item meta?', 'dokan' ),
+        'ajax_url'                      => admin_url( 'admin-ajax.php' ),
+        'order_item_nonce'              => wp_create_nonce( 'order-item' ),
+        'post_id'                       => isset( $_GET['order_id'] ) ? $_GET['order_id'] : '',
+        'currency_format_num_decimals'  => wc_get_price_decimals(),
+        'currency_format_symbol'        => get_woocommerce_currency_symbol(),
+        'currency_format_decimal_sep'   => esc_attr( wc_get_price_decimal_separator() ),
+        'currency_format_thousand_sep'  => esc_attr( wc_get_price_thousand_separator() ),
+        'currency_format'               => esc_attr( str_replace( array( '%1$s', '%2$s' ), array( '%s', '%v' ), get_woocommerce_price_format() ) ), // For accounting JS
+        'rounding_precision'            => wc_get_rounding_precision(),
+    );
+}

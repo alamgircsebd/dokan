@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace (pro)
 Plugin URI: https://wedevs.com/products/plugins/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.5.1
+Version: 2.5.2
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -54,6 +54,23 @@ class Dokan_Pro {
 
         $this->load_filters();
     }
+
+    /**
+     * Initializes the WeDevs_Dokan() class
+     *
+     * Checks for an existing WeDevs_WeDevs_Dokan() instance
+     * and if it doesn't find one, creates it.
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_Pro();
+        }
+
+        return $instance;
+    }
+
 
         /**
     * Dokan main plugin activation notice
@@ -141,9 +158,10 @@ class Dokan_Pro {
 
     public function defined() {
         define( 'DOKAN_PRO_DIR', dirname( __FILE__) );
-        define( 'DOKAN_PRO_ADMIN_DIR', dirname( __FILE__).'/admin' );
-        define( 'DOKAN_PRO_INC', dirname( __FILE__).'/includes' );
-        define( 'DOKAN_PRO_CLASS', dirname( __FILE__).'/classes' );
+        define( 'DOKAN_PRO_INC', dirname( __FILE__) . '/includes' );
+        define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/admin' );
+        define( 'DOKAN_PRO_CLASS', dirname( __FILE__) . '/classes' );
+        define( 'DOKAN_PRO_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
     }
 
     /**
@@ -164,6 +182,8 @@ class Dokan_Pro {
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
+        require_once DOKAN_PRO_INC . '/orders.php';
+        require_once DOKAN_PRO_INC . '/wc-functions.php';
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
@@ -178,7 +198,6 @@ class Dokan_Pro {
      * @return void
      */
     public function inistantiate() {
-
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
@@ -213,6 +232,10 @@ class Dokan_Pro {
      */
     public function load_actions() {
         add_action( 'woocommerce_after_my_account', array( $this, 'dokan_account_migration_button' ) );
+        add_action( 'dokan_after_register_scripts', array( $this, 'register_scripts' ) );
+        add_action( 'dokan_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+        add_action( 'dokan_enqueue_admin_scripts', array( $this, 'admin_enqueue_scripts' ) );
+        add_action( 'dokan_enqueue_admin_dashboard_script', array( $this, 'admin_dashboad_enqueue_scripts' ) );
     }
 
     /**
@@ -245,6 +268,71 @@ class Dokan_Pro {
                 require_once $file_path;
             }
         }
+    }
+
+    /**
+    * Register all scripts
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function register_scripts() {
+        $suffix   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+        wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
+        wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', array( 'jquery' ), '2.6.1' );
+        wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-pro-script', plugins_url( 'assets/js/dokan-pro.js', __FILE__ ), array( 'jquery', 'dokan-script' ), null, true );
+    }
+
+    /**
+    * Enqueue scripts
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function enqueue_scripts() {
+
+        // Load accounting scripts
+        wp_enqueue_script( 'accounting' );
+
+        //Load in Single product pages only
+        if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
+            wp_enqueue_script( 'dokan-product-shipping' );
+        }
+
+        //localize script for refund and dashboard image options
+        $dokan_refund = dokan_get_refund_localize_data();
+        wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
+
+        wp_enqueue_script( 'dokan-pro-script' );
+    }
+
+    /**
+    * Admin scripts
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function admin_enqueue_scripts() {
+        wp_enqueue_script( 'dokan_pro_admin', DOKAN_PRO_PLUGIN_ASSEST.'/js/dokan-pro-admin.js', array( 'jquery' ) );
+
+        $dokan_refund = dokan_get_refund_localize_data();
+        wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );
+    }
+
+    /**
+    * Load admin dhashboard scripts
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function admin_dashboad_enqueue_scripts() {
+        wp_enqueue_style( 'dokan-pro-admin-dash', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
     }
 
     /**
@@ -297,8 +385,17 @@ class Dokan_Pro {
 
         return $file;
     }
-
-
 }
 
-new Dokan_Pro();
+add_action( 'plugins_loaded', 'dokan_load_pro', 7 );
+
+/**
+* Load pro plugin for dokan
+*
+* @since 2.5.3
+*
+* @return void
+**/
+function dokan_load_pro() {
+    Dokan_Pro::init();
+}

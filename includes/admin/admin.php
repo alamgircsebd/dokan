@@ -23,7 +23,7 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
         add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
-        add_action( 'wp_before_admin_bar_render', array( $this, 'render_pro_admin_toolbar' ) );
+        add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
     }
 
     /**
@@ -39,6 +39,8 @@ class Dokan_Pro_Admin_Settings {
     public function load_admin_settings( $capability, $menu_position ) {
         $refund      = dokan_get_refund_count();
         $refund_text = __( 'Refund Request', 'dokan-pro' );
+
+        remove_submenu_page( 'dokan', 'dokan-pro-features' );
 
         if ( $refund['pending'] ) {
             $refund_text = sprintf( __( 'Refund Request %s', 'dokan-pro' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
@@ -173,7 +175,14 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     function report_scripts() {
-        Dokan_Admin_Settings::report_scripts();
+        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
+        wp_enqueue_style( 'jquery-ui' );
+        wp_enqueue_style( 'dokan-chosen-style' );
+
+        wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_script( 'dokan-flot' );
+        wp_enqueue_script( 'dokan-chart' );
+        wp_enqueue_script( 'dokan-chosen' );
     }
 
     /**
@@ -343,48 +352,27 @@ class Dokan_Pro_Admin_Settings {
         }
     }
 
-    function render_pro_admin_toolbar() {
+    function render_pro_admin_toolbar( $wp_admin_bar ) {
 
-        global $wp_admin_bar;
-
-        if ( ! current_user_can( 'manage_options' ) ) {
-            return;
-        }
-        $wp_admin_bar->remove_menu( 'dokan-dashboard' );
-        $wp_admin_bar->remove_menu( 'dokan-withdraw' );
-        $wp_admin_bar->remove_menu( 'dokan-settings' );
-
-        $wp_admin_bar->add_menu( array(
-            'id'     => 'dokan-dashboard',
-            'parent' => 'dokan-pro',
-            'title'  => __( 'Dokan Dashboard', 'dokan-pro' ),
-            'href'   => admin_url( 'admin.php?page=dokan' )
-        ) );
-
-        $wp_admin_bar->add_menu( array(
-            'id'     => 'dokan-withdraw',
-            'parent' => 'dokan-pro',
-            'title'  => __( 'Withdraw', 'dokan-pro' ),
-            'href'   => admin_url( 'admin.php?page=dokan-withdraw' )
-        ) );
+        $wp_admin_bar->remove_menu( 'dokan-pro-features' );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-sellers',
-            'parent' => 'dokan-pro',
+            'parent' => 'dokan',
             'title'  => __( 'All Vendors', 'dokan-pro' ),
             'href'   => admin_url( 'admin.php?page=dokan-sellers' )
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-reports',
-            'parent' => 'dokan-pro',
+            'parent' => 'dokan',
             'title'  => __( 'Earning Reports', 'dokan-pro' ),
             'href'   => admin_url( 'admin.php?page=dokan-reports' )
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-settings',
-            'parent' => 'dokan-pro',
+            'parent' => 'dokan',
             'title'  => __( 'Settings', 'dokan-pro' ),
             'href'   => admin_url( 'admin.php?page=dokan-settings' )
         ) );

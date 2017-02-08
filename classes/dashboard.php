@@ -21,8 +21,7 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
      *
      */
 	public function __construct() {
-            
-                $this->user_id = get_current_user_id();
+        $this->user_id = get_current_user_id();
 		$this->comment_counts = $this->get_comment_counts();
 
 		add_action( 'dokan_dashboard_before_widgets', array( $this, 'show_profile_progressbar' ), 10 );
