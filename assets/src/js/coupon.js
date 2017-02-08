@@ -1,6 +1,17 @@
 // Coupon
 (function($) {
 
+    $.validator.setDefaults({ ignore: ":hidden" });
+
+    var validatorError = function(error, element) {
+        var form_group = $(element).closest('.form-group');
+        form_group.addClass('has-error').append(error);
+    };
+
+    var validatorSuccess = function(label, element) {
+        $(element).closest('.form-group').removeClass('has-error');
+    };
+
     var Dokan_Coupons = {
         init: function() {
             var self = this;

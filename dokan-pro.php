@@ -292,14 +292,14 @@ class Dokan_Pro {
     public function register_scripts() {
         $suffix   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-        // Register all styles
-        wp_register_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time() );
+
+        // // Register all styles
+        // wp_register_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time() );
 
         // Register all js
         wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
         wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', array( 'jquery' ), '2.6.1' );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
-        wp_register_script( 'dokan-pro-script', plugins_url( 'assets/js/dokan-pro.js', __FILE__ ), array( 'jquery', 'dokan-script' ), null, true );
     }
 
     /**
@@ -311,7 +311,8 @@ class Dokan_Pro {
     **/
     public function enqueue_scripts() {
 
-        wp_enqueue_style( 'dokan-pro-style' );
+        // wp_enqueue_style( 'dokan-pro-style' );
+        wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
 
         // Load accounting scripts
         wp_enqueue_script( 'accounting' );
@@ -325,7 +326,7 @@ class Dokan_Pro {
         $dokan_refund = dokan_get_refund_localize_data();
         wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
 
-        wp_enqueue_script( 'dokan-pro-script' );
+        wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro.js', array( 'jquery', 'dokan-script' ), null, true );
     }
 
     /**

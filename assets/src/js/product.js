@@ -135,7 +135,7 @@
                     }
                 }
             }
-        }
+        },
 
         variants: {
             addCategory: function (e) {

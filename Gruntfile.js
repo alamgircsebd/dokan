@@ -65,7 +65,8 @@ module.exports = function(grunt) {
                     '<%= dirs.js %>/dokan-pro.js': [
                         '<%= dirs.devJsSrc %>/*.js',
                         '!<%= dirs.devJsSrc %>/admin.js',
-                        '!<%= dirs.devJsSrc %>/single-product-shipping.js'
+                        '!<%= dirs.devJsSrc %>/single-product-shipping.js',
+                        '!<%= dirs.devJsSrc %>/dokan-tmc-button.js',
                     ],
                 },
             },
