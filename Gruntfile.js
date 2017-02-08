@@ -24,10 +24,7 @@ module.exports = function(grunt) {
                     sourceMapRootpath: '../../'
                 },
                 files: {
-                    '<%= dirs.css %>/style.css': [
-                        '<%= dirs.devLessSrc %>/style.less',
-                        '!<%= dirs.devLessSrc %>/admin.less',
-                    ]
+                    '<%= dirs.css %>/style.css': '<%= dirs.devLessSrc %>/style.less'
                 }
             },
 

@@ -248,6 +248,18 @@ class Dokan_Pro {
     public function load_filters() {
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
+        add_filter( 'dokan_set_template_path', array( $this, 'load_pro_templates' ), 10, 3 );
+    }
+
+    /**
+    * Get plugin path
+    *
+    * @since 2.5.2
+    *
+    * @return void
+    **/
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
 
     /**
@@ -280,6 +292,10 @@ class Dokan_Pro {
     public function register_scripts() {
         $suffix   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
+        // Register all styles
+        wp_register_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time() );
+
+        // Register all js
         wp_register_script( 'accounting', WC()->plugin_url() . '/assets/js/accounting/accounting' . $suffix . '.js', array( 'jquery' ), '0.3.2' );
         wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', array( 'jquery' ), '2.6.1' );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
@@ -294,6 +310,8 @@ class Dokan_Pro {
     * @return void
     **/
     public function enqueue_scripts() {
+
+        wp_enqueue_style( 'dokan-pro-style' );
 
         // Load accounting scripts
         wp_enqueue_script( 'accounting' );
@@ -385,6 +403,22 @@ class Dokan_Pro {
 
         return $file;
     }
+
+    /**
+    * Load dokan pro templates
+    *
+    * @since 2.5.2
+    *
+    * @return void
+    **/
+    public function load_pro_templates( $template_path, $template, $args ) {
+        if ( isset( $args['pro'] ) && $args['pro'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
+    }
+
 }
 
 add_action( 'plugins_loaded', 'dokan_load_pro', 7 );
