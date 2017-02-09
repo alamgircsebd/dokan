@@ -246,6 +246,7 @@ class Dokan_Pro {
      * @return void
      */
     public function load_filters() {
+        add_filter( 'dokan_is_pro_exists', array( $this, 'set_as_pro' ), 99 );
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_pro_templates' ), 10, 3 );
@@ -420,6 +421,19 @@ class Dokan_Pro {
         }
 
         return $template_path;
+    }
+    
+    /**
+     * Set plugin in pro mode
+     * 
+     * @since 2.6
+     * 
+     * @param boolean $is_pro
+     * 
+     * @return boolean
+     */
+    function set_as_pro( $is_pro ){
+        return true;
     }
 
 }
