@@ -398,7 +398,7 @@ function dokan_variable_product_type_options() {
                                 $_manage_stock = 'yes';
                             }
 
-                            include DOKAN_INC_DIR . '/woo-views/variation-admin-html.php';
+                            include DOKAN_PRO_INC . '/woo-views/variation-admin-html.php';
 
                             $loop++;
                         }

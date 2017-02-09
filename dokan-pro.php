@@ -155,7 +155,13 @@ class Dokan_Pro {
         wp_send_json_success();
     }
 
-
+    /**
+     * Define all pro module constant
+     *
+     * @since  2.6
+     *
+     * @return void
+     */
     public function defined() {
         define( 'DOKAN_PRO_DIR', dirname( __FILE__) );
         define( 'DOKAN_PRO_INC', dirname( __FILE__) . '/includes' );
@@ -422,14 +428,14 @@ class Dokan_Pro {
 
         return $template_path;
     }
-    
+
     /**
      * Set plugin in pro mode
-     * 
+     *
      * @since 2.6
-     * 
+     *
      * @param boolean $is_pro
-     * 
+     *
      * @return boolean
      */
     function set_as_pro( $is_pro ){

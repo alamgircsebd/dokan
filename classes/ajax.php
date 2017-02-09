@@ -800,7 +800,7 @@ class Dokan_Pro_Ajax {
         $order_id = absint( $_POST['order_id'] );
         $order    = wc_get_order( $order_id );
         $data     = get_post_meta( $order_id );
-        include( DOKAN_INC_DIR . '/pro/templates/orders/views/html-order-items.php' );
+        include( DOKAN_PRO_DIR . '/templates/orders/views/html-order-items.php' );
 
         die();
     }
@@ -1860,7 +1860,7 @@ class Dokan_Pro_Ajax {
                 ) );
 
             } else {
-                include DOKAN_INC_DIR . '/woo-views/variation-admin-html.php';
+                include DOKAN_PRO_INC . '/woo-views/variation-admin-html.php';
             }
         }
 

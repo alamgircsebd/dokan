@@ -192,7 +192,7 @@ class Dokan_Pro_Admin_Ajax {
 
         ob_start();
 
-        require_once DOKAN_INC_DIR.'/pro/admin/duplicate-order-list.php';
+        require_once DOKAN_PRO_INC.'/admin/duplicate-order-list.php';
 
         $html = ob_get_clean();
 
