@@ -1,31 +1,31 @@
 <?php
 
 /**
- * Dokan tinyMce Shortcode Button class 
- * 
+ * Dokan tinyMce Shortcode Button class
+ *
  * @since 2.4.12
  */
 class Dokan_shortcodes_button {
-    
+
     /**
      * Constructor for shortcode class
      */
     public function __construct() {
-        
+
         add_filter( 'mce_external_plugins',  array( $this, 'enqueue_plugin_scripts' ) );
         add_filter( 'mce_buttons',  array( $this, 'register_buttons_editor' ) );
-        
+
         add_action( 'admin_enqueue_scripts', array( $this, 'localize_shortcodes' ) , 90  );
     }
-    
+
     /**
      * Generate shortcode array
-     * 
+     *
      * @since 2.4.12
-     * 
+     *
      */
     function localize_shortcodes() {
-        
+
         $shortcodes = array(
             'dokan-dashboard'            => array(
                 'title'   => 'Dokan Dasboard',
@@ -48,9 +48,9 @@ class Dokan_shortcodes_button {
                 'content' => '[dokan-my-orders]'
             )
         );
-        
+
         $assets_url = DOKAN_PLUGIN_ASSEST;
-        
+
         wp_localize_script( 'dokan_slider_admin', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
         wp_localize_script( 'dokan_slider_admin', 'dokan_assets_url', $assets_url );
     }
@@ -74,32 +74,32 @@ class Dokan_shortcodes_button {
 
     /**
      * Add button on Post Editor
-     * 
+     *
      * @since 2.4.12
-     * 
+     *
      * @param array $plugin_array
-     * 
+     *
      * @return array
      */
     function enqueue_plugin_scripts( $plugin_array ) {
         //enqueue TinyMCE plugin script with its ID.
-        $plugin_array["dokan_button"] =  DOKAN_PLUGIN_ASSEST . "/js/dokan-tmc-button.js";
+        $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tmc-button.js";
         return $plugin_array;
     }
-    
+
     /**
      * Register tinyMce button
-     * 
+     *
      * @since 2.4.12
-     * 
+     *
      * @param array $buttons
-     * 
+     *
      * @return array
      */
     function register_buttons_editor( $buttons ) {
         //register buttons with their id.
         array_push( $buttons, "dokan_button" );
-       
+
         return $buttons;
     }
 
