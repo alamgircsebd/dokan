@@ -28,6 +28,8 @@ class Dokan_Pro_Products {
         add_action( 'woocommerce_product_options_advanced', array($this,'add_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
+
+        add_filter( 'dokan_get_product_edit_template', array( $this, 'render_product_edit_template' ), 10 );
     }
 
     /**
@@ -221,5 +223,24 @@ class Dokan_Pro_Products {
             $value = empty( $_POST['_per_product_commission'] ) ? '' : (float) $_POST['_per_product_commission'];
             update_post_meta( $post_id, '_per_product_commission', $value );
         }
+    }
+
+    /**
+    * Rewrite product edit template
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function render_product_edit_template( $template ) {
+        if ( ! get_query_var( 'edit' ) || ! is_singular( 'product' ) ) {
+            return $template;
+        }
+
+        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) === 'old' ) {
+            return dokan_locate_template( 'products/product-edit.php', '', '', true );
+        }
+
+        return dokan_locate_template( 'products/new-product-single.php' );
     }
 }
