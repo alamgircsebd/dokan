@@ -24,7 +24,7 @@ class Dokan_Announcement {
         );
 
         add_action( 'init', array( $this, 'post_types' ) );
-        add_action( 'do_meta_boxes', array( $this, 'do_metaboxes ' ) );
+        add_action( 'add_meta_boxes', array( $this, 'add_new_metabox' ) );
         add_action( 'save_post', array( $this, 'save_announcement_meta' ), 10, 2 );
 
         add_filter( 'manage_edit-dokan_announcement_columns', array( $this, 'add_type_columns' ) );
@@ -76,7 +76,7 @@ class Dokan_Announcement {
      *
      * @return void
      */
-    function do_metaboxes() {
+    function add_new_metabox() {
         add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan-pro'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );
     }
 

@@ -197,7 +197,7 @@ class Dokan_Pro_Admin_Settings {
 
         if ( 'dokan_announcement' == $post_type ) {
             wp_enqueue_style( 'dokan-chosen-style' );
-            wp_enqueue_script( 'chosen' );
+            wp_enqueue_script( 'dokan-chosen' );
         }
     }
 
