@@ -32,6 +32,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         add_action( 'dokan_settings_render_profile_progressbar', array( $this, 'load_settings_progressbar' ), 10, 2 );
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_shipping_status_message' ), 25 );
         add_action( 'dokan_render_settings_content', array( $this, 'load_settings_content' ), 10 );
+        add_action( 'dokan_settings_form_bottom', array( $this, 'add_discount_option' ), 10, 2 );
+        add_action( 'dokan_store_profile_saved', array( $this, 'save_store_discount_data' ), 10, 2 );
     }
 
     /**
@@ -297,6 +299,55 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      */
     public function load_seo_content() {
         dokan_get_template_part( 'settings/seo', '', array( 'pro' => true ) );
+    }
+
+    /**
+    * Render discount options
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function add_discount_option( $current_user, $profile_info ) {
+        $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
+        $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
+        $is_enable_order_discount = isset( $profile_info['show_min_order_discount'] ) ? $profile_info['show_min_order_discount'] : 'no';
+        $setting_minimum_order_amount = isset( $profile_info['setting_minimum_order_amount'] ) ? $profile_info['setting_minimum_order_amount'] : '';
+        $setting_order_percentage = isset( $profile_info['setting_order_percentage'] ) ? $profile_info['setting_order_percentage'] : '';
+
+        dokan_get_template_part( 'settings/discount', '', array(
+            'pro'                          => true,
+            'is_enable_op_discount'        => $is_enable_op_discount,
+            'is_enable_order_discount'     => $is_enable_order_discount,
+            'setting_minimum_order_amount' => $setting_minimum_order_amount,
+            'setting_order_percentage'     => $setting_order_percentage
+        ) );
+    }
+
+    /**
+    * Save doscount settings data
+    *
+    * @since 2.6
+    *
+    * @return void
+    **/
+    public function save_store_discount_data( $store_id, $dokan_settings ) {
+        if ( ! $store_id ) {
+            return;
+        }
+
+
+        $data = array(
+            'show_min_order_discount'      => isset( $_POST['setting_show_minimum_order_discount_option'] ) ? 'yes' : 'no',
+            'setting_minimum_order_amount' => isset( $_POST['setting_minimum_order_amount'] ) ? sanitize_text_field( $_POST['setting_minimum_order_amount'] ) : '',
+            'setting_order_percentage'     => isset( $_POST['setting_order_percentage'] ) ? sanitize_text_field( $_POST['setting_order_percentage'] ) : '',
+        );
+
+        $settings_data = wp_parse_args( $data, $dokan_settings );
+
+        error_log( print_r( $settings_data, true ) );
+
+        update_user_meta( $store_id, 'dokan_profile_settings', $settings_data );
     }
 
 }
