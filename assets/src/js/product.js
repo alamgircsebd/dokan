@@ -46,12 +46,11 @@
         },
 
         editProduct: {
-
             showLotDiscountWrapper: function(){
                 if ( $( this ).is(':checked') ) {
-                    $( '.show_if_needs_lot_discount' ).slideDown('slow');
+                    $( '.show_if_needs_lot_discount' ).slideDown('fast');
                 } else {
-                    $( '.show_if_needs_lot_discount' ).slideUp('slow');
+                    $( '.show_if_needs_lot_discount' ).slideUp('fast');
                 }
             },
 
@@ -340,5 +339,7 @@
             }
         }
     }
+
+    Dokan_Editor.init();
 
 })(jQuery);
