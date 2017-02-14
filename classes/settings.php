@@ -336,7 +336,6 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             return;
         }
 
-
         $data = array(
             'show_min_order_discount'      => isset( $_POST['setting_show_minimum_order_discount_option'] ) ? 'yes' : 'no',
             'setting_minimum_order_amount' => isset( $_POST['setting_minimum_order_amount'] ) ? sanitize_text_field( $_POST['setting_minimum_order_amount'] ) : '',
@@ -344,8 +343,6 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         );
 
         $settings_data = wp_parse_args( $data, $dokan_settings );
-
-        error_log( print_r( $settings_data, true ) );
 
         update_user_meta( $store_id, 'dokan_profile_settings', $settings_data );
     }
