@@ -149,18 +149,3 @@ function dokan_get_review_url( $user_id ) {
 
     return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
 }
-
-/**
- * Check if current page is store review page
- *
- * @since 2.2
- *
- * @return boolean
- */
-function dokan_is_store_review_page() {
-    if ( get_query_var( 'store_review' ) == 'true' ) {
-        return true;
-    }
-
-    return false;
-}
