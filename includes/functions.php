@@ -137,3 +137,30 @@ function dokan_get_refund_localize_data() {
         'rounding_precision'            => wc_get_rounding_precision(),
     );
 }
+
+/**
+ * Get review page url of a seller
+ *
+ * @param int $user_id
+ * @return string
+ */
+function dokan_get_review_url( $user_id ) {
+    $userstore = dokan_get_store_url( $user_id );
+
+    return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
+}
+
+/**
+ * Check if current page is store review page
+ *
+ * @since 2.2
+ *
+ * @return boolean
+ */
+function dokan_is_store_review_page() {
+    if ( get_query_var( 'store_review' ) == 'true' ) {
+        return true;
+    }
+
+    return false;
+}
