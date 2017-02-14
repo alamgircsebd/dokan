@@ -149,3 +149,11 @@ function dokan_get_review_url( $user_id ) {
 
     return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
 }
+
+/**
+ * 
+ */
+function dokan_render_order_table_items( $order_id ) {
+    $data  = get_post_meta( $order_id );
+    include( DOKAN_PRO_DIR . '/templates/orders/views/html-order-items.php' );
+}
