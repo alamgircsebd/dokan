@@ -151,16 +151,9 @@ function dokan_get_review_url( $user_id ) {
 }
 
 /**
- * Check if current page is store review page
- *
- * @since 2.2
- *
- * @return boolean
+ * 
  */
-function dokan_is_store_review_page() {
-    if ( get_query_var( 'store_review' ) == 'true' ) {
-        return true;
-    }
-
-    return false;
+function dokan_render_order_table_items( $order_id ) {
+    $data  = get_post_meta( $order_id );
+    include( DOKAN_PRO_DIR . '/templates/orders/views/html-order-items.php' );
 }
