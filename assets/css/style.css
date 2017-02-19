@@ -22,36 +22,6 @@ and open the template in the editor.
     Created on : Feb 6, 2017, 11:01:53 AM
     Author     : rafsun
 */
-ul.dokan_tabs {
-  border-bottom: 1px solid #ededed;
-  margin-bottom: 20px;
-  line-height: 24px;
-}
-ul.dokan_tabs > li {
-  margin-bottom: -1px !important;
-}
-ul.dokan_tabs li {
-  display: inline-block;
-  margin-right: 5px !important;
-  border: 1px solid #ededed;
-  border-bottom: none;
-}
-ul.dokan_tabs li:first-child {
-  margin-left: 10px;
-}
-ul.dokan_tabs li a {
-  display: block;
-  padding: 6px 8px !important;
-}
-ul.dokan_tabs li a:hover {
-  background-color: #eee;
-}
-ul.dokan_tabs li.dokan-hide {
-  display: none;
-}
-ul.dokan_tabs li.active {
-  border-bottom: 1px solid #fff !important;
-}
 .dokan-variation-loader {
   background: url("../images/ajax-loader@2x.gif") no-repeat;
   position: absolute;
