@@ -315,7 +315,14 @@ class Dokan_Pro {
     **/
     public function enqueue_scripts() {
 
-        if ( ( dokan_is_seller_dashboard() || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) || apply_filters( 'dokan_forced_load_scripts', false ) ) {
+        if ( ( dokan_is_seller_dashboard()
+                || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) )
+                || dokan_is_store_page()
+                || dokan_is_store_review_page()
+                || is_account_page()
+                || apply_filters( 'dokan_forced_load_scripts', false )
+            ) {
+
             // wp_enqueue_style( 'dokan-pro-style' );
             wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
 
@@ -328,6 +335,7 @@ class Dokan_Pro {
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
             wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro.js', array( 'jquery', 'dokan-script' ), null, true );
         }
+
 
         //Load in Single product pages only
         if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {

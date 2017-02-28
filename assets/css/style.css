@@ -69,7 +69,7 @@ and open the template in the editor.
   height: 100%;
   font-size: 12px;
   line-height: 20px;
-  color: #ffffff;
+  color: #fff;
   text-align: center;
   background-color: #337ab7;
   -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
@@ -521,12 +521,12 @@ and open the template in the editor.
   list-style: none;
   margin: 0;
   padding: 0;
-  border: 1px solid #ededed;
+  border: 1px solid #EDEDED;
 }
 .dokan-reports-content .dokan-reports-area ul.chart-legend li {
   color: #aaa;
   padding: 13px 18px;
-  border-bottom: 1px solid #ededed;
+  border-bottom: 1px solid #EDEDED;
   font-weight: normal;
   font-size: 13px;
 }
@@ -540,7 +540,7 @@ and open the template in the editor.
   margin-top: 15px;
 }
 .dokan-reports-content .dokan-reports-area .report-filter select {
-  border: 1px solid #ededed;
+  border: 1px solid #EDEDED;
   padding: 2px 5px;
 }
 .dokan-reports-content .dokan-reports-area table.table {
@@ -594,7 +594,7 @@ and open the template in the editor.
 }
 .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap select {
   padding: 5px;
-  border: 1px solid #ededed;
+  border: 1px solid #EDEDED;
 }
 .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table th.col-check {
   width: 5%;
@@ -739,7 +739,7 @@ table.dps-shipping-states tr td {
   display: none;
 }
 .dokan-shipping-location-wrapper {
-  border-top: 1px solid #ededed;
+  border-top: 1px solid #EDEDED;
   padding-top: 15px;
   margin-top: 30px;
 }
@@ -793,9 +793,9 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : Feb 6, 2017, 11:12:49 AM
-    Author     : rafsun
+    Author     : weDevs
 */
 .dokan-single-store .store-review-wrap h2.headline {
   font-size: 17px;
