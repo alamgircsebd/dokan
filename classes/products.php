@@ -255,12 +255,9 @@ class Dokan_Pro_Products {
     * @return void
     **/
     public function render_product_edit_template( $template ) {
-        $dokan_pro = Dokan_Pro::init();
-
         if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) === 'old' ) {
-            return dokan_locate_template( 'products/product-edit.php', '', $dokan_pro->plugin_path(). '/templates/', true );
+            return dokan_locate_template( 'products/product-edit.php', '', DOKAN_PRO_DIR. '/templates/', true );
         }
-
         return $template;
     }
 

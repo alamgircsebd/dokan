@@ -99,13 +99,13 @@ class Dokan_Pro_Store {
      * @return string
      */
     public function store_review_template( $template ) {
-
+        
         if ( ! function_exists( 'WC' ) ) {
             return $template;
         }
-
+      
         if ( get_query_var( 'store_review' ) ) {
-            return dokan_locate_template( 'store-reviews.php', '', '', true );
+            return dokan_locate_template( 'store-reviews.php', '', DOKAN_PRO_DIR. '/templates/', true );
         }
 
         return $template;
