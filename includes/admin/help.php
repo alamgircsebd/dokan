@@ -1,5 +1,5 @@
 <div class="wrap">
-    <h1><?php _e( 'Dokan Help', 'dokan-pro' ); ?> <a href="http://docs.wedevs.com/docs/dokan/" target="_blank" class="page-title-action"><?php _e( 'View all Documentations', 'dokan-pro' ); ?></a></h1>
+    <h1><?php _e( 'Dokan Help', 'dokan' ); ?> <a href="http://docs.wedevs.com/docs/dokan/" target="_blank" class="page-title-action"><?php _e( 'View all Documentations', 'dokan' ); ?></a></h1>
 
     <?php
     $help_docs = get_transient( 'dokan_help_docs' );
@@ -56,7 +56,6 @@
 
                 <div class="postbox-container">
                     <div class="meta-box-sortables">
-
                         <?php
                         if ( $right_column ) {
                             foreach ($right_column as $section) {
@@ -87,7 +86,7 @@
     <?php } else { ?>
 
         <div class="updated error">
-            <p><?php printf( __( '<strong>Error:</strong> No help documents found, or error fetching the documents. Please refresh the page again or <a href="%s" target="_blank">let us know</a> about the problem.', 'dokan-pro' ), 'https://wedevs.com/contact/' ); ?></p>
+            <p><?php printf( __( '<strong>Error:</strong> No help documents found, or error fetching the documents. Please refresh the page again or <a href="%s" target="_blank">let us know</a> about the problem.', 'dokan' ), 'https://wedevs.com/contact/' ); ?></p>
         </div>
 
     <?php } ?>

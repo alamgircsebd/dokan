@@ -9,6 +9,6 @@
 ?>
  <header class="dokan-dashboard-header dokan-clearfix">
     <span class="left-header-content">
-        <h1 class="entry-title"><?php _e( 'Announcement', 'dokan-pro' ); ?></h1>
+        <h1 class="entry-title"><?php _e( 'Announcement', 'dokan' ); ?></h1>
     </span>
 </header>

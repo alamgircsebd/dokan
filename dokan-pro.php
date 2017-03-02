@@ -3,7 +3,7 @@
 Plugin Name: Dokan - Multi-vendor Marketplace (pro)
 Plugin URI: https://wedevs.com/products/plugins/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.5.2
+Version: 2.5.3
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -82,24 +82,24 @@ class Dokan_Pro {
     public function activation_notice() {
         ?>
         <div class="updated" id="dokan-pro-installer-notice" style="padding: 1em; position: relative;">
-            <h2><?php _e( 'Your Dokan Pro is almost ready!', 'dokan-pro' ); ?></h2>
+            <h2><?php _e( 'Your Dokan Pro is almost ready!', 'dokan' ); ?></h2>
 
             <?php
                 $plugin_file = 'dokan-pro/dokan-pro.php';
                 $core_plugin_file = 'dokan-lite/dokan.php';
             ?>
-            <a href="<?php echo wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . $plugin_file . '&amp;plugin_status=all&amp;paged=1&amp;s=', 'deactivate-plugin_' . $plugin_file ); ?>" class="notice-dismiss" style="text-decoration: none;" title="<?php _e( 'Dismiss this notice', 'dokan-pro' ); ?>"></a>
+            <a href="<?php echo wp_nonce_url( 'plugins.php?action=deactivate&amp;plugin=' . $plugin_file . '&amp;plugin_status=all&amp;paged=1&amp;s=', 'deactivate-plugin_' . $plugin_file ); ?>" class="notice-dismiss" style="text-decoration: none;" title="<?php _e( 'Dismiss this notice', 'dokan' ); ?>"></a>
 
             <?php if ( file_exists( WP_PLUGIN_DIR . '/' . $core_plugin_file ) && is_plugin_inactive( 'dokan-lite' ) ): ?>
-                <p><?php _e( 'You just need to activate the Dokan lite plugin to make it functional.', 'dokan-pro' ); ?></p>
+                <p><?php _e( 'You just need to activate the Dokan lite plugin to make it functional.', 'dokan' ); ?></p>
                 <p>
-                    <a class="button button-primary" href="<?php echo wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . $core_plugin_file . '&amp;plugin_status=all&amp;paged=1&amp;s=', 'activate-plugin_' . $core_plugin_file ); ?>"  title="<?php _e( 'Activate this plugin', 'dokan-pro' ); ?>"><?php _e( 'Activate', 'dokan-pro' ); ?></a>
+                    <a class="button button-primary" href="<?php echo wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . $core_plugin_file . '&amp;plugin_status=all&amp;paged=1&amp;s=', 'activate-plugin_' . $core_plugin_file ); ?>"  title="<?php _e( 'Activate this plugin', 'dokan' ); ?>"><?php _e( 'Activate', 'dokan' ); ?></a>
                 </p>
             <?php else: ?>
                 <p><?php echo sprintf( __( "You just need to install the %sCore Plugin%s to make it functional.", "dokan-pro" ), '<a target="_blank" href="https://wordpress.org/plugins/dokan-lite/">', '</a>' ); ?></p>
 
                 <p>
-                    <button id="dokan-pro-installer" class="button"><?php _e( 'Install Now', 'dokan-pro' ); ?></button>
+                    <button id="dokan-pro-installer" class="button"><?php _e( 'Install Now', 'dokan' ); ?></button>
                 </p>
             <?php endif ?>
         </div>
@@ -109,7 +109,7 @@ class Dokan_Pro {
                 $('#dokan-pro-installer-notice #dokan-pro-installer').click( function (e) {
                     e.preventDefault();
                     $(this).addClass('install-now updating-message');
-                    $(this).text('<?php echo esc_js( 'Installing...', 'dokan-pro' ); ?>');
+                    $(this).text('<?php echo esc_js( 'Installing...', 'dokan' ); ?>');
 
                     var data = {
                         action: 'dokan_pro_install_dokan_lite',
@@ -120,7 +120,7 @@ class Dokan_Pro {
                         if (response.success) {
                             $('#dokan-pro-installer-notice #dokan-pro-installer').attr('disabled', 'disabled');
                             $('#dokan-pro-installer-notice #dokan-pro-installer').removeClass('install-now updating-message');
-                            $('#dokan-pro-installer-notice #dokan-pro-installer').text('<?php echo esc_js( 'Installed', 'dokan-pro' ); ?>');
+                            $('#dokan-pro-installer-notice #dokan-pro-installer').text('<?php echo esc_js( 'Installed', 'dokan' ); ?>');
                             window.location.reload();
                         }
                     });
@@ -139,7 +139,7 @@ class Dokan_Pro {
     **/
     public function install_dokan_lite() {
         if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-pro-installer-nonce' ) ) {
-            wp_send_json_error( __( 'Error: Nonce verification failed', 'dokan-pro' ) );
+            wp_send_json_error( __( 'Error: Nonce verification failed', 'dokan' ) );
         }
 
         include_once ABSPATH . 'wp-admin/includes/plugin-install.php';

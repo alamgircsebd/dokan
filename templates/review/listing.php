@@ -13,10 +13,10 @@
         <thead>
             <tr>
                 <th class="col-check"><input class="dokan-check-all" type="checkbox" ></th>
-                <th class="col-author"><?php _e( 'Author', 'dokan-pro' ); ?></th>
-                <th class="col-content"><?php _e( 'Comment', 'dokan-pro' ); ?></th>
-                <th class="col-link"><?php _e( 'Link To', 'dokan-pro' ); ?></th>
-                <th class="col-link"><?php _e( 'Rating', 'dokan-pro' ); ?></th>
+                <th class="col-author"><?php _e( 'Author', 'dokan' ); ?></th>
+                <th class="col-content"><?php _e( 'Comment', 'dokan' ); ?></th>
+                <th class="col-link"><?php _e( 'Link To', 'dokan' ); ?></th>
+                <th class="col-link"><?php _e( 'Rating', 'dokan' ); ?></th>
             </tr>
         </thead>
 
@@ -40,23 +40,23 @@
         <?php
             if ( $comment_status == 'hold' ) {
                 ?>
-                <option value="none"><?php _e( '-None-', 'dokan-pro' ); ?></option>
-                <option value="approve"><?php _e( 'Mark Approve', 'dokan-pro' ); ?></option>
-                <option value="spam"><?php _e( 'Mark Spam', 'dokan-pro' ); ?></option>
-                <option value="trash"><?php _e( 'Mark Trash', 'dokan-pro' ); ?></option>
+                <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
+                <option value="approve"><?php _e( 'Mark Approve', 'dokan' ); ?></option>
+                <option value="spam"><?php _e( 'Mark Spam', 'dokan' ); ?></option>
+                <option value="trash"><?php _e( 'Mark Trash', 'dokan' ); ?></option>
             <?php } else if ( $comment_status == 'spam' ) { ?>
-                <option value="none"><?php _e( '-None-', 'dokan-pro' ); ?></option>
-                <option value="approve"><?php _e( 'Mark Not Spam', 'dokan-pro' ); ?></option>
-                <option value="delete"><?php _e( 'Delete permanently', 'dokan-pro' ); ?></option>
+                <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
+                <option value="approve"><?php _e( 'Mark Not Spam', 'dokan' ); ?></option>
+                <option value="delete"><?php _e( 'Delete permanently', 'dokan' ); ?></option>
             <?php } else if ( $comment_status == 'trash' ) { ?>
-                <option value="none"><?php _e( '-None-', 'dokan-pro' ); ?></option>
-                <option value="approve"><?php _e( 'Resore', 'dokan-pro' ); ?></option>
-                <option value="delete"><?php _e( 'Delete permanently', 'dokan-pro' ); ?></option>
+                <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
+                <option value="approve"><?php _e( 'Resore', 'dokan' ); ?></option>
+                <option value="delete"><?php _e( 'Delete permanently', 'dokan' ); ?></option>
             <?php } else { ?>
-                <option value="none"><?php _e( '-None-', 'dokan-pro' ); ?></option>
-                <option value="hold"><?php _e( 'Mark Pending', 'dokan-pro' ); ?></option>
-                <option value="spam"><?php _e( 'Mark Spam', 'dokan-pro' ); ?></option>
-                <option value="trash"><?php _e( 'Mark Trash', 'dokan-pro' ); ?></option>
+                <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
+                <option value="hold"><?php _e( 'Mark Pending', 'dokan' ); ?></option>
+                <option value="spam"><?php _e( 'Mark Spam', 'dokan' ); ?></option>
+                <option value="trash"><?php _e( 'Mark Trash', 'dokan' ); ?></option>
                 <?php
             }
         ?>
@@ -64,5 +64,5 @@
 
     <?php wp_nonce_field( 'dokan_comment_nonce_action', 'dokan_comment_nonce' ); ?>
 
-    <input type="submit" value="<?php _e( 'Submit', 'dokan-pro' ); ?>" class="dokan-btn  dokan-danger dokan-btn-theme dokan-btn-sm" name="comt_stat_sub">
+    <input type="submit" value="<?php _e( 'Submit', 'dokan' ); ?>" class="dokan-btn  dokan-danger dokan-btn-theme dokan-btn-sm" name="comt_stat_sub">
 </form>

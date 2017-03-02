@@ -71,7 +71,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( $enable_shipping == 'yes' ) {
             $sub_settins['shipping'] = array(
-                'title' => __( 'Shipping', 'dokan-pro'),
+                'title' => __( 'Shipping', 'dokan' ),
                 'icon'  => '<i class="fa fa-truck"></i>',
                 'url'   => dokan_get_navigation_url( 'settings/shipping' ),
                 'pos'   => 70
@@ -79,7 +79,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         }
 
         $sub_settins['social'] = array(
-            'title' => __( 'Social Profile', 'dokan-pro'),
+            'title' => __( 'Social Profile', 'dokan' ),
             'icon'  => '<i class="fa fa-share-alt-square"></i>',
             'url'   => dokan_get_navigation_url( 'settings/social' ),
             'pos'   => 90
@@ -87,7 +87,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( dokan_get_option( 'store_seo', 'dokan_general', 'on' ) === 'on' ) {
             $sub_settins['seo'] = array(
-                'title' => __( 'Store SEO', 'dokan-pro' ),
+                'title' => __( 'Store SEO', 'dokan' ),
                 'icon'  => '<i class="fa fa-globe"></i>',
                 'url'   => dokan_get_navigation_url( 'settings/seo' ),
                 'pos'   => 110
@@ -137,17 +137,16 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      */
     public function load_settings_header( $header, $query_vars ) {
         if ( $query_vars == 'social' ) {
-            $header = __( 'Social Profiles', 'dokan-pro' );
+            $header = __( 'Social Profiles', 'dokan' );
         }
 
         if ( $query_vars == 'shipping' ) {
-            $header = __( 'Shipping Settings', 'dokan-pro' );
+            $header = __( 'Shipping Settings', 'dokan' );
         }
 
         if ( $query_vars == 'seo' ) {
-            $header = __( 'Store SEO', 'dokan-pro' );
+            $header = __( 'Store SEO', 'dokan' );
         }
-
 
         return $header;
     }
@@ -207,14 +206,14 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
     public function load_settings_helper_text( $help_text, $query_vars ) {
 
         if ( $query_vars == 'social' ) {
-            $help_text = __( 'Social profiles help you to gain more trust. Consider adding your social profile links for better user interaction.', 'dokan-pro' );
+            $help_text = __( 'Social profiles help you to gain more trust. Consider adding your social profile links for better user interaction.', 'dokan' );
         }
 
         if ( $query_vars == 'shipping' ) {
 
             $help_text = sprintf ( '<p>%s</p><p>%s</p>',
-                __( 'This page contains your store-wide shipping settings, costs, shipping and refund policy.', 'dokan-pro' ),
-                __( 'You can enable/disable shipping for your products. Also you can override these shipping costs while creating or editing a product.', 'dokan-pro' )
+                __( 'This page contains your store-wide shipping settings, costs, shipping and refund policy.', 'dokan' ),
+                __( 'You can enable/disable shipping for your products. Also you can override these shipping costs while creating or editing a product.', 'dokan' )
             );
         }
 
@@ -282,10 +281,9 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      * @return void
      */
     public function render_shipping_status_message() {
-
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'shipping_saved' ) {
             dokan_get_template_part( 'global/dokan-message', '', array(
-                'message' => __( 'Shipping options saved successfully', 'dokan-pro')
+                'message' => __( 'Shipping options saved successfully', 'dokan' )
             ) );
         }
     }

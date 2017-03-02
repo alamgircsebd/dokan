@@ -38,25 +38,25 @@ class Dokan_Pro_Admin_Settings {
      */
     public function load_admin_settings( $capability, $menu_position ) {
         $refund      = dokan_get_refund_count();
-        $refund_text = __( 'Refund Request', 'dokan-pro' );
+        $refund_text = __( 'Refund Request', 'dokan' );
 
         remove_submenu_page( 'dokan', 'dokan-pro-features' );
 
         if ( $refund['pending'] ) {
-            $refund_text = sprintf( __( 'Refund Request %s', 'dokan-pro' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
+            $refund_text = sprintf( __( 'Refund Request %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
         }
 
-        add_submenu_page( 'dokan', __( 'Refund Request', 'dokan-pro' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
-        add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan-pro' ), __( 'All Vendors', 'dokan-pro' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
-        $report       = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan-pro' ), __( 'Earning Reports', 'dokan-pro' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
-        $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan-pro' ), __( 'Announcement', 'dokan-pro' ), $capability, 'edit.php?post_type=dokan_announcement' );
-        add_submenu_page( 'dokan', __( 'Tools', 'dokan-pro' ), __( 'Tools', 'dokan-pro' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
+        add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
+        add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
+        $report       = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
+        $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
+        add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
         add_action( $report, array( $this, 'report_scripts' ) );
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
 
-        add_submenu_page( 'dokan', __( 'Help', 'dokan-pro' ), __( '<span style="color:#f18500">Help</span>', 'dokan-pro' ), $capability, 'dokan-help', array( $this, 'help_page' ) );
+        add_submenu_page( 'dokan', __( 'Help', 'dokan' ), __( '<span style="color:#f18500">Help</span>', 'dokan' ), $capability, 'dokan-help', array( $this, 'help_page' ) );
     }
 
     /**
@@ -72,27 +72,27 @@ class Dokan_Pro_Admin_Settings {
         $new_settings_fields['dokan_general'] = array(
             'product_add_mail'           => array(
                 'name'    => 'product_add_mail',
-                'label'   => __( 'Product Mail Notification', 'dokan-pro' ),
-                'desc'    => __( 'Email notification on new product submission', 'dokan-pro' ),
+                'label'   => __( 'Product Mail Notification', 'dokan' ),
+                'desc'    => __( 'Email notification on new product submission', 'dokan' ),
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
             'enable_tc_on_reg'           => array(
                 'name'    => 'enable_tc_on_reg',
-                'label'   => __( 'Enable Terms and Condition', 'dokan-pro' ),
-                'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan-pro' ),
+                'label'   => __( 'Enable Terms and Condition', 'dokan' ),
+                'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan' ),
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
             'store_banner_width' => array(
                 'name'    => 'store_banner_width',
-                'label'   => __( 'Store Banner width', 'dokan-pro' ),
+                'label'   => __( 'Store Banner width', 'dokan' ),
                 'type'    => 'text',
                 'default' => 625
             ),
             'store_banner_height' => array(
                 'name'    => 'store_banner_height',
-                'label'   => __( 'Store Banner height', 'dokan-pro' ),
+                'label'   => __( 'Store Banner height', 'dokan' ),
                 'type'    => 'text',
                 'default' => 300
             ),
@@ -101,60 +101,60 @@ class Dokan_Pro_Admin_Settings {
         $new_settings_fields['dokan_selling'] = array(
             'product_style'          => array(
                 'name'    => 'product_style',
-                'label'   => __( 'Add/Edit Product Style', 'dokan-pro' ),
-                'desc'    => __( 'The style you prefer for vendor to add or edit products. ', 'dokan-pro' ),
+                'label'   => __( 'Add/Edit Product Style', 'dokan' ),
+                'desc'    => __( 'The style you prefer for vendor to add or edit products. ', 'dokan' ),
                 'type'    => 'select',
                 'default' => 'old',
                 'options' => array(
-                    'old' => __( 'Tab View', 'dokan-pro' ),
-                    'new' => __( 'Flat View', 'dokan-pro' )
+                    'old' => __( 'Tab View', 'dokan' ),
+                    'new' => __( 'Flat View', 'dokan' )
                 )
             ),
             'product_category_style' => array(
                 'name'    => 'product_category_style',
-                'label'   => __( 'Category Selection', 'dokan-pro' ),
-                'desc'    => __( 'What option do you prefer for vendor to select product category? ', 'dokan-pro' ),
+                'label'   => __( 'Category Selection', 'dokan' ),
+                'desc'    => __( 'What option do you prefer for vendor to select product category? ', 'dokan' ),
                 'type'    => 'select',
                 'default' => 'single',
                 'options' => array(
-                    'single'   => __( 'Single', 'dokan-pro' ),
-                    'multiple' => __( 'Multiple', 'dokan-pro' )
+                    'single'   => __( 'Single', 'dokan' ),
+                    'multiple' => __( 'Multiple', 'dokan' )
                 )
             ),
             'product_status'         => array(
                 'name'    => 'product_status',
-                'label'   => __( 'New Product Status', 'dokan-pro' ),
-                'desc'    => __( 'Product status when a vendor creates a product', 'dokan-pro' ),
+                'label'   => __( 'New Product Status', 'dokan' ),
+                'desc'    => __( 'Product status when a vendor creates a product', 'dokan' ),
                 'type'    => 'select',
                 'default' => 'pending',
                 'options' => array(
-                    'publish' => __( 'Published', 'dokan-pro' ),
-                    'pending' => __( 'Pending Review', 'dokan-pro' )
+                    'publish' => __( 'Published', 'dokan' ),
+                    'pending' => __( 'Pending Review', 'dokan' )
                 )
             ),
             'discount_edit' => array(
                 'name'    => 'discount_edit',
-                'label'   => __( 'Discount Editing', 'dokan-pro' ),
-                'desc'    => __( 'Vendor can add order and product discount', 'dokan-pro' ),
+                'label'   => __( 'Discount Editing', 'dokan' ),
+                'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
                 'type'    => 'multicheck',
-                'default' => array( 'product-discount' => __( 'Discount product', 'dokan-pro' ), 'order-discount' => __( 'Discount Order', 'dokan-pro' ) ),
-                'options' => array( 'product-discount' => __( 'Discount product', 'dokan-pro' ), 'order-discount' => __( 'Discount Order', 'dokan-pro' ) )
+                'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
+                'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
             )
         );
 
         $new_settings_fields['dokan_withdraw'] = array(
             'withdraw_order_status' => array(
                 'name'    => 'withdraw_order_status',
-                'label'   => __( 'Order Status for Withdraw', 'dokan-pro' ),
-                'desc'    => __( 'Order status for which vendor can make a withdraw request.', 'dokan-pro' ),
+                'label'   => __( 'Order Status for Withdraw', 'dokan' ),
+                'desc'    => __( 'Order status for which vendor can make a withdraw request.', 'dokan' ),
                 'type'    => 'multicheck',
-                'default' => array( 'wc-completed' => __( 'Completed', 'dokan-pro' ), 'wc-processing' => __( 'Processing', 'dokan-pro' ), 'wc-on-hold' => __( 'On-hold', 'dokan-pro' ) ),
-                'options' => array( 'wc-completed' => __( 'Completed', 'dokan-pro' ), 'wc-processing' => __( 'Processing', 'dokan-pro' ), 'wc-on-hold' => __( 'On-hold', 'dokan-pro' ) )
+                'default' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) ),
+                'options' => array( 'wc-completed' => __( 'Completed', 'dokan' ), 'wc-processing' => __( 'Processing', 'dokan' ), 'wc-on-hold' => __( 'On-hold', 'dokan' ) )
             ),
             'withdraw_date_limit'   => array(
                 'name'    => 'withdraw_date_limit',
-                'label'   => __( 'Withdraw Threshold', 'dokan-pro' ),
-                'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan-pro' ),
+                'label'   => __( 'Withdraw Threshold', 'dokan' ),
+                'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
                 'default' => '0',
                 'type'    => 'text',
             ),
@@ -272,13 +272,13 @@ class Dokan_Pro_Admin_Settings {
 
             $pages = array(
                 array(
-                    'post_title' => __( 'Dashboard', 'dokan-pro' ),
+                    'post_title' => __( 'Dashboard', 'dokan' ),
                     'slug'       => 'dashboard',
                     'page_id'    => 'dashboard',
                     'content'    => '[dokan-dashboard]'
                 ),
                 array(
-                    'post_title' => __( 'Store List', 'dokan-pro' ),
+                    'post_title' => __( 'Store List', 'dokan' ),
                     'slug'       => 'store-listing',
                     'page_id'    => 'my_orders',
                     'content'    => '[dokan-stores]'
@@ -359,21 +359,21 @@ class Dokan_Pro_Admin_Settings {
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
-            'title'  => __( 'All Vendors', 'dokan-pro' ),
+            'title'  => __( 'All Vendors', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan-sellers' )
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-reports',
             'parent' => 'dokan',
-            'title'  => __( 'Earning Reports', 'dokan-pro' ),
+            'title'  => __( 'Earning Reports', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan-reports' )
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-settings',
             'parent' => 'dokan',
-            'title'  => __( 'Settings', 'dokan-pro' ),
+            'title'  => __( 'Settings', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan-settings' )
         ) );
     }

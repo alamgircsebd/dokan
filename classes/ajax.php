@@ -62,6 +62,7 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_dokan_load_order_items', array( $this, 'load_order_items') );
         add_action( 'wp_ajax_nopriv_dokan_load_order_items', array( $this, 'load_order_items') );
 
+        // Refund request
         add_action( 'wp_ajax_dokan_refund_request', array( $this, 'dokan_refund_request') );
         add_action( 'wp_ajax_nopriv_dokan_refund_request', array( $this, 'dokan_refund_request') );
 
@@ -113,7 +114,7 @@ class Dokan_Pro_Ajax {
         // Get tax classes
         $tax_classes           = WC_Tax::get_tax_classes();
         $tax_class_options     = array();
-        $tax_class_options[''] = __( 'Standard', 'dokan-pro' );
+        $tax_class_options[''] = __( 'Standard', 'dokan' );
 
         if ( ! empty( $tax_classes ) ) {
             foreach ( $tax_classes as $class ) {
@@ -123,15 +124,15 @@ class Dokan_Pro_Ajax {
 
         // Set backorder options
         $backorder_options = array(
-            'no'     => __( 'Do not allow', 'dokan-pro' ),
-            'notify' => __( 'Allow, but notify customer', 'dokan-pro' ),
-            'yes'    => __( 'Allow', 'dokan-pro' )
+            'no'     => __( 'Do not allow', 'dokan' ),
+            'notify' => __( 'Allow, but notify customer', 'dokan' ),
+            'yes'    => __( 'Allow', 'dokan' )
         );
 
         // set stock status options
         $stock_status_options = array(
-            'instock'    => __( 'In stock', 'dokan-pro' ),
-            'outofstock' => __( 'Out of stock', 'dokan-pro' )
+            'instock'    => __( 'In stock', 'dokan' ),
+            'outofstock' => __( 'Out of stock', 'dokan' )
         );
 
         $parent_data = array(
@@ -765,16 +766,16 @@ class Dokan_Pro_Ajax {
         $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
         $refund = new Dokan_Pro_Refund;
         if ( ! $refund_amount || $max_refund < $refund_amount || 0 > $refund_amount ) {
-            $data =  __( 'Invalid refund amount', 'dokan-pro' );
+            $data =  __( 'Invalid refund amount', 'dokan' );
             wp_send_json_error( $data );
         } else if ( $refund->has_pending_refund_request( $_POST['order_id'] ) ) {
-            $data =  __( 'You have already a processing refund request for this order.', 'dokan-pro' );
+            $data =  __( 'You have already a processing refund request for this order.', 'dokan' );
             wp_send_json_error( $data );
         } else{
             $refund = new Dokan_Pro_Refund;
             $refund->insert_refund($_POST);
             Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
-            $data = __( 'Refund request sent successfully', 'dokan-pro' );
+            $data = __( 'Refund request sent successfully', 'dokan' );
             wp_send_json_success( $data );
         }
 
@@ -823,13 +824,13 @@ class Dokan_Pro_Ajax {
             ?>
              <tr>
                 <td>
-                    <label for=""><?php _e( 'State', 'dokan-pro' ); ?></label>
+                    <label for=""><?php _e( 'State', 'dokan' ); ?></label>
                     <select name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control dps_state_selection" id="dps_state_selection">
                         <?php dokan_state_dropdown( $states[$country_id], '', true ); ?>
                     </select>
                 </td>
                 <td>
-                    <label for=""><?php _e( 'Cost', 'dokan-pro' ); ?></label>
+                    <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
                     <div class="dokan-input-group">
                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input type="text" placeholder="0.00" class="dokan-form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
@@ -849,11 +850,11 @@ class Dokan_Pro_Ajax {
             ?>
             <tr>
                 <td>
-                    <label for=""><?php _e( 'State', 'dokan-pro' ); ?></label>
+                    <label for=""><?php _e( 'State', 'dokan' ); ?></label>
                     <input type="text" name="dps_state_to[<?php echo $country_id ?>][]" class="dokan-form-control dps_state_selection" placeholder="State name">
                 </td>
                 <td>
-                    <label for=""><?php _e( 'Cost', 'dokan-pro' ); ?></label>
+                    <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>
                     <div class="dokan-input-group">
                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
                         <input type="text" placeholder="0.00" class="dokan-form-control" name="dps_state_to_price[<?php echo $country_id; ?>][]">
@@ -903,7 +904,7 @@ class Dokan_Pro_Ajax {
         <div class="dokan-no-announcement">
             <div class="annoument-no-wrapper">
                 <i class="fa fa-bell dokan-announcement-icon"></i>
-                <p><?php _e( 'No Announcement found', 'dokan-pro' ) ?></p>
+                <p><?php _e( 'No Announcement found', 'dokan' ) ?></p>
             </div>
         </div>
         <?php
@@ -933,13 +934,13 @@ class Dokan_Pro_Ajax {
         ob_start(); ?>
         <?php
         if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) ) { ?>
-            <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan-pro' ); ?></label>
+            <label for="dokan-shipping-state" class="dokan-control-label"><?php _e( 'State', 'dokan' ); ?></label>
             <select name="dokan-shipping-state" class="dokan-shipping-state dokan-form-control" id="dokan-shipping-state">
-                <option value=""><?php _e( '--Select State--', 'dokan-pro' ); ?></option>
+                <option value=""><?php _e( '--Select State--', 'dokan' ); ?></option>
                 <?php foreach ($dps_state_rates[$country] as $state_code => $state_cost ): ?>
                     <option value="<?php echo $state_code ?>"><?php
                         if ( $state_code == 'everywhere' ) {
-                            _e( 'Other States', 'dokan-pro' );
+                            _e( 'Other States', 'dokan' );
                         } else {
                             if( isset( $states[$country][$state_code] ) ) {
                                 echo $states[$country][$state_code];
@@ -1005,21 +1006,21 @@ class Dokan_Pro_Ajax {
 
             if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
 
-                _e( 'Please select a State from the dropdown', 'dokan-pro' );
+                _e( 'Please select a State from the dropdown', 'dokan' );
 
             } else if ( !isset( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
 
-                echo __( 'Shipping Cost : ', 'dokan-pro' ) . '<h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+                echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
 
             } else if ( isset( $_POST['state'] ) && !empty( $_POST['state'] ) ) {
 
                 $state = $_POST['state'];
-                echo __( 'Shipping Cost : ', 'dokan-pro' ) . '<h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
+                echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
 
             }
         } else {
 
-            _e( 'Please select a country from the dropdown', 'dokan-pro' );
+            _e( 'Please select a country from the dropdown', 'dokan' );
 
         }
         $content = ob_get_clean();
@@ -1033,7 +1034,6 @@ class Dokan_Pro_Ajax {
      * @return void
      */
     function save_attributes() {
-
         // Get post data
         parse_str( $_POST['data'], $data );
         $post_id = absint( $_POST['post_id'] );
@@ -1133,11 +1133,8 @@ class Dokan_Pro_Ajax {
              }
         }
 
-
         uasort( $attributes, 'wc_product_attribute_uasort_comparison' );
-
         update_post_meta( $post_id, '_product_attributes', $attributes );
-
         die();
     }
 
@@ -1150,7 +1147,6 @@ class Dokan_Pro_Ajax {
      * @return void
      */
     function save_attributes_options() {
-
         // Get post data
         parse_str( $_POST['formdata'], $data );
         $post_id = absint( $data['product_id'] );
@@ -1172,13 +1168,11 @@ class Dokan_Pro_Ajax {
                 $attribute_values[$key] = explode(',', $attr_values[$key] );
             }
 
-
             $attribute_visibility = $attr_visible;
             $attribute_variation = $attr_variation;
             $attribute_is_taxonomy = $data['attribute_is_taxonomy'];
             $attribute_position = $attr_pos;
             $attribute_names_count = sizeof( $attribute_names );
-
 
             for ( $i=0; $i < $attribute_names_count; $i++ ) {
                 if ( ! $attribute_names[ $i ] )
@@ -1239,8 +1233,7 @@ class Dokan_Pro_Ajax {
                         'is_taxonomy'   => $is_taxonomy
                     );
                 }
-
-             }
+            }
         }
 
         if ( ! function_exists( 'attributes_cmp' ) ) {
@@ -1249,12 +1242,11 @@ class Dokan_Pro_Ajax {
                 return ( $a['position'] < $b['position'] ) ? -1 : 1;
             }
         }
-        uasort( $attributes, 'attributes_cmp' );
 
+        uasort( $attributes, 'attributes_cmp' );
         update_post_meta( $post_id, '_product_attributes', $attributes );
 
         wp_send_json_success();
-
         die();
     }
 
@@ -1262,7 +1254,6 @@ class Dokan_Pro_Ajax {
      * Delete variations via ajax function
      */
     public function remove_variation() {
-
         if ( ! current_user_can( 'dokandar' ) ) {
             die(-1);
         }
@@ -1352,7 +1343,7 @@ class Dokan_Pro_Ajax {
                 $manage_stock        = isset( $variable_manage_stock[ $i ] ) ? 'yes' : 'no';
 
                 // Generate a useful post title
-                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan-pro' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
+                $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $postdata['post_id'] ) ) );
 
                 // Update or Add post
                 if ( ! $variation_id ) {
@@ -1370,13 +1361,10 @@ class Dokan_Pro_Ajax {
                     $variation_id = wp_insert_post( $variation );
 
                     do_action( 'woocommerce_create_product_variation', $variation_id );
-
                 } else {
-
                     $wpdb->update( $wpdb->posts, array( 'post_status' => $post_status, 'post_title' => $variation_post_title ), array( 'ID' => $variation_id ) );
 
                     do_action( 'woocommerce_update_product_variation', $variation_id );
-
                 }
 
                 // Only continue if we have a variation ID
@@ -1698,7 +1686,7 @@ class Dokan_Pro_Ajax {
                 <input type="hidden" name="attribute_is_taxonomy[]" value="1">
             </td>
             <td colspan="3"><input type="text" name="attribute_values[]" value="<?php echo implode( ',', $att_val ); ?>" data-preset_attr="<?php echo implode( ',', $att_val ); ?>" class="dokan-form-control dokan-<?php echo $single; ?>attribute-option-values"></td>
-            <td><button title="<?php _e( 'Clear All' , 'dokan-pro' ) ?>"class="dokan-btn dokan-btn-theme clear_attributes"><?php _e( 'Clear' , 'dokan-pro' ) ?></button>
+            <td><button title="<?php _e( 'Clear All' , 'dokan' ) ?>"class="dokan-btn dokan-btn-theme clear_attributes"><?php _e( 'Clear' , 'dokan' ) ?></button>
                 <button title="Delete" class="dokan-btn dokan-btn-theme remove_<?php echo $remove_btn; ?>attribute"><i class="fa fa-trash-o"></i></button>
             </td>
         </tr>
@@ -1715,7 +1703,6 @@ class Dokan_Pro_Ajax {
      * @return void
      */
     public static function add_variation() {
-
         check_ajax_referer( 'add-variation', 'security' );
 
         if ( ! current_user_can( 'dokandar' ) ) {
@@ -1794,7 +1781,7 @@ class Dokan_Pro_Ajax {
             // Get tax classes
             $tax_classes           = WC_Tax::get_tax_classes();
             $tax_class_options     = array();
-            $tax_class_options[''] = __( 'Standard', 'dokan-pro' );
+            $tax_class_options[''] = __( 'Standard', 'dokan' );
 
             if ( ! empty( $tax_classes ) ) {
                 foreach ( $tax_classes as $class ) {
@@ -1804,15 +1791,15 @@ class Dokan_Pro_Ajax {
 
             // Set backorder options
             $backorder_options = array(
-                'no'     => __( 'Do not allow', 'dokan-pro' ),
-                'notify' => __( 'Allow, but notify customer', 'dokan-pro' ),
-                'yes'    => __( 'Allow', 'dokan-pro' )
+                'no'     => __( 'Do not allow', 'dokan' ),
+                'notify' => __( 'Allow, but notify customer', 'dokan' ),
+                'yes'    => __( 'Allow', 'dokan' )
             );
 
             // set stock status options
             $stock_status_options = array(
-                'instock'    => __( 'In stock', 'dokan-pro' ),
-                'outofstock' => __( 'Out of stock', 'dokan-pro' )
+                'instock'    => __( 'In stock', 'dokan' ),
+                'outofstock' => __( 'Out of stock', 'dokan' )
             );
 
             // Get attributes
@@ -1849,7 +1836,6 @@ class Dokan_Pro_Ajax {
             }
 
             if ( dokan_get_option( 'product_style', 'dokan_selling', 'new' ) == 'new' ) {
-
                 dokan_get_template_part( 'products/edit/html-product-variation', '', array(
                     'pro'                => true,
                     'loop'               => $loop,
@@ -1867,7 +1853,6 @@ class Dokan_Pro_Ajax {
         die();
     }
 
-
     /**
      * Link all variations via ajax function
      *
@@ -1876,7 +1861,6 @@ class Dokan_Pro_Ajax {
      * @return void
      */
     function link_all_variations() {
-
         if ( ! defined( 'WC_MAX_LINKED_VARIATIONS' ) ) {
             define( 'WC_MAX_LINKED_VARIATIONS', 49 );
         }
@@ -1897,7 +1881,6 @@ class Dokan_Pro_Ajax {
 
         // Put variation attributes into an array
         foreach ( $_product->get_attributes() as $attribute ) {
-
             if ( ! $attribute['is_variation'] ) {
                 continue;
             }
@@ -2001,7 +1984,7 @@ class Dokan_Pro_Ajax {
                 <input type="hidden" name="attribute_is_taxonomy[<?php echo $i; ?>]" value="1">
                 <input type="hidden" name="attribute_position[<?php echo $i; ?>]" class="attribute_position" value="<?php echo esc_attr( $i ); ?>" />
                 <span class="actions">
-                    <button class="row-remove btn pull-right btn-danger btn-sm"><?php _e( 'Remove', 'dokan-pro' ); ?></button>
+                    <button class="row-remove btn pull-right btn-danger btn-sm"><?php _e( 'Remove', 'dokan' ); ?></button>
                 </span>
             </div>
             <div class="box-inside clearfix">
@@ -2012,14 +1995,14 @@ class Dokan_Pro_Ajax {
                                 <input type="checkbox" class="checkbox" <?php
                                 $tax = '';
                                 checked( apply_filters( 'default_attribute_visibility', false, $tax ), true );
-                                ?> name="attribute_visibility[<?php echo $i; ?>]" value="1" /> <?php _e( 'Visible on the product page', 'dokan-pro' ); ?>
+                                ?> name="attribute_visibility[<?php echo $i; ?>]" value="1" /> <?php _e( 'Visible on the product page', 'dokan' ); ?>
                             </label>
                         </li>
                         <li class="enable_variation" <?php echo ( $_POST['type'] === 'simple' )? 'style="display:none;"' : ""; ?>>
                             <label class="checkbox-inline">
                             <input type="checkbox" class="checkbox" <?php
                             checked( apply_filters( 'default_attribute_variation', false, $tax ), true );
-                        ?> name="attribute_variation[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for variations', 'dokan-pro' ); ?></label>
+                        ?> name="attribute_variation[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for variations', 'dokan' ); ?></label>
                         </li>
                     </ul>
                 </div>
@@ -2030,7 +2013,7 @@ class Dokan_Pro_Ajax {
                             foreach ($options as $count => $option) {
                                 ?>
                                 <li>
-                                    <input type="text" class="option" placeholder="<?php _e( 'Option...', 'dokan-pro' ); ?>" name="attribute_values[<?php echo $i; ?>][<?php echo $count; ?>]" value="<?php echo esc_attr( $option->name ); ?>">
+                                    <input type="text" class="option" placeholder="<?php _e( 'Option...', 'dokan' ); ?>" name="attribute_values[<?php echo $i; ?>][<?php echo $count; ?>]" value="<?php echo esc_attr( $option->name ); ?>">
                                     <span class="item-action actions">
                                         <a href="#" class="row-add">+</a>
                                         <a href="#" class="row-remove">-</a>
@@ -2041,7 +2024,7 @@ class Dokan_Pro_Ajax {
                         } else {
                             ?>
                             <li>
-                                <input type="text" class="option" name="attribute_values[<?php echo $i; ?>][0]" placeholder="<?php _e( 'Option...', 'dokan-pro' ); ?>">
+                                <input type="text" class="option" name="attribute_values[<?php echo $i; ?>][0]" placeholder="<?php _e( 'Option...', 'dokan' ); ?>">
                                 <span class="item-action actions">
                                     <a href="#" class="row-add">+</a>
                                     <a href="#" class="row-remove">-</a>
@@ -2058,6 +2041,5 @@ class Dokan_Pro_Ajax {
         $response = ob_get_clean();
         return wp_send_json_success( $response );
     }
-
 
 }

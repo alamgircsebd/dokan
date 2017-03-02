@@ -81,14 +81,14 @@ class Dokan_Pro_Admin_Ajax {
                 'offset'       => $offset + 1,
                 'total_orders' => $total_orders,
                 'done'         => $done,
-                'message'      => sprintf( __( '%d orders sync completed out of %d', 'dokan-pro' ), $done, $total_orders )
+                'message'      => sprintf( __( '%d orders sync completed out of %d', 'dokan' ), $done, $total_orders )
             ) );
         } else {
-            $dashboard_link = sprintf( '<a href="%s">%s</a>', admin_url( 'admin.php?page=dokan' ), __( 'Go to Dashboard &rarr;', 'dokan-pro' ) );
+            $dashboard_link = sprintf( '<a href="%s">%s</a>', admin_url( 'admin.php?page=dokan' ), __( 'Go to Dashboard &rarr;', 'dokan' ) );
             wp_send_json_success( array(
                 'offset'  => 0,
                 'done'    => 'All',
-                'message' => sprintf( __( 'All orders has been synchronized. %s', 'dokan-pro' ), $dashboard_link )
+                'message' => sprintf( __( 'All orders has been synchronized. %s', 'dokan' ), $dashboard_link )
             ) );
         }
     }
@@ -156,22 +156,22 @@ class Dokan_Pro_Admin_Ajax {
                 'offset'       => $offset + 1,
                 'total_orders' => $total_orders,
                 'done'         => $done,
-                'message'      => sprintf( __( '%d orders checked out of %d', 'dokan-pro' ), $done, $total_orders )
+                'message'      => sprintf( __( '%d orders checked out of %d', 'dokan' ), $done, $total_orders )
             ) );
         } else {
             if( count( $duplicate_orders ) ){
                wp_send_json_success( array(
                     'offset'  => 0,
                     'done'    => 'All',
-                    'message' => sprintf( __( 'All orders are checked and we found some duplicate orders', 'dokan-pro' ) ),
+                    'message' => sprintf( __( 'All orders are checked and we found some duplicate orders', 'dokan' ) ),
                     'duplicate' => true
                 ) );
             }
-            $dashboard_link = sprintf( '<a href="%s">%s</a>', admin_url( 'admin.php?page=dokan' ), __( 'Go to Dashboard &rarr;', 'dokan-pro' ) );
+            $dashboard_link = sprintf( '<a href="%s">%s</a>', admin_url( 'admin.php?page=dokan' ), __( 'Go to Dashboard &rarr;', 'dokan' ) );
             wp_send_json_success( array(
                     'offset'  => 0,
                     'done'    => 'All',
-                    'message' => sprintf( __( 'All orders are checked and no duplicate was found. %s', 'dokan-pro' ), $dashboard_link )
+                    'message' => sprintf( __( 'All orders are checked and no duplicate was found. %s', 'dokan' ), $dashboard_link )
             ) );
         }
     }

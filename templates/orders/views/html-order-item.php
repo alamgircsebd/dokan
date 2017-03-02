@@ -16,16 +16,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( $_product ) : ?>
 			<a href="<?php echo esc_url( admin_url( 'post.php?post=' . absint( $_product->id ) . '&action=edit' ) ); ?>" class="tips" data-tip="<?php
 
-				echo '<strong>' . __( 'Product ID:', 'dokan-pro' ) . '</strong> ' . absint( $item['product_id'] );
+				echo '<strong>' . __( 'Product ID:', 'dokan' ) . '</strong> ' . absint( $item['product_id'] );
 
 				if ( $item['variation_id'] && 'product_variation' === get_post_type( $item['variation_id'] ) ) {
-					echo '<br/><strong>' . __( 'Variation ID:', 'dokan-pro' ) . '</strong> ' . absint( $item['variation_id'] );
+					echo '<br/><strong>' . __( 'Variation ID:', 'dokan' ) . '</strong> ' . absint( $item['variation_id'] );
 				} elseif ( $item['variation_id'] ) {
-					echo '<br/><strong>' . __( 'Variation ID:', 'dokan-pro' ) . '</strong> ' . absint( $item['variation_id'] ) . ' (' . __( 'No longer exists', 'dokan-pro' ) . ')';
+					echo '<br/><strong>' . __( 'Variation ID:', 'dokan' ) . '</strong> ' . absint( $item['variation_id'] ) . ' (' . __( 'No longer exists', 'dokan' ) . ')';
 				}
 
 				if ( $_product && $_product->get_sku() ) {
-					echo '<br/><strong>' . __( 'Product SKU:', 'dokan-pro' ).'</strong> ' . esc_html( $_product->get_sku() );
+					echo '<br/><strong>' . __( 'Product SKU:', 'dokan' ).'</strong> ' . esc_html( $_product->get_sku() );
 				}
 
 				if ( $_product && isset( $_product->variation_data ) ) {
@@ -139,7 +139,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</tbody>
 				<tfoot>
 					<tr>
-						<td colspan="4"><button class="add_order_item_meta button"><?php _e( 'Add&nbsp;meta', 'dokan-pro' ); ?></button></td>
+						<td colspan="4"><button class="add_order_item_meta button"><?php _e( 'Add&nbsp;meta', 'dokan' ); ?></button></td>
 					</tr>
 				</tfoot>
 			</table>
@@ -201,10 +201,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="edit" style="display: none;">
 			<div class="split-input">
 				<?php $item_total = ( isset( $item['line_total'] ) ) ? esc_attr( wc_format_localized_price( $item['line_total'] ) ) : ''; ?>
-				<input style="width:60px" type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo $item_total; ?>" class="line_total wc_input_price tips" data-tip="<?php _e( 'After pre-tax discounts.', 'dokan-pro' ); ?>" data-total="<?php echo $item_total; ?>" />
+				<input style="width:60px" type="text" name="line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo $item_total; ?>" class="line_total wc_input_price tips" data-tip="<?php _e( 'After pre-tax discounts.', 'dokan' ); ?>" data-total="<?php echo $item_total; ?>" />
 
 				<?php $item_subtotal = ( isset( $item['line_subtotal'] ) ) ? esc_attr( wc_format_localized_price( $item['line_subtotal'] ) ) : ''; ?>
-				<input style="width:60px" type="text" name="line_subtotal[<?php echo absint( $item_id ); ?>]" value="<?php echo $item_subtotal; ?>" class="line_subtotal wc_input_price tips" data-tip="<?php _e( 'Before pre-tax discounts.', 'dokan-pro' ); ?>" data-subtotal="<?php echo $item_subtotal; ?>" />
+				<input style="width:60px" type="text" name="line_subtotal[<?php echo absint( $item_id ); ?>]" value="<?php echo $item_subtotal; ?>" class="line_subtotal wc_input_price tips" data-tip="<?php _e( 'Before pre-tax discounts.', 'dokan' ); ?>" data-subtotal="<?php echo $item_subtotal; ?>" />
 			</div>
 		</div>
 		<div class="refund" style="display: none;">
@@ -244,10 +244,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div class="edit" style="display: none;">
 							<div class="split-input">
 								<?php $item_total_tax = ( isset( $tax_item_total ) ) ? esc_attr( wc_format_localized_price( $tax_item_total ) ) : ''; ?>
-								<input style="width:60px" type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo $item_total_tax; ?>" class="line_tax wc_input_price tips" data-tip="<?php _e( 'After pre-tax discounts.', 'dokan-pro' ); ?>" data-total_tax="<?php echo $item_total_tax; ?>" />
+								<input style="width:60px" type="text" name="line_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo $item_total_tax; ?>" class="line_tax wc_input_price tips" data-tip="<?php _e( 'After pre-tax discounts.', 'dokan' ); ?>" data-total_tax="<?php echo $item_total_tax; ?>" />
 
 								<?php $item_subtotal_tax = ( isset( $tax_item_subtotal ) ) ? esc_attr( wc_format_localized_price( $tax_item_subtotal ) ) : ''; ?>
-								<input style="width:60px" type="text" name="line_subtotal_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" value="<?php echo $item_subtotal_tax; ?>" class="line_subtotal_tax wc_input_price tips" data-tip="<?php _e( 'Before pre-tax discounts.', 'dokan-pro' ); ?>" data-subtotal_tax="<?php echo $item_subtotal_tax; ?>" />
+								<input style="width:60px" type="text" name="line_subtotal_tax[<?php echo absint( $item_id ); ?>][<?php echo esc_attr( $tax_item_id ); ?>]" value="<?php echo $item_subtotal_tax; ?>" class="line_subtotal_tax wc_input_price tips" data-tip="<?php _e( 'Before pre-tax discounts.', 'dokan' ); ?>" data-subtotal_tax="<?php echo $item_subtotal_tax; ?>" />
 							</div>
 						</div>
 						<div class="refund" style="display: none;">

@@ -9,7 +9,7 @@
 ?>
 
 <div class="wrap">
-    <h2><?php _e( 'Dokan Tools', 'dokan-pro' ); ?></h2>
+    <h2><?php _e( 'Dokan Tools', 'dokan' ); ?></h2>
 
     <?php
     $msg = isset( $_GET['msg'] ) ? $_GET['msg'] : '';
@@ -17,11 +17,11 @@
 
     switch ($msg) {
         case 'page_installed':
-            $text = __( 'Pages have been created and installed!', 'dokan-pro' );
+            $text = __( 'Pages have been created and installed!', 'dokan' );
             break;
 
         case 'regenerated':
-            $text = __( 'Order sync table has been regenerated!', 'dokan-pro' );
+            $text = __( 'Order sync table has been regenerated!', 'dokan' );
             break;
     }
 
@@ -258,7 +258,7 @@
                         alert(resp.data.msg);
 
                     } else {
-                       alert( '<?php echo esc_js( __( 'Something went wrong!', 'dokan-pro' ) ); ?>' );
+                       alert( '<?php echo esc_js( __( 'Something went wrong!', 'dokan' ) ); ?>' );
                     }
                 });
 
@@ -269,19 +269,19 @@
 
     <div class="metabox-holder">
         <div class="postbox">
-            <h3><?php _e( 'Page Installation', 'dokan-pro' ); ?></h3>
+            <h3><?php _e( 'Page Installation', 'dokan' ); ?></h3>
 
             <div class="inside">
-                <p><?php _e( 'Clicking this button will create required pages for the plugin.', 'dokan-pro' ); ?></p>
-                <a class="button button-primary" href="<?php echo wp_nonce_url( add_query_arg( array( 'dokan_action' => 'dokan_install_pages' ), 'admin.php?page=dokan-tools' ), 'dokan-tools-action' ); ?>"><?php _e( 'Install Dokan Pages', 'dokan-pro' ); ?></a>
+                <p><?php _e( 'Clicking this button will create required pages for the plugin.', 'dokan' ); ?></p>
+                <a class="button button-primary" href="<?php echo wp_nonce_url( add_query_arg( array( 'dokan_action' => 'dokan_install_pages' ), 'admin.php?page=dokan-tools' ), 'dokan-tools-action' ); ?>"><?php _e( 'Install Dokan Pages', 'dokan' ); ?></a>
             </div>
         </div>
 
         <div class="postbox">
-            <h3><?php _e( 'Regenerate Order Sync Table', 'dokan-pro' ); ?></h3>
+            <h3><?php _e( 'Regenerate Order Sync Table', 'dokan' ); ?></h3>
 
             <div class="inside">
-                <p><?php _e( 'This tool will delete all orders from the Dokan\'s sync table and re-build it.', 'dokan-pro' ); ?></p>
+                <p><?php _e( 'This tool will delete all orders from the Dokan\'s sync table and re-build it.', 'dokan' ); ?></p>
                 <div class="regen-sync-response"></div>
                 <div id="progressbar" style="display: none">
                     <div id="regen-pro" >0</div>
@@ -290,17 +290,17 @@
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
                     <input type="hidden" name="limit" value="<?php echo apply_filters( 'regen_sync_table_limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">
-                    <input type="submit" class="button button-primary" value="<?php _e( 'Re-build', 'dokan-pro' ); ?>" >
+                    <input type="submit" class="button button-primary" value="<?php _e( 'Re-build', 'dokan' ); ?>" >
                     <span class="regen-sync-loader" style="display:none"></span>
                 </form>
             </div>
         </div>
 <!--    check for duplicate orders first-->
         <div class="postbox">
-            <h3><?php _e( 'Check for Duplicate Orders', 'dokan-pro' ); ?></h3>
+            <h3><?php _e( 'Check for Duplicate Orders', 'dokan' ); ?></h3>
 
             <div class="inside">
-                <p><?php _e( 'This tool will check for duplicate orders from the Dokan\'s sync table.', 'dokan-pro' ); ?></p>
+                <p><?php _e( 'This tool will check for duplicate orders from the Dokan\'s sync table.', 'dokan' ); ?></p>
                 <div class="duplicate-search-response"></div>
                 <div id="duplicate-progressbar" style="display: none">
                     <div id="duplicate-pro" >0</div>
@@ -309,7 +309,7 @@
                     <?php wp_nonce_field( 'regen_sync_table' ); ?>
                     <input type="hidden" name="limit" value="<?php echo apply_filters( 'duplicate-order-check-limit', 100 ); ?>">
                     <input type="hidden" name="offset" value="0">
-                    <input type="submit" class="button button-primary" value="<?php _e( 'Check Orders', 'dokan-pro' ); ?>" >
+                    <input type="submit" class="button button-primary" value="<?php _e( 'Check Orders', 'dokan' ); ?>" >
                     <span class="duplicate-sync-loader" style="display:none"></span>
                 </form>
             </div>

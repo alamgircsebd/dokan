@@ -75,8 +75,6 @@ class Dokan_Pro_Shipping {
      * @return void
      */
     function validate_country( $posted ) {
-        // print_r($posted);
-
         $shipping_method = WC()->session->get( 'chosen_shipping_methods' );
 
         // per product shipping was not chosen
@@ -101,7 +99,6 @@ class Dokan_Pro_Shipping {
         $products = $packages['contents'];
         $destination_country = isset( $packages['destination']['country'] ) ? $packages['destination']['country'] : '';
         $destination_state = isset( $packages['destination']['state'] ) ? $packages['destination']['state'] : '';
-
 
         $errors = array();
         foreach ( $products as $key => $product) {
@@ -292,9 +289,9 @@ class Dokan_Pro_Shipping {
         }
 
         $tabs['shipping'] = array(
-            'title' => __( 'Shipping', 'dokan-pro' ),
+            'title' => __( 'Shipping', 'dokan' ),
             'priority' => 12,
-            'callback' => array($this, 'shipping_tab')
+            'callback' => array($this, 'shipping_tab' )
         );
 
         return $tabs;
@@ -310,19 +307,17 @@ class Dokan_Pro_Shipping {
     function shipping_tab() {
         global $post;
 
-        $_overwrite_shipping      = get_post_meta( $post->ID, '_overwrite_shipping', true );
-
-        $dps_processing    = get_user_meta( $post->post_author, '_dps_pt', true );
-        $from              = get_user_meta( $post->post_author, '_dps_form_location', true );
-        $dps_country_rates = get_user_meta( $post->post_author, '_dps_country_rates', true );
-        $shipping_policy   = get_user_meta( $post->post_author, '_dps_ship_policy', true );
-        $refund_policy     = get_user_meta( $post->post_author, '_dps_refund_policy', true );
-
-        $product_processing_time      = get_post_meta( $post->ID, '_dps_processing_time', true );
-        $processing_time              = $dps_processing;
+        $_overwrite_shipping     = get_post_meta( $post->ID, '_overwrite_shipping', true );
+        $dps_processing          = get_user_meta( $post->post_author, '_dps_pt', true );
+        $from                    = get_user_meta( $post->post_author, '_dps_form_location', true );
+        $dps_country_rates       = get_user_meta( $post->post_author, '_dps_country_rates', true );
+        $shipping_policy         = get_user_meta( $post->post_author, '_dps_ship_policy', true );
+        $refund_policy           = get_user_meta( $post->post_author, '_dps_refund_policy', true );
+        $product_processing_time = get_post_meta( $post->ID, '_dps_processing_time', true );
+        $processing_time         = $dps_processing;
 
         if ( $_overwrite_shipping == 'yes' ) {
-            $processing_time              = ( $product_processing_time ) ? $product_processing_time : $dps_processing;
+            $processing_time  = ( $product_processing_time ) ? $product_processing_time : $dps_processing;
         }
 
         $country_obj = new WC_Countries();
@@ -332,11 +327,11 @@ class Dokan_Pro_Shipping {
         <?php if ( $processing_time ) { ?>
             <p>
                 <strong>
-                    <?php _e( 'Ready to ship in', 'dokan-pro' ); ?> <?php echo dokan_get_processing_time_value( $processing_time ); ?>
+                    <?php _e( 'Ready to ship in', 'dokan' ); ?> <?php echo dokan_get_processing_time_value( $processing_time ); ?>
 
                     <?php
                     if ( $from ) {
-                        echo __( 'from', 'dokan-pro' ) . ' ' . $countries[$from];
+                        echo __( 'from', 'dokan' ) . ' ' . $countries[$from];
                     }
                     ?>
                 </strong>
@@ -346,15 +341,15 @@ class Dokan_Pro_Shipping {
 
         <?php if ( $dps_country_rates ) { ?>
 
-            <h4><?php _e( 'Shipping Calculation:', 'dokan-pro' ); ?></h4>
+            <h4><?php _e( 'Shipping Calculation:', 'dokan' ); ?></h4>
 
             <div class="dokan-shipping-calculate-wrapper dokan-form-inline">
 
                 <div class="dokan-shipping-country-wrapper dokan-form-group dokan-w3">
 
-                    <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan-pro' ); ?></label>
+                    <label for="dokan-shipping-country" class="dokan-control-label"><?php _e( 'Country', 'dokan' ); ?></label>
                     <select name="dokan-shipping-country" id="dokan-shipping-country" class="dokan-shipping-country dokan-form-control" data-product_id="<?php echo $post->ID; ?>" data-author_id="<?php echo $post->post_author; ?>">
-                        <option value=""><?php _e( '--Select Country--', 'dokan-pro' ); ?></option>
+                        <option value=""><?php _e( '--Select Country--', 'dokan' ); ?></option>
                         <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
                             <option value="<?php echo $country; ?>"><?php echo ( $country == 'everywhere' ) ? _e( 'Other Countries' ) : $countries[$country]; ?></option>
                         <?php } ?>
@@ -362,22 +357,18 @@ class Dokan_Pro_Shipping {
 
                 </div>
 
-                <div class="dokan-shipping-state-wrapper dokan-form-group">
-
-                </div>
+                <div class="dokan-shipping-state-wrapper dokan-form-group"></div>
 
                 <div class="dokan-shipping-qty-wrapper dokan-form-group dokan-w3">
-                    <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan-pro' ); ?></label>
+                    <label for="dokan-shipping-qty" class="dokan-control-label"><?php _e( 'Quantity', 'dokan' ); ?></label>
                     <input type="number" class="dokan-shipping-qty dokan-form-control" id="dokan-shipping-qty" name="dokan-shipping-qty" value="1" placeholder="1">
                 </div>
 
-                <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator dokan-w3"><?php _e( 'Get Shipping Cost', 'dokan-pro' ); ?></button>
+                <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator dokan-w3"><?php _e( 'Get Shipping Cost', 'dokan' ); ?></button>
 
                 <div class="dokan-clearfix"></div>
 
-                <div class="dokan-shipping-price-wrapper dokan-form-group">
-
-                </div>
+                <div class="dokan-shipping-price-wrapper dokan-form-group"></div>
 
                 <div class="dokan-clearfix"></div>
             </div>
@@ -386,14 +377,14 @@ class Dokan_Pro_Shipping {
 
         <?php if ( $shipping_policy ) { ?>
             <p>&nbsp;</p>
-            <strong><?php _e( 'Shipping Policy', 'dokan-pro' ); ?></strong>
+            <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
             <?php echo wpautop( $shipping_policy ); ?>
         <?php } ?>
 
         <?php if ( $refund_policy ) { ?>
             <hr>
             <p>&nbsp;</p>
-            <strong><?php _e( 'Refund Policy', 'dokan-pro' ); ?></strong>
+            <strong><?php _e( 'Refund Policy', 'dokan' ); ?></strong>
             <hr>
             <?php echo wpautop( $refund_policy ); ?>
         <?php } ?>

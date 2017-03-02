@@ -82,7 +82,7 @@ class Dokan_Pro_Store {
      */
     public function add_review_tab_in_store( $tabs, $store_id ) {
         $tabs['reviews'] = array(
-            'title' => __( 'Reviews', 'dokan-pro' ),
+            'title' => __( 'Reviews', 'dokan' ),
             'url'   => dokan_get_review_url( $store_id )
         );
 
@@ -99,11 +99,11 @@ class Dokan_Pro_Store {
      * @return string
      */
     public function store_review_template( $template ) {
-        
+
         if ( ! function_exists( 'WC' ) ) {
             return $template;
         }
-      
+
         if ( get_query_var( 'store_review' ) ) {
             return dokan_locate_template( 'store-reviews.php', '', DOKAN_PRO_DIR. '/templates/', true );
         }
@@ -145,19 +145,18 @@ class Dokan_Pro_Store {
                 $coupon_amount_formated = wc_price( $coup->amount );
             }
             ?>
-
                 <div class="code">
                     <span class="outside">
                         <span class="inside">
-                            <div class="coupon-title"><?php printf( __( '%s Discount', 'dokan-pro' ), $coupon_amount_formated ); ?></div>
+                            <div class="coupon-title"><?php printf( __( '%s Discount', 'dokan' ), $coupon_amount_formated ); ?></div>
                             <div class="coupon-body">
                                 <?php if ( !empty( $coupon->post_content ) ) { ?>
                                     <span class="coupon-details"><?php echo esc_html( $coupon->post_content ); ?></span>
                                 <?php } ?>
-                                <span class="coupon-code"><?php printf( __( 'Coupon Code: <strong>%s</strong>', 'dokan-pro' ), $coupon->post_title ); ?></span>
+                                <span class="coupon-code"><?php printf( __( 'Coupon Code: <strong>%s</strong>', 'dokan' ), $coupon->post_title ); ?></span>
 
                                 <?php if ( $coup->expiry_date ) { ?>
-                                    <span class="expiring-in">(<?php printf( __( 'Expiring in %s', 'dokan-pro' ), human_time_diff( $current_time, $coup->expiry_date ) ); ?>)</span>
+                                    <span class="expiring-in">(<?php printf( __( 'Expiring in %s', 'dokan' ), human_time_diff( $current_time, $coup->expiry_date ) ); ?>)</span>
                                 <?php } ?>
                             </div>
                         </span>

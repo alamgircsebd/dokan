@@ -12,7 +12,6 @@ class Dokan_Pro_Coupons {
     public static $validate;
     public $is_edit_page;
 
-
     /**
      * Load autometically when class inistantiate
      *
@@ -59,9 +58,8 @@ class Dokan_Pro_Coupons {
      * @return array $urls
      */
     public function add_coupon_menu( $urls ) {
-
         $urls['coupons'] = array(
-            'title' => __( 'Coupons', 'dokan-pro'),
+            'title' => __( 'Coupons', 'dokan' ),
             'icon'  => '<i class="fa fa-gift"></i>',
             'url'   => dokan_get_navigation_url( 'coupons' ),
             'pos'   => 55
@@ -80,7 +78,6 @@ class Dokan_Pro_Coupons {
      * @return void [require once template]
      */
     public function load_coupon_template( $query_vars ) {
-
         if ( isset( $query_vars['coupons'] ) ) {
             dokan_get_template_part( 'coupon/coupons', '', array( 'pro'=>true ) );
             return;
@@ -130,7 +127,6 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     function handle_coupons() {
-
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -157,7 +153,6 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     function coupun_delete() {
-
         if ( !isset( $_GET['post'] ) || !isset( $_GET['action'] ) ) {
             return;
         } else if ( $_GET['action'] != 'delete' ) {
@@ -165,11 +160,10 @@ class Dokan_Pro_Coupons {
         }
 
         if ( !wp_verify_nonce( $_GET['coupon_del_nonce'], '_coupon_del_nonce' ) ) {
-            wp_die( __( 'Are you cheating?', 'dokan-pro' ) );
+            wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
         wp_delete_post( $_GET['post'], true );
-
         wp_redirect( add_query_arg( array('message' => 'delete_succefully'), dokan_get_navigation_url( 'coupons' ) ) );
     }
 
@@ -187,21 +181,21 @@ class Dokan_Pro_Coupons {
         }
 
         if ( !wp_verify_nonce( $_POST['coupon_nonce_field'], 'coupon_nonce' ) ) {
-            wp_die( __( 'Are you cheating?', 'dokan-pro' ) );
+            wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
         $errors = new WP_Error();
 
         if ( empty( $_POST['title'] ) ) {
-            $errors->add( 'title', __( 'Please enter the coupon title', 'dokan-pro' ) );
+            $errors->add( 'title', __( 'Please enter the coupon title', 'dokan' ) );
         }
 
         if ( empty( $_POST['amount'] ) ) {
-            $errors->add( 'amount', __( 'Please enter the amount', 'dokan-pro' ) );
+            $errors->add( 'amount', __( 'Please enter the amount', 'dokan' ) );
         }
 
         if ( !isset( $_POST['product_drop_down'] ) || !count( $_POST['product_drop_down'] ) ) {
-            $errors->add( 'products', __( 'Please specify any products', 'dokan-pro' ) );
+            $errors->add( 'products', __( 'Please specify any products', 'dokan' ) );
         }
 
         $this->is_coupon_exist( $_POST['title'], $errors );
@@ -230,7 +224,7 @@ class Dokan_Pro_Coupons {
         if ( $title ) {
             if ( !empty( $query ) ) {
                 if ( empty( $_POST['post_id'] ) || $_POST['post_id'] != $query[0]->ID ) {
-                    return $errors->add( 'duplicate', __( 'Coupon title already exists', 'dokan-pro' ) );
+                    return $errors->add( 'duplicate', __( 'Coupon title already exists', 'dokan' ) );
                 }
             }
         }
@@ -244,27 +238,26 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     function coupons_create() {
-
         if ( !isset( $_POST['coupon_creation'] ) ) {
             return;
         }
-        if ( !wp_verify_nonce( $_POST['coupon_nonce_field'], 'coupon_nonce' ) ) {
-            wp_die( __( 'Are you cheating?', 'dokan-pro' ) );
-        }
 
+        if ( !wp_verify_nonce( $_POST['coupon_nonce_field'], 'coupon_nonce' ) ) {
+            wp_die( __( 'Are you cheating?', 'dokan' ) );
+        }
 
         if ( empty( $_POST['post_id'] ) ) {
 
             $post = array(
-                'post_title' => $_POST['title'],
+                'post_title'   => $_POST['title'],
                 'post_content' => $_POST['description'],
-                'post_status' => 'publish',
-                'post_type' => 'shop_coupon',
+                'post_status'  => 'publish',
+                'post_type'    => 'shop_coupon',
             );
 
             $post_id = wp_insert_post( $post );
-
             $message = 'coupon_saved';
+
         } else {
 
             $post = array(
@@ -287,7 +280,6 @@ class Dokan_Pro_Coupons {
         $amount             = sanitize_text_field( $_POST['amount'] );
         $usage_limit        = empty( $_POST['usage_limit'] ) ? '' : absint( $_POST['usage_limit'] );
         $expiry_date        = sanitize_text_field( $_POST['expire'] );
-
         $apply_before_tax   = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
         $exclude_sale_items = isset( $_POST['exclude_sale_items'] ) ? 'yes' : 'no';
         $show_on_store      = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
@@ -330,17 +322,16 @@ class Dokan_Pro_Coupons {
      */
     function message() {
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'delete_succefully' ) {
-            dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been deleted successfully!', 'dokan-pro' ) ) );
+            dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been deleted successfully!', 'dokan' ) ) );
         }
 
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'coupon_saved' ) {
-            dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been saved successfully!', 'dokan-pro' ) ) );
+            dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been saved successfully!', 'dokan' ) ) );
         }
 
         if ( isset( $_GET['message'] ) && $_GET['message'] == 'coupon_update' ) {
-            dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been updated successfully!', 'dokan-pro' ) ) );
+            dokan_get_template_part( 'global/dokan-message', '', array( 'message'=> __( 'Coupon has been updated successfully!', 'dokan' ) ) );
         }
-
     }
 
     /**
@@ -364,7 +355,7 @@ class Dokan_Pro_Coupons {
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $offset  = ( $pagenum - 1 ) * $perpage;
 
-        $paged = (get_query_var( 'paged' )) ? get_query_var( 'paged' ) : 1;
+        $paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
         $args = array(
             'post_type'      => 'shop_coupon',
             'post_status'    => array('publish'),
@@ -382,19 +373,17 @@ class Dokan_Pro_Coupons {
             $this->message();
             dokan_get_template_part( 'coupon/listing', '', array( 'pro' => true, 'coupons' => $coupon_query->posts ) );
             echo $this->pagination();
-
         } else {
-            dokan_get_template_part( 'coupon/no-coupon', '', array( 'pro' => true, 'message' => __( 'No coupons found!', 'dokan-pro' ) ) );
+            dokan_get_template_part( 'coupon/no-coupon', '', array( 'pro' => true, 'message' => __( 'No coupons found!', 'dokan' ) ) );
         }
     }
 
     /**
      * Coupon Pagination
      *
-     * @return [type] [description]
+     * @return void
      */
     function pagination() {
-
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $this->total_query_result / $this->perpage );
         $base_url = dokan_get_navigation_url( 'coupons' );
@@ -427,7 +416,7 @@ class Dokan_Pro_Coupons {
 
         $args = array(
             'post_type'      => 'product',
-            'post_status'    => array('publish', 'draft', 'pending'),
+            'post_status'    => array( 'publish', 'draft', 'pending' ),
             'posts_per_page' => 100,
             'author'         => get_current_user_id(),
         );
@@ -445,7 +434,6 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     function add_coupons_form( $validated ) {
-
         //intial time hide this function
         if ( !isset( $_GET['view'] ) ) {
             return;
@@ -453,15 +441,12 @@ class Dokan_Pro_Coupons {
             return;
         }
 
-        $button_name = __( 'Create Coupon', 'dokan-pro' );
+        $button_name = __( 'Create Coupon', 'dokan' );
 
         if ( isset( $_GET['post'] ) && $_GET['action'] == 'edit' ) {
-//            if ( !wp_verify_nonce( $_GET['coupon_nonce_url'], '_coupon_nonce' ) ) {
-//                wp_die( __( 'Are you cheating?', 'dokan-pro' ) );
-//            }
 
             $post              = get_post( $_GET['post'] );
-            $button_name       = __( 'Update Coupon', 'dokan-pro' );
+            $button_name       = __( 'Update Coupon', 'dokan' );
 
             $discount_type     = get_post_meta( $post->ID, 'discount_type', true );
             $amount            = get_post_meta( $post->ID, 'coupon_amount', true );
@@ -538,13 +523,11 @@ class Dokan_Pro_Coupons {
 
             $amount = $_POST['amount'];
 
-
             if ( isset( $_POST['product_drop_down'] ) ) {
                 $products = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_drop_down'] ) ) );
             } else {
                 $products = '';
             }
-
 
             if ( isset( $_POST['exclude_product_ids'] ) ) {
                 $exclude_products = implode( ',', array_filter( array_map( 'intval', (array) $_POST['exclude_product_ids'] ) ) );

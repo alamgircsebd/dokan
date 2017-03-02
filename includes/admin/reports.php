@@ -14,8 +14,8 @@
     $type = isset( $_GET['type'] ) ? $_GET['type'] : 'day';
 
     $all_tabs = apply_filters( 'dokan_admin_report_tabs', array(
-        'report' => __( 'Reports', 'dokan-pro' ),
-        'logs'   => __( 'All Logs', 'dokan-pro' ),
+        'report' => __( 'Reports', 'dokan' ),
+        'logs'   => __( 'All Logs', 'dokan' ),
     ) );
     ?>
 
@@ -28,9 +28,9 @@
     <?php
     if ( $tab == 'report' ) {
         $report_sub_head = apply_filters( 'dokan_admin_report_sub', array(
-            'day'    => __( 'By Day', 'dokan-pro' ),
-            'year'   => __( 'By Year', 'dokan-pro' ),
-            'seller' => __( 'By Vendor', 'dokan-pro' ),
+            'day'    => __( 'By Day', 'dokan' ),
+            'year'   => __( 'By Year', 'dokan' ),
+            'seller' => __( 'By Vendor', 'dokan' ),
         ) );
 
         $head_count = count( $report_sub_head );
@@ -73,14 +73,14 @@
             ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
-                    <label for="from"><?php _e( 'From:', 'dokan-pro' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+                    <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
                 </span>
 
                 <span class="form-group">
-                    <label for="to"><?php _e( 'To:', 'dokan-pro' ); ?></label>
+                    <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
                     <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
 
-                    <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+                    <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
                 </span>
             </form>
 
@@ -90,14 +90,14 @@
 
             $user_search        = new WP_User_Query( array( 'role' => 'seller' ) );
             $sellers            = $user_search->get_results();
-            $chosen_placeholder = __( 'Select a Store...', 'dokan-pro' );
+            $chosen_placeholder = __( 'Select a Store...', 'dokan' );
             $seller_id          = isset( $_POST['chosen_store_name'] ) ? intval( $_POST['chosen_store_name'] ) : 0;
             ?>
             <form method="post" class="form-inline report-filter" action="" >
 
                 <span class="form-group">
-                    <label for='chosen_store_name'<b><?php _e( 'Store Name : ', 'dokan-pro' ); ?></b></label>
-                    <select id='chosen_store_name' name='chosen_store_name' data-placeholder= '<?php echo __( 'Select a Store...', 'dokan-pro' ); ?>' style="width:350px;"  class="chosen-select">
+                    <label for='chosen_store_name'<b><?php _e( 'Store Name : ', 'dokan' ); ?></b></label>
+                    <select id='chosen_store_name' name='chosen_store_name' data-placeholder= '<?php echo __( 'Select a Store...', 'dokan' ); ?>' style="width:350px;"  class="chosen-select">
                         <option></option>
                         <?php
                         foreach ( $sellers as $user ) {
@@ -113,22 +113,22 @@
                 </span>
 
                 <span class="form-group">
-                    <label for="from"><?php _e( 'From:', 'dokan-pro' ); ?></label>
+                    <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
                     <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
                 </span>
 
                 <span class="form-group">
-                    <label for="to"><?php _e( 'To:', 'dokan-pro' ); ?></label>
+                    <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
                     <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
 
-                    <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+                    <input type="submit" name="dokan_report_filter_date" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
                 </span>
             </form>
 
         <?php } elseif ( $type == 'year' ) { ?>
             <form method="post" class="form-inline report-filter" action="">
                 <span class="form-group">
-                    <label for="from"><?php _e( 'Year:', 'dokan-pro' ); ?></label>
+                    <label for="from"><?php _e( 'Year:', 'dokan' ); ?></label>
                     <select name="report_year">
                         <?php for ( $i = ($current_year - 5); $i < ($current_year + 5); $i++ ) { ?>
                             <option value="<?php echo $i; ?>" <?php selected( $selected_year, $i ); ?>><?php echo $i; ?></option>
@@ -136,7 +136,7 @@
                     </select>
                 </span>
 
-                <input type="submit" name="dokan_report_filter_year" class="button button-primary" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+                <input type="submit" name="dokan_report_filter_year" class="button button-primary" value="<?php _e( 'Show', 'dokan' ); ?>" />
             </form>
             <?php
         } else {
@@ -169,15 +169,15 @@
                 <ul class="chart-legend">
                     <li>
                         <strong><?php echo wc_price( $earning_total ); ?></strong>
-                        <?php _e( 'Total Earning in this period', 'dokan-pro' ); ?>
+                        <?php _e( 'Total Earning in this period', 'dokan' ); ?>
                     </li>
                     <li>
                         <strong><?php echo wc_price( $order_total ); ?></strong>
-                        <?php _e( 'Order total in this period', 'dokan-pro' ); ?>
+                        <?php _e( 'Order total in this period', 'dokan' ); ?>
                     </li>
                     <li>
                         <strong><?php echo $total_orders; ?></strong>
-                        <?php _e( 'orders placed in this period', 'dokan-pro' ); ?>
+                        <?php _e( 'orders placed in this period', 'dokan' ); ?>
                     </li>
                 </ul>
             </div>
@@ -191,12 +191,12 @@
     <?php } else if ( $tab == 'logs' ) { ?>
         <?php
         $headers = array(
-            'order_id'     => __( 'Order', 'dokan-pro' ),
-            'seller_id'    => __( 'Vendor', 'dokan-pro' ),
-            'order_total'  => __( 'Order Total', 'dokan-pro' ),
-            'net_amount'   => __( 'Vendor Earning', 'dokan-pro' ),
-            'commision'    => __( 'Commision', 'dokan-pro' ),
-            'order_status' => __( 'Status', 'dokan-pro' ),
+            'order_id'     => __( 'Order', 'dokan' ),
+            'seller_id'    => __( 'Vendor', 'dokan' ),
+            'order_total'  => __( 'Order Total', 'dokan' ),
+            'net_amount'   => __( 'Vendor Earning', 'dokan' ),
+            'commision'    => __( 'Commision', 'dokan' ),
+            'order_status' => __( 'Status', 'dokan' ),
         );
         $headers = apply_filters( 'dokan_earning_report_header', $headers );
         $statuses = wc_get_order_statuses();
@@ -250,7 +250,7 @@
 
                     $result = array(
                         'order_id'     => '<a href="' . admin_url( 'post.php?action=edit&amp;post=' . $log->order_id ) . '">#' . $log->order_id . '</a>',
-                        'seller_id'    => '<a href="' . add_query_arg( array( 'seller_id' => $log->seller_id ) ) . '">' . $seller->display_name . '</a> (<a href="' . admin_url( 'user-edit.php?user_id=' . $log->seller_id ) . '">' . __( 'edit', 'dokan-pro' ) . '</a>)',
+                        'seller_id'    => '<a href="' . add_query_arg( array( 'seller_id' => $log->seller_id ) ) . '">' . $seller->display_name . '</a> (<a href="' . admin_url( 'user-edit.php?user_id=' . $log->seller_id ) . '">' . __( 'edit', 'dokan' ) . '</a>)',
                         'order_total'  => $log->order_total,
                         'net_amount'   => $log->net_amount,
                         'commision'    => $log->order_total - $log->net_amount,
@@ -295,8 +295,8 @@
                 $page_links = paginate_links( array(
                     'base'      => add_query_arg( 'paged', '%#%' ),
                     'format'    => '',
-                    'prev_text' => __( '&laquo;', 'dokan-pro' ),
-                    'next_text' => __( '&raquo;', 'dokan-pro' ),
+                    'prev_text' => __( '&laquo;', 'dokan' ),
+                    'next_text' => __( '&raquo;', 'dokan' ),
                     'total'     => $num_of_pages,
                     'current'   => $pagenum,
                     'add_args'  => false

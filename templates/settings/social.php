@@ -29,7 +29,7 @@ do_action( 'dokan_profile_settings_before_form', $current_user, $profile_info );
 
     <div class="dokan-form-group">
         <div class="dokan-w4 ajax_prev dokan-text-left" style="margin-left:24%;">
-            <input type="submit" name="dokan_update_profile_settings" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan-pro' ); ?>">
+            <input type="submit" name="dokan_update_profile_settings" class="dokan-btn dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Update Settings', 'dokan' ); ?>">
         </div>
     </div>
 

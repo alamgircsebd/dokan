@@ -187,7 +187,7 @@ class Dokan_Pro_Products {
             'dps_pt'                  => $dps_pt,
             'classes_options'         => $classes_options,
             'porduct_shipping_pt'     => $porduct_shipping_pt,
-            ) );
+        ) );
     }
 
     /**
@@ -200,7 +200,7 @@ class Dokan_Pro_Products {
     function get_tax_class_option() {
         $tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
         $classes_options = array();
-        $classes_options[''] = __( 'Standard', 'dokan-pro' );
+        $classes_options[''] = __( 'Standard', 'dokan' );
 
         if ( $tax_classes ) {
 
@@ -223,9 +223,9 @@ class Dokan_Pro_Products {
         woocommerce_wp_text_input(
             array(
                 'id'            => '_per_product_commission',
-                'label'         => __( 'Vendor Commission (%)', 'dokan-pro' ),
+                'label'         => __( 'Vendor Commission (%)', 'dokan' ),
                 'wrapper_class' => 'per-product-commission show_if_simple show_if_variable',
-                'description'   => __( 'Override the default commission (%) vendor will get from this product', 'dokan-pro' ),
+                'description'   => __( 'Override the default commission (%) vendor will get from this product', 'dokan' ),
                 'data_type'     => 'price'
             )
         );
@@ -261,6 +261,15 @@ class Dokan_Pro_Products {
         return $template;
     }
 
+    /**
+     * Save extra product data
+     *
+     * @since  2.5.3
+     *
+     * @param  integer $post_id
+     *
+     * @return void
+     */
     public function save_pro_product_data( $post_id ) {
         if ( ! $post_id ) {
             return;
@@ -373,6 +382,13 @@ class Dokan_Pro_Products {
         }
     }
 
+    /**
+     * Set product type
+     *
+     * @since 2.5.3
+     *
+     * @param integer $post_id
+     */
     public function set_product_type( $post_id ) {
         if ( isset( $_POST['product_type'] ) ) {
             wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );

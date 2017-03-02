@@ -22,7 +22,7 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 	    $profile_info = dokan_get_store_info( $current_user->ID );
 	    $progress     = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : 0;
-	    $next_todo    = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : __('Start with adding a Banner to gain profile progress','dokan-pro');
+	    $next_todo    = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : __('Start with adding a Banner to gain profile progress','dokan');
 
 	    ob_start();
 

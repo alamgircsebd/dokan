@@ -18,9 +18,9 @@ class Dokan_Announcement {
 	 */
 	function __construct() {
         $this->assign_type = array(
-            ''                => __( '-- Select --', 'dokan-pro' ),
-            'all_seller'      => __( 'All Vendor', 'dokan-pro' ),
-            'selected_seller' => __( 'Selected Vendor', 'dokan-pro' )
+            ''                => __( '-- Select --', 'dokan' ),
+            'all_seller'      => __( 'All Vendor', 'dokan' ),
+            'selected_seller' => __( 'Selected Vendor', 'dokan' )
         );
 
         add_action( 'init', array( $this, 'post_types' ) );
@@ -40,7 +40,7 @@ class Dokan_Announcement {
      */
     function post_types() {
         register_post_type( $this->post_type, array(
-            'label'           => __( 'Announcement', 'dokan-pro' ),
+            'label'           => __( 'Announcement', 'dokan' ),
             'description'     => '',
             'public'          => false,
             'show_ui'         => true,
@@ -51,20 +51,20 @@ class Dokan_Announcement {
             'query_var'       => false,
             'supports'        => array( 'title', 'editor' ),
             'labels'          => array(
-                'name'               => __( 'Announcement', 'dokan-pro' ),
-                'singular_name'      => __( 'Announcement', 'dokan-pro' ),
-                'menu_name'          => __( 'Dokan Announcement', 'dokan-pro' ),
-                'add_new'            => __( 'Add Announcement', 'dokan-pro' ),
-                'add_new_item'       => __( 'Add New Announcement', 'dokan-pro' ),
-                'edit'               => __( 'Edit', 'dokan-pro' ),
-                'edit_item'          => __( 'Edit Announcement', 'dokan-pro' ),
-                'new_item'           => __( 'New Announcement', 'dokan-pro' ),
-                'view'               => __( 'View Announcement', 'dokan-pro' ),
-                'view_item'          => __( 'View Announcement', 'dokan-pro' ),
-                'search_items'       => __( 'Search Announcement', 'dokan-pro' ),
-                'not_found'          => __( 'No Announcement Found', 'dokan-pro' ),
-                'not_found_in_trash' => __( 'No Announcement found in trash', 'dokan-pro' ),
-                'parent'             => __( 'Parent Announcement', 'dokan-pro' )
+                'name'               => __( 'Announcement', 'dokan' ),
+                'singular_name'      => __( 'Announcement', 'dokan' ),
+                'menu_name'          => __( 'Dokan Announcement', 'dokan' ),
+                'add_new'            => __( 'Add Announcement', 'dokan' ),
+                'add_new_item'       => __( 'Add New Announcement', 'dokan' ),
+                'edit'               => __( 'Edit', 'dokan' ),
+                'edit_item'          => __( 'Edit Announcement', 'dokan' ),
+                'new_item'           => __( 'New Announcement', 'dokan' ),
+                'view'               => __( 'View Announcement', 'dokan' ),
+                'view_item'          => __( 'View Announcement', 'dokan' ),
+                'search_items'       => __( 'Search Announcement', 'dokan' ),
+                'not_found'          => __( 'No Announcement Found', 'dokan' ),
+                'not_found_in_trash' => __( 'No Announcement found in trash', 'dokan' ),
+                'parent'             => __( 'Parent Announcement', 'dokan' )
             ),
         ) );
     }
@@ -77,7 +77,7 @@ class Dokan_Announcement {
      * @return void
      */
     function add_new_metabox() {
-        add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan-pro'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );
+        add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );
     }
 
     /**
@@ -100,7 +100,7 @@ class Dokan_Announcement {
         ?>
             <table class="form-table dokan-announcement-meta-wrap-table">
                 <tr>
-                    <th><?php _e( 'Send Announcement To', 'dokan-pro' ); ?></th>
+                    <th><?php _e( 'Send Announcement To', 'dokan' ); ?></th>
                     <td>
                         <select name="dokan_announcement_assign_type" id="dokan_announcement_assign_type" style="width:60%">
                             <?php foreach ( $this->assign_type as $key => $type ): ?>
@@ -111,9 +111,9 @@ class Dokan_Announcement {
                 </tr>
 
                 <tr class="selected_seller_field">
-                    <th><?php _e( 'Select Vendor', 'dokan-pro' ); ?></th>
+                    <th><?php _e( 'Select Vendor', 'dokan' ); ?></th>
                     <td>
-                        <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Vendors...', 'dokan-pro' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
+                        <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Vendors...', 'dokan' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
                             <option></option>
                             <?php
                             foreach ( $sellers as $user ) {
@@ -170,8 +170,8 @@ class Dokan_Announcement {
     function add_type_columns( $columns ) {
         unset( $columns['date'] );
 
-        $columns['assign_type'] = __( 'Sent To', 'dokan-pro' );
-        $columns['date']        = __( 'Date', 'dokan-pro' );
+        $columns['assign_type'] = __( 'Sent To', 'dokan' );
+        $columns['date']        = __( 'Date', 'dokan' );
 
         return $columns;
     }
@@ -195,7 +195,7 @@ class Dokan_Announcement {
             if ( $assign_type ) {
                 echo $this->assign_type[$assign_type];
             } else {
-                _e( 'No vendor assigned!', 'dokan-pro' );
+                _e( 'No vendor assigned!', 'dokan' );
             }
         }
     }

@@ -10,10 +10,10 @@
 <article class="dokan-notice-single-notice-area">
     <header class="dokan-dashboard-header dokan-clearfix">
         <span class="left-header-content">
-            <h1 class="entry-title"><?php _e( 'Notice', 'dokan-pro' ); ?></h1>
+            <h1 class="entry-title"><?php _e( 'Notice', 'dokan' ); ?></h1>
         </span>
     </header>
     <div class="dokan-error">
-        <?php echo sprintf( "<p>%s <a href='%s'>%s</a></p", __( 'No Notice found; ', 'dokan-pro' ), dokan_get_navigation_url('announcement'), __( 'Back to all Notice', 'dokan-pro' ) ) ?>
+        <?php echo sprintf( "<p>%s <a href='%s'>%s</a></p", __( 'No Notice found; ', 'dokan' ), dokan_get_navigation_url('announcement'), __( 'Back to all Notice', 'dokan' ) ) ?>
     </div>
 </article>

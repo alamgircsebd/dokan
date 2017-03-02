@@ -11,10 +11,10 @@
 ?>
  <div class="dashboard-widget dokan-announcement-widget">
     <div class="widget-title">
-        <i class="fa fa-bullhorn" aria-hidden="true"></i> <?php _e( 'Latest Announcement', 'dokan-pro' ); ?>
+        <i class="fa fa-bullhorn" aria-hidden="true"></i> <?php _e( 'Latest Announcement', 'dokan' ); ?>
 
         <span class="pull-right">
-            <a href="<?php echo $announcement_url; ?>"><?php _e( 'See All', 'dokan-pro' ); ?></a>
+            <a href="<?php echo $announcement_url; ?>"><?php _e( 'See All', 'dokan' ); ?></a>
         </span>
     </div>
     <?php
@@ -44,7 +44,7 @@
         <div class="dokan-no-announcement">
             <div class="annoument-no-wrapper">
                 <i class="fa fa-bell dokan-announcement-icon"></i>
-                <p><?php _e( 'No announcement found', 'dokan-pro' ) ?></p>
+                <p><?php _e( 'No announcement found', 'dokan' ) ?></p>
             </div>
         </div>
     <?php endif ?>

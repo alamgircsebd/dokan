@@ -54,25 +54,25 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
         $this->form_fields = array(
             'enabled' => array(
-                'title'         => __( 'Enable/Disable', 'dokan-pro' ),
+                'title'         => __( 'Enable/Disable', 'dokan' ),
                 'type'          => 'checkbox',
-                'label'         => __( 'Enable Shipping', 'dokan-pro' ),
+                'label'         => __( 'Enable Shipping', 'dokan' ),
                 'default'       => 'yes'
             ),
             'title' => array(
-                'title'         => __( 'Method Title', 'dokan-pro' ),
+                'title'         => __( 'Method Title', 'dokan' ),
                 'type'          => 'text',
-                'description'   => __( 'This controls the title which the user sees during checkout.', 'dokan-pro' ),
-                'default'       => __( 'Regular Shipping', 'dokan-pro' ),
+                'description'   => __( 'This controls the title which the user sees during checkout.', 'dokan' ),
+                'default'       => __( 'Regular Shipping', 'dokan' ),
                 'desc_tip'      => true,
             ),
             'tax_status' => array(
-                'title'         => __( 'Tax Status', 'dokan-pro' ),
+                'title'         => __( 'Tax Status', 'dokan' ),
                 'type'          => 'select',
                 'default'       => 'taxable',
                 'options'       => array(
-                    'taxable'   => __( 'Taxable', 'dokan-pro' ),
-                    'none'      => _x( 'None', 'Tax status', 'dokan-pro' )
+                    'taxable'   => __( 'Taxable', 'dokan' ),
+                    'none'      => _x( 'None', 'Tax status', 'dokan' )
                 ),
             ),
 

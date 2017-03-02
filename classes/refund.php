@@ -44,7 +44,6 @@ class Dokan_Pro_Refund {
         // 0 -> pending
         // 1 -> active
         // 2 -> cancelled
-
         $wpdb->query( $wpdb->prepare(
             "UPDATE {$wpdb->prefix}dokan_refund
             SET status = %d WHERE order_id=%d AND id = %d",
@@ -136,7 +135,6 @@ class Dokan_Pro_Refund {
      */
     function delete_refund( $id ) {
         global $wpdb;
-
         $wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->prefix}dokan_refund WHERE id = %d", $id ) );
     }
 
@@ -177,11 +175,11 @@ class Dokan_Pro_Refund {
     function request_status( $status ) {
         switch ( $status ) {
             case 0:
-                return '<span class="label label-danger">' . __( 'Pending Reivew', 'dokan-pro' ) . '</span>';
+                return '<span class="label label-danger">' . __( 'Pending Reivew', 'dokan' ) . '</span>';
                 break;
 
             case 1:
-                return '<span class="label label-warning">' . __( 'Accepted', 'dokan-pro' ) . '</span>';
+                return '<span class="label label-warning">' . __( 'Accepted', 'dokan' ) . '</span>';
                 break;
         }
     }

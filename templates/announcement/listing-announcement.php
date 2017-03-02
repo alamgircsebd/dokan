@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="dokan-announcement-content">
-                        <?php echo wp_trim_words( $notice->post_content, '15', sprintf('<p><a href="%s">%s</a></p>', $notice_url , __( ' See More', 'dokan-pro' ) ) );  ?>
+                        <?php echo wp_trim_words( $notice->post_content, '15', sprintf('<p><a href="%s">%s</a></p>', $notice_url , __( ' See More', 'dokan' ) ) );  ?>
                     </div>
                 </div>
                 <div class="dokan-clearfix"></div>
@@ -44,7 +44,7 @@
         <div class="dokan-no-announcement">
             <div class="annoument-no-wrapper">
                 <i class="fa fa-bell dokan-announcement-icon"></i>
-                <p><?php _e( 'No announcement found', 'dokan-pro' ) ?></p>
+                <p><?php _e( 'No announcement found', 'dokan' ) ?></p>
             </div>
         </div>
 

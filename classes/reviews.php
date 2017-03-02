@@ -81,7 +81,7 @@ class Dokan_Pro_Reviews {
     public function add_review_menu( $urls ) {
 
         $urls['reviews'] = array(
-            'title' => __( 'Reviews', 'dokan-pro'),
+            'title' => __( 'Reviews', 'dokan' ),
             'icon'  => '<i class="fa fa-comments-o"></i>',
             'url'   => dokan_get_navigation_url( 'reviews' ),
             'pos'   => 65
@@ -117,6 +117,13 @@ class Dokan_Pro_Reviews {
         dokan_get_template_part( 'review/header', '', array( 'pro' => true ) );
     }
 
+    /**
+     * Render dokan review content
+     *
+     * @since  2.4
+     *
+     * @return void
+     */
     public function dokan_review_content_render() {
         $this->reviews_view();
     }
@@ -174,7 +181,7 @@ class Dokan_Pro_Reviews {
         $comment = get_comment( $comment_id );
 
         $cache_key = 'dokan-count-comments-' . $post_type . '-' . $current_user->ID;
-        wp_cache_delete( $cache_key, 'dokan-pro' );
+        wp_cache_delete( $cache_key, 'dokan' );
 
         $counts = dokan_count_comments( $post_type, $current_user->ID );
 
@@ -218,9 +225,9 @@ class Dokan_Pro_Reviews {
             $this->approved = $counts->approved;
 
             dokan_get_template_part( 'review/content', '', array(
-                'pro' => true,
+                'pro'       => true,
                 'post_type' => $post_type,
-                'counts' => $counts
+                'counts'    => $counts
             ) );
         }
     }
@@ -506,7 +513,6 @@ class Dokan_Pro_Reviews {
      * @return void
      */
     public function render_row( $comment, $post_type ) {
-
         $comment_date       = get_comment_date( 'Y/m/d \a\t g:i a', $comment->comment_ID );
         $comment_author_img = get_avatar( $comment->comment_author_email, 32 );
         $eidt_post_url      = get_edit_post_link( $comment->comment_post_ID );
@@ -516,30 +522,16 @@ class Dokan_Pro_Reviews {
         $page_status = $this->page_status();
 
         dokan_get_template_part( 'review/listing-table-tr', '', array(
-            'pro' => true,
-            'comment' => $comment,
-            'comment_date' => $comment_date,
+            'pro'                => true,
+            'comment'            => $comment,
+            'comment_date'       => $comment_date,
             'comment_author_img' => $comment_author_img,
-            'eidt_post_url' => $eidt_post_url,
-            'permalink' => $permalink,
-            'page_status' => $page_status,
-            'post_type' => $post_type,
-            'comment_status' => $comment_status
+            'eidt_post_url'      => $eidt_post_url,
+            'permalink'          => $permalink,
+            'page_status'        => $page_status,
+            'post_type'          => $post_type,
+            'comment_status'     => $comment_status
         ) );
-    }
-
-    /**
-     * Manupulate comment row actions
-     *
-     * @since 2.4
-     *
-     * @param  object $comment
-     * @param  string $post_type
-     *
-     * @return void
-     */
-    function row_action( $comment, $post_type ) {
-
     }
 
     /**
@@ -551,7 +543,7 @@ class Dokan_Pro_Reviews {
      */
     function ajax_update_comment() {
         if ( ! $this->quick_edit ) {
-            wp_send_json_error( __( 'You can not edit reviews!', 'dokan-pro' ) );
+            wp_send_json_error( __( 'You can not edit reviews!', 'dokan' ) );
         }
 
         if ( !wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) ) {
@@ -666,7 +658,7 @@ class Dokan_Pro_Reviews {
 
         ob_start();
         if ( count( $comments ) == 0 ) {
-            echo '<span colspan="5">' . __( 'No Results Found', 'dokan-pro' ) . '</span>';
+            echo '<span colspan="5">' . __( 'No Results Found', 'dokan' ) . '</span>';
         } else {
             foreach ( $comments as $single_comment ) {
                 if ( $single_comment->comment_approved ) {
@@ -686,8 +678,8 @@ class Dokan_Pro_Reviews {
                                         $rating = intval( get_comment_meta( $single_comment->comment_ID, 'rating', true ) );
                                     ?>
                                         <div class="dokan-rating">
-                                            <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf( __( 'Rated %d out of 5', 'dokan-pro' ), $rating ) ?>">
-                                                <span style="width:<?php echo ( intval( get_comment_meta( $single_comment->comment_ID, 'rating', true ) ) / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo $rating; ?></strong> <?php _e( 'out of 5', 'dokan-pro' ); ?></span>
+                                            <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating" class="star-rating" title="<?php echo sprintf( __( 'Rated %d out of 5', 'dokan' ), $rating ) ?>">
+                                                <span style="width:<?php echo ( intval( get_comment_meta( $single_comment->comment_ID, 'rating', true ) ) / 5 ) * 100; ?>%"><strong itemprop="ratingValue"><?php echo $rating; ?></strong> <?php _e( 'out of 5', 'dokan' ); ?></span>
                                             </div>
                                         </div>
                                     <?php endif; ?>

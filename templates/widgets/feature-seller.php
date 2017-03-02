@@ -19,7 +19,7 @@
             $display_rating = $rating['rating'];
 
             if ( ! $rating['count'] ) {
-                $display_rating = __( 'No ratings found yet!', 'dokan-pro' );
+                $display_rating = __( 'No ratings found yet!', 'dokan' );
             }
             ?>
             <li>

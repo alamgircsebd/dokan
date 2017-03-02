@@ -57,14 +57,14 @@ class Dokan_Pro_Reports {
             header( "Content-Disposition: attachment; filename=$filename.csv" );
             $currency = get_woocommerce_currency_symbol();
             $headers  = array(
-                'date'     => __( 'Date', 'dokan-pro' ),
-                'order_id' => __( 'ID', 'dokan-pro' ),
-                'type'     => __( 'Type', 'dokan-pro' ),
-                'sales'    => __( 'Sales', 'dokan-pro' ),
-                'amount'   => __( 'Earned', 'dokan-pro' ),
-                'shipping' => __( 'Shipping', 'dokan-pro' ),
-                'tax'      => __( 'Tax', 'dokan-pro' ),
-                'balance'  => __( 'Balance', 'dokan-pro' ),
+                'date'     => __( 'Date', 'dokan' ),
+                'order_id' => __( 'ID', 'dokan' ),
+                'type'     => __( 'Type', 'dokan' ),
+                'sales'    => __( 'Sales', 'dokan' ),
+                'amount'   => __( 'Earned', 'dokan' ),
+                'shipping' => __( 'Shipping', 'dokan' ),
+                'tax'      => __( 'Tax', 'dokan' ),
+                'balance'  => __( 'Balance', 'dokan' ),
             );
 
             foreach ( (array)$headers as $label ) {
@@ -91,7 +91,7 @@ class Dokan_Pro_Reports {
 
             foreach ( $old_statements as $key => $statement ) {
                 if ( isset( $statement->post_date ) ) {
-                    $type          = __( 'Order', 'dokan-pro' );
+                    $type          = __( 'Order', 'dokan' );
                     $url           = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
                     $id            = $statement->order_id;
                     $gross_amount  = get_post_meta( $statement->order_id, '_order_total', true );
@@ -102,7 +102,7 @@ class Dokan_Pro_Reports {
 
                     $net_amount_print = wc_price( $net_amount );
                 } else if ( isset( $statement->refund_amount ) ) {
-                    $type             = __( 'Refund', 'dokan-pro' );
+                    $type             = __( 'Refund', 'dokan' );
                     $url              = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
                     $id               = $statement->order_id;
                     $sales            = wc_price( 0 );
@@ -110,7 +110,7 @@ class Dokan_Pro_Reports {
                     $net_amount       = $net_amount - $statement->refund_amount;
                     $net_amount_print = wc_price( $net_amount );
                 } else {
-                    $type             = __( 'Withdraw', 'dokan-pro' );
+                    $type             = __( 'Withdraw', 'dokan' );
                     $url              = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url( 'withdraw' ) );
                     $id               = $statement->id;
                     $sales            = wc_price( 0 );
@@ -148,7 +148,7 @@ class Dokan_Pro_Reports {
 
                 if ( isset( $statement->post_date ) ) {
 
-                    $type       = __( 'Order', 'dokan-pro' );
+                    $type       = __( 'Order', 'dokan' );
                     $url        = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
                     $id         = $statement->order_id;
                     $sales      =  $statement->order_total;
@@ -163,7 +163,7 @@ class Dokan_Pro_Reports {
 
                 } else if ( isset( $statement->refund_amount ) ) {
 
-                    $type             = __( 'Refund', 'dokan-pro' );
+                    $type             = __( 'Refund', 'dokan' );
                     $url              = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
                     $id               = $statement->order_id;
                     $sales            = 0;
@@ -175,7 +175,7 @@ class Dokan_Pro_Reports {
 
                 } else {
 
-                    $type       = __( 'Withdraw', 'dokan-pro' );
+                    $type       = __( 'Withdraw', 'dokan' );
                     $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
                     $id         = $statement->id;
                     $sales      =  0;
@@ -199,7 +199,7 @@ class Dokan_Pro_Reports {
                 echo "\r\n";
             }
 
-             exit();
+            exit();
         }
     }
 
@@ -211,7 +211,6 @@ class Dokan_Pro_Reports {
      * @return \self
      */
     public static function init() {
-
         static $instance = false;
 
         if ( !$instance ) {
@@ -246,9 +245,8 @@ class Dokan_Pro_Reports {
      * @return array
      */
     public function add_reports_menu( $urls ) {
-
         $urls['reports'] = array(
-            'title' => __( 'Reports', 'dokan-pro'),
+            'title' => __( 'Reports', 'dokan' ),
             'icon'  => '<i class="fa fa-line-chart"></i>',
             'url'   => dokan_get_navigation_url( 'reports' ),
             'pos'   => 60
@@ -267,12 +265,10 @@ class Dokan_Pro_Reports {
      * @return void
      */
     public function load_reports_template( $query_vars ) {
-
         if ( isset( $query_vars['reports'] ) ) {
-            dokan_get_template_part( 'report/reports', '', array( 'pro'=>true ) );
+            dokan_get_template_part( 'report/reports', '', array( 'pro' => true ) );
             return;
         }
-
     }
 
     /**
@@ -289,16 +285,15 @@ class Dokan_Pro_Reports {
     /**
      * Render Review Content
      *
-     * @return [type] [description]
+     * @return void
      */
     public function render_review_content() {
-
         global $woocommerce;
 
         require_once DOKAN_PRO_INC . '/reports.php';
 
-        $charts = dokan_get_reports_charts();
-        $link = dokan_get_navigation_url( 'reports' );
+        $charts  = dokan_get_reports_charts();
+        $link    = dokan_get_navigation_url( 'reports' );
         $current = isset( $_GET['chart'] ) ? $_GET['chart'] : 'overview';
 
         dokan_get_template_part( 'report/content', '', array(

@@ -11,25 +11,25 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
 
 ?>
 <div class="update-button-wrap">
-    <input type="submit" name="dokan_update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg" value="<?php esc_attr_e( 'Update Product', 'dokan-pro' ); ?>"/>
+    <input type="submit" name="dokan_update_product" class="dokan-btn dokan-btn-theme dokan-btn-lg" value="<?php esc_attr_e( 'Update Product', 'dokan' ); ?>"/>
 </div>
 
 <div class="toggle-sidebar-container">
 
     <div class="dokan-post-status dokan-toggle-sidebar">
-        <label for="post_status"><?php _e( 'Product Status:', 'dokan-pro' ); ?></label>
+        <label for="post_status"><?php _e( 'Product Status:', 'dokan' ); ?></label>
 
         <?php $pending_class = $post->post_status == 'pending' ? '  dokan-label dokan-label-warning': ''; ?>
         <span class="dokan-toggle-selected-display<?php echo $pending_class; ?>"><?php echo dokan_get_post_status( $post->post_status ); ?></span>
 
         <?php if ( $post->post_status != 'pending' ) { ?>
-            <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan-pro' ); ?></a>
+            <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
 
             <div class="dokan-toggle-select-container dokan-hide">
 
                 <?php $post_statuses = apply_filters( 'dokan_post_status', array(
-                    'publish' => __( 'Online', 'dokan-pro' ),
-                    'draft'   => __( 'Draft', 'dokan-pro' )
+                    'publish' => __( 'Online', 'dokan' ),
+                    'draft'   => __( 'Draft', 'dokan' )
                 ), $post ); ?>
 
                 <select id="post_status" class="dokan-toggle-select" name="post_status">
@@ -38,19 +38,19 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
                     <?php } ?>
                 </select>
 
-                <a class="dokan-toggle-save dokan-btn dokan-btn-default dokan-btn-sm" href="#"><?php _e( 'OK', 'dokan-pro' ); ?></a>
-                <a class="dokan-toggle-cacnel" href="#"><?php _e( 'Cancel', 'dokan-pro' ); ?></a>
+                <a class="dokan-toggle-save dokan-btn dokan-btn-default dokan-btn-sm" href="#"><?php _e( 'OK', 'dokan' ); ?></a>
+                <a class="dokan-toggle-cacnel" href="#"><?php _e( 'Cancel', 'dokan' ); ?></a>
             </div> <!-- #dokan-toggle-select -->
         <?php } ?>
     </div>
 
     <div class="product-type dokan-toggle-sidebar">
-        <label for="product_type"><?php _e( 'Product Type:', 'dokan-pro' ); ?></label>
+        <label for="product_type"><?php _e( 'Product Type:', 'dokan' ); ?></label>
 
         <?php
         $supported_types = apply_filters( 'dokan_product_type_selector', array(
-            'simple'    => __( 'Simple product', 'dokan-pro' ),
-            'variable'  => __( 'Variable product', 'dokan-pro' )
+            'simple'    => __( 'Simple product', 'dokan' ),
+            'variable'  => __( 'Variable product', 'dokan' )
         ) );
 
         if ( $terms = wp_get_object_terms( $post->ID, 'product_type' ) ) {
@@ -66,7 +66,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
         ?>
 
         <span class="dokan-toggle-selected-display"><?php echo dokan_get_product_types( $product_type ); ?></span>
-        <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan-pro' ); ?></a>
+        <a class="dokan-toggle-edit dokan-label dokan-label-success" href="#"><?php _e( 'Edit', 'dokan' ); ?></a>
 
             <div class="dokan-toggle-select-container dokan-hide">
                 <select name="product_type" id="product_type" class="dokan-toggle-select">
@@ -78,8 +78,8 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
 
                 </select>
 
-                <a class="dokan-toggle-save dokan-btn dokan-btn-default dokan-btn-sm" href="#"><?php _e( 'OK', 'dokan-pro' ); ?></a>
-                <a class="dokan-toggle-cacnel" href="#"><?php _e( 'Cancel', 'dokan-pro' ); ?></a>
+                <a class="dokan-toggle-save dokan-btn dokan-btn-default dokan-btn-sm" href="#"><?php _e( 'OK', 'dokan' ); ?></a>
+                <a class="dokan-toggle-cacnel" href="#"><?php _e( 'Cancel', 'dokan' ); ?></a>
             </div> <!-- #dokan-toggle-select -->
 
     </div> <!-- .product-type -->
@@ -91,7 +91,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
     <div class="dokan-side-head">
         <label class="checkbox-inline">
             <input type="checkbox" id="_downloadable" name="_downloadable" value="yes"<?php checked( $_downloadable, 'yes' ); ?>>
-            <?php _e( 'Downloadable Product', 'dokan-pro' ); ?>
+            <?php _e( 'Downloadable Product', 'dokan' ); ?>
         </label>
     </div> <!-- .dokan-side-head -->
 
@@ -111,7 +111,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
                                     ob_start();
                                     include DOKAN_INC_DIR . '/woo-views/html-product-download.php';
                                     echo esc_attr( ob_get_clean() );
-                                ?>"><?php _e( 'Add File', 'dokan-pro' ); ?></a>
+                                ?>"><?php _e( 'Add File', 'dokan' ); ?></a>
                             </th>
                         </tr>
                     </tfoot>
@@ -131,14 +131,14 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
             </li>
             <li class="dokan-form-group">
                 <div class="dokan-input-group">
-                    <span class="dokan-input-group-addon"><?php _e( 'Limit', 'dokan-pro' ); ?></span>
-                    <?php dokan_post_input_box( $post->ID, '_download_limit', array( 'placeholder' => __( 'Number of times', 'dokan-pro' ), 'min' => 1, 'step' => 1 ), 'number' ); ?>
+                    <span class="dokan-input-group-addon"><?php _e( 'Limit', 'dokan' ); ?></span>
+                    <?php dokan_post_input_box( $post->ID, '_download_limit', array( 'placeholder' => __( 'Number of times', 'dokan' ), 'min' => 1, 'step' => 1 ), 'number' ); ?>
                 </div>
             </li>
             <li class="dokan-form-group">
                 <div class="dokan-input-group">
                     <span class="dokan-input-group-addon">Expiry</span>
-                    <?php dokan_post_input_box( $post->ID, '_download_expiry', array( 'placeholder' => __( 'Number of days', 'dokan-pro' ), 'min' => 1, 'step' => 1 ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post->ID, '_download_expiry', array( 'placeholder' => __( 'Number of days', 'dokan' ), 'min' => 1, 'step' => 1 ), 'number' ); ?>
                 </div>
             </li>
         </ul>
@@ -149,7 +149,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
     <div class="dokan-side-head">
         <label class="checkbox-inline">
             <input type="checkbox" id="_virtual" name="_virtual" value="yes"<?php checked( $_virtual, 'yes' ); ?>>
-            <?php _e( 'Virtual Product', 'dokan-pro' ); ?>
+            <?php _e( 'Virtual Product', 'dokan' ); ?>
         </label>
     </div> <!-- .dokan-side-head -->
 </aside>
@@ -161,7 +161,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
         <div class="dokan-side-head">
             <label class="dokan-checkbox-inline dokan-form-label" for="_is_lot_discount">
                 <input type="checkbox" id="_is_lot_discount" name="_is_lot_discount" value="yes" <?php checked( $_is_lot_discount, 'yes' ); ?>>
-                <?php _e( 'Enable bulk discount', 'dokan-pro' );?>
+                <?php _e( 'Enable bulk discount', 'dokan' );?>
             </label>
         </div> <!-- .dokan-side-head -->
 
@@ -170,12 +170,12 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
                 <div class="dokan-form-group">
                     <div class="dokan-input-group">
                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                        <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( 'Minimum quantity', 'dokan-pro' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
+                        <?php dokan_post_input_box( $post->ID, '_lot_discount_quantity', array( 'placeholder' => __( 'Minimum quantity', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_quantity ), 'number' ); ?>
                     </div>
                 </div>
                 <div class="dokan-form-group">
                     <div class="dokan-input-group">
-                        <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( 'Discount %', 'dokan-pro' ), 'min' => 0, 'value' => $_lot_discount_amount ), 'number' ); ?>
+                        <?php dokan_post_input_box( $post->ID, '_lot_discount_amount', array( 'placeholder' => __( 'Discount %', 'dokan' ), 'min' => 0, 'value' => $_lot_discount_amount ), 'number' ); ?>
                         <span class="dokan-input-group-addon" style="position: relative;left: -9%;"><?php echo '%'; ?></span>
                     </div>
                 </div>
@@ -189,7 +189,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
 
 <aside class="product-gallery">
     <div class="dokan-side-head">
-        <?php _e( 'Image Gallery', 'dokan-pro' ); ?>
+        <?php _e( 'Image Gallery', 'dokan' ); ?>
     </div>
 
     <div class="dokan-side-body" id="dokan-product-images">
@@ -220,7 +220,7 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
             <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_images ); ?>">
         </div>
 
-        <a href="#" class="add-product-images dokan-btn dokan-btn-success"><?php _e( '+ Add product images', 'dokan-pro' ); ?></a>
+        <a href="#" class="add-product-images dokan-btn dokan-btn-success"><?php _e( '+ Add product images', 'dokan' ); ?></a>
     </div>
 </aside> <!-- .product-gallery -->
 

@@ -1,4 +1,4 @@
-<h4><?php _e( 'Attributes', 'dokan-pro' ); ?> <small><?php _e( 'Different types of this product (e.g. size, color)', 'dokan-pro' ); ?></small></h4>
+<h4><?php _e( 'Attributes', 'dokan' ); ?> <small><?php _e( 'Different types of this product (e.g. size, color)', 'dokan' ); ?></small></h4>
 
 <div id="variants-holder" class="woocommerce_attributes">
 
@@ -43,7 +43,7 @@
 
                     <?php } else { ?>
 
-                        <input type="text" class="category-name" placeholder="<?php esc_attr_e( 'Category name', 'dokan-pro' ); ?>" name="attribute_names[<?php echo $i; ?>]" value="<?php echo esc_attr( $attribute_name ); ?>">
+                        <input type="text" class="category-name" placeholder="<?php esc_attr_e( 'Category name', 'dokan' ); ?>" name="attribute_names[<?php echo $i; ?>]" value="<?php echo esc_attr( $attribute_name ); ?>">
                         <input type="hidden" name="attribute_is_taxonomy[<?php echo $i; ?>]" value="0">
 
                     <?php } ?>
@@ -51,7 +51,7 @@
                     <input type="hidden" name="attribute_position[<?php echo $i; ?>]" class="attribute_position" value="<?php echo esc_attr( $position ); ?>" />
 
                     <span class="actions">
-                        <button class="row-remove btn pull-right btn-danger btn-sm"><?php _e( 'Remove', 'dokan-pro' ); ?></button>
+                        <button class="row-remove btn pull-right btn-danger btn-sm"><?php _e( 'Remove', 'dokan' ); ?></button>
                     </span>
                 </div>
 
@@ -69,7 +69,7 @@
                                     else
                                         checked( apply_filters( 'default_attribute_visibility', false, $tax ), true );
 
-                                    ?> name="attribute_visibility[<?php echo $i; ?>]" value="1" /> <?php _e( 'Visible on the product page', 'dokan-pro' ); ?>
+                                    ?> name="attribute_visibility[<?php echo $i; ?>]" value="1" /> <?php _e( 'Visible on the product page', 'dokan' ); ?>
                                 </label>
                             </li>
 
@@ -82,7 +82,7 @@
                                 else
                                     checked( apply_filters( 'default_attribute_variation', false, $tax ), true );
 
-                            ?> name="attribute_variation[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for variations', 'dokan-pro' ); ?></label>
+                            ?> name="attribute_variation[<?php echo $i; ?>]" value="1" /> <?php _e( 'Used for variations', 'dokan' ); ?></label>
                             </li>
                         </ul>
                     </div>
@@ -96,7 +96,7 @@
                                     ?>
 
                                     <li>
-                                        <input type="text" class="option" placeholder="<?php _e( 'Option...', 'dokan-pro' ); ?>" name="attribute_values[<?php echo $i; ?>][<?php echo $count; ?>]" value="<?php echo esc_attr( $option ); ?>">
+                                        <input type="text" class="option" placeholder="<?php _e( 'Option...', 'dokan' ); ?>" name="attribute_values[<?php echo $i; ?>][<?php echo $count; ?>]" value="<?php echo esc_attr( $option ); ?>">
 
                                         <span class="item-action actions">
                                             <a href="#" class="row-add">+</a>
@@ -110,7 +110,7 @@
                                 ?>
 
                                 <li>
-                                    <input type="text" class="option" name="attribute_values[<?php echo $i; ?>][0]" placeholder="<?php _e( 'Option...', 'dokan-pro' ); ?>">
+                                    <input type="text" class="option" name="attribute_values[<?php echo $i; ?>][0]" placeholder="<?php _e( 'Option...', 'dokan' ); ?>">
 
                                     <span class="item-action actions">
                                         <a href="#" class="row-add">+</a>
@@ -135,7 +135,7 @@
 <p class="toolbar pull-right">
 
     <select class="select-attribute form-control" name="category_names" >
-        <option value=""><?php _e( 'Custom Attribute', 'dokan-pro' ); ?></option>
+        <option value=""><?php _e( 'Custom Attribute', 'dokan' ); ?></option>
         <?php
         if ( !empty( $attribute_taxonomies ) ) { ?>
             <?php foreach ( $attribute_taxonomies as $key => $value ) { ?>
@@ -143,6 +143,6 @@
             <?php }
         }?>
     </select>
-    <button class="btn btn-success add-variant-category"><?php _e( '+ Add a category', 'dokan-pro' ); ?></button>
-    <button type="button" class="btn btn-default save_attributes" data-id="<?php echo $thepostid; ?>"><?php _e( 'Save attributes', 'dokan-pro' ); ?></button>
+    <button class="btn btn-success add-variant-category"><?php _e( '+ Add a category', 'dokan' ); ?></button>
+    <button type="button" class="btn btn-default save_attributes" data-id="<?php echo $thepostid; ?>"><?php _e( 'Save attributes', 'dokan' ); ?></button>
 </p>

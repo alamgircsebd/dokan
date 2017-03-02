@@ -7,7 +7,7 @@
 ?>
 
 <div class="wrap">
-    <h2><?php _e( 'Duplicate Orders', 'dokan-pro' ); ?></h2>
+    <h2><?php _e( 'Duplicate Orders', 'dokan' ); ?></h2>
 
 
     <?php
@@ -25,10 +25,10 @@
                         <th class="check-column">
                             <input type="checkbox" class="dokan-duplicate-orders-allcheck">
                         </th>
-                        <th><?php _e( 'Order No.', 'dokan-pro' ); ?></th>
-                        <th><?php _e( 'Vendor Name', 'dokan-pro' ); ?></th>
-                        <th><?php _e( 'Amount', 'dokan-pro' ); ?></th>
-                        <th><?php _e( 'Actions', 'dokan-pro' ); ?></th>
+                        <th><?php _e( 'Order No.', 'dokan' ); ?></th>
+                        <th><?php _e( 'Vendor Name', 'dokan' ); ?></th>
+                        <th><?php _e( 'Amount', 'dokan' ); ?></th>
+                        <th><?php _e( 'Actions', 'dokan' ); ?></th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -36,10 +36,10 @@
                         <th class="check-column">
                             <input type="checkbox" class="dokan-duplicate-orders-allcheck">
                         </th>
-                        <th><?php _e( 'Order No.', 'dokan-pro' ); ?></th>
-                        <th><?php _e( 'Vendor Name', 'dokan-pro' ); ?></th>
-                        <th><?php _e( 'Amount', 'dokan-pro' ); ?></th>
-                        <th><?php _e( 'Actions', 'dokan-pro' ); ?></th>
+                        <th><?php _e( 'Order No.', 'dokan' ); ?></th>
+                        <th><?php _e( 'Vendor Name', 'dokan' ); ?></th>
+                        <th><?php _e( 'Amount', 'dokan' ); ?></th>
+                        <th><?php _e( 'Actions', 'dokan' ); ?></th>
                     </tr>
                 </tfoot>
                 <?php
@@ -57,11 +57,11 @@
                             <div class="tips">
                                 <a href="<?php echo admin_url('post.php?post='.$order->id.'&action=edit')?>" class="row-title">
                                     <strong>#<?php echo $order->id ?></strong>
-                                </a><?php  _e( 'by' , 'dokan-pro' ) ?>
+                                </a><?php  _e( 'by' , 'dokan' ) ?>
                                 <a href="user-edit.php?user_id=<?php echo $order->customer_user; ?>"><?php echo get_user_meta($order->customer_user, 'first_name', true).' '.get_user_meta($order->customer_user, 'last_name', true); ?></a>
                                     <small class="meta email"><a href="mailto:<?php echo get_user_meta($order->customer_user, 'email', true) ?>"><?php echo get_user_meta($order->customer_user, 'email', true) ?></a></small>
                             </div>
-                            <strong><?php _e( 'Sub Order of' , 'dokan-pro' ) ?><a href="<?php echo admin_url('post.php?post='.$order->post->post_parent.'&action=edit')?>"> #<?php echo $order->post->post_parent ?></a></strong>
+                            <strong><?php _e( 'Sub Order of' , 'dokan' ) ?><a href="<?php echo admin_url('post.php?post='.$order->post->post_parent.'&action=edit')?>"> #<?php echo $order->post->post_parent ?></a></strong>
                         </td>
 
 
@@ -70,13 +70,13 @@
                         <td class="" data-colname="Total">
                             <?php echo $order->get_formatted_order_total(); ?>
                             <small class="meta">
-                                <?php echo __( ' via ' , 'dokan-pro' ).$order->payment_method_title; ?>
+                                <?php echo __( ' via ' , 'dokan' ).$order->payment_method_title; ?>
                             </small>
                         </td>
                         <td class="order_actions" data-colname="Actions">
                             <p>
-                                <a class="button tips view" href="<?php echo admin_url('post.php?post='.$order->id.'&action=edit')?>"><?php _e( 'View', 'dokan-pro' ) ?></a>
-                                <a class="button tips delete-action dokan-order-action-delete" ><?php _e( 'Delete', 'dokan-pro' ) ?></a>
+                                <a class="button tips view" href="<?php echo admin_url('post.php?post='.$order->id.'&action=edit')?>"><?php _e( 'View', 'dokan' ) ?></a>
+                                <a class="button tips delete-action dokan-order-action-delete" ><?php _e( 'Delete', 'dokan' ) ?></a>
                             </p>
                         </td>
 
@@ -90,7 +90,7 @@
             ?>
                 <tr>
                     <td colspan="8">
-                        <?php _e( 'No results found', 'dokan-pro' ) ?>
+                        <?php _e( 'No results found', 'dokan' ) ?>
                     </td>
                 </tr>
                 <?php
@@ -102,13 +102,13 @@
 
                 <div class="alignleft actions bulkactions">
                     <select name="dokan_duplicate_order_bulk_select">
-                        <option value="-1" selected="selected"><?php _e( 'Bulk Actions', 'dokan-pro' ); ?></option>
+                        <option value="-1" selected="selected"><?php _e( 'Bulk Actions', 'dokan' ); ?></option>
                         <?php if ( $duplicate_orders ) { ?>
-                            <option value="delete"><?php _e( 'Delete', 'dokan-pro' ); ?></option>
+                            <option value="delete"><?php _e( 'Delete', 'dokan' ); ?></option>
 
                         <?php } ?>
                     </select>
-                    <input type="submit" class="dokan-bulk-action" value="<?php _e( 'Apply' , 'dokan-pro' ) ?>">
+                    <input type="submit" class="dokan-bulk-action" value="<?php _e( 'Apply' , 'dokan' ) ?>">
                </div>
             </div>
 

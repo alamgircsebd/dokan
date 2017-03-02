@@ -21,7 +21,6 @@ class Dokan_Pro_Notice {
      * @uses filter hook
      */
     function __construct() {
-
         add_action( 'dokan_load_custom_template', array( $this, 'load_announcement_template' ), 10 );
         add_action( 'dokan_announcement_content_area_header', array( $this, 'load_header_template' ) );
         add_action( 'dokan_announcement_content', array( $this, 'load_announcement_content' ), 10 );
@@ -44,8 +43,16 @@ class Dokan_Pro_Notice {
         return $instance;
     }
 
+    /**
+     * Render announcement template
+     *
+     * @since  2.2
+     *
+     * @param  array $query_vars
+     *
+     * @return void
+     */
     public function load_announcement_template( $query_vars ) {
-
         if ( isset( $query_vars['announcement'] ) ) {
             dokan_get_template_part( 'announcement/announcement', '', array( 'pro' => true, 'announcement' => $this ) );
             return;
@@ -86,7 +93,6 @@ class Dokan_Pro_Notice {
      * @return void
      */
     public function load_single_announcement_content() {
-
         $this->notice_id =  get_query_var( 'single-announcement' );
 
         if ( is_numeric( $this->notice_id ) ) {
@@ -144,14 +150,12 @@ class Dokan_Pro_Notice {
      * @return void
      */
     function show_announcement_template() {
-
         $query = $this->get_announcement_by_users();
 
         dokan_get_template_part( 'announcement/listing-announcement', '', array( 'pro' => true, 'notices' => $query->posts ) );
 
         wp_reset_postdata();
         $this->get_pagination( $query );
-
     }
 
     /**
@@ -201,8 +205,8 @@ class Dokan_Pro_Notice {
                 'format'    => '?pagenum=%#%',
                 'add_args'  => false,
                 'type'      => 'array',
-                'prev_text' => __( '&laquo; Previous', 'dokan-pro' ),
-                'next_text' => __( 'Next &raquo;', 'dokan-pro' )
+                'prev_text' => __( '&laquo; Previous', 'dokan' ),
+                'next_text' => __( 'Next &raquo;', 'dokan' )
             ) );
 
             echo '<ul class="pagination"><li>';
@@ -223,7 +227,7 @@ class Dokan_Pro_Notice {
      */
     function get_single_announcement( $notice_id ) {
         $args = array(
-            'p' => $notice_id,
+            'p'         => $notice_id,
             'post_type' => 'dokan_announcement'
         );
 

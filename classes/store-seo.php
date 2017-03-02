@@ -116,7 +116,6 @@ class Dokan_Pro_Store_Seo {
      * Add dokan_sellers sitemap url to sitemap_index list
      */
     function add_sellers_sitemap(){
-
         ob_start();
         ?>
         <sitemap>
@@ -177,8 +176,6 @@ class Dokan_Pro_Store_Seo {
 
         $desc     = $meta_values['store_seo']['dokan-seo-meta-desc'];
         $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
-
-
 
         if ( $desc ) {
             echo PHP_EOL . '<meta name="description" content="' . $this->print_saved_meta( $desc ) . '"/>';
@@ -353,10 +350,11 @@ class Dokan_Pro_Store_Seo {
 
         $img = $meta_values['store_seo']['dokan-seo-og-image'];
 
-        if ( $img )
+        if ( $img ) {
             return wp_get_attachment_url( $img );
-        else
+        } else {
             return $img_default;
+        }
     }
 
     /**
@@ -416,7 +414,6 @@ class Dokan_Pro_Store_Seo {
      * @return string
      */
     function replace_twitter_img( $img ) {
-
         $img_default = $img;
 
         $meta_values = $this->store_info;
@@ -482,10 +479,10 @@ class Dokan_Pro_Store_Seo {
         $seo_meta = wp_parse_args( $seo_meta, $default_store_seo );
 
         dokan_get_template_part('settings/seo-form', '', array(
-            'pro' => true,
-            'seo_meta' => $seo_meta,
+            'pro'            => true,
+            'seo_meta'       => $seo_meta,
             'seller_profile' => $seller_profile,
-            'seo' => $this
+            'seo'            => $this
         ));
     }
 
@@ -499,10 +496,11 @@ class Dokan_Pro_Store_Seo {
      * @return string|empty
      */
     function print_saved_meta( $val ) {
-        if ( $val == false )
+        if ( $val == false ) {
             return '';
-        else
+        } else {
             return esc_attr( $val );
+        }
     }
 
     /**
@@ -516,7 +514,7 @@ class Dokan_Pro_Store_Seo {
         parse_str( $_POST['data'], $postdata );
 
         if ( !wp_verify_nonce( $postdata['dokan_store_seo_form_nonce'], 'dokan_store_seo_form_action' ) ) {
-            wp_send_json_error( __( 'Are you cheating?', 'dokan-pro' ) );
+            wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
 
         unset( $postdata['dokan_store_seo_form_nonce'] );
@@ -541,7 +539,7 @@ class Dokan_Pro_Store_Seo {
 
         update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
 
-        wp_send_json_success( __( 'Your changes has been updated!', 'dokan-pro' ) );
+        wp_send_json_success( __( 'Your changes has been updated!', 'dokan' ) );
     }
 
     function replace_og_url(){

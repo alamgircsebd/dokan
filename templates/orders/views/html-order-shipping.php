@@ -17,13 +17,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<td class="name">
 		<div class="view">
-			<?php echo ! empty( $item['name'] ) ? esc_html( $item['name'] ) : __( 'Shipping', 'dokan-pro' ); ?>
+			<?php echo ! empty( $item['name'] ) ? esc_html( $item['name'] ) : __( 'Shipping', 'dokan' ); ?>
 		</div>
 		<div class="edit" style="display: none;">
-			<input style="width:60px" type="text" placeholder="<?php _e( 'Shipping Name', 'dokan-pro' ); ?>" name="shipping_method_title[<?php echo $item_id; ?>]" value="<?php echo ( isset( $item['name'] ) ) ? esc_attr( $item['name'] ) : ''; ?>" />
+			<input style="width:60px" type="text" placeholder="<?php _e( 'Shipping Name', 'dokan' ); ?>" name="shipping_method_title[<?php echo $item_id; ?>]" value="<?php echo ( isset( $item['name'] ) ) ? esc_attr( $item['name'] ) : ''; ?>" />
 			<select name="shipping_method[<?php echo $item_id; ?>]">
-				<optgroup label="<?php _e( 'Shipping Method', 'dokan-pro' ); ?>">
-					<option value=""><?php _e( 'N/A', 'dokan-pro' ); ?></option>
+				<optgroup label="<?php _e( 'Shipping Method', 'dokan' ); ?>">
+					<option value=""><?php _e( 'N/A', 'dokan' ); ?></option>
 					<?php
 						$found_method = false;
 
@@ -39,9 +39,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 						}
 
 						if ( ! $found_method && ! empty( $method_id ) ) {
-							echo '<option value="' . esc_attr( $method_id ) . '" selected="selected">' . __( 'Other', 'dokan-pro' ) . '</option>';
+							echo '<option value="' . esc_attr( $method_id ) . '" selected="selected">' . __( 'Other', 'dokan' ) . '</option>';
 						} else {
-							echo '<option value="other">' . __( 'Other', 'dokan-pro' ) . '</option>';
+							echo '<option value="other">' . __( 'Other', 'dokan' ) . '</option>';
 						}
 					?>
 				</optgroup>

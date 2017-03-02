@@ -8,31 +8,31 @@
  */
 function dokan_get_reports_charts() {
     $charts = array(
-        'title'  => __( 'Sales', 'dokan-pro' ),
+        'title'  => __( 'Sales', 'dokan' ),
         'charts' => array(
             "overview"          => array(
-                'title'       => __( 'Overview', 'dokan-pro' ),
+                'title'       => __( 'Overview', 'dokan' ),
                 'description' => '',
                 'hide_title'  => true,
                 'function'    => 'dokan_sales_overview'
             ),
             "sales_by_day"      => array(
-                'title'       => __( 'Sales by day', 'dokan-pro' ),
+                'title'       => __( 'Sales by day', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_daily_sales'
             ),
             "top_sellers"       => array(
-                'title'       => __( 'Top selling', 'dokan-pro' ),
+                'title'       => __( 'Top selling', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_top_sellers'
             ),
             "top_earners"       => array(
-                'title'       => __( 'Top earning', 'dokan-pro' ),
+                'title'       => __( 'Top earning', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_top_earners'
             ),
              "sales_statement"       => array(
-                'title'       => __( 'Statement', 'dokan-pro' ),
+                'title'       => __( 'Statement', 'dokan' ),
                 'description' => '',
                 'function'    => 'dokan_seller_sales_statement'
             )
@@ -62,17 +62,17 @@ function dokan_seller_sales_statement() {
 
     <form method="get" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan-pro' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
         </div>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan-pro' ); ?></label>
+            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
 
             <input type="hidden" name="chart" value="sales_statement">
-            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
         </div>
-        <input type="submit" name="dokan_statement_export_all"  class="dokan-btn dokan-right dokan-btn-sm dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Export All', 'dokan-pro' ); ?>">
+        <input type="submit" name="dokan_statement_export_all"  class="dokan-btn dokan-right dokan-btn-sm dokan-btn-danger dokan-btn-theme" value="<?php esc_attr_e( 'Export All', 'dokan' ); ?>">
     </form>
     <?php
     //calculate opening balance
@@ -93,7 +93,7 @@ function dokan_seller_sales_statement() {
 
     foreach ( $old_statements as $key => $statement ) {
         if ( isset( $statement->post_date ) ) {
-            $type          = __( 'Order', 'dokan-pro' );
+            $type          = __( 'Order', 'dokan' );
             $url           = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
             $id            = $statement->order_id;
             $gross_amount  = get_post_meta( $statement->order_id, '_order_total', true );
@@ -104,7 +104,7 @@ function dokan_seller_sales_statement() {
 
             $net_amount_print = wc_price( $net_amount );
         } else if ( isset( $statement->refund_amount ) ) {
-            $type             = __( 'Refund', 'dokan-pro' );
+            $type             = __( 'Refund', 'dokan' );
             $url              = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
             $id               = $statement->order_id;
             $sales            = wc_price( 0 );
@@ -112,7 +112,7 @@ function dokan_seller_sales_statement() {
             $net_amount       = $net_amount - $statement->refund_amount;
             $net_amount_print = wc_price( $net_amount );
         } else {
-            $type             = __( 'Withdraw', 'dokan-pro' );
+            $type             = __( 'Withdraw', 'dokan' );
             $url              = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url( 'withdraw' ) );
             $id               = $statement->id;
             $sales            = wc_price( 0 );
@@ -144,14 +144,14 @@ function dokan_seller_sales_statement() {
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php _e( 'Date', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'ID', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Type', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Sales', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Earned', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Shipping', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Tax', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Balance', 'dokan-pro' ); ?></th>
+                <th><?php _e( 'Date', 'dokan' ); ?></th>
+                <th><?php _e( 'ID', 'dokan' ); ?></th>
+                <th><?php _e( 'Type', 'dokan' ); ?></th>
+                <th><?php _e( 'Sales', 'dokan' ); ?></th>
+                <th><?php _e( 'Earned', 'dokan' ); ?></th>
+                <th><?php _e( 'Shipping', 'dokan' ); ?></th>
+                <th><?php _e( 'Tax', 'dokan' ); ?></th>
+                <th><?php _e( 'Balance', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -159,7 +159,7 @@ function dokan_seller_sales_statement() {
                 <tr>
                     <td><?php echo $start_date ?></td>
                     <td>--</td>
-                    <td><?php _e( 'Opening Balance' , 'dokan-pro' ); ?></td>
+                    <td><?php _e( 'Opening Balance' , 'dokan' ); ?></td>
                     <td><?php echo '--'; ?></td>
                     <td><?php echo '--'; ?></td>
                     <td><?php echo '--'; ?></td>
@@ -174,7 +174,7 @@ function dokan_seller_sales_statement() {
                 $total_tax = 0;
                 foreach ( $statements as $key => $statement ) {
                     if ( isset( $statement->post_date ) ) {
-                        $type            = __( 'Order', 'dokan-pro' );
+                        $type            = __( 'Order', 'dokan' );
                         $url             = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
                         $id              = $statement->order_id;
                         $gross_amount    = get_post_meta( $statement->order_id, '_order_total', true );
@@ -196,7 +196,7 @@ function dokan_seller_sales_statement() {
                         $total_tax += $order_amount['tax'];
 
                     } else if ( isset( $statement->refund_amount ) ) {
-                        $type   = __( 'Refund', 'dokan-pro' );
+                        $type   = __( 'Refund', 'dokan' );
                         $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
                         $id     = $statement->order_id;
                         $sales  = wc_price( 0 );
@@ -207,7 +207,7 @@ function dokan_seller_sales_statement() {
                         $net_amount_print = wc_price( $net_amount );
 
                     } else {
-                        $type       = __( 'Withdraw', 'dokan-pro' );
+                        $type       = __( 'Withdraw', 'dokan' );
                         $url        = add_query_arg( array( 'type' => 'approved' ), dokan_get_navigation_url('withdraw') );
                         $id         = $statement->id;
                         $sales      = wc_price( 0 );
@@ -236,7 +236,7 @@ function dokan_seller_sales_statement() {
                 <tr>
                     <td></td>
                     <td></td>
-                    <td><b><?php _e( 'Total :', 'dokan-pro' ); ?></b></td>
+                    <td><b><?php _e( 'Total :', 'dokan' ); ?></b></td>
                     <td><b><?php echo wc_price( $total_sales ); ?></b></td>
                     <td><b><?php echo wc_price( $total_earned ); ?></b></td>
                     <td><b><?php echo wc_price( $total_shipping ); ?></b></td>
@@ -248,7 +248,7 @@ function dokan_seller_sales_statement() {
             else {
                 ?>
                 <tr>
-                    <td colspan="6"><?php _e( 'No Result found!', 'dokan-pro' ); ?></td>
+                    <td colspan="6"><?php _e( 'No Result found!', 'dokan' ); ?></td>
                 </tr>
                 <?php
             }
@@ -508,7 +508,7 @@ function dokan_sales_overview() {
     $start_date = date( 'Y-m-01', current_time('timestamp') );
     $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
-    dokan_report_sales_overview( $start_date, $end_date, __( 'This month\'s sales', 'dokan-pro' ) );
+    dokan_report_sales_overview( $start_date, $end_date, __( 'This month\'s sales', 'dokan' ) );
 }
 
 
@@ -546,19 +546,19 @@ function dokan_daily_sales() {
 
     <form method="post" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan-pro' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
         </div>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan-pro' ); ?></label>
+            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
 
-            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+            <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
         </div>
     </form>
     <?php
 
-    dokan_report_sales_overview( $start_date, $end_date, __( 'Sales in this period', 'dokan-pro' ) );
+    dokan_report_sales_overview( $start_date, $end_date, __( 'Sales in this period', 'dokan' ) );
 }
 
 
@@ -644,27 +644,27 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
 
     $legend = apply_filters( 'dokan-seller-dashboard-reports-left-sidebar', array(
         'sales_in_this_period' => array(
-            'title' => sprintf( __( '%s sales in this period', 'dokan-pro' ), '<strong>' . wc_price( $total_sales ) . '</strong>' ),
+            'title' => sprintf( __( '%s sales in this period', 'dokan' ), '<strong>' . wc_price( $total_sales ) . '</strong>' ),
         ),
 
         'average_daily_sales' => array(
-            'title' => sprintf( __( '%s average daily sales', 'dokan-pro' ), '<strong>' . wc_price( $average_sales ) . '</strong>' ),
+            'title' => sprintf( __( '%s average daily sales', 'dokan' ), '<strong>' . wc_price( $average_sales ) . '</strong>' ),
         ),
 
         'orders_placed' => array(
-            'title' => sprintf( __( '%s orders placed', 'dokan-pro' ), '<strong>' . $total_orders . '</strong>' ),
+            'title' => sprintf( __( '%s orders placed', 'dokan' ), '<strong>' . $total_orders . '</strong>' ),
         ),
 
         'items_purchased' => array(
-            'title' => sprintf( __( '%s items purchased', 'dokan-pro' ), '<strong>' . $total_items . '</strong>' ),
+            'title' => sprintf( __( '%s items purchased', 'dokan' ), '<strong>' . $total_items . '</strong>' ),
         ),
 
         'charged_for_shipping' => array(
-            'title' => sprintf( __( '%s charged for shipping', 'dokan-pro' ), '<strong>' . wc_price( $total_shipping ) . '</strong>' ),
+            'title' => sprintf( __( '%s charged for shipping', 'dokan' ), '<strong>' . wc_price( $total_shipping ) . '</strong>' ),
         ),
 
         'worth_of_coupons_used' => array(
-            'title' => sprintf( __( '%s worth of coupons used', 'dokan-pro' ), '<strong>' . wc_price( $total_coupons ) . '</strong>' ),
+            'title' => sprintf( __( '%s worth of coupons used', 'dokan' ), '<strong>' . wc_price( $total_coupons ) . '</strong>' ),
         ),
     ) );
     ?>
@@ -773,7 +773,7 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
             var order_data = jQuery.parseJSON( '<?php echo $chart_data; ?>' );
             var series = [
                 {
-                    label: "<?php echo esc_js( __( 'Sales total', 'dokan-pro' ) ) ?>",
+                    label: "<?php echo esc_js( __( 'Sales total', 'dokan' ) ) ?>",
                     data: order_data.order_amounts,
                     shadowSize: 0,
                     hoverable: true,
@@ -783,14 +783,14 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
                     prepend_tooltip: "<?php echo get_woocommerce_currency_symbol(); ?>"
                 },
                 {
-                    label: "<?php echo esc_js( __( 'Number of orders', 'dokan-pro' ) ) ?>",
+                    label: "<?php echo esc_js( __( 'Number of orders', 'dokan' ) ) ?>",
                     data: order_data.order_counts,
                     shadowSize: 0,
                     hoverable: true,
                     points: { show: true, radius: 5, lineWidth: 2, fillColor: '#fff', fill: true },
                     lines: { show: true, lineWidth: 3, fill: false },
                     shadowSize: 0,
-                    append_tooltip: " <?php echo __( 'sales', 'dokan-pro' ); ?>"
+                    append_tooltip: " <?php echo __( 'sales', 'dokan' ); ?>"
                 },
             ];
 
@@ -912,24 +912,24 @@ function dokan_top_sellers() {
     ?>
     <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan-pro' ); ?></label>
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $start_date) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan-pro' ); ?></label>
+            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
         </div>
 
-        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
     </form>
 
 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php _e( 'Product', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Sales', 'dokan-pro' ); ?></th>
+                <th><?php _e( 'Product', 'dokan' ); ?></th>
+                <th><?php _e( 'Sales', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -943,7 +943,7 @@ function dokan_top_sellers() {
                         $product_name = '<a href="' . get_permalink( $product_id ) . '">'. __( $product_title ) .'</a>';
                         $orders_link = admin_url( 'edit.php?s&post_status=all&post_type=shop_order&action=-1&s=' . urlencode( $product_title ) . '&shop_order_status=' . implode( ",", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) );
                     } else {
-                        $product_name = __( 'Product does not exist', 'dokan-pro' );
+                        $product_name = __( 'Product does not exist', 'dokan' );
                         $orders_link = admin_url( 'edit.php?s&post_status=all&post_type=shop_order&action=-1&s=&shop_order_status=' . implode( ",", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) );
                     }
 
@@ -1017,24 +1017,24 @@ function dokan_top_earners() {
     ?>
     <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan-pro' ); ?></label>
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $start_date) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
-            <label for="to"><?php _e( 'To:', 'dokan-pro' ); ?></label>
+            <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
             <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
         </div>
 
-        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan-pro' ); ?>" />
+        <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
     </form>
 
     <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php _e( 'Product', 'dokan-pro' ); ?></th>
-                <th colspan="2"><?php _e( 'Sales', 'dokan-pro' ); ?></th>
-                <th><?php _e( 'Earning', 'dokan-pro' ); ?></th>
+                <th><?php _e( 'Product', 'dokan' ); ?></th>
+                <th colspan="2"><?php _e( 'Sales', 'dokan' ); ?></th>
+                <th><?php _e( 'Earning', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -1049,7 +1049,7 @@ function dokan_top_earners() {
                         $product_name = '<a href="'.get_permalink( $product_id ).'">'. __( $product_title ) .'</a>';
                         $orders_link = admin_url( 'edit.php?s&post_status=all&post_type=shop_order&action=-1&s=' . urlencode( $product_title ) . '&shop_order_status=' . implode( ",", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) );
                     } else {
-                        $product_name = __( 'Product no longer exists', 'dokan-pro' );
+                        $product_name = __( 'Product no longer exists', 'dokan' );
                         $orders_link = admin_url( 'edit.php?s&post_status=all&post_type=shop_order&action=-1&s=&shop_order_status=' . implode( ",", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) );
                     }
 

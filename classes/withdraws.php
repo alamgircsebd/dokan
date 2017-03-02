@@ -50,7 +50,7 @@ class Dokan_Pro_Withdraws {
 	 */
 	public function load_withdraw_method( $methods ) {
 		$methods['skrill'] = array(
-            'title'    => __( 'Skrill', 'dokan-pro' ),
+            'title'    => __( 'Skrill', 'dokan' ),
             'callback' => array( $this, 'dokan_withdraw_method_skrill' )
         );
 
@@ -76,7 +76,7 @@ class Dokan_Pro_Withdraws {
 	    <div class="dokan-form-group">
 	        <div class="dokan-w8">
 	            <div class="dokan-input-group">
-	                <span class="dokan-input-group-addon"><?php _e( 'E-mail', 'dokan-pro' ); ?></span>
+	                <span class="dokan-input-group-addon"><?php _e( 'E-mail', 'dokan' ); ?></span>
 	                <input value="<?php echo $email; ?>" name="settings[skrill][email]" class="dokan-form-control email" placeholder="you@domain.com" type="text">
 	            </div>
 	        </div>

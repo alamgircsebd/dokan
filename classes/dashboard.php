@@ -66,7 +66,7 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 		dokan_get_template_part( 'dashboard/review-widget', '', array(
 				'pro' => true,
 				'comment_counts'=> $this->comment_counts,
-				'reviews_url'=> dokan_get_navigation_url('reviews'),
+				'reviews_url'=> dokan_get_navigation_url( 'reviews' ),
 			)
 		);
 	}
@@ -83,7 +83,7 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
 		dokan_get_template_part( 'dashboard/announcement-widget', '', array(
 				'pro' => true,
 				'notices'=> $query->posts,
-				'announcement_url'=> dokan_get_navigation_url('announcement'),
+				'announcement_url'=> dokan_get_navigation_url( 'announcement' ),
 			)
 		);
 	}

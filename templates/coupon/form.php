@@ -13,85 +13,85 @@
     <?php wp_nonce_field('coupon_nonce','coupon_nonce_field'); ?>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'Coupon Title', 'dokan-pro' ); ?><span class="required"> *</span></label>
+        <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'Coupon Title', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="title" name="title" required value="<?php echo esc_attr( $post_title ); ?>" placeholder="<?php _e( 'Title', 'dokan-pro' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="title" name="title" required value="<?php echo esc_attr( $post_title ); ?>" placeholder="<?php _e( 'Title', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="description"><?php _e( 'Description', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="description"><?php _e( 'Description', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
             <textarea class="dokan-form-control" id="description" name="description"><?php echo esc_textarea( $description ); ?></textarea>
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="discount_type"><?php _e( 'Discount Type', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="discount_type"><?php _e( 'Discount Type', 'dokan' ); ?></label>
 
         <div class="dokan-w5 dokan-text-left">
             <select id="discount_type" name="discount_type" class="dokan-form-control">
-                <option value="fixed_product"><?php _e( 'Product Discount', 'dokan-pro' ); ?></option>
-                <option value="percent_product" <?php echo $discount_type; ?> ><?php _e( 'Product % Discount', 'dokan-pro' ); ?></option>
+                <option value="fixed_product"><?php _e( 'Product Discount', 'dokan' ); ?></option>
+                <option value="percent_product" <?php echo $discount_type; ?> ><?php _e( 'Product % Discount', 'dokan' ); ?></option>
             </select>
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="amount"><?php _e( 'Amount', 'dokan-pro' ); ?><span class="required"> *</span></label>
+        <label class="dokan-w3 dokan-control-label" for="amount"><?php _e( 'Amount', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="amount" required value="<?php echo esc_attr( $amount ); ?>" name="amount" placeholder="<?php _e( 'Amount', 'dokan-pro' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="amount" required value="<?php echo esc_attr( $amount ); ?>" name="amount" placeholder="<?php _e( 'Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="email_restrictions"><?php _e( 'Email Restrictions', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="email_restrictions"><?php _e( 'Email Restrictions', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="email_restrictions" value="<?php echo esc_attr( $customer_email ); ?>" name="email_restrictions" placeholder="<?php _e( 'Email restrictions', 'dokan-pro' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="email_restrictions" value="<?php echo esc_attr( $customer_email ); ?>" name="email_restrictions" placeholder="<?php _e( 'Email restrictions', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="usage_limit"><?php _e( 'Usage Limit', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="usage_limit"><?php _e( 'Usage Limit', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="usage_limit" value="<?php echo esc_attr( $usage_limit ); ?>" name="usage_limit" placeholder="<?php _e( 'Usage Limit', 'dokan-pro' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="usage_limit" value="<?php echo esc_attr( $usage_limit ); ?>" name="usage_limit" placeholder="<?php _e( 'Usage Limit', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="dokan-expire"><?php _e( 'Expire Date', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="dokan-expire"><?php _e( 'Expire Date', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="dokan-expire" value="<?php echo esc_attr( $expire ); ?>" name="expire" placeholder="<?php _e( 'Expire Date', 'dokan-pro' ); ?>" class="dokan-form-control input-md datepicker" type="text">
+            <input id="dokan-expire" value="<?php echo esc_attr( $expire ); ?>" name="expire" placeholder="<?php _e( 'Expire Date', 'dokan' ); ?>" class="dokan-form-control input-md datepicker" type="text">
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Exclude Sale Items', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Exclude Sale Items', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
             <div class="checkbox">
                 <label for="checkboxes-2">
                     <input name="exclude_sale_items" <?php echo $exclide_sale_item; ?> id="checkboxes-2" value="yes" type="checkbox">
-                    <?php _e( 'Check this box if the coupon should not apply to items on sale.', 'dokan-pro' );?>
+                    <?php _e( 'Check this box if the coupon should not apply to items on sale.', 'dokan' );?>
                 </label>
 
                 <div class="help">
-                    <?php _e(' Per-item coupons will only work if the item is not on sale. Per-cart coupons will only work if there are no sale items in the cart.', 'dokan-pro' ); ?>
+                    <?php _e(' Per-item coupons will only work if the item is not on sale. Per-cart coupons will only work if there are no sale items in the cart.', 'dokan' ); ?>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="minium_ammount"><?php _e( 'Minimum Amount', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="minium_ammount"><?php _e( 'Minimum Amount', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="minium_ammount" value="<?php echo $minimum_amount; ?>" name="minium_ammount" placeholder="<?php esc_attr_e( 'Minimum Amount', 'dokan-pro' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="minium_ammount" value="<?php echo $minimum_amount; ?>" name="minium_ammount" placeholder="<?php esc_attr_e( 'Minimum Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', 'dokan-pro' ); ?><span class="required"> *</span></label>
+        <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <select name="product_drop_down[]" class="dokan-select2 dokan-coupon-product-select dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan-pro' ); ?>" required>
+            <select name="product_drop_down[]" class="dokan-select2 dokan-coupon-product-select dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $products_id ) ) {
@@ -105,15 +105,15 @@
                 }
                 ?>
             </select>
-            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan-pro' ) ?></a>
-            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-clear-all"><?php _e( 'Clear', 'dokan-pro' ) ?></a>
+            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan' ) ?></a>
+            <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-clear-all"><?php _e( 'Clear', 'dokan' ) ?></a>
         </div>
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Exclude products', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Exclude products', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <select name="exclude_product_ids[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan-pro' ); ?>">
+            <select name="exclude_product_ids[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $exclude_products ) ) {
@@ -122,7 +122,7 @@
                         $select = '';
                     }
                     ?>
-                        <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php _e( $object->post_title, 'dokan-pro' ); ?></option>
+                        <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php _e( $object->post_title, 'dokan' ); ?></option>
                     <?php
                 }
                 ?>
@@ -131,12 +131,12 @@
     </div>
 
     <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Show on store', 'dokan-pro' ); ?></label>
+        <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Show on store', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
             <div class="checkbox">
                 <label for="checkboxes-3">
                     <input name="show_on_store" <?php echo $show_on_store; ?> id="checkboxes-3" value="yes" type="checkbox">
-                    <?php _e( 'Check this box if you want to show this coupon in store page.', 'dokan-pro' );?>
+                    <?php _e( 'Check this box if you want to show this coupon in store page.', 'dokan' );?>
                 </label>
             </div>
         </div>

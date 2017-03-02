@@ -12,7 +12,7 @@
     <div class="dokan-progress">
         <div class="dokan-progress-bar dokan-progress-bar-info dokan-progress-bar-striped" role="progressbar"
              aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" style="width:<?php echo $progress ?>%">
-            <?php echo $progress . __( '% Profile complete', 'dokan-pro' ) ?>
+            <?php echo $progress . __( '% Profile complete', 'dokan' ) ?>
         </div>
     </div>
     <div class="dokan-alert dokan-alert-info dokan-panel-alert"><?php echo $next_todo; ?></div>
