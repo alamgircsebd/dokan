@@ -640,42 +640,6 @@ and open the template in the editor.
   padding-left: 55px;
   padding-bottom: 10px;
 }
-#wpuf_comments-form .star-rating:before {
-  content: "\73\73\73\73\73";
-  font-family: 'star';
-}
-.dokan-rating .star-rating {
-  float: right;
-  font-family: 'star';
-  font-size: 1em;
-  height: 1em;
-  line-height: 1em;
-  overflow: hidden;
-  position: relative;
-  width: 5.4em;
-}
-.dokan-rating .star-rating:before {
-  color: #E0DADF;
-  content: "sssss";
-  float: left;
-  left: 0;
-  position: absolute;
-  top: 0;
-}
-.dokan-rating .star-rating span {
-  float: left;
-  left: 0;
-  overflow: hidden;
-  padding-top: 1.5em;
-  position: absolute;
-  top: 0;
-}
-.dokan-rating .star-rating span:before {
-  content: "SSSSS";
-  left: 0;
-  position: absolute;
-  top: 0;
-}
 /*
 To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
