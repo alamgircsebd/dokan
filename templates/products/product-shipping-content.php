@@ -32,7 +32,7 @@
                 <input type="hidden" name="product_shipping_class" value="0">
                 <div class="dokan-form-group">
                     <label class="dokan-checkbox-inline" for="_disable_shipping">
-                        <input type="checkbox" id="_disable_shipping" name="_disable_shipping" value="yes" <?php checked( $_disable_shipping, 'yes' ); ?>>
+                        <input type="checkbox" id="_disable_shipping" name="_disable_shipping" value="no" <?php checked( $_disable_shipping, 'no' ); ?>>
                         <?php _e( 'This product requires shipping', 'dokan' ); ?>
                     </label>
                 </div>
