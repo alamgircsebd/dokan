@@ -1,3 +1,14 @@
+v2.5.3 -> March 12, 2017
+---------------------
+- [new]   Separated Free version from the PRO plugin
+- [fix]   Announcement functionality fixed
+- [fix]   Bulk discount for seller front-end fixed
+- [fix]   Styling fixed for coupons on Vendor Store Page
+- [fix]   Shipping Enable/Disable not updating issue fixed
+- [fix]   Review styling for 3rd party theme conflict fixed
+- [fix]   Product shipping toggling issue fixed
+- [tweak] Updated Flot JS version and fixed JS issues
+ 
 v2.5.2 -> January 25, 2017
 ---------------------
 - [new]   Added filter 'dokan_new_product_popup_args' to enable custom validation on new product add

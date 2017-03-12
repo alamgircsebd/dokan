@@ -6,10 +6,10 @@ module.exports = function(grunt) {
         // setting folder templates
         dirs: {
             css: 'assets/css',
-            less: 'assets/less',
-            fonts: 'assets/fonts',
             images: 'assets/images',
-            js: 'assets/js'
+            js: 'assets/js',
+            devLessSrc: 'assets/src/less',
+            devJsSrc: 'assets/src/js'
         },
 
         // Compile all .less files.
@@ -24,29 +24,29 @@ module.exports = function(grunt) {
                     sourceMapRootpath: '../../'
                 },
                 files: {
-                    '<%= dirs.css %>/style.css': '<%= dirs.less %>/style.less'
+                    '<%= dirs.css %>/style.css': '<%= dirs.devLessSrc %>/style.less'
                 }
             },
 
             admin: {
                 files: {
-                    '<%= dirs.css %>/admin.css': ['<%= dirs.less %>/admin.less', '<%= dirs.less %>/admin-report.less']
+                    '<%= dirs.css %>/admin.css': ['<%= dirs.devLessSrc %>/admin.less']
                 }
             }
         },
 
-        uglify: {
-            minify: {
-                expand: true,
-                cwd: '<%= dirs.js %>',
-                src: [
-                    'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'product-variation.js', 'reviews.js', 'script.js',
-                    'single-product-shipping.js', 'tabulous.js', 'tag-it-custom.js'
-                ],
-                dest: '<%= dirs.js %>/',
-                ext: '.min.js'
-            }
-        },
+        // uglify: {
+        //     minify: {
+        //         expand: true,
+        //         cwd: '<%= dirs.js %>',
+        //         src: [
+        //             'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'product-variation.js', 'reviews.js', 'script.js',
+        //             'single-product-shipping.js'
+        //         ],
+        //         dest: '<%= dirs.js %>/',
+        //         ext: '.min.js'
+        //     }
+        // },
 
         jshint: {
             options: {
@@ -62,36 +62,17 @@ module.exports = function(grunt) {
         concat: {
             all_js: {
                 files: {
-                    '<%= dirs.js %>/all.js': [
-                        '<%= dirs.js %>/admin.js',
-                        '<%= dirs.js %>/orders.js',
-                        '<%= dirs.js %>/product-editor.js',
-                        '<%= dirs.js %>/product-variation.js',
-                        '<%= dirs.js %>/reviews.js',
-                        '<%= dirs.js %>/script.js',
-                        '<%= dirs.js %>/settings.js',
+                    '<%= dirs.js %>/dokan-pro.js': [
+                        '<%= dirs.devJsSrc %>/*.js',
+                        '!<%= dirs.devJsSrc %>/admin.js',
                     ],
-                }
+                },
             },
 
-            flot: {
+            backend_js: {
                 files: {
-                    '<%= dirs.js %>/flot-all.min.js': [
-                        '<%= dirs.js %>/jquery.flot.min.js',
-                        '<%= dirs.js %>/jquery.flot.pie.min.js',
-                        '<%= dirs.js %>/jquery.flot.resize.min.js',
-                        '<%= dirs.js %>/jquery.flot.stack.min.js',
-                        '<%= dirs.js %>/jquery.flot.time.min.js',
-                    ],
-                }
-            },
-
-            dokan_extra: {
-                files: {
-                    '<%= dirs.css %>/dokan-extra.css': [
-                        '<%= dirs.css %>/chosen.min.css',
-                        '<%= dirs.css %>/icomoon.css',
-                        '<%= dirs.css %>/tabulous.css'
+                    '<%= dirs.js %>/dokan-pro-admin.js': [
+                        '<%= dirs.devJsSrc %>/admin.js'
                     ]
                 }
             }
@@ -115,24 +96,13 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
-                files: ['<%= dirs.less %>/*.less'],
-                tasks: ['less:core', 'less:admin'],
-                options: {
-                    livereload: true
-                }
+                files: '<%= dirs.devLessSrc %>/*.less',
+                tasks: ['less:core', 'less:admin']
             },
 
             js: {
-                files: [
-                    '<%= dirs.js %>/admin.js',
-                    '<%= dirs.js %>/orders.js',
-                    '<%= dirs.js %>/product-editor.js',
-                    '<%= dirs.js %>/product-variation.js',
-                    '<%= dirs.js %>/reviews.js',
-                    '<%= dirs.js %>/script.js',
-                    '<%= dirs.js %>/settings.js',
-                ],
-                tasks: ['concat:all_js']
+                files: '<%= dirs.devJsSrc %>/*.js',
+                tasks: [ 'concat:all_js', 'concat:backend_js' ]
             }
         },
 
@@ -170,34 +140,17 @@ module.exports = function(grunt) {
             }
         },
 
-        replace: {
-            example: {
-                src: ['build/dokan.php'],
-                dest: 'build/dokan.php',
-                replacements: [
-                    {
-                        from: 'Dokan (Lite) - Multi-vendor Marketplace',
-                        to: 'Dokan - Multi-vendor Marketplace'
-                    },
-                    {
-                        from: 'https://wordpress.org/plugins/dokan-lite/',
-                        to: 'https://wedevs.com/products/plugins/dokan/'
-                    }
-                ]
-            }
-        },
-
         //Compress build directory into <name>.zip and <name>-<version>.zip
         compress: {
             main: {
                 options: {
                     mode: 'zip',
-                    archive: './build/dokan-plugin-v' + pkg.version + '.zip'
+                    archive: './build/dokan-pro-v' + pkg.version + '.zip'
                 },
                 expand: true,
                 cwd: 'build/',
                 src: ['**/*'],
-                dest: 'dokan'
+                dest: 'dokan-pro'
             }
         },
 
@@ -213,7 +166,7 @@ module.exports = function(grunt) {
         sftp: {
             upload: {
                 files: {
-                    "./": 'build/dokan-plugin-v' + pkg.version + '.zip'
+                    "./": 'build/dokan-pro-v' + pkg.version + '.zip'
                 },
                 options: {
                     path: '<%= secret.path %>',
@@ -250,7 +203,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-clean' );
     grunt.loadNpmTasks( 'grunt-contrib-copy' );
     grunt.loadNpmTasks( 'grunt-contrib-compress' );
-    grunt.loadNpmTasks( 'grunt-text-replace' );
     grunt.loadNpmTasks( 'grunt-ssh' );
 
     grunt.registerTask( 'default', [
@@ -272,7 +224,6 @@ module.exports = function(grunt) {
     grunt.registerTask( 'zip', [
         'clean',
         'copy',
-        'replace',
         'compress'
     ])
 

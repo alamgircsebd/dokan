@@ -1,9 +1,9 @@
-=== Dokan Multivendor Marketplace Plugin ===
+=== Dokan (Pro) Multivendor Marketplace Plugin ===
 Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.6.1
+Tested up to: 4.7.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +169,18 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.5.3 -> March 12, 2017
+---------------------
+- [new]   Separated Free version from the PRO plugin
+- [fix]   Announcement functionality fixed
+- [fix]   Bulk discount for seller front-end fixed
+- [fix]   Styling fixed for coupons on Vendor Store Page
+- [fix]   Shipping Enable/Disable not updating issue fixed
+- [fix]   Review styling for 3rd party theme conflict fixed
+- [fix]   Product shipping toggling issue fixed
+- [tweak] Updated Flot JS version and fixed JS issues
+
 
 v2.5.2 -> January 25, 2017
 ----------------------
