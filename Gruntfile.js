@@ -145,12 +145,12 @@ module.exports = function(grunt) {
             main: {
                 options: {
                     mode: 'zip',
-                    archive: './build/dokan-plugin-v' + pkg.version + '.zip'
+                    archive: './build/dokan-pro-v' + pkg.version + '.zip'
                 },
                 expand: true,
                 cwd: 'build/',
                 src: ['**/*'],
-                dest: 'dokan'
+                dest: 'dokan-pro'
             }
         },
 
@@ -166,7 +166,7 @@ module.exports = function(grunt) {
         sftp: {
             upload: {
                 files: {
-                    "./": 'build/dokan-plugin-v' + pkg.version + '.zip'
+                    "./": 'build/dokan-pro-v' + pkg.version + '.zip'
                 },
                 options: {
                     path: '<%= secret.path %>',
