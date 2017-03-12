@@ -413,7 +413,7 @@ class Dokan_Pro {
     function account_migration_template( $file ) {
 
         if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) && basename( $file ) == 'my-account.php' ) {
-            $file = dokan_locate_template( 'global/update-account.php', '', '', true );
+            $file = dokan_locate_template( 'global/update-account.php', '', DOKAN_PRO_DIR. '/templates/', true );
         }
 
         return $file;
