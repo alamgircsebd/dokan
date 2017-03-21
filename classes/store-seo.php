@@ -115,11 +115,18 @@ class Dokan_Pro_Store_Seo {
     /**
      * Add dokan_sellers sitemap url to sitemap_index list
      */
-    function add_sellers_sitemap(){
+    function add_sellers_sitemap() {
+
+        if ( WPSEO_VERSION < 3.2 ) {
+            $base_url = wpseo_xml_sitemaps_base_url( 'dokan_sellers-sitemap.xml' );
+        } else {
+            $base_srl = WPSEO_Sitemaps_Router::get_base_url( 'dokan_sellers-sitemap.xml' );
+        }
+
         ob_start();
         ?>
         <sitemap>
-        <loc><?php echo wpseo_xml_sitemaps_base_url( 'dokan_sellers-sitemap.xml' ) ?></loc>
+        <loc><?php echo $base_url ?></loc>
 
         </sitemap>
         <?php
