@@ -144,7 +144,7 @@ if ( wc_tax_enabled() ) {
 			<td width="1%"></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_discount', $order->id ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_discount', dokan_cmp_get_prop( $order, 'id' ) ); ?>
 
 		<tr>
 			<td><?php _e( 'Shipping', 'dokan' ); ?> <span class="tips" data-tip="<?php _e( 'This is the shipping and handling total costs for the order.', 'dokan' ); ?>">[?]</span>:</td>
@@ -152,7 +152,7 @@ if ( wc_tax_enabled() ) {
 			<td width="1%"></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_shipping', $order->id ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_shipping', dokan_cmp_get_prop( $order, 'id' ) ); ?>
 
 		<?php if ( wc_tax_enabled() ) : ?>
 			<?php foreach ( $order->get_tax_totals() as $code => $tax ) : ?>
@@ -164,7 +164,7 @@ if ( wc_tax_enabled() ) {
 			<?php endforeach; ?>
 		<?php endif; ?>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_tax', $order->id ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_tax', dokan_cmp_get_prop( $order, 'id' ) ); ?>
 
 		<tr>
 			<td><?php _e( 'Order Total', 'dokan' ); ?>:</td>
@@ -178,7 +178,7 @@ if ( wc_tax_enabled() ) {
 			<td><?php if ( $order->is_editable() ) : ?><div class="wc-order-edit-line-item-actions"><a class="edit-order-item" href="#"></a></div><?php endif; ?></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_total', $order->id ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_total', dokan_cmp_get_prop( $order, 'id' ) ); ?>
 
 		<tr>
 			<td class="refunded-total"><?php _e( 'Refunded', 'dokan' ); ?>:</td>
@@ -186,7 +186,7 @@ if ( wc_tax_enabled() ) {
 			<td width="1%"></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_refunded', $order->id ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_cmp_get_prop( $order, 'id' ) ); ?>
 
 	</table>
 	<div class="clear"></div>

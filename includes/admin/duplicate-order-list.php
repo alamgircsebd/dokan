@@ -48,15 +48,15 @@
             foreach ( $duplicate_orders as $d_order ) {
                 $order = new WC_Order( $d_order->ID );
             ?>
-                    <tr id="row-<?php echo $order->id ?>" class="<?php echo ( $count % 2 ) == 0 ? 'alternate': 'odd'; ?>" data-order-id="<?php echo $order->id;?>">
+                    <tr id="row-<?php echo dokan_cmp_get_prop( $order, 'id' ) ?>" class="<?php echo ( $count % 2 ) == 0 ? 'alternate': 'odd'; ?>" data-order-id="<?php echo dokan_cmp_get_prop( $order, 'id' );?>">
                         <th class="check-column">
-                            <input type="checkbox" class="order-checkbox" name="id[<?php echo $order->id;?>]" value="<?php echo $order->id;?>">
+                            <input type="checkbox" class="order-checkbox" name="id[<?php echo dokan_cmp_get_prop( $order, 'id' );?>]" value="<?php echo dokan_cmp_get_prop( $order, 'id' );?>">
                         </th>
-                    <input type="hidden" value="<?php echo $order->id; ?>">
+                    <input type="hidden" value="<?php echo dokan_cmp_get_prop( $order, 'id' ); ?>">
                         <td class="order_actions" data-colname="Order">
                             <div class="tips">
-                                <a href="<?php echo admin_url('post.php?post='.$order->id.'&action=edit')?>" class="row-title">
-                                    <strong>#<?php echo $order->id ?></strong>
+                                <a href="<?php echo admin_url('post.php?post='.dokan_cmp_get_prop( $order, 'id' ).'&action=edit')?>" class="row-title">
+                                    <strong>#<?php echo dokan_cmp_get_prop( $order, 'id' ) ?></strong>
                                 </a><?php  _e( 'by' , 'dokan' ) ?>
                                 <a href="user-edit.php?user_id=<?php echo $order->customer_user; ?>"><?php echo get_user_meta($order->customer_user, 'first_name', true).' '.get_user_meta($order->customer_user, 'last_name', true); ?></a>
                                     <small class="meta email"><a href="mailto:<?php echo get_user_meta($order->customer_user, 'email', true) ?>"><?php echo get_user_meta($order->customer_user, 'email', true) ?></a></small>
@@ -75,7 +75,7 @@
                         </td>
                         <td class="order_actions" data-colname="Actions">
                             <p>
-                                <a class="button tips view" href="<?php echo admin_url('post.php?post='.$order->id.'&action=edit')?>"><?php _e( 'View', 'dokan' ) ?></a>
+                                <a class="button tips view" href="<?php echo admin_url('post.php?post='.dokan_cmp_get_prop( $order, 'id' ).'&action=edit')?>"><?php _e( 'View', 'dokan' ) ?></a>
                                 <a class="button tips delete-action dokan-order-action-delete" ><?php _e( 'Delete', 'dokan' ) ?></a>
                             </p>
                         </td>
