@@ -881,15 +881,18 @@ function dokan_discount_for_minimum_order() {
     //make unique seller array
     $allsellerids      = [];
     $unique_seller_ids = [];
+        // error_log( print_r( dokan_cmp_get_prop( $cart_data['data'], 'id' ) , true ) );
     foreach ( WC()->cart->get_cart() as $cart_data ) {
-        array_push( $allsellerids, $cart_data['data']->post->post_author );
+        $seller_id = get_post_field( 'post_author', dokan_cmp_get_prop( $cart_data['data'], 'id' ) );
+        array_push( $allsellerids, $seller_id );
     }
     $unique_seller_ids  = array_unique( $allsellerids );
     //now sum up
     $total_order_amount = 0;
     foreach ( $unique_seller_ids as $u_seller_ids ) {
         foreach ( WC()->cart->get_cart() as $cart_data ) {
-            if ( $u_seller_ids == $cart_data['data']->post->post_author ) {
+            $per_seller_id = get_post_field( 'post_author', dokan_cmp_get_prop( $cart_data['data'], 'id' ) );
+            if ( $u_seller_ids == $per_seller_id ) {
                 $total_order_amount = $total_order_amount + $cart_data['line_total'];
             }
         }

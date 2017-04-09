@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 				global $wpdb;
 
-				if ( $metadata = $order->has_meta( $item_id ) ) {
+				if ( $metadata = dokan_cmp_get_metadata( $order, $item_id )  ) {
 					echo '<table cellspacing="0" class="display_meta">';
 					foreach ( $metadata as $meta ) {
 
@@ -100,7 +100,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<table class="meta dokan-table dokan-table-strip" cellspacing="0">
 				<tbody class="meta_items">
 				<?php
-					if ( $metadata = $order->has_meta( $item_id )) {
+					if ( $metadata = dokan_cmp_get_metadata( $order, $item_id ) ) {
 						foreach ( $metadata as $meta ) {
 
 							// Skip hidden core fields
@@ -156,9 +156,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 				if ( isset( $item['line_total'] ) ) {
 					if ( isset( $item['line_subtotal'] ) && $item['line_subtotal'] != $item['line_total'] ) {
-						echo '<del>' . wc_price( $order->get_item_subtotal( $item, false, true ), array( 'currency' => $order->get_order_currency() ) ) . '</del> ';
+						echo '<del>' . wc_price( $order->get_item_subtotal( $item, false, true ), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</del> ';
 					}
-					echo wc_price( $order->get_item_total( $item, false, true ), array( 'currency' => $order->get_order_currency() ) );
+					echo wc_price( $order->get_item_total( $item, false, true ), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) );
 				}
 			?>
 		</div>
@@ -188,13 +188,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 				if ( isset( $item['line_total'] ) ) {
 					if ( isset( $item['line_subtotal'] ) && $item['line_subtotal'] != $item['line_total'] ) {
-						echo '<del>' . wc_price( $item['line_subtotal'], array( 'currency' => $order->get_order_currency() ) ) . '</del> ';
+						echo '<del>' . wc_price( $item['line_subtotal'], array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</del> ';
 					}
-					echo wc_price( $item['line_total'], array( 'currency' => $order->get_order_currency() ) );
+					echo wc_price( $item['line_total'], array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) );
 				}
 
 				if ( $refunded = $order->get_total_refunded_for_item( $item_id ) ) {
-					echo ' <small class="refunded">-' . wc_price( $refunded, array( 'currency' => $order->get_order_currency() ) ) . '</small>';
+					echo ' <small class="refunded">-' . wc_price( $refunded, array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</small>';
 				}
 			?>
 		</div>
@@ -228,16 +228,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<?php
 								if ( '' != $tax_item_total ) {
 									if ( isset( $tax_item_subtotal ) && $tax_item_subtotal != $tax_item_total ) {
-										echo '<del>' . wc_price( wc_round_tax_total( $tax_item_subtotal ), array( 'currency' => $order->get_order_currency() ) ) . '</del> ';
+										echo '<del>' . wc_price( wc_round_tax_total( $tax_item_subtotal ), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</del> ';
 									}
 
-									echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => $order->get_order_currency() ) );
+									echo wc_price( wc_round_tax_total( $tax_item_total ), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) );
 								} else {
 									echo '&ndash;';
 								}
 
 								if ( $refunded = $order->get_tax_refunded_for_item( $item_id, $tax_item_id ) ) {
-									echo ' <small class="refunded">-' . wc_price( $refunded, array( 'currency' => $order->get_order_currency() ) ) . '</small>';
+									echo ' <small class="refunded">-' . wc_price( $refunded, array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</small>';
 								}
 							?>
 						</div>
