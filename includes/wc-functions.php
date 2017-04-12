@@ -154,7 +154,7 @@ function dokan_save_variations( $post_id ) {
             }
 
             // Price handling
-            _wc_save_product_price( $variation_id, $variable_regular_price[$i], $variable_sale_price[$i], $variable_sale_price_dates_from[$i], $variable_sale_price_dates_to[$i] );
+            dokan_save_product_price( $variation_id, $variable_regular_price[$i], $variable_sale_price[$i], $variable_sale_price_dates_from[$i], $variable_sale_price_dates_to[$i] );
 
             if ( isset( $variable_tax_class[$i] ) && 'parent' !== $variable_tax_class[$i] ) {
                 update_post_meta( $variation_id, '_tax_class', wc_clean( $variable_tax_class[$i] ) );

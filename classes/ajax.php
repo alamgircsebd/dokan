@@ -378,7 +378,7 @@ class Dokan_Pro_Ajax {
             $date_from = ! empty( $date_from ) ? date( 'Y-m-d', $date_from ) : '';
             $date_to   = ! empty( $date_to ) ? date( 'Y-m-d', $date_to ) : '';
 
-            _wc_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
         }
     }
 
@@ -408,7 +408,7 @@ class Dokan_Pro_Ajax {
             $date_from = ! empty( $date_from ) ? date( 'Y-m-d', $date_from ) : '';
             $date_to   = ! empty( $date_to ) ? date( 'Y-m-d', $date_to ) : '';
 
-            _wc_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
         }
     }
 
@@ -576,7 +576,7 @@ class Dokan_Pro_Ajax {
                 $date_to = $data['date_to'];
             }
 
-            _wc_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
         }
     }
 
@@ -664,7 +664,7 @@ class Dokan_Pro_Ajax {
             } else {
                 $$field  += $value * "{$operator}1";
             }
-            _wc_save_product_price( $variation_id, $_regular_price, $_sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $_regular_price, $_sale_price, $date_from, $date_to );
         }
     }
 
