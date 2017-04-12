@@ -39,7 +39,7 @@ $who_refunded = new WP_User( $refund_post->post_author );
 
 	<td class="line_cost" width="1%">
 		<div class="view">
-			<?php echo wc_price( '-' .  dokan_cmp_replace_func( 'get_refund_amount', 'get_amount', $refund ) ); ?>
+			<?php echo wc_price( '-' .  dokan_replace_func( 'get_refund_amount', 'get_amount', $refund ) ); ?>
 		</div>
 	</td>
 
