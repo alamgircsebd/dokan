@@ -49,6 +49,33 @@ $porduct_shipping_pt     = ( $_processing_time ) ? $_processing_time : $dps_pt;
     <?php if ( 'yes' == get_option( 'woocommerce_calc_shipping' ) ): ?>
         <div class="hide_if_disable">
 
+            <div class="dokan-form-group">
+                <label class="dokan-w4 dokan-control-label" for="product_shipping_class"><?php _e( 'Shipping Class', 'dokan' ); ?></label>
+                <div class="dokan-w4 dokan-text-left">
+                    <?php
+                    // Shipping Class
+                    $classes = get_the_terms( $post->ID, 'product_shipping_class' );
+                    if ( $classes && ! is_wp_error( $classes ) ) {
+                        $current_shipping_class = current($classes)->term_id;
+                    } else {
+                        $current_shipping_class = '';
+                    }
+
+                    $args = array(
+                        'taxonomy'          => 'product_shipping_class',
+                        'hide_empty'        => 0,
+                        'show_option_none'  => __( 'No shipping class', 'dokan' ),
+                        'name'              => 'product_shipping_class',
+                        'id'                => 'product_shipping_class',
+                        'selected'          => $current_shipping_class,
+                        'class'             => 'dokan-form-control'
+                    );
+                    wp_dropdown_categories( $args );
+                    ?>
+                    <p class="help-block"><?php _e( 'Shipping classes are used by certain shipping methods to group similar products.', 'dokan' ); ?></p>
+                </div>
+            </div>
+
             <div class="dokan-form-group hide_if_disable">
                 <label class="dokan-w4 dokan-control-label" for="_overwrite_shipping"><?php _e( 'Override Shipping', 'dokan' ); ?></label>
                 <div class="dokan-w8 dokan-text-left">
