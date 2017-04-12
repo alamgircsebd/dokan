@@ -759,16 +759,12 @@ class Dokan_Pro_Ajax {
         $_POST['seller_id'] = $seller_id;
         $_POST['status'] = 0;
 
-
-
         // Validate that the refund can occur
-        $refund_amount          = wc_format_decimal( sanitize_text_field( $_POST['refund_amount'] ), wc_get_price_decimals() );
-        $order       = wc_get_order( $_POST['order_id'] );
+        $refund_amount = wc_format_decimal( sanitize_text_field( $_POST['refund_amount'] ), wc_get_price_decimals() );
+        $order         = wc_get_order( $_POST['order_id'] );
 
         $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
 
-        error_log( print_r( $refund_amount, true ) );
-        error_log( print_r( $max_refund, true ) );
         $refund = new Dokan_Pro_Refund;
         if ( ! $refund_amount || $max_refund < $refund_amount || 0 > $refund_amount ) {
             $data =  __( 'Invalid refund amount', 'dokan' );
