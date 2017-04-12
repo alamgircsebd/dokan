@@ -10,7 +10,7 @@ $from_shortcode = false;
 if ( isset( $_GET['product_id'] ) ) {
     $post_id        = intval( $_GET['product_id'] );
     $post           = get_post( $post_id );
-    $product        = get_product( $post_id );
+    $product        = wc_get_product( $post_id );
     $from_shortcode = true;
 }
 
