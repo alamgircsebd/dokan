@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<button type="button" rel="<?php echo absint( $download->product_id ) . ',' . esc_attr( $download->download_id ); ?>" class="revoke_access button"><?php _e( 'Revoke Access', 'dokan' ); ?></button>
 		<div class="handlediv" title="<?php _e( 'Click to toggle', 'dokan' ); ?>"></div>
 		<strong>
-			<?php echo '#' . absint( dokan_cmp_get_prop( $product, 'id' ) ) . ' &mdash; ' . apply_filters( 'woocommerce_admin_download_permissions_title', $product->get_title(), $download->product_id, $download->order_id, $download->order_key, $download->download_id ) . ' &mdash; ' . sprintf( __( '%s: %s', 'dokan' ), $file_count, wc_get_filename_from_url( $product->get_file_download_path( $download->download_id ) ) ) . ' &mdash; ' . sprintf( _n('Downloaded %s time', 'Downloaded %s times', absint( $download->download_count ), 'dokan'), absint( $download->download_count ) ); ?>
+			<?php echo '#' . absint( dokan_get_prop( $product, 'id' ) ) . ' &mdash; ' . apply_filters( 'woocommerce_admin_download_permissions_title', $product->get_title(), $download->product_id, $download->order_id, $download->order_key, $download->download_id ) . ' &mdash; ' . sprintf( __( '%s: %s', 'dokan' ), $file_count, wc_get_filename_from_url( $product->get_file_download_path( $download->download_id ) ) ) . ' &mdash; ' . sprintf( _n('Downloaded %s time', 'Downloaded %s times', absint( $download->download_count ), 'dokan'), absint( $download->download_count ) ); ?>
 		</strong>
 	</h3>
 	<table cellpadding="0" cellspacing="0" class="wc-metabox-content dokan-table dokan-table-strip">

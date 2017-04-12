@@ -128,7 +128,7 @@ if ( wc_tax_enabled() ) {
 
 						$link = $post_id ? add_query_arg( array( 'post' => $post_id, 'view' => 'add_coupons', 'action' => 'edit' ), dokan_get_navigation_url( 'coupons' ) ) : dokan_get_navigation_url( 'coupons' );
 
-						echo '<li class="code"><a href="' . esc_url( $link ) . '" class="tips" data-tip="' . esc_attr( wc_price( $item['discount_amount'], array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) ) . '"><span>' . esc_html( $item['name'] ). '</span></a></li>';
+						echo '<li class="code"><a href="' . esc_url( $link ) . '" class="tips" data-tip="' . esc_attr( wc_price( $item['discount_amount'], array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) ) . '"><span>' . esc_html( $item['name'] ). '</span></a></li>';
 					}
 				?></ul>
 			</div>
@@ -139,20 +139,20 @@ if ( wc_tax_enabled() ) {
 		<tr>
 			<td><?php _e( 'Discount', 'dokan' ); ?> <span class="tips" data-tip="<?php _e( 'This is the total discount. Discounts are defined per line item.', 'dokan' ); ?>">[?]</span>:</td>
 			<td class="total">
-				<?php echo wc_price( $order->get_total_discount(), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?>
+				<?php echo wc_price( $order->get_total_discount(), array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?>
 			</td>
 			<td width="1%"></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_discount', dokan_cmp_get_prop( $order, 'id' ) ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_discount', dokan_get_prop( $order, 'id' ) ); ?>
 
 		<tr>
 			<td><?php _e( 'Shipping', 'dokan' ); ?> <span class="tips" data-tip="<?php _e( 'This is the shipping and handling total costs for the order.', 'dokan' ); ?>">[?]</span>:</td>
-			<td class="total"><?php echo wc_price( $order->get_total_shipping(), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
+			<td class="total"><?php echo wc_price( $order->get_total_shipping(), array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
 			<td width="1%"></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_shipping', dokan_cmp_get_prop( $order, 'id' ) ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_shipping', dokan_get_prop( $order, 'id' ) ); ?>
 
 		<?php if ( wc_tax_enabled() ) : ?>
 			<?php foreach ( $order->get_tax_totals() as $code => $tax ) : ?>
@@ -164,7 +164,7 @@ if ( wc_tax_enabled() ) {
 			<?php endforeach; ?>
 		<?php endif; ?>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_tax', dokan_cmp_get_prop( $order, 'id' ) ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_tax', dokan_get_prop( $order, 'id' ) ); ?>
 
 		<tr>
 			<td><?php _e( 'Order Total', 'dokan' ); ?>:</td>
@@ -178,15 +178,15 @@ if ( wc_tax_enabled() ) {
 			<td><?php if ( $order->is_editable() ) : ?><div class="wc-order-edit-line-item-actions"><a class="edit-order-item" href="#"></a></div><?php endif; ?></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_total', dokan_cmp_get_prop( $order, 'id' ) ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_total', dokan_get_prop( $order, 'id' ) ); ?>
 
 		<tr>
 			<td class="refunded-total"><?php _e( 'Refunded', 'dokan' ); ?>:</td>
-			<td class="total refunded-total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
+			<td class="total refunded-total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
 			<td width="1%"></td>
 		</tr>
 
-		<?php do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_cmp_get_prop( $order, 'id' ) ); ?>
+		<?php do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_get_prop( $order, 'id' ) ); ?>
 
 	</table>
 	<div class="clear"></div>
@@ -208,11 +208,11 @@ if ( wc_tax_enabled() ) {
 
 		<tr>
 			<td><?php _e( 'Amount already refunded', 'dokan' ); ?>:</td>
-			<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
+			<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
 		</tr>
 		<tr>
 			<td><?php _e( 'Total available to refund', 'dokan' ); ?>:</td>
-			<td class="total"><?php echo wc_price( $order->get_total() - $order->get_total_refunded(), array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
+			<td class="total"><?php echo wc_price( $order->get_total() - $order->get_total_refunded(), array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ); ?></td>
 		</tr>
 		<tr>
 			<td><label for="refund_amount"><?php _e( 'Refund amount', 'dokan' ); ?>:</label></td>
@@ -232,7 +232,7 @@ if ( wc_tax_enabled() ) {
 	<div class="clear"></div>
 	<div class="refund-actions">
 		<?php
-		$refund_amount            = '<span class="wc-order-refund-amount">' . wc_price( 0, array( 'currency' => dokan_cmp_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</span>'; ?>
+		$refund_amount            = '<span class="wc-order-refund-amount">' . wc_price( 0, array( 'currency' => dokan_get_prop( $order, 'get_order_currency', 'get_currency' ) ) ) . '</span>'; ?>
 
 		<button type="button" class="dokan-btn dokan-btn-default do-manual-refund tips" data-tip="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', 'dokan' ); ?>"><?php printf( _x( 'Submit Refund Request %s', 'Submit Refund Request $amount', 'dokan' ), $refund_amount ); ?></button>
 		<button type="button" class="dokan-btn dokan-btn-default cancel-action"><?php _e( 'Cancel', 'dokan' ); ?></button>

@@ -140,17 +140,17 @@ class Dokan_Pro_Store {
         foreach ( $seller_coupons as $coupon ) {
             $coup = new WC_Coupon( $coupon->post_title );
             
-            $expiry_date = dokan_cmp_get_prop( $coup, 'expiry_date', 'get_date_expires' );
-            $coup_exists = dokan_cmp_get_prop( $coup, 'exists', 'is_valid' );
+            $expiry_date = dokan_get_prop( $coup, 'expiry_date', 'get_date_expires' );
+            $coup_exists = dokan_get_prop( $coup, 'exists', 'is_valid' );
             
             if ( !$expiry_date && $current_time < $expiry_date && !$coup_exists  )  {
                 continue; 
             }
             
-            if ( 'percent_product' == dokan_cmp_get_prop( $coup, 'type', 'get_discount_type' ) ) {
-                $coupon_amount_formated = dokan_cmp_get_prop( $coup, 'amount' ) . '%';
+            if ( 'percent_product' == dokan_get_prop( $coup, 'type', 'get_discount_type' ) ) {
+                $coupon_amount_formated = dokan_get_prop( $coup, 'amount' ) . '%';
             } else {
-                $coupon_amount_formated = wc_price( dokan_cmp_get_prop( $coup, 'amount' ) );
+                $coupon_amount_formated = wc_price( dokan_get_prop( $coup, 'amount' ) );
             }
             ?>
                 <div class="code">
