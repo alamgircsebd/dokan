@@ -47,7 +47,7 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
         $order_total = $order_total - $order->get_total_refunded();
     }
 
-    $order_status   = dokan_cmp_get_prop( $order, 'status' );
+    $order_status   = dokan_get_prop( $order, 'status' );
     $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
     $net_amount         = $order_total - $admin_commission;
     $net_amount     = apply_filters( 'dokan_order_refunded_net_amount', $net_amount, $order );

@@ -881,9 +881,9 @@ function dokan_discount_for_minimum_order() {
     //make unique seller array
     $allsellerids      = [];
     $unique_seller_ids = [];
-        // error_log( print_r( dokan_cmp_get_prop( $cart_data['data'], 'id' ) , true ) );
+        // error_log( print_r( dokan_get_prop( $cart_data['data'], 'id' ) , true ) );
     foreach ( WC()->cart->get_cart() as $cart_data ) {
-        $seller_id = get_post_field( 'post_author', dokan_cmp_get_prop( $cart_data['data'], 'id' ) );
+        $seller_id = get_post_field( 'post_author', dokan_get_prop( $cart_data['data'], 'id' ) );
         array_push( $allsellerids, $seller_id );
     }
     $unique_seller_ids  = array_unique( $allsellerids );
@@ -891,7 +891,7 @@ function dokan_discount_for_minimum_order() {
     $total_order_amount = 0;
     foreach ( $unique_seller_ids as $u_seller_ids ) {
         foreach ( WC()->cart->get_cart() as $cart_data ) {
-            $per_seller_id = get_post_field( 'post_author', dokan_cmp_get_prop( $cart_data['data'], 'id' ) );
+            $per_seller_id = get_post_field( 'post_author', dokan_get_prop( $cart_data['data'], 'id' ) );
             if ( $u_seller_ids == $per_seller_id ) {
                 $total_order_amount = $total_order_amount + $cart_data['line_total'];
             }
