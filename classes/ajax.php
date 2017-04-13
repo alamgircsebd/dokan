@@ -1610,6 +1610,8 @@ class Dokan_Pro_Ajax {
             $attribute_label    = wc_attribute_label( $taxonomy );
         } else {
             $attribute_label = '';
+            $attribute_taxonomy = array();
+            $metabox_class[]    = '';
         }
         ob_start();
         dokan_get_template_part( 'products/edit/html-product-attribute', '', array(
