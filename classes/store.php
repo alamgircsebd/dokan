@@ -127,22 +127,30 @@ class Dokan_Pro_Store {
         if ( ! $seller_coupons ) {
             return;
         }
-
-        $current_time = current_time( 'timestamp' );
+        // WC 3.0 compatibility
+        if ( class_exists( 'WC_DateTime' ) ) {
+            $current_time = new WC_DateTime();
+            $current_time = $current_time->getTimestamp();
+        } else {
+            $current_time = current_time( 'timestamp' );
+        }
 
         echo '<div class="store-coupon-wrap">';
 
         foreach ( $seller_coupons as $coupon ) {
             $coup = new WC_Coupon( $coupon->post_title );
 
-            if ( !( $coup->expiry_date && current_time( 'timestamp' ) > $coup->expiry_date ) && !$coup->exists  )  {
+            $expiry_date = dokan_get_prop( $coup, 'expiry_date', 'get_date_expires' );
+            $coup_exists = dokan_get_prop( $coup, 'exists', 'is_valid' );
+
+            if ( !$expiry_date && $current_time < $expiry_date && !$coup_exists  )  {
                 continue;
             }
 
-            if ( 'percent_product' == $coup->type ) {
-                $coupon_amount_formated = $coup->amount . '%';
+            if ( 'percent_product' == dokan_get_prop( $coup, 'type', 'get_discount_type' ) ) {
+                $coupon_amount_formated = dokan_get_prop( $coup, 'amount' ) . '%';
             } else {
-                $coupon_amount_formated = wc_price( $coup->amount );
+                $coupon_amount_formated = wc_price( dokan_get_prop( $coup, 'amount' ) );
             }
             ?>
                 <div class="code">
@@ -155,8 +163,9 @@ class Dokan_Pro_Store {
                                 <?php } ?>
                                 <span class="coupon-code"><?php printf( __( 'Coupon Code: <strong>%s</strong>', 'dokan' ), $coupon->post_title ); ?></span>
 
-                                <?php if ( $coup->expiry_date ) { ?>
-                                    <span class="expiring-in">(<?php printf( __( 'Expiring in %s', 'dokan' ), human_time_diff( $current_time, $coup->expiry_date ) ); ?>)</span>
+                                <?php if ( $expiry_date ) {
+                                    $expiry_date = is_object( $expiry_date ) ? $expiry_date->getTimestamp() : $expiry_date;        ?>
+                                    <span class="expiring-in">(<?php printf( __( 'Expiring in %s', 'dokan' ), human_time_diff( $current_time, $expiry_date ) ); ?>)</span>
                                 <?php } ?>
                             </div>
                         </span>

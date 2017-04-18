@@ -247,6 +247,11 @@
                 $all_logs = $wpdb->get_results( $sql );
                 foreach ( $all_logs as $log ) {
                     $seller = get_user_by( 'id', $log->seller_id );
+                    if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
+                        $order_status = $log->order_status;
+                    } else {
+                        $order_status = 'wc-' . $log->order_status;
+                    }
 
                     $result = array(
                         'order_id'     => '<a href="' . admin_url( 'post.php?action=edit&amp;post=' . $log->order_id ) . '">#' . $log->order_id . '</a>',
@@ -254,7 +259,7 @@
                         'order_total'  => $log->order_total,
                         'net_amount'   => $log->net_amount,
                         'commision'    => $log->order_total - $log->net_amount,
-                        'order_status' => $statuses[$log->order_status]
+                        'order_status' => $statuses[$order_status]
                     );
 
                     $result                = apply_filters( 'dokan_report_table_value', $result, $log->order_id, $log->seller_id );

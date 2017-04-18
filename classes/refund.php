@@ -62,24 +62,24 @@ class Dokan_Pro_Refund {
      */
     function insert_refund( $data = array() ) {
         global $wpdb;
-        $wpdb->dokan_refund = $wpdb->prefix . 'dokan_refund';
-        $data = array(
-            'order_id'          => $data['order_id'],
-            'seller_id'         => $data['seller_id'],
-            'refund_amount'     => $data['refund_amount'],
-            'refund_reason'     => $data['refund_reason'],
-            'item_qtys'         => $data['line_item_qtys'],
-            'item_totals'       => $data['line_item_totals'],
-            'item_tax_totals'   => $data['line_item_tax_totals'],
-            'restock_items'     => $data['restock_refunded_items'],
-            'date'              => current_time( 'mysql' ),
-            'status'            => $data['status'],
-            'method'            => $data['api_refund'],
+        $table_name = $wpdb->prefix . 'dokan_refund';
+
+        $postdata = array(
+            'order_id'        => (int)$data['order_id'],
+            'seller_id'       => (int)$data['seller_id'],
+            'refund_amount'   => floatval( $data['refund_amount'] ),
+            'refund_reason'   => $data['refund_reason'],
+            'item_qtys'       => $data['line_item_qtys'],
+            'item_totals'     => $data['line_item_totals'],
+            'item_tax_totals' => $data['line_item_tax_totals'],
+            'restock_items'   => $data['restock_refunded_items'],
+            'date'            => current_time( 'mysql' ),
+            'status'          => (int)$data['status'],
+            'method'          => $data['api_refund'],
         );
 
-        $format = array( '%d', '%d', '%f', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s' );
-
-        return $wpdb->insert( $wpdb->dokan_refund, $data, $format );
+        $format = array( '%d', '%d', '%f', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' );
+        return $wpdb->insert( $table_name, $postdata, $format );
     }
 
     /**

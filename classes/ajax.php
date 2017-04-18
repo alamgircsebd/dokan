@@ -378,7 +378,7 @@ class Dokan_Pro_Ajax {
             $date_from = ! empty( $date_from ) ? date( 'Y-m-d', $date_from ) : '';
             $date_to   = ! empty( $date_to ) ? date( 'Y-m-d', $date_to ) : '';
 
-            _wc_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
         }
     }
 
@@ -408,7 +408,7 @@ class Dokan_Pro_Ajax {
             $date_from = ! empty( $date_from ) ? date( 'Y-m-d', $date_from ) : '';
             $date_to   = ! empty( $date_to ) ? date( 'Y-m-d', $date_to ) : '';
 
-            _wc_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
         }
     }
 
@@ -576,7 +576,7 @@ class Dokan_Pro_Ajax {
                 $date_to = $data['date_to'];
             }
 
-            _wc_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $regular_price, $sale_price, $date_from, $date_to );
         }
     }
 
@@ -664,7 +664,7 @@ class Dokan_Pro_Ajax {
             } else {
                 $$field  += $value * "{$operator}1";
             }
-            _wc_save_product_price( $variation_id, $_regular_price, $_sale_price, $date_from, $date_to );
+            dokan_save_product_price( $variation_id, $_regular_price, $_sale_price, $date_from, $date_to );
         }
     }
 
@@ -760,10 +760,11 @@ class Dokan_Pro_Ajax {
         $_POST['status'] = 0;
 
         // Validate that the refund can occur
-        $refund_amount          = wc_format_decimal( sanitize_text_field( $_POST['refund_amount'] ), wc_get_price_decimals() );
-        $order       = wc_get_order( $_POST['order_id'] );
-        $order_items = $order->get_items();
+        $refund_amount = wc_format_decimal( sanitize_text_field( $_POST['refund_amount'] ), wc_get_price_decimals() );
+        $order         = wc_get_order( $_POST['order_id'] );
+
         $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
+
         $refund = new Dokan_Pro_Refund;
         if ( ! $refund_amount || $max_refund < $refund_amount || 0 > $refund_amount ) {
             $data =  __( 'Invalid refund amount', 'dokan' );
@@ -1609,6 +1610,8 @@ class Dokan_Pro_Ajax {
             $attribute_label    = wc_attribute_label( $taxonomy );
         } else {
             $attribute_label = '';
+            $attribute_taxonomy = array();
+            $metabox_class[]    = '';
         }
         ob_start();
         dokan_get_template_part( 'products/edit/html-product-attribute', '', array(
