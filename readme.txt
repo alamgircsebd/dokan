@@ -170,6 +170,15 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.6.0 -> April 18, 2017
+---------------------
+- [new] Made dokan-pro compatible with WC 3.0
+- [fix] updated Yoast SEO sitemap generation
+- [fix] Tab view seller shiiping toggle not working
+- [fix] Seller order refund showing notices fixed
+- [fix] Seller add new coupon showing notices fixed
+- [fix] Saving coupon data with WC 3.0
+
 v2.5.3 -> March 12, 2017
 ---------------------
 - [new]   Separated Free version from the PRO plugin
