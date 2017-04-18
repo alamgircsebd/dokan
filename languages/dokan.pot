@@ -1,10 +1,10 @@
-# Copyright (C) 2017 
-# This file is distributed under the same license as the  package.
+# Copyright (C) 2017 weDevs
+# This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Dokan (Pro) - Multi-vendor Marketplace 2.6.0\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2017-03-12 08:29:52+00:00\n"
+"POT-Creation-Date: 2017-04-18 02:57:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -124,65 +124,65 @@ msgid "Apply"
 msgstr ""
 
 #: classes/admin-refund.php:301 classes/coupons.php:395 classes/reviews.php:330
-#: classes/reviews.php:379 includes/admin/reports.php:298
+#: classes/reviews.php:379 includes/admin/reports.php:303
 msgid "&laquo;"
 msgstr ""
 
 #: classes/admin-refund.php:302 classes/coupons.php:396 classes/reviews.php:331
-#: classes/reviews.php:380 includes/admin/reports.php:299
+#: classes/reviews.php:380 includes/admin/reports.php:304
 msgid "&raquo;"
 msgstr ""
 
-#: classes/ajax.php:117 classes/ajax.php:1784 classes/products.php:203
+#: classes/ajax.php:117 classes/ajax.php:1787 classes/products.php:203
 #: includes/wc-functions.php:282 templates/orders/views/html-order-items.php:21
 #: templates/products/edit/inventory.php:6
 msgid "Standard"
 msgstr ""
 
-#: classes/ajax.php:127 classes/ajax.php:1794
+#: classes/ajax.php:127 classes/ajax.php:1797
 #: includes/woo-views/variation-admin-html.php:68
 #: templates/products/edit/inventory.php:53
 msgid "Do not allow"
 msgstr ""
 
-#: classes/ajax.php:128 classes/ajax.php:1795
+#: classes/ajax.php:128 classes/ajax.php:1798
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: classes/ajax.php:129 classes/ajax.php:1796
+#: classes/ajax.php:129 classes/ajax.php:1799
 #: includes/woo-views/variation-admin-html.php:70
 #: templates/products/edit/inventory.php:55
 msgid "Allow"
 msgstr ""
 
-#: classes/ajax.php:134 classes/ajax.php:1801
+#: classes/ajax.php:134 classes/ajax.php:1804
 #: includes/woo-views/variation-admin-html.php:78
 msgid "In stock"
 msgstr ""
 
-#: classes/ajax.php:135 classes/ajax.php:1802
+#: classes/ajax.php:135 classes/ajax.php:1805
 #: includes/woo-views/variation-admin-html.php:79
 msgid "Out of stock"
 msgstr ""
 
-#: classes/ajax.php:769
+#: classes/ajax.php:770
 msgid "Invalid refund amount"
 msgstr ""
 
-#: classes/ajax.php:772
+#: classes/ajax.php:773
 msgid "You have already a processing refund request for this order."
 msgstr ""
 
-#: classes/ajax.php:778
+#: classes/ajax.php:779
 msgid "Refund request sent successfully"
 msgstr ""
 
-#: classes/ajax.php:827 classes/ajax.php:853 classes/ajax.php:937
+#: classes/ajax.php:828 classes/ajax.php:854 classes/ajax.php:938
 #: templates/settings/shipping.php:202 templates/settings/shipping.php:232
 msgid "State"
 msgstr ""
 
-#: classes/ajax.php:833 classes/ajax.php:857
+#: classes/ajax.php:834 classes/ajax.php:858
 #: templates/orders/views/html-order-items.php:55
 #: templates/settings/shipping.php:180 templates/settings/shipping.php:210
 #: templates/settings/shipping.php:236 templates/settings/shipping.php:284
@@ -190,43 +190,43 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: classes/ajax.php:907
+#: classes/ajax.php:908
 msgid "No Announcement found"
 msgstr ""
 
-#: classes/ajax.php:939
+#: classes/ajax.php:940
 msgid "--Select State--"
 msgstr ""
 
-#: classes/ajax.php:943
+#: classes/ajax.php:944
 msgid "Other States"
 msgstr ""
 
-#: classes/ajax.php:1009
+#: classes/ajax.php:1010
 msgid "Please select a State from the dropdown"
 msgstr ""
 
-#: classes/ajax.php:1013 classes/ajax.php:1018
+#: classes/ajax.php:1014 classes/ajax.php:1019
 msgid "Shipping Cost : "
 msgstr ""
 
-#: classes/ajax.php:1023
+#: classes/ajax.php:1024
 msgid "Please select a country from the dropdown"
 msgstr ""
 
-#: classes/ajax.php:1346 includes/wc-functions.php:56
+#: classes/ajax.php:1347 includes/wc-functions.php:56
 msgid "Variation #%s of %s"
 msgstr ""
 
-#: classes/ajax.php:1689
+#: classes/ajax.php:1692
 msgid "Clear All"
 msgstr ""
 
-#: classes/ajax.php:1689 templates/coupon/form.php:109
+#: classes/ajax.php:1692 templates/coupon/form.php:109
 msgid "Clear"
 msgstr ""
 
-#: classes/ajax.php:1987 includes/woo-views/variation-admin-html.php:6
+#: classes/ajax.php:1990 includes/woo-views/variation-admin-html.php:6
 #: templates/orders/views/html-product-attribute.php:3
 #: templates/orders/views/html-variation-admin.php:17
 #: templates/products/edit/attributes.php:54
@@ -237,21 +237,21 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: classes/ajax.php:1998 templates/orders/views/html-product-attribute.php:66
+#: classes/ajax.php:2001 templates/orders/views/html-product-attribute.php:66
 #: templates/products/edit/attributes.php:72
 #: templates/products/edit/html-product-attribute.php:24
 #: templates/products/edit/templates-js.php:21
 msgid "Visible on the product page"
 msgstr ""
 
-#: classes/ajax.php:2005 templates/orders/views/html-product-attribute.php:72
+#: classes/ajax.php:2008 templates/orders/views/html-product-attribute.php:72
 #: templates/products/edit/attributes.php:85
 #: templates/products/edit/html-product-attribute.php:28
 #: templates/products/edit/templates-js.php:27
 msgid "Used for variations"
 msgstr ""
 
-#: classes/ajax.php:2016 classes/ajax.php:2027
+#: classes/ajax.php:2019 classes/ajax.php:2030
 #: templates/products/edit/attributes.php:99
 #: templates/products/edit/attributes.php:113
 #: templates/products/edit/templates-js.php:36
@@ -264,7 +264,7 @@ msgid "Coupons"
 msgstr ""
 
 #: classes/coupons.php:163 classes/coupons.php:184 classes/coupons.php:246
-#: classes/store-seo.php:517
+#: classes/store-seo.php:524
 msgid "Are you cheating?"
 msgstr ""
 
@@ -374,7 +374,7 @@ msgid "Order"
 msgstr ""
 
 #: classes/reports.php:105 classes/reports.php:166 includes/reports.php:107
-#: includes/reports.php:199 templates/orders/views/html-order-refund.php:18
+#: includes/reports.php:199 templates/orders/views/html-order-refund.php:23
 msgid "Refund"
 msgstr ""
 
@@ -496,19 +496,19 @@ msgstr ""
 msgid "Refund Policy"
 msgstr ""
 
-#: classes/store-seo.php:542
+#: classes/store-seo.php:549
 msgid "Your changes has been updated!"
 msgstr ""
 
-#: classes/store.php:151
+#: classes/store.php:159
 msgid "%s Discount"
 msgstr ""
 
-#: classes/store.php:156
+#: classes/store.php:164
 msgid "Coupon Code: <strong>%s</strong>"
 msgstr ""
 
-#: classes/store.php:159
+#: classes/store.php:168
 msgid "Expiring in %s"
 msgstr ""
 
@@ -643,11 +643,11 @@ msgstr ""
 msgid "Error: Nonce verification failed"
 msgstr ""
 
-#: dokan-pro.php:462
+#: dokan-pro.php:463
 msgid "Simple"
 msgstr ""
 
-#: dokan-pro.php:463
+#: dokan-pro.php:464
 msgid "Variable"
 msgstr ""
 
@@ -1070,7 +1070,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: includes/admin/reports.php:253
+#: includes/admin/reports.php:258
 msgid "edit"
 msgstr ""
 
@@ -1439,11 +1439,11 @@ msgstr ""
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:925
+#: includes/wc-functions.php:928
 msgid "Quantity discount"
 msgstr ""
 
-#: includes/wc-functions.php:932
+#: includes/wc-functions.php:935
 msgid "Order discount"
 msgstr ""
 
@@ -2132,7 +2132,7 @@ msgstr ""
 msgid "Optional"
 msgstr ""
 
-#: templates/orders/views/html-order-refund.php:21
+#: templates/orders/views/html-order-refund.php:26
 msgid "ID: "
 msgstr ""
 
@@ -2383,27 +2383,44 @@ msgstr ""
 msgid "height"
 msgstr ""
 
-#: templates/products/edit/shipping.php:51
+#: templates/products/edit/shipping.php:53
+#: templates/products/product-shipping-content.php:52
+msgid "Shipping Class"
+msgstr ""
+
+#: templates/products/edit/shipping.php:67
+#: templates/products/product-shipping-content.php:66
+msgid "No shipping class"
+msgstr ""
+
+#: templates/products/edit/shipping.php:75
+#: templates/products/product-shipping-content.php:75
+msgid ""
+"Shipping classes are used by certain shipping methods to group similar "
+"products."
+msgstr ""
+
+#: templates/products/edit/shipping.php:80
 msgid "Override Shipping"
 msgstr ""
 
-#: templates/products/edit/shipping.php:53
+#: templates/products/edit/shipping.php:82
 #: templates/products/product-shipping-content.php:82
 msgid "Override default shipping cost for this product"
 msgstr ""
 
-#: templates/products/edit/shipping.php:58
+#: templates/products/edit/shipping.php:87
 #: templates/products/product-shipping-content.php:87
 msgid "Additional cost"
 msgstr ""
 
-#: templates/products/edit/shipping.php:66
+#: templates/products/edit/shipping.php:95
 #: templates/products/product-shipping-content.php:92
 #: templates/settings/shipping.php:84
 msgid "Per Qty Additional Price"
 msgstr ""
 
-#: templates/products/edit/shipping.php:74
+#: templates/products/edit/shipping.php:103
 #: templates/products/product-shipping-content.php:97
 #: templates/settings/shipping.php:97
 msgid "Processing Time"
@@ -2582,20 +2599,6 @@ msgstr ""
 
 #: templates/products/product-shipping-content.php:36
 msgid "This product requires shipping"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:52
-msgid "Shipping Class"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:66
-msgid "No shipping class"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:75
-msgid ""
-"Shipping classes are used by certain shipping methods to group similar "
-"products."
 msgstr ""
 
 #: templates/products/product-variation.php:13
@@ -2910,6 +2913,28 @@ msgstr ""
 msgid "No vendor found"
 msgstr ""
 
+#. Plugin Name of the plugin/theme
+msgid "Dokan (Pro) - Multi-vendor Marketplace"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://wedevs.com/products/plugins/dokan/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and "
+"weDevs."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "weDevs"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://wedevs.com/"
+msgstr ""
+
 #: classes/admin-refund.php:216
 msgctxt "Refund"
 msgid "Refund via %s"
@@ -2941,7 +2966,7 @@ msgctxt "Submit Refund Request $amount"
 msgid "Submit Refund Request %s"
 msgstr ""
 
-#: templates/orders/views/html-order-refund.php:21
+#: templates/orders/views/html-order-refund.php:26
 msgctxt "Ex: Refund - $date >by< $username"
 msgid "by"
 msgstr ""
