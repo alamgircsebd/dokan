@@ -1,4 +1,4 @@
-v2.5.4 -> April 17, 2017
+v2.6.0 -> April 18, 2017
 ---------------------
 - [new] Made dokan-pro compatible with WC 3.0
 - [fix] updated Yoast SEO sitemap generation
