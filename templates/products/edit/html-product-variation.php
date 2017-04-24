@@ -323,11 +323,11 @@ extract( $variation_data );
             <div class="dokan-form-group show_if_variation_downloadable" style="display: none;">
                 <div class="content-half-part">
                     <label><?php _e( 'Download limit', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Leave blank for unlimited re-downloads.', 'dokan' ); ?>"></i></label>
-                    <input type="number" class="dokan-form-control" size="5" name="variable_download_limit[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_limit ) ) echo esc_attr( $_download_limit ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'dokan' ); ?>" step="1" min="0" />
+                    <input type="text" class="dokan-form-control" size="5" name="variable_download_limit[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_limit ) ) echo esc_attr( $_download_limit ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'dokan' ); ?>" />
                 </div>
                 <div class="content-half-part">
                     <label><?php _e( 'Download expiry', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Enter the number of days before a download link expires, or leave blank.', 'dokan' ); ?>"></i></label>
-                    <input type="number" class="dokan-form-control" size="5" name="variable_download_expiry[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_expiry ) ) echo esc_attr( $_download_expiry ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'dokan' ); ?>" step="1" min="0" />
+                    <input type="text" class="dokan-form-control" size="5" name="variable_download_expiry[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_expiry ) ) echo esc_attr( $_download_expiry ); ?>" placeholder="<?php esc_attr_e( 'Unlimited', 'dokan' ); ?>" />
                 </div>
 
                 <?php

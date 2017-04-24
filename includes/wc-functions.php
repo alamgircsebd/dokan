@@ -52,14 +52,10 @@ function dokan_save_variations( $post_id ) {
             $post_status     = isset( $variable_enabled[$i] ) ? 'publish' : 'private';
             $manage_stock    = isset( $variable_manage_stock[$i] ) ? 'yes' : 'no';
 
-            // Generate a useful post title
-            $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
-
             // Update or Add post
             if ( !$variation_id ) {
 
                 $variation = array(
-                    'post_title'   => $variation_post_title,
                     'post_content' => '',
                     'post_status'  => $post_status,
                     'post_author'  => get_current_user_id(),
@@ -78,7 +74,6 @@ function dokan_save_variations( $post_id ) {
 
                 $wpdb->update( $wpdb->posts, array(
                     'post_status'       => $post_status,
-                    'post_title'        => $variation_post_title,
                     'menu_order'        => $variable_menu_order[$i],
                     'post_modified'     => $modified_date,
                     'post_modified_gmt' => get_gmt_from_date( $modified_date ),
