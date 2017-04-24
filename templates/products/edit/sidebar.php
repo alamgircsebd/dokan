@@ -193,34 +193,40 @@ $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling', ''
     </div>
 
     <div class="dokan-side-body" id="dokan-product-images">
-        <div id="product_images_container">
-            <ul class="product_images dokan-clearfix">
-                <?php
-                $product_images = get_post_meta( $post->ID, '_product_image_gallery', true );
-                $gallery = explode( ',', $product_images );
+        <div class="dokan-product-gallery">
+            <div id="product_images_container">
+                <ul class="product_images dokan-clearfix">
+                    <?php
+                    $product_images = get_post_meta( $post_id, '_product_image_gallery', true );
+                    $gallery = explode( ',', $product_images );
 
-                if ( $gallery ) {
-                    foreach ($gallery as $image_id) {
-                        if ( empty( $image_id ) ) {
-                            continue;
+                    if ( $gallery ) {
+                        foreach ($gallery as $image_id) {
+                            if ( empty( $image_id ) ) {
+                                continue;
+                            }
+
+                            $attachment_image = wp_get_attachment_image_src( $image_id, 'thumbnail' );
+                            ?>
+                            <li class="image" data-attachment_id="<?php echo $image_id; ?>">
+                                <img src="<?php echo $attachment_image[0]; ?>" alt="">
+                                <a href="#" class="action-delete" title="<?php esc_attr_e( 'Delete image', 'dokan-lite' ); ?>">&times;</a>
+                            </li>
+                            <?php
                         }
-
-                        $attachment_image = wp_get_attachment_image_src( $image_id, 'thumbnail' );
-                        ?>
-                        <li class="image" data-attachment_id="<?php echo $image_id; ?>">
-                            <img src="<?php echo $attachment_image[0]; ?>" alt="">
-                            <a href="#" class="action-delete">&times;</a>
-                        </li>
-                        <?php
                     }
-                }
-                ?>
-            </ul>
+                    ?>
+                    <li class="add-image add-product-images tips" data-title="<?php _e( 'Add gallery image', 'dokan-lite' ); ?>">
+                        <a href="#" class="add-product-images"><i class="fa fa-plus" aria-hidden="true"></i></a>
+                    </li>
+                </ul>
 
-            <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_images ); ?>">
+                <input type="hidden" id="product_image_gallery" name="product_image_gallery" value="<?php echo esc_attr( $product_images ); ?>">
+            </div>
         </div>
+    </div>
 
-        <a href="#" class="add-product-images dokan-btn dokan-btn-success"><?php _e( '+ Add product images', 'dokan' ); ?></a>
+        <!-- <a href="#" class="add-product-images dokan-btn dokan-btn-success"><?php _e( '+ Add product images', 'dokan' ); ?></a> -->
     </div>
 </aside> <!-- .product-gallery -->
 
