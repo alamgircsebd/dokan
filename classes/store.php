@@ -146,8 +146,10 @@ class Dokan_Pro_Store {
             if ( !$expiry_date && $current_time < $expiry_date && !$coup_exists  )  {
                 continue;
             }
-
-            if ( 'percent_product' == dokan_get_prop( $coup, 'type', 'get_discount_type' ) ) {
+            
+            $coupon_type = version_compare( WC_VERSION, '2.7', '>' ) ? 'percent' : 'percent_product';
+            
+            if ( $coupon_type == dokan_get_prop( $coup, 'type', 'get_discount_type' ) ) {
                 $coupon_amount_formated = dokan_get_prop( $coup, 'amount' ) . '%';
             } else {
                 $coupon_amount_formated = wc_price( dokan_get_prop( $coup, 'amount' ) );
