@@ -79,7 +79,7 @@
                     <div class="show_if_needs_shipping dokan-shipping-product-options">
 
                         <div class="dokan-form-group">
-                            <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
+                            <?php dokan_post_input_box( $post_id, '_overwrite_shipping', array( 'label' => __( 'Override your store\'s default shipping cost for this product', 'dokan' ) ), 'checkbox' ); ?>
                         </div>
 
                         <div class="dokan-additional-shipping-wrap show_if_override">
