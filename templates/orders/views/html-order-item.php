@@ -28,8 +28,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					echo '<br/><strong>' . __( 'Product SKU:', 'dokan' ).'</strong> ' . esc_html( $_product->get_sku() );
 				}
 
-				if ( $_product && isset( $_product->variation_data ) ) {
-					echo '<br/>' . wc_get_formatted_variation( $_product->variation_data, true );
+				if ( $_product->is_type( 'variation' ) ) {
+					echo '<br/>' . wc_get_formatted_variation( $_product, true );
 				}
 
 			?>"><?php echo $_product->get_image( 'shop_thumbnail', array( 'title' => '' ) ); ?></a>

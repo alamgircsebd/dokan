@@ -290,6 +290,7 @@ extract( $variation_data );
                                     }
                                     dokan_get_template_part( 'products/edit/html-product-variation-download', '', array(
                                         'pro'          => true,
+                                        'key'          => $key,
                                         'file'         => $file,
                                         'variation_id' => $variation_id
                                     ) );
@@ -301,6 +302,7 @@ extract( $variation_data );
                             <div>
                                 <th colspan="4">
                                     <a href="#" class="dokan-btn dokan-btn-default insert-file-row" data-row="<?php
+                                        $key  = '';
                                         $file = array(
                                             'file' => '',
                                             'name' => ''
@@ -308,6 +310,7 @@ extract( $variation_data );
                                         ob_start();
                                         dokan_get_template_part( 'products/edit/html-product-variation-download', '', array(
                                             'pro'          => true,
+                                            'key'          => $key,
                                             'file'         => $file,
                                             'variation_id' => $variation_id
                                         ) );

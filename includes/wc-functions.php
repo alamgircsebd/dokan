@@ -175,9 +175,7 @@ function dokan_save_variations( $post_id ) {
                 }
 
                 // grant permission to any newly added files on any existing orders for this product prior to saving
-                do_action( 'woocommerce_process_product_file_download_paths', $post_id, $variation_id, $files );
-                do_action( 'dokan_process_product_file_download_paths', $post_id, $variation_id, $files );
-
+                do_action( 'dokan_process_file_download', $post_id, $variation_id, $files );
                 update_post_meta( $variation_id, '_downloadable_files', $files );
             } else {
                 update_post_meta( $variation_id, '_download_limit', '' );
