@@ -250,16 +250,18 @@
 
                     if ( sale_schedule_set ) {
                         $wrap.find('.sale_schedule').hide();
+                        $wrap.find('.cancel_sale_schedule').show();
                         $wrap.find('.sale_price_dates_fields').show();
                     } else {
                         $wrap.find('.sale_schedule').show();
+                        $wrap.find('.cancel_sale_schedule').hide();
                         $wrap.find('.sale_price_dates_fields').hide();
                     }
                 });
             },
 
             saleSchedule: function() {
-                var $wrap = $(this).closest( '.dokan-product-field-content', 'div, table' );
+                var $wrap = $(this).closest( 'div, table' );
 
                 $(this).hide();
                 $wrap.find('.cancel_sale_schedule').show();
@@ -269,7 +271,7 @@
             },
 
             cancelSchedule: function() {
-                var $wrap = $(this).closest( '.dokan-product-field-content', 'div, table' );
+                var $wrap = $(this).closest( 'div, table' );
 
                 $(this).hide();
                 $wrap.find('.sale_schedule').show();
