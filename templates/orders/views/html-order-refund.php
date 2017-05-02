@@ -6,9 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @var object $refund The refund object.
  */
-
-// var_dump( $refund->get_id() );
-
 $refund_post = get_post( dokan_get_prop( $refund, 'id' ) );
 
 $who_refunded = new WP_User( $refund_post->post_author );

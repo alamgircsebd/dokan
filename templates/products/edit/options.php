@@ -18,12 +18,11 @@
     <div class="dokan-form-group">
         <label class="dokan-w4 dokan-control-label" for="_purchase_note"><?php _e( 'Visibility', 'dokan' ); ?></label>
         <div class="dokan-w6 dokan-text-left">
-            <?php dokan_post_input_box( $post->ID, '_visibility', array( 'options' => array(
-                'visible' => __( 'Catalog or Search', 'dokan' ),
-                'catalog' => __( 'Catalog', 'dokan' ),
-                'search' => __( 'Search', 'dokan' ),
-                'hidden' => __( 'Hidden', 'dokan ')
-            ) ), 'select' ); ?>
+            <select name="_visibility" id="_visibility" class="dokan-form-control">
+                <?php foreach ( $visibility_options = dokan_get_product_visibility_options() as $name => $label ): ?>
+                    <option value="<?php echo $name; ?>" <?php selected( $_visibility, $name ); ?>><?php echo $label; ?></option>
+                <?php endforeach ?>
+            </select>
         </div>
     </div>
 

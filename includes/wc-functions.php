@@ -110,7 +110,6 @@ function dokan_save_variations( $post_id ) {
                 }
             }
 
-
             // Update post meta
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[$i] ) );
             update_post_meta( $variation_id, '_virtual', wc_clean( $is_virtual ) );
@@ -173,6 +172,7 @@ function dokan_save_variations( $post_id ) {
                             'file' => $file_urls[$ii]
                         );
                 }
+
 
                 // grant permission to any newly added files on any existing orders for this product prior to saving
                 do_action( 'dokan_process_file_download', $post_id, $variation_id, $files );
@@ -365,7 +365,8 @@ function dokan_variable_product_type_options() {
                                 '_virtual',
                                 '_thumbnail_id',
                                 '_sale_price_dates_from',
-                                '_sale_price_dates_to'
+                                '_sale_price_dates_to',
+                                '_variation_description'
                             );
 
                             foreach ( $variation_fields as $field ) {

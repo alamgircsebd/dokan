@@ -4,6 +4,7 @@ global $post, $product;
 wp_enqueue_script( 'dokan-tabs-scripts' );
 
 $post_id        = $post->ID;
+$product        = wc_get_product( $post_id );
 $seller_id      = get_current_user_id();
 $from_shortcode = false;
 
@@ -56,7 +57,7 @@ $is_enable_op_discount = dokan_get_option( 'discount_edit', 'dokan_selling' );
 $is_enable_op_discount = $is_enable_op_discount ? $is_enable_op_discount : array();
 
 $_stock_status          = get_post_meta( $post_id, '_stock_status', true );
-$_visibility            = get_post_meta( $post_id, '_visibility', true );
+$_visibility            = ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post_id, '_visibility', true );
 $_enable_reviews        = $post->comment_status;
 
 if ( ! $from_shortcode ) {
@@ -386,7 +387,7 @@ if ( ! $from_shortcode ) {
 
                                     <div id="product-options">
 
-                                        <?php dokan_get_template_part( 'products/edit/options', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id ) ); ?>
+                                        <?php dokan_get_template_part( 'products/edit/options', '', array( 'pro' => true, 'post' => $post, 'post_id' => $post_id, '_visibility' => $_visibility ) ); ?>
                                         <?php do_action( 'dokan_product_edit_after_options' ); ?>
 
                                     </div> <!-- #product-options -->
