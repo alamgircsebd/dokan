@@ -6,7 +6,8 @@ v2.6.1 -> May 04, 2017
 - [fix] Tab view shipping functionality
 - [fix] Tab view schedule render
 - [fix] Refund rendering issue when order is not found
-- [fix] Downlodable variable product not saving
+- [fix] Downloadable variable product not saving
+- [new] Added variation description field in tab view product page
 
 v2.6.0 -> April 18, 2017
 ---------------------
@@ -27,7 +28,7 @@ v2.5.3 -> March 12, 2017
 - [fix]   Review styling for 3rd party theme conflict fixed
 - [fix]   Product shipping toggling issue fixed
 - [tweak] Updated Flot JS version and fixed JS issues
- 
+
 v2.5.2 -> January 25, 2017
 ---------------------
 - [new]   Added filter 'dokan_new_product_popup_args' to enable custom validation on new product add
