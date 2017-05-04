@@ -1,3 +1,13 @@
+v2.6.1 -> May 04, 2017
+---------------------
+- [fix] Vendor coupon type not showing properly
+- [fix] Saving variation product and variation title view
+- [fix] Tab view product gallery image not saving
+- [fix] Tab view shipping functionality
+- [fix] Tab view schedule render
+- [fix] Refund rendering issue when order is not found
+- [fix] Downlodable variable product not saving
+
 v2.6.0 -> April 18, 2017
 ---------------------
 - [new] Made dokan-pro compatible with WC 3.0
