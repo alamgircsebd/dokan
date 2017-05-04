@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.7.3
+Tested up to: 4.7.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +169,17 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.6.1 -> May 04, 2017
+---------------------
+- [fix] Vendor coupon type not showing properly
+- [fix] Saving variation product and variation title view
+- [fix] Tab view product gallery image not saving
+- [fix] Tab view shipping functionality
+- [fix] Tab view schedule render
+- [fix] Refund rendering issue when order is not found
+- [fix] Downloadable variable product not saving
+- [new] Added variation description field in tab view product page
 
 v2.6.0 -> April 18, 2017
 ---------------------

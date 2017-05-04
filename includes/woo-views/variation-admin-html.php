@@ -202,14 +202,24 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 							<td>
 								<div>
 									<label><?php _e( 'Download Limit:', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Leave blank for unlimited re-downloads.', 'dokan' ); ?>" href="#">[?]</a></label>
-									<input type="number" size="5" name="variable_download_limit[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_limit ) ) echo esc_attr( $_download_limit ); ?>" placeholder="<?php _e( 'Unlimited', 'dokan' ); ?>" step="1" min="0" />
+									<input type="text" size="5" name="variable_download_limit[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_limit ) ) echo esc_attr( $_download_limit ); ?>" placeholder="<?php _e( 'Unlimited', 'dokan' ); ?>" />
 								</div>
 							</td>
 							<td>
 								<div>
 									<label><?php _e( 'Download Expiry:', 'dokan' ); ?> <a class="tips" title="<?php _e( 'Enter the number of days before a download link expires, or leave blank.', 'dokan' ); ?>" href="#">[?]</a></label>
-									<input type="number" size="5" name="variable_download_expiry[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_expiry ) ) echo esc_attr( $_download_expiry ); ?>" placeholder="<?php _e( 'Unlimited', 'dokan' ); ?>" step="1" min="0" />
+									<input type="text" size="5" name="variable_download_expiry[<?php echo $loop; ?>]" value="<?php if ( isset( $_download_expiry ) ) echo esc_attr( $_download_expiry ); ?>" placeholder="<?php _e( 'Unlimited', 'dokan' ); ?>" />
 								</div>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="2">
+								<div>
+					                <p class="dokan-form-group">
+					                    <label><?php _e( 'Variation description', 'dokan' ); ?></label>
+					                    <textarea class="dokan-form-control" name="variable_description[<?php echo $loop; ?>]" rows="3" style="width:100%;"><?php echo isset( $_variation_description ) ? esc_textarea( $_variation_description ) : ''; ?></textarea>
+					                </p>
+					            </div>
 							</td>
 						</tr>
 						<?php do_action( 'woocommerce_product_after_variable_attributes', $loop, $variation_data, $variation ); ?>

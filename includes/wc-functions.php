@@ -52,14 +52,10 @@ function dokan_save_variations( $post_id ) {
             $post_status     = isset( $variable_enabled[$i] ) ? 'publish' : 'private';
             $manage_stock    = isset( $variable_manage_stock[$i] ) ? 'yes' : 'no';
 
-            // Generate a useful post title
-            $variation_post_title = sprintf( __( 'Variation #%s of %s', 'dokan' ), absint( $variation_id ), esc_html( get_the_title( $post_id ) ) );
-
             // Update or Add post
             if ( !$variation_id ) {
 
                 $variation = array(
-                    'post_title'   => $variation_post_title,
                     'post_content' => '',
                     'post_status'  => $post_status,
                     'post_author'  => get_current_user_id(),
@@ -78,7 +74,6 @@ function dokan_save_variations( $post_id ) {
 
                 $wpdb->update( $wpdb->posts, array(
                     'post_status'       => $post_status,
-                    'post_title'        => $variation_post_title,
                     'menu_order'        => $variable_menu_order[$i],
                     'post_modified'     => $modified_date,
                     'post_modified_gmt' => get_gmt_from_date( $modified_date ),
@@ -114,7 +109,6 @@ function dokan_save_variations( $post_id ) {
                     update_post_meta( $variation_id, '_sku', '' );
                 }
             }
-
 
             // Update post meta
             update_post_meta( $variation_id, '_thumbnail_id', absint( $upload_image_id[$i] ) );
@@ -179,10 +173,9 @@ function dokan_save_variations( $post_id ) {
                         );
                 }
 
-                // grant permission to any newly added files on any existing orders for this product prior to saving
-                do_action( 'woocommerce_process_product_file_download_paths', $post_id, $variation_id, $files );
-                do_action( 'dokan_process_product_file_download_paths', $post_id, $variation_id, $files );
 
+                // grant permission to any newly added files on any existing orders for this product prior to saving
+                do_action( 'dokan_process_file_download', $post_id, $variation_id, $files );
                 update_post_meta( $variation_id, '_downloadable_files', $files );
             } else {
                 update_post_meta( $variation_id, '_download_limit', '' );
@@ -372,7 +365,8 @@ function dokan_variable_product_type_options() {
                                 '_virtual',
                                 '_thumbnail_id',
                                 '_sale_price_dates_from',
-                                '_sale_price_dates_to'
+                                '_sale_price_dates_to',
+                                '_variation_description'
                             );
 
                             foreach ( $variation_fields as $field ) {
