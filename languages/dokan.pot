@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2017-05-04 03:38:41+00:00\n"
+"POT-Creation-Date: 2017-05-07 03:59:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2599,6 +2599,22 @@ msgstr ""
 
 #: templates/products/product-shipping-content.php:36
 msgid "This product requires shipping"
+msgstr ""
+
+#: templates/products/product-shipping-content.php:41
+msgid "weight (%s)"
+msgstr ""
+
+#: templates/products/product-shipping-content.php:42
+msgid "length (%s)"
+msgstr ""
+
+#: templates/products/product-shipping-content.php:43
+msgid "width (%s)"
+msgstr ""
+
+#: templates/products/product-shipping-content.php:44
+msgid "height (%s)"
 msgstr ""
 
 #: templates/products/product-variation.php:13
