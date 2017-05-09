@@ -1004,25 +1004,16 @@ class Dokan_Pro_Ajax {
 
         <?php
         if ( $country != '' ) {
-
             if ( isset( $dps_state_rates[$country] ) && count( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
-
                 _e( 'Please select a State from the dropdown', 'dokan' );
-
             } else if ( !isset( $dps_state_rates[$country] ) && empty( $_POST['state'] ) ) {
-
                 echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_country_rates[$country] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
-
             } else if ( isset( $_POST['state'] ) && !empty( $_POST['state'] ) ) {
-
                 $state = $_POST['state'];
-                echo __( 'Shipping Cost : ', 'dokan' ) . '<h4>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</h4>';
-
+                echo __( 'Shipping Cost : ', 'dokan' ) . '<strong>' . wc_price( $dps_state_rates[$country][$state] + $base_shipping_type_price + $additional_quantity_cost ) . '</strong>';
             }
         } else {
-
             _e( 'Please select a country from the dropdown', 'dokan' );
-
         }
         $content = ob_get_clean();
 

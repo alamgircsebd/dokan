@@ -18,7 +18,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : Feb 6, 2017, 11:01:53 AM
     Author     : rafsun
 */
@@ -29,14 +29,6 @@ and open the template in the editor.
   width: 35px;
   top: 45%;
   left: 50%;
-}
-.dokan-shipping-calculate-wrapper .dokan-shipping-country-wrapper label,
-.dokan-shipping-calculate-wrapper .dokan-shipping-state-wrapper label,
-.dokan-shipping-calculate-wrapper .dokan-shipping-qty-wrapper label {
-  font-weight: normal;
-}
-.dokan-shipping-calculate-wrapper button.dokan-shipping-calculator {
-  margin-top: 33px;
 }
 @-webkit-keyframes progress-bar-stripes {
   from {

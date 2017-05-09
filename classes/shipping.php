@@ -364,14 +364,22 @@ class Dokan_Pro_Shipping {
                     <input type="number" class="dokan-shipping-qty dokan-form-control" id="dokan-shipping-qty" name="dokan-shipping-qty" value="1" placeholder="1">
                 </div>
 
-                <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator dokan-w3"><?php _e( 'Get Shipping Cost', 'dokan' ); ?></button>
-
                 <div class="dokan-clearfix"></div>
 
                 <div class="dokan-shipping-price-wrapper dokan-form-group"></div>
 
                 <div class="dokan-clearfix"></div>
+
+                <div class="dokan-shipping-button-wrapper dokan-form-group">
+                    <button class="dokan-btn dokan-btn-theme dokan-shipping-calculator" id="dokan-shipping-calculator"><?php _e( 'Get Shipping Cost', 'dokan' ); ?></button>
+                </div>
+
+                <div class="dokan-clearfix"></div>
             </div>
+
+            <style>
+
+            </style>
 
         <?php } ?>
 
