@@ -947,3 +947,32 @@ function dokan_calculate_totals( $total ) {
 }
 
 add_filter( 'woocommerce_calculated_total', 'dokan_calculate_totals' );
+
+/**
+* Update author for variation product
+*
+* @since 2.6.2
+*
+* @return void
+**/
+function dokan_override_author_for_variations( $product, $seller_id ) {
+    if ( $product->get_type() == 'variable' ) {
+        $args = array(
+            'post_parent' => $product->get_id(),
+            'post_type'   => 'product_variation',
+            'numberposts' => -1,
+            'post_status' => 'any'
+        );
+
+        $variations = get_children( $args );
+
+        foreach ( $variations as $key => $variation ) {
+            wp_update_post( array(
+                'ID'          => $variation->ID,
+                'post_author' => $seller_id
+            ) );
+        }
+    }
+}
+
+add_action( 'dokan_after_override_product_author', 'dokan_override_author_for_variations', 11, 2 );

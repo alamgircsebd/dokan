@@ -179,7 +179,6 @@ class Dokan_Pro {
      */
     public function includes() {
 
-
         if ( is_admin() ) {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';

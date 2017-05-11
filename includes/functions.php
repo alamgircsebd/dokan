@@ -212,10 +212,10 @@ function dokan_get_feature_sellers( $count = 5 ) {
     $users = get_users( apply_filters( 'dokan_get_feature_sellers_args', $args ) );
 
     $args = array(
-        'role'         => 'administrator',
-        'meta_key'     => 'dokan_feature_seller',
-        'meta_value'   => 'yes',
-        'offset'       => $count
+        'role'       => 'administrator',
+        'meta_key'   => 'dokan_feature_seller',
+        'meta_value' => 'yes',
+        'offset'     => $count
     );
     $admins = get_users( $args );
 
