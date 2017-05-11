@@ -158,3 +158,68 @@ function dokan_render_order_table_items( $order_id ) {
     $order    = new WC_Order( $order_id );
     include( DOKAN_PRO_DIR . '/templates/orders/views/html-order-items.php' );
 }
+
+/**
+ * Get best sellers list
+ *
+ * @param  integer $limit
+ * @return array
+ */
+function dokan_get_best_sellers( $limit = 5 ) {
+    global  $wpdb;
+
+    $cache_key = 'dokan-best-seller-' . $limit;
+    $seller = wp_cache_get( $cache_key, 'widget' );
+
+    if ( false === $seller ) {
+
+        $qry = "SELECT seller_id, display_name, SUM( net_amount ) AS total_sell
+            FROM {$wpdb->prefix}dokan_orders AS o,{$wpdb->users} AS u
+            LEFT JOIN {$wpdb->usermeta} AS umeta on umeta.user_id=u.ID
+            WHERE o.seller_id = u.ID AND umeta.meta_key = 'dokan_enable_selling' AND umeta.meta_value = 'yes'
+            GROUP BY o.seller_id
+            ORDER BY total_sell DESC LIMIT ".$limit;
+
+        $seller = $wpdb->get_results( $qry );
+        wp_cache_set( $cache_key, $seller, 'widget' );
+    }
+
+    return $seller;
+}
+
+/**
+ * Get featured sellers list
+ *
+ * @param  integer $limit
+ * @return array
+ */
+function dokan_get_feature_sellers( $count = 5 ) {
+    $args = array(
+        'role'         => 'seller',
+        'meta_query'   => array(
+            array(
+                'key'   => 'dokan_feature_seller',
+                'value' => 'yes',
+            ),
+            array(
+                'key'   => 'dokan_enable_selling',
+                'value' => 'yes',
+            )
+        ),
+        'offset'       => $count
+    );
+
+    $users = get_users( apply_filters( 'dokan_get_feature_sellers_args', $args ) );
+
+    $args = array(
+        'role'         => 'administrator',
+        'meta_key'     => 'dokan_feature_seller',
+        'meta_value'   => 'yes',
+        'offset'       => $count
+    );
+    $admins = get_users( $args );
+
+    $sellers = array_merge( $admins, $users );
+    return $sellers;
+}
+
