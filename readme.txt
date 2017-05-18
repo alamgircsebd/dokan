@@ -170,6 +170,15 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.6.2 -> May 18, 2017
+---------------------
+- [fix] Fixed weight dimension translation issue.
+- [fix] Vendor display name on variation products in cart
+- [fix] Shipping enabled settings inverted issue fixed
+- [fix] Order status for refund fixed
+- [tweak] Shipping calculator button alignment improved
+- [tweak] Best seller widget and Featured seller widget updated
+
 v2.6.1 -> May 04, 2017
 ---------------------
 - [fix] Vendor coupon type not showing properly

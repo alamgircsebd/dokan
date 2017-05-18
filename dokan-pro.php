@@ -3,7 +3,7 @@
 Plugin Name: Dokan (Pro) - Multi-vendor Marketplace
 Plugin URI: https://wedevs.com/products/plugins/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.6.1
+Version: 2.6.2
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -178,7 +178,6 @@ class Dokan_Pro {
      * @return void
      */
     public function includes() {
-
 
         if ( is_admin() ) {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';

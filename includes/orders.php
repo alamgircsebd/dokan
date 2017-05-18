@@ -52,6 +52,11 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
     $net_amount         = $order_total - $admin_commission;
     $net_amount     = apply_filters( 'dokan_order_refunded_net_amount', $net_amount, $order );
 
+    // make sure order status contains "wc-" prefix
+    if ( stripos( $order_status, 'wc-' ) === false ) {
+        $order_status = 'wc-' . $order_status;
+    }
+
     $wpdb->update( $wpdb->prefix . 'dokan_orders',
         array(
             'order_total'  => $order_total,

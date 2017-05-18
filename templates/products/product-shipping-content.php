@@ -32,16 +32,17 @@
                 <input type="hidden" name="product_shipping_class" value="0">
                 <div class="dokan-form-group">
                     <label class="dokan-checkbox-inline" for="_disable_shipping">
+                        <input type="hidden" name="_disable_shipping" value="yes">
                         <input type="checkbox" id="_disable_shipping" name="_disable_shipping" value="no" <?php checked( $_disable_shipping, 'no' ); ?>>
                         <?php _e( 'This product requires shipping', 'dokan' ); ?>
                     </label>
                 </div>
 
                 <div class="show_if_needs_shipping dokan-shipping-dimention-options">
-                    <?php dokan_post_input_box( $post_id, '_weight', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'weight (' . esc_html( get_option( 'woocommerce_weight_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                    <?php dokan_post_input_box( $post_id, '_length', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'length (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                    <?php dokan_post_input_box( $post_id, '_width', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'width (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
-                    <?php dokan_post_input_box( $post_id, '_height', array( 'class' => 'dokan-form-control', 'placeholder' => __( 'height (' . esc_html( get_option( 'woocommerce_dimension_unit' ) ) . ')', 'dokan' ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_weight', array( 'class' => 'dokan-form-control', 'placeholder' => sprintf( __( 'weight (%s)', 'dokan' ), esc_html( get_option( 'woocommerce_weight_unit' ) ) ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_length', array( 'class' => 'dokan-form-control', 'placeholder' => sprintf( __( 'length (%s)', 'dokan' ), esc_html( get_option( 'woocommerce_dimension_unit' ) ) ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_width', array( 'class' => 'dokan-form-control', 'placeholder' => sprintf( __( 'width (%s)', 'dokan' ), esc_html( get_option( 'woocommerce_dimension_unit' ) ) ) ), 'number' ); ?>
+                    <?php dokan_post_input_box( $post_id, '_height', array( 'class' => 'dokan-form-control', 'placeholder' => sprintf( __( 'height (%s)', 'dokan' ), esc_html( get_option( 'woocommerce_dimension_unit' ) ) ) ), 'number' ); ?>
                     <div class="dokan-clearfix"></div>
                 </div>
 
