@@ -1,10 +1,10 @@
-# Copyright (C) 2017 
-# This file is distributed under the same license as the  package.
+# Copyright (C) 2017 weDevs
+# This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: Dokan (Pro) - Multi-vendor Marketplace 2.6.1\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2017-05-07 03:59:22+00:00\n"
+"POT-Creation-Date: 2017-05-18 06:20:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -137,34 +137,34 @@ msgstr ""
 msgid "&raquo;"
 msgstr ""
 
-#: classes/ajax.php:117 classes/ajax.php:1787 classes/products.php:203
+#: classes/ajax.php:117 classes/ajax.php:1778 classes/products.php:203
 #: includes/wc-functions.php:275 templates/orders/views/html-order-items.php:21
 #: templates/products/edit/inventory.php:6
 msgid "Standard"
 msgstr ""
 
-#: classes/ajax.php:127 classes/ajax.php:1797
+#: classes/ajax.php:127 classes/ajax.php:1788
 #: includes/woo-views/variation-admin-html.php:68
 #: templates/products/edit/inventory.php:53
 msgid "Do not allow"
 msgstr ""
 
-#: classes/ajax.php:128 classes/ajax.php:1798
+#: classes/ajax.php:128 classes/ajax.php:1789
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: classes/ajax.php:129 classes/ajax.php:1799
+#: classes/ajax.php:129 classes/ajax.php:1790
 #: includes/woo-views/variation-admin-html.php:70
 #: templates/products/edit/inventory.php:55
 msgid "Allow"
 msgstr ""
 
-#: classes/ajax.php:134 classes/ajax.php:1804
+#: classes/ajax.php:134 classes/ajax.php:1795
 #: includes/woo-views/variation-admin-html.php:78
 msgid "In stock"
 msgstr ""
 
-#: classes/ajax.php:135 classes/ajax.php:1805
+#: classes/ajax.php:135 classes/ajax.php:1796
 #: includes/woo-views/variation-admin-html.php:79
 msgid "Out of stock"
 msgstr ""
@@ -206,31 +206,31 @@ msgstr ""
 msgid "Other States"
 msgstr ""
 
-#: classes/ajax.php:1010
+#: classes/ajax.php:1008
 msgid "Please select a State from the dropdown"
 msgstr ""
 
-#: classes/ajax.php:1014 classes/ajax.php:1019
+#: classes/ajax.php:1010 classes/ajax.php:1013
 msgid "Shipping Cost : "
 msgstr ""
 
-#: classes/ajax.php:1024
+#: classes/ajax.php:1016
 msgid "Please select a country from the dropdown"
 msgstr ""
 
-#: classes/ajax.php:1347
+#: classes/ajax.php:1338
 msgid "Variation #%s of %s"
 msgstr ""
 
-#: classes/ajax.php:1692
+#: classes/ajax.php:1683
 msgid "Clear All"
 msgstr ""
 
-#: classes/ajax.php:1692 templates/coupon/form.php:109
+#: classes/ajax.php:1683 templates/coupon/form.php:109
 msgid "Clear"
 msgstr ""
 
-#: classes/ajax.php:1990 includes/woo-views/variation-admin-html.php:6
+#: classes/ajax.php:1981 includes/woo-views/variation-admin-html.php:6
 #: templates/orders/views/html-product-attribute.php:3
 #: templates/orders/views/html-variation-admin.php:17
 #: templates/products/edit/attributes.php:54
@@ -241,21 +241,21 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: classes/ajax.php:2001 templates/orders/views/html-product-attribute.php:66
+#: classes/ajax.php:1992 templates/orders/views/html-product-attribute.php:66
 #: templates/products/edit/attributes.php:72
 #: templates/products/edit/html-product-attribute.php:24
 #: templates/products/edit/templates-js.php:21
 msgid "Visible on the product page"
 msgstr ""
 
-#: classes/ajax.php:2008 templates/orders/views/html-product-attribute.php:72
+#: classes/ajax.php:1999 templates/orders/views/html-product-attribute.php:72
 #: templates/products/edit/attributes.php:85
 #: templates/products/edit/html-product-attribute.php:28
 #: templates/products/edit/templates-js.php:27
 msgid "Used for variations"
 msgstr ""
 
-#: classes/ajax.php:2019 classes/ajax.php:2030
+#: classes/ajax.php:2010 classes/ajax.php:2021
 #: templates/products/edit/attributes.php:99
 #: templates/products/edit/attributes.php:113
 #: templates/products/edit/templates-js.php:36
@@ -356,7 +356,7 @@ msgstr ""
 #: classes/reports.php:65 classes/settings.php:74 classes/shipping.php:292
 #: includes/reports.php:152 templates/orders/views/html-order-items.php:150
 #: templates/orders/views/html-order-shipping.php:20
-#: templates/products/product-edit.php:181
+#: templates/products/product-edit.php:172
 msgid "Shipping"
 msgstr ""
 
@@ -488,15 +488,15 @@ msgstr ""
 msgid "Quantity"
 msgstr ""
 
-#: classes/shipping.php:367
+#: classes/shipping.php:374
 msgid "Get Shipping Cost"
 msgstr ""
 
-#: classes/shipping.php:380 templates/settings/shipping.php:115
+#: classes/shipping.php:388 templates/settings/shipping.php:115
 msgid "Shipping Policy"
 msgstr ""
 
-#: classes/shipping.php:387 templates/settings/shipping.php:128
+#: classes/shipping.php:395 templates/settings/shipping.php:128
 msgid "Refund Policy"
 msgstr ""
 
@@ -647,11 +647,11 @@ msgstr ""
 msgid "Error: Nonce verification failed"
 msgstr ""
 
-#: dokan-pro.php:463
+#: dokan-pro.php:462
 msgid "Simple"
 msgstr ""
 
-#: dokan-pro.php:464
+#: dokan-pro.php:463
 msgid "Variable"
 msgstr ""
 
@@ -874,7 +874,7 @@ msgstr ""
 #: includes/admin/announcement.php:59 templates/coupon/listing.php:36
 #: templates/products/edit/sidebar.php:26
 #: templates/products/edit/sidebar.php:69
-#: templates/products/product-edit.php:166
+#: templates/products/product-edit.php:157
 msgid "Edit"
 msgstr ""
 
@@ -1101,7 +1101,7 @@ msgid "Shop Name"
 msgstr ""
 
 #: includes/admin/sellers.php:29 includes/admin/sellers.php:66
-#: includes/admin/sellers.php:105 templates/products/product-edit.php:110
+#: includes/admin/sellers.php:105 templates/products/product-edit.php:101
 msgid "Products"
 msgstr ""
 
@@ -1352,13 +1352,13 @@ msgstr ""
 
 #: includes/shipping-gateway/shipping.php:70
 #: templates/products/edit/inventory.php:64
-#: templates/products/product-shipping-content.php:115
+#: templates/products/product-shipping-content.php:116
 msgid "Tax Status"
 msgstr ""
 
 #: includes/shipping-gateway/shipping.php:74
 #: templates/products/edit/inventory.php:67
-#: templates/products/product-shipping-content.php:118
+#: templates/products/product-shipping-content.php:119
 msgid "Taxable"
 msgstr ""
 
@@ -1582,7 +1582,7 @@ msgstr ""
 #: includes/woo-views/variation-admin-html.php:91
 #: templates/orders/views/html-variation-admin.php:95
 #: templates/products/edit/html-product-variation.php:121
-#: templates/products/product-edit.php:273
+#: templates/products/product-edit.php:264
 msgid "Schedule"
 msgstr ""
 
@@ -2205,7 +2205,7 @@ msgid "Manage stock?"
 msgstr ""
 
 #: templates/products/edit/attributes.php:1
-#: templates/products/product-edit.php:186
+#: templates/products/product-edit.php:177
 msgid "Attributes"
 msgstr ""
 
@@ -2318,12 +2318,12 @@ msgid "Allow Backorders"
 msgstr ""
 
 #: templates/products/edit/inventory.php:68
-#: templates/products/product-shipping-content.php:119
+#: templates/products/product-shipping-content.php:120
 msgid "Shipping only"
 msgstr ""
 
 #: templates/products/edit/inventory.php:76
-#: templates/products/product-shipping-content.php:127
+#: templates/products/product-shipping-content.php:128
 msgid "Tax Class"
 msgstr ""
 
@@ -2372,17 +2372,17 @@ msgid "height"
 msgstr ""
 
 #: templates/products/edit/shipping.php:56
-#: templates/products/product-shipping-content.php:52
+#: templates/products/product-shipping-content.php:53
 msgid "Shipping Class"
 msgstr ""
 
 #: templates/products/edit/shipping.php:70
-#: templates/products/product-shipping-content.php:66
+#: templates/products/product-shipping-content.php:67
 msgid "No shipping class"
 msgstr ""
 
 #: templates/products/edit/shipping.php:78
-#: templates/products/product-shipping-content.php:75
+#: templates/products/product-shipping-content.php:76
 msgid ""
 "Shipping classes are used by certain shipping methods to group similar "
 "products."
@@ -2393,23 +2393,23 @@ msgid "Override Shipping"
 msgstr ""
 
 #: templates/products/edit/shipping.php:86
-#: templates/products/product-shipping-content.php:82
+#: templates/products/product-shipping-content.php:83
 msgid "Override your store's default shipping cost for this product"
 msgstr ""
 
 #: templates/products/edit/shipping.php:91
-#: templates/products/product-shipping-content.php:87
+#: templates/products/product-shipping-content.php:88
 msgid "Additional cost"
 msgstr ""
 
 #: templates/products/edit/shipping.php:99
-#: templates/products/product-shipping-content.php:92
+#: templates/products/product-shipping-content.php:93
 #: templates/settings/shipping.php:84
 msgid "Per Qty Additional Price"
 msgstr ""
 
 #: templates/products/edit/shipping.php:107
-#: templates/products/product-shipping-content.php:97
+#: templates/products/product-shipping-content.php:98
 #: templates/settings/shipping.php:97
 msgid "Processing Time"
 msgstr ""
@@ -2502,77 +2502,71 @@ msgstr ""
 msgid "Access Denied"
 msgstr ""
 
-#: templates/products/product-edit.php:27
-msgid ""
-"Access Denied! You have reached the limit of your subscribed total online "
-"product"
-msgstr ""
-
-#: templates/products/product-edit.php:114
+#: templates/products/product-edit.php:105
 msgid "Hidden"
 msgstr ""
 
-#: templates/products/product-edit.php:119
+#: templates/products/product-edit.php:110
 msgid "View Product"
 msgstr ""
 
-#: templates/products/product-edit.php:137
+#: templates/products/product-edit.php:128
 msgid "Success!"
 msgstr ""
 
-#: templates/products/product-edit.php:137
+#: templates/products/product-edit.php:128
 msgid "The product has been updated successfully."
 msgstr ""
 
-#: templates/products/product-edit.php:140
+#: templates/products/product-edit.php:131
 msgid "View Product &rarr;"
 msgstr ""
 
-#: templates/products/product-edit.php:150
+#: templates/products/product-edit.php:141
 msgid "Error!"
 msgstr ""
 
-#: templates/products/product-edit.php:171
+#: templates/products/product-edit.php:162
 msgid "Options"
 msgstr ""
 
-#: templates/products/product-edit.php:176
+#: templates/products/product-edit.php:167
 msgid "Inventory"
 msgstr ""
 
-#: templates/products/product-edit.php:191
+#: templates/products/product-edit.php:182
 msgid "Variations"
 msgstr ""
 
-#: templates/products/product-edit.php:234
+#: templates/products/product-edit.php:225
 msgid "Upload a product cover image"
 msgstr ""
 
-#: templates/products/product-edit.php:271
+#: templates/products/product-edit.php:262
 msgid "Special Price"
 msgstr ""
 
-#: templates/products/product-edit.php:279
+#: templates/products/product-edit.php:270
 msgid "From"
 msgstr ""
 
-#: templates/products/product-edit.php:286
+#: templates/products/product-edit.php:277
 msgid "To"
 msgstr ""
 
-#: templates/products/product-edit.php:306
+#: templates/products/product-edit.php:297
 msgid "- Select a category -"
 msgstr ""
 
-#: templates/products/product-edit.php:323
+#: templates/products/product-edit.php:314
 msgid "Category"
 msgstr ""
 
-#: templates/products/product-edit.php:343
+#: templates/products/product-edit.php:334
 msgid "Select product category"
 msgstr ""
 
-#: templates/products/product-edit.php:368
+#: templates/products/product-edit.php:359
 msgid "Select product tags"
 msgstr ""
 
@@ -2597,23 +2591,23 @@ msgstr ""
 msgid "Manage shipping and tax for this product"
 msgstr ""
 
-#: templates/products/product-shipping-content.php:36
+#: templates/products/product-shipping-content.php:37
 msgid "This product requires shipping"
 msgstr ""
 
-#: templates/products/product-shipping-content.php:41
+#: templates/products/product-shipping-content.php:42
 msgid "weight (%s)"
 msgstr ""
 
-#: templates/products/product-shipping-content.php:42
+#: templates/products/product-shipping-content.php:43
 msgid "length (%s)"
 msgstr ""
 
-#: templates/products/product-shipping-content.php:43
+#: templates/products/product-shipping-content.php:44
 msgid "width (%s)"
 msgstr ""
 
-#: templates/products/product-shipping-content.php:44
+#: templates/products/product-shipping-content.php:45
 msgid "height (%s)"
 msgstr ""
 
@@ -2921,12 +2915,34 @@ msgstr ""
 msgid "Vendor Review"
 msgstr ""
 
-#: templates/widgets/best-seller.php:22 templates/widgets/feature-seller.php:22
+#: templates/widgets/best-seller.php:22 templates/widgets/feature-seller.php:20
 msgid "No ratings found yet!"
 msgstr ""
 
-#: templates/widgets/best-seller.php:36
+#: templates/widgets/best-seller.php:36 templates/widgets/feature-seller.php:36
 msgid "No vendor found"
+msgstr ""
+
+#. Plugin Name of the plugin/theme
+msgid "Dokan (Pro) - Multi-vendor Marketplace"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://wedevs.com/products/plugins/dokan/"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and "
+"weDevs."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "weDevs"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://wedevs.com/"
 msgstr ""
 
 #: classes/admin-refund.php:217
@@ -2936,7 +2952,7 @@ msgstr ""
 
 #: includes/shipping-gateway/shipping.php:75
 #: templates/products/edit/inventory.php:69
-#: templates/products/product-shipping-content.php:120
+#: templates/products/product-shipping-content.php:121
 msgctxt "Tax status"
 msgid "None"
 msgstr ""
