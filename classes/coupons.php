@@ -297,10 +297,24 @@ class Dokan_Pro_Coupons {
             $exclude_product_ids = '';
         }
 
+        if ( isset( $_POST['product_categories'] ) ) {
+            $product_categories = array_filter( array_map( 'intval', (array) $_POST['product_categories'] ) );
+        } else {
+            $product_categories = array();
+        }
+
+        if ( isset( $_POST['exclude_product_categories'] ) ) {
+            $exclude_product_categories = array_filter( array_map( 'intval', (array) $_POST['exclude_product_categories'] ) );
+        } else {
+            $exclude_product_categories = array();
+        }
+
         update_post_meta( $post_id, 'discount_type', $type );
         update_post_meta( $post_id, 'coupon_amount', $amount );
         update_post_meta( $post_id, 'product_ids', $product_ids );
         update_post_meta( $post_id, 'exclude_product_ids', $exclude_product_ids );
+        update_post_meta( $post_id, 'product_categories', $product_categories );
+        update_post_meta( $post_id, 'exclude_product_categories', $exclude_product_categories );
         update_post_meta( $post_id, 'usage_limit', $usage_limit );
         update_post_meta( $post_id, 'expiry_date', $expiry_date );
         update_post_meta( $post_id, 'apply_before_tax', $apply_before_tax );
@@ -445,22 +459,24 @@ class Dokan_Pro_Coupons {
 
         if ( isset( $_GET['post'] ) && $_GET['action'] == 'edit' ) {
 
-            $post              = get_post( $_GET['post'] );
-            $button_name       = __( 'Update Coupon', 'dokan' );
+            $post                       = get_post( $_GET['post'] );
+            $button_name                = __( 'Update Coupon', 'dokan' );
 
-            $discount_type     = get_post_meta( $post->ID, 'discount_type', true );
-            $amount            = get_post_meta( $post->ID, 'coupon_amount', true );
+            $discount_type              = get_post_meta( $post->ID, 'discount_type', true );
+            $amount                     = get_post_meta( $post->ID, 'coupon_amount', true );
 
-            $products          = get_post_meta( $post->ID, 'product_ids', true );
-            $exclude_products  = get_post_meta( $post->ID, 'exclude_product_ids', true );
-            $usage_limit       = get_post_meta( $post->ID, 'usage_limit', true );
-            $expire            = get_post_meta( $post->ID, 'expiry_date', true );
-            $apply_before_tax  = get_post_meta( $post->ID, 'apply_before_tax', true );
-            //$free_shipping     = get_post_meta( $post->ID, 'free_shipping', true );
-            $exclide_sale_item = get_post_meta( $post->ID, 'exclude_sale_items', true );
-            $minimum_amount    = get_post_meta( $post->ID, 'minimum_amount', true );
-            $customer_email    = get_post_meta( $post->ID, 'customer_email', true );
-            $show_on_store = get_post_meta( $post->ID, 'show_on_store', true );
+            $products                   = get_post_meta( $post->ID, 'product_ids', true );
+            $exclude_products           = get_post_meta( $post->ID, 'exclude_product_ids', true );
+            $product_categories         = get_post_meta( $post->ID, 'product_categories', true );
+            $exclude_product_categories = get_post_meta( $post->ID, 'exclude_product_categories', true );
+            $usage_limit                = get_post_meta( $post->ID, 'usage_limit', true );
+            $expire                     = get_post_meta( $post->ID, 'expiry_date', true );
+            $apply_before_tax           = get_post_meta( $post->ID, 'apply_before_tax', true );
+            //$free_shipping            = get_post_meta( $post->ID, 'free_shipping', true );
+            $exclide_sale_item          = get_post_meta( $post->ID, 'exclude_sale_items', true );
+            $minimum_amount             = get_post_meta( $post->ID, 'minimum_amount', true );
+            $customer_email             = get_post_meta( $post->ID, 'customer_email', true );
+            $show_on_store              = get_post_meta( $post->ID, 'show_on_store', true );
         }
 
         $post_id     = isset( $post->ID ) ? $post->ID : '';
@@ -479,9 +495,12 @@ class Dokan_Pro_Coupons {
             }
         }
 
-        $amount           = isset( $amount ) ? $amount : '';
-        $products         = isset( $products ) ? $products : '';
-        $exclude_products = isset( $exclude_products ) ? $exclude_products : '';
+        $amount                     = isset( $amount ) ? $amount : '';
+        $products                   = isset( $products ) ? $products : '';
+        $exclude_products           = isset( $exclude_products ) ? $exclude_products : '';
+        $product_categories         = !empty( $product_categories ) ? $product_categories : array();
+        $exclude_product_categories = !empty( $exclude_product_categories ) ? $exclude_product_categories : array();
+
         $usage_limit      = isset( $usage_limit ) ? $usage_limit : '';
         $expire           = isset( $expire ) ? $expire : '';
 
@@ -535,6 +554,18 @@ class Dokan_Pro_Coupons {
                 $exclude_products = '';
             }
 
+            if ( isset( $_POST['product_categories'] ) ) {
+                $product_categories = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_categories'] ) ) );
+            } else {
+                $product_categories = '';
+            }
+
+            if ( isset( $_POST['exclude_product_categories'] ) ) {
+                $exclude_product_categories = implode( ',', array_filter( array_map( 'intval', (array) $_POST['exclude_product_categories'] ) ) );
+            } else {
+                $exclude_product_categories = '';
+            }
+
             $usage_limit = $_POST['usage_limit'];
             $expire      = $_POST['expire'];
 
@@ -563,24 +594,34 @@ class Dokan_Pro_Coupons {
         $exclude_products = str_replace( ' ', '', $exclude_products );
         $exclude_products = explode( ',', $exclude_products );
 
+        // var_dump( $product_categories, $exclude_product_categories );
+        // $product_categories = str_replace( ' ', '', $product_categories );
+        // $product_categories = explode( ',', $product_categories );
+
+
+        // $exclude_product_categories = str_replace( ' ', '', $exclude_product_categories );
+        // $exclude_product_categories = explode( ',', $exclude_product_categories );
+
         dokan_get_template_part( 'coupon/form', '', array(
-            'pro'               => true,
-            'post_id'           => $post_id,
-            'post_title'        => $post_title,
-            'discount_type'     => $discount_type,
-            'description'       => $description,
-            'amount'            => $amount,
-            'products'          => $products,
-            'exclude_products'  => $exclude_products,
-            'usage_limit'       => $usage_limit,
-            'expire'            => $expire,
-            'minimum_amount'    => $minimum_amount,
-            'customer_email'    => $customer_email,
-            'button_name'       => $button_name,
-            'exclide_sale_item' => $exclide_sale_item,
-            'show_on_store'     => $show_on_store,
-            'all_products'      => $this->coupon_products_list(),
-            'products_id'       => $products_id,
+            'pro'                        => true,
+            'post_id'                    => $post_id,
+            'post_title'                 => $post_title,
+            'discount_type'              => $discount_type,
+            'description'                => $description,
+            'amount'                     => $amount,
+            'products'                   => $products,
+            'exclude_products'           => $exclude_products,
+            'product_categories'         => $product_categories,
+            'exclude_product_categories' => $exclude_product_categories,
+            'usage_limit'                => $usage_limit,
+            'expire'                     => $expire,
+            'minimum_amount'             => $minimum_amount,
+            'customer_email'             => $customer_email,
+            'button_name'                => $button_name,
+            'exclide_sale_item'          => $exclide_sale_item,
+            'show_on_store'              => $show_on_store,
+            'all_products'               => $this->coupon_products_list(),
+            'products_id'                => $products_id,
         ) );
     }
 }
