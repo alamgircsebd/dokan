@@ -202,6 +202,14 @@
 
 </form>
 
+<style>
+    .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+        max-height: 200px;
+        overflow-y: scroll;
+    }
+
+</style>
+
 <script>
     ;( function($) {
         $( '.dokan-coupon-product-select-all' ).click( function(e) {
