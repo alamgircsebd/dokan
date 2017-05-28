@@ -427,17 +427,17 @@ class Dokan_Pro_Coupons {
      * @return object
      */
     function coupon_products_list() {
+        global $wpdb;
 
-        $args = array(
-            'post_type'      => 'product',
-            'post_status'    => array( 'publish', 'draft', 'pending' ),
-            'posts_per_page' => 100,
-            'author'         => get_current_user_id(),
-        );
+        $user_id = get_current_user_id();
 
-        $query  = new WP_Query( $args );
+        $sql = "SELECT $wpdb->posts.* FROM $wpdb->posts
+                WHERE $wpdb->posts.post_author IN ( $user_id )
+                    AND $wpdb->posts.post_type = 'product'
+                    AND ( ( $wpdb->posts.post_status = 'publish' OR $wpdb->posts.post_status = 'draft' OR $wpdb->posts.post_status = 'pending') )
+                ORDER BY $wpdb->posts.post_date DESC";
 
-        return $query->posts;
+        return $wpdb->get_results( $sql );
     }
 
     /**
@@ -593,14 +593,6 @@ class Dokan_Pro_Coupons {
 
         $exclude_products = str_replace( ' ', '', $exclude_products );
         $exclude_products = explode( ',', $exclude_products );
-
-        // var_dump( $product_categories, $exclude_product_categories );
-        // $product_categories = str_replace( ' ', '', $product_categories );
-        // $product_categories = explode( ',', $product_categories );
-
-
-        // $exclude_product_categories = str_replace( ' ', '', $exclude_product_categories );
-        // $exclude_product_categories = explode( ',', $exclude_product_categories );
 
         dokan_get_template_part( 'coupon/form', '', array(
             'pro'                        => true,
