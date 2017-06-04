@@ -383,6 +383,11 @@ class Dokan_Pro_Products {
         if ( $product_type == 'variable' ) {
             dokan_save_variations( $post_id );
         }
+        
+        //update product status to pending-review if set by admin
+        $product_status = dokan_get_option( 'edited_product_status', 'dokan_selling' );
+        wp_update_post( array( 'ID' => intval( $post_id ), 'post_status' => $product_status ) );
+        
     }
 
     /**
