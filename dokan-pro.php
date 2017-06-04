@@ -7,7 +7,7 @@ Version: 2.6.2
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
-TextDomain: dokan-pro
+TextDomain: dokan
 */
 
 /**
