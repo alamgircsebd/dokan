@@ -132,6 +132,13 @@ class Dokan_Pro_Admin_Settings {
                     'pending' => __( 'Pending Review', 'dokan' )
                 )
             ),
+            'vendor_duplicate_product' => array(
+                'name'    => 'vendor_duplicate_product',
+                'label'   => __( 'Duplicate product', 'dokan' ),
+                'desc'    => __( 'Allow vendor to duplicate their product', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'on'
+            ),
             'discount_edit' => array(
                 'name'    => 'discount_edit',
                 'label'   => __( 'Discount Editing', 'dokan' ),
