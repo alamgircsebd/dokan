@@ -125,11 +125,13 @@ class Dokan_Pro_Notice {
         $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
 
         $args = array(
-            'post_type' => 'dokan_announcement',
-            'post_status' => 'publish',
+            'post_type'      => 'dokan_announcement',
+            'post_status'    => 'publish',
             'posts_per_page' => ($per_page) ? $per_page : $this->perpage,
             'orderby'        => 'post_date',
             'order'          => 'DESC',
+            'meta_key'       => '_announcement_type',
+            'meta_value'     => 'selected_seller',
             'paged'          => $pagenum
         );
 
@@ -151,8 +153,21 @@ class Dokan_Pro_Notice {
      */
     function show_announcement_template() {
         $query = $this->get_announcement_by_users();
-
-        dokan_get_template_part( 'announcement/listing-announcement', '', array( 'pro' => true, 'notices' => $query->posts ) );
+        
+        $args = array(
+            'post_type'      => 'dokan_announcement',
+            'post_status'    => 'publish',
+            'orderby'        => 'post_date',
+            'order'          => 'DESC',
+            'meta_key'       => '_announcement_type',
+            'meta_value'     => 'all_seller',
+        );
+        
+        $all_seller_posts = new WP_Query( $args );
+        
+        $notices = array_merge( $all_seller_posts->posts, $query->posts );
+        
+        dokan_get_template_part( 'announcement/listing-announcement', '', array( 'pro' => true, 'notices' => $notices ) );
 
         wp_reset_postdata();
         $this->get_pagination( $query );

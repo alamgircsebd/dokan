@@ -29,8 +29,12 @@ class Dokan_Pro_Products {
         add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
         add_action( 'dokan_product_updated', array( $this, 'set_product_type' ), 11 );
         add_action( 'dokan_product_updated', array( $this, 'save_pro_product_data' ), 12 );
+        add_action( 'dokan_product_listin_row_action', array( $this, 'product_row_action' ), 10 );
+        add_action( 'template_redirect', array( $this, 'handle_duplicate_product' ), 10 );
+        add_action( 'dokan_product_dashboard_errors', array( $this, 'display_duplicate_message' ), 10 );
 
         add_filter( 'dokan_get_product_edit_template', array( $this, 'render_product_edit_template' ), 10 );
+        add_filter( 'dokan_update_product_post_data', array( $this, 'save_product_post_data' ), 10 );
     }
 
     /**
@@ -380,6 +384,103 @@ class Dokan_Pro_Products {
         if ( $product_type == 'variable' ) {
             dokan_save_variations( $post_id );
         }
+        
+       
+    }
+
+    /**
+    * Added duplicate row action
+    *
+    * @since 2.6.3
+    *
+    * @return void
+    **/
+    public function product_row_action( $product ) {
+        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) == 'off' ) {
+            return;
+        }
+
+        $html = '| <span class="duplicate"><a href="' . wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $product->get_id() ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ) . '">' . __( 'Duplicate', 'dokan' ) . '</a></span>';
+        echo apply_filters( 'dokan_product_listing_duplicate_row_action', $html, $product );
+    }
+
+    /**
+    * Handle duplicate product action
+    *
+    * @since 2.6.3
+    *
+    * @return void
+    **/
+    public function handle_duplicate_product() {
+
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) == 'off' ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( class_exists( 'Dokan_Product_Subscription' ) ) {
+            if ( ! Dokan_Product_Subscription::can_post_product() ) {
+                return;
+            }
+        }
+
+        if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-duplicate-product' ) {
+            $product_id = isset( $_GET['product_id'] ) ? (int) $_GET['product_id'] : 0;
+
+            if ( !$product_id ) {
+                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
+                return;
+            }
+
+            if ( !wp_verify_nonce( $_GET['_wpnonce'], 'dokan-duplicate-product' ) ) {
+                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
+                return;
+            }
+
+            if ( !dokan_is_product_author( $product_id ) ) {
+                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
+                return;
+            }
+
+            $wo_dup = new WC_Admin_Duplicate_Product();
+
+            // Compatibility for WC 3.0+
+            if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
+                $product = wc_get_product( $product_id );
+                $clone_product =  $wo_dup->product_duplicate( $product );
+                $clone_product_id =  $clone_product->get_id();
+            } else {
+                $post = get_post( $product_id );
+                $clone_product_id =  $wo_dup->duplicate_product( $post );
+            }
+
+            $product_status = dokan_get_new_post_status();
+            wp_update_post( array( 'ID' => intval( $clone_product_id ), 'post_status' => $product_status ) );
+
+            $redirect = apply_filters( 'dokan_redirect_after_product_duplicating', dokan_get_navigation_url( 'products' ), $product_id, $clone_product_id );
+            wp_redirect( add_query_arg( array( 'message' => 'product_duplicated' ),  $redirect ) );
+            exit;
+        }
+    }
+
+    /**
+    * Show duplicate success message
+    *
+    * @since 2.6.3
+    *
+    * @return void
+    **/
+    public function display_duplicate_message( $type ) {
+        if ( 'product_duplicated' == $type ) {
+            dokan_get_template_part( 'global/dokan-success', '', array( 'deleted' => true, 'message' => __( 'Product succesfully duplicated', 'dokan' ) ) );
+        }
     }
 
     /**
@@ -393,6 +494,24 @@ class Dokan_Pro_Products {
         if ( isset( $_POST['product_type'] ) ) {
             wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );
         }
+    }
+    
+    /**
+     * Set Additional product Post Data
+     * 
+     * @since 2.6.3
+     * 
+     * @param Object $product
+     * 
+     * @return $product
+     */
+    public function save_product_post_data( $product ) {
+        //update product status to pending-review if set by admin
+        if ( $product['post_status'] == 'publish' && dokan_get_option( 'edited_product_status', 'dokan_selling' ) == 'on' ) {
+            $product['post_status'] = 'pending';
+        }
+        
+        return $product;
     }
 
 }

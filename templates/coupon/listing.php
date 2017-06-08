@@ -62,10 +62,16 @@
                         $product_ids = get_post_meta( $post->ID, 'product_ids', true );
                         $product_ids = $product_ids ? array_map( 'absint', explode( ',', $product_ids ) ) : array();
 
-                        if ( sizeof( $product_ids ) > 0 )
-                            echo esc_html( implode( ', ', $product_ids ) );
-                        else
-                        echo '&ndash;';
+                        if ( sizeof( $product_ids ) > 0 ) {
+                            if ( count( $product_ids ) > 12 ) {
+                                $product_ids = array_slice( $product_ids, 0, 12 );
+                                echo sprintf( '%s... <a href="%s">%s</a>', esc_html( implode( ', ', $product_ids ) ), esc_url( $edit_url ), __( 'See all', 'dokan' ) );
+                            } else {
+                                echo esc_html( implode( ', ', $product_ids ) );
+                            }
+                        } else {
+                            echo '&ndash;';
+                        }
                     ?>
                 </td>
 
