@@ -34,6 +34,7 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_dashboard_errors', array( $this, 'display_duplicate_message' ), 10 );
 
         add_filter( 'dokan_get_product_edit_template', array( $this, 'render_product_edit_template' ), 10 );
+        add_filter( 'dokan_update_product_post_data', array( $this, 'save_product_post_data' ), 10 );
     }
 
     /**
@@ -384,10 +385,7 @@ class Dokan_Pro_Products {
             dokan_save_variations( $post_id );
         }
         
-        //update product status to pending-review if set by admin
-        $product_status = dokan_get_option( 'edited_product_status', 'dokan_selling' );
-        wp_update_post( array( 'ID' => intval( $post_id ), 'post_status' => $product_status ) );
-        
+       
     }
 
     /**
@@ -496,6 +494,24 @@ class Dokan_Pro_Products {
         if ( isset( $_POST['product_type'] ) ) {
             wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );
         }
+    }
+    
+    /**
+     * Set Additional product Post Data
+     * 
+     * @since 2.6.3
+     * 
+     * @param Object $product
+     * 
+     * @return $product
+     */
+    public function save_product_post_data( $product ) {
+        //update product status to pending-review if set by admin
+        if ( $product['post_status'] == 'publish' && dokan_get_option( 'edited_product_status', 'dokan_selling' ) == 'on' ) {
+            $product['post_status'] = 'pending';
+        }
+        
+        return $product;
     }
 
 }
