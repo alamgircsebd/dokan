@@ -1,3 +1,12 @@
+v2.6.3 -> June 08, 2017
+---------------------
+- [new] Added action to duplicate product from product list view
+- [new] Added option to set product as pending review when vendors re-edit or update a product
+- [fix] Announcement visibility logic updated for widget and announce template
+- [fix] Coupon add category selection limit fixed
+- [fix] All products can not be set when selecting all products on coupon view fixed
+- [tweak] Coupon showing styles improved
+
 v2.6.2 -> May 18, 2017
 ---------------------
 - [fix] Fixed weight dimension translation issue.
