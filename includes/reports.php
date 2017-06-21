@@ -125,9 +125,10 @@ function dokan_seller_sales_statement() {
     // $net_amount is now set as opening balance
 
     // calculate given range totals
-    $order     = dokan_get_seller_orders_by_date( $start_date, $end_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
-    $refund    = dokan_get_seller_refund_by_date( $start_date, $end_date );
-    $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $end_date );
+    $format_end_date = date( 'Y-m-d', strtotime( $end_date . ' +1 day' ) );
+    $order     = dokan_get_seller_orders_by_date( $start_date, $format_end_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
+    $refund    = dokan_get_seller_refund_by_date( $start_date, $format_end_date );
+    $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $format_end_date );
 
     $table_data = array_merge( $order, $refund, $widthdraw );
     $statements = [];
