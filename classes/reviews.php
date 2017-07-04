@@ -658,7 +658,7 @@ class Dokan_Pro_Reviews {
 
         ob_start();
         if ( count( $comments ) == 0 ) {
-            echo '<span colspan="5">' . __( 'No Results Found', 'dokan' ) . '</span>';
+            echo '<span colspan="5">' . __( 'No Reviews Found', 'dokan' ) . '</span>';
         } else {
             foreach ( $comments as $single_comment ) {
                 if ( $single_comment->comment_approved ) {
