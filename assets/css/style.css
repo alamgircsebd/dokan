@@ -595,7 +595,16 @@ and open the template in the editor.
 }
 .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table td.col-author,
 .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table th.col-author {
-  width: 15%;
+  width: 33%;
+}
+.dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table td.col-author .dokan-author-img,
+.dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table th.col-author .dokan-author-img {
+  float: left;
+  margin-right: 5px;
+}
+.dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table td.col-author .dokan-author-meta,
+.dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table th.col-author .dokan-author-meta {
+  float: left;
 }
 .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table td.col-content,
 .dokan-reviews-content .dokan-reviews-area .dokan-comments-wrap #dokan-comments-table th.col-content {

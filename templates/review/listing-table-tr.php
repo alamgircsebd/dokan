@@ -10,12 +10,15 @@
 <tr class="<?php echo $comment_status ?>">
     <td class="col-check"><input class="dokan-check-col" type="checkbox" name="commentid[]" value="<?php echo $comment->comment_ID; ?>"></td>
     <td class="col-author">
-        <div class="dokan-author-img"><?php echo $comment_author_img; ?></div> <?php echo $comment->comment_author; ?> <br>
-
-        <?php if ( $comment->comment_author_url ) { ?>
-            <a href="<?php echo $comment->comment_author_url; ?>"><?php echo $comment->comment_author_url; ?></a><br>
-        <?php } ?>
-        <?php echo $comment->comment_author_email; ?>
+        <div class="dokan-author-img"><?php echo $comment_author_img; ?></div>
+        <div class="dokan-author-meta">
+        <?php echo $comment->comment_author; ?> <br>
+            <?php if ( $comment->comment_author_url ) { ?>
+                <a href="<?php echo $comment->comment_author_url; ?>"><?php echo $comment->comment_author_url; ?></a><br>
+            <?php } ?>
+            <?php echo $comment->comment_author_email; ?>
+        </div>
+        <div class="dokan-clearfix"></div>
     </td>
     <td class="col-content">
         <div class="dokan-comments-subdate">
