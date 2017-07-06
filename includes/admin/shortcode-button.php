@@ -46,6 +46,10 @@ class Dokan_shortcodes_button {
             'dokan-my-orders'            => array(
                 'title'   => 'Dokan My Orders',
                 'content' => '[dokan-my-orders]'
+            ),
+            'dokan-customer-migration'   => array(
+                'title'   => 'Dokan Customer Migration',
+                'content' => '[dokan-customer-migration]'
             )
         );
 
