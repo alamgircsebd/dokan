@@ -790,7 +790,8 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
             if ( !$errors ) {
                 dokan_user_update_to_seller( $user, $_POST );
 
-                wp_redirect( dokan_get_page_url( 'myaccount', 'dokan' ) );
+                wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
+                exit();
             }
         }
     }
