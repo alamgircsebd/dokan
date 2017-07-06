@@ -223,3 +223,21 @@ function dokan_get_feature_sellers( $count = 5 ) {
     return $sellers;
 }
 
+
+/**
+ * Generate Customer to Vendor migration template
+ * 
+ * @since 2.6.4
+ * 
+ * @param array $atts ShortCode attributes
+ * 
+ * @return void Render template for account update
+ */
+function dokan_render_customer_migration_template( $atts ) {
+    
+    ob_start();
+    dokan_get_template( 'global/update-account.php','', DOKAN_PRO_DIR. '/templates/', DOKAN_PRO_DIR. '/templates/' );
+    return ob_get_clean();
+}
+
+add_shortcode( 'dokan-customer-migration', 'dokan_render_customer_migration_template' );
