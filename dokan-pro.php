@@ -1,7 +1,7 @@
 <?php
-/*
-Plugin Name: Dokan (Pro) - Multi-vendor Marketplace
-Plugin URI: https://wedevs.com/products/plugins/dokan/
+/**
+Plugin Name: Dokan Pro
+Plugin URI: https://wordpress.org/plugins/dokan-lite/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
 Version: 2.6.3
 Author: weDevs
@@ -329,6 +329,7 @@ class Dokan_Pro {
             // Load accounting scripts
             wp_enqueue_script( 'accounting' );
             wp_enqueue_script( 'serializejson' );
+            wp_enqueue_script( 'jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI.min.js', array( 'jquery' ), null, true );
 
             //localize script for refund and dashboard image options
             $dokan_refund = dokan_get_refund_localize_data();
