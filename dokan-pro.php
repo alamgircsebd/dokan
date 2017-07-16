@@ -1,11 +1,11 @@
 <?php
 /**
 Plugin Name: Dokan Pro
-Plugin URI: https://wordpress.org/plugins/dokan-lite/
+Plugin URI: https://wedevs.com/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.6.3
+Version: 2.6.4
 Author: weDevs
-Author URI: http://wedevs.com/
+Author URI: https://wedevs.com/
 License: GPL2
 TextDomain: dokan
 */

@@ -170,6 +170,16 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.6.4 -> July 16, 2017
+---------------------
+- [new] Added `dokan-customer-migration` shortcode
+- [new] Added option in admin settings to allow product review status management for vendors
+- [fix] Vendor Store page review pagination not working
+- [fix] Vendor earning report date wise calculation problem
+- [fix] Expired vendor coupons are showing in vendor store
+- [tweak] Enhanced RTL support
+- [tweak] Various other core improvements
+
 v2.6.3 -> June 08, 2017
 ---------------------
 - [new] Added action to duplicate product from product list view
