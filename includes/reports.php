@@ -125,9 +125,10 @@ function dokan_seller_sales_statement() {
     // $net_amount is now set as opening balance
 
     // calculate given range totals
-    $order     = dokan_get_seller_orders_by_date( $start_date, $end_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
-    $refund    = dokan_get_seller_refund_by_date( $start_date, $end_date );
-    $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $end_date );
+    $format_end_date = date( 'Y-m-d', strtotime( $end_date . ' +1 day' ) );
+    $order     = dokan_get_seller_orders_by_date( $start_date, $format_end_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
+    $refund    = dokan_get_seller_refund_by_date( $start_date, $format_end_date );
+    $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $format_end_date );
 
     $table_data = array_merge( $order, $refund, $widthdraw );
     $statements = [];
@@ -771,6 +772,8 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
         jQuery(function($) {
 
             var order_data = jQuery.parseJSON( '<?php echo $chart_data; ?>' );
+            var isRtl = '<?php echo is_rtl() ? "1" : "0"; ?>'
+
             var series = [
                 {
                     label: "<?php echo esc_js( __( 'Sales total', 'dokan' ) ) ?>",
@@ -825,7 +828,9 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
                         minTickSize: [1, "<?php echo $group_by; ?>"],
                         font: {
                             color: "#aaa"
-                        }
+                        },
+                        transform: function (v) { return ( isRtl == '1' ) ? -v : v; },
+                        inverseTransform: function (v) { return ( isRtl == '1' ) ? -v : v; }
                     },
                     yaxes: [
                         {

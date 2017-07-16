@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan (Pro) - Multi-vendor Marketplace 2.6.3\n"
+"Project-Id-Version: Dokan Pro 2.6.4\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2017-06-08 08:39:29+00:00\n"
+"POT-Creation-Date: 2017-07-16 07:05:41+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -57,7 +57,7 @@ msgstr ""
 
 #: classes/admin-refund.php:171 classes/admin-refund.php:184
 #: classes/reports.php:60 includes/admin/announcement.php:174
-#: includes/reports.php:147
+#: includes/reports.php:148
 msgid "Date"
 msgstr ""
 
@@ -77,8 +77,8 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: classes/admin-refund.php:230 templates/review/listing-table-tr.php:35
-#: templates/review/listing-table-tr.php:54
+#: classes/admin-refund.php:230 templates/review/listing-table-tr.php:39
+#: templates/review/listing-table-tr.php:58
 msgid "Approve"
 msgstr ""
 
@@ -127,13 +127,13 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: classes/admin-refund.php:328 classes/coupons.php:409 classes/reviews.php:330
-#: classes/reviews.php:379 includes/admin/reports.php:303
+#: classes/admin-refund.php:328 classes/coupons.php:412 classes/reviews.php:330
+#: classes/reviews.php:380 includes/admin/reports.php:303
 msgid "&laquo;"
 msgstr ""
 
-#: classes/admin-refund.php:329 classes/coupons.php:410 classes/reviews.php:331
-#: classes/reviews.php:380 includes/admin/reports.php:304
+#: classes/admin-refund.php:329 classes/coupons.php:413 classes/reviews.php:331
+#: classes/reviews.php:381 includes/admin/reports.php:304
 msgid "&raquo;"
 msgstr ""
 
@@ -288,27 +288,27 @@ msgstr ""
 msgid "Coupon title already exists"
 msgstr ""
 
-#: classes/coupons.php:339
+#: classes/coupons.php:342
 msgid "Coupon has been deleted successfully!"
 msgstr ""
 
-#: classes/coupons.php:343
+#: classes/coupons.php:346
 msgid "Coupon has been saved successfully!"
 msgstr ""
 
-#: classes/coupons.php:347
+#: classes/coupons.php:350
 msgid "Coupon has been updated successfully!"
 msgstr ""
 
-#: classes/coupons.php:391
+#: classes/coupons.php:394
 msgid "No coupons found!"
 msgstr ""
 
-#: classes/coupons.php:458
+#: classes/coupons.php:461
 msgid "Create Coupon"
 msgstr ""
 
-#: classes/coupons.php:463
+#: classes/coupons.php:466
 msgid "Update Coupon"
 msgstr ""
 
@@ -344,54 +344,54 @@ msgstr ""
 msgid "Accepted"
 msgstr ""
 
-#: classes/reports.php:61 includes/reports.php:148
+#: classes/reports.php:61 includes/reports.php:149
 msgid "ID"
 msgstr ""
 
-#: classes/reports.php:62 includes/reports.php:149
+#: classes/reports.php:62 includes/reports.php:150
 msgid "Type"
 msgstr ""
 
-#: classes/reports.php:63 includes/reports.php:11 includes/reports.php:150
-#: includes/reports.php:932 includes/reports.php:1036
+#: classes/reports.php:63 includes/reports.php:11 includes/reports.php:151
+#: includes/reports.php:937 includes/reports.php:1041
 msgid "Sales"
 msgstr ""
 
-#: classes/reports.php:64 includes/reports.php:151
+#: classes/reports.php:64 includes/reports.php:152
 msgid "Earned"
 msgstr ""
 
 #: classes/reports.php:65 classes/settings.php:74 classes/shipping.php:292
-#: includes/reports.php:152 templates/orders/views/html-order-items.php:150
+#: includes/reports.php:153 templates/orders/views/html-order-items.php:150
 #: templates/orders/views/html-order-shipping.php:20
 #: templates/products/product-edit.php:172
 msgid "Shipping"
 msgstr ""
 
-#: classes/reports.php:66 includes/reports.php:153
+#: classes/reports.php:66 includes/reports.php:154
 #: templates/orders/views/html-order-items.php:63
 #: templates/orders/views/html-order-items.php:64
 msgid "Tax"
 msgstr ""
 
 #: classes/reports.php:67 includes/admin/sellers.php:30
-#: includes/admin/sellers.php:106 includes/reports.php:154
+#: includes/admin/sellers.php:106 includes/reports.php:155
 msgid "Balance"
 msgstr ""
 
 #: classes/reports.php:94 classes/reports.php:151
 #: includes/admin/reports.php:194 includes/reports.php:96
-#: includes/reports.php:177
+#: includes/reports.php:178
 msgid "Order"
 msgstr ""
 
 #: classes/reports.php:105 classes/reports.php:166 includes/reports.php:107
-#: includes/reports.php:199 templates/orders/views/html-order-refund.php:20
+#: includes/reports.php:200 templates/orders/views/html-order-refund.php:20
 msgid "Refund"
 msgstr ""
 
 #: classes/reports.php:113 classes/reports.php:178 includes/reports.php:115
-#: includes/reports.php:210
+#: includes/reports.php:211
 msgid "Withdraw"
 msgstr ""
 
@@ -406,19 +406,19 @@ msgstr ""
 msgid "Reviews"
 msgstr ""
 
-#: classes/reviews.php:546
+#: classes/reviews.php:547
 msgid "You can not edit reviews!"
 msgstr ""
 
-#: classes/reviews.php:661 templates/review/listing-table-body.php:14
-msgid "No Results Found"
+#: classes/reviews.php:662
+msgid "No Reviews Found"
 msgstr ""
 
-#: classes/reviews.php:681 templates/review/listing-table-tr.php:77
+#: classes/reviews.php:682 templates/review/listing-table-tr.php:82
 msgid "Rated %d out of 5"
 msgstr ""
 
-#: classes/reviews.php:682 templates/review/listing-table-tr.php:78
+#: classes/reviews.php:683 templates/review/listing-table-tr.php:83
 msgid "out of 5"
 msgstr ""
 
@@ -512,15 +512,15 @@ msgstr ""
 msgid "Your changes has been updated!"
 msgstr ""
 
-#: classes/store.php:161
+#: classes/store.php:167
 msgid "%s Discount"
 msgstr ""
 
-#: classes/store.php:166
+#: classes/store.php:172
 msgid "Coupon Code: <strong>%s</strong>"
 msgstr ""
 
-#: classes/store.php:170
+#: classes/store.php:176
 msgid "Expiring in %s"
 msgstr ""
 
@@ -655,11 +655,11 @@ msgstr ""
 msgid "Error: Nonce verification failed"
 msgstr ""
 
-#: dokan-pro.php:462
+#: dokan-pro.php:463
 msgid "Simple"
 msgstr ""
 
-#: dokan-pro.php:463
+#: dokan-pro.php:464
 msgid "Variable"
 msgstr ""
 
@@ -675,11 +675,11 @@ msgstr ""
 msgid "Vendors Listing"
 msgstr ""
 
-#: includes/admin/admin.php:50 includes/admin/admin.php:376
+#: includes/admin/admin.php:50 includes/admin/admin.php:383
 msgid "All Vendors"
 msgstr ""
 
-#: includes/admin/admin.php:51 includes/admin/admin.php:383
+#: includes/admin/admin.php:51 includes/admin/admin.php:390
 msgid "Earning Reports"
 msgstr ""
 
@@ -710,142 +710,150 @@ msgid "Email notification on new product submission"
 msgstr ""
 
 #: includes/admin/admin.php:82
-msgid "Enable Terms and Condition"
+msgid "Vendor Product Review"
 msgstr ""
 
 #: includes/admin/admin.php:83
-msgid "Enable Terms and Condition check on registration form"
+msgid "Vendor can change product review status from vendor dashboard"
 msgstr ""
 
 #: includes/admin/admin.php:89
+msgid "Enable Terms and Condition"
+msgstr ""
+
+#: includes/admin/admin.php:90
+msgid "Enable Terms and Condition check on registration form"
+msgstr ""
+
+#: includes/admin/admin.php:96
 msgid "Store Banner width"
 msgstr ""
 
-#: includes/admin/admin.php:95
+#: includes/admin/admin.php:102
 msgid "Store Banner height"
 msgstr ""
 
-#: includes/admin/admin.php:104
+#: includes/admin/admin.php:111
 msgid "Add/Edit Product Style"
 msgstr ""
 
-#: includes/admin/admin.php:105
+#: includes/admin/admin.php:112
 msgid "The style you prefer for vendor to add or edit products. "
 msgstr ""
 
-#: includes/admin/admin.php:109
+#: includes/admin/admin.php:116
 msgid "Tab View"
 msgstr ""
 
-#: includes/admin/admin.php:110
+#: includes/admin/admin.php:117
 msgid "Flat View"
 msgstr ""
 
-#: includes/admin/admin.php:115
+#: includes/admin/admin.php:122
 msgid "Category Selection"
 msgstr ""
 
-#: includes/admin/admin.php:116
+#: includes/admin/admin.php:123
 msgid "What option do you prefer for vendor to select product category? "
 msgstr ""
 
-#: includes/admin/admin.php:120
+#: includes/admin/admin.php:127
 msgid "Single"
 msgstr ""
 
-#: includes/admin/admin.php:121
+#: includes/admin/admin.php:128
 msgid "Multiple"
 msgstr ""
 
-#: includes/admin/admin.php:126
+#: includes/admin/admin.php:133
 msgid "New Product Status"
 msgstr ""
 
-#: includes/admin/admin.php:127
+#: includes/admin/admin.php:134
 msgid "Product status when a vendor creates a product"
 msgstr ""
 
-#: includes/admin/admin.php:131
+#: includes/admin/admin.php:138
 msgid "Published"
 msgstr ""
 
-#: includes/admin/admin.php:132
+#: includes/admin/admin.php:139
 msgid "Pending Review"
 msgstr ""
 
-#: includes/admin/admin.php:137
+#: includes/admin/admin.php:144
 msgid "Edited Product Status"
 msgstr ""
 
-#: includes/admin/admin.php:138
+#: includes/admin/admin.php:145
 msgid ""
 "Set Product status as pending review when a vendor edits or updates a "
 "product"
 msgstr ""
 
-#: includes/admin/admin.php:144
+#: includes/admin/admin.php:151
 msgid "Duplicate product"
 msgstr ""
 
-#: includes/admin/admin.php:145
+#: includes/admin/admin.php:152
 msgid "Allow vendor to duplicate their product"
 msgstr ""
 
-#: includes/admin/admin.php:151
+#: includes/admin/admin.php:158
 msgid "Discount Editing"
 msgstr ""
 
-#: includes/admin/admin.php:152
+#: includes/admin/admin.php:159
 msgid "Vendor can add order and product discount"
 msgstr ""
 
-#: includes/admin/admin.php:154 includes/admin/admin.php:155
+#: includes/admin/admin.php:161 includes/admin/admin.php:162
 msgid "Discount product"
 msgstr ""
 
-#: includes/admin/admin.php:154 includes/admin/admin.php:155
+#: includes/admin/admin.php:161 includes/admin/admin.php:162
 msgid "Discount Order"
 msgstr ""
 
-#: includes/admin/admin.php:162
+#: includes/admin/admin.php:169
 msgid "Order Status for Withdraw"
 msgstr ""
 
-#: includes/admin/admin.php:163
+#: includes/admin/admin.php:170
 msgid "Order status for which vendor can make a withdraw request."
 msgstr ""
 
-#: includes/admin/admin.php:165 includes/admin/admin.php:166
+#: includes/admin/admin.php:172 includes/admin/admin.php:173
 msgid "Completed"
 msgstr ""
 
-#: includes/admin/admin.php:165 includes/admin/admin.php:166
+#: includes/admin/admin.php:172 includes/admin/admin.php:173
 msgid "Processing"
 msgstr ""
 
-#: includes/admin/admin.php:165 includes/admin/admin.php:166
+#: includes/admin/admin.php:172 includes/admin/admin.php:173
 msgid "On-hold"
 msgstr ""
 
-#: includes/admin/admin.php:170
+#: includes/admin/admin.php:177
 msgid "Withdraw Threshold"
 msgstr ""
 
-#: includes/admin/admin.php:171
+#: includes/admin/admin.php:178
 msgid ""
 "Days, ( Make order matured to make a withdraw request) <br> Value \"0\" "
 "will inactive this option"
 msgstr ""
 
-#: includes/admin/admin.php:289
+#: includes/admin/admin.php:296
 msgid "Dashboard"
 msgstr ""
 
-#: includes/admin/admin.php:295
+#: includes/admin/admin.php:302
 msgid "Store List"
 msgstr ""
 
-#: includes/admin/admin.php:390
+#: includes/admin/admin.php:397
 msgid "Settings"
 msgstr ""
 
@@ -1041,20 +1049,20 @@ msgid "By Vendor"
 msgstr ""
 
 #: includes/admin/reports.php:76 includes/admin/reports.php:116
-#: includes/reports.php:65 includes/reports.php:549 includes/reports.php:915
-#: includes/reports.php:1020
+#: includes/reports.php:65 includes/reports.php:550 includes/reports.php:920
+#: includes/reports.php:1025
 msgid "From:"
 msgstr ""
 
 #: includes/admin/reports.php:80 includes/admin/reports.php:121
-#: includes/reports.php:69 includes/reports.php:553 includes/reports.php:920
-#: includes/reports.php:1025
+#: includes/reports.php:69 includes/reports.php:554 includes/reports.php:925
+#: includes/reports.php:1030
 msgid "To:"
 msgstr ""
 
 #: includes/admin/reports.php:83 includes/admin/reports.php:124
 #: includes/admin/reports.php:139 includes/reports.php:73
-#: includes/reports.php:556 includes/reports.php:924 includes/reports.php:1029
+#: includes/reports.php:557 includes/reports.php:929 includes/reports.php:1034
 msgid "Show"
 msgstr ""
 
@@ -1275,76 +1283,76 @@ msgstr ""
 msgid "Export All"
 msgstr ""
 
-#: includes/reports.php:162
+#: includes/reports.php:163
 msgid "Opening Balance"
 msgstr ""
 
-#: includes/reports.php:239
+#: includes/reports.php:240
 msgid "Total :"
 msgstr ""
 
-#: includes/reports.php:251
+#: includes/reports.php:252
 msgid "No Result found!"
 msgstr ""
 
-#: includes/reports.php:511
+#: includes/reports.php:512
 msgid "This month's sales"
 msgstr ""
 
-#: includes/reports.php:561
+#: includes/reports.php:562
 msgid "Sales in this period"
 msgstr ""
 
-#: includes/reports.php:647
+#: includes/reports.php:648
 msgid "%s sales in this period"
 msgstr ""
 
-#: includes/reports.php:651
+#: includes/reports.php:652
 msgid "%s average daily sales"
 msgstr ""
 
-#: includes/reports.php:655
+#: includes/reports.php:656
 msgid "%s orders placed"
 msgstr ""
 
-#: includes/reports.php:659
+#: includes/reports.php:660
 msgid "%s items purchased"
 msgstr ""
 
-#: includes/reports.php:663
+#: includes/reports.php:664
 msgid "%s charged for shipping"
 msgstr ""
 
-#: includes/reports.php:667
+#: includes/reports.php:668
 msgid "%s worth of coupons used"
 msgstr ""
 
-#: includes/reports.php:776
+#: includes/reports.php:779
 msgid "Sales total"
 msgstr ""
 
-#: includes/reports.php:786
+#: includes/reports.php:789
 msgid "Number of orders"
 msgstr ""
 
-#: includes/reports.php:793
+#: includes/reports.php:796
 msgid "sales"
 msgstr ""
 
-#: includes/reports.php:931 includes/reports.php:1035
+#: includes/reports.php:936 includes/reports.php:1040
 #: templates/coupon/form.php:92
 msgid "Product"
 msgstr ""
 
-#: includes/reports.php:946
+#: includes/reports.php:951
 msgid "Product does not exist"
 msgstr ""
 
-#: includes/reports.php:1037
+#: includes/reports.php:1042
 msgid "Earning"
 msgstr ""
 
-#: includes/reports.php:1052
+#: includes/reports.php:1057
 msgid "Product no longer exists"
 msgstr ""
 
@@ -1449,31 +1457,31 @@ msgstr ""
 msgid "No product has been found!"
 msgstr ""
 
-#: includes/wc-functions.php:771
+#: includes/wc-functions.php:777
 msgid "Enter your first name"
 msgstr ""
 
-#: includes/wc-functions.php:772
+#: includes/wc-functions.php:778
 msgid "Enter your last name"
 msgstr ""
 
-#: includes/wc-functions.php:773
+#: includes/wc-functions.php:779
 msgid "Enter your shop name"
 msgstr ""
 
-#: includes/wc-functions.php:774
+#: includes/wc-functions.php:780
 msgid "Enter your shop address"
 msgstr ""
 
-#: includes/wc-functions.php:775
+#: includes/wc-functions.php:781
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:922
+#: includes/wc-functions.php:931
 msgid "Quantity discount"
 msgstr ""
 
-#: includes/wc-functions.php:929
+#: includes/wc-functions.php:938
 msgid "Order discount"
 msgstr ""
 
@@ -1976,14 +1984,14 @@ msgid "All"
 msgstr ""
 
 #: templates/dashboard/review-widget.php:29
-#: templates/review/listing-table-tr.php:36
-#: templates/review/listing-table-tr.php:57
+#: templates/review/listing-table-tr.php:40
+#: templates/review/listing-table-tr.php:61
 msgid "Spam"
 msgstr ""
 
 #: templates/dashboard/review-widget.php:34
-#: templates/review/listing-table-tr.php:37
-#: templates/review/listing-table-tr.php:58
+#: templates/review/listing-table-tr.php:41
+#: templates/review/listing-table-tr.php:62
 msgid "Trash"
 msgstr ""
 
@@ -2681,28 +2689,32 @@ msgstr ""
 msgid "Save attribute"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:23
+#: templates/review/listing-table-body.php:14
+msgid "No Results Found"
+msgstr ""
+
+#: templates/review/listing-table-tr.php:26
 msgid "Submitted on "
 msgstr ""
 
-#: templates/review/listing-table-tr.php:41
+#: templates/review/listing-table-tr.php:45
 msgid "Not Spam"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:42
-#: templates/review/listing-table-tr.php:47
+#: templates/review/listing-table-tr.php:46
+#: templates/review/listing-table-tr.php:51
 msgid "Delete Permanently"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:46
+#: templates/review/listing-table-tr.php:50
 msgid "Restore"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:52
+#: templates/review/listing-table-tr.php:56
 msgid "Unapprove"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:66
+#: templates/review/listing-table-tr.php:71
 msgid "View Comment"
 msgstr ""
 
@@ -2970,11 +2982,11 @@ msgid "No vendor found"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-msgid "Dokan (Pro) - Multi-vendor Marketplace"
+msgid "Dokan Pro"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "https://wedevs.com/products/plugins/dokan/"
+msgid "https://wedevs.com/dokan/"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -2988,7 +3000,7 @@ msgid "weDevs"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://wedevs.com/"
+msgid "https://wedevs.com/"
 msgstr ""
 
 #: classes/admin-refund.php:217

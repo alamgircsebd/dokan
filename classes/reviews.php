@@ -371,6 +371,7 @@ class Dokan_Pro_Reviews {
         );
 
         $pagenum = max( get_query_var( 'paged' ), 1 );
+
         $num_of_pages = ceil( $total / $limit );
 
         $page_links = paginate_links( array(
@@ -481,7 +482,7 @@ class Dokan_Pro_Reviews {
     function comment_query( $id, $post_type, $limit, $status ) {
         global $wpdb;
 
-        $page_number = isset( $_GET['pagenum'] ) ? $_GET['pagenum'] : 0 ;
+        $page_number = get_query_var( 'paged' );
         $pagenum     = max( 1, $page_number );
         $offset      = ( $pagenum - 1 ) * $limit;
 
@@ -658,7 +659,7 @@ class Dokan_Pro_Reviews {
 
         ob_start();
         if ( count( $comments ) == 0 ) {
-            echo '<span colspan="5">' . __( 'No Results Found', 'dokan' ) . '</span>';
+            echo '<span colspan="5">' . __( 'No Reviews Found', 'dokan' ) . '</span>';
         } else {
             foreach ( $comments as $single_comment ) {
                 if ( $single_comment->comment_approved ) {

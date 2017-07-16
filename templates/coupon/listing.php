@@ -90,12 +90,16 @@
 
                 <td data-title="<?php _e('Expiry date', 'dokan'); ?>">
                     <?php
-                        $expiry_date = get_post_meta($post->ID, 'expiry_date', true);
+                        $expiry_date = get_post_meta( $post->ID, 'date_expires', true );
 
-                        if ( $expiry_date )
-                            echo esc_html( date_i18n( 'F j, Y', strtotime( $expiry_date ) ) );
-                        else
-                            echo '&ndash;';
+                        if ( $expiry_date && ( (string) (int) $expiry_date === $expiry_date )
+                            && ( $expiry_date <= PHP_INT_MAX )
+                            && ( $expiry_date >= ~PHP_INT_MAX ) ) {
+
+                            echo esc_html( date_i18n( 'F j, Y', $expiry_date ) );
+                        } else {
+                            echo $expiry_date ? esc_html( date_i18n( 'F j, Y', strtotime( $expiry_date ) ) ) : '&ndash;';
+                        }
                     ?>
                 </td>
                 <td class="diviader"></td>

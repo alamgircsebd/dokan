@@ -279,7 +279,7 @@ class Dokan_Pro_Coupons {
         $type               = sanitize_text_field( $_POST['discount_type'] );
         $amount             = sanitize_text_field( $_POST['amount'] );
         $usage_limit        = empty( $_POST['usage_limit'] ) ? '' : absint( $_POST['usage_limit'] );
-        $expiry_date        = sanitize_text_field( $_POST['expire'] );
+        $expiry_date        = strtotime( sanitize_text_field( $_POST['expire'] ) );
         $apply_before_tax   = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
         $exclude_sale_items = isset( $_POST['exclude_sale_items'] ) ? 'yes' : 'no';
         $show_on_store      = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
@@ -309,6 +309,8 @@ class Dokan_Pro_Coupons {
             $exclude_product_categories = array();
         }
 
+        error_log( print_r( $expiry_date, true ) );
+
         update_post_meta( $post_id, 'discount_type', $type );
         update_post_meta( $post_id, 'coupon_amount', $amount );
         update_post_meta( $post_id, 'product_ids', $product_ids );
@@ -316,7 +318,8 @@ class Dokan_Pro_Coupons {
         update_post_meta( $post_id, 'product_categories', $product_categories );
         update_post_meta( $post_id, 'exclude_product_categories', $exclude_product_categories );
         update_post_meta( $post_id, 'usage_limit', $usage_limit );
-        update_post_meta( $post_id, 'expiry_date', $expiry_date );
+        // update_post_meta( $post_id, 'expiry_date', $expiry_date );
+        update_post_meta( $post_id, 'date_expires', $expiry_date );
         update_post_meta( $post_id, 'apply_before_tax', $apply_before_tax );
         update_post_meta( $post_id, 'free_shipping', 'no' );
         update_post_meta( $post_id, 'exclude_sale_items', $exclude_sale_items );
@@ -470,9 +473,8 @@ class Dokan_Pro_Coupons {
             $product_categories         = get_post_meta( $post->ID, 'product_categories', true );
             $exclude_product_categories = get_post_meta( $post->ID, 'exclude_product_categories', true );
             $usage_limit                = get_post_meta( $post->ID, 'usage_limit', true );
-            $expire                     = get_post_meta( $post->ID, 'expiry_date', true );
+            $expire                     = get_post_meta( $post->ID, 'date_expires', true );
             $apply_before_tax           = get_post_meta( $post->ID, 'apply_before_tax', true );
-            //$free_shipping            = get_post_meta( $post->ID, 'free_shipping', true );
             $exclide_sale_item          = get_post_meta( $post->ID, 'exclude_sale_items', true );
             $minimum_amount             = get_post_meta( $post->ID, 'minimum_amount', true );
             $customer_email             = get_post_meta( $post->ID, 'customer_email', true );
@@ -502,7 +504,14 @@ class Dokan_Pro_Coupons {
         $exclude_product_categories = !empty( $exclude_product_categories ) ? $exclude_product_categories : array();
 
         $usage_limit      = isset( $usage_limit ) ? $usage_limit : '';
-        $expire           = isset( $expire ) ? $expire : '';
+
+        if ( isset( $expire ) && ( (string) (int) $expire === $expire )
+            && ( $expire <= PHP_INT_MAX )
+            && ( $expire >= ~PHP_INT_MAX ) ) {
+            $expire = date( 'Y-m-d', $expire );
+        } else {
+            $expire = !empty( $expire ) ? date( 'Y-m-d', strtotime( $expire ) ) : '';
+        }
 
         $products_id = str_replace( ' ', '', $products );
         $products_id = explode( ',', $products_id );

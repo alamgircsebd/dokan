@@ -77,6 +77,13 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'checkbox',
                 'default' => 'on'
             ),
+            'seller_review_manage'       => array(
+                'name'    => 'seller_review_manage',
+                'label'   => __( 'Vendor Product Review', 'dokan' ),
+                'desc'    => __( 'Vendor can change product review status from vendor dashboard', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'on'
+            ),
             'enable_tc_on_reg'           => array(
                 'name'    => 'enable_tc_on_reg',
                 'label'   => __( 'Enable Terms and Condition', 'dokan' ),
