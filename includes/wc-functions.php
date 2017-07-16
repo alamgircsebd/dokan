@@ -647,7 +647,7 @@ function dokan_more_from_seller_tab( $tabs ) {
         $tabs['more_seller_product'] = array(
                 'title' 	=> __( 'More Product', 'dokan' ),
                 'priority' 	=> 99,
-                'callback' 	=> 'dokan_more_product_from_seller',
+                'callback' 	=> 'dokan_more_products_from_seller',
         );
     }
     return $tabs;
@@ -664,7 +664,7 @@ add_action( 'woocommerce_product_tabs', 'dokan_more_from_seller_tab', 10 );
  * @param int $seller_id
  * @param int $posts_per_page
  */
-function dokan_more_product_from_seller( $seller_id = 0, $posts_per_page = 6 ) {
+function dokan_more_products_from_seller( $seller_id = 0, $posts_per_page = 6 ) {
 
     global $product, $post;
 
