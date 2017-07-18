@@ -469,7 +469,7 @@ class Dokan_Pro {
 
 }
 
-add_action( 'init', 'dokan_load_pro', 7 );
+add_action( 'init', 'dokan_load_pro', 0 );
 
 /**
 * Load pro plugin for dokan
