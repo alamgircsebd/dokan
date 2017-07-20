@@ -386,6 +386,7 @@ class Dokan_Pro_Shipping {
         <?php if ( $shipping_policy ) { ?>
             <p>&nbsp;</p>
             <strong><?php _e( 'Shipping Policy', 'dokan' ); ?></strong>
+            <hr>
             <?php echo wpautop( $shipping_policy ); ?>
         <?php } ?>
 
