@@ -1,4 +1,4 @@
-v2.6.5 -> July 16, 2017
+v2.6.5 -> Aug 2, 2017
 ---------------------
 - [new] Added email template for announcement
 - [new] Send email to admin when a product is edited and pending

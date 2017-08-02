@@ -3,7 +3,7 @@
 Plugin Name: Dokan Pro
 Plugin URI: https://wedevs.com/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.6.4
+Version: 2.6.5
 Author: weDevs
 Author URI: https://wedevs.com/
 License: GPL2
