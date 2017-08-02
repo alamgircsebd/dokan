@@ -229,30 +229,31 @@ class Dokan_Announcement {
             return $post_id;
         }
 
-        $announcement_assign_type         = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type']: '';
-        $announcement_assign_seller       = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
-        $announcement_assign_seller_array = array();
+        $announcement_assign_type = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type'] : '';
+        $assigned_sellers         = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
 
         update_post_meta( $post_id, '_announcement_type', $announcement_assign_type );
-        update_post_meta( $post_id, '_announcement_selected_user', $announcement_assign_seller );
+        update_post_meta( $post_id, '_announcement_selected_user', $assigned_sellers );
 
         if ( $announcement_assign_type == 'selected_seller' ) {
 
-            $this->process_seller_announcement_data( $announcement_assign_seller, $post_id );
+            $this->process_seller_announcement_data( $assigned_sellers, $post_id );
 
         } elseif ( $announcement_assign_type == 'all_seller' ) {
-
+            $assigned_sellers = array();
             $users   = new WP_User_Query( array( 'role' => 'seller' ) );
             $sellers = $users->get_results();
 
             if ( $sellers ) {
                 foreach ( $sellers as $user ) {
-                    $announcement_assign_seller_array[] = $user->ID;
+                    $assigned_sellers[] = $user->ID;
                 }
             }
 
-            $this->process_seller_announcement_data( $announcement_assign_seller_array, $post_id );
+            $this->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
+        
+        $this->new_announcement_mail( $assigned_sellers, $post_id );
     }
 
     /**
@@ -386,5 +387,39 @@ class Dokan_Announcement {
         if ( $values ) {
             $wpdb->query( $sql );
         }
+    }
+    
+    /**
+     * Send email to sellers once a new announcement is created
+     *
+     * @param int $seller_id
+     */
+    function new_announcement_mail( $sellers, $post_id ) {
+        $seller_emails = array();
+        foreach ( $sellers as $seller ) {
+            $seller_info     = get_userdata( $seller );
+            $seller_emails[] = $seller_info->user_email;
+        }
+        $email = Dokan_Email::init();
+        
+        $announcement_url = dokan_get_navigation_url( 'announcement/single-announcement' )."$post_id/";
+        ob_start();
+        dokan_get_template_part( 'emails/announcement', '', array( 'pro' => true) );
+        $body = ob_get_clean();
+
+        $find = array(
+            '%announecement_url%',
+            '%site_name%',
+            '%site_url%'
+        );
+
+        $replace = array(
+            $announcement_url,
+            $email->get_from_name(),
+            home_url(),
+        );
+        $body = str_replace( $find, $replace, $body);
+        $subject = sprintf( __( 'New Announcement from [%s] ', 'dokan-lite' ), $email->get_from_name() );
+        $email->send( $seller_emails, $subject, $body );
     }
 }
