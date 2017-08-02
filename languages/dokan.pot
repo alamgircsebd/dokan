@@ -1,10 +1,10 @@
-# Copyright (C) 2017 weDevs
-# This file is distributed under the GPL2.
+# Copyright (C) 2017 
+# This file is distributed under the same license as the  package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 2.6.4\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2017-07-16 07:05:41+00:00\n"
+"POT-Creation-Date: 2017-08-02 04:02:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -137,7 +137,7 @@ msgstr ""
 msgid "&raquo;"
 msgstr ""
 
-#: classes/ajax.php:117 classes/ajax.php:1778 classes/products.php:207
+#: classes/ajax.php:117 classes/ajax.php:1778 classes/products.php:208
 #: includes/wc-functions.php:275 templates/orders/views/html-order-items.php:21
 #: templates/products/edit/inventory.php:6
 msgid "Standard"
@@ -320,20 +320,24 @@ msgstr ""
 msgid "Next &raquo;"
 msgstr ""
 
-#: classes/products.php:230
+#: classes/products.php:231
 msgid "Vendor Commission (%)"
 msgstr ""
 
-#: classes/products.php:232
+#: classes/products.php:233
 msgid "Override the default commission (%) vendor will get from this product"
 msgstr ""
 
-#: classes/products.php:403
+#: classes/products.php:404
 msgid "Duplicate"
 msgstr ""
 
-#: classes/products.php:482
+#: classes/products.php:483
 msgid "Product succesfully duplicated"
+msgstr ""
+
+#: classes/products.php:567
+msgid "[%s]A Product is updated and pending review"
 msgstr ""
 
 #: classes/refund.php:178
@@ -353,7 +357,7 @@ msgid "Type"
 msgstr ""
 
 #: classes/reports.php:63 includes/reports.php:11 includes/reports.php:151
-#: includes/reports.php:937 includes/reports.php:1041
+#: includes/reports.php:938 includes/reports.php:1042
 msgid "Sales"
 msgstr ""
 
@@ -504,7 +508,7 @@ msgstr ""
 msgid "Shipping Policy"
 msgstr ""
 
-#: classes/shipping.php:395 templates/settings/shipping.php:128
+#: classes/shipping.php:396 templates/settings/shipping.php:128
 msgid "Refund Policy"
 msgstr ""
 
@@ -964,6 +968,10 @@ msgstr ""
 msgid "No vendor assigned!"
 msgstr ""
 
+#: includes/admin/announcement.php:422
+msgid "New Announcement from [%s] "
+msgstr ""
+
 #: includes/admin/duplicate-order-list.php:10
 msgid "Duplicate Orders"
 msgstr ""
@@ -1049,20 +1057,20 @@ msgid "By Vendor"
 msgstr ""
 
 #: includes/admin/reports.php:76 includes/admin/reports.php:116
-#: includes/reports.php:65 includes/reports.php:550 includes/reports.php:920
-#: includes/reports.php:1025
+#: includes/reports.php:65 includes/reports.php:550 includes/reports.php:921
+#: includes/reports.php:1026
 msgid "From:"
 msgstr ""
 
 #: includes/admin/reports.php:80 includes/admin/reports.php:121
-#: includes/reports.php:69 includes/reports.php:554 includes/reports.php:925
-#: includes/reports.php:1030
+#: includes/reports.php:69 includes/reports.php:554 includes/reports.php:926
+#: includes/reports.php:1031
 msgid "To:"
 msgstr ""
 
 #: includes/admin/reports.php:83 includes/admin/reports.php:124
 #: includes/admin/reports.php:139 includes/reports.php:73
-#: includes/reports.php:557 includes/reports.php:929 includes/reports.php:1034
+#: includes/reports.php:557 includes/reports.php:930 includes/reports.php:1035
 msgid "Show"
 msgstr ""
 
@@ -1339,20 +1347,20 @@ msgstr ""
 msgid "sales"
 msgstr ""
 
-#: includes/reports.php:936 includes/reports.php:1040
+#: includes/reports.php:937 includes/reports.php:1041
 #: templates/coupon/form.php:92
 msgid "Product"
 msgstr ""
 
-#: includes/reports.php:951
+#: includes/reports.php:952
 msgid "Product does not exist"
 msgstr ""
 
-#: includes/reports.php:1042
+#: includes/reports.php:1043
 msgid "Earning"
 msgstr ""
 
-#: includes/reports.php:1057
+#: includes/reports.php:1058
 msgid "Product no longer exists"
 msgstr ""
 
@@ -1490,6 +1498,7 @@ msgid "Best Vendor"
 msgstr ""
 
 #: includes/widgets/best-seller.php:85 includes/widgets/feature-seller.php:86
+#: templates/emails/product-updated-pending.php:8
 msgid "Title:"
 msgstr ""
 
@@ -1993,6 +2002,54 @@ msgstr ""
 #: templates/review/listing-table-tr.php:41
 #: templates/review/listing-table-tr.php:62
 msgid "Trash"
+msgstr ""
+
+#: templates/emails/announcement.php:1
+msgid "Hello,"
+msgstr ""
+
+#: templates/emails/announcement.php:3
+msgid ""
+"A new announecement is published for you from Admin, please check it out at "
+": "
+msgstr ""
+
+#: templates/emails/announcement.php:5 templates/products/product-edit.php:270
+msgid "From"
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:1
+msgid "Hello there,"
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:3
+msgid "A product has been updated in your site."
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:5
+msgid "Summary of the product:"
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:9
+msgid "Price:"
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:10
+msgid "Vendor:"
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:11
+msgid "Category:"
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:13
+msgid ""
+"The product is currently in \"pending\" state. Please review this product "
+"before it goes public."
+msgstr ""
+
+#: templates/emails/product-updated-pending.php:15
+msgid "Moderate:"
 msgstr ""
 
 #: templates/global/account-migration-btn.php:14
@@ -2600,10 +2657,6 @@ msgstr ""
 msgid "Special Price"
 msgstr ""
 
-#: templates/products/product-edit.php:270
-msgid "From"
-msgstr ""
-
 #: templates/products/product-edit.php:277
 msgid "To"
 msgstr ""
@@ -2979,28 +3032,6 @@ msgstr ""
 
 #: templates/widgets/best-seller.php:36 templates/widgets/feature-seller.php:36
 msgid "No vendor found"
-msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "Dokan Pro"
-msgstr ""
-
-#. Plugin URI of the plugin/theme
-msgid "https://wedevs.com/dokan/"
-msgstr ""
-
-#. Description of the plugin/theme
-msgid ""
-"An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and "
-"weDevs."
-msgstr ""
-
-#. Author of the plugin/theme
-msgid "weDevs"
-msgstr ""
-
-#. Author URI of the plugin/theme
-msgid "https://wedevs.com/"
 msgstr ""
 
 #: classes/admin-refund.php:217

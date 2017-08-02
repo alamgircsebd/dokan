@@ -170,6 +170,15 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.6.5 -> Aug 2, 2017
+---------------------
+- [new] Added email template for announcement
+- [new] Send email to admin when a product is edited and pending
+- [fix] Widgets not showing in admin menu
+- [fix] Vendor dashboard graph RTL issue fixed
+- [tweak] Added missing <hr> on shipping tab title
+- [tweak] Enhanced RTL support
+
 v2.6.4 -> July 16, 2017
 ---------------------
 - [new] Added `dokan-customer-migration` shortcode
