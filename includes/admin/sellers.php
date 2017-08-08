@@ -10,6 +10,36 @@
 
 <div class="wrap">
     <h2><?php _e( 'Vendor Listing', 'dokan' ); ?></h2>
+    <?php
+    
+    $counts = dokan_get_seller_status_count();
+    $status = isset( $_GET['status'] ) ? $_GET['status'] : 'all';
+
+    ?>
+    <div style="margin: 15px 0px;">
+        <ul class="subsubsub">
+            <li class="all">
+                <a href="admin.php?page=dokan-sellers&status=all" class="<?php echo 'all' == $status ? 'current' : ''  ?>">
+                    <?php _e( 'All', 'dokan' ); ?>
+                    <span class="count">(<?php echo $counts['total'] ?>)</span>
+                </a>
+                 | 
+            </li>
+            <li class="approved">
+                <a href="admin.php?page=dokan-sellers&status=approved" class="<?php echo 'approved' == $status ? 'current' : ''  ?>">
+                    <?php _e( 'Approved', 'dokan' ); ?>
+                    <span class="count">(<?php echo $counts['active'] ?>)</span>
+                </a>
+                 | 
+            </li>
+            <li class="pending">
+                <a href="admin.php?page=dokan-sellers&status=pending" class="<?php echo 'pending' == $status ? 'current' : ''  ?>">
+                    <?php _e( 'Pending', 'dokan' ); ?>
+                    <span class="count">(<?php echo $counts['inactive'] ?>)</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 
     <form action="<?php echo admin_url( 'users.php' ); ?>" method="get" style="margin-top: 15px;">
 
@@ -38,7 +68,15 @@
                 $limit       = 20;
                 $count       = 0;
                 $offset      = ( $paged - 1 ) * $limit;
-                $user_search = new WP_User_Query( array( 'role' => 'seller', 'number' => $limit, 'offset' => $offset ) );
+                
+                $args        = array( 'role' => 'seller', 'number' => $limit, 'offset' => $offset );
+                
+                if ( $status != 'all' ) {
+                    $args[ 'meta_key' ]   = 'dokan_enable_selling';
+                    $args[ 'meta_value' ] = 'approved' == $status ? 'yes' : 'no';
+                }
+
+                $user_search = new WP_User_Query( $args );
                 $sellers     = (array) $user_search->get_results();
                 $post_counts = count_many_users_posts( wp_list_pluck( $sellers, 'ID' ), 'product' );
 
