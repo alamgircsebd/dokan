@@ -9,13 +9,17 @@
 ?>
 
 <div class="wrap">
-    <h2><?php _e( 'Vendor Listing', 'dokan' ); ?></h2>
+    <h2 class="wp-heading-inline"><?php _e( 'Vendor Listing', 'dokan' ); ?></h2>
     <?php
-    
     $counts = dokan_get_seller_status_count();
     $status = isset( $_GET['status'] ) ? $_GET['status'] : 'all';
-
+    if ( isset( $_GET['s'] ) && !empty( $_GET['s'] ) ) {
     ?>
+        <span><?php echo __( 'Search results for : ' , 'dokan' ). $_GET['s'] ?></span>
+    <?php
+    }
+    ?>
+    <hr class="wp-header-end">  
     <div style="margin: 15px 0px;">
         <ul class="subsubsub">
             <li class="all">
@@ -41,10 +45,13 @@
         </ul>
     </div>
 
-    <form action="<?php echo admin_url( 'users.php' ); ?>" method="get" style="margin-top: 15px;">
-
-        <input type="hidden" name="s" value="">
-        <?php wp_nonce_field( 'bulk-users' ); ?>
+    <form action="<?php echo 'admin.php?'; ?>" method="get" style="margin-top: 15px;">
+        <input type="hidden" name="page" value="dokan-sellers">
+        <p class="search-box" style="margin-bottom : 12px;">
+            <input type="search" id="search-input" name="s" value="">
+            <input type="submit" id="search-submit" class="button" value="<?php _e( 'Search Vendors', 'dokan' ); ?>">
+        </p>
+        <?php //wp_nonce_field( 'bulk-users' ); ?>
 
         <table class="widefat withdraw-table">
             <thead>
@@ -75,6 +82,36 @@
                     $args[ 'meta_key' ]   = 'dokan_enable_selling';
                     $args[ 'meta_value' ] = 'approved' == $status ? 'yes' : 'no';
                 }
+                
+                if ( isset( $_GET['s'] ) ) {
+                    
+                    $search_term = sanitize_text_field( $_GET['s'] );
+                    $args[ 'search' ] = '*' . esc_attr( $search_term ) . '*';
+                    $args[' meta_query' ] = array(
+                        'relation' => 'OR',
+                        array(
+                            'key'     => 'dokan_store_name',
+                            'value'   => $search_term ,
+                            'compare' => 'LIKE'
+                        ),
+                        array(
+                            'key'     => 'first_name',
+                            'value'   => $search_term,
+                            'compare' => 'LIKE'
+                        ),
+                        array(
+                            'key'     => 'last_name',
+                            'value'   => $search_term,
+                            'compare' => 'LIKE'
+                        ),
+                        array(
+                            'key'     => 'nickname',
+                            'value'   => $search_term ,
+                            'compare' => 'LIKE'
+                        )
+                    );
+                }
+                
 
                 $user_search = new WP_User_Query( $args );
                 $sellers     = (array) $user_search->get_results();
