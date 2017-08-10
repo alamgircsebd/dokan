@@ -193,6 +193,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
+        require_once DOKAN_PRO_CLASS . '/store-share.php';
 
     }
 
