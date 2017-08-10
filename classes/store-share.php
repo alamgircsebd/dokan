@@ -147,7 +147,7 @@ class Dokan_Pro_Store_Share {
                         var content = <?php echo json_encode( $this->render_html() ) ?>;
                         $.magnificPopup.open({
                             items: {
-                                src: '<div class="white-popup dokan-support-login-wrapper"><div id="ds-error-msg" ></div>'+ content +'</div>',
+                                src: '<div class="white-popup dokan-share-popup-wrapper"><div id="ds-error-msg" ></div>'+ content +'</div>',
                                 type: 'inline'
                            }
                         });
