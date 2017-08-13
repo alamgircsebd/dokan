@@ -985,3 +985,37 @@ function dokan_override_author_for_variations( $product, $seller_id ) {
 }
 
 add_action( 'dokan_after_override_product_author', 'dokan_override_author_for_variations', 11, 2 );
+
+add_action( 'product_cat_add_form_fields', 'dokan_add_category_commission_field' );
+add_action( 'product_cat_edit_form_fields', 'dokan_edit_category_commission_field', 10 );
+add_action( 'created_term','dokan_save_category_commission_field', 10, 3 );
+add_action( 'edit_term', 'dokan_save_category_commission_field', 10, 3 );
+
+function dokan_add_category_commission_field(){
+    ?>
+    <div class="form-field term-display-type-wrap">
+        <label for="per_category_commission"><?php _e( 'Vendor Commission from this category', 'dokan' ); ?></label>
+        <input type="number" min="0" max="100" name="per_category_commission">
+        <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+    </div>
+    <?php
+}
+
+function dokan_edit_category_commission_field( $term ){
+    $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_commission', true );
+    ?>
+    <tr class="form-field">
+        <th scope="row" valign="top"><label><?php _e( 'Vendor commission', 'dokan' ); ?></label></th>
+        <td>
+            <input type="number" min="0" max="100" name="per_category_commission" value="<?php echo $commission ?>">
+            <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+        </td>
+    </tr>
+    <?php
+}
+
+function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
+    if ( isset( $_POST['per_category_commission'] ) && 'product_cat' === $taxonomy ) {
+        update_woocommerce_term_meta( $term_id, 'per_category_commission', esc_attr( $_POST['per_category_commission'] ) );
+    }
+}
