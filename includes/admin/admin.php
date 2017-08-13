@@ -24,6 +24,7 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
+        add_action( 'init', array( $this, 'dokan_export_all_logs' ) );
     }
 
     /**
@@ -398,6 +399,56 @@ class Dokan_Pro_Admin_Settings {
             'href'   => admin_url( 'admin.php?page=dokan-settings' )
         ) );
     }
+    
+    /**
+     * Export method to generate CSV for all logs tab
+     * 
+     * @since 2.6.6
+     * 
+     * @global type $wpdb
+     */
+    function dokan_export_all_logs() {
+
+        if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'export' ) {
+            global $wpdb;
+            $seller_where = '';
+
+            if ( isset( $_GET['seller_id'] ) ) {
+                $seller_where = $wpdb->prepare( 'AND seller_id = %d', $_GET['seller_id'] );
+            }
+
+            $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
+                LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+                WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where";
+
+            $all_logs = $wpdb->get_results( $sql );
+
+            $all_logs = json_decode( json_encode( $all_logs ), true );
+            $ob = fopen( "php://output", 'w' );
+            
+            $headers = array(
+                'order_id'     => __( 'Order', 'dokan' ),
+                'seller_id'    => __( 'Vendor', 'dokan' ),
+                'order_total'  => __( 'Order Total', 'dokan' ),
+                'net_amount'   => __( 'Vendor Earning', 'dokan' ),
+                'commision'    => __( 'Commision', 'dokan' ),
+                'order_status' => __( 'Status', 'dokan' ),
+            );
+            
+            $filename = "Report-" . date( 'Y-m-d', time() );
+            header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
+            header( "Content-Disposition: attachment; filename=$filename.csv" );
+            
+            fputcsv( $ob, array_values( $headers ) );
+            
+            foreach ( $all_logs as $a ) {
+                fputcsv( $ob, array_values( $a ) );
+            }
+            fclose( $ob );
+            exit();
+        }
+    }
+
 }
 
 // End of Dokan_Pro_Admin_Settings class;
