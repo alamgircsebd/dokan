@@ -991,6 +991,13 @@ add_action( 'product_cat_edit_form_fields', 'dokan_edit_category_commission_fiel
 add_action( 'created_term','dokan_save_category_commission_field', 10, 3 );
 add_action( 'edit_term', 'dokan_save_category_commission_field', 10, 3 );
 
+/**
+ * Render commission field on new product category 
+ * 
+ * @since 2.6.6
+ * 
+ * @return void 
+ */
 function dokan_add_category_commission_field(){
     ?>
     <div class="form-field term-display-type-wrap">
@@ -1001,6 +1008,15 @@ function dokan_add_category_commission_field(){
     <?php
 }
 
+/**
+ * Render commission field on edit product category page
+ * 
+ * @since 2.6.6
+ * 
+ * @param WP_Term $term
+ * 
+ * @return void
+ */
 function dokan_edit_category_commission_field( $term ){
     $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_commission', true );
     ?>
@@ -1014,6 +1030,17 @@ function dokan_edit_category_commission_field( $term ){
     <?php
 }
 
+/**
+ * Save category commission field
+ * 
+ * @since 2.6.6
+ * 
+ * @param int $term_id
+ * @param int $tt_id
+ * @param object $taxonomy
+ * 
+ * @return void
+ */
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
     if ( isset( $_POST['per_category_commission'] ) && 'product_cat' === $taxonomy ) {
         update_woocommerce_term_meta( $term_id, 'per_category_commission', esc_attr( $_POST['per_category_commission'] ) );
