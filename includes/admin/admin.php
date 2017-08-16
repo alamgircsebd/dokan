@@ -409,7 +409,7 @@ class Dokan_Pro_Admin_Settings {
      */
     function dokan_export_all_logs() {
 
-        if ( isset( $_GET['tab'] ) && $_GET['tab'] == 'export' ) {
+        if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-export' ) {
             global $wpdb;
             $seller_where = '';
 
