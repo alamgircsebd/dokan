@@ -352,7 +352,7 @@ class Dokan_Pro_Products {
         update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : ''  ) );
 
         // Save shipping class
-        $product_shipping_class = ( $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
+        $product_shipping_class = ( isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
         wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
         // Upsells
@@ -385,8 +385,8 @@ class Dokan_Pro_Products {
         if ( $product_type == 'variable' ) {
             dokan_save_variations( $post_id );
         }
-        
-       
+
+
     }
 
     /**
@@ -496,14 +496,14 @@ class Dokan_Pro_Products {
             wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );
         }
     }
-    
+
     /**
      * Set Additional product Post Data
-     * 
+     *
      * @since 2.6.3
-     * 
+     *
      * @param Object $product
-     * 
+     *
      * @return $product
      */
     public function save_product_post_data( $product ) {
@@ -511,21 +511,21 @@ class Dokan_Pro_Products {
         if ( $product['post_status'] == 'publish' && dokan_get_option( 'edited_product_status', 'dokan_selling' ) == 'on' ) {
             $product['post_status'] = 'pending';
         }
-        
+
         return $product;
     }
-    
+
     /**
      * Send email to admin once a product is updated
      *
      * @since 2.6.5
-     * 
+     *
      * @param int $product_id
-     * 
+     *
      * @param string $status
      */
     function updated_product_email( $product_id ) {
-        
+
         if ( dokan_get_option( 'edited_product_status', 'dokan_selling', 'off' ) != 'on' ) {
             return;
         }
