@@ -19,7 +19,8 @@ class Dokan_Pro_Shipping {
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
-
+        add_action( 'dokan_seller_wizard_store_setup_field', array( $this, 'show_shipping_field' ), 10 );
+        add_action( 'dokan_seller_wizard_store_field_save', array( $this, 'save_shipping_field' ), 10 );
     }
 
     /**
@@ -144,9 +145,9 @@ class Dokan_Pro_Shipping {
 
         if ( $errors ) {
             if ( count( $errors ) == 1 ) {
-                $message = sprintf( __( 'This product does not ship to your chosen location: %s'), implode( ', ', $errors ) );
+                $message = sprintf( __( 'This product does not ship to your chosen location: %s', 'dokan' ), implode( ', ', $errors ) );
             } else {
-                $message = sprintf( __( 'These products do not ship to your chosen location.: %s'), implode( ', ', $errors ) );
+                $message = sprintf( __( 'These products do not ship to your chosen location.: %s', 'dokan' ), implode( ', ', $errors ) );
             }
 
             wc_add_notice( $message, 'error' );
@@ -291,7 +292,7 @@ class Dokan_Pro_Shipping {
         $tabs['shipping'] = array(
             'title' => __( 'Shipping', 'dokan' ),
             'priority' => 12,
-            'callback' => array($this, 'shipping_tab' )
+            'callback' => array( $this, 'shipping_tab' )
         );
 
         return $tabs;
@@ -351,7 +352,7 @@ class Dokan_Pro_Shipping {
                     <select name="dokan-shipping-country" id="dokan-shipping-country" class="dokan-shipping-country dokan-form-control" data-product_id="<?php echo $post->ID; ?>" data-author_id="<?php echo $post->post_author; ?>">
                         <option value=""><?php _e( '--Select Country--', 'dokan' ); ?></option>
                         <?php foreach ( $dps_country_rates as $country => $cost ) { ?>
-                            <option value="<?php echo $country; ?>"><?php echo ( $country == 'everywhere' ) ? _e( 'Other Countries' ) : $countries[$country]; ?></option>
+                            <option value="<?php echo $country; ?>"><?php echo ( $country == 'everywhere' ) ? _e( 'Other Countries', 'dokan' ) : $countries[$country]; ?></option>
                         <?php } ?>
                     </select>
 
@@ -398,5 +399,119 @@ class Dokan_Pro_Shipping {
             <?php echo wpautop( $refund_policy ); ?>
         <?php } ?>
         <?php
+    }
+
+    /**
+    * Show shipping field in seller wizard area
+    *
+    * @since 2.6.6
+    *
+    * @return void
+    **/
+    public function show_shipping_field( $wizard ) {
+        $user_id = $wizard->store_id;
+
+        $enable_shipping             = get_user_meta( $user_id, '_dps_shipping_enable', true );
+        $default_shipping_cost       = get_user_meta( $user_id, '_dps_shipping_type_price', true );
+        $per_product_additional_cost = get_user_meta( $user_id, '_dps_additional_product', true );
+        $per_qty_additiona_cost      = get_user_meta( $user_id, '_dps_additional_qty', true );
+        $dps_pt                      = get_user_meta( $user_id, '_dps_pt', true );;
+        $processing_time             = dokan_get_shipping_processing_times();
+        ?>
+            <tr>
+                <th scope="row"><label for="enable_shipping"><?php _e( 'Enable Shipping', 'dokan' ); ?></label></th>
+                <td>
+                    <input type="checkbox" name="enable_shipping" id="enable_shipping" class="input-checkbox" value="1" <?php echo ( $enable_shipping == 'yes' ) ? 'checked="checked"' : ''; ?>/>
+                    <label for="enable_shipping"><?php _e( 'Enable store shipping', 'dokan' ); ?></label>
+                </td>
+            </tr>
+
+            <tr class="show_if_shipping">
+                <th scope="row"><label for="default_shipping_cost"><?php _e( 'Default Shipping cost', 'dokan' ); ?></label></th>
+                <td>
+                    <input type="number" id="default_shipping_cost" name="default_shipping_cost" value="<?php echo $default_shipping_cost; ?>" placeholder="<?php esc_attr_e( '0.00', 'dokan' ); ?>">
+                </td>
+            </tr>
+
+            <tr class="show_if_shipping">
+                <th scope="row"><label for="per_product_additional_cost"><?php _e( 'Per Product Additional Cost', 'dokan' ); ?></label></th>
+                <td>
+                    <input type="number" id="per_product_additional_cost" name="per_product_additional_cost" value="<?php echo $per_product_additional_cost; ?>" placeholder="<?php esc_attr_e( '0.00', 'dokan' ); ?>">
+                </td>
+            </tr>
+
+            <tr class="show_if_shipping">
+                <th scope="row"><label for="per_qty_additiona_cost"><?php _e( 'Per Qty Additional Cost', 'dokan' ); ?></label></th>
+                <td>
+                    <input type="number" id="per_qty_additiona_cost" name="per_qty_additiona_cost" value="<?php echo $per_qty_additiona_cost; ?>" placeholder="<?php esc_attr_e( '0.00', 'dokan' ); ?>">
+                </td>
+            </tr>
+
+            <tr class="show_if_shipping">
+                <th scope="row"><label for="processing_time"><?php _e( 'Processing Time', 'dokan' ); ?></label></th>
+                <td>
+                    <select name="processing_time" class="processing_time wc-enhanced-select" id="processing_time">
+                        <?php foreach ( $processing_time as $processing_key => $processing_value ): ?>
+                            <option value="<?php echo $processing_key; ?>" <?php selected( $dps_pt, $processing_key ); ?>><?php echo $processing_value; ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </td>
+            </tr>
+
+            <script>
+                ;(function($){
+                    $('input#enable_shipping').on( 'change', function(e){
+                        if( $(this).is(':checked') ) {
+                            $( '.show_if_shipping' ).show();
+                            $('.wc-enhanced-select').select2();
+                        } else {
+                            $( '.show_if_shipping' ).hide();
+                        }
+                    });
+
+                    $('input#enable_shipping').trigger('change');
+                })(jQuery);
+            </script>
+        <?php
+    }
+
+    /**
+    * Save shipping data in setup wizard
+    *
+    * @since 2.6.6
+    *
+    * @return void
+    **/
+    public function save_shipping_field( $wizard ) {
+
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! $wizard->store_id ) {
+            return;
+        }
+
+        if ( isset( $_POST['enable_shipping'] ) ) {
+            update_user_meta( $wizard->store_id, '_dps_shipping_enable', 'yes' );
+        } else {
+            update_user_meta( $wizard->store_id, '_dps_shipping_enable', 'no' );
+        }
+
+        if ( ! empty( $_POST['default_shipping_cost'] ) ) {
+            update_user_meta( $wizard->store_id, '_dps_shipping_type_price', $_POST['default_shipping_cost'] );
+        }
+
+        if ( ! empty( $_POST['per_product_additional_cost'] ) ) {
+            update_user_meta( $wizard->store_id, '_dps_additional_product', $_POST['per_product_additional_cost'] );
+        }
+
+        if ( ! empty( $_POST['per_qty_additiona_cost'] ) ) {
+            update_user_meta( $wizard->store_id, '_dps_additional_qty', $_POST['per_qty_additiona_cost'] );
+        }
+
+        if ( isset( $_POST['processing_time'] ) ) {
+            update_user_meta( $wizard->store_id, '_dps_pt', $_POST['processing_time'] );
+        }
     }
 }
