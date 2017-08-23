@@ -209,7 +209,7 @@
         <?php do_action( 'dokan_prev_report_form', $_GET ); ?>
     
         <a href="<?php echo $export_url ?>">
-            <button class="button button-primary" style="float:right; margin: 10px;"><?php _e( ' Export ALL', 'dokan' ); ?></button>
+            <button class="button button-primary" style="float:right; margin: 10px;"><?php _e( ' Export CSV', 'dokan' ); ?></button>
         </a>
         <table class="widefat withdraw-table" style="margin-top: 15px;">
             <thead>
