@@ -304,16 +304,6 @@ class Dokan_Pro_Products {
         $is_virtual   = isset( $_POST['_virtual'] ) ? 'yes' : 'no';
         $product_type = empty( $_POST['product_type'] ) ? 'simple' : stripslashes( $_POST['product_type'] );
 
-        // Sales and prices
-        if ( in_array( $product_type, array( 'variable', 'grouped' ) ) ) {
-            // Variable products have no prices
-            update_post_meta( $post_id, '_regular_price', '' );
-            update_post_meta( $post_id, '_sale_price', '' );
-            update_post_meta( $post_id, '_sale_price_dates_from', '' );
-            update_post_meta( $post_id, '_sale_price_dates_to', '' );
-            update_post_meta( $post_id, '_price', '' );
-        }
-
         // Save lot discount options
         $is_lot_discount = isset( $_POST['_is_lot_discount'] ) ? $_POST['_is_lot_discount'] : 'no';
         if ( $is_lot_discount == 'yes' ) {
@@ -376,37 +366,17 @@ class Dokan_Pro_Products {
         $product_shipping_class = ( isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
         wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
-        // Upsells
-        if ( isset( $_POST['upsell_ids'] ) ) {
-            $upsells   = array();
-            $ids       = $_POST['upsell_ids'];
-            foreach ( $ids as $id )
-                if ( $id && $id > 0 )
-                    $upsells[] = $id;
+        // Cross sells and upsells
+        $upsells    = isset( $_POST['upsell_ids'] ) ? array_map( 'intval', $_POST['upsell_ids'] ) : array();
+        $crosssells = isset( $_POST['crosssell_ids'] ) ? array_map( 'intval', $_POST['crosssell_ids'] ) : array();
 
-            update_post_meta( $post_id, '_upsell_ids', $upsells );
-        } else {
-            delete_post_meta( $post_id, '_upsell_ids' );
-        }
-
-        // Cross sells
-        if ( isset( $_POST['crosssell_ids'] ) ) {
-            $crosssells   = array();
-            $ids          = $_POST['crosssell_ids'];
-            foreach ( $ids as $id )
-                if ( $id && $id > 0 )
-                    $crosssells[] = $id;
-
-            update_post_meta( $post_id, '_crosssell_ids', $crosssells );
-        } else {
-            delete_post_meta( $post_id, '_crosssell_ids' );
-        }
+        update_post_meta( $post_id, '_upsell_ids', $upsells );
+        update_post_meta( $post_id, '_crosssell_ids', $crosssells );
 
         // Save variations
         if ( $product_type == 'variable' ) {
             dokan_save_variations( $post_id );
         }
-
 
     }
 
