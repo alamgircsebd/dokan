@@ -19,8 +19,9 @@ class Dokan_Pro_Products {
      */
     public function __construct() {
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_shipping_tax_content' ), 10, 2 );
-        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_variations_content' ), 15, 2 );
-        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_lot_discount_content' ), 15, 2 );
+        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_linked_product_content' ), 15, 2 );
+        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_variations_content' ), 20, 2 );
+        add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_lot_discount_content' ), 25, 2 );
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2 );
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
         add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
@@ -192,6 +193,26 @@ class Dokan_Pro_Products {
             'dps_pt'                  => $dps_pt,
             'classes_options'         => $classes_options,
             'porduct_shipping_pt'     => $porduct_shipping_pt,
+        ) );
+    }
+
+    /**
+    * Render linked product content
+    *
+    * @since 2.6.6
+    *
+    * @return void
+    **/
+    public function load_linked_product_content( $post, $post_id ) {
+        $upsells_ids = get_post_meta( $post_id, '_upsell_ids', true );
+        $crosssells_ids = get_post_meta( $post_id, '_crosssell_ids', true );
+
+        dokan_get_template_part( 'products/linked-product-content', '', array(
+            'pro'            => true,
+            'post'           => $post,
+            'post_id'        => $post_id,
+            'upsells_ids'    => $upsells_ids,
+            'crosssells_ids' => $crosssells_ids
         ) );
     }
 
