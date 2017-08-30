@@ -50,18 +50,17 @@ class Dokan_Email_Announcement extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_heading() {
-            return __( 'New Announcement - <i>{title}</i>', 'dokan-lite' );
+            return __( 'New Announcement - {title}', 'dokan-lite' );
 	}
 
 	/**
 	 * Trigger the this email.
 	 */
 	public function trigger( $sellers, $post_id ) {
-            error_log( 'triasdfasdf' );
+
             if ( ! $this->is_enabled() ) {
                 return;
             }
-            error_log( 'sfsdf' );
             
             $seller_emails = array();
             
