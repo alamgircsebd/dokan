@@ -253,7 +253,8 @@ class Dokan_Announcement {
             $this->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
         
-        $this->new_announcement_mail( $assigned_sellers, $post_id );
+        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $post_id );
+        //$this->new_announcement_mail( $assigned_sellers, $post_id );
     }
 
     /**

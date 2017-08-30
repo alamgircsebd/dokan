@@ -30,8 +30,6 @@ echo "= " . $email_heading . " =\n\n";
 
 <?php _e( 'The product is currently in "pending" state.', 'dokan' ); echo " \n";?>
 
-<?php echo sprintf( __( 'In case it needs to be moderated  <a href="%s"> click here </a>', 'dokan' ), $data['product_link'] ); ?>
-
 <?php
 
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";

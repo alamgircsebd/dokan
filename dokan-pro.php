@@ -484,6 +484,7 @@ class Dokan_Pro {
      */
     function load_dokan_emails( $wc_emails ) {
         $wc_emails['Dokan_Email_Updated_Product'] = include( DOKAN_PRO_INC . '/emails/class-dokan-email-updated-product.php' );
+        $wc_emails['Dokan_Email_Announcement']    = include( DOKAN_PRO_INC . '/emails/class-dokan-email-announcement.php' );
         return $wc_emails;
     }
 
@@ -499,6 +500,7 @@ class Dokan_Pro {
     function register_email_actions( $actions ) {
 
         $actions[] = 'dokan_edited_product_pending_notification';
+        $actions[] = 'dokan_after_announcement_saved';
 
         return $actions;
     }
