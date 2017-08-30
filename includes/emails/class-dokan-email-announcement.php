@@ -21,8 +21,8 @@ class Dokan_Email_Announcement extends WC_Email {
 	 */
 	public function __construct() {
 		$this->id               = 'dokan_announcement';
-		$this->title            = __( 'Dokan Announcement', 'dokan-lite' );
-		$this->description      = __( 'These emails are sent to a vendor(s) who is are selected in a annoucement ', 'dokan-lite' );
+		$this->title            = __( 'Dokan Announcement', 'dokan' );
+		$this->description      = __( 'These emails are sent to a vendor(s) who is are selected in a annoucement ', 'dokan' );
                 $this->template_html    = 'emails/announcement.php';
 		$this->template_plain   = 'emails/plain/announcement.php';
                 $this->template_base    = DOKAN_PRO_DIR.'/templates/';
@@ -42,7 +42,7 @@ class Dokan_Email_Announcement extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_subject() {
-            return __( 'A new announcement is made at - {site_name}', 'dokan-lite' );
+            return __( 'A new announcement is made at - {site_name}', 'dokan' );
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Dokan_Email_Announcement extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_heading() {
-            return __( 'New Announcement - {title}', 'dokan-lite' );
+            return __( 'New Announcement - {title}', 'dokan' );
 	}
 
 	/**
@@ -132,34 +132,34 @@ class Dokan_Email_Announcement extends WC_Email {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled' => array(
-				'title'         => __( 'Enable/Disable', 'dokan-lite' ),
+				'title'         => __( 'Enable/Disable', 'dokan' ),
 				'type'          => 'checkbox',
-				'label'         => __( 'Enable this email notification', 'dokan-lite' ),
+				'label'         => __( 'Enable this email notification', 'dokan' ),
 				'default'       => 'yes',
 			),
 			
 			'subject' => array(
-				'title'         => __( 'Subject', 'dokan-lite' ),
+				'title'         => __( 'Subject', 'dokan' ),
 				'type'          => 'text',
 				'desc_tip'      => true,
 				/* translators: %s: list of placeholders */
-				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan-lite' ), '<code>{title}, {message}, {site_name}</code>' ),
+				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan' ), '<code>{title}, {message}, {site_name}</code>' ),
 				'placeholder'   => $this->get_default_subject(),
 				'default'       => '',
 			),
 			'heading' => array(
-				'title'         => __( 'Email heading', 'dokan-lite' ),
+				'title'         => __( 'Email heading', 'dokan' ),
 				'type'          => 'text',
 				'desc_tip'      => true,
 				/* translators: %s: list of placeholders */
-				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan-lite' ), '<code>{title}, {message}, {site_name}</code>' ),
+				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan' ), '<code>{title}, {message}, {site_name}</code>' ),
 				'placeholder'   => $this->get_default_heading(),
 				'default'       => '',
 			),
 			'email_type' => array(
-				'title'         => __( 'Email type', 'dokan-lite' ),
+				'title'         => __( 'Email type', 'dokan' ),
 				'type'          => 'select',
-				'description'   => __( 'Choose which format of email to send.', 'dokan-lite' ),
+				'description'   => __( 'Choose which format of email to send.', 'dokan' ),
 				'default'       => 'html',
 				'class'         => 'email_type wc-enhanced-select',
 				'options'       => $this->get_email_type_options(),

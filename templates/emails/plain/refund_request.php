@@ -15,7 +15,7 @@ if ( !defined( 'ABSPATH' ) ) {
 echo "= " . $email_heading . " =\n\n";
 ?>
 
-<?php _e( 'Hi', 'dokan-lite' ); ?>,
+<?php _e( 'Hi', 'dokan' ); ?>,
 
 <?php _e( 'New refund request for order #'.$data['order_id'], 'dokan' );  echo " \n";?>
 
