@@ -487,6 +487,7 @@ class Dokan_Pro {
         $wc_emails['Dokan_Email_Announcement']    = include( DOKAN_PRO_INC . '/emails/class-dokan-email-announcement.php' );
         $wc_emails['Dokan_Email_Updated_Product'] = include( DOKAN_PRO_INC . '/emails/class-dokan-email-updated-product.php' );
         $wc_emails['Dokan_Email_Refund_Request']  = include( DOKAN_PRO_INC . '/emails/class-dokan-refund-request.php' );
+        $wc_emails['Dokan_Email_Refund_Vendor']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-refund-vendor.php' );
         
         return $wc_emails;
     }
@@ -505,6 +506,7 @@ class Dokan_Pro {
         $actions[] = 'dokan_edited_product_pending_notification';
         $actions[] = 'dokan_after_announcement_saved';
         $actions[] = 'dokan_refund_request_notification';
+        $actions[] = 'dokan_refund_processed_notification';
 
         return $actions;
     }
