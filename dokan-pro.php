@@ -258,6 +258,11 @@ class Dokan_Pro {
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_pro_templates' ), 10, 3 );
         add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
+        
+        //Dokan Email filters for WC Email
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_emails' ), 36 );
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ), 15 );
+        add_filter( 'dokan_email_actions' , array( $this, 'register_email_actions' ) );
     }
 
     /**
@@ -466,6 +471,65 @@ class Dokan_Pro {
         );
 
         return $product_types;
+    }
+    
+    /**
+     * Add Dokan Email classes in WC Email
+     * 
+     * @since 2.6.6
+     * 
+     * @param array $wc_emails
+     * 
+     * @return $wc_emails
+     */
+    function load_dokan_emails( $wc_emails ) {
+        
+        $wc_emails['Dokan_Email_Announcement']    = include( DOKAN_PRO_INC . '/emails/class-dokan-email-announcement.php' );
+        $wc_emails['Dokan_Email_Updated_Product'] = include( DOKAN_PRO_INC . '/emails/class-dokan-email-updated-product.php' );
+        $wc_emails['Dokan_Email_Refund_Request']  = include( DOKAN_PRO_INC . '/emails/class-dokan-refund-request.php' );
+        $wc_emails['Dokan_Email_Refund_Vendor']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-refund-vendor.php' );
+        
+        return $wc_emails;
+    }
+
+    /**
+     * Register Dokan Email actions for WC
+     * 
+     * @since 2.6.6
+     * 
+     * @param array $actions
+     * 
+     * @return $actions
+     */
+    function register_email_actions( $actions ) {
+
+        $actions[] = 'dokan_edited_product_pending_notification';
+        $actions[] = 'dokan_after_announcement_saved';
+        $actions[] = 'dokan_refund_request_notification';
+        $actions[] = 'dokan_refund_processed_notification';
+
+        return $actions;
+    }
+
+    /**
+     * Set template override directory for Dokan Emails
+     * 
+     * @since 2.6.6
+     * 
+     * @param array $dokan_emails
+     * 
+     * @return $dokan_emails
+     */
+    function set_email_template_directory( $dokan_emails ) {
+
+        $dokan_pro_emails = array(
+            'product-updated-pending',
+            'announcement',
+            'refund-seller-mail',
+            'refund_request',
+        );
+        
+        return array_merge( $dokan_pro_emails, $dokan_emails );
     }
 
 }

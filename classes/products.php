@@ -520,45 +520,13 @@ class Dokan_Pro_Products {
         if ( dokan_get_option( 'edited_product_status', 'dokan_selling', 'off' ) != 'on' ) {
             return;
         }
-        $template = 'emails/product-updated-pending';
-        $email = Dokan_Email::init();
-        ob_start();
-        dokan_get_template_part( $template , '', array( 'pro' => true ) );
-        $body = ob_get_clean();
-
+        
         $product       = wc_get_product( $product_id );
         $seller_id     = get_post_field( 'post_author', $product_id );
         $seller        = get_user_by( 'id', $seller_id );
         $category      = wp_get_post_terms( dokan_get_prop( $product, 'id' ), 'product_cat', array( 'fields' => 'names' ) );
-        $category_name = $category ? reset( $category ) : 'N/A';
 
-        $find = array(
-            '%title%',
-            '%price%',
-            '%seller_name%',
-            '%seller_url%',
-            '%category%',
-            '%product_link%',
-            '%site_name%',
-            '%site_url%'
-        );
-
-        $replace = array(
-            $product->get_title(),
-            $email->currency_symbol( $product->get_price() ),
-            $seller->display_name,
-            dokan_get_store_url( $seller->ID ),
-            $category_name,
-            admin_url( 'post.php?action=edit&post=' . $product_id ),
-            $email->get_from_name(),
-            home_url(),
-        );
-
-        $body    = str_replace( $find, $replace, $body );
-        $subject = sprintf( __( '[%s]A Product is updated and pending review', 'dokan-lite' ), $email->get_from_name() );
-
-        $email->send( $email->admin_email(), $subject, $body );
-        do_action( 'dokan_after_updated_product_email', $email->admin_email(), $subject, $body );
+        do_action( 'dokan_edited_product_pending_notification', $product, $seller, $category );
     }
 
 }

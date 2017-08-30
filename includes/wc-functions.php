@@ -755,8 +755,7 @@ if ( !function_exists( 'dokan_user_update_to_seller' ) ) {
 
         update_user_meta( $user_id, 'dokan_publishing', $publishing );
         //update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
-
-        Dokan_Email::init()->new_seller_registered_mail( $user_id );
+        do_action( 'dokan_new_seller_created', $user_id, $dokan_settings );
     }
 
 }

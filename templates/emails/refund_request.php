@@ -1,10 +1,29 @@
-<?php _e( 'Hi', 'dokan-lite' ); ?>,
+<?php
+/**
+ * New Refund request Email.
+ *
+ * An email sent to the admin when a new refund request is created by vendor.
+ *
+ * @class       Dokan_Email_Refund_Request
+ * @version     2.6.6
+ * 
+ */
 
-<?php _e( 'New refund request for order', 'dokan-lite' ); ?> # %order_id%.
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-<?php _e( 'You can process the request by going here:', 'dokan-lite' ); ?>
-%refund_page%
+do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+<p>
+    <?php _e( 'Hi', 'dokan' ); ?>,
+</p>
+<p>
+    <?php _e( 'New refund request for order #'.$data['order_id'], 'dokan' ); ?>
+</p>
+<p>
+    <?php echo sprintf( __( 'You can process the request by going <a href="%s">here</a>', 'dokan' ), $data['refund_url'] ) ; ?>
+</p>
 
----
-<?php _e( 'Sent from', 'dokan-lite' ); ?> %site_name%
-%site_url%
+<?php
+
+do_action( 'woocommerce_email_footer', $email );

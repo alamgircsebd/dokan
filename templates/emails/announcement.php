@@ -1,8 +1,26 @@
-<?php _e( 'Hello,', 'dokan-lite' ); ?>
+<?php
+/**
+ * Announcement email to vendors.
+ *
+ * An email sent to the vendor(s) when a announcement is created by admin.
+ *
+ * @class       Dokan_Email_Announcement
+ * @version     2.6.8
+ * 
+ */
 
-<?php _e( 'A new announecement is published for you from Admin, please check it out at : ', 'dokan-lite' ); ?>  %announecement_url%  .
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-<?php _e( 'From', 'dokan-lite' ); ?>
-------------------------
-%site_name%
-%site_url%
+do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
+<hr>
+<p>
+    <?php echo $data['message'] ?>
+</p>
+<hr>
+<p>
+    <?php echo sprintf( __( 'You can check this announcement in dashboard by clicking <a href="%s">here<a/>', 'dokan' ), $data['announcement_url'] ) ?> .
+</p>
+<?php
+do_action( 'woocommerce_email_footer', $email );
