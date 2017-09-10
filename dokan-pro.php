@@ -257,7 +257,6 @@ class Dokan_Pro {
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_pro_templates' ), 10, 3 );
-        add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
     }
 
     /**
@@ -448,26 +447,6 @@ class Dokan_Pro {
     function set_as_pro( $is_pro ){
         return true;
     }
-
-    /**
-     * Set default product types
-     *
-     * @since 2.6
-     *
-     * @param array $product_types
-     *
-     * @return $product_types
-     */
-    function set_default_product_types( $product_types ) {
-
-        $product_types = array(
-            'simple' => __( 'Simple', 'dokan' ),
-            'variable' => __( 'Variable', 'dokan' ),
-        );
-
-        return $product_types;
-    }
-
 }
 
 add_action( 'init', 'dokan_load_pro', 0 );

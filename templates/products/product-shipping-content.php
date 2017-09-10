@@ -11,7 +11,7 @@
 <?php do_action( 'dokan_product_options_shipping_before', $post_id ); ?>
 
 <?php if ( 'yes' == get_option( 'woocommerce_calc_shipping' ) || 'yes' == get_option( 'woocommerce_calc_taxes' ) ): ?>
-<div class="dokan-product-shipping-tax hide_if_virtual dokan-edit-row dokan-clearfix dokan-border-top <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
+<div class="dokan-product-shipping-tax hide_if_virtual hide_if_grouped dokan-edit-row dokan-clearfix dokan-border-top <?php echo ( 'no' == get_option('woocommerce_calc_shipping') ) ? 'woocommerce-no-shipping' : '' ?> <?php echo ( 'no' == get_option('woocommerce_calc_taxes') ) ? 'woocommerce-no-tax' : '' ?>">
     <div class="dokan-section-heading" data-togglehandler="dokan_product_shipping_tax">
         <h2><i class="fa fa-truck" aria-hidden="true"></i> <?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
         <p><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>

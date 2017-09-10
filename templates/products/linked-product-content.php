@@ -42,5 +42,7 @@
         </div>
 
         <div class="dokan-clearfix"></div>
+
+        <?php do_action( 'dokan_after_linked_product_fields', $post, $post_id ); ?>
     </div>
 </div>

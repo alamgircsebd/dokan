@@ -37,6 +37,9 @@ class Dokan_Pro_Products {
 
         add_filter( 'dokan_get_product_edit_template', array( $this, 'render_product_edit_template' ), 10 );
         add_filter( 'dokan_update_product_post_data', array( $this, 'save_product_post_data' ), 10 );
+        add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
+
+        add_action( 'dokan_after_linked_product_fields', array( $this, 'group_product_content' ), 10, 2 );
     }
 
     /**
@@ -374,10 +377,16 @@ class Dokan_Pro_Products {
         update_post_meta( $post_id, '_crosssell_ids', $crosssells );
 
         // Save variations
-        if ( $product_type == 'variable' ) {
+        if ( 'variable' == $product_type ) {
             dokan_save_variations( $post_id );
         }
 
+        if ( 'grouped' == $product_type && version_compare( WC_VERSION, '2.7', '>' ) ) {
+            $product = wc_get_product( $post_id );
+            $goroup_product_ids = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
+            $product->set_props( array( 'children' => $goroup_product_ids ) );
+            $product->save();
+        }
     }
 
     /**
@@ -507,6 +516,29 @@ class Dokan_Pro_Products {
     }
 
     /**
+     * Set default product types
+     *
+     * @since 2.6
+     *
+     * @param array $product_types
+     *
+     * @return $product_types
+     */
+    function set_default_product_types( $product_types ) {
+
+        $product_types = array(
+            'simple' => __( 'Simple', 'dokan' ),
+            'variable' => __( 'Variable', 'dokan' ),
+        );
+
+        if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
+            $product_types['grouped'] = __( 'Group Product', 'dokan' );
+        }
+
+        return $product_types;
+    }
+
+    /**
      * Send email to admin once a product is updated
      *
      * @since 2.6.5
@@ -559,6 +591,22 @@ class Dokan_Pro_Products {
 
         $email->send( $email->admin_email(), $subject, $body );
         do_action( 'dokan_after_updated_product_email', $email->admin_email(), $subject, $body );
+    }
+
+    /**
+    * Group product content
+    *
+    * @since 2.6.6
+    *
+    * @return void
+    **/
+    public function group_product_content( $post, $post_id ) {
+        dokan_get_template_part( 'products/group-product', '', array(
+            'pro'            => true,
+            'post'           => $post,
+            'post_id'        => $post_id,
+            'product'        => wc_get_product( $post_id )
+        ) );
     }
 
 }
