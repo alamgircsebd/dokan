@@ -775,7 +775,9 @@ class Dokan_Pro_Ajax {
         } else{
             $refund = new Dokan_Pro_Refund;
             $refund->insert_refund($_POST);
-            Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
+            
+            do_action( 'dokan_refund_request_notification',  $_POST['order_id'] );
+//            Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
             $data = __( 'Refund request sent successfully', 'dokan' );
             wp_send_json_success( $data );
         }

@@ -755,8 +755,7 @@ if ( !function_exists( 'dokan_user_update_to_seller' ) ) {
 
         update_user_meta( $user_id, 'dokan_publishing', $publishing );
         //update_user_meta( $user_id, 'dokan_seller_percentage', $percentage );
-
-        Dokan_Email::init()->new_seller_registered_mail( $user_id );
+        do_action( 'dokan_new_seller_created', $user_id, $dokan_settings );
     }
 
 }
@@ -789,8 +788,17 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
 
             if ( !$errors ) {
                 dokan_user_update_to_seller( $user, $_POST );
-
+                
+                $url = dokan_get_navigation_url();
+                
                 wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
+                
+                if ( dokan_get_option( 'disable_welcome_wizard', 'dokan_selling', 'off' ) === 'off' ) {
+                    $url = apply_filters( 'dokan_seller_setup_wizard_url', site_url( '?page=dokan-seller-setup' ) );
+                }
+                
+                wp_redirect( apply_filters( 'dokan_customer_migration_redirect', $url ) );
+
                 exit();
             }
         }
