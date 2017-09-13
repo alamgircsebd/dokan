@@ -83,12 +83,16 @@ class Dokan_Email_Announcement extends WC_Email {
             $this->replace['announcement_url'] = $announcement_url;
             $this->replace['site_name']        = $this->get_from_name();
             $this->replace['site_url']         = site_url();
-
+            
             $this->setup_locale();
-            $this->send( $seller_emails, $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
+            
+            foreach ( $seller_emails as $email ){
+                $this->send( $email, $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
+            }
+            
             $this->restore_locale();
 	}
-        
+     
         /**
 	 * Get content html.
 	 *
