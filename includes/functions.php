@@ -181,7 +181,7 @@ function dokan_get_best_sellers( $limit = 5 ) {
             ORDER BY total_sell DESC LIMIT ".$limit;
 
         $seller = $wpdb->get_results( $qry );
-        wp_cache_set( $cache_key, $seller, 'widget' );
+        wp_cache_set( $cache_key, $seller, 'widget', 3600*6 );
     }
 
     return $seller;
@@ -368,32 +368,22 @@ add_shortcode( 'dokan-customer-migration', 'dokan_render_customer_migration_temp
  * @return array
  */
 function dokan_get_seller_status_count() {
-    global $wpdb;
+    $active_users = new WP_User_Query(
+        array( 'role'       => 'seller',
+            'meta_key'   => 'dokan_enable_selling',
+            'meta_value' => 'yes'
+        )
+    );
 
-    $cache_key = 'dokan_seller_status_count';
-    $counts = wp_cache_get( $cache_key );
+    $all_users      = new WP_User_Query( array( 'role' => 'seller' ) );
+    $active_count   = $active_users->get_total();
+    $inactive_count = $all_users->get_total() - $active_count;
 
-    if ( false === $counts ) {
-        $active_users = new WP_User_Query(
-            array( 'role'       => 'seller',
-                'meta_key'   => 'dokan_enable_selling',
-                'meta_value' => 'yes'
-            )
-        );
+    $counts =  array( 
+        'total' => $active_count + $inactive_count,
+        'active' => $active_count,
+        'inactive' => $inactive_count,
+    );
         
-        $all_users      = new WP_User_Query( array( 'role' => 'seller' ) );
-        $active_count   = $active_users->get_total();
-        $inactive_count = $all_users->get_total() - $active_count;
-
-        $counts =  array( 
-            'total' => $active_count + $inactive_count,
-            'active' => $active_count,
-            'inactive' => $inactive_count,
-        );
-        
-        wp_cache_set( $cache_key, $counts );
-        
-    }
-
     return $counts;
 }
