@@ -788,15 +788,15 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
 
             if ( !$errors ) {
                 dokan_user_update_to_seller( $user, $_POST );
-                
+
                 $url = dokan_get_navigation_url();
-                
+
                 wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
-                
+
                 if ( dokan_get_option( 'disable_welcome_wizard', 'dokan_selling', 'off' ) === 'off' ) {
                     $url = apply_filters( 'dokan_seller_setup_wizard_url', site_url( '?page=dokan-seller-setup' ) );
                 }
-                
+
                 wp_redirect( apply_filters( 'dokan_customer_migration_redirect', $url ) );
 
                 exit();
@@ -807,49 +807,6 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
 }
 
 add_action( 'template_redirect', 'dokan_become_seller_handler' );
-
-/**
- * Flat Rate Shipping made compatible for Orders with multiple seller
- *
- * @since 2.4.3
- *
- * @param array $rates
- * @param array $package
- *
- * @return $rates
- */
-function dokan_multiply_flat_rate_price_by_seller( $rates, $package ) {
-
-    $flat_rate_array = preg_grep( "/^flat_rate:*/", array_keys( $rates ) );
-    $flat_rate       = isset( $flat_rate_array[0] ) ? $flat_rate_array[0] : '';
-
-    foreach ( $package['contents'] as $product ) {
-        $sellers[] = get_post_field( 'post_author', $product['product_id'] );
-    }
-
-    $sellers = array_unique( $sellers );
-
-    $selllers_count = count( $sellers );
-
-    if ( isset( $rates[$flat_rate] ) && !is_null( $rates[$flat_rate] ) ) {
-
-        $rates[$flat_rate]->cost = $rates[$flat_rate]->cost * $selllers_count;
-
-        // we assumed taxes key will always be 1, if different condition appears in future, we'll update the script
-        if ( isset( $rates[$flat_rate]->taxes[1] ) ) {
-            $rates[$flat_rate]->taxes[1] = $rates[$flat_rate]->taxes[1] * $selllers_count;
-        }
-    } elseif ( isset( $rates['international_delivery'] ) && !is_null( $rates['international_delivery'] ) ) {
-
-        $rates['international_delivery']->cost     = $rates['international_delivery']->cost * $selllers_count;
-        // we assumed taxes key will always be 1, if different condition appears in future, we'll update the script
-        $rates['international_delivery']->taxes[1] = $rates['international_delivery']->taxes[1] * $selllers_count;
-    }
-
-    return $rates;
-}
-
-add_filter( 'woocommerce_package_rates', 'dokan_multiply_flat_rate_price_by_seller', 1, 2 );
 
 /**
  * discount amount for lot quantity
@@ -1000,11 +957,11 @@ add_action( 'created_term','dokan_save_category_commission_field', 10, 3 );
 add_action( 'edit_term', 'dokan_save_category_commission_field', 10, 3 );
 
 /**
- * Render commission field on new product category 
- * 
+ * Render commission field on new product category
+ *
  * @since 2.6.6
- * 
- * @return void 
+ *
+ * @return void
  */
 function dokan_add_category_commission_field(){
     ?>
@@ -1018,11 +975,11 @@ function dokan_add_category_commission_field(){
 
 /**
  * Render commission field on edit product category page
- * 
+ *
  * @since 2.6.6
- * 
+ *
  * @param WP_Term $term
- * 
+ *
  * @return void
  */
 function dokan_edit_category_commission_field( $term ){
@@ -1040,13 +997,13 @@ function dokan_edit_category_commission_field( $term ){
 
 /**
  * Save category commission field
- * 
+ *
  * @since 2.6.6
- * 
+ *
  * @param int $term_id
  * @param int $tt_id
  * @param object $taxonomy
- * 
+ *
  * @return void
  */
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
@@ -1054,3 +1011,78 @@ function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy 
         update_woocommerce_term_meta( $term_id, 'per_category_commission', esc_attr( $_POST['per_category_commission'] ) );
     }
 }
+
+
+add_filter( 'woocommerce_cart_shipping_packages', 'dokan_custom_split_shipping_packages' );
+
+function dokan_custom_split_shipping_packages( $packages ) {
+    $cart_content = WC()->cart->get_cart();
+    $seller_pack = array();
+    $packages = array();
+
+    foreach ( $cart_content as $key => $item ) {
+        $post_author = get_post_field( 'post_author', $item['data']->get_id() );
+        $seller_pack[$post_author][$key] = $item;
+    }
+
+    foreach ( $seller_pack as $seller_id => $pack ) {
+        $packages[] = array(
+            'contents'        => $pack,
+            'contents_cost'   => array_sum( wp_list_pluck( $pack, 'line_total' ) ),
+            'applied_coupons' => WC()->cart->get_applied_coupons(),
+            'user'            => array(
+                 'ID' => get_current_user_id(),
+            ),
+            'seller_id'       =>  $seller_id,
+            'destination'     => array(
+                'country'     => WC()->customer->get_shipping_country(),
+                'state'       => WC()->customer->get_shipping_state(),
+                'postcode'    => WC()->customer->get_shipping_postcode(),
+                'city'        => WC()->customer->get_shipping_city(),
+                'address'     => WC()->customer->get_shipping_address(),
+                'address_2'   => WC()->customer->get_shipping_address_2()
+            )
+        );
+    }
+
+    return apply_filters( 'dokan_cart_shipping_packages', $packages );
+}
+
+add_filter( 'woocommerce_shipping_package_name', 'dokan_change_shipping_pack_name', 10, 3 );
+
+function dokan_change_shipping_pack_name( $title, $i, $package ) {
+
+    $user_id = $package['seller_id'];
+
+    if ( empty( $user_id ) ) {
+        return $title;
+    }
+
+    if ( is_array( $user_id ) ) {
+        $user_id = reset( $user_id );
+    }
+
+    $store_info   = dokan_get_store_info( $user_id );
+
+    $shipping_label = sprintf( '%s %s', __( 'Shipping: ', 'dokan' ), !empty( $store_info['store_name'] ) ? $store_info['store_name'] : '' );
+
+    return apply_filters( 'dokan_shipping_package_name', $shipping_label );
+}
+
+add_action( 'woocommerce_checkout_create_order_shipping_item', 'dokan_add_shipping_pack_meta', 10, 4 );
+
+function dokan_add_shipping_pack_meta( $item, $package_key, $package, $order ) {
+    $item->add_meta_data( 'seller_id', $package['seller_id'], true );
+}
+
+
+
+
+
+
+
+
+
+
+
+
