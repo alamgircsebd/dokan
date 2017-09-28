@@ -1,7 +1,7 @@
 <?php
 
 Class Dokan_Social_Login {
-    
+
     private $base_url;
     /**
      * Load automatically when class instantiated
@@ -11,7 +11,7 @@ Class Dokan_Social_Login {
      * @uses actions|filter hooks
      */
     public function __construct() {
-        $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ). '/social-register';
+        $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ) . 'dokan-registration';
         $this->init_hooks();
     }
 
@@ -33,31 +33,29 @@ Class Dokan_Social_Login {
     }
 
     public function init_hooks() {
-        
+
         //Hybrid auth action
         add_action( 'init', array( $this, 'init_session' ) );
         add_action( 'init', array( $this, 'monitor_autheticate_requests' ) );
-        
+
         //add settings menu page
         add_filter( 'dokan_settings_sections', array( $this, 'dokan_social_api_settings' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'dokan_social_settings_fields' ) );
-        
+
         // add social buttons on registration form
         add_action( 'woocommerce_register_form_end', array( $this, 'render_social_logins' ) );
         // add hybridauth library
-        
-        
         //add custom my account end-point
         add_filter( 'dokan_query_var_filter', array( $this, 'register_support_queryvar' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin' ) );
     }
-    
+
     public function init_session() {
         if ( session_id() == '' ) {
             session_start();
         }
     }
-    
+
     /**
      * Monitors Url for Hauth Request and process Hauth for authentication
      *
@@ -68,15 +66,14 @@ Class Dokan_Social_Login {
     public function monitor_autheticate_requests() {
         global $current_user;
 
-        if ( !class_exists( 'WeDevs_Dokan' )){
+        if ( !class_exists( 'WeDevs_Dokan' ) ) {
             return;
         }
 
-        $config = array(
+        $config    = array(
             'base_url'   => $this->base_url,
             "debug_mode" => false,
-
-            'providers' => array(
+            'providers'  => array(
                 "Facebook" => array(
                     "enabled" => true,
                     "keys"    => array( "id" => "", "secret" => "" ),
@@ -85,8 +82,8 @@ Class Dokan_Social_Login {
                 "Google"   => array(
                     "enabled"         => true,
                     "keys"            => array( "id" => "", "secret" => "" ),
-                    "scope"           => "https://www.googleapis.com/auth/userinfo.profile ". // optional
-                                        "https://www.googleapis.com/auth/userinfo.email"   , // optional
+                    "scope"           => "https://www.googleapis.com/auth/userinfo.profile " . // optional
+                    "https://www.googleapis.com/auth/userinfo.email", // optional
                     "access_type"     => "offline",
                     "approval_prompt" => "force",
                     "hd"              => home_url()
@@ -101,8 +98,6 @@ Class Dokan_Social_Login {
                 ),
             )
         );
-        //var_dump($config);
-
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_social_api' );
         $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_social_api' );
@@ -147,9 +142,6 @@ Class Dokan_Social_Login {
             Hybrid_Endpoint::process();
             exit;
         }
-        
-        
-     
 
         if ( isset( $_GET['dokan_reg_dc'] ) ) {
 
@@ -163,18 +155,17 @@ Class Dokan_Social_Login {
 
             return;
         }
-           
+
         if ( !isset( $_GET['dokan_reg'] ) ) {
             return;
         }
 
         $hybridauth = new Hybrid_Auth( $config );
         $provider   = $_GET['dokan_reg'];
-        
+
         try {
             if ( $provider != '' ) {
                 $adapter        = $hybridauth->authenticate( $provider );
-                var_dump( $adapter );
                 $user_profile   = $adapter->getUserProfile();
                 $seller_profile = dokan_get_store_info( $current_user->ID );
 
@@ -184,7 +175,7 @@ Class Dokan_Social_Login {
                 $seller_profile = dokan_get_store_info( $current_user->ID );
             }
         } catch ( Exception $e ) {
-           $this->e_msg = $e->getMessage();
+            $this->e_msg = $e->getMessage();
         }
     }
 
@@ -197,7 +188,7 @@ Class Dokan_Social_Login {
     }
 
     public function dokan_social_settings_fields( $settings_fields ) {
-        
+
         $settings_fields['dokan_social_api'] = array(
             'facebook_app_label'  => array(
                 'name'  => 'fb_app_label',
@@ -288,10 +279,10 @@ Class Dokan_Social_Login {
                 'type'  => 'text',
             ),
         );
-        
+
         return $settings_fields;
     }
-    
+
     /**
      * Register dokan query vars
      *
@@ -306,7 +297,7 @@ Class Dokan_Social_Login {
 
         return $vars;
     }
-    
+
     /**
      * Register page templates
      *
@@ -323,35 +314,53 @@ Class Dokan_Social_Login {
             include $template;
         }
     }
-    
+
     public function render_social_logins() {
+        $configured_providers = array();
+
+        //facebook config from admin
+        $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_social_api' );
+        $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_social_api' );
+        if ( $fb_id != '' && $fb_secret != '' ) {
+            $configured_providers [] = 'facebook';
+        }
+        //google config from admin
+        $g_id     = dokan_get_option( 'google_app_id', 'dokan_social_api' );
+        $g_secret = dokan_get_option( 'google_app_secret', 'dokan_social_api' );
+        if ( $g_id != '' && $g_secret != '' ) {
+            $configured_providers [] = 'googleplus';
+        }
+        //linkedin config from admin
+        $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_social_api' );
+        $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_social_api' );
+        if ( $l_id != '' && $l_secret != '' ) {
+            $configured_providers [] = 'linkedin';
+        }
+        //Twitter config from admin
+        $twitter_id     = dokan_get_option( 'twitter_app_id', 'dokan_social_api' );
+        $twitter_secret = dokan_get_option( 'twitter_app_secret', 'dokan_social_api' );
+        if ( $twitter_id != '' && $twitter_secret != '' ) {
+            $configured_providers [] = 'twitter';
+        }
+
+        /**
+         * Filter the list of Providers connect links to display
+         *
+         * @since 1.0.0
+         *
+         * @param array $providers
+         */
+        $providers = apply_filters( 'dokan_social_provider_list', $configured_providers );
         
-        
-        ?>
-        <div class="jssocials-shares">
-            <div class="jssocials-share jssocials-share-facebook">
-                <a target="_blank" href="https://facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%2Ftestwp%2Fstore%2Fseller_a%2F" class="jssocials-share-link">
-                    <i class="fa fa-facebook jssocials-share-logo"></i>
-                </a>
-            </div>
-            <div class="jssocials-share jssocials-share-twitter">
-                <a target="_blank" href="https://twitter.com/share?url=http%3A%2F%2Flocalhost%2Ftestwp%2Fstore%2Fseller_a%2F&amp;text=my%20store" class="jssocials-share-link">
-                    <i class="fa fa-twitter jssocials-share-logo"></i>
-                </a>
-            </div>
-            <div class="jssocials-share jssocials-share-googleplus">
-                <a target="_blank" href="https://plus.google.com/share?url=http%3A%2F%2Flocalhost%2Ftestwp%2Fstore%2Fseller_a%2F" class="jssocials-share-link">
-                    <i class="fa fa-google jssocials-share-logo"></i>
-                </a>
-            </div>
-            <div class="jssocials-share jssocials-share-linkedin">
-                <a target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Flocalhost%2Ftestwp%2Fstore%2Fseller_a%2F" class="jssocials-share-link">
-                    <i class="fa fa-linkedin jssocials-share-logo"></i>
-                </a>
-            </div>
-        <?php
+        $data = array( 
+            'base_url'  => $this->base_url,
+            'providers' => $providers,
+            'pro'       => true 
+        );
+
+        dokan_get_template_part( 'global/social-registration', '',$data );
+        }
     }
 
-}
-
-$dokan_social_login = Dokan_Social_Login::init();
+    $dokan_social_login = Dokan_Social_Login::init();
+    
