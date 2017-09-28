@@ -1,0 +1,62 @@
+# Copyright (C) 2017 
+# This file is distributed under the same license as the  package.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: support@wedevs.com\n"
+"POT-Creation-Date: 2017-06-01 07:06:54+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"X-Generator: grunt-wp-i18n1.0.0\n"
+
+#: enquiry.php:153
+msgid "Boo ya!"
+msgstr ""
+
+#: enquiry.php:180 enquiry.php:187
+msgid "Something went wrong!"
+msgstr ""
+
+#: enquiry.php:222
+msgid "\"%s\" sent you a message from your \"%s\" store"
+msgstr ""
+
+#: enquiry.php:237
+msgid "Email sent successfully!"
+msgstr ""
+
+#: enquiry.php:266 enquiry.php:298
+msgid "Product Enquiry"
+msgstr ""
+
+#: enquiry.php:284
+msgid "Guest Product Enquiry"
+msgstr ""
+
+#: enquiry.php:285
+msgid "Enable/Disable product enquiry for guest user"
+msgstr ""
+
+#: enquiry.php:308
+msgid "Please Login to make enquiry about this product"
+msgstr ""
+
+#: enquiry.php:311
+msgid "Login"
+msgstr ""
+
+#: enquiry.php:315
+msgid "Your Name"
+msgstr ""
+
+#: enquiry.php:328
+msgid "Details about your enquiry..."
+msgstr ""
+
+#: enquiry.php:338
+msgid "Submit Enquiry"
+msgstr ""

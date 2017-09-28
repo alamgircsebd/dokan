@@ -71,8 +71,45 @@ class Dokan_Pro {
         return $instance;
     }
 
+    /**
+     * Placeholder for activation function
+     *
+     * Nothing being called here yet.
+     */
+    public static function activate() {
+        self::maybe_activate_modules();
+    }
 
-        /**
+    /**
+    * Maybe Activate modules
+    *
+    * @since 1.0.0
+    *
+    * @return void
+    **/
+    public static function maybe_activate_modules() {
+        global $wpdb;
+
+        $has_installed = $wpdb->get_row( "SELECT option_id FROM {$wpdb->options} WHERE option_name = 'dokan_pro_active_modules'" );
+
+        if ( $has_installed ) {
+            return;
+        }
+
+        if ( ! function_exists( 'dokan_pro_get_modules' ) ) {
+            require_once dirname( __FILE__) . '/includes/modules.php';
+        }
+
+        $modules = dokan_pro_get_modules();
+
+        if ( $modules ) {
+            foreach ($modules as $module_file => $data) {
+                dokan_pro_activate_module( $module_file );
+            }
+        }
+    }
+
+    /**
     * Dokan main plugin activation notice
     *
     * @since 2.5.2
@@ -195,6 +232,20 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
         require_once DOKAN_PRO_CLASS . '/store-share.php';
 
+        if ( ! function_exists( 'dokan_pro_get_active_modules' ) ) {
+            require_once dirname( __FILE__) . '/includes/modules.php';
+        }
+        // load all the active modules
+        $modules = dokan_pro_get_active_modules();
+
+        if ( $modules ) {
+            foreach ( $modules as $module_file ) {
+                $module_path = dirname( __FILE__ )  . '/includes/modules/' . $module_file;
+                if ( file_exists( $module_path ) ) {
+                    include_once $module_path;
+                }
+            }
+        }
     }
 
     /**
@@ -357,10 +408,19 @@ class Dokan_Pro {
     * @return void
     **/
     public function admin_enqueue_scripts() {
-        wp_enqueue_script( 'dokan_pro_admin', DOKAN_PRO_PLUGIN_ASSEST.'/js/dokan-pro-admin.js', array( 'jquery' ) );
+        wp_enqueue_script( 'jquery-blockui', WC()->plugin_url() . '/assets/js/jquery-blockui/jquery.blockUI.min.js', array( 'jquery' ), null, true );
+        wp_enqueue_script( 'dokan_pro_admin', DOKAN_PRO_PLUGIN_ASSEST.'/js/dokan-pro-admin.js', array( 'jquery', 'jquery-blockui' ) );
 
         $dokan_refund = dokan_get_refund_localize_data();
+        $dokan_admin = apply_filters( 'dokan_admin_localize_param', array(
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'dokan-admin-nonce' ),
+            'activating' => __( 'Activating', 'dokan' ),
+            'deactivating' => __( 'Deactivating', 'dokan' )
+        ) );
+
         wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );
+        wp_localize_script( 'dokan_pro_admin', 'dokan_admin', $dokan_admin );
     }
 
     /**
@@ -523,3 +583,5 @@ add_action( 'init', 'dokan_load_pro', 0 );
 function dokan_load_pro() {
     Dokan_Pro::init();
 }
+
+register_activation_hook( __FILE__, array( 'Dokan_Pro', 'activate' ) );
