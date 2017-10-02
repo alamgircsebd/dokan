@@ -3,6 +3,8 @@
 Class Dokan_Social_Login {
 
     private $base_url;
+    private $config;
+    
     /**
      * Load automatically when class instantiated
      *
@@ -12,6 +14,7 @@ Class Dokan_Social_Login {
      */
     public function __construct() {
         $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ) . 'dokan-registration';
+        $this->config   = $this->get_providers_config();
         $this->init_hooks();
     }
 
@@ -56,48 +59,32 @@ Class Dokan_Social_Login {
         }
     }
 
-    /**
-     * Monitors Url for Hauth Request and process Hauth for authentication
-     *
-     * @global type $current_user
-     *
-     * @return void
-     */
-    public function monitor_autheticate_requests() {
-        global $current_user;
+    private function get_providers_config() {
 
-        if ( !class_exists( 'WeDevs_Dokan' ) ) {
-            return;
-        }
-
-        $config    = array(
-            'base_url'   => $this->base_url,
-            "debug_mode" => false,
-            'providers'  => array(
-                "Facebook" => array(
+        $config    = array( 'providers' => array(
+                'base_url'   => $this->base_url,
+                "debug_mode" => false,
+                "Google"     => array(
                     "enabled" => true,
                     "keys"    => array( "id" => "", "secret" => "" ),
-                    "scope"   => "email, public_profile, user_friends"
                 ),
-                "Google"   => array(
-                    "enabled"         => true,
-                    "keys"            => array( "id" => "", "secret" => "" ),
-                    "scope"           => "https://www.googleapis.com/auth/userinfo.profile " . // optional
-                    "https://www.googleapis.com/auth/userinfo.email", // optional
-                    "access_type"     => "offline",
-                    "approval_prompt" => "force",
-                    "hd"              => home_url()
+                "Facebook"   => array(
+                    "enabled"        => true,
+                    "keys"           => array( "id" => "", "secret" => "" ),
+                    "trustForwarded" => false,
+                    "scope"          => "email, public_profile, user_friends"
                 ),
-                "LinkedIn" => array(
+                "Twitter"    => array(
+                    "enabled"      => true,
+                    "keys"         => array( "key" => "", "secret" => "" ),
+                    "includeEmail" => true,
+                ),
+                "LinkedIn"   => array(
                     "enabled" => true,
-                    "keys"    => array( "key" => "", "secret" => "" ),
+                    "keys"    => array( "id" => "", "secret" => "" ),
+                    "fields"  => array(),
                 ),
-                "Twitter"  => array(
-                    "enabled" => true,
-                    "keys"    => array( "key" => "", "secret" => "" ),
-                ),
-            )
-        );
+        ) );
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_social_api' );
         $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_social_api' );
@@ -116,7 +103,7 @@ Class Dokan_Social_Login {
         $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_social_api' );
         $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_social_api' );
         if ( $l_id != '' && $l_secret != '' ) {
-            $config['providers']['LinkedIn']['keys']['key']    = $l_id;
+            $config['providers']['LinkedIn']['keys']['id']     = $l_id;
             $config['providers']['LinkedIn']['keys']['secret'] = $l_secret;
         }
         //Twitter config from admin
@@ -136,6 +123,24 @@ Class Dokan_Social_Login {
          */
         $config = apply_filters( 'dokan_social_providers_config', $config );
 
+        return $config;
+    }
+
+    /**
+     * Monitors Url for Hauth Request and process Hauth for authentication
+     *
+     * @global type $current_user
+     *
+     * @return void
+     */
+    public function monitor_autheticate_requests() {
+
+        if ( !class_exists( 'WeDevs_Dokan' ) ) {
+            return;
+        }
+
+        $config = $this->config;
+
         if ( isset( $_GET['hauth_start'] ) || isset( $_GET['hauth_done'] ) ) {
             require_once DOKAN_PRO_INC . '/lib/Hybrid/Endpoint.php';
 
@@ -143,16 +148,8 @@ Class Dokan_Social_Login {
             exit;
         }
 
+        //disconnect user
         if ( isset( $_GET['dokan_reg_dc'] ) ) {
-
-            $seller_profile = dokan_get_store_info( $current_user->ID );
-
-            $provider_dc = sanitize_text_field( $_GET['dokan_reg_dc'] );
-
-            $seller_profile['dokan-social-api'][$provider_dc] = '';
-
-            update_user_meta( $current_user->ID, 'dokan_profile_settings', $seller_profile );
-
             return;
         }
 
