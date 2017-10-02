@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Dokan Social login class
+ * 
+ * @since 2.6.6
+ * 
+ * @package dokan-pro
+ * 
+ */
+
 Class Dokan_Social_Login {
 
     private $base_url;
@@ -34,7 +43,10 @@ Class Dokan_Social_Login {
 
         return $instance;
     }
-
+    
+    /**
+     * call actions and hooks
+     */
     public function init_hooks() {
 
         //Hybrid auth action
@@ -52,13 +64,21 @@ Class Dokan_Social_Login {
         add_filter( 'dokan_query_var_filter', array( $this, 'register_support_queryvar' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin' ) );
     }
-
+    
+    /**
+     * Initialize session at start
+     */
     public function init_session() {
         if ( session_id() == '' ) {
             session_start();
         }
     }
-
+    
+    /**
+     * Get configuration values for HybridAuth
+     * 
+     * @return array
+     */
     private function get_providers_config() {
 
         $config    = array( 'providers' => array(
@@ -129,8 +149,6 @@ Class Dokan_Social_Login {
     /**
      * Monitors Url for Hauth Request and process Hauth for authentication
      *
-     * @global type $current_user
-     *
      * @return void
      */
     public function monitor_autheticate_requests() {
@@ -149,9 +167,9 @@ Class Dokan_Social_Login {
         }
 
         //disconnect user
-        if ( isset( $_GET['dokan_reg_dc'] ) ) {
-            return;
-        }
+//        if ( isset( $_GET['dokan_reg_dc'] ) ) {
+//            return;
+//        }
 
         if ( !isset( $_GET['dokan_reg'] ) ) {
             return;
@@ -181,9 +199,17 @@ Class Dokan_Social_Login {
             }
         } catch ( Exception $e ) {
             $this->e_msg = $e->getMessage();
+            error_log( $this->e_msg );
         }
     }
-
+    
+    /**
+     * Filter admin menu settings section
+     * 
+     * @param type $sections
+     * 
+     * @return array
+     */
     public function dokan_social_api_settings( $sections ) {
         $sections[] = array(
             'id'    => 'dokan_social_api',
@@ -191,7 +217,14 @@ Class Dokan_Social_Login {
         );
         return $sections;
     }
-
+    
+    /**
+     * Render settings fields for admin settings section
+     * 
+     * @param array $settings_fields
+     * 
+     * @return array
+     */
     public function dokan_social_settings_fields( $settings_fields ) {
 
         $settings_fields['dokan_social_api'] = array(
@@ -320,7 +353,12 @@ Class Dokan_Social_Login {
             include $template;
         }
     }
-
+    
+    /**
+     * Render social login icons
+     * 
+     * @return void
+     */
     public function render_social_logins() {
         $configured_providers = array();
 
@@ -394,8 +432,17 @@ Class Dokan_Social_Login {
         }
     }
     
+    /**
+     * Register a new user
+     * 
+     * @param object $data
+     * 
+     * @param string $provider
+     * 
+     * @return void
+     */
     private function register_new_user( $data, $provider ) {
-        error_log( print_r( $data ) );
+
         $userdata = array(
             'user_login' => $this->generate_unique_username( $data->displayName ),
             'user_email' => $data->email,
@@ -405,15 +452,21 @@ Class Dokan_Social_Login {
         );
         
         $user_id = @wp_insert_user( $userdata );
-        error_log( print_r( $userdata, true ) );
+
         if ( !is_wp_error( $user_id ) ) {
             $this->login_user( get_userdata( $user_id ) );
-            error_log( 'redirecting to :'.$this->base_url );
             wp_redirect( $this->base_url );
             exit();
         }
     }
     
+    /**
+     * Log in existing users
+     * 
+     * @param WP_User $wp_user
+     * 
+     * return void
+     */
     private function login_user( $wp_user ) {
         clean_user_cache( $wp_user->ID );
         wp_clear_auth_cookie();
