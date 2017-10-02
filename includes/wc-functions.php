@@ -774,7 +774,6 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
 
             $checks = apply_filters( 'dokan_customer_migration_required_fields', array(
                 'fname'    => __( 'Enter your first name', 'dokan' ),
-                'lname'    => __( 'Enter your last name', 'dokan' ),
                 'shopname' => __( 'Enter your shop name', 'dokan' ),
                 'address'  => __( 'Enter your shop address', 'dokan' ),
                 'phone'    => __( 'Enter your phone number', 'dokan' ),
@@ -1075,14 +1074,25 @@ function dokan_add_shipping_pack_meta( $item, $package_key, $package, $order ) {
     $item->add_meta_data( 'seller_id', $package['seller_id'], true );
 }
 
+/**
+ * Handles the social registration form
+ *
+ * @return void
+ */
+if ( !function_exists( 'dokan_social_reg_handler' ) ) {
 
+    function dokan_social_reg_handler() {
+        if ( isset( $_POST['dokan_social'] ) && wp_verify_nonce( $_POST['dokan_nonce'], 'account_migration' ) ) {
+            $userdata  = get_userdata( get_current_user_id() );
+            
+            $userdata->first_name = sanitize_text_field( $_POST[ 'fname' ] );
+            $userdata->last_name = sanitize_text_field( $_POST[ 'lname' ] );
+            
+            wp_update_user( $userdata );
 
+            wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
+add_action( 'template_redirect', 'dokan_social_reg_handler' );

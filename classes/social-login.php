@@ -13,7 +13,7 @@ Class Dokan_Social_Login {
      * @uses actions|filter hooks
      */
     public function __construct() {
-        $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ) . 'dokan-registration';
+        $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ) . 'dokan-registration/edit';
         $this->config   = $this->get_providers_config();
         $this->init_hooks();
     }
@@ -162,14 +162,22 @@ Class Dokan_Social_Login {
 
         try {
             if ( $provider != '' ) {
-                $adapter        = $hybridauth->authenticate( $provider );
-                $user_profile   = $adapter->getUserProfile();
-                $seller_profile = dokan_get_store_info( $current_user->ID );
+                $adapter = $hybridauth->authenticate( $provider );
 
-                $seller_profile['dokan-social-api'][$provider] = (array) $user_profile;
+                if ( $adapter->isUserConnected() ) {
+                    $user_profile = $adapter->getUserProfile();
+                } else {
+                    wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
+                    wp_redirect( $this->base_url );
+                }
 
-                update_user_meta( $current_user->ID, 'dokan_profile_settings', $seller_profile );
-                $seller_profile = dokan_get_store_info( $current_user->ID );
+                $wp_user = get_user_by( 'email', $user_profile->email );
+             
+                if ( !$wp_user ) {
+                    $this->register_new_user( $user_profile, $provider );
+                } else {
+                    $this->login_user( $wp_user );
+                }
             }
         } catch ( Exception $e ) {
             $this->e_msg = $e->getMessage();
@@ -197,7 +205,7 @@ Class Dokan_Social_Login {
                 'name'  => 'fb_app_url',
                 'label' => __( 'Site Url', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?hauth.done=Facebook' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=facebook&hauth.done=Facebook' . '>',
             ),
             'facebook_app_id'     => array(
                 'name'  => 'fb_app_id',
@@ -219,7 +227,7 @@ Class Dokan_Social_Login {
                 'name'  => 'twitter_app_url',
                 'label' => __( 'Callback URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?hauth.done=Twitter' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=twitter&hauth.done=Twitter' . '>',
             ),
             'twitter_app_id'      => array(
                 'name'  => 'twitter_app_id',
@@ -241,7 +249,7 @@ Class Dokan_Social_Login {
                 'name'  => 'google_app_url',
                 'label' => __( 'Redirect URI', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?hauth.done=Google' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=google&hauth.done=Google' . '>',
             ),
             'google_app_id'       => array(
                 'name'  => 'google_app_id',
@@ -263,7 +271,7 @@ Class Dokan_Social_Login {
                 'name'  => 'linkedin_app_url',
                 'label' => __( 'Redirect URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?hauth.done=LinkedIn' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=linkedin&hauth.done=LinkedIn' . '>',
             ),
             'linkedin_app_id'     => array(
                 'name'  => 'linkedin_app_id',
@@ -291,6 +299,7 @@ Class Dokan_Social_Login {
      */
     function register_support_queryvar( $vars ) {
         $vars[] = 'social-register';
+        $vars[] = 'dokan-registration';
 
         return $vars;
     }
@@ -306,7 +315,7 @@ Class Dokan_Social_Login {
      */
     function load_template_from_plugin( $query_vars ) {
 
-        if ( isset( $query_vars['social-register'] ) ) {
+        if ( isset( $query_vars['dokan-registration'] ) ) {
             $template = DOKAN_PRO_DIR . '/templates/global/social-register.php';
             include $template;
         }
@@ -325,7 +334,7 @@ Class Dokan_Social_Login {
         $g_id     = dokan_get_option( 'google_app_id', 'dokan_social_api' );
         $g_secret = dokan_get_option( 'google_app_secret', 'dokan_social_api' );
         if ( $g_id != '' && $g_secret != '' ) {
-            $configured_providers [] = 'googleplus';
+            $configured_providers [] = 'google';
         }
         //linkedin config from admin
         $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_social_api' );
@@ -348,16 +357,72 @@ Class Dokan_Social_Login {
          * @param array $providers
          */
         $providers = apply_filters( 'dokan_social_provider_list', $configured_providers );
-        
-        $data = array( 
+
+        $data = array(
             'base_url'  => $this->base_url,
             'providers' => $providers,
-            'pro'       => true 
+            'pro'       => true
         );
 
-        dokan_get_template_part( 'global/social-registration', '',$data );
-        }
+        dokan_get_template_part( 'global/social-registration', '', $data );
     }
 
-    $dokan_social_login = Dokan_Social_Login::init();
+    /**
+     * Recursive function to generate a unique username.
+     *
+     * If the username already exists, will add a numerical suffix which will increase until a unique username is found.
+     *
+     * @param string $username
+     *
+     * @return string The unique username.
+     */
+    function generate_unique_username( $username ) {
+        static $i;
+        if ( null === $i ) {
+            $i = 1;
+        } else {
+            $i++;
+        }
+        if ( !username_exists( $username ) ) {
+            return $username;
+        }
+        $new_username = sprintf( '%s_%s', $username, $i );
+        if ( !username_exists( $new_username ) ) {
+            return $new_username;
+        } else {
+            return call_user_func( array( $this, 'generate_unique_username' ), $username );
+        }
+    }
     
+    private function register_new_user( $data, $provider ) {
+        error_log( print_r( $data ) );
+        $userdata = array(
+            'user_login' => $this->generate_unique_username( $data->displayName ),
+            'user_email' => $data->email,
+            'first_name' => $data->firstName,
+            'last_name'  => $data->lastName,
+            'role'       => 'customer',
+        );
+        
+        $user_id = @wp_insert_user( $userdata );
+        error_log( print_r( $userdata, true ) );
+        if ( !is_wp_error( $user_id ) ) {
+            $this->login_user( get_userdata( $user_id ) );
+            error_log( 'redirecting to :'.$this->base_url );
+            wp_redirect( $this->base_url );
+            exit();
+        }
+    }
+    
+    private function login_user( $wp_user ) {
+        clean_user_cache( $wp_user->ID );
+        wp_clear_auth_cookie();
+        wp_set_current_user( $wp_user->ID );
+        wp_set_auth_cookie( $wp_user->ID, true, false );
+        update_user_caches( $wp_user );
+        error_log( 'Logged in user : '.$wp_user->ID );
+    }
+
+}
+
+$dokan_social_login = Dokan_Social_Login::init();
