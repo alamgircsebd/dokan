@@ -64,6 +64,7 @@ class Dokan_Pro_Store_Share {
         // register styles
         wp_register_style( 'dokan-social-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/jssocials.css', false, time(), 'all' );
         wp_register_style( 'dokan-social-theme-minimal', DOKAN_PRO_PLUGIN_ASSEST . '/css/jssocials-theme-minima.css', false, time(), 'all' );
+        wp_register_style( 'dokan-social-theme-flat', DOKAN_PRO_PLUGIN_ASSEST . '/css/jssocials-theme-flat.css', false, time(), 'all' );
 
         // register scripts
         wp_register_script( 'dokan-social-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/jssocials.min.js', array( 'jquery', 'dokan-script' ), null, true );
@@ -81,6 +82,11 @@ class Dokan_Pro_Store_Share {
             wp_enqueue_style( 'dokan-magnific-popup' );
             wp_enqueue_script( 'dokan-popup' );
             wp_enqueue_style( 'dokan-social-theme-minimal' );
+        }
+        
+        if ( is_account_page() ) {
+            wp_enqueue_style( 'dokan-social-style' );
+            wp_enqueue_style( 'dokan-social-theme-flat' );
         }
     }
     

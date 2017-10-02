@@ -194,11 +194,15 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
         require_once DOKAN_PRO_CLASS . '/store-share.php';
-
+        require_once DOKAN_PRO_CLASS . '/social-login.php';
+        
+        if ( !class_exists( 'Hybrid_Auth' ) ) {
+            require_once DOKAN_PRO_INC. '/lib/Hybrid/Auth.php';
+        }
     }
 
     /**
-     * Inistantiate all classes
+     * Instantiate all classes
      *
      * @since 2.4
      *
@@ -256,6 +260,7 @@ class Dokan_Pro {
         add_filter( 'dokan_is_pro_exists', array( $this, 'set_as_pro' ), 99 );
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
+        add_filter( 'woocommerce_locate_template', array( $this, 'dokan_registration_template' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_pro_templates' ), 10, 3 );
 
         //Dokan Email filters for WC Email
@@ -390,6 +395,7 @@ class Dokan_Pro {
         $query_vars[] = 'announcement';
         $query_vars[] = 'single-announcement';
         $query_vars[] = 'account-migration';
+        $query_vars[] = 'dokan-registration';
 
         return $query_vars;
     }
@@ -422,6 +428,18 @@ class Dokan_Pro {
             $file = dokan_locate_template( 'global/update-account.php', '', DOKAN_PRO_DIR. '/templates/', true );
         }
 
+        return $file;
+    }
+    
+    /**
+     * 
+     * @param type $file
+     * @return type
+     */
+    function dokan_registration_template( $file ) {
+        if ( get_query_var( 'dokan-registration' ) && dokan_is_user_customer( get_current_user_id() ) && basename( $file ) == 'my-account.php' ) {
+            $file = dokan_locate_template( 'global/dokan-registration.php', '', DOKAN_PRO_DIR . '/templates/', true );
+        }
         return $file;
     }
 
