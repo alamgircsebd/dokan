@@ -7,8 +7,3 @@
     </div>
 <?php  endforeach; ?>
 </div>
-<style>
-    .fa-googleplus:before {
-    content: "\f1a0";
-}
-</style>
