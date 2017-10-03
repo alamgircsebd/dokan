@@ -91,10 +91,7 @@ class Dokan_Product_Importer{
      */
     public function __construct() {
         register_activation_hook( __FILE__, array( $this, 'activate' ) );
-        register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-        // Localize our plugin
-        add_action( 'init', array( $this, 'localization_setup' ) );
         add_action( 'init', array( $this, 'do_product_export' ),99 );
 
         // Loads frontend scripts and styles
@@ -157,24 +154,6 @@ class Dokan_Product_Importer{
     }
 
     /**
-     * Placeholder for deactivation function
-     *
-     * Nothing being called here yet.
-     */
-    public function deactivate() {
-
-    }
-
-    /**
-     * Initialize plugin for localization
-     *
-     * @uses load_plugin_textdomain()
-     */
-    public function localization_setup() {
-        load_plugin_textdomain( 'dpi_plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-    }
-
-    /**
      * Enqueue admin scripts
      *
      * Allows plugin assets to be loaded.
@@ -209,14 +188,14 @@ class Dokan_Product_Importer{
 
             if ( $installed_version >= '2.4' ) {
                 $urls['tools'] = array(
-                    'title' => __( 'Tools', 'dpi_plugin'),
+                    'title' => __( 'Tools', 'dokan'),
                     'icon' => '<i class="fa fa-wrench"></i>',
                     'url' => dokan_get_navigation_url( 'tools' ),
                     'pos' => 182
                 );
             } else {
                 $urls['tools'] = array(
-                    'title' => __( 'Tools', 'dpi_plugin'),
+                    'title' => __( 'Tools', 'dokan'),
                     'icon' => '<i class="fa fa-wrench"></i>',
                     'url' => dokan_get_navigation_url( 'tools' )
                 );
@@ -369,7 +348,7 @@ class Dokan_Product_Importer{
                 if ( isset($cat['term_id']) )
                     $this->processed_terms[intval($cat['term_id'])] = $id;
             } else {
-                printf( __( 'Failed to import category %s', 'dpi_plugin' ), esc_html($cat['category_nicename']) );
+                printf( __( 'Failed to import category %s', 'dokan' ), esc_html($cat['category_nicename']) );
                 if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
                     echo ': ' . $id->get_error_message();
                 echo '<br />';
@@ -409,7 +388,7 @@ class Dokan_Product_Importer{
                 if ( isset($tag['term_id']) )
                     $this->processed_terms[intval($tag['term_id'])] = $id['term_id'];
             } else {
-                printf( __( 'Failed to import post tag %s', 'dpi_plugin' ), esc_html($tag['tag_name']) );
+                printf( __( 'Failed to import post tag %s', 'dokan' ), esc_html($tag['tag_name']) );
                 if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
                     echo ': ' . $id->get_error_message();
                 echo '<br />';
@@ -455,7 +434,7 @@ class Dokan_Product_Importer{
                 if ( isset($term['term_id']) )
                     $this->processed_terms[intval($term['term_id'])] = $id['term_id'];
             } else {
-                printf( __( 'Failed to import %s %s', 'dpi_plugin' ), esc_html($term['term_taxonomy']), esc_html($term['term_name']) );
+                printf( __( 'Failed to import %s %s', 'dokan' ), esc_html($term['term_taxonomy']), esc_html($term['term_name']) );
                 if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
                     echo ': ' . $id->get_error_message();
                 echo '<br />';
@@ -480,7 +459,7 @@ class Dokan_Product_Importer{
             $post = apply_filters( 'wp_import_post_data_raw', $post );
 
             if ( ! post_type_exists( $post['post_type'] ) ) {
-                printf( __( 'Failed to import &#8220;%s&#8221;: Invalid post type %s', 'dpi_plugin' ),
+                printf( __( 'Failed to import &#8220;%s&#8221;: Invalid post type %s', 'dokan' ),
                     esc_html($post['post_title']), esc_html($post['post_type']) );
                 echo '<br />';
                 do_action( 'wp_import_post_exists', $post );
@@ -497,7 +476,7 @@ class Dokan_Product_Importer{
 
             $post_exists = $this->post_exists( $post['post_title'], '', $post['post_date'] );
             if ( $post_exists && get_post_type( $post_exists ) == $post['post_type'] ) {
-                printf( __('%s &#8220;%s&#8221; already exists.', 'dpi_plugin'), $post_type_object->labels->singular_name, esc_html($post['post_title']) );
+                printf( __('%s &#8220;%s&#8221; already exists.', 'dokan'), $post_type_object->labels->singular_name, esc_html($post['post_title']) );
                 echo '<br />';
                 $comment_post_ID = $post_id = $post_exists;
             } else {
@@ -557,7 +536,7 @@ class Dokan_Product_Importer{
                 }
 
                 if ( is_wp_error( $post_id ) ) {
-                    printf( __( 'Failed to import %s &#8220;%s&#8221;', 'dpi_plugin' ),
+                    printf( __( 'Failed to import %s &#8220;%s&#8221;', 'dokan' ),
                         $post_type_object->labels->singular_name, esc_html($post['post_title']) );
                     if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
                         echo ': ' . $post_id->get_error_message();
@@ -591,7 +570,7 @@ class Dokan_Product_Importer{
                             $term_id = $t['term_id'];
                             do_action( 'wp_import_insert_term', $t, $term, $post_id, $post );
                         } else {
-                            printf( __( 'Failed to import %s %s', 'dpi_plugin' ), esc_html($taxonomy), esc_html($term['name']) );
+                            printf( __( 'Failed to import %s %s', 'dokan' ), esc_html($taxonomy), esc_html($term['name']) );
                             if ( defined('IMPORT_DEBUG') && IMPORT_DEBUG )
                                 echo ': ' . $t->get_error_message();
                             echo '<br />';
@@ -704,7 +683,7 @@ class Dokan_Product_Importer{
     function process_attachment( $post, $url ) {
         if ( ! $this->fetch_attachments )
             return new WP_Error( 'attachment_processing_error',
-                __( 'Fetching attachments is not enabled', 'dpi_plugin' ) );
+                __( 'Fetching attachments is not enabled', 'dokan' ) );
 
         // if the URL is absolute, but does not contain address, then upload it assuming base_site_url
         if ( preg_match( '|^/[\w\W]+$|', $url ) )
@@ -719,7 +698,7 @@ class Dokan_Product_Importer{
         if ( $info = wp_check_filetype( $upload['file'] ) )
             $post['post_mime_type'] = $info['type'];
         else
-            return new WP_Error( 'attachment_processing_error', __('Invalid file type', 'dpi_plugin') );
+            return new WP_Error( 'attachment_processing_error', __('Invalid file type', 'dokan') );
 
         $post['guid'] = $upload['url'];
 
@@ -763,31 +742,31 @@ class Dokan_Product_Importer{
         // request failed
         if ( ! $headers ) {
             @unlink( $upload['file'] );
-            return new WP_Error( 'import_file_error', __('Remote server did not respond', 'dpi_plugin') );
+            return new WP_Error( 'import_file_error', __('Remote server did not respond', 'dokan') );
         }
 
         // make sure the fetch was successful
         if ( $headers['response'] != '200' ) {
             @unlink( $upload['file'] );
-            return new WP_Error( 'import_file_error', sprintf( __('Remote server returned error response %1$d %2$s', 'dpi_plugin'), esc_html($headers['response']), get_status_header_desc($headers['response']) ) );
+            return new WP_Error( 'import_file_error', sprintf( __('Remote server returned error response %1$d %2$s', 'dokan'), esc_html($headers['response']), get_status_header_desc($headers['response']) ) );
         }
 
         $filesize = filesize( $upload['file'] );
 
         if ( isset( $headers['content-length'] ) && $filesize != $headers['content-length'] ) {
             @unlink( $upload['file'] );
-            return new WP_Error( 'import_file_error', __('Remote file is incorrect size', 'dpi_plugin') );
+            return new WP_Error( 'import_file_error', __('Remote file is incorrect size', 'dokan') );
         }
 
         if ( 0 == $filesize ) {
             @unlink( $upload['file'] );
-            return new WP_Error( 'import_file_error', __('Zero size file downloaded', 'dpi_plugin') );
+            return new WP_Error( 'import_file_error', __('Zero size file downloaded', 'dokan') );
         }
 
         $max_size = (int) $this->max_attachment_size();
         if ( ! empty( $max_size ) && $filesize > $max_size ) {
             @unlink( $upload['file'] );
-            return new WP_Error( 'import_file_error', sprintf(__('Remote file is too large, limit is %s', 'dpi_plugin'), size_format($max_size) ) );
+            return new WP_Error( 'import_file_error', sprintf(__('Remote file is too large, limit is %s', 'dokan'), size_format($max_size) ) );
         }
 
         // keep track of the old and new urls so we can substitute them later
@@ -815,7 +794,7 @@ class Dokan_Product_Importer{
         wp_defer_term_counting( false );
         wp_defer_comment_counting( false );
 
-        echo '<p>' . __( 'All done.', 'dpi_plugin' ) . ' <a href="' . dokan_get_page_url('products') . '">' . __( 'Have fun!', 'dpi_plugin' ) . '</a>' . '</p>';
+        echo '<p>' . __( 'All done.', 'dokan' ) . ' <a href="' . dokan_get_page_url('products') . '">' . __( 'Have fun!', 'dokan' ) . '</a>' . '</p>';
 
         do_action( 'import_end' );
     }
@@ -827,8 +806,8 @@ class Dokan_Product_Importer{
      */
     function import_start( $file ) {
         if ( ! is_file($file) ) {
-            echo '<p><strong>' . __( 'Sorry, there has been an error.', 'dpi_plugin' ) . '</strong><br />';
-            echo __( 'The file does not exist, please try again.', 'dpi_plugin' ) . '</p>';
+            echo '<p><strong>' . __( 'Sorry, there has been an error.', 'dokan' ) . '</strong><br />';
+            echo __( 'The file does not exist, please try again.', 'dokan' ) . '</p>';
             die();
         }
         $parser = new Dokan_WXR_Parser();
@@ -836,7 +815,7 @@ class Dokan_Product_Importer{
         $import_data = $parser->parse( $file );
 
         if ( is_wp_error( $import_data ) ) {
-            echo '<p><strong>' . __( 'Sorry, there has been an error.', 'dpi_plugin' ) . '</strong><br />';
+            echo '<p><strong>' . __( 'Sorry, there has been an error.', 'dokan' ) . '</strong><br />';
             echo esc_html( $import_data->get_error_message() ) . '</p>';
             die();
         }
