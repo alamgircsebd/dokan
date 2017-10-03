@@ -161,7 +161,14 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'multicheck',
                 'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
                 'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
-            )
+            ),
+            'hide_customer_info' => array(
+                'name'    => 'hide_customer_info',
+                'label'   => __( 'Hide Customer info', 'dokan' ),
+                'desc'    => __( 'Hide customer information from order details of vendors', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'off'
+            ),
         );
 
         $new_settings_fields['dokan_withdraw'] = array(
