@@ -1,9 +1,0 @@
-v1.0.0 June 1, 2017
------------------------
-- [new] Added settings for guest user in product enquiry
-- [new] Added hook `dokan_product_enquiry_after_form` after product enquiry form
-- [new] Added hook `dokan_enquiry_email_sent` after sending email
-
-v0.1 -> March 11, 2014
------------------------
-- Initial Release

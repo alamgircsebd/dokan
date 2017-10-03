@@ -66,13 +66,9 @@ class Dokan_Apperance {
      * @uses add_action()
      */
     public function __construct() {
-
         self::$plugin_basename = plugin_basename( __FILE__ );
         self::$plugin_url      = plugin_dir_url( self::$plugin_basename );
         self::$plugin_path     = trailingslashit( dirname( __FILE__ ) );
-
-        register_activation_hook( __FILE__, array( $this, 'activate' ) );
-        register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
         $this->depends_on['dokan'] = array(
             'name'   => 'WeDevs_Dokan',
@@ -149,24 +145,6 @@ class Dokan_Apperance {
 
         add_action( 'wp_head', array( $this, 'load_styles' ) );
         // Loads frontend scripts and styles
-    }
-
-    /**
-     * Placeholder for activation function
-     *
-     * Nothing being called here yet.
-     */
-    public function activate() {
-
-    }
-
-    /**
-     * Placeholder for deactivation function
-     *
-     * Nothing being called here yet.
-     */
-    public function deactivate() {
-
     }
 
     /**
