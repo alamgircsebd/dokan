@@ -20,8 +20,8 @@ class Dokan_Live_Search_Widget extends WP_Widget {
     function __construct() {
         parent::__construct(
             'dokna_product_search',
-            __('Dokan Live Search', 'dokan_ls'),
-            array( 'description' => __( 'Search products live', 'dokan_ls' ), )
+            __('Dokan Live Search', 'dokan' ),
+            array( 'description' => __( 'Search products live', 'dokan' ) )
         );
     }
 
@@ -34,7 +34,6 @@ class Dokan_Live_Search_Widget extends WP_Widget {
      * @param array $instance Saved values from database.
      */
     public function widget( $args, $instance ) {
-
         extract( $args );
 
         $title = $instance['title'];
@@ -46,11 +45,11 @@ class Dokan_Live_Search_Widget extends WP_Widget {
         ?>
         <form role="search" method="get" class="ajaxsearchform" action="<?php echo esc_url( home_url( '/'  ) ); ?>">
             <div class="input-group">
-                <input type="text" class="form-control dokan-ajax-search-textfield" value="<?php echo get_search_query(); ?>" name="s" placeholder="<?php echo __( 'Just type ...', 'dokan_ls' ); ?>" />
+                <input type="text" class="form-control dokan-ajax-search-textfield" value="<?php echo get_search_query(); ?>" name="s" placeholder="<?php echo __( 'Just type ...', 'dokan' ); ?>" />
                 <span class="input-group-addon">
                     <?php wp_dropdown_categories( array(
                         'taxonomy' => 'product_cat',
-                        'show_option_all' => __( 'All', 'dokan_ls' ),
+                        'show_option_all' => __( 'All', 'dokan' ),
                         'hierarchical' => true,
                         'hide_empty' => false,
                         'orderby' => 'name',
@@ -77,11 +76,11 @@ class Dokan_Live_Search_Widget extends WP_Widget {
             $title = $instance[ 'title' ];
         }
         else {
-            $title = __( 'Live Search', 'dokan_ls' );
+            $title = __( 'Live Search', 'dokan' );
         }
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','dokan_ls' ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:','dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
         </p>
         <?php
@@ -98,7 +97,6 @@ class Dokan_Live_Search_Widget extends WP_Widget {
      * @return array Updated safe values to be saved.
      */
     public function update( $new_instance, $old_instance ) {
-
         $instance = array();
         $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
 
@@ -140,7 +138,7 @@ class Dokan_LS_Walker_CategoryDropdown extends Walker {
 
         $cat_name = apply_filters('list_cats', $category->name, $category);
         $output .= "\t<option class=\"level-$depth\" value=\"". esc_attr( $category->slug ) . "\"";
-        
+
         $output .= '>';
         $output .= $pad.$cat_name;
         if ( $args['show_count'] )
