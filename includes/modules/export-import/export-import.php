@@ -3,8 +3,8 @@
 Plugin Name: Dokan - Product Importer and Exporter
 Plugin URI: https://wedevs.com/products/dokan/dokan-export-import/
 Description: This is simple product import and export plugin for vendor
-Version: 0.3
-Thumbnail Name: import-export.jpg
+Version: 0.4
+Thumbnail Name: import-export.png
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -95,21 +95,18 @@ class Dokan_Product_Importer{
 
         // Localize our plugin
         add_action( 'init', array( $this, 'localization_setup' ) );
-
-        add_action( 'init', array( $this, 'do_product_export'),99 );
+        add_action( 'init', array( $this, 'do_product_export' ),99 );
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_importer_page'), 13, 1 );
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_importer_page' ), 13, 1 );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
-        add_filter( 'dokan_dashboard_template_render', array( $this, 'dashboard_template' ) );
+        add_filter( 'dokan_dashboard_template_render', array( $this, 'export_import_template' ) );
 
         if ( self::is_dokan_plugin() ) {
-            add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin'), 10 );
+            add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 10 );
         }
-
-        // add_filter( 'dokan_dashboard_template_render', array( $this, 'importer_page_template'),99 );
     }
 
     /**
@@ -117,7 +114,7 @@ class Dokan_Product_Importer{
      * @return boolean true|false
      */
     public static function is_dokan_plugin() {
-        return defined('DOKAN_PLUGIN_VERSION');
+        return defined( 'DOKAN_PLUGIN_VERSION' );
     }
 
     /**
@@ -187,16 +184,8 @@ class Dokan_Product_Importer{
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-
-        /**
-         * All styles goes here
-         */
-        wp_enqueue_style( 'dpi-styles', plugins_url( 'css/style.css', __FILE__ ), false, date( 'Ymd' ) );
-
-        /**
-         * All scripts goes here
-         */
-        wp_enqueue_script( 'dpi-scripts', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery','bootstrap-min' ), false, true );
+        wp_enqueue_style( 'dpi-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
+        wp_enqueue_script( 'dpi-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery','bootstrap-min' ), false, true );
     }
 
     /**
@@ -204,7 +193,6 @@ class Dokan_Product_Importer{
      * @param array $query_var
      */
     function add_endpoint( $query_var ) {
-
         $query_var['tools'] = 'tools';
 
         return $query_var;
@@ -216,7 +204,6 @@ class Dokan_Product_Importer{
      * @return array $urls
      */
     public function add_importer_page( $urls ) {
-
         if ( dokan_is_seller_enabled(get_current_user_id()) ) {
             $installed_version = get_option( 'dokan_theme_version' );
 
@@ -239,13 +226,30 @@ class Dokan_Product_Importer{
         return $urls;
     }
 
-    public function dashboard_template( $template_part ) {
+    /**
+     * Load importer template
+     *
+     * @since  0.4
+     *
+     * @param  string $template_part
+     *
+     * @return void
+     */
+    public function export_import_template( $template_part ) {
         include dirname( __FILE__ ) . '/templates/template_importer.php';
         return;
     }
 
+    /**
+     * Load tools template
+     *
+     * @since  0.4
+     *
+     * @param  array $query_vars
+     *
+     * @return string
+     */
     function load_tools_template_from_plugin( $query_vars ) {
-
         if ( isset( $query_vars['tools'] ) ) {
             $installed_version = get_option( 'dokan_theme_version' );
 
@@ -254,13 +258,16 @@ class Dokan_Product_Importer{
             } else {
                 $template = dirname( __FILE__ ) . '/templates/template_importer.php';
             }
+
             require_once $template;
         }
     }
 
     /**
      * Load Importer page templates in tamplate directory
+     *
      * @param  string $file
+     *
      * @return  string $file
      */
     public function importer_page_template( $file ) {
@@ -326,7 +333,6 @@ class Dokan_Product_Importer{
 
         $this->import_end();
     }
-
 
     /**
      * Create new categories based on import information
@@ -688,7 +694,6 @@ class Dokan_Product_Importer{
         unset( $this->posts );
     }
 
-
     /**
      * If fetching attachments is enabled then attempt to create a new attachment
      *
@@ -814,7 +819,6 @@ class Dokan_Product_Importer{
 
         do_action( 'import_end' );
     }
-
 
     /**
      * Parses the WXR file and prepares us for the task of processing parsed data
@@ -945,10 +949,12 @@ class Dokan_Product_Importer{
     }
 
     /**
-     * check if psot exists or not
+     * Check if psot exists or not
+     *
      * @param  string $title   [description]
      * @param  string $content [description]
      * @param  string $date    [description]
+     *
      * @return [type]          [description]
      */
     function post_exists($title, $content = '', $date = '') {
@@ -986,10 +992,12 @@ class Dokan_Product_Importer{
      * Determine if a comment exists based on author and date.
      *
      * @since 2.0.0
+     *
      * @uses $wpdb
      *
      * @param string $comment_author Author of the comment
      * @param string $comment_date Date of the comment
+     *
      * @return mixed Comment post ID on success.
      */
     function comment_exists($comment_author, $comment_date) {
@@ -1016,7 +1024,6 @@ class Dokan_Product_Importer{
     function max_attachment_size() {
         return apply_filters( 'import_attachment_size_limit', 0 );
     }
-
 
 } // Dokan_Product_Importer
 

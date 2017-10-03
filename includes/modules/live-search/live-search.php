@@ -3,8 +3,8 @@
 Plugin Name: Dokan Live Search
 Plugin URI: http://wedevs.com/
 Description: Live product search for WooCommerce store
-Version: 1.0
-Thumbnail Name: ajax-live-search.jpg
+Version: 1.1
+Thumbnail Name: ajax-live-search.png
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2
@@ -39,14 +39,7 @@ License: GPL2
 // don't call the file directly
 if ( !defined( 'ABSPATH' ) ) exit;
 
-if ( is_admin() ) {
-    require_once dirname( __FILE__ ) . '/lib/wedevs-updater.php';
-
-    new WeDevs_Plugin_Update_Checker( plugin_basename( __FILE__ ) );
-}
-
 include_once 'classes/class-dokan-live-search.php';
-
 
 /**
  * Dokan_Live_Search class
@@ -70,7 +63,7 @@ class Dokan_Live_Search {
         add_action( 'init', array( $this, 'localization_setup' ) );
 
         // Widget initialization hook
-        add_action('widgets_init',array($this,'initialize_widget_register'));
+        add_action( 'widgets_init',array($this,'initialize_widget_register' ) );
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -117,23 +110,12 @@ class Dokan_Live_Search {
      * @uses wp_enqueue_style()
      */
     public function enqueue_scripts() {
+        wp_enqueue_style( 'dokan-ls-custom-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
+        wp_enqueue_script( 'dokan-ls-custom-js', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
 
-        /**
-         * All styles goes here
-         */
-        wp_enqueue_style( 'dokan-ls-custom-style', plugins_url( 'css/style.css', __FILE__ ), false, date( 'Ymd' ) );
-
-        /**
-         * All scripts goes here
-         */
-        wp_enqueue_script( 'dokan-ls-custom-js', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ), false, true );
-
-        /**
-         * Example for setting up text strings from Javascript files for localization.
-         */
         wp_localize_script( 'dokan-ls-custom-js', 'dokanLiveSearch', array(
             'ajaxurl'      => admin_url( 'admin-ajax.php' ),
-            'loading_img'  => plugins_url( 'images/loading.gif', __FILE__ ),
+            'loading_img'  => plugins_url( 'assets/images/loading.gif', __FILE__ ),
             'currentTheme' => wp_get_theme()->stylesheet,
             'themeTags'    => apply_filters( 'dokan_ls_theme_tags', array() )
         ));

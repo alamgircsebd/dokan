@@ -88,7 +88,6 @@
 
         function loading_get_request( url, textfield, selectfield ){
             var div_id = get_div_id();
-            console.log(div_id);
 
             $(div_id).append('<div id="loading"><img src="' + dokanLiveSearch.loading_img + '" atr="Loding..."/></div>');
             $(div_id).css({'opacity':0.3,'position':'relative'});
@@ -109,20 +108,14 @@
 
             xhr = $.get(url, function(resp, status) {
 
-                //window.history.pushState({"html":resp,"pageTitle":resp.pageTitle},"", url);
-                var dom = $(resp).find(get_div_id());
+                var dom = $(resp).find(get_div_id()).html();
 
                 $('.dokan-ajax-search-textfield').val( textfield );
                 $('.dokan-ajax-search-category').val( selectfield );
                 $(get_div_id()).html(dom);
 
-
                 $('#loading').hide();
                 $(get_div_id()).css({'opacity':1,'position':'auto'});
-
-                if(dokanLiveSearch.single){
-                    console.log('single');
-                }
 
                 $('.woocommerce-ordering').on('change','.orderby',function(e){
                     e.preventDefault();
