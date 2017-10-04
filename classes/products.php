@@ -251,10 +251,10 @@ class Dokan_Pro_Products {
     function add_per_product_commission_options() {
         woocommerce_wp_text_input(
             array(
-                'id'            => '_per_product_commission',
-                'label'         => __( 'Vendor Commission (%)', 'dokan' ),
+                'id'            => '_per_product_admin_commission',
+                'label'         => __( 'Admin Commission', 'dokan' ),
                 'wrapper_class' => 'per-product-commission show_if_simple show_if_variable',
-                'description'   => __( 'Override the default commission (%) vendor will get from this product', 'dokan' ),
+                'description'   => __( 'Override the default commission admin will get from this product', 'dokan' ),
                 'data_type'     => 'price'
             )
         );
@@ -270,9 +270,9 @@ class Dokan_Pro_Products {
      * @return void
      */
     function save_per_product_commission_options( $post_id ) {
-        if ( isset( $_POST['_per_product_commission'] ) ) {
-            $value = empty( $_POST['_per_product_commission'] ) ? '' : (float) $_POST['_per_product_commission'];
-            update_post_meta( $post_id, '_per_product_commission', $value );
+        if ( isset( $_POST['_per_product_admin_commission'] ) ) {
+            $value = empty( $_POST['_per_product_admin_commission'] ) ? '' : (float) $_POST['_per_product_admin_commission'];
+            update_post_meta( $post_id, '_per_product_admin_commission', $value );
         }
     }
 
