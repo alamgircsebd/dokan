@@ -6,7 +6,7 @@
   Version: 1.0
   Author: weDevs
   Author URI: https://wedevs.com/
-  Thumbnail Name: import-export.jpg
+  Thumbnail Name: appearance.png
   License: GPL2
   Text Domain: dokan-ac
  */

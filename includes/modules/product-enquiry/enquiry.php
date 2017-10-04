@@ -6,7 +6,7 @@ Description: Enquiry for a specific product to a seller
 Version: 1.0.0
 Author: Tareq Hasan
 Author URI: http://tareq.wedevs.com/
-Thumbnail Name: import-export.jpg
+Thumbnail Name: product-enquiry.png
 License: GPL2
 */
 
