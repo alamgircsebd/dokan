@@ -60,15 +60,6 @@ class Dokan_Paypal_AP {
 
     }
 
-    /**
-     * Initialize plugin for localization
-     *
-     * @uses load_plugin_textdomain()
-     */
-    public function localization_setup() {
-        load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-    }
-
     function init() {
         if ( !class_exists( 'WC_Payment_Gateway' ) ) {
             return;
