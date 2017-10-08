@@ -985,10 +985,10 @@ function dokan_edit_category_commission_field( $term ){
     $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission', true );
     ?>
     <tr class="form-field">
-        <th scope="row" valign="top"><label><?php _e( 'Vendor commission', 'dokan' ); ?></label></th>
+        <th scope="row" valign="top"><label><?php _e( 'Admin commission', 'dokan' ); ?></label></th>
         <td>
             <input type="number" min="0" max="100" name="per_category_admin_commission" value="<?php echo $commission ?>">
-            <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+            <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
         </td>
     </tr>
     <?php

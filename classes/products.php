@@ -249,6 +249,18 @@ class Dokan_Pro_Products {
      * @return void
      */
     function add_per_product_commission_options() {
+        
+        woocommerce_wp_select( array(
+            'id'            => '_per_product_admin_commission_type',
+            'label'         => __( 'Admin Commission type', 'dokan' ),
+            'options'       => array(
+                'percentage'  => __( 'Percentage', 'dokan' ),
+                'flat'        => __( 'Flat', 'dokan' ),
+            ),
+            'wrapper_class' => 'per-product-commission-type show_if_simple show_if_variable',
+            'description'   => __( 'Set the commission type admin will get from this product', 'dokan' ),
+            'data_type'     => 'price'
+        ) );
         woocommerce_wp_text_input(
             array(
                 'id'            => '_per_product_admin_commission',
@@ -270,6 +282,10 @@ class Dokan_Pro_Products {
      * @return void
      */
     function save_per_product_commission_options( $post_id ) {
+        if ( isset( $_POST['_per_product_admin_commission_type'] ) ) {
+            $value = empty( $_POST['_per_product_admin_commission_type'] ) ? 'percentage' : $_POST['_per_product_admin_commission_type'];
+            update_post_meta( $post_id, '_per_product_admin_commission_type', $value );
+        }
         if ( isset( $_POST['_per_product_admin_commission'] ) ) {
             $value = empty( $_POST['_per_product_admin_commission'] ) ? '' : (float) $_POST['_per_product_admin_commission'];
             update_post_meta( $post_id, '_per_product_admin_commission', $value );
