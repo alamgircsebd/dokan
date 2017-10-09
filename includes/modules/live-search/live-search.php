@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Dokan Live Search
+Plugin Name: Live Search
 Plugin URI: http://wedevs.com/
 Description: Live product search for WooCommerce store
 Version: 1.1

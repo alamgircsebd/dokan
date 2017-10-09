@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Dokan - PayPal Adaptive Payment
+Plugin Name: PayPal Adaptive Payment
 Plugin URI: https://wedevs.com/products/dokan/paypal-adaptive-payment/
 Description: Allows to send split payments to vendor via PayPal Adaptive Payment gateway
 Version: 1.1.0

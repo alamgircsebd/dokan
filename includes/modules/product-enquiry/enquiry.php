@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Dokan Product Enquiry
+Plugin Name: Product Enquiry
 Plugin URI: http://wedevs.com/
 Description: Enquiry for a specific product to a seller
 Version: 1.0.0

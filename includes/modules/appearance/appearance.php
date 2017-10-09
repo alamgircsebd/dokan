@@ -1,6 +1,6 @@
 <?php
 /*
-  Plugin Name: Dokan - Appearance Customizer
+  Plugin Name: Color Scheme Customizer
   Plugin URI: https://wedevs.com/
   Description: A Dokan plugin Add-on to Customize Colors of Dokan Dashboard
   Version: 1.0

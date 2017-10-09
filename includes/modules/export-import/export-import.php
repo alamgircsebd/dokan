@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: Dokan - Product Importer and Exporter
+Plugin Name: Vendor Product Importer and Exporter
 Plugin URI: https://wedevs.com/products/dokan/dokan-export-import/
 Description: This is simple product import and export plugin for vendor
 Version: 0.4
-Thumbnail Name: import-export.png
 Author: weDevs
 Author URI: http://wedevs.com/
+Thumbnail Name: import-export.png
 License: GPL2
 */
 

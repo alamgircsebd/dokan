@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Dokan - Store Support
+Plugin Name: Store Support
 Plugin URI: https://wedevs.com/products/plugins/dokan/store-support/
 Description: Enable vendors to provide support to customers from store page.
 Version: 1.3.5
@@ -482,7 +482,6 @@ class Dokan_Store_Support {
         $vars[] = 'support';
         $vars[] = 'support-tickets';
 
-        error_log( print_r( $vars, true ) );
         return $vars;
     }
 
@@ -547,8 +546,6 @@ class Dokan_Store_Support {
      * @return array $query_vars
      */
     function load_template_from_plugin( $query_vars ) {
-        error_log( print_r( $query_vars, true ) );
-
         if ( isset( $query_vars['support'] ) ) {
             $template = DOKAN_STORE_SUPPORT_DIR . '/templates/support.php';
             include $template;
