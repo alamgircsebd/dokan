@@ -98,6 +98,7 @@ class Dokan_Product_Importer{
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_importer_page' ), 13, 1 );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
         add_filter( 'dokan_dashboard_template_render', array( $this, 'export_import_template' ) );
+        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
 
         if ( self::is_dokan_plugin() ) {
             add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 10 );
@@ -134,25 +135,36 @@ class Dokan_Product_Importer{
      * Nothing being called here yet.
      */
     public static function activate() {
-        error_log( print_r( 'Activated', true ) );
-        // if( get_option( 'dokan_importer_page_created') ) {
-        //     return;
-        // }
-        // $dasboard_page = get_page_by_title( 'Dashboard' );
+        set_transient( 'dokan-export-import', 1 );
 
-        // $post_id =  wp_insert_post( array(
-        //     'post_title'    => wp_strip_all_tags( 'Import' ),
-        //     'post_status' => 'publish',
-        //     'post_parent'  => $dasboard_page->ID,
-        //     'post_type' => 'page'
-        // ) );
+        if( get_option( 'dokan_importer_page_created') ) {
+            return;
+        }
+        $dasboard_page = get_page_by_title( 'Dashboard' );
 
-        // update_option( 'dokan_importer_page_created', true );
-        // update_option( 'dokan_importer_page_id', $post_id );
+        $post_id =  wp_insert_post( array(
+            'post_title'    => wp_strip_all_tags( 'Import' ),
+            'post_status' => 'publish',
+            'post_parent'  => $dasboard_page->ID,
+            'post_type' => 'page'
+        ) );
+
+        update_option( 'dokan_importer_page_created', true );
+        update_option( 'dokan_importer_page_id', $post_id );
     }
 
-    public static function deactivate() {
-        error_log( print_r( 'Deactivated', true ) );
+    /**
+     * Flush rewrite endpoind after activation
+     *
+     * @since 1.5.2
+     *
+     * @return void
+     */
+    function add_rewrite_rules() {
+        if ( get_transient( 'dokan-export-import' ) ) {
+            flush_rewrite_rules( true );
+            delete_transient( 'dokan-export-import' );
+        }
     }
 
     /**
@@ -1011,5 +1023,3 @@ class Dokan_Product_Importer{
 $dokan_pi = Dokan_Product_Importer::init();
 
 dokan_register_activation_hook( __FILE__ , array( 'Dokan_Product_Importer', 'activate' ) );
-dokan_register_deactivation_hook( __FILE__ , array( 'Dokan_Product_Importer', 'deactivate' ) );
-
