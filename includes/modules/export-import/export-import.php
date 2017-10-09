@@ -90,8 +90,6 @@ class Dokan_Product_Importer{
      * @uses add_action()
      */
     public function __construct() {
-        register_activation_hook( __FILE__, array( $this, 'activate' ) );
-
         add_action( 'init', array( $this, 'do_product_export' ),99 );
 
         // Loads frontend scripts and styles
@@ -135,22 +133,26 @@ class Dokan_Product_Importer{
      *
      * Nothing being called here yet.
      */
-    public function activate() {
+    public static function activate() {
+        error_log( print_r( 'Activated', true ) );
+        // if( get_option( 'dokan_importer_page_created') ) {
+        //     return;
+        // }
+        // $dasboard_page = get_page_by_title( 'Dashboard' );
 
-        if( get_option( 'dokan_importer_page_created') ) {
-            return;
-        }
-        $dasboard_page = get_page_by_title( 'Dashboard' );
+        // $post_id =  wp_insert_post( array(
+        //     'post_title'    => wp_strip_all_tags( 'Import' ),
+        //     'post_status' => 'publish',
+        //     'post_parent'  => $dasboard_page->ID,
+        //     'post_type' => 'page'
+        // ) );
 
-        $post_id =  wp_insert_post( array(
-            'post_title'    => wp_strip_all_tags( 'Import' ),
-            'post_status' => 'publish',
-            'post_parent'  => $dasboard_page->ID,
-            'post_type' => 'page'
-        ) );
+        // update_option( 'dokan_importer_page_created', true );
+        // update_option( 'dokan_importer_page_id', $post_id );
+    }
 
-        update_option( 'dokan_importer_page_created', true );
-        update_option( 'dokan_importer_page_id', $post_id );
+    public static function deactivate() {
+        error_log( print_r( 'Deactivated', true ) );
     }
 
     /**
@@ -1007,3 +1009,7 @@ class Dokan_Product_Importer{
 } // Dokan_Product_Importer
 
 $dokan_pi = Dokan_Product_Importer::init();
+
+dokan_register_activation_hook( __FILE__ , array( 'Dokan_Product_Importer', 'activate' ) );
+dokan_register_deactivation_hook( __FILE__ , array( 'Dokan_Product_Importer', 'deactivate' ) );
+

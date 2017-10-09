@@ -171,7 +171,14 @@ function dokan_pro_activate_module( $module ) {
         $current[] = $module;
         sort($current);
 
-        update_option( dokan_pro_active_module_key(), $current);
+        $file_path = plugin_basename( "$module_root/$module" );
+
+        if ( file_exists( "$module_root/$module" ) ) {
+            require_once "$module_root/$module";
+            do_action( "activate_{$file_path}", $module );
+        }
+
+        update_option( dokan_pro_active_module_key(), $current );
     }
 
     return null;
@@ -193,8 +200,15 @@ function dokan_pro_deactivate_module( $module ) {
 
         if ( false !== $key ) {
             unset( $current[ $key ] );
-
             sort($current);
+        }
+
+        $module_root = dirname( __FILE__) . '/modules';
+        $file_path = plugin_basename( "$module_root/$module" );
+
+        if ( file_exists( "$module_root/$module" ) ) {
+            require_once "$module_root/$module";
+            do_action( "deactivate_{$file_path}", $module );
         }
 
         update_option( dokan_pro_active_module_key(), $current );
@@ -203,4 +217,36 @@ function dokan_pro_deactivate_module( $module ) {
     }
 
     return false;
+}
+
+/**
+ * Dokan register activation hook description]
+ *
+ * @param string $file     full file path
+ * @param array|string $function callback function
+ *
+ * @return void
+ */
+function dokan_register_activation_hook( $file, $function ) {
+    if ( file_exists( $file ) ) {
+        require_once $file;
+        $base_name = plugin_basename( $file );
+        add_action( "activate_{$base_name}", $function );
+    }
+}
+
+/**
+ * Dokan register deactivation hook description]
+ *
+ * @param string $file     full file path
+ * @param array|string $function callback function
+ *
+ * @return void
+ */
+function dokan_register_deactivation_hook( $file, $function ) {
+    if ( file_exists( $file ) ) {
+        require_once $file;
+        $base_name = plugin_basename( $file );
+        add_action( "deactivate_{$base_name}", $function );
+    }
 }
