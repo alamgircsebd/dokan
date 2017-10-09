@@ -8,16 +8,15 @@
  * @package dokan
  */
 class Dokan_Store_Support_Widget extends WP_Widget {
-    
-    private $text_domain = 'dokan-store-support';
+
     /**
      * Constructor
      *
      * @return void
      */
     public function __construct() {
-        $widget_ops = array( 'classname' => 'dokan-store-support-widget', 'description' => __( 'Show Dokan Store Support button', $this->text_domain ) );
-        parent::__construct( 'dokan-store-support-widget', __( 'Dokan: Store Support Area', $this->text_domain ), $widget_ops );
+        $widget_ops = array( 'classname' => 'dokan-store-support-widget', 'description' => __( 'Show Dokan Store Support button', 'dokan' ) );
+        parent::__construct( 'dokan-store-support-widget', __( 'Dokan: Store Support Area', 'dokan' ), $widget_ops );
     }
 
     /**
@@ -38,16 +37,16 @@ class Dokan_Store_Support_Widget extends WP_Widget {
 
         $title     = apply_filters( 'dokan_store_support_widget_title', $instance['title'] );
         $desc      = $instance['description'];
-        
+
         echo $before_widget;
-        
+
         if ( ! empty( $title ) ) {
             echo $args['before_title'] . $title . $args['after_title'];
-        }  
+        }
         if ( ! empty( $desc ) ) {
             echo '<p class="store-support-widget-desc">' . $desc . '</p>';
-        } 
-     
+        }
+
         $this->generate_support_button_on_widget();
 
         echo $after_widget;
@@ -78,27 +77,27 @@ class Dokan_Store_Support_Widget extends WP_Widget {
      */
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title'       => __( 'Store Support' , $this->text_domain ),
-            'description' => '',           
+            'title'       => __( 'Store Support' , 'dokan' ),
+            'description' => '',
         ) );
 
         $title = $instance['title'];
         $description = $instance['description'];
-        
+
         ?>
         <p>
-            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', $this->text_domain ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', 'dokan' ); ?></label>
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
         </p>
         <p>
-            <label for="<?php echo $this->get_field_id( 'description' ); ?>"><?php _e( 'Description: ', $this->text_domain ); ?></label>
+            <label for="<?php echo $this->get_field_id( 'description' ); ?>"><?php _e( 'Description: ', 'dokan' ); ?></label>
             <textarea class="widefat" id="<?php echo $this->get_field_id( 'description' ); ?>" name="<?php echo $this->get_field_name( 'description' ); ?>"><?php echo esc_attr( $description ); ?></textarea>
         </p>
-        
+
         <?php
     }
-    
-    
+
+
     /**
      * prints Get support button on store page
      *
@@ -106,7 +105,7 @@ class Dokan_Store_Support_Widget extends WP_Widget {
      * @param int store_id
      */
     function generate_support_button_on_widget( $store_id = '' ) {
-        
+
         if ( empty( $store_id ) ) {
             $store_user = get_userdata( get_query_var( 'author' ) );
             $store_id   = $store_user->ID;
@@ -128,7 +127,7 @@ class Dokan_Store_Support_Widget extends WP_Widget {
             return;
         }
 
-        $support_text = isset( $store_info['support_btn_name'] ) && !empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : __( 'Get Support', $this->text_domain );
+        $support_text = isset( $store_info['support_btn_name'] ) && !empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : __( 'Get Support', 'dokan' );
         ?>
         <button data-store_id="<?php echo $store_id; ?>" class="dokan-store-support-btn dokan-btn dokan-btn-theme dokan-btn-sm <?php echo $user_logged_in ?>">
             <?php echo esc_html( $support_text ); ?>
