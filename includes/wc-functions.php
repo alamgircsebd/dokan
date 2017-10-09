@@ -962,12 +962,20 @@ add_action( 'edit_term', 'dokan_save_category_commission_field', 10, 3 );
  *
  * @return void
  */
-function dokan_add_category_commission_field(){
+function dokan_add_category_commission_field() {
     ?>
     <div class="form-field term-display-type-wrap">
-        <label for="per_category_commission"><?php _e( 'Vendor Commission from this category', 'dokan' ); ?></label>
-        <input type="number" min="0" max="100" name="per_category_commission">
-        <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+        <label for="per_category_admin_commission_type"><?php _e( 'Commission type', 'dokan' ); ?></label>
+        <select name="per_category_admin_commission_type">
+            <option value="percentage"><?php _e( 'Percentage', 'dokan' ) ?></option>
+            <option value="flat"><?php _e( 'Flat', 'dokan' ) ?></option>
+        </select>
+        <p class="description"><?php _e( 'This is the commission type for admin fee', 'dokan' ); ?></p>
+    </div>
+    <div class="form-field term-display-type-wrap">
+        <label for="per_category_admin_commission"><?php _e( 'Admin Commission from this category', 'dokan' ); ?></label>
+        <input type="number" min="0" max="100" name="per_category_admin_commission">
+        <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
     </div>
     <?php
 }
@@ -982,13 +990,24 @@ function dokan_add_category_commission_field(){
  * @return void
  */
 function dokan_edit_category_commission_field( $term ){
-    $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_commission', true );
+    $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission', true );
+    $commission_type = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
     ?>
     <tr class="form-field">
-        <th scope="row" valign="top"><label><?php _e( 'Vendor commission', 'dokan' ); ?></label></th>
+        <th scope="row" valign="top"><label><?php _e( 'Admin Commission type', 'dokan' ); ?></label></th>
         <td>
-            <input type="number" min="0" max="100" name="per_category_commission" value="<?php echo $commission ?>">
-            <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+            <select id="per_category_admin_commission_type" name="per_category_admin_commission_type" class="postform">
+                <option value="percentage" <?php selected( $commission_type, 'percentage' ) ?> ><?php _e( 'Percentage', 'dokan' ) ?></option>
+                <option value="flat" <?php selected( $commission_type, 'flat' ) ?>><?php _e( 'Flat', 'dokan' ) ?></option>
+            </select>
+            <p class="description"><?php _e( 'This is the commission type for admin fee', 'dokan' ); ?></p>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th scope="row" valign="top"><label><?php _e( 'Admin commission', 'dokan' ); ?></label></th>
+        <td>
+            <input type="number" min="0" max="100" name="per_category_admin_commission" value="<?php echo $commission ?>">
+            <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
         </td>
     </tr>
     <?php
@@ -1006,8 +1025,13 @@ function dokan_edit_category_commission_field( $term ){
  * @return void
  */
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
-    if ( isset( $_POST['per_category_commission'] ) && 'product_cat' === $taxonomy ) {
-        update_woocommerce_term_meta( $term_id, 'per_category_commission', esc_attr( $_POST['per_category_commission'] ) );
+    
+    if ( isset( $_POST['per_category_admin_commission_type'] ) && 'product_cat' === $taxonomy ) {
+        update_woocommerce_term_meta( $term_id, 'per_category_admin_commission_type', esc_attr( $_POST['per_category_admin_commission_type'] ) );
+    }
+    
+    if ( isset( $_POST['per_category_admin_commission'] ) && 'product_cat' === $taxonomy ) {
+        update_woocommerce_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
     }
 }
 
