@@ -1,7 +1,9 @@
 'use strict';
 module.exports = function(grunt) {
     var pkg = grunt.file.readJSON('package.json');
+    var pack = grunt.file.readJSON('pack.json');
 
+    console.log( pack );
     grunt.initConfig({
         // setting folder templates
         dirs: {
@@ -34,19 +36,6 @@ module.exports = function(grunt) {
                 }
             }
         },
-
-        // uglify: {
-        //     minify: {
-        //         expand: true,
-        //         cwd: '<%= dirs.js %>',
-        //         src: [
-        //             'admin.js', 'all.js', 'orders.js', 'product-editor.js', 'product-variation.js', 'reviews.js', 'script.js',
-        //             'single-product-shipping.js'
-        //         ],
-        //         dest: '<%= dirs.js %>/',
-        //         ext: '.min.js'
-        //     }
-        // },
 
         jshint: {
             options: {
