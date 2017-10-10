@@ -104,9 +104,8 @@ class Dokan_Store_Support {
 
         add_action( 'wp_ajax_dokan_support_ajax_handler', array( $this, 'ajax_handler' ) );
         add_action( 'wp_ajax_nopriv_dokan_support_ajax_handler', array( $this, 'ajax_handler' ) );
-
-        add_filter( 'dokan_query_var_filter', array( $this, 'register_support_queryvar' ), 20 );
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_store_support_page' ), 20, 1 );
+        add_filter( 'dokan_query_var_filter', array( $this, 'register_support_queryvar' ), 20 );
         add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin' ), 20 );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
 
@@ -122,19 +121,6 @@ class Dokan_Store_Support {
         add_filter( 'woocommerce_locate_template', array( $this, 'customer_topic_list' ),15 );
 
         require_once DOKAN_STORE_SUPPORT_DIR . '/support-widget.php';
-    }
-
-    /**
-     * Print error notice if Dokan not active
-     *
-     * @since 1.0.0
-     */
-    function need_dokan(){
-        $error = sprintf( __( '<b>Dokan Store Support </b> requires %sDokan plugin%s to be installed & activated!' , 'dokan-verification' ), '<a target="_blank" href="https://wedevs.com/products/plugins/dokan/">', '</a>' );
-
-        $message = '<div class="error"><p>' . $error . '</p></div>';
-
-        echo $message;
     }
 
     /**
@@ -479,6 +465,7 @@ class Dokan_Store_Support {
      * @return array new $vars
      */
     function register_support_queryvar( $vars ) {
+        error_log( print_r( $vars, true ) );
         $vars[] = 'support';
         $vars[] = 'support-tickets';
 
