@@ -1,9 +1,64 @@
 'use strict';
 module.exports = function(grunt) {
     var pkg = grunt.file.readJSON('package.json');
-    var pack = grunt.file.readJSON('pack.json');
+    var packs = grunt.file.readJSON('pack.json');
 
-    console.log( pack );
+    var cleanPack = {};
+    var compressPack = {};
+    var replacePack = {};
+
+    cleanPack.main = {
+        src : ['build/']
+    }
+
+    compressPack.main = {
+        options: {
+            mode: 'zip',
+            archive: './build/dokan-pro-v' + pkg.version + '.zip'
+        },
+        expand: true,
+        cwd: 'build/',
+        src: ['**/*'],
+        dest: 'dokan-pro'
+    }
+
+    Object.keys( packs ).forEach( function( val, index ) {
+        var cleanPackages = packs[val].map( function( module ) {
+            return "!build/includes/modules/" + module
+        });
+
+        cleanPackages.unshift( "build/includes/modules/*" );
+
+        cleanPack[val] = {
+            src : cleanPackages
+        };
+
+        compressPack[val] = {
+            options: {
+                mode: 'zip',
+                archive: './build/dokan-pro-'+ val + '-' + pkg.version + '.zip'
+            },
+            expand: true,
+            cwd: 'build/',
+            src: ['**/*'],
+            dest: 'dokan-pro-' + val
+        };
+
+        replacePack[val] = {
+            src: [ 'build/dokan-pro.php' ],
+            overwrite: true,
+            replacements: [
+                {
+                    from: "Plugin Name: Dokan Pro",
+                    to: "Plugin Name: Dokan Pro - " + val
+                }
+            ]
+        };
+
+    });
+
+    console.log( cleanPack );
+
     grunt.initConfig({
         // setting folder templates
         dirs: {
@@ -96,9 +151,7 @@ module.exports = function(grunt) {
         },
 
         // Clean up build directory
-        clean: {
-            main: ['build/']
-        },
+        clean: cleanPack,
 
         // Copy the plugin into the build directory
         copy: {
@@ -130,18 +183,9 @@ module.exports = function(grunt) {
         },
 
         //Compress build directory into <name>.zip and <name>-<version>.zip
-        compress: {
-            main: {
-                options: {
-                    mode: 'zip',
-                    archive: './build/dokan-pro-v' + pkg.version + '.zip'
-                },
-                expand: true,
-                cwd: 'build/',
-                src: ['**/*'],
-                dest: 'dokan-pro'
-            }
-        },
+        compress: compressPack,
+
+        replace: replacePack,
 
         //secret: grunt.file.readJSON('secret.json'),
         sshconfig: {
@@ -187,6 +231,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
     grunt.loadNpmTasks( 'grunt-contrib-jshint' );
     grunt.loadNpmTasks( 'grunt-wp-i18n' );
+    grunt.loadNpmTasks( 'grunt-text-replace' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
     grunt.loadNpmTasks( 'grunt-contrib-clean' );
@@ -195,26 +240,27 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-ssh' );
 
     grunt.registerTask( 'default', [
-        'less',
-        'concat',
-        // 'uglify'
+        // 'less',
+        // 'concat',
     ]);
 
-    grunt.registerTask('release', [
+    grunt.registerTask( 'release', [
         'makepot',
         'less',
         'concat',
-        // 'clean',
-        // 'copy',
-        // 'compress'
-        // 'uglify'
     ]);
 
     grunt.registerTask( 'zip', [
-        'clean',
-        'copy',
-        'compress'
-    ])
+        'clean:main',
+        'copy:main',
+        'compress:main'
+    ]);
+
+    Object.keys( packs ).forEach( function( val, index ) {
+        grunt.registerTask( 'zip-' + val, [
+            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:' + val
+        ]);
+    });
 
     grunt.registerTask( 'deploy', [
         'sftp:upload', 'sshexec:updateVersion'
