@@ -57,8 +57,6 @@ module.exports = function(grunt) {
 
     });
 
-    console.log( cleanPack );
-
     grunt.initConfig({
         // setting folder templates
         dirs: {

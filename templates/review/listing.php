@@ -50,7 +50,7 @@
                 <option value="delete"><?php _e( 'Delete permanently', 'dokan' ); ?></option>
             <?php } else if ( $comment_status == 'trash' ) { ?>
                 <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
-                <option value="approve"><?php _e( 'Resore', 'dokan' ); ?></option>
+                <option value="approve"><?php _e( 'Restore', 'dokan' ); ?></option>
                 <option value="delete"><?php _e( 'Delete permanently', 'dokan' ); ?></option>
             <?php } else { ?>
                 <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
