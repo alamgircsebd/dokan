@@ -19,7 +19,7 @@
     <?php
     }
     ?>
-    <hr class="wp-header-end">  
+    <hr class="wp-header-end">
     <div style="margin: 15px 0px;">
         <ul class="subsubsub">
             <li class="all">
@@ -27,14 +27,14 @@
                     <?php _e( 'All', 'dokan' ); ?>
                     <span class="count">(<?php echo $counts['total'] ?>)</span>
                 </a>
-                 | 
+                 |
             </li>
             <li class="approved">
                 <a href="admin.php?page=dokan-sellers&status=approved" class="<?php echo 'approved' == $status ? 'current' : ''  ?>">
                     <?php _e( 'Approved', 'dokan' ); ?>
                     <span class="count">(<?php echo $counts['active'] ?>)</span>
                 </a>
-                 | 
+                 |
             </li>
             <li class="pending">
                 <a href="admin.php?page=dokan-sellers&status=pending" class="<?php echo 'pending' == $status ? 'current' : ''  ?>">
@@ -75,16 +75,16 @@
                 $limit       = 20;
                 $count       = 0;
                 $offset      = ( $paged - 1 ) * $limit;
-                
+
                 $args        = array( 'role' => 'seller', 'number' => $limit, 'offset' => $offset );
-                
+
                 if ( $status != 'all' ) {
                     $args[ 'meta_key' ]   = 'dokan_enable_selling';
                     $args[ 'meta_value' ] = 'approved' == $status ? 'yes' : 'no';
                 }
-                
+
                 if ( isset( $_GET['s'] ) ) {
-                    
+
                     $search_term = sanitize_text_field( $_GET['s'] );
                     $args[ 'search' ] = '*' . esc_attr( $search_term ) . '*';
                     $args[' meta_query' ] = array(
@@ -111,11 +111,13 @@
                         )
                     );
                 }
-                
+
 
                 $user_search = new WP_User_Query( $args );
                 $sellers     = (array) $user_search->get_results();
                 $post_counts = count_many_users_posts( wp_list_pluck( $sellers, 'ID' ), 'product' );
+                $make_active_txt = __( 'Make Active', 'dokan' );
+                $make_inactive_txt = __( 'Make Inactive', 'dokan' );
 
                 if ( $sellers ) {
 
@@ -147,10 +149,10 @@
                             <td><?php echo dokan_get_seller_balance( $user->ID ); ?></td>
                             <td><?php echo empty( $info['phone'] ) ? '--' : $info['phone']; ?></td>
                             <td>
-                                <label class="switch">
+                                <label class="switch tips" title="<?php echo $seller_enable ? $make_inactive_txt : $make_active_txt; ?>">
                                     <input type="checkbox" <?php echo $seller_enable ? 'checked': '' ?> class="toogle-seller" data-id="<?php echo $user->ID; ?>">
                                     <span class="slider round"></span>
-                                </label>                
+                                </label>
                             </td>
                         </tr>
                         <?php
@@ -215,7 +217,9 @@
 
             $('input.toogle-seller').on('change', function(e) {
                 e.preventDefault();
-                var self = $(this);
+                var self = $(this),
+                    make_inactive_txt = '<?php echo $make_inactive_txt; ?>',
+                    make_active_txt = '<?php echo $make_active_txt; ?>';
 
                 if ( self.is( ':checked' ) ) {
                     var data = {
@@ -231,8 +235,16 @@
                     };
                 }
 
-                $.post(ajaxurl, data, function(resp) {
-                    //
+                $.post( ajaxurl, data, function(resp) {
+                    if ( resp.success ) {
+                        if ( 'yes' == data.type ) {
+                            self.closest('label').attr( 'data-original-title', make_inactive_txt );
+                        } else {
+                            self.closest('label').attr( 'data-original-title', make_active_txt );
+                        }
+
+                        $( '.tips' ).tooltip();
+                    }
                 });
             });
 
