@@ -1044,6 +1044,9 @@ function dokan_custom_split_shipping_packages( $packages ) {
     $packages = array();
 
     foreach ( $cart_content as $key => $item ) {
+        if ( Dokan_WC_Shipping::is_product_disable_shipping( $item['product_id'] ) ) {
+            continue;
+        }
         $post_author = get_post_field( 'post_author', $item['data']->get_id() );
         $seller_pack[$post_author][$key] = $item;
     }
@@ -1054,7 +1057,7 @@ function dokan_custom_split_shipping_packages( $packages ) {
             'contents_cost'   => array_sum( wp_list_pluck( $pack, 'line_total' ) ),
             'applied_coupons' => WC()->cart->get_applied_coupons(),
             'user'            => array(
-                 'ID' => get_current_user_id(),
+                'ID' => get_current_user_id(),
             ),
             'seller_id'       =>  $seller_id,
             'destination'     => array(
@@ -1072,6 +1075,11 @@ function dokan_custom_split_shipping_packages( $packages ) {
 }
 
 add_filter( 'woocommerce_shipping_package_name', 'dokan_change_shipping_pack_name', 10, 3 );
+
+// add_filter('dokan_cart_shipping_packages', function( $p ) {
+//     var_dump($p);
+// });
+
 
 function dokan_change_shipping_pack_name( $title, $i, $package ) {
 

@@ -254,8 +254,8 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
                 }
 
-                if ( count( $products) > 1 ) {
-                    $price[ $seller_id ]['add_product'] = $default_shipping_add_price * ( count( $products) - ( 1 + $downloadable_count ) );
+                if ( count( $products ) > 1 ) {
+                    $price[ $seller_id ]['add_product'] =  (int) $default_shipping_add_price * ( count( $products) - ( 1 + $downloadable_count ) );
                 } else {
                     $price[ $seller_id ]['add_product'] = 0;
                 }

@@ -132,12 +132,6 @@
                             <td>
                                 <strong><a href="<?php echo $edit_link ?>"><?php echo $user->user_login; ?></strong></a>
                                 <div class="row-actions toggle-seller-status">
-                                    <?php if ( !$seller_enable ) { ?>
-                                        <span class="active"><a class="toggle-seller" href="#" data-id="<?php echo $user->ID; ?>" data-type="yes"><?php _e( 'Activate Selling', 'dokan' ); ?></a> | </span>
-                                    <?php } else { ?>
-                                        <span class="active delete"><a class="toggle-seller" href="#" data-id="<?php echo $user->ID; ?>" data-type="no"><?php _e( 'Make Inactivate', 'dokan' ); ?></a> | </span>
-                                    <?php } ?>
-
                                     <span class="products-link"><a href="<?php echo admin_url( 'edit.php?post_type=product&author=' . $user->ID ); ?>"><?php _e( 'Products', 'dokan' ); ?></a> | </span>
                                     <span class="orders-link"><a href="<?php echo admin_url( 'edit.php?post_type=shop_order&author=' . $user->ID ); ?>"><?php _e( 'Orders', 'dokan' ); ?></a></span>
                                 </div>
@@ -153,11 +147,10 @@
                             <td><?php echo dokan_get_seller_balance( $user->ID ); ?></td>
                             <td><?php echo empty( $info['phone'] ) ? '--' : $info['phone']; ?></td>
                             <td>
-                                <?php if ( $seller_enable ) {
-                                    echo '<span class="seller-active">' . __( 'Active', 'dokan' ) . '</span>';
-                                } else {
-                                    echo '<span class="seller-inactive">' . __( 'Inactive', 'dokan' ) . '</span>';
-                                } ?>
+                                <label class="switch">
+                                    <input type="checkbox" <?php echo $seller_enable ? 'checked': '' ?> class="toogle-seller" data-id="<?php echo $user->ID; ?>">
+                                    <span class="slider round"></span>
+                                </label>                
                             </td>
                         </tr>
                         <?php
@@ -217,29 +210,32 @@
             ?>
         </div>
     </form>
-
-    <style type="text/css">
-        .seller-active { color: green; }
-        .seller-inactive { color: red; }
-    </style>
-
     <script type="text/javascript">
         jQuery(function($) {
-            $('.toggle-seller-status').on('click', 'a.toggle-seller', function(e) {
-                e.preventDefault();
 
-                var data = {
-                    'action' : 'dokan_toggle_seller',
-                    'user_id' : $(this).data('id'),
-                    'type' : $(this).data('type')
-                };
+            $('input.toogle-seller').on('change', function(e) {
+                e.preventDefault();
+                var self = $(this);
+
+                if ( self.is( ':checked' ) ) {
+                    var data = {
+                        'action' : 'dokan_toggle_seller',
+                        'user_id' : self.data('id'),
+                        'type' : 'yes'
+                    };
+                } else {
+                    var data = {
+                        'action' : 'dokan_toggle_seller',
+                        'user_id' : self.data('id'),
+                        'type' : 'no'
+                    };
+                }
 
                 $.post(ajaxurl, data, function(resp) {
-                    window.location.reload();
+                    //
                 });
             });
+
         });
     </script>
-
-
 </div>
