@@ -23,7 +23,6 @@ Class Dokan_Social_Login {
      */
     public function __construct() {
         $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ) . 'dokan-registration/edit';
-        $this->config   = $this->get_providers_config();
         $this->init_hooks();
     }
 
@@ -48,14 +47,18 @@ Class Dokan_Social_Login {
      * call actions and hooks
      */
     public function init_hooks() {
+        //add settings menu page
+        add_filter( 'dokan_settings_sections', array( $this, 'dokan_social_api_settings' ) );
+        add_filter( 'dokan_settings_fields', array( $this, 'dokan_social_settings_fields' ) );
+        
+        if ( 'on' != dokan_get_option( 'enabled', 'dokan_social_api' ) ) {
+           return; 
+        }
+        $this->config   = $this->get_providers_config();
 
         //Hybrid auth action
         add_action( 'init', array( $this, 'init_session' ) );
         add_action( 'init', array( $this, 'monitor_autheticate_requests' ) );
-
-        //add settings menu page
-        add_filter( 'dokan_settings_sections', array( $this, 'dokan_social_api_settings' ) );
-        add_filter( 'dokan_settings_fields', array( $this, 'dokan_social_settings_fields' ) );
 
         // add social buttons on registration form
         add_action( 'woocommerce_register_form_end', array( $this, 'render_social_logins' ) );
@@ -228,6 +231,12 @@ Class Dokan_Social_Login {
     public function dokan_social_settings_fields( $settings_fields ) {
 
         $settings_fields['dokan_social_api'] = array(
+            'enabled' => array(
+                'name'  => 'enabled',
+                'label' => __( 'Enable Social Login', 'dokan-social-api' ),
+                'type'  => "checkbox",
+                'desc'  => __( 'Enabling this will add Social Icons under registration form to allow users to login or register using Social Profiles', 'dokan-social-api' ),
+            ),
             'facebook_app_label'  => array(
                 'name'  => 'fb_app_label',
                 'label' => __( 'Facebook App Settings', 'dokan-social-api' ),
