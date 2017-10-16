@@ -13,6 +13,7 @@
     <?php
     $counts = dokan_get_seller_status_count();
     $status = isset( $_GET['status'] ) ? $_GET['status'] : 'all';
+    $sort_order = ( ! empty( $_GET[ 'order' ] ) && $_GET[ 'order' ] == 'desc' ) ? 'asc' : 'desc';
     if ( isset( $_GET['s'] ) && !empty( $_GET['s'] ) ) {
     ?>
         <span><?php echo __( 'Search results for : ' , 'dokan' ). $_GET['s'] ?></span>
@@ -66,6 +67,12 @@
                     <th><?php _e( 'Products', 'dokan' ); ?></th>
                     <th><?php _e( 'Balance', 'dokan' ); ?></th>
                     <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
+                    <th class="manage-column column-regsitered_date sortable <?php echo $sort_order ?>">
+                        <a href="<?php echo add_query_arg( array( 'page' => 'dokan-sellers', 'orderby' => 'user_registered', 'order' => $sort_order ), admin_url( 'admin.php' ) ); ?>">
+                            <span><?php _e( 'Regsitered', 'dokan' ); ?></span>
+                            <span class="sorting-indicator"></span>
+                        </a>
+                    </th>
                     <th><?php _e( 'Status', 'dokan' ); ?></th>
                 </tr>
             </thead>
@@ -112,6 +119,13 @@
                     );
                 }
 
+                if ( ! empty( $_GET['orderby'] ) ) {
+                    $args['orderby'] = $_GET['orderby'];
+                }
+
+                if ( ! empty( $_GET['order'] ) ) {
+                    $args['order'] = $_GET['order'];
+                }
 
                 $user_search = new WP_User_Query( $args );
                 $sellers     = (array) $user_search->get_results();
@@ -148,6 +162,7 @@
                             </td>
                             <td><?php echo dokan_get_seller_balance( $user->ID ); ?></td>
                             <td><?php echo empty( $info['phone'] ) ? '--' : $info['phone']; ?></td>
+                            <td><?php echo dokan_date_time_format( $user->user_registered ); ?></td>
                             <td>
                                 <label class="switch tips" title="<?php echo $seller_enable ? $make_inactive_txt : $make_active_txt; ?>">
                                     <input type="checkbox" <?php echo $seller_enable ? 'checked': '' ?> class="toogle-seller" data-id="<?php echo $user->ID; ?>">
@@ -175,6 +190,12 @@
                     <th><?php _e( 'Products', 'dokan' ); ?></th>
                     <th><?php _e( 'Balance', 'dokan' ); ?></th>
                     <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
+                    <th class="manage-column column-regsitered_date sortable <?php echo $sort_order ?>">
+                        <a href="<?php echo add_query_arg( array( 'page' => 'dokan-sellers', 'orderby' => 'user_registered', 'order' => $sort_order ), admin_url( 'admin.php' ) ); ?>">
+                            <span><?php _e( 'Regsitered', 'dokan' ); ?></span>
+                            <span class="sorting-indicator"></span>
+                        </a>
+                    </th>
                     <th><?php _e( 'Status', 'dokan' ); ?></th>
                 </tr>
             </tfoot>
