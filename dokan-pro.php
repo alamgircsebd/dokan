@@ -195,7 +195,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
         require_once DOKAN_PRO_CLASS . '/store-share.php';
         require_once DOKAN_PRO_CLASS . '/social-login.php';
-        
+
         if ( !class_exists( 'Hybrid_Auth' ) ) {
             require_once DOKAN_PRO_INC. '/lib/Hybrid/Auth.php';
         }
@@ -363,7 +363,6 @@ class Dokan_Pro {
     **/
     public function admin_enqueue_scripts() {
         wp_enqueue_script( 'dokan_pro_admin', DOKAN_PRO_PLUGIN_ASSEST.'/js/dokan-pro-admin.js', array( 'jquery' ) );
-        wp_enqueue_style( 'dokan_admin_style', DOKAN_PRO_PLUGIN_ASSEST .'/css/admin.css' );
 
         $dokan_refund = dokan_get_refund_localize_data();
         wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );
@@ -431,9 +430,9 @@ class Dokan_Pro {
 
         return $file;
     }
-    
+
     /**
-     * 
+     *
      * @param type $file
      * @return type
      */
