@@ -2,18 +2,18 @@
 
 /**
  * Dokan Social login class
- * 
+ *
  * @since 2.6.6
- * 
+ *
  * @package dokan-pro
- * 
+ *
  */
 
 Class Dokan_Social_Login {
 
     private $base_url;
     private $config;
-    
+
     /**
      * Load automatically when class instantiated
      *
@@ -42,7 +42,7 @@ Class Dokan_Social_Login {
 
         return $instance;
     }
-    
+
     /**
      * call actions and hooks
      */
@@ -50,9 +50,9 @@ Class Dokan_Social_Login {
         //add settings menu page
         add_filter( 'dokan_settings_sections', array( $this, 'dokan_social_api_settings' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'dokan_social_settings_fields' ) );
-        
+
         if ( 'on' != dokan_get_option( 'enabled', 'dokan_social_api' ) ) {
-           return; 
+           return;
         }
         $this->config   = $this->get_providers_config();
 
@@ -67,7 +67,7 @@ Class Dokan_Social_Login {
         add_filter( 'dokan_query_var_filter', array( $this, 'register_support_queryvar' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin' ) );
     }
-    
+
     /**
      * Initialize session at start
      */
@@ -76,10 +76,10 @@ Class Dokan_Social_Login {
             session_start();
         }
     }
-    
+
     /**
      * Get configuration values for HybridAuth
-     * 
+     *
      * @return array
      */
     private function get_providers_config() {
@@ -169,11 +169,6 @@ Class Dokan_Social_Login {
             exit;
         }
 
-        //disconnect user
-//        if ( isset( $_GET['dokan_reg_dc'] ) ) {
-//            return;
-//        }
-
         if ( !isset( $_GET['dokan_reg'] ) ) {
             return;
         }
@@ -193,7 +188,7 @@ Class Dokan_Social_Login {
                 }
 
                 $wp_user = get_user_by( 'email', $user_profile->email );
-             
+
                 if ( !$wp_user ) {
                     $this->register_new_user( $user_profile, $provider );
                 } else {
@@ -202,15 +197,14 @@ Class Dokan_Social_Login {
             }
         } catch ( Exception $e ) {
             $this->e_msg = $e->getMessage();
-            error_log( $this->e_msg );
         }
     }
-    
+
     /**
      * Filter admin menu settings section
-     * 
+     *
      * @param type $sections
-     * 
+     *
      * @return array
      */
     public function dokan_social_api_settings( $sections ) {
@@ -220,12 +214,12 @@ Class Dokan_Social_Login {
         );
         return $sections;
     }
-    
+
     /**
      * Render settings fields for admin settings section
-     * 
+     *
      * @param array $settings_fields
-     * 
+     *
      * @return array
      */
     public function dokan_social_settings_fields( $settings_fields ) {
@@ -362,10 +356,10 @@ Class Dokan_Social_Login {
             include $template;
         }
     }
-    
+
     /**
      * Render social login icons
-     * 
+     *
      * @return void
      */
     public function render_social_logins() {
@@ -440,14 +434,14 @@ Class Dokan_Social_Login {
             return call_user_func( array( $this, 'generate_unique_username' ), $username );
         }
     }
-    
+
     /**
      * Register a new user
-     * 
+     *
      * @param object $data
-     * 
+     *
      * @param string $provider
-     * 
+     *
      * @return void
      */
     private function register_new_user( $data, $provider ) {
@@ -459,7 +453,7 @@ Class Dokan_Social_Login {
             'last_name'  => $data->lastName,
             'role'       => 'customer',
         );
-        
+
         $user_id = @wp_insert_user( $userdata );
 
         if ( !is_wp_error( $user_id ) ) {
@@ -468,12 +462,12 @@ Class Dokan_Social_Login {
             exit();
         }
     }
-    
+
     /**
      * Log in existing users
-     * 
+     *
      * @param WP_User $wp_user
-     * 
+     *
      * return void
      */
     private function login_user( $wp_user ) {
@@ -482,7 +476,6 @@ Class Dokan_Social_Login {
         wp_set_current_user( $wp_user->ID );
         wp_set_auth_cookie( $wp_user->ID, true, false );
         update_user_caches( $wp_user );
-        error_log( 'Logged in user : '.$wp_user->ID );
     }
 
 }
