@@ -3,7 +3,7 @@
 Plugin Name: Dokan Pro
 Plugin URI: https://wedevs.com/dokan/
 Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-Version: 2.6.5
+Version: 2.6.6
 Author: weDevs
 Author URI: https://wedevs.com/
 License: GPL2
@@ -182,6 +182,7 @@ class Dokan_Pro {
         if ( is_admin() ) {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
+            require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
             require_once DOKAN_PRO_CLASS . '/update.php';
@@ -193,11 +194,16 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
+        require_once DOKAN_PRO_CLASS . '/store-share.php';
+        require_once DOKAN_PRO_CLASS . '/social-login.php';
 
+        if ( !class_exists( 'Hybrid_Auth' ) ) {
+            require_once DOKAN_PRO_INC. '/lib/Hybrid/Auth.php';
+        }
     }
 
     /**
-     * Inistantiate all classes
+     * Instantiate all classes
      *
      * @since 2.4
      *
@@ -255,8 +261,13 @@ class Dokan_Pro {
         add_filter( 'dokan_is_pro_exists', array( $this, 'set_as_pro' ), 99 );
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
+        add_filter( 'woocommerce_locate_template', array( $this, 'dokan_registration_template' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_pro_templates' ), 10, 3 );
-        add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
+
+        //Dokan Email filters for WC Email
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_emails' ), 36 );
+        add_filter( 'dokan_email_list', array( $this, 'set_email_template_directory' ), 15 );
+        add_filter( 'dokan_email_actions' , array( $this, 'register_email_actions' ) );
     }
 
     /**
@@ -385,6 +396,7 @@ class Dokan_Pro {
         $query_vars[] = 'announcement';
         $query_vars[] = 'single-announcement';
         $query_vars[] = 'account-migration';
+        $query_vars[] = 'dokan-registration';
 
         return $query_vars;
     }
@@ -421,6 +433,18 @@ class Dokan_Pro {
     }
 
     /**
+     *
+     * @param type $file
+     * @return type
+     */
+    function dokan_registration_template( $file ) {
+        if ( get_query_var( 'dokan-registration' ) && dokan_is_user_customer( get_current_user_id() ) && basename( $file ) == 'my-account.php' ) {
+            $file = dokan_locate_template( 'global/dokan-registration.php', '', DOKAN_PRO_DIR . '/templates/', true );
+        }
+        return $file;
+    }
+
+    /**
     * Load dokan pro templates
     *
     * @since 2.5.2
@@ -449,22 +473,59 @@ class Dokan_Pro {
     }
 
     /**
-     * Set default product types
+     * Add Dokan Email classes in WC Email
      *
-     * @since 2.6
+     * @since 2.6.6
      *
-     * @param array $product_types
+     * @param array $wc_emails
      *
-     * @return $product_types
+     * @return $wc_emails
      */
-    function set_default_product_types( $product_types ) {
+    function load_dokan_emails( $wc_emails ) {
+        $wc_emails['Dokan_Email_Announcement']    = include( DOKAN_PRO_INC . '/emails/class-dokan-email-announcement.php' );
+        $wc_emails['Dokan_Email_Updated_Product'] = include( DOKAN_PRO_INC . '/emails/class-dokan-email-updated-product.php' );
+        $wc_emails['Dokan_Email_Refund_Request']  = include( DOKAN_PRO_INC . '/emails/class-dokan-refund-request.php' );
+        $wc_emails['Dokan_Email_Refund_Vendor']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-refund-vendor.php' );
 
-        $product_types = array(
-            'simple' => __( 'Simple', 'dokan' ),
-            'variable' => __( 'Variable', 'dokan' ),
+        return $wc_emails;
+    }
+
+    /**
+     * Register Dokan Email actions for WC
+     *
+     * @since 2.6.6
+     *
+     * @param array $actions
+     *
+     * @return $actions
+     */
+    function register_email_actions( $actions ) {
+        $actions[] = 'dokan_edited_product_pending_notification';
+        $actions[] = 'dokan_after_announcement_saved';
+        $actions[] = 'dokan_refund_request_notification';
+        $actions[] = 'dokan_refund_processed_notification';
+
+        return $actions;
+    }
+
+    /**
+     * Set template override directory for Dokan Emails
+     *
+     * @since 2.6.6
+     *
+     * @param array $dokan_emails
+     *
+     * @return $dokan_emails
+     */
+    function set_email_template_directory( $dokan_emails ) {
+        $dokan_pro_emails = array(
+            'product-updated-pending',
+            'announcement',
+            'refund-seller-mail',
+            'refund_request',
         );
 
-        return $product_types;
+        return array_merge( $dokan_pro_emails, $dokan_emails );
     }
 
 }

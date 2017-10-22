@@ -13,10 +13,10 @@ class Dokan_Announcement {
     private $post_type = 'dokan_announcement';
     private $assign_type = array();
 
-	/**
-	 *  Load autometically all actions
-	 */
-	function __construct() {
+    /**
+     *  Load automatically all actions
+     */
+    function __construct() {
         $this->assign_type = array(
             ''                => __( '-- Select --', 'dokan' ),
             'all_seller'      => __( 'All Vendor', 'dokan' ),
@@ -26,10 +26,33 @@ class Dokan_Announcement {
         add_action( 'init', array( $this, 'post_types' ) );
         add_action( 'add_meta_boxes', array( $this, 'add_new_metabox' ) );
         add_action( 'save_post', array( $this, 'save_announcement_meta' ), 10, 2 );
+        add_action( 'admin_footer', array( $this, 'help_text' ));
 
         add_filter( 'manage_edit-dokan_announcement_columns', array( $this, 'add_type_columns' ) );
         add_filter( 'manage_dokan_announcement_posts_custom_column', array( $this, 'assign_type_edit_columns' ), 10, 2 );
-	}
+    }
+        
+    /**
+     * Show help link under add new announcement button
+     * 
+     * @since 2.6.9
+     * 
+     * @return void
+     */    
+    function help_text() {
+        $screen = get_current_screen();
+        if ( $screen->post_type != $this->post_type ) {
+            return;
+        }
+        $help_text = sprintf( __( 'Learn More: <a target="_blank" href="%s">How to Create Announcement in Dokan</a>', 'dokan' ), 'https://wedevs.com/docs/dokan/tutorials/how-to-create-an-announcement/' );
+        ?>
+        <script>
+            jQuery(function($) {
+                $( '.wp-header-end' ).before( '<p><?php echo $help_text ?></p>' );
+            });
+        </script>
+        <?php
+    }
 
     /**
      * Register Announcement post type
@@ -253,7 +276,8 @@ class Dokan_Announcement {
             $this->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
         
-        $this->new_announcement_mail( $assigned_sellers, $post_id );
+        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $post_id );
+        //$this->new_announcement_mail( $assigned_sellers, $post_id );
     }
 
     /**

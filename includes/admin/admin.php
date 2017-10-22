@@ -24,6 +24,7 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
+        add_action( 'init', array( $this, 'dokan_export_all_logs' ) );
     }
 
     /**
@@ -47,12 +48,13 @@ class Dokan_Pro_Admin_Settings {
         }
 
         add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
-        add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
-        $report       = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
-        $announcement = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
-        add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
+        $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
+        $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
+        $announcement   = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
+        $tools          = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
-        add_action( $report, array( $this, 'report_scripts' ) );
+        add_action( $report, array( $this, 'common_scripts' ) );
+        add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
 
@@ -160,7 +162,14 @@ class Dokan_Pro_Admin_Settings {
                 'type'    => 'multicheck',
                 'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
                 'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
-            )
+            ),
+            'hide_customer_info' => array(
+                'name'    => 'hide_customer_info',
+                'label'   => __( 'Hide Customer info', 'dokan' ),
+                'desc'    => __( 'Hide customer information from order details of vendors', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'off'
+            ),
         );
 
         $new_settings_fields['dokan_withdraw'] = array(
@@ -195,7 +204,7 @@ class Dokan_Pro_Admin_Settings {
      *
      * @return void
      */
-    function report_scripts() {
+    function common_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
         wp_enqueue_style( 'dokan-chosen-style' );
@@ -398,6 +407,56 @@ class Dokan_Pro_Admin_Settings {
             'href'   => admin_url( 'admin.php?page=dokan-settings' )
         ) );
     }
+
+    /**
+     * Export method to generate CSV for all logs tab
+     *
+     * @since 2.6.6
+     *
+     * @global type $wpdb
+     */
+    function dokan_export_all_logs() {
+
+        if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-export' ) {
+            global $wpdb;
+            $seller_where = '';
+
+            if ( isset( $_GET['seller_id'] ) ) {
+                $seller_where = $wpdb->prepare( 'AND seller_id = %d', $_GET['seller_id'] );
+            }
+
+            $sql = "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
+                LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
+                WHERE seller_id != 0 AND p.post_status != 'trash' $seller_where";
+
+            $all_logs = $wpdb->get_results( $sql );
+
+            $all_logs = json_decode( json_encode( $all_logs ), true );
+            $ob = fopen( "php://output", 'w' );
+
+            $headers = array(
+                'order_id'     => __( 'Order', 'dokan' ),
+                'seller_id'    => __( 'Vendor', 'dokan' ),
+                'order_total'  => __( 'Order Total', 'dokan' ),
+                'net_amount'   => __( 'Vendor Earning', 'dokan' ),
+                'commision'    => __( 'Commision', 'dokan' ),
+                'order_status' => __( 'Status', 'dokan' ),
+            );
+
+            $filename = "Report-" . date( 'Y-m-d', time() );
+            header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
+            header( "Content-Disposition: attachment; filename=$filename.csv" );
+
+            fputcsv( $ob, array_values( $headers ) );
+
+            foreach ( $all_logs as $a ) {
+                fputcsv( $ob, array_values( $a ) );
+            }
+            fclose( $ob );
+            exit();
+        }
+    }
+
 }
 
 // End of Dokan_Pro_Admin_Settings class;

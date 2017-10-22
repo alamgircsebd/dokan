@@ -200,9 +200,17 @@
         );
         $headers = apply_filters( 'dokan_earning_report_header', $headers );
         $statuses = wc_get_order_statuses();
+        
+        $args = $_GET;
+        $args['action'] = 'dokan-export';
+        $export_url = add_query_arg( $args , admin_url( 'admin.php' ) );
         ?>
+    
         <?php do_action( 'dokan_prev_report_form', $_GET ); ?>
-
+    
+        <a href="<?php echo $export_url ?>">
+            <button class="button button-primary" style="float:right; margin: 10px;"><?php _e( ' Export CSV', 'dokan' ); ?></button>
+        </a>
         <table class="widefat withdraw-table" style="margin-top: 15px;">
             <thead>
                 <tr>

@@ -230,7 +230,7 @@ $dps_refund_policy       = get_user_meta( $user_id, '_dps_refund_policy', true )
                                                                 <tr>
                                                                     <td>
                                                                         <label for=""><?php _e( 'State', 'dokan' ); ?></label>
-                                                                        <input type="text" name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control dps_state_selection" placeholder="State name" value="<?php echo $state; ?>">
+                                                                        <input type="text" name="dps_state_to[<?php echo $country ?>][]" class="dokan-form-control dps_state_selection" placeholder="<?php _e( 'State name', 'dokan' ); ?>" value="<?php echo $state; ?>">
                                                                     </td>
                                                                     <td>
                                                                         <label for=""><?php _e( 'Cost', 'dokan' ); ?></label>

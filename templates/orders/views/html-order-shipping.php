@@ -77,10 +77,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( empty( $legacy_order ) && wc_tax_enabled() ) :
 			$shipping_taxes = isset( $item['taxes'] ) ? $item['taxes'] : '';
 			$tax_data       = maybe_unserialize( $shipping_taxes );
-
 			foreach ( $order_taxes as $tax_item ) :
 				$tax_item_id       = $tax_item['rate_id'];
-				$tax_item_total    = isset( $tax_data[ $tax_item_id ] ) ? $tax_data[ $tax_item_id ] : '';
+				$tax_item_total    = isset( $tax_data['total'][ $tax_item_id ] ) ? $tax_data['total'][ $tax_item_id ] : '';
 				?>
 					<td class="line_tax" width="1%">
 						<div class="view">
