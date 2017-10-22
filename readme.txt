@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.7.4
+Tested up to: 4.8.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +169,31 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.6.6 -> October 22, 2017
+---------------------
+- [new] Added Flat commission option
+- [new] Added status filter and search option on vendor listing for Admin
+- [new] Added Social login feature 
+- [new] Vendor Store's social share icon on tabs 
+- [new] Added Category wise vendor commission
+- [new] Added Export CSV option on All Logs tab of Dokan Reports page
+- [new] Added Shipping option in seller setup wizard
+- [new] Added Up sell and Cross sell product on vendor product option
+- [new] Added group type product on vendor product option
+- [new] Dokan email templates integrated within WooCommerce emails with template support
+- [new] Added various help texts on Dokan admin pages
+- [new] Added various help texts on Dokan admin pages
+- [new] Help tutorial on Dokan Admin pages
+- [fix] Customer migration redirect to seller wizard not working
+- [fix] Placeholder date format translation issue
+- [fix] Not sending new seller email on customer migration
+- [fix] Announcement mail showing all seller emails
+- [fix] Fix showing tax data for order details page 
+- [fix] Added settings to hide customer info from vendor's order details
+- [fix] Turned of shipping method when product shipping is disabled
+- [tweak] Toggle switch added for toggle vendor status on vendor listing
+- [tweak] Registered date in vendor listing column for Dokan Admin
 
 v2.6.5 -> Aug 2, 2017
 ---------------------
