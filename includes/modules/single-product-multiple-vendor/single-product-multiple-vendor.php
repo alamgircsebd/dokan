@@ -59,6 +59,7 @@ class Dokan_Single_Product_Multi_Vendor {
     public function define() {
         define( 'DOKAN_SPMV_DIR', dirname( __FILE__ ) );
         define( 'DOKAN_SPMV_INC_DIR', DOKAN_SPMV_DIR . '/includes' );
+        define( 'DOKAN_SPMV_ASSETS_DIR', plugins_url( 'assets', __FILE__ ) );
     }
 
     /**
@@ -72,6 +73,8 @@ class Dokan_Single_Product_Multi_Vendor {
         if ( is_admin() ) {
             require_once DOKAN_SPMV_INC_DIR . '/admin.php';
         }
+
+        require_once DOKAN_SPMV_INC_DIR . '/products.php';
     }
 
     /**
@@ -85,6 +88,8 @@ class Dokan_Single_Product_Multi_Vendor {
         if ( is_admin() ) {
             new Dokan_SPMV_Admin();
         }
+
+        new Dokan_SPMV_Products();
     }
 
     /**
@@ -101,10 +106,46 @@ class Dokan_Single_Product_Multi_Vendor {
             return;
         }
 
+        //tinysort.min.js
+        add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
         // Hook all necessary filter and actions
+    }
+
+    /**
+     * Load scripts
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function load_scripts() {
+        wp_enqueue_script( 'dokan-spvm-tinysort', DOKAN_SPMV_ASSETS_DIR. '/js/tinysort.min.js', array( 'jquery' ) );
+    }
+
+    /**
+     * Create Mapping table for product and vendor
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public static function activate() {
+        global $wpdb;
+
+        $sql = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_product_map` (
+                `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `map_id` bigint(20) DEFAULT NULL,
+                `product_id` bigint(20) DEFAULT NULL,
+                `seller_id` bigint(20) DEFAULT NULL,
+                PRIMARY KEY (`id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+        include_once ABSPATH . 'wp-admin/includes/upgrade.php';
+        dbDelta( $sql );
     }
 
 }
 
 Dokan_Single_Product_Multi_Vendor::init();
+dokan_register_activation_hook( __FILE__, array( 'Dokan_Single_Product_Multi_Vendor', 'activate' ) );
 

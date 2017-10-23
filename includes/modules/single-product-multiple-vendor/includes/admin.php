@@ -49,7 +49,36 @@ class Dokan_SPMV_Admin {
                 'label' => __( 'Enable Single Product Multiple Vendor', 'dokan' ),
                 'desc'  => __( 'Enable Single Product Multiple Vendor functionality', 'dokan' ),
                 'type'  => 'checkbox'
-            )
+            ),
+
+            array(
+                'name'    => 'sell_item_btn',
+                'label'   => __( 'Sell Item Button Text', 'dokan' ),
+                'desc'    => __( 'Change your sell this item button text', 'dokan' ),
+                'type'    => 'text',
+                'default' => __( 'Sell This Item', 'dokan' ),
+            ),
+
+            array(
+                'name'    => 'available_vendor_list_title',
+                'label'   => __( 'Available Vendor Display area title', 'dokan' ),
+                'desc'    => __( 'Set your heading for available vendor section in single product page', 'dokan' ),
+                'type'    => 'text',
+                'default' => __( 'Other Available Vendor', 'dokan' ),
+            ),
+
+            array(
+                'name'    => 'available_vendor_list_position',
+                'label'   => __( 'Available Vendor Section Display Position', 'dokan' ),
+                'desc'    => __( 'Set your displaying position for diplaying available vendor section in single product page', 'dokan' ),
+                'type'    => 'select',
+                'options' => array(
+                    'below_tabs'  => __( 'Below Single Product Tabs', 'dokan' ),
+                    'inside_tabs' => __( 'Display inside Product Tabs', 'dokan' ),
+                    'after_tabs'  => __( 'After Single Product Tabs', 'dokan' ),
+                ),
+                'default' => 'below_tabs',
+            ),
         );
 
         return $settings_fields;
