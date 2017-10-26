@@ -236,75 +236,66 @@ class Dokan_SPMV_Products {
                     <?php echo dokan_get_option( 'available_vendor_list_title', 'dokan_spmv', __( 'Other Available Vendor', 'dokan' ) ); ?>
                 </h3>
 
-                <table class="table dokan-table dokan-other-vendor-camparison-table">
-                    <thead>
-                        <tr>
-                            <th><?php _e( 'Vendor', 'dokan' ); ?></th>
-                            <th><?php _e( 'Price', 'dokan' ); ?></th>
-                            <th><?php _e( 'Rating', 'dokan' ); ?></th>
-                            <th></th>
-                        </tr>
-                    </thead>
+                <div class="table dokan-table dokan-other-vendor-camparison-table">
 
-                    <tbody>
-                        <?php foreach ( $lists as $key => $list ): ?>
-                            <?php
-                                $product_obj    = wc_get_product( $list->product_id );
-                                $post_author_id = get_post_field( 'post_author', $product_obj->get_id() );
-                                $seller_info    = dokan_get_store_info( $post_author_id );
-                                $rating_count   = $product_obj->get_rating_count();
-                                $review_count   = $product_obj->get_review_count();
-                                $average        = $product_obj->get_average_rating();
+                    <?php foreach ( $lists as $key => $list ): ?>
+                        <?php
+                            $product_obj    = wc_get_product( $list->product_id );
+                            $post_author_id = get_post_field( 'post_author', $product_obj->get_id() );
+                            $seller_info    = dokan_get_store_info( $post_author_id );
+                            $rating_count   = $product_obj->get_rating_count();
+                            $review_count   = $product_obj->get_review_count();
+                            $average        = $product_obj->get_average_rating();
 
-                                if ( ! $product_obj->is_visible() ) {
-                                    continue;
-                                }
-                            ?>
-                            <tr <?php echo ( $list->product_id == $product->get_id() ) ? 'class="active"' : ''; ?>>
+                            if ( ! $product_obj->is_visible() ) {
+                                continue;
+                            }
+                        ?>
 
-                                <td>
-                                    <?php echo get_avatar( $post_author_id, 30 ); ?>
-                                    <a href="<?php echo dokan_get_store_url( $post_author_id ); ?>"><?php echo $seller_info['store_name'] ?></a>
-                                </td>
+                    <div class="table-row <?php echo ( $list->product_id == $product->get_id() ) ? 'active' : ''; ?>">
+                        <div class="table-cell vendor">
+                            <?php echo get_avatar( $post_author_id, 52 ); ?>
+                            <a href="<?php echo dokan_get_store_url( $post_author_id ); ?>"><?php echo $seller_info['store_name'] ?></a>
+                        </div>
+                        <div class="table-cell price">
+                            <span class="cell-title">Price</span>
+                            <?php echo $product_obj->get_price_html(); ?>
+                        </div>
+                        <div class="table-cell rating">
+                            <span class="cell-title">Rating</span>
+                            <div class="woocommerce-product-rating">
+                                <?php echo wc_get_rating_html( $average, $rating_count ); ?>
+                                <?php if ( comments_open() ) : ?><a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s customer review', '%s customer reviews', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a><?php endif ?>
+                            </div>
+                        </div>
+                        <div class="table-cell action-area">
+                            <a href="<?php echo dokan_get_store_url( $post_author_id ); ?>" class="dokan-btn tips link" title="<?php _e( 'View Store', 'dokan' ); ?>">
+                                <i class="fa fa-external-link"></i>
+                            </a>
+                            <a href="<?php echo $product_obj->get_permalink(); ?>" class="dokan-btn tips view" title="<?php _e( 'View Product', 'dokan' ); ?>">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <?php if ( 'simple' == $product_obj->get_type() ): ?>
+                                <?php
+                                echo sprintf( '<a href="%s" data-quantity="%s" data-product_id="%s" data-product_sku="%s" class="%s" title="%s">%s</a>',
+                                    esc_url( $product_obj->add_to_cart_url() ),
+                                    1,
+                                    esc_attr( $product_obj->get_id() ),
+                                    esc_attr( $product_obj->get_sku() ),
+                                    'dokan-btn tips cart',
+                                    __( 'Add to cart', 'dokan' ),
+                                    '<i class="fa fa-shopping-cart"></i>'
+                                );
+                                ?>
+                            <?php elseif ( 'variable' == $product_obj->get_type() ) : ?>
+                                <a href="<?php echo $product_obj->get_permalink(); ?>" class="dokan-btn tips bars" title="<?php _e( 'Select Options', 'dokan' ); ?>"><i class="fa fa-bars"></i></a>
+                            <?php endif ?>
+                        </div>
+                    </div>
 
-                                <td class="td-price"><?php echo $product_obj->get_price_html(); ?></td>
+                    <?php endforeach ?>
 
-                                <td>
-                                    <div class="woocommerce-product-rating">
-                                        <?php echo wc_get_rating_html( $average, $rating_count ); ?>
-                                        <?php if ( comments_open() ) : ?><a href="#reviews" class="woocommerce-review-link" rel="nofollow">(<?php printf( _n( '%s customer review', '%s customer reviews', $review_count, 'woocommerce' ), '<span class="count">' . esc_html( $review_count ) . '</span>' ); ?>)</a><?php endif ?>
-                                    </div>
-                                </td>
-
-                                <td>
-                                    <a href="<?php echo dokan_get_store_url( $post_author_id ); ?>" class="dokan-btn dokan-btn-theme tips" title="<?php _e( 'View Store', 'dokan' ); ?>">
-                                        <i><i class="fa fa-external-link"></i></i>
-                                    </a>
-                                    <a href="<?php echo $product_obj->get_permalink(); ?>" class="dokan-btn dokan-btn-theme tips" title="<?php _e( 'View Product', 'dokan' ); ?>">
-                                        <i class="fa fa-eye" aria-hidden="true"></i>
-                                    </a>
-                                    <?php if ( 'simple' == $product_obj->get_type() ): ?>
-                                        <?php
-                                            echo sprintf( '<a href="%s" data-quantity="%s" data-product_id="%s" data-product_sku="%s" class="%s" title="%s">%s</a>',
-                                                esc_url( $product_obj->add_to_cart_url() ),
-                                                1,
-                                                esc_attr( $product_obj->get_id() ),
-                                                esc_attr( $product_obj->get_sku() ),
-                                                'dokan-btn dokan-btn-theme tips',
-                                                __( 'Add to cart', 'dokan' ),
-                                                '<i class="fa fa-shopping-cart"></i>'
-                                            );
-                                        ?>
-                                    <?php elseif ( 'variable' == $product_obj->get_type() ) : ?>
-                                        <a href="<?php echo $product_obj->get_permalink(); ?>" class="dokan-btn dokan-btn-theme tips" title="<?php _e( 'Select Options', 'dokan' ); ?>"><i class="fa fa-bars"></i></a>
-                                    <?php endif ?>
-
-                                </td>
-
-                            </tr>
-                        <?php endforeach ?>
-                    </tbody>
-                </table>
+                </div>
             </div>
 
             <style>
@@ -315,6 +306,117 @@ class Dokan_SPMV_Products {
 
                 .dokan-other-vendor-camparison h3 {
                     margin-bottom: 15px;
+                }
+
+                .dokan-other-vendor-camparison-table {
+                    margin:50px 0;
+                }
+                .table-row {
+                    display: table;
+                    background: white;
+                    border-radius: 5px;
+                    border: 1px solid #edf2f7;
+                    padding: 20px;
+                    width: 100%;
+                    margin-bottom: 15px;
+                    box-shadow: 1.21px 4.851px 27px 0px rgba(202, 210, 240, 0.2);
+                }
+                .table-cell {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+                .table-cell.vendor {
+                    width: 45%;
+                }
+                .table-cell.price {
+                    width: 15%;
+                }
+                .table-cell.rating {
+                    width: 20%;
+                }
+                .table-cell.action-area {
+                    width: 20%;
+                    text-align: center;
+                }
+
+                .table-cell.vendor img{
+                    display: inline-block;
+                    vertical-align: middle;
+                    border-radius: 3px;
+                }
+                .table-cell.vendor a{
+                    display: inline-block;
+                    vertical-align: middle;
+                    text-decoration: none;
+                    color: black;
+                    font-size: 20px;
+                    line-height: 1.2em;
+                    margin-left: 15px;
+                }
+                .table-cell .woocommerce-product-rating{
+                    margin-bottom:0 !important;
+                }
+                span.cell-title {
+                    display: block;
+                    font-size: 16px;
+                    margin-bottom: 10px;
+                    color: #82959b;
+                }
+                .table-cell .woocommerce-Price-amount{
+                    color: #e74c3c;
+                    font-size: 20px;
+                    line-height: 1.2em;
+                }
+
+                .table-cell .dokan-btn {
+                    padding: 5px 8px;
+                    font-size: 16px;
+                }
+                .table-cell .dokan-btn.link {
+                    color: #8e44ad;
+                }
+                .table-cell .dokan-btn.view {
+                    color: #008fd5;
+                }
+                .table-cell .dokan-btn.cart {
+                    color: #d35400;
+                }
+                .table-cell .dokan-btn:hover {
+                    background-color: #f5f7fa;
+                    color: inherit;
+                }
+
+                @media screen and (max-width: 767px){
+                    .table-row {
+                        display: block;
+                        padding:0;
+                        width: 100%;
+                    }
+                    .table-cell {
+                        display: block;
+                        width: 100% !important;
+                        text-align: center;
+                    }
+                    .table-cell.vendor img{
+                        display: block;
+                        margin: 30px auto;
+                    }
+                    .table-cell.vendor a{
+                        display: block;
+                        margin: 0 20px;
+                    }
+                    .table-cell.price{
+                        padding: 20px 0;
+                    }
+                    span.cell-title{
+                        display: none;
+                    }
+
+                    .action-area{
+                        border-top: 1px solid #e5edf0;
+                        margin-top: 20px;
+                        padding: 10px 0;
+                    }
                 }
             </style>
 
@@ -410,12 +512,3 @@ class Dokan_SPMV_Products {
         return false;
     }
 }
-
-
-
-
-
-
-
-
-
