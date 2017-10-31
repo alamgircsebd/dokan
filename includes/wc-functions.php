@@ -645,9 +645,9 @@ function dokan_variable_product_type_options() {
 function dokan_more_from_seller_tab( $tabs ) {
     if( check_more_seller_product_tab()){
         $tabs['more_seller_product'] = array(
-                'title' 	=> __( 'More Product', 'dokan' ),
-                'priority' 	=> 99,
-                'callback' 	=> 'dokan_more_products_from_seller',
+                'title'     => __( 'More Product', 'dokan' ),
+                'priority'  => 99,
+                'callback'  => 'dokan_more_products_from_seller',
         );
     }
     return $tabs;
@@ -785,8 +785,14 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
                 }
             }
 
-            if ( !$errors ) {
+            if ( ! $errors ) {
                 dokan_user_update_to_seller( $user, $_POST );
+
+                if ( isset( $_POST['dokan-subscription-pack'] ) ) {
+                    $url = get_site_url() . '/?add-to-cart=' . $_POST['dokan-subscription-pack'];
+                    wp_redirect( $url );
+                    exit;
+                }
 
                 $url = dokan_get_navigation_url();
 
