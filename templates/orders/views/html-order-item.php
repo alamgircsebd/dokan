@@ -51,7 +51,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<input type="hidden" class="order_item_id" name="order_item_id[]" value="<?php echo esc_attr( $item_id ); ?>" />
 		<input type="hidden" name="order_item_tax_class[<?php echo absint( $item_id ); ?>]" value="<?php echo isset( $item['tax_class'] ) ? esc_attr( $item['tax_class'] ) : ''; ?>" />
-		
 			<?php if( $variation_meta = $item->get_formatted_meta_data( '' ) ) : ?>
 				<?php foreach ( $variation_meta as $meta_id => $meta ) : ?>
 					<p class="order-product-variation" style="color: gray">
