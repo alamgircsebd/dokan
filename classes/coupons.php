@@ -309,8 +309,6 @@ class Dokan_Pro_Coupons {
             $exclude_product_categories = array();
         }
 
-        error_log( print_r( $expiry_date, true ) );
-
         update_post_meta( $post_id, 'discount_type', $type );
         update_post_meta( $post_id, 'coupon_amount', $amount );
         update_post_meta( $post_id, 'product_ids', $product_ids );

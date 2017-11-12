@@ -13,13 +13,14 @@
     <?php
     $counts = dokan_get_seller_status_count();
     $status = isset( $_GET['status'] ) ? $_GET['status'] : 'all';
+    $sort_order = ( ! empty( $_GET[ 'order' ] ) && $_GET[ 'order' ] == 'desc' ) ? 'asc' : 'desc';
     if ( isset( $_GET['s'] ) && !empty( $_GET['s'] ) ) {
     ?>
         <span><?php echo __( 'Search results for : ' , 'dokan' ). $_GET['s'] ?></span>
     <?php
     }
     ?>
-    <hr class="wp-header-end">  
+    <hr class="wp-header-end">
     <div style="margin: 15px 0px;">
         <ul class="subsubsub">
             <li class="all">
@@ -27,14 +28,14 @@
                     <?php _e( 'All', 'dokan' ); ?>
                     <span class="count">(<?php echo $counts['total'] ?>)</span>
                 </a>
-                 | 
+                 |
             </li>
             <li class="approved">
                 <a href="admin.php?page=dokan-sellers&status=approved" class="<?php echo 'approved' == $status ? 'current' : ''  ?>">
                     <?php _e( 'Approved', 'dokan' ); ?>
                     <span class="count">(<?php echo $counts['active'] ?>)</span>
                 </a>
-                 | 
+                 |
             </li>
             <li class="pending">
                 <a href="admin.php?page=dokan-sellers&status=pending" class="<?php echo 'pending' == $status ? 'current' : ''  ?>">
@@ -66,6 +67,12 @@
                     <th><?php _e( 'Products', 'dokan' ); ?></th>
                     <th><?php _e( 'Balance', 'dokan' ); ?></th>
                     <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
+                    <th class="manage-column column-regsitered_date sortable <?php echo $sort_order ?>">
+                        <a href="<?php echo add_query_arg( array( 'page' => 'dokan-sellers', 'orderby' => 'user_registered', 'order' => $sort_order ), admin_url( 'admin.php' ) ); ?>">
+                            <span><?php _e( 'Regsitered', 'dokan' ); ?></span>
+                            <span class="sorting-indicator"></span>
+                        </a>
+                    </th>
                     <th><?php _e( 'Status', 'dokan' ); ?></th>
                 </tr>
             </thead>
@@ -75,16 +82,16 @@
                 $limit       = 20;
                 $count       = 0;
                 $offset      = ( $paged - 1 ) * $limit;
-                
+
                 $args        = array( 'role' => 'seller', 'number' => $limit, 'offset' => $offset );
-                
+
                 if ( $status != 'all' ) {
                     $args[ 'meta_key' ]   = 'dokan_enable_selling';
                     $args[ 'meta_value' ] = 'approved' == $status ? 'yes' : 'no';
                 }
-                
+
                 if ( isset( $_GET['s'] ) ) {
-                    
+
                     $search_term = sanitize_text_field( $_GET['s'] );
                     $args[ 'search' ] = '*' . esc_attr( $search_term ) . '*';
                     $args[' meta_query' ] = array(
@@ -111,11 +118,20 @@
                         )
                     );
                 }
-                
+
+                if ( ! empty( $_GET['orderby'] ) ) {
+                    $args['orderby'] = $_GET['orderby'];
+                }
+
+                if ( ! empty( $_GET['order'] ) ) {
+                    $args['order'] = $_GET['order'];
+                }
 
                 $user_search = new WP_User_Query( $args );
                 $sellers     = (array) $user_search->get_results();
                 $post_counts = count_many_users_posts( wp_list_pluck( $sellers, 'ID' ), 'product' );
+                $make_active_txt = __( 'Make Active', 'dokan' );
+                $make_inactive_txt = __( 'Make Inactive', 'dokan' );
 
                 if ( $sellers ) {
 
@@ -132,12 +148,6 @@
                             <td>
                                 <strong><a href="<?php echo $edit_link ?>"><?php echo $user->user_login; ?></strong></a>
                                 <div class="row-actions toggle-seller-status">
-                                    <?php if ( !$seller_enable ) { ?>
-                                        <span class="active"><a class="toggle-seller" href="#" data-id="<?php echo $user->ID; ?>" data-type="yes"><?php _e( 'Activate Selling', 'dokan' ); ?></a> | </span>
-                                    <?php } else { ?>
-                                        <span class="active delete"><a class="toggle-seller" href="#" data-id="<?php echo $user->ID; ?>" data-type="no"><?php _e( 'Make Inactivate', 'dokan' ); ?></a> | </span>
-                                    <?php } ?>
-
                                     <span class="products-link"><a href="<?php echo admin_url( 'edit.php?post_type=product&author=' . $user->ID ); ?>"><?php _e( 'Products', 'dokan' ); ?></a> | </span>
                                     <span class="orders-link"><a href="<?php echo admin_url( 'edit.php?post_type=shop_order&author=' . $user->ID ); ?>"><?php _e( 'Orders', 'dokan' ); ?></a></span>
                                 </div>
@@ -152,12 +162,12 @@
                             </td>
                             <td><?php echo dokan_get_seller_balance( $user->ID ); ?></td>
                             <td><?php echo empty( $info['phone'] ) ? '--' : $info['phone']; ?></td>
+                            <td><?php echo dokan_date_time_format( $user->user_registered ); ?></td>
                             <td>
-                                <?php if ( $seller_enable ) {
-                                    echo '<span class="seller-active">' . __( 'Active', 'dokan' ) . '</span>';
-                                } else {
-                                    echo '<span class="seller-inactive">' . __( 'Inactive', 'dokan' ) . '</span>';
-                                } ?>
+                                <label class="switch tips" title="<?php echo $seller_enable ? $make_inactive_txt : $make_active_txt; ?>">
+                                    <input type="checkbox" <?php echo $seller_enable ? 'checked': '' ?> class="toogle-seller" data-id="<?php echo $user->ID; ?>">
+                                    <span class="slider round"></span>
+                                </label>
                             </td>
                         </tr>
                         <?php
@@ -180,6 +190,12 @@
                     <th><?php _e( 'Products', 'dokan' ); ?></th>
                     <th><?php _e( 'Balance', 'dokan' ); ?></th>
                     <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
+                    <th class="manage-column column-regsitered_date sortable <?php echo $sort_order ?>">
+                        <a href="<?php echo add_query_arg( array( 'page' => 'dokan-sellers', 'orderby' => 'user_registered', 'order' => $sort_order ), admin_url( 'admin.php' ) ); ?>">
+                            <span><?php _e( 'Regsitered', 'dokan' ); ?></span>
+                            <span class="sorting-indicator"></span>
+                        </a>
+                    </th>
                     <th><?php _e( 'Status', 'dokan' ); ?></th>
                 </tr>
             </tfoot>
@@ -217,29 +233,42 @@
             ?>
         </div>
     </form>
-
-    <style type="text/css">
-        .seller-active { color: green; }
-        .seller-inactive { color: red; }
-    </style>
-
     <script type="text/javascript">
         jQuery(function($) {
-            $('.toggle-seller-status').on('click', 'a.toggle-seller', function(e) {
+
+            $('input.toogle-seller').on('change', function(e) {
                 e.preventDefault();
+                var self = $(this),
+                    make_inactive_txt = '<?php echo $make_inactive_txt; ?>',
+                    make_active_txt = '<?php echo $make_active_txt; ?>';
 
-                var data = {
-                    'action' : 'dokan_toggle_seller',
-                    'user_id' : $(this).data('id'),
-                    'type' : $(this).data('type')
-                };
+                if ( self.is( ':checked' ) ) {
+                    var data = {
+                        'action' : 'dokan_toggle_seller',
+                        'user_id' : self.data('id'),
+                        'type' : 'yes'
+                    };
+                } else {
+                    var data = {
+                        'action' : 'dokan_toggle_seller',
+                        'user_id' : self.data('id'),
+                        'type' : 'no'
+                    };
+                }
 
-                $.post(ajaxurl, data, function(resp) {
-                    window.location.reload();
+                $.post( ajaxurl, data, function(resp) {
+                    if ( resp.success ) {
+                        if ( 'yes' == data.type ) {
+                            self.closest('label').attr( 'data-original-title', make_inactive_txt );
+                        } else {
+                            self.closest('label').attr( 'data-original-title', make_active_txt );
+                        }
+
+                        $( '.tips' ).tooltip();
+                    }
                 });
             });
+
         });
     </script>
-
-
 </div>

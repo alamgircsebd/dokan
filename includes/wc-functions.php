@@ -645,9 +645,9 @@ function dokan_variable_product_type_options() {
 function dokan_more_from_seller_tab( $tabs ) {
     if( check_more_seller_product_tab()){
         $tabs['more_seller_product'] = array(
-                'title' 	=> __( 'More Product', 'dokan' ),
-                'priority' 	=> 99,
-                'callback' 	=> 'dokan_more_products_from_seller',
+                'title'     => __( 'More Product', 'dokan' ),
+                'priority'  => 99,
+                'callback'  => 'dokan_more_products_from_seller',
         );
     }
     return $tabs;
@@ -774,7 +774,6 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
 
             $checks = apply_filters( 'dokan_customer_migration_required_fields', array(
                 'fname'    => __( 'Enter your first name', 'dokan' ),
-                'lname'    => __( 'Enter your last name', 'dokan' ),
                 'shopname' => __( 'Enter your shop name', 'dokan' ),
                 'address'  => __( 'Enter your shop address', 'dokan' ),
                 'phone'    => __( 'Enter your phone number', 'dokan' ),
@@ -786,8 +785,14 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
                 }
             }
 
-            if ( !$errors ) {
+            if ( ! $errors ) {
                 dokan_user_update_to_seller( $user, $_POST );
+
+                if ( isset( $_POST['dokan-subscription-pack'] ) ) {
+                    $url = get_site_url() . '/?add-to-cart=' . $_POST['dokan-subscription-pack'];
+                    wp_redirect( $url );
+                    exit;
+                }
 
                 $url = dokan_get_navigation_url();
 
@@ -963,12 +968,20 @@ add_action( 'edit_term', 'dokan_save_category_commission_field', 10, 3 );
  *
  * @return void
  */
-function dokan_add_category_commission_field(){
+function dokan_add_category_commission_field() {
     ?>
     <div class="form-field term-display-type-wrap">
-        <label for="per_category_commission"><?php _e( 'Vendor Commission from this category', 'dokan' ); ?></label>
-        <input type="number" min="0" max="100" name="per_category_commission">
-        <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+        <label for="per_category_admin_commission_type"><?php _e( 'Commission type', 'dokan' ); ?></label>
+        <select name="per_category_admin_commission_type">
+            <option value="percentage"><?php _e( 'Percentage', 'dokan' ) ?></option>
+            <option value="flat"><?php _e( 'Flat', 'dokan' ) ?></option>
+        </select>
+        <p class="description"><?php _e( 'This is the commission type for admin fee', 'dokan' ); ?></p>
+    </div>
+    <div class="form-field term-display-type-wrap">
+        <label for="per_category_admin_commission"><?php _e( 'Admin Commission from this category', 'dokan' ); ?></label>
+        <input type="number" min="0" max="100" name="per_category_admin_commission">
+        <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
     </div>
     <?php
 }
@@ -983,13 +996,24 @@ function dokan_add_category_commission_field(){
  * @return void
  */
 function dokan_edit_category_commission_field( $term ){
-    $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_commission', true );
+    $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission', true );
+    $commission_type = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
     ?>
     <tr class="form-field">
-        <th scope="row" valign="top"><label><?php _e( 'Vendor commission', 'dokan' ); ?></label></th>
+        <th scope="row" valign="top"><label><?php _e( 'Admin Commission type', 'dokan' ); ?></label></th>
         <td>
-            <input type="number" min="0" max="100" name="per_category_commission" value="<?php echo $commission ?>">
-            <p class="description"><?php _e( 'If set, it will override global vendor commission rate for this category', 'dokan' ); ?></p>
+            <select id="per_category_admin_commission_type" name="per_category_admin_commission_type" class="postform">
+                <option value="percentage" <?php selected( $commission_type, 'percentage' ) ?> ><?php _e( 'Percentage', 'dokan' ) ?></option>
+                <option value="flat" <?php selected( $commission_type, 'flat' ) ?>><?php _e( 'Flat', 'dokan' ) ?></option>
+            </select>
+            <p class="description"><?php _e( 'This is the commission type for admin fee', 'dokan' ); ?></p>
+        </td>
+    </tr>
+    <tr class="form-field">
+        <th scope="row" valign="top"><label><?php _e( 'Admin commission', 'dokan' ); ?></label></th>
+        <td>
+            <input type="number" min="0" max="100" name="per_category_admin_commission" value="<?php echo $commission ?>">
+            <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
         </td>
     </tr>
     <?php
@@ -1007,8 +1031,13 @@ function dokan_edit_category_commission_field( $term ){
  * @return void
  */
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
-    if ( isset( $_POST['per_category_commission'] ) && 'product_cat' === $taxonomy ) {
-        update_woocommerce_term_meta( $term_id, 'per_category_commission', esc_attr( $_POST['per_category_commission'] ) );
+    
+    if ( isset( $_POST['per_category_admin_commission_type'] ) && 'product_cat' === $taxonomy ) {
+        update_woocommerce_term_meta( $term_id, 'per_category_admin_commission_type', esc_attr( $_POST['per_category_admin_commission_type'] ) );
+    }
+    
+    if ( isset( $_POST['per_category_admin_commission'] ) && 'product_cat' === $taxonomy ) {
+        update_woocommerce_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
     }
 }
 
@@ -1021,6 +1050,9 @@ function dokan_custom_split_shipping_packages( $packages ) {
     $packages = array();
 
     foreach ( $cart_content as $key => $item ) {
+        if ( Dokan_WC_Shipping::is_product_disable_shipping( $item['product_id'] ) ) {
+            continue;
+        }
         $post_author = get_post_field( 'post_author', $item['data']->get_id() );
         $seller_pack[$post_author][$key] = $item;
     }
@@ -1031,7 +1063,7 @@ function dokan_custom_split_shipping_packages( $packages ) {
             'contents_cost'   => array_sum( wp_list_pluck( $pack, 'line_total' ) ),
             'applied_coupons' => WC()->cart->get_applied_coupons(),
             'user'            => array(
-                 'ID' => get_current_user_id(),
+                'ID' => get_current_user_id(),
             ),
             'seller_id'       =>  $seller_id,
             'destination'     => array(
@@ -1049,6 +1081,11 @@ function dokan_custom_split_shipping_packages( $packages ) {
 }
 
 add_filter( 'woocommerce_shipping_package_name', 'dokan_change_shipping_pack_name', 10, 3 );
+
+// add_filter('dokan_cart_shipping_packages', function( $p ) {
+//     var_dump($p);
+// });
+
 
 function dokan_change_shipping_pack_name( $title, $i, $package ) {
 
@@ -1075,14 +1112,25 @@ function dokan_add_shipping_pack_meta( $item, $package_key, $package, $order ) {
     $item->add_meta_data( 'seller_id', $package['seller_id'], true );
 }
 
+/**
+ * Handles the social registration form
+ *
+ * @return void
+ */
+if ( !function_exists( 'dokan_social_reg_handler' ) ) {
 
+    function dokan_social_reg_handler() {
+        if ( isset( $_POST['dokan_social'] ) && wp_verify_nonce( $_POST['dokan_nonce'], 'account_migration' ) ) {
+            $userdata  = get_userdata( get_current_user_id() );
+            
+            $userdata->first_name = sanitize_text_field( $_POST[ 'fname' ] );
+            $userdata->last_name = sanitize_text_field( $_POST[ 'lname' ] );
+            
+            wp_update_user( $userdata );
 
+            wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
+        }
+    }
+}
 
-
-
-
-
-
-
-
-
+add_action( 'template_redirect', 'dokan_social_reg_handler' );

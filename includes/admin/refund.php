@@ -6,6 +6,7 @@ $status = isset( $_GET['status'] ) ? $_GET['status'] : 'pending';
 ?>
 <div class="wrap">
     <h2><?php _e( 'Refund Requests', 'dokan' ); ?></h2>
+    <p><?php printf( __( 'Process all the refund requests of your marketplace from a single place. <a href="%s" target="_blank">Learn More<a/>','dokan' ), 'https://wedevs.com/docs/dokan/tutorials/how-to-create-and-approve-refund-requests-in-dokan/' ) ?></p>
 
     <ul class="subsubsub" style="float: none;">
         <li>
