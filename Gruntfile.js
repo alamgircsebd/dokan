@@ -162,6 +162,7 @@ module.exports = function(grunt) {
                     '!.git/**',
                     '!Gruntfile.js',
                     '!package.json',
+                    '!pack.json',
                     '!package-lock.json',
                     '!debug.log',
                     '!phpunit.xml',
@@ -252,6 +253,7 @@ module.exports = function(grunt) {
     grunt.registerTask( 'zip', [
         'clean:main',
         'copy:main',
+        'clean:basic',
         'compress:main'
     ]);
 
