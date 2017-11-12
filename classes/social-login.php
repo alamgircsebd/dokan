@@ -211,6 +211,7 @@ Class Dokan_Social_Login {
         $sections[] = array(
             'id'    => 'dokan_social_api',
             'title' => __( 'Social API', 'dokan' ),
+            'icon'  => 'dashicons-networking'
         );
         return $sections;
     }
