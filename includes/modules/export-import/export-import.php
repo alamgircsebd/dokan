@@ -136,21 +136,6 @@ class Dokan_Product_Importer{
      */
     public static function activate() {
         set_transient( 'dokan-export-import', 1 );
-
-        if( get_option( 'dokan_importer_page_created') ) {
-            return;
-        }
-        $dasboard_page = get_page_by_title( 'Dashboard' );
-
-        $post_id =  wp_insert_post( array(
-            'post_title'    => wp_strip_all_tags( 'Import' ),
-            'post_status' => 'publish',
-            'post_parent'  => $dasboard_page->ID,
-            'post_type' => 'page'
-        ) );
-
-        update_option( 'dokan_importer_page_created', true );
-        update_option( 'dokan_importer_page_id', $post_id );
     }
 
     /**

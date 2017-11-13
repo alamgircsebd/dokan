@@ -186,7 +186,8 @@ class Dokan_Apperance {
 
         $sections[] = array(
             'id'    => 'dokan_colors',
-            'title' => __( 'Colors', 'dokan-lite' )
+            'title' => __( 'Colors', 'dokan-lite' ),
+            'icon'  => 'dashicons-admin-customizer'
         );
 
 

@@ -6,10 +6,12 @@ function dokan_verification_admin_settings( $sections ) {
     $sections[] = array(
         'id'    => 'dokan_verification',
         'title' => __( 'Seller Verification', 'dokan' ),
+        'icon'  => 'dashicons-unlock'
     );
     $sections[] = array(
         'id'    => 'dokan_verification_sms_gateways',
         'title' => __( 'Verification SMS Gateways', 'dokan' ),
+        'icon'  => 'dashicons-email'
     );
     return $sections;
 }
