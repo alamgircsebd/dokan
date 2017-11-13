@@ -1,3 +1,10 @@
+v2.6.7 -> November 13, 2017
+---------------------
+- [new]   Added Vendor dashboard color customizer as module
+- [tweak] Social login buttons also shown under login form
+- [fix]   Removed bulk action from review listing while editing is disabled
+- [fix]   Variation products not showing under Order details
+
 v2.6.6 -> October 22, 2017
 ---------------------
 - [new] Added Flat commission option

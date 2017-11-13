@@ -796,8 +796,6 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
 
                 $url = dokan_get_navigation_url();
 
-                wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
-
                 if ( dokan_get_option( 'disable_welcome_wizard', 'dokan_selling', 'off' ) === 'off' ) {
                     $url = apply_filters( 'dokan_seller_setup_wizard_url', site_url( '?page=dokan-seller-setup' ) );
                 }
