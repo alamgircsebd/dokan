@@ -63,6 +63,17 @@ $cu_slug = get_user_meta( $user_id, 'nickname', true );
             <label for="shop-phone"><?php _e( 'Phone Number', 'dokan' ); ?><span class="required">*</span></label>
             <input type="text" class="input-text form-control" name="phone" id="shop-phone" value="<?php if ( ! empty( $_POST['phone'] ) ) echo esc_attr( $_POST['phone'] ); ?>" required="required" />
         </p>
+
+        <?php
+
+            /**
+             * Hook for adding fields after vendor migration
+             *
+             * @since 2.6.7
+             */
+            do_action( 'dokan_after_seller_migration_fields' );
+        ?>
+
         <?php
         $show_toc = dokan_get_option( 'enable_tc_on_reg', 'dokan_general' );
 
