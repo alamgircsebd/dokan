@@ -788,12 +788,6 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
             if ( ! $errors ) {
                 dokan_user_update_to_seller( $user, $_POST );
 
-                if ( isset( $_POST['dokan-subscription-pack'] ) ) {
-                    $url = get_site_url() . '/?add-to-cart=' . $_POST['dokan-subscription-pack'];
-                    wp_redirect( $url );
-                    exit;
-                }
-
                 $url = dokan_get_navigation_url();
 
                 if ( dokan_get_option( 'disable_welcome_wizard', 'dokan_selling', 'off' ) === 'off' ) {
@@ -801,7 +795,6 @@ if ( !function_exists( 'dokan_become_seller_handler' ) ) {
                 }
 
                 wp_redirect( apply_filters( 'dokan_customer_migration_redirect', $url ) );
-
                 exit();
             }
         }
@@ -1029,11 +1022,11 @@ function dokan_edit_category_commission_field( $term ){
  * @return void
  */
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
-    
+
     if ( isset( $_POST['per_category_admin_commission_type'] ) && 'product_cat' === $taxonomy ) {
         update_woocommerce_term_meta( $term_id, 'per_category_admin_commission_type', esc_attr( $_POST['per_category_admin_commission_type'] ) );
     }
-    
+
     if ( isset( $_POST['per_category_admin_commission'] ) && 'product_cat' === $taxonomy ) {
         update_woocommerce_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
     }
@@ -1120,10 +1113,10 @@ if ( !function_exists( 'dokan_social_reg_handler' ) ) {
     function dokan_social_reg_handler() {
         if ( isset( $_POST['dokan_social'] ) && wp_verify_nonce( $_POST['dokan_nonce'], 'account_migration' ) ) {
             $userdata  = get_userdata( get_current_user_id() );
-            
+
             $userdata->first_name = sanitize_text_field( $_POST[ 'fname' ] );
             $userdata->last_name = sanitize_text_field( $_POST[ 'lname' ] );
-            
+
             wp_update_user( $userdata );
 
             wp_redirect( dokan_get_page_url( 'dashboard', 'dokan' ) );
