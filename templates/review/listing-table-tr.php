@@ -8,7 +8,9 @@
  */
 ?>
 <tr class="<?php echo $comment_status ?>">
+    <?php if ( dokan_get_option( 'seller_review_manage', 'dokan_general', 'on' ) == 'on' ) : ?>
     <td class="col-check"><input class="dokan-check-col" type="checkbox" name="commentid[]" value="<?php echo $comment->comment_ID; ?>"></td>
+    <?php endif; ?>
     <td class="col-author">
         <div class="dokan-author-img"><?php echo $comment_author_img; ?></div>
         <div class="dokan-author-meta">

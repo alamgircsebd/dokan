@@ -60,8 +60,9 @@ Class Dokan_Social_Login {
         add_action( 'init', array( $this, 'init_session' ) );
         add_action( 'init', array( $this, 'monitor_autheticate_requests' ) );
 
-        // add social buttons on registration form
+        // add social buttons on registration form and login form
         add_action( 'woocommerce_register_form_end', array( $this, 'render_social_logins' ) );
+        add_action( 'woocommerce_login_form_end', array( $this, 'render_social_logins' ) );
         // add hybridauth library
         //add custom my account end-point
         add_filter( 'dokan_query_var_filter', array( $this, 'register_support_queryvar' ) );
@@ -211,6 +212,7 @@ Class Dokan_Social_Login {
         $sections[] = array(
             'id'    => 'dokan_social_api',
             'title' => __( 'Social API', 'dokan' ),
+            'icon'  => 'dashicons-networking'
         );
         return $sections;
     }

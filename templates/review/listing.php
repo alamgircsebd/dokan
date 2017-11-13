@@ -10,6 +10,7 @@
 ?>
 <form id="dokan_comments-form" action="" method="post">
     <table id="dokan-comments-table" class="dokan-table dokan-table-striped">
+        <?php if ( dokan_get_option( 'seller_review_manage', 'dokan_general', 'on' ) == 'on' ) : ?>
         <thead>
             <tr>
                 <th class="col-check"><input class="dokan-check-all" type="checkbox" ></th>
@@ -19,6 +20,7 @@
                 <th class="col-link"><?php _e( 'Rating', 'dokan' ); ?></th>
             </tr>
         </thead>
+        <?php endif; ?>
 
         <tbody>
 
@@ -35,7 +37,7 @@
         </tbody>
 
     </table>
-
+<?php if ( dokan_get_option( 'seller_review_manage', 'dokan_general', 'on' ) == 'on' ) : ?>
     <select name="comment_status">
         <?php
             if ( $comment_status == 'hold' ) {
@@ -50,7 +52,7 @@
                 <option value="delete"><?php _e( 'Delete permanently', 'dokan' ); ?></option>
             <?php } else if ( $comment_status == 'trash' ) { ?>
                 <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
-                <option value="approve"><?php _e( 'Resore', 'dokan' ); ?></option>
+                <option value="approve"><?php _e( 'Restore', 'dokan' ); ?></option>
                 <option value="delete"><?php _e( 'Delete permanently', 'dokan' ); ?></option>
             <?php } else { ?>
                 <option value="none"><?php _e( '-None-', 'dokan' ); ?></option>
@@ -66,3 +68,4 @@
 
     <input type="submit" value="<?php _e( 'Submit', 'dokan' ); ?>" class="dokan-btn  dokan-danger dokan-btn-theme dokan-btn-sm" name="comt_stat_sub">
 </form>
+<?php endif; ?>

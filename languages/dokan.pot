@@ -2,16 +2,16 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 2.6.6\n"
+"Project-Id-Version: Dokan Pro 2.6.7\n"
 "Report-Msgid-Bugs-To: http://wedevs.com/support/forum/theme-support/dokan/\n"
-"POT-Creation-Date: 2017-10-22 04:33:39+00:00\n"
+"POT-Creation-Date: 2017-11-13 09:03:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
-"X-Generator: grunt-wp-i18n1.0.0\n"
+"X-Generator: grunt-wp-i18n1.0.1\n"
 
 #: templates/products/product-lot-discount.php:21
 msgid "0"
@@ -38,7 +38,8 @@ msgid "Order ID"
 msgstr ""
 
 #: classes/admin-refund.php:167 classes/admin-refund.php:180
-#: includes/admin/admin.php:439 includes/admin/reports.php:195
+#: includes/admin/admin.php:440 includes/admin/reports.php:195
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:178
 msgid "Vendor"
 msgstr ""
 
@@ -57,6 +58,10 @@ msgstr ""
 
 #: classes/admin-refund.php:171 classes/admin-refund.php:184
 #: classes/reports.php:60 includes/admin/announcement.php:197
+#: includes/modules/booking/templates/booking/product-list.php:44
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:43
+#: includes/modules/store-support/store-support.php:612
+#: includes/modules/store-support/store-support.php:925
 #: includes/reports.php:148
 msgid "Date"
 msgstr ""
@@ -66,6 +71,13 @@ msgid "Refund manually"
 msgstr ""
 
 #: classes/admin-refund.php:221 classes/admin-refund.php:225
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:85
+#: includes/modules/subscription/includes/admin/admin.php:491
+#: includes/modules/subscription/product-subscription.php:459
+#: includes/modules/vendor-verification/templates/verification-new.php:113
+#: includes/modules/vendor-verification/templates/verification-new.php:275
+#: includes/modules/vendor-verification/templates/verification.php:121
+#: includes/modules/vendor-verification/templates/verification.php:282
 #: templates/orders/views/html-order-items.php:238
 #: templates/products/edit/sidebar.php:42
 #: templates/products/edit/sidebar.php:82
@@ -74,12 +86,20 @@ msgstr ""
 
 #: classes/admin-refund.php:226 classes/admin-refund.php:231
 #: includes/admin/refund.php:14 includes/admin/sellers.php:42
+#: includes/modules/vendor-verification/templates/admin-verifications.php:17
+#: includes/modules/vendor-verification/templates/admin-verifications.php:180
+#: includes/modules/vendor-verification/templates/admin-verifications.php:242
 #: templates/dashboard/review-widget.php:24
 msgid "Pending"
 msgstr ""
 
-#: classes/admin-refund.php:230 templates/review/listing-table-tr.php:39
-#: templates/review/listing-table-tr.php:58
+#: classes/admin-refund.php:230
+#: includes/modules/vendor-verification/templates/admin-verifications.php:169
+#: includes/modules/vendor-verification/templates/admin-verifications.php:179
+#: includes/modules/vendor-verification/templates/admin-verifications.php:232
+#: includes/modules/vendor-verification/templates/admin-verifications.php:241
+#: templates/review/listing-table-tr.php:41
+#: templates/review/listing-table-tr.php:60
 msgid "Approve"
 msgstr ""
 
@@ -115,7 +135,7 @@ msgid "Mark as Cancelled"
 msgstr ""
 
 #: classes/admin-refund.php:303 classes/admin-refund.php:308
-#: templates/review/listing.php:57
+#: templates/review/listing.php:59
 msgid "Mark Pending"
 msgstr ""
 
@@ -130,11 +150,13 @@ msgstr ""
 
 #: classes/admin-refund.php:328 classes/coupons.php:410 classes/reviews.php:330
 #: classes/reviews.php:380 includes/admin/reports.php:311
+#: includes/modules/store-support/store-support.php:1068
 msgid "&laquo;"
 msgstr ""
 
 #: classes/admin-refund.php:329 classes/coupons.php:411 classes/reviews.php:331
 #: classes/reviews.php:381 includes/admin/reports.php:312
+#: includes/modules/store-support/store-support.php:1069
 msgid "&raquo;"
 msgstr ""
 
@@ -161,11 +183,15 @@ msgid "Allow"
 msgstr ""
 
 #: classes/ajax.php:134 classes/ajax.php:1797
+#: includes/modules/booking/templates/booking/product-list.php:146
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:111
 #: includes/woo-views/variation-admin-html.php:78
 msgid "In stock"
 msgstr ""
 
 #: classes/ajax.php:135 classes/ajax.php:1798
+#: includes/modules/booking/templates/booking/product-list.php:148
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:113
 #: includes/woo-views/variation-admin-html.php:79
 msgid "Out of stock"
 msgstr ""
@@ -231,7 +257,12 @@ msgstr ""
 msgid "Clear"
 msgstr ""
 
-#: classes/ajax.php:1983 includes/woo-views/variation-admin-html.php:6
+#: classes/ajax.php:1983 includes/modules/booking/booking.php:576
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:9
+#: includes/modules/booking/templates/booking/resources/html-booking-resource.php:9
+#: includes/modules/booking/templates/booking/resources/resources.php:112
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:4
+#: includes/woo-views/variation-admin-html.php:6
 #: templates/orders/views/html-product-attribute.php:3
 #: templates/orders/views/html-variation-admin.php:17
 #: templates/products/edit/attributes.php:54
@@ -242,7 +273,9 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: classes/ajax.php:1994 templates/orders/views/html-product-attribute.php:66
+#: classes/ajax.php:1994
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:24
+#: templates/orders/views/html-product-attribute.php:66
 #: templates/products/edit/attributes.php:72
 #: templates/products/edit/html-product-attribute.php:24
 #: templates/products/edit/templates-js.php:21
@@ -270,6 +303,13 @@ msgstr ""
 
 #: classes/coupons.php:163 classes/coupons.php:184 classes/coupons.php:246
 #: classes/store-seo.php:524
+#: includes/modules/store-support/store-support.php:389
+#: includes/modules/store-support/store-support.php:423
+#: includes/modules/vendor-verification/vendor-verification.php:394
+#: includes/modules/vendor-verification/vendor-verification.php:469
+#: includes/modules/vendor-verification/vendor-verification.php:576
+#: includes/modules/vendor-verification/vendor-verification.php:669
+#: includes/modules/vendor-verification/vendor-verification.php:704
 msgid "Are you cheating?"
 msgstr ""
 
@@ -314,26 +354,31 @@ msgid "Update Coupon"
 msgstr ""
 
 #: classes/notice.php:223
+#: includes/modules/booking/templates/booking/product-list.php:255
+#: includes/modules/booking/templates/booking/resources/resources.php:143
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:219
 msgid "&laquo; Previous"
 msgstr ""
 
 #: classes/notice.php:224
+#: includes/modules/booking/templates/booking/product-list.php:256
+#: includes/modules/booking/templates/booking/resources/resources.php:144
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:220
 msgid "Next &raquo;"
 msgstr ""
 
-#: classes/products.php:255 includes/wc-functions.php:997
+#: classes/products.php:255 includes/wc-functions.php:994
 msgid "Admin Commission type"
 msgstr ""
 
-#: classes/products.php:257 includes/wc-functions.php:970
-#: includes/wc-functions.php:1000
-#: templates/products/product-lot-discount.php:26
+#: classes/products.php:257 includes/wc-functions.php:967
+#: includes/wc-functions.php:997 templates/products/product-lot-discount.php:26
 #: templates/settings/discount.php:24
 msgid "Percentage"
 msgstr ""
 
-#: classes/products.php:258 includes/wc-functions.php:971
-#: includes/wc-functions.php:1001
+#: classes/products.php:258 includes/wc-functions.php:968
+#: includes/wc-functions.php:998
 msgid "Flat"
 msgstr ""
 
@@ -358,10 +403,12 @@ msgid "Product succesfully duplicated"
 msgstr ""
 
 #: classes/products.php:546
+#: includes/modules/booking/templates/booking/product-list.php:178
 msgid "Simple"
 msgstr ""
 
 #: classes/products.php:547
+#: includes/modules/booking/templates/booking/product-list.php:182
 msgid "Variable"
 msgstr ""
 
@@ -377,11 +424,17 @@ msgstr ""
 msgid "Accepted"
 msgstr ""
 
-#: classes/reports.php:61 includes/reports.php:149
+#: classes/reports.php:61
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:75
+#: includes/reports.php:149
 msgid "ID"
 msgstr ""
 
-#: classes/reports.php:62 includes/reports.php:150
+#: classes/reports.php:62
+#: includes/modules/booking/templates/booking/product-list.php:42
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:17
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:41
+#: includes/reports.php:150
 msgid "Type"
 msgstr ""
 
@@ -412,9 +465,10 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: classes/reports.php:94 classes/reports.php:151 includes/admin/admin.php:438
-#: includes/admin/reports.php:194 includes/reports.php:96
-#: includes/reports.php:178
+#: classes/reports.php:94 classes/reports.php:151 includes/admin/admin.php:439
+#: includes/admin/reports.php:194
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:79
+#: includes/reports.php:96 includes/reports.php:178
 msgid "Order"
 msgstr ""
 
@@ -447,11 +501,15 @@ msgstr ""
 msgid "No Reviews Found"
 msgstr ""
 
-#: classes/reviews.php:682 templates/review/listing-table-tr.php:82
+#: classes/reviews.php:682
+#: includes/modules/store-reviews/classes/DSR_View.php:292
+#: templates/review/listing-table-tr.php:84
 msgid "Rated %d out of 5"
 msgstr ""
 
-#: classes/reviews.php:683 templates/review/listing-table-tr.php:83
+#: classes/reviews.php:683
+#: includes/modules/store-reviews/classes/DSR_View.php:293
+#: templates/review/listing-table-tr.php:85
 msgid "out of 5"
 msgstr ""
 
@@ -464,6 +522,8 @@ msgid "Store SEO"
 msgstr ""
 
 #: classes/settings.php:140
+#: includes/modules/vendor-verification/templates/verification-new.php:294
+#: includes/modules/vendor-verification/templates/verification.php:301
 msgid "Social Profiles"
 msgstr ""
 
@@ -566,92 +626,115 @@ msgstr ""
 msgid "Per Qty Additional Cost"
 msgstr ""
 
-#: classes/shipping.php:451 templates/products/edit/shipping.php:107
+#: classes/shipping.php:451
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:98
+#: templates/products/edit/shipping.php:107
 #: templates/products/product-shipping-content.php:98
 #: templates/settings/shipping.php:97
 msgid "Processing Time"
 msgstr ""
 
-#: classes/social-login.php:186
+#: classes/social-login.php:187
 msgid "Something went wrong! please try again"
 msgstr ""
 
-#: classes/social-login.php:213
+#: classes/social-login.php:214
 msgid "Social API"
 msgstr ""
 
-#: classes/social-login.php:230
+#: classes/social-login.php:232
 msgid "Enable Social Login"
 msgstr ""
 
-#: classes/social-login.php:232
+#: classes/social-login.php:234
 msgid ""
 "Enabling this will add Social Icons under registration form to allow users "
 "to login or register using Social Profiles"
 msgstr ""
 
-#: classes/social-login.php:236
+#: classes/social-login.php:238
+#: includes/modules/vendor-verification/includes/admin/admin.php:25
 msgid "Facebook App Settings"
 msgstr ""
 
-#: classes/social-login.php:238 classes/social-login.php:260
-#: classes/social-login.php:282 classes/social-login.php:304
+#: classes/social-login.php:240 classes/social-login.php:262
+#: classes/social-login.php:284 classes/social-login.php:306
+#: includes/modules/vendor-verification/includes/admin/admin.php:27
+#: includes/modules/vendor-verification/includes/admin/admin.php:49
+#: includes/modules/vendor-verification/includes/admin/admin.php:71
+#: includes/modules/vendor-verification/includes/admin/admin.php:93
 msgid "Create an App"
 msgstr ""
 
-#: classes/social-login.php:242
+#: classes/social-login.php:244
+#: includes/modules/vendor-verification/includes/admin/admin.php:31
 msgid "Site Url"
 msgstr ""
 
-#: classes/social-login.php:248
+#: classes/social-login.php:250
+#: includes/modules/vendor-verification/includes/admin/admin.php:37
 msgid "App Id"
 msgstr ""
 
-#: classes/social-login.php:253
+#: classes/social-login.php:255
+#: includes/modules/vendor-verification/includes/admin/admin.php:42
 msgid "App Secret"
 msgstr ""
 
-#: classes/social-login.php:258
+#: classes/social-login.php:260
+#: includes/modules/vendor-verification/includes/admin/admin.php:47
 msgid "Twitter App Settings"
 msgstr ""
 
-#: classes/social-login.php:264
+#: classes/social-login.php:266
+#: includes/modules/vendor-verification/includes/admin/admin.php:53
 msgid "Callback URL"
 msgstr ""
 
-#: classes/social-login.php:270
+#: classes/social-login.php:272
+#: includes/modules/vendor-verification/includes/admin/admin.php:59
 msgid "Consumer Key"
 msgstr ""
 
-#: classes/social-login.php:275
+#: classes/social-login.php:277
+#: includes/modules/vendor-verification/includes/admin/admin.php:64
 msgid "Consumer Secret"
 msgstr ""
 
-#: classes/social-login.php:280
+#: classes/social-login.php:282
+#: includes/modules/vendor-verification/includes/admin/admin.php:69
 msgid "Google App Settings"
 msgstr ""
 
-#: classes/social-login.php:286
+#: classes/social-login.php:288
+#: includes/modules/vendor-verification/includes/admin/admin.php:75
 msgid "Redirect URI"
 msgstr ""
 
-#: classes/social-login.php:292 classes/social-login.php:314
+#: classes/social-login.php:294 classes/social-login.php:316
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:214
+#: includes/modules/vendor-verification/includes/admin/admin.php:81
+#: includes/modules/vendor-verification/includes/admin/admin.php:103
 msgid "Client ID"
 msgstr ""
 
-#: classes/social-login.php:297
+#: classes/social-login.php:299
+#: includes/modules/vendor-verification/includes/admin/admin.php:86
 msgid "Client secret"
 msgstr ""
 
-#: classes/social-login.php:302
+#: classes/social-login.php:304
+#: includes/modules/vendor-verification/includes/admin/admin.php:91
 msgid "Linkedin App Settings"
 msgstr ""
 
-#: classes/social-login.php:308
+#: classes/social-login.php:310
+#: includes/modules/vendor-verification/includes/admin/admin.php:97
 msgid "Redirect URL"
 msgstr ""
 
-#: classes/social-login.php:319
+#: classes/social-login.php:321
+#: includes/modules/vendor-verification/includes/admin/admin.php:108
 msgid "Client Secret"
 msgstr ""
 
@@ -774,40 +857,48 @@ msgstr ""
 msgid "E-mail"
 msgstr ""
 
-#: dokan-pro.php:85
+#: dokan-pro.php:121
 msgid "Your Dokan Pro is almost ready!"
 msgstr ""
 
-#: dokan-pro.php:91
+#: dokan-pro.php:127
 msgid "Dismiss this notice"
 msgstr ""
 
-#: dokan-pro.php:94
+#: dokan-pro.php:130
 msgid "You just need to activate the <strong>%s</strong> to make it functional."
 msgstr ""
 
-#: dokan-pro.php:96
+#: dokan-pro.php:132
 msgid "Activate this plugin"
 msgstr ""
 
-#: dokan-pro.php:96
+#: dokan-pro.php:132
 msgid "Activate"
 msgstr ""
 
-#: dokan-pro.php:99
+#: dokan-pro.php:135
 msgid "You just need to install the %sCore Plugin%s to make it functional."
 msgstr ""
 
-#: dokan-pro.php:102
+#: dokan-pro.php:138
 msgid "Install Now"
 msgstr ""
 
-#: dokan-pro.php:142
+#: dokan-pro.php:178
 msgid "Error: Nonce verification failed"
 msgstr ""
 
-#: includes/admin/admin-pointers.php:68 includes/admin/admin.php:51
-#: includes/admin/admin.php:392
+#: dokan-pro.php:419
+msgid "Activating"
+msgstr ""
+
+#: dokan-pro.php:420
+msgid "Deactivating"
+msgstr ""
+
+#: includes/admin/admin-pointers.php:68 includes/admin/admin.php:52
+#: includes/admin/admin.php:393
 msgid "All Vendors"
 msgstr ""
 
@@ -866,239 +957,270 @@ msgstr ""
 msgid "Refund Request %s"
 msgstr ""
 
-#: includes/admin/admin.php:51
+#: includes/admin/admin.php:52
 msgid "Vendors Listing"
 msgstr ""
 
-#: includes/admin/admin.php:52 includes/admin/admin.php:399
+#: includes/admin/admin.php:53 includes/admin/admin.php:400
 msgid "Earning Reports"
 msgstr ""
 
-#: includes/admin/admin.php:53 includes/admin/announcement.php:66
+#: includes/admin/admin.php:54 includes/admin/announcement.php:66
 #: includes/admin/announcement.php:77 includes/admin/announcement.php:78
 #: templates/announcement/header.php:12
 msgid "Announcement"
 msgstr ""
 
-#: includes/admin/admin.php:54
+#: includes/admin/admin.php:55 includes/admin/modules.php:5
+msgid "Modules"
+msgstr ""
+
+#: includes/admin/admin.php:56
+#: includes/modules/export-import/export-import.php:190
+#: includes/modules/export-import/export-import.php:197
+#: includes/modules/export-import/templates/template_importer.php:14
+#: includes/modules/export-import/templates/template_importer_new.php:36
 msgid "Tools"
 msgstr ""
 
-#: includes/admin/admin.php:61
-msgid "Help"
-msgstr ""
-
-#: includes/admin/admin.php:61
-msgid "<span style=\"color:#f18500\">Help</span>"
-msgstr ""
-
-#: includes/admin/admin.php:77
+#: includes/admin/admin.php:78
 msgid "Product Mail Notification"
 msgstr ""
 
-#: includes/admin/admin.php:78
+#: includes/admin/admin.php:79
 msgid "Email notification on new product submission"
 msgstr ""
 
-#: includes/admin/admin.php:84
+#: includes/admin/admin.php:85
 msgid "Vendor Product Review"
 msgstr ""
 
-#: includes/admin/admin.php:85
+#: includes/admin/admin.php:86
 msgid "Vendor can change product review status from vendor dashboard"
 msgstr ""
 
-#: includes/admin/admin.php:91
+#: includes/admin/admin.php:92
 msgid "Enable Terms and Condition"
 msgstr ""
 
-#: includes/admin/admin.php:92
+#: includes/admin/admin.php:93
 msgid "Enable Terms and Condition check on registration form"
 msgstr ""
 
-#: includes/admin/admin.php:98
+#: includes/admin/admin.php:99
 msgid "Store Banner width"
 msgstr ""
 
-#: includes/admin/admin.php:104
+#: includes/admin/admin.php:105
 msgid "Store Banner height"
 msgstr ""
 
-#: includes/admin/admin.php:113
+#: includes/admin/admin.php:114
 msgid "Add/Edit Product Style"
 msgstr ""
 
-#: includes/admin/admin.php:114
+#: includes/admin/admin.php:115
 msgid "The style you prefer for vendor to add or edit products. "
 msgstr ""
 
-#: includes/admin/admin.php:118
+#: includes/admin/admin.php:119
 msgid "Tab View"
 msgstr ""
 
-#: includes/admin/admin.php:119
+#: includes/admin/admin.php:120
 msgid "Flat View"
 msgstr ""
 
-#: includes/admin/admin.php:124
+#: includes/admin/admin.php:125
 msgid "Category Selection"
 msgstr ""
 
-#: includes/admin/admin.php:125
+#: includes/admin/admin.php:126
 msgid "What option do you prefer for vendor to select product category? "
 msgstr ""
 
-#: includes/admin/admin.php:129
+#: includes/admin/admin.php:130
 msgid "Single"
 msgstr ""
 
-#: includes/admin/admin.php:130
+#: includes/admin/admin.php:131
 msgid "Multiple"
 msgstr ""
 
-#: includes/admin/admin.php:135
+#: includes/admin/admin.php:136
 msgid "New Product Status"
 msgstr ""
 
-#: includes/admin/admin.php:136
+#: includes/admin/admin.php:137
 msgid "Product status when a vendor creates a product"
 msgstr ""
 
-#: includes/admin/admin.php:140
+#: includes/admin/admin.php:141
+#: includes/modules/booking/templates/booking/product-list.php:214
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:180
+#: includes/modules/subscription/includes/admin/admin.php:356
 msgid "Published"
 msgstr ""
 
-#: includes/admin/admin.php:141
+#: includes/admin/admin.php:142
+#: includes/modules/subscription/includes/admin/admin.php:357
 msgid "Pending Review"
 msgstr ""
 
-#: includes/admin/admin.php:146
+#: includes/admin/admin.php:147
 msgid "Edited Product Status"
 msgstr ""
 
-#: includes/admin/admin.php:147
+#: includes/admin/admin.php:148
 msgid ""
 "Set Product status as pending review when a vendor edits or updates a "
 "product"
 msgstr ""
 
-#: includes/admin/admin.php:153
+#: includes/admin/admin.php:154
 msgid "Duplicate product"
 msgstr ""
 
-#: includes/admin/admin.php:154
+#: includes/admin/admin.php:155
 msgid "Allow vendor to duplicate their product"
 msgstr ""
 
-#: includes/admin/admin.php:160
+#: includes/admin/admin.php:161
 msgid "Discount Editing"
 msgstr ""
 
-#: includes/admin/admin.php:161
+#: includes/admin/admin.php:162
 msgid "Vendor can add order and product discount"
 msgstr ""
 
-#: includes/admin/admin.php:163 includes/admin/admin.php:164
+#: includes/admin/admin.php:164 includes/admin/admin.php:165
 msgid "Discount product"
 msgstr ""
 
-#: includes/admin/admin.php:163 includes/admin/admin.php:164
+#: includes/admin/admin.php:164 includes/admin/admin.php:165
 msgid "Discount Order"
 msgstr ""
 
-#: includes/admin/admin.php:168
+#: includes/admin/admin.php:169
 msgid "Hide Customer info"
 msgstr ""
 
-#: includes/admin/admin.php:169
+#: includes/admin/admin.php:170
 msgid "Hide customer information from order details of vendors"
 msgstr ""
 
-#: includes/admin/admin.php:178
+#: includes/admin/admin.php:179
 msgid "Order Status for Withdraw"
 msgstr ""
 
-#: includes/admin/admin.php:179
+#: includes/admin/admin.php:180
 msgid "Order status for which vendor can make a withdraw request."
 msgstr ""
 
-#: includes/admin/admin.php:181 includes/admin/admin.php:182
+#: includes/admin/admin.php:182 includes/admin/admin.php:183
 msgid "Completed"
 msgstr ""
 
-#: includes/admin/admin.php:181 includes/admin/admin.php:182
+#: includes/admin/admin.php:182 includes/admin/admin.php:183
 msgid "Processing"
 msgstr ""
 
-#: includes/admin/admin.php:181 includes/admin/admin.php:182
+#: includes/admin/admin.php:182 includes/admin/admin.php:183
 msgid "On-hold"
 msgstr ""
 
-#: includes/admin/admin.php:186
+#: includes/admin/admin.php:187
 msgid "Withdraw Threshold"
 msgstr ""
 
-#: includes/admin/admin.php:187
+#: includes/admin/admin.php:188
 msgid ""
 "Days, ( Make order matured to make a withdraw request) <br> Value \"0\" "
 "will inactive this option"
 msgstr ""
 
-#: includes/admin/admin.php:305
+#: includes/admin/admin.php:306
 msgid "Dashboard"
 msgstr ""
 
-#: includes/admin/admin.php:311
+#: includes/admin/admin.php:312
 msgid "Store List"
 msgstr ""
 
-#: includes/admin/admin.php:406
+#: includes/admin/admin.php:407
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/admin.php:440 includes/admin/reports.php:196
+#: includes/admin/admin.php:441 includes/admin/reports.php:196
 #: templates/orders/views/html-order-items.php:170
 msgid "Order Total"
 msgstr ""
 
-#: includes/admin/admin.php:441 includes/admin/reports.php:197
+#: includes/admin/admin.php:442 includes/admin/reports.php:197
 msgid "Vendor Earning"
 msgstr ""
 
-#: includes/admin/admin.php:442 includes/admin/reports.php:198
+#: includes/admin/admin.php:443 includes/admin/reports.php:198
 msgid "Commision"
 msgstr ""
 
-#: includes/admin/admin.php:443 includes/admin/reports.php:199
+#: includes/admin/admin.php:444 includes/admin/reports.php:199
 #: includes/admin/sellers.php:76 includes/admin/sellers.php:199
+#: includes/modules/booking/templates/booking/product-list.php:38
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:37
+#: includes/modules/store-support/store-support.php:611
+#: includes/modules/store-support/store-support.php:924
+#: includes/modules/subscription/includes/admin/admin.php:447
+#: includes/modules/subscription/includes/admin/admin.php:457
 msgid "Status"
 msgstr ""
 
-#: includes/admin/ajax.php:84
+#: includes/admin/ajax.php:87
 msgid "%d orders sync completed out of %d"
 msgstr ""
 
-#: includes/admin/ajax.php:87 includes/admin/ajax.php:170
+#: includes/admin/ajax.php:90 includes/admin/ajax.php:173
 msgid "Go to Dashboard &rarr;"
 msgstr ""
 
-#: includes/admin/ajax.php:91
+#: includes/admin/ajax.php:94
 msgid "All orders has been synchronized. %s"
 msgstr ""
 
-#: includes/admin/ajax.php:159
+#: includes/admin/ajax.php:162
 msgid "%d orders checked out of %d"
 msgstr ""
 
-#: includes/admin/ajax.php:166
+#: includes/admin/ajax.php:169
 msgid "All orders are checked and we found some duplicate orders"
 msgstr ""
 
-#: includes/admin/ajax.php:174
+#: includes/admin/ajax.php:177
 msgid "All orders are checked and no duplicate was found. %s"
 msgstr ""
 
+#: includes/admin/ajax.php:366
+msgid "Invalid nonce"
+msgstr ""
+
+#: includes/admin/ajax.php:373
+msgid "Invalid module provided"
+msgstr ""
+
+#: includes/admin/ajax.php:377
+msgid "Invalid request type"
+msgstr ""
+
+#: includes/admin/ajax.php:389
+msgid "Activated"
+msgstr ""
+
+#: includes/admin/ajax.php:392
+msgid "Deactivated"
+msgstr ""
+
 #: includes/admin/announcement.php:21
+#: includes/modules/seller-vacation/seller-vacation.php:158
 msgid "-- Select --"
 msgstr ""
 
@@ -1129,8 +1251,11 @@ msgstr ""
 msgid "Add New Announcement"
 msgstr ""
 
-#: includes/admin/announcement.php:82 templates/coupon/listing.php:36
-#: templates/products/edit/sidebar.php:26
+#: includes/admin/announcement.php:82 includes/modules/booking/booking.php:575
+#: includes/modules/booking/templates/booking/product-list.php:119
+#: includes/modules/booking/templates/booking/resources/resources.php:111
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:91
+#: templates/coupon/listing.php:36 templates/products/edit/sidebar.php:26
 #: templates/products/edit/sidebar.php:69
 #: templates/products/product-edit.php:157
 msgid "Edit"
@@ -1230,22 +1355,14 @@ msgid " via "
 msgstr ""
 
 #: includes/admin/duplicate-order-list.php:78
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:175
+#: includes/modules/booking/templates/booking/product-list.php:128
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:93
 msgid "View"
 msgstr ""
 
-#: includes/admin/help.php:2
-msgid "Dokan Help"
-msgstr ""
-
-#: includes/admin/help.php:2
-msgid "View all Documentations"
-msgstr ""
-
-#: includes/admin/help.php:89
-msgid ""
-"<strong>Error:</strong> No help documents found, or error fetching the "
-"documents. Please refresh the page again or <a href=\"%s\" "
-"target=\"_blank\">let us know</a> about the problem."
+#: includes/admin/modules.php:41
+msgid "No modules found."
 msgstr ""
 
 #: includes/admin/refund.php:8
@@ -1259,10 +1376,12 @@ msgid ""
 msgstr ""
 
 #: includes/admin/refund.php:19 includes/admin/sellers.php:35
+#: includes/modules/vendor-verification/templates/admin-verifications.php:22
 msgid "Approved"
 msgstr ""
 
 #: includes/admin/refund.php:24
+#: includes/modules/subscription/includes/admin/admin.php:487
 msgid "Cancelled"
 msgstr ""
 
@@ -1340,15 +1459,26 @@ msgstr ""
 msgid "Search results for : "
 msgstr ""
 
-#: includes/admin/sellers.php:28 templates/dashboard/review-widget.php:19
+#: includes/admin/sellers.php:28
+#: includes/modules/export-import/templates/template_importer.php:57
+#: includes/modules/export-import/templates/template_importer_new.php:79
+#: includes/modules/live-search/classes/class-dokan-live-search.php:52
+#: templates/dashboard/review-widget.php:19
 msgid "All"
 msgstr ""
 
 #: includes/admin/sellers.php:63 includes/admin/sellers.php:186
+#: includes/modules/subscription/includes/admin/admin.php:443
+#: includes/modules/subscription/includes/admin/admin.php:453
 msgid "Username"
 msgstr ""
 
 #: includes/admin/sellers.php:64 includes/admin/sellers.php:187
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:22
+#: includes/modules/booking/templates/booking/product-list.php:37
+#: includes/modules/booking/templates/booking/resources/resources.php:32
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:36
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:12
 #: includes/woo-views/variation-admin-html.php:162
 #: templates/orders/views/html-product-attribute.php:12
 #: templates/orders/views/html-variation-admin.php:196
@@ -1415,6 +1545,8 @@ msgid "Order sync table has been regenerated!"
 msgstr ""
 
 #: includes/admin/tools.php:261
+#: includes/modules/product-enquiry/enquiry.php:175
+#: includes/modules/product-enquiry/enquiry.php:182
 msgid "Something went wrong!"
 msgstr ""
 
@@ -1472,6 +1604,8 @@ msgstr ""
 #: includes/emails/class-dokan-email-refund-vendor.php:144
 #: includes/emails/class-dokan-email-updated-product.php:144
 #: includes/emails/class-dokan-refund-request.php:137
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:125
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:113
 #: includes/shipping-gateway/shipping.php:57
 msgid "Enable/Disable"
 msgstr ""
@@ -1616,6 +1750,3947 @@ msgstr ""
 msgid "Remove this item meta?"
 msgstr ""
 
+#: includes/modules/appearance/appearance.php:75
+msgid ""
+"<b>Dokan Appearance Customizer </b> requires %sDokan plugin%s to be "
+"installed & activated!"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:189
+msgid "Colors"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:211
+msgid "Button Text color"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:217
+msgid "Button Background color"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:223
+msgid "Button Border color"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:229
+msgid "Button Hover Text color"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:235
+msgid "Button Hover color"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:241
+msgid "Button Hover Border color"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:247
+msgid "Dashboard Navigation Text"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:253
+msgid "Dashboard Navigation Active Menu"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:259
+msgid "Dashboard Navigation Background"
+msgstr ""
+
+#: includes/modules/appearance/appearance.php:265
+msgid "Dashboard Menu Border"
+msgstr ""
+
+#: includes/modules/booking/booking.php:75
+msgid ""
+"<b>Dokan WC Booking </b> requires %sWooCommerce Bookings plugin%s to be "
+"installed & activated!"
+msgstr ""
+
+#: includes/modules/booking/booking.php:242
+msgid "Are you sure you want to remove this person type?"
+msgstr ""
+
+#: includes/modules/booking/booking.php:245
+msgid "Are you sure you want to remove this resource?"
+msgstr ""
+
+#: includes/modules/booking/booking.php:248
+msgid "minutes"
+msgstr ""
+
+#: includes/modules/booking/booking.php:249
+#: includes/modules/subscription/product-subscription.php:393
+msgid "days"
+msgstr ""
+
+#: includes/modules/booking/booking.php:250
+msgid "Enter a name for the new resource"
+msgstr ""
+
+#: includes/modules/booking/booking.php:321
+msgid "Dokan New Booking"
+msgstr ""
+
+#: includes/modules/booking/booking.php:322
+msgid ""
+"New booking emails are sent to the admin when a new booking is created and "
+"paid. This email is also received when a Pending confirmation booking is "
+"created."
+msgstr ""
+
+#: includes/modules/booking/booking.php:331
+msgid "Dokan Booking Cancelled"
+msgstr ""
+
+#: includes/modules/booking/booking.php:332
+msgid ""
+"Booking cancelled Admin emails are sent to vendor when the status of a "
+"booking goes to cancelled."
+msgstr ""
+
+#: includes/modules/booking/booking.php:390
+msgid "Booking"
+msgstr ""
+
+#: includes/modules/booking/booking.php:573
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:132
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:237
+#: includes/modules/booking/templates/booking/resources/resources.php:107
+#: templates/orders/views/html-order-shipping.php:26
+msgid "N/A"
+msgstr ""
+
+#: includes/modules/booking/booking.php:744
+#: includes/modules/booking/booking.php:758
+#: includes/modules/subscription/includes/admin/admin.php:427
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: includes/modules/booking/booking.php:747
+msgid "You have taken too long. Please go back and retry."
+msgstr ""
+
+#: includes/modules/booking/booking.php:827
+msgid "Error Occured"
+msgstr ""
+
+#: includes/modules/booking/booking.php:842
+msgid "All Booking Product"
+msgstr ""
+
+#: includes/modules/booking/booking.php:846
+msgid "Add Booking Product"
+msgstr ""
+
+#: includes/modules/booking/booking.php:850
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:43
+msgid "Manage Bookings"
+msgstr ""
+
+#: includes/modules/booking/booking.php:854
+msgid "Calendar"
+msgstr ""
+
+#: includes/modules/booking/booking.php:858
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:90
+msgid "Manage Resources"
+msgstr ""
+
+#: includes/modules/booking/booking.php:862
+msgid "Edit Booking Product"
+msgstr ""
+
+#: includes/modules/booking/booking.php:866
+msgid "Edit Resource"
+msgstr ""
+
+#: includes/modules/booking/booking.php:870
+msgid "Edit Booking"
+msgstr ""
+
+#: includes/modules/booking/booking.php:1087
+msgid "Booking #%s"
+msgstr ""
+
+#: includes/modules/booking/booking.php:1097
+msgid "Confirm booking"
+msgstr ""
+
+#: includes/modules/booking/booking.php:1101
+msgid "View booking &rarr;"
+msgstr ""
+
+#: includes/modules/booking/includes/class-wc-booking-calendar.php:109
+#: includes/modules/booking/includes/class-wc-booking-calendar.php:224
+msgid "Booked by"
+msgstr ""
+
+#: includes/modules/booking/includes/class-wc-booking-calendar.php:113
+msgid "All Day"
+msgstr ""
+
+#: includes/modules/booking/includes/class-wc-booking-calendar.php:118
+#: includes/modules/booking/includes/class-wc-booking-calendar.php:227
+msgid "Resource #"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-day.php:3
+msgid "Bookings by day"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-day.php:13
+#: includes/modules/booking/templates/booking/calendar/html-calendar-month.php:14
+msgid "Filter Bookings"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-day.php:15
+#: includes/modules/booking/templates/booking/calendar/html-calendar-month.php:19
+msgid "By bookable product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-day.php:22
+#: includes/modules/booking/templates/booking/calendar/html-calendar-month.php:26
+msgid "By resource"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-day.php:38
+msgid "Month View"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-month.php:3
+msgid "Bookings by month"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/calendar/html-calendar-month.php:53
+msgid "Day View"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-attributes.php:3
+#: includes/modules/simple-auction/templates/auction/html-auction-attribute.php:3
+#: templates/products/product-variation.php:13
+msgid "Attribute"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-attributes.php:4
+msgid "Manage attributes"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-attributes.php:66
+#: includes/modules/simple-auction/templates/auction/html-auction-attribute.php:65
+#: templates/products/edit/attributes.php:138
+#: templates/products/product-variation.php:78
+msgid "Custom Attribute"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-attributes.php:77
+#: includes/modules/simple-auction/templates/auction/html-auction-attribute.php:76
+#: templates/products/product-variation.php:89
+msgid "Add attribute"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-attributes.php:78
+#: includes/modules/simple-auction/templates/auction/html-auction-attribute.php:77
+#: templates/products/product-variation.php:90
+msgid "Save attribute"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:5
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:5
+msgid "January"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:6
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:6
+msgid "February"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:7
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:7
+msgid "March"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:8
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:8
+msgid "April"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:9
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:9
+msgid "May"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:10
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:10
+msgid "June"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:11
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:11
+msgid "July"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:12
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:12
+msgid "August"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:13
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:13
+msgid "September"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:14
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:14
+msgid "October"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:15
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:15
+msgid "November"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:16
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:16
+msgid "December"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:20
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:20
+msgid "Monday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:21
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:21
+msgid "Tuesday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:22
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:22
+msgid "Wednesday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:23
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:23
+msgid "Thursday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:24
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:24
+msgid "Friday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:25
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:25
+msgid "Saturday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:26
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:26
+msgid "Sunday"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:30
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:30
+msgid "Week %s"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:46
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:51
+msgid "Date range"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:47
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:52
+msgid "Range of months"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:48
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:53
+msgid "Range of weeks"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:49
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:54
+msgid "Range of days"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:50
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:58
+msgid "Time Ranges"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:51
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:59
+msgid "Time Range (all week)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:52
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:60
+msgid "Date Range with time"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:100
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:101
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:113
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:114
+msgid "to"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:146
+msgid "No"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-availability-fields.php:147
+msgid "Yes"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:55
+msgid "Time Range"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:56
+msgid "Person count"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-booking-pricing-fields.php:57
+msgid "Block count"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:9
+msgid "Costs"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:10
+msgid "Set Costs options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:18
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:56
+msgid "Base cost"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:19
+msgid "One-off cost for the booking as a whole."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:28
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:60
+msgid "Block cost"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:29
+msgid ""
+"This is the cost per block booked. All other costs (for resources and "
+"persons) are added to this."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:38
+msgid "Display cost"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:39
+msgid ""
+"The cost is displayed to the user on the frontend. Leave blank to have it "
+"calculated for you. If a booking has varying costs, this will be prefixed "
+"with the word \"from:\"."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:52
+#: includes/modules/booking/templates/booking/new-product.php:491
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:78
+msgid "Range type"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:53
+#: includes/modules/booking/templates/booking/new-product.php:492
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:79
+msgid "Range"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:57
+msgid "Enter a cost for this rule. Applied to the booking as a whole."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:61
+msgid "Enter a cost for this rule. Applied to each booking block."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:76
+#: includes/modules/booking/templates/booking/new-product.php:519
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:106
+msgid "Add Range"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-dokan-booking-pricing.php:77
+msgid "All matching rules will be applied to the booking."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:3
+#: includes/modules/booking/templates/booking/new-product.php:608
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:419
+msgid "Other Options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:4
+#: includes/modules/booking/templates/booking/new-product.php:609
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:420
+msgid "Set your extra product options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:13
+#: includes/modules/booking/templates/booking/new-product.php:618
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:426
+#: includes/modules/subscription/includes/admin/admin.php:351
+msgid "Product Status"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:17
+#: includes/modules/booking/templates/booking/new-product.php:622
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:429
+#: templates/products/edit/sidebar.php:31
+msgid "Online"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:18
+#: includes/modules/booking/templates/booking/new-product.php:623
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:430
+#: includes/modules/subscription/includes/admin/admin.php:358
+#: templates/products/edit/sidebar.php:32
+msgid "Draft"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:34
+#: includes/modules/booking/templates/booking/new-product.php:639
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:445
+#: templates/products/edit/options.php:19
+msgid "Visibility"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:45
+#: includes/modules/booking/templates/booking/new-product.php:650
+#: templates/products/edit/options.php:4
+msgid "Purchase Note"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:46
+#: includes/modules/booking/templates/booking/new-product.php:651
+msgid "Customer will get this info in their order email"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-other-options.php:51
+#: includes/modules/booking/templates/booking/new-product.php:656
+msgid "Enable product reviews"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:16
+#: templates/products/product-shipping-content.php:16
+msgid "Shipping and Tax"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:17
+#: templates/products/product-shipping-content.php:17
+msgid "Manage shipping and tax for this product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:37
+#: templates/products/product-shipping-content.php:37
+msgid "This product requires shipping"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:42
+#: templates/products/product-shipping-content.php:42
+msgid "weight (%s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:43
+#: templates/products/product-shipping-content.php:43
+msgid "length (%s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:44
+#: templates/products/product-shipping-content.php:44
+msgid "width (%s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:45
+#: templates/products/product-shipping-content.php:45
+msgid "height (%s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:53
+#: templates/products/edit/shipping.php:56
+#: templates/products/product-shipping-content.php:53
+msgid "Shipping Class"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:67
+#: templates/products/edit/shipping.php:70
+#: templates/products/product-shipping-content.php:67
+msgid "No shipping class"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:76
+#: templates/products/edit/shipping.php:78
+#: templates/products/product-shipping-content.php:76
+msgid ""
+"Shipping classes are used by certain shipping methods to group similar "
+"products."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:83
+#: templates/products/edit/shipping.php:86
+#: templates/products/product-shipping-content.php:83
+msgid "Override your store's default shipping cost for this product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:88
+#: templates/products/edit/shipping.php:91
+#: templates/products/product-shipping-content.php:88
+msgid "Additional cost"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:93
+#: templates/products/edit/shipping.php:99
+#: templates/products/product-shipping-content.php:93
+#: templates/settings/shipping.php:84
+msgid "Per Qty Additional Price"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:116
+#: includes/shipping-gateway/shipping.php:70
+#: templates/products/edit/inventory.php:64
+#: templates/products/product-shipping-content.php:116
+msgid "Tax Status"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:119
+#: includes/shipping-gateway/shipping.php:74
+#: templates/products/edit/inventory.php:67
+#: templates/products/product-shipping-content.php:119
+msgid "Taxable"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:120
+#: templates/products/edit/inventory.php:68
+#: templates/products/product-shipping-content.php:120
+msgid "Shipping only"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:128
+#: templates/products/edit/inventory.php:76
+#: templates/products/product-shipping-content.php:128
+msgid "Tax Class"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:51
+#: includes/modules/simple-auction/includes/dokan-auction-functions.php:80
+msgid "All (%d)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:74
+msgid "Booking Status"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:76
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:18
+#: includes/modules/booking/templates/emails/admin-new-booking.php:25
+msgid "Booked Product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:77
+#: includes/modules/store-support/store-support.php:610
+msgid "Customer"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:78
+msgid "# of persons"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:80
+msgid "Start Date"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:81
+msgid "End Date"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:82
+#: includes/modules/store-support/store-support.php:613
+#: includes/modules/subscription/includes/admin/admin.php:448
+#: includes/modules/subscription/includes/admin/admin.php:458
+msgid "Action"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:95
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:96
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:403
+msgid "%s"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:100
+msgid "Booking #%d"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:182
+msgid "Confirm"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/all-bookings.php:224
+msgid "No Bookings found"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:30
+msgid "This is not yours, I swear!"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:43
+msgid "Booking Details"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:46
+msgid "Booking Number: #%d. Order Number:<a href=\"%s\"> #%d </a>"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:58
+msgid "Details"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:64
+msgid "Booking Status:"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:66
+msgid "&nbsp; Edit"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:83
+#: templates/global/dokan-registration.php:95
+msgid "Update"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:90
+msgid "Order Date :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:98
+msgid "Booked Product : "
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:109
+msgid "Resource(s) :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:123
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:130
+msgid "Person(s) :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:140
+msgid "Booking Start Date :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:145
+msgid "Booking End Date :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:150
+msgid "Duration :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:174
+msgid "Customer Details"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:184
+msgid "Name:"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:194
+msgid "User Email:"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:204
+msgid "Address:"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:209
+msgid "No billing address set."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:214
+msgid "Email:"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:220
+msgid "Phone:"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/my-bookings/booking-details.php:228
+msgid "View Order"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:41
+msgid "Add Bookable product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:50
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:69
+#: includes/modules/single-product-multiple-vendor/includes/products.php:275
+#: templates/products/product-edit.php:110
+msgid "View Product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:55
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:64
+#: templates/products/product-edit.php:105
+msgid "Hidden"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:69
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:28
+#: templates/products/product-edit.php:141
+msgid "Error!"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:78
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:33
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:79
+#: templates/products/product-edit.php:128
+msgid "Success!"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:78
+msgid "The product has been saved successfully."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:81
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:82
+#: templates/products/product-edit.php:131
+msgid "View Product &rarr;"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:111
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:131
+#: includes/modules/store-support/store-support.php:609
+#: includes/modules/store-support/store-support.php:923
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:120
+#: templates/coupon/form.php:18
+msgid "Title"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:113
+msgid "Please choose a Name !!!"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:115
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:76
+msgid "Product name.."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:119
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:173
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:204
+#: templates/products/product-edit.php:314
+msgid "Category"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:143
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:224
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:123
+#: templates/products/product-edit.php:334
+msgid "Select product category"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:150
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:230
+msgid "Tags"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:170
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:250
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:146
+#: templates/products/product-edit.php:359
+msgid "Select product tags"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:195
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:114
+#: templates/products/product-edit.php:225
+msgid "Upload a product cover image"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:226
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:144
+#: templates/products/edit/sidebar.php:213
+msgid "Delete image"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:232
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:150
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:64
+#: templates/products/edit/sidebar.php:219
+msgid "Add gallery image"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:277
+msgid "Booking duration"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:280
+msgid "Fixed blocks of"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:281
+msgid "Customer defined blocks of"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:285
+#: includes/modules/booking/templates/booking/new-product.php:351
+#: includes/modules/booking/templates/booking/new-product.php:426
+#: includes/modules/booking/templates/booking/new-product.php:438
+msgid "Month(s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:286
+#: includes/modules/booking/templates/booking/new-product.php:353
+#: includes/modules/booking/templates/booking/new-product.php:428
+#: includes/modules/booking/templates/booking/new-product.php:440
+msgid "Day(s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:287
+#: includes/modules/booking/templates/booking/new-product.php:354
+#: includes/modules/booking/templates/booking/new-product.php:429
+#: includes/modules/booking/templates/booking/new-product.php:441
+msgid "Hour(s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:288
+msgid "Minutes(s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:296
+msgid "Minimum duration"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:302
+msgid "Maximum duration"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:308
+msgid "Calendar display mode"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:310
+msgid "Display calendar on click"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:311
+msgid "Calendar always visible"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:318
+msgid "Enable Calendar Range Picker?"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:319
+msgid ""
+"Lets the user select a start and end date on the calendar - duration will "
+"be calculated automatically."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:328
+msgid "Requires Confirmation"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:329
+msgid ""
+"Check this box if the booking requires YOUR approval/confirmation. Payment "
+"will not be taken during CHECKOUT."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:340
+msgid "Can Be Cancelled ?"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:341
+msgid ""
+"Check this box if the booking can be cancelled by the customer after it has "
+"been purchased. A refund will not be sent automatically."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:348
+msgid "Booking can be cancelled "
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:352
+#: includes/modules/booking/templates/booking/new-product.php:427
+#: includes/modules/booking/templates/booking/new-product.php:439
+msgid "Week(s)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:356
+msgid "before start date"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:409
+msgid "Availability"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:410
+msgid "Set Availability options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:419
+msgid "Max bookings per block"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:423
+msgid "Minimum booking window ( into the future )"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:435
+msgid "Maximum booking window ( into the future )"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:446
+msgid "Require a buffer period of ( "
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:446
+msgid " ) between bookings"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:453
+msgid "Adjacent Buffering ?"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:454
+msgid ""
+"By default buffer period applies forward into the future of a booking. "
+"Enabling this option will apply adjacently (before and after Bookings)"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:461
+msgid "All dates are..."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:463
+msgid "available by default"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:464
+msgid "not-available by default"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:466
+msgid "This option affects how you use the rules below."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:470
+msgid "Check rules against..."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:472
+msgid "All blocks being booked"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:473
+msgid "The starting block only"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:475
+msgid "This option affects how bookings are checked for availability."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:479
+msgid "First block starts at..."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:483
+msgid "Set Availability Range :"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:496
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:83
+msgid "Bookable"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:497
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:84
+msgid "If not bookable, users won't be able to choose this block for their booking."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:503
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:90
+msgid "Priority"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:504
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:91
+msgid ""
+"The lower the priority number, the earlier this rule gets applied. By "
+"default, global rules take priority over product rules which take priority "
+"over resource rules. By using priority numbers you can execute rules in "
+"different orders."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:520
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:107
+msgid ""
+"Rules with lower numbers will execute first. Rules further down this table "
+"with the same priority will also execute first."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:542
+msgid "Extra Options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:543
+msgid "Set more options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:552
+msgid "Please Save the Product to add extra options ( Persons or Resources )"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:558
+msgid "Has persons"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:564
+msgid "Has resources"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:592
+msgid "Short Description"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:597
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:37
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:138
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:456
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:126
+#: templates/coupon/form.php:23
+msgid "Description"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/new-product.php:670
+#: includes/modules/booking/templates/booking/new-product.php:671
+#: includes/modules/booking/templates/booking/new-product.php:676
+#: includes/modules/booking/templates/booking/new-product.php:677
+msgid "Save Product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:10
+#: includes/modules/booking/templates/booking/resources/html-booking-resource.php:13
+#: includes/woo-views/variation-admin-html.php:7
+#: templates/orders/views/html-order-download-permission.php:11
+#: templates/orders/views/html-product-attribute.php:4
+#: templates/orders/views/html-variation-admin.php:18
+msgid "Click to toggle"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:21
+msgid "Person Type Name"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:25
+#: includes/modules/booking/templates/booking/resources/html-booking-resource.php:24
+msgid "Base Cost"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:30
+#: includes/modules/booking/templates/booking/resources/html-booking-resource.php:29
+msgid "Block Cost"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:41
+msgid "Min"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-person.php:45
+msgid "Max"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:4
+msgid "Persons"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:5
+msgid "Set Person Options"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:13
+msgid "Min persons"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:14
+msgid "The minimum number of persons per booking."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:21
+msgid "Max persons"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:22
+msgid "The maximum number of persons per booking."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:31
+msgid "Multiply all costs by person count"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:33
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:41
+msgid ""
+"Enable this to multiply the entire cost of the booking (block and base "
+"costs) by the person count."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:39
+msgid "Count persons as bookings"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:47
+msgid "Enable person types"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:49
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:78
+msgid ""
+"Person types allow you to offer different booking costs for different types "
+"of individuals, for example, adults and children."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:58
+msgid "Person types"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/persons/html-booking-persons.php:96
+msgid "Add Person Type"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:18
+msgid "Add New Booking Product"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:36
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:35
+msgid "Image"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:39
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:38
+#: includes/woo-views/variation-admin-html.php:52
+#: templates/orders/views/html-variation-admin.php:66
+#: templates/products/edit/html-product-variation.php:94
+#: templates/products/edit/inventory.php:18
+#: templates/products/edit/inventory.php:20
+msgid "SKU"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:40
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:39
+msgid "Stock"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:41
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:40
+msgid "Price"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:43
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:42
+msgid "Views"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:127
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:92
+#: templates/review/listing-table-tr.php:48
+#: templates/review/listing-table-tr.php:53
+msgid "Delete Permanently"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:168
+msgid "Grouped"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:170
+msgid "External/Affiliate"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:174
+#: includes/woo-views/variation-admin-html.php:238
+#: templates/orders/views/html-variation-admin.php:78
+#: templates/products/edit/html-product-variation.php:79
+msgid "Virtual"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:176
+#: includes/woo-views/variation-admin-html.php:236
+#: templates/orders/views/html-variation-admin.php:76
+#: templates/products/edit/html-product-variation.php:78
+msgid "Downloadable"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:195
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:161
+msgid "Unpublished"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:198
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:164
+msgid "Y/m/d g:i:s A"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:205
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:171
+msgid "%s ago"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:207
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:173
+msgid "Y/m/d"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:217
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:183
+msgid "Missed schedule"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:219
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:185
+msgid "Scheduled"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:222
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:188
+msgid "Last Modified"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/product-list.php:232
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:198
+msgid "No product found"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:33
+msgid "The Resource has been updated successfully."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:41
+msgid "Invalid Resource Id"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:45
+msgid "You do not have permission to edit this resource"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:64
+msgid "Resource Title"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:65
+msgid "Resource name.."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:68
+msgid "Available Quantity"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:125
+#: includes/modules/booking/templates/booking/resources/edit-resource.php:127
+msgid "Save Resource"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:3
+msgid "Additional Resources"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:4
+msgid "Set Available Resources"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:12
+msgid "Label"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:13
+msgid "The label shown on the frontend if the resource is customer defined."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:20
+msgid "Resources are..."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:21
+msgid ""
+"Customer selected resources allow customers to choose one from the booking "
+"form."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:26
+msgid "Customer selected"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:27
+msgid "Automatically assigned"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:34
+msgid "Resources"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:41
+msgid ""
+"Resources are used if you have multiple bookable items, e.g. room types, "
+"instructors or ticket types. Availability for resources is global across "
+"all bookable products."
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:79
+msgid "Add/link Resource"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/html-booking-resources.php:97
+msgid "No existing resource was found, please <a href='%s'>add resource</a>"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/resources.php:7
+msgid "Add new Resource"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/resources.php:33
+msgid "Parent"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/resources/resources.php:120
+msgid "No Resource found"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:12
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:9
+msgid ""
+"The following booking has been cancelled by the customer. The details of "
+"the cancelled booking can be found below."
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:23
+#: includes/modules/booking/templates/emails/admin-new-booking.php:29
+msgid "Booking ID"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:28
+#: includes/modules/booking/templates/emails/admin-new-booking.php:34
+msgid "Booking Type"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:33
+#: includes/modules/booking/templates/emails/admin-new-booking.php:39
+msgid "Booking Start Date"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:37
+#: includes/modules/booking/templates/emails/admin-new-booking.php:43
+msgid "Booking End Date"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:47
+#: includes/modules/booking/templates/emails/admin-new-booking.php:53
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:29
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:39
+msgid "Person(s)"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-booking-cancelled.php:58
+msgid "View and edit this booking in the dashboard"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-new-booking.php:10
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:12
+msgid ""
+"A booking has been made by %s and is awaiting your approval. The details of "
+"this booking are as follows:"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-new-booking.php:12
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:14
+msgid ""
+"A new booking has been made by %s. The details of this booking are as "
+"follows:"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-new-booking.php:65
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:47
+msgid ""
+"This booking is awaiting your approval. Please check it and inform the "
+"customer if the date is available or not."
+msgstr ""
+
+#: includes/modules/booking/templates/emails/admin-new-booking.php:68
+msgid "View and edit this booking in the dashboard "
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:13
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:23
+msgid "Booked: %s"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:14
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:24
+msgid "Booking ID: %s"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:17
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:27
+msgid "Booking Type: %s"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:20
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:30
+msgid "Booking Start Date: %s"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:21
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:31
+msgid "Booking End Date: %s"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:30
+#: includes/modules/booking/templates/emails/plain/admin-new-booking.php:40
+msgid "%s: %d"
+msgstr ""
+
+#: includes/modules/booking/templates/emails/plain/admin-booking-cancelled.php:36
+msgid "You can view and edit this booking in the dashboard here: %s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:350
+msgid "Failed to import category %s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:390
+msgid "Failed to import post tag %s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:436
+#: includes/modules/export-import/export-import.php:572
+msgid "Failed to import %s %s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:461
+msgid "Failed to import &#8220;%s&#8221;: Invalid post type %s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:478
+msgid "%s &#8220;%s&#8221; already exists."
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:538
+msgid "Failed to import %s &#8220;%s&#8221;"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:685
+msgid "Fetching attachments is not enabled"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:700
+msgid "Invalid file type"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:744
+msgid "Remote server did not respond"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:750
+msgid "Remote server returned error response %1$d %2$s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:757
+msgid "Remote file is incorrect size"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:762
+msgid "Zero size file downloaded"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:768
+msgid "Remote file is too large, limit is %s"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:796
+msgid "All done."
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:796
+msgid "Have fun!"
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:808
+#: includes/modules/export-import/export-import.php:817
+msgid "Sorry, there has been an error."
+msgstr ""
+
+#: includes/modules/export-import/export-import.php:809
+msgid "The file does not exist, please try again."
+msgstr ""
+
+#: includes/modules/export-import/includes/parsers.php:42
+#: includes/modules/export-import/includes/parsers.php:72
+#: includes/modules/export-import/includes/parsers.php:80
+msgid "There was an error when reading this WXR file"
+msgstr ""
+
+#: includes/modules/export-import/includes/parsers.php:43
+msgid ""
+"Details are shown above. The importer will now try again with a different "
+"parser..."
+msgstr ""
+
+#: includes/modules/export-import/includes/parsers.php:84
+#: includes/modules/export-import/includes/parsers.php:89
+#: includes/modules/export-import/includes/parsers.php:279
+#: includes/modules/export-import/includes/parsers.php:468
+msgid "This does not appear to be a WXR file, missing/invalid WXR version number"
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:19
+#: includes/modules/export-import/templates/template_importer.php:27
+#: includes/modules/export-import/templates/template_importer.php:44
+#: includes/modules/export-import/templates/template_importer_new.php:41
+#: includes/modules/export-import/templates/template_importer_new.php:49
+#: includes/modules/export-import/templates/template_importer_new.php:66
+msgid "Import"
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:20
+#: includes/modules/export-import/templates/template_importer.php:50
+#: includes/modules/export-import/templates/template_importer_new.php:42
+#: includes/modules/export-import/templates/template_importer_new.php:72
+msgid "Export"
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:34
+#: includes/modules/export-import/templates/template_importer_new.php:56
+msgid "Please select a xml file"
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:41
+#: includes/modules/export-import/templates/template_importer_new.php:63
+msgid "Click Browse button and choose a XML file that you want to import."
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:54
+#: includes/modules/export-import/templates/template_importer_new.php:76
+msgid ""
+"Chose your type of product and click export button to export all data in "
+"XML form"
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:58
+#: includes/modules/export-import/templates/template_importer_new.php:80
+#: includes/reports.php:937 includes/reports.php:1041
+#: templates/coupon/form.php:92
+msgid "Product"
+msgstr ""
+
+#: includes/modules/export-import/templates/template_importer.php:59
+#: includes/modules/export-import/templates/template_importer_new.php:81
+msgid "Variation"
+msgstr ""
+
+#: includes/modules/live-search/classes/class-dokan-live-search.php:23
+msgid "Dokan Live Search"
+msgstr ""
+
+#: includes/modules/live-search/classes/class-dokan-live-search.php:24
+msgid "Search products live"
+msgstr ""
+
+#: includes/modules/live-search/classes/class-dokan-live-search.php:48
+msgid "Just type ..."
+msgstr ""
+
+#: includes/modules/live-search/classes/class-dokan-live-search.php:79
+msgid "Live Search"
+msgstr ""
+
+#: includes/modules/live-search/classes/class-dokan-live-search.php:83
+#: includes/modules/store-support/support-widget.php:89
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:105
+#: includes/widgets/best-seller.php:85 includes/widgets/feature-seller.php:86
+msgid "Title:"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:26
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:91
+msgid "Dokan PayPal Adaptive Payments"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:27
+msgid "Pay via paypal adaptive payment"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:31
+msgid "PayPal Adaptive Payments"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:92
+msgid "PayPal Adaptive works by sending payment to multiple user email"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:102
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:264
+msgid "Gateway Disabled"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:102
+msgid "PayPal Adaptive does not support your store currency."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:127
+msgid "Enable PayPal Adaptive"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:133
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:122
+#: includes/shipping-gateway/shipping.php:65
+msgid "This controls the title which the user sees during checkout."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:134
+msgid "PayPal Adaptive"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:140
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:128
+msgid "This controls the description which the user sees during checkout."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:141
+msgid ""
+"Pay via PayPal Adaptive; you can pay with your credit card if you don't "
+"have a PayPal account"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:144
+msgid "PayPal Email"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:146
+msgid ""
+"Please enter your PayPal email address; this is needed in order to take "
+"payment."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:152
+msgid "Payment System"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:154
+msgid "Please choose your payment system"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:158
+msgid "Chained Payment"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:159
+msgid "Parallel Payment"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:163
+msgid "Mode"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:164
+msgid "Single Vendor Mode (Recommended)"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:167
+msgid ""
+"When using this mode, items from <strong>only one</strong> vendor can be "
+"purchased in a single order. Works only with <strong>chained "
+"payments</strong>. It's a good solution for marketplace as "
+"disputes/chargebacks will be handled by the vendor, not by "
+"admin.<br>Warning : <i>Do not use <b>Chained Payment </b> while <a "
+"href=\"%s\" target=\"_blank\">Vendor commission</a> is set to 100%%</i>"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:170
+msgid "Fees Payer"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:172
+msgid "Please choose who will pay the fee"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:176
+msgid "Each receiver"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:177
+msgid "Admin"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:182
+msgid "Shipping details"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:183
+msgid "Send shipping details to PayPal instead of billing."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:187
+msgid "PayPal sandbox"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:189
+msgid "Enable PayPal sandbox"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:191
+msgid ""
+"PayPal sandbox can be used to test payments. Sign up for a developer "
+"account <a href=\"%s\">here</a>."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:194
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:110
+msgid "API Username"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:196
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:204
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:212
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:220
+msgid "For this payment method your need an application credential"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:202
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:116
+msgid "API Password"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:210
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:122
+msgid "API Signature"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:218
+msgid "App ID"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:226
+msgid "Sandbox App Username"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:228
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:236
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:244
+msgid ""
+"For this system please sign up in developer account and get your  "
+"application credential"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:234
+msgid "Sandbox App Password"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:242
+msgid "Sandbox App Signature"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:250
+msgid "Error Message"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:252
+msgid ""
+"This is the error message displayed to a shopper when attempting to add too "
+"many vendor items to the cart due to PayPal limitation."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:253
+msgid ""
+"Cart item quantity total exceeded - item not added to cart. Please checkout "
+"to purchase the items in your cart."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:257
+msgid "Debug Log"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:259
+msgid "Enable logging"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:261
+msgid ""
+"Log PayPal events, such as IPN requests, inside "
+"<code>woocommerce/logs/paypal-%s.txt</code>"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:357
+msgid ""
+"You have products from multiple-vendor please choose products from Single "
+"vendor only"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:489
+msgid "Paypal Adaptive Error : %s , Error Code : %d"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:568
+msgid "No pay key found, abort."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:575
+msgid "No order id found by pay key: %s"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:583
+msgid "No order found by pay key: %s"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:600
+msgid "IPN payment completed"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:624
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:643
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:657
+msgid "Payment %s via IPN."
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:633
+msgid ""
+"Payment %s via IPN. Order is pending completion. PayPal will notify this "
+"site of further status updates. Or check your PayPal account for further "
+"information"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:646
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:660
+msgid "Order refunded/reversed"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:646
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:660
+msgid "Order %s has been marked as refunded - PayPal reason code: %s"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:648
+#: includes/modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:661
+msgid "Payment for order %s refunded/reversed"
+msgstr ""
+
+#: includes/modules/paypal-adaptive-payments/dokan-paypal-ap.php:136
+msgid "You can not add more than one vendors product in the cart"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:148
+msgid "Boo ya!"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:217
+msgid "\"%s\" sent you a message from your \"%s\" store"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:232
+msgid "Email sent successfully!"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:274
+#: includes/modules/product-enquiry/enquiry.php:313
+msgid "Product Enquiry"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:292
+msgid "Guest Product Enquiry"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:293
+msgid "Enable/Disable product enquiry for guest user"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:322
+msgid "Please Login to make enquiry about this product"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:325
+#: includes/modules/store-support/store-support.php:320
+msgid "Login"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:329
+msgid "Your Name"
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:342
+msgid "Details about your enquiry..."
+msgstr ""
+
+#: includes/modules/product-enquiry/enquiry.php:352
+msgid "Submit Enquiry"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:145
+msgid "Vacation <span class=\"count\">(%s)</span>"
+msgid_plural "Vacation <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:159
+msgid "Instantly Close"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:160
+msgid "Date Wise Close"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:172
+msgid "Go to Vacation"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:177
+msgid "Want to go vacation by closing our store publically"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:184
+msgid "Closing Style"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:197
+msgid "Date Range"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:201
+#: includes/modules/store-support/templates/email/new-reply-to-store.php:9
+#: includes/modules/store-support/templates/email/new-reply-to-user.php:9
+#: includes/modules/store-support/templates/email/new-ticket.php:8
+#: templates/products/product-edit.php:270
+msgid "From"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:204
+#: templates/products/product-edit.php:277
+msgid "To"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:211
+msgid "Set Vacation Message"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:392
+msgid "Vacation (%d)"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:404
+msgid "In vacation"
+msgstr ""
+
+#: includes/modules/simple-auction/auction.php:42
+msgid ""
+"<b>Auction Integration </b> requires %sWooCommerce Simple Auctions plugin%s "
+"to be installed & activated first !"
+msgstr ""
+
+#: includes/modules/simple-auction/auction.php:201
+#: includes/modules/simple-auction/auction.php:267
+msgid "Auction"
+msgstr ""
+
+#: includes/modules/simple-auction/auction.php:206
+msgid "Disable Auction"
+msgstr ""
+
+#: includes/modules/simple-auction/auction.php:209
+msgid "Disable auction capability for this vendor"
+msgstr ""
+
+#: includes/modules/simple-auction/auction.php:247
+msgid "New vendor Enable Auction"
+msgstr ""
+
+#: includes/modules/simple-auction/auction.php:248
+msgid "Make auction status enable for new registred vendor"
+msgstr ""
+
+#: includes/modules/simple-auction/classes/class-auction.php:96
+msgid "Please enter product title"
+msgstr ""
+
+#: includes/modules/simple-auction/classes/class-auction.php:100
+msgid "Please select a category"
+msgstr ""
+
+#: includes/modules/simple-auction/includes/dokan-auction-functions.php:83
+msgid "Online (%d)"
+msgstr ""
+
+#: includes/modules/simple-auction/includes/dokan-auction-functions.php:86
+msgid "Pending Review (%d)"
+msgstr ""
+
+#: includes/modules/simple-auction/includes/dokan-auction-functions.php:89
+msgid "Draft (%d)"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:16
+#: templates/products/product-edit.php:20
+msgid "Access Denied"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:58
+msgid "Edit Auction Products"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:79
+#: templates/products/product-edit.php:128
+msgid "The product has been updated successfully."
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:184
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:88
+#: templates/products/product-edit.php:297
+msgid "- Select a category -"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:199
+msgid "Please choose a category!"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:260
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:156
+msgid "General Options"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:261
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:157
+msgid "Manage your auction product data"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:268
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:163
+msgid "Item condition"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:271
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:166
+msgid "New"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:272
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:167
+msgid "Used"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:280
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:173
+msgid "Auction type"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:283
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:176
+msgid "Normal"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:284
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:177
+msgid "Reverse"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:296
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:188
+msgid "Enable proxy bidding for this auction product"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:306
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:198
+msgid "Enable sealed bidding for this auction product"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:307
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:199
+msgid ""
+"In this type of auction all bidders simultaneously submit sealed bids so "
+"that no bidder knows the bid of any other participant. The highest bidder "
+"pays the price they submitted. If two bids with same value are placed for "
+"auction the one which was placed first wins the auction."
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:315
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:206
+msgid "Start Price"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:327
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:216
+msgid "Bid increment"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:341
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:228
+msgid "Reserved price"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:352
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:238
+msgid "Buy it now price"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:364
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:250
+msgid "Auction Start date"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:371
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:257
+msgid "Auction End date"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:385
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:272
+msgid "Enable automatic relisting for this auction"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:392
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:279
+msgid "Relist if fail after n hours"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:398
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:285
+msgid "Relist if not paid after n hours"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:404
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:291
+msgid "Relist auction duration in h"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-product-edit.php:467
+#: templates/products/edit/sidebar.php:14
+msgid "Update Product"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/auction-products-listing.php:26
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:19
+msgid "Add New Auction Product"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/html-auction-attribute.php:4
+msgid "Manage attributes for this auction"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:50
+msgid "Upload Product Image"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:80
+msgid "Short description about the product..."
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/new-auction-product.php:312
+msgid "Add auction Product"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:3
+#: templates/products/edit/html-product-attribute.php:3
+msgid "Attribute Name"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:29
+#: templates/orders/views/html-product-attribute.php:25
+#: templates/products/edit/html-product-attribute.php:33
+msgid "Value(s)"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:34
+#: templates/orders/views/html-product-attribute.php:30
+#: templates/products/edit/html-product-attribute.php:38
+msgid "Select terms"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:49
+#: templates/coupon/form.php:108
+#: templates/orders/views/html-product-attribute.php:40
+#: templates/products/edit/html-product-attribute.php:53
+msgid "Select all"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:50
+#: templates/orders/views/html-product-attribute.php:41
+#: templates/products/edit/html-product-attribute.php:54
+msgid "Select none"
+msgstr ""
+
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:53
+#: includes/modules/simple-auction/templates/auction/product-attribute.php:68
+#: templates/orders/views/html-product-attribute.php:59
+#: templates/products/edit/html-product-attribute.php:58
+#: templates/products/edit/html-product-attribute.php:73
+msgid "Enter some text, or some attributes by \"%s\" separating values."
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:31
+msgid "Single Product MultiVendor"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:49
+msgid "Enable Single Product Multiple Vendor"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:50
+msgid "Enable Single Product Multiple Vendor functionality"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:56
+msgid "Sell Item Button Text"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:57
+msgid "Change your sell this item button text"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:59
+#: includes/modules/single-product-multiple-vendor/includes/products.php:203
+msgid "Sell This Item"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:64
+msgid "Available Vendor Display area title"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:65
+msgid "Set your heading for available vendor section in single product page"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:67
+#: includes/modules/single-product-multiple-vendor/includes/products.php:178
+#: includes/modules/single-product-multiple-vendor/includes/products.php:236
+msgid "Other Available Vendor"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:72
+msgid "Available Vendor Section Display Position"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:73
+msgid ""
+"Set your displaying position for diplaying available vendor section in "
+"single product page"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:76
+msgid "Below Single Product Tabs"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:77
+msgid "Display inside Product Tabs"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/admin.php:78
+msgid "After Single Product Tabs"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/products.php:268
+msgid "%s customer review"
+msgid_plural "%s customer reviews"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/single-product-multiple-vendor/includes/products.php:272
+msgid "View Store"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/products.php:286
+msgid "Add to cart"
+msgstr ""
+
+#: includes/modules/single-product-multiple-vendor/includes/products.php:291
+msgid "Select Options"
+msgstr ""
+
+#: includes/modules/store-reviews/classes/DSR_View.php:120
+msgid "Your Review"
+msgstr ""
+
+#: includes/modules/store-reviews/classes/DSR_View.php:146
+msgid " Write a Review "
+msgstr ""
+
+#: includes/modules/store-reviews/classes/DSR_View.php:165
+msgid " Edit"
+msgstr ""
+
+#: includes/modules/store-reviews/classes/DSR_View.php:201
+#: includes/modules/store-reviews/classes/DSR_View.php:209
+#: includes/modules/store-reviews/classes/DSR_View.php:257
+msgid "Sorry, something went wrong!."
+msgstr ""
+
+#: includes/modules/store-reviews/classes/DSR_View.php:251
+msgid "Thanks for your review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:135
+#: includes/modules/store-reviews/store-reviews.php:137
+#: includes/modules/store-reviews/store-reviews.php:138
+#: includes/modules/store-reviews/store-reviews.php:152
+msgid "Store Reviews"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:136
+msgid "Store Review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:139
+#: includes/modules/store-support/store-support.php:187
+msgid "Parent Item"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:140
+msgid "All Reviews"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:141
+msgid "Add New review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:142
+#: includes/modules/store-support/store-support.php:190
+msgid "Add New"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:143
+msgid "New review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:144
+msgid "Edit review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:145
+msgid "Update review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:146
+msgid "View review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:147
+msgid "Search review"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:148
+#: includes/modules/store-support/store-support.php:196
+msgid "Not found"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:149
+#: includes/modules/store-support/store-support.php:197
+msgid "Not found in Trash"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:153
+msgid "Store Reviews by customer"
+msgstr ""
+
+#: includes/modules/store-reviews/store-reviews.php:201
+msgid "No Ratings found yet"
+msgstr ""
+
+#: includes/modules/store-reviews/templates/add-review.php:13
+#: includes/modules/store-reviews/templates/edit-review.php:21
+#: includes/modules/store-support/store-support.php:345
+msgid "Hi, %s"
+msgstr ""
+
+#: includes/modules/store-reviews/templates/add-review.php:16
+msgid "Share your Experience with <a href='%s' target='_blank'>%s</a>"
+msgstr ""
+
+#: includes/modules/store-reviews/templates/add-review.php:23
+#: includes/modules/store-reviews/templates/edit-review.php:31
+#: templates/emails/product-updated-pending.php:26
+msgid "Title :"
+msgstr ""
+
+#: includes/modules/store-reviews/templates/add-review.php:28
+#: includes/modules/store-reviews/templates/edit-review.php:36
+msgid "Your Review :"
+msgstr ""
+
+#: includes/modules/store-reviews/templates/add-review.php:35
+#: includes/modules/store-reviews/templates/edit-review.php:44
+#: includes/modules/store-support/store-support.php:371
+#: includes/modules/vendor-verification/templates/verification-new.php:112
+#: includes/modules/vendor-verification/templates/verification-new.php:157
+#: includes/modules/vendor-verification/templates/verification-new.php:174
+#: includes/modules/vendor-verification/templates/verification-new.php:274
+#: includes/modules/vendor-verification/templates/verification.php:120
+#: includes/modules/vendor-verification/templates/verification.php:164
+#: includes/modules/vendor-verification/templates/verification.php:181
+#: includes/modules/vendor-verification/templates/verification.php:281
+#: templates/review/listing.php:69
+msgid "Submit"
+msgstr ""
+
+#: includes/modules/store-reviews/templates/edit-review.php:24
+msgid "Update your Experience with <a href='%s' target='_blank'>%s</a>"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:183
+msgid "Topics"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:184
+#: includes/modules/store-support/store-support.php:608
+#: includes/modules/store-support/store-support.php:921
+msgid "Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:185
+#: includes/modules/store-support/store-support.php:186
+#: includes/modules/store-support/store-support.php:517
+msgid "Support"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:188
+msgid "All Topics"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:189
+msgid "Add New Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:191
+msgid "New Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:192
+msgid "Edit Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:193
+msgid "Update Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:194
+msgid "View Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:195
+msgid "Search Topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:200
+#: includes/modules/store-support/support-widget.php:80
+msgid "Store Support"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:201
+msgid "Support Topics by customer"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:220
+msgid "Open"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:225
+msgid "Open <span class=\"count\">(%s)</span>"
+msgid_plural "Open <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/store-support/store-support.php:229
+msgid "Closed"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:234
+msgid "Closed <span class=\"count\">(%s)</span>"
+msgid_plural "Closed <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/store-support/store-support.php:257
+#: includes/modules/store-support/store-support.php:1265
+#: includes/modules/store-support/support-widget.php:130
+msgid "Get Support"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:307
+msgid "Please Login to Continue"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:311
+msgid "Username :"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:315
+msgid "Password :"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:346
+msgid "Create a new support topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:349
+msgid "Subject :"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:355
+msgid "Select Order ID"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:364
+msgid "Message :"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:399
+msgid "Invalid Username or Password"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:404
+msgid "Logged in"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:444
+msgid "Thank you. Your ticket has been submitted!"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:451
+msgid "Sorry, something went wrong! Couldn't create the ticket."
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:646
+#: includes/modules/store-support/store-support.php:659
+#: includes/modules/store-support/store-support.php:963
+#: includes/modules/store-support/store-support.php:976
+msgid "close topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:652
+#: includes/modules/store-support/store-support.php:969
+msgid "re-open topic"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:672
+#: includes/modules/store-support/store-support.php:987
+msgid "No tickets found!"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:752
+msgid "Back to Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:762
+msgid "Referenced Order #%s"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:810
+msgid "Add Reply"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:810
+msgid "Ticket Closed"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:815
+msgid "(Adding reply will re-open the ticket)"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:826
+msgid "-- Change Status --"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:827
+msgid "Close Ticket"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:841
+msgid "Leave a Reply"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:843
+msgid "Cancel Reply"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:844
+msgid "Submit Reply"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:848
+msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:857
+msgid ""
+"This ticket has been closed. Open a new support ticket if you have any "
+"further query."
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:868
+msgid "Topic not found"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:896
+#: includes/modules/store-support/templates/support.php:33
+msgid "Support Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:898
+msgid "View Support Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:922
+#: includes/modules/vendor-verification/templates/admin-verifications.php:105
+#: includes/modules/vendor-verification/templates/admin-verifications.php:115
+msgid "Store Name"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1217
+msgid "[%s][%d] A New Reply on Your Ticket"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1250
+msgid "Enable Support"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1255
+msgid "Show support button in store"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1262
+msgid "Support Button text"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1401
+msgid "All Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1404
+msgid "Open Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1407
+msgid "Closed Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1421
+msgid "[%d] A New Support Ticket"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1456
+msgid "Seller Support Tickets"
+msgstr ""
+
+#: includes/modules/store-support/store-support.php:1457
+msgid "Logout"
+msgstr ""
+
+#: includes/modules/store-support/support-widget.php:18
+msgid "Show Dokan Store Support button"
+msgstr ""
+
+#: includes/modules/store-support/support-widget.php:19
+msgid "Dokan: Store Support Area"
+msgstr ""
+
+#: includes/modules/store-support/support-widget.php:93
+msgid "Description: "
+msgstr ""
+
+#: includes/modules/store-support/templates/email/new-reply-to-store.php:1
+#: includes/modules/store-support/templates/email/new-reply-to-user.php:1
+#: templates/emails/product-updated-pending.php:18
+msgid "Hello,"
+msgstr ""
+
+#: includes/modules/store-support/templates/email/new-reply-to-store.php:3
+#: includes/modules/store-support/templates/email/new-reply-to-user.php:3
+msgid "A new reply was made in the ticket "
+msgstr ""
+
+#: includes/modules/store-support/templates/email/new-reply-to-store.php:5
+#: includes/modules/store-support/templates/email/new-reply-to-user.php:5
+msgid "See the details by going here:"
+msgstr ""
+
+#: includes/modules/store-support/templates/email/new-ticket.php:1
+msgid "Hi,"
+msgstr ""
+
+#: includes/modules/store-support/templates/email/new-ticket.php:3
+msgid "A support request has been made by customer on your store "
+msgstr ""
+
+#: includes/modules/store-support/templates/email/new-ticket.php:5
+msgid "You can see it by going here :"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:13
+msgid "Dokan Stripe Connect"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:54
+msgid ""
+"Stripe now uses stripe.js for security and requires WooCommerce 1.5.8. "
+"Please update WooCommerce to continue using Stripe."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:59
+msgid "Stripe error: Please enter your secret key <a href=\"%s\">here</a>"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:63
+msgid "Stripe error: Please enter your publishable key <a href=\"%s\">here</a>"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:68
+msgid ""
+"Stripe error: Your secret and publishable keys match. Please check and "
+"re-enter."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:73
+msgid ""
+"Stripe is enabled, but the <a href=\"%s\">force SSL option</a> is disabled; "
+"your checkout may not be secure! Please enable SSL and ensure your server "
+"has a valid SSL certificate - Stripe will only work in test mode."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:114
+msgid "Enable Stripe"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:123
+msgid "Dokan Credit card (Stripe)"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:132
+msgid "Test mode"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:133
+msgid "Enable Test Mode"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:135
+msgid "Place the payment gateway in test mode using test API keys."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:139
+msgid "Stripe Checkout"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:140
+msgid "Enable Stripe Checkout"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:142
+msgid ""
+"If enabled, this option shows a \"pay\" button and modal credit card form "
+"on the checkout, instead of credit card fields directly on the page."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:146
+msgid "Stripe Checkout locale"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:149
+msgid ""
+"Language to display in Stripe Checkout modal. Specify Auto to display "
+"Checkout in the user's preferred language, if available. English will be "
+"used by default."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:153
+msgid "Auto"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:154
+msgid "Simplified Chinese"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:155
+msgid "Danish"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:156
+msgid "Dutch"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:157
+msgid "English"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:158
+msgid "Finnish"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:159
+msgid "French"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:160
+msgid "German"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:161
+msgid "Italian"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:162
+msgid "Japanese"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:163
+msgid "Norwegian"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:164
+msgid "Spanish"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:165
+msgid "Swedish"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:169
+msgid "Bitcoin Currency"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:170
+msgid "Enable Bitcoin Currency in Stripe Checkout"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:172
+msgid ""
+"If enabled, an option to accept bitcoin will show on the checkout modal. "
+"Note: Stripe Checkout needs to be enabled and store currency must be set to "
+"USD."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:177
+msgid "Checkout Image"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:178
+msgid ""
+"Optionally enter the URL to a 128x128px image of your brand or product. "
+"e.g. "
+"<code>https://yoursite.com/wp-content/uploads/2013/09/yourimage.jpg</code>"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:184
+msgid "Checkout Button Label"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:185
+msgid "Optionally enter a Label for PAY button"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:191
+#: includes/modules/stripe/templates/saved-cards.php:1
+msgid "Saved cards"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:192
+msgid "Enable saved cards"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:194
+msgid ""
+"If enabled, users will be able to pay with a saved card during checkout. "
+"Card details are saved on Stripe servers, not on your store."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:198
+msgid "Live credentials"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:202
+msgid "Secret Key"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:204
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:210
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:226
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:232
+msgid "Get your API keys from your stripe account."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:208
+msgid "Publishable Key"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:216
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:238
+msgid "Get your client ID from your stripe account, the Apps menu."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:220
+msgid "Test credentials"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:224
+msgid "Test Secret Key"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:230
+msgid "Test Publishable Key"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:236
+msgid "Test Client ID"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:250
+msgid "Stripe Connect"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:251
+msgid ""
+"Stripe works by adding credit card fields on the checkout and then sending "
+"the details to Stripe for verification."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:253
+msgid ""
+"Recurring subscription requires webhooks to be configured. Go to <a "
+"href=\"%s\">webhook</a> and set your webhook url <code>%s</code>. Otherwise "
+"recurring payment not working autometically"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:265
+msgid ""
+"Choose a currency supported by Stripe as your store currency to enable "
+"Stripe Connect."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:316
+msgid ""
+"TEST MODE ENABLED. In test mode, you can use the card number "
+"4242424242424242 with any CVC and a valid expiration date."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:323
+msgid "Manage cards"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:327
+msgid "Card ending with"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:330
+msgid "Use a new credit card"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:407
+msgid "Please accept the terms and conditions first"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:408
+msgid "Please fill in required checkout fields first"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:479
+msgid "Invalid card."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:485
+msgid ""
+"Please make sure your card details have been entered correctly and that "
+"your browser supports JavaScript."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:491
+msgid "Minimum order total is 0.50"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:520
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:640
+msgid "Stripe Payment Error: %s"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:523
+msgid "Error: "
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:543
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:656
+msgid "%s - Order %s"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:547
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:677
+msgid "No orders found to process!"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:612
+msgid "Order %s payment <a href=\"#\">completed</a> via %s on (Charge IDs: %s)"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:637
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:750
+msgid ""
+"Order %s payment <a href=\"#\">completed</a> via Dokan Stripe on (Charge "
+"IDs: %s)"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:689
+msgid "Something went wrong and the order can not be processed!"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:700
+msgid "Order %s payment completed"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:745
+msgid "Order %s payment completed via Dokan Stripe on Charge ID: %s"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:806
+msgid "Order %d payment Auto paid via Dokan Stripe"
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:909
+msgid "There was a problem connecting to the payment gateway."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:913
+msgid "Empty response."
+msgstr ""
+
+#: includes/modules/stripe/classes/class-dokan-stripe-connect.php:925
+msgid "Invalid response."
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:172
+msgid ""
+"This vendor has not configured his Stripe payment gateway and the product "
+"can not be purchased!"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:201
+msgid "Your Stripe account isn't active yet. Please connect to stripe first!"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:201
+msgid "Connect to Stripe"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:216
+msgid "Dokan Stripe"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:233
+msgid "Stripe gateway is not configured. Please contact admin."
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:258
+msgid ""
+"Your account is not yet connected with Stripe. Connect with Stripe to "
+"receive your commissions."
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:277
+msgid "Your account is connected with Stripe."
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:278
+msgid "Disconnect"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:441
+msgid "Order %s status is now on-hold due to dispute via %s on (Charge IDs: %s)"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:461
+msgid ""
+"Order %s status is now completed due to dispute resolved in your favour via "
+"%s on (Charge IDs: %s)"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:549
+msgid "Dokan Stripe Settings"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:552
+msgid "Disconnect User Stripe Account"
+msgstr ""
+
+#: includes/modules/stripe/gateway-stripe.php:554
+msgid "User account not connected to Stripe"
+msgstr ""
+
+#: includes/modules/stripe/templates/saved-cards.php:5
+msgid "Card"
+msgstr ""
+
+#: includes/modules/stripe/templates/saved-cards.php:6
+msgid "Expires"
+msgstr ""
+
+#: includes/modules/stripe/templates/saved-cards.php:15
+msgid "Card ending in %s"
+msgstr ""
+
+#: includes/modules/stripe/templates/saved-cards.php:16
+msgid "Expires %s/%s"
+msgstr ""
+
+#: includes/modules/stripe/templates/saved-cards.php:21
+msgid "Delete card"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:58
+msgid "Successfully Cancelled Subscription"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:60
+msgid "Sorry Something wrong please try again"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:73
+#: includes/modules/subscription/includes/admin/admin.php:416
+#: includes/modules/subscription/includes/admin/admin.php:543
+msgid "Dokan Subscription"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:89
+msgid "Number of Products"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:91
+msgid "Enter the no of product you want to give this package."
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:103
+msgid "Pack Validity"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:105
+msgid "Enter no of validity days you want to give this pack "
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:117
+msgid "Vendor Commission"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:119
+msgid ""
+"How much (%) a vendor will get from each order, Leave empty ( not \"0\" ) "
+"if you don't apply any ovverride"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:130
+#: includes/modules/subscription/includes/admin/admin.php:569
+msgid "Allowed categories"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:131
+#: includes/modules/subscription/includes/admin/admin.php:573
+msgid "Select categories&hellip;"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:145
+msgid ""
+"Select specific product category for this package. Leave empty to select "
+"all categories."
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:152
+msgid "Recurring Payment"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:153
+msgid "Please check this if you want to enable recurring payment system"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:168
+msgid "Billing cycle"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:188
+msgid "Billing cycle stop"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:279
+#: includes/modules/subscription/product-subscription.php:153
+#: includes/modules/subscription/product-subscription.php:158
+msgid "Product Subscription"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:293
+msgid "- select -"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:318
+#: includes/modules/subscription/includes/admin/admin.php:416
+#: includes/modules/subscription/product-subscription.php:327
+#: includes/modules/subscription/product-subscription.php:334
+msgid "Subscription"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:324
+msgid "Enable Product Subscription"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:325
+msgid "Enable product subscription for vendor"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:330
+msgid "Enable Subscription in registration form"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:331
+msgid "Enable Subscription pack in registration form for new vendor"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:337
+msgid "Enable Email Notification"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:338
+msgid "Enable notification by email for vendor during end of the package expiration"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:343
+msgid "No. of Days"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:344
+msgid "Before an email will be sent to the vendor"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:352
+msgid "Product status when vendor pack validity will expire"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:363
+msgid "Email Subject"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:364
+msgid "Enter Subject text for email notification"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:369
+msgid "Email body"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:370
+msgid "Enter body text for email notification"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:432
+msgid "Subscription User List"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:444
+#: includes/modules/subscription/includes/admin/admin.php:454
+msgid "Subscription Pack"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:445
+#: includes/modules/subscription/includes/admin/admin.php:455
+msgid "Start date"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:446
+#: includes/modules/subscription/includes/admin/admin.php:456
+msgid "End date"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:487
+msgid "Active"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:501
+msgid "No users with subscription found!"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:549
+msgid "Currently Activated Pack"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:553
+msgid "Start Date :"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:557
+msgid "End Date :"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:564
+msgid ""
+"<i>This user already has recurring pack assigned. Are you sure to assign a "
+"new normal pack to the user? If you do so, the existing recurring plan will "
+"be replaced with the new one<i>"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:589
+msgid ""
+"You can override allowed categories for this user. If empty then the "
+"predefined category for this pack will be selected"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:594
+msgid "Assign Subscription Pack"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:597
+msgid "-- Select a pack --"
+msgstr ""
+
+#: includes/modules/subscription/includes/admin/admin.php:602
+msgid "You can only assign non-recurring packs"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-manager.php:104
+msgid "day(s)"
+msgid_plural "%s days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/subscription/includes/classes/class-dps-manager.php:105
+msgid "week(s)"
+msgid_plural "%s weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/subscription/includes/classes/class-dps-manager.php:106
+msgid "month(s)"
+msgid_plural "%s months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/subscription/includes/classes/class-dps-manager.php:107
+msgid "year(s)"
+msgid_plural "%s years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/modules/subscription/includes/classes/class-dps-manager.php:128
+#: templates/orders/views/html-order-download-permission.php:27
+msgid "Never"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:101
+msgid ""
+"It is <strong>strongly recommended you do not change this email "
+"address</strong> if you have active subscriptions with PayPal. Doing so can "
+"break existing subscriptions."
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:105
+msgid "API Credentials"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:107
+msgid ""
+"Enter your PayPal API credentials to unlock subscription suspension and "
+"cancellation features. %sLearn More &raquo;%s"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:304
+msgid "IPN subscription sign up completed."
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:339
+msgid "IPN subscription payment completed. txn_id#%s"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:344
+msgid "IPN subscription payment failed."
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:360
+msgid "IPN subscription cancelled for order."
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:379
+msgid "IPN subscription end-of-term for order."
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:393
+msgid "IPN subscription payment failure."
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:421
+msgid "Subscription cancelled with PayPal"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:435
+msgid "cancelled"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:438
+msgid "suspended"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:441
+msgid "reactivated"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:464
+msgid "Subscription %s at %s"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-dps-paypal-standard-subscriptions.php:502
+msgid "Your Paypal Credentials are not complete"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-registration-sub.php:55
+msgid "Choose Subscription Pack"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-registration-sub.php:82
+#: templates/emails/product-updated-pending.php:32
+msgid "Price :"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-registration-sub.php:84
+msgid "Free"
+msgstr ""
+
+#: includes/modules/subscription/includes/classes/class-registration-sub.php:110
+msgid "In every %d %s(s)"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:240
+msgid ""
+"Sorry! You can not add or publish any more product. Please <a "
+"href=\"%s\">update your package</a>."
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:244
+msgid "You can add %d more product(s)."
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:357
+msgid ""
+"Sorry your subscription exceeds your package limits please update your "
+"package subscription"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:396
+msgid "week"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:399
+msgid "mo"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:402
+msgid "yr"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:445
+msgid "Your are using <span>%s</span> package."
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:448
+msgid "You can add <span>%s</span> product(s) for <span>%s</span> days."
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:451
+msgid "Your package will expire on <span>%s</span>"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:456
+msgid "To cancel your subscription click here &rarr;"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:463
+msgid "Please cancel your running package to switch another subscription"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:473
+msgid "Your subscription has been cancelled!"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:509
+msgid "<div class=\"pack_data_option\"><strong>%d</strong> Products <br />"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:514
+msgid "In every %d %s(s)</div>"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:518
+msgid "For<br /><strong>%s</strong> Days</div>"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:525
+msgid "Your Pack"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:529
+msgid "Renew"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:534
+msgid "Subscribed"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:538
+msgid "Buy Now"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:542
+msgid "View Details"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:553
+msgid "No subscription pack has been found!"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:647
+msgid "Package End notification alert"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:648
+msgid "Your Package validation remaining some days please confirm it"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:654
+msgid "Subscription Package Cancel notification"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:655
+msgid ""
+"Due to finish your Package validation we are canceling your Subscription "
+"Package"
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:781
+msgid ""
+"A subscription has been removed from your cart. Due to payment gateway "
+"restrictions, products and subscriptions can not be purchased at the same "
+"time."
+msgstr ""
+
+#: includes/modules/subscription/product-subscription.php:1047
+msgid "Nonce failure"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:8
+msgid "Seller Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:13
+msgid "Verification SMS Gateways"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:126
+msgid "Sender Name"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:131
+msgid "SMS Text"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:133
+msgid "Your verification code is: %CODE%"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:134
+msgid ""
+"will be displayed in SMS. <strong>%CODE%</strong> will be replaced by "
+"verification code"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:138
+msgid "SMS Sent Success"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:139
+msgid "SMS sent. Please enter your verification code"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:143
+msgid "SMS Sent Error"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:144
+msgid "Unable to send sms. Contact admin"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:148
+msgid "Active Gateway"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:154
+msgid "Nexmo App Settings"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:156
+#: includes/modules/vendor-verification/includes/admin/admin.php:170
+msgid "here"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:160
+msgid "API Key"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:164
+msgid "API Secret"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:168
+msgid "Twilio App Settings"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:174
+msgid "From Number"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:178
+msgid "Account SID"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/admin/admin.php:182
+msgid "Auth Token"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/theme-functions.php:96
+msgid "New Seller Verification Request submitted"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:18
+msgid "Dokan Seller Verifications"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:19
+msgid "Dokan: Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:99
+#: includes/modules/vendor-verification/templates/verification-new.php:35
+#: includes/modules/vendor-verification/templates/verification.php:43
+msgid "ID Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:150
+#: includes/modules/vendor-verification/templates/admin-verifications.php:106
+msgid "Photo ID"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:161
+msgid "Postal Address"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:171
+msgid "Phone"
+msgstr ""
+
+#: includes/modules/vendor-verification/includes/widgets/verifications-list.php:197
+msgid "Verifications"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:12
+msgid "Verification Requests"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:27
+msgid "Rejected"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:37
+msgid "Requests deleted!"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:41
+msgid "Requests cancelled!"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:45
+msgid "Requests approved!"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:107
+#: templates/global/dokan-registration.php:52
+#: templates/global/update-account.php:58
+msgid "Address"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:116
+msgid "Photo ID "
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:117
+msgid "Address "
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:170
+#: includes/modules/vendor-verification/templates/admin-verifications.php:233
+msgid "Reject"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:174
+#: includes/modules/vendor-verification/templates/admin-verifications.php:237
+msgid "Disapprove"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:192
+#: includes/modules/vendor-verification/templates/admin-verifications.php:254
+msgid "Not Available"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/admin-verifications.php:269
+msgid "No result found"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:61
+#: includes/modules/vendor-verification/templates/verification.php:69
+msgid "Your ID verification request is %s"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:75
+#: includes/modules/vendor-verification/templates/verification-new.php:260
+#: includes/modules/vendor-verification/templates/verification.php:83
+#: includes/modules/vendor-verification/templates/verification.php:267
+msgid "Start Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:80
+#: includes/modules/vendor-verification/templates/verification.php:89
+msgid "Select ID type :"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:85
+#: includes/modules/vendor-verification/templates/verification.php:93
+msgid "Passport"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:90
+#: includes/modules/vendor-verification/templates/verification.php:98
+msgid "National ID Card"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:95
+#: includes/modules/vendor-verification/templates/verification.php:103
+msgid "Driving License"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:108
+#: includes/modules/vendor-verification/templates/verification.php:116
+#: templates/settings/seo-form.php:75 templates/settings/seo-form.php:107
+msgid "Upload Photo"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:125
+#: includes/modules/vendor-verification/templates/verification-new.php:287
+#: includes/modules/vendor-verification/templates/verification.php:132
+#: includes/modules/vendor-verification/templates/verification.php:294
+msgid "Cancel Request"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:138
+#: includes/modules/vendor-verification/templates/verification.php:145
+msgid "Phone Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:150
+#: includes/modules/vendor-verification/templates/verification.php:157
+msgid "Phone No"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:167
+#: includes/modules/vendor-verification/templates/verification.php:174
+msgid "SMS code"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:182
+#: includes/modules/vendor-verification/templates/verification.php:189
+msgid "Your Verified Phone number is : "
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:222
+#: includes/modules/vendor-verification/templates/verification.php:229
+msgid "Address Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:249
+#: includes/modules/vendor-verification/templates/verification.php:256
+msgid "Your Address verification request is %s"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:263
+#: includes/modules/vendor-verification/templates/verification.php:270
+msgid "Change Address"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:350
+#: includes/modules/vendor-verification/templates/verification.php:357
+msgid "Connect "
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:368
+#: includes/modules/vendor-verification/templates/verification.php:375
+msgid "Disconnect "
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification-new.php:380
+#: includes/modules/vendor-verification/templates/verification.php:387
+msgid "No Social App is configured by website Admin"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification.php:27
+#: includes/modules/vendor-verification/vendor-verification.php:363
+msgid "Verification"
+msgstr ""
+
+#: includes/modules/vendor-verification/templates/verification.php:29
+msgid "Visit Store"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:133
+msgid "Verifcation"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:146
+msgid "Seller Verifications"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:405
+msgid "Your ID verification request is Sent and %s approval"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:433
+msgid "Your ID Verification request is cancelled"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:454
+msgid "Your Address Verification request is cancelled"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:559
+msgid "Information updated"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:598
+msgid "Please fill all the required fields"
+msgstr ""
+
+#: includes/modules/vendor-verification/vendor-verification.php:604
+msgid "Your Address verification request is Sent and Pending approval"
+msgstr ""
+
+#: includes/modules.php:106
+msgid "This is not a valid plugin"
+msgstr ""
+
+#: includes/modules.php:166
+msgid "The module is invalid"
+msgstr ""
+
 #: includes/reports.php:14
 msgid "Overview"
 msgstr ""
@@ -1696,11 +5771,6 @@ msgstr ""
 msgid "sales"
 msgstr ""
 
-#: includes/reports.php:937 includes/reports.php:1041
-#: templates/coupon/form.php:92
-msgid "Product"
-msgstr ""
-
 #: includes/reports.php:952
 msgid "Product does not exist"
 msgstr ""
@@ -1725,24 +5795,8 @@ msgstr ""
 msgid "Method Title"
 msgstr ""
 
-#: includes/shipping-gateway/shipping.php:65
-msgid "This controls the title which the user sees during checkout."
-msgstr ""
-
 #: includes/shipping-gateway/shipping.php:66
 msgid "Regular Shipping"
-msgstr ""
-
-#: includes/shipping-gateway/shipping.php:70
-#: templates/products/edit/inventory.php:64
-#: templates/products/product-shipping-content.php:116
-msgid "Tax Status"
-msgstr ""
-
-#: includes/shipping-gateway/shipping.php:74
-#: templates/products/edit/inventory.php:67
-#: templates/products/product-shipping-content.php:119
-msgid "Taxable"
 msgstr ""
 
 #: includes/wc-functions.php:104
@@ -1822,44 +5876,40 @@ msgstr ""
 msgid "Enter your phone number"
 msgstr ""
 
-#: includes/wc-functions.php:895
+#: includes/wc-functions.php:892
 msgid "Quantity discount"
 msgstr ""
 
-#: includes/wc-functions.php:902
+#: includes/wc-functions.php:899
 msgid "Order discount"
 msgstr ""
 
-#: includes/wc-functions.php:968
+#: includes/wc-functions.php:965
 msgid "Commission type"
 msgstr ""
 
-#: includes/wc-functions.php:973 includes/wc-functions.php:1003
+#: includes/wc-functions.php:970 includes/wc-functions.php:1000
 msgid "This is the commission type for admin fee"
 msgstr ""
 
-#: includes/wc-functions.php:976
+#: includes/wc-functions.php:973
 msgid "Admin Commission from this category"
 msgstr ""
 
-#: includes/wc-functions.php:978 includes/wc-functions.php:1010
+#: includes/wc-functions.php:975 includes/wc-functions.php:1007
 msgid "If set, it will override global admin commission rate for this category"
 msgstr ""
 
-#: includes/wc-functions.php:1007
+#: includes/wc-functions.php:1004
 msgid "Admin commission"
 msgstr ""
 
-#: includes/wc-functions.php:1098
+#: includes/wc-functions.php:1095
 msgid "Shipping: "
 msgstr ""
 
 #: includes/widgets/best-seller.php:77
 msgid "Best Vendor"
-msgstr ""
-
-#: includes/widgets/best-seller.php:85 includes/widgets/feature-seller.php:86
-msgid "Title:"
 msgstr ""
 
 #: includes/widgets/best-seller.php:89
@@ -1902,25 +5952,10 @@ msgstr ""
 msgid "Insert file URL"
 msgstr ""
 
-#: includes/woo-views/variation-admin-html.php:7
-#: templates/orders/views/html-order-download-permission.php:11
-#: templates/orders/views/html-product-attribute.php:4
-#: templates/orders/views/html-variation-admin.php:18
-msgid "Click to toggle"
-msgstr ""
-
 #: includes/woo-views/variation-admin-html.php:21
 #: templates/orders/views/html-variation-admin.php:32
 #: templates/products/edit/html-product-variation.php:31
 msgid "Any"
-msgstr ""
-
-#: includes/woo-views/variation-admin-html.php:52
-#: templates/orders/views/html-variation-admin.php:66
-#: templates/products/edit/html-product-variation.php:94
-#: templates/products/edit/inventory.php:18
-#: templates/products/edit/inventory.php:20
-msgid "SKU"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:52
@@ -2120,21 +6155,9 @@ msgid "Enabled"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:236
-#: templates/orders/views/html-variation-admin.php:76
-#: templates/products/edit/html-product-variation.php:78
-msgid "Downloadable"
-msgstr ""
-
-#: includes/woo-views/variation-admin-html.php:236
 msgid ""
 "Enable this option if access will be given to a downloadable file upon the "
 "purchase of a product"
-msgstr ""
-
-#: includes/woo-views/variation-admin-html.php:238
-#: templates/orders/views/html-variation-admin.php:78
-#: templates/products/edit/html-product-variation.php:79
-msgid "Virtual"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:238
@@ -2178,14 +6201,6 @@ msgstr ""
 
 #: templates/coupon/form.php:16
 msgid "Coupon Title"
-msgstr ""
-
-#: templates/coupon/form.php:18
-msgid "Title"
-msgstr ""
-
-#: templates/coupon/form.php:23
-msgid "Description"
 msgstr ""
 
 #: templates/coupon/form.php:30
@@ -2236,12 +6251,6 @@ msgstr ""
 
 #: templates/coupon/form.php:94 templates/coupon/form.php:116
 msgid "Select Some Product"
-msgstr ""
-
-#: templates/coupon/form.php:108
-#: templates/orders/views/html-product-attribute.php:40
-#: templates/products/edit/html-product-attribute.php:53
-msgid "Select all"
 msgstr ""
 
 #: templates/coupon/form.php:114
@@ -2349,14 +6358,14 @@ msgid "See All"
 msgstr ""
 
 #: templates/dashboard/review-widget.php:29
-#: templates/review/listing-table-tr.php:40
-#: templates/review/listing-table-tr.php:61
+#: templates/review/listing-table-tr.php:42
+#: templates/review/listing-table-tr.php:63
 msgid "Spam"
 msgstr ""
 
 #: templates/dashboard/review-widget.php:34
-#: templates/review/listing-table-tr.php:41
-#: templates/review/listing-table-tr.php:62
+#: templates/review/listing-table-tr.php:43
+#: templates/review/listing-table-tr.php:64
 msgid "Trash"
 msgstr ""
 
@@ -2399,18 +6408,6 @@ msgstr ""
 msgid "Hi"
 msgstr ""
 
-#: templates/emails/product-updated-pending.php:18
-msgid "Hello,"
-msgstr ""
-
-#: templates/emails/product-updated-pending.php:26
-msgid "Title :"
-msgstr ""
-
-#: templates/emails/product-updated-pending.php:32
-msgid "Price :"
-msgstr ""
-
 #: templates/emails/product-updated-pending.php:38
 msgid "Vendor :"
 msgstr ""
@@ -2432,7 +6429,7 @@ msgid "You can process the request by going <a href=\"%s\">here</a>"
 msgstr ""
 
 #: templates/global/account-migration-btn.php:14
-#: templates/global/update-account.php:84
+#: templates/global/update-account.php:95
 msgid "Become a Vendor"
 msgstr ""
 
@@ -2451,13 +6448,8 @@ msgstr ""
 msgid "Shop URL"
 msgstr ""
 
-#: templates/global/dokan-registration.php:52
-#: templates/global/update-account.php:58
-msgid "Address"
-msgstr ""
-
 #: templates/global/dokan-registration.php:70
-#: templates/global/update-account.php:76
+#: templates/global/update-account.php:87
 msgid ""
 "I have read and agree to the <a target=\"_blank\" href=\"%s\">Terms &amp; "
 "Conditions</a>."
@@ -2469,10 +6461,6 @@ msgstr ""
 
 #: templates/global/dokan-registration.php:88
 msgid "I am a vendor"
-msgstr ""
-
-#: templates/global/dokan-registration.php:95
-msgid "Update"
 msgstr ""
 
 #: templates/global/profile-progressbar.php:15
@@ -2505,10 +6493,6 @@ msgstr ""
 msgid "Access Expires"
 msgstr ""
 
-#: templates/orders/views/html-order-download-permission.php:27
-msgid "Never"
-msgstr ""
-
 #: templates/orders/views/html-order-fee.php:20
 msgid "Fee"
 msgstr ""
@@ -2534,17 +6518,17 @@ msgstr ""
 msgid "Product SKU:"
 msgstr ""
 
-#: templates/orders/views/html-order-item.php:142
+#: templates/orders/views/html-order-item.php:150
 msgid "Add&nbsp;meta"
 msgstr ""
 
-#: templates/orders/views/html-order-item.php:204
-#: templates/orders/views/html-order-item.php:247
+#: templates/orders/views/html-order-item.php:212
+#: templates/orders/views/html-order-item.php:255
 msgid "After pre-tax discounts."
 msgstr ""
 
-#: templates/orders/views/html-order-item.php:207
-#: templates/orders/views/html-order-item.php:250
+#: templates/orders/views/html-order-item.php:215
+#: templates/orders/views/html-order-item.php:258
 msgid "Before pre-tax discounts."
 msgstr ""
 
@@ -2663,28 +6647,9 @@ msgstr ""
 msgid "Shipping Method"
 msgstr ""
 
-#: templates/orders/views/html-order-shipping.php:26
-msgid "N/A"
-msgstr ""
-
 #: templates/orders/views/html-order-shipping.php:42
 #: templates/orders/views/html-order-shipping.php:44
 msgid "Other"
-msgstr ""
-
-#: templates/orders/views/html-product-attribute.php:25
-#: templates/products/edit/html-product-attribute.php:33
-msgid "Value(s)"
-msgstr ""
-
-#: templates/orders/views/html-product-attribute.php:30
-#: templates/products/edit/html-product-attribute.php:38
-msgid "Select terms"
-msgstr ""
-
-#: templates/orders/views/html-product-attribute.php:41
-#: templates/products/edit/html-product-attribute.php:54
-msgid "Select none"
 msgstr ""
 
 #: templates/orders/views/html-product-attribute.php:42
@@ -2694,12 +6659,6 @@ msgstr ""
 
 #: templates/orders/views/html-product-attribute.php:51
 msgid "\"%s\" separate terms"
-msgstr ""
-
-#: templates/orders/views/html-product-attribute.php:59
-#: templates/products/edit/html-product-attribute.php:58
-#: templates/products/edit/html-product-attribute.php:73
-msgid "Enter some text, or some attributes by \"%s\" separating values."
 msgstr ""
 
 #: templates/orders/views/html-variation-admin.php:76
@@ -2728,21 +6687,12 @@ msgstr ""
 msgid "Category name"
 msgstr ""
 
-#: templates/products/edit/attributes.php:138
-#: templates/products/product-variation.php:78
-msgid "Custom Attribute"
-msgstr ""
-
 #: templates/products/edit/attributes.php:146
 msgid "+ Add a category"
 msgstr ""
 
 #: templates/products/edit/attributes.php:147
 msgid "Save attributes"
-msgstr ""
-
-#: templates/products/edit/html-product-attribute.php:3
-msgid "Attribute Name"
 msgstr ""
 
 #: templates/products/edit/html-product-variation.php:62
@@ -2827,26 +6777,8 @@ msgstr ""
 msgid "Allow Backorders"
 msgstr ""
 
-#: templates/products/edit/inventory.php:68
-#: templates/products/product-shipping-content.php:120
-msgid "Shipping only"
-msgstr ""
-
-#: templates/products/edit/inventory.php:76
-#: templates/products/product-shipping-content.php:128
-msgid "Tax Class"
-msgstr ""
-
-#: templates/products/edit/options.php:4
-msgid "Purchase Note"
-msgstr ""
-
 #: templates/products/edit/options.php:14
 msgid "Enable Reviews"
-msgstr ""
-
-#: templates/products/edit/options.php:19
-msgid "Visibility"
 msgstr ""
 
 #: templates/products/edit/options.php:30
@@ -2881,57 +6813,12 @@ msgstr ""
 msgid "height"
 msgstr ""
 
-#: templates/products/edit/shipping.php:56
-#: templates/products/product-shipping-content.php:53
-msgid "Shipping Class"
-msgstr ""
-
-#: templates/products/edit/shipping.php:70
-#: templates/products/product-shipping-content.php:67
-msgid "No shipping class"
-msgstr ""
-
-#: templates/products/edit/shipping.php:78
-#: templates/products/product-shipping-content.php:76
-msgid ""
-"Shipping classes are used by certain shipping methods to group similar "
-"products."
-msgstr ""
-
 #: templates/products/edit/shipping.php:84
 msgid "Override Shipping"
 msgstr ""
 
-#: templates/products/edit/shipping.php:86
-#: templates/products/product-shipping-content.php:83
-msgid "Override your store's default shipping cost for this product"
-msgstr ""
-
-#: templates/products/edit/shipping.php:91
-#: templates/products/product-shipping-content.php:88
-msgid "Additional cost"
-msgstr ""
-
-#: templates/products/edit/shipping.php:99
-#: templates/products/product-shipping-content.php:93
-#: templates/settings/shipping.php:84
-msgid "Per Qty Additional Price"
-msgstr ""
-
-#: templates/products/edit/sidebar.php:14
-msgid "Update Product"
-msgstr ""
-
 #: templates/products/edit/sidebar.php:20
 msgid "Product Status:"
-msgstr ""
-
-#: templates/products/edit/sidebar.php:31
-msgid "Online"
-msgstr ""
-
-#: templates/products/edit/sidebar.php:32
-msgid "Draft"
 msgstr ""
 
 #: templates/products/edit/sidebar.php:41
@@ -2990,14 +6877,6 @@ msgstr ""
 msgid "Image Gallery"
 msgstr ""
 
-#: templates/products/edit/sidebar.php:213
-msgid "Delete image"
-msgstr ""
-
-#: templates/products/edit/sidebar.php:219
-msgid "Add gallery image"
-msgstr ""
-
 #: templates/products/edit/sidebar.php:229
 msgid "+ Add product images"
 msgstr ""
@@ -3039,34 +6918,6 @@ msgid ""
 "current product."
 msgstr ""
 
-#: templates/products/product-edit.php:20
-msgid "Access Denied"
-msgstr ""
-
-#: templates/products/product-edit.php:105
-msgid "Hidden"
-msgstr ""
-
-#: templates/products/product-edit.php:110
-msgid "View Product"
-msgstr ""
-
-#: templates/products/product-edit.php:128
-msgid "Success!"
-msgstr ""
-
-#: templates/products/product-edit.php:128
-msgid "The product has been updated successfully."
-msgstr ""
-
-#: templates/products/product-edit.php:131
-msgid "View Product &rarr;"
-msgstr ""
-
-#: templates/products/product-edit.php:141
-msgid "Error!"
-msgstr ""
-
 #: templates/products/product-edit.php:162
 msgid "Options"
 msgstr ""
@@ -3079,36 +6930,8 @@ msgstr ""
 msgid "Variations"
 msgstr ""
 
-#: templates/products/product-edit.php:225
-msgid "Upload a product cover image"
-msgstr ""
-
 #: templates/products/product-edit.php:262
 msgid "Special Price"
-msgstr ""
-
-#: templates/products/product-edit.php:270
-msgid "From"
-msgstr ""
-
-#: templates/products/product-edit.php:277
-msgid "To"
-msgstr ""
-
-#: templates/products/product-edit.php:297
-msgid "- Select a category -"
-msgstr ""
-
-#: templates/products/product-edit.php:314
-msgid "Category"
-msgstr ""
-
-#: templates/products/product-edit.php:334
-msgid "Select product category"
-msgstr ""
-
-#: templates/products/product-edit.php:359
-msgid "Select product tags"
 msgstr ""
 
 #: templates/products/product-lot-discount.php:4
@@ -3117,38 +6940,6 @@ msgstr ""
 
 #: templates/products/product-lot-discount.php:5
 msgid "Set your discount for this product"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:16
-msgid "Shipping and Tax"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:17
-msgid "Manage shipping and tax for this product"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:37
-msgid "This product requires shipping"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:42
-msgid "weight (%s)"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:43
-msgid "length (%s)"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:44
-msgid "width (%s)"
-msgstr ""
-
-#: templates/products/product-shipping-content.php:45
-msgid "height (%s)"
-msgstr ""
-
-#: templates/products/product-variation.php:13
-msgid "Attribute"
 msgstr ""
 
 #: templates/products/product-variation.php:13
@@ -3163,90 +6954,69 @@ msgstr ""
 msgid "Manage attributes for this simple product."
 msgstr ""
 
-#: templates/products/product-variation.php:89
-msgid "Add attribute"
-msgstr ""
-
-#: templates/products/product-variation.php:90
-msgid "Save attribute"
-msgstr ""
-
 #: templates/review/listing-table-body.php:14
 msgid "No Results Found"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:26
+#: templates/review/listing-table-tr.php:28
 msgid "Submitted on "
 msgstr ""
 
-#: templates/review/listing-table-tr.php:45
+#: templates/review/listing-table-tr.php:47
 msgid "Not Spam"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:46
-#: templates/review/listing-table-tr.php:51
-msgid "Delete Permanently"
-msgstr ""
-
-#: templates/review/listing-table-tr.php:50
+#: templates/review/listing-table-tr.php:52 templates/review/listing.php:55
 msgid "Restore"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:56
+#: templates/review/listing-table-tr.php:58
 msgid "Unapprove"
 msgstr ""
 
-#: templates/review/listing-table-tr.php:71
+#: templates/review/listing-table-tr.php:73
 msgid "View Comment"
 msgstr ""
 
-#: templates/review/listing.php:16
+#: templates/review/listing.php:17
 msgid "Author"
 msgstr ""
 
-#: templates/review/listing.php:17
+#: templates/review/listing.php:18
 msgid "Comment"
 msgstr ""
 
-#: templates/review/listing.php:18
+#: templates/review/listing.php:19
 msgid "Link To"
 msgstr ""
 
-#: templates/review/listing.php:19
+#: templates/review/listing.php:20
 msgid "Rating"
 msgstr ""
 
-#: templates/review/listing.php:43 templates/review/listing.php:48
-#: templates/review/listing.php:52 templates/review/listing.php:56
+#: templates/review/listing.php:45 templates/review/listing.php:50
+#: templates/review/listing.php:54 templates/review/listing.php:58
 msgid "-None-"
 msgstr ""
 
-#: templates/review/listing.php:44
+#: templates/review/listing.php:46
 msgid "Mark Approve"
 msgstr ""
 
-#: templates/review/listing.php:45 templates/review/listing.php:58
+#: templates/review/listing.php:47 templates/review/listing.php:60
 msgid "Mark Spam"
 msgstr ""
 
-#: templates/review/listing.php:46 templates/review/listing.php:59
+#: templates/review/listing.php:48 templates/review/listing.php:61
 msgid "Mark Trash"
 msgstr ""
 
-#: templates/review/listing.php:49
+#: templates/review/listing.php:51
 msgid "Mark Not Spam"
 msgstr ""
 
-#: templates/review/listing.php:50 templates/review/listing.php:54
+#: templates/review/listing.php:52 templates/review/listing.php:56
 msgid "Delete permanently"
-msgstr ""
-
-#: templates/review/listing.php:53
-msgid "Resore"
-msgstr ""
-
-#: templates/review/listing.php:67
-msgid "Submit"
 msgstr ""
 
 #: templates/review/status-filter.php:13
@@ -3319,10 +7089,6 @@ msgstr ""
 
 #: templates/settings/seo-form.php:66
 msgid "Facebook Image :"
-msgstr ""
-
-#: templates/settings/seo-form.php:75 templates/settings/seo-form.php:107
-msgid "Upload Photo"
 msgstr ""
 
 #: templates/settings/seo-form.php:81
@@ -3494,11 +7260,22 @@ msgctxt "Refund"
 msgid "Refund via %s"
 msgstr ""
 
+#: includes/modules/booking/templates/booking/calendar/html-calendar-month.php:66
+msgctxt "date format"
+msgid "l"
+msgstr ""
+
+#: includes/modules/booking/templates/booking/html-shipping-tax.php:121
 #: includes/shipping-gateway/shipping.php:75
 #: templates/products/edit/inventory.php:69
 #: templates/products/product-shipping-content.php:121
 msgctxt "Tax status"
 msgid "None"
+msgstr ""
+
+#: includes/modules/seller-vacation/seller-vacation.php:141
+msgctxt "dokan"
+msgid "Vacation"
 msgstr ""
 
 #: includes/woo-views/variation-admin-html.php:99

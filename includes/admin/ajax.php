@@ -20,6 +20,9 @@ class Dokan_Pro_Admin_Ajax {
         add_action( 'wp_ajax_dokan_duplicate_orders_bulk_delete', array( $this, 'dokan_duplicate_orders_bulk_delete' ) );
 
         add_action( 'wp_ajax_dokan_refund_form_action', array( $this, 'handle_refund_action' ) );
+
+        // Toggle module action
+        add_action( 'wp_ajax_dokan-toggle-module', array( $this, 'toggle_module' ), 10 );
     }
 
     /**
@@ -291,9 +294,9 @@ class Dokan_Pro_Admin_Ajax {
                 $refund_reason  = $postdata['refund_reason'][$refund_id];
                 $seller = get_userdata( $seller_id );
                 $seller_mail = $seller->user_email;
-                
+
                 do_action( 'dokan_refund_processed_notification' , $seller_mail, $order_id, 'deleted', $refund_amount, $refund_reason );
-                
+
                 $refund->delete_refund( $refund_id );
                 $refund_processing_id = get_post_meta( $order_id, 'dokan_refund_processing_id', true );
                 $url = admin_url( 'admin.php?page=dokan-refund&message=trashed&status=' . $status );
@@ -349,7 +352,47 @@ class Dokan_Pro_Admin_Ajax {
 
                 break;
         }
+    }
 
+    /**
+    * Toggle module
+    *
+    * @since 1.0.0
+    *
+    * @return void
+    **/
+    public function toggle_module() {
+        if ( isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'dokan-admin-nonce' ) ) {
+            wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
+        }
+
+        $module = isset( $_POST['module'] ) ? sanitize_text_field( $_POST['module'] ) : '';
+        $type   = isset( $_POST['type'] ) ? $_POST['type'] : '';
+
+        if ( ! $module ) {
+            wp_send_json_error( __( 'Invalid module provided', 'dokan' ) );
+        }
+
+        if ( ! in_array( $type, array( 'activate', 'deactivate' ) ) ) {
+            wp_send_json_error( __( 'Invalid request type', 'dokan' ) );
+        }
+
+        $module_data = dokan_pro_get_module( $module );
+
+        if ( 'activate' == $type ) {
+            $status = dokan_pro_activate_module( $module );
+
+            if ( is_wp_error( $status ) ) {
+                wp_send_json_error( $status->get_error_message() );
+            }
+
+            $message = __( 'Activated', 'dokan' );
+        } else {
+            dokan_pro_deactivate_module( $module );
+            $message = __( 'Deactivated', 'dokan' );
+        }
+
+        wp_send_json_success( $message );
     }
 
 }

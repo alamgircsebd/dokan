@@ -1,0 +1,17 @@
+{
+    "basic" : [
+        "appearance"
+    ],
+
+    "personal": [
+        "appearance" , "booking", "export-import", "live-search"
+    ],
+
+    "gold" : [
+        "paypal-adaptive-payments", "product-enquiry", "seller-vacation", "simple-auction"
+    ],
+
+    "primium" : [
+        "store-reviews", "store-support", "stripe", "subscription", "vendor-verification"
+    ]
+}

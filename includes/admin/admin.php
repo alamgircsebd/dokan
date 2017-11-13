@@ -48,17 +48,18 @@ class Dokan_Pro_Admin_Settings {
         }
 
         add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
+       
         $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
         $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
         $announcement   = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
+        $modules        = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
         $tools          = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
         add_action( $report, array( $this, 'common_scripts' ) );
         add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
+        add_action( $modules, array( $this, 'modules_scripts' ) );
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
-
-        add_submenu_page( 'dokan', __( 'Help', 'dokan' ), __( '<span style="color:#f18500">Help</span>', 'dokan' ), $capability, 'dokan-help', array( $this, 'help_page' ) );
     }
 
     /**
@@ -216,6 +217,17 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
+    * Modules Scripts
+    *
+    * @since 1.0.0
+    *
+    * @return void
+    **/
+    function modules_scripts() {
+        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
+    }
+
+    /**
      * Seller announcement scripts
      *
      * @since 2.4
@@ -274,17 +286,6 @@ class Dokan_Pro_Admin_Settings {
      */
     function tools_page() {
         include dirname( __FILE__ ) . '/tools.php';
-    }
-
-    /**
-     * Plugin help page
-     *
-     * @since 2.4.9
-     *
-     * @return void
-     */
-    function help_page() {
-        include dirname( __FILE__ ) . '/help.php';
     }
 
     /**
@@ -455,6 +456,17 @@ class Dokan_Pro_Admin_Settings {
             fclose( $ob );
             exit();
         }
+    }
+
+    /**
+    * Modules Page
+    *
+    * @since 1.0.0
+    *
+    * @return void
+    **/
+    public function modules_page() {
+        include dirname( __FILE__ ) . '/modules.php';
     }
 
 }
