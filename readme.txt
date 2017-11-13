@@ -170,12 +170,19 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.6.7 -> November 13, 2017
+---------------------
+- [new]   Added Vendor dashboard color customizer as module
+- [tweak] Social login buttons also shown under login form
+- [fix]   Removed bulk action from review listing while editing is disabled
+- [fix]   Variation products not showing under Order details
+
 v2.6.6 -> October 22, 2017
 ---------------------
 - [new] Added Flat commission option
 - [new] Added status filter and search option on vendor listing for Admin
-- [new] Added Social login feature 
-- [new] Vendor Store's social share icon on tabs 
+- [new] Added Social login feature
+- [new] Vendor Store's social share icon on tabs
 - [new] Added Category wise vendor commission
 - [new] Added Export CSV option on All Logs tab of Dokan Reports page
 - [new] Added Shipping option in seller setup wizard
@@ -189,7 +196,7 @@ v2.6.6 -> October 22, 2017
 - [fix] Placeholder date format translation issue
 - [fix] Not sending new seller email on customer migration
 - [fix] Announcement mail showing all seller emails
-- [fix] Fix showing tax data for order details page 
+- [fix] Fix showing tax data for order details page
 - [fix] Added settings to hide customer info from vendor's order details
 - [fix] Turned of shipping method when product shipping is disabled
 - [tweak] Toggle switch added for toggle vendor status on vendor listing
