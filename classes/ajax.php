@@ -66,6 +66,7 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_dokan_refund_request', array( $this, 'dokan_refund_request') );
         add_action( 'wp_ajax_nopriv_dokan_refund_request', array( $this, 'dokan_refund_request') );
 
+        add_action( 'wp_ajax_dokan_toggle_seller', array( $this, 'toggle_seller_status' ) );
     }
 
     /**
@@ -775,7 +776,7 @@ class Dokan_Pro_Ajax {
         } else{
             $refund = new Dokan_Pro_Refund;
             $refund->insert_refund($_POST);
-            
+
             do_action( 'dokan_refund_request_notification',  $_POST['order_id'] );
 //            Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
             $data = __( 'Refund request sent successfully', 'dokan' );
@@ -783,6 +784,69 @@ class Dokan_Pro_Ajax {
         }
 
     }
+
+    /**
+     * Enable/disable seller selling capability from admin seller listing page
+     *
+     * @return type
+     */
+    function toggle_seller_status() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        if ( isset( $_POST['nonce'] ) && ! wp_verify_nonce( $_POST['nonce'], 'dokan-admin-nonce' ) ) {
+            return;
+        }
+
+        $user_id = isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : 0;
+        $status = sanitize_text_field( $_POST['type'] );
+
+        if ( $user_id && in_array( $status, array( 'yes', 'no' ) ) ) {
+            update_user_meta( $user_id, 'dokan_enable_selling', $status );
+
+            $product_status = ( $status == 'no' ) ? 'pending' : 'publish';
+            $this->change_product_status( $user_id, $product_status );
+        }
+
+        wp_send_json_success();
+        exit;
+    }
+
+    /**
+     * Chnage product status when toggling seller active status
+     *
+     * @since 2.6.9
+     *
+     * @param int $seller_id
+     * @param string $status
+     *
+     * @return void
+     */
+    function change_product_status( $seller_id, $status ) {
+        $args = array(
+            'post_type'      => 'product',
+            'post_status'    => ( $status == 'pending' ) ? 'publish' : 'pending',
+            'posts_per_page' => -1,
+            'author'         => $seller_id,
+            'orderby'        => 'post_date',
+            'order'          => 'DESC'
+        );
+
+        $product_query = new WP_Query( $args );
+        $products = $product_query->get_posts();
+
+        if ( $products ) {
+            foreach ( $products as $pro ) {
+                if ( 'publish' != $status ) {
+                    update_post_meta( $pro->ID, 'inactive_product_flag', 'yes' );
+                }
+
+                wp_update_post( array( 'ID' => $pro->ID, 'post_status' => $status ) );
+            }
+        }
+    }
+
 
     /**
      * Load State via ajax for refund
