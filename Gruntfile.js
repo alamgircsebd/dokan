@@ -36,12 +36,12 @@ module.exports = function(grunt) {
         compressPack[val] = {
             options: {
                 mode: 'zip',
-                archive: './build/dokan-pro-'+ val + '-' + pkg.version + '.zip'
+                archive: './build/dokan-'+ val + '-' + pkg.version + '.zip'
             },
             expand: true,
             cwd: 'build/',
             src: ['**/*'],
-            dest: 'dokan-pro-' + val
+            dest: 'dokan-' + val
         };
 
         replacePack[val] = {
@@ -51,6 +51,11 @@ module.exports = function(grunt) {
                 {
                     from: "Plugin Name: Dokan Pro",
                     to: "Plugin Name: Dokan Pro - " + val
+                },
+
+                {
+                    from: "private $plan = 'dokan-pro';",
+                    to: "private $plan = 'dokan-" + val + "';"
                 }
             ]
         };

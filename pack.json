@@ -1,17 +1,17 @@
 {
-    "basic" : [
+    "starter" : [
         "appearance"
     ],
 
-    "personal": [
-        "appearance" , "booking", "export-import", "live-search"
+    "professional": [
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search"
     ],
 
-    "gold" : [
-        "paypal-adaptive-payments", "product-enquiry", "seller-vacation", "simple-auction"
+    "business" : [
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction"
     ],
 
-    "primium" : [
-        "store-reviews", "store-support", "stripe", "subscription", "vendor-verification"
+    "enterprise" : [
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction"
     ]
 }

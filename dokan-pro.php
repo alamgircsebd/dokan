@@ -22,6 +22,8 @@
  */
 class Dokan_Pro {
 
+    private $plan = 'dokan-pro';
+
     /**
      * Constructor for the Dokan_Pro class
      *
@@ -265,7 +267,10 @@ class Dokan_Pro {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
             new Dokan_Announcement();
-            new Dokan_Update();
+
+            if ( current_user_can( 'manage_options' ) ) {
+                new Dokan_Update( $this->plan );
+            }
         }
 
         Dokan_Pro_Ajax::init();

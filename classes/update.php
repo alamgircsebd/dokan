@@ -10,11 +10,13 @@ class Dokan_Update {
 
     const base_url     = 'https://wedevs.com/';
     const api_endpoint = 'http://api.wedevs.com/';
-    const product_id   = 'dokan';
+    private $product_id;
     const option       = 'dokan_license';
     const slug         = 'dokan';
 
-    function __construct() {
+    function __construct( $plan ) {
+
+        $this->product_id = $plan;
 
         // bail out if it's a local server
         if ( $this->is_local_server() ) {
@@ -153,7 +155,7 @@ class Dokan_Update {
                 'request'     => $request,
                 'email'       => $option['email'],
                 'licence_key' => $option['key'],
-                'product_id'  => self::product_id,
+                'product_id'  => $this->product_id,
                 'instance'    => home_url()
             )
         );
@@ -299,7 +301,7 @@ class Dokan_Update {
                 'site_url'          => $wp_install,
                 'license'           => isset( $license['key'] ) ? $license['key'] : '',
                 'license_email'     => isset( $license['email'] ) ? $license['email'] : '',
-                'product_id'        => self::product_id
+                'product_id'        => $this->product_id
             )
         );
 
