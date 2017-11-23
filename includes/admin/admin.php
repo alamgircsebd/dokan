@@ -26,6 +26,8 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
         add_action( 'init', array( $this, 'dokan_export_all_logs' ) );
         add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
+        add_action( 'admin_notices', array( $this, 'show_whats_new_notice' ), 10 );
+        add_action( 'wp_ajax_dokan-whats-new-notice', array( $this, 'dismiss_new_notice' ) );
     }
 
     /**
@@ -492,7 +494,54 @@ class Dokan_Pro_Admin_Settings {
     public function modules_page() {
         include dirname( __FILE__ ) . '/modules.php';
     }
+    
+    /**
+     * Show update notice
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
+    
+    public function show_whats_new_notice() {
 
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        // check if it has already been dismissed
+        $offer_key = 'dokan_whats_new_notice';
+        $hide_notice = get_option( $offer_key . '_tracking_notice', 'no' );
+
+        if ( 'hide' == $hide_notice ) {
+            return;
+        }
+
+        ?>
+            <div class="notice udpated is-dismissible" id="dokan-pro-whats-new-notice">
+                <p>Check What's new in Dokan Pro</p>
+                <a style="margin-bottom: 10px;" href="<?php echo add_query_arg( array( 'page' => 'whats-new-dokan' ), admin_url( 'admin.php' ) ); ?>" class="button button-primary">What's New in Dokan Pro</a>   
+            </div>
+
+            <script type='text/javascript'>
+                jQuery('body').on('click', '#dokan-pro-whats-new-notice .notice-dismiss', function(e) {
+                    e.preventDefault();
+
+                    wp.ajax.post('dokan-whats-new-notice', {
+                        dokan_promotion_dismissed: true
+                    });
+                });
+            </script>
+       <?php
+    }
+   
+    public function dismiss_new_notice() {
+
+        if ( !empty( $_POST['dokan_promotion_dismissed'] ) ) {
+            $offer_key = 'dokan_whats_new_notice';
+            update_option( $offer_key . '_tracking_notice', 'hide' );
+        }
+    }
 }
 
 // End of Dokan_Pro_Admin_Settings class;
