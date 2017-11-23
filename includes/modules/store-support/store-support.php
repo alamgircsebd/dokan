@@ -93,8 +93,8 @@ class Dokan_Store_Support {
      * @return void
      */
     public function init_hooks() {
-        add_action( 'init', array( $this, 'register_dokan_store_support' ) );
-        add_action( 'init', array( $this, 'register_dokan_support_topic_status' ) );
+        add_action( 'init', array( $this, 'register_dokan_store_support' ) ,50 );
+        add_action( 'init', array( $this, 'register_dokan_support_topic_status' ), 50 );
 
         add_action( 'template_redirect', array( $this, 'change_topic_status' ) );
 
@@ -704,7 +704,7 @@ class Dokan_Store_Support {
         );
 
         $args_t = apply_filters( 'dokan_support_get_single_topic_args', $args_t );
-
+        
         $query_dss = new WP_Query( $args_t );
         return $query_dss;
     }
@@ -738,7 +738,7 @@ class Dokan_Store_Support {
      */
     function print_single_topic( $topic ) {
         global $wp;
-
+       
         $is_customer = 0;
         $back_url    = dokan_get_navigation_url( 'support' );
 
