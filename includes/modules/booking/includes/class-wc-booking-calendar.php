@@ -69,10 +69,10 @@ class Dokan_WC_Bookings_Calendar {
 				$product_filter,
 				false
 			);
-
+                        
 		}
 		include DOKAN_WC_BOOKING_DIR.( '/templates/booking/calendar/html-calendar-' . $view . '.php' );
-
+                
 	}
 
 	/**
@@ -86,9 +86,9 @@ class Dokan_WC_Bookings_Calendar {
 	public function list_bookings( $day, $month, $year ) {
 		$date_start = strtotime( "$year-$month-$day 00:00" );
 		$date_end   = strtotime( "$year-$month-$day 23:59" );
-
+               
 		foreach ( $this->bookings as $booking ) {
-
+                    
                     if ( get_post_field( 'post_author', $booking->product_id ) != get_current_user_id() ) {
                         continue;
                     }
@@ -106,16 +106,16 @@ class Dokan_WC_Bookings_Calendar {
 					echo '</strong>';
 					echo '<ul>';
 						if ( ( $customer = $booking->get_customer() ) && ! empty( $customer->name ) ) {
-							echo '<li>' . __( 'Booked by', 'dokan' ) . ' ' . $customer->name . '</li>';
+							echo '<li>' . __( 'Booked by', 'dokan-wc-booking' ) . ' ' . $customer->name . '</li>';
 						}
 						echo '<li>';
 						if ( $booking->is_all_day() )
-							echo __( 'All Day', 'dokan' );
+							echo __( 'All Day', 'dokan-wc-booking' );
 						else
 							echo $booking->get_start_date( '', 'g:ia' ) . '&mdash;' . $booking->get_end_date( '', 'g:ia' );
 						echo '</li>';
 						if ( $resource = $booking->get_resource() )
-							echo '<li>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title . '</li>';
+							echo '<li>' . __( 'Resource #', 'dokan-wc-booking' ) . $resource->ID . ' - ' . $resource->post_title . '</li>';
 					echo '</ul></a>';
 				echo '</li>';
 			}
@@ -131,13 +131,13 @@ class Dokan_WC_Bookings_Calendar {
 		$unqiue_ids       = array();
 
                 foreach ( $this->bookings as $booking ) {
-
+                    
                     $seller       = get_post_field( 'post_author', $booking->get_product_id() );
-
+                    
                     if ( $seller != get_current_user_id() ) {
                         continue;
                     }
-
+                    
                     $edit_url = dokan_get_navigation_url('orders').'?order_id='.$booking->order_id;
                     if ( $booking->is_all_day() ) {
                             $all_day_bookings[] = $booking;
@@ -221,10 +221,10 @@ class Dokan_WC_Bookings_Calendar {
 			$return .= $product->get_title();
 		}
 		if ( ( $customer = $booking->get_customer() ) && ! empty( $customer->name ) ) {
-			$return .= '<br/>' . __( 'Booked by', 'dokan' ) . ' ' . $customer->name;
+			$return .= '<br/>' . __( 'Booked by', 'dokan-wc-booking' ) . ' ' . $customer->name;
 		}
 		if ( $resource = $booking->get_resource() )
-			$return .= '<br/>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title;
+			$return .= '<br/>' . __( 'Resource #', 'dokan-wc-booking' ) . $resource->ID . ' - ' . $resource->post_title;
 
 		return esc_attr( $return );
 	}
@@ -249,7 +249,7 @@ class Dokan_WC_Bookings_Calendar {
 			),
 			'suppress_filters' => true
 		) ) );
-
+                
 		foreach ( $products as $product ) {
 			$filters[ $product->ID ] = $product->post_title;
 

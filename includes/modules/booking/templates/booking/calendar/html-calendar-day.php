@@ -1,6 +1,6 @@
 <div class="wrap woocommerce">
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
-	<h2><?php _e( 'Bookings by day', 'dokan' ); ?></h2>
+	<h2><?php _e( 'Bookings by day', 'dokan-wc-booking' ); ?></h2>
 
 	<form method="get" id="mainform" enctype="multipart/form-data" class="wc_bookings_calendar_form">
 		<!--<input type="hidden" name="post_type" value="wc_booking" />-->
@@ -10,16 +10,16 @@
 		<div class="tablenav">
 			<div class="filters">
 				<select id="calendar-bookings-filter" name="filter_bookings" class="wc-enhanced-select" style="width:200px">
-					<option value=""><?php _e( 'Filter Bookings', 'dokan' ); ?></option>
+					<option value=""><?php _e( 'Filter Bookings', 'dokan-wc-booking' ); ?></option>
 					<?php if ( $product_filters = $this->product_filters() ) : ?>
-						<optgroup label="<?php _e( 'By bookable product', 'dokan' ); ?>">
+						<optgroup label="<?php _e( 'By bookable product', 'dokan-wc-booking' ); ?>">
 							<?php foreach ( $product_filters as $filter_id => $filter_name ) : ?>
 								<option value="<?php echo $filter_id; ?>" <?php selected( $product_filter, $filter_id ); ?>><?php echo $filter_name; ?></option>
 							<?php endforeach; ?>
 						</optgroup>
 					<?php endif; ?>
 					<?php if ( $resources_filters = $this->resources_filters() ) : ?>
-						<optgroup label="<?php _e( 'By resource', 'dokan' ); ?>">
+						<optgroup label="<?php _e( 'By resource', 'dokan-wc-booking' ); ?>">
 							<?php foreach ( $resources_filters as $filter_id => $filter_name ) : ?>
 								<option value="<?php echo $filter_id; ?>" <?php selected( $product_filter, $filter_id ); ?>><?php echo $filter_name; ?></option>
 							<?php endforeach; ?>
@@ -35,7 +35,7 @@
 				<a class="next" href="<?php echo esc_url( add_query_arg( 'calendar_day', date_i18n( 'Y-m-d', strtotime( '+1 day', strtotime( $day ) ) ) ) ); ?>">&rarr;</a>
 			</div>
 			<div class="views">
-				<a class="month" href="<?php echo esc_url( add_query_arg( 'view', 'month' ) ); ?>"><?php _e( 'Month View', 'dokan' ); ?></a>
+				<a class="month" href="<?php echo esc_url( add_query_arg( 'view', 'month' ) ); ?>"><?php _e( 'Month View', 'dokan-wc-booking' ); ?></a>
 			</div>
 			<script type="text/javascript">
 				jQuery(function() {

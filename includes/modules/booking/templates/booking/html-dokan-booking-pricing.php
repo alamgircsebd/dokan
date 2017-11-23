@@ -6,8 +6,8 @@ $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
 
 <div class="cost_fields dokan-edit-row dokan-clearfix">
     <div class="dokan-section-heading" data-togglehandler="cost_fields">
-        <h2><i class="fa fa-money" aria-hidden="true"></i> <?php _e( 'Costs', 'dokan' ) ?></h2>
-        <p><?php _e( 'Set Costs options', 'dokan' ) ?></p>
+        <h2><i class="fa fa-money" aria-hidden="true"></i> <?php _e( 'Costs', 'dokan-wc-booking' ) ?></h2>
+        <p><?php _e( 'Set Costs options', 'dokan-wc-booking' ) ?></p>
         <a href="#" class="dokan-section-toggle">
             <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true" style="margin-top: 9px;"></i>
         </a>
@@ -15,8 +15,8 @@ $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
     </div>
     <div id="bookings_pricing" class="dokan-section-content">
         <div class="dokan-form-group content-half-part">
-            <label for="_wc_booking_cost" class="form-label"><?php _e( 'Base cost', 'dokan' ); ?>
-                <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'One-off cost for the booking as a whole.', 'dokan' ); ?>">
+            <label for="_wc_booking_cost" class="form-label"><?php _e( 'Base cost', 'dokan-wc-booking' ); ?>
+                <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'One-off cost for the booking as a whole.', 'dokan-wc-booking' ); ?>">
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>
@@ -25,18 +25,18 @@ $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
         <?php do_action( 'woocommerce_bookings_after_booking_base_cost', $post_id ); ?>
 
         <div class="dokan-form-group content-half-part">
-            <label for="_wc_booking_base_cost" class="form-label"><?php _e( 'Block cost', 'dokan' ); ?>
-                <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'This is the cost per block booked. All other costs (for resources and persons) are added to this.', 'dokan' ); ?>">
+            <label for="_wc_booking_base_cost" class="form-label"><?php _e( 'Block cost', 'dokan-wc-booking' ); ?>
+                <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'This is the cost per block booked. All other costs (for resources and persons) are added to this.', 'dokan-wc-booking' ); ?>">
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>
             <?php dokan_post_input_box( $post_id, '_wc_booking_base_cost', array( 'min' => '0', 'step' => '0.1', 'value' => $booking_base_cost ), 'number' ); ?>
         </div>
         <?php do_action( 'woocommerce_bookings_after_booking_block_cost', $post_id ); ?>
-
+        
         <div class="dokan-form-group">
-            <label for="_wc_display_cost" class="form-label"><?php _e( 'Display cost', 'dokan' ); ?>
-                <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'The cost is displayed to the user on the frontend. Leave blank to have it calculated for you. If a booking has varying costs, this will be prefixed with the word "from:".', 'dokan' ); ?>">
+            <label for="_wc_display_cost" class="form-label"><?php _e( 'Display cost', 'dokan-wc-booking' ); ?>
+                <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'The cost is displayed to the user on the frontend. Leave blank to have it calculated for you. If a booking has varying costs, this will be prefixed with the word "from:".', 'dokan-wc-booking' ); ?>">
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>
@@ -49,19 +49,19 @@ $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
                 <thead>
                     <tr>
                         <th class="sort" width="1%">&nbsp;</th>
-                        <th><?php _e( 'Range type', 'dokan' ); ?></th>
-                        <th><?php _e( 'Range', 'dokan' ); ?></th>
+                        <th><?php _e( 'Range type', 'dokan-wc-booking' ); ?></th>
+                        <th><?php _e( 'Range', 'dokan-wc-booking' ); ?></th>
                         <th></th>
                         <th></th>
-                        <th><?php _e( 'Base cost', 'dokan' ); ?>&nbsp;
-                            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Enter a cost for this rule. Applied to the booking as a whole.', 'dokan' ); ?>">
+                        <th><?php _e( 'Base cost', 'dokan-wc-booking' ); ?>&nbsp;
+                            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Enter a cost for this rule. Applied to the booking as a whole.', 'dokan-wc-booking' ); ?>">
                                 <i class="fa fa-question-circle"></i>
                             </span>
-                        <th><?php _e( 'Block cost', 'dokan' ); ?>&nbsp;
-                            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Enter a cost for this rule. Applied to each booking block.', 'dokan' ); ?>">
+                        <th><?php _e( 'Block cost', 'dokan-wc-booking' ); ?>&nbsp;
+                            <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Enter a cost for this rule. Applied to each booking block.', 'dokan-wc-booking' ); ?>">
                                 <i class="fa fa-question-circle"></i>
                             </span>
-                            <!--<a class="tips" data-tip="<?php // _e( 'Enter a cost for this rule. Applied to each booking block.', 'dokan' );   ?>">[?]</a></th>-->
+                            <!--<a class="tips" data-tip="<?php // _e( 'Enter a cost for this rule. Applied to each booking block.', 'dokan-wc-booking' );   ?>">[?]</a></th>-->
                         <th class="remove" width="1%">&nbsp;</th>
                     </tr>
                 </thead>
@@ -73,8 +73,8 @@ $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
                             include( 'html-booking-pricing-fields.php' );
                             $html   = ob_get_clean();
                             echo esc_attr( $html );
-                            ?>"><?php _e( 'Add Range', 'dokan' ); ?></a>
-                            <span class="description"><?php _e( 'All matching rules will be applied to the booking.', 'dokan' ); ?></span>
+                            ?>"><?php _e( 'Add Range', 'dokan-wc-booking' ); ?></a>
+                            <span class="description"><?php _e( 'All matching rules will be applied to the booking.', 'dokan-wc-booking' ); ?></span>
                         </th>
                     </tr>
                 </tfoot>
