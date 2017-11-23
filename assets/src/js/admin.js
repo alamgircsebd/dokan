@@ -41,11 +41,26 @@
                 },
             });
 
-            $.post( dokan_admin.ajaxurl, data, function(resp) {
-                $('.blockMsg').text(resp.data);
-                setTimeout( function() {
-                    self.closest('.plugin-card').unblock();
-                }, 1000)
+            wp.ajax.send( 'dokan-toggle-module', {
+                data: data,
+                success: function(response) {
+
+                },
+
+                error: function(error) {
+                    if ( error.error === 'plugin-exists' ) {
+                        wp.ajax.send( 'dokan-toggle-module', {
+                            data: data
+                        });
+                    }
+                },
+
+                complete: function(resp) {
+                    $('.blockMsg').text(resp.data);
+                    setTimeout( function() {
+                        self.closest('.plugin-card').unblock();
+                    }, 1000)
+                }
             });
         }
     };

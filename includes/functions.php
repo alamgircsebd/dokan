@@ -226,11 +226,11 @@ function dokan_get_feature_sellers( $count = 5 ) {
 
 /**
  * Generate Customer to Vendor migration template
- * 
+ *
  * @since 2.6.4
- * 
+ *
  * @param array $atts ShortCode attributes
- * 
+ *
  * @return void Render template for account update
  */
 if ( !function_exists( 'dokan_render_customer_migration_template' ) ) {
@@ -379,11 +379,12 @@ function dokan_get_seller_status_count() {
     $active_count   = $active_users->get_total();
     $inactive_count = $all_users->get_total() - $active_count;
 
-    $counts =  array( 
+    $counts =  array(
         'total' => $active_count + $inactive_count,
         'active' => $active_count,
         'inactive' => $inactive_count,
     );
-        
+
     return $counts;
 }
+

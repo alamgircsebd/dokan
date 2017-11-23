@@ -171,11 +171,23 @@ function dokan_pro_activate_module( $module ) {
         $current[] = $module;
         sort($current);
 
+        // deactivate the addon if exists
+        $module_class = dokan_module_class_map( $module );
+
+        if ( $module_class && class_exists( $module_class ) ) {
+            $reflector = new ReflectionClass( $module_class );
+            $addon_path = plugin_basename( $reflector->getFileName() );
+
+            deactivate_plugins( $addon_path );
+
+            return new WP_Error( 'plugin-exists', __( 'Deactivated the plugin, please try again.', 'dokan' ) );
+        }
+
         $file_path = plugin_basename( "$module_root/$module" );
 
         if ( file_exists( "$module_root/$module" ) ) {
             require_once "$module_root/$module";
-            do_action( "activate_{$file_path}", $module );
+            do_action( "dokan_activate_{$file_path}", $module );
         }
 
         update_option( dokan_pro_active_module_key(), $current );
@@ -208,7 +220,7 @@ function dokan_pro_deactivate_module( $module ) {
 
         if ( file_exists( "$module_root/$module" ) ) {
             require_once "$module_root/$module";
-            do_action( "deactivate_{$file_path}", $module );
+            do_action( "dokan_deactivate_{$file_path}", $module );
         }
 
         update_option( dokan_pro_active_module_key(), $current );
@@ -231,7 +243,7 @@ function dokan_register_activation_hook( $file, $function ) {
     if ( file_exists( $file ) ) {
         require_once $file;
         $base_name = plugin_basename( $file );
-        add_action( "activate_{$base_name}", $function );
+        add_action( "dokan_activate_{$base_name}", $function );
     }
 }
 
@@ -247,6 +259,29 @@ function dokan_register_deactivation_hook( $file, $function ) {
     if ( file_exists( $file ) ) {
         require_once $file;
         $base_name = plugin_basename( $file );
-        add_action( "deactivate_{$base_name}", $function );
+        add_action( "dokan_deactivate_{$base_name}", $function );
     }
+}
+
+function dokan_module_class_map( $module ) {
+    $modules = array(
+        'appearance/appearance.php'                    => 'Dokan_Apperance',
+        'booking/booking.php'                          => 'Dokan_WC_Booking',
+        'export-import/export-import.php'              => 'Dokan_Product_Importer',
+        'live-search/live-search.php'                  => 'Dokan_Live_Search',
+        'paypal-adaptive-payments/dokan-paypal-ap.php' => 'Dokan_Paypal_AP',
+        'product-enquiry/enquiry.php'                  => 'Dokan_Product_Enquiry',
+        'seller-vacation/seller-vacation.php'          => 'Dokan_Seller_Vacation',
+        'store-reviews/store-reviews.php'              => 'Dokan_Store_Reviews',
+        'store-support/store-support.php'              => 'Dokan_Store_Support',
+        'stripe/gateway-stripe.php'                    => 'Dokan_Stripe',
+        'subscription/product-subscription.php'        => 'Dokan_Product_Subscription',
+        'vendor-verification/vendor-verification.php'  => 'Dokan_Seller_Verification',
+    );
+
+    if ( array_key_exists( $module, $modules) ) {
+        return $modules[ $module ];
+    }
+
+    return false;
 }
