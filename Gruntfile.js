@@ -258,13 +258,13 @@ module.exports = function(grunt) {
     grunt.registerTask( 'zip', [
         'clean:main',
         'copy:main',
-        'clean:basic',
+        'clean:starter',
         'compress:main'
     ]);
 
     Object.keys( packs ).forEach( function( val, index ) {
         grunt.registerTask( 'zip-' + val, [
-            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:' + val
+            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:main'
         ]);
     });
 
