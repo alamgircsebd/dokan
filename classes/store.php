@@ -54,6 +54,7 @@ class Dokan_Pro_Store {
         $vars[] = 'store_review';
         $vars[] = 'support';
         $vars[] = 'support-tickets';
+        $vars[] = 'booking';
 
         return $vars;
     }
