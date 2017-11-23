@@ -1,7 +1,7 @@
 <div class="wrap woocommerce">
 	<div class="icon32 icon32-woocommerce-settings" id="icon-woocommerce"><br /></div>
-        <h2><?php _e( 'Bookings by month', 'dokan' ); ?></h2>
-
+        <h2><?php _e( 'Bookings by month', 'dokan-wc-booking' ); ?></h2>
+        
 	<form method="get" id="mainform" enctype="multipart/form-data" class="wc_bookings_calendar_form">
 		<!--<input type="hidden" name="post_type" value="wc_booking" />-->
 		<!--<input type="hidden" name="page" value="booking_calendar" />-->
@@ -11,19 +11,19 @@
 		<div class="tablenav">
 			<div class="filters">
 				<select id="calendar-bookings-filter" name="filter_bookings" class="dokan-form-control" style="width:200px">
-					<option value=""><?php _e( 'Filter Bookings', 'dokan' ); ?></option>
-                                        <?php
+					<option value=""><?php _e( 'Filter Bookings', 'dokan-wc-booking' ); ?></option>
+                                        <?php 
                                             $product_filters = $this->product_filters();
                                         ?>
 					<?php if ( $product_filters ) : ?>
-						<optgroup label="<?php _e( 'By bookable product', 'dokan' ); ?>">
+						<optgroup label="<?php _e( 'By bookable product', 'dokan-wc-booking' ); ?>">
 							<?php foreach ( $product_filters as $filter_id => $filter_name ) : ?>
 								<option value="<?php echo $filter_id; ?>" <?php selected( $product_filter, $filter_id ); ?>><?php echo $filter_name; ?></option>
 							<?php endforeach; ?>
 						</optgroup>
 					<?php endif; ?>
 					<?php if ( $resources_filters = $this->resources_filters() ) : ?>
-						<optgroup label="<?php _e( 'By resource', 'dokan' ); ?>">
+						<optgroup label="<?php _e( 'By resource', 'dokan-wc-booking' ); ?>">
 							<?php foreach ( $resources_filters as $filter_id => $filter_name ) : ?>
 								<option value="<?php echo $filter_id; ?>" <?php selected( $product_filter, $filter_id ); ?>><?php echo $filter_name; ?></option>
 							<?php endforeach; ?>
@@ -50,7 +50,7 @@
 				<a class="next" href="<?php echo esc_url( add_query_arg( array( 'calendar_year' => $year, 'calendar_month' => $month + 1 ) ) ); ?>">&rarr;</a>
 			</div>
 			<div class="views">
-				<a class="day" href="<?php echo esc_url( add_query_arg( 'view', 'day' ) ); ?>"><?php _e( 'Day View', 'dokan' ); ?></a>
+				<a class="day" href="<?php echo esc_url( add_query_arg( 'view', 'day' ) ); ?>"><?php _e( 'Day View', 'dokan-wc-booking' ); ?></a>
 			</div>
 			<script type="text/javascript">
 				jQuery(".tablenav select").change(function() {
@@ -63,7 +63,7 @@
 			<thead>
 				<tr>
 					<?php for ( $ii = get_option( 'start_of_week', 1 ); $ii < get_option( 'start_of_week', 1 ) + 7; $ii ++ ) : ?>
-						<th><?php echo date_i18n( _x( 'l', 'date format', 'dokan' ), strtotime( "next sunday +{$ii} day" ) ); ?></th>
+						<th><?php echo date_i18n( _x( 'l', 'date format', 'dokan-wc-booking' ), strtotime( "next sunday +{$ii} day" ) ); ?></th>
 					<?php endfor; ?>
 				</tr>
 			</thead>

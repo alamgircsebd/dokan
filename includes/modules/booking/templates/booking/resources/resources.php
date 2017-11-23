@@ -2,9 +2,9 @@
 
 ?>
 <header class="dokan-dashboard-header">
-    <h1 class="entry-title"><?php _e( $title , 'dokan' ); ?>
+    <h1 class="entry-title"><?php _e( $title , 'dokan-wc-booking' ); ?>
         <span class="dokan-add-resource-link">
-            <button href="#" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-briefcase">&nbsp;</i><?php _e( 'Add new Resource', 'dokan' ) ?></button>
+            <button href="#" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-briefcase">&nbsp;</i><?php _e( 'Add new Resource', 'dokan-wc-booking' ) ?></button>
         </span>
     </h1>
 </header><!-- .dokan-dashboard-header -->
@@ -20,7 +20,7 @@ global $post;
              *  @since 2.4
              */
             do_action( 'dokan_dashboard_content_inside_before' );
-
+            
             ?>
             <div class="dokan-product-listing">
 
@@ -29,8 +29,8 @@ global $post;
                     <table class="dokan-table dokan-table-striped product-listing-table">
                         <thead>
                             <tr>
-                                <th><?php _e( 'Name', 'dokan' ); ?></th>
-                                <th><?php _e( 'Parent', 'dokan' ); ?></th>
+                                <th><?php _e( 'Name', 'dokan-wc-booking' ); ?></th>
+                                <th><?php _e( 'Parent', 'dokan-wc-booking' ); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -83,9 +83,9 @@ global $post;
                             if ( $product_query->have_posts() ) {
                                 while ($product_query->have_posts()) {
                                     $product_query->the_post();
-
+                                    
                                     $tr_class = ($post->post_status == 'pending' ) ? ' class="danger"' : '';
-
+                                    
                                     $edit_url = dokan_get_navigation_url('booking').'resources/edit/?id=' . $post->ID;
                                     ?>
                                     <tr<?php echo $tr_class; ?>>
@@ -93,23 +93,23 @@ global $post;
                                         <a href="<?php echo $edit_url; ?>"><?php echo $post->post_title; ?></a>
                                     </td>
                                     <td>
-                                        <?php
+                                        <?php 
                                         global $wpdb;
                                         $parents      = $wpdb->get_col( $wpdb->prepare( "SELECT product_id FROM {$wpdb->prefix}wc_booking_relationships WHERE resource_id = %d ORDER BY sort_order;", $post->ID ) );
                                         $parent_posts = array();
                                         foreach ( $parents as $parent_id ) {
                                             if( $parent_id == 0 ){
-                                                continue;
+                                                continue;   
                                             }
                                             $edit_link = dokan_get_navigation_url('booking').'edit/?product_id='.$parent_id;
                                             $parent_posts[] = "<a href='$edit_link'>" . get_the_title( $parent_id ) . '</a>';
                                         }
-                                        echo $parent_posts ? implode( ', ', $parent_posts ) : __( 'N/A', 'dokan' );
+                                        echo $parent_posts ? implode( ', ', $parent_posts ) : __( 'N/A', 'dokan-wc-booking' );
                                         ?>
                                     </td>
                                     <td>
-                                        <a class="dokan-btn dokan-btn-sm dokan-btn-theme" href ="<?php echo $edit_url  ?>"><?php _e( 'Edit', 'dokan' );  ?></a>
-                                        <button class="dokan-btn dokan-btn-theme dokan-btn-sm btn-remove" data-id="<?php echo $post->ID ?>"><?php _e( 'Remove', 'dokan' );  ?></button>
+                                        <a class="dokan-btn dokan-btn-sm dokan-btn-theme" href ="<?php echo $edit_url  ?>"><?php _e( 'Edit', 'dokan-wc-booking' );  ?></a>
+                                        <button class="dokan-btn dokan-btn-theme dokan-btn-sm btn-remove" data-id="<?php echo $post->ID ?>"><?php _e( 'Remove', 'dokan-wc-booking' );  ?></button>
                                     </td>
                                 </tr>
 
@@ -117,7 +117,7 @@ global $post;
 
                                 <?php } else { ?>
                                 <tr>
-                                    <td colspan="7"><?php _e( 'No Resource found', 'dokan' ); ?></td>
+                                    <td colspan="7"><?php _e( 'No Resource found', 'dokan-wc-booking' ); ?></td>
                                 </tr>
                                 <?php } ?>
 
@@ -140,8 +140,8 @@ global $post;
                                 'format'    => '?pagenum=%#%',
                                 'add_args'  => false,
                                 'type'      => 'array',
-                                'prev_text' => __( '&laquo; Previous', 'dokan' ),
-                                'next_text' => __( 'Next &raquo;', 'dokan' )
+                                'prev_text' => __( '&laquo; Previous', 'dokan-wc-booking' ),
+                                'next_text' => __( 'Next &raquo;', 'dokan-wc-booking' )
                                 ) );
 
                             echo '<ul class="pagination"><li>';
@@ -181,12 +181,12 @@ global $post;
                 $( document ).ready( function () {
                     $('.dokan-dashboard-header').on('click', '.dokan-btn', function(){
                       add_resource_name = prompt( wc_bookings_writepanel_js_params.i18n_new_resource_name );
-
+                      
                       var data = {
                          action:            'add_new_resource',
                          add_resource_name: add_resource_name,
                      };
-
+                     
                      $.post( dokan.ajaxurl, data, function( response ) {
                         console.log(response);
                         if ( response.error ) {
@@ -197,7 +197,7 @@ global $post;
                     });
                  });
                     $('.dokan-product-listing').on('click', '.btn-remove', function(){
-
+                      
                         res_id = $(this).data( 'id' );
                         row = $(this).closest('tr');
                         var data = {
@@ -209,11 +209,11 @@ global $post;
                                 row.hide();
                             }
                         });
-
-
-
+                        
+                        
+                        
                     });
-
+                    
                 } );
 
             } )( jQuery );

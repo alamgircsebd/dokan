@@ -9,7 +9,7 @@ $limit        = 10;
 $offset       = ( $paged - 1 ) * $limit;
 
 
-$args = array(
+$args = array( 
     'post_type' => 'wc_booking',
     'paged'          => $paged,
     'posts_per_page' => $limit,
@@ -40,7 +40,7 @@ $status_list   = array_filter( (array) $counts );
 unset( $status_list['total'] );
 ?>
 <header class="dokan-dashboard-header">
-    <h1 class="entry-title"><?php _e( 'Manage Bookings', 'dokan' ); ?></h1>
+    <h1 class="entry-title"><?php _e( 'Manage Bookings', 'dokan-wc-booking' ); ?></h1>
 </header><!-- .dokan-dashboard-header -->
 
 <div class="dokan-orders-content dokan-orders-area">
@@ -51,7 +51,7 @@ unset( $status_list['total'] );
                 <?php printf( __( 'All (%d)', 'dokan-wc-booking '), $orders_counts->total ); ?></span>
             </a>
         </li>
-        <?php
+        <?php 
         foreach ( $status_list as $status => $status_count ) {
             ?>
             <li<?php echo $status_class == $status ? ' class="active"' : ''; ?>>
@@ -92,8 +92,8 @@ if ( $bookings ) {
                 <tr class="type-wc_booking ">
                     <td class="booking_status column-booking_status">
                         <?php $status = $the_booking->get_status( ); ?>
-                        <span class="status-<?php echo $status; ?> dokan-tooltips-help tips" data-original-title = '<?php echo sprintf( __('%s','dokan' ), $status ); ?>'>
-                            <?php  echo sprintf( __('%s','dokan' ), $status ); ?>
+                        <span class="status-<?php echo $status; ?> dokan-tooltips-help tips" data-original-title = '<?php echo sprintf( __('%s','dokan-wc-booking' ), $status ); ?>'>
+                            <?php  echo sprintf( __('%s','dokan-wc-booking' ), $status ); ?>
                         </span>
                     </td>
                     <td class="booking_id column-booking_id">
@@ -118,7 +118,7 @@ if ( $bookings ) {
                     <td class="customer column-customer">
                      <?php
                      $customer = $the_booking->get_customer();
-
+                     
                      if ( $customer ) {
                         echo '<a href="mailto:' .  $customer->email . '">' . $customer->name . '</a>';
                     } else {
@@ -127,7 +127,7 @@ if ( $bookings ) {
                     ?>
                 </td>
                 <td class="num_of_persons column-num_of_persons">
-                    <?php
+                    <?php               
                     if ( !is_object( $product ) || !$product->has_persons() ) {
                         esc_html_e( 'N/A', 'dokan-wc-bookings' );
                     } else {
