@@ -3,7 +3,7 @@
 Plugin Name: Store Support
 Plugin URI: https://wedevs.com/products/plugins/dokan/store-support/
 Description: Enable vendors to provide support to customers from store page.
-Version: 1.3.5
+Version: 1.3.6
 Author: weDevs
 Author URI: http://wedevs.com/
 Thumbnail Name: store-support.png
@@ -39,7 +39,7 @@ License: GPL2
 // don't call the file directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'DOKAN_STORE_SUPPORT_PLUGIN_VERSION', '1.3.5' );
+define( 'DOKAN_STORE_SUPPORT_PLUGIN_VERSION', '1.3.6' );
 define( 'DOKAN_STORE_SUPPORT_DIR', dirname( __FILE__ ) );
 define( 'DOKAN_STORE_SUPPORT_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 
@@ -147,6 +147,7 @@ class Dokan_Store_Support {
     public function enqueue_scripts() {
         wp_enqueue_style( 'dokan-store-support-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
         wp_enqueue_script( 'dokan-store-support-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
+        wp_localize_script( 'dokan-store-support-scripts', 'wait_string', array( 'wait' => __( 'wait...', 'dokan' ) ) );
     }
 
     /**
@@ -1059,7 +1060,12 @@ class Dokan_Store_Support {
 
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $this->total_query_result / $this->per_page );
-        $base_url = dokan_get_navigation_url( $query_var );
+        
+        if ( is_account_page() ) {
+            $base_url = home_url( 'my-account/support-tickets/' );
+        } else {
+            $base_url = dokan_get_navigation_url( $query_var );
+        }
 
         $page_links = paginate_links( array(
             'base'      => $base_url. '%_%',
@@ -1076,7 +1082,6 @@ class Dokan_Store_Support {
             echo "<ul class='pagination'>\n\t<li>";
             echo join("</li>\n\t<li>", $page_links);
             echo "</li>\n</ul>\n";
-            echo '</div>';
         }
     }
 
