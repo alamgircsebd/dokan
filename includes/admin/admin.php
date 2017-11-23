@@ -494,7 +494,7 @@ class Dokan_Pro_Admin_Settings {
     public function modules_page() {
         include dirname( __FILE__ ) . '/modules.php';
     }
-    
+
     /**
      * Show update notice
      *
@@ -502,7 +502,7 @@ class Dokan_Pro_Admin_Settings {
      *
      * @return void
      */
-    
+
     public function show_whats_new_notice() {
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -518,9 +518,9 @@ class Dokan_Pro_Admin_Settings {
         }
 
         ?>
-            <div class="notice udpated is-dismissible" id="dokan-pro-whats-new-notice">
+            <div class="info notice notice-info is-dismissible" id="dokan-pro-whats-new-notice">
                 <p>Check What's new in Dokan Pro</p>
-                <a style="margin-bottom: 10px;" href="<?php echo add_query_arg( array( 'page' => 'whats-new-dokan' ), admin_url( 'admin.php' ) ); ?>" class="button button-primary">What's New in Dokan Pro</a>   
+                <a style="margin-bottom: 10px;" href="<?php echo add_query_arg( array( 'page' => 'whats-new-dokan' ), admin_url( 'admin.php' ) ); ?>" class="button button-primary">What's New in Dokan Pro</a>
             </div>
 
             <script type='text/javascript'>
@@ -534,7 +534,7 @@ class Dokan_Pro_Admin_Settings {
             </script>
        <?php
     }
-   
+
     public function dismiss_new_notice() {
 
         if ( !empty( $_POST['dokan_promotion_dismissed'] ) ) {

@@ -85,23 +85,6 @@ class Dokan_Product_Enquiry {
     }
 
     /**
-     * Activation hook
-     *
-     * @since 1.0.0
-     *
-     * @return void
-     */
-    public static function activate() {
-        // $mapping_data = dokan_mapping_toggle_module_plugin();
-
-        error_log( print_r( 'Activating enquiry hook', true ) );
-        // error_log( print_r( $mapping_data, true ) );
-        // if (  ) {
-        //     # code...
-        // }
-    }
-
-    /**
      * Enqueue admin scripts
      *
      * Allows plugin assets to be loaded.
@@ -375,7 +358,5 @@ class Dokan_Product_Enquiry {
     }
 
 } // Dokan_Product_Enquiry
-
-dokan_register_activation_hook( __FILE__, array( 'Dokan_Product_Enquiry', 'activate' ) );
 
 Dokan_Product_Enquiry::init();
