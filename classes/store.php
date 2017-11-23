@@ -52,6 +52,8 @@ class Dokan_Pro_Store {
      */
     public function load_store_review_query_var( $vars ) {
         $vars[] = 'store_review';
+        $vars[] = 'support';
+        $vars[] = 'support-tickets';
 
         return $vars;
     }
