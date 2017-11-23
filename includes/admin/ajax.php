@@ -383,7 +383,10 @@ class Dokan_Pro_Admin_Ajax {
             $status = dokan_pro_activate_module( $module );
 
             if ( is_wp_error( $status ) ) {
-                wp_send_json_error( $status->get_error_message() );
+                wp_send_json_error( array(
+                    'error' => $status->get_error_code(),
+                    'message' => $status->get_error_message()
+                ) );
             }
 
             $message = __( 'Activated', 'dokan' );

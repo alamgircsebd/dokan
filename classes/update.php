@@ -261,7 +261,7 @@ class Dokan_Update {
     function get_current_plugin_info() {
         require_once ABSPATH . '/wp-admin/includes/plugin.php';
 
-        $plugin_data    = get_plugin_data( DOKAN_DIR . '/dokan.php' );
+        $plugin_data    = get_plugin_data( DOKAN_PRO_DIR . '/dokan-pro.php' );
         $plugin_name    = $plugin_data['Name'];
         $plugin_version = $plugin_data['Version'];
 

@@ -25,6 +25,7 @@ class Dokan_Pro_Admin_Settings {
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
         add_action( 'init', array( $this, 'dokan_export_all_logs' ) );
+        add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
     }
 
     /**
@@ -48,7 +49,7 @@ class Dokan_Pro_Admin_Settings {
         }
 
         add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
-       
+
         $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
         $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
         $announcement   = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
@@ -60,6 +61,17 @@ class Dokan_Pro_Admin_Settings {
         add_action( $modules, array( $this, 'modules_scripts' ) );
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
+    }
+
+    /**
+     * Remove addon submen from dokan admin menu
+     *
+     * @since 2.7.0
+     *
+     * @return void
+     */
+    public function remove_add_on_menu() {
+        remove_submenu_page( 'dokan', 'dokan-addons' );
     }
 
     /**
