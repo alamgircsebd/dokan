@@ -73,13 +73,13 @@ function _dokan_changelog_content( $content ) {
     </div>
 
 </div>
-<?php 
+<?php
     $offer_key = 'dokan_whats_new_notice';
     update_option( $offer_key . '_tracking_notice', 'hide' );
 ?>
 <style type="text/css">
 
-.error, .udpated {
+.error, .udpated, .info, .notice {
     display: none;
 }
 
