@@ -5,41 +5,31 @@ $changelog = array(
         'released' => '2017-11-23',
         'changes' => array(
             array(
-                'title'       => 'Externally triggering widget popover',
-                'type'        => 'Improvement',
-                'description' => 'Until today you could only trigger the widget popover only by clicking on the badge, but sometimes it makes sense to toggle the popover from an external link, say like we do above, with the Release notes link.'
-            ),
-            array(
-                'title'       => 'Scheduled publishing',
+                'title'       => 'Introducing All New modules and packaging System',
                 'type'        => 'New',
-                'description' => 'Pretty self-explanatory – just pick a date in the future, publish the post and we\'ll handle the rest!.'
+                'description' => 'Say bye bye to previous add-ons, which were very difficult to manage. From our new update, we are going to transform all our add-ons into modules. Guess what, you will be able to manage all of them from a single place. So, we have added a new menu called ‘Modules’ and removed the old ‘Add-ons’ menu. This is how the new page looks like.
+                <img src="https://wedevs.com/wp-content/uploads/2017/11/Dokan-new-module-activation-deactivation.gif" alt="Dokan Module">'
             ),
             array(
-                'title'       => 'Saving is back... Don\'t ask.',
+                'title'       => 'Automatic Updates for Modules',
+                'type'        => 'New',
+                'description' => 'Previously, you didn’t get a live update for any of the Dokan add-ons. Now, you can manage them from a single place as well as get live updates directly with Dokan plugin. So, no more manual updates! You don’t have to download each add-ons and install them separately every time you get an update.'
+            ),
+            array(
+                'title'       => 'Interactive Settings Page to Manage it All',
+                'type'        => 'New',
+                'description' => 'Dokan now has better and improved settings page where you can easily configure everything for your Dokan Multivendor.
+                <img src="https://wedevs-com-wedevs.netdna-ssl.com/wp-content/uploads/2017/11/dokan-new-settings-page.png" alt="Dokan Settings">'
+            ),
+            array(
+                'title'       => 'Shipping options showing for product edit while dokan shipping is disabled',
                 'type'        => 'Fix',
-                'description' => '<p>A bit of a regression happened today, we updated some under-the-hood things and unfortunately broke saving posts along the way.</p>
-<p>Issue is now solved. Sorry for the trouble.</p>'
+                'description' => 'Shipping option all time showing in edit product page due to disable dokan shipping option. This problem fixed if dokan main shipping is disabled then shipping option are not showing in edit product page
+                <img src="https://wedevs-com-wedevs.netdna-ssl.com/wp-content/uploads/2017/11/dokan-new-settings-page.png" alt="Dokan Settings">'
             ),
 
         )
-    ),
-    array(
-        'version'  => 'Version 2.6.8',
-        'released' => '2017-10-13',
-        'changes' => array(
-            array(
-                'title'       => 'Externally triggering widget popover',
-                'type'        => 'Improvement',
-                'description' => 'Until today you could only trigger the widget popover only by clicking on the badge, but sometimes it makes sense to toggle the popover from an external link, say like we do above, with the Release notes link.'
-            ),
-            array(
-                'title'       => 'Scheduled publishing',
-                'type'        => 'New',
-                'description' => 'Pretty self-explanatory – just pick a date in the future, publish the post and we\'ll handle the rest!.'
-            ),
-
-        )
-    ),
+    )
 );
 
 function _dokan_changelog_content( $content ) {
@@ -81,9 +71,14 @@ function _dokan_changelog_content( $content ) {
             </div>
         <?php } ?>
     </div>
+
 </div>
 
 <style type="text/css">
+
+.error, .udpated {
+    display: none;
+}
 
 .dokan-whats-new h1 {
     text-align: center;
@@ -99,6 +94,10 @@ function _dokan_changelog_content( $content ) {
     margin: 20px auto;
     background: #fff;
     box-shadow: 0 1px 1px rgba(0,0,0,0.04);
+}
+
+.wedevs-changelog-wrapper .wedevs-support-help {
+
 }
 
 .wedevs-changelog .wedevs-changelog-version {
@@ -121,6 +120,7 @@ function _dokan_changelog_content( $content ) {
 .wedevs-changelog .wedevs-changelog-history h4 {
     margin: 0 0 10px 0;
     font-size: 1.3em;
+    line-height: 26px;
 }
 
 .wedevs-changelog .wedevs-changelog-history p {
@@ -129,6 +129,7 @@ function _dokan_changelog_content( $content ) {
 }
 
 .wedevs-changelog .wedevs-changelog-history img {
+    margin-top: 30px;
     max-width: 100%;
 }
 

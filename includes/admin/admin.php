@@ -56,6 +56,8 @@ class Dokan_Pro_Admin_Settings {
         $modules        = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
         $tools          = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
+        add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
+
         add_action( $report, array( $this, 'common_scripts' ) );
         add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
         add_action( $modules, array( $this, 'modules_scripts' ) );
@@ -301,6 +303,15 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
+     * Whats new page for dokan pro
+     *
+     * @return void
+     */
+    function whats_new_page() {
+        include dirname( __FILE__ ) . '/whats-new.php';
+    }
+
+    /**
      * Tools Toggole Handler
      *
      * @since 2.4
@@ -308,6 +319,7 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     function tools_page_handler() {
+
         if ( isset( $_GET['dokan_action'] ) && current_user_can( 'manage_options' ) ) {
             $action = $_GET['dokan_action'];
             check_admin_referer( 'dokan-tools-action' );
