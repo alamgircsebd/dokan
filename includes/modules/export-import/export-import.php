@@ -95,9 +95,6 @@ class Dokan_Product_Importer {
         define( 'DOKAN_IE_DIR', __DIR__ );
         define( 'DOKAN_IE_INC_DIR', __DIR__ . '/includes' );
 
-        // Localize our plugin
-        add_action( 'init', array( $this, 'localization_setup' ) );
-
         add_action( 'init', array( $this, 'do_product_export' ), 99 );
 
         // Loads frontend scripts and styles
