@@ -24,8 +24,7 @@ $changelog = array(
             array(
                 'title'       => 'Shipping options showing for product edit while dokan shipping is disabled',
                 'type'        => 'Fix',
-                'description' => 'Shipping option all time showing in edit product page due to disable dokan shipping option. This problem fixed if dokan main shipping is disabled then shipping option are not showing in edit product page
-                <img src="https://wedevs-com-wedevs.netdna-ssl.com/wp-content/uploads/2017/11/dokan-new-settings-page.png" alt="Dokan Settings">'
+                'description' => 'Shipping option all time showing in edit product page due to disable dokan shipping option. This problem fixed if dokan main shipping is disabled then shipping option are not showing in edit product page'
             ),
 
         )
