@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     var cleanPack = {};
     var compressPack = {};
     var replacePack = {};
+    var copyPack = {};
 
     cleanPack.main = {
         src : ['build/']
@@ -22,6 +23,34 @@ module.exports = function(grunt) {
         dest: 'dokan-pro'
     }
 
+    copyPack.main = {
+        src: [
+            '**',
+            '!node_modules/**',
+            '!build/**',
+            '!bin/**',
+            '!.git/**',
+            '!Gruntfile.js',
+            '!package.json',
+            '!pack.json',
+            '!package-lock.json',
+            '!debug.log',
+            '!phpunit.xml',
+            '!.gitignore',
+            '!.gitmodules',
+            '!npm-debug.log',
+            '!secret.json',
+            '!plugin-deploy.sh',
+            '!assets/less/**',
+            '!tests/**',
+            '!**/Gruntfile.js',
+            '!**/package.json',
+            '!**/README.md',
+            '!**/*~'
+        ],
+        dest: 'build/'
+    }
+
     Object.keys( packs ).forEach( function( val, index ) {
         var cleanPackages = packs[val].map( function( module ) {
             return "!build/includes/modules/" + module
@@ -33,6 +62,13 @@ module.exports = function(grunt) {
             src : cleanPackages
         };
 
+        copyPack[val] = {
+            src : './build/dokan-'+ val + '-' + pkg.version + '.zip',
+            dest : 'dist/',
+            flatten: true,
+            expand: true
+        }
+
         compressPack[val] = {
             options: {
                 mode: 'zip',
@@ -41,7 +77,7 @@ module.exports = function(grunt) {
             expand: true,
             cwd: 'build/',
             src: ['**/*'],
-            dest: 'dokan-' + val
+            dest: 'dokan-pro'
         };
 
         replacePack[val] = {
@@ -157,35 +193,7 @@ module.exports = function(grunt) {
         clean: cleanPack,
 
         // Copy the plugin into the build directory
-        copy: {
-            main: {
-                src: [
-                    '**',
-                    '!node_modules/**',
-                    '!build/**',
-                    '!bin/**',
-                    '!.git/**',
-                    '!Gruntfile.js',
-                    '!package.json',
-                    '!pack.json',
-                    '!package-lock.json',
-                    '!debug.log',
-                    '!phpunit.xml',
-                    '!.gitignore',
-                    '!.gitmodules',
-                    '!npm-debug.log',
-                    '!secret.json',
-                    '!plugin-deploy.sh',
-                    '!assets/less/**',
-                    '!tests/**',
-                    '!**/Gruntfile.js',
-                    '!**/package.json',
-                    '!**/README.md',
-                    '!**/*~'
-                ],
-                dest: 'build/'
-            }
-        },
+        copy: copyPack,
 
         //Compress build directory into <name>.zip and <name>-<version>.zip
         compress: compressPack,
@@ -264,7 +272,7 @@ module.exports = function(grunt) {
 
     Object.keys( packs ).forEach( function( val, index ) {
         grunt.registerTask( 'zip-' + val, [
-            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:main'
+            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:' + val, 'copy:' + val
         ]);
     });
 
