@@ -413,7 +413,7 @@ class Dokan_Product_Subscription {
     function shortcode_handler() {
         global $post;
 
-        $checkout_url = WC()->cart->get_checkout_url();
+        $checkout_url = wc_get_checkout_url();
         $user_id      = get_current_user_id();
         $product      = wc_get_product( get_user_meta( $user_id, 'product_package_id', true ) );
         $order_id     = get_user_meta( $user_id, 'product_order_id', true );
@@ -757,7 +757,7 @@ class Dokan_Product_Subscription {
 
         // If product is of the subscription type
         if ( self::is_subscription_product( $product_id ) ) {
-            $url = WC()->cart->get_checkout_url();
+            $url = wc_get_checkout_url();
         }
 
         return $url;
