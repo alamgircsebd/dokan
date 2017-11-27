@@ -731,12 +731,12 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', '' );
-                $vendor_commission = get_post_meta( $product['product_id'], '_vendor_commission', true );
+                $admin_commission = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
 
-                if ( !empty( $vendor_commission ) ) {
-                    update_user_meta( $customer_id, 'dokan_seller_percentage', $vendor_commission );
+                if ( ! empty( $admin_commission ) ) {
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
                 } else {
-                    update_user_meta( $customer_id, 'dokan_seller_percentage', '' );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
                 }
             }
         }
@@ -1099,4 +1099,3 @@ dokan_register_deactivation_hook( __FILE__, array( 'Dokan_Product_Subscription' 
 
 require_once dirname( __FILE__ ). '/includes/classes/class-dps-product-pack.php';
 $dps = Dokan_Product_Subscription::init();
-
