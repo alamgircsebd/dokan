@@ -20,7 +20,7 @@ class Dokan_Update {
 
         // bail out if it's a local server
         if ( $this->is_local_server() ) {
-            // return;
+            return;
         }
 
         add_action( 'dokan_admin_menu', array($this, 'admin_menu'), 99 );

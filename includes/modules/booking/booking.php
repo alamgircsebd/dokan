@@ -72,7 +72,7 @@ class Dokan_WC_Booking {
     public function __construct() {
         $this->depends_on['wc_bookings'] = array(
             'name'   => 'WC_Bookings',
-            'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %sWooCommerce Bookings plugin%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="http://www.woothemes.com/products/dokan-wc-booking/">', '</a>' ),
+            'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %sWooCommerce Bookings plugin%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-bookings/">', '</a>' ),
         );
 
         if ( ! $this->check_if_has_dependency() ) {
@@ -303,7 +303,7 @@ class Dokan_WC_Booking {
         //override email receipents
         add_filter( 'woocommerce_email_recipient_new_booking', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
         //add_filter( 'woocommerce_email_recipient_booking_cancelled', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
-        
+
     }
     public function load_dokan_booking_cancelled_emails( $wc_emails ) {
         $wc_emails['Dokan_Email_Booking_Cancelled'] = include( DOKAN_WC_BOOKING_DIR. '/includes/emails/class-dokan-booking-email-cancelled.php' );
