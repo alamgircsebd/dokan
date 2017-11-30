@@ -165,12 +165,14 @@ module.exports = function(grunt) {
         makepot: {
             target: {
                 options: {
-                    exclude: ['build/.*'],
+                    cwd: 'build',
+                    exclude: ['dist/.*', '*.zip'],
+                    mainFile: 'dokan-pro.php',
                     domainPath: '/languages/', // Where to save the POT file.
                     potFilename: 'dokan.pot', // Name of the POT file.
                     type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
                     potHeaders: {
-                        'report-msgid-bugs-to': 'http://wedevs.com/support/forum/theme-support/dokan/',
+                        'report-msgid-bugs-to': 'https://wedevs.com/account/tickets/',
                         'language-team': 'LANGUAGE <EMAIL@ADDRESS>'
                     }
                 }
@@ -272,7 +274,7 @@ module.exports = function(grunt) {
 
     Object.keys( packs ).forEach( function( val, index ) {
         grunt.registerTask( 'zip-' + val, [
-            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:' + val, 'copy:' + val
+            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'makepot', 'compress:' + val, 'copy:' + val
         ]);
     });
 

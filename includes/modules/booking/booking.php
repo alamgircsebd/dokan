@@ -339,8 +339,8 @@ class Dokan_WC_Booking {
         // if ( isset( $emails['WC_Email_Admin_Booking_Cancelled'] ) ) {
         //     $email = $emails['WC_Email_Admin_Booking_Cancelled'];
 
-        //     $email->title       = __( 'Dokan Booking Cancelled by Admin', 'dokan-wc-booking' );
-        //     $email->description = __( 'Booking cancelled Admin emails are sent to vendor when the status of a booking goes to cancelled.', 'dokan-wc-booking' );
+        //     $email->title       = __( 'Dokan Booking Cancelled by Admin', 'dokan' );
+        //     $email->description = __( 'Booking cancelled Admin emails are sent to vendor when the status of a booking goes to cancelled.', 'dokan' );
 
         //     $email->template_base = DOKAN_WC_BOOKING_TEMPLATE_PATH;
         //     $email->recipient     = "vendor@ofthe.product";

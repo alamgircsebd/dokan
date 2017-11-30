@@ -13,9 +13,9 @@ global $post;
     ?>
     <header class="dokan-dashboard-header">
         <?php if ( dokan_is_seller_enabled( get_current_user_id() ) ) { ?>
-        <h1 class="entry-title"><?php _e( $title , 'dokan-wc-booking' ); ?>
+        <h1 class="entry-title"><?php _e( $title , 'dokan' ); ?>
             <span class="dokan-add-product-link">
-                <a href="<?php _e( $booking_url.'new-product','dokan' );?>" class="dokan-btn dokan-btn-theme dokan-right dokan-add-new-product"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add New Booking Product', 'dokan-wc-booking' ) ?></a>
+                <a href="<?php _e( $booking_url.'new-product','dokan' );?>" class="dokan-btn dokan-btn-theme dokan-right dokan-add-new-product"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add New Booking Product', 'dokan' ) ?></a>
             </span>
         </h1>
         <?php } ?>
@@ -33,15 +33,15 @@ global $post;
             <table class="dokan-table dokan-table-striped product-listing-table">
                 <thead>
                     <tr>
-                        <th><?php _e( 'Image', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Name', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Status', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'SKU', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Stock', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Price', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Type', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Views', 'dokan-wc-booking' ); ?></th>
-                        <th><?php _e( 'Date', 'dokan-wc-booking' ); ?></th>
+                        <th><?php _e( 'Image', 'dokan' ); ?></th>
+                        <th><?php _e( 'Name', 'dokan' ); ?></th>
+                        <th><?php _e( 'Status', 'dokan' ); ?></th>
+                        <th><?php _e( 'SKU', 'dokan' ); ?></th>
+                        <th><?php _e( 'Stock', 'dokan' ); ?></th>
+                        <th><?php _e( 'Price', 'dokan' ); ?></th>
+                        <th><?php _e( 'Type', 'dokan' ); ?></th>
+                        <th><?php _e( 'Views', 'dokan' ); ?></th>
+                        <th><?php _e( 'Date', 'dokan' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -102,7 +102,7 @@ global $post;
                     if ( $product_query->have_posts() ) {
                         while ($product_query->have_posts()) {
                             $product_query->the_post();
-                            
+
                             $tr_class = ($post->post_status == 'pending' ) ? ' class="danger"' : '';
                             $product = dokan_wc_get_product( $post->ID );
 
@@ -116,16 +116,16 @@ global $post;
                                 <p><a href="<?php echo $edit_url; ?>"><?php echo $product->get_title(); ?></a></p>
 
                                 <div class="row-actions">
-                                    <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan-wc-booking' ); ?></a> | </span>
+                                    <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
                                     <span class="delete"><a onclick="return confirm('Are you sure?');" href="
-                                    <?php 
-                                    echo wp_nonce_url( add_query_arg( array( 
-                                    'action' => 'dokan-delete-product', 
+                                    <?php
+                                    echo wp_nonce_url( add_query_arg( array(
+                                    'action' => 'dokan-delete-product',
                                     'product_id' => $post->ID, 'tab' => 'booking' ),
-                                     dokan_get_navigation_url('booking') ), 'dokan-delete-product' ); 
+                                     dokan_get_navigation_url('booking') ), 'dokan-delete-product' );
                                     ?>
-                                    "><?php _e( 'Delete Permanently', 'dokan-wc-booking' ); ?></a> | </span>
-                                    <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan-wc-booking' ); ?></a></span>
+                                    "><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                    <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                 </div>
                             </td>
                             <td class="post-status">
@@ -143,9 +143,9 @@ global $post;
                             <td>
                                 <?php
                                 if ( $product->is_in_stock() ) {
-                                    echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
+                                    echo '<mark class="instock">' . __( 'In stock', 'dokan' ) . '</mark>';
                                 } else {
-                                    echo '<mark class="outofstock">' . __( 'Out of stock', 'woocommerce' ) . '</mark>';
+                                    echo '<mark class="outofstock">' . __( 'Out of stock', 'dokan' ) . '</mark>';
                                 }
 
                                 if ( $product->managing_stock() ) :
@@ -165,21 +165,21 @@ global $post;
                             <td>
                                 <?php
                                 if( dokan_get_prop( $product, 'product_type' , 'get_type') == 'grouped' ):
-                                    echo '<span class="product-type tips grouped" title="' . __( 'Grouped', 'woocommerce' ) . '"></span>';
+                                    echo '<span class="product-type tips grouped" title="' . __( 'Grouped', 'dokan' ) . '"></span>';
                                 elseif ( dokan_get_prop( $product, 'product_type' , 'get_type') == 'external' ):
-                                    echo '<span class="product-type tips external" title="' . __( 'External/Affiliate', 'woocommerce' ) . '"></span>';
+                                    echo '<span class="product-type tips external" title="' . __( 'External/Affiliate', 'dokan' ) . '"></span>';
                                 elseif ( dokan_get_prop( $product, 'product_type' , 'get_type') == 'simple' ):
 
                                     if ( $product->is_virtual() ) {
-                                        echo '<span class="product-type tips virtual" title="' . __( 'Virtual', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips virtual" title="' . __( 'Virtual', 'dokan' ) . '"></span>';
                                     } elseif ( $product->is_downloadable() ) {
-                                        echo '<span class="product-type tips downloadable" title="' . __( 'Downloadable', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips downloadable" title="' . __( 'Downloadable', 'dokan' ) . '"></span>';
                                     } else {
-                                        echo '<span class="product-type tips simple" title="' . __( 'Simple', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips simple" title="' . __( 'Simple', 'dokan' ) . '"></span>';
                                     }
 
                                     elseif ( dokan_get_prop( $product, 'product_type' , 'get_type') == 'variable' ):
-                                        echo '<span class="product-type tips variable" title="' . __( 'Variable', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips variable" title="' . __( 'Variable', 'dokan' ) . '"></span>';
                                     else:
                                     // Assuming that we have other types in future
                                         echo '<span class="product-type tips ' . dokan_get_prop( $product, 'product_type' , 'get_type') . '" title="' . ucfirst( dokan_get_prop( $product, 'product_type' , 'get_type') ) . '"></span>';
@@ -192,34 +192,34 @@ global $post;
                                 <td class="post-date">
                                     <?php
                                     if ( '0000-00-00 00:00:00' == $post->post_date ) {
-                                        $t_time = $h_time = __( 'Unpublished', 'dokan-wc-booking' );
+                                        $t_time = $h_time = __( 'Unpublished', 'dokan' );
                                         $time_diff = 0;
                                     } else {
-                                        $t_time = get_the_time( __( 'Y/m/d g:i:s A', 'dokan-wc-booking' ) );
+                                        $t_time = get_the_time( __( 'Y/m/d g:i:s A', 'dokan' ) );
                                         $m_time = $post->post_date;
                                         $time = get_post_time( 'G', true, $post );
 
                                         $time_diff = time() - $time;
 
                                         if ( $time_diff > 0 && $time_diff < 24 * 60 * 60 ) {
-                                            $h_time = sprintf( __( '%s ago', 'dokan-wc-booking' ), human_time_diff( $time ) );
+                                            $h_time = sprintf( __( '%s ago', 'dokan' ), human_time_diff( $time ) );
                                         } else {
-                                            $h_time = mysql2date( __( 'Y/m/d', 'dokan-wc-booking' ), $m_time );
+                                            $h_time = mysql2date( __( 'Y/m/d', 'dokan' ), $m_time );
                                         }
                                     }
 
                                     echo '<abbr title="' . $t_time . '">' . apply_filters( 'post_date_column_time', $h_time, $post, 'date', 'all' ) . '</abbr>';
                                     echo '<br />';
                                     if ( 'publish' == $post->post_status ) {
-                                        _e( 'Published', 'dokan-wc-booking' );
+                                        _e( 'Published', 'dokan' );
                                     } elseif ( 'future' == $post->post_status ) {
                                         if ( $time_diff > 0 ) {
-                                            echo '<strong class="attention">' . __( 'Missed schedule', 'dokan-wc-booking' ) . '</strong>';
+                                            echo '<strong class="attention">' . __( 'Missed schedule', 'dokan' ) . '</strong>';
                                         } else {
-                                            _e( 'Scheduled', 'dokan-wc-booking' );
+                                            _e( 'Scheduled', 'dokan' );
                                         }
                                     } else {
-                                        _e( 'Last Modified', 'dokan-wc-booking' );
+                                        _e( 'Last Modified', 'dokan' );
                                     }
                                     ?>
                                 </td>
@@ -229,7 +229,7 @@ global $post;
 
                             <?php } else { ?>
                             <tr>
-                                <td colspan="7"><?php _e( 'No product found', 'dokan-wc-booking' ); ?></td>
+                                <td colspan="7"><?php _e( 'No product found', 'dokan' ); ?></td>
                             </tr>
                             <?php } ?>
 
@@ -252,8 +252,8 @@ global $post;
                             'format'    => '?pagenum=%#%',
                             'add_args'  => false,
                             'type'      => 'array',
-                            'prev_text' => __( '&laquo; Previous', 'dokan-wc-booking' ),
-                            'next_text' => __( 'Next &raquo;', 'dokan-wc-booking' )
+                            'prev_text' => __( '&laquo; Previous', 'dokan' ),
+                            'next_text' => __( 'Next &raquo;', 'dokan' )
                             ) );
 
                         echo '<ul class="pagination"><li>';
