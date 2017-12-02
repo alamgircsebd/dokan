@@ -441,8 +441,11 @@ class Dokan_Store_Support {
             update_post_meta( $post_id, 'order_id', $postdata['order_id'] );
 
             $this->send_email_to_seller( $postdata['store_id'], $post_id );
-
+            
             $success_msg = __( 'Thank you. Your ticket has been submitted!', 'dokan' );
+            
+            do_action( 'dss_new_ticket_created', $post_id, $postdata['store_id'] );
+            
             wp_send_json( array(
                 'success' => true,
                 'msg'     => apply_filters( 'dss_ticket_submission_msg' , $success_msg),
@@ -1165,10 +1168,15 @@ class Dokan_Store_Support {
 
         $post_id     = (int) $comment->comment_post_ID;
         $parent_post = get_post( $post_id );
-
+    
         if ( $parent_post->post_type != $this->post_type){
             return;
         }
+        
+        $store_id = get_post_meta( $post_id, 'store_id', true );
+        
+        do_action( 'dss_new_comment_inserted', $post_id, $store_id );
+        
         if ( ! isset($_POST['dokan-topic-status-change'] ) ) {
             $this->notify_ticket_author( $comment, $parent_post, true );
             return;
