@@ -28,7 +28,8 @@ class Dokan_SPMV_Admin {
     function add_new_section_admin_panael( $sections ) {
         $sections['dokan_spmv'] = array(
             'id'    => 'dokan_spmv',
-            'title' => __( 'Single Product MultiVendor', 'dokan' )
+            'title' => __( 'Single Product MultiVendor', 'dokan' ),
+            'icon'  => 'dashicons-store'
         );
 
         return $sections;

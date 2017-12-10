@@ -282,7 +282,8 @@ class DPS_Admin {
     function add_new_section_admin_panael( $sections ) {
         $sections['dokan_product_subscription'] = array(
             'id'    => 'dokan_product_subscription',
-            'title' => __( 'Product Subscription', 'dokan' )
+            'title' => __( 'Product Subscription', 'dokan' ),
+            'icon'  => 'dashicons-controls-repeat'
         );
 
         return $sections;

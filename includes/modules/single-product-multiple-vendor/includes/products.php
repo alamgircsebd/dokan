@@ -22,6 +22,12 @@ class Dokan_SPMV_Products {
 
         add_action( 'template_redirect', array( $this, 'handle_sell_item_action' ), 10 );
         add_action( 'woocommerce_single_product_summary', array( $this, 'show_sell_now_btn' ), 32 );
+        add_action( 'dokan_product_deleted', array( $this, 'delete_product_meta' ), 20 );
+        add_action( 'delete_post', array( $this, 'delete_product' ) );
+        add_action( 'wp_trash_post', array( $this, 'trash_product' ) );
+        add_action( 'untrashed_post', array( $this, 'untrash_product' ) );
+        add_action( 'transition_post_status',  array( $this, 'on_product_status_changes' ), 10, 3 );
+        add_action( 'dokan_product_updated',  array( $this, 'update_product_status' ), 10, 3 );
 
         if ( 'below_tabs' == $display_position ) {
 
@@ -84,7 +90,7 @@ class Dokan_SPMV_Products {
             return false;
         }
 
-        $sql     = "SELECT * FROM `{$wpdb->prefix}dokan_product_map` WHERE `map_id`= '$map_id' AND `seller_id` = '$user_id'";
+        $sql     = "SELECT * FROM `{$wpdb->prefix}dokan_product_map` WHERE `map_id`= '$map_id' AND `seller_id` = '$user_id' AND `is_trash` IN (0,2,3)";
         $results = $wpdb->get_row( $sql );
 
         if ( $results ) {
@@ -108,9 +114,10 @@ class Dokan_SPMV_Products {
         }
 
         $user_id = ! empty( $_POST['user_id'] ) ? $_POST['user_id'] : 0;
+        $current_product_author = ! empty( $_POST['current_product_author'] ) ? $_POST['current_product_author'] : 0;
         $product_id = ! empty( $_POST['product_id'] ) ? $_POST['product_id'] : 0;
 
-        if ( ! $user_id || ! $product_id ) {
+        if ( ! $user_id || ! $product_id || $current_product_author ) {
             return;
         }
 
@@ -163,6 +170,9 @@ class Dokan_SPMV_Products {
             )
         );
 
+        $this->update_product_visibility( $clone_product_id, $product_status );
+
+        do_action( 'dokan_spmv_create_clone_product', $clone_product_id, $product_id );
         wp_redirect( dokan_edit_product_url( $clone_product_id ) );
         exit();
     }
@@ -201,7 +211,6 @@ class Dokan_SPMV_Products {
         }
 
         $sell_item_btn_txt = dokan_get_option( 'sell_item_btn', 'dokan_spmv', __( 'Sell This Item', 'dokan' ) );
-
         ?>
         <form method="post">
             <?php wp_nonce_field( 'dokan-sell-item-action', 'dokan-sell-item-nonce' ); ?>
@@ -212,6 +221,202 @@ class Dokan_SPMV_Products {
         <?php
     }
 
+    /**
+     * Get mapping status
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function get_product_map_status_code( $status = '' ) {
+        $statuses = array(
+            'publish' => 0,
+            'trash'   => 1,
+            'pending' => 2,
+            'draft'   => 3
+        );
+
+        if ( ! empty( $status ) ) {
+            return isset( $statuses[$status] ) ? $statuses[$status] : '';
+        }
+
+        return $statuses;
+    }
+
+    /**
+     * Delete map and meta data for product
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function delete_product_meta( $product_id ) {
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! $product_id ) {
+            return;
+        }
+
+        $this->delete_map_id( intval( $product_id ) );
+        delete_post_meta( $product_id, '_has_multi_vendor' );
+    }
+
+    /**
+     * Delete product form admin area
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function delete_product( $product_id ) {
+        if ( ! current_user_can( 'delete_posts' ) || ! $product_id ) {
+            return;
+        }
+
+        $post_type = get_post_type( $product_id );
+
+        if ( 'product' == $post_type ) {
+            $this->delete_map_id( intval( $product_id ) );
+            delete_post_meta( $product_id, '_has_multi_vendor' );
+        }
+    }
+    /**
+     * Update trash flag during product trash
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function trash_product( $product_id ) {
+        global $wpdb;
+
+        if ( ! is_user_logged_in() || ! is_admin() ) {
+            return;
+        }
+
+        if ( ! $product_id ) {
+            return;
+        }
+
+        $post_type = get_post_type( $product_id );
+
+        if ( 'product' == $post_type ) {
+            $this->update_product_visibility( $product_id, 'trash' );
+        }
+
+    }
+
+    /**
+     * Untrash product and restore
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function untrash_product( $product_id ) {
+        global $wpdb;
+
+        if ( ! is_user_logged_in() || ! is_admin() ) {
+            return;
+        }
+
+        if ( ! $product_id ) {
+            return;
+        }
+
+        $post_type = get_post_type( $product_id );
+
+        if ( 'product' == $post_type ) {
+            $product = wc_get_product( $product_id );
+            if ( 'publish' == $product->get_status() ) {
+                $this->update_product_visibility( $product_id, 'publish' );
+            }
+        }
+    }
+
+    /**
+     * Trigger product status changes
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function on_product_status_changes( $new_status, $old_status, $post ) {
+        if ( ! is_user_logged_in() || ! is_admin() ) {
+            return;
+        }
+
+        if ( ! $post->ID ) {
+            return;
+        }
+
+        if ( ! empty( $post->post_type ) && 'product' == $post->post_type ) {
+
+            if ( 'pending' == $new_status ) {
+                $this->update_product_visibility( $post->ID, 'pending' );
+            }
+
+            if ( 'draft' == $new_status  ) {
+                $this->update_product_visibility( $post->ID, 'draft' );
+            }
+
+            if ( 'publish' == $new_status ) {
+                $this->update_product_visibility( $post->ID, 'publish' );
+            }
+        }
+    }
+
+    /**
+     * Udpate product visibility status from seller end
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function update_product_status( $product_id ) {
+        if ( ! is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! $product_id ) {
+            return;
+        }
+
+        $product = wc_get_product( $product_id );
+
+        if ( 'draft' == $product->get_status() ) {
+            $this->update_product_visibility( $product_id, 'draft' );
+        }
+    }
+
+    /**
+     * Udpate product visibility in product mapping table
+     *
+     * @since 1.0.0
+     *
+     * @param integer $product_id
+     * @param string $visibility [ 0 -> publish | 1 -> trash | 2 -> pending | 3 -> draft ]
+     *
+     * @return void
+     */
+    public function update_product_visibility( $product_id, $visibility ) {
+        global $wpdb;
+
+        $is_trash = $this->get_product_map_status_code( $visibility );
+
+        $table = $wpdb->prefix . 'dokan_product_map';
+        $wpdb->update(
+            $table,
+            array(
+                'is_trash' => $is_trash
+            ),
+            array( 'product_id' => $product_id ),
+            array( '%d' ),
+            array( '%d' )
+        );
+    }
     /**
      * Show Vendor comparison
      *
@@ -321,6 +526,11 @@ class Dokan_SPMV_Products {
                     margin-bottom: 15px;
                     box-shadow: 1.21px 4.851px 27px 0px rgba(202, 210, 240, 0.2);
                 }
+
+                .table-row.active {
+                    border: 1px solid #e3e3e3;
+                }
+
                 .table-cell {
                     display: table-cell;
                     vertical-align: middle;
@@ -463,13 +673,14 @@ class Dokan_SPMV_Products {
 
         $values = array();
         foreach ( $product_ids as $product_id ) {
-            $values[] = '(' . $map_id . ',' . $product_id . ')';
+            $seller_id = get_post_field( 'post_author', $product_id );
+            $values[] = '(' . $map_id . ',' . $product_id . ',' . $seller_id . ')';
         }
 
         $values = implode( ',', $values );
 
         $result = $wpdb->query( "INSERT INTO `{$wpdb->prefix}dokan_product_map`
-            ( map_id, product_id )
+            ( map_id, product_id, seller_id )
             VALUES $values"
         );
 
@@ -478,6 +689,24 @@ class Dokan_SPMV_Products {
         }
 
         return false;
+    }
+
+    /**
+     * Delete product map data
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function delete_map_id( $product_id ) {
+        global $wpdb;
+
+        if ( ! $product_id ) {
+            return false;
+        }
+
+        $table = $wpdb->prefix . 'dokan_product_map';
+        $wpdb->delete( $table, array( 'product_id' => $product_id ), array( '%d' ) );
     }
 
     /**
@@ -502,7 +731,7 @@ class Dokan_SPMV_Products {
             return false;
         }
 
-        $sql     = "SELECT `product_id` FROM `{$wpdb->prefix}dokan_product_map` WHERE `map_id`= '$has_multivendor'";
+        $sql     = "SELECT `product_id` FROM `{$wpdb->prefix}dokan_product_map` WHERE `map_id`= '$has_multivendor' AND `product_id` != $product_id AND `is_trash` = 0";
         $results = $wpdb->get_results( $sql );
 
         if ( $results ) {

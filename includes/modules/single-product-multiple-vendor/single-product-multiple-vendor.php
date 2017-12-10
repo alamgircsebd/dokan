@@ -108,7 +108,6 @@ class Dokan_Single_Product_Multi_Vendor {
 
         //tinysort.min.js
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        // Hook all necessary filter and actions
     }
 
     /**
