@@ -100,7 +100,7 @@ class Dokan_Single_Product_Multi_Vendor {
      * @return void
      */
     public function hooks() {
-        $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'on' );
+        $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'off' );
 
         if ( 'off' == $enable_option ) {
             return;
@@ -108,7 +108,6 @@ class Dokan_Single_Product_Multi_Vendor {
 
         //tinysort.min.js
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        // Hook all necessary filter and actions
     }
 
     /**

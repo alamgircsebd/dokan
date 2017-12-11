@@ -94,6 +94,7 @@ class Dokan_Product_Importer {
         define( 'DOKAN_IE_FILE', __FILE__ );
         define( 'DOKAN_IE_DIR', __DIR__ );
         define( 'DOKAN_IE_INC_DIR', __DIR__ . '/includes' );
+        define( 'DOKAN_IE_ASSEST', plugins_url( 'assets', __FILE__ ) );
 
         add_action( 'init', array( $this, 'do_product_export' ), 99 );
 
@@ -198,12 +199,12 @@ class Dokan_Product_Importer {
         /**
          * All styles goes here
          */
-        wp_enqueue_style( 'dpi-styles', DOKAN_IE_DIR . '/assets/css/style.css', false, date( 'Ymd' ) );
+        wp_enqueue_style( 'dpi-styles', DOKAN_IE_ASSEST . '/css/style.css', false, date( 'Ymd' ) );
 
         /**
          * All scripts goes here
          */
-        wp_enqueue_script( 'dpi-scripts', DOKAN_IE_DIR . '/assets/js/script.js', array( 'jquery', 'bootstrap-min' ), false, true );
+        wp_enqueue_script( 'dpi-scripts', DOKAN_IE_ASSEST . '/js/script.js', array( 'jquery', 'bootstrap-min' ), false, true );
 
         wp_register_script( 'wc-product-import', WC()->plugin_url() . '/assets/js/admin/wc-product-import.js', array( 'jquery' ), WC_VERSION );
         wp_register_script( 'wc-product-export', WC()->plugin_url() . '/assets/js/admin/wc-product-export.js', array( 'jquery' ), WC_VERSION );
