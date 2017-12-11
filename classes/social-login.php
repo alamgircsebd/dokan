@@ -237,7 +237,7 @@ Class Dokan_Social_Login {
                 'name'  => 'fb_app_label',
                 'label' => __( 'Facebook App Settings', 'dokan-social-api' ),
                 'type'  => "html",
-                'desc'  => '<a target="_blank" href="https://developers.facebook.com/apps/">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill App ID and Secret below.',
+                'desc'  => '<a target="_blank" href="https://developers.facebook.com/apps/">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill App ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-facebook/" target="_blank">Get Help</a>',
             ),
             'facebook_app_url'    => array(
                 'name'  => 'fb_app_url',
@@ -259,7 +259,7 @@ Class Dokan_Social_Login {
                 'name'  => 'twitter_app_label',
                 'label' => __( 'Twitter App Settings', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => '<a target="_blank" href="https://apps.twitter.com/">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Consumer key and Secret below.',
+                'desc'  => '<a target="_blank" href="https://apps.twitter.com/">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Consumer key and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-twitter/" target="_blank">Get Help</a>',
             ),
             'twitter_app_url'     => array(
                 'name'  => 'twitter_app_url',
@@ -281,7 +281,7 @@ Class Dokan_Social_Login {
                 'name'  => 'google_app_label',
                 'label' => __( 'Google App Settings', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => '<a target="_blank" href="https://console.developers.google.com/project">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Client ID and Secret below.',
+                'desc'  => '<a target="_blank" href="https://console.developers.google.com/project">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Client ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-google/" target="_blank">Get Help</a>',
             ),
             'google_app_url'      => array(
                 'name'  => 'google_app_url',
@@ -303,7 +303,7 @@ Class Dokan_Social_Login {
                 'name'  => 'linkedin_app_label',
                 'label' => __( 'Linkedin App Settings', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => '<a target="_blank" href="https://www.linkedin.com/developer/apps">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Client ID and Secret below.',
+                'desc'  => '<a target="_blank" href="https://www.linkedin.com/developer/apps">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Client ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-linkedin/" target="_blank">Get Help</a>',
             ),
             'linkedin_app_url'    => array(
                 'name'  => 'linkedin_app_url',

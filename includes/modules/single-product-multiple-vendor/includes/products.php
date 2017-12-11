@@ -13,7 +13,7 @@ class Dokan_SPMV_Products {
      * @since 1.0.0
      */
     public function __construct() {
-        $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'on' );
+        $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'off' );
         $display_position = dokan_get_option( 'available_vendor_list_position', 'dokan_spmv', 'below_tabs' );
 
         if ( 'off' == $enable_option ) {
