@@ -293,7 +293,7 @@ class Dokan_Stripe {
      */
     public function remove_withdraw_page( $urls ) {
         $withdraw_settings = get_option( 'dokan_withdraw' );
-        $hide_withdraw_option = $withdraw_settings['hide_withdraw_option'] ? $withdraw_settings['hide_withdraw_option'] : 'off';
+        $hide_withdraw_option = isset( $withdraw_settings['hide_withdraw_option'] ) ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
         if ( $hide_withdraw_option == 'on' ) {
             $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
@@ -323,7 +323,7 @@ class Dokan_Stripe {
      */
     public function remove_withdraw_query_var( $query_vars ) {
         $withdraw_settings = get_option( 'dokan_withdraw' );
-        $hide_withdraw_option = $withdraw_settings['hide_withdraw_option'] ? $withdraw_settings['hide_withdraw_option'] : 'off';
+        $hide_withdraw_option = isset( $withdraw_settings['hide_withdraw_option'] ) ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
         if ( $hide_withdraw_option == 'on' ) {
             $key = array_search( 'withdraw', $query_vars );

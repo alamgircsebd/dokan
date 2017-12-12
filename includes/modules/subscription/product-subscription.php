@@ -116,6 +116,9 @@ class Dokan_Product_Subscription {
 
         // Load Shortcodes
         add_shortcode( 'dps_product_pack', array( $this, 'shortcode_handler' ) );
+
+        // Handle popup error if subscription outdated
+        add_action( 'dokan_new_product_popup_args', array( $this, 'can_create_product' ), 20, 2 );
     }
 
     /**
@@ -563,6 +566,29 @@ class Dokan_Product_Subscription {
         $contents = ob_get_clean();
 
         return apply_filters( 'dokan_sub_shortcode', $contents, $query, $args );
+    }
+
+    /**
+     * Check if have pack availability
+     *
+     * @since 1.2.1
+     *
+     * @return void
+     */
+    public function can_create_product( $errors, $data ) {
+        $user_id = get_current_user_id();
+        if ( dokan_is_user_seller( $user_id ) ) {
+
+            $remaining_product = dps_user_remaining_product( $user_id );
+
+            if ( $remaining_product <= 0 ) {
+                $errors = new WP_Error( 'no-subscription', __( 'Sorry your subscription exceeds your package limits please update your package subscription', 'dokan' ) );
+            } else {
+                update_user_meta( $user_id, 'product_no_with_pack', $remaining_product - 1  );
+            }
+
+            return $errors;
+        }
     }
 
     /**

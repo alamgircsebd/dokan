@@ -160,7 +160,7 @@ class Dokan_Paypal_AP {
      */
     function unset_withdraw_page( $urls ) {
         $withdraw_settings = get_option( 'dokan_withdraw' );
-        $hide_withdraw_option = $withdraw_settings['hide_withdraw_option'] ? $withdraw_settings['hide_withdraw_option'] : 'off';
+        $hide_withdraw_option = isset( $withdraw_settings['hide_withdraw_option'] ) ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
         if ( $hide_withdraw_option == 'on' ) {
             $enable = get_option( 'woocommerce_dokan_paypal_adaptive_settings' );
