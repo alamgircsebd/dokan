@@ -6,7 +6,7 @@ Description: A module that offer for multiple vendor to sell a single product
 Version: 1.0.0
 Author: weDevs
 Author URI: https://wedevs.com/
-Thumbnail Name: auction.png
+Thumbnail Name: single-product-multivendor.png
 */
 
 // don't call the file directly
