@@ -63,6 +63,9 @@ class Dokan_Auction {
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
 
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_auction_active_menu' ) );
+        // dokan simple auciton email
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_auction_email_class' ) );
+        add_filter( 'dokan_email_actions', array( $this, 'register_auction_email_action') );
     }
 
     /**
@@ -388,6 +391,35 @@ class Dokan_Auction {
         return $active_menu;
     }
 
+    /**
+     * Load auction email class
+     *
+     * @since  2.7.1
+     *
+     * @param  array $wc_emails
+     *
+     * @return array
+     */
+    public function load_auction_email_class( $wc_emails ) {
+        $wc_emails['Dokan_Auction_Email'] = include( DOKAN_AUCTION_DIR. '/includes/emails/class-dokan-auction-email.php' );
+
+        return $wc_emails;
+    }
+
+    /**
+     * Register auction email action hook
+     *
+     * @since  2.7.1
+     *
+     * @param  array $actions
+     *
+     * @return array
+     */
+    public function register_auction_email_action( $actions ) {
+        $actions[] = 'dokan_new_auction_product_added';
+
+        return $actions;
+    }
 
 } // Dokan_Auction
 

@@ -292,15 +292,21 @@ class Dokan_Stripe {
      * @return array
      */
     public function remove_withdraw_page( $urls ) {
-        $settings = get_option('woocommerce_dokan-stripe-connect_settings');
+        $withdraw_settings = get_option( 'dokan_withdraw' );
+        $hide_withdraw_option = $withdraw_settings['hide_withdraw_option'] ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
-        // bailout if the gateway is not enabled
-        if ( isset( $settings['enabled'] ) && $settings['enabled'] !== 'yes' ) {
+        if ( $hide_withdraw_option == 'on' ) {
+            $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+            // bailout if the gateway is not enabled
+            if ( isset( $settings['enabled'] ) && $settings['enabled'] !== 'yes' ) {
+                return $urls;
+            }
+
+            if ( array_key_exists( 'withdraw', $urls ) ) {
+                unset( $urls['withdraw'] );
+            }
+
             return $urls;
-        }
-
-        if ( array_key_exists( 'withdraw', $urls ) ) {
-            unset( $urls['withdraw'] );
         }
 
         return $urls;
@@ -316,12 +322,20 @@ class Dokan_Stripe {
      * @return array $query_vars
      */
     public function remove_withdraw_query_var( $query_vars ) {
+        $withdraw_settings = get_option( 'dokan_withdraw' );
+        $hide_withdraw_option = $withdraw_settings['hide_withdraw_option'] ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
-        $key = array_search( 'withdraw', $query_vars );
-        if ( $key != FALSE ) {
-            unset( $query_vars[$key] );
-            $query_vars = array_values( $query_vars );
+        if ( $hide_withdraw_option == 'on' ) {
+            $key = array_search( 'withdraw', $query_vars );
+
+            if ( $key != FALSE ) {
+                unset( $query_vars[$key] );
+                $query_vars = array_values( $query_vars );
+            }
+
+            return $query_vars;
         }
+
         return $query_vars;
     }
 

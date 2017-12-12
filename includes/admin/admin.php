@@ -205,6 +205,13 @@ class Dokan_Pro_Admin_Settings {
                 'default' => '0',
                 'type'    => 'text',
             ),
+            'hide_withdraw_option' => array(
+                'name'    => 'hide_withdraw_option',
+                'label'   => __( 'Hide Withdraw Option', 'dokan' ),
+                'desc'    => __( 'Hide withdraw option (when vendor is getting commission autometically) ', 'dokan' ),
+                'default' => 'off',
+                'type'    => 'checkbox'
+            ),
         );
 
         $settings_fields['dokan_general']  = array_merge( $settings_fields['dokan_general'], $new_settings_fields['dokan_general'] );
