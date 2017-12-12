@@ -136,6 +136,7 @@ class Dokan_Single_Product_Multi_Vendor {
                 `map_id` bigint(20) DEFAULT NULL,
                 `product_id` bigint(20) DEFAULT NULL,
                 `seller_id` bigint(20) DEFAULT NULL,
+                `is_trash` tinyint(4) NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
