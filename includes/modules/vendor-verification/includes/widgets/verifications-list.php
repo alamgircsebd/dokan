@@ -27,50 +27,61 @@ class Dokan_Verification_list extends WP_Widget {
      * @return void Echoes it's output
      * */
     function widget( $args, $instance ) {
+        if ( dokan_is_store_page() || is_product() ) {
 
-        if ( !dokan_is_store_page() ) {
-            return;
+            if ( is_product() ) {
+                global $post;
+                $seller_id = get_post_field( 'post_author', $post->ID );
+            }
+
+            if ( dokan_is_store_page() ) {
+                $seller_id  = (int) get_query_var( 'author' );
+            }
+
+            if ( empty( $seller_id ) ) {
+                return;
+            }
+
+            $store_info = dokan_get_store_info( $seller_id );
+
+            $this->seller_info = $store_info;
+
+            if ( !isset( $store_info['dokan_verification']['verified_info'] ) ) {
+                return;
+            }
+            extract( $args, EXTR_SKIP );
+
+            $title = apply_filters( 'widget_title', $instance['title'] );
+
+            echo $before_widget;
+
+            if ( !empty( $title ) ) {
+                echo $args['before_title'] . $title . $args['after_title'];
+            }
+            if ( !isset( $store_info['dokan_verification']['info'] ) ) {
+
+                return;
+            }
+
+            if ( $store_info['dokan_verification']['info'] == '' || sizeof( $store_info['dokan_verification']['info'] ) < 0 ) {
+
+                return;
+            }
+            ?>
+
+            <div id="dokan-verification-list">
+                <ul class="fa-ul">
+                    <?php
+                    foreach ( $store_info['dokan_verification'] as $key => $item ) {
+                        $this->print_item( $key, $item );
+                    }
+                    ?>
+                </ul>
+            </div>
+
+            <?php
+            echo $after_widget;
         }
-        $store_user = get_userdata( get_query_var( 'author' ) );
-        $store_info = dokan_get_store_info( $store_user->ID );
-
-        $this->seller_info = $store_info;
-
-        if ( !isset( $store_info['dokan_verification']['verified_info'] ) ) {
-            return;
-        }
-        extract( $args, EXTR_SKIP );
-
-        $title = apply_filters( 'widget_title', $instance['title'] );
-
-        echo $before_widget;
-
-        if ( !empty( $title ) ) {
-            echo $args['before_title'] . $title . $args['after_title'];
-        }
-        if ( !isset( $store_info['dokan_verification']['info'] ) ) {
-
-            return;
-        }
-
-        if ( $store_info['dokan_verification']['info'] == '' || sizeof( $store_info['dokan_verification']['info'] ) < 0 ) {
-
-            return;
-        }
-        ?>
-
-        <div id="dokan-verification-list">
-            <ul class="fa-ul">
-                <?php
-                foreach ( $store_info['dokan_verification'] as $key => $item ) {
-                    $this->print_item( $key, $item );
-                }
-                ?>
-            </ul>
-        </div>
-
-        <?php
-        echo $after_widget;
     }
 
     /**
