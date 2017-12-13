@@ -59,7 +59,7 @@ $states      = $country_obj->states;
     $query = new WP_User_Query( array(
         //'role'    => 'seller',
         'meta_key'     => 'dokan_verification_status',
-        'meta_compare'      => 'LIKE',
+        'meta_compare' => 'LIKE',
         'meta_value'   => $status,
     ) );
 
@@ -89,22 +89,31 @@ $states      = $country_obj->states;
         }else{
             $seller_v['address_status'] = isset( $seller_profile['dokan_verification']['info']['store_address']['v_status'] ) ? $seller_profile['dokan_verification']['info']['store_address']['v_status'] : '';
         }
+
+        if ( isset( $seller_profile['dokan_verification']['info']['phone_status'] ) && $seller_profile['dokan_verification']['info']['phone_status'] === $status ) {
+            $seller_v['phone'] = $seller_profile['dokan_verification']['info']['phone_no'];
+            $seller_v['phone_status'] = $seller_profile['dokan_verification']['info']['phone_status'];
+        } 
+        else {
+            $seller_v['phone'] =  isset( $seller_profile['dokan_verification']['info']['phone_no'] ) ? $seller_profile['dokan_verification']['info']['phone_no'] : '';
+            $seller_v['phone_status'] = isset( $seller_profile['dokan_verification']['info']['phone_status'] ) ? $seller_profile['dokan_verification']['info']['phone_status'] : '';
+        }
     }
     if ( isset( $seller_v ) ) {
         $result[] = $seller_v;
     }
 }
     ?>
-
          <table class="widefat verification-table">
             <thead>
                 <tr>
                     <th class="check-column">
 <!--                        <input type="checkbox" class="dokan-withdraw-allcheck">-->
                     </th>
-                    <th width="30%"><?php _e( 'Store Name', 'dokan' ); ?></th>
-                    <th width="30%"><?php _e( 'Photo ID', 'dokan' ); ?></th>
-                    <th><?php _e( 'Address', 'dokan' ); ?></th>
+                    <th width="25%"><?php _e( 'Store Name', 'dokan' ); ?></th>
+                    <th width="25%"><?php _e( 'Photo ID', 'dokan' ); ?></th>
+                    <th width="25%"><?php _e( 'Address', 'dokan' ); ?></th>
+                    <th width="25%"><?php _e( 'Phone Number', 'dokan' ); ?></th>
                 </tr>
             </thead>
             <tfoot>
@@ -115,7 +124,7 @@ $states      = $country_obj->states;
                     <th><?php _e( 'Store Name', 'dokan' ); ?></th>
                     <th><?php _e( 'Photo ID ', 'dokan' ); ?></th>
                     <th><?php _e( 'Address ', 'dokan' ); ?></th>
-
+                    <th><?php _e( 'Phone Number ', 'dokan' ); ?></th>
                 </tr>
             </tfoot>
 
@@ -255,6 +264,15 @@ $states      = $country_obj->states;
 
 
                             <?php } ?>
+                        </td>
+                        <td>
+                            <?php if ( $val['phone_status'] == 'verified' ) : ?>
+                                <span title="pending" class="dashicons dashicons-approved"></span>
+                                <p class="status-text"><?php echo $val['phone'] ?></p>
+                            <?php elseif ( $val['phone_status'] == 'pending' ) : ?>
+                                <span title="pending" class="dashicons dashicons-pending"></span>
+                                <p class="status-text"><?php echo $val['phone'] ?></p>
+                            <?php endif; ?>
                         </td>
 
 

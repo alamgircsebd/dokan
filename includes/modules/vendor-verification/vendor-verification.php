@@ -677,9 +677,9 @@ class Dokan_Seller_Verification {
             $current_user   = get_current_user_id();
             $seller_profile = dokan_get_store_info( $current_user );
 
-            $seller_profile['dokan_verification']['verified_info']['phone']        = $postdata['phone'];
-            $seller_profile['dokan_verification']['verified_info']['phone_code']   = $info['code'];
-            $seller_profile['dokan_verification']['verified_info']['phone_status'] = 'pending';
+            $seller_profile['dokan_verification']['info']['phone_no']        = $postdata['phone'];
+            $seller_profile['dokan_verification']['info']['phone_code']   = $info['code'];
+            $seller_profile['dokan_verification']['info']['phone_status'] = 'pending';
 
             update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
         }
@@ -706,13 +706,12 @@ class Dokan_Seller_Verification {
         $current_user   = get_current_user_id();
         $seller_profile = dokan_get_store_info( $current_user );
 
-        $saved_code = $seller_profile['dokan_verification']['verified_info']['phone_code'];
+        $saved_code = $seller_profile['dokan_verification']['info']['phone_code'];
 
         if ( $saved_code == $postdata['sms_code'] ) {
 
-            $seller_profile['dokan_verification']['verified_info']['phone_status'] = 'verified';
             $seller_profile['dokan_verification']['info']['phone_status'] = 'verified';
-            $seller_profile['dokan_verification']['info']['phone_no'] = $seller_profile['dokan_verification']['verified_info']['phone'];
+            $seller_profile['dokan_verification']['info']['phone_no'] = $seller_profile['dokan_verification']['info']['phone_no'];
             update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
 
             $resp = array(
