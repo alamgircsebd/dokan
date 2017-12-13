@@ -2,7 +2,7 @@
 /*
 Plugin Name: Single Product Multiple Vendor
 Plugin URI: https://wedevs.com/products/dokan/dokan-simple-auctions/
-Description: A module that offer for multiple vendor to sell a single product
+Description: A module that offers multiple vendor to sell a single product
 Version: 1.0.0
 Author: weDevs
 Author URI: https://wedevs.com/
