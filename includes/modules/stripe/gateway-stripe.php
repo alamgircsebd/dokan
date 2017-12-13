@@ -456,7 +456,7 @@ class Dokan_Stripe {
                     }
 
                     if ( 'charge.dispute.closed' == $event->type ) {
-                        error_log( print_r( $invoice, true ) );
+
                         if ( 'won' == $invoice->status ) {
                             $charge_id = $invoice->charge;
                             $charge  = \Stripe\Charge::retrieve( $charge_id );
