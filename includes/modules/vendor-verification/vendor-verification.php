@@ -87,6 +87,9 @@ class Dokan_Seller_Verification {
         self::$plugin_path     = trailingslashit( dirname( __FILE__ ) );
 
         add_action( 'init', array( $this, 'init_hooks' ) );
+
+        //includes file
+        $this->includes_file();
     }
 
     public function init_hooks() {
@@ -123,9 +126,6 @@ class Dokan_Seller_Verification {
 
         // usermeta update hook
         add_action( 'updated_user_meta', array( $this, 'dokan_v_recheck_verification_status_meta' ), 10, 4 );
-
-        //includes file
-        $this->includes_file();
     }
 
     function load_verification_template_header( $heading, $query_vars ) {
@@ -213,7 +213,6 @@ class Dokan_Seller_Verification {
     public function monitor_autheticate_requests() {
         global $current_user;
 
-
         if ( ! class_exists( 'WeDevs_Dokan' ) ) {
             return;
         }
@@ -247,7 +246,6 @@ class Dokan_Seller_Verification {
                 ),
             )
         );
-        //var_dump($config);
 
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_verification' );
@@ -308,12 +306,9 @@ class Dokan_Seller_Verification {
             return;
         }
 
-        error_log( print_r( $_POST, true ) );
-
         if ( !isset( $_GET['dokan_auth'] ) ) {
             return;
         }
-
 
         $hybridauth = new Hybrid_Auth_dokan( $config );
         $provider   = $_GET['dokan_auth'];
