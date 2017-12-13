@@ -93,7 +93,7 @@ class Dokan_Seller_Verification {
         $installed_version = get_option( 'dokan_theme_version' );
 
         add_action( 'init', array( $this, 'init_session' ) );
-        add_action( 'init', array( $this, 'monitor_autheticate_requests' ) );
+        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ) );
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -213,6 +213,7 @@ class Dokan_Seller_Verification {
     public function monitor_autheticate_requests() {
         global $current_user;
 
+
         if ( ! class_exists( 'WeDevs_Dokan' ) ) {
             return;
         }
@@ -307,9 +308,12 @@ class Dokan_Seller_Verification {
             return;
         }
 
+        error_log( print_r( $_POST, true ) );
+
         if ( !isset( $_GET['dokan_auth'] ) ) {
             return;
         }
+
 
         $hybridauth = new Hybrid_Auth_dokan( $config );
         $provider   = $_GET['dokan_auth'];
