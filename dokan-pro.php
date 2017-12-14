@@ -22,7 +22,19 @@
  */
 class Dokan_Pro {
 
+    /**
+     * Plan type
+     *
+     * @var string
+     */
     private $plan = 'dokan-pro';
+
+    /**
+     * Plugin version
+     *
+     * @var string
+     */
+    public $version = '2.7.1';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -201,6 +213,7 @@ class Dokan_Pro {
      * @return void
      */
     public function defined() {
+        define( 'DOKAN_PRO_PLUGIN_VERSION', $this->version );
         define( 'DOKAN_PRO_DIR', dirname( __FILE__ ) );
         define( 'DOKAN_PRO_INC', dirname( __FILE__ ) . '/includes' );
         define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/admin' );

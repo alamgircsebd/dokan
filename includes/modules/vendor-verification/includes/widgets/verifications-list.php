@@ -193,7 +193,6 @@ class Dokan_Verification_list extends WP_Widget {
 
 }
 
-error_log( print_r( 'Loaded', true ) );
 add_action( 'widgets_init', create_function( '', "register_widget( 'Dokan_Verification_list' );" ) );
 
 add_action( 'dokan_sidebar_store_after', 'show_verification_widget');

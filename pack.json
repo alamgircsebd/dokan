@@ -4,14 +4,14 @@
     ],
 
     "professional": [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "single-product-multiple-vendor"
     ],
 
     "business" : [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor"
     ],
 
     "enterprise" : [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor"
     ]
 }

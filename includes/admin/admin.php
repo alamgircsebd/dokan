@@ -517,10 +517,9 @@ class Dokan_Pro_Admin_Settings {
         }
 
         // check if it has already been dismissed
-        $offer_key = 'dokan_whats_new_notice';
-        $hide_notice = get_option( $offer_key . '_tracking_notice', 'no' );
+        $versions = get_option( 'dokan_whats_new_versions', array() );
 
-        if ( 'hide' == $hide_notice ) {
+        if ( in_array( DOKAN_PRO_PLUGIN_VERSION, $versions ) ) {
             return;
         }
 
@@ -545,8 +544,13 @@ class Dokan_Pro_Admin_Settings {
     public function dismiss_new_notice() {
 
         if ( !empty( $_POST['dokan_promotion_dismissed'] ) ) {
-            $offer_key = 'dokan_whats_new_notice';
-            update_option( $offer_key . '_tracking_notice', 'hide' );
+            $versions = get_option( 'dokan_whats_new_versions', array() );
+
+            if ( ! in_array( DOKAN_PRO_PLUGIN_VERSION, $versions ) ) {
+                $versions[] = DOKAN_PRO_PLUGIN_VERSION;
+            }
+
+            update_option( 'dokan_whats_new_versions', $versions );
         }
     }
 }
