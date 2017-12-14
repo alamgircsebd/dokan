@@ -105,6 +105,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 'title'       => __( 'API Credentials', 'dokan' ),
                 'type'        => 'title',
                 'description' => sprintf( __( 'Enter your PayPal API credentials to unlock subscription suspension and cancellation features. %sLearn More &raquo;%s', 'dokan' ), '<a href="http://docs.woothemes.com/document/store-manager-guide/#extrapaypalconfigurationsteps" target="_blank" tabindex="-1">', '</a>' ),
+                'default'     => ''
                 ),
             'api_username' => array(
                 'title'       => __( 'API Username', 'dokan' ),
