@@ -1,3 +1,18 @@
+.dokan-settings-wrap .dashicons.dashicons-store {
+  color: #f39c12;
+}
+.dokan-settings-wrap .dashicons.dashicons-controls-repeat {
+  color: #3d566e;
+}
+.dokan-settings-wrap .dashicons.dashicons-unlock {
+  color: #3498db;
+}
+.dokan-settings-wrap .dashicons.dashicons-email {
+  color: #e74c3c;
+}
+.dokan-settings-wrap .dashicons.dashicons-admin-customizer {
+  color: #16a085;
+}
 .admin-report-container {
   margin-top: 10px;
 }
