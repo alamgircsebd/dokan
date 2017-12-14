@@ -214,6 +214,7 @@ class Dokan_Pro {
      */
     public function defined() {
         define( 'DOKAN_PRO_PLUGIN_VERSION', $this->version );
+        define( 'DOKAN_PRO_FILE', __FILE__ );
         define( 'DOKAN_PRO_DIR', dirname( __FILE__ ) );
         define( 'DOKAN_PRO_INC', dirname( __FILE__ ) . '/includes' );
         define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/admin' );
@@ -236,9 +237,9 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
-            require_once DOKAN_PRO_CLASS . '/update.php';
         }
 
+        require_once DOKAN_PRO_CLASS . '/update.php';
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/orders.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
@@ -280,14 +281,11 @@ class Dokan_Pro {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
             new Dokan_Announcement();
-
-            if ( current_user_can( 'manage_options' ) ) {
-                new Dokan_Update( $this->plan );
-            }
         }
 
         Dokan_Pro_Ajax::init();
         Dokan_Pro_Shipping::init();
+        new Dokan_Update( $this->plan );
 
         if ( is_user_logged_in() ) {
             Dokan_Pro_Dashboard::init();

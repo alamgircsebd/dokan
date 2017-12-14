@@ -8,15 +8,28 @@
  */
 class Dokan_Update {
 
+    /**
+     * The license product ID
+     *
+     * @var string
+     */
+    private $product_id = 'dokan';
+
+    /**
+     * The license plan ID
+     *
+     * @var string
+     */
+    private $plan_id;
+
     const base_url     = 'https://wedevs.com/';
     const api_endpoint = 'http://api.wedevs.com/';
-    private $product_id;
     const option       = 'dokan_license';
-    const slug         = 'dokan';
+    const slug         = 'dokan-pro';
 
     function __construct( $plan ) {
 
-        $this->product_id = $plan;
+        $this->plan_id = $plan;
 
         // bail out if it's a local server
         if ( $this->is_local_server() ) {
@@ -37,6 +50,8 @@ class Dokan_Update {
 
         add_filter( 'pre_set_site_transient_update_plugins', array($this, 'check_update') );
         add_filter( 'pre_set_transient_update_plugins', array($this, 'check_update') );
+
+        add_action( 'in_plugin_update_message-' . plugin_basename( DOKAN_PRO_FILE ), array( $this, 'plugin_update_message' ) );
         add_filter( 'plugins_api', array($this, 'check_info'), 10, 3 );
     }
 
@@ -46,7 +61,25 @@ class Dokan_Update {
      * @return boolean
      */
     private function is_local_server() {
-        return in_array( dokan_get_client_ip(), array( '127.0.0.1', '::1' ) );
+
+        if ( $_SERVER['HTTP_HOST'] == 'localhost'
+            || substr( $_SERVER['REMOTE_ADDR'], 0, 3 ) == '10.'
+            || substr( $_SERVER['REMOTE_ADDR'], 0, 7 ) == '192.168' ) {
+
+            return true;
+        }
+
+        if ( in_array( $_SERVER['REMOTE_ADDR'], array( '127.0.0.1', '::1' ) ) ) {
+            return true;
+        }
+
+        $fragments = explode( '.',  site_url() );
+
+        if ( in_array( end( $fragments ), array( 'dev', 'local', 'localhost', 'test' ) ) ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -65,6 +98,23 @@ class Dokan_Update {
      */
     function get_license_key() {
         return get_option( self::option, array() );
+    }
+
+    /**
+     * Check if this is a valid license
+     *
+     * @since 2.7.1
+     *
+     * @return boolean
+     */
+    public function is_valid_license() {
+        $license_status = get_option( 'dokan_license_status' );
+
+        if ( is_object( $license_status ) && $license_status->activated ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -97,7 +147,7 @@ class Dokan_Update {
 
         $license_status = get_option( 'dokan_license_status' );
 
-        if ( $license_status && $license_status->activated ) {
+        if ( $this->is_valid_license() ) {
 
             $status = get_transient( self::option );
             if ( false === $status ) {
@@ -210,7 +260,7 @@ class Dokan_Update {
                 $obj->package = $remote_info->latest_url;
             }
 
-            $basefile = plugin_basename( DOKAN_PRO_DIR . '/dokan-pro.php' );
+            $basefile = plugin_basename( DOKAN_PRO_FILE );
             $transient->response[$basefile] = $obj;
         }
 
@@ -293,7 +343,7 @@ class Dokan_Update {
             'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
             'body' => array(
                 'name'              => $plugin_name,
-                'slug'              => self::slug,
+                'slug'              => $this->plan_id,
                 'type'              => 'plugin',
                 'version'           => $plugin_version,
                 'wp_version'        => $wp_version,
@@ -361,8 +411,7 @@ class Dokan_Update {
         $key     = $license ? $license['key'] : '';
         ?>
         <div class="wrap">
-            <?php screen_icon( 'plugins' ); ?>
-            <h3 style="font-size: 24px;"><?php _e( 'Plugin Activation', 'dokan' ); ?></h3>
+            <h1><?php _e( 'Plugin Activation', 'dokan' ); ?></h3>
 
             <p class="description">
                 <?php _e( 'Enter the E-mail address that was used for purchasing the plugin and the license key.', 'dokan' ); ?>
@@ -449,6 +498,30 @@ class Dokan_Update {
             <?php do_action( 'dokan_update_license_wrap' ); ?>
         </div>
         <?php
+    }
+
+    /**
+     * Show plugin udpate message
+     *
+     * @since  2.7.1
+     *
+     * @param  array $args
+     *
+     * @return void
+     */
+    public function plugin_update_message( $args ) {
+
+        if ( $this->is_valid_license() ) {
+            return;
+        }
+
+        $upgrade_notice = sprintf(
+            '</p><p class="%s-plugin-upgrade-notice" style="background: #dc4b02;color: #fff;padding: 10px;">Please <a href="%s" target="_blank">activate</a> your license key for getting regular updates and support',
+            self::slug,
+            admin_url( 'admin.php?page=dokan_updates' )
+        );
+
+        echo apply_filters( $this->product_id . '_in_plugin_update_message', wp_kses_post( $upgrade_notice ) );
     }
 
 }
