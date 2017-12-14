@@ -260,7 +260,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask( 'release', [
-        'makepot',
         'less',
         'concat',
     ]);
