@@ -143,9 +143,9 @@ global $post;
                             <td>
                                 <?php
                                 if ( $product->is_in_stock() ) {
-                                    echo '<mark class="instock">' . __( 'In stock', 'woocommerce' ) . '</mark>';
+                                    echo '<mark class="instock">' . __( 'In stock', 'dokan' ) . '</mark>';
                                 } else {
-                                    echo '<mark class="outofstock">' . __( 'Out of stock', 'woocommerce' ) . '</mark>';
+                                    echo '<mark class="outofstock">' . __( 'Out of stock', 'dokan' ) . '</mark>';
                                 }
 
                                 if ( $product->managing_stock() ) :
@@ -165,21 +165,21 @@ global $post;
                             <td>
                                 <?php
                                 if( dokan_get_prop( $product, 'product_type' , 'get_type') == 'grouped' ):
-                                    echo '<span class="product-type tips grouped" title="' . __( 'Grouped', 'woocommerce' ) . '"></span>';
+                                    echo '<span class="product-type tips grouped" title="' . __( 'Grouped', 'dokan' ) . '"></span>';
                                 elseif ( dokan_get_prop( $product, 'product_type' , 'get_type') == 'external' ):
-                                    echo '<span class="product-type tips external" title="' . __( 'External/Affiliate', 'woocommerce' ) . '"></span>';
+                                    echo '<span class="product-type tips external" title="' . __( 'External/Affiliate', 'dokan' ) . '"></span>';
                                 elseif ( dokan_get_prop( $product, 'product_type' , 'get_type') == 'simple' ):
 
                                     if ( $product->is_virtual() ) {
-                                        echo '<span class="product-type tips virtual" title="' . __( 'Virtual', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips virtual" title="' . __( 'Virtual', 'dokan' ) . '"></span>';
                                     } elseif ( $product->is_downloadable() ) {
-                                        echo '<span class="product-type tips downloadable" title="' . __( 'Downloadable', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips downloadable" title="' . __( 'Downloadable', 'dokan' ) . '"></span>';
                                     } else {
-                                        echo '<span class="product-type tips simple" title="' . __( 'Simple', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips simple" title="' . __( 'Simple', 'dokan' ) . '"></span>';
                                     }
 
                                     elseif ( dokan_get_prop( $product, 'product_type' , 'get_type') == 'variable' ):
-                                        echo '<span class="product-type tips variable" title="' . __( 'Variable', 'woocommerce' ) . '"></span>';
+                                        echo '<span class="product-type tips variable" title="' . __( 'Variable', 'dokan' ) . '"></span>';
                                     else:
                                     // Assuming that we have other types in future
                                         echo '<span class="product-type tips ' . dokan_get_prop( $product, 'product_type' , 'get_type') . '" title="' . ucfirst( dokan_get_prop( $product, 'product_type' , 'get_type') ) . '"></span>';

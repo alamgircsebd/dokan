@@ -72,7 +72,7 @@ class Dokan_WC_Booking {
     public function __construct() {
         $this->depends_on['wc_bookings'] = array(
             'name'   => 'WC_Bookings',
-            'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %sWooCommerce Bookings plugin%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="http://www.woothemes.com/products/dokan-wc-booking/">', '</a>' ),
+            'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %sWooCommerce Bookings plugin%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-bookings/">', '</a>' ),
         );
 
         if ( ! $this->check_if_has_dependency() ) {
@@ -297,12 +297,23 @@ class Dokan_WC_Booking {
 
         //override emails
         add_filter( 'woocommerce_email_classes', array( $this, 'setup_emails' ), 12 );
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_booking_cancelled_emails' ), 13 );
+        add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_cancelled_actions' ) );
 
         //override email receipents
         add_filter( 'woocommerce_email_recipient_new_booking', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
-        add_filter( 'woocommerce_email_recipient_booking_cancelled', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
-        add_filter( 'woocommerce_email_recipient_cancelled_order', array( $this, 'set_vendor_as_email_recipient' ), 10, 2 );
+        //add_filter( 'woocommerce_email_recipient_booking_cancelled', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
 
+    }
+    public function load_dokan_booking_cancelled_emails( $wc_emails ) {
+        $wc_emails['Dokan_Email_Booking_Cancelled'] = include( DOKAN_WC_BOOKING_DIR. '/includes/emails/class-dokan-booking-email-cancelled.php' );
+
+        return $wc_emails;
+    }
+    public function register_dokan_booking_cancelled_actions( $actions ) {
+        $actions[] = 'woocommerce_bookings_cancelled_booking';
+
+        return $actions;
     }
 
     /**
@@ -325,15 +336,15 @@ class Dokan_WC_Booking {
             $email->recipient     = "vendor@ofthe.product";
         }
 
-        if ( isset( $emails['WC_Email_Admin_Booking_Cancelled'] ) ) {
-            $email = $emails['WC_Email_Admin_Booking_Cancelled'];
+        // if ( isset( $emails['WC_Email_Admin_Booking_Cancelled'] ) ) {
+        //     $email = $emails['WC_Email_Admin_Booking_Cancelled'];
 
-            $email->title       = __( 'Dokan Booking Cancelled', 'dokan' );
-            $email->description = __( 'Booking cancelled Admin emails are sent to vendor when the status of a booking goes to cancelled.', 'dokan' );
+        //     $email->title       = __( 'Dokan Booking Cancelled by Admin', 'dokan' );
+        //     $email->description = __( 'Booking cancelled Admin emails are sent to vendor when the status of a booking goes to cancelled.', 'dokan' );
 
-            $email->template_base = DOKAN_WC_BOOKING_TEMPLATE_PATH;
-            $email->recipient     = "vendor@ofthe.product";
-        }
+        //     $email->template_base = DOKAN_WC_BOOKING_TEMPLATE_PATH;
+        //     $email->recipient     = "vendor@ofthe.product";
+        // }
         return $emails;
     }
 
@@ -359,25 +370,6 @@ class Dokan_WC_Booking {
 
         return apply_filters( 'dokan_booking_new_email_recipient', $sellerdata->user_email, $booking );
     }
-
-    /**
-     * Filter to add vendor emial as email recipient
-     *
-     * @since 1.5
-     *
-     * @param $recipient, $order
-     *
-     * @return string
-     */
-    function set_vendor_as_email_recipient( $recipient, $order ) {
-
-        $seller_id = dokan_get_seller_id_by_order( $order->id );
-        $seller = get_user_by( 'id', $seller_id );
-        $vendor_email = $seller->user_email;
-
-        return $recipient . ',' . $vendor_email;
-    }
-
 
     /**
      * Add menu on seller dashboard

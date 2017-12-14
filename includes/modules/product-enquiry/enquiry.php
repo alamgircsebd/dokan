@@ -326,7 +326,7 @@ class Dokan_Product_Enquiry {
                                 </div>
                             <?php else: ?>
                                 <div class="col-xs-6 col-md-6 form-group">
-                                    <input class="form-control" id="name" name="author" placeholder="<?php _e( 'Your Name', 'dokan' ); ?>" type="text" required autofocus />
+                                    <input class="form-control" id="name" name="author" placeholder="<?php _e( 'Your Name', 'dokan' ); ?>" type="text" required/>
                                 </div>
 
                                 <div class="col-xs-6 col-md-6 form-group">

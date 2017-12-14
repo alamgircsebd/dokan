@@ -418,7 +418,7 @@ class Dokan_Pro_Shipping {
         $dps_pt                      = get_user_meta( $user_id, '_dps_pt', true );;
         $processing_time             = dokan_get_shipping_processing_times();
         ?>
-            <tr>
+            <tr class="enable-shipping">
                 <th scope="row"><label for="enable_shipping"><?php _e( 'Enable Shipping', 'dokan' ); ?></label></th>
                 <td>
                     <input type="checkbox" name="enable_shipping" id="enable_shipping" class="input-checkbox" value="1" <?php echo ( $enable_shipping == 'yes' ) ? 'checked="checked"' : ''; ?>/>
@@ -426,28 +426,28 @@ class Dokan_Pro_Shipping {
                 </td>
             </tr>
 
-            <tr class="show_if_shipping">
+            <tr class="default-shipping-cost show_if_shipping">
                 <th scope="row"><label for="default_shipping_cost"><?php _e( 'Default Shipping cost', 'dokan' ); ?></label></th>
                 <td>
                     <input type="number" id="default_shipping_cost" name="default_shipping_cost" value="<?php echo $default_shipping_cost; ?>" placeholder="<?php esc_attr_e( '0.00', 'dokan' ); ?>">
                 </td>
             </tr>
 
-            <tr class="show_if_shipping">
+            <tr class="per-product-cost show_if_shipping">
                 <th scope="row"><label for="per_product_additional_cost"><?php _e( 'Per Product Additional Cost', 'dokan' ); ?></label></th>
                 <td>
                     <input type="number" id="per_product_additional_cost" name="per_product_additional_cost" value="<?php echo $per_product_additional_cost; ?>" placeholder="<?php esc_attr_e( '0.00', 'dokan' ); ?>">
                 </td>
             </tr>
 
-            <tr class="show_if_shipping">
+            <tr class="per-qty-cost show_if_shipping">
                 <th scope="row"><label for="per_qty_additiona_cost"><?php _e( 'Per Qty Additional Cost', 'dokan' ); ?></label></th>
                 <td>
                     <input type="number" id="per_qty_additiona_cost" name="per_qty_additiona_cost" value="<?php echo $per_qty_additiona_cost; ?>" placeholder="<?php esc_attr_e( '0.00', 'dokan' ); ?>">
                 </td>
             </tr>
 
-            <tr class="show_if_shipping">
+            <tr class="precessing-time show_if_shipping">
                 <th scope="row"><label for="processing_time"><?php _e( 'Processing Time', 'dokan' ); ?></label></th>
                 <td>
                     <select name="processing_time" class="processing_time wc-enhanced-select" id="processing_time">

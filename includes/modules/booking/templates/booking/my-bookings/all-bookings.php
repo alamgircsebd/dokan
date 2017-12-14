@@ -92,8 +92,8 @@ if ( $bookings ) {
                 <tr class="type-wc_booking ">
                     <td class="booking_status column-booking_status">
                         <?php $status = $the_booking->get_status( ); ?>
-                        <span class="status-<?php echo $status; ?> dokan-tooltips-help tips" data-original-title = '<?php echo sprintf( __('%s','dokan' ), $status ); ?>'>
-                            <?php  echo sprintf( __('%s','dokan' ), $status ); ?>
+                        <span class="status-<?php echo $status; ?> dokan-tooltips-help tips" data-original-title = '<?php echo sprintf( __( '%s','dokan' ), $status ); ?>'>
+                            <?php  echo sprintf( __( '%s','dokan' ), $status ); ?>
                         </span>
                     </td>
                     <td class="booking_id column-booking_id">

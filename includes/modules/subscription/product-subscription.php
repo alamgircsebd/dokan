@@ -116,6 +116,9 @@ class Dokan_Product_Subscription {
 
         // Load Shortcodes
         add_shortcode( 'dps_product_pack', array( $this, 'shortcode_handler' ) );
+
+        // Handle popup error if subscription outdated
+        add_action( 'dokan_new_product_popup_args', array( $this, 'can_create_product' ), 20, 2 );
     }
 
     /**
@@ -413,7 +416,7 @@ class Dokan_Product_Subscription {
     function shortcode_handler() {
         global $post;
 
-        $checkout_url = WC()->cart->get_checkout_url();
+        $checkout_url = wc_get_checkout_url();
         $user_id      = get_current_user_id();
         $product      = wc_get_product( get_user_meta( $user_id, 'product_package_id', true ) );
         $order_id     = get_user_meta( $user_id, 'product_order_id', true );
@@ -563,6 +566,29 @@ class Dokan_Product_Subscription {
         $contents = ob_get_clean();
 
         return apply_filters( 'dokan_sub_shortcode', $contents, $query, $args );
+    }
+
+    /**
+     * Check if have pack availability
+     *
+     * @since 1.2.1
+     *
+     * @return void
+     */
+    public function can_create_product( $errors, $data ) {
+        $user_id = get_current_user_id();
+        if ( dokan_is_user_seller( $user_id ) ) {
+
+            $remaining_product = dps_user_remaining_product( $user_id );
+
+            if ( $remaining_product <= 0 ) {
+                $errors = new WP_Error( 'no-subscription', __( 'Sorry your subscription exceeds your package limits please update your package subscription', 'dokan' ) );
+            } else {
+                update_user_meta( $user_id, 'product_no_with_pack', $remaining_product - 1  );
+            }
+
+            return $errors;
+        }
     }
 
     /**
@@ -731,12 +757,12 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', '' );
-                $vendor_commission = get_post_meta( $product['product_id'], '_vendor_commission', true );
+                $admin_commission = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
 
-                if ( !empty( $vendor_commission ) ) {
-                    update_user_meta( $customer_id, 'dokan_seller_percentage', $vendor_commission );
+                if ( ! empty( $admin_commission ) ) {
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
                 } else {
-                    update_user_meta( $customer_id, 'dokan_seller_percentage', '' );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
                 }
             }
         }
@@ -757,7 +783,7 @@ class Dokan_Product_Subscription {
 
         // If product is of the subscription type
         if ( self::is_subscription_product( $product_id ) ) {
-            $url = WC()->cart->get_checkout_url();
+            $url = wc_get_checkout_url();
         }
 
         return $url;
@@ -1099,4 +1125,3 @@ dokan_register_deactivation_hook( __FILE__, array( 'Dokan_Product_Subscription' 
 
 require_once dirname( __FILE__ ). '/includes/classes/class-dps-product-pack.php';
 $dps = Dokan_Product_Subscription::init();
-

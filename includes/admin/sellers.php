@@ -244,15 +244,17 @@
 
                 if ( self.is( ':checked' ) ) {
                     var data = {
-                        'action' : 'dokan_toggle_seller',
-                        'user_id' : self.data('id'),
-                        'type' : 'yes'
+                        action : 'dokan_toggle_seller',
+                        user_id : self.data('id'),
+                        type : 'yes',
+                        nonce: dokan_admin.nonce
                     };
                 } else {
                     var data = {
-                        'action' : 'dokan_toggle_seller',
-                        'user_id' : self.data('id'),
-                        'type' : 'no'
+                        action : 'dokan_toggle_seller',
+                        user_id : self.data('id'),
+                        type : 'no',
+                        nonce: dokan_admin.nonce
                     };
                 }
 

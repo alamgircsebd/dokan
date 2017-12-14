@@ -28,7 +28,8 @@ class Dokan_SPMV_Admin {
     function add_new_section_admin_panael( $sections ) {
         $sections['dokan_spmv'] = array(
             'id'    => 'dokan_spmv',
-            'title' => __( 'Single Product MultiVendor', 'dokan' )
+            'title' => __( 'Single Product MultiVendor', 'dokan' ),
+            'icon'  => 'dashicons-store'
         );
 
         return $sections;
@@ -73,7 +74,7 @@ class Dokan_SPMV_Admin {
                 'desc'    => __( 'Set your displaying position for diplaying available vendor section in single product page', 'dokan' ),
                 'type'    => 'select',
                 'options' => array(
-                    'below_tabs'  => __( 'Below Single Product Tabs', 'dokan' ),
+                    'below_tabs'  => __( 'Above Single Product Tabs', 'dokan' ),
                     'inside_tabs' => __( 'Display inside Product Tabs', 'dokan' ),
                     'after_tabs'  => __( 'After Single Product Tabs', 'dokan' ),
                 ),

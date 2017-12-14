@@ -25,6 +25,9 @@ class Dokan_Pro_Admin_Settings {
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
         add_action( 'init', array( $this, 'dokan_export_all_logs' ) );
+        add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
+        add_action( 'admin_notices', array( $this, 'show_whats_new_notice' ), 10 );
+        add_action( 'wp_ajax_dokan-whats-new-notice', array( $this, 'dismiss_new_notice' ) );
     }
 
     /**
@@ -48,18 +51,31 @@ class Dokan_Pro_Admin_Settings {
         }
 
         add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
-       
+
         $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
         $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
         $announcement   = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
         $modules        = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
         $tools          = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
+        add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
+
         add_action( $report, array( $this, 'common_scripts' ) );
         add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
         add_action( $modules, array( $this, 'modules_scripts' ) );
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
+    }
+
+    /**
+     * Remove addon submen from dokan admin menu
+     *
+     * @since 2.7.0
+     *
+     * @return void
+     */
+    public function remove_add_on_menu() {
+        remove_submenu_page( 'dokan', 'dokan-addons' );
     }
 
     /**
@@ -189,6 +205,13 @@ class Dokan_Pro_Admin_Settings {
                 'default' => '0',
                 'type'    => 'text',
             ),
+            'hide_withdraw_option' => array(
+                'name'    => 'hide_withdraw_option',
+                'label'   => __( 'Hide Withdraw Option', 'dokan' ),
+                'desc'    => __( 'Hide withdraw option (when vendor is getting commission autometically) ', 'dokan' ),
+                'default' => 'off',
+                'type'    => 'checkbox'
+            ),
         );
 
         $settings_fields['dokan_general']  = array_merge( $settings_fields['dokan_general'], $new_settings_fields['dokan_general'] );
@@ -289,6 +312,15 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
+     * Whats new page for dokan pro
+     *
+     * @return void
+     */
+    function whats_new_page() {
+        include dirname( __FILE__ ) . '/whats-new.php';
+    }
+
+    /**
      * Tools Toggole Handler
      *
      * @since 2.4
@@ -296,6 +328,7 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     function tools_page_handler() {
+
         if ( isset( $_GET['dokan_action'] ) && current_user_can( 'manage_options' ) ) {
             $action = $_GET['dokan_action'];
             check_admin_referer( 'dokan-tools-action' );
@@ -469,6 +502,57 @@ class Dokan_Pro_Admin_Settings {
         include dirname( __FILE__ ) . '/modules.php';
     }
 
+    /**
+     * Show update notice
+     *
+     * @since 1.0
+     *
+     * @return void
+     */
+
+    public function show_whats_new_notice() {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        // check if it has already been dismissed
+        $versions = get_option( 'dokan_whats_new_versions', array() );
+
+        if ( in_array( DOKAN_PRO_PLUGIN_VERSION, $versions ) ) {
+            return;
+        }
+
+        ?>
+            <div class="info notice notice-info is-dismissible" id="dokan-pro-whats-new-notice">
+                <p>Check What's new in Dokan Pro</p>
+                <a style="margin-bottom: 10px;" href="<?php echo add_query_arg( array( 'page' => 'whats-new-dokan' ), admin_url( 'admin.php' ) ); ?>" class="button button-primary">What's New in Dokan Pro</a>
+            </div>
+
+            <script type='text/javascript'>
+                jQuery('body').on('click', '#dokan-pro-whats-new-notice .notice-dismiss', function(e) {
+                    e.preventDefault();
+
+                    wp.ajax.post('dokan-whats-new-notice', {
+                        dokan_promotion_dismissed: true
+                    });
+                });
+            </script>
+       <?php
+    }
+
+    public function dismiss_new_notice() {
+
+        if ( !empty( $_POST['dokan_promotion_dismissed'] ) ) {
+            $versions = get_option( 'dokan_whats_new_versions', array() );
+
+            if ( ! in_array( DOKAN_PRO_PLUGIN_VERSION, $versions ) ) {
+                $versions[] = DOKAN_PRO_PLUGIN_VERSION;
+            }
+
+            update_option( 'dokan_whats_new_versions', $versions );
+        }
+    }
 }
 
 // End of Dokan_Pro_Admin_Settings class;

@@ -3,7 +3,7 @@
 Plugin Name: Store Support
 Plugin URI: https://wedevs.com/products/plugins/dokan/store-support/
 Description: Enable vendors to provide support to customers from store page.
-Version: 1.3.5
+Version: 1.3.6
 Author: weDevs
 Author URI: http://wedevs.com/
 Thumbnail Name: store-support.png
@@ -39,7 +39,7 @@ License: GPL2
 // don't call the file directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'DOKAN_STORE_SUPPORT_PLUGIN_VERSION', '1.3.5' );
+define( 'DOKAN_STORE_SUPPORT_PLUGIN_VERSION', '1.3.6' );
 define( 'DOKAN_STORE_SUPPORT_DIR', dirname( __FILE__ ) );
 define( 'DOKAN_STORE_SUPPORT_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 
@@ -93,8 +93,8 @@ class Dokan_Store_Support {
      * @return void
      */
     public function init_hooks() {
-        add_action( 'init', array( $this, 'register_dokan_store_support' ) );
-        add_action( 'init', array( $this, 'register_dokan_support_topic_status' ) );
+        add_action( 'init', array( $this, 'register_dokan_store_support' ) ,50 );
+        add_action( 'init', array( $this, 'register_dokan_support_topic_status' ), 50 );
 
         add_action( 'template_redirect', array( $this, 'change_topic_status' ) );
 
@@ -147,6 +147,7 @@ class Dokan_Store_Support {
     public function enqueue_scripts() {
         wp_enqueue_style( 'dokan-store-support-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
         wp_enqueue_script( 'dokan-store-support-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
+        wp_localize_script( 'dokan-store-support-scripts', 'wait_string', array( 'wait' => __( 'wait...', 'dokan' ) ) );
     }
 
     /**
@@ -440,8 +441,11 @@ class Dokan_Store_Support {
             update_post_meta( $post_id, 'order_id', $postdata['order_id'] );
 
             $this->send_email_to_seller( $postdata['store_id'], $post_id );
-
+            
             $success_msg = __( 'Thank you. Your ticket has been submitted!', 'dokan' );
+            
+            do_action( 'dss_new_ticket_created', $post_id, $postdata['store_id'] );
+            
             wp_send_json( array(
                 'success' => true,
                 'msg'     => apply_filters( 'dss_ticket_submission_msg' , $success_msg),
@@ -703,7 +707,7 @@ class Dokan_Store_Support {
         );
 
         $args_t = apply_filters( 'dokan_support_get_single_topic_args', $args_t );
-
+        
         $query_dss = new WP_Query( $args_t );
         return $query_dss;
     }
@@ -737,7 +741,7 @@ class Dokan_Store_Support {
      */
     function print_single_topic( $topic ) {
         global $wp;
-
+       
         $is_customer = 0;
         $back_url    = dokan_get_navigation_url( 'support' );
 
@@ -1059,7 +1063,12 @@ class Dokan_Store_Support {
 
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $this->total_query_result / $this->per_page );
-        $base_url = dokan_get_navigation_url( $query_var );
+        
+        if ( is_account_page() ) {
+            $base_url = home_url( 'my-account/support-tickets/' );
+        } else {
+            $base_url = dokan_get_navigation_url( $query_var );
+        }
 
         $page_links = paginate_links( array(
             'base'      => $base_url. '%_%',
@@ -1076,7 +1085,6 @@ class Dokan_Store_Support {
             echo "<ul class='pagination'>\n\t<li>";
             echo join("</li>\n\t<li>", $page_links);
             echo "</li>\n</ul>\n";
-            echo '</div>';
         }
     }
 
@@ -1160,10 +1168,15 @@ class Dokan_Store_Support {
 
         $post_id     = (int) $comment->comment_post_ID;
         $parent_post = get_post( $post_id );
-
+    
         if ( $parent_post->post_type != $this->post_type){
             return;
         }
+        
+        $store_id = get_post_meta( $post_id, 'store_id', true );
+        
+        do_action( 'dss_new_comment_inserted', $post_id, $store_id );
+        
         if ( ! isset($_POST['dokan-topic-status-change'] ) ) {
             $this->notify_ticket_author( $comment, $parent_post, true );
             return;

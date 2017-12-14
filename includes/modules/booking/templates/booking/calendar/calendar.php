@@ -1,6 +1,6 @@
 <header class="dokan-dashboard-header">
     <h1 class="entry-title">
-        <?php _e( $title , 'dokan' ); ?>
+        <?php echo $title; ?>
     </h1>
 </header><!-- .dokan-dashboard-header -->
 

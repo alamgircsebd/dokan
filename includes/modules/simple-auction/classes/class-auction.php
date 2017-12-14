@@ -153,7 +153,7 @@ class Dokan_Template_Auction {
 
                     do_action( 'dokan_new_auction_product_added', $product_id, $post_data );
 
-                    Dokan_Email::init()->new_product_added( $product_id, $product_status );
+                    // Dokan_Email::init()->new_product_added( $product_id, $product_status );
 
                     wp_redirect( add_query_arg( array('product_id' => $product_id, 'action' => 'edit', 'message' => 'success' ), dokan_get_navigation_url('auction') ) );
                     exit;

@@ -8,13 +8,28 @@
  */
 class Dokan_Update {
 
+    /**
+     * The license product ID
+     *
+     * @var string
+     */
+    private $product_id = 'dokan';
+
+    /**
+     * The license plan ID
+     *
+     * @var string
+     */
+    private $plan_id;
+
     const base_url     = 'https://wedevs.com/';
     const api_endpoint = 'http://api.wedevs.com/';
-    const product_id   = 'dokan';
     const option       = 'dokan_license';
-    const slug         = 'dokan';
+    const slug         = 'dokan-pro';
 
-    function __construct() {
+    function __construct( $plan ) {
+
+        $this->plan_id = $plan;
 
         // bail out if it's a local server
         if ( $this->is_local_server() ) {
@@ -35,6 +50,8 @@ class Dokan_Update {
 
         add_filter( 'pre_set_site_transient_update_plugins', array($this, 'check_update') );
         add_filter( 'pre_set_transient_update_plugins', array($this, 'check_update') );
+
+        add_action( 'in_plugin_update_message-' . plugin_basename( DOKAN_PRO_FILE ), array( $this, 'plugin_update_message' ) );
         add_filter( 'plugins_api', array($this, 'check_info'), 10, 3 );
     }
 
@@ -44,7 +61,25 @@ class Dokan_Update {
      * @return boolean
      */
     private function is_local_server() {
-        return in_array( dokan_get_client_ip(), array( '127.0.0.1', '::1' ) );
+
+        if ( $_SERVER['HTTP_HOST'] == 'localhost'
+            || substr( $_SERVER['REMOTE_ADDR'], 0, 3 ) == '10.'
+            || substr( $_SERVER['REMOTE_ADDR'], 0, 7 ) == '192.168' ) {
+
+            return true;
+        }
+
+        if ( in_array( $_SERVER['REMOTE_ADDR'], array( '127.0.0.1', '::1' ) ) ) {
+            return true;
+        }
+
+        $fragments = explode( '.',  site_url() );
+
+        if ( in_array( end( $fragments ), array( 'dev', 'local', 'localhost', 'test' ) ) ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -63,6 +98,23 @@ class Dokan_Update {
      */
     function get_license_key() {
         return get_option( self::option, array() );
+    }
+
+    /**
+     * Check if this is a valid license
+     *
+     * @since 2.7.1
+     *
+     * @return boolean
+     */
+    public function is_valid_license() {
+        $license_status = get_option( 'dokan_license_status' );
+
+        if ( is_object( $license_status ) && $license_status->activated ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -95,7 +147,7 @@ class Dokan_Update {
 
         $license_status = get_option( 'dokan_license_status' );
 
-        if ( $license_status && $license_status->activated ) {
+        if ( $this->is_valid_license() ) {
 
             $status = get_transient( self::option );
             if ( false === $status ) {
@@ -153,7 +205,7 @@ class Dokan_Update {
                 'request'     => $request,
                 'email'       => $option['email'],
                 'licence_key' => $option['key'],
-                'product_id'  => self::product_id,
+                'product_id'  => $this->product_id,
                 'instance'    => home_url()
             )
         );
@@ -208,7 +260,7 @@ class Dokan_Update {
                 $obj->package = $remote_info->latest_url;
             }
 
-            $basefile = plugin_basename( DOKAN_DIR . '/dokan.php' );
+            $basefile = plugin_basename( DOKAN_PRO_FILE );
             $transient->response[$basefile] = $obj;
         }
 
@@ -259,7 +311,7 @@ class Dokan_Update {
     function get_current_plugin_info() {
         require_once ABSPATH . '/wp-admin/includes/plugin.php';
 
-        $plugin_data    = get_plugin_data( DOKAN_DIR . '/dokan.php' );
+        $plugin_data    = get_plugin_data( DOKAN_PRO_DIR . '/dokan-pro.php' );
         $plugin_name    = $plugin_data['Name'];
         $plugin_version = $plugin_data['Version'];
 
@@ -291,7 +343,7 @@ class Dokan_Update {
             'user-agent' => 'WordPress/' . $wp_version . '; ' . home_url( '/' ),
             'body' => array(
                 'name'              => $plugin_name,
-                'slug'              => self::slug,
+                'slug'              => $this->plan_id,
                 'type'              => 'plugin',
                 'version'           => $plugin_version,
                 'wp_version'        => $wp_version,
@@ -299,7 +351,7 @@ class Dokan_Update {
                 'site_url'          => $wp_install,
                 'license'           => isset( $license['key'] ) ? $license['key'] : '',
                 'license_email'     => isset( $license['email'] ) ? $license['email'] : '',
-                'product_id'        => self::product_id
+                'product_id'        => $this->product_id
             )
         );
 
@@ -359,86 +411,117 @@ class Dokan_Update {
         $key     = $license ? $license['key'] : '';
         ?>
         <div class="wrap">
-            <?php screen_icon( 'plugins' ); ?>
-            <h2><?php _e( 'Plugin Activation', 'dokan' ); ?></h2>
+            <h1><?php _e( 'Plugin Activation', 'dokan' ); ?></h3>
 
             <p class="description">
                 <?php _e( 'Enter the E-mail address that was used for purchasing the plugin and the license key.', 'dokan' ); ?>
                 <?php _e( 'We recommend you to enter those details to get regular <strong>plugin update and support</strong>.', 'dokan' ); ?>
             </p>
 
-            <?php
-            if ( $errors ) {
-                foreach ($errors as $error) {
-                    ?>
-                    <div class="error"><p><?php echo $error; ?></p></div>
-                    <?php
-                }
-            }
-
-            $license_status = get_option( 'dokan_license_status' );
-            if ( !isset( $license_status->activated ) || $license_status->activated != true ) {
-                ?>
-
-                <form method="post" action="">
-                    <table class="form-table">
-                        <tr>
-                            <th><?php _e( 'E-mail Address', 'dokan' ); ?></th>
-                            <td>
-                                <input type="email" name="email" class="regular-text" value="<?php echo esc_attr( $email ); ?>" required>
-                                <span class="description"><?php _e( 'Enter your purchase Email address', 'dokan' ); ?></span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th><?php _e( 'License Key', 'dokan' ); ?></th>
-                            <td>
-                                <input type="text" name="license_key" class="regular-text" value="<?php echo esc_attr( $key ); ?>">
-                                <span class="description"><?php _e( 'Enter your license key', 'dokan' ); ?></span>
-                            </td>
-                        </tr>
-                    </table>
-
-                    <?php submit_button( __( 'Save & Activate', 'dokan' ) ); ?>
-                </form>
-            <?php } else {
-
-                if ( isset( $license_status->update ) ) {
-                    $update = strtotime( $license_status->update );
-                    $expired = false;
-
-                    if ( time() > $update ) {
-                        $string = __( 'has been expired %s ago', 'dokan' );
-                        $expired = true;
-                    } else {
-                        $string = __( 'will expire in %s', 'dokan' );
+            <h3><?php _e( 'Dokan Pro', 'dokan-wc-booking' ); ?></h3>
+            <hr>
+            <div class="dokan-pro-license-wrap">
+                <?php
+                if ( $errors ) {
+                    foreach ($errors as $error) {
+                        ?>
+                        <div class="error"><p><?php echo $error; ?></p></div>
+                        <?php
                     }
-                    // $expired = true;
-                    ?>
-                    <div class="updated <?php echo $expired ? 'error' : ''; ?>">
-                        <p>
-                            <strong><?php _e( 'Validity:', 'dokan' ); ?></strong>
-                            <?php printf( 'Your license %s.', sprintf( $string, human_time_diff( $update, time() ) ) ); ?>
-                        </p>
-
-                        <?php if ( $expired ) { ?>
-                            <p><a href="https://wedevs.com/account/" target="_blank" class="button-primary"><?php _e( 'Renew License', 'dokan' ); ?></a></p>
-                        <?php } ?>
-                    </div>
-                    <?php
                 }
-                ?>
 
-                <div class="updated">
-                    <p><?php _e( 'Plugin is activated', 'dokan' ); ?></p>
-                </div>
+                $license_status = get_option( 'dokan_license_status' );
+                if ( !isset( $license_status->activated ) || $license_status->activated != true ) {
+                    ?>
 
-                <form method="post" action="">
-                    <?php submit_button( __( 'Delete License', 'dokan' ), 'delete', 'delete_license' ); ?>
-                </form>
+                    <form method="post" action="">
+                        <table class="form-table">
+                            <tr>
+                                <th><?php _e( 'E-mail Address', 'dokan' ); ?></th>
+                                <td>
+                                    <input type="email" name="email" class="regular-text" value="<?php echo esc_attr( $email ); ?>" required>
+                                    <span class="description"><?php _e( 'Enter your purchase Email address', 'dokan' ); ?></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th><?php _e( 'License Key', 'dokan' ); ?></th>
+                                <td>
+                                    <input type="text" name="license_key" class="regular-text" value="<?php echo esc_attr( $key ); ?>">
+                                    <span class="description"><?php _e( 'Enter your license key', 'dokan' ); ?></span>
+                                </td>
+                            </tr>
+                        </table>
 
-            <?php } ?>
+                        <?php submit_button( __( 'Save & Activate', 'dokan' ) ); ?>
+                    </form>
+                <?php } else {
+
+                    if ( isset( $license_status->update ) ) {
+                        $update = strtotime( $license_status->update );
+                        $expired = false;
+
+                        if ( time() > $update ) {
+                            $string = __( 'has been expired %s ago', 'dokan' );
+                            $expired = true;
+                        } else {
+                            $string = __( 'will expire in %s', 'dokan' );
+                        }
+                        // $expired = true;
+                        ?>
+                        <div class="updated <?php echo $expired ? 'error' : ''; ?>">
+                            <p>
+                                <strong><?php _e( 'Validity:', 'dokan' ); ?></strong>
+                                <?php printf( 'Your license %s.', sprintf( $string, human_time_diff( $update, time() ) ) ); ?>
+                            </p>
+
+                            <?php if ( $expired ) { ?>
+                                <p><a href="https://wedevs.com/account/" target="_blank" class="button-primary"><?php _e( 'Renew License', 'dokan' ); ?></a></p>
+                            <?php } ?>
+                        </div>
+                        <?php
+                    }
+                    ?>
+
+                    <div class="updated">
+                        <p><?php _e( 'Plugin is activated', 'dokan' ); ?></p>
+                    </div>
+
+                    <form method="post" action="">
+                        <?php submit_button( __( 'Delete License', 'dokan' ), 'delete', 'delete_license' ); ?>
+                    </form>
+
+                <?php } ?>
+
+            </div>
+
+
+            <?php do_action( 'dokan_update_license_wrap' ); ?>
         </div>
         <?php
+    }
+
+    /**
+     * Show plugin udpate message
+     *
+     * @since  2.7.1
+     *
+     * @param  array $args
+     *
+     * @return void
+     */
+    public function plugin_update_message( $args ) {
+
+        if ( $this->is_valid_license() ) {
+            return;
+        }
+
+        $upgrade_notice = sprintf(
+            '</p><p class="%s-plugin-upgrade-notice" style="background: #dc4b02;color: #fff;padding: 10px;">Please <a href="%s" target="_blank">activate</a> your license key for getting regular updates and support',
+            self::slug,
+            admin_url( 'admin.php?page=dokan_updates' )
+        );
+
+        echo apply_filters( $this->product_id . '_in_plugin_update_message', wp_kses_post( $upgrade_notice ) );
     }
 
 }

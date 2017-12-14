@@ -1094,7 +1094,7 @@ function dokan_change_shipping_pack_name( $title, $i, $package ) {
 
     $shipping_label = sprintf( '%s %s', __( 'Shipping: ', 'dokan' ), !empty( $store_info['store_name'] ) ? $store_info['store_name'] : '' );
 
-    return apply_filters( 'dokan_shipping_package_name', $shipping_label );
+    return apply_filters( 'dokan_shipping_package_name', $shipping_label, $i, $package );
 }
 
 add_action( 'woocommerce_checkout_create_order_shipping_item', 'dokan_add_shipping_pack_meta', 10, 4 );

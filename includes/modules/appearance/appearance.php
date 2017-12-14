@@ -50,9 +50,6 @@ class Dokan_Apperance {
     public static $plugin_url;
     public static $plugin_path;
     public static $plugin_basename;
-    protected $dokan_invoice_active = 0;
-    private $depends_on       = array();
-    private $dependency_error = array();
 
     /**
      * Constructor for the Dokan_Apperance class
@@ -70,54 +67,7 @@ class Dokan_Apperance {
         self::$plugin_url      = plugin_dir_url( self::$plugin_basename );
         self::$plugin_path     = trailingslashit( dirname( __FILE__ ) );
 
-        $this->depends_on['dokan'] = array(
-            'name'   => 'WeDevs_Dokan',
-            'notice' => sprintf( __( '<b>Dokan Appearance Customizer </b> requires %sDokan plugin%s to be installed & activated!', 'dokan-ac' ), '<a target="_blank" href="https://wordpress.org/plugins/dokan-lite/">', '</a>' ),
-        );
-
-        add_action( 'init', array( $this, 'is_dependency_available' ) );
         add_action( 'init', array( $this, 'init_hooks' ) );
-    }
-
-    /**
-     * check if dependencies installed or not and add error notice
-     * @since 1.0.0
-     */
-    function is_dependency_available() {
-
-        $res = true;
-
-        foreach ( $this->depends_on as $class ) {
-            if ( !class_exists( $class['name'] ) ) {
-                $this->dependency_error[] = $class['notice'];
-                $res                      = false;
-            }
-        }
-
-        if ( $res == false ) {
-            add_action( 'admin_notices', array( $this, 'dependency_notice' ) );
-        }
-
-        return $res;
-    }
-
-    /*
-     * print error notice if dependency not active
-     * @since 1.0.0
-     */
-
-    function dependency_notice() {
-
-        $errors = '';
-        $error  = '';
-        foreach ( $this->dependency_error as $error ) {
-            $errors .= '<p>' . $error . '</p>';
-        }
-        $message = '<div class="error">' . $errors . '</div>';
-
-        echo $message;
-
-        deactivate_plugins( plugin_basename( __FILE__ ) );
     }
 
     /**
@@ -137,23 +87,10 @@ class Dokan_Apperance {
 
     function init_hooks() {
 
-        // Localize our plugin
-        add_action( 'init', array( $this, 'localization_setup' ) );
-
         add_filter( 'dokan_settings_sections', array( $this, 'render_apperance_section' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'render_apperance_settings' ) );
 
         add_action( 'wp_head', array( $this, 'load_styles' ) );
-        // Loads frontend scripts and styles
-    }
-
-    /**
-     * Initialize plugin for localization
-     *
-     * @uses load_plugin_textdomain()
-     */
-    public function localization_setup() {
-        load_plugin_textdomain( 'dokan-ac', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
     /**
@@ -166,10 +103,6 @@ class Dokan_Apperance {
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-
-        /**
-         * All styles goes here
-         */
         wp_enqueue_style( 'dokan-ac-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
     }
 
@@ -183,10 +116,9 @@ class Dokan_Apperance {
      * @return array
      */
     function render_apperance_section( $sections ) {
-
         $sections[] = array(
             'id'    => 'dokan_colors',
-            'title' => __( 'Colors', 'dokan-lite' ),
+            'title' => __( 'Colors', 'dokan' ),
             'icon'  => 'dashicons-admin-customizer'
         );
 
@@ -208,61 +140,61 @@ class Dokan_Apperance {
         $settings_fields['dokan_colors'] = array(
             'btn_text'           => array(
                 'name'    => 'btn_text',
-                'label'   => __( 'Button Text color', 'dokan-lite' ),
+                'label'   => __( 'Button Text color', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#ffffff'
             ),
             'btn_primary'        => array(
                 'name'    => 'btn_primary',
-                'label'   => __( 'Button Background color', 'dokan-lite' ),
+                'label'   => __( 'Button Background color', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#f05025'
             ),
             'btn_primary_border' => array(
                 'name'    => 'btn_primary_border',
-                'label'   => __( 'Button Border color', 'dokan-lite' ),
+                'label'   => __( 'Button Border color', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#f05025'
             ),
             'btn_hover_text'     => array(
                 'name'    => 'btn_hover_text',
-                'label'   => __( 'Button Hover Text color', 'dokan-lite' ),
+                'label'   => __( 'Button Hover Text color', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#ffffff'
             ),
             'btn_hover'          => array(
                 'name'    => 'btn_hover',
-                'label'   => __( 'Button Hover color', 'dokan-lite' ),
+                'label'   => __( 'Button Hover color', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#dd3b0f'
             ),
             'btn_hover_border'   => array(
                 'name'    => 'btn_hover_border',
-                'label'   => __( 'Button Hover Border color', 'dokan-lite' ),
+                'label'   => __( 'Button Hover Border color', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#ca360e'
             ),
             'dash_nav_text'      => array(
                 'name'    => 'dash_nav_text',
-                'label'   => __( 'Dashboard Navigation Text', 'dokan-lite' ),
+                'label'   => __( 'Dashboard Navigation Text', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#ffffff'
             ),
             'dash_active_link'   => array(
                 'name'    => 'dash_active_link',
-                'label'   => __( 'Dashboard Navigation Active Menu', 'dokan-lite' ),
+                'label'   => __( 'Dashboard Navigation Active Menu', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#f05025'
             ),
             'dash_nav_bg'        => array(
                 'name'    => 'dash_nav_bg',
-                'label'   => __( 'Dashboard Navigation Background', 'dokan-lite' ),
+                'label'   => __( 'Dashboard Navigation Background', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#242424'
             ),
             'dash_nav_border'    => array(
                 'name'    => 'dash_nav_border',
-                'label'   => __( 'Dashboard Menu Border', 'dokan-lite' ),
+                'label'   => __( 'Dashboard Menu Border', 'dokan' ),
                 'type'    => 'color',
                 'default' => '#454545'
             ),

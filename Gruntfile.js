@@ -6,6 +6,7 @@ module.exports = function(grunt) {
     var cleanPack = {};
     var compressPack = {};
     var replacePack = {};
+    var copyPack = {};
 
     cleanPack.main = {
         src : ['build/']
@@ -22,6 +23,34 @@ module.exports = function(grunt) {
         dest: 'dokan-pro'
     }
 
+    copyPack.main = {
+        src: [
+            '**',
+            '!node_modules/**',
+            '!build/**',
+            '!bin/**',
+            '!.git/**',
+            '!Gruntfile.js',
+            '!package.json',
+            '!pack.json',
+            '!package-lock.json',
+            '!debug.log',
+            '!phpunit.xml',
+            '!.gitignore',
+            '!.gitmodules',
+            '!npm-debug.log',
+            '!secret.json',
+            '!plugin-deploy.sh',
+            '!assets/less/**',
+            '!tests/**',
+            '!**/Gruntfile.js',
+            '!**/package.json',
+            '!**/README.md',
+            '!**/*~'
+        ],
+        dest: 'build/'
+    }
+
     Object.keys( packs ).forEach( function( val, index ) {
         var cleanPackages = packs[val].map( function( module ) {
             return "!build/includes/modules/" + module
@@ -33,15 +62,22 @@ module.exports = function(grunt) {
             src : cleanPackages
         };
 
+        copyPack[val] = {
+            src : './build/dokan-'+ val + '-' + pkg.version + '.zip',
+            dest : 'dist/',
+            flatten: true,
+            expand: true
+        }
+
         compressPack[val] = {
             options: {
                 mode: 'zip',
-                archive: './build/dokan-pro-'+ val + '-' + pkg.version + '.zip'
+                archive: './build/dokan-'+ val + '-' + pkg.version + '.zip'
             },
             expand: true,
             cwd: 'build/',
             src: ['**/*'],
-            dest: 'dokan-pro-' + val
+            dest: 'dokan-pro'
         };
 
         replacePack[val] = {
@@ -51,6 +87,11 @@ module.exports = function(grunt) {
                 {
                     from: "Plugin Name: Dokan Pro",
                     to: "Plugin Name: Dokan Pro - " + val
+                },
+
+                {
+                    from: "private $plan = 'dokan-pro';",
+                    to: "private $plan = 'dokan-" + val + "';"
                 }
             ]
         };
@@ -124,12 +165,14 @@ module.exports = function(grunt) {
         makepot: {
             target: {
                 options: {
-                    exclude: ['build/.*'],
+                    cwd: 'build',
+                    exclude: ['dist/.*', '*.zip'],
+                    mainFile: 'dokan-pro.php',
                     domainPath: '/languages/', // Where to save the POT file.
                     potFilename: 'dokan.pot', // Name of the POT file.
                     type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
                     potHeaders: {
-                        'report-msgid-bugs-to': 'http://wedevs.com/support/forum/theme-support/dokan/',
+                        'report-msgid-bugs-to': 'https://wedevs.com/account/tickets/',
                         'language-team': 'LANGUAGE <EMAIL@ADDRESS>'
                     }
                 }
@@ -152,35 +195,7 @@ module.exports = function(grunt) {
         clean: cleanPack,
 
         // Copy the plugin into the build directory
-        copy: {
-            main: {
-                src: [
-                    '**',
-                    '!node_modules/**',
-                    '!build/**',
-                    '!bin/**',
-                    '!.git/**',
-                    '!Gruntfile.js',
-                    '!package.json',
-                    '!pack.json',
-                    '!package-lock.json',
-                    '!debug.log',
-                    '!phpunit.xml',
-                    '!.gitignore',
-                    '!.gitmodules',
-                    '!npm-debug.log',
-                    '!secret.json',
-                    '!plugin-deploy.sh',
-                    '!assets/less/**',
-                    '!tests/**',
-                    '!**/Gruntfile.js',
-                    '!**/package.json',
-                    '!**/README.md',
-                    '!**/*~'
-                ],
-                dest: 'build/'
-            }
-        },
+        copy: copyPack,
 
         //Compress build directory into <name>.zip and <name>-<version>.zip
         compress: compressPack,
@@ -245,7 +260,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask( 'release', [
-        'makepot',
         'less',
         'concat',
     ]);
@@ -253,13 +267,13 @@ module.exports = function(grunt) {
     grunt.registerTask( 'zip', [
         'clean:main',
         'copy:main',
-        'clean:basic',
+        'clean:starter',
         'compress:main'
     ]);
 
     Object.keys( packs ).forEach( function( val, index ) {
         grunt.registerTask( 'zip-' + val, [
-            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'compress:' + val
+            'clean:main', 'copy:main', 'replace:' + val, 'clean:' + val, 'makepot', 'compress:' + val, 'copy:' + val
         ]);
     });
 

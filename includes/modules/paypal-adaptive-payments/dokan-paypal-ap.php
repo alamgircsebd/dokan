@@ -159,11 +159,21 @@ class Dokan_Paypal_AP {
      * @return array
      */
     function unset_withdraw_page( $urls ) {
+        $withdraw_settings = get_option( 'dokan_withdraw' );
+        $hide_withdraw_option = isset( $withdraw_settings['hide_withdraw_option'] ) ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
-        $enable = get_option( 'woocommerce_dokan_paypal_adaptive_settings' );
+        if ( $hide_withdraw_option == 'on' ) {
+            $enable = get_option( 'woocommerce_dokan_paypal_adaptive_settings' );
+            // bailout if the gateway is not enabled
+            if ( isset( $enable['enabled'] ) && $enable['enabled'] !== 'yes' ) {
+                return $urls;
+            }
 
-        if ( isset( $enable['enabled'] ) && $enable['enabled'] == 'yes' ) {
-            unset( $urls['withdraw'] );
+            if ( array_key_exists( 'withdraw', $urls ) ) {
+                unset( $urls['withdraw'] );
+            }
+
+            return $urls;
         }
 
         return $urls;

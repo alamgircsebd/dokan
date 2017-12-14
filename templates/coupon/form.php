@@ -134,6 +134,7 @@
         <label for="product_cat" class="dokan-w3 dokan-control-label"><?php _e( 'Product categories', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
             <?php
+            $product_categories = ! empty( $product_categories ) ? $product_categories : array();
             $term = array();
             include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
             $drop_down_category = wp_dropdown_categories( array(
@@ -160,6 +161,7 @@
         <label for="product_cat" class="dokan-w3 dokan-control-label"><?php _e( 'Exclude product categories', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
             <?php
+            $exclude_product_categories = ! empty( $exclude_product_categories ) ? $exclude_product_categories : array();
             $term = array();
             include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
             $drop_down_category = wp_dropdown_categories( array(

@@ -3,7 +3,7 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.6.7
+  Version: 2.7.1
   Author: weDevs
   Author URI: https://wedevs.com/
   License: GPL2
@@ -21,6 +21,20 @@
  * @author weDevs <info@wedevs.com>
  */
 class Dokan_Pro {
+
+    /**
+     * Plan type
+     *
+     * @var string
+     */
+    private $plan = 'dokan-pro';
+
+    /**
+     * Plugin version
+     *
+     * @var string
+     */
+    public $version = '2.7.1';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -199,6 +213,8 @@ class Dokan_Pro {
      * @return void
      */
     public function defined() {
+        define( 'DOKAN_PRO_PLUGIN_VERSION', $this->version );
+        define( 'DOKAN_PRO_FILE', __FILE__ );
         define( 'DOKAN_PRO_DIR', dirname( __FILE__ ) );
         define( 'DOKAN_PRO_INC', dirname( __FILE__ ) . '/includes' );
         define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/admin' );
@@ -221,9 +237,9 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
-            require_once DOKAN_PRO_CLASS . '/update.php';
         }
 
+        require_once DOKAN_PRO_CLASS . '/update.php';
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/orders.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
@@ -265,11 +281,11 @@ class Dokan_Pro {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
             new Dokan_Announcement();
-            new Dokan_Update();
         }
 
         Dokan_Pro_Ajax::init();
         Dokan_Pro_Shipping::init();
+        new Dokan_Update( $this->plan );
 
         if ( is_user_logged_in() ) {
             Dokan_Pro_Dashboard::init();

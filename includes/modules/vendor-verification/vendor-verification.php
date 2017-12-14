@@ -87,13 +87,16 @@ class Dokan_Seller_Verification {
         self::$plugin_path     = trailingslashit( dirname( __FILE__ ) );
 
         add_action( 'init', array( $this, 'init_hooks' ) );
+
+        //includes file
+        $this->includes_file();
     }
 
     public function init_hooks() {
         $installed_version = get_option( 'dokan_theme_version' );
 
         add_action( 'init', array( $this, 'init_session' ) );
-        add_action( 'init', array( $this, 'monitor_autheticate_requests' ) );
+        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ) );
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -123,9 +126,6 @@ class Dokan_Seller_Verification {
 
         // usermeta update hook
         add_action( 'updated_user_meta', array( $this, 'dokan_v_recheck_verification_status_meta' ), 10, 4 );
-
-        //includes file
-        $this->includes_file();
     }
 
     function load_verification_template_header( $heading, $query_vars ) {
@@ -246,7 +246,6 @@ class Dokan_Seller_Verification {
                 ),
             )
         );
-        //var_dump($config);
 
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_verification' );
@@ -678,9 +677,9 @@ class Dokan_Seller_Verification {
             $current_user   = get_current_user_id();
             $seller_profile = dokan_get_store_info( $current_user );
 
-            $seller_profile['dokan_verification']['verified_info']['phone']        = $postdata['phone'];
-            $seller_profile['dokan_verification']['verified_info']['phone_code']   = $info['code'];
-            $seller_profile['dokan_verification']['verified_info']['phone_status'] = 'pending';
+            $seller_profile['dokan_verification']['info']['phone_no']        = $postdata['phone'];
+            $seller_profile['dokan_verification']['info']['phone_code']   = $info['code'];
+            $seller_profile['dokan_verification']['info']['phone_status'] = 'pending';
 
             update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
         }
@@ -707,13 +706,12 @@ class Dokan_Seller_Verification {
         $current_user   = get_current_user_id();
         $seller_profile = dokan_get_store_info( $current_user );
 
-        $saved_code = $seller_profile['dokan_verification']['verified_info']['phone_code'];
+        $saved_code = $seller_profile['dokan_verification']['info']['phone_code'];
 
         if ( $saved_code == $postdata['sms_code'] ) {
 
-            $seller_profile['dokan_verification']['verified_info']['phone_status'] = 'verified';
             $seller_profile['dokan_verification']['info']['phone_status'] = 'verified';
-            $seller_profile['dokan_verification']['info']['phone_no'] = $seller_profile['dokan_verification']['verified_info']['phone'];
+            $seller_profile['dokan_verification']['info']['phone_no'] = $seller_profile['dokan_verification']['info']['phone_no'];
             update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
 
             $resp = array(

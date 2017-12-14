@@ -20,7 +20,7 @@
         popUp : {
             show : function(e){
 
-                support_btn.html('wait...');
+                support_btn.html( wait_string.wait );
                 if (support_btn.hasClass('user_logged_out')){
                     Dokan_Store_Support.popUp.getForm( 'login_form' );
                 } else {

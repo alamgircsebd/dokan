@@ -111,17 +111,24 @@ class DPS_Admin {
             )
         );
 
+        woocommerce_wp_select( array(
+            'id'            => '_subscription_product_admin_commission_type',
+            'label'         => __( 'Admin Commission type', 'dokan' ),
+            'options'       => array(
+                'percentage'  => __( 'Percentage', 'dokan' ),
+                'flat'        => __( 'Flat', 'dokan' ),
+            ),
+            'description'   => __( 'Set the commission type admin will get under this subscription', 'dokan' ),
+            'data_type'     => 'price'
+        ) );
+
         woocommerce_wp_text_input(
             array(
-                'id'                => '_vendor_commission',
-                'label'             => __( 'Vendor Commission', 'dokan' ),
-                'placeholder'       => '',
-                'description'       => __( 'How much (%) a vendor will get from each order, Leave empty ( not "0" ) if you don\'t apply any ovverride', 'dokan' ),
-                'type'              => 'number',
-                'custom_attributes' => array(
-                    'step' => 'any',
-                    'min'  => '0'
-                )
+                'id'            => '_subscription_product_admin_commission',
+                'label'         => __( 'Admin Commission', 'dokan' ),
+                'placeholder'   => '',
+                'description'   => __( 'How much (%) a vendor will get from each order, Leave empty ( not "0" ) if you don\'t apply any ovverride', 'dokan' ),
+                'data_type'     => 'price'
             )
         );
 
@@ -227,10 +234,9 @@ class DPS_Admin {
             update_post_meta( $post_id, '_pack_validity', $woocommerce_pack_validity_field );
         }
 
-        $woocommerce_vendor_commission_field = $_POST['_vendor_commission'];
-
-        if ( ! empty( $woocommerce_vendor_commission_field ) ) {
-            update_post_meta( $post_id, '_vendor_commission', $woocommerce_vendor_commission_field );
+        if ( ! empty( $_POST['_subscription_product_admin_commission_type'] ) && ! empty( $_POST['_subscription_product_admin_commission'] ) ) {
+            update_post_meta( $post_id, '_subscription_product_admin_commission_type', $_POST['_subscription_product_admin_commission_type'] );
+            update_post_meta( $post_id, '_subscription_product_admin_commission', $_POST['_subscription_product_admin_commission'] );
         }
 
         if ( ! empty( $_POST['_vendor_allowed_categories'] ) ) {
@@ -276,7 +282,8 @@ class DPS_Admin {
     function add_new_section_admin_panael( $sections ) {
         $sections['dokan_product_subscription'] = array(
             'id'    => 'dokan_product_subscription',
-            'title' => __( 'Product Subscription', 'dokan' )
+            'title' => __( 'Product Subscription', 'dokan' ),
+            'icon'  => 'dashicons-controls-repeat'
         );
 
         return $sections;
@@ -640,7 +647,7 @@ class DPS_Admin {
         }
 
         $pack_validity = get_post_meta( $pack_id, '_pack_validity', true );
-        $vendor_commission = get_post_meta( $pack_id, '_vendor_commission', true );
+        $admin_commission = get_post_meta( $pack_id, '_per_product_admin_commission', true );
         update_user_meta( $user_id, 'product_package_id', $pack_id );
         update_user_meta( $user_id, 'product_order_id', '' );
         update_user_meta( $user_id, 'product_no_with_pack' , get_post_meta( $pack_id, '_no_of_product', true ) ); //number of products
@@ -656,8 +663,8 @@ class DPS_Admin {
             delete_user_meta( $user_id, 'vendor_allowed_categories' );
         }
 
-        if ( !empty( $vendor_commission ) ) {
-            update_user_meta( $user_id, 'dokan_seller_percentage', $vendor_commission );
+        if ( ! empty( $admin_commission ) ) {
+            update_user_meta( $user_id, 'dokan_seller_percentage', $admin_commission );
         } else {
             update_user_meta( $user_id, 'dokan_seller_percentage', '' );
         }

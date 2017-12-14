@@ -25,7 +25,8 @@ if ( isset( $_GET['product_id'] ) ) {
 //$_downloadable   = get_post_meta( $post_id, '_downloadable', true );
 //$_stock          = get_post_meta( $post_id, '_stock', true );
 //$_stock_status   = get_post_meta( $post_id, '_stock_status', true );
-
+$_virtual               = get_post_meta( $post_id, '_virtual', true );
+$is_virtual             = ( 'yes' == $_virtual ) ? true : false;
 $has_persons  = get_post_meta( $post_id, '_wc_booking_has_persons', true );
 $has_resource = get_post_meta( $post_id, '_wc_booking_has_resources', true );
 
@@ -113,6 +114,11 @@ $template_args = array(
                                 <?php _e( 'Please choose a Name !!!', 'dokan' ); ?>
                             </div>
                             <?php dokan_post_input_box( $post_id, 'post_title', array( 'placeholder' => __( 'Product name..', 'dokan' ), 'value' => $post_title ) ); ?>
+                        </div>
+                        <div class="dokan-form-group virtual-checkbox">
+                            <label>
+                                <input type="checkbox" <?php checked( $is_virtual, true ); ?> class="_is_virtual" name="_virtual" id="_virtual"> <?php _e( 'Virtual', 'dokan-lite' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Virtual products are intangible and aren\'t shipped.', 'dokan-lite' ); ?>"></i>
+                            </label>
                         </div>
 
                         <div class="dokan-form-group">

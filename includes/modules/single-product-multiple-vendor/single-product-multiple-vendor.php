@@ -2,11 +2,11 @@
 /*
 Plugin Name: Single Product Multiple Vendor
 Plugin URI: https://wedevs.com/products/dokan/dokan-simple-auctions/
-Description: A module that offer for multiple vendor to sell a single product
+Description: A module that offers multiple vendor to sell a single product
 Version: 1.0.0
 Author: weDevs
 Author URI: https://wedevs.com/
-Thumbnail Name: auction.png
+Thumbnail Name: single-product-multivendor.png
 */
 
 // don't call the file directly
@@ -100,7 +100,7 @@ class Dokan_Single_Product_Multi_Vendor {
      * @return void
      */
     public function hooks() {
-        $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'on' );
+        $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'off' );
 
         if ( 'off' == $enable_option ) {
             return;
@@ -108,7 +108,6 @@ class Dokan_Single_Product_Multi_Vendor {
 
         //tinysort.min.js
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-        // Hook all necessary filter and actions
     }
 
     /**
@@ -137,6 +136,7 @@ class Dokan_Single_Product_Multi_Vendor {
                 `map_id` bigint(20) DEFAULT NULL,
                 `product_id` bigint(20) DEFAULT NULL,
                 `seller_id` bigint(20) DEFAULT NULL,
+                `is_trash` tinyint(4) NOT NULL DEFAULT '0',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 

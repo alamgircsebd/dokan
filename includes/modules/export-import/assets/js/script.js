@@ -1,5 +1,7 @@
 ;(function($) {
+
 	$('#myTab a').on('click',function(){
+		console.log(this);
 		$(this).tab('show');
 		localStorage.setItem("ie_active", $(this).attr('href') )
 	})
