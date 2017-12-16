@@ -1162,7 +1162,6 @@ class Dokan_Pro_Ajax {
 
                     // Update post terms
                     if ( taxonomy_exists( $attribute_names[ $i ] ) ) {
-                        error_log( print_r( $values, true ) );
                         wp_set_object_terms( $post_id, $values, $attribute_names[ $i ] );
                     }
 
@@ -1181,8 +1180,7 @@ class Dokan_Pro_Ajax {
                 } elseif ( isset( $attribute_values[ $i ] ) ) {
 
                     // Text based, possibly separated by pipes (WC_DELIMITER). Preserve line breaks in non-variation attributes.
-                    $values = $is_variation ? wc_clean( $attribute_values[ $i ] ) : implode( "\n", array_map( 'wc_clean', explode( "\n", $attribute_values[ $i ] ) ) );
-                    $values = implode( ' ' . WC_DELIMITER . ' ', wc_get_text_attributes( $values ) );
+                    $values = implode( ' ' . WC_DELIMITER . ' ', array_map( 'wc_clean', array_map( 'stripslashes', $attribute_values[ $i ] ) ) );
 
                     // Custom attribute - Add attribute to array and set the values
                     $attributes[ sanitize_title( $attribute_names[ $i ] ) ] = array(
