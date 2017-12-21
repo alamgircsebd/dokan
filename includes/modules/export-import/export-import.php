@@ -110,6 +110,8 @@ class Dokan_Product_Importer {
         add_action( 'wp_ajax_woocommerce_do_ajax_product_export', array( $this, 'do_ajax_product_export' ) );
         add_action( 'template_redirect', array( $this, 'download_export_file' ) );
 
+        add_action( 'template_redirect', array( $this, 'handle_step_submission' ), 10, 1 );
+
         if ( self::is_dokan_plugin() ) {
             add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 10 );
         }
@@ -117,6 +119,16 @@ class Dokan_Product_Importer {
         // add_filter( 'dokan_dashboard_template_render', array( $this, 'importer_page_template'),99 );
         add_action( 'dokan_before_listing_product', array( $this, 'render_import_export_button' ) );
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
+    }
+
+
+    function handle_step_submission() {
+        include_once( plugin_dir_path( __FILE__ ) . 'includes/importers/class-wc-product-csv-importer-controller.php' );
+        $import_controller = new WC_Product_CSV_Importer_Controller();
+
+        if ( !empty( $_POST['save_step'] ) && !empty( $import_controller->steps[$import_controller->step]['handler'] ) ) {
+            call_user_func( $import_controller->steps[$import_controller->step]['handler'], $import_controller );
+        }
     }
 
     /**
