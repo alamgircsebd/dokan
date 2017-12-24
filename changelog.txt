@@ -1,3 +1,8 @@
+v2.7.2 -> Dec 24, 2017
+---------------------
+- [fix]   Attributes not being saved properly in product edit section
+- [fix]   Dokan Import Export Module Importer showing blank page
+
 v2.7.1 -> Dec 13, 2017
 ---------------------
 - [new]   Added an option for hiding and showing withdraw menus in vendor dashboard
