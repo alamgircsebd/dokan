@@ -33,6 +33,7 @@ module.exports = function(grunt) {
             '!Gruntfile.js',
             '!package.json',
             '!pack.json',
+            '!dist/**',
             '!package-lock.json',
             '!debug.log',
             '!phpunit.xml',
