@@ -30,14 +30,14 @@ class WC_Product_CSV_Importer_Controller {
      *
      * @var string
      */
-    protected $step = '';
+    public $step = '';
 
     /**
      * Progress steps.
      *
      * @var array
      */
-    protected $steps = array();
+    public $steps = array();
 
     /**
      * Errors.
@@ -182,9 +182,7 @@ class WC_Product_CSV_Importer_Controller {
      * Dispatch current step and show correct view.
      */
     public function dispatch() {
-        if ( !empty( $_POST['save_step'] ) && !empty( $this->steps[$this->step]['handler'] ) ) {
-            call_user_func( $this->steps[$this->step]['handler'], $this );
-        }
+
         $this->output_header();
         $this->output_steps();
         $this->output_errors();

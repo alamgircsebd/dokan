@@ -170,6 +170,32 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.7.2 -> December 24, 2017
+---------------------
+- [new]   Introducing All New modules and packaging System
+- [new]   Automatic Updates for Modules
+- [new]   Interactive Settings Page to Manage it All
+- [fix]   Shipping options showing for product edit while dokan shipping is disabled
+
+v2.7.1 -> Dec 13, 2017
+---------------------
+- [new]   Added an option for hiding and showing withdraw menus in vendor dashboard
+- [new]   New module integration called Single product Multiple Vendor
+- [new]   Added helper link in social API integration
+- [new]   New product email template is added for auction product - Auction module
+- [new]   Vendor verification widget is now showing in single product page - Vendor Verification module
+- [fix]   Import export warning fixed - Import Export module
+- [fix]   Calculation wrong in Subscription packages - Subcsription module
+- [fix]   Fixed depricated checkout url - Subcsription module
+- [fix]   Fixed core udpater class
+- [fix]   Showing wrong WC Booking link fixed - Booking module
+- [fix]   Update textdomain in appearance - Appearance module
+- [fix]   Attribute saving problem if integer or commas value set as a attribute values
+- [fix]   Social connect redirection issue fixed - Vendor Verification module
+- [fix]   Fixed vendor verification widget is not showing - Vendor Verification module
+- [tweak] Hooks added for new ticket and reply - Store Support
+- [tweak] Update shipping package label hook parameters
+
 v2.7.0 -> November 23, 2017
 ---------------------
 - [new]   Introducing All New modules and packaging System

@@ -1,5 +1,6 @@
-;(function($) {
+window.ajaxurl = dokan.ajaxurl;
 
+;(function($) {
 	$('#myTab a').on('click',function(){
 		console.log(this);
 		$(this).tab('show');

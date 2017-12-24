@@ -94,6 +94,7 @@ class Dokan_Product_Importer {
         define( 'DOKAN_IE_FILE', __FILE__ );
         define( 'DOKAN_IE_DIR', __DIR__ );
         define( 'DOKAN_IE_INC_DIR', __DIR__ . '/includes' );
+        define( 'DOKAN_IE_ASSETS', plugins_url( 'assets', __FILE__ ) );
 
         add_action( 'init', array( $this, 'do_product_export' ), 99 );
 
@@ -109,6 +110,8 @@ class Dokan_Product_Importer {
         add_action( 'wp_ajax_woocommerce_do_ajax_product_export', array( $this, 'do_ajax_product_export' ) );
         add_action( 'template_redirect', array( $this, 'download_export_file' ) );
 
+        add_action( 'template_redirect', array( $this, 'handle_step_submission' ), 10, 1 );
+
         if ( self::is_dokan_plugin() ) {
             add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 10 );
         }
@@ -116,6 +119,16 @@ class Dokan_Product_Importer {
         // add_filter( 'dokan_dashboard_template_render', array( $this, 'importer_page_template'),99 );
         add_action( 'dokan_before_listing_product', array( $this, 'render_import_export_button' ) );
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
+    }
+
+
+    function handle_step_submission() {
+        include_once( plugin_dir_path( __FILE__ ) . 'includes/importers/class-wc-product-csv-importer-controller.php' );
+        $import_controller = new WC_Product_CSV_Importer_Controller();
+
+        if ( !empty( $_POST['save_step'] ) && !empty( $import_controller->steps[$import_controller->step]['handler'] ) ) {
+            call_user_func( $import_controller->steps[$import_controller->step]['handler'], $import_controller );
+        }
     }
 
     /**
@@ -190,9 +203,9 @@ class Dokan_Product_Importer {
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-        
+
         global $wp;
-        
+
         if ( dokan_is_seller_dashboard()  && isset( $wp->query_vars['tools'] )) {
             wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', array(), WC_VERSION );
         }
@@ -200,12 +213,12 @@ class Dokan_Product_Importer {
         /**
          * All styles goes here
          */
-        wp_enqueue_style( 'dpi-styles', DOKAN_IE_DIR . '/assets/css/style.css', false, date( 'Ymd' ) );
+        wp_enqueue_style( 'dpi-styles', DOKAN_IE_ASSETS . '/css/style.css', false, date( 'Ymd' ) );
 
         /**
          * All scripts goes here
          */
-        wp_enqueue_script( 'dpi-scripts', DOKAN_IE_DIR . '/assets/js/script.js', array( 'jquery', 'bootstrap-min' ), false, true );
+        wp_enqueue_script( 'dpi-scripts', DOKAN_IE_ASSETS . '/js/script.js', array( 'jquery', 'bootstrap-min' ), false, true );
 
         wp_register_script( 'wc-product-import', WC()->plugin_url() . '/assets/js/admin/wc-product-import.js', array( 'jquery' ), WC_VERSION );
         wp_register_script( 'wc-product-export', WC()->plugin_url() . '/assets/js/admin/wc-product-export.js', array( 'jquery' ), WC_VERSION );
@@ -1226,7 +1239,7 @@ class Dokan_Product_Importer {
      * @return string
      */
     function dashboard_active_menu( $active_menu ) {
-        if ( $active_menu == 'tools/csv' || $active_menu == 'tools/csv-export' ) {
+        if ( $active_menu == 'tools/csv-import' || $active_menu == 'tools/csv-export' ) {
             $active_menu = 'tools';
         }
         return $active_menu;
