@@ -1,44 +1,60 @@
 <?php
 $changelog = array(
     array(
-        'version'  => 'Version 2.7.1',
-        'released' => '2017-12-13',
+        'version'  => 'Version 2.7.2',
+        'released' => '2017-12-24',
         'changes' => array(
             array(
-                'title'       => 'Enable/Disable Withdraw menu for the payment modules',
-                'type'        => 'New',
-                'description' => 'Now admins using the modules Dokan Stripe and Dokan PayPal Adaptive have the option to display or hide the Withdraw menu on vendors dashboard.'
-            ),
-            array(
-                'title'       => 'Help links added on Social API settings page',
-                'type'        => 'New',
-                'description' => 'For ease of configuration and creation, we have added links to our detailed documentation on social login & registration under Dokan Social API settings.'
-            ),
-            array(
-                'title'       => 'Introducing a new module: “Single Product Multiple Vendor” [For Professional, Business & Enterprise Packages]',
-                'type'        => 'New',
-                'description' => 'With this module, vendors will be able to duplicate and sell another vendor\'s product without a hassle. Thus, one product can be sold by multiple vendors.
-                <img src="https://wedevs.com/wp-content/uploads/2017/12/dokan-single-product-multivendor.gif" alt="Single Product Multiple Vendor Module">'
-            ),
-            array(
-                'title'       => 'Verification widget for single product page. [For Professional, Business & Enterprise Packages]',
-                'type'        => 'New',
-                'description' => 'Previously, the verification widget was only available for the store page. Now it\'s available for both store and single product pages.'
-            ),
-            array(
-                'title'       => 'New email template introduced for Auction-able products',
-                'type'        => 'New',
-                'description' => 'Admins can now customize a built-in email template and receive automatic email notifications every time a vendor adds a new auction type product'
-            ),
-
-            array(
-                'title'       => 'Product attribute saving issue',
+                'title'       => 'Attributes not being saved properly in product edit section',
                 'type'        => 'Fix',
-                'description' => 'When a pointing or comma terms need to add as a attribute value, the values are not saving properperly'
+                'description' => 'Vendor\'s product edit section under dashboard wasn\'t saving attributes properly , so variations were not created properly. This issue is resolved now with proper saving of attributes.'
             ),
-
+            array(
+                'title'       => 'Dokan Import Export Module Importer showing blank page',
+                'type'        => 'Fix',
+                'description' => 'Import page for Dokan Import Export module was showing a blank page due to internal error. This issue is now resolved'
+            ),
         )
     ),
+    //    array(
+    //        'version'  => 'Version 2.7.1',
+    //        'released' => '2017-12-13',
+    //        'changes' => array(
+    //            array(
+    //                'title'       => 'Enable/Disable Withdraw menu for the payment modules',
+    //                'type'        => 'New',
+    //                'description' => 'Now admins using the modules Dokan Stripe and Dokan PayPal Adaptive have the option to display or hide the Withdraw menu on vendors dashboard.'
+    //            ),
+    //            array(
+    //                'title'       => 'Help links added on Social API settings page',
+    //                'type'        => 'New',
+    //                'description' => 'For ease of configuration and creation, we have added links to our detailed documentation on social login & registration under Dokan Social API settings.'
+    //            ),
+    //            array(
+    //                'title'       => 'Introducing a new module: “Single Product Multiple Vendor” [For Professional, Business & Enterprise Packages]',
+    //                'type'        => 'New',
+    //                'description' => 'With this module, vendors will be able to duplicate and sell another vendor\'s product without a hassle. Thus, one product can be sold by multiple vendors.
+    //                <img src="https://wedevs.com/wp-content/uploads/2017/12/dokan-single-product-multivendor.gif" alt="Single Product Multiple Vendor Module">'
+    //            ),
+    //            array(
+    //                'title'       => 'Verification widget for single product page. [For Professional, Business & Enterprise Packages]',
+    //                'type'        => 'New',
+    //                'description' => 'Previously, the verification widget was only available for the store page. Now it\'s available for both store and single product pages.'
+    //            ),
+    //            array(
+    //                'title'       => 'New email template introduced for Auction-able products',
+    //                'type'        => 'New',
+    //                'description' => 'Admins can now customize a built-in email template and receive automatic email notifications every time a vendor adds a new auction type product'
+    //            ),
+    //
+    //            array(
+    //                'title'       => 'Product attribute saving issue',
+    //                'type'        => 'Fix',
+    //                'description' => 'When a pointing or comma terms need to add as a attribute value, the values are not saving properperly'
+    //            ),
+    //
+    //        )
+    //    ),
     // array(
     //     'version'  => 'Version 2.7.0',
     //     'released' => '2017-11-23',
