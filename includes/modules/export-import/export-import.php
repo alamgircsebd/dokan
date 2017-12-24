@@ -1239,7 +1239,7 @@ class Dokan_Product_Importer {
      * @return string
      */
     function dashboard_active_menu( $active_menu ) {
-        if ( $active_menu == 'tools/csv' || $active_menu == 'tools/csv-export' ) {
+        if ( $active_menu == 'tools/csv-import' || $active_menu == 'tools/csv-export' ) {
             $active_menu = 'tools';
         }
         return $active_menu;
