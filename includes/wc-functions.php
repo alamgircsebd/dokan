@@ -1035,20 +1035,37 @@ function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy 
 
 add_filter( 'woocommerce_cart_shipping_packages', 'dokan_custom_split_shipping_packages' );
 
+/**
+ * Split shpping seller wise
+ *
+ * @param array $packages
+ *
+ * @return array
+ */
 function dokan_custom_split_shipping_packages( $packages ) {
     $cart_content = WC()->cart->get_cart();
     $seller_pack = array();
     $packages = array();
 
+
     foreach ( $cart_content as $key => $item ) {
+
+        // If individual seller product shipping is disable then out from here
         if ( Dokan_WC_Shipping::is_product_disable_shipping( $item['product_id'] ) ) {
             continue;
         }
+
         $post_author = get_post_field( 'post_author', $item['data']->get_id() );
         $seller_pack[$post_author][$key] = $item;
     }
 
     foreach ( $seller_pack as $seller_id => $pack ) {
+
+        // If seller store shipping is disabled then bell out from here
+        if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
+            continue;
+        }
+
         $packages[] = array(
             'contents'        => $pack,
             'contents_cost'   => array_sum( wp_list_pluck( $pack, 'line_total' ) ),
@@ -1073,11 +1090,15 @@ function dokan_custom_split_shipping_packages( $packages ) {
 
 add_filter( 'woocommerce_shipping_package_name', 'dokan_change_shipping_pack_name', 10, 3 );
 
-// add_filter('dokan_cart_shipping_packages', function( $p ) {
-//     var_dump($p);
-// });
-
-
+/**
+ * Set packagewise seller name
+ *
+ * @param string $title
+ * @param integer $i
+ * @param array $package
+ *
+ * @return string
+ */
 function dokan_change_shipping_pack_name( $title, $i, $package ) {
 
     $user_id = $package['seller_id'];
@@ -1099,6 +1120,16 @@ function dokan_change_shipping_pack_name( $title, $i, $package ) {
 
 add_action( 'woocommerce_checkout_create_order_shipping_item', 'dokan_add_shipping_pack_meta', 10, 4 );
 
+/**
+ * Added shipping meta after order
+ *
+ * @param object $item
+ * @param string $package_key
+ * @param array $package
+ * @param object $order
+ *
+ * @return void
+ */
 function dokan_add_shipping_pack_meta( $item, $package_key, $package, $order ) {
     $item->add_meta_data( 'seller_id', $package['seller_id'], true );
 }
