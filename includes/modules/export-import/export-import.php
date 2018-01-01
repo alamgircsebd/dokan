@@ -117,7 +117,7 @@ class Dokan_Product_Importer {
         }
 
         // add_filter( 'dokan_dashboard_template_render', array( $this, 'importer_page_template'),99 );
-        add_action( 'dokan_before_listing_product', array( $this, 'render_import_export_button' ) );
+        add_action( 'dokan_after_add_product_btn', array( $this, 'render_import_export_button' ) );
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
     }
 
@@ -420,7 +420,7 @@ class Dokan_Product_Importer {
                 if ( isset( $cat['term_id'] ) )
                     $this->processed_terms[intval( $cat['term_id'] )] = $id;
             } else {
-                printf( __( 'Failed to import category %s', 'dpi_plugin' ), esc_html( $cat['category_nicename'] ) );
+                printf( __( 'Failed to import category %s', 'dokan' ), esc_html( $cat['category_nicename'] ) );
                 if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG )
                     echo ': ' . $id->get_error_message();
                 echo '<br />';
@@ -461,7 +461,7 @@ class Dokan_Product_Importer {
                 if ( isset( $tag['term_id'] ) )
                     $this->processed_terms[intval( $tag['term_id'] )] = $id['term_id'];
             } else {
-                printf( __( 'Failed to import post tag %s', 'dpi_plugin' ), esc_html( $tag['tag_name'] ) );
+                printf( __( 'Failed to import post tag %s', 'dokan' ), esc_html( $tag['tag_name'] ) );
                 if ( defined( 'IMPORT_DEBUG' ) && IMPORT_DEBUG )
                     echo ': ' . $id->get_error_message();
                 echo '<br />';
@@ -1220,12 +1220,12 @@ class Dokan_Product_Importer {
      */
     public function render_import_export_button() {
         ?>
-        <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ) ?>">
-            <button class="dokan-btn dokan-btn-theme"><?php _e( 'Import', 'dpi_plugin' ) ?></button>
+        <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ) ?>" class="dokan-btn dokan-btn-theme">
+            <?php _e( 'Import', 'dokan' ) ?>
         </a>
         <?php if ( apply_filters( 'dokan_csv_export_enabled', true ) ) { ?>
-            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ) ?>">
-                <button class="dokan-btn dokan-btn-theme"><?php _e( 'Export', 'dpi_plugin' ) ?></button>
+            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ) ?>" class="dokan-btn dokan-btn-theme">
+                <?php _e( 'Export', 'dokan' ) ?>
             </a>
         <?php } ?>
         <?php
