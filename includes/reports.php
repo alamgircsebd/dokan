@@ -187,14 +187,14 @@ function dokan_seller_sales_statement() {
                         $seller_tax      = wc_price( $order_amount['tax'] );
 
                         $amount     = wc_price( $seller_amount );
-                        $net_amount = $net_amount + $seller_amount + $order_amount['shipping'] + $order_amount['tax'];
+                        $net_amount = (float) $net_amount + (float) $seller_amount + (float) $order_amount['shipping'] + (float) $order_amount['tax'];
 
                         $net_amount_print = wc_price( $net_amount );
 
                         $total_sales += $gross_amount;
                         $total_earned += $seller_amount;
-                        $total_shipping += $order_amount['shipping'];
-                        $total_tax += $order_amount['tax'];
+                        $total_shipping += (float) $order_amount['shipping'];
+                        $total_tax += (float) $order_amount['tax'];
 
                     } else if ( isset( $statement->refund_amount ) ) {
                         $type   = __( 'Refund', 'dokan' );
