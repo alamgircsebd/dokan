@@ -22,8 +22,11 @@ class DPS_Pack_On_Registration {
     function init_hooks() {
 
         add_action( 'dokan_seller_registration_field_after', array( $this, 'generate_form_fields' ) );
+        add_action( 'dokan_after_seller_migration_fields', array( $this, 'generate_form_fields') );
         add_filter( 'woocommerce_registration_redirect', array( $this, 'redirect_to_checkout' ), 10, 1 );
         add_filter( 'dokan_ww_payment_redirect', array( $this, 'redirect_to_checkout_after_wizard' ), 10, 1);
+        add_filter( 'dokan_customer_migration_required_fields', array( $this, 'add_subscription_to_dokan_customer_migration_required_fields' ) );
+        add_filter( 'dokan_customer_migration_redirect', array( $this, 'redirect_after_migration' ) );
     }
 
     public static function init() {
@@ -56,7 +59,6 @@ class DPS_Pack_On_Registration {
         <div class="form-row form-group form-row-wide dps-pack-wrappper" style="border: 1px solid #D3CED2;">
 
             <select required="required" class="dokan-form-control" name="dokan-subscription-pack" id="dokan-subscription-pack">
-            <!--<option value=""><?php // _e( 'Choose Any' , 'dokan' ) ?></option>-->
                 <?php
                 while ( $query->have_posts() ) {
                     $query->the_post();
@@ -142,7 +144,7 @@ class DPS_Pack_On_Registration {
             'orderby'        => 'menu_order title',
             'order'          => 'ASC'
         );
-
+        
         $query = new WP_Query( apply_filters( 'dokan_sub_get_reg_sub_packs_args', $args ) );
 
         return $query;
@@ -184,6 +186,32 @@ class DPS_Pack_On_Registration {
         }
         return $url;
     }
+     /** 
+     * Check if subscriptin pack is selected
+     * @since 1.1.5
+     * @param array $fields
+     * @return array $fields
+     */
+    public function add_subscription_to_dokan_customer_migration_required_fields( $fields ) {
+        $fields['dokan-subscription-pack'] = __( 'Select subscription a pack', 'dokan' );
+
+        return $fields;
+    }
+
+    /** 
+    * Redirect after migration
+    * @since 1.1.5
+    * @param string $url
+    * @return string
+    */
+    public function redirect_after_migration( $url ) {
+        if ( isset( $_POST['dokan-subscription-pack'] ) ) {
+            return get_site_url() . '/?add-to-cart=' . $_POST['dokan-subscription-pack'];
+        }
+
+        return $url;
+    }
+
 }
 
 if ( dokan_get_option('enable_subscription_pack_in_reg', 'dokan_product_subscription', 'on' ) == 'on' ) {
