@@ -63,6 +63,10 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
      * @return void
      */
 	public function get_review_widget() {
+        if ( ! current_user_can( 'dokan_view_review_reports' ) ) {
+            return;
+        }
+
 		dokan_get_template_part( 'dashboard/review-widget', '', array(
 				'pro' => true,
 				'comment_counts'=> $this->comment_counts,
@@ -77,9 +81,13 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
      * @return void
      */
 	public function get_announcement_widget() {
+        if ( ! current_user_can( 'dokan_view_announcement' ) ) {
+            return;
+        }
+
 		$template_notice = Dokan_Pro_Notice::init();
-                $query = $template_notice->get_announcement_by_users( apply_filters( 'dokan_announcement_list_number', 3 ) );
-        
+        $query = $template_notice->get_announcement_by_users( apply_filters( 'dokan_announcement_list_number', 3 ) );
+
         $args = array(
             'post_type'      => 'dokan_announcement',
             'post_status'    => 'publish',
@@ -88,11 +96,11 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
             'meta_key'       => '_announcement_type',
             'meta_value'     => 'all_seller',
         );
-        
+
         $all_seller_posts = new WP_Query( $args );
-        
+
         $notices = array_merge( $all_seller_posts->posts, $query->posts );
-        
+
 		dokan_get_template_part( 'dashboard/announcement-widget', '', array(
 				'pro' => true,
 				'notices'=> $notices,
