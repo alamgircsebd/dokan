@@ -31,10 +31,10 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_updated', array( $this, 'set_product_type' ), 11 );
         add_action( 'dokan_product_updated', array( $this, 'save_pro_product_data' ), 12 );
         add_action( 'dokan_product_updated', array( $this, 'updated_product_email' ), 20 );
-        add_action( 'dokan_product_listin_row_action', array( $this, 'product_row_action' ), 10 );
         add_action( 'template_redirect', array( $this, 'handle_duplicate_product' ), 10 );
         add_action( 'dokan_product_dashboard_errors', array( $this, 'display_duplicate_message' ), 10 );
 
+        add_filter( 'dokan_product_row_actions', array( $this, 'product_row_action' ), 10, 2 );
         add_filter( 'dokan_get_product_edit_template', array( $this, 'render_product_edit_template' ), 10 );
         add_filter( 'dokan_update_product_post_data', array( $this, 'save_product_post_data' ), 10 );
         add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
@@ -249,7 +249,7 @@ class Dokan_Pro_Products {
      * @return void
      */
     function add_per_product_commission_options() {
-        
+
         woocommerce_wp_select( array(
             'id'            => '_per_product_admin_commission_type',
             'label'         => __( 'Admin Commission type', 'dokan' ),
@@ -412,13 +412,27 @@ class Dokan_Pro_Products {
     *
     * @return void
     **/
-    public function product_row_action( $product ) {
-        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) == 'off' ) {
-            return;
+    public function product_row_action( $row_action, $post ) {
+
+        if ( empty( $post->ID ) ) {
+            return $row_action;
         }
 
-        $html = '| <span class="duplicate"><a href="' . wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $product->get_id() ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ) . '">' . __( 'Duplicate', 'dokan' ) . '</a></span>';
-        echo apply_filters( 'dokan_product_listing_duplicate_row_action', $html, $product );
+        if ( ! current_user_can( 'dokan_duplicate_product' ) ) {
+            return $row_action;
+        }
+
+        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) == 'off' ) {
+            return $row_action;
+        }
+
+        $row_action['duplicate'] = array(
+            'title' => __( 'Duplicate', 'dokan' ),
+            'url'   => wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $post->ID ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ),
+            'class' => 'duplicate',
+        );
+
+        return $row_action;
     }
 
     /**
@@ -568,7 +582,7 @@ class Dokan_Pro_Products {
         if ( dokan_get_option( 'edited_product_status', 'dokan_selling', 'off' ) != 'on' ) {
             return;
         }
-        
+
         $product       = wc_get_product( $product_id );
         $seller_id     = get_post_field( 'post_author', $product_id );
         $seller        = get_user_by( 'id', $seller_id );
