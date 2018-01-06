@@ -191,132 +191,56 @@ if ( wc_tax_enabled() ) {
 	</table>
 	<div class="clear"></div>
 </div>
-<div class="wc-order-data-row wc-order-bulk-actions">
 
-	<p class="add-items">
+<?php if ( current_user_can( 'dokan_manage_refund' ) ): ?>
+	<div class="wc-order-data-row wc-order-bulk-actions">
+		<p class="add-items">
 
-		<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
-			<button type="button" class="dokan-btn dokan-btn-default refund-items"><?php _e( 'Request Refund', 'dokan' ); ?></button>
-		<?php endif; ?>
-	</p>
-	<div class="clear"></div>
-</div>
-
-<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
-<div class="wc-order-data-row wc-order-refund-items" style="display: none;">
-	<table class="wc-order-totals dokan-table dokan-table-strip">
-
-		<tr>
-			<td><?php _e( 'Amount already refunded', 'dokan' ); ?>:</td>
-			<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ); ?></td>
-		</tr>
-		<tr>
-			<td><?php _e( 'Total available to refund', 'dokan' ); ?>:</td>
-			<td class="total"><?php echo wc_price( $order->get_total() - $order->get_total_refunded(), array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ); ?></td>
-		</tr>
-		<tr>
-			<td><label for="refund_amount"><?php _e( 'Refund amount', 'dokan' ); ?>:</label></td>
-			<td class="total">
-				<input type="text" class="text" id="refund_amount" name="refund_amount" class="wc_input_price" />
-				<div class="clear"></div>
-			</td>
-		</tr>
-		<tr>
-			<td><label for="refund_reason"><?php _e( 'Reason for refund (optional)', 'dokan' ); ?>:</label></td>
-			<td class="total">
-				<input type="text" class="text" id="refund_reason" name="refund_reason" />
-				<div class="clear"></div>
-			</td>
-		</tr>
-	</table>
-	<div class="clear"></div>
-	<div class="refund-actions">
-		<?php
-		$refund_amount            = '<span class="wc-order-refund-amount">' . wc_price( 0, array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ) . '</span>'; ?>
-
-		<button type="button" class="dokan-btn dokan-btn-default do-manual-refund tips" data-tip="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', 'dokan' ); ?>"><?php printf( _x( 'Submit Refund Request %s', 'Submit Refund Request $amount', 'dokan' ), $refund_amount ); ?></button>
-		<button type="button" class="dokan-btn dokan-btn-default cancel-action"><?php _e( 'Cancel', 'dokan' ); ?></button>
+			<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
+				<button type="button" class="dokan-btn dokan-btn-default refund-items"><?php _e( 'Request Refund', 'dokan' ); ?></button>
+			<?php endif; ?>
+		</p>
 		<div class="clear"></div>
 	</div>
-	<div class="clear"></div>
-</div>
-<?php endif; ?>
 
-<script type="text/template" id="wc-modal-add-products">
-	<div class="wc-backbone-modal">
-		<div class="wc-backbone-modal-content">
-			<section class="wc-backbone-modal-main" role="main">
-				<header class="wc-backbone-modal-header">
-					<a class="modal-close modal-close-link" href="#"><span class="close-icon"><span class="screen-reader-text">Close media panel</span></span></a>
-					<h1><?php _e( 'Add products', 'dokan' ); ?></h1>
-				</header>
-				<article>
-					<form action="" method="post">
-						<input type="hidden" id="add_item_id" name="add_order_items" class="wc-product-search" style="width: 100%;" data-placeholder="<?php _e( 'Search for a product&hellip;', 'dokan' ); ?>" data-multiple="true" />
-					</form>
-				</article>
-				<footer>
-					<div class="inner">
-						<button id="btn-ok" class="button button-primary button-large"><?php _e( 'Add', 'dokan' ); ?></button>
-					</div>
-				</footer>
-			</section>
+	<?php if ( ( $order->get_total() - $order->get_total_refunded() ) > 0 ) : ?>
+		<div class="wc-order-data-row wc-order-refund-items" style="display: none;">
+			<table class="wc-order-totals dokan-table dokan-table-strip">
+
+				<tr>
+					<td><?php _e( 'Amount already refunded', 'dokan' ); ?>:</td>
+					<td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ); ?></td>
+				</tr>
+				<tr>
+					<td><?php _e( 'Total available to refund', 'dokan' ); ?>:</td>
+					<td class="total"><?php echo wc_price( $order->get_total() - $order->get_total_refunded(), array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ); ?></td>
+				</tr>
+				<tr>
+					<td><label for="refund_amount"><?php _e( 'Refund amount', 'dokan' ); ?>:</label></td>
+					<td class="total">
+						<input type="text" class="text" id="refund_amount" name="refund_amount" class="wc_input_price" />
+						<div class="clear"></div>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="refund_reason"><?php _e( 'Reason for refund (optional)', 'dokan' ); ?>:</label></td>
+					<td class="total">
+						<input type="text" class="text" id="refund_reason" name="refund_reason" />
+						<div class="clear"></div>
+					</td>
+				</tr>
+			</table>
+			<div class="clear"></div>
+			<div class="refund-actions">
+				<?php
+				$refund_amount            = '<span class="wc-order-refund-amount">' . wc_price( 0, array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ) . '</span>'; ?>
+
+				<button type="button" class="dokan-btn dokan-btn-default do-manual-refund tips" data-tip="<?php esc_attr_e( 'You will need to manually issue a refund through your payment gateway after using this.', 'dokan' ); ?>"><?php printf( _x( 'Submit Refund Request %s', 'Submit Refund Request $amount', 'dokan' ), $refund_amount ); ?></button>
+				<button type="button" class="dokan-btn dokan-btn-default cancel-action"><?php _e( 'Cancel', 'dokan' ); ?></button>
+				<div class="clear"></div>
+			</div>
+			<div class="clear"></div>
 		</div>
-	</div>
-	<div class="wc-backbone-modal-backdrop modal-close">&nbsp;</div>
-</script>
+	<?php endif; ?>
 
-<script type="text/template" id="wc-modal-add-tax">
-	<div class="wc-backbone-modal">
-		<div class="wc-backbone-modal-content">
-			<section class="wc-backbone-modal-main" role="main">
-				<header class="wc-backbone-modal-header">
-					<a class="modal-close modal-close-link" href="#"><span class="close-icon"><span class="screen-reader-text">Close media panel</span></span></a>
-					<h1><?php _e( 'Add tax', 'dokan' ); ?></h1>
-				</header>
-				<article>
-					<form action="" method="post">
-						<table class="widefat">
-							<thead>
-								<tr>
-									<th>&nbsp;</th>
-									<th><?php _e( 'Rate name', 'dokan' ); ?></th>
-									<th><?php _e( 'Tax class', 'dokan' ); ?></th>
-									<th><?php _e( 'Rate code', 'dokan' ); ?></th>
-									<th><?php _e( 'Rate %', 'dokan' ); ?></th>
-								</tr>
-							</thead>
-						<?php
-							$rates = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}woocommerce_tax_rates ORDER BY tax_rate_name LIMIT 100" );
-
-							foreach ( $rates as $rate ) {
-								echo '
-									<tr>
-										<td><input type="radio" id="add_order_tax_' . absint( $rate->tax_rate_id ) . '" name="add_order_tax" value="' . absint( $rate->tax_rate_id ) . '" /></td>
-										<td><label for="add_order_tax_' . absint( $rate->tax_rate_id ) . '">' . WC_Tax::get_rate_label( $rate ) . '</label></td>
-										<td>' . ( isset( $classes_options[ $rate->tax_rate_class ] ) ? $classes_options[ $rate->tax_rate_class ] : '-' ) . '</td>
-										<td>' . WC_Tax::get_rate_code( $rate ) . '</td>
-										<td>' . WC_Tax::get_rate_percent( $rate ) . '</td>
-									</tr>
-								';
-							}
-						?>
-						</table>
-						<?php if ( absint( $wpdb->get_var( "SELECT COUNT(tax_rate_id) FROM {$wpdb->prefix}woocommerce_tax_rates;" ) ) > 100 ) : ?>
-							<p>
-								<label for="manual_tax_rate_id"><?php _e( 'Or, enter tax rate ID:', 'dokan' ); ?></label><br/>
-								<input type="number" name="manual_tax_rate_id" id="manual_tax_rate_id" step="1" placeholder="<?php _e( 'Optional', 'dokan' ); ?>" />
-							</p>
-						<?php endif; ?>
-					</form>
-				</article>
-				<footer>
-					<div class="inner">
-						<button id="btn-ok" class="button button-primary button-large"><?php _e( 'Add', 'dokan' ); ?></button>
-					</div>
-				</footer>
-			</section>
-		</div>
-	</div>
-	<div class="wc-backbone-modal-backdrop modal-close">&nbsp;</div>
-</script>
+<?php endif ?>
