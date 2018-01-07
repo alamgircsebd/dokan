@@ -139,8 +139,6 @@ class Dokan_Pro_Notice {
 
         $query = new WP_Query( $args );
 
-        $this->remove_query_filter();
-
         return $query;
     }
 
