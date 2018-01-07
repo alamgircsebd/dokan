@@ -165,6 +165,11 @@ class Dokan_Pro_Reviews {
             wp_send_json_error();
         }
 
+        if ( ! current_user_can( 'dokan_manage_reviews' ) ) {
+            wp_send_json_error( __( 'You have no permission to manage this review', 'dokan' ) );
+            return;
+        }
+
         $comment_id  = $_POST['comment_id'];
         $action      = $_POST['comment_status'];
         $post_type   = $_POST['post_type'];
@@ -581,6 +586,10 @@ class Dokan_Pro_Reviews {
         }
 
         if ( !wp_verify_nonce( $_POST['dokan_comment_nonce'], 'dokan_comment_nonce_action' ) && !is_user_logged_in() ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'dokan_manage_reviews' ) ) {
             return;
         }
 

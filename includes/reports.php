@@ -14,27 +14,32 @@ function dokan_get_reports_charts() {
                 'title'       => __( 'Overview', 'dokan' ),
                 'description' => '',
                 'hide_title'  => true,
-                'function'    => 'dokan_sales_overview'
+                'function'    => 'dokan_sales_overview',
+                'permission'  => 'dokan_view_overview_report'
             ),
             "sales_by_day"      => array(
                 'title'       => __( 'Sales by day', 'dokan' ),
                 'description' => '',
-                'function'    => 'dokan_daily_sales'
+                'function'    => 'dokan_daily_sales',
+                'permission'  => 'dokan_view_daily_sale_report'
             ),
             "top_sellers"       => array(
                 'title'       => __( 'Top selling', 'dokan' ),
                 'description' => '',
-                'function'    => 'dokan_top_sellers'
+                'function'    => 'dokan_top_sellers',
+                'permission'  => 'dokan_view_top_selling_report'
             ),
             "top_earners"       => array(
                 'title'       => __( 'Top earning', 'dokan' ),
                 'description' => '',
-                'function'    => 'dokan_top_earners'
+                'function'    => 'dokan_top_earners',
+                'permission'  => 'dokan_view_top_earning_report'
             ),
              "sales_statement"       => array(
                 'title'       => __( 'Statement', 'dokan' ),
                 'description' => '',
-                'function'    => 'dokan_seller_sales_statement'
+                'function'    => 'dokan_seller_sales_statement',
+                'permission'  => 'dokan_view_statement_report'
             )
         )
     );

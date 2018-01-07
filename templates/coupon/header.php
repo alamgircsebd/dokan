@@ -18,9 +18,9 @@
                 }
             ?>
 
-            <?php if ( ! $is_edit_page ) { ?>
+            <?php if ( ! $is_edit_page && current_user_can( 'dokan_add_coupon' ) ) { ?>
                 <span class="left-header-content dokan-right">
-                    <a href="<?php echo add_query_arg( array( 'view' => 'add_coupons'), dokan_get_navigation_url( 'coupons' ) ); ?>" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-gift">&nbsp;</i> <?php _e( 'Add new Coupon', 'dokan' ); ?></a>
+                    <a href="<?php echo add_query_arg( array( 'view' => 'add_coupons' ), dokan_get_navigation_url( 'coupons' ) ); ?>" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-gift">&nbsp;</i> <?php _e( 'Add new Coupon', 'dokan' ); ?></a>
                 </span>
             <?php } ?>
         </h1>

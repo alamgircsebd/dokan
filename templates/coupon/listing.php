@@ -27,14 +27,23 @@
                 <td class="coupon-code" data-title="<?php _e('Code', 'dokan'); ?>">
                     <?php $edit_url =  wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'edit', 'view' => 'add_coupons'), dokan_get_navigation_url( 'coupons' ) ), '_coupon_nonce', 'coupon_nonce_url' ); ?>
                     <div class="code">
-                        <a href="<?php echo $edit_url; ?>"><span><?php echo esc_attr( $post->post_title ); ?></span></a>
+                        <?php if ( current_user_can( 'dokan_edit_coupon' ) ): ?>
+                            <a href="<?php echo $edit_url; ?>"><span><?php echo esc_attr( $post->post_title ); ?></span></a>
+                        <?php else: ?>
+                            <a href=""><span><?php echo esc_attr( $post->post_title ); ?></span></a>
+                        <?php endif ?>
                     </div>
 
                     <div class="row-actions">
                         <?php $del_url = wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'delete'), dokan_get_navigation_url( 'coupons' ) ) ,'_coupon_del_nonce', 'coupon_del_nonce'); ?>
 
-                        <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
-                        <span class="delete"><a  href="<?php echo $del_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e('delete', 'dokan'); ?></a></span>
+                        <?php if ( current_user_can( 'dokan_edit_coupon' ) ): ?>
+                            <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
+                        <?php endif; ?>
+
+                        <?php if ( current_user_can( 'dokan_delete_coupon' ) ): ?>
+                            <span class="delete"><a  href="<?php echo $del_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e('delete', 'dokan'); ?></a></span>
+                        <?php endif ?>
                     </div>
                 </td>
 

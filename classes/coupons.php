@@ -117,6 +117,7 @@ class Dokan_Pro_Coupons {
                     dokan_get_template_part('global/dokan-error', '', array( 'deleted' => true, 'message' => $message ) );
                 }
             }
+
             $this->add_coupons_form( self::$validated );
         }
     }
@@ -159,6 +160,10 @@ class Dokan_Pro_Coupons {
             return;
         }
 
+        if ( ! current_user_can( 'dokan_delete_coupon' ) ) {
+            wp_die( __( 'You have not permission to delete this coupon', 'dokan' ) );
+        }
+
         if ( !wp_verify_nonce( $_GET['coupon_del_nonce'], '_coupon_del_nonce' ) ) {
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
@@ -185,6 +190,17 @@ class Dokan_Pro_Coupons {
         }
 
         $errors = new WP_Error();
+
+        // Checking permissions for adding and editing
+        if ( empty( $_POST['post_id'] ) ) {
+            if ( ! current_user_can( 'dokan_add_coupon' ) ) {
+                $errors->add( 'title', __( 'You have no permission to add this coupon', 'dokan' ) );
+            }
+        } else {
+            if ( ! current_user_can( 'dokan_edit_coupon' ) ) {
+                $errors->add( 'title', __( 'You have no permission to edit this coupon', 'dokan' ) );
+            }
+        }
 
         if ( empty( $_POST['title'] ) ) {
             $errors->add( 'title', __( 'Please enter the coupon title', 'dokan' ) );
@@ -601,26 +617,33 @@ class Dokan_Pro_Coupons {
         $exclude_products = str_replace( ' ', '', $exclude_products );
         $exclude_products = explode( ',', $exclude_products );
 
-        dokan_get_template_part( 'coupon/form', '', array(
-            'pro'                        => true,
-            'post_id'                    => $post_id,
-            'post_title'                 => $post_title,
-            'discount_type'              => $discount_type,
-            'description'                => $description,
-            'amount'                     => $amount,
-            'products'                   => $products,
-            'exclude_products'           => $exclude_products,
-            'product_categories'         => $product_categories,
-            'exclude_product_categories' => $exclude_product_categories,
-            'usage_limit'                => $usage_limit,
-            'expire'                     => $expire,
-            'minimum_amount'             => $minimum_amount,
-            'customer_email'             => $customer_email,
-            'button_name'                => $button_name,
-            'exclide_sale_item'          => $exclide_sale_item,
-            'show_on_store'              => $show_on_store,
-            'all_products'               => $this->coupon_products_list(),
-            'products_id'                => $products_id,
-        ) );
+        if ( empty( $post_id ) && ! current_user_can( 'dokan_add_coupon' ) ) {
+            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to add coupon', 'dokan' ) ) );
+        } elseif ( ! empty( $post_id ) && ! current_user_can( 'dokan_edit_coupon' ) ) {
+            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to edit this coupon', 'dokan' ) ) );
+        } else {
+            dokan_get_template_part( 'coupon/form', '', array(
+                'pro'                        => true,
+                'post_id'                    => $post_id,
+                'post_title'                 => $post_title,
+                'discount_type'              => $discount_type,
+                'description'                => $description,
+                'amount'                     => $amount,
+                'products'                   => $products,
+                'exclude_products'           => $exclude_products,
+                'product_categories'         => $product_categories,
+                'exclude_product_categories' => $exclude_product_categories,
+                'usage_limit'                => $usage_limit,
+                'expire'                     => $expire,
+                'minimum_amount'             => $minimum_amount,
+                'customer_email'             => $customer_email,
+                'button_name'                => $button_name,
+                'exclide_sale_item'          => $exclide_sale_item,
+                'show_on_store'              => $show_on_store,
+                'all_products'               => $this->coupon_products_list(),
+                'products_id'                => $products_id,
+            ) );
+        }
+
     }
 }
