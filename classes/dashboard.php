@@ -54,7 +54,10 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
      * @return void
      */
 	public function show_profile_progressbar() {
-		echo dokan_get_profile_progressbar();
+        if ( current_user_can( 'dokan_view_overview_menu' ) ) {
+            echo dokan_get_profile_progressbar();
+        }
+
 	}
 
     /**
@@ -63,6 +66,10 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
      * @return void
      */
 	public function get_review_widget() {
+        if ( ! current_user_can( 'dokan_view_overview_menu' ) ) {
+            return;
+        }
+
         if ( ! current_user_can( 'dokan_view_review_reports' ) ) {
             return;
         }
@@ -81,6 +88,10 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
      * @return void
      */
 	public function get_announcement_widget() {
+        if ( ! current_user_can( 'dokan_view_overview_menu' ) ) {
+            return;
+        }
+
         if ( ! current_user_can( 'dokan_view_announcement' ) ) {
             return;
         }

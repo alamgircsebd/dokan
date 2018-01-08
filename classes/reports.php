@@ -249,7 +249,8 @@ class Dokan_Pro_Reports {
             'title' => __( 'Reports', 'dokan' ),
             'icon'  => '<i class="fa fa-line-chart"></i>',
             'url'   => dokan_get_navigation_url( 'reports' ),
-            'pos'   => 60
+            'pos'   => 60,
+            'permission' => 'dokan_view_report_menu'
         );
 
         return $urls;

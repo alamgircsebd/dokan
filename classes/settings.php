@@ -71,26 +71,29 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( $enable_shipping == 'yes' ) {
             $sub_settins['shipping'] = array(
-                'title' => __( 'Shipping', 'dokan' ),
-                'icon'  => '<i class="fa fa-truck"></i>',
-                'url'   => dokan_get_navigation_url( 'settings/shipping' ),
-                'pos'   => 70
+                'title'      => __( 'Shipping', 'dokan' ),
+                'icon'       => '<i class="fa fa-truck"></i>',
+                'url'        => dokan_get_navigation_url( 'settings/shipping' ),
+                'pos'        => 70,
+                'permission' => 'dokan_view_store_shipping_menu'
             );
         }
 
         $sub_settins['social'] = array(
-            'title' => __( 'Social Profile', 'dokan' ),
-            'icon'  => '<i class="fa fa-share-alt-square"></i>',
-            'url'   => dokan_get_navigation_url( 'settings/social' ),
-            'pos'   => 90
+            'title'      => __( 'Social Profile', 'dokan' ),
+            'icon'       => '<i class="fa fa-share-alt-square"></i>',
+            'url'        => dokan_get_navigation_url( 'settings/social' ),
+            'pos'        => 90,
+            'permission' => 'dokan_view_store_social_menu'
         );
 
         if ( dokan_get_option( 'store_seo', 'dokan_general', 'on' ) === 'on' ) {
             $sub_settins['seo'] = array(
-                'title' => __( 'Store SEO', 'dokan' ),
-                'icon'  => '<i class="fa fa-globe"></i>',
-                'url'   => dokan_get_navigation_url( 'settings/seo' ),
-                'pos'   => 110
+                'title'      => __( 'Store SEO', 'dokan' ),
+                'icon'       => '<i class="fa fa-globe"></i>',
+                'url'        => dokan_get_navigation_url( 'settings/seo' ),
+                'pos'        => 110,
+                'permission' => 'dokan_view_store_seo_menu'
             );
         }
 
@@ -232,15 +235,27 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
     public function load_settings_content( $query_vars ) {
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'social' ) {
-            $this->load_social_content();
+             if ( ! current_user_can( 'dokan_view_store_social_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+            } else {
+                $this->load_social_content();
+            }
         }
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'shipping' ) {
-            $this->load_shipping_content();
+             if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+            } else {
+                $this->load_shipping_content();
+            }
         }
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'seo' ) {
-            $this->load_seo_content();
+             if ( ! current_user_can( 'dokan_view_store_seo_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+            } else {
+                $this->load_seo_content();
+            }
         }
     }
 

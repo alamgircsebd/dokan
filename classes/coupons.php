@@ -59,10 +59,11 @@ class Dokan_Pro_Coupons {
      */
     public function add_coupon_menu( $urls ) {
         $urls['coupons'] = array(
-            'title' => __( 'Coupons', 'dokan' ),
-            'icon'  => '<i class="fa fa-gift"></i>',
-            'url'   => dokan_get_navigation_url( 'coupons' ),
-            'pos'   => 55
+            'title'      => __( 'Coupons', 'dokan' ),
+            'icon'       => '<i class="fa fa-gift"></i>',
+            'url'        => dokan_get_navigation_url( 'coupons' ),
+            'pos'        => 55,
+            'permission' => 'dokan_view_coupon_menu'
         );
 
         return $urls;

@@ -81,10 +81,11 @@ class Dokan_Pro_Reviews {
     public function add_review_menu( $urls ) {
 
         $urls['reviews'] = array(
-            'title' => __( 'Reviews', 'dokan' ),
-            'icon'  => '<i class="fa fa-comments-o"></i>',
-            'url'   => dokan_get_navigation_url( 'reviews' ),
-            'pos'   => 65
+            'title'      => __( 'Reviews', 'dokan' ),
+            'icon'       => '<i class="fa fa-comments-o"></i>',
+            'url'        => dokan_get_navigation_url( 'reviews' ),
+            'pos'        => 65,
+            'permission' => 'dokan_view_review_menu'
         );
 
         return $urls;
