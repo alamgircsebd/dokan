@@ -524,6 +524,10 @@ class Dokan_Pro_Store_Seo {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
 
+        if ( ! current_user_can( 'dokan_view_store_seo_menu' ) ) {
+            wp_send_json_error( __( 'Pemission denied', 'dokan-lite' ) );
+        }
+
         unset( $postdata['dokan_store_seo_form_nonce'] );
         unset( $postdata['_wp_http_referer'] );
 

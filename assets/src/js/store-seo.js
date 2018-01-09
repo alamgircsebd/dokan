@@ -28,7 +28,7 @@
                 feedback.fadeOut();
 
                 $.post( dokan.ajaxurl, data, function ( resp ) {
-                    if ( resp.success == true ) {
+                    if ( resp.success ) {
                         feedback.html(resp.data);
                         feedback.removeClass('dokan-hide');
                         feedback.addClass('dokan-alert-success');

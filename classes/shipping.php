@@ -167,11 +167,16 @@ class Dokan_Pro_Shipping {
             return;
         }
 
+
         if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
             return;
         }
 
         if ( isset( $_POST['dokan_update_shipping_options'] ) && wp_verify_nonce( $_POST['dokan_shipping_form_field_nonce'], 'dokan_shipping_form_field' ) ) {
+
+            if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
+                wp_die( __( 'You have no access to save this shipping options', 'dokan' ) );
+            }
 
             $user_id = get_current_user_id();
             $s_rates = array();
