@@ -1899,19 +1899,14 @@ class Dokan_Pro_Ajax {
                 $parent_data['height'] = wc_format_localized_decimal( 0 );
             }
 
-            if ( dokan_get_option( 'product_style', 'dokan_selling', 'new' ) == 'new' ) {
-                dokan_get_template_part( 'products/edit/html-product-variation', '', array(
-                    'pro'                => true,
-                    'loop'               => $loop,
-                    'variation_id'       => $variation_id,
-                    'parent_data'        => $parent_data,
-                    'variation_data'     => $variation_data,
-                    'variation'          => $variation
-                ) );
-
-            } else {
-                include DOKAN_PRO_INC . '/woo-views/variation-admin-html.php';
-            }
+            dokan_get_template_part( 'products/edit/html-product-variation', '', array(
+                'pro'                => true,
+                'loop'               => $loop,
+                'variation_id'       => $variation_id,
+                'parent_data'        => $parent_data,
+                'variation_data'     => $variation_data,
+                'variation'          => $variation
+            ) );
         }
 
         die();

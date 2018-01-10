@@ -125,17 +125,6 @@ class Dokan_Pro_Admin_Settings {
         );
 
         $new_settings_fields['dokan_selling'] = array(
-            'product_style'          => array(
-                'name'    => 'product_style',
-                'label'   => __( 'Add/Edit Product Style', 'dokan' ),
-                'desc'    => __( 'The style you prefer for vendor to add or edit products. ', 'dokan' ),
-                'type'    => 'select',
-                'default' => 'old',
-                'options' => array(
-                    'old' => __( 'Tab View', 'dokan' ),
-                    'new' => __( 'Flat View', 'dokan' )
-                )
-            ),
             'product_category_style' => array(
                 'name'    => 'product_category_style',
                 'label'   => __( 'Category Selection', 'dokan' ),
