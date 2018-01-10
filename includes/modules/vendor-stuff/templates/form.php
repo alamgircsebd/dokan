@@ -1,4 +1,4 @@
-<form method="post" action="" class="dokan-form-horizontal vendor-stuff">
+<form method="post" action="" class="dokan-form-horizontal vendor-stuff register">
     <input type="hidden"  value="<?php echo $is_edit; ?>" name="stuff_id">
     <input type="hidden"  value="<?php echo get_current_user_id(); ?>" name="vendor_id">
 
@@ -36,25 +36,21 @@
 
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'Password', 'dokan' ); ?></label>
-        <div class="dokan-w5 dokan-text-left">
-            <input id="password" name="password" value="" class="dokan-form-control input-md" type="text">
+        <div class="dokan-w5 dokan-text-left form-row">
+            <input type="password" class="input-text dokan-form-control" name="password" id="reg_password" minlength="6" />
         </div>
-    </div>
-
-    <div class="dokan-form-group">
-        <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'Confirm Password', 'dokan' ); ?></label>
-        <div class="dokan-w5 dokan-text-left">
-            <input id="confirm_password" name="confirm_password" value="" class="dokan-form-control input-md" type="text">
-        </div>
+        <div style="left:-999em; position:absolute;"><label for="trap"><?php _e( 'Anti-spam', 'dokan-theme' ); ?></label><input type="text" name="email_2" id="trap" tabindex="-1" /></div>
     </div>
 
     <?php endif ?>
-
 
     <div class="dokan-form-group">
         <div class="dokan-w5 dokan-text-left" style="margin-left:25%">
             <input type="submit" id="" name="stuff_creation" value="<?php echo $button_name; ?>" class="dokan-btn dokan-btn-danger dokan-btn-theme">
         </div>
     </div>
-
 </form>
+
+<?php
+wp_enqueue_script( 'wc-password-strength-meter' );
+?>

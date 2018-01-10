@@ -9,16 +9,9 @@
  *  @package dokan
  */
 ?>
-
 <?php
-$is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['stuff_id'] ) ) ? $_GET['stuff_id'] : 0;
-$first_name = '';
-$last_name = '';
-$email = '';
-$phone = '';
-$button_name = ! $is_edit ? __( 'Create Stuff', 'dokan' ) : __( 'Update Stuff', 'dokan' );
+    $is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['stuff_id'] ) ) ? $_GET['stuff_id'] : 0;
 ?>
-
 <div class="dokan-dashboard-wrap">
 
     <?php
@@ -66,9 +59,7 @@ $button_name = ! $is_edit ? __( 'Create Stuff', 'dokan' ) : __( 'Update Stuff', 
 
         <article class="dokan-stuffs-area">
             <?php
-
                 do_action( 'dokan_add_stuff_content' );
-
             ?>
         </article>
 

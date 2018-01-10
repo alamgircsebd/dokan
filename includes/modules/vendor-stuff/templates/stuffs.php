@@ -61,7 +61,7 @@
                 $paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
                 $limit        = 10;
                 $offset       = ( $paged - 1 ) * $limit;
-                $stuffs       = dokan_get_all_vendor_stuffs( array( 'limit' => 10, 'offset' => $offset ) );
+                $stuffs       = dokan_get_all_vendor_stuffs( array( 'number' => $limit, 'offset' => $offset ) );
 
                 if ( count( $stuffs['stuffs'] ) > 0 ) {
                     ?>

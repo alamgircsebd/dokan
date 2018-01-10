@@ -9,7 +9,10 @@ function dokan_get_all_vendor_stuffs( $args ) {
 
     $defaults = array(
         'number' => 10,
-        'vendor_id' => get_current_user_id()
+        'offset' => 0,
+        'vendor_id' => get_current_user_id(),
+        'orderby' => 'registered',
+        'order' => 'desc'
     );
 
     $args = wp_parse_args( $args, $defaults );

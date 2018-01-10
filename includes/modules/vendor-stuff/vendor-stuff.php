@@ -176,7 +176,6 @@ class Dokan_Vendor_Stuff {
             } else {
                 require_once DOKAN_VENDOR_STUFF_DIR . '/templates/stuffs.php';
             }
-            exit();
         }
     }
 
