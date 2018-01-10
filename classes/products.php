@@ -35,7 +35,6 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_dashboard_errors', array( $this, 'display_duplicate_message' ), 10 );
 
         add_filter( 'dokan_product_row_actions', array( $this, 'product_row_action' ), 10, 2 );
-        add_filter( 'dokan_get_product_edit_template', array( $this, 'render_product_edit_template' ), 10 );
         add_filter( 'dokan_update_product_post_data', array( $this, 'save_product_post_data' ), 10 );
         add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
 
@@ -82,11 +81,7 @@ class Dokan_Pro_Products {
      * @return void
      */
     public function load_product_edit_template() {
-        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) == 'old' ) {
-            dokan_get_template_part( 'products/product-edit', '', array( 'pro' => true ) );
-        } else {
-            dokan_get_template_part( 'products/new-product-single' );
-        }
+        dokan_get_template_part( 'products/new-product-single' );
     }
 
     /**
@@ -290,20 +285,6 @@ class Dokan_Pro_Products {
             $value = empty( $_POST['_per_product_admin_commission'] ) ? '' : (float) $_POST['_per_product_admin_commission'];
             update_post_meta( $post_id, '_per_product_admin_commission', $value );
         }
-    }
-
-    /**
-    * Rewrite product edit template
-    *
-    * @since 2.6
-    *
-    * @return void
-    **/
-    public function render_product_edit_template( $template ) {
-        if ( dokan_get_option( 'product_style', 'dokan_selling', 'old' ) === 'old' ) {
-            return dokan_locate_template( 'products/product-edit.php', '', DOKAN_PRO_DIR. '/templates/', true );
-        }
-        return $template;
     }
 
     /**
