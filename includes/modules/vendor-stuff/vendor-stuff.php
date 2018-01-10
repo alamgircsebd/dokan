@@ -56,7 +56,13 @@ class Dokan_Vendor_Stuff {
      * @uses add_action()
      */
     public function __construct() {
-        add_action( 'init', array( $this, 'init_hooks' ) );
+        $this->define_constant();
+        $this->includes();
+        $this->initiate();
+
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_stuffs_page' ), 15 );
+        add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
+        add_action( 'dokan_load_custom_template', array( $this, 'load_stuff_template' ), 16 );
     }
 
     /**
@@ -74,8 +80,39 @@ class Dokan_Vendor_Stuff {
         return $instance;
     }
 
-    function init_hooks() {
+    /**
+     * Define all constant
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function define_constant() {
+        define( 'DOKAN_VENDOR_STUFF_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_VENDOR_STUFF_INC_DIR', DOKAN_VENDOR_STUFF_DIR . '/includes' );
+    }
 
+    /**
+     * Includes all files
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function includes() {
+        require_once DOKAN_VENDOR_STUFF_INC_DIR . '/functions.php';
+        require_once DOKAN_VENDOR_STUFF_INC_DIR . '/class-stuffs.php';
+    }
+
+    /**
+     * Inistantiate all class
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function initiate() {
+        new Dokan_Stuffs();
     }
 
     /**
@@ -109,6 +146,60 @@ class Dokan_Vendor_Stuff {
             'read'     => true,
             'dokandar' => true
         ) );
+    }
+
+    /**
+     * Add Stuffs endpoint to the end of Dashboard
+     *
+     * @param array $query_var
+     */
+    function add_endpoint( $query_var ) {
+        $query_var['stuffs'] = 'stuffs';
+
+        return $query_var;
+    }
+
+    /**
+     * Load tools template
+     *
+     * @since  1.0
+     *
+     * @param  array $query_vars
+     *
+     * @return string
+     */
+    function load_stuff_template( $query_vars ) {
+
+        if ( isset( $query_vars['stuffs'] ) ) {
+            if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_stuffs' ) {
+                require_once DOKAN_VENDOR_STUFF_DIR . '/templates/add-stuffs.php';
+            } else {
+                require_once DOKAN_VENDOR_STUFF_DIR . '/templates/stuffs.php';
+            }
+            exit();
+        }
+    }
+
+
+
+    /**
+     * Add Stuffs page in seller dashboard
+     *
+     * @param array $urls
+     *
+     * @return array $urls
+     */
+    public function add_stuffs_page( $urls ) {
+        if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'seller' ) ) {
+            $urls['stuffs'] = array(
+                'title' => __( 'Stuffs', 'dokan' ),
+                'icon'  => '<i class="fa fa-users"></i>',
+                'url'   => dokan_get_navigation_url( 'stuffs' ),
+                'pos'   => 172
+            );
+        }
+
+        return $urls;
     }
 
 }
