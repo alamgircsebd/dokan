@@ -62,6 +62,7 @@ class Dokan_Stuffs {
         }
 
         include DOKAN_VENDOR_STUFF_DIR . '/templates/form.php';
+
     }
 
     /**

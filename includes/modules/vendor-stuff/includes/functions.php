@@ -19,9 +19,11 @@ function dokan_get_all_vendor_stuffs( $args ) {
 
     $args['role'] = 'vendor_stuff';
     $args['meta_query'] = array(
-        'key'     => '_vendor_id',
-        'value'   => $args['vendor_id'],
-        'compare' => '='
+        array(
+            'key'     => '_vendor_id',
+            'value'   => $args['vendor_id'],
+            'compare' => '='
+        )
     );
 
     $user_search = new WP_User_Query( $args );
