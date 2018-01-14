@@ -142,9 +142,76 @@ class Dokan_Vendor_staff {
             $wp_roles = new WP_Roles();
         }
 
-        add_role( 'vendor_staff', __( 'Vendor staff', 'dokan' ), array(
+        add_role( 'vendor_staff', __( 'Vendor Staff', 'dokan' ), array(
             'read'     => true,
         ) );
+
+        $users_query = new WP_User_Query( array(
+            'role' => 'vendor_staff'
+        ) );
+
+        $staffs = $users_query->get_results();
+        $staff_caps = dokan_get_staff_capabilities();
+
+        if ( count( $staffs ) > 0 ) {
+            foreach ( $staffs as $staff ) {
+                $staff->add_cap( 'dokandar' );
+                $staff->add_cap( 'delete_pages' );
+                $staff->add_cap( 'publish_posts' );
+                $staff->add_cap( 'edit_posts' );
+                $staff->add_cap( 'delete_published_posts' );
+                $staff->add_cap( 'edit_published_posts' );
+                $staff->add_cap( 'delete_posts' );
+                $staff->add_cap( 'manage_categories' );
+                $staff->add_cap( 'moderate_comments' );
+                $staff->add_cap( 'unfiltered_html' );
+                $staff->add_cap( 'upload_files' );
+                $staff->add_cap( 'edit_shop_orders' );
+                $staff->add_cap( 'edit_product' );
+
+                foreach ( $staff_caps as $key => $staff_cap ) {
+                    $staff->add_cap( $staff_cap );
+                }
+            }
+        }
+    }
+
+    /**
+     * Deactivate functions
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public static function deactivate() {
+        $users_query = new WP_User_Query( array(
+            'role' => 'vendor_staff'
+        ) );
+
+        $staffs = $users_query->get_results();
+        $staff_caps = dokan_get_staff_capabilities();
+
+        if ( count( $staffs ) > 0 ) {
+            foreach ( $staffs as $staff ) {
+                $staff->remove_cap( 'dokandar' );
+                $staff->remove_cap( 'delete_pages' );
+                $staff->remove_cap( 'publish_posts' );
+                $staff->remove_cap( 'edit_posts' );
+                $staff->remove_cap( 'delete_published_posts' );
+                $staff->remove_cap( 'edit_published_posts' );
+                $staff->remove_cap( 'delete_posts' );
+                $staff->remove_cap( 'manage_categories' );
+                $staff->remove_cap( 'moderate_comments' );
+                $staff->remove_cap( 'unfiltered_html' );
+                $staff->remove_cap( 'upload_files' );
+                $staff->remove_cap( 'edit_shop_orders' );
+                $staff->remove_cap( 'edit_product' );
+
+                foreach ( $staff_caps as $key => $staff_cap ) {
+                    $staff->remove_cap( $staff_cap );
+                }
+            }
+        }
     }
 
     /**
@@ -211,4 +278,5 @@ class Dokan_Vendor_staff {
 $vendor_staff = Dokan_Vendor_staff::init();
 
 dokan_register_activation_hook( __FILE__, array( 'Dokan_Vendor_staff', 'activate' ) );
+dokan_register_deactivation_hook( __FILE__, array( 'Dokan_Vendor_staff', 'deactivate' ) );
 
