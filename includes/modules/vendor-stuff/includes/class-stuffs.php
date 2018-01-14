@@ -16,7 +16,8 @@ class Dokan_Stuffs {
         add_action( 'dokan_add_stuff_content', array( $this, 'display_errors' ), 10 );
         add_action( 'dokan_add_stuff_content', array( $this, 'add_stuff_content' ), 15 );
         add_action( 'template_redirect', array( $this, 'handle_stuff' ), 10 );
-        add_action( 'init', array( $this, 'delete_stuff' ), 99 );
+        add_action( 'template_redirect', array( $this, 'delete_stuff' ), 99 );
+        add_action( 'template_redirect', array( $this, 'handle_pemission' ), 99 );
     }
 
     /**
@@ -169,10 +170,66 @@ class Dokan_Stuffs {
                     if ( $user_id ) {
                         require_once ABSPATH . 'wp-admin/includes/user.php';
                         wp_delete_user( $user_id );
+
+                        $redirect_url = add_query_arg( array( 'message' => 'success' ), dokan_get_navigation_url( 'stuffs' ) );
+                        wp_redirect( $redirect_url );
+                        exit();
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Handle stuff permissions
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function handle_pemission() {
+        if ( ! isset( $_POST['update_stuff_permission'] ) ) {
+            return;
+        }
+
+        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( isset( $_GET['view'] ) && $_GET['view']  != 'manage_permissions' ) {
+            return;
+        }
+
+        $stuff_id  = ! empty( $_GET['stuff_id'] ) ? $_GET['stuff_id'] : 0;
+        $vendor_id = get_user_meta( $stuff_id, '_vendor_id', true );
+
+        if ( $stuff_id && $vendor_id != get_current_user_id() ) {
+            return;
+        }
+
+        $capabilities = array();
+        $all_cap      = dokan_get_all_caps();
+        $stuff        = new WP_User( $stuff_id );
+
+        if ( ! $stuff ) {
+            return;
+        }
+
+        foreach( $all_cap as $key=>$cap ) {
+            $capabilities = array_merge( $capabilities, $cap );
+        }
+
+        foreach ( $capabilities as $key => $value ) {
+            if ( isset( $_POST[$value] ) && $_POST[$value] ) {
+                $stuff->add_cap( $value );
+            } else {
+                $stuff->remove_cap( $value );
+            }
+        }
+        //view=manage_permissions&action=manage&stuff_id=9
+        $redirect_url = add_query_arg( array( 'view' => 'manage_permissions', 'action' => 'manage', 'stuff_id' => $stuff_id, 'message' => 'success' ), dokan_get_navigation_url( 'stuffs' ) );
+        wp_redirect( $redirect_url );
+
     }
 
 }

@@ -173,7 +173,9 @@ class Dokan_Vendor_Stuff {
         if ( isset( $query_vars['stuffs'] ) ) {
             if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_stuffs' ) {
                 require_once DOKAN_VENDOR_STUFF_DIR . '/templates/add-stuffs.php';
-            } else {
+            } else if ( isset( $_GET['view'] ) && $_GET['view'] == 'manage_permissions' ) {
+                require_once DOKAN_VENDOR_STUFF_DIR . '/templates/permissions.php';
+            }else {
                 require_once DOKAN_VENDOR_STUFF_DIR . '/templates/stuffs.php';
             }
         }

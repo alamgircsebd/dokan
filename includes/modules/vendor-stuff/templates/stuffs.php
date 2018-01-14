@@ -56,6 +56,12 @@
         <article class="dokan-stuffs-area">
 
             <?php
+                if ( isset( $_GET['message'] ) && $_GET['message'] == 'success' ) {
+                    dokan_get_template_part('global/dokan-success', '', array( 'deleted' => true, 'message' => __( 'Permission update successfully', 'dokan' ) ) );
+                }
+            ?>
+
+            <?php
 
                 $seller_id    = get_current_user_id();
                 $paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
@@ -83,6 +89,7 @@
                                         <?php
                                             $delete_url =  wp_nonce_url( add_query_arg( array( 'action' => 'delete_stuff', 'stuff_id' => $stuff->ID ), dokan_get_navigation_url( 'stuffs' ) ), 'stuff_delete_nonce', '_stuff_delete_nonce' );
                                             $edit_url   = add_query_arg( array( 'view' => 'add_stuffs', 'action' => 'edit', 'stuff_id' => $stuff->ID ), dokan_get_navigation_url( 'stuffs' ) );
+                                            $manage_permission_url = add_query_arg( array( 'view' => 'manage_permissions', 'action' => 'manage', 'stuff_id' => $stuff->ID ), dokan_get_navigation_url( 'stuffs' ) );
                                         ?>
 
                                         <?php echo sprintf( '<a href="%s">%s</a>', esc_url( $edit_url ), $stuff->display_name ); ?>
@@ -93,7 +100,11 @@
                                             <?php endif; ?>
 
                                             <?php if ( current_user_can( 'seller' ) ): ?>
-                                                <span class="delete"><a  href="<?php echo $delete_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e( 'Delete', 'dokan' ); ?></a></span>
+                                                <span class="delete"><a  href="<?php echo $delete_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e( 'Delete', 'dokan' ); ?></a> | </span>
+                                            <?php endif ?>
+
+                                            <?php if ( current_user_can( 'seller' ) ): ?>
+                                                <span class="permission"><a  href="<?php echo $manage_permission_url; ?>" ><?php _e( 'Manage Permissions', 'dokan' ); ?></a></span>
                                             <?php endif ?>
                                         </div>
                                     </td>
