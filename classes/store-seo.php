@@ -467,7 +467,7 @@ class Dokan_Pro_Store_Seo {
      * @return void
      */
     function frontend_meta_form() {
-        $current_user   = get_current_user_id();
+        $current_user   = dokan_get_current_user_id();
         $seller_profile = dokan_get_store_info( $current_user );
         $seo_meta       = isset( $seller_profile['store_seo'] ) ? $seller_profile['store_seo'] : array();
 
@@ -543,7 +543,7 @@ class Dokan_Pro_Store_Seo {
             'dokan-seo-twitter-image' => false,
         );
 
-        $current_user   = get_current_user_id();
+        $current_user   = dokan_get_current_user_id();
         $seller_profile = dokan_get_store_info( $current_user );
 
         $seller_profile['store_seo'] = wp_parse_args( $postdata, $default_store_seo );

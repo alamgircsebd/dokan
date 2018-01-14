@@ -20,8 +20,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      * @return void
      */
     public function __construct() {
-        $this->currentuser = get_current_user_id();
-        $this->profile_info = dokan_get_store_info( get_current_user_id() );
+        $this->currentuser = dokan_get_current_user_id();
+        $this->profile_info = dokan_get_store_info( dokan_get_current_user_id() );
 
         add_filter( 'dokan_get_dashboard_settings_nav', array( $this, 'load_settings_menu' ), 10 );
         add_filter( 'dokan_dashboard_settings_heading_title', array( $this, 'load_settings_header' ), 10, 2 );

@@ -153,7 +153,7 @@ class Dokan_Pro_Notice {
      */
     function show_announcement_template() {
         $query = $this->get_announcement_by_users();
-        
+
         $args = array(
             'post_type'      => 'dokan_announcement',
             'post_status'    => 'publish',
@@ -162,11 +162,11 @@ class Dokan_Pro_Notice {
             'meta_key'       => '_announcement_type',
             'meta_value'     => 'all_seller',
         );
-        
+
         $all_seller_posts = new WP_Query( $args );
-        
+
         $notices = array_merge( $all_seller_posts->posts, $query->posts );
-        
+
         dokan_get_template_part( 'announcement/listing-announcement', '', array( 'pro' => true, 'notices' => $notices ) );
 
         wp_reset_postdata();
@@ -275,7 +275,7 @@ class Dokan_Pro_Notice {
             array(
                 'status' => $status,
             ),
-            array( 'post_id' => $notice_id, 'user_id' => get_current_user_id() )
+            array( 'post_id' => $notice_id, 'user_id' => dokan_get_current_user_id() )
         );
     }
 
@@ -330,7 +330,7 @@ class Dokan_Pro_Notice {
         global $wpdb;
 
         $table_name = $wpdb->prefix .'dokan_announcement';
-        $current_user_id = get_current_user_id();
+        $current_user_id = dokan_get_current_user_id();
 
         $where .= " AND da.user_id = $current_user_id AND ( da.status = 'read' OR da.status = 'unread' )";
 

@@ -155,11 +155,21 @@ class Dokan_staffs {
 
         $staff->add_cap( 'dokandar' );
         $staff->add_cap( 'delete_pages' );
+        $staff->add_cap( 'publish_posts' );
+        $staff->add_cap( 'edit_posts' );
+        $staff->add_cap( 'delete_published_posts' );
+        $staff->add_cap( 'edit_published_posts' );
+        $staff->add_cap( 'delete_posts' );
+        $staff->add_cap( 'manage_categories' );
+        $staff->add_cap( 'moderate_comments' );
+        $staff->add_cap( 'unfiltered_html' );
+        $staff->add_cap( 'upload_files' );
+        $staff->add_cap( 'edit_shop_orders' );
+        $staff->add_cap( 'edit_product' );
 
         foreach ( $staff_caps as $key => $staff_cap ) {
             $staff->add_cap( $staff_cap );
         }
-
 
         update_user_meta( $user, 'dokan_enable_selling', 'yes' );
         update_user_meta( $user, '_vendor_id', sanitize_text_field( $_POST['vendor_id'] ) );

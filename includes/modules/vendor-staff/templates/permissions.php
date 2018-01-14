@@ -10,7 +10,7 @@
  */
 ?>
 <?php
-    $is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['stuff_id'] ) ) ? $_GET['stuff_id'] : 0;
+    $is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['staff_id'] ) ) ? $_GET['staff_id'] : 0;
 ?>
 <div class="dokan-dashboard-wrap">
 
@@ -50,7 +50,7 @@
                     ?>
 
                     <span class="left-header-content dokan-right" style="font-size: 14px;">
-                        <a href="<?php echo dokan_get_navigation_url( 'stuffs' ); ?>" class="dokan-right"><i class="fa fa-long-arrow-left" aria-hidden="true"></i> <?php _e( 'Back to all Stuffs', 'dokan' ); ?></a>
+                        <a href="<?php echo dokan_get_navigation_url( 'staffs' ); ?>" class="dokan-right"><i class="fa fa-long-arrow-left" aria-hidden="true"></i> <?php _e( 'Back to all Staff', 'dokan' ); ?></a>
                     </span>
                 </h1>
             </span>
@@ -60,11 +60,11 @@
         <article class="dokan-stuffs-area">
             <?php
             $is_valid = true;
-            $stuff_id = ! empty( $_GET['stuff_id'] ) ? $_GET['stuff_id'] : 0;
-            $stuff_user = new WP_User( $stuff_id );
+            $staff_id = ! empty( $_GET['staff_id'] ) ? $_GET['staff_id'] : 0;
+            $stuff_user = new WP_User( $staff_id );
 
-            $vendor_id = get_user_meta( $stuff_id, '_vendor_id', true );
-            if ( $stuff_id && $vendor_id != get_current_user_id() ) {
+            $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
+            if ( $staff_id && $vendor_id != get_current_user_id() ) {
                 $is_valid = false;
             }
             ?>
@@ -107,7 +107,6 @@
             <?php endif ?>
 
         </article>
-
 
         <?php
 

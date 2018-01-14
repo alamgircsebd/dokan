@@ -963,7 +963,7 @@ class Dokan_Pro_Ajax {
             array(
                 'status' => 'trash',
             ),
-            array( 'id' => $row_id, 'user_id' => get_current_user_id() )
+            array( 'id' => $row_id, 'user_id' => dokan_get_current_user_id() )
         );
 
         ob_start();
@@ -1414,7 +1414,7 @@ class Dokan_Pro_Ajax {
                         'post_title'    => $variation_post_title,
                         'post_content'  => '',
                         'post_status'   => $post_status,
-                        'post_author'   => get_current_user_id(),
+                        'post_author'   => dokan_get_current_user_id(),
                         'post_parent'   => $postdata['post_id'],
                         'post_type'     => 'product_variation',
                         'menu_order'    => $variable_menu_order[ $i ]
@@ -1616,7 +1616,7 @@ class Dokan_Pro_Ajax {
             'post_title'   => 'Product #' . $post_id . ' Variation',
             'post_content' => '',
             'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
+            'post_author'  => dokan_get_current_user_id(),
             'post_parent'  => $post_id,
             'post_type'    => 'product_variation',
             'menu_order'    => $menu_order
@@ -1783,7 +1783,7 @@ class Dokan_Pro_Ajax {
             'post_title'   => 'Product #' . $post_id . ' Variation',
             'post_content' => '',
             'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
+            'post_author'  => dokan_get_current_user_id(),
             'post_parent'  => $post_id,
             'post_type'    => 'product_variation',
             'menu_order'   => -1
@@ -1978,7 +1978,7 @@ class Dokan_Pro_Ajax {
             'post_title'   => 'Product #' . $post_id . ' Variation',
             'post_content' => '',
             'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
+            'post_author'  => dokan_get_current_user_id(),
             'post_parent'  => $post_id,
             'post_type'    => 'product_variation'
         );

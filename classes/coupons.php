@@ -105,7 +105,7 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     public function dokan_coupon_content_render() {
-        if ( !dokan_is_seller_enabled( get_current_user_id() ) ) {
+        if ( ! dokan_is_seller_enabled( get_current_user_id() ) ) {
             echo dokan_seller_not_enabled_notice();
         } else {
 
@@ -393,7 +393,7 @@ class Dokan_Pro_Coupons {
             'post_status'    => array('publish'),
             'posts_per_page' => $this->perpage,
             'offset'         => $offset,
-            'author'         => get_current_user_id(),
+            'author'         => dokan_get_current_user_id(),
             'paged'          => $paged
         );
 
@@ -447,7 +447,7 @@ class Dokan_Pro_Coupons {
     function coupon_products_list() {
         global $wpdb;
 
-        $user_id = get_current_user_id();
+        $user_id = dokan_get_current_user_id();
 
         $sql = "SELECT $wpdb->posts.* FROM $wpdb->posts
                 WHERE $wpdb->posts.post_author IN ( $user_id )
@@ -500,7 +500,7 @@ class Dokan_Pro_Coupons {
         $post_title  = isset( $post->post_title ) ? $post->post_title : '';
         $description = isset( $post->post_content ) ? $post->post_content : '';
 
-        if ( !empty( $post_id ) && !dokan_is_valid_owner( $post_id, get_current_user_id() ) ) {
+        if ( !empty( $post_id ) && !dokan_is_valid_owner( $post_id, dokan_get_current_user_id() ) ) {
             wp_redirect( dokan_get_navigation_url( 'coupons' ) );
             exit();
         }

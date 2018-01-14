@@ -167,7 +167,6 @@ class Dokan_Pro_Shipping {
             return;
         }
 
-
         if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
             return;
         }
@@ -178,9 +177,9 @@ class Dokan_Pro_Shipping {
                 wp_die( __( 'You have no access to save this shipping options', 'dokan' ) );
             }
 
-            $user_id = get_current_user_id();
+            $user_id = dokan_get_current_user_id();
             $s_rates = array();
-            $rates = array();
+            $rates   = array();
 
             if ( isset( $_POST['dps_enable_shipping'] ) ) {
                 update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );
