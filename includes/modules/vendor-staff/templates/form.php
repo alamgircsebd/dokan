@@ -12,11 +12,11 @@ if ( ! empty( $is_edit ) ) {
 ?>
 
 <?php if ( $is_valid ): ?>
-    <form method="post" action="" class="dokan-form-horizontal vendor-stuff register">
-        <input type="hidden"  value="<?php echo $is_edit; ?>" name="stuff_id">
+    <form method="post" action="" class="dokan-form-horizontal vendor-staff register">
+        <input type="hidden"  value="<?php echo $is_edit; ?>" name="staff_id">
         <input type="hidden"  value="<?php echo get_current_user_id(); ?>" name="vendor_id">
 
-        <?php wp_nonce_field( 'vendor_stuff_nonce', 'vendor_stuff_nonce_field' ); ?>
+        <?php wp_nonce_field( 'vendor_staff_nonce', 'vendor_staff_nonce_field' ); ?>
 
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label" for="title"><?php _e( 'First Name', 'dokan' ); ?><span class="required"> *</span></label>
@@ -60,14 +60,14 @@ if ( ! empty( $is_edit ) ) {
 
         <div class="dokan-form-group">
             <div class="dokan-w5 dokan-text-left" style="margin-left:25%">
-                <input type="submit" id="" name="stuff_creation" value="<?php echo $button_name; ?>" class="dokan-btn dokan-btn-danger dokan-btn-theme">
+                <input type="submit" id="" name="staff_creation" value="<?php echo $button_name; ?>" class="dokan-btn dokan-btn-danger dokan-btn-theme">
             </div>
         </div>
     </form>
 
 <?php else: ?>
     <div class="dokan-error">
-        <?php echo sprintf( '<p>%s <a href="%s">%s</a></p>', __( 'Invalid Stuff. Please visit', 'dokan' ), esc_url( dokan_get_navigation_url( 'stuffs' ) ), __( 'Back to list', 'dokan' ) ); ?>
+        <?php echo sprintf( '<p>%s <a href="%s">%s</a></p>', __( 'Invalid staff. Please visit', 'dokan' ), esc_url( dokan_get_navigation_url( 'staffs' ) ), __( 'Back to list', 'dokan' ) ); ?>
     </div>
 <?php endif ?>
 

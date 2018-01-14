@@ -1,8 +1,8 @@
 <?php
 /**
- *  Dokan Dashboard Stuffs Template
+ *  Dokan Dashboard staffs Template
  *
- *  Load Stuffs related template
+ *  Load staffs related template
  *
  *  @since 2.4
  *
@@ -10,7 +10,7 @@
  */
 ?>
 <?php
-    $is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['stuff_id'] ) ) ? $_GET['stuff_id'] : 0;
+    $is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['staff_id'] ) ) ? $_GET['staff_id'] : 0;
 ?>
 <div class="dokan-dashboard-wrap">
 
@@ -24,22 +24,22 @@
          *  @since 2.4
          */
         do_action( 'dokan_dashboard_content_before' );
-        do_action( 'dokan_stuffs_content_before' );
+        do_action( 'dokan_staffs_content_before' );
 
     ?>
 
-    <div class="dokan-dashboard-content dokan-stuffs-content">
+    <div class="dokan-dashboard-content dokan-staffs-content">
 
         <?php
 
             /**
-             *  dokan_stuffs_content_inside_before hook
+             *  dokan_staffs_content_inside_before hook
              *
              *  @hooked show_seller_enable_message
              *
              *  @since 2.4
              */
-            do_action( 'dokan_add_stuffs_content_inside_before' );
+            do_action( 'dokan_add_staffs_content_inside_before' );
         ?>
 
         <header class="dokan-dashboard-header">
@@ -47,9 +47,9 @@
                 <h1 class="entry-title">
                     <?php
                         if ( !$is_edit ) {
-                            _e( 'Add New Stuff', 'dokan' );
+                            _e( 'Add New Staff', 'dokan' );
                         } else {
-                            _e( 'Edit Stuff', 'dokan' );
+                            _e( 'Edit Staff', 'dokan' );
                         }
                     ?>
                 </h1>
@@ -57,9 +57,9 @@
             <div class="dokan-clearfix"></div>
         </header><!-- .entry-header -->
 
-        <article class="dokan-stuffs-area">
+        <article class="dokan-staffs-area">
             <?php
-                do_action( 'dokan_add_stuff_content' );
+                do_action( 'dokan_add_staff_content' );
             ?>
         </article>
 
@@ -67,11 +67,11 @@
         <?php
 
             /**
-             *  dokan_Stuffs_content_inside_after hook
+             *  dokan_staffs_content_inside_after hook
              *
              *  @since 2.4
              */
-            do_action( 'dokan_Stuffs_content_inside_after' );
+            do_action( 'dokan_staffs_content_inside_after' );
         ?>
 
     </div> <!-- #primary .content-area -->
@@ -80,12 +80,12 @@
 
         /**
          *  dokan_dashboard_content_after hook
-         *  dokan_Stuffs_content_after hook
+         *  dokan_staffs_content_after hook
          *
          *  @since 2.4
          */
         do_action( 'dokan_dashboard_content_after' );
-        do_action( 'dokan_Stuffs_content_after' );
+        do_action( 'dokan_staffs_content_after' );
 
     ?>
 

@@ -1,8 +1,8 @@
 <?php
 /*
-  Plugin Name: Vendor Stuff Manager
+  Plugin Name: Vendor staff Manager
   Plugin URI: https://wedevs.com/
-  Description: A plugin for manage store via vendor stuffs
+  Description: A plugin for manage store via vendor staffs
   Version: 1.0
   Author: weDevs
   Author URI: https://wedevs.com/
@@ -40,14 +40,14 @@ if ( !defined( 'ABSPATH' ) )
     exit;
 
 /**
- * Dokan_Vendor_Stuff class
+ * Dokan_Vendor_staff class
  *
- * @class Dokan_Vendor_Stuff The class that holds the entire Dokan_Vendor_Stuff plugin
+ * @class Dokan_Vendor_staff The class that holds the entire Dokan_Vendor_staff plugin
  */
-class Dokan_Vendor_Stuff {
+class Dokan_Vendor_staff {
 
     /**
-     * Constructor for the Dokan_Vendor_Stuff class
+     * Constructor for the Dokan_Vendor_staff class
      *
      * Sets up all the appropriate hooks and actions
      * within our plugin.
@@ -60,21 +60,21 @@ class Dokan_Vendor_Stuff {
         $this->includes();
         $this->initiate();
 
-        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_stuffs_page' ), 15 );
+        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_staffs_page' ), 15 );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
-        add_action( 'dokan_load_custom_template', array( $this, 'load_stuff_template' ), 16 );
+        add_action( 'dokan_load_custom_template', array( $this, 'load_staff_template' ), 16 );
     }
 
     /**
-     * Initializes the Dokan_Vendor_Stuff() class
+     * Initializes the Dokan_Vendor_staff() class
      *
-     * Checks for an existing Dokan_Vendor_Stuff() instance
+     * Checks for an existing Dokan_Vendor_staff() instance
      * and if it doesn't find one, creates it.
      */
     public static function init() {
         static $instance = false;
         if ( !$instance ) {
-            $instance = new Dokan_Vendor_Stuff();
+            $instance = new Dokan_Vendor_staff();
         }
 
         return $instance;
@@ -88,8 +88,8 @@ class Dokan_Vendor_Stuff {
      * @return void
      */
     public function define_constant() {
-        define( 'DOKAN_VENDOR_STUFF_DIR', dirname( __FILE__ ) );
-        define( 'DOKAN_VENDOR_STUFF_INC_DIR', DOKAN_VENDOR_STUFF_DIR . '/includes' );
+        define( 'DOKAN_VENDOR_staff_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_VENDOR_staff_INC_DIR', DOKAN_VENDOR_staff_DIR . '/includes' );
     }
 
     /**
@@ -100,8 +100,8 @@ class Dokan_Vendor_Stuff {
      * @return void
      */
     public function includes() {
-        require_once DOKAN_VENDOR_STUFF_INC_DIR . '/functions.php';
-        require_once DOKAN_VENDOR_STUFF_INC_DIR . '/class-stuffs.php';
+        require_once DOKAN_VENDOR_staff_INC_DIR . '/functions.php';
+        require_once DOKAN_VENDOR_staff_INC_DIR . '/class-staffs.php';
     }
 
     /**
@@ -112,7 +112,7 @@ class Dokan_Vendor_Stuff {
      * @return void
      */
     public function initiate() {
-        new Dokan_Stuffs();
+        new Dokan_staffs();
     }
 
     /**
@@ -142,19 +142,18 @@ class Dokan_Vendor_Stuff {
             $wp_roles = new WP_Roles();
         }
 
-        add_role( 'vendor_stuff', __( 'Vendor Stuff', 'dokan' ), array(
+        add_role( 'vendor_staff', __( 'Vendor staff', 'dokan' ), array(
             'read'     => true,
-            'dokandar' => true
         ) );
     }
 
     /**
-     * Add Stuffs endpoint to the end of Dashboard
+     * Add staffs endpoint to the end of Dashboard
      *
      * @param array $query_var
      */
     function add_endpoint( $query_var ) {
-        $query_var['stuffs'] = 'stuffs';
+        $query_var['staffs'] = 'staffs';
 
         return $query_var;
     }
@@ -168,15 +167,19 @@ class Dokan_Vendor_Stuff {
      *
      * @return string
      */
-    function load_stuff_template( $query_vars ) {
+    function load_staff_template( $query_vars ) {
 
-        if ( isset( $query_vars['stuffs'] ) ) {
-            if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_stuffs' ) {
-                require_once DOKAN_VENDOR_STUFF_DIR . '/templates/add-stuffs.php';
-            } else if ( isset( $_GET['view'] ) && $_GET['view'] == 'manage_permissions' ) {
-                require_once DOKAN_VENDOR_STUFF_DIR . '/templates/permissions.php';
-            }else {
-                require_once DOKAN_VENDOR_STUFF_DIR . '/templates/stuffs.php';
+        if ( isset( $query_vars['staffs'] ) ) {
+            if ( ! dokan_is_seller_enabled( get_current_user_id() ) ) {
+                wp_die( __( 'Access Denied', 'dokan' ) );
+            } else {
+                if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_staffs' ) {
+                    require_once DOKAN_VENDOR_staff_DIR . '/templates/add-staffs.php';
+                } else if ( isset( $_GET['view'] ) && $_GET['view'] == 'manage_permissions' ) {
+                    require_once DOKAN_VENDOR_staff_DIR . '/templates/permissions.php';
+                }else {
+                    require_once DOKAN_VENDOR_staff_DIR . '/templates/staffs.php';
+                }
             }
         }
     }
@@ -184,18 +187,18 @@ class Dokan_Vendor_Stuff {
 
 
     /**
-     * Add Stuffs page in seller dashboard
+     * Add staffs page in seller dashboard
      *
      * @param array $urls
      *
      * @return array $urls
      */
-    public function add_stuffs_page( $urls ) {
+    public function add_staffs_page( $urls ) {
         if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'seller' ) ) {
-            $urls['stuffs'] = array(
-                'title' => __( 'Stuffs', 'dokan' ),
+            $urls['staffs'] = array(
+                'title' => __( 'Staffs', 'dokan' ),
                 'icon'  => '<i class="fa fa-users"></i>',
-                'url'   => dokan_get_navigation_url( 'stuffs' ),
+                'url'   => dokan_get_navigation_url( 'staffs' ),
                 'pos'   => 172
             );
         }
@@ -205,7 +208,7 @@ class Dokan_Vendor_Stuff {
 
 }
 
-$vendor_stuff = Dokan_Vendor_Stuff::init();
+$vendor_staff = Dokan_Vendor_staff::init();
 
-dokan_register_activation_hook( __FILE__, array( 'Dokan_Vendor_Stuff', 'activate' ) );
+dokan_register_activation_hook( __FILE__, array( 'Dokan_Vendor_staff', 'activate' ) );
 
