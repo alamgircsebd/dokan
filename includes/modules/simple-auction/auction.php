@@ -49,6 +49,9 @@ class Dokan_Auction {
 
         $this->includes();
 
+        // Hooking all caps
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'dokan_seller_meta_fields', array( $this, 'add_admin_user_options' ) );
@@ -125,7 +128,36 @@ class Dokan_Auction {
      * @return void
      */
     public static function activate() {
-        set_transient( 'dokan', 1 );
+        global $wp_roles;
+        set_transient( 'dokan-auction', 1 );
+
+        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
+
+        $wp_roles->add_cap( 'seller', 'dokan_view_tools_menu' );
+        $wp_roles->add_cap( 'administrator', 'dokan_view_tools_menu' );
+        $wp_roles->add_cap( 'shop_manager', 'dokan_view_tools_menu' );
+
+    }
+
+    /**
+     * Add capabilities
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_capabilities( $capabilities ) {
+        $capabilities['menu'][] = 'dokan_view_auction_menu';
+
+        $capabilities['auction'] = array(
+            'dokan_add_auction_product',
+            'dokan_edit_auction_product',
+            'dokan_delete_auction_product',
+        );
+
+        return $capabilities;
     }
 
     /**
@@ -301,9 +333,9 @@ class Dokan_Auction {
      * @return void
      */
     function add_rewrite_rules() {
-        if ( get_transient( 'dokan' ) ) {
+        if ( get_transient( 'dokan-auction' ) ) {
             flush_rewrite_rules( true );
-            delete_transient( 'dokan' );
+            delete_transient( 'dokan-auction' );
         }
     }
 

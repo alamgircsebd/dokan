@@ -116,7 +116,7 @@ class Dokan_Product_Importer {
             add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 10 );
         }
 
-        // add_filter( 'dokan_dashboard_template_render', array( $this, 'importer_page_template'),99 );
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'dokan_after_add_product_btn', array( $this, 'render_import_export_button' ) );
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
     }
@@ -161,6 +161,16 @@ class Dokan_Product_Importer {
      * Nothing being called here yet.
      */
     public static function activate() {
+        global $wp_roles;
+
+        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
+
+        $wp_roles->add_cap( 'seller', 'dokan_view_tools_menu' );
+        $wp_roles->add_cap( 'administrator', 'dokan_view_tools_menu' );
+        $wp_roles->add_cap( 'shop_manager', 'dokan_view_tools_menu' );
+
         set_transient( 'dokan-export-import', 1 );
 
         if ( get_option( 'dokan_importer_page_created' ) ) {
@@ -229,7 +239,6 @@ class Dokan_Product_Importer {
      * @param array $query_var
      */
     function add_endpoint( $query_var ) {
-
         $query_var['tools'] = 'tools';
 
         return $query_var;
@@ -241,6 +250,10 @@ class Dokan_Product_Importer {
      * @return array $urls
      */
     public function add_importer_page( $urls ) {
+
+        if ( ! current_user_can( 'dokan_view_tools_menu' ) ) {
+            return $urls;
+        }
 
         if ( dokan_is_seller_enabled( get_current_user_id() ) ) {
             $installed_version = get_option( 'dokan_theme_version' );
@@ -282,36 +295,53 @@ class Dokan_Product_Importer {
 
         if ( isset( $query_vars['tools'] ) ) {
 
-            switch ( $query_vars['tools'] ) {
+            if ( ! current_user_can( 'dokan_view_tools_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this tool page', 'dokan' ) ) );
+            } else {
+                switch ( $query_vars['tools'] ) {
 
-                case 'csv-import':
-                    include_once( plugin_dir_path( __FILE__ ) . 'includes/import/class-wc-product-csv-importer.php' );
-                    include_once( plugin_dir_path( __FILE__ ) . 'includes/importers/class-wc-product-csv-importer-controller.php' );
+                    case 'csv-import':
+                        include_once( plugin_dir_path( __FILE__ ) . 'includes/import/class-wc-product-csv-importer.php' );
+                        include_once( plugin_dir_path( __FILE__ ) . 'includes/importers/class-wc-product-csv-importer-controller.php' );
 
-                    $importer = new WC_Product_CSV_Importer_Controller();
-                    $importer->dispatch();
-                    break;
+                        $importer = new WC_Product_CSV_Importer_Controller();
+                        $importer->dispatch();
+                        break;
 
-                case 'csv-export':
-                    wp_localize_script( 'wc-product-export', 'wc_product_export_params', array(
-                        'export_nonce' => wp_create_nonce( 'wc-product-export' ),
-                    ) );
-                    $this->product_exporter();
+                    case 'csv-export':
+                        wp_localize_script( 'wc-product-export', 'wc_product_export_params', array(
+                            'export_nonce' => wp_create_nonce( 'wc-product-export' ),
+                        ) );
+                        $this->product_exporter();
 
-                    break;
+                        break;
 
-                default:
-                    $installed_version = get_option( 'dokan_theme_version' );
-                    if ( $installed_version >= '2.4' ) {
-                        $template = dirname( __FILE__ ) . '/templates/template_importer_new.php';
-                    } else {
-                        $template = dirname( __FILE__ ) . '/templates/template_importer.php';
-                    }
-                    require_once $template;
+                    default:
+                        $installed_version = get_option( 'dokan_theme_version' );
+                        if ( $installed_version >= '2.4' ) {
+                            $template = dirname( __FILE__ ) . '/templates/template_importer_new.php';
+                        } else {
+                            $template = dirname( __FILE__ ) . '/templates/template_importer.php';
+                        }
+                        require_once $template;
 
-                    break;
+                        break;
+                }
             }
         }
+    }
+
+    /**
+     * Add capabilities
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_capabilities( $capabilities ) {
+        $capabilities['menu'][] = 'dokan_view_tools_menu';
+
+        return $capabilities;
     }
 
     /**
@@ -1220,10 +1250,12 @@ class Dokan_Product_Importer {
      */
     public function render_import_export_button() {
         ?>
-        <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ) ?>" class="dokan-btn dokan-btn-theme">
-            <?php _e( 'Import', 'dokan' ) ?>
-        </a>
-        <?php if ( apply_filters( 'dokan_csv_export_enabled', true ) ) { ?>
+        <?php if ( current_user_can( 'dokan_import_product' ) ): ?>
+            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ) ?>" class="dokan-btn dokan-btn-theme">
+                <?php _e( 'Import', 'dokan' ) ?>
+            </a>
+        <?php endif ?>
+        <?php if ( current_user_can( 'dokan_export_product' ) && apply_filters( 'dokan_csv_export_enabled', true ) ) { ?>
             <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ) ?>" class="dokan-btn dokan-btn-theme">
                 <?php _e( 'Export', 'dokan' ) ?>
             </a>

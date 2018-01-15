@@ -96,13 +96,14 @@
                     }
                     ?>
                     <?php wp_nonce_field( 'dokan_manage_staff_permission', '_dokan_manage_staff_permission_nonce' ); ?>
+                    <div class="dokan-clearfix"></div>
                     <hr>
                     <input type="submit" class="dokan-right dokan-btn dokan-btn-large dokan-btn-theme" name="update_staff_permission" value="<?php _e( 'Update permission', 'dokan' ) ?>">
                     <div class="dokan-clearfix"></div>
                 </form>
             <?php else: ?>
                 <div class="dokan-error">
-                    <?php echo sprintf( '<p>%s <a href="%s">%s</a></p>', __( 'Invalid Stuff. Please visit', 'dokan' ), esc_url( dokan_get_navigation_url( 'stuffs' ) ), __( 'Back to list', 'dokan' ) ); ?>
+                    <?php echo sprintf( '<p>%s <a href="%s">%s</a></p>', __( 'Invalid Staff. Please visit', 'dokan' ), esc_url( dokan_get_navigation_url( 'staffs' ) ), __( 'Back to list', 'dokan' ) ); ?>
                 </div>
             <?php endif ?>
 
