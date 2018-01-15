@@ -222,6 +222,10 @@ class Dokan_staffs {
             return;
         }
 
+        if ( ! wp_verify_nonce( $_POST['_dokan_manage_staff_permission_nonce'], 'dokan_manage_staff_permission' ) ) {
+            return;
+        }
+
         if ( isset( $_GET['view'] ) && $_GET['view']  != 'manage_permissions' ) {
             return;
         }

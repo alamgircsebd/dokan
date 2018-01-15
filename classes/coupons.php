@@ -270,6 +270,7 @@ class Dokan_Pro_Coupons {
                 'post_content' => $_POST['description'],
                 'post_status'  => 'publish',
                 'post_type'    => 'shop_coupon',
+                'post_author'  => dokan_get_current_user_id()
             );
 
             $post_id = wp_insert_post( $post );
@@ -283,6 +284,7 @@ class Dokan_Pro_Coupons {
                 'post_content' => $_POST['description'],
                 'post_status'  => 'publish',
                 'post_type'    => 'shop_coupon',
+                'post_author'  => dokan_get_current_user_id()
             );
             $post_id = wp_update_post( $post );
             $message = 'coupon_update';

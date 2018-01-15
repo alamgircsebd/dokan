@@ -237,8 +237,8 @@ class Dokan_Vendor_staff {
     function load_staff_template( $query_vars ) {
 
         if ( isset( $query_vars['staffs'] ) ) {
-            if ( ! dokan_is_seller_enabled( get_current_user_id() ) ) {
-                wp_die( __( 'Access Denied', 'dokan' ) );
+            if ( ! current_user_can( 'seller' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_staffs' ) {
                     require_once DOKAN_VENDOR_staff_DIR . '/templates/add-staffs.php';

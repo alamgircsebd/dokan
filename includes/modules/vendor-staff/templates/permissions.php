@@ -95,9 +95,9 @@
                         $i++;
                     }
                     ?>
-                    <?php wp_nonce_field( 'dokan_manage_stuff_permission', '_dokan_manage_stuff_permission_nonce' ); ?>
+                    <?php wp_nonce_field( 'dokan_manage_staff_permission', '_dokan_manage_staff_permission_nonce' ); ?>
                     <hr>
-                    <input type="submit" class="dokan-right dokan-btn dokan-btn-large dokan-btn-theme" name="update_stuff_permission" value="<?php _e( 'Update permission', 'dokan' ) ?>">
+                    <input type="submit" class="dokan-right dokan-btn dokan-btn-large dokan-btn-theme" name="update_staff_permission" value="<?php _e( 'Update permission', 'dokan' ) ?>">
                     <div class="dokan-clearfix"></div>
                 </form>
             <?php else: ?>
