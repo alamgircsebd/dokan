@@ -14,9 +14,9 @@
         foreach ( $notices as $notice ) {
             $notice_url =  trailingslashit( dokan_get_navigation_url( 'single-announcement' ).''.$notice->ID );
             ?>
-            <div class="dokan-announcement-wrapper-item <?php echo ( $notice->status == 'unread' ) ? 'dokan-announcement-uread' : '' ?>">
+            <div class="dokan-announcement-wrapper-item <?php echo ( $notice->post_status == 'unread' ) ? 'dokan-announcement-uread' : '' ?>">
                 <div class="announcement-action">
-                    <a href="#" class="remove_announcement" data-notice_row = <?php echo $notice->id; ?>><i class="fa fa-times"></i></a>
+                    <a href="#" class="remove_announcement" data-notice_row = <?php echo $notice->ID; ?>><i class="fa fa-times"></i></a>
                 </div>
                 <div class="dokan-annnouncement-date dokan-left">
                     <div class="announcement-day"><?php echo date('d', strtotime( $notice->post_date ) ) ?></div>
