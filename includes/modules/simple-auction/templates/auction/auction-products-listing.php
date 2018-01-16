@@ -22,9 +22,11 @@
                 <div class="product-listing-top dokan-clearfix">
                     <?php  dokan_auction_product_listing_status_filter(); ?>
 
-                    <span class="dokan-add-product-link">
-                        <a href="<?php echo dokan_get_navigation_url( 'new-auction-product' ); ?>" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add New Auction Product', 'dokan' ); ?></a>
-                    </span>
+                    <?php if ( current_user_can( 'dokan_add_auction_product' ) ): ?>
+                        <span class="dokan-add-product-link">
+                            <a href="<?php echo dokan_get_navigation_url( 'new-auction-product' ); ?>" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add New Auction Product', 'dokan' ); ?></a>
+                        </span>
+                    <?php endif ?>
                 </div>
 
                 <?php dokan_product_dashboard_errors(); ?>
@@ -51,11 +53,10 @@
                         $post_statuses = array( 'publish', 'draft', 'pending');
 
                         $args = array(
-                            //'post_type' => 'product',
                             'post_status'         => $post_statuses,
                             'ignore_sticky_posts' => 1,
                             'orderby'             => 'post_date',
-                            'author'              => get_current_user_id(),
+                            'author'              => dokan_get_current_user_id(),
                             'order'               => 'DESC',
                             'posts_per_page'      => -1,
                             'tax_query'           => array( array( 'taxonomy' => 'product_type', 'field' => 'slug', 'terms' => 'auction' ) ),
@@ -82,14 +83,24 @@
                                 ?>
                                 <tr<?php echo $tr_class; ?>>
                                     <td>
-                                        <a href="<?php echo $edit_url ?>"><?php echo $product->get_image(); ?></a>
+                                        <?php if ( current_user_can( 'dokan_edit_auction_product' ) ): ?>
+                                            <a href="<?php echo $edit_url ?>"><?php echo $product->get_image(); ?></a>
+                                        <?php else: ?>
+                                            <a href="#"><?php echo $product->get_image(); ?></a>
+                                        <?php endif ?>
                                     </td>
                                     <td>
                                         <p><a href="<?php echo $edit_url ?>"><?php echo $product->get_title(); ?></a></p>
 
                                         <div class="row-actions">
-                                            <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
-                                            <span class="delete"><a onclick="return confirm('Are you sure?');" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-delete-auction-product', 'product_id' => $post->ID ), dokan_get_navigation_url('auction') ), 'dokan-delete-auction-product' ); ?>"><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                            <?php if ( current_user_can( 'dokan_edit_auction_product' ) ): ?>
+                                                <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
+                                            <?php endif ?>
+
+                                            <?php if ( current_user_can( 'dokan_delete_auction_product' ) ): ?>
+                                                <span class="delete"><a onclick="return confirm('Are you sure?');" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-delete-auction-product', 'product_id' => $post->ID ), dokan_get_navigation_url('auction') ), 'dokan-delete-auction-product' ); ?>"><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                            <?php endif ?>
+
                                             <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                         </div>
                                     </td>

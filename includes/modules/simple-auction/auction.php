@@ -135,9 +135,18 @@ class Dokan_Auction {
             $wp_roles = new WP_Roles();
         }
 
-        $wp_roles->add_cap( 'seller', 'dokan_view_tools_menu' );
-        $wp_roles->add_cap( 'administrator', 'dokan_view_tools_menu' );
-        $wp_roles->add_cap( 'shop_manager', 'dokan_view_tools_menu' );
+        $all_cap = array(
+            'dokan_view_auction_menu',
+            'dokan_add_auction_product',
+            'dokan_edit_auction_product',
+            'dokan_delete_auction_product'
+        );
+
+        foreach ( $all_cap as $key => $cap ) {
+            $wp_roles->add_cap( 'seller', $cap );
+            $wp_roles->add_cap( 'administrator', $cap );
+            $wp_roles->add_cap( 'shop_manager', $cap );
+        }
 
     }
 
@@ -296,6 +305,9 @@ class Dokan_Auction {
      * @param array $urls
      */
     function add_auction_dashboad_menu( $urls ) {
+        if ( ! current_user_can( 'dokan_view_auction_menu' ) ) {
+            return $urls;
+        }
 
         if ( dokan_is_seller_enabled( get_current_user_id() ) && !dokan_is_seller_auction_disabled( get_current_user_id() ) ) {
             $urls['auction'] = array(
@@ -364,13 +376,22 @@ class Dokan_Auction {
      * @return void
      */
     function load_dokan_auction_template( $query_vars ) {
+        if ( ! current_user_can( 'dokan_view_auction_menu' ) ) {
+            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this auction page', 'dokan' ) ) );
+            return;
+        }
+
         if ( isset( $query_vars['auction'] ) ) {
             dokan_get_template_part( 'auction/template-auction', '', array( 'is_auction' => true ) );
             return;
         }
 
         if ( isset( $query_vars['new-auction-product'] ) ) {
-            dokan_get_template_part( 'auction/new-auction-product', '', array( 'is_auction' => true ) );
+            if ( ! current_user_can( 'dokan_add_auction_product' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+            } else {
+                dokan_get_template_part( 'auction/new-auction-product', '', array( 'is_auction' => true ) );
+            }
             return;
         }
     }

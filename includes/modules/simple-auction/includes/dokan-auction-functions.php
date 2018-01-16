@@ -73,7 +73,7 @@ function dokan_count_auction_posts( $post_type, $user_id ) {
 function dokan_auction_product_listing_status_filter() {
     $permalink = dokan_get_navigation_url( 'auction' );
     $status_class = isset( $_GET['post_status'] ) ? $_GET['post_status'] : 'all';
-    $post_counts = dokan_count_auction_posts( 'product', get_current_user_id() );
+    $post_counts = dokan_count_auction_posts( 'product', dokan_get_current_user_id() );
     ?>
     <ul class="dokan-listing-filter dokan-left subsubsub">
         <li<?php echo $status_class == 'all' ? ' class="active"' : ''; ?>>
