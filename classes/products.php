@@ -81,7 +81,9 @@ class Dokan_Pro_Products {
      * @return void
      */
     public function load_product_edit_template() {
-        dokan_get_template_part( 'products/new-product-single' );
+        if ( current_user_can( 'dokan_edit_product' ) ) {
+            dokan_get_template_part( 'products/new-product-single' );
+        }
     }
 
     /**
