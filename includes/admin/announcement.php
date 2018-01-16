@@ -44,7 +44,7 @@ class Dokan_Announcement {
         if ( $screen->post_type != $this->post_type ) {
             return;
         }
-        $help_text = sprintf( __( 'Learn More: <a target="_blank" href="%s">How to Create Announcement in Dokan</a>', 'dokan' ), 'https://wedevs.com/docs/dokan/tutorials/how-to-create-an-announcement/' );
+        $help_text = sprintf( __( 'Learn More: <a target="_blank" href="%s">How to Create Announcement in Dokan</a>', 'dokan' ), 'https://wedevs.com/docs/dokan/announcements/' );
         ?>
         <script>
             jQuery(function($) {

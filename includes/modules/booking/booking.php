@@ -103,6 +103,8 @@ class Dokan_WC_Booking {
         add_action( 'shutdown', array( $this, 'add_seller_manage_cap' ) );
         add_action( 'wp_ajax_dokan-wc-booking-confirm', array( $this, 'mark_booking_confirmed' ) );
         add_action( 'woocommerce_after_order_itemmeta', array( $this, 'booking_display' ), 10, 3 );
+        // booking person type delete
+        add_action( 'wp_ajax_woocommerce_remove_bookable_person', array( $this, 'dokan_remove_bookable_person' ) );
 
         // booking page filters
         add_filter( 'dokan_booking_menu', array( $this, 'dokan_get_bookings_menu' ) );
@@ -1097,6 +1099,22 @@ class Dokan_WC_Booking {
                     <?php
             }
         }
+    }
+
+    /**
+     * Delete bookable person type
+     * @since 2.7.3
+     */
+    public function dokan_remove_bookable_person() {
+        if ( ! isset( $_POST['action'] ) && $_POST['action'] != 'woocommerce_remove_bookable_person' ) {
+            return;
+        }
+        if ( ! wp_verify_nonce( $_POST['security'], 'delete-bookable-person' ) ) {
+            return;
+        }
+
+        wp_delete_post( $_POST['person_id'] );
+        exit;
     }
 }
 
