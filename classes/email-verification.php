@@ -93,9 +93,11 @@ Class Dokan_Email_Verification {
     function check_verification( $redirect, $user = array() ) {
 
         $user_id = get_current_user_id();
-
+        $notice = dokan_get_option( 'registration_notice', 'dokan_email_verification' );
+        
         if ( !empty( $user ) ) {
             $user_id = $user->ID;
+            $notice = dokan_get_option( 'login_notice', 'dokan_email_verification' );
         }
 
         $pending_verification = get_user_meta( $user_id, '_dokan_email_pending_verification', true );
@@ -106,7 +108,7 @@ Class Dokan_Email_Verification {
 
         wp_logout();
 
-        wc_add_notice( "Please Check your Email and complete Email Verification to Login." );
+        wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
         do_action( 'woocommerce_set_cart_cookies', true );
 
         return $this->base_url;
@@ -135,7 +137,9 @@ Class Dokan_Email_Verification {
         delete_user_meta( $user_id, '_dokan_email_pending_verification' );
         delete_user_meta( $user_id, '_dokan_email_verification_key' );
         
-        wc_add_notice( "Account Activated successfully" );
+        $notice = dokan_get_option( 'activation_notice', 'dokan_email_verification' );
+        
+        wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
         do_action( 'woocommerce_set_cart_cookies',  true );
         
         dokan_redirect_login();
@@ -164,7 +168,7 @@ Class Dokan_Email_Verification {
 
         $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID ), $this->base_url );
         
-        $message = sprintf( __( "<p>To Verify your Email <a href='%s'>Click Here</a></p>", 'dokan' ), $verification_link );
+        $message = sprintf( __( "<p><b>To Verify your Email <a href='%s'>Click Here</a></b></p>", 'dokan' ), $verification_link );
         
         echo apply_filters( 'dokan_email_verification_email_text' , $message, $verification_link );
     }
@@ -200,7 +204,30 @@ Class Dokan_Email_Verification {
                 'label' => __( 'Enable Email Verification', 'dokan' ),
                 'type'  => "checkbox",
                 'desc'  => __( 'Enabling this will add Email verification after registration form to allow users to verify their emails', 'dokan' ),
-            )
+            ),
+            'registration_notice' => array(
+                'name'  => 'registration_notice',
+                'label' => __( 'Registration Notice', 'dokan' ),
+                'type'  => "text",
+                'desc'  => __( 'This notice will be shown after a user has registered with pending email verification.', 'dokan' ),
+                'default' => __( 'Please Check your Email and complete Email Verification to Login.', 'dokan' ),
+            ),
+            'login_notice' => array(
+                'name'  => 'login_notice',
+                'label' => __( 'Login Notice', 'dokan' ),
+                'type'  => "text",
+                'desc'  => __( 'This notice will be shown when a user tries to login without email verification.', 'dokan' ),
+                'default' => __( 'Please Check your Email and complete Email Verification to Login.', 'dokan' ),
+            ),
+            'activation_notice' => array(
+                'name'  => 'activation_notice',
+                'label' => __( 'Activation Notice', 'dokan' ),
+                'type'  => "text",
+                'desc'  => __( 'This notice will be shown when a user succesfully completes email verification.', 'dokan' ),
+                'default' => __( 'Email verification is complete, you can now login.', 'dokan' ),
+            ),
+            
+            
         );
 
         return $settings_fields;
