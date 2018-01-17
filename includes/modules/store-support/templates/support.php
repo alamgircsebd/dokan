@@ -4,7 +4,7 @@ $dss = Dokan_Store_Support::init();
 $topic_id = get_query_var( 'support' );
 
 if( is_numeric( $topic_id ) ) {
-    $topic = $dss ->get_single_topic( $topic_id, get_current_user_id() );
+    $topic = $dss ->get_single_topic( $topic_id, dokan_get_current_user_id()() );
 }
 ?>
 
@@ -36,7 +36,7 @@ if( is_numeric( $topic_id ) ) {
 
         <?php $dss->support_topic_status_list() ?>
         <?php
-            $dss->print_support_topics_by_seller( get_current_user_id() );
+            $dss->print_support_topics_by_seller( dokan_get_current_user_id()() );
         } else {
             $dss->print_single_topic( $topic );
         }

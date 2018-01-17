@@ -339,7 +339,7 @@ class Dokan_Store_Support {
         $seller_id = $seller_id == "" ? ( ( isset( $_POST['store_id'] ) ) ? $_POST['store_id'] : 0 ) : $seller_id;
         wp_get_current_user();
 
-        $customer_orders = apply_filters( 'dokan_store_support_order_id_select_in_form', dokan_get_customer_orders_by_seller( get_current_user_id() , $seller_id ) );
+        $customer_orders = apply_filters( 'dokan_store_support_order_id_select_in_form', dokan_get_customer_orders_by_seller( dokan_get_current_user_id()() , $seller_id ) );
 
         ob_start();
         ?>
@@ -429,7 +429,7 @@ class Dokan_Store_Support {
             'post_title'     => $postdata['dokan-support-subject'],
             'post_content'   => $postdata['dokan-support-msg'],
             'post_status'    => 'open',
-            'post_author'    => get_current_user_id(),
+            'post_author'    => dokan_get_current_user_id()(),
             'post_type'      => 'dokan_store_support',
             'comment_status' => 'open'
         );
@@ -500,7 +500,7 @@ class Dokan_Store_Support {
 
         if ( dokan_is_seller_enabled( get_current_user_id() ) ) {
 
-            $counts = $this->topic_count( get_current_user_id() );
+            $counts = $this->topic_count( dokan_get_current_user_id()() );
             $count  = 0;
             if ( $counts ) {
                 $count = wp_list_pluck( $counts, 'count', 'post_status' );
@@ -1129,7 +1129,7 @@ class Dokan_Store_Support {
             return;
         }
 
-        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+        if ( ! dokan_is_user_seller( dokan_get_current_user_id()() ) ) {
             return;
         }
 
@@ -1384,10 +1384,10 @@ class Dokan_Store_Support {
     function support_topic_status_list( $seller = true ){
 
         if ( $seller ){
-            $counts = $this->topic_count( get_current_user_id() );
+            $counts = $this->topic_count( dokan_get_current_user_id()() );
             $redir_url = dokan_get_navigation_url( 'support' );
         } else {
-            $counts = $this->topic_count_by_customer( get_current_user_id() );
+            $counts = $this->topic_count_by_customer( dokan_get_current_user_id()() );
             $redir_url = get_permalink( get_option('woocommerce_myaccount_page_id') ).'support-tickets';
         }
 
@@ -1443,7 +1443,7 @@ class Dokan_Store_Support {
 
         $email->send( $store_email, $subject, $message );
 
-        $sender = get_userdata( get_current_user_id() );
+        $sender = get_userdata( dokan_get_current_user_id()() );
 
         do_action( 'dss_ticket_mail_sent', array(
             'to'           => $store_email,
