@@ -868,7 +868,7 @@ class Dokan_WC_Booking {
      */
     function dokan_get_bookings_menu( $bookings ) {
         $bookings = array(
-            ""                => array(
+            "" => array(
                 'title' => __( 'All Booking Product', 'dokan' ),
                 'tabs'  => true
             ),
@@ -878,15 +878,15 @@ class Dokan_WC_Booking {
             ),
             "my-bookings"     => array(
                 'title' => __( 'Manage Bookings', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => current_user_can( 'dokan_manage_bookings' )
             ),
             "calendar"        => array(
                 'title' => __( 'Calendar', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => current_user_can( 'dokan_manage_booking_calendar' )
             ),
             "resources"       => array(
                 'title' => __( 'Manage Resources', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => current_user_can( 'dokan_manage_booking_resource' )
             ),
             "edit"            => array(
                 'title' => __( 'Edit Booking Product', 'dokan' ),
@@ -901,7 +901,7 @@ class Dokan_WC_Booking {
                 'tabs'  => false
             )
         );
-
+        
         return apply_filters( 'dokan_booking_nav_titles', $bookings );
     }
 

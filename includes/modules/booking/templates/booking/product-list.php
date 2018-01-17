@@ -117,14 +117,22 @@ global $post;
 
                                 <div class="row-actions">
                                     <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
-                                    <span class="delete"><a onclick="return confirm('Are you sure?');" href="
                                     <?php
-                                    echo wp_nonce_url( add_query_arg( array(
-                                    'action' => 'dokan-delete-product',
-                                    'product_id' => $post->ID, 'tab' => 'booking' ),
-                                     dokan_get_navigation_url('booking') ), 'dokan-delete-product' );
+                                    if ( current_user_can( 'dokan_delete_booking_product' ) ) {
+                                        ?>
+                                        <span class="delete"><a onclick="return confirm('Are you sure?');" href="
+                                        <?php
+                                        echo wp_nonce_url( add_query_arg( array(
+                                        'action' => 'dokan-delete-product',
+                                        'product_id' => $post->ID, 'tab' => 'booking' ),
+                                         dokan_get_navigation_url('booking') ), 'dokan-delete-product' );
+                                        ?>
+                                        ">
+                                        <?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                    <?php
+                                    }
                                     ?>
-                                    "><?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
+                                   
                                     <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                 </div>
                             </td>
