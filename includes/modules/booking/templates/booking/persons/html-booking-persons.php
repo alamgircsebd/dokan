@@ -69,7 +69,7 @@
                     'orderby'        => 'menu_order',
                     'order'          => 'asc',
                     'post_parent'    => $post_id,
-                    'author'         => get_current_user_id(),
+                    'author'         => dokan_get_current_user_id(),
                 ) );
 
                 if ( sizeof( $person_types ) == 0 ) {

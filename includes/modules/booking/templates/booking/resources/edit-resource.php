@@ -41,7 +41,7 @@
         $error = __( 'Invalid Resource Id', 'dokan' );
     }
 
-    if ( $resource->post_author != get_current_user_id() || $resource->post_type != 'bookable_resource' ) {
+    if ( $resource->post_author != dokan_get_current_user_id() || $resource->post_type != 'bookable_resource' ) {
         $error = __( 'You do not have permission to edit this resource', 'dokan' );
     }
 

@@ -1,7 +1,7 @@
 <?php
 global $woocommerce;
 
-$seller_id    = get_current_user_id();
+$seller_id    = dokan_get_current_user_id();
 $counts       = Dokan_WC_Booking::get_booking_status_counts_by( $seller_id );
 
 $paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;

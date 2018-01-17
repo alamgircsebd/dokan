@@ -7,7 +7,7 @@ if ( !isset( $_GET['booking_id'] ) ) {
 $booking_id = $_GET['booking_id'];
 
 $can_edit = false;
-$user_id  = get_current_user_id();
+$user_id  = dokan_get_current_user_id();
 
 $the_booking = get_wc_booking( $booking_id );
 $order_id    = $the_booking->get_order_id();

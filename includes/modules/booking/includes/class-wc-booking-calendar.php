@@ -89,7 +89,7 @@ class Dokan_WC_Bookings_Calendar {
 
 		foreach ( $this->bookings as $booking ) {
 
-                    if ( get_post_field( 'post_author', $booking->product_id ) != get_current_user_id() ) {
+                    if ( get_post_field( 'post_author', $booking->product_id ) != dokan_get_current_user_id() ) {
                         continue;
                     }
                         if (
@@ -134,7 +134,7 @@ class Dokan_WC_Bookings_Calendar {
 
                     $seller       = get_post_field( 'post_author', $booking->get_product_id() );
 
-                    if ( $seller != get_current_user_id() ) {
+                    if ( $seller != dokan_get_current_user_id() ) {
                         continue;
                     }
 
@@ -238,7 +238,7 @@ class Dokan_WC_Bookings_Calendar {
 		$products =  get_posts( apply_filters( 'get_booking_products_args', array(
 			'post_status'    => 'publish',
 			'post_type'      => 'product',
-                        'author'         => get_current_user_id(),
+                        'author'         => dokan_get_current_user_id(),
 			'posts_per_page' => -1,
 			'tax_query'      => array(
 				array(
@@ -276,7 +276,7 @@ class Dokan_WC_Bookings_Calendar {
 			'orderby'          => 'menu_order',
 			'order'            => 'asc',
 			'suppress_filters' => true,
-                        'author'           => get_current_user_id()
+                        'author'           => dokan_get_current_user_id()
 		) ) );
 
 		foreach ( $resources as $resource ) {

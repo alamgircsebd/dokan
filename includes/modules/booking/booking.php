@@ -591,7 +591,7 @@ class Dokan_WC_Booking {
             'post_title'   => $add_resource_name,
             'post_content' => '',
             'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
+            'post_author'  => dokan_get_current_user_id(),
             'post_type'    => 'bookable_resource'
         );
         $resource_id = wp_insert_post( $resource );
@@ -784,7 +784,7 @@ class Dokan_WC_Booking {
         // Additional check to see if Seller id is same as current user
         $seller = get_post_meta( $booking_id, '_booking_seller_id', true );
 
-        if ( $seller != get_current_user_id() ) {
+        if ( $seller != dokan_get_current_user_id() ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'dokan' ) );
         }
 

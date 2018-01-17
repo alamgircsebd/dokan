@@ -377,7 +377,7 @@ $template_args = array(
                     ?>
                     <!--shipping and tax section-->
                    <?php
-                        $user_id                 = get_current_user_id();
+                        $user_id                 = dokan_get_current_user_id();
                         $processing_time         = dokan_get_shipping_processing_times();
                         $_required_tax           = get_post_meta( $post_id, '_required_tax', true );
                         $_disable_shipping       = ( get_post_meta( $post_id, '_disable_shipping', true ) ) ? get_post_meta( $post_id, '_disable_shipping', true ) : 'no';
