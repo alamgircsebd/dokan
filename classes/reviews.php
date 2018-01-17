@@ -102,8 +102,14 @@ class Dokan_Pro_Reviews {
      */
     public function load_review_template( $query_vars ) {
         if ( isset( $query_vars['reviews'] ) ) {
-            dokan_get_template_part( 'review/reviews', '', array( 'pro'=>true ) );
-            return;
+
+            if ( ! current_user_can( 'dokan_view_review_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view review page', 'dokan' ) ) );
+                return;
+            } else {
+                dokan_get_template_part( 'review/reviews', '', array( 'pro'=>true ) );
+                return;
+            }
         }
     }
 
