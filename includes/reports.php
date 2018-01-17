@@ -81,7 +81,7 @@ function dokan_seller_sales_statement() {
     </form>
     <?php
     //calculate opening balance
-    $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $start_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
+    $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $start_date, dokan_get_current_user_id(), dokan_withdraw_get_active_order_status() );
     $prev_refunds    = dokan_get_seller_refund_by_date( '2010-01-01', $start_date );
     $prev_wthdraws = dokan_get_seller_withdraw_by_date( '2010-01-01', $start_date );
 
@@ -131,7 +131,7 @@ function dokan_seller_sales_statement() {
 
     // calculate given range totals
     $format_end_date = date( 'Y-m-d', strtotime( $end_date . ' +1 day' ) );
-    $order     = dokan_get_seller_orders_by_date( $start_date, $format_end_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
+    $order     = dokan_get_seller_orders_by_date( $start_date, $format_end_date, dokan_get_current_user_id(), dokan_withdraw_get_active_order_status() );
     $refund    = dokan_get_seller_refund_by_date( $start_date, $format_end_date );
     $widthdraw = dokan_get_seller_withdraw_by_date( $start_date, $format_end_date );
 
@@ -283,7 +283,9 @@ function dokan_seller_sales_statement() {
  * @return obj
  */
 function dokan_get_order_report_data( $args = array(), $start_date, $end_date ) {
-    global $wpdb, $current_user;
+    global $wpdb;
+
+    $current_user = dokan_get_current_user_id();
 
     $defaults = array(
         'data'         => array(),
@@ -378,7 +380,7 @@ function dokan_get_order_report_data( $args = array(), $start_date, $end_date ) 
     $query['where']  = "
         WHERE   posts.post_type     = 'shop_order'
         AND     posts.post_status   != 'trash'
-        AND     do.seller_id = {$current_user->ID}
+        AND     do.seller_id = {$current_user}
         AND     do.order_status IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) . "')
         ";
 
@@ -583,7 +585,7 @@ function dokan_daily_sales() {
  * @param type $heading
  */
 function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
-    global $woocommerce, $wpdb, $wp_locale, $current_user;
+    global $woocommerce, $wpdb, $wp_locale;
 
     $total_sales = $total_orders = $order_items = $discount_total = $shipping_total = 0;
 
@@ -874,7 +876,8 @@ function dokan_sales_overview_chart_data( $start_date, $end_date, $group_by ) {
  */
 function dokan_top_sellers() {
 
-    global $start_date, $end_date, $woocommerce, $wpdb, $current_user;
+    global $start_date, $end_date, $woocommerce, $wpdb;
+    $current_user = dokan_get_current_user_id();
 
     $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
     $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
@@ -898,7 +901,7 @@ function dokan_top_sellers() {
 
         WHERE   posts.post_type     = 'shop_order'
         AND     posts.post_status   != 'trash'
-        AND     do.seller_id = {$current_user->ID}
+        AND     do.seller_id = {$current_user}
         AND     do.order_status IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) . "')
         AND     post_date > '" . date('Y-m-d', $start_date ) . "'
         AND     post_date < '" . date('Y-m-d', strtotime('+1 day', $end_date ) ) . "'
@@ -978,7 +981,8 @@ function dokan_top_sellers() {
  */
 function dokan_top_earners() {
 
-    global $start_date, $end_date, $woocommerce, $wpdb, $current_user;
+    global $start_date, $end_date, $woocommerce, $wpdb;
+    $current_user = dokan_get_current_user_id();
 
     $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
     $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
@@ -1002,7 +1006,7 @@ function dokan_top_earners() {
 
         WHERE   posts.post_type     = 'shop_order'
         AND     posts.post_status   != 'trash'
-        AND     do.seller_id = {$current_user->ID}
+        AND     do.seller_id = {$current_user}
         AND     do.order_status           IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) . "')
         AND     post_date > '" . date('Y-m-d', $start_date ) . "'
         AND     post_date < '" . date('Y-m-d', strtotime('+1 day', $end_date ) ) . "'
