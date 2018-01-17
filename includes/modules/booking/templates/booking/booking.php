@@ -40,34 +40,66 @@
         <?php
             switch ( $current_page ) {
             case 'my-bookings':
+                if ( !current_user_can( 'dokan_manage_bookings' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/my-bookings/all-bookings', '', $template_args );
                 break;
 
             case 'booking-details':
+                 if ( !current_user_can( 'dokan_manage_bookings' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/my-bookings/booking-details', '', $template_args );
                 break;
 
             case 'new-product':
+                if ( !current_user_can( 'dokan_add_booking_product' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/new-product', '', $template_args );
                 break;
 
             case 'edit':
+                if ( !current_user_can( 'dokan_edit_booking_product' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/new-product', '', $template_args );
                 break;
 
             case 'calendar' :
+                if ( !current_user_can( 'dokan_manage_booking_calendar' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/calendar/calendar', '', $template_args );
                 break;
 
             case 'resources' :
+                if ( !current_user_can( 'dokan_manage_booking_resource' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/resources/resources', '', $template_args );
                 break;
 
             case 'resources/edit' :
+                if ( !current_user_can( 'dokan_manage_booking_resource' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/resources/edit-resource', '', $template_args );
                 break;
 
             case '':
+                if ( !current_user_can( 'dokan_manage_booking_products' ) ) {
+                    dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                    break;
+                }
                 dokan_get_template_part( 'booking/product-list', '', $template_args );
                 break;
 
