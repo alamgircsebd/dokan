@@ -117,7 +117,7 @@ class Dokan_Store_Support_Widget extends WP_Widget {
             $user_logged_in = 'user_logged_out';
         }
         $disabled = '';
-//        if ( dokan_get_current_user_id()() == $store_id ) {
+//        if ( dokan_get_current_user_id() == $store_id ) {
 //            $disabled = 'disabled';
 //        }
 
