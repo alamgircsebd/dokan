@@ -139,7 +139,6 @@ class Dokan_Store_Support {
         }
         
         $all_cap = array(
-            'dokan_view_support_menu',
             'dokan_manage_support_tickets',
         );
 
@@ -516,6 +515,10 @@ class Dokan_Store_Support {
      * @return array $urls
      */
     function add_store_support_page( $urls ) {
+        
+        if ( !current_user_can( 'dokan_manage_support_tickets' ) ) {
+            return $urls;
+        }
 
         if ( dokan_is_seller_enabled( get_current_user_id() ) ) {
 
@@ -558,6 +561,10 @@ class Dokan_Store_Support {
      */
     function load_template_from_plugin( $query_vars ) {
         if ( isset( $query_vars['support'] ) ) {
+            if ( !current_user_can( 'dokan_manage_support_tickets' ) ) {
+                dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                return;
+            }
             $template = DOKAN_STORE_SUPPORT_DIR . '/templates/support.php';
             include $template;
         }
@@ -1497,8 +1504,6 @@ class Dokan_Store_Support {
      * @return void
      */
     public function add_capabilities( $capabilities ) {
-        $capabilities['menu'][] = 'dokan_view_support_menu';
-
         $capabilities['store_support'] = array(
             'dokan_manage_support_tickets',
         );
