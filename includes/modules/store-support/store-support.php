@@ -65,6 +65,7 @@ class Dokan_Store_Support {
      * @uses add_action()
      */
     public function __construct() {
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'init', array( $this, 'init_hooks' ) );
     }
@@ -120,7 +121,7 @@ class Dokan_Store_Support {
         add_action( 'dokan_store_profile_saved', array( $this, 'save_supoort_btn_title' ), 13 );
 
         add_filter( 'woocommerce_locate_template', array( $this, 'customer_topic_list' ),15 );
-
+        
         require_once DOKAN_STORE_SUPPORT_DIR . '/support-widget.php';
     }
 
@@ -131,28 +132,22 @@ class Dokan_Store_Support {
      */
     public static function activate() {
         
-//        global $wp_roles;
-//        
-//        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
-//            $wp_roles = new WP_Roles();
-//        }
-//        
-//        $all_cap = array(
-//            'dokan_view_support_menu',
-//            'dokan_add_support_product',
-//            'dokan_edit_support_product',
-//            'dokan_delete_support_product',
-//            'dokan_manage_support_products',
-//            'dokan_manage_support_calendar',
-//            'dokan_manage_bookings',
-//            'dokan_manage_support_resource'
-//        );
-//
-//        foreach ( $all_cap as $key => $cap ) {
-//            $wp_roles->add_cap( 'seller', $cap );
-//            $wp_roles->add_cap( 'administrator', $cap );
-//            $wp_roles->add_cap( 'shop_manager', $cap );
-//        }
+        global $wp_roles;
+        
+        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
+        
+        $all_cap = array(
+            'dokan_view_support_menu',
+            'dokan_manage_support_tickets',
+        );
+
+        foreach ( $all_cap as $key => $cap ) {
+            $wp_roles->add_cap( 'seller', $cap );
+            $wp_roles->add_cap( 'administrator', $cap );
+            $wp_roles->add_cap( 'shop_manager', $cap );
+        }
         
         $support_url = dokan_get_page_url( 'myaccount', 'woocommerce' ). 'support-tickets/';
         add_option( 'dokan-customer-support' , $support_url );
@@ -1494,6 +1489,21 @@ class Dokan_Store_Support {
         $items['customer-logout']   = __( 'Logout', 'dokan-store-support' );
 
         return $items;
+    }
+    
+     /**
+     * Add capabilities
+     *
+     * @return void
+     */
+    public function add_capabilities( $capabilities ) {
+        $capabilities['menu'][] = 'dokan_view_support_menu';
+
+        $capabilities['store_support'] = array(
+            'dokan_manage_support_tickets',
+        );
+
+        return $capabilities;
     }
 
 }
