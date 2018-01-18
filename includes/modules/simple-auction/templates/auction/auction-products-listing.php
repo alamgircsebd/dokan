@@ -90,7 +90,11 @@
                                         <?php endif ?>
                                     </td>
                                     <td>
-                                        <p><a href="<?php echo $edit_url ?>"><?php echo $product->get_title(); ?></a></p>
+                                        <?php if ( current_user_can( 'dokan_edit_auction_product' ) ): ?>
+                                            <p><a href="<?php echo $edit_url ?>"><?php echo $product->get_title(); ?></a></p>
+                                        <?php else: ?>
+                                            <p><a href=""><?php echo $product->get_title(); ?></a></p>
+                                        <?php endif ?>
 
                                         <div class="row-actions">
                                             <?php if ( current_user_can( 'dokan_edit_auction_product' ) ): ?>

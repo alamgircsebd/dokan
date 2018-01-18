@@ -79,9 +79,9 @@ class Dokan_WC_Booking {
             add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
             return;
         }
-        
+
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
-        
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -198,13 +198,13 @@ class Dokan_WC_Booking {
      * Nothing being called here yet.
      */
     public static function activate() {
-        
+
         global $wp_roles;
-        
+
         if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
             $wp_roles = new WP_Roles();
         }
-        
+
         $all_cap = array(
             'dokan_view_booking_menu',
             'dokan_add_booking_product',
@@ -406,11 +406,11 @@ class Dokan_WC_Booking {
      * @return array $urls
      */
     function add_booking_page( $urls ) {
-        
+
         if ( ! current_user_can( 'dokan_view_booking_menu' ) ) {
             return $urls;
         }
-        
+
         $urls['booking'] = array(
             'title' => __( 'Booking', 'dokan' ),
             'icon'  => '<i class="fa fa-calendar"></i>',
@@ -431,14 +431,14 @@ class Dokan_WC_Booking {
      * @return array $query_vars
      */
     function load_template_from_plugin( $query_vars ) {
-        
-        if ( !current_user_can( 'dokan_view_booking_menu' ) ) {
-            dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this booking page', 'dokan' ) ) );
-            return;
-        }
+
 
         if ( isset( $query_vars['booking'] ) ) {
-            dokan_get_template_part( 'booking/booking', '', array( 'is_booking' => true ) );
+            if ( !current_user_can( 'dokan_view_booking_menu' ) ) {
+                dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this booking page', 'dokan' ) ) );
+            } else {
+                dokan_get_template_part( 'booking/booking', '', array( 'is_booking' => true ) );
+            }
             return;
         }
     }
@@ -901,7 +901,7 @@ class Dokan_WC_Booking {
                 'tabs'  => false
             )
         );
-        
+
         return apply_filters( 'dokan_booking_nav_titles', $bookings );
     }
 
@@ -1152,7 +1152,7 @@ class Dokan_WC_Booking {
         wp_delete_post( $_POST['person_id'] );
         exit;
     }
-    
+
     /**
      * Add capabilities
      *

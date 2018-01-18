@@ -336,7 +336,6 @@ class Dokan_staffs {
      * @return void
      */
     public function listing_product( $args ) {
-
         if ( current_user_can( 'vendor_staff' ) ) {
             $staff_id = get_current_user_id();
             $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
