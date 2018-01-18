@@ -12,7 +12,7 @@ global $post;
     do_action( 'dokan_before_listing_product' );
     ?>
     <header class="dokan-dashboard-header">
-        <?php if ( dokan_is_seller_enabled( get_current_user_id() ) ) { ?>
+        <?php if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'dokan_add_booking_product') ) { ?>
         <h1 class="entry-title"><?php _e( $title , 'dokan' ); ?>
             <span class="dokan-add-product-link">
                 <a href="<?php _e( $booking_url.'new-product','dokan' );?>" class="dokan-btn dokan-btn-theme dokan-right dokan-add-new-product"><i class="fa fa-briefcase">&nbsp;</i> <?php _e( 'Add New Booking Product', 'dokan' ) ?></a>
