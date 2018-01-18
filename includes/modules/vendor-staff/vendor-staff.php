@@ -6,7 +6,7 @@
   Version: 1.0
   Author: weDevs
   Author URI: https://wedevs.com/
-  Thumbnail Name: import-export.png
+  Thumbnail Name: vendor-staff.png
   License: GPL2
  */
 
