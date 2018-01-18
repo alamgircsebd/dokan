@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Booking Integration
 Plugin URI: https://wedevs.com/products/plugins/dokan/woocommerce-booking-integration/
 Description: This Plugin Integrates WooCommerce Booking with Dokan.
-Version: 1.4.0
+Version: 1.4.1
 Author: weDevs
 Author URI: https://wedevs.com
 Thumbnail Name: booking.png
@@ -41,7 +41,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 // Define all constant
-define( 'DOKAN_WC_BOOKING_PLUGIN_VERSION', '1.4.0' );
+define( 'DOKAN_WC_BOOKING_PLUGIN_VERSION', '1.4.1' );
 define( 'DOKAN_WC_BOOKING_DIR', dirname( __FILE__ ) );
 define( 'DOKAN_WC_BOOKING_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 define( 'DOKAN_WC_BOOKING_TEMPLATE_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) . '/templates/' );
