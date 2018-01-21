@@ -159,7 +159,13 @@ class Dokan_Template_Auction {
 
                     // Dokan_Email::init()->new_product_added( $product_id, $product_status );
 
-                    wp_redirect( add_query_arg( array('product_id' => $product_id, 'action' => 'edit', 'message' => 'success' ), dokan_get_navigation_url('auction') ) );
+                    if ( current_user_can( 'dokan_edit_auction_product' ) ) {
+                        $redirect_url = add_query_arg( array('product_id' => $product_id, 'action' => 'edit', 'message' => 'success' ), dokan_get_navigation_url('auction') );
+                    } else {
+                        $redirect_url = dokan_get_navigation_url('auction');
+                    }
+
+                    wp_redirect( $redirect_url );
                     exit;
                 }
             }
