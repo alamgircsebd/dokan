@@ -63,6 +63,7 @@ class Dokan_Vendor_staff {
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_staffs_page' ), 15 );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_staff_template' ), 16 );
+        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
     }
 
     /**
@@ -129,6 +130,20 @@ class Dokan_Vendor_staff {
     }
 
     /**
+     * Flush rewrite endpoind after activation
+     *
+     * @since 1.5.2
+     *
+     * @return void
+     */
+    function add_rewrite_rules() {
+        if ( get_transient( 'dokan-vendor-staff' ) ) {
+            flush_rewrite_rules( true );
+            delete_transient( 'dokan-vendor-staff' );
+        }
+    }
+
+    /**
      * Activate functions
      *
      * @since 1.0.0
@@ -137,6 +152,7 @@ class Dokan_Vendor_staff {
      */
     public static function activate() {
         global $wp_roles;
+        set_transient( 'dokan-vendor-staff', 1 );
 
         if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
             $wp_roles = new WP_Roles();
