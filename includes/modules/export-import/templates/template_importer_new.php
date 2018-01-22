@@ -34,25 +34,33 @@ $parser = new Dokan_WXR_Parser();
 
 			<header class="dokan-dashboard-header">
 			    <h1 class="entry-title"><?php _e( 'Tools', 'dokan' ); ?></h1>
-			</header><!-- .entry-header -->
+			</header><!-- .-->
 
 			<div id="tab-container">
 				<ul class="dokan_tabs">
-                    <?php if ( current_user_can( 'dokan_import_product' ) ): ?>
-				  	     <li class="active"><a href="#import" data-toggle="tab"><?php _e( 'Import', 'dokan' ); ?></a></li>
-                    <?php endif ?>
+                                    <?php if ( current_user_can( 'dokan_import_product' ) ): ?>
+                                            <li class="active">
+                                                <a href="#import" data-toggle="tab">
+                                                    <?php _e( 'Import', 'dokan' ); ?>
+                                                </a>
+                                            </li>
+                                    <?php endif ?>
 
-                    <?php if ( current_user_can( 'dokan_export_product' ) ): ?>
-				  	    <li><a href="#export" data-toggle="tab"><?php _e( 'Export', 'dokan' ); ?></a></li>
-                    <?php endif ?>
+                                    <?php if ( current_user_can( 'dokan_export_product' ) ): ?>
+                                            <li>
+                                                <a href="#export" data-toggle="tab">
+                                                    <?php _e( 'Export', 'dokan' ); ?>
+                                                </a>
+                                            </li>
+                                    <?php endif ?>
 				</ul>
 
 				<!-- Tab panes -->
 				<div class="tabs_container">
-                    <?php if ( current_user_can( 'dokan_import_product' ) ): ?>
+                                <?php if ( current_user_can( 'dokan_import_product' ) ): ?>
     				  	<div class="import_div tab-pane active" id="import">
-    					  	<header class="entry-header dokan-import-export-header">
-    					    	<h1 class="entry-title"><?php _e( 'Import', 'dokan' ); ?></h1>
+                                            <header class="dokan-import-export-header">
+    					    	<h1 class="entry-title"><?php _e( 'Import XML', 'dokan' ); ?></h1>
     					    </header>
 
     						<?php
@@ -72,25 +80,40 @@ $parser = new Dokan_WXR_Parser();
     				        	<p><input type='submit' name='import_xml' value='<?php _e( 'Import', 'dokan' ); ?>' class="btn btn-danger" /></p>
 
     					    </form>
+                                            <hr>
+                                            <header class="dokan-import-export-header">
+    					    	<h1 class="entry-title"><?php _e( 'Import CSV', 'dokan' ); ?></h1>
+    					    </header>
+                                            <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ) ?>" class="dokan-btn dokan-btn-theme">
+                                                <?php _e( 'Import CSV', 'dokan' ) ?>
+                                            </a>
+                                            
     				  	</div>
                     <?php endif ?>
                     <?php if ( current_user_can( 'dokan_export_product' ) ): ?>
-    					<div class="export_div tab-pane" id="export">
-    						<header class="entry-header dokan-import-export-header">
-    							<h1 class="entry-title"><?php _e( 'Export', 'dokan' ); ?></h1>
-    						</header>
+                                <div class="export_div tab-pane" id="export">
+                                    <header class="dokan-import-export-header">
+                                            <h1 class="entry-title"><?php _e( 'Export XML', 'dokan' ); ?></h1>
+                                    </header>
 
 
-    						<p><?php _e( 'Chose your type of product and click export button to export all data in XML form', 'dokan' ); ?></p>
+                                    <p><?php _e( 'Chose your type of product and click export button to export all data in XML form', 'dokan' ); ?></p>
 
-    						<form action="" method="POST">
-    							<p><input type="radio" name="content" value="all" id="export_all" checked="checked"> <label for="export_all"><?php _e( 'All', 'dokan' ); ?></label></p>
-    							<p><input type="radio" name="content" value="product" id="export_product"> <label for="export_product"><?php _e( 'Product', 'dokan' ); ?></label></p>
-    							<p><input type="radio" name="content" value="product_variation" id="export_variation_product"> <label for="export_variation_product"><?php _e( 'Variation', 'dokan' ); ?></label></p>
-    							<p><input type="submit" name="export_xml" value="Export" class="btn btn-danger"></p>
-    						</form>
+                                    <form action="" method="POST">
+                                            <p><input type="radio" name="content" value="all" id="export_all" checked="checked"> <label for="export_all"><?php _e( 'All', 'dokan' ); ?></label></p>
+                                            <p><input type="radio" name="content" value="product" id="export_product"> <label for="export_product"><?php _e( 'Product', 'dokan' ); ?></label></p>
+                                            <p><input type="radio" name="content" value="product_variation" id="export_variation_product"> <label for="export_variation_product"><?php _e( 'Variation', 'dokan' ); ?></label></p>
+                                            <p><input type="submit" name="export_xml" value="Export" class="btn btn-danger"></p>
+                                    </form>
+                                    <hr>
+                                    <header class="dokan-import-export-header">
+                                        <h1 class="entry-title"><?php _e( 'Export CSV', 'dokan' ); ?></h1>
+                                    </header>
+                                    <a href="<?php echo dokan_get_navigation_url( 'tools/csv-export' ) ?>" class="dokan-btn dokan-btn-theme">
+                                        <?php _e( 'Export CSV', 'dokan' ) ?>
+                                    </a>
 
-    					</div>
+                                </div>
                     <?php endif ?>
 
 				</div>
