@@ -11,7 +11,7 @@
     <div class="dokan-section-content">
         <div class="content-half-part dokan-form-group hide_if_variation">
             <label for="upsell_ids" class="form-label"><?php _e( 'Upsells', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Upsells are products which you recommend instead of the currently viewed product, for example, products that are more profitable or better quality or more expensive.', 'dokan' ); ?>"></i></label>
-            <select class="dokan-form-control dokan-product-search" multiple="multiple" style="width: 100%;" id="upsell_ids" name="upsell_ids[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'dokan' ); ?>" data-action="dokan_json_search_products_and_variations" data-exclude="<?php echo intval( $post->ID ); ?>" data-user_ids="<?php echo get_current_user_id(); ?>">
+            <select class="dokan-form-control dokan-product-search" multiple="multiple" style="width: 100%;" id="upsell_ids" name="upsell_ids[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'dokan' ); ?>" data-action="dokan_json_search_products_and_variations" data-exclude="<?php echo intval( $post->ID ); ?>" data-user_ids="<?php echo dokan_get_current_user_id(); ?>">
                 <?php
                     if ( !empty( $upsells_ids ) ) {
                         foreach ( $upsells_ids as $product_id ) {
@@ -27,7 +27,7 @@
 
         <div class="content-half-part">
             <label for="crosssell_ids" class="form-label"><?php _e( 'Cross-sells', 'dokan' ); ?> <i class="fa fa-question-circle tips" aria-hidden="true" data-title="<?php _e( 'Cross-sells are products which you promote in the cart, based on the current product.', 'dokan' ); ?>"></i></label>
-            <select class="dokan-form-control dokan-product-search" multiple="multiple" style="width: 100%;" id="crosssell_ids" name="crosssell_ids[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'dokan' ); ?>" data-action="dokan_json_search_products_and_variations" data-exclude="<?php echo intval( $post->ID ); ?>" data-user_ids="<?php echo get_current_user_id(); ?>">
+            <select class="dokan-form-control dokan-product-search" multiple="multiple" style="width: 100%;" id="crosssell_ids" name="crosssell_ids[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'dokan' ); ?>" data-action="dokan_json_search_products_and_variations" data-exclude="<?php echo intval( $post->ID ); ?>" data-user_ids="<?php echo dokan_get_current_user_id(); ?>">
                 <?php
                     if ( ! empty( $crosssells_ids ) ) {
                         foreach ( $crosssells_ids as $product_id ) {
