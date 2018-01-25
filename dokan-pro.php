@@ -599,7 +599,7 @@ class Dokan_Pro {
 
         return array_merge( $dokan_pro_emails, $dokan_emails );
     }
-
+    
 }
 
 add_action( 'init', 'dokan_load_pro', 0 );
@@ -614,5 +614,15 @@ add_action( 'init', 'dokan_load_pro', 0 );
 function dokan_load_pro() {
     Dokan_Pro::init();
 }
+
+function pro_rest_api_class_map( $class_map ) {
+    $classes = array(
+        dirname( __FILE__ ) . '/includes/api/class-dokan-coupon-controller.php' => 'Dokan_REST_Coupon_Controller'
+    );
+
+    return array_merge( $class_map, $classes );
+}
+
+add_filter( 'dokan_rest_api_class_map', 'pro_rest_api_class_map' );
 
 register_activation_hook( __FILE__, array( 'Dokan_Pro', 'activate' ) );
