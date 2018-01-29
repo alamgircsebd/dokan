@@ -270,6 +270,7 @@ class Dokan_WC_Booking {
                 'i18n_remove_person'  => esc_js( __( 'Are you sure you want to remove this person type?', 'dokan' ) ),
                 'nonce_delete_person' => wp_create_nonce( 'delete-bookable-person' ),
                 'nonce_add_person'    => wp_create_nonce( 'add-bookable-person' ),
+                'nonce_unlink_person' => wp_create_nonce( 'unlink-bookable-person' ),
                 'i18n_remove_resource'  => esc_js( __( 'Are you sure you want to remove this resource?', 'dokan' ) ),
                 'nonce_delete_resource' => wp_create_nonce( 'delete-bookable-resource' ),
                 'nonce_add_resource'    => wp_create_nonce( 'add-bookable-resource' ),
