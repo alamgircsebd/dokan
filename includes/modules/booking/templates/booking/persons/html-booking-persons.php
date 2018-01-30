@@ -62,6 +62,7 @@
             <div class="woocommerce_bookable_persons wc-metaboxes">
 
                 <?php
+                $admin = get_user_by( 'email', get_option( 'admin_email' ) );
                 $person_types = get_posts( array(
                     'post_type'      => 'bookable_person',
                     'post_status'    => 'publish',
@@ -69,7 +70,7 @@
                     'orderby'        => 'menu_order',
                     'order'          => 'asc',
                     'post_parent'    => $post_id,
-                    'author'         => dokan_get_current_user_id(),
+                    'author__in'     => array( $admin->ID, get_current_user_id() ),
                 ) );
 
                 if ( sizeof( $person_types ) == 0 ) {
