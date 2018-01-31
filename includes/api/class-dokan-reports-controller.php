@@ -77,6 +77,21 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             case 'sales_overview':
                 $data = $this->get_sales_overview( $request );
                 break;
+            case 'top_selling':
+                $data = $this->get_top_selling( $request );
+                break;
+//            case 'dashboard_sales':
+//                $data = $this->get_sales_overview( $request );
+//                break;
+//            case 'dashboard_orders':
+//                $data = $this->get_sales_overview( $request );
+//                break;
+//            case 'dashboard_reviews':
+//                $data = $this->get_sales_overview( $request );
+//                break;
+//            case 'dashboard_products':
+//                $data = $this->get_sales_overview( $request );
+//                break;
 
             default:
                 return new WP_Error( 'invalid_type', 'Invalid Report Type', array( 'status' => 404 ) );
@@ -161,4 +176,68 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         
         return $data;
     }
+    
+    public function get_top_selling( $request ) {
+        
+        global $wpdb;
+        $params     = $request->get_params();
+        $seller_id  = $params['seller_id'];
+        $start_date = $params['start_date'];
+        $end_date   = $params['end_date'];
+        
+        $start_date = strtotime( $start_date );
+        $end_date   = strtotime( $end_date );
+
+        // Get order ids and dates in range
+        $order_items = apply_filters( 'woocommerce_reports_top_sellers_order_items', $wpdb->get_results( "
+            SELECT order_item_meta_2.meta_value as product_id, SUM( order_item_meta.meta_value ) as item_quantity FROM {$wpdb->prefix}woocommerce_order_items as order_items
+
+            LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta ON order_items.order_item_id = order_item_meta.order_item_id
+            LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta_2 ON order_items.order_item_id = order_item_meta_2.order_item_id
+            LEFT JOIN {$wpdb->posts} AS posts ON order_items.order_id = posts.ID
+            LEFT JOIN {$wpdb->prefix}dokan_orders AS do ON posts.ID = do.order_id
+
+            WHERE   posts.post_type     = 'shop_order'
+            AND     posts.post_status   != 'trash'
+            AND     do.seller_id = {$seller_id}
+            AND     do.order_status IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) . "')
+            AND     post_date > '" . date( 'Y-m-d', $start_date ) . "'
+            AND     post_date < '" . date( 'Y-m-d', strtotime( '+1 day', $end_date ) ) . "'
+            AND     order_items.order_item_type = 'line_item'
+            AND     order_item_meta.meta_key = '_qty'
+            AND     order_item_meta_2.meta_key = '_product_id'
+            GROUP BY order_item_meta_2.meta_value
+        " ), $start_date, $end_date );
+
+        $found_products = array();
+
+        if ( $order_items ) {
+            foreach ( $order_items as $order_item ) {
+                $found_products[$order_item->product_id] = $order_item->item_quantity;
+            }
+        }
+
+        asort( $found_products );
+        $found_products = array_reverse( $found_products, true );
+        $found_products = array_slice( $found_products, 0, 25, true );
+        reset( $found_products );
+        
+        $data = array();
+        
+        foreach ( $found_products as $product_id => $sales ) {
+            $product = wc_get_product( $product_id );
+            
+            $data[] = array(
+                'id'       => $product->get_id(),
+                'title'    => $product->get_title(),
+                'url'      => $product->get_permalink(),
+                'edit_url' => dokan_edit_product_url( $product_id ),
+                'sold_qty' => $sales,
+                );
+        }
+            
+        $response = rest_ensure_response( $data );
+        return $response;
+    }
+
 }
