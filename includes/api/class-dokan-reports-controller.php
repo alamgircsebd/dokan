@@ -41,38 +41,38 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
                 'methods'  => WP_REST_Server::READABLE,
                 'callback' => array( $this, 'get_report' ),
                 'args'     => array(
-                    'type' => array(
-                        'default' => 'sales_overview',
+                    'type'       => array(
+                        'default'           => 'sales_overview',
                         'sanitize_callback' => 'sanitize_text_field',
                     ),
                     'start_date' => array(
-                        'default' => date( 'Y-m-01', current_time( 'timestamp' ) ),
+                        'default'           => date( 'Y-m-01', current_time( 'timestamp' ) ),
                         'sanitize_callback' => 'sanitize_text_field',
                     ),
-                    'end_date' => array(
-                        'default' => date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) ),
+                    'end_date'   => array(
+                        'default'           => date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) ),
                         'sanitize_callback' => 'sanitize_text_field',
                     )
                 )
             ),
         ) );
     }
-    
+
     /**
      * Get single report
      *
      * @return void
      */
     public function get_report( $request ) {
-        
-        $params = $request->get_params();
+
+        $params    = $request->get_params();
         error_log( print_r( $params, true ) );
         $seller_id = $params['seller_id'];
-        
+
         if ( !dokan_is_user_seller( $seller_id ) ) {
             return new WP_Error( 'invalid_seller', 'Invalid Seller ID', array( 'status' => 404 ) );
         }
-        
+
         switch ( $params['type'] ) {
             case 'sales_overview':
                 $data = $this->get_sales_overview( $request );
@@ -80,9 +80,9 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             case 'top_selling':
                 $data = $this->get_top_selling( $request );
                 break;
-//            case 'dashboard_sales':
-//                $data = $this->get_sales_overview( $request );
-//                break;
+            case 'top_earners':
+                $data = $this->get_top_earners( $request );
+                break;
 //            case 'dashboard_orders':
 //                $data = $this->get_sales_overview( $request );
 //                break;
@@ -96,18 +96,18 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             default:
                 return new WP_Error( 'invalid_type', 'Invalid Report Type', array( 'status' => 404 ) );
         }
-        
+
         $response = rest_ensure_response( $data );
         return $response;
     }
-    
-    public function  get_sales_overview( $request ) {
-        
+
+    public function get_sales_overview( $request ) {
+
         $params     = $request->get_params();
         $seller_id  = $params['seller_id'];
         $start_date = $params['start_date'];
         $end_date   = $params['end_date'];
-        
+
         $order_totals = dokan_get_order_report_data( array(
             'data'         => array(
                 '_order_total'    => array(
@@ -129,7 +129,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             'filter_range' => true,
         ), $start_date, $end_date, $seller_id );
 
-        $total_items    = absint( dokan_get_order_report_data( array(
+        $total_items = absint( dokan_get_order_report_data( array(
             'data'         => array(
                 '_qty' => array(
                     'type'            => 'order_item_meta',
@@ -164,7 +164,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         ), $start_date, $end_date, $seller_id );
 
         $average_sales = $order_totals->total_sales / ( 30 + 1 );
-        
+
         $data = array(
             'total_sales'    => $order_totals->total_sales,
             'total_shipping' => $order_totals->total_shipping,
@@ -173,18 +173,18 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             'total_coupons'  => $total_coupons,
             'average_sales'  => $average_sales,
         );
-        
+
         return $data;
     }
-    
+
     public function get_top_selling( $request ) {
-        
+
         global $wpdb;
         $params     = $request->get_params();
         $seller_id  = $params['seller_id'];
         $start_date = $params['start_date'];
         $end_date   = $params['end_date'];
-        
+
         $start_date = strtotime( $start_date );
         $end_date   = strtotime( $end_date );
 
@@ -221,21 +221,84 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         $found_products = array_reverse( $found_products, true );
         $found_products = array_slice( $found_products, 0, 25, true );
         reset( $found_products );
-        
+
         $data = array();
-        
+
         foreach ( $found_products as $product_id => $sales ) {
             $product = wc_get_product( $product_id );
-            
+
             $data[] = array(
                 'id'       => $product->get_id(),
                 'title'    => $product->get_title(),
                 'url'      => $product->get_permalink(),
                 'edit_url' => dokan_edit_product_url( $product_id ),
                 'sold_qty' => $sales,
-                );
+            );
         }
+
+        $response = rest_ensure_response( $data );
+        return $response;
+    }
+
+    public function get_top_earners( $request ) {
+        global $wpdb;
+        
+        $params     = $request->get_params();
+        $seller_id  = $params['seller_id'];
+        $start_date = $params['start_date'];
+        $end_date   = $params['end_date'];
+
+        $start_date = strtotime( $start_date );
+        $end_date   = strtotime( $end_date );
+
+        // Get order ids and dates in range
+        $order_items = apply_filters( 'woocommerce_reports_top_earners_order_items', $wpdb->get_results( "
+        SELECT order_item_meta_2.meta_value as product_id, SUM( order_item_meta.meta_value ) as line_total,SUM( do.net_amount ) as total_earning FROM {$wpdb->prefix}woocommerce_order_items as order_items
+
+        LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta ON order_items.order_item_id = order_item_meta.order_item_id
+        LEFT JOIN {$wpdb->prefix}woocommerce_order_itemmeta as order_item_meta_2 ON order_items.order_item_id = order_item_meta_2.order_item_id
+        LEFT JOIN {$wpdb->posts} AS posts ON order_items.order_id = posts.ID
+        LEFT JOIN {$wpdb->prefix}dokan_orders AS do ON posts.ID = do.order_id
+
+        WHERE   posts.post_type     = 'shop_order'
+        AND     posts.post_status   != 'trash'
+        AND     do.seller_id = {$seller_id}
+        AND     do.order_status           IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) . "')
+        AND     post_date > '" . date( 'Y-m-d', $start_date ) . "'
+        AND     post_date < '" . date( 'Y-m-d', strtotime( '+1 day', $end_date ) ) . "'
+        AND     order_items.order_item_type = 'line_item'
+        AND     order_item_meta.meta_key = '_line_total'
+        AND     order_item_meta_2.meta_key = '_product_id'
+        GROUP BY order_item_meta_2.meta_value
+    " ), $start_date, $end_date );
+
+        $found_products = array();
+        $total_earnings = array();
+        if ( $order_items ) {
+            foreach ( $order_items as $order_item ) {
+                $found_products[$order_item->product_id] = $order_item->line_total;
+                $total_earnings[$order_item->product_id] = $order_item->total_earning;
+            }
+        }
+
+        asort( $found_products );
+        $found_products = array_reverse( $found_products, true );
+        $found_products = array_slice( $found_products, 0, 25, true );
+        reset( $found_products );
             
+        $data = array();
+        foreach ( $found_products as $product_id => $sales ) {
+            $product = wc_get_product( $product_id );
+
+            $data[] = array(
+                'id'       => $product->get_id(),
+                'title'    => $product->get_title(),
+                'url'      => $product->get_permalink(),
+                'edit_url' => dokan_edit_product_url( $product_id ),
+                'sales'    => $sales,
+            );
+        }
+
         $response = rest_ensure_response( $data );
         return $response;
     }
