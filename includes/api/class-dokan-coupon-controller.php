@@ -50,7 +50,14 @@ class Dokan_REST_Coupon_Controller extends WP_REST_Controller {
             ),
         ) );
     }
-
+    
+    /**
+     * Get Coupon by id
+     * 
+     * @param type $id
+     * 
+     * @return WC_Coupon
+     */
     protected function get_object( $id ) {
         return new WC_Coupon( $id );
     }
