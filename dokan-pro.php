@@ -242,6 +242,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/update.php';
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/orders.php';
+        require_once DOKAN_PRO_INC . '/reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
@@ -617,7 +618,8 @@ function dokan_load_pro() {
 
 function pro_rest_api_class_map( $class_map ) {
     $classes = array(
-        dirname( __FILE__ ) . '/includes/api/class-dokan-coupon-controller.php' => 'Dokan_REST_Coupon_Controller'
+        dirname( __FILE__ ) . '/includes/api/class-dokan-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
+        dirname( __FILE__ ) . '/includes/api/class-dokan-reports-controller.php' => 'Dokan_REST_Reports_Controller'
     );
 
     return array_merge( $class_map, $classes );

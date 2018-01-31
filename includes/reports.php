@@ -282,10 +282,12 @@ function dokan_seller_sales_statement() {
  * @param string $end_date
  * @return obj
  */
-function dokan_get_order_report_data( $args = array(), $start_date, $end_date ) {
+function dokan_get_order_report_data( $args = array(), $start_date, $end_date, $current_user = false ) {
     global $wpdb;
-
-    $current_user = dokan_get_current_user_id();
+    
+    if ( !$current_user ) {
+        $current_user = dokan_get_current_user_id();
+    }
 
     $defaults = array(
         'data'         => array(),
