@@ -94,6 +94,8 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
                 break;
             case 'dashboard_products':
                 $data = $this->get_dashboard_products( $request );
+            case 'dashboard':
+                $data = $this->get_dashboard_data( $request );
                 break;
 
             default:
@@ -405,5 +407,26 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
 
         return $data;
     }
+    
+    /**
+     * Get report data for Dashboard All data
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
+    public function get_dashboard_data( $request ) {
+
+        $data = array(
+            'overview' => $this->get_dashboard_overview( $request ),
+            'orders'   => $this->get_dashboard_orders( $request ),
+            'products' => $this->get_dashboard_products( $request ),
+            'reviews'  => $this->get_dashboard_reviews( $request ),
+        );
+
+        return $data;
+    }
+    
+    
 
 }
