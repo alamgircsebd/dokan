@@ -92,9 +92,9 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             case 'dashboard_reviews':
                 $data = $this->get_dashboard_reviews( $request );
                 break;
-//            case 'dashboard_products':
-//                $data = $this->get_sales_overview( $request );
-//                break;
+            case 'dashboard_products':
+                $data = $this->get_dashboard_products( $request );
+                break;
 
             default:
                 return new WP_Error( 'invalid_type', 'Invalid Report Type', array( 'status' => 404 ) );
@@ -383,6 +383,26 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             'reviews_url'    => dokan_get_navigation_url( 'reviews' ),
         );
         
+        return $data;
+    }
+    
+    /**
+     * Get report data for Dashboard Products widget
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
+    public function get_dashboard_products( $request ) {
+
+        $params    = $request->get_params();
+        $seller_id = $params['seller_id'];
+
+        $data = array(
+            'post_counts'  => dokan_count_posts( 'product', $seller_id ),
+            'products_url' => dokan_get_navigation_url( 'products' ),
+        );
+
         return $data;
     }
 
