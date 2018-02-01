@@ -45,6 +45,7 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
+
         if ( !class_exists( 'WeDevs_Dokan' ) ) {
             if ( !current_user_can( 'manage_options' ) ) {
                 return;
@@ -55,17 +56,26 @@ class Dokan_Pro {
             return;
         }
 
-        $this->defined();
+        add_action( 'init', array( $this, 'init_plugin' ), 1 );
+    }
 
+    /**
+     * Load all things
+     *
+     * @since 2.7.3
+     *
+     * @return void
+     */
+    public function init_plugin() {
+        $this->defined();
         spl_autoload_register( array( $this, 'dokan_pro_autoload' ) );
 
         $this->includes();
-
         $this->inistantiate();
 
         $this->load_actions();
-
         $this->load_filters();
+
     }
 
     /**
