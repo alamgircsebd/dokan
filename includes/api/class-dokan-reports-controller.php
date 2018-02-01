@@ -100,7 +100,14 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         $response = rest_ensure_response( $data );
         return $response;
     }
-
+    
+    /**
+     * Get report data for Sales Overview
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
     public function get_sales_overview( $request ) {
 
         $params     = $request->get_params();
@@ -177,6 +184,13 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         return $data;
     }
 
+    /**
+     * Get report data for Top Selling products
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
     public function get_top_selling( $request ) {
 
         global $wpdb;
@@ -239,7 +253,14 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         $response = rest_ensure_response( $data );
         return $response;
     }
-
+    
+    /**
+     * Get report data for Top Earning products
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
     public function get_top_earners( $request ) {
         global $wpdb;
         

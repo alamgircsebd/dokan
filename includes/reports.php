@@ -983,7 +983,7 @@ function dokan_top_sellers() {
  */
 function dokan_top_earners() {
 
-    global $start_date, $end_date, $woocommerce, $wpdb;
+    global $wpdb;
     $current_user = dokan_get_current_user_id();
 
     $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
