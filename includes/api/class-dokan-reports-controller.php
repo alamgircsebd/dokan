@@ -86,6 +86,9 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             case 'dashboard_overview':
                 $data = $this->get_dashboard_overview( $request );
                 break;
+            case 'dashboard_orders':
+                $data = $this->get_dashboard_orders( $request );
+                break;
 //            case 'dashboard_reviews':
 //                $data = $this->get_sales_overview( $request );
 //                break;
@@ -344,6 +347,26 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         );
         
         $response = rest_ensure_response( $data );
+        return $response;
+    }
+    
+    /**
+     * Get report data for Dashboard Orders widget
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
+    public function get_dashboard_orders( $request ) {
+
+        $params    = $request->get_params();
+        $seller_id = $params['seller_id'];
+
+        $data = array(
+            'orders_data'   => dokan_count_orders( $seller_id ),
+        );
+        
+        $response = rest_ensure_response( reset( $data ) );
         return $response;
     }
 
