@@ -66,7 +66,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
     public function get_report( $request ) {
 
         $params    = $request->get_params();
-        error_log( print_r( $params, true ) );
+        
         $seller_id = $params['seller_id'];
 
         if ( !dokan_is_user_seller( $seller_id ) ) {
@@ -89,9 +89,9 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             case 'dashboard_orders':
                 $data = $this->get_dashboard_orders( $request );
                 break;
-//            case 'dashboard_reviews':
-//                $data = $this->get_sales_overview( $request );
-//                break;
+            case 'dashboard_reviews':
+                $data = $this->get_dashboard_reviews( $request );
+                break;
 //            case 'dashboard_products':
 //                $data = $this->get_sales_overview( $request );
 //                break;
@@ -253,8 +253,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             );
         }
 
-        $response = rest_ensure_response( $data );
-        return $response;
+        return $data;
     }
 
     /**
@@ -323,8 +322,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             );
         }
 
-        $response = rest_ensure_response( $data );
-        return $response;
+        return $data;
     }
     
     /**
@@ -346,8 +344,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             'seller_balance' => dokan_get_seller_earnings( $seller_id )
         );
         
-        $response = rest_ensure_response( $data );
-        return $response;
+        return $data;
     }
     
     /**
@@ -366,8 +363,27 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             'orders_data'   => dokan_count_orders( $seller_id ),
         );
         
-        $response = rest_ensure_response( reset( $data ) );
-        return $response;
+        return reset( $data );
+    }
+    
+    /**
+     * Get report data for Dashboard Reviews widget
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
+    public function get_dashboard_reviews( $request ) {
+
+        $params    = $request->get_params();
+        $seller_id = $params['seller_id'];
+
+        $data = array(
+            'comment_counts' => dokan_count_comments( 'product', $seller_id ),
+            'reviews_url'    => dokan_get_navigation_url( 'reviews' ),
+        );
+        
+        return $data;
     }
 
 }
