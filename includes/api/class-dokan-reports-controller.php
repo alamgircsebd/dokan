@@ -83,9 +83,9 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             case 'top_earners':
                 $data = $this->get_top_earners( $request );
                 break;
-//            case 'dashboard_orders':
-//                $data = $this->get_sales_overview( $request );
-//                break;
+            case 'dashboard_overview':
+                $data = $this->get_dashboard_overview( $request );
+                break;
 //            case 'dashboard_reviews':
 //                $data = $this->get_sales_overview( $request );
 //                break;
@@ -100,7 +100,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         $response = rest_ensure_response( $data );
         return $response;
     }
-    
+
     /**
      * Get report data for Sales Overview
      * 
@@ -253,7 +253,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         $response = rest_ensure_response( $data );
         return $response;
     }
-    
+
     /**
      * Get report data for Top Earning products
      * 
@@ -263,7 +263,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
      */
     public function get_top_earners( $request ) {
         global $wpdb;
-        
+
         $params     = $request->get_params();
         $seller_id  = $params['seller_id'];
         $start_date = $params['start_date'];
@@ -306,7 +306,7 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
         $found_products = array_reverse( $found_products, true );
         $found_products = array_slice( $found_products, 0, 25, true );
         reset( $found_products );
-            
+
         $data = array();
         foreach ( $found_products as $product_id => $sales ) {
             $product = wc_get_product( $product_id );
@@ -320,6 +320,29 @@ class Dokan_REST_Reports_Controller extends WP_REST_Controller {
             );
         }
 
+        $response = rest_ensure_response( $data );
+        return $response;
+    }
+    
+    /**
+     * Get report data for Dashboard Big Counter widget
+     * 
+     * @param type $request
+     * 
+     * @return array
+     */
+    public function get_dashboard_overview( $request ) {
+
+        $params    = $request->get_params();
+        $seller_id = $params['seller_id'];
+
+        $data = array(
+            'pageviews'      => (int) dokan_author_pageviews( $seller_id ),
+            'orders_count'   => dokan_count_orders( $seller_id ),
+            'sales'          => dokan_author_total_sales( $seller_id ),
+            'seller_balance' => dokan_get_seller_earnings( $seller_id )
+        );
+        
         $response = rest_ensure_response( $data );
         return $response;
     }
