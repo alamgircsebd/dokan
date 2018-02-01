@@ -24,7 +24,6 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_lot_discount_content' ), 25, 2 );
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2 );
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
-        add_action( 'dokan_render_product_edit_template', array( $this, 'load_product_edit_template' ), 11 );
         add_action( 'woocommerce_product_options_advanced', array($this,'add_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
@@ -70,19 +69,6 @@ class Dokan_Pro_Products {
     public function render_new_product_template( $query_vars ) {
         if ( isset( $query_vars['new-product'] ) ) {
             dokan_get_template_part( 'products/new-product' );
-        }
-    }
-
-    /**
-     * Load Product Edit Template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    public function load_product_edit_template() {
-        if ( current_user_can( 'dokan_edit_product' ) ) {
-            dokan_get_template_part( 'products/new-product-single' );
         }
     }
 

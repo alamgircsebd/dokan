@@ -45,6 +45,9 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
+        if ( !function_exists( 'WC' ) ) {
+            return;
+        }
 
         if ( !class_exists( 'WeDevs_Dokan' ) ) {
             if ( !current_user_can( 'manage_options' ) ) {
