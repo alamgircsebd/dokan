@@ -59,10 +59,11 @@ class Dokan_Pro_Coupons {
      */
     public function add_coupon_menu( $urls ) {
         $urls['coupons'] = array(
-            'title' => __( 'Coupons', 'dokan' ),
-            'icon'  => '<i class="fa fa-gift"></i>',
-            'url'   => dokan_get_navigation_url( 'coupons' ),
-            'pos'   => 55
+            'title'      => __( 'Coupons', 'dokan' ),
+            'icon'       => '<i class="fa fa-gift"></i>',
+            'url'        => dokan_get_navigation_url( 'coupons' ),
+            'pos'        => 55,
+            'permission' => 'dokan_view_coupon_menu'
         );
 
         return $urls;
@@ -104,7 +105,7 @@ class Dokan_Pro_Coupons {
      * @return void
      */
     public function dokan_coupon_content_render() {
-        if ( !dokan_is_seller_enabled( get_current_user_id() ) ) {
+        if ( ! dokan_is_seller_enabled( get_current_user_id() ) ) {
             echo dokan_seller_not_enabled_notice();
         } else {
 
@@ -117,6 +118,7 @@ class Dokan_Pro_Coupons {
                     dokan_get_template_part('global/dokan-error', '', array( 'deleted' => true, 'message' => $message ) );
                 }
             }
+
             $this->add_coupons_form( self::$validated );
         }
     }
@@ -159,6 +161,10 @@ class Dokan_Pro_Coupons {
             return;
         }
 
+        if ( ! current_user_can( 'dokan_delete_coupon' ) ) {
+            wp_die( __( 'You have not permission to delete this coupon', 'dokan' ) );
+        }
+
         if ( !wp_verify_nonce( $_GET['coupon_del_nonce'], '_coupon_del_nonce' ) ) {
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
@@ -185,6 +191,17 @@ class Dokan_Pro_Coupons {
         }
 
         $errors = new WP_Error();
+
+        // Checking permissions for adding and editing
+        if ( empty( $_POST['post_id'] ) ) {
+            if ( ! current_user_can( 'dokan_add_coupon' ) ) {
+                $errors->add( 'title', __( 'You have no permission to add this coupon', 'dokan' ) );
+            }
+        } else {
+            if ( ! current_user_can( 'dokan_edit_coupon' ) ) {
+                $errors->add( 'title', __( 'You have no permission to edit this coupon', 'dokan' ) );
+            }
+        }
 
         if ( empty( $_POST['title'] ) ) {
             $errors->add( 'title', __( 'Please enter the coupon title', 'dokan' ) );
@@ -253,6 +270,7 @@ class Dokan_Pro_Coupons {
                 'post_content' => $_POST['description'],
                 'post_status'  => 'publish',
                 'post_type'    => 'shop_coupon',
+                'post_author'  => dokan_get_current_user_id()
             );
 
             $post_id = wp_insert_post( $post );
@@ -266,6 +284,7 @@ class Dokan_Pro_Coupons {
                 'post_content' => $_POST['description'],
                 'post_status'  => 'publish',
                 'post_type'    => 'shop_coupon',
+                'post_author'  => dokan_get_current_user_id()
             );
             $post_id = wp_update_post( $post );
             $message = 'coupon_update';
@@ -376,7 +395,7 @@ class Dokan_Pro_Coupons {
             'post_status'    => array('publish'),
             'posts_per_page' => $this->perpage,
             'offset'         => $offset,
-            'author'         => get_current_user_id(),
+            'author'         => dokan_get_current_user_id(),
             'paged'          => $paged
         );
 
@@ -430,7 +449,7 @@ class Dokan_Pro_Coupons {
     function coupon_products_list() {
         global $wpdb;
 
-        $user_id = get_current_user_id();
+        $user_id = dokan_get_current_user_id();
 
         $sql = "SELECT $wpdb->posts.* FROM $wpdb->posts
                 WHERE $wpdb->posts.post_author IN ( $user_id )
@@ -483,7 +502,7 @@ class Dokan_Pro_Coupons {
         $post_title  = isset( $post->post_title ) ? $post->post_title : '';
         $description = isset( $post->post_content ) ? $post->post_content : '';
 
-        if ( !empty( $post_id ) && !dokan_is_valid_owner( $post_id, get_current_user_id() ) ) {
+        if ( !empty( $post_id ) && !dokan_is_valid_owner( $post_id, dokan_get_current_user_id() ) ) {
             wp_redirect( dokan_get_navigation_url( 'coupons' ) );
             exit();
         }
@@ -601,26 +620,33 @@ class Dokan_Pro_Coupons {
         $exclude_products = str_replace( ' ', '', $exclude_products );
         $exclude_products = explode( ',', $exclude_products );
 
-        dokan_get_template_part( 'coupon/form', '', array(
-            'pro'                        => true,
-            'post_id'                    => $post_id,
-            'post_title'                 => $post_title,
-            'discount_type'              => $discount_type,
-            'description'                => $description,
-            'amount'                     => $amount,
-            'products'                   => $products,
-            'exclude_products'           => $exclude_products,
-            'product_categories'         => $product_categories,
-            'exclude_product_categories' => $exclude_product_categories,
-            'usage_limit'                => $usage_limit,
-            'expire'                     => $expire,
-            'minimum_amount'             => $minimum_amount,
-            'customer_email'             => $customer_email,
-            'button_name'                => $button_name,
-            'exclide_sale_item'          => $exclide_sale_item,
-            'show_on_store'              => $show_on_store,
-            'all_products'               => $this->coupon_products_list(),
-            'products_id'                => $products_id,
-        ) );
+        if ( empty( $post_id ) && ! current_user_can( 'dokan_add_coupon' ) ) {
+            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to add coupon', 'dokan' ) ) );
+        } elseif ( ! empty( $post_id ) && ! current_user_can( 'dokan_edit_coupon' ) ) {
+            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to edit this coupon', 'dokan' ) ) );
+        } else {
+            dokan_get_template_part( 'coupon/form', '', array(
+                'pro'                        => true,
+                'post_id'                    => $post_id,
+                'post_title'                 => $post_title,
+                'discount_type'              => $discount_type,
+                'description'                => $description,
+                'amount'                     => $amount,
+                'products'                   => $products,
+                'exclude_products'           => $exclude_products,
+                'product_categories'         => $product_categories,
+                'exclude_product_categories' => $exclude_product_categories,
+                'usage_limit'                => $usage_limit,
+                'expire'                     => $expire,
+                'minimum_amount'             => $minimum_amount,
+                'customer_email'             => $customer_email,
+                'button_name'                => $button_name,
+                'exclide_sale_item'          => $exclide_sale_item,
+                'show_on_store'              => $show_on_store,
+                'all_products'               => $this->coupon_products_list(),
+                'products_id'                => $products_id,
+            ) );
+        }
+
     }
 }

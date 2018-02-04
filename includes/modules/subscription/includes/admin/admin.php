@@ -234,17 +234,17 @@ class DPS_Admin {
             update_post_meta( $post_id, '_pack_validity', $woocommerce_pack_validity_field );
         }
 
-        if ( ! empty( $_POST['_subscription_product_admin_commission_type'] ) && ! empty( $_POST['_subscription_product_admin_commission'] ) ) {
+        if ( ! empty( $_POST['_subscription_product_admin_commission_type'] ) ) {
             update_post_meta( $post_id, '_subscription_product_admin_commission_type', $_POST['_subscription_product_admin_commission_type'] );
-            update_post_meta( $post_id, '_subscription_product_admin_commission', $_POST['_subscription_product_admin_commission'] );
         }
+
+        update_post_meta( $post_id, '_subscription_product_admin_commission', $_POST['_subscription_product_admin_commission'] );
 
         if ( ! empty( $_POST['_vendor_allowed_categories'] ) ) {
             update_post_meta( $post_id, '_vendor_allowed_categories', $_POST['_vendor_allowed_categories'] );
         } else {
             delete_post_meta( $post_id, '_vendor_allowed_categories' );
         }
-
 
         $woocommerce_enable_recurring_field = isset( $_POST['_enable_recurring_payment'] ) ? 'yes' : 'no';
 

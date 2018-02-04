@@ -28,7 +28,7 @@ class Dokan_Email_Refund_Request extends WC_Email {
                 $this->template_html    = 'emails/refund_request.php';
 		$this->template_plain   = 'emails/plain/refund_request.php';
                 $this->template_base    = DOKAN_PRO_DIR.'/templates/';
-                
+
 		// Triggers for this email
 		add_action( 'dokan_refund_request_notification', array( $this, 'trigger' ), 30 );
 
@@ -62,13 +62,13 @@ class Dokan_Email_Refund_Request extends WC_Email {
 	 * @param array $postdata.
 	 */
 	public function trigger( $order_id ) {
-            
+
             if ( ! $this->is_enabled() || ! $this->get_recipient() ) {
                 return;
             }
-            
+
             $order                     = wc_get_order( $order_id );
-            $seller                    = get_user_by( 'id', get_current_user_id() );
+            $seller                    = get_user_by( 'id', dokan_get_current_user_id() );
             $this->object              = $order;
             $this->find['seller_name'] = '{seller_name}';
             $this->find['order_id']    = '{order_id}';
@@ -85,9 +85,9 @@ class Dokan_Email_Refund_Request extends WC_Email {
             $this->setup_locale();
             $this->send( $this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
             $this->restore_locale();
-            
+
 	}
-        
+
         /**
 	 * Get content html.
 	 *
@@ -106,7 +106,7 @@ class Dokan_Email_Refund_Request extends WC_Email {
                     'data'          => $this->replace
                 ), 'dokan/', $this->template_base );
             return ob_get_clean();
-           
+
 	}
 
 	/**

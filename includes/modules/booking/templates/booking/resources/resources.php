@@ -42,7 +42,7 @@ global $post;
                                 'post_type'      => 'bookable_resource',
                                 'post_status'    => $post_statuses,
                                 'posts_per_page' => 10,
-                                'author'         => get_current_user_id(),
+                                'author'         => dokan_get_current_user_id(),
                                 'orderby'        => 'post_date',
                                 'order'          => 'DESC',
                                 'paged'          => $pagenum,

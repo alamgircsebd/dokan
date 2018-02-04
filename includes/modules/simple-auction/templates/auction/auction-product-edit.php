@@ -2,7 +2,7 @@
 global $post, $product;
 
 $post_id        = $post->ID;
-$seller_id      = get_current_user_id();
+$seller_id      = dokan_get_current_user_id();
 
 if ( isset( $_GET['product_id'] ) ) {
     $post_id        = intval( $_GET['product_id'] );

@@ -1,7 +1,7 @@
 <?php
 global $woocommerce;
 
-$seller_id    = get_current_user_id();
+$seller_id    = dokan_get_current_user_id();
 $counts       = Dokan_WC_Booking::get_booking_status_counts_by( $seller_id );
 
 $paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
@@ -149,7 +149,7 @@ if ( $bookings ) {
                     <?php
                     $order = $the_booking->get_order();
                     if ( $order ) {
-                        echo '<a href="' . add_query_arg( 'order_id', $order->get_id(), $orders_url ) . '">#' . $order->get_order_number() . '</a> - ' . esc_html( wc_get_order_status_name( $the_booking->get_status() ) );
+                        echo '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $order->get_id() ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '">#' . $order->get_order_number() . '</a> - ' . esc_html( wc_get_order_status_name( $the_booking->get_status() ) );
                     } else {
                         echo '-';
                     }

@@ -170,6 +170,22 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.7.3 -> Feb 04, 2018
+---------------------
+- [new]   Vendor Staff Module is added
+- [new]   Email Verification on registration is added
+- [fix]   Regular shipping shown while disabled from settings
+- [fix]   Non-numeric warning shown on Statement report
+- [fix]   Product edit template duplicates for pending products
+- [fix]   Subscription :  Become a vendor form not showing subscription form
+- [fix]   Subscription :  Commission rate for subscription can't be set as blank
+- [fix]   Appearance   :  Color scheme not working on product edit page
+- [fix]   Booking      :  Person type unlink or remove not working
+- [fix]   Booking      :  Order links inside Booking details not working
+- [tweak] Dropping support for Tab view product edit page
+- [tweak] Import Export : button position for products view changed
+- [tweak] Import Export : CSV import export buttons added under Tools
+
 v2.7.2 -> December 24, 2017
 ---------------------
 - [new]   Introducing All New modules and packaging System

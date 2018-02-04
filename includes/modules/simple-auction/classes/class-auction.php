@@ -86,6 +86,10 @@ class Dokan_Template_Auction {
         global $woocommerce_auctions;
 
         if ( isset( $_POST['add_auction_product'] ) && wp_verify_nonce( $_POST['dokan_add_new_auction_product_nonce'], 'dokan_add_new_auction_product' ) ) {
+            if ( ! current_user_can( 'dokan_add_auction_product' ) ) {
+                return;
+            }
+
             $post_title = trim( $_POST['post_title'] );
             $post_content = trim( $_POST['post_content'] );
             $post_excerpt = trim( $_POST['post_excerpt'] );
@@ -110,7 +114,7 @@ class Dokan_Template_Auction {
                         'post_title'   => $post_title,
                         'post_content' => $post_content,
                         'post_excerpt' => $post_excerpt,
-                        'post_author'  => get_current_user_id()
+                        'post_author'  => dokan_get_current_user_id()
                     ) );
 
                 $product_id = wp_insert_post( $post_data );
@@ -155,7 +159,13 @@ class Dokan_Template_Auction {
 
                     // Dokan_Email::init()->new_product_added( $product_id, $product_status );
 
-                    wp_redirect( add_query_arg( array('product_id' => $product_id, 'action' => 'edit', 'message' => 'success' ), dokan_get_navigation_url('auction') ) );
+                    if ( current_user_can( 'dokan_edit_auction_product' ) ) {
+                        $redirect_url = add_query_arg( array('product_id' => $product_id, 'action' => 'edit', 'message' => 'success' ), dokan_get_navigation_url('auction') );
+                    } else {
+                        $redirect_url = dokan_get_navigation_url('auction');
+                    }
+
+                    wp_redirect( $redirect_url );
                     exit;
                 }
             }
@@ -172,6 +182,10 @@ class Dokan_Template_Auction {
         }
 
         if ( isset( $_POST['update_auction_product'] ) && wp_verify_nonce( $_POST['dokan_edit_auction_product_nonce'], 'dokan_edit_auction_product' ) ) {
+            if ( ! current_user_can( 'dokan_edit_auction_product' ) ) {
+                return;
+            }
+
             $product_info = array(
                 'ID'             => $post_id,
                 'post_title'     => sanitize_text_field( $_POST['post_title'] ),
@@ -374,6 +388,10 @@ class Dokan_Template_Auction {
         }
 
         if ( !dokan_is_user_seller( get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'dokan_delete_auction_product' ) ) {
             return;
         }
 

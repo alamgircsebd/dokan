@@ -212,9 +212,10 @@ class Dokan_Apperance {
      */
     function load_styles() {
 
-        if ( !dokan_is_seller_dashboard() ) {
+        if ( ! dokan_is_seller_dashboard() && get_query_var( 'post_type' ) != 'product' ) {
             return;
         }
+        
         $btn_text   = dokan_get_option( 'btn_text', 'dokan_colors', '#ffffff' );
         $btn_bg     = dokan_get_option( 'btn_primary', 'dokan_colors', '#f05025' );
         $btn_border = dokan_get_option( 'btn_primary_border', 'dokan_colors', '#f05025' );

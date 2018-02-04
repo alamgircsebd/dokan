@@ -3,9 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.7.2
+  Version: 2.7.3
   Author: weDevs
   Author URI: https://wedevs.com/
+  WC requires at least: 2.6
+  WC tested up to: 3.2.6
   License: GPL2
   TextDomain: dokan
  */
@@ -34,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.7.2';
+    public $version = '2.7.3';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -45,6 +47,10 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
+        if ( !function_exists( 'WC' ) ) {
+            return;
+        }
+
         if ( !class_exists( 'WeDevs_Dokan' ) ) {
             if ( !current_user_can( 'manage_options' ) ) {
                 return;
@@ -55,17 +61,26 @@ class Dokan_Pro {
             return;
         }
 
-        $this->defined();
+        add_action( 'init', array( $this, 'init_plugin' ), 1 );
+    }
 
+    /**
+     * Load all things
+     *
+     * @since 2.7.3
+     *
+     * @return void
+     */
+    public function init_plugin() {
+        $this->defined();
         spl_autoload_register( array( $this, 'dokan_pro_autoload' ) );
 
         $this->includes();
-
         $this->inistantiate();
 
         $this->load_actions();
-
         $this->load_filters();
+
     }
 
     /**
@@ -248,6 +263,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
         require_once DOKAN_PRO_CLASS . '/store-share.php';
         require_once DOKAN_PRO_CLASS . '/social-login.php';
+        require_once DOKAN_PRO_CLASS . '/email-verification.php';
 
         if ( !function_exists( 'dokan_pro_get_active_modules' ) ) {
             require_once dirname( __FILE__ ) . '/includes/modules.php';

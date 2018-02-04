@@ -81,10 +81,11 @@ class Dokan_Pro_Reviews {
     public function add_review_menu( $urls ) {
 
         $urls['reviews'] = array(
-            'title' => __( 'Reviews', 'dokan' ),
-            'icon'  => '<i class="fa fa-comments-o"></i>',
-            'url'   => dokan_get_navigation_url( 'reviews' ),
-            'pos'   => 65
+            'title'      => __( 'Reviews', 'dokan' ),
+            'icon'       => '<i class="fa fa-comments-o"></i>',
+            'url'        => dokan_get_navigation_url( 'reviews' ),
+            'pos'        => 65,
+            'permission' => 'dokan_view_review_menu'
         );
 
         return $urls;
@@ -101,8 +102,14 @@ class Dokan_Pro_Reviews {
      */
     public function load_review_template( $query_vars ) {
         if ( isset( $query_vars['reviews'] ) ) {
-            dokan_get_template_part( 'review/reviews', '', array( 'pro'=>true ) );
-            return;
+
+            if ( ! current_user_can( 'dokan_view_review_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view review page', 'dokan' ) ) );
+                return;
+            } else {
+                dokan_get_template_part( 'review/reviews', '', array( 'pro'=>true ) );
+                return;
+            }
         }
     }
 
@@ -141,9 +148,9 @@ class Dokan_Pro_Reviews {
      * @return void
      */
     function get_count( $post_type ) {
-        global $wpdb, $current_user;
+        global $wpdb;
 
-        $counts = dokan_count_comments( $post_type, $current_user->ID );
+        $counts = dokan_count_comments( $post_type, dokan_get_current_user_id() );
 
         $this->pending  = $counts->moderated;
         $this->spam     = $counts->spam;
@@ -159,10 +166,13 @@ class Dokan_Pro_Reviews {
      * @return josn
      */
     function ajax_comment_status() {
-        global $current_user;
-
         if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) && !is_user_logged_in() ) {
             wp_send_json_error();
+        }
+
+        if ( ! current_user_can( 'dokan_manage_reviews' ) ) {
+            wp_send_json_error( __( 'You have no permission to manage this review', 'dokan' ) );
+            return;
         }
 
         $comment_id  = $_POST['comment_id'];
@@ -180,10 +190,10 @@ class Dokan_Pro_Reviews {
 
         $comment = get_comment( $comment_id );
 
-        $cache_key = 'dokan-count-comments-' . $post_type . '-' . $current_user->ID;
+        $cache_key = 'dokan-count-comments-' . $post_type . '-' . dokan_get_current_user_id();
         wp_cache_delete( $cache_key, 'dokan' );
 
-        $counts = dokan_count_comments( $post_type, $current_user->ID );
+        $counts = dokan_count_comments( $post_type, dokan_get_current_user_id() );
 
         ob_start();
         $this->render_row( $comment, $post_type  );
@@ -217,7 +227,7 @@ class Dokan_Pro_Reviews {
             $this->post_type = 'product';
             $post_type       = 'product';
 
-            $counts        = dokan_count_comments( $post_type, $current_user->ID );
+            $counts        = dokan_count_comments( $post_type, dokan_get_current_user_id() );
 
             $this->pending  = $counts->moderated;
             $this->spam     = $counts->spam;
@@ -270,8 +280,6 @@ class Dokan_Pro_Reviews {
      * @return void
      */
     function show_comment_table( $post_type, $counts ) {
-        global $current_user;
-
         $comment_status = isset( $_GET['comment_status'] ) ? $_GET['comment_status'] : 'all';
 
         dokan_get_template_part( 'review/listing', '', array(
@@ -312,7 +320,7 @@ class Dokan_Pro_Reviews {
         $total = $wpdb->get_var(
             "SELECT COUNT(*)
             FROM $wpdb->comments, $wpdb->posts
-            WHERE   $wpdb->posts.post_author='$current_user->ID' AND
+            WHERE   $wpdb->posts.post_author='dokan_get_current_user_id()' AND
             $wpdb->posts.post_status='publish' AND
             $wpdb->comments.comment_post_ID=$wpdb->posts.ID AND
             $wpdb->comments.comment_approved='$status' AND
@@ -454,11 +462,9 @@ class Dokan_Pro_Reviews {
      * @return string
      */
     function dokan_render_listing_table_body( $post_type ) {
-        global $current_user;
-
         $status   = $this->page_status();
         $limit    = $this->limit;
-        $comments = $this->comment_query( $current_user->ID, $post_type, $limit, $status );
+        $comments = $this->comment_query( dokan_get_current_user_id(), $post_type, $limit, $status );
 
         dokan_get_template_part( 'review/listing-table-body', '', array(
             'pro' => true,
@@ -479,10 +485,10 @@ class Dokan_Pro_Reviews {
      *
      * @return object
      */
-    function comment_query( $id, $post_type, $limit, $status ) {
+    function comment_query( $id, $post_type, $limit, $status, $offset = false ) {
         global $wpdb;
 
-        $page_number = get_query_var( 'paged' );
+        $page_number = $offset ? $offset : get_query_var( 'paged' );
         $pagenum     = max( 1, $page_number );
         $offset      = ( $pagenum - 1 ) * $limit;
 
@@ -584,6 +590,10 @@ class Dokan_Pro_Reviews {
             return;
         }
 
+        if ( ! current_user_can( 'dokan_manage_reviews' ) ) {
+            return;
+        }
+
         $action = $_POST['comment_status'];
 
         if ( !count( $_POST['commentid'] ) ) {
@@ -647,7 +657,7 @@ class Dokan_Pro_Reviews {
         return $totalcomments = $wpdb->get_var(
             "SELECT count($wpdb->comments.comment_ID)
             FROM $wpdb->comments, $wpdb->posts
-            WHERE $wpdb->posts.post_author=$current_user->ID AND
+            WHERE $wpdb->posts.post_author=dokan_get_current_user_id() AND
             $wpdb->posts.post_status='publish' AND
             $wpdb->comments.comment_post_ID=wp_posts.ID AND
             $wpdb->comments.comment_approved='$status' AND

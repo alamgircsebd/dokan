@@ -3,7 +3,7 @@
 Plugin Name: WooCommerce Booking Integration
 Plugin URI: https://wedevs.com/products/plugins/dokan/woocommerce-booking-integration/
 Description: This Plugin Integrates WooCommerce Booking with Dokan.
-Version: 1.4.0
+Version: 1.4.1
 Author: weDevs
 Author URI: https://wedevs.com
 Thumbnail Name: booking.png
@@ -41,7 +41,7 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 // Define all constant
-define( 'DOKAN_WC_BOOKING_PLUGIN_VERSION', '1.4.0' );
+define( 'DOKAN_WC_BOOKING_PLUGIN_VERSION', '1.4.1' );
 define( 'DOKAN_WC_BOOKING_DIR', dirname( __FILE__ ) );
 define( 'DOKAN_WC_BOOKING_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 define( 'DOKAN_WC_BOOKING_TEMPLATE_PATH', untrailingslashit( plugin_dir_path( __FILE__ ) ) . '/templates/' );
@@ -80,6 +80,8 @@ class Dokan_WC_Booking {
             return;
         }
 
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -103,6 +105,8 @@ class Dokan_WC_Booking {
         add_action( 'shutdown', array( $this, 'add_seller_manage_cap' ) );
         add_action( 'wp_ajax_dokan-wc-booking-confirm', array( $this, 'mark_booking_confirmed' ) );
         add_action( 'woocommerce_after_order_itemmeta', array( $this, 'booking_display' ), 10, 3 );
+        // booking person type delete
+        add_action( 'wp_ajax_woocommerce_remove_bookable_person', array( $this, 'dokan_remove_bookable_person' ) );
 
         // booking page filters
         add_filter( 'dokan_booking_menu', array( $this, 'dokan_get_bookings_menu' ) );
@@ -194,6 +198,30 @@ class Dokan_WC_Booking {
      * Nothing being called here yet.
      */
     public static function activate() {
+
+        global $wp_roles;
+
+        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
+
+        $all_cap = array(
+            'dokan_view_booking_menu',
+            'dokan_add_booking_product',
+            'dokan_edit_booking_product',
+            'dokan_delete_booking_product',
+            'dokan_manage_booking_products',
+            'dokan_manage_booking_calendar',
+            'dokan_manage_bookings',
+            'dokan_manage_booking_resource'
+        );
+
+        foreach ( $all_cap as $key => $cap ) {
+            $wp_roles->add_cap( 'seller', $cap );
+            $wp_roles->add_cap( 'administrator', $cap );
+            $wp_roles->add_cap( 'shop_manager', $cap );
+        }
+
         set_transient( 'dokan-wc-booking', 1 );
     }
 
@@ -242,6 +270,7 @@ class Dokan_WC_Booking {
                 'i18n_remove_person'  => esc_js( __( 'Are you sure you want to remove this person type?', 'dokan' ) ),
                 'nonce_delete_person' => wp_create_nonce( 'delete-bookable-person' ),
                 'nonce_add_person'    => wp_create_nonce( 'add-bookable-person' ),
+                'nonce_unlink_person' => wp_create_nonce( 'unlink-bookable-person' ),
                 'i18n_remove_resource'  => esc_js( __( 'Are you sure you want to remove this resource?', 'dokan' ) ),
                 'nonce_delete_resource' => wp_create_nonce( 'delete-bookable-resource' ),
                 'nonce_add_resource'    => wp_create_nonce( 'add-bookable-resource' ),
@@ -378,6 +407,11 @@ class Dokan_WC_Booking {
      * @return array $urls
      */
     function add_booking_page( $urls ) {
+
+        if ( ! current_user_can( 'dokan_view_booking_menu' ) ) {
+            return $urls;
+        }
+
         $urls['booking'] = array(
             'title' => __( 'Booking', 'dokan' ),
             'icon'  => '<i class="fa fa-calendar"></i>',
@@ -399,8 +433,13 @@ class Dokan_WC_Booking {
      */
     function load_template_from_plugin( $query_vars ) {
 
+
         if ( isset( $query_vars['booking'] ) ) {
-            dokan_get_template_part( 'booking/booking', '', array( 'is_booking' => true ) );
+            if ( !current_user_can( 'dokan_view_booking_menu' ) ) {
+                dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this booking page', 'dokan' ) ) );
+            } else {
+                dokan_get_template_part( 'booking/booking', '', array( 'is_booking' => true ) );
+            }
             return;
         }
     }
@@ -480,20 +519,20 @@ class Dokan_WC_Booking {
             'max_date_unit'              => wc_clean( $_POST['_wc_booking_max_date_unit'] ),
             'max_date_value'             => wc_clean( $_POST['_wc_booking_max_date'] ),
             'max_duration'               => wc_clean( $_POST['_wc_booking_max_duration'] ),
-            'max_persons'                => wc_clean( $_POST['_wc_booking_max_persons_group'] ),
+            'max_persons'                => isset( $_POST['_wc_booking_max_persons_group'] ) ? wc_clean( $_POST['_wc_booking_max_persons_group'] ) : '',
             'min_date_unit'              => wc_clean( $_POST['_wc_booking_min_date_unit'] ),
             'min_date_value'             => wc_clean( $_POST['_wc_booking_min_date'] ),
             'min_duration'               => wc_clean( $_POST['_wc_booking_min_duration'] ),
-            'min_persons'                => wc_clean( $_POST['_wc_booking_min_persons_group'] ),
+            'min_persons'                => isset( $_POST['_wc_booking_min_persons_group'] ) ? wc_clean( $_POST['_wc_booking_min_persons_group'] ) : '' ,
             'person_types'               => $this->get_posted_person_types( $product ),
             'pricing'                    => $this->get_posted_pricing(),
             'qty'                        => wc_clean( $_POST['_wc_booking_qty'] ),
             'requires_confirmation'      => isset( $_POST['_wc_booking_requires_confirmation'] ),
-            'resource_label'             => wc_clean( $_POST['_wc_booking_resource_label'] ),
+            'resource_label'             => isset( $_POST['_wc_booking_resource_label'] ) ? wc_clean( $_POST['_wc_booking_resource_label'] ) : '',
             'resource_base_costs'        => wp_list_pluck( $resources, 'base_cost' ),
             'resource_block_costs'       => wp_list_pluck( $resources, 'block_cost' ),
             'resource_ids'               => array_keys( $resources ),
-            'resources_assignment'       => wc_clean( $_POST['_wc_booking_resources_assignment'] ),
+            'resources_assignment'       => isset( $_POST['_wc_booking_resources_assignment'] ) ? wc_clean( $_POST['_wc_booking_resources_assignment'] ) : '',
             'user_can_cancel'            => isset( $_POST['_wc_booking_user_can_cancel'] ),
         );
 
@@ -553,7 +592,7 @@ class Dokan_WC_Booking {
             'post_title'   => $add_resource_name,
             'post_content' => '',
             'post_status'  => 'publish',
-            'post_author'  => get_current_user_id(),
+            'post_author'  => dokan_get_current_user_id(),
             'post_type'    => 'bookable_resource'
         );
         $resource_id = wp_insert_post( $resource );
@@ -746,7 +785,7 @@ class Dokan_WC_Booking {
         // Additional check to see if Seller id is same as current user
         $seller = get_post_meta( $booking_id, '_booking_seller_id', true );
 
-        if ( $seller != get_current_user_id() ) {
+        if ( $seller != dokan_get_current_user_id() ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'dokan' ) );
         }
 
@@ -830,7 +869,7 @@ class Dokan_WC_Booking {
      */
     function dokan_get_bookings_menu( $bookings ) {
         $bookings = array(
-            ""                => array(
+            "" => array(
                 'title' => __( 'All Booking Product', 'dokan' ),
                 'tabs'  => true
             ),
@@ -840,15 +879,15 @@ class Dokan_WC_Booking {
             ),
             "my-bookings"     => array(
                 'title' => __( 'Manage Bookings', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => current_user_can( 'dokan_manage_bookings' )
             ),
             "calendar"        => array(
                 'title' => __( 'Calendar', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => current_user_can( 'dokan_manage_booking_calendar' )
             ),
             "resources"       => array(
                 'title' => __( 'Manage Resources', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => current_user_can( 'dokan_manage_booking_resource' )
             ),
             "edit"            => array(
                 'title' => __( 'Edit Booking Product', 'dokan' ),
@@ -1097,6 +1136,45 @@ class Dokan_WC_Booking {
                     <?php
             }
         }
+    }
+
+    /**
+     * Delete bookable person type
+     * @since 2.7.3
+     */
+    public function dokan_remove_bookable_person() {
+        if ( ! isset( $_POST['action'] ) && $_POST['action'] != 'woocommerce_remove_bookable_person' ) {
+            return;
+        }
+        if ( ! wp_verify_nonce( $_POST['security'], 'delete-bookable-person' ) ) {
+            return;
+        }
+
+        wp_delete_post( $_POST['person_id'] );
+        exit;
+    }
+
+    /**
+     * Add capabilities
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_capabilities( $capabilities ) {
+        $capabilities['menu'][] = 'dokan_view_booking_menu';
+
+        $capabilities['booking'] = array(
+            'dokan_manage_booking_products',
+            'dokan_manage_booking_calendar',
+            'dokan_manage_bookings',
+            'dokan_manage_booking_resource',
+            'dokan_add_booking_product',
+            'dokan_edit_booking_product',
+            'dokan_delete_booking_product',
+        );
+
+        return $capabilities;
     }
 }
 

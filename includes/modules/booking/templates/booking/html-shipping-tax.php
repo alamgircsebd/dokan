@@ -25,7 +25,7 @@
         <?php
             $dokan_shipping_option  = get_option( 'woocommerce_dokan_product_shipping_settings' );
             $dokan_shipping_enabled = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
-            $store_shipping         = get_user_meta( get_current_user_id(), '_dps_shipping_enable', true );
+            $store_shipping         = get_user_meta( dokan_get_current_user_id(), '_dps_shipping_enable', true );
         ?>
         <?php if( 'yes' == get_option('woocommerce_calc_shipping') ): ?>
             <div class="dokan-clearfix dokan-shipping-container">

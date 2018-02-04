@@ -74,7 +74,7 @@ class Dokan_Pro_Reports {
             echo "\r\n";
 
             //calculate opening balance
-            $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $start_date, get_current_user_id(), dokan_withdraw_get_active_order_status() );
+            $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $start_date, dokan_get_current_user_id(), dokan_withdraw_get_active_order_status() );
             $prev_refunds    = dokan_get_seller_refund_by_date( '2010-01-01', $start_date );
             $prev_wthdraws   = dokan_get_seller_withdraw_by_date( '2010-01-01', $start_date );
 
@@ -249,7 +249,8 @@ class Dokan_Pro_Reports {
             'title' => __( 'Reports', 'dokan' ),
             'icon'  => '<i class="fa fa-line-chart"></i>',
             'url'   => dokan_get_navigation_url( 'reports' ),
-            'pos'   => 60
+            'pos'   => 60,
+            'permission' => 'dokan_view_report_menu'
         );
 
         return $urls;
@@ -266,8 +267,13 @@ class Dokan_Pro_Reports {
      */
     public function load_reports_template( $query_vars ) {
         if ( isset( $query_vars['reports'] ) ) {
-            dokan_get_template_part( 'report/reports', '', array( 'pro' => true ) );
-            return;
+            if ( ! current_user_can( 'dokan_view_review_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view review page', 'dokan' ) ) );
+                return;
+            } else {
+                dokan_get_template_part( 'report/reports', '', array( 'pro' => true ) );
+                return;
+            }
         }
     }
 

@@ -102,6 +102,7 @@ class Dokan_Seller_Verification {
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
         //filters
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_filter( 'dokan_get_dashboard_settings_nav', array( $this, 'register_dashboard_menu' ) );
         add_filter( 'dokan_query_var_filter', array( $this, 'dokan_verification_template_endpoint' ) );
 
@@ -137,8 +138,10 @@ class Dokan_Seller_Verification {
     }
 
     function load_verification_content( $query_vars ) {
-        if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'verification' ) {
+        if ( current_user_can( 'dokan_view_store_verification_menu' ) && isset( $query_vars['settings'] ) && $query_vars['settings'] == 'verification' ) {
             require_once DOKAN_VERFICATION_DIR . '/templates/verification-new.php';
+        } else {
+            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this verification page', 'dokan' ) ) );
         }
     }
 
@@ -166,6 +169,23 @@ class Dokan_Seller_Verification {
         }
 
         return $instance;
+    }
+
+    /**
+     * Placeholder for activation function
+     *
+     * Nothing being called here yet.
+     */
+    public static function activate() {
+        global $wp_roles;
+
+        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
+
+        $wp_roles->add_cap( 'seller', 'dokan_view_store_verification_menu' );
+        $wp_roles->add_cap( 'administrator', 'dokan_view_store_verification_menu' );
+        $wp_roles->add_cap( 'shop_manager', 'dokan_view_store_verification_menu' );
     }
 
     /**
@@ -351,6 +371,19 @@ class Dokan_Seller_Verification {
     }
 
     /**
+     * Add capabilities
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_capabilities( $capabilities ) {
+        $capabilities['menu'][] = 'dokan_view_store_verification_menu';
+
+        return $capabilities;
+    }
+
+    /**
      * Adds Verification menu on Dokan Seller Dashboard
      *
      * @since 1.0.0
@@ -359,11 +392,13 @@ class Dokan_Seller_Verification {
      */
     public function register_dashboard_menu( $urls ) {
         $urls['verification'] = array(
-            'title' => __( 'Verification', 'dokan' ),
-            'icon'  => '<i class="fa fa-check"></i>',
-            'url'   => dokan_get_navigation_url( 'settings/verification' ),
-            'pos'   => 55
+            'title'      => __( 'Verification', 'dokan' ),
+            'icon'       => '<i class="fa fa-check"></i>',
+            'url'        => dokan_get_navigation_url( 'settings/verification' ),
+            'pos'        => 55,
+            'permission' => 'dokan_view_store_verification_menu'
         );
+
         return $urls;
     }
 
@@ -731,3 +766,5 @@ class Dokan_Seller_Verification {
 }
 
 $dokan_Seller_Verification = Dokan_Seller_Verification::init();
+
+dokan_register_activation_hook( __FILE__, array( 'Dokan_Seller_Verification', 'activate' ) );

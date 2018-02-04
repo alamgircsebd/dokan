@@ -50,7 +50,7 @@
                     'posts_per_page' => -1,
                     'orderby'        => 'menu_order',
                     'order'          => 'asc',
-                    'author'         => get_current_user_id(),
+                    'author'         => dokan_get_current_user_id(),
                 ) );
 
                 if ( $post_id ) {
