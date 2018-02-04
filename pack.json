@@ -12,6 +12,6 @@
     ],
 
     "enterprise" : [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor", "vendor-staff"
     ]
 }
