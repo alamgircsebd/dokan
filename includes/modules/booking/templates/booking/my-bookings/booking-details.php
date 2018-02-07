@@ -31,9 +31,8 @@ if ( !$can_edit ) {
     return;
 }
 
-$order_url = add_query_arg( 'order_id', $order_id, dokan_get_navigation_url( 'orders' ) );
-
-$product = $the_booking->get_product();
+$order_url = wp_nonce_url( add_query_arg( array( 'order_id' => $order_id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' );
+$product   = $the_booking->get_product();
 
 $statuses  = array_unique( array_merge( get_wc_booking_statuses( 'user' ), get_wc_booking_statuses( 'cancel') ) );
 ?>

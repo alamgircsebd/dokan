@@ -1,21 +1,53 @@
 <?php
 $changelog = array(
     array(
-        'version'  => 'Version 2.7.2',
-        'released' => '2017-12-24',
+        'version'  => 'Version 2.7.3',
+        'released' => '2018-02-04',
         'changes' => array(
             array(
-                'title'       => 'Attributes not being saved properly in product edit section',
-                'type'        => 'Fix',
-                'description' => 'Vendor\'s product edit section under dashboard wasn\'t saving attributes properly , so variations were not created properly. This issue is resolved now with proper saving of attributes.'
+                    'title'       => 'Email Verification on registration',
+                    'type'        => 'New',
+                    'description' => 'Now you can simply enable Email Verification from your Dokan Settings panel to restrict Registration to valid users only.'
+                ),
+            array(
+                'title'       => 'Vendor Staff Management Module',
+                'type'        => 'New',
+                'description' => 'Dokan Vendor Staff Manager Module is a new introduction to Dokan Premium Modules Family. This module gives the sellers of your multivendor marketplace a unique opportunity to appoint an unlimited number of personnel or staffs to manage their individual stores. <a href="https://wedevs.com/docs/dokan/modules/dokan-vendor-staff-manager/">More Details and Documentation</a>
+                                  Vendor Staff Manager is available in Dokan Business and Enterprise Packages. <br><iframe width="560" height="315" src="https://www.youtube.com/embed/z4yinwCxabI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'
             ),
             array(
-                'title'       => 'Dokan Import Export Module Importer showing blank page',
+                'title'       => 'Appearance   :  Color scheme not working on product edit page',
                 'type'        => 'Fix',
-                'description' => 'Import page for Dokan Import Export module was showing a blank page due to internal error. This issue is now resolved'
+                'description' => 'Fixed the color scheme customizer module not working properly on product edit page.'
+            ),
+            array(
+                'title'       => 'Booking      :  Person type unlink or remove not working',
+                'type'        => 'Fix',
+                'description' => 'Fixed person type is not removable from booking type products'
+            ),
+            array(
+                'title'       => 'Various other Bug fixes and Improvements',
+                'type'        => 'Improvement',
+                'description' => 'Many other improvements were made to improve the UX and Performance optimization. See the Change log for more details.'
             ),
         )
     ),
+//    array(
+//        'version'  => 'Version 2.7.2',
+//        'released' => '2017-12-24',
+//        'changes' => array(
+//            array(
+//                'title'       => 'Attributes not being saved properly in product edit section',
+//                'type'        => 'Fix',
+//                'description' => 'Vendor\'s product edit section under dashboard wasn\'t saving attributes properly , so variations were not created properly. This issue is resolved now with proper saving of attributes.'
+//            ),
+//            array(
+//                'title'       => 'Dokan Import Export Module Importer showing blank page',
+//                'type'        => 'Fix',
+//                'description' => 'Import page for Dokan Import Export module was showing a blank page due to internal error. This issue is now resolved'
+//            ),
+//        )
+//    ),
     //    array(
     //        'version'  => 'Version 2.7.1',
     //        'released' => '2017-12-13',
@@ -190,7 +222,8 @@ function _dokan_changelog_content( $content ) {
     line-height: 1.5;
 }
 
-.wedevs-changelog .wedevs-changelog-history img {
+.wedevs-changelog .wedevs-changelog-history img, 
+.wedevs-changelog .wedevs-changelog-history iframe {
     margin-top: 30px;
     max-width: 100%;
 }

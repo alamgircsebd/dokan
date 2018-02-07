@@ -485,10 +485,10 @@ class Dokan_Pro_Reviews {
      *
      * @return object
      */
-    function comment_query( $id, $post_type, $limit, $status ) {
+    function comment_query( $id, $post_type, $limit, $status, $offset = false ) {
         global $wpdb;
 
-        $page_number = get_query_var( 'paged' );
+        $page_number = $offset ? $offset : get_query_var( 'paged' );
         $pagenum     = max( 1, $page_number );
         $offset      = ( $pagenum - 1 ) * $limit;
 
