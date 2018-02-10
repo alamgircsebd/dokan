@@ -615,7 +615,7 @@ class Dokan_Pro {
 
         return array_merge( $dokan_pro_emails, $dokan_emails );
     }
-    
+
 }
 
 add_action( 'init', 'dokan_load_pro', 0 );
@@ -634,7 +634,8 @@ function dokan_load_pro() {
 function pro_rest_api_class_map( $class_map ) {
     $classes = array(
         dirname( __FILE__ ) . '/includes/api/class-dokan-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
-        dirname( __FILE__ ) . '/includes/api/class-dokan-reports-controller.php' => 'Dokan_REST_Reports_Controller'
+        dirname( __FILE__ ) . '/includes/api/class-dokan-reports-controller.php' => 'Dokan_REST_Reports_Controller',
+        dirname( __FILE__ ) . '/includes/api/class-dokan-reviews-controller.php' => 'Dokan_REST_Reviews_Controller'
     );
 
     return array_merge( $class_map, $classes );
