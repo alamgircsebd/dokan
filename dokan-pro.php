@@ -7,7 +7,7 @@
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 2.6
-  WC tested up to: 3.2.6
+  WC tested up to: 3.3.1
   License: GPL2
   TextDomain: dokan
  */
