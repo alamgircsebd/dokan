@@ -138,10 +138,13 @@ class Dokan_Seller_Verification {
     }
 
     function load_verification_content( $query_vars ) {
-        if ( current_user_can( 'dokan_view_store_verification_menu' ) && isset( $query_vars['settings'] ) && $query_vars['settings'] == 'verification' ) {
-            require_once DOKAN_VERFICATION_DIR . '/templates/verification-new.php';
-        } else {
-            dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this verification page', 'dokan' ) ) );
+        if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'verification' ) {
+            if (  current_user_can( 'dokan_view_store_verification_menu' ) ) {
+                require_once DOKAN_VERFICATION_DIR . '/templates/verification-new.php';
+            } else {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this verification page', 'dokan' ) ) );
+            }
+            return;
         }
     }
 
