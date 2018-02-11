@@ -633,9 +633,10 @@ function dokan_load_pro() {
 
 function pro_rest_api_class_map( $class_map ) {
     $classes = array(
-        dirname( __FILE__ ) . '/includes/api/class-dokan-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
-        dirname( __FILE__ ) . '/includes/api/class-dokan-reports-controller.php' => 'Dokan_REST_Reports_Controller',
-        dirname( __FILE__ ) . '/includes/api/class-dokan-reviews-controller.php' => 'Dokan_REST_Reviews_Controller'
+        dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
+        dirname( __FILE__ ) . '/includes/api/class-reports-controller.php' => 'Dokan_REST_Reports_Controller',
+        dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php' => 'Dokan_REST_Reviews_Controller',
+        dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller'
     );
 
     return array_merge( $class_map, $classes );
