@@ -1,3 +1,10 @@
+v2.7.4 -> Feb 12, 2018
+---------------------
+- [fix]   Fixed vendor verification permission issue
+- [fix]   Fixed Shipping not rendering in cart and checkout page
+- [fix]   Fixed dokan verification and store support Widget issue
+- [tweak] Compatibility with WooCommerce 3.3+
+
 v2.7.3 -> Feb 04, 2018
 ---------------------
 - [new]   Vendor Staff Module is added

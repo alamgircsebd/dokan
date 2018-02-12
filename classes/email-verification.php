@@ -53,48 +53,48 @@ Class Dokan_Email_Verification {
         if ( 'on' != dokan_get_option( 'enabled', 'dokan_email_verification' ) ) {
            return;
         }
-        
+
         add_action( 'woocommerce_created_customer', array( $this,'send_verification_email'), 5, 3 );
         add_action( 'woocommerce_registration_redirect', array( $this, 'check_verification' ), 99 );
         add_action( 'woocommerce_login_redirect', array( $this, 'check_verification' ), 99, 2 );
         add_action( 'init', array( $this,'validate_email_link' ) );
-        add_action( 'woocommerce_email_footer', array( $this,'add_activation_link' ) );        
+        add_action( 'woocommerce_email_footer', array( $this,'add_activation_link' ) );
     }
-    
+
     /**
      * Set Verification meta
-     * 
+     *
      * @param type $customer_id
-     * 
+     *
      * @param type $new_customer_data
-     * 
+     *
      * @param type $password_generated
-     * 
+     *
      * @return void
      */
     function send_verification_email( $customer_id, $new_customer_data, $password_generated ) {
         $user            = get_user_by( 'id', $customer_id );
         $code            = sha1( $customer_id . $user->user_email . time() );
-      
+
         // update user meta
         add_user_meta( $customer_id, '_dokan_email_verification_key', $code, true );
         add_user_meta( $customer_id, '_dokan_email_pending_verification', true, true);
     }
-    
+
     /**
      * Check for verification when a user logs in
-     * 
+     *
      * @param type $redirect
-     * 
+     *
      * @param WP_User $user
-     * 
+     *
      * @return String $redirect
      */
     function check_verification( $redirect, $user = array() ) {
 
         $user_id = get_current_user_id();
         $notice = dokan_get_option( 'registration_notice', 'dokan_email_verification' );
-        
+
         if ( !empty( $user ) ) {
             $user_id = $user->ID;
             $notice = dokan_get_option( 'login_notice', 'dokan_email_verification' );
@@ -136,40 +136,40 @@ Class Dokan_Email_Verification {
 
         delete_user_meta( $user_id, '_dokan_email_pending_verification' );
         delete_user_meta( $user_id, '_dokan_email_verification_key' );
-        
+
         $notice = dokan_get_option( 'activation_notice', 'dokan_email_verification' );
-        
+
         wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
         do_action( 'woocommerce_set_cart_cookies',  true );
-        
+
         dokan_redirect_login();
     }
-    
+
     /**
      * Add verification link in welcome email
-     * 
+     *
      * @param type $email
-     * 
+     *
      * @return void
      */
     function add_activation_link( $email ) {
-        
+
         if ( $email->id != 'customer_new_account' ) {
             return;
         }
-        
+
         $user = get_user_by( 'email', $email->user_email );
-        
+
         $verification_key = get_user_meta( $user->ID, '_dokan_email_verification_key', true );
-        
+
         if ( empty( $verification_key ) ) {
             return;
         }
 
         $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID ), $this->base_url );
-        
+
         $message = sprintf( __( "<p><b>To Verify your Email <a href='%s'>Click Here</a></b></p>", 'dokan' ), $verification_link );
-        
+
         echo apply_filters( 'dokan_email_verification_email_text' , $message, $verification_link );
     }
 
@@ -226,13 +226,13 @@ Class Dokan_Email_Verification {
                 'desc'  => __( 'This notice will be shown when a user succesfully completes email verification.', 'dokan' ),
                 'default' => __( 'Email verification is complete, you can now login.', 'dokan' ),
             ),
-            
-            
+
+
         );
 
         return $settings_fields;
     }
-    
+
     /**
      * Get Post Type array
      *
@@ -255,4 +255,3 @@ Class Dokan_Email_Verification {
 
 }
 
-$dokan_email_v = Dokan_Email_Verification::init();

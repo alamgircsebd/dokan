@@ -43,6 +43,14 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
         add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
     }
 
+    /**
+     * Checking is gateway enabled or not
+     *
+     * @return boolean [description]
+     */
+    public function is_method_enabled() {
+        return $this->enabled == 'yes';
+    }
 
     /**
      * Initialise Gateway Settings Form Fields

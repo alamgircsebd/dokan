@@ -481,5 +481,3 @@ Class Dokan_Social_Login {
     }
 
 }
-
-$dokan_social_login = Dokan_Social_Login::init();

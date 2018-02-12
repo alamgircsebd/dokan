@@ -68,6 +68,7 @@ class Dokan_Store_Support {
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'init', array( $this, 'init_hooks' ) );
+        require_once DOKAN_STORE_SUPPORT_DIR . '/support-widget.php';
     }
 
     /**
@@ -121,8 +122,7 @@ class Dokan_Store_Support {
         add_action( 'dokan_store_profile_saved', array( $this, 'save_supoort_btn_title' ), 13 );
 
         add_filter( 'woocommerce_locate_template', array( $this, 'customer_topic_list' ),15 );
-        
-        require_once DOKAN_STORE_SUPPORT_DIR . '/support-widget.php';
+
     }
 
     /**
@@ -131,13 +131,13 @@ class Dokan_Store_Support {
      * Nothing being called here yet.
      */
     public static function activate() {
-        
+
         global $wp_roles;
-        
+
         if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
             $wp_roles = new WP_Roles();
         }
-        
+
         $all_cap = array(
             'dokan_manage_support_tickets',
         );
@@ -147,7 +147,7 @@ class Dokan_Store_Support {
             $wp_roles->add_cap( 'administrator', $cap );
             $wp_roles->add_cap( 'shop_manager', $cap );
         }
-        
+
         $support_url = dokan_get_page_url( 'myaccount', 'woocommerce' ). 'support-tickets/';
         add_option( 'dokan-customer-support' , $support_url );
         set_transient( 'dokan-store-support-activated', 1 );
@@ -459,11 +459,11 @@ class Dokan_Store_Support {
             update_post_meta( $post_id, 'order_id', $postdata['order_id'] );
 
             $this->send_email_to_seller( $postdata['store_id'], $post_id );
-            
+
             $success_msg = __( 'Thank you. Your ticket has been submitted!', 'dokan' );
-            
+
             do_action( 'dss_new_ticket_created', $post_id, $postdata['store_id'] );
-            
+
             wp_send_json( array(
                 'success' => true,
                 'msg'     => apply_filters( 'dss_ticket_submission_msg' , $success_msg),
@@ -491,7 +491,6 @@ class Dokan_Store_Support {
         $vars[] = 'support';
         $vars[] = 'support-tickets';
 
-        error_log( print_r( $vars, true ) );
         return $vars;
     }
 
@@ -515,7 +514,7 @@ class Dokan_Store_Support {
      * @return array $urls
      */
     function add_store_support_page( $urls ) {
-        
+
         if ( !current_user_can( 'dokan_manage_support_tickets' ) ) {
             return $urls;
         }
@@ -733,7 +732,7 @@ class Dokan_Store_Support {
         );
 
         $args_t = apply_filters( 'dokan_support_get_single_topic_args', $args_t );
-        
+
         $query_dss = new WP_Query( $args_t );
         return $query_dss;
     }
@@ -767,7 +766,7 @@ class Dokan_Store_Support {
      */
     function print_single_topic( $topic ) {
         global $wp;
-       
+
         $is_customer = 0;
         $back_url    = dokan_get_navigation_url( 'support' );
 
@@ -1089,7 +1088,7 @@ class Dokan_Store_Support {
 
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $num_of_pages = ceil( $this->total_query_result / $this->per_page );
-        
+
         if ( is_account_page() ) {
             $base_url = home_url( 'my-account/support-tickets/' );
         } else {
@@ -1194,15 +1193,15 @@ class Dokan_Store_Support {
 
         $post_id     = (int) $comment->comment_post_ID;
         $parent_post = get_post( $post_id );
-    
+
         if ( $parent_post->post_type != $this->post_type){
             return;
         }
-        
+
         $store_id = get_post_meta( $post_id, 'store_id', true );
-        
+
         do_action( 'dss_new_comment_inserted', $post_id, $store_id );
-        
+
         if ( ! isset($_POST['dokan-topic-status-change'] ) ) {
             $this->notify_ticket_author( $comment, $parent_post, true );
             return;
@@ -1497,7 +1496,7 @@ class Dokan_Store_Support {
 
         return $items;
     }
-    
+
      /**
      * Add capabilities
      *

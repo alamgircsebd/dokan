@@ -3,7 +3,9 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.9
+Tested up to: 4.9.4
+WC requires at least: 2.6
+WC tested up to: 3.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -169,6 +171,13 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.7.4 -> Feb 12, 2018
+---------------------
+- [fix]   Fixed vendor verification permission issue
+- [fix]   Fixed Shipping not rendering in cart and checkout page
+- [fix]   Fixed dokan verification and store support Widget issue
+- [tweak] Compatibility with WooCommerce 3.3+
 
 v2.7.3 -> Feb 04, 2018
 ---------------------

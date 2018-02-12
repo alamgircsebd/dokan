@@ -1061,8 +1061,10 @@ function dokan_custom_split_shipping_packages( $packages ) {
 
     foreach ( $seller_pack as $seller_id => $pack ) {
 
+        $dokan_shipping = new Dokan_WC_Shipping();
+
         // If seller store shipping is disabled then bell out from here
-        if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
+        if ( $dokan_shipping->is_method_enabled() && ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
             continue;
         }
 
