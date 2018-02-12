@@ -1,6 +1,33 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.7.4',
+        'released' => '2018-02-12',
+        'changes' => array(
+            array(
+                'title'       => 'Shipping rendering problem',
+                'type'        => 'Fix',
+                'description' => 'Shipping calculation is not showing on cart and checkout page if dokan shipping is disabled.'
+            ),
+            array(
+                'title'       => 'Vendor verification and store support widgets are not showing on widget area',
+                'type'        => 'Fix',
+                'description' => 'Because of plugin loading sequesnce, the vendor verification and store support widget are not showing in Theme widget area.'
+            ),
+            array(
+                'title'       => 'Vendor verifcation permission issue',
+                'type'        => 'Fix',
+                'description' => 'Due to wrong permission checking in vendor verification settings page and error is always showing in Vendor settings dashboard'
+            ),
+            array(
+                'title'       => 'Compatibility Testing for WooCommerce 3.3+',
+                'type'        => 'Improvement',
+                'description' => 'Dokan pro are now compatible with WooCommerce 3.3+'
+            )
+        )
+    ),
+
+    array(
         'version'  => 'Version 2.7.3',
         'released' => '2018-02-04',
         'changes' => array(
@@ -222,7 +249,7 @@ function _dokan_changelog_content( $content ) {
     line-height: 1.5;
 }
 
-.wedevs-changelog .wedevs-changelog-history img, 
+.wedevs-changelog .wedevs-changelog-history img,
 .wedevs-changelog .wedevs-changelog-history iframe {
     margin-top: 30px;
     max-width: 100%;
