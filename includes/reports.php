@@ -284,7 +284,7 @@ function dokan_seller_sales_statement() {
  */
 function dokan_get_order_report_data( $args = array(), $start_date, $end_date, $current_user = false ) {
     global $wpdb;
-    
+
     if ( !$current_user ) {
         $current_user = dokan_get_current_user_id();
     }

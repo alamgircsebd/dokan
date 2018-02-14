@@ -40,6 +40,15 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
             ),
         ) );
 
+        register_rest_route( $this->namespace, '/' . $this->base . '/summary', array(
+            array(
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'get_reviews_summary' ),
+                'permission_callback' => array( $this, 'check_reviews_summary_permission' ),
+                'args'                => $this->get_collection_params(),
+            ),
+        ) );
+
         register_rest_route( $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)', array(
             'args' => array(
                 'id' => array(
@@ -82,6 +91,17 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
      */
     public function manage_reviews_permission_check() {
         return current_user_can( 'dokan_manage_reviews' );
+    }
+
+    /**
+     * Get reviews permissions
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function check_reviews_summary_permission() {
+        return current_user_can( 'dokan_view_review_reports' );
     }
 
     /**
@@ -200,10 +220,29 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
     }
 
     /**
+     * Get review summary
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function get_reviews_summary( $request ) {
+        $seller_id = dokan_get_current_user_id();
+
+        $data = array(
+            'comment_counts' => dokan_count_comments( 'product', $seller_id ),
+            'reviews_url'    => dokan_get_navigation_url( 'reviews' ),
+        );
+
+        return rest_ensure_response( $data );
+    }
+
+    /**
      * Prepare a single product review output for response.
      *
      * @param WP_Comment $review Product review object.
      * @param WP_REST_Request $request Request object.
+     *
      * @return WP_REST_Response $response Response data.
      */
     public function prepare_item_for_response( $review, $request ) {
