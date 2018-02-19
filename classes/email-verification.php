@@ -57,7 +57,7 @@ Class Dokan_Email_Verification {
         add_action( 'woocommerce_created_customer', array( $this,'send_verification_email'), 5, 3 );
         add_action( 'woocommerce_registration_redirect', array( $this, 'check_verification' ), 99 );
         add_action( 'woocommerce_login_redirect', array( $this, 'check_verification' ), 99, 2 );
-        add_action( 'init', array( $this,'validate_email_link' ) );
+        add_action( 'init', array( $this,'validate_email_link' ), 100 );
         add_action( 'woocommerce_email_footer', array( $this,'add_activation_link' ) );
     }
 
@@ -137,12 +137,26 @@ Class Dokan_Email_Verification {
         delete_user_meta( $user_id, '_dokan_email_pending_verification' );
         delete_user_meta( $user_id, '_dokan_email_verification_key' );
 
-        $notice = dokan_get_option( 'activation_notice', 'dokan_email_verification' );
+        // $notice = dokan_get_option( 'activation_notice', 'dokan_email_verification' );
 
-        wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
+        // wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
         do_action( 'woocommerce_set_cart_cookies',  true );
 
-        dokan_redirect_login();
+        $user = get_user_by( 'id', $user_id );
+
+        if ( $user ) {
+            clean_user_cache( $user_id );
+            wp_clear_auth_cookie();
+            wp_set_current_user( $user_id, $user->user_login );
+
+            if ( is_ssl() == true ) {
+                wp_set_auth_cookie( $user_id, true, true );
+            } else {
+                wp_set_auth_cookie( $user_id, true, false );
+            }
+
+            update_user_caches( $user );
+        }
     }
 
     /**
@@ -219,13 +233,13 @@ Class Dokan_Email_Verification {
                 'desc'  => __( 'This notice will be shown when a user tries to login without email verification.', 'dokan' ),
                 'default' => __( 'Please Check your Email and complete Email Verification to Login.', 'dokan' ),
             ),
-            'activation_notice' => array(
-                'name'  => 'activation_notice',
-                'label' => __( 'Activation Notice', 'dokan' ),
-                'type'  => "text",
-                'desc'  => __( 'This notice will be shown when a user succesfully completes email verification.', 'dokan' ),
-                'default' => __( 'Email verification is complete, you can now login.', 'dokan' ),
-            ),
+            // 'activation_notice' => array(
+            //     'name'  => 'activation_notice',
+            //     'label' => __( 'Activation Notice', 'dokan' ),
+            //     'type'  => "text",
+            //     'desc'  => __( 'This notice will be shown when a user succesfully completes email verification.', 'dokan' ),
+            //     'default' => __( 'Email verification is complete, you will be loggedin automatically in a few seconds.', 'dokan' ),
+            // ),
 
 
         );
