@@ -108,6 +108,17 @@ class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Control
     }
 
     /**
+     * Validation before create variation item
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function validation_before_create_item( $request ) {
+        return true;
+    }
+
+    /**
      * Get product data.
      *
      * @param WC_Product $product Product instance.
