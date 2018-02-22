@@ -29,27 +29,37 @@ class Dokan_Store_Support_Widget extends WP_Widget {
      */
     function widget( $args, $instance ) {
 
-        if ( ! dokan_is_store_page() ) {
-            return;
+        if ( dokan_is_store_page() || is_product() ) {
+            extract( $args, EXTR_SKIP );
+
+            if ( is_product() ) {
+                global $post;
+                $seller_id = get_post_field( 'post_author', $post->ID );
+            }
+
+            if ( dokan_is_store_page() ) {
+                $seller_id  = (int) get_query_var( 'author' );
+            }
+
+            if ( empty( $seller_id ) ) {
+                return;
+            }
+
+            $title     = apply_filters( 'dokan_store_support_widget_title', $instance['title'] );
+            $desc      = $instance['description'];
+
+            echo $before_widget;
+            if ( ! empty( $title ) ) {
+                echo $args['before_title'] . $title . $args['after_title'];
+            }
+            if ( ! empty( $desc ) ) {
+                echo '<p class="store-support-widget-desc">' . $desc . '</p>';
+            }
+
+            $this->generate_support_button_on_widget( $seller_id );
+
+            echo $after_widget;
         }
-
-        extract( $args, EXTR_SKIP );
-
-        $title     = apply_filters( 'dokan_store_support_widget_title', $instance['title'] );
-        $desc      = $instance['description'];
-
-        echo $before_widget;
-
-        if ( ! empty( $title ) ) {
-            echo $args['before_title'] . $title . $args['after_title'];
-        }
-        if ( ! empty( $desc ) ) {
-            echo '<p class="store-support-widget-desc">' . $desc . '</p>';
-        }
-
-        $this->generate_support_button_on_widget();
-
-        echo $after_widget;
     }
 
     /**
