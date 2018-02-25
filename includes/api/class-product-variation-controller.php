@@ -126,7 +126,7 @@ class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Control
      *                            Options: 'view' and 'edit'.
      * @return array
      */
-    protected function prepare_data_for_response( $object, $context = 'view' ) {
+    protected function prepare_data_for_response( $object, $request ) {
         $data = array(
             'id'                    => $object->get_id(),
             'date_created'          => wc_rest_prepare_date_response( $object->get_date_created(), false ),
@@ -173,7 +173,10 @@ class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Control
             'meta_data'             => $object->get_meta_data(),
         );
 
-        return apply_filters( "dokan_rest_prepare_{$this->post_type}_object", $data );
+        $response = rest_ensure_response( $data );
+        $response->add_links( $this->prepare_links( $object, $request ) );
+
+        return apply_filters( "dokan_rest_prepare_{$this->post_type}_object", $response, $object );
     }
 
     /**
@@ -426,5 +429,30 @@ class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Control
 
         return $response;
     }
+
+    /**
+     * Prepare links for the request.
+     *
+     * @param WC_Data         $object  Object data.
+     * @param WP_REST_Request $request Request object.
+     * @return array                   Links for the given post.
+     */
+    protected function prepare_links( $object, $request ) {
+        $product_id = (int) $request['product_id'];
+        $base       = str_replace( '(?P<product_id>[\d]+)', $product_id, $this->rest_base );
+        $links      = array(
+            'self' => array(
+                'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $base, $object->get_id() ) ),
+            ),
+            'collection' => array(
+                'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $base ) ),
+            ),
+            'up' => array(
+                'href' => rest_url( sprintf( '/%s/products/%d', $this->namespace, $product_id ) ),
+            ),
+        );
+        return $links;
+    }
+
 
 }

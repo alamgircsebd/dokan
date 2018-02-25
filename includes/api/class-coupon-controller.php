@@ -277,7 +277,9 @@ class Dokan_REST_Coupon_Controller extends Dokan_REST_Controller {
      */
     public function prepare_data_for_response( $object, $request ) {
         $data     = $this->get_formatted_item_data( $object );
-        return apply_filters( "dokan_rest_prepare_{$this->post_type}_object", $data, $object, $request );
+        $response      = rest_ensure_response( $data );
+        $response->add_links( $this->prepare_links( $object, $request ) );
+        return apply_filters( "dokan_rest_prepare_{$this->post_type}_object", $response, $object, $request );
     }
 
     /**
@@ -434,6 +436,28 @@ class Dokan_REST_Coupon_Controller extends Dokan_REST_Controller {
     protected function filter_writable_props( $schema ) {
         return empty( $schema['readonly'] );
     }
+
+    /**
+     * Prepare links for the request.
+     *
+     * @param WC_Data         $object  Object data.
+     * @param WP_REST_Request $request Request object.
+     *
+     * @return array                   Links for the given post.
+     */
+    protected function prepare_links( $object, $request ) {
+        $links = array(
+            'self' => array(
+                'href' => rest_url( sprintf( '/%s/%s/%d', $this->namespace, $this->base, $object->get_id() ) ),
+            ),
+            'collection' => array(
+                'href' => rest_url( sprintf( '/%s/%s', $this->namespace, $this->base ) ),
+            ),
+        );
+
+        return $links;
+    }
+
 
     /**
      * Get the Coupon's schema, conforming to JSON Schema.
