@@ -230,7 +230,7 @@ class DPS_Admin {
 
         $woocommerce_pack_validity_field = $_POST['_pack_validity'];
 
-        if ( ! empty( $woocommerce_pack_validity_field ) ) {
+        if ( isset( $woocommerce_pack_validity_field ) ) {
             update_post_meta( $post_id, '_pack_validity', $woocommerce_pack_validity_field );
         }
 
