@@ -101,7 +101,7 @@ class DPS_Admin {
             array(
                 'id'                => '_pack_validity',
                 'label'             => __( 'Pack Validity', 'dokan' ),
-                'placeholder'       => 30,
+                'placeholder'       => 'Put 0 for unlimited days',
                 'description'       => __( 'Enter no of validity days you want to give this pack ', 'dokan' ),
                 'type'              => 'number',
                 'custom_attributes' => array(
