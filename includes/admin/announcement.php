@@ -23,7 +23,7 @@ class Dokan_Announcement {
             'selected_seller' => __( 'Selected Vendor', 'dokan' )
         );
 
-        add_action( 'init', array( $this, 'post_types' ) );
+        add_action( 'init', array( $this, 'post_types' ), 20 );
         add_action( 'add_meta_boxes', array( $this, 'add_new_metabox' ) );
         add_action( 'save_post', array( $this, 'save_announcement_meta' ), 10, 2 );
         add_action( 'admin_footer', array( $this, 'help_text' ));
