@@ -61,6 +61,10 @@ class Dokan_Update {
      * @return boolean
      */
     private function is_local_server() {
+        // we are from cli
+        if ( ! isset( $_SERVER['HTTP_HOST'] ) ) {
+            return;
+        }
 
         if ( $_SERVER['HTTP_HOST'] == 'localhost'
             || substr( $_SERVER['REMOTE_ADDR'], 0, 3 ) == '10.'
