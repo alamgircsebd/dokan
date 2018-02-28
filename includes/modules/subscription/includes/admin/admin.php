@@ -18,7 +18,7 @@ class DPS_Admin {
         add_action( 'woocommerce_product_options_general_product_data', array( $this, 'general_fields' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'general_fields_save' ), 99 );
 
-        add_action( 'dokan_admin_menu', array( $this, 'add_submenu_in_dokan_dashboard' ) );
+        add_action( 'dokan_admin_menu', array( $this, 'add_submenu_in_dokan_dashboard' ), 15 );
 
         // settings section
         add_filter( 'dokan_settings_sections', array( $this, 'add_new_section_admin_panael' ) );
@@ -420,7 +420,7 @@ class DPS_Admin {
      * Add submenu page in dokan Dashboard
      */
     function add_submenu_in_dokan_dashboard() {
-        add_submenu_page( 'dokan', __( 'Dokan Subscription', 'dokan' ), __( 'Subscription', 'dokan' ), 'activate_plugins' , 'dokan-subscription', array( $this, 'admin_user_list' ) );
+        add_submenu_page( 'dokan', __( 'Dokan Subscription', 'dokan' ), __( 'Subscriptions', 'dokan' ), 'activate_plugins' , 'dokan-subscription', array( $this, 'admin_user_list' ) );
     }
 
     /**
