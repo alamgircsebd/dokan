@@ -50,7 +50,7 @@
                         <button class="dokan-btn dokan-btn-default minus dokan-select-no-attributes"><?php _e( 'Select none', 'dokan' ); ?></button>
                     </div>
                 <?php elseif ( 'text' == $attribute_taxonomy->attribute_type ) : ?>
-                    <select name="attribute_values[<?php echo $i; ?>][]" id="" multiple style="width:100%" class="dokan-select2" data-placeholder="<?php echo esc_attr( sprintf( __( 'Enter some text, or some attributes by "%s" separating values.', 'doakn' ), WC_DELIMITER ) ); ?>" data-tags="true" data-allow-clear="true" data-token-separators="['|']">
+                    <select name="attribute_values[<?php echo $i; ?>][]" id="" multiple style="width:100%" class="dokan-select2" data-placeholder="<?php echo esc_attr( sprintf( __( 'Enter some text, or some attributes by "%s" separating values.', 'dokan' ), WC_DELIMITER ) ); ?>" data-tags="true" data-allow-clear="true" data-token-separators="['|']">
                         <?php
                             $attr_val = wp_get_post_terms( $thepostid, $taxonomy, array( 'fields' => 'names' ) );
                             if ( $attr_val ):
@@ -65,7 +65,7 @@
                 <?php do_action( 'dokan_auction_product_option_terms', $attribute_taxonomy, $i ); ?>
 
             <?php else : ?>
-                <select name="attribute_values[<?php echo $i; ?>][]" id="" multiple style="width:100%" class="dokan-select2" data-placeholder="<?php echo esc_attr( sprintf( __( 'Enter some text, or some attributes by "%s" separating values.', 'doakn' ), WC_DELIMITER ) ); ?>" data-tags="true" data-allow-clear="true" data-token-separators="['|']" data-values="[ 'Red', 'Green' ]">
+                <select name="attribute_values[<?php echo $i; ?>][]" id="" multiple style="width:100%" class="dokan-select2" data-placeholder="<?php echo esc_attr( sprintf( __( 'Enter some text, or some attributes by "%s" separating values.', 'dokan' ), WC_DELIMITER ) ); ?>" data-tags="true" data-allow-clear="true" data-token-separators="['|']" data-values="[ 'Red', 'Green' ]">
                     <?php if ( $attribute['value'] ): ?>
                         <?php foreach ( explode( WC_DELIMITER, $attribute['value'] )  as $key => $value ) : ?>
                             <option value="<?php echo $value ?>" selected><?php echo $value; ?></option>
