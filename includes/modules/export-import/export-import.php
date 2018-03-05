@@ -226,11 +226,6 @@ class Dokan_Product_Importer {
          */
         wp_enqueue_style( 'dpi-styles', DOKAN_IE_ASSETS . '/css/style.css', false, date( 'Ymd' ) );
 
-        /**
-         * All scripts goes here
-         */
-        // wp_enqueue_script( 'dpi-scripts', DOKAN_IE_ASSETS . '/js/script.js', array( 'jquery', 'dokan-tabs' ), false, true );
-
         wp_register_script( 'wc-product-import', WC()->plugin_url() . '/assets/js/admin/wc-product-import.js', array( 'jquery' ), WC_VERSION );
         wp_register_script( 'wc-product-export', WC()->plugin_url() . '/assets/js/admin/wc-product-export.js', array( 'jquery' ), WC_VERSION );
     }
