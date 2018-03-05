@@ -97,7 +97,8 @@ class Dokan_WC_Bookings_Calendar {
 				( $booking->start < $date_start && $booking->end > $date_end ) ||
 				( $booking->end > $date_start && $booking->end <= $date_end )
 				) {
-                            $edit_url = dokan_get_navigation_url('orders').'?order_id='.$booking->order_id;
+
+                    $edit_url = wp_nonce_url( add_query_arg( array( 'order_id' => $booking->order_id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' );
 				echo '<li><a href="'.$edit_url.'">';
 					echo '<strong>#' . $booking->id . ' - ';
 					if ( $product = $booking->get_product() ) {
