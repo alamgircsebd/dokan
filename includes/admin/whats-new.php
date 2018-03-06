@@ -6,7 +6,7 @@ $changelog = array(
         'changes'  => array(
             array(
                 'title'         => 'Re-organize dokan admin menu’s',
-                'type'          => 'Tweak',
+                'type'          => 'Improvement',
                 'description'   => 'We re-organized doman menus in the amdin panel'
             ),
             array(
