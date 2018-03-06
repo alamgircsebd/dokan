@@ -62,6 +62,7 @@ class Dokan_Pro_Admin_Settings {
 
         add_action( $report, array( $this, 'common_scripts' ) );
         add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
+        add_action( $vendor_lisitng, array( $this, 'vue_scripts' ) );
 
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
@@ -245,6 +246,18 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
+     * Vue scripts and styles for admin page
+     *
+     * @since 2.8
+     *
+     * @return void
+     */
+    public function vue_scripts() {
+        wp_enqueue_style( 'dokan-vue-admin' );
+        wp_enqueue_script( 'dokan-vue-admin' );
+    }
+
+    /**
     * Modules Scripts
     *
     * @since 1.0.0
@@ -290,7 +303,8 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     function seller_listing() {
-        include dirname( __FILE__ ) . '/sellers.php';
+        echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
+        // include dirname( __FILE__ ) . '/sellers.php';
     }
 
     /**
