@@ -58,7 +58,7 @@ Class Dokan_Social_Login {
 
         //Hybrid auth action
         add_action( 'init', array( $this, 'init_session' ) );
-        add_action( 'init', array( $this, 'monitor_autheticate_requests' ) );
+        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ) );
 
         // add social buttons on registration form and login form
         add_action( 'woocommerce_register_form_end', array( $this, 'render_social_logins' ) );
@@ -476,7 +476,13 @@ Class Dokan_Social_Login {
         clean_user_cache( $wp_user->ID );
         wp_clear_auth_cookie();
         wp_set_current_user( $wp_user->ID );
-        wp_set_auth_cookie( $wp_user->ID, true, false );
+        
+        if ( is_ssl() == true ) {
+            wp_set_auth_cookie( $wp_user->ID, true, true );
+        } else {
+            wp_set_auth_cookie( $wp_user->ID, true, false );
+        }
+        
         update_user_caches( $wp_user );
     }
 

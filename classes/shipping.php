@@ -14,6 +14,10 @@ class Dokan_Pro_Shipping {
      * @uses actions|filter hooks
      */
     public function __construct() {
+        if ( defined( 'WCML_VERSION' ) ) {
+            require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
+        }
+
         add_action( 'woocommerce_shipping_init', array( $this, 'include_shipping' ) );
         add_action( 'woocommerce_shipping_methods', array( $this, 'register_shipping' ) );
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );

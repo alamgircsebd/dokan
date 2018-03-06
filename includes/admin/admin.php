@@ -21,6 +21,8 @@ class Dokan_Pro_Admin_Settings {
      */
     public function __construct() {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
+        add_action( 'dokan_admin_menu', array( $this, 'tools_modules_menu' ), 99 );
+
         add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
@@ -42,29 +44,43 @@ class Dokan_Pro_Admin_Settings {
      */
     public function load_admin_settings( $capability, $menu_position ) {
         $refund      = dokan_get_refund_count();
-        $refund_text = __( 'Refund Request', 'dokan' );
+        $refund_text = __( 'Refunds', 'dokan' );
 
         remove_submenu_page( 'dokan', 'dokan-pro-features' );
 
         if ( $refund['pending'] ) {
-            $refund_text = sprintf( __( 'Refund Request %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
+            $refund_text = sprintf( __( 'Refunds %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
         }
 
-        add_submenu_page( 'dokan', __( 'Refund Request', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
+        add_submenu_page( 'dokan', __( 'Refund Requests', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
 
-        $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'All Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
-        $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Earning Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
-        $announcement   = add_submenu_page( 'dokan', __( 'Announcement', 'dokan' ), __( 'Announcement', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
-        $modules        = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
-        $tools          = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
+        $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
+        $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
+        $announcement   = add_submenu_page( 'dokan', __( 'Vendor Announcements', 'dokan' ), __( 'Announcements', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
         add_action( $report, array( $this, 'common_scripts' ) );
         add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
-        add_action( $modules, array( $this, 'modules_scripts' ) );
+
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
+    }
+
+    /**
+     * Tools and modules menu
+     *
+     * Load these modules at the bottom
+     *
+     * @param  string $capability
+     *
+     * @return void
+     */
+    public function tools_modules_menu( $capability ) {
+        $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
+        $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
+
+        add_action( $modules, array( $this, 'modules_scripts' ) );
     }
 
     /**

@@ -69,7 +69,7 @@
                     <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
                     <th class="manage-column column-regsitered_date sortable <?php echo $sort_order ?>">
                         <a href="<?php echo add_query_arg( array( 'page' => 'dokan-sellers', 'orderby' => 'user_registered', 'order' => $sort_order ), admin_url( 'admin.php' ) ); ?>">
-                            <span><?php _e( 'Regsitered', 'dokan' ); ?></span>
+                            <span><?php _e( 'Registered', 'dokan' ); ?></span>
                             <span class="sorting-indicator"></span>
                         </a>
                     </th>
@@ -192,7 +192,7 @@
                     <th><?php _e( 'Phone Number', 'dokan' ); ?></th>
                     <th class="manage-column column-regsitered_date sortable <?php echo $sort_order ?>">
                         <a href="<?php echo add_query_arg( array( 'page' => 'dokan-sellers', 'orderby' => 'user_registered', 'order' => $sort_order ), admin_url( 'admin.php' ) ); ?>">
-                            <span><?php _e( 'Regsitered', 'dokan' ); ?></span>
+                            <span><?php _e( 'Registered', 'dokan' ); ?></span>
                             <span class="sorting-indicator"></span>
                         </a>
                     </th>

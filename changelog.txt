@@ -1,3 +1,17 @@
+v2.7.5 -> March 06, 2018
+---------------------
+- [fix]   If a user is logged in using social media then he is unable to upload product image
+- [fix]   Registration process through email verification doesn't verify vendors properly
+- [fix]   Dokan Announcement option is not working
+- [fix]   Store support widget is not working on single product page
+- [fix]   Cannot register using social media
+- [fix]   Subscription pack [for unlimited number of days] expiration date shows invalid date from vendor's dashboard
+- [fix]   Subscription pack purchase during vendor registration
+- [fix]   Announcement query conflict with product widget
+- [fix]   Shipping is not working if WPML is activated
+- [Tweak] Skip updater if we are from command line
+- [Tweak] Re-organize dokan admin menu’s
+
 v2.7.4 -> Feb 12, 2018
 ---------------------
 - [fix]   Fixed vendor verification permission issue

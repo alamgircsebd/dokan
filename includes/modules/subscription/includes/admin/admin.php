@@ -18,7 +18,7 @@ class DPS_Admin {
         add_action( 'woocommerce_product_options_general_product_data', array( $this, 'general_fields' ) );
         add_action( 'woocommerce_process_product_meta', array( $this, 'general_fields_save' ), 99 );
 
-        add_action( 'dokan_admin_menu', array( $this, 'add_submenu_in_dokan_dashboard' ) );
+        add_action( 'dokan_admin_menu', array( $this, 'add_submenu_in_dokan_dashboard' ), 15 );
 
         // settings section
         add_filter( 'dokan_settings_sections', array( $this, 'add_new_section_admin_panael' ) );
@@ -101,7 +101,7 @@ class DPS_Admin {
             array(
                 'id'                => '_pack_validity',
                 'label'             => __( 'Pack Validity', 'dokan' ),
-                'placeholder'       => 30,
+                'placeholder'       => 'Put 0 for unlimited days',
                 'description'       => __( 'Enter no of validity days you want to give this pack ', 'dokan' ),
                 'type'              => 'number',
                 'custom_attributes' => array(
@@ -230,7 +230,7 @@ class DPS_Admin {
 
         $woocommerce_pack_validity_field = $_POST['_pack_validity'];
 
-        if ( ! empty( $woocommerce_pack_validity_field ) ) {
+        if ( isset( $woocommerce_pack_validity_field ) ) {
             update_post_meta( $post_id, '_pack_validity', $woocommerce_pack_validity_field );
         }
 
@@ -420,7 +420,7 @@ class DPS_Admin {
      * Add submenu page in dokan Dashboard
      */
     function add_submenu_in_dokan_dashboard() {
-        add_submenu_page( 'dokan', __( 'Dokan Subscription', 'dokan' ), __( 'Subscription', 'dokan' ), 'activate_plugins' , 'dokan-subscription', array( $this, 'admin_user_list' ) );
+        add_submenu_page( 'dokan', __( 'Dokan Subscription', 'dokan' ), __( 'Subscriptions', 'dokan' ), 'activate_plugins' , 'dokan-subscription', array( $this, 'admin_user_list' ) );
     }
 
     /**

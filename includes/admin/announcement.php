@@ -23,7 +23,7 @@ class Dokan_Announcement {
             'selected_seller' => __( 'Selected Vendor', 'dokan' )
         );
 
-        add_action( 'init', array( $this, 'post_types' ) );
+        add_action( 'init', array( $this, 'post_types' ), 20 );
         add_action( 'add_meta_boxes', array( $this, 'add_new_metabox' ) );
         add_action( 'save_post', array( $this, 'save_announcement_meta' ), 10, 2 );
         add_action( 'admin_footer', array( $this, 'help_text' ));
@@ -31,14 +31,14 @@ class Dokan_Announcement {
         add_filter( 'manage_edit-dokan_announcement_columns', array( $this, 'add_type_columns' ) );
         add_filter( 'manage_dokan_announcement_posts_custom_column', array( $this, 'assign_type_edit_columns' ), 10, 2 );
     }
-        
+
     /**
      * Show help link under add new announcement button
-     * 
+     *
      * @since 2.6.9
-     * 
+     *
      * @return void
-     */    
+     */
     function help_text() {
         $screen = get_current_screen();
         if ( $screen->post_type != $this->post_type ) {
@@ -275,7 +275,7 @@ class Dokan_Announcement {
 
             $this->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
-        
+
         do_action( 'dokan_after_announcement_saved', $assigned_sellers, $post_id );
         //$this->new_announcement_mail( $assigned_sellers, $post_id );
     }
@@ -412,7 +412,7 @@ class Dokan_Announcement {
             $wpdb->query( $sql );
         }
     }
-    
+
     /**
      * Send email to sellers once a new announcement is created
      *
@@ -425,7 +425,7 @@ class Dokan_Announcement {
             $seller_emails[] = $seller_info->user_email;
         }
         $email = Dokan_Email::init();
-        
+
         $announcement_url = dokan_get_navigation_url( 'announcement/single-announcement' )."$post_id/";
         ob_start();
         dokan_get_template_part( 'emails/announcement', '', array( 'pro' => true) );
