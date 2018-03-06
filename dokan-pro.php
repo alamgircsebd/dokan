@@ -342,6 +342,7 @@ class Dokan_Pro {
      * @return void
      */
     public function load_filters() {
+        add_filter( 'dokan_rest_api_class_map', array( $this, 'rest_api_class_map' ) );
         add_filter( 'dokan_is_pro_exists', array( $this, 'set_as_pro' ), 99 );
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
@@ -616,6 +617,23 @@ class Dokan_Pro {
         return array_merge( $dokan_pro_emails, $dokan_emails );
     }
 
+    /**
+     * Initialize pro rest api class
+     *
+     * @param array $class_map
+     *
+     * @return array
+     */
+    function rest_api_class_map( $class_map ) {
+        $classes = array(
+            dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-reports-controller.php' => 'Dokan_REST_Reports_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php' => 'Dokan_REST_Reviews_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller'
+        );
+
+        return array_merge( $class_map, $classes );
+    }
 }
 
 add_action( 'init', 'dokan_load_pro', 0 );
@@ -630,18 +648,5 @@ add_action( 'init', 'dokan_load_pro', 0 );
 function dokan_load_pro() {
     Dokan_Pro::init();
 }
-
-function pro_rest_api_class_map( $class_map ) {
-    $classes = array(
-        dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
-        dirname( __FILE__ ) . '/includes/api/class-reports-controller.php' => 'Dokan_REST_Reports_Controller',
-        dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php' => 'Dokan_REST_Reviews_Controller',
-        dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller'
-    );
-
-    return array_merge( $class_map, $classes );
-}
-
-add_filter( 'dokan_rest_api_class_map', 'pro_rest_api_class_map' );
 
 register_activation_hook( __FILE__, array( 'Dokan_Pro', 'activate' ) );
