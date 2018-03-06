@@ -242,6 +242,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/update.php';
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/orders.php';
+        require_once DOKAN_PRO_INC . '/reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
@@ -330,6 +331,7 @@ class Dokan_Pro {
      * @return void
      */
     public function load_filters() {
+        add_filter( 'dokan_rest_api_class_map', array( $this, 'rest_api_class_map' ) );
         add_filter( 'dokan_is_pro_exists', array( $this, 'set_as_pro' ), 99 );
         add_filter( 'dokan_query_var_filter', array( $this, 'load_query_var' ), 10 );
         add_filter( 'woocommerce_locate_template', array( $this, 'account_migration_template' ) );
@@ -602,6 +604,23 @@ class Dokan_Pro {
         return array_merge( $dokan_pro_emails, $dokan_emails );
     }
 
+    /**
+     * Initialize pro rest api class
+     *
+     * @param array $class_map
+     *
+     * @return array
+     */
+    function rest_api_class_map( $class_map ) {
+        $classes = array(
+            dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-reports-controller.php' => 'Dokan_REST_Reports_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php' => 'Dokan_REST_Reviews_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller'
+        );
+
+        return array_merge( $class_map, $classes );
+    }
 }
 
 /**
