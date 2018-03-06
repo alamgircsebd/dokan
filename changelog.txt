@@ -1,4 +1,4 @@
-v2.7.5 -> March 05, 2018
+v2.7.5 -> March 06, 2018
 ---------------------
 - [fix]   If a user is logged in using social media then he is unable to upload product image
 - [fix]   Registration process through email verification doesn't verify vendors properly
@@ -11,7 +11,6 @@ v2.7.5 -> March 05, 2018
 - [fix]   Shipping is not working if WPML is activated
 - [Tweak] Skip updater if we are from command line
 - [Tweak] Re-organize dokan admin menu’s
-- [Tweak] Remove unwanted code
 
 v2.7.4 -> Feb 12, 2018
 ---------------------

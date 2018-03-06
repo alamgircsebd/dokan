@@ -2,7 +2,7 @@
 $changelog = array(
     array(
         'version'  => 'Version 2.7.5',
-        'released' => '2018-03-05',
+        'released' => '2018-03-06',
         'changes'  => array(
             array(
                 'title'         => 'Re-organize dokan admin menu’s',
@@ -15,7 +15,7 @@ $changelog = array(
                 'description'   => 'Dokan shipping was\'t working when the WPML plugin was activated'
             ),
             array(
-                'title'         => 'Subscription pack purchase during vendor registration',
+                'title'         => 'Subscription pack purchase during vendor registration [Subscription Module]',
                 'type'          => 'Fix',
                 'description'   => 'Vendor wasn\'t able to purchase subscription pack just after the registration process'
             ),
@@ -25,12 +25,12 @@ $changelog = array(
                 'description'   => 'User was unable to login or register using social media'
             ),
             array(
-                'title'         => 'Subcsription pack shows wrong validaty date',
+                'title'         => 'Subcsription pack shows wrong validaty date [Subscription Module]',
                 'type'          => 'Fix',
                 'description'   => 'Subscription pack [for unlimited number of days] expiration date shows invalid date from vendor\'s dashboard'
             ),
             array(
-                'title'         => 'Store support widget is not working on single product page',
+                'title'         => 'Store support widget is not working on single product page [Store Support Module]',
                 'type'          => 'Fix',
                 'description'   => 'Store support widget is not working on single product page'
             ),
@@ -38,11 +38,6 @@ $changelog = array(
                 'title'         => 'Email verification wasn\'t working',
                 'type'          => 'Fix',
                 'description'   => 'Registration process through email verification doesn\'t verify vendors properly'
-            ),
-            array(
-                'title'         => 'Query conflick',
-                'type'          => 'Fix',
-                'description'   => 'Announcement query conflict with product widget'
             )
         )
     ),
