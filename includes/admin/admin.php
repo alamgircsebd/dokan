@@ -23,6 +23,8 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
         add_action( 'dokan_admin_menu', array( $this, 'tools_modules_menu' ), 99 );
 
+        add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
+
         add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
@@ -62,7 +64,6 @@ class Dokan_Pro_Admin_Settings {
 
         add_action( $report, array( $this, 'common_scripts' ) );
         add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
-        add_action( $vendor_lisitng, array( $this, 'vue_scripts' ) );
 
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
@@ -246,15 +247,21 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
-     * Vue scripts and styles for admin page
+     * Add vue routes for admin pages
      *
-     * @since 2.8
+     * @param  array $routes
      *
-     * @return void
+     * @return array
      */
-    public function vue_scripts() {
-        wp_enqueue_style( 'dokan-vue-admin' );
-        wp_enqueue_script( 'dokan-vue-admin' );
+    public function vue_admin_routes( $routes ) {
+
+        $routes[] = array(
+            'path'      => '/vendors',
+            'name'      => 'Vendors',
+            'component' => 'Vendors'
+        );
+
+        return $routes;
     }
 
     /**

@@ -1,13 +1,13 @@
 <template>
     <div class="app-settings">
-        The Settings Page
+        Pro Test Page
     </div>
 </template>
 
 <script>
 export default {
 
-    name: 'Settings',
+    name: 'Test',
 
     data () {
         return {
@@ -16,6 +16,3 @@ export default {
     }
 };
 </script>
-
-<style lang="css" scoped>
-</style>

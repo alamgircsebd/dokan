@@ -37,7 +37,7 @@ class DPS_Admin {
         wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
         wp_enqueue_script( 'dps-custom-admin-js', DPS_URL . '/assets/js/admin-script.js', array('jquery'), false, true );
 
-        wp_localize_script( 'dps-custom-admin-js', 'dokan', array(
+        wp_localize_script( 'dps-custom-admin-js', 'dokanSubscription', array(
             'ajaxurl'             => admin_url( 'admin-ajax.php' ),
             'subscriptionLengths' => DPS_Manager::get_subscription_ranges()
         ) );

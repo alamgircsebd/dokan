@@ -1,5 +1,5 @@
 <template>
-    <div class="home">
+    <div class="vendor-list">
         <h1 class="wp-heading-inline">Vendors</h1>
         <a href="#" class="page-title-action">Add New</a>
 
@@ -41,14 +41,14 @@
 </template>
 
 <script>
-import ListTable from 'vue-wp-list-table';
+let ListTable = dokan_get_lib('ListTable');
+
 import Switches from '@/components/Switches.vue';
-import API from '@/utils/Api';
-import 'vue-wp-list-table/dist/vue-wp-list-table.css';
+// import 'vue-wp-list-table/dist/vue-wp-list-table.css';
 
 export default {
 
-    name: 'Home',
+    name: 'Vendors',
 
     components: {
         ListTable,
@@ -173,7 +173,7 @@ export default {
 </script>
 
 <style lang="less">
-.home {
+.vendor-list {
     h1 {
         margin-bottom: 15px;
     }

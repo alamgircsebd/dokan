@@ -12,8 +12,7 @@ const config = require( './config.json' );
 var appName = 'app';
 var entryPoint = {
     // frontend: './src/frontend/main.js',
-    vueAdmin: './src/admin/main.js',
-    vendor: Object.keys(package.dependencies),
+    'vue-pro-admin': './src/admin/main.js',
     // style: './less/style.less',
 };
 
@@ -35,21 +34,21 @@ const extractCss = new ExtractTextPlugin({
 plugins.push( extractCss );
 
 // Extract all 3rd party modules into a separate 'vendor' chunk
-plugins.push(new webpack.optimize.CommonsChunkPlugin({
-    name: 'vendor',
-    minChunks: ({ resource }) => /node_modules/.test(resource),
-}));
+// plugins.push(new webpack.optimize.CommonsChunkPlugin({
+//     name: 'vendor',
+//     minChunks: ({ resource }) => /node_modules/.test(resource),
+// }));
 
-plugins.push(new BrowserSyncPlugin( {
-    proxy: {
-        target: config.proxyURL
-    },
-    files: [
-        '**/*.php'
-    ],
-    cors: true,
-    reloadDelay: 0
-} ));
+// plugins.push(new BrowserSyncPlugin( {
+//     proxy: {
+//         target: config.proxyURL
+//     },
+//     files: [
+//         '**/*.php'
+//     ],
+//     cors: true,
+//     reloadDelay: 0
+// } ));
 
 // Generate a 'manifest' chunk to be inlined in the HTML template
 // plugins.push(new webpack.optimize.CommonsChunkPlugin('manifest'));
@@ -85,9 +84,7 @@ module.exports = {
     entry: entryPoint,
     output: {
         path: exportPath,
-        filename: appName,
-        chunkFilename: 'chunks/[chunkhash].js',
-        jsonpFunction: 'dokanWebpack'
+        filename: appName
     },
 
     resolve: {

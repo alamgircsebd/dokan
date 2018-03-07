@@ -9,9 +9,15 @@ class Dokan_Pro_Assets {
 
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'register' ], 5 );
+            add_action( 'dokan-vue-admin-scripts', [ $this, 'enqueue_admin_scripts' ] );
         } else {
             add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 5 );
         }
+    }
+
+    public function enqueue_admin_scripts() {
+        wp_enqueue_script( 'dokan-pro-vue-admin' );
+        wp_enqueue_style( 'dokan-pro-vue-admin' );
     }
 
     /**
@@ -66,16 +72,10 @@ class Dokan_Pro_Assets {
         $prefix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
 
         $scripts = [
-            'dokan-vue-vendor' => [
-                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vendor.js',
-                'deps'      => [ 'jquery' ],
-                'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vendor.js' ),
-                'in_footer' => true
-            ],
-            'dokan-vue-admin' => [
-                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vueAdmin.js',
-                'deps'      => [ 'jquery', 'dokan-vue-vendor' ],
-                'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vueAdmin.js' ),
+            'dokan-pro-vue-admin' => [
+                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-admin.js',
+                'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
+                'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-admin.js' ),
                 'in_footer' => true
             ]
         ];
@@ -91,9 +91,9 @@ class Dokan_Pro_Assets {
     public function get_styles() {
 
         $styles = [
-            'dokan-vue-admin' => [
-                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vueAdmin.css',
-                'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vueAdmin.css' ),
+            'dokan-pro-vue-admin' => [
+                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin.css',
+                'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-admin.css' ),
             ]
         ];
 
