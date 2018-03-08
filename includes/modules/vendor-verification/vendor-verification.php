@@ -96,7 +96,7 @@ class Dokan_Seller_Verification {
         $installed_version = get_option( 'dokan_theme_version' );
 
         add_action( 'init', array( $this, 'init_session' ) );
-        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ) );
+        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ), 99 );
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
