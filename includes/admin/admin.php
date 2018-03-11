@@ -310,8 +310,8 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     function seller_listing() {
-        echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
-        // include dirname( __FILE__ ) . '/sellers.php';
+        // echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
+        include dirname( __FILE__ ) . '/sellers.php';
     }
 
     /**
