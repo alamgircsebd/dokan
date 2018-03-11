@@ -149,7 +149,7 @@ class Dokan_Seller_Verification {
     }
 
     function load_verfication_admin_template() {
-        add_submenu_page( 'dokan', __( 'Vendor Verifications', 'dokan' ), __( 'Verificationss' ), 'manage_options', 'dokan-seller-verifications', array( $this, 'seller_verfications_page' ) );
+        add_submenu_page( 'dokan', __( 'Vendor Verifications', 'dokan' ), __( 'Verifications' ), 'manage_options', 'dokan-seller-verifications', array( $this, 'seller_verfications_page' ) );
     }
 
     function seller_verfications_page() {
