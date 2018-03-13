@@ -69,6 +69,9 @@ class DPS_Admin {
      * @param array   $product_type
      */
     function add_product_type( $types ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return $types;
+        }
 
         $types['product_pack'] = __( 'Dokan Subscription', 'dokan' );
 
@@ -79,6 +82,10 @@ class DPS_Admin {
      * Add extra custom field in woocommerce product type
      */
     function general_fields() {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return;
+        }
+
         global $woocommerce, $post;
 
         echo '<div class="options_group show_if_product_pack">';
