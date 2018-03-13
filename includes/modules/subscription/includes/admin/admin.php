@@ -653,7 +653,7 @@ class DPS_Admin {
         }
 
         $pack_validity = get_post_meta( $pack_id, '_pack_validity', true );
-        $admin_commission = get_post_meta( $pack_id, '_per_product_admin_commission', true );
+        $admin_commission = get_post_meta( $pack_id, '_subscription_product_admin_commission', true );
         update_user_meta( $user_id, 'product_package_id', $pack_id );
         update_user_meta( $user_id, 'product_order_id', '' );
         update_user_meta( $user_id, 'product_no_with_pack' , get_post_meta( $pack_id, '_no_of_product', true ) ); //number of products
@@ -676,9 +676,9 @@ class DPS_Admin {
         }
 
         if ( ! empty( $admin_commission ) ) {
-            update_user_meta( $user_id, 'dokan_seller_percentage', $admin_commission );
+            update_user_meta( $user_id, 'dokan_admin_percentage', $admin_commission );
         } else {
-            update_user_meta( $user_id, 'dokan_seller_percentage', '' );
+            update_user_meta( $user_id, 'dokan_admin_percentage', '' );
         }
     }
 }
