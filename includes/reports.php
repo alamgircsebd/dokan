@@ -227,7 +227,7 @@ function dokan_seller_sales_statement() {
                     ?>
                     <tr>
                         <td><?php echo date( 'Y-m-d', $key ); ?></td>
-                        <td><a href="<?php echo $url; ?>">#<?php echo $id; ?></a></td>
+                        <td><a href="<?php echo wp_nonce_url( $url, 'dokan_view_order' ); ?>">#<?php echo $id; ?></a></td>
                         <td><?php echo $type; ?></td>
                         <td><?php echo $sales; ?></td>
                         <td><?php echo $amount; ?></td>
