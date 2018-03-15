@@ -56,7 +56,7 @@ class Dokan_Stripe {
 
         /** All actions */
         add_action( 'init', array( $this, 'init' ) );
-        add_action( 'template_redirect', array( $this, 'stripe_check_connect' ) );
+        add_action( 'template_redirect', array( $this, 'stripe_check_connect' ), 20 );
 
         add_filter( 'woocommerce_payment_gateways', array( $this, 'register_gateway' ) );
 
