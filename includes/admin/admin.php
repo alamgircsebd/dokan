@@ -45,8 +45,11 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     public function load_admin_settings( $capability, $menu_position ) {
+        global $submenu;
+
         $refund      = dokan_get_refund_count();
         $refund_text = __( 'Refunds', 'dokan' );
+        $slug        = 'dokan';
 
         remove_submenu_page( 'dokan', 'dokan-pro-features' );
 
@@ -56,14 +59,18 @@ class Dokan_Pro_Admin_Settings {
 
         add_submenu_page( 'dokan', __( 'Refund Requests', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
 
-        $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
+        if ( current_user_can( $capability ) ) {
+            $submenu[ $slug ][] = array( __( 'Vendors', 'dokan-lite' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
+        }
+
+        // $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
         $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
         $announcement   = add_submenu_page( 'dokan', __( 'Vendor Announcements', 'dokan' ), __( 'Announcements', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
         add_action( $report, array( $this, 'common_scripts' ) );
-        add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
+        // add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
 
         add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
         add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );

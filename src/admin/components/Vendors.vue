@@ -1,7 +1,14 @@
 <template>
     <div class="vendor-list">
         <h1 class="wp-heading-inline">Vendors</h1>
-        <a href="#" class="page-title-action">Add New</a>
+        <!-- <a href="#" class="page-title-action">Add New</a> -->
+        <hr class="wp-header-end">
+
+        <ul class="subsubsub">
+            <li><router-link :to="{ name: 'Vendors', query: { status: 'all' }}" active-class="current" exact>All <span class="count">({{ counts.all }})</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Vendors', query: { status: 'approved' }}" active-class="current" exact>Approved <span class="count">({{ counts.approved }})</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Vendors', query: { status: 'pending' }}" active-class="current" exact>Pending <span class="count">({{ counts.pending }})</span></router-link></li>
+        </ul>
 
         <list-table
             :columns="columns"
@@ -15,6 +22,8 @@
             :per-page="perPage"
             :current-page="currentPage"
             :action-column="actionColumn"
+
+            not-found="No vendors found."
 
             :sort-by="sortBy"
             :sort-order="sortOrder"
@@ -33,6 +42,10 @@
                 <a :href="'mailto:' + data.row.email">{{ data.row.email }}</a>
             </template>
 
+            <template slot="registered" slot-scope="data">
+                {{ moment(data.row.registered).format('MMM D, YYYY') }}
+            </template>
+
             <template slot="enabled" slot-scope="data">
                 <switches :enabled="data.row.enabled" :value="data.row.id" @input="onSwitch"></switches>
             </template>
@@ -42,9 +55,7 @@
 
 <script>
 let ListTable = dokan_get_lib('ListTable');
-
-import Switches from '@/components/Switches.vue';
-// import 'vue-wp-list-table/dist/vue-wp-list-table.css';
+let Switches  = dokan_get_lib('Switches');
 
 export default {
 
@@ -59,13 +70,15 @@ export default {
         return {
             showCb: true,
 
-            sortBy: 'title',
-            sortOrder: 'asc',
+            counts: {
+                pending: 0,
+                approved: 0,
+                all: 0
+            },
 
             totalItems: 0,
-            perPage: 10,
+            perPage: 20,
             totalPages: 1,
-            currentPage: 1,
             loading: false,
 
             columns: {
@@ -100,11 +113,54 @@ export default {
             ],
             bulkActions: [
                 {
-                    key: 'trash',
-                    label: 'Move to Trash'
+                    key: 'approved',
+                    label: 'Approve Vendors'
+                },
+                {
+                    key: 'pending',
+                    label: 'Disable Selling'
                 }
             ],
             vendors: []
+        }
+    },
+
+    watch: {
+        '$route.query.status'() {
+            this.fetchVendors();
+        },
+
+        '$route.query.page'() {
+            this.fetchVendors();
+        },
+
+        '$route.query.orderby'() {
+            this.fetchVendors();
+        },
+
+        '$route.query.order'() {
+            this.fetchVendors();
+        },
+    },
+
+    computed: {
+
+        currentStatus() {
+            return this.$route.query.status || 'all';
+        },
+
+        currentPage() {
+            let page = this.$route.query.page || 1;
+
+            return parseInt( page );
+        },
+
+        sortBy() {
+            return this.$route.query.orderby || 'registered';
+        },
+
+        sortOrder() {
+            return this.$route.query.order || 'desc';
         }
     },
 
@@ -115,19 +171,38 @@ export default {
 
     methods: {
 
-        fetchVendors(time = 100) {
+        updatedCounts(xhr) {
+            this.counts.pending  = parseInt( xhr.getResponseHeader('X-Status-Pending') );
+            this.counts.approved = parseInt( xhr.getResponseHeader('X-Status-Approved') );
+            this.counts.all      = parseInt( xhr.getResponseHeader('X-Status-All') );
+        },
+
+        updatePagination(xhr) {
+            this.totalPages = parseInt( xhr.getResponseHeader('X-WP-TotalPages') );
+            this.totalItems = parseInt( xhr.getResponseHeader('X-WP-Total') );
+        },
+
+        fetchVendors() {
 
             let self = this;
 
             self.loading = true;
 
-            dokan.api.get('/stores?status=all')
+            // dokan.api.get('/stores?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
+            dokan.api.get('/stores', {
+                per_page: this.perPage,
+                page: this.currentPage,
+                status: this.currentStatus,
+                orderby: this.sortBy,
+                order: this.sortOrder
+            })
             .done((response, status, xhr) => {
-                console.log(response, status, xhr);
+                // console.log(response, status, xhr);
                 self.vendors = response;
-                self.totalItems = parseInt( xhr.getResponseHeader('X-WP-Total') );
-                self.totalPages = parseInt( xhr.getResponseHeader('X-WP-TotalPages') );
                 self.loading = false;
+
+                this.updatedCounts(xhr);
+                this.updatePagination(xhr);
             });
         },
 
@@ -144,29 +219,57 @@ export default {
 
             let message = ( status === false ) ? 'The vendor has been disabled.' : 'Selling has been enabled';
 
-            this.$notify({
-                title: 'Success!',
-                type: 'success',
-                text: message,
+            dokan.api.put('/stores/' + vendor_id + '/status', {
+                status: ( status === false ) ? 'inactive' : 'active'
+            })
+            .done(response => {
+                this.$notify({
+                    title: 'Success!',
+                    type: 'success',
+                    text: message,
+                });
+
+                this.fetchVendors();
             });
         },
 
+        moment(date) {
+            return moment(date);
+        },
+
         goToPage(page) {
-            console.log('Going to page: ' + page);
-            this.currentPage = page;
-            this.fetchVendors(1000);
+            this.$router.push({
+                name: 'Vendors',
+                query: {
+                    status: this.currentStatus,
+                    page: page
+                }
+            });
         },
 
         onBulkAction(action, items) {
-            console.log(action, items);
-            alert(action + ': ' + items.join(', ') );
+            let jsonData = {};
+            jsonData[action] = items;
+
+            this.loading = true;
+
+            dokan.api.put('/stores/batch', jsonData)
+            .done(response => {
+                this.loading = false;
+                this.fetchVendors();
+            });
         },
 
         sortCallback(column, order) {
-            this.sortBy = column;
-            this.sortOrder = order;
-
-            this.fetchVendors(1000);
+            this.$router.push({
+                name: 'Vendors',
+                query: {
+                    status: this.currentStatus,
+                    page: 1,
+                    orderby: column,
+                    order: order
+                }
+            });
         }
     }
 }
@@ -174,9 +277,6 @@ export default {
 
 <style lang="less">
 .vendor-list {
-    h1 {
-        margin-bottom: 15px;
-    }
 
     .image {
         width: 10%;

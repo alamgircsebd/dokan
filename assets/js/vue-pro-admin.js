@@ -60,28 +60,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
-/* 0 */,
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _Vendors = __webpack_require__(7);
-
-var _Vendors2 = _interopRequireDefault(_Vendors);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-dokan_add_route(_Vendors2.default);
-
-/***/ }),
-/* 2 */,
-/* 3 */
+/* 0 */
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -190,12 +173,23 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 4 */,
-/* 5 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_Switches_vue__ = __webpack_require__(9);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -240,9 +234,7 @@ module.exports = function normalizeComponent (
 //
 
 var ListTable = dokan_get_lib('ListTable');
-
-
-// import 'vue-wp-list-table/dist/vue-wp-list-table.css';
+var Switches = dokan_get_lib('Switches');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -250,20 +242,22 @@ var ListTable = dokan_get_lib('ListTable');
 
     components: {
         ListTable: ListTable,
-        Switches: __WEBPACK_IMPORTED_MODULE_0__components_Switches_vue__["a" /* default */]
+        Switches: Switches
     },
 
     data: function data() {
         return {
             showCb: true,
 
-            sortBy: 'title',
-            sortOrder: 'asc',
+            counts: {
+                pending: 0,
+                approved: 0,
+                all: 0
+            },
 
             totalItems: 0,
-            perPage: 10,
+            perPage: 20,
             totalPages: 1,
-            currentPage: 1,
             loading: false,
 
             columns: {
@@ -294,12 +288,49 @@ var ListTable = dokan_get_lib('ListTable');
                 label: 'Delete'
             }],
             bulkActions: [{
-                key: 'trash',
-                label: 'Move to Trash'
+                key: 'approved',
+                label: 'Approve Vendors'
+            }, {
+                key: 'pending',
+                label: 'Disable Selling'
             }],
             vendors: []
         };
     },
+
+
+    watch: {
+        '$route.query.status': function $routeQueryStatus() {
+            this.fetchVendors();
+        },
+        '$route.query.page': function $routeQueryPage() {
+            this.fetchVendors();
+        },
+        '$route.query.orderby': function $routeQueryOrderby() {
+            this.fetchVendors();
+        },
+        '$route.query.order': function $routeQueryOrder() {
+            this.fetchVendors();
+        }
+    },
+
+    computed: {
+        currentStatus: function currentStatus() {
+            return this.$route.query.status || 'all';
+        },
+        currentPage: function currentPage() {
+            var page = this.$route.query.page || 1;
+
+            return parseInt(page);
+        },
+        sortBy: function sortBy() {
+            return this.$route.query.orderby || 'registered';
+        },
+        sortOrder: function sortOrder() {
+            return this.$route.query.order || 'desc';
+        }
+    },
+
     created: function created() {
 
         this.fetchVendors();
@@ -307,20 +338,36 @@ var ListTable = dokan_get_lib('ListTable');
 
 
     methods: {
+        updatedCounts: function updatedCounts(xhr) {
+            this.counts.pending = parseInt(xhr.getResponseHeader('X-Status-Pending'));
+            this.counts.approved = parseInt(xhr.getResponseHeader('X-Status-Approved'));
+            this.counts.all = parseInt(xhr.getResponseHeader('X-Status-All'));
+        },
+        updatePagination: function updatePagination(xhr) {
+            this.totalPages = parseInt(xhr.getResponseHeader('X-WP-TotalPages'));
+            this.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
+        },
         fetchVendors: function fetchVendors() {
-            var time = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 100;
-
+            var _this = this;
 
             var self = this;
 
             self.loading = true;
 
-            dokan.api.get('/stores?status=all').done(function (response, status, xhr) {
-                console.log(response, status, xhr);
+            // dokan.api.get('/stores?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
+            dokan.api.get('/stores', {
+                per_page: this.perPage,
+                page: this.currentPage,
+                status: this.currentStatus,
+                orderby: this.sortBy,
+                order: this.sortOrder
+            }).done(function (response, status, xhr) {
+                // console.log(response, status, xhr);
                 self.vendors = response;
-                self.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
-                self.totalPages = parseInt(xhr.getResponseHeader('X-WP-TotalPages'));
                 self.loading = false;
+
+                _this.updatedCounts(xhr);
+                _this.updatePagination(xhr);
             });
         },
         onActionClick: function onActionClick(action, row) {
@@ -331,89 +378,104 @@ var ListTable = dokan_get_lib('ListTable');
             }
         },
         onSwitch: function onSwitch(status, vendor_id) {
+            var _this2 = this;
+
             console.log(status, vendor_id);
 
             var message = status === false ? 'The vendor has been disabled.' : 'Selling has been enabled';
 
-            this.$notify({
-                title: 'Success!',
-                type: 'success',
-                text: message
+            dokan.api.put('/stores/' + vendor_id + '/status', {
+                status: status === false ? 'inactive' : 'active'
+            }).done(function (response) {
+                _this2.$notify({
+                    title: 'Success!',
+                    type: 'success',
+                    text: message
+                });
+
+                _this2.fetchVendors();
             });
         },
+        moment: function (_moment) {
+            function moment(_x) {
+                return _moment.apply(this, arguments);
+            }
+
+            moment.toString = function () {
+                return _moment.toString();
+            };
+
+            return moment;
+        }(function (date) {
+            return moment(date);
+        }),
         goToPage: function goToPage(page) {
-            console.log('Going to page: ' + page);
-            this.currentPage = page;
-            this.fetchVendors(1000);
+            this.$router.push({
+                name: 'Vendors',
+                query: {
+                    status: this.currentStatus,
+                    page: page
+                }
+            });
         },
         onBulkAction: function onBulkAction(action, items) {
-            console.log(action, items);
-            alert(action + ': ' + items.join(', '));
+            var _this3 = this;
+
+            var jsonData = {};
+            jsonData[action] = items;
+
+            this.loading = true;
+
+            dokan.api.put('/stores/batch', jsonData).done(function (response) {
+                _this3.loading = false;
+                _this3.fetchVendors();
+            });
         },
         sortCallback: function sortCallback(column, order) {
-            this.sortBy = column;
-            this.sortOrder = order;
-
-            this.fetchVendors(1000);
+            this.$router.push({
+                name: 'Vendors',
+                query: {
+                    status: this.currentStatus,
+                    page: 1,
+                    orderby: column,
+                    order: order
+                }
+            });
         }
     }
 });
 
 /***/ }),
-/* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 2 */,
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-
-    name: 'Switches',
-
-    props: {
-        enabled: {
-            type: Boolean, // String, Number, Boolean, Function, Object, Array
-            required: true,
-            default: false
-        },
-        value: {
-            type: [String, Number]
-        }
-    },
-
-    data: function data() {
-        return {};
-    },
 
 
-    methods: {
-        trigger: function trigger(e) {
-            this.$emit('input', e.target.checked, e.target.value);
-        }
-    }
-});
+var _Vendors = __webpack_require__(4);
+
+var _Vendors2 = _interopRequireDefault(_Vendors);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+dokan_add_route(_Vendors2.default);
 
 /***/ }),
-/* 7 */
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Vendors_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Vendors_vue__ = __webpack_require__(1);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(9);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(8)
+  __webpack_require__(5)
 }
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(0)
 /* script */
 
 
@@ -457,106 +519,16 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 8 */
+/* 5 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
+/* 6 */,
+/* 7 */,
+/* 8 */,
 /* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Switches_vue__ = __webpack_require__(6);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_defeb3dc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Switches_vue__ = __webpack_require__(11);
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(10)
-}
-var normalizeComponent = __webpack_require__(3)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Switches_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_defeb3dc_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Switches_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src/components/Switches.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-defeb3dc", Component.options)
-  } else {
-    hotAPI.reload("data-v-defeb3dc", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 11 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("label", { staticClass: "switch tips" }, [
-    _c("input", {
-      staticClass: "toogle-checkbox",
-      attrs: { type: "checkbox" },
-      domProps: { checked: _vm.enabled, value: _vm.value },
-      on: { change: _vm.trigger }
-    }),
-    _vm._v(" "),
-    _c("span", { staticClass: "slider round" })
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-defeb3dc", esExports)
-  }
-}
-
-/***/ }),
-/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -570,8 +542,79 @@ var render = function() {
     [
       _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Vendors")]),
       _vm._v(" "),
-      _c("a", { staticClass: "page-title-action", attrs: { href: "#" } }, [
-        _vm._v("Add New")
+      _c("hr", { staticClass: "wp-header-end" }),
+      _vm._v(" "),
+      _c("ul", { staticClass: "subsubsub" }, [
+        _c(
+          "li",
+          [
+            _c(
+              "router-link",
+              {
+                attrs: {
+                  to: { name: "Vendors", query: { status: "all" } },
+                  "active-class": "current",
+                  exact: ""
+                }
+              },
+              [
+                _vm._v("All "),
+                _c("span", { staticClass: "count" }, [
+                  _vm._v("(" + _vm._s(_vm.counts.all) + ")")
+                ])
+              ]
+            ),
+            _vm._v(" | ")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          [
+            _c(
+              "router-link",
+              {
+                attrs: {
+                  to: { name: "Vendors", query: { status: "approved" } },
+                  "active-class": "current",
+                  exact: ""
+                }
+              },
+              [
+                _vm._v("Approved "),
+                _c("span", { staticClass: "count" }, [
+                  _vm._v("(" + _vm._s(_vm.counts.approved) + ")")
+                ])
+              ]
+            ),
+            _vm._v(" | ")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          [
+            _c(
+              "router-link",
+              {
+                attrs: {
+                  to: { name: "Vendors", query: { status: "pending" } },
+                  "active-class": "current",
+                  exact: ""
+                }
+              },
+              [
+                _vm._v("Pending "),
+                _c("span", { staticClass: "count" }, [
+                  _vm._v("(" + _vm._s(_vm.counts.pending) + ")")
+                ])
+              ]
+            )
+          ],
+          1
+        )
       ]),
       _vm._v(" "),
       _c("list-table", {
@@ -587,6 +630,7 @@ var render = function() {
           "per-page": _vm.perPage,
           "current-page": _vm.currentPage,
           "action-column": _vm.actionColumn,
+          "not-found": "No vendors found.",
           "sort-by": _vm.sortBy,
           "sort-order": _vm.sortOrder
         },
@@ -630,6 +674,20 @@ var render = function() {
                 _c("a", { attrs: { href: "mailto:" + data.row.email } }, [
                   _vm._v(_vm._s(data.row.email))
                 ])
+              ]
+            }
+          },
+          {
+            key: "registered",
+            fn: function(data) {
+              return [
+                _vm._v(
+                  "\n            " +
+                    _vm._s(
+                      _vm.moment(data.row.registered).format("MMM D, YYYY")
+                    ) +
+                    "\n        "
+                )
               ]
             }
           },
