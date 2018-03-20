@@ -642,6 +642,10 @@ class DPS_Admin {
             return;
         }
 
+        if ( get_user_meta( $user_id, '_dokan_user_assigned_sub_pack', true ) == $pack_id ) {
+            return;
+        }
+
         //cancel paypal if current pack is recurring
         if( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
             $order_id = get_user_meta( $user_id, 'product_order_id', true );
@@ -655,18 +659,16 @@ class DPS_Admin {
         $pack_validity = get_post_meta( $pack_id, '_pack_validity', true );
         $admin_commission = get_post_meta( $pack_id, '_per_product_admin_commission', true );
 
-        // if ( ! get_user_meta( $user_id, 'product_package_id', true ) ) {
-            update_user_meta( $user_id, 'product_package_id', $pack_id );
-            update_user_meta( $user_id, 'product_order_id', '' );
-            update_user_meta( $user_id, 'product_no_with_pack' , get_post_meta( $pack_id, '_no_of_product', true ) ); //number of products
-            update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+        update_user_meta( $user_id, 'product_package_id', $pack_id );
+        update_user_meta( $user_id, 'product_order_id', '' );
+        update_user_meta( $user_id, 'product_no_with_pack' , get_post_meta( $pack_id, '_no_of_product', true ) ); //number of products
+        update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
 
-            if ( $pack_validity == 0 ) {
-                update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
-            } else {
-                update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
-            }
-        // }
+        if ( $pack_validity == 0 ) {
+            update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
+        } else {
+            update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
+        }
 
         update_user_meta( $user_id, 'can_post_product' , 1 );
         update_user_meta( $user_id, '_customer_recurring_subscription', '' );
