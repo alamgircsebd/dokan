@@ -251,6 +251,8 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/social-login.php';
         require_once DOKAN_PRO_CLASS . '/email-verification.php';
 
+        require_once DOKAN_PRO_INC . '/class-assets.php';
+
         if ( !function_exists( 'dokan_pro_get_active_modules' ) ) {
             require_once dirname( __FILE__ ) . '/includes/modules.php';
         }
@@ -304,6 +306,7 @@ class Dokan_Pro {
         }
 
         Dokan_Pro_Store::init();
+        new Dokan_Pro_Assets();
     }
 
     /**
