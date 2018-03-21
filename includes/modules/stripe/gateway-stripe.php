@@ -41,6 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'DOKAN_STRIPE_FILE', __FILE__ );
 define( 'DOKAN_STRIPE_PATH', dirname( __FILE__ ) );
+define( 'DOKAN_STRIPE_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates/' );
 
 /**
  * Dokan Stripe Main class
