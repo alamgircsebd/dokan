@@ -215,7 +215,6 @@ export default {
         },
 
         onSwitch(status, vendor_id) {
-            console.log(status, vendor_id);
 
             let message = ( status === false ) ? 'The vendor has been disabled.' : 'Selling has been enabled';
 
@@ -229,7 +228,9 @@ export default {
                     text: message,
                 });
 
-                this.fetchVendors();
+                if (this.currentStatus !== 'all' ) {
+                    this.fetchVendors();
+                }
             });
         },
 

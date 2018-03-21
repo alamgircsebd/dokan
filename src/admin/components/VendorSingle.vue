@@ -1,7 +1,7 @@
 <template>
     <div class="dokan-vendor-single">
         <div style="margin-bottom: 10px">
-            <router-link to="/" class="button">&larr; Back to listing</router-link>
+            <router-link :to="{ name: 'Vendors' }" class="button">&larr; Back to listing</router-link>
         </div>
 
         <div class="vendor-header" v-if="store.id">
@@ -44,7 +44,9 @@
 </template>
 
 <script>
-import { VclFacebook, VclTwitch } from 'vue-content-loading';
+let ContentLoading = dokan_get_lib('ContentLoading');
+let VclFacebook = ContentLoading.VclFacebook;
+let VclTwitch = ContentLoading.VclTwitch;
 
 export default {
 

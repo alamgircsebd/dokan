@@ -268,6 +268,12 @@ class Dokan_Pro_Admin_Settings {
             'component' => 'Vendors'
         );
 
+        $routes[] = array(
+            'path'      => '/vendors/:id',
+            'name'      => 'VendorSingle',
+            'component' => 'VendorSingle'
+        );
+
         return $routes;
     }
 
