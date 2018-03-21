@@ -1,12 +1,12 @@
 ;(function($) {
 
 $('.pack_content_wrapper').on('click','.buy_product_pack',function(evt){
-    
+
     url = $(this).attr('href');
-    
+
     console.log(dps);
     console.log(url);
-    
+
 });
 
 var wrapper = $( '.dps-pack-wrappper' );
@@ -16,18 +16,31 @@ var Dokan_Subscription_details = {
         //$('.dps-pack-details').hide();
         wrapper.on( 'change', 'select#dokan-subscription-pack', this.show_details );
         this.show_details();
-    },   
+    },
     show_details : function(){
-        id = $( 'select#dokan-subscription-pack' ).val();        
+        id = $( 'select#dokan-subscription-pack' ).val();
         $('.dps-pack').hide();
         $('.dps-pack-'+id).show();
     }
-    
-    
+
+
+};
+
+var Dokan_Subscription_Cancel = {
+    init: function() {
+        $( '.seller_subs_info input[type="submit"]' ).on( 'click', function( e ) {
+            var confirm = window.confirm( 'Do you really want to cancel the subscription?' );
+
+            if ( ! confirm ) {
+                e.preventDefault();
+            }
+        } );
+    }
 };
 
 $(function() {
     Dokan_Subscription_details.init();
+    Dokan_Subscription_Cancel.init();
 });
 
 })(jQuery);
