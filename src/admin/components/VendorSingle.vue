@@ -71,21 +71,21 @@
             </section>
 
             <section class="vendor-summary">
-                <div class="half-box products-revenue">
+                <div class="summary-wrap products-revenue">
                     <div class="stat-summary products">
                         <h3>Products</h3>
 
                         <ul class="counts">
                             <li class="products">
-                                <span class="count">27</span>
+                                <span class="count"><a :href="productUrl(store.id)">{{ stats.products.total }}</a></span>
                                 <span class="subhead">Total Products</span>
                             </li>
                             <li class="items">
-                                <span class="count">155</span>
+                                <span class="count">{{ stats.products.sold }}</span>
                                 <span class="subhead">Items Sold</span>
                             </li>
                             <li class="visitors">
-                                <span class="count">7650</span>
+                                <span class="count">{{ stats.products.visitor }}</span>
                                 <span class="subhead">Store Visitors</span>
                             </li>
                         </ul>
@@ -96,44 +96,79 @@
 
                         <ul class="counts">
                             <li class="orders">
-                                <span class="count">140</span>
+                                <span class="count"><a :href="ordersUrl(store.id)">{{ stats.revenue.orders }}</a></span>
                                 <span class="subhead">Orders Processed</span>
                             </li>
                             <li class="gross">
-                                <span class="count">{{ 16125 | currency }}</span>
+                                <span class="count">{{ stats.revenue.sales | currency }}</span>
                                 <span class="subhead">Gross Sales</span>
                             </li>
                             <li class="earning">
-                                <span class="count">{{ 12240 | currency }}</span>
+                                <span class="count">{{ stats.revenue.earning | currency }}</span>
                                 <span class="subhead">Total Earning</span>
                             </li>
                         </ul>
                     </div>
-                </div>
-                <div class="half-box">
+
                     <div class="stat-summary others">
                         <h3>Others</h3>
 
                         <ul class="counts">
                             <li class="commision">
-                                <span class="count">10%</span>
-                                <span class="subhead">Commision Rate</span>
+                                <span class="count">{{ stats.others.commision_rate }}%</span>
+                                <span class="subhead">Earning Rate</span>
                             </li>
                             <li class="balance">
-                                <span class="count">{{ 190 | currency }}</span>
+                                <span class="count">{{ stats.others.balance | currency }}</span>
                                 <span class="subhead">Current Balance</span>
                             </li>
                             <li class="reviews">
-                                <span class="count">123</span>
+                                <span class="count">{{ stats.others.reviews }}</span>
                                 <span class="subhead">Reviews</span>
                             </li>
                         </ul>
                     </div>
+                </div>
+                <div class="vendor-info">
+                    <ul>
+                        <li class="registered">
+                            <div class="subhead">Registered Since</div>
+                            <span class="date">
+                                {{ moment(store.registered).format('MMM D, YYYY') }}
+                                ({{ moment(store.registered).toNow(true) }})
+                            </span>
+                        </li>
+                        <li class="social-profiles">
+                            <div class="subhead">Social Profiles</div>
 
-                    <div class="stat-summary others">
-                        <h3>Others</h3>
+                            <div class="profiles">
+                                <a :class="{ active: isSocialActive('fb') }" :href="store.social.fb" target="_blank"><span class="flaticon-facebook-logo"></span></a>
+                                <a :class="{ active: isSocialActive('flickr') }" :href="store.social.flickr" target="_blank"><span class="flaticon-flickr-website-logo-silhouette"></span></a>
+                                <a :class="{ active: isSocialActive('twitter') }" :href="store.social.twitter" target="_blank"><span class="flaticon-twitter-logo-silhouette"></span></a>
+                                <a :class="{ active: isSocialActive('gplus') }" :href="store.social.gplus" target="_blank"><span class="flaticon-google-plus"></span></a>
+                                <a :class="{ active: isSocialActive('instagram') }" :href="store.social.instagram" target="_blank"><span class="flaticon-instagram"></span></a>
+                                <a :class="{ active: isSocialActive('youtube') }" :href="store.social.youtube" target="_blank"><span class="flaticon-youtube"></span></a>
+                                <a :class="{ active: isSocialActive('linkedin') }" :href="store.social.linkedin" target="_blank"><span class="flaticon-linkedin-logo"></span></a>
+                                <a :class="{ active: isSocialActive('pinterest') }" :href="store.social.pinterest" target="_blank"><span class="flaticon-pinterest-logo"></span></a>
+                            </div>
+                        </li>
+                        <li class="payments">
+                            <div class="subhead">Payment Methods</div>
 
-                    </div>
+                            <div class="payment-methods">
+                                <span title="PayPal Payment" :class="['flaticon-money', hasPaymentEmail('paypal') ? 'active' : '']"></span>
+                                <span title="Stripe Connect" class="flaticon-stripe-logo"></span>
+                                <span title="Bank Payment" :class="['flaticon-bank-building', hasBank ? 'active': '' ]"></span>
+                                <span title="Skrill" :class="['flaticon-skrill-pay-logo', hasPaymentEmail('skrill') ? 'active' : '']"></span>
+                            </div>
+                        </li>
+                        <li class="publishing">
+                            <div class="subhead">Product Publishing</div>
+
+                            <span v-if="store.trusted"><span class="dashicons dashicons-shield"></span> Direct</span>
+                            <span v-else><span class="dashicons dashicons-backup"></span> Requires Review</span>
+                        </li>
+                    </ul>
                 </div>
             </section>
         </div>
@@ -162,6 +197,7 @@ export default {
         return {
             showDialog: false,
             store: {},
+            stats: {},
             mail: {
                 subject: '',
                 body: ''
@@ -177,11 +213,27 @@ export default {
 
         mailTo() {
             return this.store.store_name + ' <' + this.store.email + '>';
+        },
+
+        hasBank() {
+            if ( this.store.payment.hasOwnProperty('bank') && ! _.isEmpty(this.store.payment.bank) ) {
+                return true;
+            }
+
+            return false;
         }
+    },
+
+    watch: {
+        '$route.params.id'() {
+            this.fetch();
+            this.fetchStats();
+        },
     },
 
     created() {
         this.fetch();
+        this.fetchStats();
     },
 
     methods: {
@@ -191,6 +243,27 @@ export default {
             .done(response => this.store = response);
         },
 
+        fetchStats() {
+            dokan.api.get('/stores/' + this.id + '/stats' )
+            .done(response => this.stats = response);
+        },
+
+        isSocialActive(profile) {
+            if (this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== false ) {
+                return true;
+            }
+
+            return false;
+        },
+
+        hasPaymentEmail(method) {
+            if ( this.store.payment.hasOwnProperty(method) && this.store.payment[method].email !== false ) {
+                return true;
+            }
+
+            return false;
+        },
+
         messageDialog() {
             this.showDialog = true;
         },
@@ -198,11 +271,34 @@ export default {
         sendEmail() {
             this.showDialog = false;
 
+            dokan.api.post('/stores/' + this.id + '/email', {
+                subject: this.mail.subject,
+                body: this.mail.body
+            } ).done(response => {
+                this.$notify({
+                    title: 'Success!',
+                    type: 'success',
+                    text: 'Email has been sent successfully.'
+                });
+            });
+
             this.mail = {
                 subject: '',
                 body: ''
             };
-        }
+        },
+
+        moment(date) {
+            return moment(date);
+        },
+
+        productUrl(id) {
+            return dokan.adminRoot + 'edit.php?post_type=product&author=' + id;
+        },
+
+        ordersUrl(id) {
+            return dokan.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
+        },
     }
 };
 </script>
@@ -402,8 +498,8 @@ export default {
         justify-content: space-between;
         margin-top: 20px;
 
-        .half-box {
-            width: 49%;
+        .summary-wrap {
+            width: 72%;
             background: #fff;
             border: 1px solid #D9E4E7;
             border-radius: 3px;
@@ -413,7 +509,7 @@ export default {
         }
 
         .stat-summary {
-            width: 48%;
+            width: 32%;
 
             h3 {
                 margin: 0 0 1em 0;
@@ -436,6 +532,10 @@ export default {
                     .count {
                         font-size: 1.5em;
                         line-height: 130%;
+
+                        a {
+                            text-decoration: none;
+                        }
                     }
 
                     .subhead {
@@ -459,7 +559,7 @@ export default {
                         transition: color .1s ease-in 0;
                         -webkit-font-smoothing: antialiased;
                         -moz-osx-font-smoothing: grayscale;
-                        left: 29px;
+                        left: 31px;
                         top: 26px;
                         color: #fff;
                         position: absolute;
@@ -470,7 +570,7 @@ export default {
                         width: 41px;
                         height: 41px;
                         border-radius: 50%;
-                        left: 18px;
+                        left: 20px;
                         top: 18px;
                         content: " ";
                     }
@@ -478,6 +578,7 @@ export default {
                     &.products {
                         color: #FB094C;
 
+                        a { color: #FB094C; }
                         &:before { background-color: #FB094C; }
                         &:after {
                             font-family: WooCommerce!important;
@@ -502,6 +603,7 @@ export default {
                     &.orders {
                         color: #323ABF;
 
+                        a { color: #323ABF; }
                         &:before { background-color: #323ABF; }
                         &:after { content: "\f174"; }
                     }
@@ -541,6 +643,90 @@ export default {
                         &:after { content: "\f125"; }
                     }
                 }
+            }
+        }
+
+        .vendor-info {
+            background: #fff;
+            border: 1px solid #D9E4E7;
+            border-radius: 3px;
+            // padding: 20px;
+            width: 27%;
+
+            .subhead {
+                color: #999;
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            ul {
+                margin: 0;
+            }
+
+            li {
+                border-top: 1px solid #dfdfdf;
+                padding: 10px 15px;
+
+                &:first-child {
+                    border-top: none;
+                }
+            }
+
+            li.registered {
+                padding-top: 15px;
+            }
+
+            .social-profiles {
+
+                a {
+                    text-decoration: none;
+                    color: #ddd;
+                    margin-right: 5px;
+                }
+
+                [class^="flaticon-"]:before,
+                [class*=" flaticon-"]:before,
+                [class^="flaticon-"]:after,
+                [class*=" flaticon-"]:after {
+                    font-size: 19px;
+                }
+
+                a.active {
+                    .flaticon-facebook-logo { color: #3C5998; }
+                    .flaticon-twitter-logo-silhouette { color: #1496F1; }
+                    .flaticon-google-plus { color: #EC322B; }
+                    .flaticon-youtube { color: #CD2120; }
+                    .flaticon-instagram { color: #B6224A; }
+                    .flaticon-linkedin-logo { color: #0C61A8; }
+                    .flaticon-pinterest-logo { color: #BD091E; }
+                    .flaticon-flickr-website-logo-silhouette { color: #FB0072; }
+                }
+            }
+
+            li.payments {
+                // text-align: center;
+
+                [class^="flaticon-"]:before,
+                [class*=" flaticon-"]:before,
+                [class^="flaticon-"]:after,
+                [class*=" flaticon-"]:after {
+                    font-size: 35px;
+                    vertical-align: top;
+                }
+
+                [class^="flaticon-"] {
+                    margin-right: 8px;
+                    color: #ddd;
+                }
+
+                .flaticon-bank-building:before {
+                    font-size: 26px;
+                }
+
+                .flaticon-money.active { color: #011B78; }
+                .flaticon-stripe-logo.active { color: #5458DF; }
+                .flaticon-bank-building.active { color: #444; }
+                .flaticon-skrill-pay-logo.active { color: #721052; }
             }
         }
     }

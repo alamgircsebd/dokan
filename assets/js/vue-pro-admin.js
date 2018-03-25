@@ -593,6 +593,41 @@ var Switches = dokan_get_lib('Switches');
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var ContentLoading = dokan_get_lib('ContentLoading');
 var Modal = dokan_get_lib('Modal');
@@ -614,6 +649,7 @@ var VclTwitch = ContentLoading.VclTwitch;
         return {
             showDialog: false,
             store: {},
+            stats: {},
             mail: {
                 subject: '',
                 body: ''
@@ -628,11 +664,26 @@ var VclTwitch = ContentLoading.VclTwitch;
         },
         mailTo: function mailTo() {
             return this.store.store_name + ' <' + this.store.email + '>';
+        },
+        hasBank: function hasBank() {
+            if (this.store.payment.hasOwnProperty('bank') && !_.isEmpty(this.store.payment.bank)) {
+                return true;
+            }
+
+            return false;
+        }
+    },
+
+    watch: {
+        '$route.params.id': function $routeParamsId() {
+            this.fetch();
+            this.fetchStats();
         }
     },
 
     created: function created() {
         this.fetch();
+        this.fetchStats();
     },
 
 
@@ -644,16 +695,69 @@ var VclTwitch = ContentLoading.VclTwitch;
                 return _this.store = response;
             });
         },
+        fetchStats: function fetchStats() {
+            var _this2 = this;
+
+            dokan.api.get('/stores/' + this.id + '/stats').done(function (response) {
+                return _this2.stats = response;
+            });
+        },
+        isSocialActive: function isSocialActive(profile) {
+            if (this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== false) {
+                return true;
+            }
+
+            return false;
+        },
+        hasPaymentEmail: function hasPaymentEmail(method) {
+            if (this.store.payment.hasOwnProperty(method) && this.store.payment[method].email !== false) {
+                return true;
+            }
+
+            return false;
+        },
         messageDialog: function messageDialog() {
             this.showDialog = true;
         },
         sendEmail: function sendEmail() {
+            var _this3 = this;
+
             this.showDialog = false;
+
+            dokan.api.post('/stores/' + this.id + '/email', {
+                subject: this.mail.subject,
+                body: this.mail.body
+            }).done(function (response) {
+                _this3.$notify({
+                    title: 'Success!',
+                    type: 'success',
+                    text: 'Email has been sent successfully.'
+                });
+            });
 
             this.mail = {
                 subject: '',
                 body: ''
             };
+        },
+        moment: function (_moment) {
+            function moment(_x) {
+                return _moment.apply(this, arguments);
+            }
+
+            moment.toString = function () {
+                return _moment.toString();
+            };
+
+            return moment;
+        }(function (date) {
+            return moment(date);
+        }),
+        productUrl: function productUrl(id) {
+            return dokan.adminRoot + 'edit.php?post_type=product&author=' + id;
+        },
+        ordersUrl: function ordersUrl(id) {
+            return dokan.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
         }
     }
 });
@@ -1221,18 +1325,70 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("section", { staticClass: "vendor-summary" }, [
-              _c("div", { staticClass: "half-box products-revenue" }, [
-                _vm._m(1),
+              _c("div", { staticClass: "summary-wrap products-revenue" }, [
+                _c("div", { staticClass: "stat-summary products" }, [
+                  _c("h3", [_vm._v("Products")]),
+                  _vm._v(" "),
+                  _c("ul", { staticClass: "counts" }, [
+                    _c("li", { staticClass: "products" }, [
+                      _c("span", { staticClass: "count" }, [
+                        _c(
+                          "a",
+                          { attrs: { href: _vm.productUrl(_vm.store.id) } },
+                          [_vm._v(_vm._s(_vm.stats.products.total))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subhead" }, [
+                        _vm._v("Total Products")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "items" }, [
+                      _c("span", { staticClass: "count" }, [
+                        _vm._v(_vm._s(_vm.stats.products.sold))
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subhead" }, [
+                        _vm._v("Items Sold")
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("li", { staticClass: "visitors" }, [
+                      _c("span", { staticClass: "count" }, [
+                        _vm._v(_vm._s(_vm.stats.products.visitor))
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subhead" }, [
+                        _vm._v("Store Visitors")
+                      ])
+                    ])
+                  ])
+                ]),
                 _vm._v(" "),
                 _c("div", { staticClass: "stat-summary revenue" }, [
                   _c("h3", [_vm._v("Revenue")]),
                   _vm._v(" "),
                   _c("ul", { staticClass: "counts" }, [
-                    _vm._m(2),
+                    _c("li", { staticClass: "orders" }, [
+                      _c("span", { staticClass: "count" }, [
+                        _c(
+                          "a",
+                          { attrs: { href: _vm.ordersUrl(_vm.store.id) } },
+                          [_vm._v(_vm._s(_vm.stats.revenue.orders))]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subhead" }, [
+                        _vm._v("Orders Processed")
+                      ])
+                    ]),
                     _vm._v(" "),
                     _c("li", { staticClass: "gross" }, [
                       _c("span", { staticClass: "count" }, [
-                        _vm._v(_vm._s(_vm._f("currency")(16125)))
+                        _vm._v(
+                          _vm._s(_vm._f("currency")(_vm.stats.revenue.sales))
+                        )
                       ]),
                       _vm._v(" "),
                       _c("span", { staticClass: "subhead" }, [
@@ -1242,7 +1398,9 @@ var render = function() {
                     _vm._v(" "),
                     _c("li", { staticClass: "earning" }, [
                       _c("span", { staticClass: "count" }, [
-                        _vm._v(_vm._s(_vm._f("currency")(12240)))
+                        _vm._v(
+                          _vm._s(_vm._f("currency")(_vm.stats.revenue.earning))
+                        )
                       ]),
                       _vm._v(" "),
                       _c("span", { staticClass: "subhead" }, [
@@ -1250,19 +1408,27 @@ var render = function() {
                       ])
                     ])
                   ])
-                ])
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "half-box" }, [
+                ]),
+                _vm._v(" "),
                 _c("div", { staticClass: "stat-summary others" }, [
                   _c("h3", [_vm._v("Others")]),
                   _vm._v(" "),
                   _c("ul", { staticClass: "counts" }, [
-                    _vm._m(3),
+                    _c("li", { staticClass: "commision" }, [
+                      _c("span", { staticClass: "count" }, [
+                        _vm._v(_vm._s(_vm.stats.others.commision_rate) + "%")
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subhead" }, [
+                        _vm._v("Earning Rate")
+                      ])
+                    ]),
                     _vm._v(" "),
                     _c("li", { staticClass: "balance" }, [
                       _c("span", { staticClass: "count" }, [
-                        _vm._v(_vm._s(_vm._f("currency")(190)))
+                        _vm._v(
+                          _vm._s(_vm._f("currency")(_vm.stats.others.balance))
+                        )
                       ]),
                       _vm._v(" "),
                       _c("span", { staticClass: "subhead" }, [
@@ -1270,11 +1436,208 @@ var render = function() {
                       ])
                     ]),
                     _vm._v(" "),
-                    _vm._m(4)
+                    _c("li", { staticClass: "reviews" }, [
+                      _c("span", { staticClass: "count" }, [
+                        _vm._v(_vm._s(_vm.stats.others.reviews))
+                      ]),
+                      _vm._v(" "),
+                      _c("span", { staticClass: "subhead" }, [
+                        _vm._v("Reviews")
+                      ])
+                    ])
                   ])
-                ]),
-                _vm._v(" "),
-                _vm._m(5)
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "vendor-info" }, [
+                _c("ul", [
+                  _c("li", { staticClass: "registered" }, [
+                    _c("div", { staticClass: "subhead" }, [
+                      _vm._v("Registered Since")
+                    ]),
+                    _vm._v(" "),
+                    _c("span", { staticClass: "date" }, [
+                      _vm._v(
+                        "\n                            " +
+                          _vm._s(
+                            _vm
+                              .moment(_vm.store.registered)
+                              .format("MMM D, YYYY")
+                          ) +
+                          "\n                            (" +
+                          _vm._s(_vm.moment(_vm.store.registered).toNow(true)) +
+                          ")\n                        "
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "social-profiles" }, [
+                    _c("div", { staticClass: "subhead" }, [
+                      _vm._v("Social Profiles")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "profiles" }, [
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("fb") },
+                          attrs: { href: _vm.store.social.fb, target: "_blank" }
+                        },
+                        [_c("span", { staticClass: "flaticon-facebook-logo" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("flickr") },
+                          attrs: {
+                            href: _vm.store.social.flickr,
+                            target: "_blank"
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass:
+                              "flaticon-flickr-website-logo-silhouette"
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("twitter") },
+                          attrs: {
+                            href: _vm.store.social.twitter,
+                            target: "_blank"
+                          }
+                        },
+                        [
+                          _c("span", {
+                            staticClass: "flaticon-twitter-logo-silhouette"
+                          })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("gplus") },
+                          attrs: {
+                            href: _vm.store.social.gplus,
+                            target: "_blank"
+                          }
+                        },
+                        [_c("span", { staticClass: "flaticon-google-plus" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("instagram") },
+                          attrs: {
+                            href: _vm.store.social.instagram,
+                            target: "_blank"
+                          }
+                        },
+                        [_c("span", { staticClass: "flaticon-instagram" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("youtube") },
+                          attrs: {
+                            href: _vm.store.social.youtube,
+                            target: "_blank"
+                          }
+                        },
+                        [_c("span", { staticClass: "flaticon-youtube" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("linkedin") },
+                          attrs: {
+                            href: _vm.store.social.linkedin,
+                            target: "_blank"
+                          }
+                        },
+                        [_c("span", { staticClass: "flaticon-linkedin-logo" })]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "a",
+                        {
+                          class: { active: _vm.isSocialActive("pinterest") },
+                          attrs: {
+                            href: _vm.store.social.pinterest,
+                            target: "_blank"
+                          }
+                        },
+                        [_c("span", { staticClass: "flaticon-pinterest-logo" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "payments" }, [
+                    _c("div", { staticClass: "subhead" }, [
+                      _vm._v("Payment Methods")
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "payment-methods" }, [
+                      _c("span", {
+                        class: [
+                          "flaticon-money",
+                          _vm.hasPaymentEmail("paypal") ? "active" : ""
+                        ],
+                        attrs: { title: "PayPal Payment" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", {
+                        staticClass: "flaticon-stripe-logo",
+                        attrs: { title: "Stripe Connect" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", {
+                        class: [
+                          "flaticon-bank-building",
+                          _vm.hasBank ? "active" : ""
+                        ],
+                        attrs: { title: "Bank Payment" }
+                      }),
+                      _vm._v(" "),
+                      _c("span", {
+                        class: [
+                          "flaticon-skrill-pay-logo",
+                          _vm.hasPaymentEmail("skrill") ? "active" : ""
+                        ],
+                        attrs: { title: "Skrill" }
+                      })
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "publishing" }, [
+                    _c("div", { staticClass: "subhead" }, [
+                      _vm._v("Product Publishing")
+                    ]),
+                    _vm._v(" "),
+                    _vm.store.trusted
+                      ? _c("span", [
+                          _c("span", {
+                            staticClass: "dashicons dashicons-shield"
+                          }),
+                          _vm._v(" Direct")
+                        ])
+                      : _c("span", [
+                          _c("span", {
+                            staticClass: "dashicons dashicons-backup"
+                          }),
+                          _vm._v(" Requires Review")
+                        ])
+                  ])
+                ])
               ])
             ])
           ])
@@ -1294,72 +1657,6 @@ var staticRenderFns = [
         { staticClass: "button", attrs: { href: "javascript:history.go(-1)" } },
         [_vm._v("← Go Back")]
       )
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "stat-summary products" }, [
-      _c("h3", [_vm._v("Products")]),
-      _vm._v(" "),
-      _c("ul", { staticClass: "counts" }, [
-        _c("li", { staticClass: "products" }, [
-          _c("span", { staticClass: "count" }, [_vm._v("27")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "subhead" }, [_vm._v("Total Products")])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "items" }, [
-          _c("span", { staticClass: "count" }, [_vm._v("155")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "subhead" }, [_vm._v("Items Sold")])
-        ]),
-        _vm._v(" "),
-        _c("li", { staticClass: "visitors" }, [
-          _c("span", { staticClass: "count" }, [_vm._v("7650")]),
-          _vm._v(" "),
-          _c("span", { staticClass: "subhead" }, [_vm._v("Store Visitors")])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "orders" }, [
-      _c("span", { staticClass: "count" }, [_vm._v("140")]),
-      _vm._v(" "),
-      _c("span", { staticClass: "subhead" }, [_vm._v("Orders Processed")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "commision" }, [
-      _c("span", { staticClass: "count" }, [_vm._v("10%")]),
-      _vm._v(" "),
-      _c("span", { staticClass: "subhead" }, [_vm._v("Commision Rate")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "reviews" }, [
-      _c("span", { staticClass: "count" }, [_vm._v("123")]),
-      _vm._v(" "),
-      _c("span", { staticClass: "subhead" }, [_vm._v("Reviews")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "stat-summary others" }, [
-      _c("h3", [_vm._v("Others")])
     ])
   }
 ]
