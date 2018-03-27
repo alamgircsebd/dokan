@@ -28,7 +28,7 @@ if ( ! class_exists( 'Dokan_Email_Vendor_Disable' ) ) :
             $this->template_base    = DOKAN_PRO_DIR.'/templates/';
 
             // Triggers for this email
-            add_action( 'dokan_vendor_disabled', array( $this, 'trigger' ), 10, 2 );
+            add_action( 'dokan_vendor_disabled', array( $this, 'trigger' ) );
 
             // Call parent constructor
             parent::__construct();
@@ -55,7 +55,7 @@ if ( ! class_exists( 'Dokan_Email_Vendor_Disable' ) ) :
         /**
         * Trigger the this email.
         */
-        public function trigger( $seller_id, $status ) {
+        public function trigger( $seller_id ) {
             if ( ! $this->is_enabled() ) {
                 return;
             }
