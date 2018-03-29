@@ -629,6 +629,7 @@ class Dokan_Pro {
             dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',
             dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
             dirname( __FILE__ ) . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
         );
 
         return array_merge( $class_map, $classes );
