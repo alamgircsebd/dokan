@@ -232,6 +232,18 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Switches = dokan_get_lib('Switches');
@@ -284,8 +296,11 @@ var Switches = dokan_get_lib('Switches');
                 key: 'edit',
                 label: 'Edit'
             }, {
-                key: 'trash',
-                label: 'Delete'
+                key: 'products',
+                label: 'Products'
+            }, {
+                key: 'orders',
+                label: 'Orders'
             }],
             bulkActions: [{
                 key: 'approved',
@@ -441,6 +456,15 @@ var Switches = dokan_get_lib('Switches');
                     order: order
                 }
             });
+        },
+        productUrl: function productUrl(id) {
+            return dokan.urls.adminRoot + 'edit.php?post_type=product&author=' + id;
+        },
+        ordersUrl: function ordersUrl(id) {
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
+        },
+        editUrl: function editUrl(id) {
+            return dokan.urls.adminRoot + 'user-edit.php?user_id=' + id;
         }
     }
 });
@@ -953,6 +977,7 @@ var render = function() {
           loading: _vm.loading,
           rows: _vm.vendors,
           actions: _vm.actions,
+          actionColumn: "store_name",
           "show-cb": _vm.showCb,
           "total-items": _vm.totalItems,
           "bulk-actions": _vm.bulkActions,
@@ -1038,6 +1063,43 @@ var render = function() {
                   on: { input: _vm.onSwitch }
                 })
               ]
+            }
+          },
+          {
+            key: "row-actions",
+            fn: function(data) {
+              return _vm._l(_vm.actions, function(action, index) {
+                return _c(
+                  "span",
+                  { class: action.key },
+                  [
+                    action.key == "edit"
+                      ? _c("a", { attrs: { href: _vm.editUrl(data.row.id) } }, [
+                          _vm._v(_vm._s(action.label))
+                        ])
+                      : action.key == "products"
+                        ? _c(
+                            "a",
+                            { attrs: { href: _vm.productUrl(data.row.id) } },
+                            [_vm._v(_vm._s(action.label))]
+                          )
+                        : action.key == "orders"
+                          ? _c(
+                              "a",
+                              { attrs: { href: _vm.ordersUrl(data.row.id) } },
+                              [_vm._v(_vm._s(action.label))]
+                            )
+                          : _c("a", { attrs: { href: "#" } }, [
+                              _vm._v(_vm._s(action.label))
+                            ]),
+                    _vm._v(" "),
+                    index !== _vm.actions.length - 1
+                      ? [_vm._v(" | ")]
+                      : _vm._e()
+                  ],
+                  2
+                )
+              })
             }
           }
         ])
