@@ -428,6 +428,10 @@ class Dokan_Pro {
         if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
             wp_enqueue_script( 'dokan-product-shipping' );
         }
+
+        if ( get_query_var( 'account-migration' ) ) {
+            wp_enqueue_script( 'dokan-vendor-registration' );
+        }
     }
 
     /**
