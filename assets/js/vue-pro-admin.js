@@ -989,7 +989,15 @@ var render = function() {
                     _c(
                       "router-link",
                       { attrs: { to: "/vendors/" + data.row.id } },
-                      [_vm._v(_vm._s(data.row.store_name))]
+                      [
+                        _vm._v(
+                          _vm._s(
+                            data.row.store_name
+                              ? data.row.store_name
+                              : "(no name)"
+                          )
+                        )
+                      ]
                     )
                   ],
                   1
@@ -1247,7 +1255,13 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "store-info" }, [
                   _c("h2", { staticClass: "store-name" }, [
-                    _vm._v(_vm._s(_vm.store.store_name))
+                    _vm._v(
+                      _vm._s(
+                        _vm.store.store_name
+                          ? _vm.store.store_name
+                          : "(No Name)"
+                      )
+                    )
                   ]),
                   _vm._v(" "),
                   _c(

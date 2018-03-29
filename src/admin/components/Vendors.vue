@@ -35,7 +35,7 @@
         >
             <template slot="store_name" slot-scope="data">
                 <img :src="data.row.gravatar" :alt="data.row.store_name" width="50">
-                <strong><router-link :to="'/vendors/' + data.row.id">{{ data.row.store_name }}</router-link></strong>
+                <strong><router-link :to="'/vendors/' + data.row.id">{{ data.row.store_name ? data.row.store_name : '(no name)' }}</router-link></strong>
             </template>
 
             <template slot="email" slot-scope="data">
