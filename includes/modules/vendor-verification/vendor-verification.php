@@ -98,6 +98,9 @@ class Dokan_Seller_Verification {
         add_action( 'init', array( $this, 'init_session' ) );
         add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ) );
 
+        // widget
+        add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
@@ -218,6 +221,17 @@ class Dokan_Seller_Verification {
                 require_once $lib_dir . '/Hybrid/Auth.php';
             }
         }
+    }
+
+    /**
+     * Register widgets
+     *
+     * @since 2.8
+     *
+     * @return void
+     */
+    public function register_widgets() {
+        register_widget( 'Dokan_Verification_list' );
     }
 
     public function init_session() {

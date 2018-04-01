@@ -802,51 +802,17 @@ class Dokan_Pro_Ajax {
         $user_id = isset( $_POST['user_id'] ) ? intval( $_POST['user_id'] ) : 0;
         $status = sanitize_text_field( $_POST['type'] );
 
-        if ( $user_id && in_array( $status, array( 'yes', 'no' ) ) ) {
-            update_user_meta( $user_id, 'dokan_enable_selling', $status );
-
-            $product_status = ( $status == 'no' ) ? 'pending' : 'publish';
-            $this->change_product_status( $user_id, $product_status );
-        }
-
-        wp_send_json_success();
-        exit;
-    }
-
-    /**
-     * Chnage product status when toggling seller active status
-     *
-     * @since 2.6.9
-     *
-     * @param int $seller_id
-     * @param string $status
-     *
-     * @return void
-     */
-    function change_product_status( $seller_id, $status ) {
-        $args = array(
-            'post_type'      => 'product',
-            'post_status'    => ( $status == 'pending' ) ? 'publish' : 'pending',
-            'posts_per_page' => -1,
-            'author'         => $seller_id,
-            'orderby'        => 'post_date',
-            'order'          => 'DESC'
-        );
-
-        $product_query = new WP_Query( $args );
-        $products = $product_query->get_posts();
-
-        if ( $products ) {
-            foreach ( $products as $pro ) {
-                if ( 'publish' != $status ) {
-                    update_post_meta( $pro->ID, 'inactive_product_flag', 'yes' );
-                }
-
-                wp_update_post( array( 'ID' => $pro->ID, 'post_status' => $status ) );
+        if ( in_array( $status, array( 'yes', 'no' ) ) ) {
+            if ( 'yes' == $status ) {
+                $user = dokan()->vendor->get( $user_id )->make_active();
+            } else {
+                $user = dokan()->vendor->get( $user_id )->make_inactive();
             }
         }
-    }
 
+        wp_send_json_success($user);
+        exit;
+    }
 
     /**
      * Load State via ajax for refund
