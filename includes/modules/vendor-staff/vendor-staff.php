@@ -64,6 +64,8 @@ class Dokan_Vendor_staff {
         add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_staff_template' ), 16 );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
+        add_action( 'admin_init', array( $this, 'disable_backend_access' ) );
+        add_filter( 'show_admin_bar', array( $this, 'disable_admin_bar' ) );
     }
 
     /**
@@ -141,6 +143,38 @@ class Dokan_Vendor_staff {
             flush_rewrite_rules( true );
             delete_transient( 'dokan-vendor-staff' );
         }
+    }
+
+    /**
+     * Disable backend access of vendor_staff
+     *
+     * @since 2.7.6
+     *
+     * @return void
+     */
+    public function disable_backend_access() {
+        if ( ! current_user_can( 'vendor_staff') ) {
+            return;
+        }
+
+        if ( is_admin() && ! wp_doing_ajax() ) {
+            wp_redirect( dokan_get_navigation_url( 'dashboard' ) );
+            exit;
+        }
+    }
+
+    /**
+     * Disable admin bar when the user role is vendor_staff
+     * @since 2.7.6
+     *
+     * @return bool
+     */
+    public function disable_admin_bar( $show_admin_bar ) {
+        if ( current_user_can( 'vendor_staff' ) ) {
+            return false;
+        }
+
+        return $show_admin_bar;
     }
 
     /**
@@ -295,4 +329,3 @@ $vendor_staff = Dokan_Vendor_staff::init();
 
 dokan_register_activation_hook( __FILE__, array( 'Dokan_Vendor_staff', 'activate' ) );
 dokan_register_deactivation_hook( __FILE__, array( 'Dokan_Vendor_staff', 'deactivate' ) );
-
