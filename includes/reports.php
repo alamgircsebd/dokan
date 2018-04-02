@@ -192,7 +192,7 @@ function dokan_seller_sales_statement() {
                         $seller_tax      = wc_price( $order_amount['tax'] );
 
                         $amount     = wc_price( $seller_amount );
-                        $net_amount = (float) $net_amount + (float) $seller_amount + (float) $order_amount['shipping'] + (float) $order_amount['tax'];
+                        $net_amount = (float) $net_amount + (float) $seller_amount;
 
                         $net_amount_print = wc_price( $net_amount );
 

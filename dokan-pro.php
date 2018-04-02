@@ -244,12 +244,16 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/orders.php';
         require_once DOKAN_PRO_INC . '/reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
+
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
+
         require_once DOKAN_PRO_CLASS . '/store-seo.php';
         require_once DOKAN_PRO_CLASS . '/store-share.php';
         require_once DOKAN_PRO_CLASS . '/social-login.php';
         require_once DOKAN_PRO_CLASS . '/email-verification.php';
+
+        require_once DOKAN_PRO_INC . '/class-assets.php';
 
         if ( !function_exists( 'dokan_pro_get_active_modules' ) ) {
             require_once dirname( __FILE__ ) . '/includes/modules.php';
@@ -304,6 +308,7 @@ class Dokan_Pro {
         }
 
         Dokan_Pro_Store::init();
+        new Dokan_Pro_Assets();
     }
 
     /**
@@ -316,8 +321,12 @@ class Dokan_Pro {
     public function load_actions() {
          // init the classes
         add_action( 'init', array( $this, 'inistantiate' ), 10 );
-        add_action( 'woocommerce_after_my_account', array( $this, 'dokan_account_migration_button' ) );
         add_action( 'init', array( $this, 'register_scripts' ), 10 );
+
+        add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+
+        add_action( 'woocommerce_after_my_account', array( $this, 'dokan_account_migration_button' ) );
+
         add_action( 'dokan_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
         add_action( 'dokan_enqueue_admin_scripts', array( $this, 'admin_enqueue_scripts' ) );
         add_action( 'dokan_enqueue_admin_dashboard_script', array( $this, 'admin_dashboad_enqueue_scripts' ) );
@@ -400,8 +409,7 @@ class Dokan_Pro {
      * */
     public function enqueue_scripts() {
 
-        if ( ( dokan_is_seller_dashboard() || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) || dokan_is_store_page() || dokan_is_store_review_page() || is_account_page() || apply_filters( 'dokan_forced_load_scripts', false )
-        ) {
+        if ( ( dokan_is_seller_dashboard() || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) || dokan_is_store_page() || dokan_is_store_review_page() || is_account_page() || apply_filters( 'dokan_forced_load_scripts', false ) ) {
             // wp_enqueue_style( 'dokan-pro-style' );
             wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
 
@@ -416,10 +424,13 @@ class Dokan_Pro {
             wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro.js', array( 'jquery', 'dokan-script' ), null, true );
         }
 
-
-        //Load in Single product pages only
+        // Load in Single product pages only
         if ( is_singular( 'product' ) && !get_query_var( 'edit' ) ) {
             wp_enqueue_script( 'dokan-product-shipping' );
+        }
+
+        if ( get_query_var( 'account-migration' ) ) {
+            wp_enqueue_script( 'dokan-vendor-registration' );
         }
     }
 
@@ -613,13 +624,27 @@ class Dokan_Pro {
      */
     function rest_api_class_map( $class_map ) {
         $classes = array(
-            dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php' => 'Dokan_REST_Coupon_Controller',
-            dirname( __FILE__ ) . '/includes/api/class-reports-controller.php' => 'Dokan_REST_Reports_Controller',
-            dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php' => 'Dokan_REST_Reviews_Controller',
-            dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller'
+            dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
         );
 
         return array_merge( $class_map, $classes );
+    }
+
+    /**
+     * Register widgets
+     *
+     * @since 2.8
+     *
+     * @return void
+     */
+    public function register_widgets() {
+        register_widget( 'Dokan_Best_Seller_Widget' );
+        register_widget( 'Dokan_Feature_Seller_Widget' );
     }
 }
 
