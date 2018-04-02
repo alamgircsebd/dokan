@@ -252,6 +252,7 @@ class Dokan_Stripe {
         </style>
 
         <div class="dokan-stripe-connect-container">
+            <input type="hidden" name="settings[stripe]" value="<?php echo empty( $key ) ? 0 : 1; ?>">
             <?php
                 if ( empty( $key ) ) {
 
