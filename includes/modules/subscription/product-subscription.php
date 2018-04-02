@@ -780,10 +780,10 @@ class Dokan_Product_Subscription {
                 $admin_commission_type   = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
                 if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
-                    update_user_meta( $user_id, 'dokan_admin_percentage', $admin_commission );
-                    update_user_meta( $user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
-                    update_user_meta( $user_id, 'dokan_admin_percentage', '' );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
                 }
             }
         }
