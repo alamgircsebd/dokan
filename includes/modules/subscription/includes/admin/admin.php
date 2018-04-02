@@ -677,9 +677,9 @@ class DPS_Admin {
             delete_user_meta( $user_id, 'vendor_allowed_categories' );
         }
 
-        if ( ! empty( $admin_commission ) ) {
+        if ( $admin_commission != '' && $admin_commission_type != '' ) {
             update_user_meta( $user_id, 'dokan_admin_percentage', $admin_commission );
-            update_post_meta( $user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+            update_user_meta( $user_id, 'dokan_admin_percentage_type', $admin_commission_type );
         } else {
             update_user_meta( $user_id, 'dokan_admin_percentage', '' );
         }

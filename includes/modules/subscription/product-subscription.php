@@ -766,7 +766,7 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product['product_id'], '_no_of_product', true ) );
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                
+
                 if ( $pack_validity == 0 ) {
                     update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
                 } else {
@@ -1049,7 +1049,7 @@ class Dokan_Product_Subscription {
         delete_user_meta( $customer_id, 'product_pack_enddate' );
         delete_user_meta( $customer_id, 'can_post_product' );
         delete_user_meta( $customer_id, '_customer_recurring_subscription' );
-        delete_user_meta( $customer_id, 'dokan_seller_percentage' );
+        delete_user_meta( $customer_id, 'dokan_admin_percentage' );
     }
 
     /**
