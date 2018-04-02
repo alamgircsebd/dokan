@@ -106,7 +106,6 @@ Class Dokan_Social_Login {
                 "LinkedIn"   => array(
                     "enabled" => true,
                     "keys"    => array( "id" => "", "secret" => "" ),
-                    "fields"  => array(),
                 ),
         ) );
         //facebook config from admin
