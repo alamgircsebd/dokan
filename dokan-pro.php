@@ -573,6 +573,8 @@ class Dokan_Pro {
         $wc_emails['Dokan_Email_Updated_Product'] = include( DOKAN_PRO_INC . '/emails/class-dokan-email-updated-product.php' );
         $wc_emails['Dokan_Email_Refund_Request']  = include( DOKAN_PRO_INC . '/emails/class-dokan-refund-request.php' );
         $wc_emails['Dokan_Email_Refund_Vendor']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-refund-vendor.php' );
+        $wc_emails['Dokan_Email_Vendor_Enable']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-vendor-enable.php' );
+        $wc_emails['Dokan_Email_Vendor_Disable']  = include( DOKAN_PRO_INC . '/emails/class-dokan-email-vendor-disable.php' );
 
         return $wc_emails;
     }
