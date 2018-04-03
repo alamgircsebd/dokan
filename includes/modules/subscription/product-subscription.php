@@ -220,7 +220,8 @@ class Dokan_Product_Subscription {
      */
     public function enqueue_scripts() {
         wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
-        wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), false, true );
+        wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), time(), true );
+        wp_localize_script( 'dps-custom-js', 'dokanSubscription', array( 'cancel_string' => __( 'Do you really want to cancel the subscription?', 'dokan' ) ) );
     }
 
     /**
@@ -766,7 +767,7 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product['product_id'], '_no_of_product', true ) );
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                
+
                 if ( $pack_validity == 0 ) {
                     update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
                 } else {
