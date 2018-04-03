@@ -25,7 +25,7 @@ var Dokan_Subscription_details = {
     },
     cancel: function() {
         $( '.seller_subs_info input[type="submit"]' ).on( 'click', function( e ) {
-            var confirm = window.confirm( subscription.cancel_string );
+            var confirm = window.confirm( dokanSubscription.cancel_string );
 
             if ( ! confirm ) {
                 e.preventDefault();

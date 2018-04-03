@@ -221,7 +221,7 @@ class Dokan_Product_Subscription {
     public function enqueue_scripts() {
         wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
         wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), time(), true );
-        wp_localize_script( 'dps-custom-js', 'subscription', array( 'cancel_string' => __( 'Do you really want to cancel the subscription?', 'dokan' ) ) );
+        wp_localize_script( 'dps-custom-js', 'dokanSubscription', array( 'cancel_string' => __( 'Do you really want to cancel the subscription?', 'dokan' ) ) );
     }
 
     /**
