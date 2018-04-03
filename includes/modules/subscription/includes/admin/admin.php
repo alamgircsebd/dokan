@@ -37,7 +37,7 @@ class DPS_Admin {
         wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
         wp_enqueue_script( 'dps-custom-admin-js', DPS_URL . '/assets/js/admin-script.js', array('jquery'), false, true );
 
-        wp_localize_script( 'dps-custom-admin-js', 'dokan', array(
+        wp_localize_script( 'dps-custom-admin-js', 'dokanSubscription', array(
             'ajaxurl'             => admin_url( 'admin-ajax.php' ),
             'subscriptionLengths' => DPS_Manager::get_subscription_ranges()
         ) );
@@ -69,6 +69,9 @@ class DPS_Admin {
      * @param array   $product_type
      */
     function add_product_type( $types ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return $types;
+        }
 
         $types['product_pack'] = __( 'Dokan Subscription', 'dokan' );
 
@@ -79,6 +82,10 @@ class DPS_Admin {
      * Add extra custom field in woocommerce product type
      */
     function general_fields() {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return;
+        }
+
         global $woocommerce, $post;
 
         echo '<div class="options_group show_if_product_pack">';
@@ -656,8 +663,9 @@ class DPS_Admin {
             }
         }
 
-        $pack_validity = get_post_meta( $pack_id, '_pack_validity', true );
-        $admin_commission = get_post_meta( $pack_id, '_per_product_admin_commission', true );
+        $pack_validity           = get_post_meta( $pack_id, '_pack_validity', true );
+        $admin_commission        = get_post_meta( $pack_id, '_subscription_product_admin_commission', true );
+        $admin_commission_type   = get_post_meta( $pack_id, '_subscription_product_admin_commission_type', true );
 
         update_user_meta( $user_id, 'product_package_id', $pack_id );
         update_user_meta( $user_id, 'product_order_id', '' );
@@ -680,10 +688,11 @@ class DPS_Admin {
             delete_user_meta( $user_id, 'vendor_allowed_categories' );
         }
 
-        if ( ! empty( $admin_commission ) ) {
-            update_user_meta( $user_id, 'dokan_seller_percentage', $admin_commission );
+        if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+            update_user_meta( $user_id, 'dokan_admin_percentage', $admin_commission );
+            update_user_meta( $user_id, 'dokan_admin_percentage_type', $admin_commission_type );
         } else {
-            update_user_meta( $user_id, 'dokan_seller_percentage', '' );
+            update_user_meta( $user_id, 'dokan_admin_percentage', '' );
         }
     }
 }

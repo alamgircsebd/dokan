@@ -30,7 +30,7 @@
         <header class="dokan-dashboard-header">
             <span class="left-header-content">
                 <h1 class="entry-title">
-                    <?php _e( 'Staffs', 'dokan' ); ?>
+                    <?php _e( 'Staff', 'dokan' ); ?>
 
                     <span class="left-header-content dokan-right">
                         <a href="<?php echo add_query_arg( array( 'view' => 'add_staffs' ), dokan_get_navigation_url( 'staffs' ) ); ?>" class="dokan-btn dokan-btn-theme dokan-right"><i class="fa fa-user">&nbsp;</i> <?php _e( 'Add new staff', 'dokan' ); ?></a>
@@ -145,7 +145,7 @@
                 <?php } else { ?>
 
                     <div class="dokan-error">
-                        <?php _e( 'No staffs found', 'dokan' ); ?>
+                        <?php _e( 'No staff found', 'dokan' ); ?>
                     </div>
 
                 <?php } ?>

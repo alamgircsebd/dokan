@@ -220,7 +220,8 @@ class Dokan_Product_Subscription {
      */
     public function enqueue_scripts() {
         wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
-        wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), false, true );
+        wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), time(), true );
+        wp_localize_script( 'dps-custom-js', 'dokanSubscription', array( 'cancel_string' => __( 'Do you really want to cancel the subscription?', 'dokan' ) ) );
     }
 
     /**
@@ -766,7 +767,7 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product['product_id'], '_no_of_product', true ) );
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                
+
                 if ( $pack_validity == 0 ) {
                     update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
                 } else {
@@ -775,10 +776,13 @@ class Dokan_Product_Subscription {
 
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', '' );
-                $admin_commission = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
 
-                if ( ! empty( $admin_commission ) ) {
+                $admin_commission        = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
+                $admin_commission_type   = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
+
+                if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
+                    update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
                 }
@@ -1049,7 +1053,7 @@ class Dokan_Product_Subscription {
         delete_user_meta( $customer_id, 'product_pack_enddate' );
         delete_user_meta( $customer_id, 'can_post_product' );
         delete_user_meta( $customer_id, '_customer_recurring_subscription' );
-        delete_user_meta( $customer_id, 'dokan_seller_percentage' );
+        delete_user_meta( $customer_id, 'dokan_admin_percentage' );
     }
 
     /**
