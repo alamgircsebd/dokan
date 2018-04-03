@@ -15,6 +15,7 @@
             :loading="loading"
             :rows="vendors"
             :actions="actions"
+            actionColumn="store_name"
             :show-cb="showCb"
             :total-items="totalItems"
             :bulk-actions="bulkActions"
@@ -35,7 +36,7 @@
         >
             <template slot="store_name" slot-scope="data">
                 <img :src="data.row.gravatar" :alt="data.row.store_name" width="50">
-                <strong><router-link :to="'/vendors/' + data.row.id">{{ data.row.store_name }}</router-link></strong>
+                <strong><router-link :to="'/vendors/' + data.row.id">{{ data.row.store_name ? data.row.store_name : '(no name)' }}</router-link></strong>
             </template>
 
             <template slot="email" slot-scope="data">
@@ -48,6 +49,17 @@
 
             <template slot="enabled" slot-scope="data">
                 <switches :enabled="data.row.enabled" :value="data.row.id" @input="onSwitch"></switches>
+            </template>
+
+            <template slot="row-actions" slot-scope="data">
+                <span v-for="(action, index) in actions" :class="action.key">
+                    <a v-if="action.key == 'edit'" :href="editUrl(data.row.id)">{{ action.label }}</a>
+                    <a v-else-if="action.key == 'products'" :href="productUrl(data.row.id)">{{ action.label }}</a>
+                    <a v-else-if="action.key == 'orders'" :href="ordersUrl(data.row.id)">{{ action.label }}</a>
+                    <a v-else href="#">{{ action.label }}</a>
+
+                    <template v-if="index !== (actions.length - 1)"> | </template>
+                </span>
             </template>
         </list-table>
     </div>
@@ -107,9 +119,13 @@ export default {
                     label: 'Edit'
                 },
                 {
-                    key: 'trash',
-                    label: 'Delete'
-                }
+                    key: 'products',
+                    label: 'Products'
+                },
+                {
+                    key: 'orders',
+                    label: 'Orders'
+                },
             ],
             bulkActions: [
                 {
@@ -271,7 +287,19 @@ export default {
                     order: order
                 }
             });
-        }
+        },
+
+        productUrl(id) {
+            return dokan.urls.adminRoot + 'edit.php?post_type=product&author=' + id;
+        },
+
+        ordersUrl(id) {
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
+        },
+
+        editUrl(id) {
+            return dokan.urls.adminRoot + 'user-edit.php?user_id=' + id;
+        },
     }
 }
 </script>

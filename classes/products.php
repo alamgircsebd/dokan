@@ -38,6 +38,7 @@ class Dokan_Pro_Products {
         add_filter( 'dokan_product_types', array( $this, 'set_default_product_types' ), 10 );
 
         add_action( 'dokan_after_linked_product_fields', array( $this, 'group_product_content' ), 10, 2 );
+        add_filter( 'woocommerce_duplicate_product_exclude_meta', array( $this, 'remove_unwanted_meta' ) );
     }
 
     /**
@@ -581,6 +582,21 @@ class Dokan_Pro_Products {
             'post_id'        => $post_id,
             'product'        => wc_get_product( $post_id )
         ) );
+    }
+
+    /**
+     * Remove unwanted meta_keys while duplicating product
+     *
+     * @param  array $meta_keys
+     *
+     * @since 2.7.6
+     *
+     * @return array $meta_keys
+     */
+    public function remove_unwanted_meta( $meta_keys ) {
+        $meta_keys[] = 'pageview';
+
+        return $meta_keys;
     }
 
 }

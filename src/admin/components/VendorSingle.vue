@@ -34,12 +34,17 @@
         <div class="vendor-profile" v-if="store.id">
             <section class="vendor-header">
                 <div class="profile-info">
+
+                    <div class="featured-vendor" v-if="store.featured">
+                        <span title="Featured Vendor" class="dashicons dashicons-star-filled"></span>
+                    </div>
+
                     <div class="profile-icon">
                         <img :src="store.gravatar" :alt="store.store_name">
                     </div>
 
                     <div class="store-info">
-                        <h2 class="store-name">{{ store.store_name }}</h2>
+                        <h2 class="store-name">{{ store.store_name ? store.store_name : '(No Name)' }}</h2>
 
                         <div class="star-rating">
                             <span v-for="i in 5" :class="['dashicons', i <= store.rating.count ? 'active' : '' ]"></span>
@@ -67,17 +72,21 @@
                     <div class="banner-wrap">
                         <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
                     </div>
+                    <div class="action-links">
+                        <a :href="store.shop_url" target="_blank" class="button visit-store">Visit Store <span class="dashicons dashicons-arrow-right-alt"></span></a>
+                        <a :href="editUrl()" class="button edit-store"><span class="dashicons dashicons-edit"></span></a>
+                    </div>
                 </div>
             </section>
 
-            <section class="vendor-summary">
+            <section class="vendor-summary" v-if="stats !== null">
                 <div class="summary-wrap products-revenue">
                     <div class="stat-summary products">
                         <h3>Products</h3>
 
                         <ul class="counts">
                             <li class="products">
-                                <span class="count"><a :href="productUrl(store.id)">{{ stats.products.total }}</a></span>
+                                <span class="count"><a :href="productUrl()">{{ stats.products.total }}</a></span>
                                 <span class="subhead">Total Products</span>
                             </li>
                             <li class="items">
@@ -96,7 +105,7 @@
 
                         <ul class="counts">
                             <li class="orders">
-                                <span class="count"><a :href="ordersUrl(store.id)">{{ stats.revenue.orders }}</a></span>
+                                <span class="count"><a :href="ordersUrl()">{{ stats.revenue.orders }}</a></span>
                                 <span class="subhead">Orders Processed</span>
                             </li>
                             <li class="gross">
@@ -197,7 +206,7 @@ export default {
         return {
             showDialog: false,
             store: {},
-            stats: {},
+            stats: null,
             mail: {
                 subject: '',
                 body: ''
@@ -292,12 +301,16 @@ export default {
             return moment(date);
         },
 
-        productUrl(id) {
-            return dokan.adminRoot + 'edit.php?post_type=product&author=' + id;
+        productUrl() {
+            return dokan.urls.adminRoot + 'edit.php?post_type=product&author=' + this.store.id;
         },
 
-        ordersUrl(id) {
-            return dokan.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
+        ordersUrl() {
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + this.store.id;
+        },
+
+        editUrl() {
+            return dokan.urls.adminRoot + 'user-edit.php?user_id=' + this.store.id;
         },
     }
 };
@@ -338,6 +351,14 @@ export default {
             width: 285px;
             margin-right: 30px;
             border-radius: 3px;
+            position: relative;
+
+            .featured-vendor {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                color: #FF9800;
+            }
         }
 
         .profile-banner {
@@ -352,6 +373,47 @@ export default {
             img {
                 height: 315px;
                 width: auto;
+            }
+
+            .action-links {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+
+                .button {
+                    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+                }
+
+                .button.visit-store {
+                    background: #FD563A;
+                    border-color: #FD563A;
+                    color: #fff;
+
+                    &:hover {
+                        background: darken(#FD563A, 5%);
+                    }
+
+                    .dashicons {
+                        font-size: 17px;
+                        margin-top: 5px;
+                    }
+                }
+
+                .button.edit-store {
+                    color: #B8BAC2;
+                    background: #fff;
+                    border-color: #fff;
+                    margin-left: 5px;
+
+                    &:hover {
+                        background: #eee;
+                        border-color: #eee;
+                    }
+
+                    .dashicons {
+                        margin-top: 3px;
+                    }
+                }
             }
         }
 
