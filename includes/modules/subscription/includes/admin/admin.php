@@ -570,7 +570,7 @@ class DPS_Admin {
             <tr>
                 <td><?php _e( 'End Date :' ) ;?></td>
                 <td>
-                    <?php if ( date( get_option( 'date_format' ), strtotime( get_user_meta( $user->ID, 'product_pack_startdate', true ) ) ) > '4000-10-10' ) {
+                    <?php if ( get_user_meta( $user->ID, 'product_pack_enddate', true ) > '4000-10-10' ) {
                         printf( __( 'Lifetime package.', 'dokan' ) );
                     } else {
                         echo date( get_option( 'date_format' ), strtotime( get_user_meta( $user->ID, 'product_pack_enddate', true ) ) );
@@ -646,6 +646,10 @@ class DPS_Admin {
         $pack_id = intval( $_POST['_dokan_user_assigned_sub_pack'] );
 
         if ( !$pack_id || empty( $pack_id ) ) {
+            return;
+        }
+
+        if ( get_user_meta( $user_id, 'product_package_id', true ) == $pack_id ) {
             return;
         }
 
