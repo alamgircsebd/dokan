@@ -16,31 +16,28 @@ var Dokan_Subscription_details = {
         //$('.dps-pack-details').hide();
         wrapper.on( 'change', 'select#dokan-subscription-pack', this.show_details );
         this.show_details();
+        this.cancel();
     },
     show_details : function(){
         id = $( 'select#dokan-subscription-pack' ).val();
         $('.dps-pack').hide();
         $('.dps-pack-'+id).show();
-    }
-
-
-};
-
-var Dokan_Subscription_Cancel = {
-    init: function() {
+    },
+    cancel: function() {
         $( '.seller_subs_info input[type="submit"]' ).on( 'click', function( e ) {
-            var confirm = window.confirm( 'Do you really want to cancel the subscription?' );
+            var confirm = window.confirm( subscription.cancel_string );
 
             if ( ! confirm ) {
                 e.preventDefault();
             }
         } );
     }
+
+
 };
 
 $(function() {
     Dokan_Subscription_details.init();
-    Dokan_Subscription_Cancel.init();
 });
 
 })(jQuery);
