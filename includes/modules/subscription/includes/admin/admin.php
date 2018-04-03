@@ -649,7 +649,7 @@ class DPS_Admin {
             return;
         }
 
-        if ( get_user_meta( $user_id, '_dokan_user_assigned_sub_pack', true ) == $pack_id ) {
+        if ( get_user_meta( $user_id, 'product_package_id', true ) == $pack_id ) {
             return;
         }
 
