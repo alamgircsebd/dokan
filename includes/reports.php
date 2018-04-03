@@ -173,7 +173,6 @@ function dokan_seller_sales_statement() {
                     <td><?php echo wc_price( $net_amount ); ?></td>
                 </tr>
                 <?php
-    //            $net_amount = 0;
                 $total_sales = 0;
                 $total_earned = 0;
                 $total_shipping = 0;
@@ -181,11 +180,10 @@ function dokan_seller_sales_statement() {
                 foreach ( $statements as $key => $statement ) {
                     if ( isset( $statement->post_date ) ) {
                         $type            = __( 'Order', 'dokan' );
-                        $url             = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) );
+                        $url             = wp_nonce_url( add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' );
                         $id              = $statement->order_id;
                         $gross_amount    = get_post_meta( $statement->order_id, '_order_total', true );
                         $sales           = wc_price( $gross_amount );
-        //                        $seller_amount = dokan_get_seller_amount_from_order( $statement->order_id );
                         $order_amount    = dokan_get_seller_amount_from_order( $statement->order_id, true );
                         $seller_amount   = $order_amount['net_amount'];
                         $seller_shipping = wc_price( $order_amount['shipping'] );
@@ -203,7 +201,7 @@ function dokan_seller_sales_statement() {
 
                     } else if ( isset( $statement->refund_amount ) ) {
                         $type   = __( 'Refund', 'dokan' );
-                        $url    = add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') );
+                        $url    = wp_nonce_url( add_query_arg( array( 'order_id' => $statement->order_id ), dokan_get_navigation_url('orders') ), 'dokan_view_order' );
                         $id     = $statement->order_id;
                         $sales  = wc_price( 0 );
                         $amount = '<span style="color: #f05025;">'.wc_price( $statement->refund_amount ).'</span>';
