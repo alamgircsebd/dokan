@@ -68,6 +68,7 @@ class Dokan_Store_Support {
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'init', array( $this, 'init_hooks' ) );
+
         require_once DOKAN_STORE_SUPPORT_DIR . '/support-widget.php';
     }
 
@@ -123,6 +124,7 @@ class Dokan_Store_Support {
 
         add_filter( 'woocommerce_locate_template', array( $this, 'customer_topic_list' ),15 );
 
+        add_action( 'widgets_init', array( $this, 'register_widgets' ) );
     }
 
     /**
@@ -1508,6 +1510,17 @@ class Dokan_Store_Support {
         );
 
         return $capabilities;
+    }
+
+    /**
+     * Register widgets
+     *
+     * @since 2.8
+     *
+     * @return void
+     */
+    public function register_widgets() {
+        register_widget( 'Dokan_Store_Support_Widget' );
     }
 
 }

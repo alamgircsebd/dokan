@@ -845,12 +845,12 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             return $customer->id;
         }
 
-        if ( !empty( $customer->active_card->last4 )) {
+        if ( !empty( $customer->sources->data[0]->last4 )) {
             add_user_meta( get_current_user_id(), '_stripe_customer_id', array(
                 'customer_id' => $customer->id,
-                'active_card' => !empty( $customer->active_card->last4 ) ? $customer->active_card->last4 : '',
-                'exp_year'    => !empty( $customer->active_card->exp_year ) ? $customer->active_card->exp_year : '',
-                'exp_month'   => !empty( $customer->active_card->exp_month ) ? $customer->active_card->exp_month : '',
+                'active_card' => !empty( $customer->sources->data[0]->last4 ) ? $customer->sources->data[0]->last4 : '',
+                'exp_year'    => !empty( $customer->sources->data[0]->exp_year ) ? $customer->sources->data[0]->exp_year : '',
+                'exp_month'   => !empty( $customer->sources->data[0]->exp_month ) ? $customer->sources->data[0]->exp_month : '',
             ) );
         }
 

@@ -41,6 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 define( 'DOKAN_STRIPE_FILE', __FILE__ );
 define( 'DOKAN_STRIPE_PATH', dirname( __FILE__ ) );
+define( 'DOKAN_STRIPE_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates/' );
 
 /**
  * Dokan Stripe Main class
@@ -56,7 +57,7 @@ class Dokan_Stripe {
 
         /** All actions */
         add_action( 'init', array( $this, 'init' ) );
-        add_action( 'template_redirect', array( $this, 'stripe_check_connect' ) );
+        add_action( 'template_redirect', array( $this, 'stripe_check_connect' ), 20 );
 
         add_filter( 'woocommerce_payment_gateways', array( $this, 'register_gateway' ) );
 
@@ -251,6 +252,7 @@ class Dokan_Stripe {
         </style>
 
         <div class="dokan-stripe-connect-container">
+            <input type="hidden" name="settings[stripe]" value="<?php echo empty( $key ) ? 0 : 1; ?>">
             <?php
                 if ( empty( $key ) ) {
 
