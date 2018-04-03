@@ -313,7 +313,7 @@ class Dokan_Vendor_staff {
     public function add_staffs_page( $urls ) {
         if ( dokan_is_seller_enabled( get_current_user_id() ) && current_user_can( 'seller' ) ) {
             $urls['staffs'] = array(
-                'title' => __( 'Staffs', 'dokan' ),
+                'title' => __( 'Staff', 'dokan' ),
                 'icon'  => '<i class="fa fa-users"></i>',
                 'url'   => dokan_get_navigation_url( 'staffs' ),
                 'pos'   => 172
