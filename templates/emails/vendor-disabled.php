@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <p>
-    <?php _e( 'Hello', 'dokan' ); ?>,
+    <?php printf( __( 'Hello %s', 'dokan' ), $data['display_name'] ); ?>
 </p>
 <p>
     <?php _e( 'Sorry, your vendor account is deactivated.', 'dokan' ); ?>

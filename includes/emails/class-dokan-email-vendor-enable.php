@@ -60,13 +60,20 @@ if ( ! class_exists( 'Dokan_Email_Vendor_Enable' ) ) :
                 return;
             }
 
-            $this->find['site_name']        = '{site_name}';
-            $this->replace['site_name']     = $this->get_from_name();
-
             $this->setup_locale();
 
             $seller = get_user_by( 'ID', $seller_id );
             $seller_email = $seller->user_email;
+
+            $this->find['site_name']        = '{site_name}';
+            $this->find['first_name']       = '{first_name}';
+            $this->find['last_name']        = '{last_name}';
+            $this->find['display_name']     = '{display_name}';
+
+            $this->replace['site_name']     = $this->get_from_name();
+            $this->replace['first_name']    = $seller->first_name;
+            $this->replace['last_name']     = $seller->last_name;
+            $this->replace['display_name']  = $seller->display_name;
 
             $this->send( $seller_email, $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
 

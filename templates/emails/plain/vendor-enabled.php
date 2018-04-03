@@ -18,7 +18,7 @@ echo "= " . $email_heading . " =\n\n";
 
 ------------------------------------------------------------
 
-<?php _e( 'Congratulations!', 'dokan' ); echo " \n\n";  ?>
+<?php printf( __( 'Congratulations %s!', 'dokan' ), $data['display_name'] ); echo " \n\n";  ?>
 
 ------------------------------------------------------------
 

@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 <p>
-    <?php _e( 'Congratulations!', 'dokan' ); ?>
+    <?php printf( __( 'Congratulations %s!', 'dokan' ), $data['display_name'] ); ?>
 </p>
 <p>
     <?php _e( 'Your vendor account is activated', 'dokan' ); ?>
