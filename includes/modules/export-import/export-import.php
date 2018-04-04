@@ -113,7 +113,8 @@ class Dokan_Product_Importer {
         add_action( 'template_redirect', array( $this, 'handle_step_submission' ), 10, 1 );
 
         if ( self::is_dokan_plugin() ) {
-            add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 10 );
+            add_filter( 'dokan_set_template_path', array( $this, 'load_export_import_templates' ), 11, 3 );
+            add_action( 'dokan_load_custom_template', array( $this, 'load_tools_template_from_plugin' ), 12 );
         }
 
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
@@ -274,8 +275,34 @@ class Dokan_Product_Importer {
     }
 
     public function dashboard_template( $template_part ) {
-        include dirname( __FILE__ ) . '/templates/template_importer.php';
+        dokan_get_template_part( 'export-import/template_importer', '', array( 'is_export_import' => true ) );
         return;
+    }
+
+    /**
+    * Get plugin path
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
+    }
+
+    /**
+    * Load Dokan Export-Import templates
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function load_export_import_templates( $template_path, $template, $args ) {
+        if ( isset( $args['is_export_import'] ) && $args['is_export_import'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
     }
 
     /**
@@ -315,11 +342,10 @@ class Dokan_Product_Importer {
                     default:
                         $installed_version = get_option( 'dokan_theme_version' );
                         if ( $installed_version >= '2.4' ) {
-                            $template = dirname( __FILE__ ) . '/templates/template_importer_new.php';
+                            dokan_get_template_part( 'export-import/template_importer_new', '', array( 'is_export_import' => true ) );
                         } else {
-                            $template = dirname( __FILE__ ) . '/templates/template_importer.php';
+                            dokan_get_template_part( 'export-import/template_importer', '', array( 'is_export_import' => true ) );
                         }
-                        require_once $template;
 
                         break;
                 }

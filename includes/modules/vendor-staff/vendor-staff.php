@@ -63,6 +63,7 @@ class Dokan_Vendor_staff {
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_staffs_page' ), 15 );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_endpoint' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'load_staff_template' ), 16 );
+        add_filter( 'dokan_set_template_path', array( $this, 'load_vendor_staff_templates' ), 11, 3 );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
         add_action( 'admin_init', array( $this, 'disable_backend_access' ) );
         add_filter( 'show_admin_bar', array( $this, 'disable_admin_bar' ) );
@@ -276,6 +277,32 @@ class Dokan_Vendor_staff {
     }
 
     /**
+    * Get plugin path
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
+    }
+
+    /**
+    * Load Dokan vendor_staff templates
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function load_vendor_staff_templates( $template_path, $template, $args ) {
+        if ( isset( $args['is_vendor_staff'] ) && $args['is_vendor_staff'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
+    }
+
+    /**
      * Load tools template
      *
      * @since  1.0
@@ -291,11 +318,11 @@ class Dokan_Vendor_staff {
                 dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_staffs' ) {
-                    require_once DOKAN_VENDOR_staff_DIR . '/templates/add-staffs.php';
+                    dokan_get_template_part( 'vendor-staff/add-staffs', '', array( 'is_vendor_staff' => true ) );
                 } else if ( isset( $_GET['view'] ) && $_GET['view'] == 'manage_permissions' ) {
-                    require_once DOKAN_VENDOR_staff_DIR . '/templates/permissions.php';
+                    dokan_get_template_part( 'vendor-staff/permissions', '', array( 'is_vendor_staff' => true ) );
                 }else {
-                    require_once DOKAN_VENDOR_staff_DIR . '/templates/staffs.php';
+                    dokan_get_template_part( 'vendor-staff/staffs', '', array( 'is_vendor_staff' => true ) );
                 }
             }
         }

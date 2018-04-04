@@ -100,6 +100,7 @@ class Dokan_Product_Subscription {
         // add_action( 'valid-paypal-standard-ipn-request', array( $this, 'process_paypal_ipn_request' ), 9 );
 
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_new_page' ), 11, 1 );
+        add_filter( 'dokan_set_template_path', array( $this, 'load_subscription_templates' ), 11, 3 );
         add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin') );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
 
@@ -276,6 +277,32 @@ class Dokan_Product_Subscription {
     }
 
     /**
+    * Get plugin path
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
+    }
+
+    /**
+    * Load Dokan subscription templates
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function load_subscription_templates( $template_path, $template, $args ) {
+        if ( isset( $args['is_subscription'] ) && $args['is_subscription'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
+    }
+
+    /**
      * Load template for the dashboard
      *
      * @param  array $query_vars
@@ -287,12 +314,10 @@ class Dokan_Product_Subscription {
             $installed_version = get_option( 'dokan_theme_version' );
 
             if ( $installed_version > '2.3' ) {
-                $template = dirname( __FILE__ ) . '/templates/product_subscription_plugin_new.php';
+                dokan_get_template_part( 'subscription/product_subscription_plugin_new', '', array( 'is_subscription' => true ) );
             } else {
-                $template = dirname( __FILE__ ) . '/templates/product_subscription_plugin.php';
+                dokan_get_template_part( 'subscription/product_subscription_plugin', '', array( 'is_subscription' => true ) );
             }
-
-            include $template;
         }
     }
 
