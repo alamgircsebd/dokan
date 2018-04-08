@@ -18,7 +18,7 @@ class Dokan_Pro_Shipping {
             require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
         }
 
-        add_action( 'woocommerce_shipping_init', array( $this, 'include_shipping' ) );
+        // add_action( 'init', array( $this, 'include_shipping' ), 5 );
         add_action( 'woocommerce_shipping_methods', array( $this, 'register_shipping' ) );
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
@@ -52,7 +52,8 @@ class Dokan_Pro_Shipping {
      * @return void
      */
     function include_shipping() {
-        require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
+        // require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
+        // require_once DOKAN_PRO_INC . '/shipping-gateway/flat-rate.php';
     }
 
     /**
@@ -65,7 +66,8 @@ class Dokan_Pro_Shipping {
      * @return array
      */
     function register_shipping( $methods ) {
-        $methods[] = 'Dokan_WC_Shipping';
+        // $methods['dokan_product_shipping'] = 'Dokan_WC_Shipping';
+        $methods['dokan_vendor_shipping'] = 'Dokan_Vendor_Shipping';
 
         return $methods;
     }
@@ -184,6 +186,12 @@ class Dokan_Pro_Shipping {
             $user_id = dokan_get_current_user_id();
             $s_rates = array();
             $rates   = array();
+
+            // Additional extra code
+
+            if ( isset( $_POST['_dokan_flat_rate'] ) ) {
+                update_user_meta( $user_id, '_dokan_flat_rate', $_POST['_dokan_flat_rate'] );
+            }
 
             if ( isset( $_POST['dps_enable_shipping'] ) ) {
                 update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );

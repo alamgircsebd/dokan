@@ -32,6 +32,8 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
         add_action( 'admin_notices', array( $this, 'show_whats_new_notice' ), 10 );
         add_action( 'wp_ajax_dokan-whats-new-notice', array( $this, 'dismiss_new_notice' ) );
+
+        add_action( 'admin_init', array( $this, 'handle_seller_bulk_action' ), 10 );
     }
 
     /**
@@ -591,6 +593,34 @@ class Dokan_Pro_Admin_Settings {
 
             update_option( 'dokan_whats_new_versions', $versions );
         }
+    }
+
+    /**
+     * Handle seller bulk action
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function handle_seller_bulk_action() {
+        if ( ! isset( $_REQUEST['dokan-seller-bulk-action'] ) ) {
+            return;
+        }
+
+        if ( isset( $_REQUEST['action2'] ) && $_REQUEST['action2'] == 'delete' ) {
+
+            $users = $_REQUEST['users'];
+
+            if ( $users ) {
+                foreach ( $users as $key => $user ) {
+                    dokan()->vendor->get( intval( $user ) )->delete();
+                }
+            }
+        }
+
+        $redirect_url = add_query_arg( array( 'page' => 'dokan-sellers'), admin_url( 'admin.php' ) );
+        wp_redirect( $redirect_url );
+        exit();
     }
 }
 

@@ -11,7 +11,8 @@ const config = require( './config.json' );
 // Naming and path settings
 var appName = 'app';
 var entryPoint = {
-    // frontend: './src/frontend/main.js',
+    // 'vue-pro-frontend': './src/frontend/main.js',
+    'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
     // style: './less/style.less',
 };

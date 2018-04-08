@@ -285,7 +285,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      * @return void
      */
     public function load_shipping_content() {
-        dokan_get_template_part( 'settings/shipping', '', array( 'pro' => true ) );
+        echo "<div id='dokan-vue-shipping'></div>";
+        // dokan_get_template_part( 'settings/shipping', '', array( 'pro' => true ) );
     }
 
     /**

@@ -47,6 +47,16 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
+        // if ( !class_exists( 'WeDevs_Dokan' ) ) {
+        //     if ( !current_user_can( 'manage_options' ) ) {
+        //         return;
+        //     }
+
+        //     add_action( 'admin_notices', array( $this, 'activation_notice' ) );
+        //     add_action( 'wp_ajax_dokan_pro_install_dokan_lite', array( $this, 'install_dokan_lite' ) );
+        //     return;
+        // }
+
         add_action( 'dokan_loaded', array( $this, 'init_plugin' ), 10 );
     }
 
@@ -65,7 +75,6 @@ class Dokan_Pro {
 
         $this->load_actions();
         $this->load_filters();
-
     }
 
     /**
@@ -90,36 +99,9 @@ class Dokan_Pro {
      * Nothing being called here yet.
      */
     public static function activate() {
-        self::maybe_activate_modules();
-    }
-
-    /**
-     * Maybe Activate modules
-     *
-     * @since 1.0.0
-     *
-     * @return void
-     * */
-    public static function maybe_activate_modules() {
-        global $wpdb;
-
-        $has_installed = $wpdb->get_row( "SELECT option_id FROM {$wpdb->options} WHERE option_name = 'dokan_pro_active_modules'" );
-
-        if ( $has_installed ) {
-            return;
-        }
-
-        if ( !function_exists( 'dokan_pro_get_modules' ) ) {
-            require_once dirname( __FILE__ ) . '/includes/modules.php';
-        }
-
-        $modules = dokan_pro_get_modules();
-
-        if ( $modules ) {
-            foreach ( $modules as $module_file => $data ) {
-                dokan_pro_activate_module( $module_file );
-            }
-        }
+        require_once dirname( __FILE__ ) . '/includes/installer.php';
+        $installer = new Dokan_Pro_Installer();
+        $installer->do_install();
     }
 
     /**
@@ -155,27 +137,27 @@ class Dokan_Pro {
         </div>
 
         <script type="text/javascript">
-                ( function ( $ ) {
-                    $( '#dokan-pro-installer-notice #dokan-pro-installer' ).click( function ( e ) {
-                        e.preventDefault();
-                        $( this ).addClass( 'install-now updating-message' );
-                        $( this ).text( '<?php echo esc_js( 'Installing...', 'dokan' ); ?>' );
+            ( function ( $ ) {
+                $( '#dokan-pro-installer-notice #dokan-pro-installer' ).click( function ( e ) {
+                    e.preventDefault();
+                    $( this ).addClass( 'install-now updating-message' );
+                    $( this ).text( '<?php echo esc_js( 'Installing...', 'dokan' ); ?>' );
 
-                        var data = {
-                            action: 'dokan_pro_install_dokan_lite',
-                            _wpnonce: '<?php echo wp_create_nonce( 'dokan-pro-installer-nonce' ); ?>'
-                        };
+                    var data = {
+                        action: 'dokan_pro_install_dokan_lite',
+                        _wpnonce: '<?php echo wp_create_nonce( 'dokan-pro-installer-nonce' ); ?>'
+                    };
 
-                        $.post( ajaxurl, data, function ( response ) {
-                            if ( response.success ) {
-                                $( '#dokan-pro-installer-notice #dokan-pro-installer' ).attr( 'disabled', 'disabled' );
-                                $( '#dokan-pro-installer-notice #dokan-pro-installer' ).removeClass( 'install-now updating-message' );
-                                $( '#dokan-pro-installer-notice #dokan-pro-installer' ).text( '<?php echo esc_js( 'Installed', 'dokan' ); ?>' );
-                                window.location.reload();
-                            }
-                        } );
+                    $.post( ajaxurl, data, function ( response ) {
+                        if ( response.success ) {
+                            $( '#dokan-pro-installer-notice #dokan-pro-installer' ).attr( 'disabled', 'disabled' );
+                            $( '#dokan-pro-installer-notice #dokan-pro-installer' ).removeClass( 'install-now updating-message' );
+                            $( '#dokan-pro-installer-notice #dokan-pro-installer' ).text( '<?php echo esc_js( 'Installed', 'dokan' ); ?>' );
+                            window.location.reload();
+                        }
                     } );
-                } )( jQuery );
+                } );
+            } )( jQuery );
         </script>
         <?php
     }
@@ -239,6 +221,9 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
         }
 
+        require_once DOKAN_PRO_INC . '/class-shipping-zone.php';
+        require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
+        require_once DOKAN_PRO_INC . '/shipping-gateway/vendor-shipping.php';
         require_once DOKAN_PRO_CLASS . '/update.php';
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/orders.php';
@@ -291,6 +276,7 @@ class Dokan_Pro {
 
         Dokan_Pro_Ajax::init();
         Dokan_Pro_Shipping::init();
+        new Dokan_Shipping_Zone();
         new Dokan_Update( $this->plan );
         Dokan_Email_Verification::init();
         Dokan_Social_Login::init();
