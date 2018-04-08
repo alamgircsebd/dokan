@@ -436,6 +436,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 
             if ( isset( $location_group['postcode'] ) ) {
                 $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
+                $postcode_array = array_map( 'trim', $postcode_array );
 
                 if ( ! in_array( $destination_postcode, $postcode_array ) ) {
                     return false;
