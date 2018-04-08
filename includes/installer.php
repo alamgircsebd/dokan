@@ -32,7 +32,7 @@ class Dokan_Pro_Installer {
         }
 
         if ( ! function_exists( 'dokan_pro_get_modules' ) ) {
-            require_once dirname( __FILE__ ) . '/includes/modules.php';
+            require_once dirname( __FILE__ ) . '/modules.php';
         }
 
         $modules = dokan_pro_get_modules();

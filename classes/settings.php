@@ -24,6 +24,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         $this->profile_info = dokan_get_store_info( dokan_get_current_user_id() );
 
         add_filter( 'dokan_get_dashboard_settings_nav', array( $this, 'load_settings_menu' ), 10 );
+        add_filter( 'dokan_dashboard_nav_active', array( $this, 'filter_nav_active' ), 10, 3 );
         add_filter( 'dokan_dashboard_settings_heading_title', array( $this, 'load_settings_header' ), 10, 2 );
         add_filter( 'dokan_dashboard_settings_helper_text', array( $this, 'load_settings_helper_text' ), 10, 2 );
 
@@ -54,6 +55,22 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         return $instance;
     }
 
+    /**
+     * filter_nav_active
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function filter_nav_active( $active_menu, $request, $active ) {
+
+        if ( 'settings/regular-shipping' == $active_menu ) {
+            return 'settings/shipping';
+        }
+
+        return $active_menu;
+    }
+
 
     /**
      * Load Settings Menu for Pro
@@ -68,8 +85,9 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
         $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+        $disable_woo_shipping  = get_option( 'woocommerce_ship_to_countries' );
 
-        if ( $enable_shipping == 'yes' ) {
+        if ( $disable_woo_shipping != 'disabled' ) {
             $sub_settins['shipping'] = array(
                 'title'      => __( 'Shipping', 'dokan' ),
                 'icon'       => '<i class="fa fa-truck"></i>',
@@ -207,6 +225,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      * @return string
      */
     public function load_settings_helper_text( $help_text, $query_vars ) {
+        $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
+        $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
         if ( $query_vars == 'social' ) {
             $help_text = __( 'Social profiles help you to gain more trust. Consider adding your social profile links for better user interaction.', 'dokan' );
@@ -214,9 +234,29 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( $query_vars == 'shipping' ) {
 
-            $help_text = sprintf ( '<p>%s</p><p>%s</p>',
+            $help_text = sprintf ( '<p>%s</p>',
+                __( 'A shipping zone is a geographic region where a certain set of shipping methods are offered. WooCommerce will match a customer to a single zone using their shipping address and present the shipping methods within that zone to them.', 'dokan' ),
+                __( 'If you want to use the previous Dokan Shipping system then', 'dokan' ),
+                esc_url( dokan_get_navigation_url('settings/regular-shipping' ) ),
+                __( 'Click Here', 'dokan' )
+            );
+
+            if ( 'yes' == $enable_shipping ) {
+                $help_text .= sprintf ( '<p>%s <a href="%s">%s</a></p>',
+                    __( 'If you want to use the previous Dokan Shipping system then', 'dokan' ),
+                    esc_url( dokan_get_navigation_url('settings/regular-shipping' ) ),
+                    __( 'Click Here', 'dokan' )
+                );
+            }
+        }
+
+        if ( $query_vars == 'regular-shipping' && $enable_shipping == 'yes' ) {
+            $help_text = sprintf ( '<p>%s</p><p>%s</p><p>%s <a href="%s">%s</a></p>',
                 __( 'This page contains your store-wide shipping settings, costs, shipping and refund policy.', 'dokan' ),
-                __( 'You can enable/disable shipping for your products. Also you can override these shipping costs while creating or editing a product.', 'dokan' )
+                __( 'You can enable/disable shipping for your products. Also you can override these shipping costs while creating or editing a product.', 'dokan' ),
+                __( 'If you want to configure zone wise shipping then', 'dokan' ),
+                esc_url( dokan_get_navigation_url('settings/shipping' ) ),
+                __( 'Click Here', 'dokan' )
             );
         }
 
@@ -246,7 +286,30 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
              if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
                 dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
             } else {
-                $this->load_shipping_content();
+                $disable_woo_shipping  = get_option( 'woocommerce_ship_to_countries' );
+
+                if ( 'disabled' == $disable_woo_shipping ) {
+                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'Shipping functionality is currentlly disabled by site owner', 'dokan-lite' ) ) );
+                } else {
+                    $this->load_shipping_content();
+                }
+            }
+        }
+
+        if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'regular-shipping' ) {
+             if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+            } else {
+                $disable_woo_shipping  = get_option( 'woocommerce_ship_to_countries' );
+                $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
+                $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
+
+                if ( 'disabled' == $disable_woo_shipping || 'no' == $enable_shipping ) {
+                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'Shipping functionality is currentlly disabled by site owner', 'dokan-lite' ) ) );
+                } else {
+                    dokan_get_template_part( 'settings/shipping', '', array( 'pro' => true ) );
+                }
+
             }
         }
 
@@ -286,7 +349,6 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      */
     public function load_shipping_content() {
         echo "<div id='dokan-vue-shipping'></div>";
-        // dokan_get_template_part( 'settings/shipping', '', array( 'pro' => true ) );
     }
 
     /**
