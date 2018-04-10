@@ -34,7 +34,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         add_action( 'dokan_settings_content_area_header', array( $this, 'render_shipping_status_message' ), 25 );
         add_action( 'dokan_render_settings_content', array( $this, 'load_settings_content' ), 10 );
         add_action( 'dokan_settings_form_bottom', array( $this, 'add_discount_option' ), 10, 2 );
-        add_action( 'dokan_store_profile_saved', array( $this, 'save_store_discount_data' ), 10, 2 );
+        add_action( 'dokan_store_profile_saved', array( $this, 'save_store_data' ), 10, 2 );
     }
 
     /**
@@ -407,11 +407,16 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
     *
     * @return void
     **/
-    public function save_store_discount_data( $store_id, $dokan_settings ) {
+    public function save_store_data( $store_id, $dokan_settings ) {
         if ( ! $store_id ) {
             return;
         }
 
+        $profile_completeness = $this->calculate_profile_completeness_value( $dokan_settings );
+        $dokan_settings['profile_completion'] = $profile_completeness;
+
+
+        // Set discount data in seller profile
         $data = array(
             'show_min_order_discount'      => isset( $_POST['setting_show_minimum_order_discount_option'] ) ? 'yes' : 'no',
             'setting_minimum_order_amount' => isset( $_POST['setting_minimum_order_amount'] ) ? sanitize_text_field( $_POST['setting_minimum_order_amount'] ) : '',
@@ -422,5 +427,188 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         update_user_meta( $store_id, 'dokan_profile_settings', $settings_data );
     }
+
+    /**
+     * Calculate Profile Completeness meta value
+     *
+     * @since 2.1
+     *
+     * @param  array  $dokan_settings
+     *
+     * @return array
+     */
+    function calculate_profile_completeness_value( $dokan_settings ) {
+
+        $profile_val = 0;
+        $next_add    = '';
+        $track_val   = array();
+
+        $progress_values = array(
+           'banner_val'          => 15,
+           'profile_picture_val' => 15,
+           'store_name_val'      => 10,
+           'social_val'          => array(
+               'fb'       => 2,
+               'gplus'    => 2,
+               'twitter'  => 2,
+               'youtube'  => 2,
+               'linkedin' => 2,
+           ),
+           'payment_method_val'  => 15,
+           'phone_val'           => 10,
+           'address_val'         => 10,
+           'map_val'             => 15,
+        );
+
+        // setting values for completion
+        $progress_values = apply_filters('dokan_profile_completion_values', $progress_values );
+
+        extract( $progress_values );
+
+        //settings wise completeness section
+        if ( isset( $profile_picture_val ) && isset( $dokan_settings['gravatar'] ) ):
+            if ( $dokan_settings['gravatar'] != 0 ) {
+                $profile_val           = $profile_val + $profile_picture_val;
+                $track_val['gravatar'] = $profile_picture_val;
+            } else {
+                if ( strlen( $next_add ) == 0 ) {
+                    $next_add = sprintf(__( 'Add Profile Picture to gain %s%% progress', 'dokan-lite' ), $profile_picture_val);
+                }
+            }
+        endif;
+
+        // Calculate Social profiles
+        if ( isset( $social_val ) && isset( $dokan_settings['social'] ) ):
+
+            foreach ( $dokan_settings['social'] as $key => $value ) {
+
+                if ( isset( $social_val[$key] ) && $value != false ) {
+                    $profile_val     = $profile_val + $social_val[$key];
+                    $track_val[$key] = $social_val[$key];
+                }
+
+                if ( isset( $social_val[$key] ) && $value == false ) {
+
+                    if ( strlen( $next_add ) == 0 ) {
+                        //replace keys to nice name
+                        $nice_name = ( $key === 'fb' ) ? __( 'Facebook', 'dokan-lite' ) : ( ( $key === 'gplus' ) ? __( 'Google+', 'dokan-lite' ) : $key);
+                        $next_add = sprintf( __( 'Add %s profile link to gain %s%% progress', 'dokan-lite' ), $nice_name, $social_val[$key] );
+                    }
+                }
+            }
+        endif;
+
+        //calculate completeness for phone
+        if ( isset( $phone_val ) && isset( $dokan_settings['phone'] ) ):
+
+            if ( strlen( trim( $dokan_settings['phone'] ) ) != 0 ) {
+                $profile_val        = $profile_val + $phone_val;
+                $track_val['phone'] = $phone_val;
+            } else {
+                if ( strlen( $next_add ) == 0 ) {
+                    $next_add = sprintf( __( 'Add Phone to gain %s%% progress', 'dokan-lite' ), $phone_val );
+                }
+            }
+
+        endif;
+
+        //calculate completeness for banner
+        if ( isset( $banner_val ) && isset( $dokan_settings['banner'] ) ):
+
+            if ( $dokan_settings['banner'] != 0 ) {
+                $profile_val         = $profile_val + $banner_val;
+                $track_val['banner'] = $banner_val;
+            } else {
+                $next_add = sprintf(__( 'Add Banner to gain %s%% progress', 'dokan-lite' ), $banner_val);
+            }
+
+        endif;
+
+        //calculate completeness for store name
+        if ( isset( $store_name_val ) && isset( $dokan_settings['store_name'] ) ):
+            if ( isset( $dokan_settings['store_name'] ) ) {
+                $profile_val             = $profile_val + $store_name_val;
+                $track_val['store_name'] = $store_name_val;
+            } else {
+                if ( strlen( $next_add ) == 0 ) {
+                    $next_add = sprintf( __( 'Add Store Name to gain %s%% progress', 'dokan-lite' ), $store_name_val );
+                }
+            }
+        endif;
+
+        //calculate completeness for address
+        if ( isset( $address_val ) && isset( $dokan_settings['address'] ) ):
+            if ( !empty($dokan_settings['address']['street_1']) ) {
+                $profile_val          = $profile_val + $address_val;
+                $track_val['address'] = $address_val;
+            } else {
+                if ( strlen( $next_add ) == 0 ) {
+                    $next_add = sprintf(__( 'Add address to gain %s%% progress', 'dokan-lite' ),$address_val);
+                }
+            }
+        endif;
+
+        // Calculate Payment method val for Bank
+        if ( isset( $dokan_settings['payment'] ) && isset( $dokan_settings['payment']['bank'] ) ) {
+            $count_bank = true;
+
+            // if any of the values for bank details are blank, check_bank will be set as false
+            foreach ( $dokan_settings['payment']['bank'] as $value ) {
+                if ( strlen( trim( $value )) == 0)   {
+                    $count_bank = false;
+                }
+            }
+
+            if ( $count_bank ) {
+                $profile_val        = $profile_val + $payment_method_val;
+                $track_val['Bank']  = $payment_method_val;
+                $payment_method_val = 0;
+                $payment_added      = 'true';
+            }
+        }
+
+        // Calculate Payment method val for Paypal
+        if ( isset( $dokan_settings['payment'] ) && isset( $dokan_settings['payment']['paypal'] ) ) {
+            $p_email = isset($dokan_settings['payment']['paypal']['email']) ? $dokan_settings['payment']['paypal']['email'] : false;
+            if ( $p_email != false ) {
+
+                $profile_val         = $profile_val + $payment_method_val;
+                $track_val['paypal'] = $payment_method_val;
+                $payment_method_val  = 0;
+            }
+        }
+
+        // Calculate Payment method val for skrill
+        if ( isset( $dokan_settings['payment'] ) && isset( $dokan_settings['payment']['skrill'] ) ) {
+
+            $s_email = isset( $dokan_settings['payment']['skrill']['email'] ) ? $dokan_settings['payment']['skrill']['email'] : false;
+            if ( $s_email != false ) {
+                $profile_val         = $profile_val + $payment_method_val;
+                $track_val['skrill'] = $payment_method_val;
+                $payment_method_val  = 0;
+            }
+        }
+
+        // set message if no payment method found
+        if ( strlen( $next_add ) == 0 && $payment_method_val !=0 ) {
+            $next_add = sprintf( __( 'Add a Payment method to gain %s%% progress', 'dokan-lite' ), $payment_method_val );
+        }
+
+        if ( isset( $dokan_settings['location'] ) && strlen(trim($dokan_settings['location'])) != 0 ) {
+            $profile_val           = $profile_val + $map_val;
+            $track_val['location'] = $map_val;
+        } else {
+            if ( strlen( $next_add ) == 0 ) {
+                $next_add = sprintf( __( 'Add Map location to gain %s%% progress', 'dokan-lite' ), $map_val );
+            }
+        }
+
+        $track_val['next_todo']     = $next_add;
+        $track_val['progress']      = $profile_val;
+        $track_val['progress_vals'] = $progress_values;
+
+        return apply_filters( 'dokan_profile_completion_progress_value', $track_val ) ;
+    }
+
 
 }
