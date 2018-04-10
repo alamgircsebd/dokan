@@ -76,7 +76,7 @@ class Dokan_Stripe {
         add_action( 'template_redirect', array( $this, 'delete_stripe_account') , 50 );
         add_action( 'init', array( $this, 'handle_stripe_webhook') , 10 );
 
-        add_filter( 'dokan_profile_completion_progress_value', array( $this, 'profile_progress_override') , 88 );
+        add_action( 'dokan_store_profile_saved', array( $this, 'save_stripe_progress' ), 8, 2 );
     }
 
     function filter_gateways(  $gateways ){
@@ -572,20 +572,23 @@ class Dokan_Stripe {
         endif;
     }
 
-    function profile_progress_override( $track_val ) {
-
-        if ( !is_user_logged_in() ) {
-            return $track_val;
+    /**
+    * Save stripe progress settings data
+    *
+    * @since 2.8
+    *
+    * @return void
+    **/
+    public function save_stripe_progress( $store_id, $dokan_settings ) {
+        if ( ! $store_id ) {
+            return;
         }
 
-        $connected = get_user_meta( get_current_user_id(), '_stripe_connect_access_key', true );
-
-        if ( $connected ) {
-            $track_val['progress'] = $track_val['progress'] +  $track_val['progress_vals']['payment_method_val'];
-            $track_val['stripe']   = $track_val['progress_vals']['payment_method_val'];
+        if ( isset( $_POST['settings']['stripe'] ) ) {
+            $dokan_settings['payment']['stripe'] = $_POST['settings']['stripe'];
         }
 
-        return $track_val;
+        update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
     }
 
 }

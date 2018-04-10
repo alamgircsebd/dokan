@@ -412,6 +412,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             return;
         }
 
+        $dokan_settings = get_user_meta( $store_id, 'dokan_profile_settings', true );
+
         $profile_completeness = $this->calculate_profile_completeness_value( $dokan_settings );
         $dokan_settings['profile_completion'] = $profile_completeness;
 
@@ -589,6 +591,16 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             }
         }
 
+        // Calculate Payment method val for stripe
+        if ( isset( $dokan_settings['payment'] ) && isset( $dokan_settings['payment']['stripe'] ) ) {
+
+            if ( $dokan_settings['payment']['stripe'] ) {
+                $profile_val         = $profile_val + $payment_method_val;
+                $track_val['stripe'] = $payment_method_val;
+                $payment_method_val  = 0;
+            }
+        }
+
         // set message if no payment method found
         if ( strlen( $next_add ) == 0 && $payment_method_val !=0 ) {
             $next_add = sprintf( __( 'Add a Payment method to gain %s%% progress', 'dokan-lite' ), $payment_method_val );
@@ -609,6 +621,5 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         return apply_filters( 'dokan_profile_completion_progress_value', $track_val ) ;
     }
-
 
 }
