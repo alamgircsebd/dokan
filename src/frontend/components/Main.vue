@@ -72,11 +72,14 @@ export default {
                 action: 'dokan-get-shipping-zone',
                 nonce: dokan.nonce
             }
+            jQuery('#dokan-shipping-zone').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
 
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {
                     self.shippingZone = resp.data;
+                    jQuery('#dokan-shipping-zone').unblock();
                 } else {
+                    jQuery('#dokan-shipping-zone').unblock();
                     alert( resp.data );
                 }
             });

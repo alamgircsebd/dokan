@@ -69,7 +69,7 @@
 
             <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showPostCodeList">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ i18n.select_postcode }}
+                    {{ i18n.select_postcode }} <i class="fa fa-question-circle" v-tooltip :title="i18n.postcode_help_text"></i>
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     <input name="zone_postcode" id="zone_postcode" class="dokan-form-control" v-model="postcode">
@@ -88,7 +88,7 @@
                         <thead>
                             <tr>
                                 <th class="title">{{ i18n.method_title }}</th>
-                                <th class="enabled">{{ i18n.enabled }}</th>
+                                <th class="enabled">{{ i18n.status }}</th>
                                 <th class="description">{{ i18n.description }}</th>
                             </tr>
                         </thead>
@@ -221,17 +221,6 @@
                     <input type="text" id="method_title" class="dokan-form-control" v-model="editShippingMethodData.settings.title" placeholder="Enter method title">
                 </div>
 
-                <!-- <div class="dokan-form-group">
-                    <label for="method_tax_status">{{ i18n.free_shipping_requires }}</label>
-                    <select v-model="editShippingMethodData.settings.requires" id="method_requires" class="dokan-form-control">
-                        <option value="" selected="selected">N/A</option>
-                        <option value="coupon">{{ i18n.coupon }}</option>
-                        <option value="min_amount">{{ i18n.minimum_order }}</option>
-                        <option value="both">{{ i18n.minimum_order_and_coupon }}</option>
-                        <option value="either">{{ i18n.minimum_order_or_coupon }}</option>
-                    </select>
-                </div>
- -->
                 <div class="dokan-form-group">
                     <label for="minimum_order_amount">{{ i18n.minimum_order_amount }}</label>
                     <input type="text" id="minimum_order_amount" class="dokan-form-control" v-model="editShippingMethodData.settings.min_amount" placeholder="0.00">
@@ -324,14 +313,17 @@ export default {
                     nonce: dokan.nonce
                 };
 
+            jQuery('.zone-method-wrapper').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {
                     self.successMessage = resp.data;
-
+                    jQuery('.zone-method-wrapper').unblock();
                     setTimeout( function() {
                         self.successMessage = '';
                     }, 2000)
                 } else {
+                    jQuery('.zone-method-wrapper').unblock();
                     alert( resp.data );
                 }
             });
@@ -349,10 +341,14 @@ export default {
                     nonce: dokan.nonce
                 };
 
+            jQuery('#dokan-shipping-zone').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {
                     self.successMessage = resp.data;
+                    jQuery('#dokan-shipping-zone').unblock();
                 } else {
+                    jQuery('#dokan-shipping-zone').unblock();
                     alert( resp.data );
                 }
             });
@@ -378,11 +374,15 @@ export default {
                     nonce: dokan.nonce
                 };
 
+            jQuery('.zone-method-wrapper').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {
                     self.fetchZone();
                     self.successMessage = resp.data;
+                    jQuery('.zone-method-wrapper').unblock();
                 } else {
+                    jQuery('.zone-method-wrapper').unblock();
                     alert( resp.data );
                 }
             });
@@ -398,11 +398,15 @@ export default {
                     nonce: dokan.nonce
                 };
 
+            jQuery('.zone-method-wrapper').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {
                     self.fetchZone();
                     self.editShippingMethodModal = false;
+                    jQuery('.zone-method-wrapper').unblock();
                 } else {
+                    jQuery('.zone-method-wrapper').unblock();
                     alert( resp.data );
                 }
             });
@@ -450,6 +454,8 @@ export default {
                     zoneID: self.$route.params.zoneID,
                     nonce: dokan.nonce
                 };
+
+            jQuery('#dokan-shipping-zone').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
 
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {
@@ -502,8 +508,10 @@ export default {
                         });
                     }
 
+                    jQuery('#dokan-shipping-zone').unblock();
 
                 } else {
+                    jQuery('#dokan-shipping-zone').unblock();
                     alert( resp.data );
                 }
             });

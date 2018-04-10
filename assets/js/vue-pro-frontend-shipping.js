@@ -272,11 +272,14 @@ module.exports = function normalizeComponent (
                 action: 'dokan-get-shipping-zone',
                 nonce: dokan.nonce
             };
+            jQuery('#dokan-shipping-zone').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
 
             jQuery.post(dokan.ajaxurl, data, function (resp) {
                 if (resp.success) {
                     self.shippingZone = resp.data;
+                    jQuery('#dokan-shipping-zone').unblock();
                 } else {
+                    jQuery('#dokan-shipping-zone').unblock();
                     alert(resp.data);
                 }
             });
@@ -294,17 +297,6 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -618,14 +610,17 @@ var Modal = dokan_get_lib('Modal');
                 nonce: dokan.nonce
             };
 
+            jQuery('.zone-method-wrapper').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post(dokan.ajaxurl, data, function (resp) {
                 if (resp.success) {
                     self.successMessage = resp.data;
-
+                    jQuery('.zone-method-wrapper').unblock();
                     setTimeout(function () {
                         self.successMessage = '';
                     }, 2000);
                 } else {
+                    jQuery('.zone-method-wrapper').unblock();
                     alert(resp.data);
                 }
             });
@@ -641,10 +636,14 @@ var Modal = dokan_get_lib('Modal');
                 nonce: dokan.nonce
             };
 
+            jQuery('#dokan-shipping-zone').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post(dokan.ajaxurl, data, function (resp) {
                 if (resp.success) {
                     self.successMessage = resp.data;
+                    jQuery('#dokan-shipping-zone').unblock();
                 } else {
+                    jQuery('#dokan-shipping-zone').unblock();
                     alert(resp.data);
                 }
             });
@@ -667,11 +666,15 @@ var Modal = dokan_get_lib('Modal');
                 nonce: dokan.nonce
             };
 
+            jQuery('.zone-method-wrapper').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post(dokan.ajaxurl, data, function (resp) {
                 if (resp.success) {
                     self.fetchZone();
                     self.successMessage = resp.data;
+                    jQuery('.zone-method-wrapper').unblock();
                 } else {
+                    jQuery('.zone-method-wrapper').unblock();
                     alert(resp.data);
                 }
             });
@@ -685,11 +688,15 @@ var Modal = dokan_get_lib('Modal');
                 nonce: dokan.nonce
             };
 
+            jQuery('.zone-method-wrapper').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
             jQuery.post(dokan.ajaxurl, data, function (resp) {
                 if (resp.success) {
                     self.fetchZone();
                     self.editShippingMethodModal = false;
+                    jQuery('.zone-method-wrapper').unblock();
                 } else {
+                    jQuery('.zone-method-wrapper').unblock();
                     alert(resp.data);
                 }
             });
@@ -735,6 +742,8 @@ var Modal = dokan_get_lib('Modal');
                 zoneID: self.$route.params.zoneID,
                 nonce: dokan.nonce
             };
+
+            jQuery('#dokan-shipping-zone').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
 
             jQuery.post(dokan.ajaxurl, data, function (resp) {
                 if (resp.success) {
@@ -786,7 +795,10 @@ var Modal = dokan_get_lib('Modal');
                             }
                         });
                     }
+
+                    jQuery('#dokan-shipping-zone').unblock();
                 } else {
+                    jQuery('#dokan-shipping-zone').unblock();
                     alert(resp.data);
                 }
             });
@@ -1265,18 +1277,18 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                   " +
+                "\n                " +
                   _vm._s(_vm.i18n.zone_name) +
-                  " :\n               "
+                  " :\n            "
               )
             ]
           ),
           _vm._v(" "),
           _c("div", { staticClass: "dokan-w5 dokan-text-left" }, [
             _vm._v(
-              "\n                   " +
+              "\n                " +
                 _vm._s(_vm.zone.data.zone_name) +
-                "\n               "
+                "\n            "
             )
           ])
         ]),
@@ -1290,9 +1302,9 @@ var render = function() {
             },
             [
               _vm._v(
-                "\n                   " +
+                "\n                " +
                   _vm._s(_vm.i18n.zone_location) +
-                  " :\n               "
+                  " :\n            "
               )
             ]
           ),
@@ -1346,9 +1358,9 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n                   " +
+                    "\n                " +
                       _vm._s(_vm.i18n.select_country) +
-                      "\n               "
+                      "\n            "
                   )
                 ]
               ),
@@ -1442,9 +1454,9 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n                   " +
+                    "\n                " +
                       _vm._s(_vm.i18n.select_state) +
-                      "\n               "
+                      "\n            "
                   )
                 ]
               ),
@@ -1537,10 +1549,15 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n                   " +
+                    "\n                " +
                       _vm._s(_vm.i18n.select_postcode) +
-                      "\n               "
-                  )
+                      " "
+                  ),
+                  _c("i", {
+                    directives: [{ name: "tooltip", rawName: "v-tooltip" }],
+                    staticClass: "fa fa-question-circle",
+                    attrs: { title: _vm.i18n.postcode_help_text }
+                  })
                 ]
               ),
               _vm._v(" "),
@@ -1601,7 +1618,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("th", { staticClass: "enabled" }, [
-                    _vm._v(_vm._s(_vm.i18n.enabled))
+                    _vm._v(_vm._s(_vm.i18n.status))
                   ]),
                   _vm._v(" "),
                   _c("th", { staticClass: "description" }, [
@@ -1618,9 +1635,9 @@ var render = function() {
                         return _c("tr", [
                           _c("td", [
                             _vm._v(
-                              "\n                                       " +
+                              "\n                                    " +
                                 _vm._s(method.title) +
-                                "\n                                       "
+                                "\n                                    "
                             ),
                             _c("div", { staticClass: "row-actions" }, [
                               _c("span", { staticClass: "edit" }, [
@@ -1674,9 +1691,9 @@ var render = function() {
                           _vm._v(" "),
                           _c("td", [
                             _vm._v(
-                              "\n                                       " +
+                              "\n                                    " +
                                 _vm._s(method.settings.description) +
-                                "\n                                   "
+                                "\n                                "
                             )
                           ])
                         ])
@@ -1685,9 +1702,9 @@ var render = function() {
                         _c("tr", [
                           _c("td", { attrs: { colspan: "3" } }, [
                             _vm._v(
-                              "\n                                       " +
+                              "\n                                    " +
                                 _vm._s(_vm.i18n.no_method_found) +
-                                "\n                                   "
+                                "\n                                "
                             )
                           ])
                         ])

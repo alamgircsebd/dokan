@@ -53,6 +53,7 @@ class Dokan_Pro_Assets {
                     'shipping_method_help'          => __( 'Add your shipping method for appropiate zone', 'dokan' ),
                     'method_title'                  => __( 'Method Title', 'dokan' ),
                     'enabled'                       => __( 'Enabled', 'dokan' ),
+                    'status'                        => __( 'Status', 'dokan' ),
                     'description'                   => __( 'Description', 'dokan' ),
                     'edit'                          => __( 'Edit', 'dokan' ),
                     'delete'                        => __( 'Delete', 'dokan' ),
@@ -83,7 +84,8 @@ class Dokan_Pro_Assets {
                     'minimum_order'                 =>  __( 'A minimum order amount', 'dokan' ),
                     'minimum_order_and_coupon'      =>  __( 'A minimum order amount AND a coupon', 'dokan' ),
                     'minimum_order_or_coupon'       =>  __( 'A minimum order amount OR a coupon', 'dokan' ),
-                    'minimum_order_amount'          =>  __( 'Minimum order amount for free shipping', 'dokan' )
+                    'minimum_order_amount'          =>  __( 'Minimum order amount for free shipping', 'dokan' ),
+                    'postcode_help_text'            =>  __( 'Postcodes need to be comma separated', 'dokan' )
                 )
             );
 
