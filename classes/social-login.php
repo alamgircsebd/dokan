@@ -242,7 +242,7 @@ Class Dokan_Social_Login {
                 'name'  => 'fb_app_url',
                 'label' => __( 'Site Url', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=facebook&hauth.done=Facebook' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=facebook&hauth_done=Facebook' . '>',
             ),
             'facebook_app_id'     => array(
                 'name'  => 'fb_app_id',
@@ -264,7 +264,7 @@ Class Dokan_Social_Login {
                 'name'  => 'twitter_app_url',
                 'label' => __( 'Callback URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=twitter&hauth.done=Twitter' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '/?dokan_reg=twitter&hauth.done=Twitter' . '>',
             ),
             'twitter_app_id'      => array(
                 'name'  => 'twitter_app_id',
