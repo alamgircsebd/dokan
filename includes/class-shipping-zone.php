@@ -112,7 +112,7 @@ class Dokan_Shipping_Zone {
      *
      * @return void
      */
-    public function delete_shipping_methods( $data ) {
+    public static function delete_shipping_methods( $data ) {
         global $wpdb;
 
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_methods";

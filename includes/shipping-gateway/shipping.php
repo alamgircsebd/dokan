@@ -103,6 +103,14 @@ class Dokan_WC_Shipping extends WC_Shipping_Method {
 
         $amount = 0.0;
 
+        if ( ! $this->is_method_enabled() ) {
+            return;
+        }
+
+        if ( !self::is_shipping_enabled_for_seller( $package['seller_id'] ) ) {
+            return;
+        }
+
         if ( $products ) {
             $amount = $this->calculate_per_seller( $products, $destination_country, $destination_state );
         }

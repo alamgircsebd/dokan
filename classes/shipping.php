@@ -111,6 +111,12 @@ class Dokan_Pro_Shipping {
 
             $seller_id = get_post_field( 'post_author', $product['product_id'] );
 
+            $dokan_regular_shipping = new Dokan_WC_Shipping();
+
+            if ( ! $dokan_regular_shipping->is_method_enabled() ) {
+                continue;
+            }
+
             if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
                 continue;
             }
@@ -269,7 +275,7 @@ class Dokan_Pro_Shipping {
 
             do_action( 'dokan_after_shipping_options_updated' ,$rates, $s_rates );
 
-            $shipping_url = dokan_get_navigation_url( 'settings/shipping' );
+            $shipping_url = dokan_get_navigation_url( 'settings/regular-shipping' );
             wp_redirect( add_query_arg( array( 'message' => 'shipping_saved' ), $shipping_url ) );
             exit();
         }

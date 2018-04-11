@@ -47,17 +47,26 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
-        // if ( !class_exists( 'WeDevs_Dokan' ) ) {
-        //     if ( !current_user_can( 'manage_options' ) ) {
-        //         return;
-        //     }
-
-        //     add_action( 'admin_notices', array( $this, 'activation_notice' ) );
-        //     add_action( 'wp_ajax_dokan_pro_install_dokan_lite', array( $this, 'install_dokan_lite' ) );
-        //     return;
-        // }
-
+        add_action( 'plugins_loaded', array( $this, 'check_dokan_lite_exist' ), 10 );
         add_action( 'dokan_loaded', array( $this, 'init_plugin' ), 10 );
+    }
+
+    /**
+     * Check is dokan lite active or not
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function check_dokan_lite_exist() {
+        if ( ! class_exists( 'WeDevs_Dokan' ) ) {
+            if ( ! current_user_can( 'manage_options' ) ) {
+                return;
+            }
+
+            add_action( 'admin_notices', array( $this, 'activation_notice' ) );
+            add_action( 'wp_ajax_dokan_pro_install_dokan_lite', array( $this, 'install_dokan_lite' ) );
+        }
     }
 
     /**
