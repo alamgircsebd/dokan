@@ -144,7 +144,7 @@ class DPS_Pack_On_Registration {
             'orderby'        => 'menu_order title',
             'order'          => 'ASC'
         );
-        
+
         $query = new WP_Query( apply_filters( 'dokan_sub_get_reg_sub_packs_args', $args ) );
 
         return $query;
@@ -186,7 +186,7 @@ class DPS_Pack_On_Registration {
         }
         return $url;
     }
-     /** 
+     /**
      * Check if subscriptin pack is selected
      * @since 1.1.5
      * @param array $fields
@@ -198,7 +198,7 @@ class DPS_Pack_On_Registration {
         return $fields;
     }
 
-    /** 
+    /**
     * Redirect after migration
     * @since 1.1.5
     * @param string $url
@@ -214,6 +214,9 @@ class DPS_Pack_On_Registration {
 
 }
 
-if ( dokan_get_option('enable_subscription_pack_in_reg', 'dokan_product_subscription', 'on' ) == 'on' ) {
+$dps_enable = dokan_get_option( 'enable_pricing', 'dokan_product_subscription', 'on' );
+$dps_enable_in_registration =  dokan_get_option('enable_subscription_pack_in_reg', 'dokan_product_subscription', 'on' );
+
+if (  $dps_enable == 'on' && $dps_enable_in_registration == 'on' ) {
     $dps_on_reg = DPS_Pack_On_Registration::init();
 }
