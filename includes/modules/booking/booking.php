@@ -85,7 +85,7 @@ class Dokan_WC_Booking {
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
-        add_action( 'init', array( $this, 'init_hooks' ), 55 );
+        add_action( 'init', array( $this, 'init_hooks' ) );
 
         add_action( 'dokan_new_product_added', array( $this, 'save_booking_data' ), 10 );
         add_action( 'dokan_product_updated', array( $this, 'save_booking_data' ), 10 );
