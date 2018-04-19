@@ -70,7 +70,7 @@ class Dokan_Pro_Assets {
                     'none'                          => __( 'None', 'dokan' ),
                     'taxable'                       => __( 'Taxable', 'dokan' ),
                     'shipping_class_cost'           => __( 'Shipping Class Cost', 'dokan' ),
-                    'shipping_class_cost_help_text' => __( 'These costs can optionally be added based on the', 'dokan' ),
+                    'shipping_class_cost_help_text' => __( 'These costs can optionally be added based on the product shipping class', 'dokan' ),
                     'no_shipping_class_cost'        => __( 'No shipping class cost', 'dokan' ),
                     'no_shipping_zone_found'        => __( 'No shipping zone found for configuration. Please contact with admin for manage your store shipping', 'dokan' ),
                     'calculation_type'              => __( 'Calculation type', 'dokan' ),

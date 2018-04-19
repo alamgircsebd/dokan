@@ -276,7 +276,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'social' ) {
              if ( ! current_user_can( 'dokan_view_store_social_menu' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 $this->load_social_content();
             }
@@ -284,12 +284,12 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'shipping' ) {
              if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 $disable_woo_shipping  = get_option( 'woocommerce_ship_to_countries' );
 
                 if ( 'disabled' == $disable_woo_shipping ) {
-                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'Shipping functionality is currentlly disabled by site owner', 'dokan-lite' ) ) );
+                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'Shipping functionality is currentlly disabled by site owner', 'dokan' ) ) );
                 } else {
                     $this->load_shipping_content();
                 }
@@ -298,14 +298,14 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'regular-shipping' ) {
              if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 $disable_woo_shipping  = get_option( 'woocommerce_ship_to_countries' );
                 $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
                 $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
 
                 if ( 'disabled' == $disable_woo_shipping || 'no' == $enable_shipping ) {
-                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'Shipping functionality is currentlly disabled by site owner', 'dokan-lite' ) ) );
+                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'Shipping functionality is currentlly disabled by site owner', 'dokan' ) ) );
                 } else {
                     dokan_get_template_part( 'settings/shipping', '', array( 'pro' => true ) );
                 }
@@ -315,7 +315,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'seo' ) {
              if ( ! current_user_can( 'dokan_view_store_seo_menu' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan-lite' ) ) );
+                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
             } else {
                 $this->load_seo_content();
             }
@@ -474,7 +474,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['gravatar'] = $profile_picture_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf(__( 'Add Profile Picture to gain %s%% progress', 'dokan-lite' ), $profile_picture_val);
+                    $next_add = sprintf(__( 'Add Profile Picture to gain %s%% progress', 'dokan' ), $profile_picture_val);
                 }
             }
         endif;
@@ -493,8 +493,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
                     if ( strlen( $next_add ) == 0 ) {
                         //replace keys to nice name
-                        $nice_name = ( $key === 'fb' ) ? __( 'Facebook', 'dokan-lite' ) : ( ( $key === 'gplus' ) ? __( 'Google+', 'dokan-lite' ) : $key);
-                        $next_add = sprintf( __( 'Add %s profile link to gain %s%% progress', 'dokan-lite' ), $nice_name, $social_val[$key] );
+                        $nice_name = ( $key === 'fb' ) ? __( 'Facebook', 'dokan' ) : ( ( $key === 'gplus' ) ? __( 'Google+', 'dokan' ) : $key);
+                        $next_add = sprintf( __( 'Add %s profile link to gain %s%% progress', 'dokan' ), $nice_name, $social_val[$key] );
                     }
                 }
             }
@@ -508,7 +508,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['phone'] = $phone_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf( __( 'Add Phone to gain %s%% progress', 'dokan-lite' ), $phone_val );
+                    $next_add = sprintf( __( 'Add Phone to gain %s%% progress', 'dokan' ), $phone_val );
                 }
             }
 
@@ -521,7 +521,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $profile_val         = $profile_val + $banner_val;
                 $track_val['banner'] = $banner_val;
             } else {
-                $next_add = sprintf(__( 'Add Banner to gain %s%% progress', 'dokan-lite' ), $banner_val);
+                $next_add = sprintf(__( 'Add Banner to gain %s%% progress', 'dokan' ), $banner_val);
             }
 
         endif;
@@ -533,7 +533,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['store_name'] = $store_name_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf( __( 'Add Store Name to gain %s%% progress', 'dokan-lite' ), $store_name_val );
+                    $next_add = sprintf( __( 'Add Store Name to gain %s%% progress', 'dokan' ), $store_name_val );
                 }
             }
         endif;
@@ -545,7 +545,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['address'] = $address_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf(__( 'Add address to gain %s%% progress', 'dokan-lite' ),$address_val);
+                    $next_add = sprintf(__( 'Add address to gain %s%% progress', 'dokan' ),$address_val);
                 }
             }
         endif;
@@ -603,7 +603,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         // set message if no payment method found
         if ( strlen( $next_add ) == 0 && $payment_method_val !=0 ) {
-            $next_add = sprintf( __( 'Add a Payment method to gain %s%% progress', 'dokan-lite' ), $payment_method_val );
+            $next_add = sprintf( __( 'Add a Payment method to gain %s%% progress', 'dokan' ), $payment_method_val );
         }
 
         if ( isset( $dokan_settings['location'] ) && strlen(trim($dokan_settings['location'])) != 0 ) {
@@ -611,7 +611,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             $track_val['location'] = $map_val;
         } else {
             if ( strlen( $next_add ) == 0 ) {
-                $next_add = sprintf( __( 'Add Map location to gain %s%% progress', 'dokan-lite' ), $map_val );
+                $next_add = sprintf( __( 'Add Map location to gain %s%% progress', 'dokan' ), $map_val );
             }
         }
 
