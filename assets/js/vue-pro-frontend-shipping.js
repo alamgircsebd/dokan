@@ -247,7 +247,6 @@ module.exports = function normalizeComponent (
 
     data: function data() {
         return {
-            i18n: {},
             shippingZone: {}
         };
     },
@@ -287,7 +286,6 @@ module.exports = function normalizeComponent (
     },
 
     created: function created() {
-        this.i18n = dokanShipping.i18n;
         this.fetchShippingZone();
     }
 });
@@ -549,7 +547,6 @@ var Modal = dokan_get_lib('Modal');
 
     data: function data() {
         return {
-            i18n: {},
             successMessage: '',
             showAddShippingMethodModal: false,
             editShippingMethodModal: false,
@@ -825,7 +822,6 @@ var Modal = dokan_get_lib('Modal');
     },
 
     created: function created() {
-        this.i18n = dokanShipping.i18n;
         this.fetchZone();
     }
 });
@@ -856,6 +852,10 @@ new Vue({
     router: _router2.default,
     render: function render(h) {
         return h(_shipping2.default);
+    },
+
+    created: function created() {
+        this.setLocaleData(dokanShipping.i18n['dokan']);
     }
 });
 
@@ -1057,11 +1057,11 @@ var render = function() {
     _c("table", { staticClass: "dokan-table shipping-zone-table" }, [
       _c("thead", [
         _c("tr", [
-          _c("th", [_vm._v(_vm._s(_vm.i18n.zone_name))]),
+          _c("th", [_vm._v(_vm._s(_vm.__("Zone Name", "dokan")))]),
           _vm._v(" "),
-          _c("th", [_vm._v(_vm._s(_vm.i18n.regions))]),
+          _c("th", [_vm._v(_vm._s(_vm.__("Region(s)", "dokan")))]),
           _vm._v(" "),
-          _c("th", [_vm._v(_vm._s(_vm.i18n.shipping_method))])
+          _c("th", [_vm._v(_vm._s(_vm.__("Shipping Method", "dokan")))])
         ])
       ]),
       _vm._v(" "),
@@ -1101,7 +1101,7 @@ var render = function() {
                                 }
                               }
                             },
-                            [_vm._v(_vm._s(_vm.i18n.edit))]
+                            [_vm._v(_vm._s(_vm.__("Edit", "dokan")))]
                           )
                         ],
                         1
@@ -1131,7 +1131,9 @@ var render = function() {
                           "p",
                           [
                             _c("span", [
-                              _vm._v(_vm._s(_vm.i18n.no_method_found) + " ")
+                              _vm._v(
+                                _vm._s(_vm.__("No method found", "dokan")) + " "
+                              )
                             ]),
                             _vm._v(" "),
                             _c(
@@ -1144,7 +1146,14 @@ var render = function() {
                                   }
                                 }
                               },
-                              [_vm._v(" " + _vm._s(_vm.i18n.add_method))]
+                              [
+                                _vm._v(
+                                  " " +
+                                    _vm._s(
+                                      _vm.__("Add Shipping Method", "dokan")
+                                    )
+                                )
+                              ]
                             )
                           ],
                           1
@@ -1155,7 +1164,14 @@ var render = function() {
             : [
                 _c("tr", [
                   _c("td", { attrs: { colspan: "3" } }, [
-                    _vm._v(_vm._s(_vm.i18n.no_shipping_zone_found))
+                    _vm._v(
+                      _vm._s(
+                        _vm.__(
+                          "No shipping zone found for configuration. Please contact with admin for manage your store shipping",
+                          "dokan"
+                        )
+                      )
+                    )
                   ])
                 ])
               ]
@@ -1278,7 +1294,7 @@ var render = function() {
             [
               _vm._v(
                 "\n                " +
-                  _vm._s(_vm.i18n.zone_name) +
+                  _vm._s(_vm.__("Zone Name", "dokan")) +
                   " :\n            "
               )
             ]
@@ -1303,7 +1319,7 @@ var render = function() {
             [
               _vm._v(
                 "\n                " +
-                  _vm._s(_vm.i18n.zone_location) +
+                  _vm._s(_vm.__("Zone Location", "dokan")) +
                   " :\n            "
               )
             ]
@@ -1320,17 +1336,7 @@ var render = function() {
                     attrs: { href: "#" },
                     on: {
                       click: function($event) {
-                        if (
-                          !("button" in $event) &&
-                          _vm._k(
-                            $event.keyCode,
-                            "preventx",
-                            undefined,
-                            $event.key
-                          )
-                        ) {
-                          return null
-                        }
+                        $event.preventDefault()
                         _vm.wantToSetLocation($event)
                       }
                     }
@@ -1341,7 +1347,11 @@ var render = function() {
                       on: { input: _vm.wantToSetLocation }
                     }),
                     _vm._v(" "),
-                    _c("span", [_vm._v(_vm._s(_vm.i18n.limit_zone_location))])
+                    _c("span", [
+                      _vm._v(
+                        _vm._s(_vm.__("Limit your zone location", "dokan"))
+                      )
+                    ])
                   ],
                   1
                 )
@@ -1359,7 +1369,7 @@ var render = function() {
                 [
                   _vm._v(
                     "\n                " +
-                      _vm._s(_vm.i18n.select_country) +
+                      _vm._s(_vm.__("Select Country", "dokan")) +
                       "\n            "
                   )
                 ]
@@ -1372,7 +1382,7 @@ var render = function() {
                   _c("multiselect", {
                     attrs: {
                       options: _vm.countryList,
-                      placeholder: _vm.i18n.select_country,
+                      placeholder: _vm.__("Select Country", "dokan"),
                       multiple: true,
                       label: "name",
                       "track-by": "code"
@@ -1455,7 +1465,7 @@ var render = function() {
                 [
                   _vm._v(
                     "\n                " +
-                      _vm._s(_vm.i18n.select_state) +
+                      _vm._s(_vm.__("Select States", "dokan")) +
                       "\n            "
                   )
                 ]
@@ -1468,7 +1478,7 @@ var render = function() {
                   _c("multiselect", {
                     attrs: {
                       options: _vm.stateList,
-                      placeholder: _vm.i18n.select_state,
+                      placeholder: _vm.__("Select States", "dokan"),
                       multiple: true,
                       label: "name",
                       "track-by": "code"
@@ -1550,13 +1560,18 @@ var render = function() {
                 [
                   _vm._v(
                     "\n                " +
-                      _vm._s(_vm.i18n.select_postcode) +
+                      _vm._s(_vm.__("Set your postcode", "dokan")) +
                       " "
                   ),
                   _c("i", {
                     directives: [{ name: "tooltip", rawName: "v-tooltip" }],
                     staticClass: "fa fa-question-circle",
-                    attrs: { title: _vm.i18n.postcode_help_text }
+                    attrs: {
+                      title: _vm.__(
+                        "Postcodes need to be comma separated",
+                        "dokan"
+                      )
+                    }
                   })
                 ]
               ),
@@ -1600,10 +1615,19 @@ var render = function() {
                   staticClass: "fa fa-truck",
                   attrs: { "aria-hidden": "true" }
                 }),
-                _vm._v(" " + _vm._s(_vm.i18n.shipping_method))
+                _vm._v(" " + _vm._s(_vm.__("Shipping Method", "dokan")))
               ]),
               _vm._v(" "),
-              _c("p", [_vm._v(_vm._s(_vm.i18n.shipping_method_help))]),
+              _c("p", [
+                _vm._v(
+                  _vm._s(
+                    _vm.__(
+                      "Add your shipping method for appropiate zone",
+                      "dokan"
+                    )
+                  )
+                )
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "dokan-clearfix" })
             ]
@@ -1614,15 +1638,15 @@ var render = function() {
               _c("thead", [
                 _c("tr", [
                   _c("th", { staticClass: "title" }, [
-                    _vm._v(_vm._s(_vm.i18n.method_title))
+                    _vm._v(_vm._s(_vm.__("Method Title", "dokan")))
                   ]),
                   _vm._v(" "),
                   _c("th", { staticClass: "enabled" }, [
-                    _vm._v(_vm._s(_vm.i18n.status))
+                    _vm._v(_vm._s(_vm.__("Status", "dokan")))
                   ]),
                   _vm._v(" "),
                   _c("th", { staticClass: "description" }, [
-                    _vm._v(_vm._s(_vm.i18n.description))
+                    _vm._v(_vm._s(_vm.__("Description", "dokan")))
                   ])
                 ])
               ]),
@@ -1652,7 +1676,7 @@ var render = function() {
                                       }
                                     }
                                   },
-                                  [_vm._v(_vm._s(_vm.i18n.edit))]
+                                  [_vm._v(_vm._s(_vm.__("Edit", "dokan")))]
                                 ),
                                 _vm._v(" | ")
                               ]),
@@ -1669,7 +1693,7 @@ var render = function() {
                                       }
                                     }
                                   },
-                                  [_vm._v(_vm._s(_vm.i18n.delete))]
+                                  [_vm._v(_vm._s(_vm.__("Delete", "dokan")))]
                                 )
                               ])
                             ])
@@ -1703,7 +1727,7 @@ var render = function() {
                           _c("td", { attrs: { colspan: "3" } }, [
                             _vm._v(
                               "\n                                    " +
-                                _vm._s(_vm.i18n.no_method_found) +
+                                _vm._s(_vm.__("No method found", "dokan")) +
                                 "\n                                "
                             )
                           ])
@@ -1730,7 +1754,7 @@ var render = function() {
               },
               [
                 _c("i", { staticClass: "fa fa-plus" }),
-                _vm._v(" " + _vm._s(_vm.i18n.add_method))
+                _vm._v(" " + _vm._s(_vm.__("Add Shipping Method", "dokan")))
               ]
             )
           ])
@@ -1739,7 +1763,8 @@ var render = function() {
         _c("div", { staticClass: "dokan-form-group" }, [
           _c("input", {
             staticClass: "dokan-btn dokan-btn-theme dokan-right",
-            attrs: { type: "submit", value: "Save Changes" },
+            attrs: { type: "submit" },
+            domProps: { value: _vm.__("Save Changes", "dokan") },
             on: {
               click: function($event) {
                 $event.preventDefault()
@@ -1756,7 +1781,7 @@ var render = function() {
         ? _c(
             "modal",
             {
-              attrs: { title: "Add Shipping Methods" },
+              attrs: { title: _vm.__("Add Shipping Methods", "dokan") },
               on: {
                 close: function($event) {
                   _vm.showAddShippingMethodModal = false
@@ -1765,7 +1790,16 @@ var render = function() {
             },
             [
               _c("template", { slot: "body" }, [
-                _c("p", [_vm._v(_vm._s(_vm.i18n.choose_shipping_help_text))]),
+                _c("p", [
+                  _vm._v(
+                    _vm._s(
+                      _vm.__(
+                        "Choose the shipping method you wish to add. Only shipping methods which support zones are listed.",
+                        "dokan"
+                      )
+                    )
+                  )
+                ]),
                 _vm._v(" "),
                 _c(
                   "select",
@@ -1798,19 +1832,21 @@ var render = function() {
                   },
                   [
                     _c("option", { attrs: { value: "" } }, [
-                      _vm._v("‐ " + _vm._s(_vm.i18n.select_method) + " ‐")
+                      _vm._v(
+                        "‐ " + _vm._s(_vm.__("Select a Method", "dokan")) + " ‐"
+                      )
                     ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "flat_rate" } }, [
-                      _vm._v(_vm._s(_vm.i18n.flat_rate))
+                      _vm._v(_vm._s(_vm.__("Flat Rate", "dokan")))
                     ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "local_pickup" } }, [
-                      _vm._v(_vm._s(_vm.i18n.local_pickup))
+                      _vm._v(_vm._s(_vm.__("Local Pickup", "dokan")))
                     ]),
                     _vm._v(" "),
                     _c("option", { attrs: { value: "free_shipping" } }, [
-                      _vm._v(_vm._s(_vm.i18n.free_pickup))
+                      _vm._v(_vm._s(_vm.__("Free Shipping", "dokan")))
                     ])
                   ]
                 )
@@ -1828,7 +1864,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v(_vm._s(_vm.i18n.add_method))]
+                  [_vm._v(_vm._s(_vm.__("Add Shipping Method", "dokan")))]
                 )
               ])
             ],
@@ -1855,7 +1891,7 @@ var render = function() {
                     [
                       _c("div", { staticClass: "dokan-form-group" }, [
                         _c("label", { attrs: { for: "method_title" } }, [
-                          _vm._v(_vm._s(_vm.i18n.title))
+                          _vm._v(_vm._s(_vm.__("Title", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1872,7 +1908,7 @@ var render = function() {
                           attrs: {
                             type: "text",
                             id: "method_title",
-                            placeholder: "Enter method title"
+                            placeholder: _vm.__("Enter method title", "dokan")
                           },
                           domProps: {
                             value: _vm.editShippingMethodData.settings.title
@@ -1894,7 +1930,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "dokan-form-group" }, [
                         _c("label", { attrs: { for: "method_cost" } }, [
-                          _vm._v(_vm._s(_vm.i18n.cost))
+                          _vm._v(_vm._s(_vm.__("Cost", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c("input", {
@@ -1933,7 +1969,12 @@ var render = function() {
                           ? _c("span", {
                               staticClass: "description",
                               domProps: {
-                                innerHTML: _vm._s(_vm.i18n.cost_desc)
+                                innerHTML: _vm._s(
+                                  _vm.__(
+                                    "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
+                                    "dokan"
+                                  )
+                                )
                               }
                             })
                           : _vm._e()
@@ -1941,7 +1982,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "dokan-form-group" }, [
                         _c("label", { attrs: { for: "method_tax_status" } }, [
-                          _vm._v(_vm._s(_vm.i18n.tax_status))
+                          _vm._v(_vm._s(_vm.__("Tax Status", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c(
@@ -1982,11 +2023,11 @@ var render = function() {
                           },
                           [
                             _c("option", { attrs: { value: "none" } }, [
-                              _vm._v(_vm._s(_vm.i18n.none))
+                              _vm._v(_vm._s(_vm.__("None", "dokan")))
                             ]),
                             _vm._v(" "),
                             _c("option", { attrs: { value: "taxable" } }, [
-                              _vm._v(_vm._s(_vm.i18n.taxable))
+                              _vm._v(_vm._s(_vm.__("Taxable", "dokan")))
                             ])
                           ]
                         )
@@ -1994,7 +2035,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("div", { staticClass: "dokan-form-group" }, [
                         _c("label", { attrs: { for: "method_description" } }, [
-                          _vm._v(_vm._s(_vm.i18n.description))
+                          _vm._v(_vm._s(_vm.__("Description", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c(
@@ -2046,12 +2087,19 @@ var render = function() {
                             _vm._v(" "),
                             _c("div", { staticClass: "dokan-form-group" }, [
                               _c("h3", [
-                                _vm._v(_vm._s(_vm.i18n.shipping_class_cost))
+                                _vm._v(
+                                  _vm._s(_vm.__("Shipping Class Cost", "dokan"))
+                                )
                               ]),
                               _vm._v(" "),
                               _c("span", { staticClass: "description" }, [
                                 _vm._v(
-                                  _vm._s(_vm.i18n.shipping_class_cost_help_text)
+                                  _vm._s(
+                                    _vm.__(
+                                      "These costs can optionally be added based on the product shipping class",
+                                      "dokan"
+                                    )
+                                  )
                                 )
                               ])
                             ]),
@@ -2068,7 +2116,12 @@ var render = function() {
                                       _vm._v(
                                         _vm._s(shippingClass.name) +
                                           " " +
-                                          _vm._s(_vm.i18n.shipping_class_cost)
+                                          _vm._s(
+                                            _vm.__(
+                                              "No shipping class cost",
+                                              "dokan"
+                                            )
+                                          )
                                       )
                                     ]
                                   ),
@@ -2118,7 +2171,12 @@ var render = function() {
                                     ? _c("span", {
                                         staticClass: "description",
                                         domProps: {
-                                          innerHTML: _vm._s(_vm.i18n.cost_desc)
+                                          innerHTML: _vm._s(
+                                            _vm.__(
+                                              "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
+                                              "dokan"
+                                            )
+                                          )
                                         }
                                       })
                                     : _vm._e()
@@ -2128,7 +2186,11 @@ var render = function() {
                             _vm._v(" "),
                             _c("div", { staticClass: "dokan-form-group" }, [
                               _c("label", { attrs: { for: "no_class_cost" } }, [
-                                _vm._v(_vm._s(_vm.i18n.no_shipping_class_cost))
+                                _vm._v(
+                                  _vm._s(
+                                    _vm.__("No shipping class cost", "dokan")
+                                  )
+                                )
                               ]),
                               _vm._v(" "),
                               _c("input", {
@@ -2173,7 +2235,12 @@ var render = function() {
                                 ? _c("span", {
                                     staticClass: "description",
                                     domProps: {
-                                      innerHTML: _vm._s(_vm.i18n.cost_desc)
+                                      innerHTML: _vm._s(
+                                        _vm.__(
+                                          "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
+                                          "dokan"
+                                        )
+                                      )
                                     }
                                   })
                                 : _vm._e()
@@ -2183,7 +2250,11 @@ var render = function() {
                               _c(
                                 "label",
                                 { attrs: { for: "calculation_type" } },
-                                [_vm._v(_vm._s(_vm.i18n.calculation_type))]
+                                [
+                                  _vm._v(
+                                    _vm._s(_vm.__("Calculation type", "dokan"))
+                                  )
+                                ]
                               ),
                               _vm._v(" "),
                               _c(
@@ -2227,7 +2298,14 @@ var render = function() {
                                 },
                                 [
                                   _c("option", { attrs: { value: "class" } }, [
-                                    _vm._v(_vm._s(_vm.i18n.per_class))
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.__(
+                                          "Per class: Charge shipping for each shipping class individually",
+                                          "dokan"
+                                        )
+                                      )
+                                    )
                                   ]),
                                   _vm._v(" "),
                                   _c(
@@ -2236,7 +2314,16 @@ var render = function() {
                                       attrs: { value: "order" },
                                       domProps: { selected: true }
                                     },
-                                    [_vm._v(_vm._s(_vm.i18n.per_order))]
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.__(
+                                            "Per order: Charge shipping for the most expensive shipping class",
+                                            "dokan"
+                                          )
+                                        )
+                                      )
+                                    ]
                                   )
                                 ]
                               )
@@ -2249,7 +2336,7 @@ var render = function() {
                 : _c("template", { slot: "body" }, [
                     _c("div", { staticClass: "dokan-form-group" }, [
                       _c("label", { attrs: { for: "method_title" } }, [
-                        _vm._v(_vm._s(_vm.i18n.title))
+                        _vm._v(_vm._s(_vm.__("Method Title", "dokan")))
                       ]),
                       _vm._v(" "),
                       _c("input", {
@@ -2265,7 +2352,7 @@ var render = function() {
                         attrs: {
                           type: "text",
                           id: "method_title",
-                          placeholder: "Enter method title"
+                          placeholder: _vm.__("Enter method title", "dokan")
                         },
                         domProps: {
                           value: _vm.editShippingMethodData.settings.title
@@ -2287,7 +2374,14 @@ var render = function() {
                     _vm._v(" "),
                     _c("div", { staticClass: "dokan-form-group" }, [
                       _c("label", { attrs: { for: "minimum_order_amount" } }, [
-                        _vm._v(_vm._s(_vm.i18n.minimum_order_amount))
+                        _vm._v(
+                          _vm._s(
+                            _vm.__(
+                              "Minimum order amount for free shipping",
+                              "dokan"
+                            )
+                          )
+                        )
                       ]),
                       _vm._v(" "),
                       _c("input", {
@@ -2327,7 +2421,14 @@ var render = function() {
                       _vm.editShippingMethodData.method_id == "flat_rate"
                         ? _c("span", {
                             staticClass: "description",
-                            domProps: { innerHTML: _vm._s(_vm.i18n.cost_desc) }
+                            domProps: {
+                              innerHTML: _vm._s(
+                                _vm.__(
+                                  "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
+                                  "dokan"
+                                )
+                              )
+                            }
                           })
                         : _vm._e()
                     ])
@@ -2345,7 +2446,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v(_vm._s(_vm.i18n.save_settings))]
+                  [_vm._v(_vm._s(_vm.__("Save Settings", "dokan")))]
                 )
               ])
             ],

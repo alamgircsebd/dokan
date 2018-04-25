@@ -8,7 +8,7 @@
         <form action="" method="post">
             <div class="dokan-form-group dokan-clearfix">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ i18n.zone_name }} :
+                    {{ __( 'Zone Name', 'dokan' ) }} :
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     {{ zone.data.zone_name }}
@@ -17,24 +17,24 @@
 
             <div class="dokan-form-group dokan-clearfix">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ i18n.zone_location }} :
+                    {{ __( 'Zone Location', 'dokan' ) }} :
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     <p>{{ zone.formatted_zone_location }}</p>
 
-                    <a href="#" v-if="showLimitLocationLink && this.$route.params.zoneID != 0" class="limit-location-link" @click.preventx="wantToSetLocation">
+                    <a href="#" v-if="showLimitLocationLink && this.$route.params.zoneID != 0" class="limit-location-link" @click.prevent="wantToSetLocation">
                         <switches :enabled="wantToLimitLocation" @input="wantToSetLocation"></switches>
-                        <span>{{ i18n.limit_zone_location }}</span>
+                        <span>{{ __( 'Limit your zone location', 'dokan' ) }}</span>
                     </a>
                 </div>
             </div>
 
             <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showCountryList">
                 <label class="dokan-w4 dokan-control-label dokan-text-right">
-                    {{ i18n.select_country }}
+                    {{ __( 'Select Country', 'dokan' ) }}
                 </label>
                 <div class="dokan-w5 dokan-text-left">
-                    <multiselect v-model="country" :options="countryList" @input="setStateForChosenCountry" :placeholder="i18n.select_country" :multiple="true" label="name" track-by="code">
+                    <multiselect v-model="country" :options="countryList" @input="setStateForChosenCountry" :placeholder="__( 'Select Country', 'dokan' )" :multiple="true" label="name" track-by="code">
                         <template slot="option" slot-scope="props">
                             <span v-html="props.option.name"></span>
                         </template>
@@ -50,10 +50,10 @@
 
             <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showStateList && stateList.length">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ i18n.select_state }}
+                    {{ __( 'Select States', 'dokan' ) }}
                 </label>
                 <div class="dokan-w5 dokan-text-left">
-                    <multiselect v-model="state" :options="stateList" :placeholder="i18n.select_state" :multiple="true" label="name" track-by="code">
+                    <multiselect v-model="state" :options="stateList" :placeholder="__( 'Select States', 'dokan' )" :multiple="true" label="name" track-by="code">
                         <template slot="option" slot-scope="props">
                             <span v-html="props.option.name"></span>
                         </template>
@@ -69,7 +69,7 @@
 
             <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showPostCodeList">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ i18n.select_postcode }} <i class="fa fa-question-circle" v-tooltip :title="i18n.postcode_help_text"></i>
+                    {{ __( 'Set your postcode', 'dokan' ) }} <i class="fa fa-question-circle" v-tooltip :title="__( 'Postcodes need to be comma separated', 'dokan' )"></i>
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     <input name="zone_postcode" id="zone_postcode" class="dokan-form-control" v-model="postcode">
@@ -78,8 +78,8 @@
 
             <div class="dokan-edit-row zone-method-wrapper">
                 <div class="dokan-section-heading" data-togglehandler="dokan_product_inventory">
-                    <h2><i class="fa fa-truck" aria-hidden="true"></i> {{ i18n.shipping_method }}</h2>
-                    <p>{{ i18n.shipping_method_help }}</p>
+                    <h2><i class="fa fa-truck" aria-hidden="true"></i> {{ __( 'Shipping Method', 'dokan' ) }}</h2>
+                    <p>{{ __( 'Add your shipping method for appropiate zone', 'dokan' ) }}</p>
                     <div class="dokan-clearfix"></div>
                 </div>
 
@@ -87,9 +87,9 @@
                     <table class="dokan-table zone-method-table">
                         <thead>
                             <tr>
-                                <th class="title">{{ i18n.method_title }}</th>
-                                <th class="enabled">{{ i18n.status }}</th>
-                                <th class="description">{{ i18n.description }}</th>
+                                <th class="title">{{ __( 'Method Title', 'dokan' ) }}</th>
+                                <th class="enabled">{{ __( 'Status', 'dokan' ) }}</th>
+                                <th class="description">{{ __( 'Description', 'dokan' ) }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,8 +98,8 @@
                                     <td>
                                         {{ method.title }}
                                         <div class="row-actions">
-                                            <span class="edit"><a href="#" @click.prevent="editShippingMethod( method )">{{ i18n.edit }}</a> | </span>
-                                            <span class="delete"><a href="#" @click.prevent="deleteShippingMethod( method )">{{ i18n.delete }}</a></span>
+                                            <span class="edit"><a href="#" @click.prevent="editShippingMethod( method )">{{ __( 'Edit', 'dokan' ) }}</a> | </span>
+                                            <span class="delete"><a href="#" @click.prevent="deleteShippingMethod( method )">{{ __( 'Delete', 'dokan' ) }}</a></span>
                                         </div>
                                     </td>
                                     <td>
@@ -113,7 +113,7 @@
                             <template v-else>
                                 <tr>
                                     <td colspan="3">
-                                        {{ i18n.no_method_found }}
+                                        {{ __( 'No method found', 'dokan' ) }}
                                     </td>
                                 </tr>
                             </template>
@@ -122,35 +122,35 @@
                 </div><!-- .dokan-side-right -->
 
                 <div class="dokan-section-footer">
-                    <a href="#" class="dokan-btn dokan-btn-theme" @click.prevent="showAddShippingMethodModal=true"><i class="fa fa-plus"></i> {{ i18n.add_method }}</a>
+                    <a href="#" class="dokan-btn dokan-btn-theme" @click.prevent="showAddShippingMethodModal=true"><i class="fa fa-plus"></i> {{ __( 'Add Shipping Method', 'dokan' ) }}</a>
                 </div>
             </div><!-- .dokan-product-inventory -->
 
             <div class="dokan-form-group">
-                <input type="submit" class="dokan-btn dokan-btn-theme dokan-right" @click.prevent="saveZoneSettings" value="Save Changes">
+                <input type="submit" class="dokan-btn dokan-btn-theme dokan-right" @click.prevent="saveZoneSettings" :value="__( 'Save Changes', 'dokan' )">
             </div>
 
             <div class="dokan-clearfix"></div>
         </form>
 
         <modal
-            title="Add Shipping Methods"
+            :title="__( 'Add Shipping Methods', 'dokan' )"
             v-if="showAddShippingMethodModal"
             @close="showAddShippingMethodModal = false"
         >
             <template slot="body">
-                <p>{{ i18n.choose_shipping_help_text }}</p>
+                <p>{{ __( 'Choose the shipping method you wish to add. Only shipping methods which support zones are listed.', 'dokan' ) }}</p>
                 <select class="dokan-form-control" v-model="shipping_method" model="shipping_method" id="shipping_method">
-                    <option value="">&dash; {{ i18n.select_method }} &dash;</option>
-                    <option value="flat_rate">{{ i18n.flat_rate }}</option>
-                    <option value="local_pickup">{{ i18n.local_pickup }}</option>
-                    <option value="free_shipping">{{ i18n.free_pickup }}</option>
+                    <option value="">&dash; {{ __( 'Select a Method', 'dokan' ) }} &dash;</option>
+                    <option value="flat_rate">{{ __( 'Flat Rate', 'dokan' ) }}</option>
+                    <option value="local_pickup">{{ __( 'Local Pickup', 'dokan' ) }}</option>
+                    <option value="free_shipping">{{ __( 'Free Shipping', 'dokan' ) }}</option>
                     <!-- <option value="custom">Custom Shipping</option> -->
                 </select>
             </template>
 
             <template slot="footer">
-                <button class="button button-primary button-large" @click.prevent="addNewMethod">{{ i18n.add_method }}</button>
+                <button class="button button-primary button-large" @click.prevent="addNewMethod">{{ __( 'Add Shipping Method', 'dokan' ) }}</button>
             </template>
         </modal>
 
@@ -161,54 +161,54 @@
         >
             <template slot="body" v-if="editShippingMethodData.method_id != 'free_shipping'">
                 <div class="dokan-form-group">
-                    <label for="method_title">{{ i18n.title }}</label>
-                    <input type="text" id="method_title" class="dokan-form-control" v-model="editShippingMethodData.settings.title" placeholder="Enter method title">
+                    <label for="method_title">{{ __( 'Title', 'dokan' ) }}</label>
+                    <input type="text" id="method_title" class="dokan-form-control" v-model="editShippingMethodData.settings.title" :placeholder="__( 'Enter method title', 'dokan' )">
                 </div>
 
                 <div class="dokan-form-group">
-                    <label for="method_cost">{{ i18n.cost }}</label>
+                    <label for="method_cost">{{ __( 'Cost', 'dokan' ) }}</label>
                     <input type="text" id="method_cost" class="dokan-form-control" v-model="editShippingMethodData.settings.cost" placeholder="0.00">
-                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="i18n.cost_desc"></span>
+                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
                 </div>
 
                 <div class="dokan-form-group">
-                    <label for="method_tax_status">{{ i18n.tax_status }}</label>
+                    <label for="method_tax_status">{{ __( 'Tax Status', 'dokan' ) }}</label>
                     <select v-model="editShippingMethodData.settings.tax_status" id="method_tax_status" class="dokan-form-control">
-                        <option value="none">{{ i18n.none }}</option>
-                        <option value="taxable">{{ i18n.taxable }}</option>
+                        <option value="none">{{ __( 'None', 'dokan' ) }}</option>
+                        <option value="taxable">{{ __( 'Taxable', 'dokan' ) }}</option>
                     </select>
                 </div>
 
                 <div class="dokan-form-group">
-                    <label for="method_description">{{ i18n.description }}</label>
+                    <label for="method_description">{{ __( 'Description', 'dokan' ) }}</label>
                     <textarea v-model="editShippingMethodData.settings.description" id="method_description" class="dokan-form-control">{{ editShippingMethodData.settings.description }}</textarea>
                 </div>
 
                 <template v-if="'flat_rate' == editShippingMethodData.method_id">
                     <hr>
                     <div class="dokan-form-group">
-                        <h3>{{ i18n.shipping_class_cost }}</h3>
-                        <span class="description">{{ i18n.shipping_class_cost_help_text }}</span>
+                        <h3>{{ __( 'Shipping Class Cost', 'dokan' ) }}</h3>
+                        <span class="description">{{ __( 'These costs can optionally be added based on the product shipping class', 'dokan' ) }}</span>
                     </div>
                     <template v-for="shippingClass in shippingClasses">
                         <div class="dokan-form-group">
-                            <label :for="shippingClass.slug">{{ shippingClass.name }} {{ i18n.shipping_class_cost }}</label>
+                            <label :for="shippingClass.slug">{{ shippingClass.name }} {{ __( 'No shipping class cost', 'dokan' ) }}</label>
                             <input type="text" :id="shippingClass.slug" class="dokan-form-control" v-model="editShippingMethodData.settings['class_cost_' + shippingClass.term_id]" placeholder="N\A">
-                            <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="i18n.cost_desc"></span>
+                            <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
                         </div>
                     </template>
 
                     <div class="dokan-form-group">
-                        <label for="no_class_cost">{{ i18n.no_shipping_class_cost }}</label>
+                        <label for="no_class_cost">{{ __( 'No shipping class cost', 'dokan' ) }}</label>
                         <input type="text" id="no_class_cost" class="dokan-form-control" v-model="editShippingMethodData.settings.no_class_cost" placeholder="N\A">
-                        <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="i18n.cost_desc"></span>
+                        <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
                     </div>
 
                     <div class="dokan-form-group">
-                        <label for="calculation_type">{{ i18n.calculation_type }}</label>
+                        <label for="calculation_type">{{ __( 'Calculation type', 'dokan' ) }}</label>
                         <select v-model="editShippingMethodData.settings.calculation_type" id="calculation_type" class="dokan-form-control">
-                            <option value="class">{{ i18n.per_class }}</option>
-                            <option value="order" :selected="true">{{ i18n.per_order }}</option>
+                            <option value="class">{{ __( 'Per class: Charge shipping for each shipping class individually', 'dokan' ) }}</option>
+                            <option value="order" :selected="true">{{ __( 'Per order: Charge shipping for the most expensive shipping class', 'dokan' ) }}</option>
                         </select>
                     </div>
 
@@ -217,19 +217,19 @@
 
             <template slot="body" v-else>
                 <div class="dokan-form-group">
-                    <label for="method_title">{{ i18n.title }}</label>
-                    <input type="text" id="method_title" class="dokan-form-control" v-model="editShippingMethodData.settings.title" placeholder="Enter method title">
+                    <label for="method_title">{{ __( 'Method Title', 'dokan' ) }}</label>
+                    <input type="text" id="method_title" class="dokan-form-control" v-model="editShippingMethodData.settings.title" :placeholder="__( 'Enter method title', 'dokan' )">
                 </div>
 
                 <div class="dokan-form-group">
-                    <label for="minimum_order_amount">{{ i18n.minimum_order_amount }}</label>
+                    <label for="minimum_order_amount">{{ __( 'Minimum order amount for free shipping', 'dokan' ) }}</label>
                     <input type="text" id="minimum_order_amount" class="dokan-form-control" v-model="editShippingMethodData.settings.min_amount" placeholder="0.00">
-                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="i18n.cost_desc"></span>
+                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
                 </div>
             </template>
 
             <template slot="footer">
-                <button class="button button-primary button-large" @click.prevent="updateShippingMethodSettings">{{ i18n.save_settings }}</button>
+                <button class="button button-primary button-large" @click.prevent="updateShippingMethodSettings">{{ __( 'Save Settings', 'dokan' ) }}</button>
             </template>
         </modal>
     </div>
@@ -250,7 +250,6 @@ export default {
 
     data () {
         return {
-            i18n: {},
             successMessage: '',
             showAddShippingMethodModal: false,
             editShippingMethodModal: false,
@@ -539,7 +538,6 @@ export default {
     },
 
     created() {
-        this.i18n = dokanShipping.i18n;
         this.fetchZone();
     }
 }

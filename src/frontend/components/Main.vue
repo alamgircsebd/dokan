@@ -3,9 +3,9 @@
         <table class="dokan-table shipping-zone-table">
             <thead>
                 <tr>
-                    <th>{{ i18n.zone_name }}</th>
-                    <th>{{ i18n.regions }}</th>
-                    <th>{{ i18n.shipping_method }}</th>
+                    <th>{{ __( 'Zone Name', 'dokan' ) }}</th>
+                    <th>{{ __( 'Region(s)', 'dokan') }}</th>
+                    <th>{{ __( 'Shipping Method', 'dokan' ) }}</th>
                 </tr>
             </thead>
 
@@ -15,7 +15,7 @@
                         <td>
                             <router-link :to="{ name: 'Zone', params: { zoneID: zone.zone_id }}">{{ zone.zone_name }}</router-link>
                             <div class="row-actions">
-                                <router-link :to="{ name: 'Zone', params: { zoneID: zone.zone_id }}">{{ i18n.edit }}</router-link>
+                                <router-link :to="{ name: 'Zone', params: { zoneID: zone.zone_id }}">{{ __( 'Edit', 'dokan' ) }}</router-link>
                             </div>
                         </td>
                         <td>
@@ -24,8 +24,8 @@
                         <td>
                             <p v-if="getShippingMethod( zone.shipping_methods )" v-html="getShippingMethod( zone.shipping_methods )"></p>
                             <p v-else>
-                                <span>{{ i18n.no_method_found }}&nbsp;</span>
-                                <router-link :to="{ name: 'Zone', params: { zoneID: zone.zone_id }}"> {{ i18n.add_method }}</router-link>
+                                <span>{{ __( 'No method found', 'dokan' ) }}&nbsp;</span>
+                                <router-link :to="{ name: 'Zone', params: { zoneID: zone.zone_id }}"> {{ __( 'Add Shipping Method', 'dokan' ) }}</router-link>
                             </p>
                         </td>
                     </tr>
@@ -33,7 +33,7 @@
 
                 <template v-else>
                     <tr>
-                        <td colspan="3">{{ i18n.no_shipping_zone_found }}</td>
+                        <td colspan="3">{{ __( 'No shipping zone found for configuration. Please contact with admin for manage your store shipping', 'dokan' ) }}</td>
                     </tr>
                 </template>
             </tbody>
@@ -47,7 +47,6 @@ export default {
 
     data() {
         return {
-            i18n: {},
             shippingZone : {}
         }
     },
@@ -87,7 +86,6 @@ export default {
     },
 
     created() {
-        this.i18n = dokanShipping.i18n;
         this.fetchShippingZone();
     }
 }
