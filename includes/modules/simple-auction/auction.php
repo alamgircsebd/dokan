@@ -158,12 +158,12 @@ class Dokan_Auction {
      * @return void
      */
     public function add_capabilities( $capabilities ) {
-        $capabilities['menu'][] = 'dokan_view_auction_menu';
+        $capabilities['menu']['dokan_view_auction_menu'] = __( 'View auction menu');
 
         $capabilities['auction'] = array(
-            'dokan_add_auction_product',
-            'dokan_edit_auction_product',
-            'dokan_delete_auction_product',
+            'dokan_add_auction_product'    => __( 'Add auction product', 'dokan' ),
+            'dokan_edit_auction_product'   => __( 'Edit auction product', 'dokan' ),
+            'dokan_delete_auction_product' => __( 'Delete auction product', 'dokan' ),
         );
 
         return $capabilities;

@@ -1531,7 +1531,7 @@ class Dokan_Store_Support {
      */
     public function add_capabilities( $capabilities ) {
         $capabilities['store_support'] = array(
-            'dokan_manage_support_tickets',
+            'dokan_manage_support_tickets' => __( 'Manage support ticket', 'dokan' ),
         );
 
         return $capabilities;

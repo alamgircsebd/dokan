@@ -1162,16 +1162,16 @@ class Dokan_WC_Booking {
      * @return void
      */
     public function add_capabilities( $capabilities ) {
-        $capabilities['menu'][] = 'dokan_view_booking_menu';
+        $capabilities['menu']['dokan_view_booking_menu'] = __( 'View booking menu', 'dokan' );
 
         $capabilities['booking'] = array(
-            'dokan_manage_booking_products',
-            'dokan_manage_booking_calendar',
-            'dokan_manage_bookings',
-            'dokan_manage_booking_resource',
-            'dokan_add_booking_product',
-            'dokan_edit_booking_product',
-            'dokan_delete_booking_product',
+            'dokan_manage_booking_products' => __( 'Manage booking products', 'dokan' ),
+            'dokan_manage_booking_calendar' => __( 'Manage booking calendar', 'dokan' ),
+            'dokan_manage_bookings'         => __( 'Manage bookings', 'dokan' ),
+            'dokan_manage_booking_resource' => __( 'Manage booking resource', 'dokan' ),
+            'dokan_add_booking_product'     => __( 'Add booking product', 'dokan' ),
+            'dokan_edit_booking_product'    => __( 'Edit booking product', 'dokan' ),
+            'dokan_delete_booking_product'  => __( 'Delete booking product', 'dokan' ),
         );
 
         return $capabilities;

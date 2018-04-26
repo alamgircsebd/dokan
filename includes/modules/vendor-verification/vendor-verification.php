@@ -395,7 +395,7 @@ class Dokan_Seller_Verification {
      * @return void
      */
     public function add_capabilities( $capabilities ) {
-        $capabilities['menu'][] = 'dokan_view_store_verification_menu';
+        $capabilities['menu']['dokan_view_store_verification_menu'] = __( 'View verification settings menu', 'dokan' );
 
         return $capabilities;
     }

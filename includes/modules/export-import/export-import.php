@@ -361,7 +361,7 @@ class Dokan_Product_Importer {
      * @return void
      */
     public function add_capabilities( $capabilities ) {
-        $capabilities['menu'][] = 'dokan_view_tools_menu';
+        $capabilities['menu']['dokan_view_tools_menu'] = __( 'View tools menu', 'dokan' );
 
         return $capabilities;
     }

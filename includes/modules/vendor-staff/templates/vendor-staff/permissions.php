@@ -82,9 +82,9 @@
                     $selected_caps = $stuff_user->allcaps;
                     foreach ( dokan_get_all_caps() as $key => $value ) {
                         echo sprintf( '<div class="%s-permission dokan-w6"> <h3>%s</h3>', $key, ucwords( str_replace( '_', ' ', $key ) ) );
-                        foreach ( $value as $cap ) {
-                            $checked = ( isset( $selected_caps[$cap] ) && $selected_caps[$cap] ) ? 'checked' : '';
-                            echo sprintf( '<div class="dokan-form-group"><label for="%1$s"><input type="checkbox" name="%1$s" value="1" id="%1$s" %3$s> &nbsp; %2$s</label></div>', $cap, ucfirst( str_replace( '_', ' ', $cap ) ), $checked );
+                        foreach ( $value as $key=>$cap ) {
+                            $checked = ( isset( $selected_caps[$key] ) && $selected_caps[$key] ) ? 'checked' : '';
+                            echo sprintf( '<div class="dokan-form-group"><label for="%1$s"><input type="checkbox" name="%1$s" value="1" id="%1$s" %3$s> &nbsp; %2$s</label></div>', $key, $cap, $checked );
                         }
                         echo '</div>';
 
