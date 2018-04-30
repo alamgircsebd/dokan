@@ -521,6 +521,11 @@ class Dokan_Product_Subscription {
                     $recurring_interval = (int) get_post_meta( $post->ID, '_subscription_period_interval', true );
                     $recurring_period   = get_post_meta( $post->ID, '_subscription_period', true );
                     $product = wc_get_product( get_the_ID() );
+
+                    if ( ( get_post_meta( get_the_ID(), '_regular_price', true ) == '0' ) && $this->has_used_free_pack( get_current_user_id(), get_the_id() ) ) {
+                        continue;
+                    }
+
                     ?>
 
                         <div class="product_pack_item <?php echo ( $this->has_pack_validity_seller( get_the_ID() ) || $this->pack_renew_seller( get_the_ID() ) ) ? 'current_pack ' : ''; ?><?php echo ( ( get_post_meta( get_the_ID(), '_regular_price', true ) == '0' ) && $this->has_used_free_pack( get_current_user_id(), get_the_id() ) ) ? 'fp_already_taken' : ''; ?>">

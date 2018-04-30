@@ -170,7 +170,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
 
                             <?php if ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'single' ): ?>
                                 <div class="dokan-form-group dokan-auction-category">
-                                    <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan-lite' ); ?></label>
+                                    <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
                                     <?php
                                     $product_cat = -1;
                                     $term = array();
@@ -181,7 +181,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                     }
 
                                     $category_args =  array(
-                                        'show_option_none' => __( '- Select a category -', 'dokan-lite' ),
+                                        'show_option_none' => __( '- Select a category -', 'dokan' ),
                                         'hierarchical'     => 1,
                                         'hide_empty'       => 0,
                                         'name'             => 'product_cat',
@@ -196,18 +196,18 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                     wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
                                 ?>
                                     <div class="dokan-product-cat-alert dokan-hide">
-                                        <?php _e('Please choose a category!', 'dokan-lite'); ?>
+                                        <?php _e('Please choose a category!', 'dokan'); ?>
                                     </div>
                                 </div>
                             <?php elseif ( dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) == 'multiple' ): ?>
                                 <div class="dokan-form-group dokan-auction-category">
-                                    <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan-lite' ); ?></label>
+                                    <label for="product_cat" class="form-label"><?php _e( 'Category', 'dokan' ); ?></label>
                                     <?php
                                     $term = array();
                                     $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
                                     include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
                                     $drop_down_category = wp_dropdown_categories( array(
-                                        'show_option_none' => __( '', 'dokan-lite' ),
+                                        'show_option_none' => __( '', 'dokan' ),
                                         'hierarchical'     => 1,
                                         'hide_empty'       => 0,
                                         'name'             => 'product_cat[]',
@@ -221,19 +221,19 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                         'walker'           => new DokanTaxonomyWalker()
                                     ) );
 
-                                    echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product category', 'dokan-lite' ).'" multiple="multiple" ', $drop_down_category );
+                                    echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product category', 'dokan' ).'" multiple="multiple" ', $drop_down_category );
                                     ?>
                                 </div>
                             <?php endif; ?>
 
                             <div class="dokan-form-group dokan-auction-tags">
-                                <label for="product_tag" class="form-label"><?php _e( 'Tags', 'dokan-lite' ); ?></label>
+                                <label for="product_tag" class="form-label"><?php _e( 'Tags', 'dokan' ); ?></label>
                                 <?php
                                 require_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
                                 $term = wp_get_post_terms( $post_id, 'product_tag', array( 'fields' => 'ids') );
                                 $selected = ( $term ) ? $term : array();
                                 $drop_down_tags = wp_dropdown_categories( array(
-                                    'show_option_none' => __( '', 'dokan-lite' ),
+                                    'show_option_none' => __( '', 'dokan' ),
                                     'hierarchical'     => 1,
                                     'hide_empty'       => 0,
                                     'name'             => 'product_tag[]',
@@ -247,7 +247,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                     'walker'           => new DokanTaxonomyWalker()
                                 ) );
 
-                                echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product tags', 'dokan-lite' ).'" multiple="multiple" ', $drop_down_tags );
+                                echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product tags', 'dokan' ).'" multiple="multiple" ', $drop_down_tags );
 
                                 ?>
                             </div>
