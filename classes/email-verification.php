@@ -140,7 +140,7 @@ Class Dokan_Email_Verification {
         // $notice = dokan_get_option( 'activation_notice', 'dokan_email_verification' );
 
         // wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
-        do_action( 'woocommerce_set_cart_cookies',  true );
+        do_action( 'woocommerce_set_cart_cookies', true );
 
         $user = get_user_by( 'id', $user_id );
 
@@ -157,6 +157,9 @@ Class Dokan_Email_Verification {
 
             update_user_caches( $user );
         }
+
+        $seller_wizard = new Dokan_Seller_Setup_Wizard();
+        $seller_wizard->setup_wizard();
     }
 
     /**
@@ -180,7 +183,11 @@ Class Dokan_Email_Verification {
             return;
         }
 
-        $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID ), $this->base_url );
+        if ( in_array( 'seller', $user->roles ) ) {
+            $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID, 'page' => 'dokan-seller-setup' ), $this->base_url );
+        } else {
+            $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID ), $this->base_url );
+        }
 
         $message = sprintf( __( "<p><b>To Verify your Email <a href='%s'>Click Here</a></b></p>", 'dokan' ), $verification_link );
 
