@@ -255,7 +255,7 @@ Class Dokan_Email_Verification {
      * @return array
      */
     public function get_post_type( $post_type ) {
-        $pages_array = array( '-1' => __( '- select -', 'dokan-lite' ) );
+        $pages_array = array( '-1' => __( '- select -', 'dokan' ) );
         $pages = get_posts( array('post_type' => $post_type, 'numberposts' => -1) );
 
         if ( $pages ) {
@@ -268,4 +268,3 @@ Class Dokan_Email_Verification {
     }
 
 }
-

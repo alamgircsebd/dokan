@@ -114,7 +114,7 @@ extract( $variation_data );
             <div class="variable_pricing">
                 <div class="content-half-part">
                     <label><?php echo __( 'Regular price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
-                    <span class="vendor-earning">( <?php _e( ' You Earn : ', 'dokan-lite' ) ?><?php echo get_woocommerce_currency_symbol() ?><span class="vendor-price">0.00</span> )</span>
+                    <span class="vendor-earning">( <?php _e( ' You Earn : ', 'dokan' ) ?><?php echo get_woocommerce_currency_symbol() ?><span class="vendor-price">0.00</span> )</span>
                     <input type="text" size="5" name="variable_regular_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_regular_price ) ) echo esc_attr( $_regular_price ); ?>" class="dokan-form-control dokan-product-regular-price-variable" placeholder="<?php esc_attr_e( 'Variation price (required)', 'dokan' ); ?>" />
                 </div>
                 <div class="content-half-part">
@@ -123,7 +123,7 @@ extract( $variation_data );
                 </div>
                 <div class="dokan-form-group dokan-clearfix product-edit-container">
                     <div class="dokan-product-less-price-alert">
-                        <?php _e('Product price can\'t be less than the vendor fee!', 'dokan-lite' ); ?>
+                        <?php _e('Product price can\'t be less than the vendor fee!', 'dokan' ); ?>
                     </div>
                 </div>
                 <div class="dokan-clearfix"></div>

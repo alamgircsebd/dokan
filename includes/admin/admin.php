@@ -62,7 +62,7 @@ class Dokan_Pro_Admin_Settings {
         add_submenu_page( 'dokan', __( 'Refund Requests', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
 
         if ( current_user_can( $capability ) ) {
-            $submenu[ $slug ][] = array( __( 'Vendors', 'dokan-lite' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
+            $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
         }
 
         // $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );

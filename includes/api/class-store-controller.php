@@ -125,7 +125,7 @@ class Dokan_Pro_REST_Store_Controller extends Dokan_REST_Store_Controller {
         $params = $request->get_params();
 
         if ( empty( $params ) ) {
-            return new WP_Error( 'no_item_found', __( 'No items found for bulk updating', 'dokan-lite' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_item_found', __( 'No items found for bulk updating', 'dokan' ), array( 'status' => 404 ) );
         }
 
         $allowed_status = array( 'approved', 'pending', 'delete' );
