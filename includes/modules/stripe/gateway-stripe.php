@@ -77,6 +77,9 @@ class Dokan_Stripe {
         add_action( 'init', array( $this, 'handle_stripe_webhook') , 10 );
 
         add_action( 'dokan_store_profile_saved', array( $this, 'save_stripe_progress' ), 8, 2 );
+        // add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'add_to_cart_validation' ), 15, 3 );
+
+        add_action( 'woocommerce_after_checkout_validation', array( $this, 'check_vendor_configure_stripe' ), 15, 2 );
     }
 
     function filter_gateways(  $gateways ){
@@ -92,6 +95,51 @@ class Dokan_Stripe {
             }
         }
         return $gateways;
+    }
+
+    /**
+     * Validate checkout if vendor has configured stripe account
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function check_vendor_configure_stripe( $data, $errors ) {
+        $settings = get_option('woocommerce_dokan-stripe-connect_settings');
+
+        // bailout if the gateway is not enabled
+        if ( isset( $settings['enabled'] ) && $settings['enabled'] == 'yes' ) {
+            if ( 'dokan-stripe-connect' == $data['payment_method'] ) {
+                foreach ( WC()->cart->get_cart() as $item ) {
+                    $product_id = $item['data']->get_id();
+                    $available_vendors[get_post_field( 'post_author', $product_id )][] = $item['data'];
+                }
+
+                $vendor_names = array();
+
+                foreach ( array_keys( $available_vendors ) as $vendor_id ) {
+                    $vendor = dokan()->vendor->get( $vendor_id );
+                    $access_token = get_user_meta( $vendor_id, '_stripe_connect_access_key', true );
+
+                    if ( empty( $access_token ) ) {
+                        $vendor_products = array();
+
+                        foreach ( $available_vendors[$vendor_id] as $product ) {
+                            $vendor_products[] = sprintf( '<a href="%s">%s</a>', $product->get_permalink(), $product->get_name() );
+                        }
+                        $vendor_names[$vendor_id] = array(
+                            'name' => sprintf( '<a href="%s">%s</a>', esc_url( $vendor->get_shop_url() ), $vendor->get_shop_name() ),
+                            'products' => implode( ', ', $vendor_products )
+                        );
+                    }
+                }
+
+                foreach ( $vendor_names as $vendor_id => $data ) {
+                    $errors->add( 'stipe-not-configured', sprintf( '<strong>Error!</strong> The <strong>%s</strong> does not allowes the Stipe gateway. You can not purchase this products %s using Stripe Gateway', $data['name'], $data['products'] ) );
+                }
+            }
+        }
+
     }
 
     /**
@@ -158,7 +206,7 @@ class Dokan_Stripe {
      *
      * @return bool
      */
-    public function add_to_cart_validation( $validation, $product_id ) {
+    function add_to_cart_validation( $validation, $product_id, $qty ) {
         $settings = get_option('woocommerce_dokan-stripe-connect_settings');
 
         // bailout if the gateway is not enabled
