@@ -1,6 +1,142 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.8.0',
+        'released' => '2018-05-01',
+        'changes'  => array(
+            array(
+                'title'         => 'Introduction of REST APIs',
+                'type'          => 'New',
+                'description'   => 'We have introduced REST APIs in dokan'
+            ),
+            array(
+                'title'         => 'Zone wize shipping',
+                'type'          => 'New',
+                'description'   => 'We have introduced zone wize shipping functionality similar to WooCommerce in dokan. <img src="https://wedevs-com-wedevs.netdna-ssl.com/wp-content/uploads/2018/04/dokan-vendor-dashboard-settings-shipping-method-settings.gif">'
+            ),
+            array(
+                'title'         => 'Earning suggestion for variable product',
+                'type'          => 'New',
+                'description'   => 'As like simple product, vendor will get to see the earning suggestion for variable product as well'
+            ),
+            array(
+                'title'         => 'Confirmation on subscription cancellation',
+                'type'          => 'New',
+                'description'   => 'Cancellation of a subscription pack will ask for confirmation'
+            ),
+            array(
+                'title'         => 'Unable to login with social media',
+                'type'          => 'Fix',
+                'description'   => 'Customer, Seller was unable to login with social media'
+            ),
+            array(
+                'title'         => 'CSV earning report exporting issue',
+                'type'          => 'Fix',
+                'description'   => 'There were an issue with CSV report exporting from back end'
+            ),
+            array(
+                'title'         => 'Unable to delete vendor form admin panel',
+                'type'          => 'Fix',
+                'description'   => 'Admin was unable to delete a vendor from admin panel'
+            ),
+            array(
+                'title'         => 'Paypal adaptive checkout issue',
+                'type'          => 'Fix',
+                'description'   => 'Checkout with paypal had some issue'
+            ),
+            array(
+                'title'         => 'Fatal error while importing product via CSV issue',
+                'type'          => 'Fix',
+                'description'   => 'While importing product via CSV it shows fatal error'
+            ),
+            array(
+                'title'         => 'Subscription based admin commission issue',
+                'type'          => 'Fix',
+                'description'   => 'Subscription based admin commission issue'
+            ),
+            array(
+                'title'         => 'Seller permission issue',
+                'type'          => 'Fix',
+                'description'   => 'There were a littl issue with seller permissions'
+            ),
+            array(
+                'title'         => 'Seller subscription issue',
+                'type'          => 'Fix',
+                'description'   => 'Subscription is being updated with the update of a user in back end issue'
+            ),
+            array(
+                'title'         => 'Stripe card saving option issue',
+                'type'          => 'Fix',
+                'description'   => 'Stripe card saving option wasn\'t working'
+            ),
+            array(
+                'title'         => 'Wrong product view count',
+                'type'          => 'Fix',
+                'description'   => 'Duplicated product shows existing product\'s view count'
+            ),
+            array(
+                'title'         => 'Booking cancellation email sending issue',
+                'type'          => 'Fix',
+                'description'   => 'Booking cancellation email sending issue'
+            ),
+            array(
+                'title'         => 'Seller setup wizard is missing',
+                'type'          => 'Fix',
+                'description'   => 'Seller setup wizard after a seller is verified by email was missing'
+            ),
+            array(
+                'title'         => 'Seller verification widget issue',
+                'type'          => 'Fix',
+                'description'   => 'There were some issue with seller verification widget'
+            ),
+            array(
+                'title'         => 'Wrong shipping notice',
+                'type'          => 'Fix',
+                'description'   => 'There was a little issue with shipping notice'
+            ),
+            array(
+                'title'         => 'Subscription pack date issue',
+                'type'          => 'Fix',
+                'description'   => 'Subscription pack date calculation wasn\'t correct'
+            ),
+            array(
+                'title'         => 'Subscription pack visibility issue',
+                'type'          => 'Fix',
+                'description'   => 'Hide subscription product type from back end when a seller can access the back end'
+            ),
+            array(
+                'title'         => 'Progress bar issue',
+                'type'          => 'Fix',
+                'description'   => 'Progress bar value not increase by adding stripe payment method issue'
+            ),
+            array(
+                'title'         => 'Disable back end access for vendor staff',
+                'type'          => 'Improvement',
+                'description'   => 'Disable back end access for vendor staff for security perpose'
+            ),
+            array(
+                'title'         => 'Updated deprecated functions',
+                'type'          => 'Improvement',
+                'description'   => 'Updated some deprecated functions'
+            ),
+            array(
+                'title'         => 'Statement calculation',
+                'type'          => 'Improvement',
+                'description'   => 'Statement calculation'
+            ),
+            array(
+                'title'         => 'Reduction of \'dokan\' text from staff permission',
+                'type'          => 'Improvement',
+                'description'   => 'Reduction of \'dokan\' text from staff permission',
+            ),
+            array(
+                'title'         => 'Various UI, UX improvement',
+                'type'          => 'Improvement',
+                'description'   => 'Various UI, UX improvement',
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.7.5',
         'released' => '2018-03-06',
         'changes'  => array(
