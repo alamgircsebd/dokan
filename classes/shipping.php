@@ -96,61 +96,71 @@ class Dokan_Pro_Shipping {
 
         // echo $shipping_country;
         $packages = WC()->shipping->get_packages();
-        $packages = reset( $packages );
 
-        if ( !isset( $packages['contents'] ) ) {
+        reset( $packages );
+
+        if ( !isset( $packages[0]['contents'] ) ) {
             return;
         }
 
-        $products = $packages['contents'];
-        $destination_country = isset( $packages['destination']['country'] ) ? $packages['destination']['country'] : '';
-        $destination_state = isset( $packages['destination']['state'] ) ? $packages['destination']['state'] : '';
+        $products = array();
 
+        foreach ( $packages as $package ) {
+            array_push( $products, $package['contents'] );
+        }
+
+        $destination_country = isset( $packages[0]['destination']['country'] ) ? $packages[0]['destination']['country'] : '';
+        $destination_state   = isset( $packages[0]['destination']['state'] ) ? $packages[0]['destination']['state'] : '';
+
+        // hold all the errors
         $errors = array();
-        foreach ( $products as $key => $product) {
 
-            $seller_id = get_post_field( 'post_author', $product['product_id'] );
-
+        foreach ( $products as $key => $product ) {
             $dokan_regular_shipping = new Dokan_WC_Shipping();
 
-            if ( ! $dokan_regular_shipping->is_method_enabled() ) {
-                continue;
-            }
+            foreach ( $product as $product_obj ) {
+                $seller_id = get_post_field( 'post_author', $product_obj['product_id'] );
 
-            if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
-                continue;
-            }
+                if ( ! $dokan_regular_shipping->is_method_enabled() ) {
+                    continue;
+                }
 
-            if ( Dokan_WC_Shipping::is_product_disable_shipping( $product['product_id'] ) ) {
-                continue;
-            }
+                if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
+                    continue;
+                }
 
-            $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
-            $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true );
+                if ( Dokan_WC_Shipping::is_product_disable_shipping( $product_obj['product_id'] ) ) {
+                    continue;
+                }
 
-            $has_found = false;
-            $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
-            $dps_state = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
+                $dps_country_rates = get_user_meta( $seller_id, '_dps_country_rates', true );
+                $dps_state_rates   = get_user_meta( $seller_id, '_dps_state_rates', true );
 
-            if ( array_key_exists( $destination_country, $dps_country ) ) {
+                $has_found   = false;
+                $dps_country = ( isset( $dps_country_rates ) ) ? $dps_country_rates : array();
+                $dps_state   = ( isset( $dps_state_rates[$destination_country] ) ) ? $dps_state_rates[$destination_country] : array();
 
-                if ( $dps_state ) {
-                    if ( array_key_exists( $destination_state, $dps_state ) ) {
-                        $has_found = true;
-                    } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+                if ( array_key_exists( $destination_country, $dps_country ) ) {
+
+                    if ( $dps_state ) {
+                        if ( array_key_exists( $destination_state, $dps_state ) ) {
+                            $has_found = true;
+                        } elseif ( array_key_exists( 'everywhere', $dps_state ) ) {
+                            $has_found = true;
+                        }
+                    } else {
                         $has_found = true;
                     }
                 } else {
-                    $has_found = true;
+                    if ( array_key_exists( 'everywhere', $dps_country ) ) {
+                        $has_found = true;
+                    }
                 }
-            } else {
-                if ( array_key_exists( 'everywhere', $dps_country ) ) {
-                    $has_found = true;
-                }
-            }
 
-            if ( ! $has_found ) {
-                $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product['product_id'] ), get_the_title( $product['product_id'] ) );
+                if ( ! $has_found ) {
+                    $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product_obj['product_id'] ), get_the_title( $product_obj['product_id'] ) );
+                }
+
             }
         }
 
