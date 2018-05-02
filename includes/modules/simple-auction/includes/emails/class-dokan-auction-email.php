@@ -23,13 +23,13 @@ class Dokan_Auction_Email extends WC_Email {
 	 */
 	public function __construct() {
 		$this->id               = 'Dokan_Auction_Email_NEW';
-		$this->title            = __( 'Dokan New Auction', 'dokan-lite' );
-		$this->description      = __( 'This email is sent to admin and vendor when a new auction product is added', 'dokan-lite' );
+		$this->title            = __( 'Dokan New Auction', 'dokan' );
+		$this->description      = __( 'This email is sent to admin and vendor when a new auction product is added', 'dokan' );
 
 		$this->template_base    = DOKAN_AUCTION_DIR . '/templates/';
         $this->template_html    = 'emails/auction-product-added.php';
 		$this->template_plain   = 'emails/plain/auction-product-added.php';
-        
+
 		// Triggers for this email
 		add_action( 'dokan_new_auction_product_added', array( $this, 'trigger' ), 30, 2 );
 
@@ -46,7 +46,7 @@ class Dokan_Auction_Email extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_subject() {
-        return __( '[{site_name}] A new auction product is added by ({seller_name}) - {product_title}', 'dokan-lite' );
+        return __( '[{site_name}] A new auction product is added by ({seller_name}) - {product_title}', 'dokan' );
 	}
 
 	/**
@@ -56,7 +56,7 @@ class Dokan_Auction_Email extends WC_Email {
 	 * @return string
 	 */
 	public function get_default_heading() {
-        return __( 'New auction product is added by Vendor {seller_name}', 'dokan-lite' );
+        return __( 'New auction product is added by Vendor {seller_name}', 'dokan' );
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Dokan_Auction_Email extends WC_Email {
 	 * @param array $postdata.
 	 */
 	public function trigger( $product_id, $postdata ) {
-            
+
             if ( dokan_get_option( 'product_add_mail', 'dokan_general', 'on' ) != 'on' ) {
                 return;
             }
@@ -75,11 +75,11 @@ class Dokan_Auction_Email extends WC_Email {
                 do_action( 'dokan_email_trigger_new_pending_product', $product_id, $postdata );
                 return;
             }
-            
+
             if ( ! $this->is_enabled() || ! $this->get_recipient() ) {
                 return;
             }
-            
+
             $product       = wc_get_product( $product_id );
 
             $seller_id     = get_post_field( 'post_author', $product_id );
@@ -89,7 +89,7 @@ class Dokan_Auction_Email extends WC_Email {
 
             if ( is_a( $product, 'WC_Product' ) ) {
                 $this->object                = $product;
-                
+
                 $this->find['product-title'] = '{product_title}';
                 $this->find['price']         = '{price}';
                 $this->find['seller-name']   = '{seller_name}';
@@ -132,7 +132,7 @@ class Dokan_Auction_Email extends WC_Email {
                     'data'          => $this->replace
                 ), 'dokan/', $this->template_base );
             return ob_get_clean();
-           
+
 	}
 
 	/**
@@ -161,41 +161,41 @@ class Dokan_Auction_Email extends WC_Email {
 	public function init_form_fields() {
 		$this->form_fields = array(
 			'enabled' => array(
-				'title'         => __( 'Enable/Disable', 'dokan-lite' ),
+				'title'         => __( 'Enable/Disable', 'dokan' ),
 				'type'          => 'checkbox',
-				'label'         => __( 'Enable this email notification', 'dokan-lite' ),
+				'label'         => __( 'Enable this email notification', 'dokan' ),
 				'default'       => 'yes',
 			),
 			'recipient' => array(
-				'title'         => __( 'Recipient(s)', 'dokan-lite' ),
+				'title'         => __( 'Recipient(s)', 'dokan' ),
 				'type'          => 'text',
-				'description'   => sprintf( __( 'Enter recipients (comma separated) for this email. Defaults to %s.', 'dokan-lite' ), '<code>' . esc_attr( get_option( 'admin_email' ) ) . '</code>' ),
+				'description'   => sprintf( __( 'Enter recipients (comma separated) for this email. Defaults to %s.', 'dokan' ), '<code>' . esc_attr( get_option( 'admin_email' ) ) . '</code>' ),
 				'placeholder'   => '',
 				'default'       => '',
 				'desc_tip'      => true,
-			),	
+			),
 			'subject' => array(
-				'title'         => __( 'Subject', 'dokan-lite' ),
+				'title'         => __( 'Subject', 'dokan' ),
 				'type'          => 'text',
 				'desc_tip'      => true,
 				/* translators: %s: list of placeholders */
-				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan-lite' ), '<code>{blogname}</code>' ),
+				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan' ), '<code>{blogname}</code>' ),
 				'placeholder'   => $this->get_default_subject(),
 				'default'       => '',
 			),
 			'heading' => array(
-				'title'         => __( 'Email heading', 'dokan-lite' ),
+				'title'         => __( 'Email heading', 'dokan' ),
 				'type'          => 'text',
 				'desc_tip'      => true,
 				/* translators: %s: list of placeholders */
-				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan-lite' ), '<code>{product_title}</code>' ),
+				'description'   => sprintf( __( 'Available placeholders: %s', 'dokan' ), '<code>{product_title}</code>' ),
 				'placeholder'   => $this->get_default_heading(),
 				'default'       => '',
 			),
 			'email_type' => array(
-				'title'         => __( 'Email type', 'dokan-lite' ),
+				'title'         => __( 'Email type', 'dokan' ),
 				'type'          => 'select',
-				'description'   => __( 'Choose which format of email to send.', 'dokan-lite' ),
+				'description'   => __( 'Choose which format of email to send.', 'dokan' ),
 				'default'       => 'html',
 				'class'         => 'email_type wc-enhanced-select',
 				'options'       => $this->get_email_type_options(),

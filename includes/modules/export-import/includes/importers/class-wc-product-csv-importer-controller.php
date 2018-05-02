@@ -207,9 +207,10 @@ class WC_Product_CSV_Importer_Controller {
     public function upload_form_handler() {
         check_admin_referer( 'woocommerce-csv-importer' );
 
-        $file_handler = ABSPATH . '/wp-admin/includes/file.php';
-
-        require $file_handler;
+        if ( ! function_exists( 'get_file_description' ) ) {
+            $file_handler = ABSPATH . '/wp-admin/includes/file.php';
+            require $file_handler;
+        }
 
         $file = $this->handle_upload();
 

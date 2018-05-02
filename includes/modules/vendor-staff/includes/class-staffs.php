@@ -246,7 +246,7 @@ class Dokan_staffs {
         }
 
         foreach( $all_cap as $key=>$cap ) {
-            $capabilities = array_merge( $capabilities, $cap );
+            $capabilities = array_merge( $capabilities, array_keys( $cap ) );
         }
 
         foreach ( $capabilities as $key => $value ) {
