@@ -37,6 +37,9 @@ module.exports = function(grunt) {
             '!package-lock.json',
             '!debug.log',
             '!phpunit.xml',
+            '!config.json',
+            '!phpcs.xml.dist',
+            '!webpack.config.js',
             '!.gitignore',
             '!.gitmodules',
             '!npm-debug.log',
@@ -77,7 +80,7 @@ module.exports = function(grunt) {
             },
             expand: true,
             cwd: 'build/',
-            src: ['**/*'],
+            src: ['**/*', '!src/**'],
             dest: 'dokan-pro'
         };
 
@@ -167,7 +170,7 @@ module.exports = function(grunt) {
             target: {
                 options: {
                     cwd: 'build',
-                    exclude: ['dist/.*', '*.zip'],
+                    exclude: ['build/.*', 'node_modules/*', 'assets/*', 'tests/*', 'bin/*'],
                     mainFile: 'dokan-pro.php',
                     domainPath: '/languages/', // Where to save the POT file.
                     potFilename: 'dokan.pot', // Name of the POT file.
@@ -246,7 +249,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks( 'grunt-contrib-less' );
     grunt.loadNpmTasks( 'grunt-contrib-concat' );
     grunt.loadNpmTasks( 'grunt-contrib-jshint' );
-    grunt.loadNpmTasks( 'grunt-wp-i18n' );
+    grunt.loadNpmTasks( 'grunt-wpvue-i18n' );
     grunt.loadNpmTasks( 'grunt-text-replace' );
     grunt.loadNpmTasks( 'grunt-contrib-uglify' );
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
