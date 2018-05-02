@@ -532,6 +532,7 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
 
 var Switches = dokan_get_lib('Switches');
 var Modal = dokan_get_lib('Modal');
@@ -1760,19 +1761,28 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "dokan-form-group" }, [
-          _c("input", {
-            staticClass: "dokan-btn dokan-btn-theme dokan-right",
-            attrs: { type: "submit" },
-            domProps: { value: _vm.__("Save Changes", "dokan") },
-            on: {
-              click: function($event) {
-                $event.preventDefault()
-                _vm.saveZoneSettings($event)
+        _c(
+          "div",
+          { staticClass: "dokan-form-group" },
+          [
+            _c("router-link", { attrs: { to: { name: "Main" } } }, [
+              _vm._v(_vm._s(_vm.__("← Back to Zone List", "dokan")))
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "dokan-btn dokan-btn-theme dokan-right",
+              attrs: { type: "submit" },
+              domProps: { value: _vm.__("Save Changes", "dokan") },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.saveZoneSettings($event)
+                }
               }
-            }
-          })
-        ]),
+            })
+          ],
+          1
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "dokan-clearfix" })
       ]),

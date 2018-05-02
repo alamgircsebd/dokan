@@ -127,6 +127,7 @@
             </div><!-- .dokan-product-inventory -->
 
             <div class="dokan-form-group">
+                <router-link :to="{ name: 'Main' }">{{ __( '&larr; Back to Zone List', 'dokan' ) }}</router-link>
                 <input type="submit" class="dokan-btn dokan-btn-theme dokan-right" @click.prevent="saveZoneSettings" :value="__( 'Save Changes', 'dokan' )">
             </div>
 
