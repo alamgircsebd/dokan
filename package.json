@@ -1,6 +1,6 @@
 {
   "name": "dokan-pro",
-  "version": "2.7.5",
+  "version": "2.8.0",
   "description": "A WordPress marketplace plugin",
   "author": "weDevs",
   "license": "GPL",
@@ -39,7 +39,7 @@
     "grunt-phplint": "^0.1.0",
     "grunt-ssh": "^0.12.9",
     "grunt-text-replace": "^0.4.0",
-    "grunt-wp-i18n": "^1.0.0",
+    "grunt-wpvue-i18n": "^1.0.0",
     "less": "^2.7.3",
     "less-loader": "^4.0.5",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
