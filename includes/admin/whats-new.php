@@ -30,7 +30,7 @@ $changelog = array(
                 'description'   => 'Customer, Seller was unable to login with social media'
             ),
             array(
-                'title'         => 'CSV earning report exporting issue',
+                'title'         => 'CSV earning report exporting',
                 'type'          => 'Fix',
                 'description'   => 'There were an issue with CSV report exporting from back end'
             ),
@@ -40,74 +40,14 @@ $changelog = array(
                 'description'   => 'Admin was unable to delete a vendor from admin panel'
             ),
             array(
-                'title'         => 'Paypal adaptive checkout issue',
-                'type'          => 'Fix',
-                'description'   => 'Checkout with paypal had some issue'
-            ),
-            array(
-                'title'         => 'Fatal error while importing product via CSV issue',
-                'type'          => 'Fix',
-                'description'   => 'While importing product via CSV it shows fatal error'
-            ),
-            array(
-                'title'         => 'Subscription based admin commission issue',
-                'type'          => 'Fix',
-                'description'   => 'Subscription based admin commission issue'
-            ),
-            array(
-                'title'         => 'Seller permission issue',
-                'type'          => 'Fix',
-                'description'   => 'There were a littl issue with seller permissions'
-            ),
-            array(
-                'title'         => 'Seller subscription issue',
-                'type'          => 'Fix',
-                'description'   => 'Subscription is being updated with the update of a user in back end issue'
-            ),
-            array(
-                'title'         => 'Stripe card saving option issue',
-                'type'          => 'Fix',
-                'description'   => 'Stripe card saving option wasn\'t working'
-            ),
-            array(
-                'title'         => 'Wrong product view count',
-                'type'          => 'Fix',
-                'description'   => 'Duplicated product shows existing product\'s view count'
-            ),
-            array(
-                'title'         => 'Booking cancellation email sending issue',
-                'type'          => 'Fix',
-                'description'   => 'Booking cancellation email sending issue'
-            ),
-            array(
-                'title'         => 'Seller setup wizard is missing',
+                'title'         => 'Seller setup wizard is missing during email verification',
                 'type'          => 'Fix',
                 'description'   => 'Seller setup wizard after a seller is verified by email was missing'
             ),
             array(
-                'title'         => 'Seller verification widget issue',
-                'type'          => 'Fix',
-                'description'   => 'There were some issue with seller verification widget'
-            ),
-            array(
-                'title'         => 'Wrong shipping notice',
-                'type'          => 'Fix',
-                'description'   => 'There was a little issue with shipping notice'
-            ),
-            array(
-                'title'         => 'Subscription pack date issue',
-                'type'          => 'Fix',
-                'description'   => 'Subscription pack date calculation wasn\'t correct'
-            ),
-            array(
-                'title'         => 'Subscription pack visibility issue',
+                'title'         => 'Subscription Free pack visibility',
                 'type'          => 'Fix',
                 'description'   => 'Hide subscription product type from back end when a seller can access the back end'
-            ),
-            array(
-                'title'         => 'Progress bar issue',
-                'type'          => 'Fix',
-                'description'   => 'Progress bar value not increase by adding stripe payment method issue'
             ),
             array(
                 'title'         => 'Disable back end access for vendor staff',
