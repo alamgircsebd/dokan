@@ -172,6 +172,11 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.8.1 -> May 3, 2018
+--------------------------
+- [fix]  Added some missing transation in single product multivendor modules
+- [fix]  Tinymce dokan button not working in all post types
+
 v2.8.0 -> May 2, 2018
 --------------------------
 - [new]   Introduction of REST APIs
