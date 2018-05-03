@@ -25,6 +25,7 @@ class Dokan_shortcodes_button {
      *
      */
     function localize_shortcodes() {
+        $screen = get_current_screen();
 
         $shortcodes = array(
             'dokan-dashboard'            => array(
@@ -59,8 +60,10 @@ class Dokan_shortcodes_button {
 
         $assets_url = DOKAN_PRO_PLUGIN_ASSEST;
 
-        wp_localize_script( 'dokan-admin', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
-        wp_localize_script( 'dokan-admin', 'dokan_assets_url', $assets_url );
+        if ( 'post' == $screen->base ) {
+            wp_localize_script( 'jquery', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
+            wp_localize_script( 'jquery', 'dokan_assets_url', $assets_url );
+        }
     }
 
     /**
