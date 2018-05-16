@@ -1518,8 +1518,8 @@ class Dokan_Store_Support {
     function place_support_menu( $items ) {
 
         unset( $items['customer-logout'] );
-        $items['support-tickets']   = __( "Seller Support Tickets", 'dokan-store-support' );
-        $items['customer-logout']   = __( 'Logout', 'dokan-store-support' );
+        $items['support-tickets']   = __( "Seller Support Tickets", 'dokan' );
+        $items['customer-logout']   = __( 'Logout', 'dokan' );
 
         return $items;
     }
