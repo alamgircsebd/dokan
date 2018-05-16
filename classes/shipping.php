@@ -204,10 +204,6 @@ class Dokan_Pro_Shipping {
 
             // Additional extra code
 
-            if ( isset( $_POST['_dokan_flat_rate'] ) ) {
-                update_user_meta( $user_id, '_dokan_flat_rate', $_POST['_dokan_flat_rate'] );
-            }
-
             if ( isset( $_POST['dps_enable_shipping'] ) ) {
                 update_user_meta( $user_id, '_dps_shipping_enable', $_POST['dps_enable_shipping'] );
             }
