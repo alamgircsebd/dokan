@@ -80,14 +80,31 @@ function dokan_pro_get_modules() {
                 continue;
             }
 
-            $file_base = wp_normalize_path( $module_file );
+            if ( ! empty ( $module_data['thumbnail'] ) ) {
+                $module_data['thumbnail'] = DOKAN_PRO_PLUGIN_ASSEST . '/images/modules/' . $module_data['thumbnail'];
+            }
 
+            $file_base = wp_normalize_path( $module_file );
 
             $modules[ $file_base ] = $module_data;
         }
     }
 
+    uasort( $modules, 'dokan_module_short_by_name' );
+
     return $modules;
+}
+
+/**
+ * Short by module name A-Z
+ *
+ * @param array $a
+ * @param array $b
+ *
+ * @return array
+ */
+function dokan_module_short_by_name( $a, $b ) {
+    return strcmp( $a["name"], $b["name"] );
 }
 
 /**

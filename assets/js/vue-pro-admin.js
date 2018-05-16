@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 17);
+/******/ 	return __webpack_require__(__webpack_require__.s = 18);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -802,7 +802,138 @@ var VclTwitch = ContentLoading.VclTwitch;
 });
 
 /***/ }),
-/* 6 */,
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var Loading = dokan_get_lib('Loading');
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+    name: 'Modules',
+
+    data: function data() {
+        return {
+            search: '',
+            isLoaded: false,
+            modules: []
+        };
+    },
+
+
+    components: {
+        Loading: Loading
+    },
+
+    computed: {
+        currentStatus: function currentStatus() {
+            return this.$route.query.status || 'all';
+        },
+        filteredModules: function filteredModules() {
+            var self = this;
+            return this.modules.filter(function (module) {
+                return module.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0;
+            });
+        }
+    },
+
+    watch: {
+        '$route.query.status': function $routeQueryStatus() {
+            this.fetchModuels();
+        }
+    },
+
+    methods: {
+        fetchModuels: function fetchModuels() {
+            var _this = this;
+
+            this.isLoaded = false;
+
+            dokan.api.get('/admin/modules?status=' + this.currentStatus).done(function (response, status, xhr) {
+                _this.modules = response;
+                _this.isLoaded = true;
+            });
+        }
+    },
+
+    created: function created() {
+        this.fetchModuels();
+    }
+});
+
+/***/ }),
 /* 7 */,
 /* 8 */,
 /* 9 */,
@@ -813,38 +944,44 @@ var VclTwitch = ContentLoading.VclTwitch;
 /* 14 */,
 /* 15 */,
 /* 16 */,
-/* 17 */
+/* 17 */,
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Vendors = __webpack_require__(18);
+var _Vendors = __webpack_require__(19);
 
 var _Vendors2 = _interopRequireDefault(_Vendors);
 
-var _VendorSingle = __webpack_require__(21);
+var _VendorSingle = __webpack_require__(22);
 
 var _VendorSingle2 = _interopRequireDefault(_VendorSingle);
+
+var _Modules = __webpack_require__(25);
+
+var _Modules2 = _interopRequireDefault(_Modules);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 dokan_add_route(_Vendors2.default);
 dokan_add_route(_VendorSingle2.default);
+dokan_add_route(_Modules2.default);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Vendors_vue__ = __webpack_require__(4);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(21);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(19)
+  __webpack_require__(20)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -890,13 +1027,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1134,18 +1271,18 @@ if (false) {
 }
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VendorSingle_vue__ = __webpack_require__(5);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(24);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(22)
+  __webpack_require__(23)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1191,13 +1328,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1834,6 +1971,322 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-849fac40", esExports)
+  }
+}
+
+/***/ }),
+/* 25 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Modules_vue__ = __webpack_require__(6);
+/* empty harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(27);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(26)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Modules_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/admin/components/Modules.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-2f819007", Component.options)
+  } else {
+    hotAPI.reload("data-v-2f819007", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "dokan-modules-wrap" }, [
+    _c("h1", [_vm._v(_vm._s(_vm.__("Modules", "dokan")))]),
+    _vm._v(" "),
+    _c("div", { staticClass: "wp-filter module-filter" }, [
+      _c("div", { staticClass: "filter-items" }, [
+        _c("ul", [
+          _c(
+            "li",
+            [
+              _c("router-link", {
+                attrs: {
+                  to: { name: "Modules" },
+                  "active-class": "current",
+                  exact: ""
+                },
+                domProps: { innerHTML: _vm._s(_vm.__("All", "dokan-lite")) }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            [
+              _c("router-link", {
+                attrs: {
+                  to: { name: "Modules", query: { status: "active" } },
+                  "active-class": "current",
+                  exact: ""
+                },
+                domProps: { innerHTML: _vm._s(_vm.__("Active", "dokan-lite")) }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            [
+              _c("router-link", {
+                attrs: {
+                  to: { name: "Modules", query: { status: "inactive" } },
+                  "active-class": "current",
+                  exact: ""
+                },
+                domProps: {
+                  innerHTML: _vm._s(_vm.__("Inactive", "dokan-lite"))
+                }
+              })
+            ],
+            1
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "search-form" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "label",
+          {
+            staticClass: "screen-reader-text",
+            attrs: { for: "media-search-input" }
+          },
+          [_vm._v("Search Media")]
+        ),
+        _vm._v(" "),
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.search,
+              expression: "search"
+            }
+          ],
+          staticClass: "search",
+          attrs: {
+            type: "search",
+            placeholder: "Search Module...",
+            id: "media-search-input"
+          },
+          domProps: { value: _vm.search },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.search = $event.target.value
+            }
+          }
+        })
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "module-content" },
+      [
+        _vm.isLoaded
+          ? [
+              _c(
+                "div",
+                { staticClass: "wp-list-table widefat dokan-modules" },
+                [
+                  _vm.filteredModules.length > 0
+                    ? _vm._l(_vm.filteredModules, function(module) {
+                        return _c("div", { staticClass: "plugin-card" }, [
+                          _c("div", { staticClass: "plugin-card-top" }, [
+                            _c("div", { staticClass: "name column-name" }, [
+                              _c("h3", [
+                                _c("span", { staticClass: "plugin-name" }, [
+                                  _vm._v(_vm._s(module.name))
+                                ]),
+                                _vm._v(" "),
+                                _c("img", {
+                                  staticClass: "plugin-icon",
+                                  attrs: {
+                                    src: module.thumbnail,
+                                    alt: module.name
+                                  }
+                                })
+                              ])
+                            ]),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "action-links" }, [
+                              _c(
+                                "ul",
+                                { staticClass: "plugin-action-buttons" },
+                                [
+                                  _c(
+                                    "li",
+                                    { attrs: { "data-module": module.slug } },
+                                    [
+                                      _c(
+                                        "label",
+                                        { staticClass: "dokan-toggle-switch" },
+                                        [
+                                          _c("input", {
+                                            staticClass: "dokan-toggle-module",
+                                            attrs: {
+                                              type: "checkbox",
+                                              name: "module_toggle"
+                                            },
+                                            domProps: { checked: module.active }
+                                          }),
+                                          _vm._v(" "),
+                                          _c("span", {
+                                            staticClass: "slider round"
+                                          })
+                                        ]
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "desc column-description" },
+                              [
+                                _c("p", {
+                                  domProps: {
+                                    innerHTML: _vm._s(module.description)
+                                  }
+                                })
+                              ]
+                            )
+                          ])
+                        ])
+                      })
+                    : [
+                        _c(
+                          "div",
+                          {
+                            staticClass: "notice notice-info",
+                            attrs: { id: "message" }
+                          },
+                          [
+                            _c("p", [
+                              _c("strong", [
+                                _vm._v(
+                                  _vm._s(_vm.__("No modules found.", "dokan"))
+                                )
+                              ])
+                            ])
+                          ]
+                        )
+                      ]
+                ],
+                2
+              )
+            ]
+          : _c("div", { staticClass: "loading" }, [_c("loading")], 1)
+      ],
+      2
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "view-switch" }, [
+      _c(
+        "a",
+        {
+          staticClass: "view-grid",
+          attrs: { href: "#", id: "view-switch-grid" }
+        },
+        [
+          _c("span", { staticClass: "screen-reader-text" }, [
+            _vm._v("Grid View")
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "a",
+        {
+          staticClass: "view-list current",
+          attrs: { href: "#", id: "view-switch-list" }
+        },
+        [
+          _c("span", { staticClass: "screen-reader-text" }, [
+            _vm._v("List View")
+          ])
+        ]
+      )
+    ])
+  }
+]
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-2f819007", esExports)
   }
 }
 

@@ -71,6 +71,16 @@ class Dokan_Pro_Admin_Settings {
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
+        // Load tools ad modules menu
+        if ( current_user_can( $capability ) ) {
+            $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
+        }
+
+        $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
+
+        $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
+
+        add_action( $modules, array( $this, 'modules_scripts' ) );
         add_action( $report, array( $this, 'common_scripts' ) );
         // add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
 
@@ -88,10 +98,7 @@ class Dokan_Pro_Admin_Settings {
      * @return void
      */
     public function tools_modules_menu( $capability ) {
-        $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
-        $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
-        add_action( $modules, array( $this, 'modules_scripts' ) );
     }
 
     /**
@@ -274,6 +281,12 @@ class Dokan_Pro_Admin_Settings {
             'path'      => '/vendors/:id',
             'name'      => 'VendorSingle',
             'component' => 'VendorSingle'
+        );
+
+        $routes[] = array(
+            'path'      => '/modules',
+            'name'      => 'Modules',
+            'component' => 'Modules'
         );
 
         return $routes;
