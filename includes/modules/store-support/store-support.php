@@ -1362,7 +1362,7 @@ class Dokan_Store_Support {
     function customer_topic_list( $file ) {
         global $wp;
         if ( isset($wp->query_vars['support-tickets']) && basename( $file ) == 'my-account.php' ) {
-            return DOKAN_STORE_SUPPORT_DIR . '/templates/support-tickets.php';
+            return DOKAN_STORE_SUPPORT_DIR . '/templates/store-support/support-tickets.php';
         }
         return $file;
     }
