@@ -877,8 +877,37 @@ var VclTwitch = ContentLoading.VclTwitch;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var ListTable = dokan_get_lib('ListTable');
 var Loading = dokan_get_lib('Loading');
+var Switches = dokan_get_lib('Switches');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -888,13 +917,28 @@ var Loading = dokan_get_lib('Loading');
         return {
             search: '',
             isLoaded: false,
-            modules: []
+            toggleActivation: false,
+            modules: [],
+            column: {
+                'name': {
+                    label: 'Module Name',
+                    sortable: true
+                },
+                'description': {
+                    label: 'Description'
+                },
+                'active': {
+                    label: 'Status'
+                }
+            }
         };
     },
 
 
     components: {
-        Loading: Loading
+        Loading: Loading,
+        Switches: Switches,
+        ListTable: ListTable
     },
 
     computed: {
@@ -925,6 +969,47 @@ var Loading = dokan_get_lib('Loading');
                 _this.modules = response;
                 _this.isLoaded = true;
             });
+        },
+        onSwitch: function onSwitch(status, moduleSlug) {
+            var _this2 = this;
+
+            var moduleData = _.findWhere(this.modules, { slug: moduleSlug });
+
+            this.toggleActivation = true;
+
+            if (status) {
+                // Need to activate
+                var message = moduleData.name + this.__('is successfully activated', 'dokan');
+
+                dokan.api.put('/admin/modules/activate', {
+                    module: [moduleSlug]
+                }).done(function (response) {
+                    _this2.$notify({
+                        title: 'Success!',
+                        type: 'success',
+                        text: message
+                    });
+
+                    _this2.toggleActivation = false;
+                });
+            } else {
+                // Need to deactivate
+                var message = moduleData.name + this.__('is successfully deactivated', 'dokan');
+
+                dokan.api.put('/admin/modules/deactivate', {
+                    module: [moduleSlug]
+                }).done(function (response) {
+                    _this2.$notify({
+                        title: 'Success!',
+                        type: 'success',
+                        text: message
+                    });
+                    _this2.toggleActivation = false;
+                });
+            }
+        },
+        onBulkAction: function onBulkAction(action, items) {
+            console.log(action, items);
         }
     },
 
@@ -2147,6 +2232,64 @@ var render = function() {
       [
         _vm.isLoaded
           ? [
+              _c("list-table", {
+                attrs: {
+                  columns: _vm.column,
+                  loading: false,
+                  rows: _vm.modules,
+                  actions: [],
+                  "show-cb": true,
+                  "bulk-actions": [
+                    {
+                      key: "activate",
+                      label: "Activate"
+                    },
+                    {
+                      key: "deactivate",
+                      label: "Deactivate"
+                    }
+                  ],
+                  "action-column": "name"
+                },
+                on: { "bulk:click": _vm.onBulkAction },
+                scopedSlots: _vm._u([
+                  {
+                    key: "name",
+                    fn: function(data) {
+                      return [
+                        _c("img", {
+                          attrs: {
+                            src: data.row.thumbnail,
+                            alt: data.row.name,
+                            width: "50"
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("strong", [
+                          _c("a", { attrs: { href: "#" } }, [
+                            _vm._v(_vm._s(data.row.name))
+                          ])
+                        ])
+                      ]
+                    }
+                  },
+                  {
+                    key: "active",
+                    fn: function(data) {
+                      return [
+                        _c("switches", {
+                          attrs: {
+                            enabled: data.row.active,
+                            value: data.row.slug
+                          },
+                          on: { input: _vm.onSwitch }
+                        })
+                      ]
+                    }
+                  }
+                ])
+              }),
+              _vm._v(" "),
               _c(
                 "div",
                 { staticClass: "wp-list-table widefat dokan-modules" },
@@ -2180,25 +2323,15 @@ var render = function() {
                                     "li",
                                     { attrs: { "data-module": module.slug } },
                                     [
-                                      _c(
-                                        "label",
-                                        { staticClass: "dokan-toggle-switch" },
-                                        [
-                                          _c("input", {
-                                            staticClass: "dokan-toggle-module",
-                                            attrs: {
-                                              type: "checkbox",
-                                              name: "module_toggle"
-                                            },
-                                            domProps: { checked: module.active }
-                                          }),
-                                          _vm._v(" "),
-                                          _c("span", {
-                                            staticClass: "slider round"
-                                          })
-                                        ]
-                                      )
-                                    ]
+                                      _c("switches", {
+                                        attrs: {
+                                          enabled: module.active,
+                                          value: module.slug
+                                        },
+                                        on: { input: _vm.onSwitch }
+                                      })
+                                    ],
+                                    1
                                   )
                                 ]
                               )

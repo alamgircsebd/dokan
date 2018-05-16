@@ -24,6 +24,37 @@
 
         <div class="module-content">
             <template v-if="isLoaded">
+                <list-table
+                  :columns="column"
+                  :loading="false"
+                  :rows="modules"
+                  :actions="[]"
+                  :show-cb="true"
+                  :bulk-actions="[
+                    {
+                        key: 'activate',
+                        label: 'Activate'
+                    },
+                    {
+                        key: 'deactivate',
+                        label: 'Deactivate'
+                    }
+                  ]"
+                  action-column="name"
+                  @bulk:click="onBulkAction"
+
+                >
+                    <template slot="name" slot-scope="data">
+                        <img :src="data.row.thumbnail" :alt="data.row.name" width="50">
+                        <strong><a href="#">{{ data.row.name }}</a></strong>
+                    </template>
+
+                    <template slot="active" slot-scope="data">
+                        <switches :enabled="data.row.active" :value="data.row.slug" @input="onSwitch"></switches>
+                    </template>
+
+                </list-table>
+
                 <div class="wp-list-table widefat dokan-modules">
                     <template v-if="filteredModules.length > 0">
                         <div class="plugin-card" v-for="module in filteredModules">
@@ -38,10 +69,7 @@
                                 <div class="action-links">
                                     <ul class="plugin-action-buttons">
                                         <li :data-module="module.slug">
-                                            <label class="dokan-toggle-switch">
-                                                <input type="checkbox" name="module_toggle" class="dokan-toggle-module" :checked="module.active">
-                                                <span class="slider round"></span>
-                                            </label>
+                                            <switches :enabled="module.active" :value="module.slug" @input="onSwitch"></switches>
                                         </li>
                                     </ul>
                                 </div>
@@ -58,7 +86,6 @@
                             <p><strong>{{ __( 'No modules found.', 'dokan' ) }}</strong></p>
                         </div>
                     </template>
-
                 </div>
             </template>
             <div class="loading" v-else>
@@ -70,7 +97,9 @@
 </template>
 
 <script>
+    let ListTable = dokan_get_lib('ListTable');
     let Loading = dokan_get_lib('Loading');
+    let Switches  = dokan_get_lib('Switches');
 
     export default {
 
@@ -80,12 +109,27 @@
             return {
                 search: '',
                 isLoaded: false,
-                modules : []
+                toggleActivation: false,
+                modules : [],
+                column: {
+                    'name': {
+                        label: 'Module Name',
+                        sortable: true
+                    },
+                    'description': {
+                        label: 'Description'
+                    },
+                    'active': {
+                        label: 'Status'
+                    }
+                }
             }
         },
 
         components: {
             Loading,
+            Switches,
+            ListTable
         },
 
         computed: {
@@ -117,6 +161,51 @@
                     this.modules = response;
                     this.isLoaded = true;
                 });
+            },
+
+            onSwitch( status, moduleSlug ) {
+                var moduleData = _.findWhere( this.modules, { slug: moduleSlug } );
+
+                this.toggleActivation = true;
+
+                if ( status ) {
+                    // Need to activate
+                    var message = moduleData.name + this.__( 'is successfully activated', 'dokan' );
+
+                    dokan.api.put('/admin/modules/activate', {
+                        module: [ moduleSlug ]
+                    })
+                    .done(response => {
+                        this.$notify({
+                            title: 'Success!',
+                            type: 'success',
+                            text: message,
+                        });
+
+                        this.toggleActivation = false;
+                    });
+
+                } else {
+                    // Need to deactivate
+                    var message = moduleData.name + this.__( 'is successfully deactivated', 'dokan' );
+
+                    dokan.api.put('/admin/modules/deactivate', {
+                        module: [ moduleSlug ]
+                    })
+                    .done(response => {
+                        this.$notify({
+                            title: 'Success!',
+                            type: 'success',
+                            text: message,
+                        });
+                        this.toggleActivation = false;
+                    });
+                }
+            },
+
+
+            onBulkAction( action, items ) {
+                console.log( action, items );
             }
         },
 
@@ -145,6 +234,43 @@
                 .dokan-loader {
                     top: 30%;
                     left: 47%;
+                }
+            }
+
+            .dokan-modules {
+                .plugin-card {
+                    .plugin-action-buttons {
+                        .switch {
+                            input:checked + .slider {
+                                background-color: #0068A0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            table.wp-list-table {
+                thead {
+                    tr {
+                        th.active {
+                            width: 10%;
+                        }
+
+                        th.description {
+                            width: 55%;
+                        }
+                    }
+                }
+
+                tbody {
+                    tr {
+                        td.name {
+                            img {
+                                float: left;
+                                margin-right: 10px;
+                            }
+                        }
+                    }
                 }
             }
         }
