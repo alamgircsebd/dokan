@@ -649,6 +649,13 @@ class DPS_Admin {
             return;
         }
 
+        if ( ! empty( $_POST['vendor_allowed_categories'] ) ) {
+            $allowed_cat = array_map( 'intval', $_POST['vendor_allowed_categories'] );
+            update_user_meta( $user_id, 'vendor_allowed_categories', $allowed_cat );
+        } else {
+            delete_user_meta( $user_id, 'vendor_allowed_categories' );
+        }
+
         if ( get_user_meta( $user_id, 'product_package_id', true ) == $pack_id ) {
             return;
         }
@@ -680,13 +687,6 @@ class DPS_Admin {
 
         update_user_meta( $user_id, 'can_post_product' , 1 );
         update_user_meta( $user_id, '_customer_recurring_subscription', '' );
-
-        if ( !empty( $_POST['vendor_allowed_categories'] ) ) {
-            $allowed_cat = array_map( 'intval', $_POST['vendor_allowed_categories'] );
-            update_user_meta( $user_id, 'vendor_allowed_categories', $allowed_cat );
-        } else {
-            delete_user_meta( $user_id, 'vendor_allowed_categories' );
-        }
 
         if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
             update_user_meta( $user_id, 'dokan_admin_percentage', $admin_commission );
