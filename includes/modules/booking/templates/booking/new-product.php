@@ -143,7 +143,7 @@ $template_args = array(
                                 'exclude'          => '',
                                 'selected'         => $term,
                                 'echo'             => 0,
-                                'walker'           => new DokanTaxonomyWalker()
+                                'walker'           => new DokanTaxonomyWalker( $post_id )
                             ) );
 
                             $replace_attrb = "<select data-placeholder='".__( 'Select product category','dokan' )."' ". $multiple ;
@@ -170,7 +170,7 @@ $template_args = array(
                                 'exclude'          => '',
                                 'selected'         => $selected,
                                 'echo'             => 0,
-                                'walker'           => new DokanTaxonomyWalker()
+                                'walker'           => new DokanTaxonomyWalker( $post_id )
                             ) );
 
                             echo str_replace( '<select', '<select data-placeholder="' . __( 'Select product tags', 'dokan' ) . '" multiple="multiple" ', $drop_down_tags );
