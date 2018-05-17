@@ -76,11 +76,11 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
         }
 
-        $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
+        // $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
 
         $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
-        add_action( $modules, array( $this, 'modules_scripts' ) );
+        // add_action( $modules, array( $this, 'modules_scripts' ) );
         add_action( $report, array( $this, 'common_scripts' ) );
         // add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
 
@@ -283,10 +283,35 @@ class Dokan_Pro_Admin_Settings {
             'component' => 'VendorSingle'
         );
 
+        // $routes[] = array(
+        //     'path'      => '/modules/:status',
+        //     'name'      => 'ModulesStatus',
+        //     'component' => 'Modules'
+        // );
+
+        // $routes[] = array(
+        //     'path'      => '/modules',
+        //     'name'      => 'Modules',
+        //     'component' => 'Modules'
+        // );
+
         $routes[] = array(
             'path'      => '/modules',
-            'name'      => 'Modules',
-            'component' => 'Modules'
+            'component' => 'Modules',
+            'children' => [
+                [
+                    'path' => '',
+                    'name' => 'Modules',
+                    'component' => 'Modules',
+                    'children' => [
+                        [
+                            'path' => 'status/:status',
+                            'name' => 'ModulesStatus',
+                            'component' => 'Modules'
+                        ]
+                    ]
+                ],
+            ]
         );
 
         return $routes;

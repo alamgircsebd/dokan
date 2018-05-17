@@ -90,7 +90,7 @@ function dokan_pro_get_modules() {
         }
     }
 
-    uasort( $modules, 'dokan_module_short_by_name' );
+    uasort( $modules, 'dokan_module_short_by_name_asc' );
 
     return $modules;
 }
@@ -103,8 +103,20 @@ function dokan_pro_get_modules() {
  *
  * @return array
  */
-function dokan_module_short_by_name( $a, $b ) {
+function dokan_module_short_by_name_desc( $a, $b ) {
     return strcmp( $a["name"], $b["name"] );
+}
+
+/**
+ * Short by module name Z-A
+ *
+ * @param array $a
+ * @param array $b
+ *
+ * @return array
+ */
+function dokan_module_short_by_name_asc( $a, $b ) {
+    return strcmp( $b["name"], $a["name"] );
 }
 
 /**

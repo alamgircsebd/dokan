@@ -5,16 +5,22 @@
         <div class="wp-filter module-filter">
             <div class="filter-items">
                 <ul>
-                    <li><router-link :to="{ name: 'Modules' }" active-class="current" exact v-html="__( 'All', 'dokan-lite' )"></router-link></li>
-                    <li><router-link :to="{ name: 'Modules', query: { status: 'active' }}" active-class="current" exact v-html="__( 'Active', 'dokan-lite' )"></router-link></li>
-                    <li><router-link :to="{ name: 'Modules', query: { status: 'inactive' }}" active-class="current" exact v-html="__( 'Inactive', 'dokan-lite' )"></router-link></li>
+                    <li v-for="(menu, index) in filterMenu" :key="index" :class="[filterMenuClass(menu.route)]">
+                        <router-link :to="menu.route">
+                            {{ menu.title }}
+                        </router-link>
+                    </li>
                 </ul>
             </div>
 
             <div class="search-form">
+               <!--  <div class="view-shorting">
+
+                </div>
+ -->
                 <div class="view-switch">
-                    <a href="#" class="view-grid" id="view-switch-grid"><span class="screen-reader-text">Grid View</span></a>
-                    <a href="#" class="view-list current" id="view-switch-list"><span class="screen-reader-text">List View</span></a>
+                    <a href="#" class="view-grid" :class="{ 'current' : currentView == 'grid' }" id="view-switch-grid" @click.prevent="changeView( 'grid' )"><span class="screen-reader-text">Grid View</span></a>
+                    <a href="#" class="view-list" :class="{ 'current' : currentView == 'list' }" id="view-switch-list" @click.prevent="changeView( 'list' )"><span class="screen-reader-text">List View</span></a>
                 </div>
 
                 <label for="media-search-input" class="screen-reader-text">Search Media</label>
@@ -25,23 +31,29 @@
         <div class="module-content">
             <template v-if="isLoaded">
                 <list-table
-                  :columns="column"
-                  :loading="false"
-                  :rows="modules"
-                  :actions="[]"
-                  :show-cb="true"
-                  :bulk-actions="[
-                    {
-                        key: 'activate',
-                        label: 'Activate'
-                    },
-                    {
-                        key: 'deactivate',
-                        label: 'Deactivate'
-                    }
-                  ]"
-                  action-column="name"
-                  @bulk:click="onBulkAction"
+                    v-if="currentView == 'list'"
+                    :columns="column"
+                    :loading="false"
+                    :rows="filteredModules"
+                    :actions="[]"
+                    :show-cb="true"
+                    not-found="No module found."
+                    :bulk-actions="[
+                        {
+                            key: 'activate',
+                            label: 'Activate'
+                        },
+                        {
+                            key: 'deactivate',
+                            label: 'Deactivate'
+                        }
+                    ]"
+                    :sort-by="sortBy"
+                    :sort-order="sortOrder"
+                    @sort="sortCallback"
+
+                    action-column="name"
+                    @bulk:click="onBulkAction"
 
                 >
                     <template slot="name" slot-scope="data">
@@ -55,7 +67,7 @@
 
                 </list-table>
 
-                <div class="wp-list-table widefat dokan-modules">
+                <div class="wp-list-table widefat dokan-modules" v-if="currentView == 'grid'">
                     <template v-if="filteredModules.length > 0">
                         <div class="plugin-card" v-for="module in filteredModules">
                             <div class="plugin-card-top">
@@ -109,8 +121,9 @@
             return {
                 search: '',
                 isLoaded: false,
-                toggleActivation: false,
+                currentView: '',
                 modules : [],
+                count: {},
                 column: {
                     'name': {
                         label: 'Module Name',
@@ -122,7 +135,35 @@
                     'active': {
                         label: 'Status'
                     }
-                }
+                },
+
+                filterMenu: [
+                    {
+                        title: 'All',
+                        route: {
+                            name: 'Modules',
+                            params: {}
+                        }
+                    },
+                    {
+                        title: 'Active',
+                        route: {
+                            name: 'ModulesStatus',
+                            params: {
+                                status: 'active'
+                            }
+                        }
+                    },
+                    {
+                        title: 'Inactive',
+                        route: {
+                            name: 'ModulesStatus',
+                            params: {
+                                status: 'inactive'
+                            }
+                        }
+                    }
+                ]
             }
         },
 
@@ -135,38 +176,79 @@
         computed: {
 
             currentStatus() {
-                return this.$route.query.status || 'all';
+                return this.$route.params.status || 'all';
             },
 
             filteredModules() {
                 var self=this;
-                return this.modules.filter( function( module ){
+
+                var data =  this.modules.filter( function( module ){
                     return module.name.toLowerCase().indexOf( self.search.toLowerCase() ) >= 0;
                 } );
-            }
+
+                return data;
+            },
+
+            sortBy() {
+                return this.$route.query.orderby || 'name';
+            },
+
+            sortOrder() {
+                return this.$route.query.order || 'desc';
+            },
         },
 
         watch: {
-            '$route.query.status'() {
+            '$route.query.order'() {
+                this.fetchModuels();
+            },
+
+            '$route.params.status'() {
                 this.fetchModuels();
             }
         },
 
         methods: {
+            changeView( view ) {
+                var activetab = '';
+                this.currentView = view;
+
+                if ( typeof( localStorage ) != 'undefined' ) {
+                    localStorage.setItem( "activeview", this.currentView );
+                }
+            },
+
             fetchModuels() {
                 this.isLoaded = false;
 
-                dokan.api.get('/admin/modules?status=' + this.currentStatus )
+                dokan.api.get('/admin/modules?status=' + this.currentStatus + '&orderby=' + this.sortBy + '&order=' + this.sortOrder  )
                 .done((response, status, xhr) => {
                     this.modules = response;
                     this.isLoaded = true;
                 });
             },
 
+            sortCallback(column, order) {
+                var currentRoute = this.$router.currentRoute;
+
+                var route = {
+                    name: currentRoute.name,
+                    params: {},
+                    query: {
+                        orderby: column,
+                        order: order
+                    }
+                };
+
+                if (currentRoute.params.status) {
+                    route.params.status = currentRoute.params.status;
+                }
+
+                this.$router.push(route);
+            },
+
             onSwitch( status, moduleSlug ) {
                 var moduleData = _.findWhere( this.modules, { slug: moduleSlug } );
-
-                this.toggleActivation = true;
 
                 if ( status ) {
                     // Need to activate
@@ -198,18 +280,49 @@
                             type: 'success',
                             text: message,
                         });
-                        this.toggleActivation = false;
                     });
                 }
             },
 
 
             onBulkAction( action, items ) {
-                console.log( action, items );
-            }
+                var message = ( 'activate' == action ) ? this.__( 'All selected modules are successfully activated', 'dokan' ) : this.__( 'All selected modules are successfully deactivated', 'dokan' )
+
+                dokan.api.put('/admin/modules/' + action, {
+                    module: items
+                })
+                .done(response => {
+                    this.fetchModuels();
+                    this.$notify({
+                        title: 'Success!',
+                        type: 'success',
+                        text: message,
+                    });
+                });
+            },
+
+            filterMenuClass(route) {
+               let className = '';
+               let currentRoute = this.$router.currentRoute;
+
+               const routeParams = jQuery.extend(true, {}, route.params);
+               const currentRouteParams = jQuery.extend(true, {}, currentRoute.params);
+
+               if (route.name === currentRoute.name && _.isEqual(routeParams, currentRouteParams)) {
+                   className = 'active';
+               }
+
+               return className;
+           },
         },
 
         created() {
+            if ( typeof(localStorage) != 'undefined' ) {
+                this.currentView = localStorage.getItem("activeview") ? localStorage.getItem("activeview") : 'grid';
+            } else {
+                this.currentView = 'grid';
+            }
+
             this.fetchModuels();
         }
     };
@@ -270,6 +383,14 @@
                                 margin-right: 10px;
                             }
                         }
+
+                        td.active {
+                            .switch {
+                                input:checked + .slider {
+                                    background-color: #0068A0;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -288,7 +409,7 @@
                     li {
                         display: inline-block;
                         line-height: 53px;
-                        margin: 0px 0px 0px -4px;
+                        margin: 0px;
 
                         a{
                             font-size: 14px;
@@ -303,7 +424,10 @@
                                 background: #fafafa;
                             }
 
-                            &.current {
+                        }
+
+                        &.active {
+                            a {
                                 background: #fafafa;
                             }
                         }

@@ -904,6 +904,18 @@ var VclTwitch = ContentLoading.VclTwitch;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Loading = dokan_get_lib('Loading');
@@ -917,8 +929,9 @@ var Switches = dokan_get_lib('Switches');
         return {
             search: '',
             isLoaded: false,
-            toggleActivation: false,
+            currentView: '',
             modules: [],
+            count: {},
             column: {
                 'name': {
                     label: 'Module Name',
@@ -930,7 +943,31 @@ var Switches = dokan_get_lib('Switches');
                 'active': {
                     label: 'Status'
                 }
-            }
+            },
+
+            filterMenu: [{
+                title: 'All',
+                route: {
+                    name: 'Modules',
+                    params: {}
+                }
+            }, {
+                title: 'Active',
+                route: {
+                    name: 'ModulesStatus',
+                    params: {
+                        status: 'active'
+                    }
+                }
+            }, {
+                title: 'Inactive',
+                route: {
+                    name: 'ModulesStatus',
+                    params: {
+                        status: 'inactive'
+                    }
+                }
+            }]
         };
     },
 
@@ -943,39 +980,75 @@ var Switches = dokan_get_lib('Switches');
 
     computed: {
         currentStatus: function currentStatus() {
-            return this.$route.query.status || 'all';
+            return this.$route.params.status || 'all';
         },
         filteredModules: function filteredModules() {
             var self = this;
-            return this.modules.filter(function (module) {
+
+            var data = this.modules.filter(function (module) {
                 return module.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0;
             });
+
+            return data;
+        },
+        sortBy: function sortBy() {
+            return this.$route.query.orderby || 'name';
+        },
+        sortOrder: function sortOrder() {
+            return this.$route.query.order || 'desc';
         }
     },
 
     watch: {
-        '$route.query.status': function $routeQueryStatus() {
+        '$route.query.order': function $routeQueryOrder() {
+            this.fetchModuels();
+        },
+        '$route.params.status': function $routeParamsStatus() {
             this.fetchModuels();
         }
     },
 
     methods: {
+        changeView: function changeView(view) {
+            var activetab = '';
+            this.currentView = view;
+
+            if (typeof localStorage != 'undefined') {
+                localStorage.setItem("activeview", this.currentView);
+            }
+        },
         fetchModuels: function fetchModuels() {
             var _this = this;
 
             this.isLoaded = false;
 
-            dokan.api.get('/admin/modules?status=' + this.currentStatus).done(function (response, status, xhr) {
+            dokan.api.get('/admin/modules?status=' + this.currentStatus + '&orderby=' + this.sortBy + '&order=' + this.sortOrder).done(function (response, status, xhr) {
                 _this.modules = response;
                 _this.isLoaded = true;
             });
+        },
+        sortCallback: function sortCallback(column, order) {
+            var currentRoute = this.$router.currentRoute;
+
+            var route = {
+                name: currentRoute.name,
+                params: {},
+                query: {
+                    orderby: column,
+                    order: order
+                }
+            };
+
+            if (currentRoute.params.status) {
+                route.params.status = currentRoute.params.status;
+            }
+
+            this.$router.push(route);
         },
         onSwitch: function onSwitch(status, moduleSlug) {
             var _this2 = this;
 
             var moduleData = _.findWhere(this.modules, { slug: moduleSlug });
-
-            this.toggleActivation = true;
 
             if (status) {
                 // Need to activate
@@ -1004,16 +1077,47 @@ var Switches = dokan_get_lib('Switches');
                         type: 'success',
                         text: message
                     });
-                    _this2.toggleActivation = false;
                 });
             }
         },
         onBulkAction: function onBulkAction(action, items) {
-            console.log(action, items);
+            var _this3 = this;
+
+            var message = 'activate' == action ? this.__('All selected modules are successfully activated', 'dokan') : this.__('All selected modules are successfully deactivated', 'dokan');
+
+            dokan.api.put('/admin/modules/' + action, {
+                module: items
+            }).done(function (response) {
+                _this3.fetchModuels();
+                _this3.$notify({
+                    title: 'Success!',
+                    type: 'success',
+                    text: message
+                });
+            });
+        },
+        filterMenuClass: function filterMenuClass(route) {
+            var className = '';
+            var currentRoute = this.$router.currentRoute;
+
+            var routeParams = jQuery.extend(true, {}, route.params);
+            var currentRouteParams = jQuery.extend(true, {}, currentRoute.params);
+
+            if (route.name === currentRoute.name && _.isEqual(routeParams, currentRouteParams)) {
+                className = 'active';
+            }
+
+            return className;
         }
     },
 
     created: function created() {
+        if (typeof localStorage != 'undefined') {
+            this.currentView = localStorage.getItem("activeview") ? localStorage.getItem("activeview") : 'grid';
+        } else {
+            this.currentView = 'grid';
+        }
+
         this.fetchModuels();
     }
 });
@@ -2136,58 +2240,69 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "wp-filter module-filter" }, [
       _c("div", { staticClass: "filter-items" }, [
-        _c("ul", [
-          _c(
-            "li",
-            [
-              _c("router-link", {
-                attrs: {
-                  to: { name: "Modules" },
-                  "active-class": "current",
-                  exact: ""
-                },
-                domProps: { innerHTML: _vm._s(_vm.__("All", "dokan-lite")) }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c("router-link", {
-                attrs: {
-                  to: { name: "Modules", query: { status: "active" } },
-                  "active-class": "current",
-                  exact: ""
-                },
-                domProps: { innerHTML: _vm._s(_vm.__("Active", "dokan-lite")) }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "li",
-            [
-              _c("router-link", {
-                attrs: {
-                  to: { name: "Modules", query: { status: "inactive" } },
-                  "active-class": "current",
-                  exact: ""
-                },
-                domProps: {
-                  innerHTML: _vm._s(_vm.__("Inactive", "dokan-lite"))
-                }
-              })
-            ],
-            1
-          )
-        ])
+        _c(
+          "ul",
+          _vm._l(_vm.filterMenu, function(menu, index) {
+            return _c(
+              "li",
+              { key: index, class: [_vm.filterMenuClass(menu.route)] },
+              [
+                _c("router-link", { attrs: { to: menu.route } }, [
+                  _vm._v(
+                    "\n                           " +
+                      _vm._s(menu.title) +
+                      "\n                       "
+                  )
+                ])
+              ],
+              1
+            )
+          })
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "search-form" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "view-switch" }, [
+          _c(
+            "a",
+            {
+              staticClass: "view-grid",
+              class: { current: _vm.currentView == "grid" },
+              attrs: { href: "#", id: "view-switch-grid" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.changeView("grid")
+                }
+              }
+            },
+            [
+              _c("span", { staticClass: "screen-reader-text" }, [
+                _vm._v("Grid View")
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "a",
+            {
+              staticClass: "view-list",
+              class: { current: _vm.currentView == "list" },
+              attrs: { href: "#", id: "view-switch-list" },
+              on: {
+                click: function($event) {
+                  $event.preventDefault()
+                  _vm.changeView("list")
+                }
+              }
+            },
+            [
+              _c("span", { staticClass: "screen-reader-text" }, [
+                _vm._v("List View")
+              ])
+            ]
+          )
+        ]),
         _vm._v(" "),
         _c(
           "label",
@@ -2232,146 +2347,160 @@ var render = function() {
       [
         _vm.isLoaded
           ? [
-              _c("list-table", {
-                attrs: {
-                  columns: _vm.column,
-                  loading: false,
-                  rows: _vm.modules,
-                  actions: [],
-                  "show-cb": true,
-                  "bulk-actions": [
-                    {
-                      key: "activate",
-                      label: "Activate"
+              _vm.currentView == "list"
+                ? _c("list-table", {
+                    attrs: {
+                      columns: _vm.column,
+                      loading: false,
+                      rows: _vm.filteredModules,
+                      actions: [],
+                      "show-cb": true,
+                      "not-found": "No module found.",
+                      "bulk-actions": [
+                        {
+                          key: "activate",
+                          label: "Activate"
+                        },
+                        {
+                          key: "deactivate",
+                          label: "Deactivate"
+                        }
+                      ],
+                      "sort-by": _vm.sortBy,
+                      "sort-order": _vm.sortOrder,
+                      "action-column": "name"
                     },
-                    {
-                      key: "deactivate",
-                      label: "Deactivate"
-                    }
-                  ],
-                  "action-column": "name"
-                },
-                on: { "bulk:click": _vm.onBulkAction },
-                scopedSlots: _vm._u([
-                  {
-                    key: "name",
-                    fn: function(data) {
-                      return [
-                        _c("img", {
-                          attrs: {
-                            src: data.row.thumbnail,
-                            alt: data.row.name,
-                            width: "50"
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c("strong", [
-                          _c("a", { attrs: { href: "#" } }, [
-                            _vm._v(_vm._s(data.row.name))
-                          ])
-                        ])
-                      ]
-                    }
-                  },
-                  {
-                    key: "active",
-                    fn: function(data) {
-                      return [
-                        _c("switches", {
-                          attrs: {
-                            enabled: data.row.active,
-                            value: data.row.slug
-                          },
-                          on: { input: _vm.onSwitch }
-                        })
-                      ]
-                    }
-                  }
-                ])
-              }),
-              _vm._v(" "),
-              _c(
-                "div",
-                { staticClass: "wp-list-table widefat dokan-modules" },
-                [
-                  _vm.filteredModules.length > 0
-                    ? _vm._l(_vm.filteredModules, function(module) {
-                        return _c("div", { staticClass: "plugin-card" }, [
-                          _c("div", { staticClass: "plugin-card-top" }, [
-                            _c("div", { staticClass: "name column-name" }, [
-                              _c("h3", [
-                                _c("span", { staticClass: "plugin-name" }, [
-                                  _vm._v(_vm._s(module.name))
-                                ]),
-                                _vm._v(" "),
-                                _c("img", {
-                                  staticClass: "plugin-icon",
-                                  attrs: {
-                                    src: module.thumbnail,
-                                    alt: module.name
-                                  }
-                                })
-                              ])
-                            ]),
+                    on: {
+                      sort: _vm.sortCallback,
+                      "bulk:click": _vm.onBulkAction
+                    },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "name",
+                        fn: function(data) {
+                          return [
+                            _c("img", {
+                              attrs: {
+                                src: data.row.thumbnail,
+                                alt: data.row.name,
+                                width: "50"
+                              }
+                            }),
                             _vm._v(" "),
-                            _c("div", { staticClass: "action-links" }, [
-                              _c(
-                                "ul",
-                                { staticClass: "plugin-action-buttons" },
-                                [
-                                  _c(
-                                    "li",
-                                    { attrs: { "data-module": module.slug } },
-                                    [
-                                      _c("switches", {
-                                        attrs: {
-                                          enabled: module.active,
-                                          value: module.slug
-                                        },
-                                        on: { input: _vm.onSwitch }
-                                      })
-                                    ],
-                                    1
-                                  )
-                                ]
-                              )
-                            ]),
-                            _vm._v(" "),
-                            _c(
-                              "div",
-                              { staticClass: "desc column-description" },
-                              [
-                                _c("p", {
-                                  domProps: {
-                                    innerHTML: _vm._s(module.description)
-                                  }
-                                })
-                              ]
-                            )
-                          ])
-                        ])
-                      })
-                    : [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "notice notice-info",
-                            attrs: { id: "message" }
-                          },
-                          [
-                            _c("p", [
-                              _c("strong", [
-                                _vm._v(
-                                  _vm._s(_vm.__("No modules found.", "dokan"))
-                                )
+                            _c("strong", [
+                              _c("a", { attrs: { href: "#" } }, [
+                                _vm._v(_vm._s(data.row.name))
                               ])
                             ])
                           ]
-                        )
-                      ]
-                ],
-                2
-              )
+                        }
+                      },
+                      {
+                        key: "active",
+                        fn: function(data) {
+                          return [
+                            _c("switches", {
+                              attrs: {
+                                enabled: data.row.active,
+                                value: data.row.slug
+                              },
+                              on: { input: _vm.onSwitch }
+                            })
+                          ]
+                        }
+                      }
+                    ])
+                  })
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.currentView == "grid"
+                ? _c(
+                    "div",
+                    { staticClass: "wp-list-table widefat dokan-modules" },
+                    [
+                      _vm.filteredModules.length > 0
+                        ? _vm._l(_vm.filteredModules, function(module) {
+                            return _c("div", { staticClass: "plugin-card" }, [
+                              _c("div", { staticClass: "plugin-card-top" }, [
+                                _c("div", { staticClass: "name column-name" }, [
+                                  _c("h3", [
+                                    _c("span", { staticClass: "plugin-name" }, [
+                                      _vm._v(_vm._s(module.name))
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("img", {
+                                      staticClass: "plugin-icon",
+                                      attrs: {
+                                        src: module.thumbnail,
+                                        alt: module.name
+                                      }
+                                    })
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                _c("div", { staticClass: "action-links" }, [
+                                  _c(
+                                    "ul",
+                                    { staticClass: "plugin-action-buttons" },
+                                    [
+                                      _c(
+                                        "li",
+                                        {
+                                          attrs: { "data-module": module.slug }
+                                        },
+                                        [
+                                          _c("switches", {
+                                            attrs: {
+                                              enabled: module.active,
+                                              value: module.slug
+                                            },
+                                            on: { input: _vm.onSwitch }
+                                          })
+                                        ],
+                                        1
+                                      )
+                                    ]
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "div",
+                                  { staticClass: "desc column-description" },
+                                  [
+                                    _c("p", {
+                                      domProps: {
+                                        innerHTML: _vm._s(module.description)
+                                      }
+                                    })
+                                  ]
+                                )
+                              ])
+                            ])
+                          })
+                        : [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "notice notice-info",
+                                attrs: { id: "message" }
+                              },
+                              [
+                                _c("p", [
+                                  _c("strong", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.__("No modules found.", "dokan")
+                                      )
+                                    )
+                                  ])
+                                ])
+                              ]
+                            )
+                          ]
+                    ],
+                    2
+                  )
+                : _vm._e()
             ]
           : _c("div", { staticClass: "loading" }, [_c("loading")], 1)
       ],
@@ -2379,40 +2508,7 @@ var render = function() {
     )
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "view-switch" }, [
-      _c(
-        "a",
-        {
-          staticClass: "view-grid",
-          attrs: { href: "#", id: "view-switch-grid" }
-        },
-        [
-          _c("span", { staticClass: "screen-reader-text" }, [
-            _vm._v("Grid View")
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          staticClass: "view-list current",
-          attrs: { href: "#", id: "view-switch-list" }
-        },
-        [
-          _c("span", { staticClass: "screen-reader-text" }, [
-            _vm._v("List View")
-          ])
-        ]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);
