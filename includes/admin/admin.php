@@ -63,6 +63,7 @@ class Dokan_Pro_Admin_Settings {
 
         if ( current_user_can( $capability ) ) {
             $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
+            $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
         }
 
         // $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
@@ -283,6 +284,18 @@ class Dokan_Pro_Admin_Settings {
             'component' => 'VendorSingle'
         );
 
+        $routes[] = array(
+            'path'      => '/announcement',
+            'name'      => 'Announcement',
+            'component' => 'Announcement'
+        );
+
+        $routes[] = array(
+            'path'      => '/announcement/new',
+            'name'      => 'NewAnnouncement',
+            'component' => 'NewAnnouncement'
+        );
+
         // $routes[] = array(
         //     'path'      => '/modules/:status',
         //     'name'      => 'ModulesStatus',
@@ -313,6 +326,7 @@ class Dokan_Pro_Admin_Settings {
                 ],
             ]
         );
+
 
         return $routes;
     }
