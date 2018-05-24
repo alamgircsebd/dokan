@@ -3,7 +3,7 @@
 /**
 * Dokan Refund API Controller
 *
-* @since 2.8.0
+* @since 2.8.2
 *
 * @package dokan
 */
@@ -95,16 +95,16 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     }
 
     /**
-     * Map withdraw status
+     * Map refund status
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return array
      */
     protected function get_status( $status ) {
         $statuses = array(
             0 => 'pending',
-            1 => 'completed',
+            1 => 'approved',
             2 => 'cancelled'
         );
 
@@ -118,9 +118,9 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     }
 
     /**
-     * Get withdraws
+     * Get refunds
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return object
      */
@@ -161,7 +161,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
         }
 
         $response       = rest_ensure_response( $data );
-        $refund_count = dokan_get_refund_count();
+        $refund_count   = dokan_get_refund_count();
 
         $response->header( 'X-Status-Pending', $refund_count['pending'] );
         $response->header( 'X-Status-Completed', $refund_count['completed'] );
@@ -172,9 +172,9 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     }
 
     /**
-     * Cancel withdraw status
+     * Cancel refund status
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return void
      */
@@ -191,7 +191,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
             return new WP_Error( 'no_order_id', __( 'Invalid Order ID', 'dokan' ), array( 'status' => 404 ) );
         }
 
-        $status = ! empty( $request['status'] ) ? $request['status'] : 'cancelled';
+        $status = ! empty( $request['status'] ) ? $request['status'] : 'pending';
 
         if ( ! current_user_can( 'manage_options' ) ) {
             return new WP_Error( 'cancel_request', __( 'Vendor can only create refund request', 'dokan' ), array( 'status' => 400 ) );
@@ -217,7 +217,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     /**
      * Delete a refund
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return void
      */
@@ -245,33 +245,36 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     }
 
     /**
-     * Make a withdraw request
+     * Make a refund request
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return void
      */
     public function create_refund( $request ) {
         global $wpdb;
 
-        $store_id                           = dokan_get_current_user_id();
-        $request['seller_id']               = dokan_get_seller_id_by_order($request['order_id']);
-        $request['refund_reason']           = $request['reason'] ? $request['reason'] : '';
-        $request['line_item_qtys']          = $request['line_item_qtys'] ? $request['line_item_qtys'] : '';
-        $request['line_item_totals']        = $request['line_item_totals'] ? $request['line_item_totals'] : '';
-        $request['line_item_tax_totals']    = $request['line_item_tax_totals'] ? $request['line_item_tax_totals'] : '';
-        $request['restock_refunded_items']  = $request['restock_refunded_items'] ? 'true' : 'false';
-        $request['status']                  = 0;
-        $request['api_refund']              = $request['method'] ? $request['method'] : 'false';
+        $data                            = array();
+        $store_id                        = dokan_get_current_user_id();
+        $data['order_id']                = $request['order_id'] ;
+        $data['seller_id']               = dokan_get_seller_id_by_order($request['order_id']);
+        $data['refund_amount']           = $request['amount'];
+        $data['refund_reason']           = $request['reason'] ? $request['reason'] : '';
+        $data['line_item_qtys']          = $request['line_item_qtys'] ? $request['line_item_qtys'] : '';
+        $data['line_item_totals']        = $request['line_item_totals'] ? $request['line_item_totals'] : '';
+        $data['line_item_tax_totals']    = $request['line_item_tax_totals'] ? $request['line_item_tax_totals'] : '';
+        $data['restock_refunded_items']  = $request['restock_refunded_items'] ? 'true' : 'false';
+        $data['status']                  = 0;
+        $data['api_refund']              = $request['method'] ? $request['method'] : 'false';
 
         // Validate that the refund can occur
-        $amount     = wc_format_decimal( sanitize_text_field( $request['refund_amount'] ), wc_get_price_decimals() );
-        $order      = wc_get_order( $request['order_id'] );
+        $amount     = wc_format_decimal( sanitize_text_field( $data['refund_amount'] ), wc_get_price_decimals() );
+        $order      = wc_get_order( $data['order_id'] );
         $max_refund = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
 
         $refund = new Dokan_Pro_Admin_Refund;
 
-        if ( $store_id != $request['seller_id'] && ! $this->refund_permissions_check() ) {
+        if ( $store_id != $data['seller_id'] && ! $this->refund_permissions_check() ) {
             return new WP_Error( 'cheating', __( 'Cheating uh!', 'dokan' ), array( 'status' => 404 ) );
         }
 
@@ -279,11 +282,11 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
             return new WP_Error( 'no_store_found', __( 'No vendor found', 'dokan' ), array( 'status' => 404 ) );
         }
 
-        if ( empty( $request['order_id'] ) ) {
+        if ( empty( $data['order_id'] ) ) {
             return new WP_Error( 'no_order_found', __( 'No Order found', 'dokan' ), array( 'status' => 404 ) );
         }
 
-        if ( empty( $request['refund_amount'] ) ) {
+        if ( empty( $data['refund_amount'] ) ) {
             return new WP_Error( 'no_amount_found', __( 'No Amount found', 'dokan' ), array( 'status' => 404 ) );
         }
 
@@ -293,14 +296,14 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
 
         }
 
-        if ( $refund->has_pending_refund_request( $request['order_id'] ) ) {
+        if ( $refund->has_pending_refund_request( $data['order_id'] ) ) {
             return new WP_Error( 'duplicate', __( 'You have already a processing refund request for this order.', 'dokan' ), array( 'status' => 404 ) );
         }
 
-        $update = $refund->insert_refund( $request );
+        $update = $refund->insert_refund( $data );
 
         $data_info['id']      = $wpdb->insert_id;
-        $data_info['user']    = $this->get_user_data( $request['seller_id'] );
+        $data_info['user']    = $this->get_user_data( $data['seller_id'] );
         $data_info['created'] = mysql_to_rfc3339( date( 'Y-m-d h:i:s' ) );
 
         return rest_ensure_response( $data_info );
@@ -322,7 +325,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
      *         ]
      *     }
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return void
      */
@@ -336,7 +339,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
         }
 
         if ( ! $this->refund_permissions_check() ) {
-            return new WP_Error( 'cheating', __( 'Cheating uh!', 'dokan' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_permission', __( 'You do not have permission for bulk status change', 'dokan' ), array( 'status' => 404 ) );
         }
 
         $allowed_status = array( 'approved', 'cancelled', 'pending' );
@@ -361,7 +364,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     /**
      * Prepare data for response
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return data
      */
@@ -412,7 +415,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     /**
      * Get user data
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return return object
      */
@@ -425,7 +428,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     /**
      * Check permission for getting refund
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return void
      */
@@ -436,7 +439,7 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     /**
      * Check permission for getting refund
      *
-     * @since 2.8.0
+     * @since 2.8.2
      *
      * @return void
      */
