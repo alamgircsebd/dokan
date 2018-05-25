@@ -146,14 +146,14 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      *
      * @return void
      */
-    public function get_announcement( y$request ) {
+    public function get_announcement( $request ) {
         $announcement_id = $request['id'];
 
         if ( empty( $announcement_id ) ) {
             return new WP_Error( 'no_announcement_found', __( 'No announcement found', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
-        $data     = $this->prepare_response_for_object( $this->get_object( $announcement_id ), $requesty );
+        $data     = $this->prepare_response_for_object( $this->get_object( $announcement_id ), $request );
         $response = rest_ensure_response( $data );
 
         return $response;
@@ -169,15 +169,17 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
     public function create_announcement( $request ) {
 
         if (  empty( trim( $request['title'] ) ) ) {
-            return new WP_Error( 'no_title', __( 'Announcement title mus be required', 'dokan-lite' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
         $status = !empty( $request['status'] ) ? $request['status'] : 'pending';
 
         $data = array(
-            'title'        => sanitize_text_field( $request['title'] ),
-            'content'      => sanitize_textarea_field( $request['content'] );,
-            'status'       => $status,
+            'post_title'   => sanitize_text_field( $request['title'] ),
+            'post_content' => sanitize_textarea_field( $request['content'] ),
+            'post_status'  => $status,
+            'post_type'    => 'dokan_announcement',
+            'post_author'  => get_current_user_id()
         );
 
         $post_id = wp_insert_post( $data );
@@ -187,8 +189,163 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
         }
 
         update_post_meta( $post_id, '_announcement_type', $request['sender_type'] );
-        update_post_meta( $post_id, '_announcement_selected_user', $request['sender_type'] );
+        update_post_meta( $post_id, '_announcement_selected_user', $request['sender_ids'] );
 
+        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
+        $announcement = new Dokan_Announcement();
+
+        $assigned_sellers = !empty( $request['sender_ids'] ) ? $request['sender_ids'] : array();
+
+        if ( $request['sender_type'] == 'selected_seller' ) {
+            $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
+        } elseif ( $request['sender_type'] == 'all_seller' ) {
+            $assigned_sellers = array();
+            $users   = new WP_User_Query( array( 'role' => 'seller' ) );
+            $sellers = $users->get_results();
+
+            if ( $sellers ) {
+                foreach ( $sellers as $user ) {
+                    $assigned_sellers[] = $user->ID;
+                }
+            }
+
+            $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
+        }
+
+        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $post_id );
+
+        $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
+
+        return rest_ensure_response( $data );
+    }
+
+    /**
+     * Update announcement
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
+    public function update_announcement( $request ) {
+        if (  empty( trim( $request['id'] ) ) ) {
+            return new WP_Error( 'no_id', __( 'No announcement id found', 'dokan-lite' ), array( 'status' => 404 ) );
+        }
+
+        if (  empty( trim( $request['title'] ) ) ) {
+            return new WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan-lite' ), array( 'status' => 404 ) );
+        }
+
+        $status = ! empty( $request['status'] ) ? $request['status'] : '';
+
+        $data = array(
+            'ID'           => $request['id'],
+            'post_title'   => sanitize_text_field( $request['title'] ),
+            'post_content' => sanitize_textarea_field( $request['content'] ),
+        );
+
+        if ( $status ) {
+            $data['post_status'] = $status;
+        }
+
+        $post_id = wp_update_post( $data );
+
+        update_post_meta( $post_id, '_announcement_type', $request['sender_type'] );
+        update_post_meta( $post_id, '_announcement_selected_user', $request['sender_ids'] );
+
+        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
+        $announcement = new Dokan_Announcement();
+
+        $assigned_sellers = !empty( $request['sender_ids'] ) ? $request['sender_ids'] : array();
+
+        if ( $request['sender_type'] == 'selected_seller' ) {
+            $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
+        } elseif ( $request['sender_type'] == 'all_seller' ) {
+            $assigned_sellers = array();
+            $users   = new WP_User_Query( array( 'role' => 'seller' ) );
+            $sellers = $users->get_results();
+
+            if ( $sellers ) {
+                foreach ( $sellers as $user ) {
+                    $assigned_sellers[] = $user->ID;
+                }
+            }
+
+            $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
+        }
+
+        $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
+        return rest_ensure_response( $data );
+    }
+
+    /**
+     * Delete announcement
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
+    public function delete_withdraw( $request ) {
+
+        $post = $this->get_object( $request['id'] );
+
+        if ( is_wp_error( $post ) ) {
+            return $post;
+        }
+
+        $id    = $post->ID;
+        $force = (bool) $request['force'];
+
+        $supports_trash = ( EMPTY_TRASH_DAYS > 0 );
+
+        $supports_trash = apply_filters( "dokan_rest_{$this->post_type}_trashable", $supports_trash, $post );
+
+        // If we're forcing, then delete permanently.
+        if ( $force ) {
+            $previous = $this->prepare_response_for_object( $post, $request );
+            $result = wp_delete_post( $id, true );
+            $this->delete_announcement_data( $id );
+            $response = new WP_REST_Response();
+            $response->set_data( array( 'deleted' => true, 'previous' => $previous->get_data() ) );
+        } else {
+            // If we don't support trashing for this type, error out.
+            if ( ! $supports_trash ) {
+                /* translators: %s: force=true */
+                return new WP_Error( 'rest_trash_not_supported', sprintf( __( "The post does not support trashing. Set '%s' to delete.", "dokan" ), 'force=true' ), array( 'status' => 501 ) );
+            }
+
+            // Otherwise, only trash if we haven't already.
+            if ( 'trash' === $post->post_status ) {
+                return new WP_Error( 'rest_already_trashed', __( 'The post has already been deleted.', 'dokan' ), array( 'status' => 410 ) );
+            }
+
+            // (Note that internally this falls through to `wp_delete_post` if
+            // the trash is disabled.)
+            $result = wp_trash_post( $id );
+            $post = get_post( $id );
+            $response = $this->prepare_response_for_object( $post, $request );
+        }
+
+        if ( ! $result ) {
+            return new WP_Error( 'dokan_rest_cannot_delete', __( 'The announcement cannot be deleted.', 'dokan' ), array( 'status' => 500 ) );
+        }
+
+        return $response;
+    }
+
+    /**
+     * Delete announcement relational table data
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
+    public function delete_announcement_data( $post_id ) {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix.'dokan_announcement';
+        $sql = "DELETE FROM {$table_name} WHERE `post_id` = $post_id";
+
+        $wpdb->query( $sql );
     }
 
     /**
@@ -258,7 +415,4 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
 
         return $links;
     }
-
-
-
 }
