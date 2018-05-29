@@ -327,32 +327,32 @@ class DPS_Admin {
         $pages_array = $this->get_post_type( 'page' );
 
         $settings_fields['dokan_product_subscription'] = array(
-            array(
+            'subscription_pack' => array(
                 'name'    => 'subscription_pack',
                 'label'   => __( 'Subscription', 'dokan' ),
                 'type'    => 'select',
                 'options' => $pages_array
             ),
-            array(
+            'enable_pricing' => array(
                 'name'  => 'enable_pricing',
                 'label' => __( 'Enable Product Subscription', 'dokan' ),
                 'desc'  => __( 'Enable product subscription for vendor', 'dokan' ),
                 'type'  => 'checkbox'
             ),
-            array(
+            'enable_subscription_pack_in_reg' => array(
                 'name'    => 'enable_subscription_pack_in_reg',
                 'label' => __( 'Enable Subscription in registration form', 'dokan' ),
                 'desc'  => __( 'Enable Subscription pack in registration form for new vendor', 'dokan' ),
                 'type'  => 'checkbox',
                 'default' => 'on'
             ),
-            array(
+            'notify_by_email' => array(
                 'name'  => 'notify_by_email',
                 'label' => __( 'Enable Email Notification', 'dokan' ),
                 'desc'  => __( 'Enable notification by email for vendor during end of the package expiration', 'dokan' ),
                 'type'  => 'checkbox'
             ),
-            array(
+            'no_of_days_before_mail' => array(
                 'name'    => 'no_of_days_before_mail',
                 'label'   => __( 'No. of Days', 'dokan' ),
                 'desc'    => __( 'Before an email will be sent to the vendor', 'dokan' ),
@@ -360,7 +360,7 @@ class DPS_Admin {
                 'size'    => 'midium',
                 'default' => '2'
             ),
-            array(
+            'product_status_after_end' => array(
                 'name'    => 'product_status_after_end',
                 'label'   => __( 'Product Status', 'dokan' ),
                 'desc'    => __( 'Product status when vendor pack validity will expire', 'dokan' ),
@@ -372,13 +372,13 @@ class DPS_Admin {
                     'draft'   => __( 'Draft', 'dokan' )
                 )
             ),
-            array(
+            'email_subject' => array(
                 'name'  => 'email_subject',
                 'label' => __( 'Email Subject', 'dokan' ),
                 'desc'  => __( 'Enter Subject text for email notification', 'dokan' ),
                 'type'  => 'text'
             ),
-            array(
+            'email_body' => array(
                 'name'  => 'email_body',
                 'label' => __( 'Email body', 'dokan' ),
                 'desc'  => __( 'Enter body text for email notification', 'dokan' ),
