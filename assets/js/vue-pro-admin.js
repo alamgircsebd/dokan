@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 18);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1123,8 +1123,331 @@ var Switches = dokan_get_lib('Switches');
 });
 
 /***/ }),
-/* 7 */,
-/* 8 */,
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var ListTable = dokan_get_lib('ListTable');
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'Announcement',
+
+    components: {
+        ListTable: ListTable
+    },
+
+    data: function data() {
+        return {
+            requests: [],
+            loading: false,
+
+            status: {
+                'publish': this.__('Published', 'dokan'),
+                'pending': this.__('Pending', 'dokan'),
+                'draft': this.__('Draft', 'dokan'),
+                'trash': this.__('Trash', 'dokan')
+            },
+
+            counts: {
+                all: 0,
+                publish: 0,
+                draft: 0,
+                pending: 0,
+                trash: 0
+            },
+            notFound: this.__('No announcement found.', 'dokan'),
+            totalPages: 1,
+            perPage: 10,
+            totalItems: 0,
+
+            showCb: true,
+
+            columns: {
+                'title': { label: this.__('Title', 'dokan') },
+                'send_to': { label: this.__('Sent To', 'dokan') },
+                'status': { label: this.__('Status', 'dokan') },
+                'created_at': { label: this.__('Created Date', 'dokan') }
+            },
+
+            actionColumn: 'title',
+            actions: [{
+                key: 'edit',
+                label: this.__('Edit', 'dokan')
+            }, {
+                key: 'trash',
+                label: this.__('Trash', 'dokan')
+            }, {
+                key: 'delete',
+                label: this.__('Permanent Delete', 'dokan')
+            }, {
+                key: 'restore',
+                label: this.__('Restore', 'dokan')
+            }]
+        };
+    },
+
+
+    watch: {
+        '$route.query.status': function $routeQueryStatus() {
+            this.fetchAll();
+        },
+        '$route.query.page': function $routeQueryPage() {
+            this.fetchAll();
+        }
+    },
+
+    computed: {
+        currentStatus: function currentStatus() {
+            return this.$route.query.status || 'all';
+        },
+        currentPage: function currentPage() {
+            var page = this.$route.query.page || 1;
+            return parseInt(page);
+        },
+        bulkActions: function bulkActions() {
+            if ('trash' == this.$route.query.status) {
+                return [{
+                    key: 'delete',
+                    label: this.__('Permanent Delete', 'dokan')
+                }, {
+                    key: 'restore',
+                    label: this.__('Restore', 'dokan')
+                }];
+            } else {
+                return [{
+                    key: 'trash',
+                    label: this.__('Move in Trash', 'dokan')
+                }];
+            }
+        }
+    },
+
+    methods: {
+        updatedCounts: function updatedCounts(xhr) {
+            this.counts.all = parseInt(xhr.getResponseHeader('X-Status-All'));
+            this.counts.publish = parseInt(xhr.getResponseHeader('X-Status-Publish'));
+            this.counts.pending = parseInt(xhr.getResponseHeader('X-Status-Pending'));
+            this.counts.draft = parseInt(xhr.getResponseHeader('X-Status-Draft'));
+            this.counts.trash = parseInt(xhr.getResponseHeader('X-Status-Trash'));
+        },
+        updatePagination: function updatePagination(xhr) {
+            this.totalPages = parseInt(xhr.getResponseHeader('X-WP-TotalPages'));
+            this.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
+        },
+        fetchAll: function fetchAll() {
+            var _this = this;
+
+            this.loading = true;
+
+            dokan.api.get('/announcement?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
+                _this.requests = response;
+                _this.loading = false;
+
+                _this.updatedCounts(xhr);
+                _this.updatePagination(xhr);
+            });
+        },
+        moment: function (_moment) {
+            function moment(_x) {
+                return _moment.apply(this, arguments);
+            }
+
+            moment.toString = function () {
+                return _moment.toString();
+            };
+
+            return moment;
+        }(function (date) {
+            return moment(date);
+        }),
+        editUrl: function editUrl(id) {
+            return dokan.urls.adminRoot + 'admin.php?page=dokan#/announcement/' + id;
+        },
+        goToPage: function goToPage(page) {
+            this.$router.push({
+                name: 'Withdraw',
+                query: {
+                    status: this.currentStatus,
+                    page: page
+                }
+            });
+        },
+        onActionClick: function onActionClick(action, row) {
+            console.log(action, row);
+        },
+        rowAction: function rowAction(action, data) {
+            var _this2 = this;
+
+            if (!data.row.id) {
+                alert(this.__('No data found', 'dokan'));
+                return;
+            }
+
+            if ('trash' === action || 'delete' === action) {
+                this.loading = true;
+
+                var isPermanentDelete = 'delete' === action ? '?force=true' : '';
+
+                dokan.api.delete('/announcement/' + data.row.id + isPermanentDelete).done(function (response, status, xhr) {
+                    _this2.fetchAll();
+                    _this2.loading = false;
+                });
+            }
+
+            if ('restore' === action) {
+                this.loading = true;
+                var jsonData = {};
+
+                dokan.api.put('/announcement/' + data.row.id + '/restore').done(function (response, status, xhr) {
+                    _this2.fetchAll();
+                    _this2.loading = false;
+                }).error(function (response, status, xhr) {
+                    console.log(response);
+                });
+            }
+        },
+        onBulkAction: function onBulkAction(action, items) {
+            var _this3 = this;
+
+            if ('trash' === action) {
+                this.loading = true;
+
+                var jsonData = {};
+                jsonData.trash = items;
+
+                dokan.api.put('/announcement/batch', jsonData).done(function (response, status, xhr) {
+                    _this3.fetchAll();
+                    _this3.loading = false;
+                });
+            }
+
+            if ('delete' === action) {
+                this.loading = true;
+
+                var _jsonData = {};
+                _jsonData.delete = items;
+
+                dokan.api.put('/announcement/batch', _jsonData).done(function (response, status, xhr) {
+                    _this3.fetchAll();
+                    _this3.loading = false;
+                });
+            }
+
+            if ('restore' === action) {
+                this.loading = true;
+                var _jsonData2 = {};
+                _jsonData2.restore = items;
+
+                dokan.api.put('/announcement/batch', _jsonData2).done(function (response, status, xhr) {
+                    _this3.fetchAll();
+                    _this3.loading = false;
+                });
+            }
+        }
+    },
+
+    created: function created() {
+        this.fetchAll();
+    }
+});
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+    name: 'NewAnnouncement'
+});
+
+/***/ }),
 /* 9 */,
 /* 10 */,
 /* 11 */,
@@ -1134,29 +1457,31 @@ var Switches = dokan_get_lib('Switches');
 /* 15 */,
 /* 16 */,
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */,
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Vendors = __webpack_require__(19);
+var _Vendors = __webpack_require__(21);
 
 var _Vendors2 = _interopRequireDefault(_Vendors);
 
-var _VendorSingle = __webpack_require__(22);
+var _VendorSingle = __webpack_require__(24);
 
 var _VendorSingle2 = _interopRequireDefault(_VendorSingle);
 
-var _Modules = __webpack_require__(25);
+var _Modules = __webpack_require__(27);
 
 var _Modules2 = _interopRequireDefault(_Modules);
 
-var _Announcement = __webpack_require__(38);
+var _Announcement = __webpack_require__(30);
 
 var _Announcement2 = _interopRequireDefault(_Announcement);
 
-var _NewAnnouncement = __webpack_require__(43);
+var _NewAnnouncement = __webpack_require__(33);
 
 var _NewAnnouncement2 = _interopRequireDefault(_NewAnnouncement);
 
@@ -1169,18 +1494,18 @@ dokan_add_route(_Announcement2.default);
 dokan_add_route(_NewAnnouncement2.default);
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Vendors_vue__ = __webpack_require__(4);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(23);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(20)
+  __webpack_require__(22)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1226,13 +1551,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1470,18 +1795,18 @@ if (false) {
 }
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VendorSingle_vue__ = __webpack_require__(5);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(26);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(23)
+  __webpack_require__(25)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1527,13 +1852,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 24 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2174,18 +2499,18 @@ if (false) {
 }
 
 /***/ }),
-/* 25 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Modules_vue__ = __webpack_require__(6);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(29);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(26)
+  __webpack_require__(28)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2231,13 +2556,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 26 */
+/* 28 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2530,48 +2855,18 @@ if (false) {
 }
 
 /***/ }),
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'Announcement',
-
-    data: function data() {
-        return {};
-    }
-});
-
-/***/ }),
-/* 38 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Announcement_vue__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Announcement_vue__ = __webpack_require__(7);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b4865812_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Announcement_vue__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b4865812_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Announcement_vue__ = __webpack_require__(32);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(39)
+  __webpack_require__(31)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2617,13 +2912,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 39 */
+/* 31 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 40 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2631,11 +2926,336 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "dokan-announcement-wrapper" }, [
-    _vm._v(
-      "\n    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora vitae et, modi nostrum temporibus corporis veritatis ut nam, ipsum repellat dolore laborum nemo voluptatem sed ullam. Praesentium quas dolorem nesciunt.\n"
-    )
-  ])
+  return _c(
+    "div",
+    { staticClass: "dokan-announcement-wrapper" },
+    [
+      _c("h1", [_vm._v(_vm._s(_vm.__("Announcement", "dokan")))]),
+      _vm._v(" "),
+      _c("div", { staticClass: "help-block" }, [
+        _c("span", { staticClass: "help-text" }, [
+          _c(
+            "a",
+            {
+              attrs: {
+                href: "https://wedevs.com/docs/dokan/announcements/",
+                target: "_blank"
+              }
+            },
+            [_vm._v(_vm._s(_vm.__("Need Any Help ?")))]
+          )
+        ]),
+        _vm._v(" "),
+        _c("span", { staticClass: "dashicons dashicons-smiley" })
+      ]),
+      _vm._v(" "),
+      _c("ul", { staticClass: "subsubsub" }, [
+        _c(
+          "li",
+          [
+            _c("router-link", {
+              attrs: {
+                to: { name: "Announcement" },
+                "active-class": "current",
+                exact: ""
+              },
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__("All <span class='count'>(%s)</span>", "dokan"),
+                    _vm.counts.all
+                  )
+                )
+              }
+            }),
+            _vm._v(" | ")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          [
+            _c("router-link", {
+              attrs: {
+                to: { name: "Announcement", query: { status: "publish" } },
+                "active-class": "current",
+                exact: ""
+              },
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__(
+                      "Published <span class='count'>(%s)</span>",
+                      "dokan-lite"
+                    ),
+                    _vm.counts.publish
+                  )
+                )
+              }
+            }),
+            _vm._v(" | ")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          [
+            _c("router-link", {
+              attrs: {
+                to: { name: "Announcement", query: { status: "pending" } },
+                "active-class": "current",
+                exact: ""
+              },
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__(
+                      "Pending <span class='count'>(%s)</span>",
+                      "dokan-lite"
+                    ),
+                    _vm.counts.pending
+                  )
+                )
+              }
+            }),
+            _vm._v(" | ")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          [
+            _c("router-link", {
+              attrs: {
+                to: { name: "Announcement", query: { status: "draft" } },
+                "active-class": "current",
+                exact: ""
+              },
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__(
+                      "Draft <span class='count'>(%s)</span>",
+                      "dokan-lite"
+                    ),
+                    _vm.counts.draft
+                  )
+                )
+              }
+            }),
+            _vm._v(" | ")
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          [
+            _c("router-link", {
+              attrs: {
+                to: { name: "Announcement", query: { status: "trash" } },
+                "active-class": "current",
+                exact: ""
+              },
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__(
+                      "Trash <span class='count'>(%s)</span>",
+                      "dokan-lite"
+                    ),
+                    _vm.counts.trash
+                  )
+                )
+              }
+            })
+          ],
+          1
+        )
+      ]),
+      _vm._v(" "),
+      _c("list-table", {
+        attrs: {
+          columns: _vm.columns,
+          rows: _vm.requests,
+          loading: _vm.loading,
+          "action-column": _vm.actionColumn,
+          actions: _vm.actions,
+          "show-cb": _vm.showCb,
+          "bulk-actions": _vm.bulkActions,
+          "not-found": _vm.notFound,
+          "total-pages": _vm.totalPages,
+          "total-items": _vm.totalItems,
+          "per-page": _vm.perPage,
+          "current-page": _vm.currentPage
+        },
+        on: {
+          pagination: _vm.goToPage,
+          "action:click": _vm.onActionClick,
+          "bulk:click": _vm.onBulkAction
+        },
+        scopedSlots: _vm._u([
+          {
+            key: "title",
+            fn: function(data) {
+              return [
+                _c("strong", [
+                  _c("a", { attrs: { href: _vm.editUrl(data.row.id) } }, [
+                    _vm._v(_vm._s(data.row.title))
+                  ])
+                ])
+              ]
+            }
+          },
+          {
+            key: "status",
+            fn: function(data) {
+              return [
+                _c("span", { class: data.row.status }, [
+                  _vm._v(_vm._s(_vm.status[data.row.status]))
+                ])
+              ]
+            }
+          },
+          {
+            key: "created_at",
+            fn: function(data) {
+              return [
+                _vm._v(
+                  "\n            " +
+                    _vm._s(
+                      _vm.moment(data.row.created_at).format("MMM D, YYYY")
+                    ) +
+                    "\n        "
+                )
+              ]
+            }
+          },
+          {
+            key: "send_to",
+            fn: function(data) {
+              return [
+                "all_seller" === data.row.sender_type
+                  ? _c("span", [_vm._v(_vm._s(_vm.__("All Vendor", "dokan")))])
+                  : _vm._e(),
+                _vm._v(" "),
+                "selected_seller" === data.row.sender_type
+                  ? _c("span", [
+                      _vm._v(_vm._s(_vm.__("Selected Vendor", "dokan")))
+                    ])
+                  : _vm._e()
+              ]
+            }
+          },
+          {
+            key: "row-actions",
+            fn: function(data) {
+              return [
+                _vm._l(_vm.actions, function(action, index) {
+                  return [
+                    action.key == "edit"
+                      ? _c(
+                          "span",
+                          { class: action.key },
+                          [
+                            _c(
+                              "a",
+                              { attrs: { href: _vm.editUrl(data.row.id) } },
+                              [_vm._v(_vm._s(action.label))]
+                            ),
+                            _vm._v(" "),
+                            index !== _vm.actions.length - 1
+                              ? [_vm._v(" | ")]
+                              : _vm._e()
+                          ],
+                          2
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    action.key == "trash" && _vm.currentStatus != "trash"
+                      ? _c("span", { class: action.key }, [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.rowAction(action.key, data)
+                                }
+                              }
+                            },
+                            [_vm._v(_vm._s(action.label))]
+                          )
+                        ])
+                      : _vm._e(),
+                    _vm._v(" "),
+                    action.key == "delete" && _vm.currentStatus == "trash"
+                      ? _c(
+                          "span",
+                          { class: action.key },
+                          [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.rowAction(action.key, data)
+                                  }
+                                }
+                              },
+                              [_vm._v(_vm._s(action.label))]
+                            ),
+                            _vm._v(" "),
+                            index !== _vm.actions.length - 1
+                              ? [_vm._v(" | ")]
+                              : _vm._e()
+                          ],
+                          2
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    action.key == "restore" && _vm.currentStatus == "trash"
+                      ? _c(
+                          "span",
+                          { class: action.key },
+                          [
+                            _c(
+                              "a",
+                              {
+                                attrs: { href: "#" },
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    _vm.rowAction(action.key, data)
+                                  }
+                                }
+                              },
+                              [_vm._v(_vm._s(action.label))]
+                            ),
+                            _vm._v(" "),
+                            index !== _vm.actions.length - 1
+                              ? [_vm._v(" | ")]
+                              : _vm._e()
+                          ],
+                          2
+                        )
+                      : _vm._e()
+                  ]
+                })
+              ]
+            }
+          }
+        ])
+      })
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -2649,36 +3269,18 @@ if (false) {
 }
 
 /***/ }),
-/* 41 */,
-/* 42 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-
-    name: 'NewAnnouncement'
-});
-
-/***/ }),
-/* 43 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_NewAnnouncement_vue__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_NewAnnouncement_vue__ = __webpack_require__(8);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0a129b87_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_NewAnnouncement_vue__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0a129b87_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_NewAnnouncement_vue__ = __webpack_require__(35);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(44)
+  __webpack_require__(34)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2724,13 +3326,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 44 */
+/* 34 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 45 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";

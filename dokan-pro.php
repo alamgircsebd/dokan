@@ -226,10 +226,10 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
-            require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
         }
 
+        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
         require_once DOKAN_PRO_INC . '/class-shipping-zone.php';
         require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
         require_once DOKAN_PRO_INC . '/shipping-gateway/vendor-shipping.php';
@@ -280,8 +280,9 @@ class Dokan_Pro {
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
-            new Dokan_Announcement();
         }
+
+        new Dokan_Announcement();
 
         Dokan_Pro_Ajax::init();
         Dokan_Pro_Shipping::init();

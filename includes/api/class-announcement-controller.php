@@ -84,12 +84,35 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
 
             array(
                 'methods'             => WP_REST_Server::DELETABLE,
-                'callback'            => array( $this, 'delete_withdraw' ),
+                'callback'            => array( $this, 'delete_announcement' ),
                 'permission_callback' => array( $this, 'get_announcement_permissions_check' ),
             ),
 
         ) );
 
+        register_rest_route( $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)/restore', array(
+            'args' => array(
+                'id' => array(
+                    'description' => __( 'Unique identifier for the object.', 'dokan' ),
+                    'type'        => 'integer',
+                ),
+            ),
+
+            array(
+                'methods'             => WP_REST_Server::EDITABLE,
+                'callback'            => array( $this, 'restore_announcement' ),
+                'permission_callback' => array( $this, 'restore_announcement_permissions_check' ),
+            ),
+        ) );
+
+        register_rest_route( $this->namespace, '/' . $this->base . '/batch', array(
+            array(
+                'methods'             => WP_REST_Server::EDITABLE,
+                'callback'            => array( $this, 'batch_items' ),
+                'permission_callback' => array( $this, 'batch_items_permissions_check' ),
+                'args'                => $this->get_endpoint_args_for_item_schema( WP_REST_Server::EDITABLE ),
+            ),
+        ) );
     }
 
     /**
@@ -111,7 +134,7 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      * @return void
      */
     public function get_announcements( $request ) {
-        $status = ! empty( $request['status'] ) ? $request['status'] : 'any';
+        $status = ( empty( $request['status'] ) || $request['status'] == 'all' ) ? array( 'publish', 'pending', 'draft' ) : $request['status'];
 
         $limit = $request['per_page'];
         $offset = ( $request['page'] - 1 ) * $request['page'];
@@ -134,6 +157,13 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
         }
 
         $response = rest_ensure_response( $data );
+        $count = wp_count_posts( 'dokan_announcement' );
+
+        $response->header( 'X-Status-All', ( $count->pending + $count->publish + $count->draft ) );
+        $response->header( 'X-Status-Pending', $count->pending );
+        $response->header( 'X-Status-Publish', $count->publish );
+        $response->header( 'X-Status-Draft', $count->draft );
+        $response->header( 'X-Status-Trash', $count->trash );
 
         $response = $this->format_collection_response( $response, $request, $query->found_posts );
         return $response;
@@ -227,11 +257,11 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      * @return void
      */
     public function update_announcement( $request ) {
-        if (  empty( trim( $request['id'] ) ) ) {
+        if ( empty( trim( $request['id'] ) ) ) {
             return new WP_Error( 'no_id', __( 'No announcement id found', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
-        if (  empty( trim( $request['title'] ) ) ) {
+        if ( isset( $request['title'] ) && empty( trim( $request['title'] ) ) ) {
             return new WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
@@ -284,7 +314,7 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      *
      * @return void
      */
-    public function delete_withdraw( $request ) {
+    public function delete_announcement( $request ) {
 
         $post = $this->get_object( $request['id'] );
 
@@ -333,6 +363,79 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
     }
 
     /**
+     * Restore announcement
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
+    public function restore_announcement( $request ) {
+        $post = $this->get_object( $request['id'] );
+
+        if ( is_wp_error( $post ) ) {
+            return $post;
+        }
+
+        $post = wp_untrash_post( $post->ID );
+        $response = $this->prepare_response_for_object( $post, $request );
+        return $response;
+    }
+
+    /**
+     * trash, delete and restore bulk action
+     *
+     * JSON data format for sending to API
+     *     {
+     *         "trash" : [
+     *             "1", "9", "7"
+     *         ],
+     *         "delete" : [
+     *             "2"
+     *         ],
+     *         "restore" : [
+     *             "4"
+     *         ]
+     *     }
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
+    public function batch_items( $request ) {
+        global $wpdb;
+
+        $params = $request->get_params();
+
+        if ( empty( $params ) ) {
+            return new WP_Error( 'no_item_found', __( 'No items found for bulk updating', 'dokan-lite' ), array( 'status' => 404 ) );
+        }
+
+        $allowed_status = array( 'trash', 'delete', 'restore' );
+
+        foreach ( $params as $status => $value ) {
+            if ( in_array( $status, $allowed_status ) ) {
+                if ( 'delete' === $status ) {
+                    foreach ( $value as $announcement_id ) {
+                        $result = wp_delete_post( $announcement_id, true );
+                        $this->delete_announcement_data( $announcement_id );
+                    }
+                } else if ( 'trash' === $status ) {
+                    foreach ( $value as $announcement_id ) {
+                        wp_trash_post( $announcement_id );
+                    }
+                } else if ( 'restore' === $status ) {
+                    foreach ( $value as $announcement_id ) {
+                        wp_untrash_post( $announcement_id );
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
      * Delete announcement relational table data
      *
      * @since 2.8.2
@@ -360,6 +463,17 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
     }
 
     /**
+     * get_announcement_permissions_check
+     *
+     * @since 2.8.2
+     *
+     * @return void
+     */
+    public function restore_announcement_permissions_check() {
+        return current_user_can( 'manage_options' );
+    }
+
+    /**
      * create_announcement_permissions_check
      *
      * @since 2.8.2
@@ -367,6 +481,17 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      * @return void
      */
     public function create_announcement_permissions_check() {
+        return current_user_can( 'manage_options' );
+    }
+
+    /**
+     * Check permission for getting withdraw
+     *
+     * @since 2.8.0
+     *
+     * @return void
+     */
+    public function batch_items_permissions_check() {
         return current_user_can( 'manage_options' );
     }
 
