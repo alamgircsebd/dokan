@@ -45,14 +45,14 @@ class Dokan_SPMV_Admin {
     function add_new_setting_field_admin_panael( $settings_fields ) {
 
         $settings_fields['dokan_spmv'] = array(
-            array(
+            'enable_pricing' => array(
                 'name'  => 'enable_pricing',
                 'label' => __( 'Enable Single Product Multiple Vendor', 'dokan' ),
                 'desc'  => __( 'Enable Single Product Multiple Vendor functionality', 'dokan' ),
                 'type'  => 'checkbox'
             ),
 
-            array(
+            'sell_item_btn' => array(
                 'name'    => 'sell_item_btn',
                 'label'   => __( 'Sell Item Button Text', 'dokan' ),
                 'desc'    => __( 'Change your sell this item button text', 'dokan' ),
@@ -60,7 +60,7 @@ class Dokan_SPMV_Admin {
                 'default' => __( 'Sell This Item', 'dokan' ),
             ),
 
-            array(
+            'available_vendor_list_title' => array(
                 'name'    => 'available_vendor_list_title',
                 'label'   => __( 'Available Vendor Display area title', 'dokan' ),
                 'desc'    => __( 'Set your heading for available vendor section in single product page', 'dokan' ),
@@ -68,7 +68,7 @@ class Dokan_SPMV_Admin {
                 'default' => __( 'Other Available Vendor', 'dokan' ),
             ),
 
-            array(
+            'available_vendor_list_position' => array(
                 'name'    => 'available_vendor_list_position',
                 'label'   => __( 'Available Vendor Section Display Position', 'dokan' ),
                 'desc'    => __( 'Set your displaying position for diplaying available vendor section in single product page', 'dokan' ),
