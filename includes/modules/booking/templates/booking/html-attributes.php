@@ -10,7 +10,7 @@
         <div class="dokan-clearfix"></div>
     </div>
     <div class="dokan-section-content">
-        <div class="dokan-product-attribute-wrapper show_if_simple show_if_variable">
+        <div class="dokan-product-attribute-wrapper">
 
             <ul class="dokan-attribute-option-list">
                 <?php
