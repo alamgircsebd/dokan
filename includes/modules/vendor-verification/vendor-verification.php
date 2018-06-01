@@ -262,7 +262,7 @@ class Dokan_Seller_Verification {
                 "Facebook" => array(
                     "enabled" => true,
                     "keys"    => array( "id" => "", "secret" => "" ),
-                    "scope"   => "email, public_profile, user_friends"
+                    "scope"   => "email, public_profile"
                 ),
                 "Google"   => array(
                     "enabled"         => true,
