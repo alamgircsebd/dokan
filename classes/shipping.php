@@ -438,17 +438,23 @@ class Dokan_Pro_Shipping {
     public function show_shipping_field( $wizard ) {
         $user_id = $wizard->store_id;
 
-        $enable_shipping             = get_user_meta( $user_id, '_dps_shipping_enable', true );
+        $dokan_shipping_option       = get_option( 'woocommerce_dokan_product_shipping_settings' );
+        $enable_shipping             = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
         $default_shipping_cost       = get_user_meta( $user_id, '_dps_shipping_type_price', true );
         $per_product_additional_cost = get_user_meta( $user_id, '_dps_additional_product', true );
         $per_qty_additiona_cost      = get_user_meta( $user_id, '_dps_additional_qty', true );
         $dps_pt                      = get_user_meta( $user_id, '_dps_pt', true );;
         $processing_time             = dokan_get_shipping_processing_times();
+
+        if ( $enable_shipping !== 'yes' ) {
+            return;
+        }
+
         ?>
             <tr class="enable-shipping">
                 <th scope="row"><label for="enable_shipping"><?php _e( 'Enable Shipping', 'dokan' ); ?></label></th>
                 <td>
-                    <input type="checkbox" name="enable_shipping" id="enable_shipping" class="input-checkbox" value="1" <?php echo ( $enable_shipping == 'yes' ) ? 'checked="checked"' : ''; ?>/>
+                    <input type="checkbox" name="enable_shipping" id="enable_shipping" class="input-checkbox" value="1"/>
                     <label for="enable_shipping"><?php _e( 'Enable store shipping', 'dokan' ); ?></label>
                 </td>
             </tr>
