@@ -47,7 +47,7 @@
                         <h2 class="store-name">{{ store.store_name ? store.store_name : '(No Name)' }}</h2>
 
                         <div class="star-rating">
-                            <span v-for="i in 5" :class="['dashicons', i <= store.rating.count ? 'active' : '' ]"></span>
+                            <span v-for="i in 5" :class="['dashicons', i <= store.rating.rating ? 'active' : '' ]"></span>
                         </div>
 
                         <ul class="store-details">
