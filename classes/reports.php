@@ -74,9 +74,9 @@ class Dokan_Pro_Reports {
             echo "\r\n";
 
             //calculate opening balance
-            $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $start_date, dokan_get_current_user_id(), dokan_withdraw_get_active_order_status() );
-            $prev_refunds    = dokan_get_seller_refund_by_date( '2010-01-01', $start_date );
-            $prev_wthdraws   = dokan_get_seller_withdraw_by_date( '2010-01-01', $start_date );
+            $prev_orders     = dokan_get_seller_orders_by_date( '2010-01-01', $end_date, dokan_get_current_user_id(), dokan_withdraw_get_active_order_status() );
+            $prev_refunds    = dokan_get_seller_refund_by_date( '2010-01-01', $end_date );
+            $prev_wthdraws   = dokan_get_seller_withdraw_by_date( '2010-01-01', $end_date );
 
             $old_data = array_merge( $prev_orders, $prev_refunds, $prev_wthdraws );
             $old_statements = [];
