@@ -373,10 +373,11 @@ class DPS_Admin {
                 )
             ),
             'email_subject' => array(
-                'name'  => 'email_subject',
-                'label' => __( 'Email Subject', 'dokan' ),
-                'desc'  => __( 'Enter Subject text for email notification', 'dokan' ),
-                'type'  => 'text'
+                'name'    => 'email_subject',
+                'label'   => __( 'Email Subject', 'dokan' ),
+                'desc'    => __( 'Enter Subject text for email notification', 'dokan' ),
+                'type'    => 'text',
+                'default' => __( 'Subscription Email', 'dokan' )
             ),
             'email_body' => array(
                 'name'  => 'email_body',

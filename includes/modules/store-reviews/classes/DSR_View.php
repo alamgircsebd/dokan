@@ -119,7 +119,7 @@ class DSR_View {
         ?>
             <h3><?php _e( 'Your Review', 'dokan' ) ?></h3>
             <ol class="commentlist" id="dokan-store-review-single">
-                <?php echo $this->render_review_list( $query->posts, 'No Reviews found' );?>
+                <?php echo $this->render_review_list( $query->posts, __( 'No Reviews found', 'dokan' ) );?>
             </ol>
         <?php
 

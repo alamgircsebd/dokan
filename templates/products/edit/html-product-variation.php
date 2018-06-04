@@ -122,7 +122,7 @@ extract( $variation_data );
                     <input type="text" size="5" name="variable_sale_price[<?php echo $loop; ?>]" value="<?php if ( isset( $_sale_price ) ) echo esc_attr( $_sale_price ); ?>" class="dokan-form-control dokan-product-sales-price-variable" />
                 </div>
                 <div class="dokan-form-group dokan-clearfix product-edit-container">
-                    <div class="dokan-product-less-price-alert">
+                    <div class="dokan-product-less-price-alert dokan-hide">
                         <?php _e('Product price can\'t be less than the vendor fee!', 'dokan' ); ?>
                     </div>
                 </div>

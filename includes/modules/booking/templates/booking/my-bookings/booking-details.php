@@ -57,7 +57,7 @@ $statuses  = array_unique( array_merge( get_wc_booking_statuses( 'user' ), get_w
                             <div class="dokan-panel-heading"><strong><?php _e( 'Details' , 'dokan' ) ?></strong></div>
                             <div class="dokan-panel-body">
                                 <div class="dokan-booking-general-details">
-                                    <ul class="list-unstyled order-status">
+                                    <ul class="list-unstyled">
 
                                         <li>
                                             <span class="dokan-booking-label"><?php _e( 'Booking Status:', 'dokan' ); ?></span>

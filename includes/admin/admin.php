@@ -223,7 +223,7 @@ class Dokan_Pro_Admin_Settings {
             'hide_withdraw_option' => array(
                 'name'    => 'hide_withdraw_option',
                 'label'   => __( 'Hide Withdraw Option', 'dokan' ),
-                'desc'    => __( 'Hide withdraw option (when vendor is getting commission autometically) ', 'dokan' ),
+                'desc'    => __( 'Hide withdraw option (when vendor is getting commission automatically) ', 'dokan' ),
                 'default' => 'off',
                 'type'    => 'checkbox'
             ),

@@ -2352,7 +2352,7 @@ var render = function() {
                       return _c("span", {
                         class: [
                           "dashicons",
-                          i <= _vm.store.rating.count ? "active" : ""
+                          i <= _vm.store.rating.rating ? "active" : ""
                         ]
                       })
                     })

@@ -134,7 +134,7 @@ class Dokan_Seller_Verification {
 
     function load_verification_template_header( $heading, $query_vars ) {
         if ( isset( $query_vars ) && $query_vars == 'verification' ) {
-            $heading = __( 'Verifcation', 'dokan' );
+            $heading = __( 'Verification', 'dokan' );
         }
 
         return $heading;
@@ -262,7 +262,7 @@ class Dokan_Seller_Verification {
                 "Facebook" => array(
                     "enabled" => true,
                     "keys"    => array( "id" => "", "secret" => "" ),
-                    "scope"   => "email, public_profile, user_friends"
+                    "scope"   => "email, public_profile"
                 ),
                 "Google"   => array(
                     "enabled"         => true,
