@@ -1,12 +1,15 @@
 <template>
     <div class="dokan-announcement-wrapper">
 
-        <h1>{{ __( 'Announcement', 'dokan' ) }}</h1>
+        <h1 class="wp-heading-inline">{{ __( 'Announcement', 'dokan' ) }}</h1>
+        <router-link :to="{ name: 'NewAnnouncement' }" class="page-title-action">{{ __( 'Add Announcement', 'dokan' ) }}</router-link>
 
         <div class="help-block">
-            <span class='help-text'><a href="https://wedevs.com/docs/dokan/announcements/" target="_blank">{{ __( 'Need Any Help ?') }}</a></span>
+            <span class='help-text'><a href="https://wedevs.com/docs/dokan/announcements/" target="_blank">{{ __( 'Need Any Help ?', 'dokan' ) }}</a></span>
             <span class="dashicons dashicons-smiley"></span>
         </div>
+
+        <hr class="wp-header-end">
 
         <ul class="subsubsub">
             <li><router-link :to="{ name: 'Announcement' }" active-class="current" exact v-html="sprintf( __( 'All <span class=\'count\'>(%s)</span>', 'dokan' ), counts.all )"></router-link> | </li>
@@ -35,7 +38,8 @@
         >
 
             <template slot="title" slot-scope="data">
-                <strong><a :href="editUrl(data.row.id)">{{ data.row.title }}</a></strong>
+                <strong v-if="'publish' == data.row.status">{{ data.row.title }}</strong>
+                <strong v-else><a :href="editUrl(data.row.id)">{{ data.row.title }}</a></strong>
             </template>
 
             <template slot="status" slot-scope="data">
@@ -53,7 +57,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <template v-for="(action, index) in actions">
-                    <span :class="action.key" v-if="action.key == 'edit'">
+                    <span :class="action.key" v-if="action.key == 'edit' && 'publish' != data.row.status">
                         <a :href="editUrl(data.row.id)">{{ action.label }}</a>
                         <template v-if="index !== ( actions.length - 1)"> | </template>
                     </span>
@@ -218,12 +222,12 @@
             },
 
             editUrl(id) {
-                return dokan.urls.adminRoot + 'admin.php?page=dokan#/announcement/' + id;
+                return dokan.urls.adminRoot + 'admin.php?page=dokan#/announcement/' + id + '/edit';
             },
 
             goToPage(page) {
                 this.$router.push({
-                    name: 'Withdraw',
+                    name: 'Announcement',
                     query: {
                         status: this.currentStatus,
                         page: page

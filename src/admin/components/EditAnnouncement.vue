@@ -1,10 +1,18 @@
 <template>
-    <div class="dokan-announcement-form-wrapper">
-        <h1 class="wp-heading-inline">{{ __( 'Add New Announcement', 'dokan' ) }}</h1>
+    <div class="dokan-announcement-form-wrapper" v-if="announcement.id">
+        <h1 class="wp-heading-inline">{{ __( 'Edit Announcement', 'dokan' ) }}</h1>
+        <router-link :to="{ name: 'NewAnnouncement' }" class="page-title-action">{{ __( 'Add Announcement', 'dokan' ) }}</router-link>
 
         <div class="help-block">
             <span class='help-text'><a href="https://wedevs.com/docs/dokan/announcements/" target="_blank">{{ __( 'Need Any Help ?', 'dokan' ) }}</a></span>
             <span class="dashicons dashicons-smiley"></span>
+        </div>
+
+        <div id="announcement-message_updated" class="announcement-error notice is-dismissible updated" v-if="isSaved">
+            <p><strong v-html="message"></strong></p>
+            <button type="button" class="notice-dismiss" @click.prevent="isSaved = false">
+                <span class="screen-reader-text">{{ __( 'Dismiss this notice.', 'dokan-lite' ) }}</span>
+            </button>
         </div>
 
         <hr class="wp-header-end">
@@ -28,9 +36,9 @@
                     <div id="postbox-container-1" class="postbox-container">
                         <postbox :title="__( 'Publish', 'dokan' )" extraClass="announcement-actions">
                             <div class="action">
-                                <input type="submit" class="button button-default draft-btn" :value="draftBtnLabel" @click.prevent="createAnnouncement('draft')" :disabled="loadSpinner">
+                                <input type="submit" class="button button-default draft-btn" :value="draftBtnLabel" @click.prevent="updateAnnouncement('draft')">
                                 <span class="spinner" v-if="loadSpinner"></span>
-                                <input type="submit" class="button button-primary publish-btn" :value="publishBtnLabel" @click.prevent="createAnnouncement('publish')" :disabled="loadSpinner">
+                                <input type="submit" class="button button-primary publish-btn" :value="publishBtnLabel" @click.prevent="updateAnnouncement( 'publish' )">
                                 <div class="clear"></div>
                             </div>
                         </postbox>
@@ -53,7 +61,7 @@
                                     <tr v-if="'selected_seller' === announcement.sender_type">
                                         <th>{{ __( 'Select Vendors', 'dokan' ) }}</th>
                                         <td>
-                                            <multiselect v-model="announcement.sender_ids" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="vendors" :multiple="true" :searchable="true" :loading="isLoading" :internal-search="false" :clear-on-select="true" :close-on-select="false" :options-limit="300" :limit="3" :limit-text="limitText" :max-height="700" :show-no-results="false" :hide-selected="true" @search-change="asyncFind">
+                                            <multiselect v-model="announcement.sender_ids" id="ajax" label="name" track-by="id" placeholder="Type to search" open-direction="bottom" :options="vendors" :multiple="true" :searchable="true" :loading="isLoading" :internal-search="false" :clear-on-select="false" :close-on-select="false" :options-limit="300" :limit="3" :limit-text="limitText" :max-height="600" :show-no-results="false" :hide-selected="true" @search-change="asyncFind">
                                                 <template slot="clear" slot-scope="props">
                                                   <div class="multiselect__clear" v-if="announcement.sender_ids.length" @mousedown.prevent.stop="clearAll(props.search)"></div>
                                                 </template><span slot="noResult">Oops! No elements found. Consider changing the search query.</span>
@@ -76,7 +84,7 @@
     let Postbox = dokan_get_lib('Postbox');
 
     export default {
-        name: 'NewAnnouncement',
+        name: 'EditAnnouncement',
 
         components: {
             Postbox,
@@ -85,26 +93,15 @@
 
         data() {
             return {
-                announcement: {
-                    title: '',
-                    content: '',
-                    status: 'publish',
-                    sender_type: 'all_seller',
-                    sender_ids: []
-                },
-                message: '',
-                isSaved: false,
+                announcement: {},
                 loadSpinner: false,
+                isSaved: false,
+                isUpdated: false,
                 isLoading: false,
                 draftBtnLabel : this.__( 'Save as Draft', 'dokan' ),
                 publishBtnLabel : this. __( 'Send', 'dokan' ),
+                message: '',
                 vendors: [],
-            }
-        },
-
-        computed: {
-            submitBtnLabel() {
-                return this.statusesLabel[this.announcement.status];
             }
         },
 
@@ -129,8 +126,17 @@
                 this.announcement.sender_ids = []
             },
 
-            createAnnouncement( status ) {
-                var self = this;
+            fetchAnnouncement() {
+                dokan.api.get('/announcement/' + this.$route.params.id  )
+                .done( response => {
+                    this.announcement = response;
+                })
+                .error( response => {
+                    alert( response.responseJSON.message );
+                });
+            },
+
+            updateAnnouncement( status ) {
                 this.loadSpinner = true;
                 let jsonData = {};
                 jsonData = jQuery.extend( {}, this.announcement );
@@ -138,98 +144,38 @@
                 jsonData.sender_ids = _.pluck( jsonData.sender_ids, 'id' );
                 jsonData.status = status;
 
-                dokan.api.post('/announcement', jsonData )
+                dokan.api.put('/announcement/' + this.$route.params.id, jsonData )
                 .done( response => {
-                    this.isSaved = false;
                     this.loadSpinner = false;
-
+                    this.isSaved = true;
+                    this.message = this.__( 'Announcement draft successfully', 'dokan' );
                     if ( 'draft' == status ) {
                         this.$router.push({
                             name: 'EditAnnouncement',
                             params: { id: response.id }
                         });
                     } else {
+                        this.loadSpinner = false;
                         this.$router.push({
                             name: 'Announcement',
                         });
                     }
                 })
                 .error( response => {
-                    this.isSaved = false;
-                    alert( response.responseJSON.message );
+                    this.loadSpinner = false;
+                    this.isSaved = true;
+                    this.message = response.responseJSON.message;
                 });
             }
+        },
+
+        created() {
+            this.fetchAnnouncement();
         }
 
     };
 </script>
 
 <style lang="less">
-
-    .dokan-announcement-form-wrapper {
-        position: relative;
-
-        .help-block {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-
-            span.help-text {
-                display: inline-block;
-                margin-top: 4px;
-                margin-right: 6px;
-                a {
-                    text-decoration: none;
-                }
-            }
-
-            span.dashicons {
-                font-size: 25px;
-            }
-        }
-
-        #post-body {
-            .post-body-content {
-                position: relative;
-                width: 100%;
-                min-width: 463px;
-                float: left;
-                margin-bottom: 20px;
-
-                #postdivrich {
-                    margin-top: 20px;
-                }
-            }
-
-            .announcement-actions {
-                background: #fafafa;
-                .action {
-                    padding: 15px 0px;
-                    .spinner {
-                        visibility: visible;
-                        float:none;
-                    }
-
-                    .draft-btn {
-                        float:left;
-                    }
-
-                    .publish-btn {
-                        float:right;
-                    }
-                }
-            }
-        }
-
-        .multiselect {
-            input#ajax {
-                background: none !important;
-                box-shadow: none !important;
-                outline: 0 !important;
-                border:none !important;
-            }
-        }
-
-    }
 
 </style>

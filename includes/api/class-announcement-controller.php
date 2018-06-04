@@ -242,9 +242,8 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
 
-        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $post_id );
-
         $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
+        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $data );
 
         return rest_ensure_response( $data );
     }
@@ -511,8 +510,21 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             'status'       => $object->post_status,
             'created_at'   => mysql_to_rfc3339( $object->post_date ),
             'sender_type'  => get_post_meta( $object->ID, '_announcement_type', true ),
-            'sender_ids'   => get_post_meta( $object->ID, '_announcement_selected_user', true )
+            'sender_ids'   => array()
         );
+
+
+        $sender_ids = get_post_meta( $object->ID, '_announcement_selected_user', true );
+
+        if ( ! empty( $sender_ids ) ) {
+            foreach ( $sender_ids as  $id ) {
+                $vendor = dokan()->vendor->get( $id );
+                $data['sender_ids'][] = array(
+                    'id' => $id,
+                    'name' => $vendor->get_shop_name() . '(' . $vendor->get_email() . ')'
+                );
+            }
+        }
 
         $response      = rest_ensure_response( $data );
         $response->add_links( $this->prepare_links( $object, $request ) );

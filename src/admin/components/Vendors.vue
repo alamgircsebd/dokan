@@ -301,7 +301,7 @@ export default {
             return dokan.urls.adminRoot + 'user-edit.php?user_id=' + id;
         },
     }
-}
+};
 </script>
 
 <style lang="less">

@@ -66,9 +66,7 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
         }
 
-        // $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
-        $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
-        $announcement   = add_submenu_page( 'dokan', __( 'Vendor Announcements', 'dokan' ), __( 'Announcements', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
+        $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
@@ -77,16 +75,9 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
         }
 
-        // $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
-
         $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
-        // add_action( $modules, array( $this, 'modules_scripts' ) );
         add_action( $report, array( $this, 'common_scripts' ) );
-        // add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
-
-        add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
-        add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
     }
 
     /**
@@ -296,17 +287,11 @@ class Dokan_Pro_Admin_Settings {
             'component' => 'NewAnnouncement'
         );
 
-        // $routes[] = array(
-        //     'path'      => '/modules/:status',
-        //     'name'      => 'ModulesStatus',
-        //     'component' => 'Modules'
-        // );
-
-        // $routes[] = array(
-        //     'path'      => '/modules',
-        //     'name'      => 'Modules',
-        //     'component' => 'Modules'
-        // );
+        $routes[] = array(
+            'path'      => '/announcement/:id/edit',
+            'name'      => 'EditAnnouncement',
+            'component' => 'EditAnnouncement'
+        );
 
         $routes[] = array(
             'path'      => '/modules',
@@ -340,22 +325,6 @@ class Dokan_Pro_Admin_Settings {
     **/
     function modules_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-    }
-
-    /**
-     * Seller announcement scripts
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function announcement_scripts() {
-        global $post_type;
-
-        if ( 'dokan_announcement' == $post_type ) {
-            wp_enqueue_style( 'dokan-chosen-style' );
-            wp_enqueue_script( 'dokan-chosen' );
-        }
     }
 
     /**
@@ -517,7 +486,7 @@ class Dokan_Pro_Admin_Settings {
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
             'title'  => __( 'All Vendors', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan-sellers' )
+            'href'   => admin_url( 'admin.php?page=dokan#/vendors' )
         ) );
 
         $wp_admin_bar->add_menu( array(
@@ -531,7 +500,7 @@ class Dokan_Pro_Admin_Settings {
             'id'     => 'dokan-settings',
             'parent' => 'dokan',
             'title'  => __( 'Settings', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan-settings' )
+            'href'   => admin_url( 'admin.php?page=dokan#/settings' )
         ) );
     }
 

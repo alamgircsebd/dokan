@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 21);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1205,6 +1205,10 @@ var Switches = dokan_get_lib('Switches');
 //
 //
 //
+//
+//
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 
@@ -1340,11 +1344,11 @@ var ListTable = dokan_get_lib('ListTable');
             return moment(date);
         }),
         editUrl: function editUrl(id) {
-            return dokan.urls.adminRoot + 'admin.php?page=dokan#/announcement/' + id;
+            return dokan.urls.adminRoot + 'admin.php?page=dokan#/announcement/' + id + '/edit';
         },
         goToPage: function goToPage(page) {
             this.$router.push({
-                name: 'Withdraw',
+                name: 'Announcement',
                 query: {
                     status: this.currentStatus,
                     page: page
@@ -1441,14 +1445,348 @@ var ListTable = dokan_get_lib('ListTable');
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var TextEditor = dokan_get_lib('TextEditor');
+var Postbox = dokan_get_lib('Postbox');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'NewAnnouncement',
 
-    name: 'NewAnnouncement'
+    components: {
+        Postbox: Postbox,
+        TextEditor: TextEditor
+    },
+
+    data: function data() {
+        return {
+            announcement: {
+                title: '',
+                content: '',
+                status: 'publish',
+                sender_type: 'all_seller',
+                sender_ids: []
+            },
+            message: '',
+            isSaved: false,
+            loadSpinner: false,
+            isLoading: false,
+            draftBtnLabel: this.__('Save as Draft', 'dokan'),
+            publishBtnLabel: this.__('Send', 'dokan'),
+            vendors: []
+        };
+    },
+
+
+    computed: {
+        submitBtnLabel: function submitBtnLabel() {
+            return this.statusesLabel[this.announcement.status];
+        }
+    },
+
+    methods: {
+        limitText: function limitText(count) {
+            return 'and ' + count + ' other vendors';
+        },
+        asyncFind: function asyncFind(query) {
+            var _this = this;
+
+            this.isLoading = true;
+            dokan.api.get('/stores' + '?search=' + query).done(function (response) {
+                _this.isLoading = false;
+                _this.vendors = _.map(response, function (item) {
+                    return {
+                        id: item.id,
+                        name: item.store_name + '( ' + item.email + ' )'
+                    };
+                });
+            });
+        },
+        clearAll: function clearAll() {
+            this.announcement.sender_ids = [];
+        },
+        createAnnouncement: function createAnnouncement(status) {
+            var _this2 = this;
+
+            var self = this;
+            this.loadSpinner = true;
+            var jsonData = {};
+            jsonData = jQuery.extend({}, this.announcement);
+
+            jsonData.sender_ids = _.pluck(jsonData.sender_ids, 'id');
+            jsonData.status = status;
+
+            dokan.api.post('/announcement', jsonData).done(function (response) {
+                _this2.isSaved = false;
+                _this2.loadSpinner = false;
+
+                if ('draft' == status) {
+                    _this2.$router.push({
+                        name: 'EditAnnouncement',
+                        params: { id: response.id }
+                    });
+                } else {
+                    _this2.$router.push({
+                        name: 'Announcement'
+                    });
+                }
+            }).error(function (response) {
+                _this2.isSaved = false;
+                alert(response.responseJSON.message);
+            });
+        }
+    }
+
 });
 
 /***/ }),
-/* 9 */,
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var TextEditor = dokan_get_lib('TextEditor');
+var Postbox = dokan_get_lib('Postbox');
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'EditAnnouncement',
+
+    components: {
+        Postbox: Postbox,
+        TextEditor: TextEditor
+    },
+
+    data: function data() {
+        return {
+            announcement: {},
+            loadSpinner: false,
+            isSaved: false,
+            isUpdated: false,
+            isLoading: false,
+            draftBtnLabel: this.__('Save as Draft', 'dokan'),
+            publishBtnLabel: this.__('Send', 'dokan'),
+            message: '',
+            vendors: []
+        };
+    },
+
+
+    methods: {
+        limitText: function limitText(count) {
+            return 'and ' + count + ' other vendors';
+        },
+        asyncFind: function asyncFind(query) {
+            var _this = this;
+
+            this.isLoading = true;
+            dokan.api.get('/stores' + '?search=' + query).done(function (response) {
+                _this.isLoading = false;
+                _this.vendors = _.map(response, function (item) {
+                    return {
+                        id: item.id,
+                        name: item.store_name + '( ' + item.email + ' )'
+                    };
+                });
+            });
+        },
+        clearAll: function clearAll() {
+            this.announcement.sender_ids = [];
+        },
+        fetchAnnouncement: function fetchAnnouncement() {
+            var _this2 = this;
+
+            dokan.api.get('/announcement/' + this.$route.params.id).done(function (response) {
+                _this2.announcement = response;
+            }).error(function (response) {
+                alert(response.responseJSON.message);
+            });
+        },
+        updateAnnouncement: function updateAnnouncement(status) {
+            var _this3 = this;
+
+            this.loadSpinner = true;
+            var jsonData = {};
+            jsonData = jQuery.extend({}, this.announcement);
+
+            jsonData.sender_ids = _.pluck(jsonData.sender_ids, 'id');
+            jsonData.status = status;
+
+            dokan.api.put('/announcement/' + this.$route.params.id, jsonData).done(function (response) {
+                _this3.loadSpinner = false;
+                _this3.isSaved = true;
+                _this3.message = _this3.__('Announcement draft successfully', 'dokan');
+                if ('draft' == status) {
+                    _this3.$router.push({
+                        name: 'EditAnnouncement',
+                        params: { id: response.id }
+                    });
+                } else {
+                    _this3.loadSpinner = false;
+                    _this3.$router.push({
+                        name: 'Announcement'
+                    });
+                }
+            }).error(function (response) {
+                _this3.loadSpinner = false;
+                _this3.isSaved = true;
+                _this3.message = response.responseJSON.message;
+            });
+        }
+    },
+
+    created: function created() {
+        this.fetchAnnouncement();
+    }
+});
+
+/***/ }),
 /* 10 */,
 /* 11 */,
 /* 12 */,
@@ -1459,31 +1797,36 @@ var ListTable = dokan_get_lib('ListTable');
 /* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */
+/* 20 */,
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Vendors = __webpack_require__(21);
+var _Vendors = __webpack_require__(22);
 
 var _Vendors2 = _interopRequireDefault(_Vendors);
 
-var _VendorSingle = __webpack_require__(24);
+var _VendorSingle = __webpack_require__(25);
 
 var _VendorSingle2 = _interopRequireDefault(_VendorSingle);
 
-var _Modules = __webpack_require__(27);
+var _Modules = __webpack_require__(28);
 
 var _Modules2 = _interopRequireDefault(_Modules);
 
-var _Announcement = __webpack_require__(30);
+var _Announcement = __webpack_require__(31);
 
 var _Announcement2 = _interopRequireDefault(_Announcement);
 
-var _NewAnnouncement = __webpack_require__(33);
+var _NewAnnouncement = __webpack_require__(34);
 
 var _NewAnnouncement2 = _interopRequireDefault(_NewAnnouncement);
+
+var _EditAnnouncement = __webpack_require__(37);
+
+var _EditAnnouncement2 = _interopRequireDefault(_EditAnnouncement);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1492,20 +1835,21 @@ dokan_add_route(_VendorSingle2.default);
 dokan_add_route(_Modules2.default);
 dokan_add_route(_Announcement2.default);
 dokan_add_route(_NewAnnouncement2.default);
+dokan_add_route(_EditAnnouncement2.default);
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Vendors_vue__ = __webpack_require__(4);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(24);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(22)
+  __webpack_require__(23)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1551,13 +1895,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1795,18 +2139,18 @@ if (false) {
 }
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VendorSingle_vue__ = __webpack_require__(5);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(27);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(25)
+  __webpack_require__(26)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1852,13 +2196,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2499,18 +2843,18 @@ if (false) {
 }
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Modules_vue__ = __webpack_require__(6);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(30);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(28)
+  __webpack_require__(29)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2556,13 +2900,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2855,18 +3199,18 @@ if (false) {
 }
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Announcement_vue__ = __webpack_require__(7);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b4865812_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Announcement_vue__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b4865812_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Announcement_vue__ = __webpack_require__(33);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(31)
+  __webpack_require__(32)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2912,13 +3256,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2930,7 +3274,18 @@ var render = function() {
     "div",
     { staticClass: "dokan-announcement-wrapper" },
     [
-      _c("h1", [_vm._v(_vm._s(_vm.__("Announcement", "dokan")))]),
+      _c("h1", { staticClass: "wp-heading-inline" }, [
+        _vm._v(_vm._s(_vm.__("Announcement", "dokan")))
+      ]),
+      _vm._v(" "),
+      _c(
+        "router-link",
+        {
+          staticClass: "page-title-action",
+          attrs: { to: { name: "NewAnnouncement" } }
+        },
+        [_vm._v(_vm._s(_vm.__("Add Announcement", "dokan")))]
+      ),
       _vm._v(" "),
       _c("div", { staticClass: "help-block" }, [
         _c("span", { staticClass: "help-text" }, [
@@ -2942,12 +3297,14 @@ var render = function() {
                 target: "_blank"
               }
             },
-            [_vm._v(_vm._s(_vm.__("Need Any Help ?")))]
+            [_vm._v(_vm._s(_vm.__("Need Any Help ?", "dokan")))]
           )
         ]),
         _vm._v(" "),
         _c("span", { staticClass: "dashicons dashicons-smiley" })
       ]),
+      _vm._v(" "),
+      _c("hr", { staticClass: "wp-header-end" }),
       _vm._v(" "),
       _c("ul", { staticClass: "subsubsub" }, [
         _c(
@@ -3102,11 +3459,13 @@ var render = function() {
             key: "title",
             fn: function(data) {
               return [
-                _c("strong", [
-                  _c("a", { attrs: { href: _vm.editUrl(data.row.id) } }, [
-                    _vm._v(_vm._s(data.row.title))
-                  ])
-                ])
+                "publish" == data.row.status
+                  ? _c("strong", [_vm._v(_vm._s(data.row.title))])
+                  : _c("strong", [
+                      _c("a", { attrs: { href: _vm.editUrl(data.row.id) } }, [
+                        _vm._v(_vm._s(data.row.title))
+                      ])
+                    ])
               ]
             }
           },
@@ -3156,7 +3515,7 @@ var render = function() {
               return [
                 _vm._l(_vm.actions, function(action, index) {
                   return [
-                    action.key == "edit"
+                    action.key == "edit" && "publish" != data.row.status
                       ? _c(
                           "span",
                           { class: action.key },
@@ -3269,18 +3628,18 @@ if (false) {
 }
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_NewAnnouncement_vue__ = __webpack_require__(8);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0a129b87_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_NewAnnouncement_vue__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0a129b87_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_NewAnnouncement_vue__ = __webpack_require__(36);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(34)
+  __webpack_require__(35)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -3326,13 +3685,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3340,8 +3699,350 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "addnew" }, [
-    _vm._v("\n    Add new annountment\n")
+  return _c("div", { staticClass: "dokan-announcement-form-wrapper" }, [
+    _c("h1", { staticClass: "wp-heading-inline" }, [
+      _vm._v(_vm._s(_vm.__("Add New Announcement", "dokan")))
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "help-block" }, [
+      _c("span", { staticClass: "help-text" }, [
+        _c(
+          "a",
+          {
+            attrs: {
+              href: "https://wedevs.com/docs/dokan/announcements/",
+              target: "_blank"
+            }
+          },
+          [_vm._v(_vm._s(_vm.__("Need Any Help ?", "dokan")))]
+        )
+      ]),
+      _vm._v(" "),
+      _c("span", { staticClass: "dashicons dashicons-smiley" })
+    ]),
+    _vm._v(" "),
+    _c("hr", { staticClass: "wp-header-end" }),
+    _vm._v(" "),
+    _c("form", { attrs: { action: "", method: "post", id: "post" } }, [
+      _c("div", { attrs: { id: "poststuff" } }, [
+        _c(
+          "div",
+          {
+            staticClass: "metabox-holder columns-2",
+            attrs: { id: "post-body" }
+          },
+          [
+            _c("div", { staticClass: "post-body-content" }, [
+              _c("div", { attrs: { id: "titlediv" } }, [
+                _c("div", { attrs: { id: "titlewrap" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.announcement.title,
+                        expression: "announcement.title"
+                      }
+                    ],
+                    attrs: {
+                      type: "text",
+                      name: "post_title",
+                      size: "30",
+                      id: "title",
+                      autocomplete: "off",
+                      placeholder: "Enter announcement title"
+                    },
+                    domProps: { value: _vm.announcement.title },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.announcement, "title", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "inside" })
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  staticClass: "postarea wp-editor-expand",
+                  attrs: { id: "postdivrich" }
+                },
+                [
+                  _c("text-editor", {
+                    model: {
+                      value: _vm.announcement.content,
+                      callback: function($$v) {
+                        _vm.$set(_vm.announcement, "content", $$v)
+                      },
+                      expression: "announcement.content"
+                    }
+                  })
+                ],
+                1
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "postbox-container",
+                attrs: { id: "postbox-container-1" }
+              },
+              [
+                _c(
+                  "postbox",
+                  {
+                    attrs: {
+                      title: _vm.__("Publish", "dokan"),
+                      extraClass: "announcement-actions"
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "action" }, [
+                      _c("input", {
+                        staticClass: "button button-default draft-btn",
+                        attrs: { type: "submit", disabled: _vm.loadSpinner },
+                        domProps: { value: _vm.draftBtnLabel },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.createAnnouncement("draft")
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _vm.loadSpinner
+                        ? _c("span", { staticClass: "spinner" })
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _c("input", {
+                        staticClass: "button button-primary publish-btn",
+                        attrs: { type: "submit", disabled: _vm.loadSpinner },
+                        domProps: { value: _vm.publishBtnLabel },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.createAnnouncement("publish")
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "clear" })
+                    ])
+                  ]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "postbox-container",
+                attrs: { id: "postbox-container-2" }
+              },
+              [
+                _c(
+                  "postbox",
+                  {
+                    attrs: {
+                      title: _vm.__("Announcement Settings", "dokan"),
+                      extraClass: "announcement-settings"
+                    }
+                  },
+                  [
+                    _c(
+                      "table",
+                      { staticClass: "form-table announcement-meta-options" },
+                      [
+                        _c("tbody", [
+                          _c("tr", [
+                            _c("th", [
+                              _vm._v(
+                                _vm._s(_vm.__("Send Announcement To", "dokan"))
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "select",
+                                {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.announcement.sender_type,
+                                      expression: "announcement.sender_type"
+                                    }
+                                  ],
+                                  attrs: {
+                                    name: "announcement_sender_type",
+                                    id: "announcement_sender_type"
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.$set(
+                                        _vm.announcement,
+                                        "sender_type",
+                                        $event.target.multiple
+                                          ? $$selectedVal
+                                          : $$selectedVal[0]
+                                      )
+                                    }
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "all_seller" } },
+                                    [
+                                      _vm._v(
+                                        _vm._s(_vm.__("All Vendor", "dokan"))
+                                      )
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c(
+                                    "option",
+                                    { attrs: { value: "selected_seller" } },
+                                    [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.__("Selected Vendor", "dokan")
+                                        )
+                                      )
+                                    ]
+                                  )
+                                ]
+                              )
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          "selected_seller" === _vm.announcement.sender_type
+                            ? _c("tr", [
+                                _c("th", [
+                                  _vm._v(
+                                    _vm._s(_vm.__("Select Vendors", "dokan"))
+                                  )
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "td",
+                                  [
+                                    _c(
+                                      "multiselect",
+                                      {
+                                        attrs: {
+                                          id: "ajax",
+                                          label: "name",
+                                          "track-by": "id",
+                                          placeholder: "Type to search",
+                                          "open-direction": "bottom",
+                                          options: _vm.vendors,
+                                          multiple: true,
+                                          searchable: true,
+                                          loading: _vm.isLoading,
+                                          "internal-search": false,
+                                          "clear-on-select": true,
+                                          "close-on-select": false,
+                                          "options-limit": 300,
+                                          limit: 3,
+                                          "limit-text": _vm.limitText,
+                                          "max-height": 700,
+                                          "show-no-results": false,
+                                          "hide-selected": true
+                                        },
+                                        on: { "search-change": _vm.asyncFind },
+                                        scopedSlots: _vm._u([
+                                          {
+                                            key: "clear",
+                                            fn: function(props) {
+                                              return [
+                                                _vm.announcement.sender_ids
+                                                  .length
+                                                  ? _c("div", {
+                                                      staticClass:
+                                                        "multiselect__clear",
+                                                      on: {
+                                                        mousedown: function(
+                                                          $event
+                                                        ) {
+                                                          $event.preventDefault()
+                                                          $event.stopPropagation()
+                                                          _vm.clearAll(
+                                                            props.search
+                                                          )
+                                                        }
+                                                      }
+                                                    })
+                                                  : _vm._e()
+                                              ]
+                                            }
+                                          }
+                                        ]),
+                                        model: {
+                                          value: _vm.announcement.sender_ids,
+                                          callback: function($$v) {
+                                            _vm.$set(
+                                              _vm.announcement,
+                                              "sender_ids",
+                                              $$v
+                                            )
+                                          },
+                                          expression: "announcement.sender_ids"
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "span",
+                                          {
+                                            attrs: { slot: "noResult" },
+                                            slot: "noResult"
+                                          },
+                                          [
+                                            _vm._v(
+                                              "Oops! No elements found. Consider changing the search query."
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ],
+                                  1
+                                )
+                              ])
+                            : _vm._e()
+                        ])
+                      ]
+                    )
+                  ]
+                )
+              ],
+              1
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("br", { staticClass: "clear" })
+      ])
+    ])
   ])
 }
 var staticRenderFns = []
@@ -3352,6 +4053,517 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-0a129b87", esExports)
+  }
+}
+
+/***/ }),
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_EditAnnouncement_vue__ = __webpack_require__(9);
+/* empty harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_34d4b3be_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_EditAnnouncement_vue__ = __webpack_require__(39);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(38)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_EditAnnouncement_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_34d4b3be_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_EditAnnouncement_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/admin/components/EditAnnouncement.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-34d4b3be", Component.options)
+  } else {
+    hotAPI.reload("data-v-34d4b3be", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _vm.announcement.id
+    ? _c(
+        "div",
+        { staticClass: "dokan-announcement-form-wrapper" },
+        [
+          _c("h1", { staticClass: "wp-heading-inline" }, [
+            _vm._v(_vm._s(_vm.__("Edit Announcement", "dokan")))
+          ]),
+          _vm._v(" "),
+          _c(
+            "router-link",
+            {
+              staticClass: "page-title-action",
+              attrs: { to: { name: "NewAnnouncement" } }
+            },
+            [_vm._v(_vm._s(_vm.__("Add Announcement", "dokan")))]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "help-block" }, [
+            _c("span", { staticClass: "help-text" }, [
+              _c(
+                "a",
+                {
+                  attrs: {
+                    href: "https://wedevs.com/docs/dokan/announcements/",
+                    target: "_blank"
+                  }
+                },
+                [_vm._v(_vm._s(_vm.__("Need Any Help ?", "dokan")))]
+              )
+            ]),
+            _vm._v(" "),
+            _c("span", { staticClass: "dashicons dashicons-smiley" })
+          ]),
+          _vm._v(" "),
+          _vm.isSaved
+            ? _c(
+                "div",
+                {
+                  staticClass:
+                    "announcement-error notice is-dismissible updated",
+                  attrs: { id: "announcement-message_updated" }
+                },
+                [
+                  _c("p", [
+                    _c("strong", {
+                      domProps: { innerHTML: _vm._s(_vm.message) }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "notice-dismiss",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.isSaved = false
+                        }
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "screen-reader-text" }, [
+                        _vm._v(
+                          _vm._s(_vm.__("Dismiss this notice.", "dokan-lite"))
+                        )
+                      ])
+                    ]
+                  )
+                ]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("hr", { staticClass: "wp-header-end" }),
+          _vm._v(" "),
+          _c("form", { attrs: { action: "", method: "post", id: "post" } }, [
+            _c("div", { attrs: { id: "poststuff" } }, [
+              _c(
+                "div",
+                {
+                  staticClass: "metabox-holder columns-2",
+                  attrs: { id: "post-body" }
+                },
+                [
+                  _c("div", { staticClass: "post-body-content" }, [
+                    _c("div", { attrs: { id: "titlediv" } }, [
+                      _c("div", { attrs: { id: "titlewrap" } }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.announcement.title,
+                              expression: "announcement.title"
+                            }
+                          ],
+                          attrs: {
+                            type: "text",
+                            name: "post_title",
+                            size: "30",
+                            id: "title",
+                            autocomplete: "off",
+                            placeholder: "Enter announcement title"
+                          },
+                          domProps: { value: _vm.announcement.title },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.announcement,
+                                "title",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "inside" })
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      {
+                        staticClass: "postarea wp-editor-expand",
+                        attrs: { id: "postdivrich" }
+                      },
+                      [
+                        _c("text-editor", {
+                          model: {
+                            value: _vm.announcement.content,
+                            callback: function($$v) {
+                              _vm.$set(_vm.announcement, "content", $$v)
+                            },
+                            expression: "announcement.content"
+                          }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "postbox-container",
+                      attrs: { id: "postbox-container-1" }
+                    },
+                    [
+                      _c(
+                        "postbox",
+                        {
+                          attrs: {
+                            title: _vm.__("Publish", "dokan"),
+                            extraClass: "announcement-actions"
+                          }
+                        },
+                        [
+                          _c("div", { staticClass: "action" }, [
+                            _c("input", {
+                              staticClass: "button button-default draft-btn",
+                              attrs: { type: "submit" },
+                              domProps: { value: _vm.draftBtnLabel },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.updateAnnouncement("draft")
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _vm.loadSpinner
+                              ? _c("span", { staticClass: "spinner" })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            _c("input", {
+                              staticClass: "button button-primary publish-btn",
+                              attrs: { type: "submit" },
+                              domProps: { value: _vm.publishBtnLabel },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.updateAnnouncement("publish")
+                                }
+                              }
+                            }),
+                            _vm._v(" "),
+                            _c("div", { staticClass: "clear" })
+                          ])
+                        ]
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "postbox-container",
+                      attrs: { id: "postbox-container-2" }
+                    },
+                    [
+                      _c(
+                        "postbox",
+                        {
+                          attrs: {
+                            title: _vm.__("Announcement Settings", "dokan"),
+                            extraClass: "announcement-settings"
+                          }
+                        },
+                        [
+                          _c(
+                            "table",
+                            {
+                              staticClass:
+                                "form-table announcement-meta-options"
+                            },
+                            [
+                              _c("tbody", [
+                                _c("tr", [
+                                  _c("th", [
+                                    _vm._v(
+                                      _vm._s(
+                                        _vm.__("Send Announcement To", "dokan")
+                                      )
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c("td", [
+                                    _c(
+                                      "select",
+                                      {
+                                        directives: [
+                                          {
+                                            name: "model",
+                                            rawName: "v-model",
+                                            value: _vm.announcement.sender_type,
+                                            expression:
+                                              "announcement.sender_type"
+                                          }
+                                        ],
+                                        attrs: {
+                                          name: "announcement_sender_type",
+                                          id: "announcement_sender_type"
+                                        },
+                                        on: {
+                                          change: function($event) {
+                                            var $$selectedVal = Array.prototype.filter
+                                              .call(
+                                                $event.target.options,
+                                                function(o) {
+                                                  return o.selected
+                                                }
+                                              )
+                                              .map(function(o) {
+                                                var val =
+                                                  "_value" in o
+                                                    ? o._value
+                                                    : o.value
+                                                return val
+                                              })
+                                            _vm.$set(
+                                              _vm.announcement,
+                                              "sender_type",
+                                              $event.target.multiple
+                                                ? $$selectedVal
+                                                : $$selectedVal[0]
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c(
+                                          "option",
+                                          { attrs: { value: "all_seller" } },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.__("All Vendor", "dokan")
+                                              )
+                                            )
+                                          ]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "option",
+                                          {
+                                            attrs: { value: "selected_seller" }
+                                          },
+                                          [
+                                            _vm._v(
+                                              _vm._s(
+                                                _vm.__(
+                                                  "Selected Vendor",
+                                                  "dokan"
+                                                )
+                                              )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    )
+                                  ])
+                                ]),
+                                _vm._v(" "),
+                                "selected_seller" ===
+                                _vm.announcement.sender_type
+                                  ? _c("tr", [
+                                      _c("th", [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.__("Select Vendors", "dokan")
+                                          )
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "td",
+                                        [
+                                          _c(
+                                            "multiselect",
+                                            {
+                                              attrs: {
+                                                id: "ajax",
+                                                label: "name",
+                                                "track-by": "id",
+                                                placeholder: "Type to search",
+                                                "open-direction": "bottom",
+                                                options: _vm.vendors,
+                                                multiple: true,
+                                                searchable: true,
+                                                loading: _vm.isLoading,
+                                                "internal-search": false,
+                                                "clear-on-select": false,
+                                                "close-on-select": false,
+                                                "options-limit": 300,
+                                                limit: 3,
+                                                "limit-text": _vm.limitText,
+                                                "max-height": 600,
+                                                "show-no-results": false,
+                                                "hide-selected": true
+                                              },
+                                              on: {
+                                                "search-change": _vm.asyncFind
+                                              },
+                                              scopedSlots: _vm._u([
+                                                {
+                                                  key: "clear",
+                                                  fn: function(props) {
+                                                    return [
+                                                      _vm.announcement
+                                                        .sender_ids.length
+                                                        ? _c("div", {
+                                                            staticClass:
+                                                              "multiselect__clear",
+                                                            on: {
+                                                              mousedown: function(
+                                                                $event
+                                                              ) {
+                                                                $event.preventDefault()
+                                                                $event.stopPropagation()
+                                                                _vm.clearAll(
+                                                                  props.search
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        : _vm._e()
+                                                    ]
+                                                  }
+                                                }
+                                              ]),
+                                              model: {
+                                                value:
+                                                  _vm.announcement.sender_ids,
+                                                callback: function($$v) {
+                                                  _vm.$set(
+                                                    _vm.announcement,
+                                                    "sender_ids",
+                                                    $$v
+                                                  )
+                                                },
+                                                expression:
+                                                  "announcement.sender_ids"
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "span",
+                                                {
+                                                  attrs: { slot: "noResult" },
+                                                  slot: "noResult"
+                                                },
+                                                [
+                                                  _vm._v(
+                                                    "Oops! No elements found. Consider changing the search query."
+                                                  )
+                                                ]
+                                              )
+                                            ]
+                                          )
+                                        ],
+                                        1
+                                      )
+                                    ])
+                                  : _vm._e()
+                              ])
+                            ]
+                          )
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ]
+              ),
+              _vm._v(" "),
+              _c("br", { staticClass: "clear" })
+            ])
+          ])
+        ],
+        1
+      )
+    : _vm._e()
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-34d4b3be", esExports)
   }
 }
 

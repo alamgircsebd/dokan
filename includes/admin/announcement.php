@@ -1,4 +1,8 @@
 <?php
+if ( ! class_exists( 'Dokan_Announcement_Background_Process', false ) ) {
+    include_once DOKAN_PRO_ADMIN_DIR . '/announcement-background-process.php';
+}
+
 /**
  *  Dokan Announcement class for Admin
  *
@@ -11,47 +15,61 @@
 class Dokan_Announcement {
 
     private $post_type = 'dokan_announcement';
-    private $assign_type = array();
+
+    protected $processor;
 
     /**
      *  Load automatically all actions
      */
     function __construct() {
-        $this->assign_type = array(
-            ''                => __( '-- Select --', 'dokan' ),
-            'all_seller'      => __( 'All Vendor', 'dokan' ),
-            'selected_seller' => __( 'Selected Vendor', 'dokan' )
-        );
+        $this->processor = new Dokan_Announcement_Background_Process();
 
         add_action( 'init', array( $this, 'post_types' ), 20 );
-        add_action( 'add_meta_boxes', array( $this, 'add_new_metabox' ) );
-        add_action( 'save_post', array( $this, 'save_announcement_meta' ), 10, 2 );
-        add_action( 'admin_footer', array( $this, 'help_text' ));
-
-        add_filter( 'manage_edit-dokan_announcement_columns', array( $this, 'add_type_columns' ) );
-        add_filter( 'manage_dokan_announcement_posts_custom_column', array( $this, 'assign_type_edit_columns' ), 10, 2 );
+        add_action( 'dokan_after_announcement_saved', array( $this, 'trigger_mail' ), 10, 2 );
     }
 
     /**
-     * Show help link under add new announcement button
+     * Trigger mail
      *
-     * @since 2.6.9
+     * @since 2.8.0
      *
      * @return void
      */
-    function help_text() {
-        $screen = get_current_screen();
-        if ( $screen->post_type != $this->post_type ) {
+    public function trigger_mail( $sellers, $data ) {
+        $announcement_data = $data->get_data();
+        $sender_ids = array();
+
+        if ( 'publish' !== $announcement_data['status'] ) {
             return;
         }
-        $help_text = sprintf( __( 'Learn More: <a target="_blank" href="%s">How to Create Announcement in Dokan</a>', 'dokan' ), 'https://wedevs.com/docs/dokan/announcements/' );
-        ?>
-        <script>
-            jQuery(function($) {
-                $( '.wp-header-end' ).before( '<p><?php echo $help_text ?></p>' );
-            });
-        </script>
-        <?php
+
+        $sender_type = get_post_meta( $announcement_data['id'], '_announcement_type', true );
+
+        if ( 'all_seller' == $sender_type ) {
+            $users   = new WP_User_Query( array( 'role' => 'seller' ) );
+            $sellers = $users->get_results();
+
+            if ( $sellers ) {
+                foreach ( $sellers as $user ) {
+                    $sender_ids[] = $user->ID;
+                }
+            }
+        } else {
+            $sender_ids = wp_list_pluck( $announcement_data['sender_ids'], 'id' );
+        }
+
+        $payload = array();
+
+        foreach ( $sender_ids as $sender_id ) {
+            $payload = array(
+                'post_id'    => $announcement_data['id'],
+                'sender_id' => $sender_id
+            );
+
+            $this->processor->push_to_queue( $payload );
+        }
+
+        $this->processor->save()->dispatch();
     }
 
     /**
@@ -90,194 +108,6 @@ class Dokan_Announcement {
                 'parent'             => __( 'Parent Announcement', 'dokan' )
             ),
         ) );
-    }
-
-    /**
-     * Initialize metabox for dokan announcement post type
-     *
-     * @since 2.1
-     *
-     * @return void
-     */
-    function add_new_metabox() {
-        add_meta_box( 'dokan-announcement-meta-box', __('Announcement Settings', 'dokan'), array( $this, 'meta_boxes_cb' ), $this->post_type, 'advanced', 'high' );
-    }
-
-    /**
-     * Announcement metabox callback function
-     *
-     * @param  integer $post_id
-     *
-     * @return void
-     */
-    function meta_boxes_cb( $post_id ) {
-        global $post;
-
-        $user_search = new WP_User_Query( array( 'role' => 'seller' ) );
-        $sellers     = $user_search->get_results();
-
-        $announcement_type    = get_post_meta( $post->ID, '_announcement_type', true );
-        $announcement_users   = get_post_meta( $post->ID, '_announcement_selected_user', true );
-        $announcement_sellers = ( $announcement_users ) ? $announcement_users : array();
-
-        ?>
-            <table class="form-table dokan-announcement-meta-wrap-table">
-                <tr>
-                    <th><?php _e( 'Send Announcement To', 'dokan' ); ?></th>
-                    <td>
-                        <select name="dokan_announcement_assign_type" id="dokan_announcement_assign_type" style="width:60%">
-                            <?php foreach ( $this->assign_type as $key => $type ): ?>
-                                <option value="<?php echo $key; ?>" <?php selected( $announcement_type, $key ); ?>><?php echo $type; ?></option>
-                            <?php endforeach ?>
-                        </select>
-                    </td>
-                </tr>
-
-                <tr class="selected_seller_field">
-                    <th><?php _e( 'Select Vendor', 'dokan' ); ?></th>
-                    <td>
-                        <select name="dokan_announcement_assign_seller[]" data-placeholder= '<?php echo __( 'Select Vendors...', 'dokan' ); ?>' id="dokan_announcement_assign_seller" multiple="multiple">
-                            <option></option>
-                            <?php
-                            foreach ( $sellers as $user ) {
-                                $info = dokan_get_store_info( $user->ID );
-
-                                if ( isset( $info['store_name'] ) ) {
-                                    ?>
-                                    <option <?php echo in_array( $user->ID, $announcement_sellers ) ? 'selected="selected"' : ''; ?> value='<?php echo $user->ID  ?>'><?php echo esc_html( $info['store_name'] ) ?></option>
-                                <?php } ?>
-                            <?php } ?>
-
-                        </select>
-                    </td>
-                </tr>
-            </table>
-            <?php wp_nonce_field( 'dokan_announcement_meta_action', 'dokan_announcement_meta_action_nonce' ); ?>
-
-            <script>
-                (function($){
-                    $(document).ready( function() {
-                        $('#dokan_announcement_assign_seller').chosen( { width: '60%' });
-                        $('table.dokan-announcement-meta-wrap-table').on( 'change', 'select#dokan_announcement_assign_type', function(){
-                            var self = $(this);
-
-                            if ( self.val() == 'selected_seller' ) {
-                                $( 'tr.selected_seller_field' ).show();
-                            } else {
-                                $( 'tr.selected_seller_field' ).hide();
-                            }
-                        });
-
-                        $('select#dokan_announcement_assign_type').trigger('change')
-                    });
-                })(jQuery);
-            </script>
-            <style>
-                .chosen-choices li.search-field input[type="text"] {
-                    height: 23px !important;
-                }
-                tr.selected_seller_field{
-                    display: none;
-                }
-            </style>
-        <?php
-    }
-
-    /**
-     * Add custom column label
-     *
-     * @since  2.1
-     *
-     * @param array $columns
-     */
-    function add_type_columns( $columns ) {
-        unset( $columns['date'] );
-
-        $columns['assign_type'] = __( 'Sent To', 'dokan' );
-        $columns['date']        = __( 'Date', 'dokan' );
-
-        return $columns;
-    }
-
-    /**
-     * Render custom column content
-     *
-     * @since  2.1
-     *
-     * @param  string $column
-     * @param  integer $post_id
-     *
-     * @return void
-     */
-    function assign_type_edit_columns( $column, $post_id ) {
-        global $post;
-
-        if ( $column == 'assign_type' ) {
-            $assign_type = get_post_meta( $post_id, '_announcement_type', true );
-
-            if ( $assign_type ) {
-                echo $this->assign_type[$assign_type];
-            } else {
-                _e( 'No vendor assigned!', 'dokan' );
-            }
-        }
-    }
-
-    /**
-     * Save Announcement post meta
-     *
-     * @since  2.1
-     *
-     * @param  integer $post_id
-     * @param  object $post
-     *
-     * @return void
-     */
-    function save_announcement_meta( $post_id, $post ) {
-
-        if ( ! isset( $_POST['dokan_announcement_meta_action_nonce'] ) ) {
-            return $post_id;
-        }
-
-        if ( ! wp_verify_nonce( $_POST['dokan_announcement_meta_action_nonce'], 'dokan_announcement_meta_action' ) ) {
-            return $post_id;
-        }
-
-        if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE )
-            return $post_id;
-
-        $post_type = get_post_type_object( $post->post_type );
-
-        if ( !current_user_can( $post_type->cap->edit_post, $post_id ) ) {
-            return $post_id;
-        }
-
-        $announcement_assign_type = ( isset( $_POST['dokan_announcement_assign_type'] ) ) ? $_POST['dokan_announcement_assign_type'] : '';
-        $assigned_sellers         = ( isset( $_POST['dokan_announcement_assign_seller'] ) ) ? $_POST['dokan_announcement_assign_seller']: array();
-
-        update_post_meta( $post_id, '_announcement_type', $announcement_assign_type );
-        update_post_meta( $post_id, '_announcement_selected_user', $assigned_sellers );
-
-        if ( $announcement_assign_type == 'selected_seller' ) {
-
-            $this->process_seller_announcement_data( $assigned_sellers, $post_id );
-
-        } elseif ( $announcement_assign_type == 'all_seller' ) {
-            $assigned_sellers = array();
-            $users   = new WP_User_Query( array( 'role' => 'seller' ) );
-            $sellers = $users->get_results();
-
-            if ( $sellers ) {
-                foreach ( $sellers as $user ) {
-                    $assigned_sellers[] = $user->ID;
-                }
-            }
-
-            $this->process_seller_announcement_data( $assigned_sellers, $post_id );
-        }
-
-        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $post_id );
-        //$this->new_announcement_mail( $assigned_sellers, $post_id );
     }
 
     /**
@@ -411,39 +241,5 @@ class Dokan_Announcement {
         if ( $values ) {
             $wpdb->query( $sql );
         }
-    }
-
-    /**
-     * Send email to sellers once a new announcement is created
-     *
-     * @param int $seller_id
-     */
-    function new_announcement_mail( $sellers, $post_id ) {
-        $seller_emails = array();
-        foreach ( $sellers as $seller ) {
-            $seller_info     = get_userdata( $seller );
-            $seller_emails[] = $seller_info->user_email;
-        }
-        $email = Dokan_Email::init();
-
-        $announcement_url = dokan_get_navigation_url( 'announcement/single-announcement' )."$post_id/";
-        ob_start();
-        dokan_get_template_part( 'emails/announcement', '', array( 'pro' => true) );
-        $body = ob_get_clean();
-
-        $find = array(
-            '%announecement_url%',
-            '%site_name%',
-            '%site_url%'
-        );
-
-        $replace = array(
-            $announcement_url,
-            $email->get_from_name(),
-            home_url(),
-        );
-        $body = str_replace( $find, $replace, $body);
-        $subject = sprintf( __( 'New Announcement from [%s] ', 'dokan' ), $email->get_from_name() );
-        $email->send( $seller_emails, $subject, $body );
     }
 }
