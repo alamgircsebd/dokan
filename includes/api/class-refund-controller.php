@@ -7,7 +7,7 @@
 *
 * @package dokan
 */
-class Dokan_REST_Refund_Controller extends WP_REST_Controller {
+class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
 
     /**
      * Endpoint namespace.
@@ -161,11 +161,13 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
         }
 
         $response       = rest_ensure_response( $data );
-        $refund_count = dokan_get_refund_count();
+        $refund_count   = dokan_get_refund_count();
 
-        $response->header( 'X-Status-Pending', $refund_count['pending'] );
-        $response->header( 'X-Status-Completed', $refund_count['completed'] );
-        $response->header( 'X-Status-Cancelled', $refund_count['cancelled'] );
+        if (  current_user_can( 'manage_options' ) ) {
+            $response->header( 'X-Status-Pending', $refund_count['pending'] );
+            $response->header( 'X-Status-Completed', $refund_count['completed'] );
+            $response->header( 'X-Status-Cancelled', $refund_count['cancelled'] );
+        }
 
         $response = $this->format_collection_response( $response, $request, $total_count );
         return $response;
@@ -419,7 +421,13 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
     public function get_user_data( $user_id ) {
         $vendor = dokan()->vendor->get( $user_id );
 
-        return $vendor->to_array();
+        return array(
+            'id'         => $vendor->get_id(),
+            'store_name' => $vendor->get_shop_name(),
+            'email'      => $vendor->get_email(),
+            'first_name' => $vendor->get_first_name(),
+            'last_name'  => $vendor->get_last_name()
+        );
     }
 
     /**
@@ -442,53 +450,6 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
      */
     public function refund_permissions_check() {
         return current_user_can( 'manage_options' );
-    }
-
-      /**
-     * Format item's collection for response
-     *
-     * @param  object $response
-     * @param  object $request
-     * @param  array $items
-     * @param  int $total_items
-     *
-     * @return object
-     */
-    public function format_collection_response( $response, $request, $total_items ) {
-        if ( $total_items === 0 ) {
-            return $response;
-        }
-
-        // Store pagation values for headers then unset for count query.
-        $per_page = (int) ( ! empty( $request['per_page'] ) ? $request['per_page'] : 20 );
-        $page     = (int) ( ! empty( $request['page'] ) ? $request['page'] : 1 );
-
-        $response->header( 'X-WP-Total', (int) $total_items );
-
-        $max_pages = ceil( $total_items / $per_page );
-
-        $response->header( 'X-WP-TotalPages', (int) $max_pages );
-        $base = add_query_arg( $request->get_query_params(), rest_url( sprintf( '/%s/%s', $this->namespace, $this->base ) ) );
-
-        if ( $page > 1 ) {
-            $prev_page = $page - 1;
-
-            if ( $prev_page > $max_pages ) {
-                $prev_page = $max_pages;
-            }
-
-            $prev_link = add_query_arg( 'page', $prev_page, $base );
-            $response->link_header( 'prev', $prev_link );
-        }
-
-        if ( $max_pages > $page ) {
-
-            $next_page = $page + 1;
-            $next_link = add_query_arg( 'page', $next_page, $base );
-            $response->link_header( 'next', $next_link );
-        }
-
-        return $response;
     }
 
     /**
@@ -568,6 +529,5 @@ class Dokan_REST_Refund_Controller extends WP_REST_Controller {
 
         return $this->add_additional_fields_schema( $schema );
     }
-
 
 }
