@@ -21,7 +21,6 @@ class Dokan_Pro_Admin_Settings {
      */
     public function __construct() {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
-        add_action( 'dokan_admin_menu', array( $this, 'tools_modules_menu' ), 99 );
 
         add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
 
@@ -59,11 +58,12 @@ class Dokan_Pro_Admin_Settings {
             $refund_text = sprintf( __( 'Refunds %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
         }
 
-        add_submenu_page( 'dokan', __( 'Refund Requests', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
+            add_submenu_page( 'dokan', __( 'Refund Requests', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
 
         if ( current_user_can( $capability ) ) {
             $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
             $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
+            $submenu[ $slug ][] = array( $refund_text, $capability, 'admin.php?page=' . $slug . '#/refund?status=pending' );
         }
 
         $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
@@ -78,19 +78,6 @@ class Dokan_Pro_Admin_Settings {
         $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
         add_action( $report, array( $this, 'common_scripts' ) );
-    }
-
-    /**
-     * Tools and modules menu
-     *
-     * Load these modules at the bottom
-     *
-     * @param  string $capability
-     *
-     * @return void
-     */
-    public function tools_modules_menu( $capability ) {
-
     }
 
     /**
@@ -291,6 +278,12 @@ class Dokan_Pro_Admin_Settings {
             'path'      => '/announcement/:id/edit',
             'name'      => 'EditAnnouncement',
             'component' => 'EditAnnouncement'
+        );
+
+        $routes[] = array(
+            'path'      => '/refund',
+            'name'      => 'Refund',
+            'component' => 'Refund'
         );
 
         $routes[] = array(

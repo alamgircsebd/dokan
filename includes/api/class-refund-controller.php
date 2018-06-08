@@ -324,6 +324,9 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
      *         ],
      *         "cancelled" : [
      *             "5"
+     *         ],
+     *         "delete" : [
+     *             "9", "11"
      *         ]
      *     }
      *
@@ -344,18 +347,26 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'no_permission', __( 'You do not have permission for bulk status change', 'dokan' ), array( 'status' => 404 ) );
         }
 
-        $allowed_status = array( 'approved', 'cancelled', 'pending' );
+        $allowed_status = array( 'approved', 'cancelled', 'pending', 'delete' );
 
         foreach ( $params as $status => $value ) {
             if ( in_array( $status, $allowed_status ) ) {
-                foreach ( $value as $refund_id ) {
-                    $status_code = $this->get_status( $status );
 
-                    $wpdb->query( $wpdb->prepare(
-                        "UPDATE {$wpdb->prefix}dokan_refund
-                        SET status = %d WHERE id = %d",
-                        $status_code, $refund_id
-                    ) );
+                if ( 'delete' === $status ) {
+                    $refund = new Dokan_Pro_Admin_Refund();
+                    foreach ( $value as $refund_id ) {
+                        $refund->delete_refund( $refund_id );
+                    }
+                } else {
+                    foreach ( $value as $refund_id ) {
+                        $status_code = $this->get_status( $status );
+
+                        $wpdb->query( $wpdb->prepare(
+                            "UPDATE {$wpdb->prefix}dokan_refund
+                            SET status = %d WHERE id = %d",
+                            $status_code, $refund_id
+                        ) );
+                    }
                 }
             }
         }
@@ -384,7 +395,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             'restock_items'=> $object->restock_items,
             'created'      => mysql_to_rfc3339( $object->date ),
             'status'       => $this->get_status( (int) $object->status ),
-            'method'       => $object->method == false ? 'cash' : $object->method,
+            'method'       => get_post_meta( $object->order_id, '_payment_method_title', true )
         );
 
         $response      = rest_ensure_response( $data );
