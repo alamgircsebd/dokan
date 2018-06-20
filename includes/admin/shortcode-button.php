@@ -60,9 +60,9 @@ class Dokan_shortcodes_button {
 
         $assets_url = DOKAN_PRO_PLUGIN_ASSEST;
 
-        if ( 'post' == $screen->base ) {
-            wp_localize_script( 'jquery', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
-            wp_localize_script( 'jquery', 'dokan_assets_url', $assets_url );
+        if ( 'page' == $screen->post_type || 'product' == $screen->post_type ) {
+            wp_localize_script( 'dokan_pro_admin', 'dokan_shortcodes', apply_filters( 'dokan_button_shortcodes', $shortcodes ) );
+            wp_localize_script( 'dokan_pro_admin', 'dokan_assets_url', $assets_url );
         }
     }
 
@@ -94,7 +94,12 @@ class Dokan_shortcodes_button {
      */
     function enqueue_plugin_scripts( $plugin_array ) {
         //enqueue TinyMCE plugin script with its ID.
-        $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tmc-button.js";
+        $screen = get_current_screen();
+
+        if ( 'page' == $screen->post_type || 'product' == $screen->post_type ) {
+            $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tmc-button.js";
+        }
+
         return $plugin_array;
     }
 
