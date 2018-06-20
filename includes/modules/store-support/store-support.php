@@ -696,20 +696,20 @@ class Dokan_Store_Support {
                              <?php
                                 switch ( $topic->post_status ) {
                                     case 'open':
-                                        $c_status = 'closed';
+                                        $c_status = __( 'closed', 'dokan' );
                                         $btn_icon = 'fa-close';
                                         $topic_status = 'dokan-label-success';
                                         $btn_title = __( 'close topic' , 'dokan' );
                                         break;
                                     case 'closed':
-                                        $c_status = 'open';
+                                        $c_status = __( 'open', 'dokan' );
                                         $btn_icon = 'fa-file-o';
                                         $topic_status = 'dokan-label-danger';
                                         $btn_title = __( 're-open topic' , 'dokan' );
                                         break;
 
                                     default:
-                                        $c_status = 'closed';
+                                        $c_status = __( 'closed', 'dokan' );
                                         $btn_icon = 'fa-close';
                                         $topic_status = 'dokan-label-success';
                                         $btn_title = __( 'close topic' , 'dokan' );
@@ -1013,20 +1013,20 @@ class Dokan_Store_Support {
                         <?php
                             switch ( $topic->post_status ) {
                                 case 'open':
-                                    $c_status = 'closed';
+                                    $c_status = __( 'closed', 'dokan' );
                                     $btn_icon = 'fa-close';
                                     $topic_status = 'dokan-label-success';
                                     $btn_title = __( 'close topic' , 'dokan' );
                                     break;
                                 case 'closed':
-                                    $c_status = 'open';
+                                    $c_status = __( 'open', 'dokan' );
                                     $btn_icon = 'fa-file-o';
                                     $topic_status = 'dokan-label-danger';
                                     $btn_title = __( 're-open topic' , 'dokan' );
                                     break;
 
                                 default:
-                                    $c_status = 'closed';
+                                    $c_status = __( 'closed', 'dokan' );
                                     $btn_icon = 'fa-close';
                                     $topic_status = 'dokan-label-success';
                                     $btn_title = __( 'close topic' , 'dokan' );
