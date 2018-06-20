@@ -235,15 +235,15 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         if ( $query_vars == 'shipping' ) {
 
             $help_text = sprintf ( '<p>%s</p>',
-                __( 'A shipping zone is a geographic region where a certain set of shipping methods are offered. WooCommerce will match a customer to a single zone using their shipping address and present the shipping methods within that zone to them.', 'dokan' ),
-                __( 'If you want to use the previous Dokan Shipping system then', 'dokan' ),
+                __( 'A shipping zone is a geographic region where a certain set of shipping methods are offered. We will match a customer to a single zone using their shipping address and present the shipping methods within that zone to them.', 'dokan' ),
+                __( 'If you want to use the previous shipping system then', 'dokan' ),
                 esc_url( dokan_get_navigation_url('settings/regular-shipping' ) ),
                 __( 'Click Here', 'dokan' )
             );
 
             if ( 'yes' == $enable_shipping ) {
                 $help_text .= sprintf ( '<p>%s <a href="%s">%s</a></p>',
-                    __( 'If you want to use the previous Dokan Shipping system then', 'dokan' ),
+                    __( 'If you want to use the previous shipping system then', 'dokan' ),
                     esc_url( dokan_get_navigation_url('settings/regular-shipping' ) ),
                     __( 'Click Here', 'dokan' )
                 );

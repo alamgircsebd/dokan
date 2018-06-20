@@ -170,6 +170,9 @@ Class Dokan_Email_Verification {
      * @return void
      */
     function add_activation_link( $email ) {
+        if ( empty( $email ) ) {
+            return;
+        }
 
         if ( $email->id != 'customer_new_account' ) {
             return;

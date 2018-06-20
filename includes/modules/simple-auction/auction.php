@@ -69,6 +69,9 @@ class Dokan_Auction {
         // dokan simple auciton email
         add_filter( 'woocommerce_email_classes', array( $this, 'load_auction_email_class' ) );
         add_filter( 'dokan_email_actions', array( $this, 'register_auction_email_action') );
+
+        // send bid email to admin and vendor
+        add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
     }
 
     /**
@@ -470,6 +473,30 @@ class Dokan_Auction {
         $actions[] = 'dokan_new_auction_product_added';
 
         return $actions;
+    }
+
+    /**
+     * Send bid email to seller and amdin
+     *
+     * @param $recipient
+     *
+     * @param $object
+     *
+     * @since 2.8.2
+     *
+     * @return string
+     */
+    public function send_bid_email( $recipient, $object ) {
+        $product_id = $object->get_id();
+
+        if ( empty( $product_id ) ) {
+            return $recipient;
+        }
+
+        $vendor_id = get_post_field( 'post_author', $product_id );
+        $vendor_email = dokan()->vendor->get( $vendor_id )->get_email();
+
+        return $recipient . ',' . $vendor_email;
     }
 
 } // Dokan_Auction
