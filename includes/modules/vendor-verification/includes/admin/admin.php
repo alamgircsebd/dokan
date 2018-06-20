@@ -110,78 +110,84 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
         ),
     );
 
-     //$settings_fields = array();
-        $gateways = array();
-        $gateway_obj = WeDevs_dokan_SMS_Gateways::instance();
-        $registered_gateways = $gateway_obj->get_gateways();
+    $gateways = array();
+    $gateway_obj = WeDevs_dokan_SMS_Gateways::instance();
+    $registered_gateways = $gateway_obj->get_gateways();
 
+    foreach ($registered_gateways as $gateway => $option) {
+        $gateways[$gateway] = $option['label'];
+    }
 
-        foreach ($registered_gateways as $gateway => $option) {
-            $gateways[$gateway] = $option['label'];
-        }
-
-        $settings_fields['dokan_verification_sms_gateways'] = array(
-            'sender_name' => array(
-                'name' => 'sender_name',
-                'label' => __( 'Sender Name', 'dokan' ),
-                'default' => 'weDevs Team'
-            ),
-            'sms_text' => array(
-                'name' => 'sms_text',
-                'label' => __( 'SMS Text', 'dokan' ),
-                'type' => 'textarea',
-                'default' => __( 'Your verification code is: %CODE%', 'dokan' ),
-                'desc' => __( 'will be displayed in SMS. <strong>%CODE%</strong> will be replaced by verification code', 'dokan' )
-            ),
-            'sms_sent_msg' => array(
-                'name' => 'sms_sent_msg',
-                'label' => __( 'SMS Sent Success', 'wedevs' ),
-                'default' => __( 'SMS sent. Please enter your verification code', 'wedevs' )
-            ),
-               'sms_sent_error' => array(
-                'name' => 'sms_sent_error',
-                'label' => __( 'SMS Sent Error', 'wedevs' ),
-                'default' => __( 'Unable to send sms. Contact admin', 'wedevs' )
-            ),
-            array(
-                'name' => 'active_gateway',
-                'label' => __( 'Active Gateway', 'dokan' ),
-                'type' => 'select',
-                'options' => $gateways
-            ),
-            array(
-                'name' => 'nexmo_header',
-                'label' => __( 'Nexmo App Settings', 'dokan' ),
-                'type' => 'html',
-                'desc'  => 'Configure your gateway from <a target="_blank" href="https://www.nexmo.com/">' . __( 'here', 'dokan' ) . '</a> and fill the details below',
-            ),
-            array(
-                'name' => 'nexmo_username',
-                'label' => __( 'API Key', 'dokan' )
-            ),
-            array(
-                'name' => 'nexmo_pass',
-                'label' => __( 'API Secret', 'dokan' )
-            ),
-            array(
-                'name' => 'twilio_header',
-                'label' => __( 'Twilio App Settings', 'dokan' ),
-                'type' => 'html',
-                'desc'  => 'Configure your gateway from <a target="_blank" href="https://www.twilio.com/">' . __( 'here', 'dokan' ) . '</a>  and fill the details below',
-            ),
-            array(
-                'name' => 'twilio_number',
-                'label' => __( 'From Number', 'dokan' )
-            ),
-            array(
-                'name' => 'twilio_username',
-                'label' => __( 'Account SID', 'dokan' )
-            ),
-            array(
-                'name' => 'twilio_pass',
-                'label' => __( 'Auth Token', 'dokan' )
-            ),
-        );
+    $settings_fields['dokan_verification_sms_gateways'] = array(
+        'sender_name' => array(
+            'name' => 'sender_name',
+            'label'=> __( 'Sender Name', 'dokan' ),
+            'default' => 'weDevs Team',
+            'type' => 'text'
+        ),
+        'sms_text' => array(
+            'name' => 'sms_text',
+            'label'=> __( 'SMS Text', 'dokan' ),
+            'type' => 'textarea',
+            'default' => __( 'Your verification code is: %CODE%', 'dokan' ),
+            'desc' => __( 'will be displayed in SMS. <strong>%CODE%</strong> will be replaced by verification code', 'dokan' ),
+        ),
+        'sms_sent_msg' => array(
+            'name' => 'sms_sent_msg',
+            'label' => __( 'SMS Sent Success', 'wedevs' ),
+            'default' => __( 'SMS sent. Please enter your verification code', 'wedevs' ),
+            'type' => 'text'
+        ),
+        'sms_sent_error' => array(
+            'name' => 'sms_sent_error',
+            'label'=> __( 'SMS Sent Error', 'wedevs' ),
+            'default' => __( 'Unable to send sms. Contact admin', 'wedevs' ),
+            'type' => 'text'
+        ),
+        'active_gateway' => array(
+            'name' => 'active_gateway',
+            'label'=> __( 'Active Gateway', 'dokan' ),
+            'type' => 'select',
+            'options' => $gateways
+        ),
+        'nexmo_header' => array(
+            'name' => 'nexmo_header',
+            'label'=> __( 'Nexmo App Settings', 'dokan' ),
+            'type' => 'html',
+            'desc' => 'Configure your gateway from <a target="_blank" href="https://www.nexmo.com/">' . __( 'here', 'dokan' ) . '</a> and fill the details below',
+        ),
+        'nexmo_username' => array(
+            'name' => 'nexmo_username',
+            'label'=> __( 'API Key', 'dokan' ),
+            'type' => 'text'
+        ),
+        'nexmo_pass' => array(
+            'name' => 'nexmo_pass',
+            'label'=> __( 'API Secret', 'dokan' ),
+            'type' => 'text'
+        ),
+        'twilio_header' => array(
+            'name' => 'twilio_header',
+            'label'=> __( 'Twilio App Settings', 'dokan' ),
+            'type' => 'html',
+            'desc' => 'Configure your gateway from <a target="_blank" href="https://www.twilio.com/">' . __( 'here', 'dokan' ) . '</a>  and fill the details below',
+        ),
+        'twilio_number' => array(
+            'name' => 'twilio_number',
+            'label'=> __( 'From Number', 'dokan' ),
+            'type' => 'text'
+        ),
+        'twilio_username' => array(
+            'name' => 'twilio_username',
+            'label'=> __( 'Account SID', 'dokan' ),
+            'type' => 'text'
+        ),
+        'twilio_pass' => array(
+            'name' => 'twilio_pass',
+            'label'=> __( 'Auth Token', 'dokan' ),
+            'type' => 'text'
+        ),
+    );
 
     return $settings_fields;
 }
