@@ -265,6 +265,7 @@
                         });
 
                         this.toggleActivation = false;
+                        location.reload();
                     });
 
                 } else {
@@ -280,6 +281,8 @@
                             type: 'success',
                             text: message,
                         });
+
+                        location.reload();
                     });
                 }
             },
