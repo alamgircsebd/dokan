@@ -528,8 +528,8 @@ class Dokan_Pro_Admin_Settings {
                 'seller_id'    => __( 'Vendor', 'dokan' ),
                 'order_total'  => __( 'Order Total', 'dokan' ),
                 'net_amount'   => __( 'Vendor Earning', 'dokan' ),
-                'commision'    => __( 'Commision', 'dokan' ),
                 'order_status' => __( 'Status', 'dokan' ),
+                'commission'   => __( 'Commission', 'dokan' )
             );
 
             $filename = "Report-" . date( 'Y-m-d', time() );
@@ -539,6 +539,13 @@ class Dokan_Pro_Admin_Settings {
             fputcsv( $ob, array_values( $headers ) );
 
             foreach ( $all_logs as $a ) {
+                unset( $a['id'] );
+                unset( $a['post_date'] );
+
+                $a['seller_id'] = dokan()->vendor->get($a['seller_id'])->get_name();
+                $a['order_status'] = ucwords( substr( $a['order_status'], 3 ) );
+                $a['commission'] = $a['order_total'] - $a['net_amount'];
+
                 fputcsv( $ob, array_values( $a ) );
             }
             fclose( $ob );
