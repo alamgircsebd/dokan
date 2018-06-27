@@ -105,13 +105,32 @@ class Dokan_Live_Chat_Start {
             ) );
         }
 
-        if ( dokan_is_seller_dashboard() ) {
+        if ( dokan_is_seller_dashboard() && ! $this->dokan_is_seller_settings_page() ) {
             wp_enqueue_script( 'dokan-live-chat-login', DOKAN_LIVE_CHAT_ASSETS . '/js/script.js', array( 'jquery' ), false, true );
 
             wp_localize_script( 'dokan-live-chat-login', 'dokan_live_chat', array(
                 'seller_dashboard' => 'yes',
             ) );
         }
+    }
+
+	/**
+     * Check if it's dokan seller settings page
+     *
+	 * @return bool
+     *
+     * @since 1.0
+	 */
+    public function dokan_is_seller_settings_page() {
+        global $wp;
+
+        $settings_page = isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store';
+
+        if ( ! $settings_page ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
