@@ -124,9 +124,7 @@ class Dokan_Live_Chat_Start {
     public function dokan_is_seller_settings_page() {
         global $wp;
 
-        $settings_page = isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'store';
-
-        if ( ! $settings_page ) {
+        if ( ! isset( $wp->query_vars['settings'] ) ) {
             return false;
         }
 
