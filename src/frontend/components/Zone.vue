@@ -645,6 +645,45 @@ export default {
             }
         }
 
+        @media only screen and ( max-width: 750px ) {
+            .dokan-modal {
+                .dokan-modal-content {
+                    width: 600px;
+                }
+            }
+        }
+
+        @media only screen and ( max-width: 667px ) {
+            .dokan-modal {
+                .dokan-modal-content {
+                    width: 500px;
+                }
+            }
+        }
+
+        @media only screen and ( max-width: 568px ) {
+            .dokan-modal {
+                .dokan-modal-content {
+                    width: 420px;
+                }
+            }
+        }
+
+        @media only screen and ( max-width: 480px ) {
+            .dokan-modal {
+                .dokan-modal-content {
+                    width: 350px;
+                }
+            }
+        }
+
+        @media only screen and ( max-width: 360px ) {
+            .dokan-modal {
+                .dokan-modal-content {
+                    width: 300px;
+                }
+            }
+        }
     }
 
 </style>
