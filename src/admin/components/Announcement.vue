@@ -46,6 +46,10 @@
                 <span :class="data.row.status">{{ status[data.row.status] }}</span>
             </template>
 
+            <template slot="content" slot-scope="data">
+                <span :class="data.row.status"><a href="#" @click.prevent="showContent( data.row )"><span class="dashicons dashicons-visibility"></span></a></span>
+            </template>
+
             <template slot="created_at" slot-scope="data">
                 {{ moment(data.row.created_at).format('MMM D, YYYY') }}
             </template>
@@ -77,17 +81,30 @@
 
         </list-table>
 
+        <modal
+            :title="modalTitle"
+            v-if="showDialog"
+            @close="showDialog = false"
+            :footer="false"
+        >
+            <template slot="body">
+                <div v-html="modalContent"></div>
+            </template>
+        </modal>
+
     </div>
 </template>
 
 <script>
     let ListTable = dokan_get_lib('ListTable');
+    let Modal = dokan_get_lib('Modal');
 
     export default {
         name: 'Announcement',
 
         components: {
             ListTable,
+            Modal
         },
 
         data() {
@@ -118,6 +135,7 @@
 
                 columns: {
                     'title': { label: this.__( 'Title', 'dokan' ) },
+                    'content': { label: this.__( 'Content', 'dokan' ) },
                     'send_to': { label: this.__( 'Sent To', 'dokan' ) },
                     'status': { label: this.__( 'Status', 'dokan' ) },
                     'created_at': { label: this.__( 'Created Date', 'dokan' ) },
@@ -142,6 +160,9 @@
                         label: this.__( 'Restore', 'dokan' )
                     }
                 ],
+                showDialog: false,
+                modalContent: '',
+                modalTitle: ''
             }
         },
 
@@ -217,6 +238,12 @@
                 });
             },
 
+            showContent( row ) {
+                this.modalTitle = row.title;
+                this.modalContent = row.content;
+                this.showDialog = true;
+            },
+
             moment(date) {
                 return moment(date);
             },
@@ -236,7 +263,6 @@
             },
 
             onActionClick(action, row) {
-                console.log( action, row );
             },
 
             rowAction( action, data ) {

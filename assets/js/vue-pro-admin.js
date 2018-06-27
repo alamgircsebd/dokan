@@ -1064,6 +1064,7 @@ var Switches = dokan_get_lib('Switches');
                     });
 
                     _this2.toggleActivation = false;
+                    location.reload();
                 });
             } else {
                 // Need to deactivate
@@ -1077,6 +1078,8 @@ var Switches = dokan_get_lib('Switches');
                         type: 'success',
                         text: message
                     });
+
+                    location.reload();
                 });
             }
         },
@@ -1209,14 +1212,31 @@ var Switches = dokan_get_lib('Switches');
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
+var Modal = dokan_get_lib('Modal');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'Announcement',
 
     components: {
-        ListTable: ListTable
+        ListTable: ListTable,
+        Modal: Modal
     },
 
     data: function data() {
@@ -1247,6 +1267,7 @@ var ListTable = dokan_get_lib('ListTable');
 
             columns: {
                 'title': { label: this.__('Title', 'dokan') },
+                'content': { label: this.__('Content', 'dokan') },
                 'send_to': { label: this.__('Sent To', 'dokan') },
                 'status': { label: this.__('Status', 'dokan') },
                 'created_at': { label: this.__('Created Date', 'dokan') }
@@ -1265,7 +1286,10 @@ var ListTable = dokan_get_lib('ListTable');
             }, {
                 key: 'restore',
                 label: this.__('Restore', 'dokan')
-            }]
+            }],
+            showDialog: false,
+            modalContent: '',
+            modalTitle: ''
         };
     },
 
@@ -1330,6 +1354,11 @@ var ListTable = dokan_get_lib('ListTable');
                 _this.updatePagination(xhr);
             });
         },
+        showContent: function showContent(row) {
+            this.modalTitle = row.title;
+            this.modalContent = row.content;
+            this.showDialog = true;
+        },
         moment: function (_moment) {
             function moment(_x) {
                 return _moment.apply(this, arguments);
@@ -1355,9 +1384,7 @@ var ListTable = dokan_get_lib('ListTable');
                 }
             });
         },
-        onActionClick: function onActionClick(action, row) {
-            console.log(action, row);
-        },
+        onActionClick: function onActionClick(action, row) {},
         rowAction: function rowAction(action, data) {
             var _this2 = this;
 
@@ -3746,6 +3773,32 @@ var render = function() {
             }
           },
           {
+            key: "content",
+            fn: function(data) {
+              return [
+                _c("span", { class: data.row.status }, [
+                  _c(
+                    "a",
+                    {
+                      attrs: { href: "#" },
+                      on: {
+                        click: function($event) {
+                          $event.preventDefault()
+                          _vm.showContent(data.row)
+                        }
+                      }
+                    },
+                    [
+                      _c("span", {
+                        staticClass: "dashicons dashicons-visibility"
+                      })
+                    ]
+                  )
+                ])
+              ]
+            }
+          },
+          {
             key: "created_at",
             fn: function(data) {
               return [
@@ -3877,7 +3930,27 @@ var render = function() {
             }
           }
         ])
-      })
+      }),
+      _vm._v(" "),
+      _vm.showDialog
+        ? _c(
+            "modal",
+            {
+              attrs: { title: _vm.modalTitle, footer: false },
+              on: {
+                close: function($event) {
+                  _vm.showDialog = false
+                }
+              }
+            },
+            [
+              _c("template", { slot: "body" }, [
+                _c("div", { domProps: { innerHTML: _vm._s(_vm.modalContent) } })
+              ])
+            ],
+            2
+          )
+        : _vm._e()
     ],
     1
   )
