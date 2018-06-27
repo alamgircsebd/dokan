@@ -32,9 +32,9 @@
                         <?php echo wp_trim_words( $notice->post_content, 6, '...' ); ?>
                     </div>
                     <div class="dokan-dashboard-announce-date dokan-right <?php echo ( $notice->status == 'unread' ) ? 'dokan-dashboard-announce-unread' : 'dokan-dashboard-announce-read'; ?>">
-                        <div class="announce-day"><?php echo date( 'd', strtotime( $notice->post_date ) ); ?></div>
-                        <div class="announce-month"><?php echo date( 'l', strtotime( $notice->post_date ) ); ?></div>
-                        <div class="announce-year"><?php echo date( 'Y', strtotime( $notice->post_date ) ); ?></div>
+                        <div class="announce-day"><?php echo date_i18n( 'd', strtotime( $notice->post_date ) ); ?></div>
+                        <div class="announce-month"><?php echo date_i18n( 'l', strtotime( $notice->post_date ) ); ?></div>
+                        <div class="announce-year"><?php echo date_i18n( 'Y', strtotime( $notice->post_date ) ); ?></div>
                     </div>
                     <div class="dokan-clearfix"></div>
                 </li>
