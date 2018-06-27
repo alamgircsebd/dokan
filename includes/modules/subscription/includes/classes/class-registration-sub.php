@@ -47,6 +47,7 @@ class DPS_Pack_On_Registration {
     function generate_form_fields() {
         //get packs
         $query = $this->get_subscription_packs();
+        $available_recurring_period = DPS_Manager::get_subscription_period_strings();
 
         $packs = $query->get_posts();
 
@@ -96,7 +97,7 @@ class DPS_Pack_On_Registration {
 
                         <?php if ( $is_recurring && $recurring_interval === 1 ) { ?>
                             <span class="dps-rec-period">
-                                <span class="sep">/</span><?php echo $recurring_period; ?>
+                                <span class="sep">/</span><?php echo isset( $available_recurring_period[$recurring_period] ) ? $available_recurring_period[$recurring_period] : ''; ?>
                             </span>
                         <?php } ?>
                     </div><!-- .pack_price -->
