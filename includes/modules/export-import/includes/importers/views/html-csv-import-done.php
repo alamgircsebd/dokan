@@ -14,45 +14,45 @@ if ( !defined( 'ABSPATH' ) ) {
         if ( 0 < $imported ) {
             $results[] = sprintf(
             /* translators: %d: products count */
-            _n( '%s product imported', '%s products imported', $imported, 'dpi_plugin' ), '<strong>' . number_format_i18n( $imported ) . '</strong>'
+            _n( '%s product imported', '%s products imported', $imported, 'dokan' ), '<strong>' . number_format_i18n( $imported ) . '</strong>'
             );
         }
 
         if ( 0 < $updated ) {
             $results[] = sprintf(
             /* translators: %d: products count */
-            _n( '%s product updated', '%s products updated', $updated, 'dpi_plugin' ), '<strong>' . number_format_i18n( $updated ) . '</strong>'
+            _n( '%s product updated', '%s products updated', $updated, 'dokan' ), '<strong>' . number_format_i18n( $updated ) . '</strong>'
             );
         }
 
         if ( 0 < $skipped ) {
             $results[] = sprintf(
             /* translators: %d: products count */
-            _n( '%s product was skipped', '%s products were skipped', $skipped, 'dpi_plugin' ), '<strong>' . number_format_i18n( $skipped ) . '</strong>'
+            _n( '%s product was skipped', '%s products were skipped', $skipped, 'dokan' ), '<strong>' . number_format_i18n( $skipped ) . '</strong>'
             );
         }
 
         if ( 0 < $failed ) {
             $results [] = sprintf(
             /* translators: %d: products count */
-            _n( 'Failed to import %s product', 'Failed to import %s products', $failed, 'dpi_plugin' ), '<strong>' . number_format_i18n( $failed ) . '</strong>'
+            _n( 'Failed to import %s product', 'Failed to import %s products', $failed, 'dokan' ), '<strong>' . number_format_i18n( $failed ) . '</strong>'
             );
         }
 
         if ( 0 < $failed || 0 < $skipped ) {
-            $results[] = '<a href="#" class="woocommerce-importer-done-view-errors">' . __( 'View import log', 'dpi_plugin' ) . '</a>';
+            $results[] = '<a href="#" class="woocommerce-importer-done-view-errors">' . __( 'View import log', 'dokan' ) . '</a>';
         }
 
         /* translators: %d: import results */
-        echo wp_kses_post( __( 'Import complete!', 'dpi_plugin' ) . ' ' . implode( '. ', $results ) );
+        echo wp_kses_post( __( 'Import complete!', 'dokan' ) . ' ' . implode( '. ', $results ) );
         ?>
     </section>
     <section class="wc-importer-error-log" style="display:none">
         <table class="widefat wc-importer-error-log-table">
             <thead>
                 <tr>
-                    <th><?php esc_html_e( 'Product', 'dpi_plugin' ); ?></th>
-                    <th><?php esc_html_e( 'Reason for failure', 'dpi_plugin' ); ?></th>
+                    <th><?php esc_html_e( 'Product', 'dokan' ); ?></th>
+                    <th><?php esc_html_e( 'Reason for failure', 'dokan' ); ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -84,6 +84,6 @@ if ( count( $errors ) ) {
             } );
     </script>
     <div class="wc-actions">
-        <a class="button button-primary" href="<?php echo esc_url( dokan_get_navigation_url( 'products' ) ); ?>"><?php esc_html_e( 'View products', 'dpi_plugin' ); ?></a>
+        <a class="button button-primary" href="<?php echo esc_url( dokan_get_navigation_url( 'products' ) ); ?>"><?php esc_html_e( 'View products', 'dokan' ); ?></a>
     </div>
 </div>

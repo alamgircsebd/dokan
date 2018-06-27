@@ -78,44 +78,44 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
      */
     public function get_default_column_names() {
         return apply_filters( "woocommerce_product_export_{$this->export_type}_default_columns", array(
-            'id'                 => __( 'ID', 'dpi_plugin' ),
-            'type'               => __( 'Type', 'dpi_plugin' ),
-            'sku'                => __( 'SKU', 'dpi_plugin' ),
-            'name'               => __( 'Name', 'dpi_plugin' ),
-            'published'          => __( 'Published', 'dpi_plugin' ),
-            'featured'           => __( 'Is featured?', 'dpi_plugin' ),
-            'catalog_visibility' => __( 'Visibility in catalog', 'dpi_plugin' ),
-            'short_description'  => __( 'Short description', 'dpi_plugin' ),
-            'description'        => __( 'Description', 'dpi_plugin' ),
-            'date_on_sale_from'  => __( 'Date sale price starts', 'dpi_plugin' ),
-            'date_on_sale_to'    => __( 'Date sale price ends', 'dpi_plugin' ),
-            'tax_status'         => __( 'Tax status', 'dpi_plugin' ),
-            'tax_class'          => __( 'Tax class', 'dpi_plugin' ),
-            'stock_status'       => __( 'In stock?', 'dpi_plugin' ),
-            'stock'              => __( 'Stock', 'dpi_plugin' ),
-            'backorders'         => __( 'Backorders allowed?', 'dpi_plugin' ),
-            'sold_individually'  => __( 'Sold individually?', 'dpi_plugin' ),
-            'weight'             => sprintf( __( 'Weight (%s)', 'dpi_plugin' ), get_option( 'woocommerce_weight_unit' ) ),
-            'length'             => sprintf( __( 'Length (%s)', 'dpi_plugin' ), get_option( 'woocommerce_dimension_unit' ) ),
-            'width'              => sprintf( __( 'Width (%s)', 'dpi_plugin' ), get_option( 'woocommerce_dimension_unit' ) ),
-            'height'             => sprintf( __( 'Height (%s)', 'dpi_plugin' ), get_option( 'woocommerce_dimension_unit' ) ),
-            'reviews_allowed'    => __( 'Allow customer reviews?', 'dpi_plugin' ),
-            'purchase_note'      => __( 'Purchase note', 'dpi_plugin' ),
-            'sale_price'         => __( 'Sale price', 'dpi_plugin' ),
-            'regular_price'      => __( 'Regular price', 'dpi_plugin' ),
-            'category_ids'       => __( 'Categories', 'dpi_plugin' ),
-            'tag_ids'            => __( 'Tags', 'dpi_plugin' ),
-            'shipping_class_id'  => __( 'Shipping class', 'dpi_plugin' ),
-            'images'             => __( 'Images', 'dpi_plugin' ),
-            'download_limit'     => __( 'Download limit', 'dpi_plugin' ),
-            'download_expiry'    => __( 'Download expiry days', 'dpi_plugin' ),
-            'parent_id'          => __( 'Parent', 'dpi_plugin' ),
-            'grouped_products'   => __( 'Grouped products', 'dpi_plugin' ),
-            'upsell_ids'         => __( 'Upsells', 'dpi_plugin' ),
-            'cross_sell_ids'     => __( 'Cross-sells', 'dpi_plugin' ),
-            'product_url'        => __( 'External URL', 'dpi_plugin' ),
-            'button_text'        => __( 'Button text', 'dpi_plugin' ),
-            'menu_order'         => __( 'Position', 'dpi_plugin' ),
+            'id'                 => __( 'ID', 'dokan' ),
+            'type'               => __( 'Type', 'dokan' ),
+            'sku'                => __( 'SKU', 'dokan' ),
+            'name'               => __( 'Name', 'dokan' ),
+            'published'          => __( 'Published', 'dokan' ),
+            'featured'           => __( 'Is featured?', 'dokan' ),
+            'catalog_visibility' => __( 'Visibility in catalog', 'dokan' ),
+            'short_description'  => __( 'Short description', 'dokan' ),
+            'description'        => __( 'Description', 'dokan' ),
+            'date_on_sale_from'  => __( 'Date sale price starts', 'dokan' ),
+            'date_on_sale_to'    => __( 'Date sale price ends', 'dokan' ),
+            'tax_status'         => __( 'Tax status', 'dokan' ),
+            'tax_class'          => __( 'Tax class', 'dokan' ),
+            'stock_status'       => __( 'In stock?', 'dokan' ),
+            'stock'              => __( 'Stock', 'dokan' ),
+            'backorders'         => __( 'Backorders allowed?', 'dokan' ),
+            'sold_individually'  => __( 'Sold individually?', 'dokan' ),
+            'weight'             => sprintf( __( 'Weight (%s)', 'dokan' ), get_option( 'woocommerce_weight_unit' ) ),
+            'length'             => sprintf( __( 'Length (%s)', 'dokan' ), get_option( 'woocommerce_dimension_unit' ) ),
+            'width'              => sprintf( __( 'Width (%s)', 'dokan' ), get_option( 'woocommerce_dimension_unit' ) ),
+            'height'             => sprintf( __( 'Height (%s)', 'dokan' ), get_option( 'woocommerce_dimension_unit' ) ),
+            'reviews_allowed'    => __( 'Allow customer reviews?', 'dokan' ),
+            'purchase_note'      => __( 'Purchase note', 'dokan' ),
+            'sale_price'         => __( 'Sale price', 'dokan' ),
+            'regular_price'      => __( 'Regular price', 'dokan' ),
+            'category_ids'       => __( 'Categories', 'dokan' ),
+            'tag_ids'            => __( 'Tags', 'dokan' ),
+            'shipping_class_id'  => __( 'Shipping class', 'dokan' ),
+            'images'             => __( 'Images', 'dokan' ),
+            'download_limit'     => __( 'Download limit', 'dokan' ),
+            'download_expiry'    => __( 'Download expiry days', 'dokan' ),
+            'parent_id'          => __( 'Parent', 'dokan' ),
+            'grouped_products'   => __( 'Grouped products', 'dokan' ),
+            'upsell_ids'         => __( 'Upsells', 'dokan' ),
+            'cross_sell_ids'     => __( 'Cross-sells', 'dokan' ),
+            'product_url'        => __( 'External URL', 'dokan' ),
+            'button_text'        => __( 'Button text', 'dokan' ),
+            'menu_order'         => __( 'Position', 'dokan' ),
         ) );
     }
 
@@ -442,8 +442,8 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
             if ( $downloads ) {
                 $i = 1;
                 foreach ( $downloads as $download ) {
-                    $this->column_names['downloads:name' . $i] = sprintf( __( 'Download %d name', 'dpi_plugin' ), $i );
-                    $this->column_names['downloads:url' . $i]  = sprintf( __( 'Download %d URL', 'dpi_plugin' ), $i );
+                    $this->column_names['downloads:name' . $i] = sprintf( __( 'Download %d name', 'dokan' ), $i );
+                    $this->column_names['downloads:url' . $i]  = sprintf( __( 'Download %d URL', 'dokan' ), $i );
                     $row['downloads:name' . $i]                = $download->get_name();
                     $row['downloads:url' . $i]                 = $download->get_file();
                     $i++;
@@ -467,10 +467,10 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
             if ( count( $attributes ) ) {
                 $i = 1;
                 foreach ( $attributes as $attribute_name => $attribute ) {
-                    $this->column_names['attributes:name' . $i]     = sprintf( __( 'Attribute %d name', 'dpi_plugin' ), $i );
-                    $this->column_names['attributes:value' . $i]    = sprintf( __( 'Attribute %d value(s)', 'dpi_plugin' ), $i );
-                    $this->column_names['attributes:visible' . $i]  = sprintf( __( 'Attribute %d visible', 'dpi_plugin' ), $i );
-                    $this->column_names['attributes:taxonomy' . $i] = sprintf( __( 'Attribute %d global', 'dpi_plugin' ), $i );
+                    $this->column_names['attributes:name' . $i]     = sprintf( __( 'Attribute %d name', 'dokan' ), $i );
+                    $this->column_names['attributes:value' . $i]    = sprintf( __( 'Attribute %d value(s)', 'dokan' ), $i );
+                    $this->column_names['attributes:visible' . $i]  = sprintf( __( 'Attribute %d visible', 'dokan' ), $i );
+                    $this->column_names['attributes:taxonomy' . $i] = sprintf( __( 'Attribute %d global', 'dokan' ), $i );
 
                     if ( is_a( $attribute, 'WC_Product_Attribute' ) ) {
                         $row['attributes:name' . $i] = wc_attribute_label( $attribute->get_name(), $product );
@@ -507,7 +507,7 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
                     }
 
                     if ( $product->is_type( 'variable' ) && isset( $default_attributes[sanitize_title( $attribute_name )] ) ) {
-                        $this->column_names['attributes:default' . $i] = sprintf( __( 'Attribute %d default', 'dpi_plugin' ), $i );
+                        $this->column_names['attributes:default' . $i] = sprintf( __( 'Attribute %d default', 'dokan' ), $i );
                         $default_value                                   = $default_attributes[sanitize_title( $attribute_name )];
 
                         if ( 0 === strpos( $attribute_name, 'pa_' ) ) {
@@ -551,7 +551,7 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
                     }
 
                     $column_key                        = 'meta:' . esc_attr( $meta->key );
-                    $this->column_names[$column_key] = sprintf( __( 'Meta: %s', 'dpi_plugin' ), $meta->key );
+                    $this->column_names[$column_key] = sprintf( __( 'Meta: %s', 'dokan' ), $meta->key );
                     $row[$column_key]                = $meta_value;
                     $i ++;
                 }

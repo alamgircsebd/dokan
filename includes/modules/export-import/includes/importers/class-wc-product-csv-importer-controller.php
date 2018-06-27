@@ -78,22 +78,22 @@ class WC_Product_CSV_Importer_Controller {
     public function __construct() {
         $this->steps           = array(
             'upload'  => array(
-                'name'    => __( 'Upload CSV file', 'dpi_plugin' ),
+                'name'    => __( 'Upload CSV file', 'dokan' ),
                 'view'    => array( $this, 'upload_form' ),
                 'handler' => array( $this, 'upload_form_handler' ),
             ),
             'mapping' => array(
-                'name'    => __( 'Column mapping', 'dpi_plugin' ),
+                'name'    => __( 'Column mapping', 'dokan' ),
                 'view'    => array( $this, 'mapping_form' ),
                 'handler' => '',
             ),
             'import'  => array(
-                'name'    => __( 'Import', 'dpi_plugin' ),
+                'name'    => __( 'Import', 'dokan' ),
                 'view'    => array( $this, 'import' ),
                 'handler' => '',
             ),
             'done'    => array(
-                'name'    => __( 'Done!', 'dpi_plugin' ),
+                'name'    => __( 'Done!', 'dokan' ),
                 'view'    => array( $this, 'done' ),
                 'handler' => '',
             ),
@@ -236,12 +236,12 @@ class WC_Product_CSV_Importer_Controller {
 
         if ( empty( $_POST['file_url'] ) ) {
             if ( !isset( $_FILES['import'] ) ) {
-                return new WP_Error( 'woocommerce_product_csv_importer_upload_file_empty', __( 'File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini or by post_max_size being defined as smaller than upload_max_filesize in php.ini.', 'dpi_plugin' ) );
+                return new WP_Error( 'woocommerce_product_csv_importer_upload_file_empty', __( 'File is empty. Please upload something more substantial. This error could also be caused by uploads being disabled in your php.ini or by post_max_size being defined as smaller than upload_max_filesize in php.ini.', 'dokan' ) );
             }
 
             $filetype = wp_check_filetype( $_FILES['import']['name'], $valid_filetypes );
             if ( !in_array( $filetype['type'], $valid_filetypes ) ) {
-                return new WP_Error( 'woocommerce_product_csv_importer_upload_file_invalid', __( 'Invalid file type. The importer supports CSV and TXT file formats.', 'dpi_plugin' ) );
+                return new WP_Error( 'woocommerce_product_csv_importer_upload_file_invalid', __( 'Invalid file type. The importer supports CSV and TXT file formats.', 'dokan' ) );
             }
 
             $overrides = array( 'test_form' => false, 'mimes' => $valid_filetypes );
@@ -274,13 +274,13 @@ class WC_Product_CSV_Importer_Controller {
         } elseif ( file_exists( ABSPATH . $_POST['file_url'] ) ) {
             $filetype = wp_check_filetype( ABSPATH . $_POST['file_url'], $valid_filetypes );
             if ( !in_array( $filetype['type'], $valid_filetypes ) ) {
-                return new WP_Error( 'woocommerce_product_csv_importer_upload_file_invalid', __( 'Invalid file type. The importer supports CSV and TXT file formats.', 'dpi_plugin' ) );
+                return new WP_Error( 'woocommerce_product_csv_importer_upload_file_invalid', __( 'Invalid file type. The importer supports CSV and TXT file formats.', 'dokan' ) );
             }
 
             return ABSPATH . $_POST['file_url'];
         }
 
-        return new WP_Error( 'woocommerce_product_csv_importer_upload_invalid_file', __( 'Please upload or provide the link to a valid CSV file.', 'dpi_plugin' ) );
+        return new WP_Error( 'woocommerce_product_csv_importer_upload_invalid_file', __( 'Please upload or provide the link to a valid CSV file.', 'dokan' ) );
     }
 
     /**
@@ -298,7 +298,7 @@ class WC_Product_CSV_Importer_Controller {
         $sample       = current( $importer->get_raw_data() );
 
         if ( empty( $sample ) ) {
-            $this->add_error( __( 'The file is empty, please try again with a new file.', 'dpi_plugin' ) );
+            $this->add_error( __( 'The file is empty, please try again with a new file.', 'dokan' ) );
             return;
         }
 
@@ -311,7 +311,7 @@ class WC_Product_CSV_Importer_Controller {
     public function import() {
 
         if ( !is_file( $this->file ) ) {
-            $this->add_error( __( 'The file does not exist, please try again.', 'dpi_plugin' ) );
+            $this->add_error( __( 'The file does not exist, please try again.', 'dokan' ) );
             return;
         }
 
@@ -370,54 +370,54 @@ class WC_Product_CSV_Importer_Controller {
          * @hooked wc_importer_wordpress_mappings - 10
          */
         $default_columns = apply_filters( 'woocommerce_csv_product_import_mapping_default_columns', array(
-            __( 'ID', 'dpi_plugin' )                                      => 'id',
-            __( 'Type', 'dpi_plugin' )                                    => 'type',
-            __( 'SKU', 'dpi_plugin' )                                     => 'sku',
-            __( 'Name', 'dpi_plugin' )                                    => 'name',
-            __( 'Published', 'dpi_plugin' )                               => 'published',
-            __( 'Is featured?', 'dpi_plugin' )                            => 'featured',
-            __( 'Visibility in catalog', 'dpi_plugin' )                   => 'catalog_visibility',
-            __( 'Short description', 'dpi_plugin' )                       => 'short_description',
-            __( 'Description', 'dpi_plugin' )                             => 'description',
-            __( 'Date sale price starts', 'dpi_plugin' )                  => 'date_on_sale_from',
-            __( 'Date sale price ends', 'dpi_plugin' )                    => 'date_on_sale_to',
-            __( 'Tax status', 'dpi_plugin' )                              => 'tax_status',
-            __( 'Tax class', 'dpi_plugin' )                               => 'tax_class',
-            __( 'In stock?', 'dpi_plugin' )                               => 'stock_status',
-            __( 'Stock', 'dpi_plugin' )                                   => 'stock_quantity',
-            __( 'Backorders allowed?', 'dpi_plugin' )                     => 'backorders',
-            __( 'Sold individually?', 'dpi_plugin' )                      => 'sold_individually',
-            sprintf( __( 'Weight (%s)', 'dpi_plugin' ), $weight_unit )    => 'weight',
-            sprintf( __( 'Length (%s)', 'dpi_plugin' ), $dimension_unit ) => 'length',
-            sprintf( __( 'Width (%s)', 'dpi_plugin' ), $dimension_unit )  => 'width',
-            sprintf( __( 'Height (%s)', 'dpi_plugin' ), $dimension_unit ) => 'height',
-            __( 'Allow customer reviews?', 'dpi_plugin' )                 => 'reviews_allowed',
-            __( 'Purchase note', 'dpi_plugin' )                           => 'purchase_note',
-            __( 'Sale price', 'dpi_plugin' )                              => 'sale_price',
-            __( 'Regular price', 'dpi_plugin' )                           => 'regular_price',
-            __( 'Categories', 'dpi_plugin' )                              => 'category_ids',
-            __( 'Tags', 'dpi_plugin' )                                    => 'tag_ids',
-            __( 'Shipping class', 'dpi_plugin' )                          => 'shipping_class_id',
-            __( 'Images', 'dpi_plugin' )                                  => 'images',
-            __( 'Download limit', 'dpi_plugin' )                          => 'download_limit',
-            __( 'Download expiry days', 'dpi_plugin' )                    => 'download_expiry',
-            __( 'Parent', 'dpi_plugin' )                                  => 'parent_id',
-            __( 'Upsells', 'dpi_plugin' )                                 => 'upsell_ids',
-            __( 'Cross-sells', 'dpi_plugin' )                             => 'cross_sell_ids',
-            __( 'Grouped products', 'dpi_plugin' )                        => 'grouped_products',
-            __( 'External URL', 'dpi_plugin' )                            => 'product_url',
-            __( 'Button text', 'dpi_plugin' )                             => 'button_text',
+            __( 'ID', 'dokan' )                                      => 'id',
+            __( 'Type', 'dokan' )                                    => 'type',
+            __( 'SKU', 'dokan' )                                     => 'sku',
+            __( 'Name', 'dokan' )                                    => 'name',
+            __( 'Published', 'dokan' )                               => 'published',
+            __( 'Is featured?', 'dokan' )                            => 'featured',
+            __( 'Visibility in catalog', 'dokan' )                   => 'catalog_visibility',
+            __( 'Short description', 'dokan' )                       => 'short_description',
+            __( 'Description', 'dokan' )                             => 'description',
+            __( 'Date sale price starts', 'dokan' )                  => 'date_on_sale_from',
+            __( 'Date sale price ends', 'dokan' )                    => 'date_on_sale_to',
+            __( 'Tax status', 'dokan' )                              => 'tax_status',
+            __( 'Tax class', 'dokan' )                               => 'tax_class',
+            __( 'In stock?', 'dokan' )                               => 'stock_status',
+            __( 'Stock', 'dokan' )                                   => 'stock_quantity',
+            __( 'Backorders allowed?', 'dokan' )                     => 'backorders',
+            __( 'Sold individually?', 'dokan' )                      => 'sold_individually',
+            sprintf( __( 'Weight (%s)', 'dokan' ), $weight_unit )    => 'weight',
+            sprintf( __( 'Length (%s)', 'dokan' ), $dimension_unit ) => 'length',
+            sprintf( __( 'Width (%s)', 'dokan' ), $dimension_unit )  => 'width',
+            sprintf( __( 'Height (%s)', 'dokan' ), $dimension_unit ) => 'height',
+            __( 'Allow customer reviews?', 'dokan' )                 => 'reviews_allowed',
+            __( 'Purchase note', 'dokan' )                           => 'purchase_note',
+            __( 'Sale price', 'dokan' )                              => 'sale_price',
+            __( 'Regular price', 'dokan' )                           => 'regular_price',
+            __( 'Categories', 'dokan' )                              => 'category_ids',
+            __( 'Tags', 'dokan' )                                    => 'tag_ids',
+            __( 'Shipping class', 'dokan' )                          => 'shipping_class_id',
+            __( 'Images', 'dokan' )                                  => 'images',
+            __( 'Download limit', 'dokan' )                          => 'download_limit',
+            __( 'Download expiry days', 'dokan' )                    => 'download_expiry',
+            __( 'Parent', 'dokan' )                                  => 'parent_id',
+            __( 'Upsells', 'dokan' )                                 => 'upsell_ids',
+            __( 'Cross-sells', 'dokan' )                             => 'cross_sell_ids',
+            __( 'Grouped products', 'dokan' )                        => 'grouped_products',
+            __( 'External URL', 'dokan' )                            => 'product_url',
+            __( 'Button text', 'dokan' )                             => 'button_text',
         ) );
 
         $special_columns = $this->get_special_columns( apply_filters( 'woocommerce_csv_product_import_mapping_special_columns', array(
-            __( 'Attribute %d name', 'dpi_plugin' )     => 'attributes:name',
-            __( 'Attribute %d value(s)', 'dpi_plugin' ) => 'attributes:value',
-            __( 'Attribute %d visible', 'dpi_plugin' )  => 'attributes:visible',
-            __( 'Attribute %d global', 'dpi_plugin' )   => 'attributes:taxonomy',
-            __( 'Attribute %d default', 'dpi_plugin' )  => 'attributes:default',
-            __( 'Download %d name', 'dpi_plugin' )      => 'downloads:name',
-            __( 'Download %d URL', 'dpi_plugin' )       => 'downloads:url',
-            __( 'Meta: %s', 'dpi_plugin' )              => 'meta:',
+            __( 'Attribute %d name', 'dokan' )     => 'attributes:name',
+            __( 'Attribute %d value(s)', 'dokan' ) => 'attributes:value',
+            __( 'Attribute %d visible', 'dokan' )  => 'attributes:visible',
+            __( 'Attribute %d global', 'dokan' )   => 'attributes:taxonomy',
+            __( 'Attribute %d default', 'dokan' )  => 'attributes:default',
+            __( 'Download %d name', 'dokan' )      => 'downloads:name',
+            __( 'Download %d URL', 'dokan' )       => 'downloads:url',
+            __( 'Meta: %s', 'dokan' )              => 'meta:',
         )
         ) );
 
@@ -490,80 +490,80 @@ class WC_Product_CSV_Importer_Controller {
         $weight_unit    = get_option( 'woocommerce_weight_unit' );
         $dimension_unit = get_option( 'woocommerce_dimension_unit' );
         $options        = array(
-            'id'                 => __( 'ID', 'dpi_plugin' ),
-            'type'               => __( 'Type', 'dpi_plugin' ),
-            'sku'                => __( 'SKU', 'dpi_plugin' ),
-            'name'               => __( 'Name', 'dpi_plugin' ),
-            'published'          => __( 'Published', 'dpi_plugin' ),
-            'featured'           => __( 'Is featured?', 'dpi_plugin' ),
-            'catalog_visibility' => __( 'Visibility in catalog', 'dpi_plugin' ),
-            'short_description'  => __( 'Short description', 'dpi_plugin' ),
-            'description'        => __( 'Description', 'dpi_plugin' ),
+            'id'                 => __( 'ID', 'dokan' ),
+            'type'               => __( 'Type', 'dokan' ),
+            'sku'                => __( 'SKU', 'dokan' ),
+            'name'               => __( 'Name', 'dokan' ),
+            'published'          => __( 'Published', 'dokan' ),
+            'featured'           => __( 'Is featured?', 'dokan' ),
+            'catalog_visibility' => __( 'Visibility in catalog', 'dokan' ),
+            'short_description'  => __( 'Short description', 'dokan' ),
+            'description'        => __( 'Description', 'dokan' ),
             'price'              => array(
-                'name'    => __( 'Price', 'dpi_plugin' ),
+                'name'    => __( 'Price', 'dokan' ),
                 'options' => array(
-                    'regular_price'     => __( 'Regular price', 'dpi_plugin' ),
-                    'sale_price'        => __( 'Sale price', 'dpi_plugin' ),
-                    'date_on_sale_from' => __( 'Date sale price starts', 'dpi_plugin' ),
-                    'date_on_sale_to'   => __( 'Date sale price ends', 'dpi_plugin' ),
+                    'regular_price'     => __( 'Regular price', 'dokan' ),
+                    'sale_price'        => __( 'Sale price', 'dokan' ),
+                    'date_on_sale_from' => __( 'Date sale price starts', 'dokan' ),
+                    'date_on_sale_to'   => __( 'Date sale price ends', 'dokan' ),
                 ),
             ),
-            'tax_status'         => __( 'Tax status', 'dpi_plugin' ),
-            'tax_class'          => __( 'Tax class', 'dpi_plugin' ),
-            'stock_status'       => __( 'In stock?', 'dpi_plugin' ),
-            'stock_quantity'     => _x( 'Stock', 'Quantity in stock', 'dpi_plugin' ),
-            'backorders'         => __( 'Backorders allowed?', 'dpi_plugin' ),
-            'sold_individually'  => __( 'Sold individually?', 'dpi_plugin' ),
+            'tax_status'         => __( 'Tax status', 'dokan' ),
+            'tax_class'          => __( 'Tax class', 'dokan' ),
+            'stock_status'       => __( 'In stock?', 'dokan' ),
+            'stock_quantity'     => _x( 'Stock', 'Quantity in stock', 'dokan' ),
+            'backorders'         => __( 'Backorders allowed?', 'dokan' ),
+            'sold_individually'  => __( 'Sold individually?', 'dokan' ),
             /* translators: %s: weight unit */
-            'weight'             => sprintf( __( 'Weight (%s)', 'dpi_plugin' ), $weight_unit ),
+            'weight'             => sprintf( __( 'Weight (%s)', 'dokan' ), $weight_unit ),
             'dimensions'         => array(
-                'name'    => __( 'Dimensions', 'dpi_plugin' ),
+                'name'    => __( 'Dimensions', 'dokan' ),
                 'options' => array(
                     /* translators: %s: dimension unit */
-                    'length' => sprintf( __( 'Length (%s)', 'dpi_plugin' ), $dimension_unit ),
+                    'length' => sprintf( __( 'Length (%s)', 'dokan' ), $dimension_unit ),
                     /* translators: %s: dimension unit */
-                    'width'  => sprintf( __( 'Width (%s)', 'dpi_plugin' ), $dimension_unit ),
+                    'width'  => sprintf( __( 'Width (%s)', 'dokan' ), $dimension_unit ),
                     /* translators: %s: dimension unit */
-                    'height' => sprintf( __( 'Height (%s)', 'dpi_plugin' ), $dimension_unit ),
+                    'height' => sprintf( __( 'Height (%s)', 'dokan' ), $dimension_unit ),
                 ),
             ),
-            'category_ids'       => __( 'Categories', 'dpi_plugin' ),
-            'tag_ids'            => __( 'Tags', 'dpi_plugin' ),
-            'shipping_class_id'  => __( 'Shipping class', 'dpi_plugin' ),
-            'images'             => __( 'Images', 'dpi_plugin' ),
-            'parent_id'          => __( 'Parent', 'dpi_plugin' ),
-            'upsell_ids'         => __( 'Upsells', 'dpi_plugin' ),
-            'cross_sell_ids'     => __( 'Cross-sells', 'dpi_plugin' ),
-            'grouped_products'   => __( 'Grouped products', 'dpi_plugin' ),
+            'category_ids'       => __( 'Categories', 'dokan' ),
+            'tag_ids'            => __( 'Tags', 'dokan' ),
+            'shipping_class_id'  => __( 'Shipping class', 'dokan' ),
+            'images'             => __( 'Images', 'dokan' ),
+            'parent_id'          => __( 'Parent', 'dokan' ),
+            'upsell_ids'         => __( 'Upsells', 'dokan' ),
+            'cross_sell_ids'     => __( 'Cross-sells', 'dokan' ),
+            'grouped_products'   => __( 'Grouped products', 'dokan' ),
             'external'           => array(
-                'name'    => __( 'External product', 'dpi_plugin' ),
+                'name'    => __( 'External product', 'dokan' ),
                 'options' => array(
-                    'product_url' => __( 'External URL', 'dpi_plugin' ),
-                    'button_text' => __( 'Button text', 'dpi_plugin' ),
+                    'product_url' => __( 'External URL', 'dokan' ),
+                    'button_text' => __( 'Button text', 'dokan' ),
                 ),
             ),
             'downloads'          => array(
-                'name'    => __( 'Downloads', 'dpi_plugin' ),
+                'name'    => __( 'Downloads', 'dokan' ),
                 'options' => array(
-                    'downloads:name' . $index => __( 'Download name', 'dpi_plugin' ),
-                    'downloads:url' . $index  => __( 'Download URL', 'dpi_plugin' ),
-                    'download_limit'          => __( 'Download limit', 'dpi_plugin' ),
-                    'download_expiry'         => __( 'Download expiry days', 'dpi_plugin' ),
+                    'downloads:name' . $index => __( 'Download name', 'dokan' ),
+                    'downloads:url' . $index  => __( 'Download URL', 'dokan' ),
+                    'download_limit'          => __( 'Download limit', 'dokan' ),
+                    'download_expiry'         => __( 'Download expiry days', 'dokan' ),
                 ),
             ),
             'attributes'         => array(
-                'name'    => __( 'Attributes', 'dpi_plugin' ),
+                'name'    => __( 'Attributes', 'dokan' ),
                 'options' => array(
-                    'attributes:name' . $index     => __( 'Attribute name', 'dpi_plugin' ),
-                    'attributes:value' . $index    => __( 'Attribute value(s)', 'dpi_plugin' ),
-                    'attributes:taxonomy' . $index => __( 'Is a global attribute?', 'dpi_plugin' ),
-                    'attributes:visible' . $index  => __( 'Attribute visibility', 'dpi_plugin' ),
-                    'attributes:default' . $index  => __( 'Default attribute', 'dpi_plugin' ),
+                    'attributes:name' . $index     => __( 'Attribute name', 'dokan' ),
+                    'attributes:value' . $index    => __( 'Attribute value(s)', 'dokan' ),
+                    'attributes:taxonomy' . $index => __( 'Is a global attribute?', 'dokan' ),
+                    'attributes:visible' . $index  => __( 'Attribute visibility', 'dokan' ),
+                    'attributes:default' . $index  => __( 'Default attribute', 'dokan' ),
                 ),
             ),
-            'reviews_allowed'    => __( 'Allow customer reviews?', 'dpi_plugin' ),
-            'purchase_note'      => __( 'Purchase note', 'dpi_plugin' ),
-            'meta:' . $meta      => __( 'Import as meta', 'dpi_plugin' ),
+            'reviews_allowed'    => __( 'Allow customer reviews?', 'dokan' ),
+            'purchase_note'      => __( 'Purchase note', 'dokan' ),
+            'meta:' . $meta      => __( 'Import as meta', 'dokan' ),
         );
 
         return apply_filters( 'woocommerce_csv_product_import_mapping_options', $options, $item );

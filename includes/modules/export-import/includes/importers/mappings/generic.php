@@ -13,11 +13,11 @@ if ( !defined( 'ABSPATH' ) ) {
  */
 function wc_importer_generic_mappings( $mappings ) {
     $generic_mappings = array(
-        __( 'Title', 'dpi_plugin' )         => 'name',
-        __( 'Product Title', 'dpi_plugin' ) => 'name',
-        __( 'Price', 'dpi_plugin' )         => 'regular_price',
-        __( 'Parent SKU', 'dpi_plugin' )    => 'parent_id',
-        __( 'Quantity', 'dpi_plugin' )      => 'stock_quantity',
+        __( 'Title', 'dokan' )         => 'name',
+        __( 'Product Title', 'dokan' ) => 'name',
+        __( 'Price', 'dokan' )         => 'regular_price',
+        __( 'Parent SKU', 'dokan' )    => 'parent_id',
+        __( 'Quantity', 'dokan' )      => 'stock_quantity',
     );
 
     return array_merge( $mappings, $generic_mappings );

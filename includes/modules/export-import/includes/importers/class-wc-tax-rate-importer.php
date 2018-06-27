@@ -122,7 +122,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
      */
     public function import( $file ) {
         if ( !is_file( $file ) ) {
-            $this->import_error( __( 'The file does not exist, please try again.', 'dpi_plugin' ) );
+            $this->import_error( __( 'The file does not exist, please try again.', 'dokan' ) );
         }
 
         $this->import_start();
@@ -156,7 +156,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
                     WC_Tax::_update_tax_rate_cities( $tax_rate_id, wc_clean( $city ) );
                 }
             } else {
-                $this->import_error( __( 'The CSV is invalid.', 'dpi_plugin' ) );
+                $this->import_error( __( 'The CSV is invalid.', 'dokan' ) );
             }
 
             fclose( $handle );
@@ -166,7 +166,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
         echo '<div class="updated settings-error"><p>';
         /* translators: %s: tax rates count */
         printf(
-        __( 'Import complete - imported %s tax rates.', 'dpi_plugin' ), '<strong>' . $loop . '</strong>'
+        __( 'Import complete - imported %s tax rates.', 'dokan' ), '<strong>' . $loop . '</strong>'
         );
         echo '</p></div>';
 
@@ -177,7 +177,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
      * Performs post-import cleanup of files and the cache.
      */
     public function import_end() {
-        echo '<p>' . __( 'All done!', 'dpi_plugin' ) . ' <a href="' . admin_url( 'admin.php?page=wc-settings&tab=tax' ) . '">' . __( 'View tax rates', 'dpi_plugin' ) . '</a>' . '</p>';
+        echo '<p>' . __( 'All done!', 'dokan' ) . ' <a href="' . admin_url( 'admin.php?page=wc-settings&tab=tax' ) . '">' . __( 'View tax rates', 'dokan' ) . '</a>' . '</p>';
 
         do_action( 'import_end' );
     }
@@ -212,7 +212,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
      */
     public function header() {
         echo '<div class="wrap">';
-        echo '<h1>' . __( 'Import tax rates', 'dpi_plugin' ) . '</h1>';
+        echo '<h1>' . __( 'Import tax rates', 'dokan' ) . '</h1>';
     }
 
     /**
@@ -228,9 +228,9 @@ class WC_Tax_Rate_Importer extends WP_Importer {
     public function greet() {
 
         echo '<div class="narrow">';
-        echo '<p>' . __( 'Hi there! Upload a CSV file containing tax rates to import the contents into your shop. Choose a .csv file to upload, then click "Upload file and import".', 'dpi_plugin' ) . '</p>';
+        echo '<p>' . __( 'Hi there! Upload a CSV file containing tax rates to import the contents into your shop. Choose a .csv file to upload, then click "Upload file and import".', 'dokan' ) . '</p>';
 
-        echo '<p>' . sprintf( __( 'Tax rates need to be defined with columns in a specific order (10 columns). <a href="%s">Click here to download a sample</a>.', 'dpi_plugin' ), WC()->plugin_url() . '/dummy-data/sample_tax_rates.csv' ) . '</p>';
+        echo '<p>' . sprintf( __( 'Tax rates need to be defined with columns in a specific order (10 columns). <a href="%s">Click here to download a sample</a>.', 'dokan' ), WC()->plugin_url() . '/dummy-data/sample_tax_rates.csv' ) . '</p>';
 
         $action = 'admin.php?import=woocommerce_tax_rate_csv&step=1';
 
@@ -238,7 +238,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
         $size       = size_format( $bytes );
         $upload_dir = wp_upload_dir();
         if ( !empty( $upload_dir['error'] ) ) :
-            ?><div class="error"><p><?php _e( 'Before you can upload your import file, you will need to fix the following error:', 'dpi_plugin' ); ?></p>
+            ?><div class="error"><p><?php _e( 'Before you can upload your import file, you will need to fix the following error:', 'dokan' ); ?></p>
                 <p><strong><?php echo $upload_dir['error']; ?></strong></p></div><?php
         else :
             ?>
@@ -247,7 +247,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
                     <tbody>
                         <tr>
                             <th>
-                                <label for="upload"><?php _e( 'Choose a file from your computer:', 'dpi_plugin' ); ?></label>
+                                <label for="upload"><?php _e( 'Choose a file from your computer:', 'dokan' ); ?></label>
                             </th>
                             <td>
                                 <input type="file" id="upload" name="import" size="25" />
@@ -256,27 +256,27 @@ class WC_Tax_Rate_Importer extends WP_Importer {
                                 <small><?php
             /* translators: %s: maximum upload size */
             printf(
-            __( 'Maximum size: %s', 'dpi_plugin' ), $size
+            __( 'Maximum size: %s', 'dokan' ), $size
             );
             ?></small>
                             </td>
                         </tr>
                         <tr>
                             <th>
-                                <label for="file_url"><?php _e( 'OR enter path to file:', 'dpi_plugin' ); ?></label>
+                                <label for="file_url"><?php _e( 'OR enter path to file:', 'dokan' ); ?></label>
                             </th>
                             <td>
             <?php echo ' ' . ABSPATH . ' '; ?><input type="text" id="file_url" name="file_url" size="25" />
                             </td>
                         </tr>
                         <tr>
-                            <th><label><?php _e( 'Delimiter', 'dpi_plugin' ); ?></label><br/></th>
+                            <th><label><?php _e( 'Delimiter', 'dokan' ); ?></label><br/></th>
                             <td><input type="text" name="delimiter" placeholder="," size="2" /></td>
                         </tr>
                     </tbody>
                 </table>
                 <p class="submit">
-                    <input type="submit" class="button" value="<?php esc_attr_e( 'Upload file and import', 'dpi_plugin' ); ?>" />
+                    <input type="submit" class="button" value="<?php esc_attr_e( 'Upload file and import', 'dokan' ); ?>" />
                 </p>
             </form>
         <?php
@@ -290,7 +290,7 @@ class WC_Tax_Rate_Importer extends WP_Importer {
      * @param  string $message
      */
     private function import_error( $message = '' ) {
-        echo '<p><strong>' . __( 'Sorry, there has been an error.', 'dpi_plugin' ) . '</strong><br />';
+        echo '<p><strong>' . __( 'Sorry, there has been an error.', 'dokan' ) . '</strong><br />';
         if ( $message ) {
             echo esc_html( $message );
         }

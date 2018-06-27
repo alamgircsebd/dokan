@@ -164,7 +164,7 @@ abstract class WC_Product_Importer implements WC_Importer_Interface {
             $types[] = 'variation';
 
             if ( !in_array( $data['type'], $types, true ) ) {
-                return new WP_Error( 'woocommerce_product_importer_invalid_type', __( 'Invalid product type.', 'dpi_plugin' ), array( 'status' => 401 ) );
+                return new WP_Error( 'woocommerce_product_importer_invalid_type', __( 'Invalid product type.', 'dokan' ), array( 'status' => 401 ) );
             }
 
             $classname = WC_Product_Factory::get_classname_from_product_type( $data['type'] );
@@ -178,7 +178,7 @@ abstract class WC_Product_Importer implements WC_Importer_Interface {
             $product = wc_get_product( $id );
 
             if ( !$product ) {
-                return new WP_Error( 'woocommerce_product_csv_importer_invalid_id', sprintf( __( 'Invalid product ID %d.', 'dpi_plugin' ), $id ), array( 'id' => $id, 'status' => 401 ) );
+                return new WP_Error( 'woocommerce_product_csv_importer_invalid_id', sprintf( __( 'Invalid product ID %d.', 'dokan' ), $id ), array( 'id' => $id, 'status' => 401 ) );
             }
         } else {
             $product = new WC_Product_Simple( $id );
@@ -403,7 +403,7 @@ abstract class WC_Product_Importer implements WC_Importer_Interface {
 
         // Stop if parent does not exists.
         if ( !$parent ) {
-            return new WP_Error( 'woocommerce_product_importer_missing_variation_parent_id', __( 'Variation cannot be imported: Missing parent ID or parent does not exist yet.', 'dpi_plugin' ), array( 'status' => 401 ) );
+            return new WP_Error( 'woocommerce_product_importer_missing_variation_parent_id', __( 'Variation cannot be imported: Missing parent ID or parent does not exist yet.', 'dokan' ), array( 'status' => 401 ) );
         }
 
         if ( isset( $data['raw_attributes'] ) ) {
@@ -552,7 +552,7 @@ abstract class WC_Product_Importer implements WC_Importer_Interface {
             $id = wc_rest_set_uploaded_image_as_attachment( $upload, $product_id );
 
             if ( !wp_attachment_is_image( $id ) ) {
-                throw new Exception( sprintf( __( 'Not able to attach "%s".', 'dpi_plugin' ), $url ), 400 );
+                throw new Exception( sprintf( __( 'Not able to attach "%s".', 'dokan' ), $url ), 400 );
             }
 
             // Save attachment source for future reference.
@@ -560,7 +560,7 @@ abstract class WC_Product_Importer implements WC_Importer_Interface {
         }
 
         if ( !$id ) {
-            throw new Exception( sprintf( __( 'Unable to use image "%s".', 'dpi_plugin' ), $url ), 400 );
+            throw new Exception( sprintf( __( 'Unable to use image "%s".', 'dokan' ), $url ), 400 );
         }
 
         return $id;
@@ -600,11 +600,11 @@ abstract class WC_Product_Importer implements WC_Importer_Interface {
 
         // Validate attribute.
         if ( strlen( $attribute_name ) >= 28 ) {
-            throw new Exception( sprintf( __( 'Slug "%s" is too long (28 characters max). Shorten it, please.', 'dpi_plugin' ), $attribute_name ), 400 );
+            throw new Exception( sprintf( __( 'Slug "%s" is too long (28 characters max). Shorten it, please.', 'dokan' ), $attribute_name ), 400 );
         } elseif ( wc_check_if_attribute_name_is_reserved( $attribute_name ) ) {
-            throw new Exception( sprintf( __( 'Slug "%s" is not allowed because it is a reserved term. Change it, please.', 'dpi_plugin' ), $attribute_name ), 400 );
+            throw new Exception( sprintf( __( 'Slug "%s" is not allowed because it is a reserved term. Change it, please.', 'dokan' ), $attribute_name ), 400 );
         } elseif ( taxonomy_exists( wc_attribute_taxonomy_name( $attribute_name ) ) ) {
-            throw new Exception( sprintf( __( 'Slug "%s" is already in use. Change it, please.', 'dpi_plugin' ), $attribute_name ), 400 );
+            throw new Exception( sprintf( __( 'Slug "%s" is already in use. Change it, please.', 'dokan' ), $attribute_name ), 400 );
         }
 
         $result = $wpdb->insert( $wpdb->prefix . 'woocommerce_attribute_taxonomies', $args, array( '%s', '%s', '%s', '%s', '%d' ) );
