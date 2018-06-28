@@ -983,6 +983,7 @@ function dokan_top_earners() {
 
     global $wpdb;
     $current_user = dokan_get_current_user_id();
+    $withdraw_order_status = dokan_get_option( 'withdraw_order_status', 'dokan_withdraw' );
 
     $start_date = isset( $_POST['start_date'] ) ? $_POST['start_date'] : '';
     $end_date   = isset( $_POST['end_date'] ) ? $_POST['end_date'] : '';
@@ -1007,7 +1008,7 @@ function dokan_top_earners() {
         WHERE   posts.post_type     = 'shop_order'
         AND     posts.post_status   != 'trash'
         AND     do.seller_id = {$current_user}
-        AND     do.order_status           IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', array( 'wc-completed', 'wc-processing', 'wc-on-hold' ) ) ) . "')
+        AND     do.order_status           IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', $withdraw_order_status ) ) . "')
         AND     post_date > '" . date('Y-m-d', $start_date ) . "'
         AND     post_date < '" . date('Y-m-d', strtotime('+1 day', $end_date ) ) . "'
         AND     order_items.order_item_type = 'line_item'
