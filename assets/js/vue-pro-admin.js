@@ -277,40 +277,40 @@ var Switches = dokan_get_lib('Switches');
 
             columns: {
                 'store_name': {
-                    label: 'Store',
+                    label: this.__('Store', 'dokan'),
                     sortable: true
                 },
                 'email': {
-                    label: 'E-mail'
+                    label: this.__('E-mail', 'dokan')
                 },
                 'phone': {
-                    label: 'Phone'
+                    label: this.__('Phone', 'dokan')
                 },
                 'registered': {
-                    label: 'Registered',
+                    label: this.__('Registered', 'dokan'),
                     sortable: true
                 },
                 'enabled': {
-                    label: 'Status'
+                    label: this.__('Status', 'dokan')
                 }
             },
             actionColumn: 'title',
             actions: [{
                 key: 'edit',
-                label: 'Edit'
+                label: this.__('Edit', 'dokan')
             }, {
                 key: 'products',
-                label: 'Products'
+                label: this.__('Products', 'dokan')
             }, {
                 key: 'orders',
-                label: 'Orders'
+                label: this.__('Orders', 'dokan')
             }],
             bulkActions: [{
                 key: 'approved',
-                label: 'Approve Vendors'
+                label: this.__('Approve Vendors', 'dokan')
             }, {
                 key: 'pending',
-                label: 'Disable Selling'
+                label: this.__('Disable Selling', 'dokan')
             }],
             vendors: []
         };
@@ -398,13 +398,13 @@ var Switches = dokan_get_lib('Switches');
         onSwitch: function onSwitch(status, vendor_id) {
             var _this2 = this;
 
-            var message = status === false ? 'The vendor has been disabled.' : 'Selling has been enabled';
+            var message = status === false ? this.__('The vendor has been disabled.', 'dokan') : this.__('Selling has been enabled', 'dokan');
 
             dokan.api.put('/stores/' + vendor_id + '/status', {
                 status: status === false ? 'inactive' : 'active'
             }).done(function (response) {
                 _this2.$notify({
-                    title: 'Success!',
+                    title: _this2.__('Success!', 'dokan'),
                     type: 'success',
                     text: message
                 });
@@ -765,9 +765,9 @@ var VclTwitch = ContentLoading.VclTwitch;
                 body: this.mail.body
             }).done(function (response) {
                 _this3.$notify({
-                    title: 'Success!',
+                    title: _this3.__('Success!', 'dokan'),
                     type: 'success',
-                    text: 'Email has been sent successfully.'
+                    text: _this3.__('Email has been sent successfully.', 'dokan')
                 });
             });
 
@@ -2206,7 +2206,9 @@ var render = function() {
     "div",
     { staticClass: "vendor-list" },
     [
-      _c("h1", { staticClass: "wp-heading-inline" }, [_vm._v("Vendors")]),
+      _c("h1", { staticClass: "wp-heading-inline" }, [
+        _vm._v(_vm._s(_vm.__("Vendors", "dokan")))
+      ]),
       _vm._v(" "),
       _c("hr", { staticClass: "wp-header-end" }),
       _vm._v(" "),
@@ -2214,22 +2216,21 @@ var render = function() {
         _c(
           "li",
           [
-            _c(
-              "router-link",
-              {
-                attrs: {
-                  to: { name: "Vendors", query: { status: "all" } },
-                  "active-class": "current",
-                  exact: ""
-                }
+            _c("router-link", {
+              attrs: {
+                to: { name: "Vendors", query: { status: "all" } },
+                "active-class": "current",
+                exact: ""
               },
-              [
-                _vm._v("All "),
-                _c("span", { staticClass: "count" }, [
-                  _vm._v("(" + _vm._s(_vm.counts.all) + ")")
-                ])
-              ]
-            ),
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__("All <span class='count'>(%s)</span>", "dokan"),
+                    _vm.counts.all
+                  )
+                )
+              }
+            }),
             _vm._v(" | ")
           ],
           1
@@ -2238,22 +2239,21 @@ var render = function() {
         _c(
           "li",
           [
-            _c(
-              "router-link",
-              {
-                attrs: {
-                  to: { name: "Vendors", query: { status: "approved" } },
-                  "active-class": "current",
-                  exact: ""
-                }
+            _c("router-link", {
+              attrs: {
+                to: { name: "Vendors", query: { status: "approved" } },
+                "active-class": "current",
+                exact: ""
               },
-              [
-                _vm._v("Approved "),
-                _c("span", { staticClass: "count" }, [
-                  _vm._v("(" + _vm._s(_vm.counts.approved) + ")")
-                ])
-              ]
-            ),
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__("Approved <span class='count'>(%s)</span>", "dokan"),
+                    _vm.counts.approved
+                  )
+                )
+              }
+            }),
             _vm._v(" | ")
           ],
           1
@@ -2262,22 +2262,21 @@ var render = function() {
         _c(
           "li",
           [
-            _c(
-              "router-link",
-              {
-                attrs: {
-                  to: { name: "Vendors", query: { status: "pending" } },
-                  "active-class": "current",
-                  exact: ""
-                }
+            _c("router-link", {
+              attrs: {
+                to: { name: "Vendors", query: { status: "pending" } },
+                "active-class": "current",
+                exact: ""
               },
-              [
-                _vm._v("Pending "),
-                _c("span", { staticClass: "count" }, [
-                  _vm._v("(" + _vm._s(_vm.counts.pending) + ")")
-                ])
-              ]
-            )
+              domProps: {
+                innerHTML: _vm._s(
+                  _vm.sprintf(
+                    _vm.__("Pending <span class='count'>(%s)</span>", "dokan"),
+                    _vm.counts.pending
+                  )
+                )
+              }
+            })
           ],
           1
         )
@@ -2331,7 +2330,7 @@ var render = function() {
                           _vm._s(
                             data.row.store_name
                               ? data.row.store_name
-                              : "(no name)"
+                              : _vm.__("(no name)", "dokan")
                           )
                         )
                       ]
@@ -2507,13 +2506,22 @@ var render = function() {
     "div",
     { staticClass: "dokan-vendor-single" },
     [
-      _vm._m(0),
+      _c("div", { staticStyle: { "margin-bottom": "10px" } }, [
+        _c(
+          "a",
+          {
+            staticClass: "button",
+            attrs: { href: "javascript:history.go(-1)" }
+          },
+          [_vm._v("← " + _vm._s(_vm.__("Go Back", "dokan")))]
+        )
+      ]),
       _vm._v(" "),
       _vm.showDialog
         ? _c(
             "modal",
             {
-              attrs: { title: "Send Email" },
+              attrs: { title: _vm.__("Send Email", "dokan") },
               on: {
                 close: function($event) {
                   _vm.showDialog = false
@@ -2523,7 +2531,9 @@ var render = function() {
             [
               _c("template", { slot: "body" }, [
                 _c("div", { staticClass: "form-row" }, [
-                  _c("label", { attrs: { for: "mailto" } }, [_vm._v("To")]),
+                  _c("label", { attrs: { for: "mailto" } }, [
+                    _vm._v(_vm._s(_vm.__("To", "dokan")))
+                  ]),
                   _vm._v(" "),
                   _c("input", {
                     attrs: { type: "text", id: "mailto", disabled: "disabled" },
@@ -2533,7 +2543,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "form-row" }, [
                   _c("label", { attrs: { for: "subject" } }, [
-                    _vm._v("Subject")
+                    _vm._v(_vm._s(_vm.__("Subject", "dokan")))
                   ]),
                   _vm._v(" "),
                   _c("input", {
@@ -2560,7 +2570,7 @@ var render = function() {
                 _vm._v(" "),
                 _c("div", { staticClass: "form-row" }, [
                   _c("label", { attrs: { for: "message" } }, [
-                    _vm._v("Message")
+                    _vm._v(_vm._s(_vm.__("Message", "dokan")))
                   ]),
                   _vm._v(" "),
                   _c("textarea", {
@@ -2597,7 +2607,7 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("Send Email")]
+                  [_vm._v(_vm._s(_vm.__("Send Email", "dokan")))]
                 )
               ])
             ],
@@ -2633,7 +2643,7 @@ var render = function() {
                       _vm._s(
                         _vm.store.store_name
                           ? _vm.store.store_name
-                          : "(No Name)"
+                          : _vm.__("(No Name)", "dokan")
                       )
                     )
                   ]),
@@ -2694,7 +2704,7 @@ var render = function() {
                         _c("span", {
                           staticClass: "dashicons dashicons-email"
                         }),
-                        _vm._v(" Send Email")
+                        _vm._v(" " + _vm._s(_vm.__("Send Email", "dokan")))
                       ]
                     ),
                     _vm._v(" "),
@@ -2711,7 +2721,11 @@ var render = function() {
                         _c("span", { staticClass: "dashicons" }),
                         _vm._v(
                           " " +
-                            _vm._s(_vm.store.enabled ? "Enabled" : "Disabled")
+                            _vm._s(
+                              _vm.store.enabled
+                                ? _vm.__("Enabled", "dokan")
+                                : _vm.__("Disabled", "dokan")
+                            )
                         )
                       ]
                     )
@@ -2739,7 +2753,7 @@ var render = function() {
                       attrs: { href: _vm.store.shop_url, target: "_blank" }
                     },
                     [
-                      _vm._v("Visit Store "),
+                      _vm._v(_vm._s(_vm.__("Visit Store", "dokan")) + " "),
                       _c("span", {
                         staticClass: "dashicons dashicons-arrow-right-alt"
                       })
@@ -2762,7 +2776,7 @@ var render = function() {
               ? _c("section", { staticClass: "vendor-summary" }, [
                   _c("div", { staticClass: "summary-wrap products-revenue" }, [
                     _c("div", { staticClass: "stat-summary products" }, [
-                      _c("h3", [_vm._v("Products")]),
+                      _c("h3", [_vm._v(_vm._s(_vm.__("Products", "dokan")))]),
                       _vm._v(" "),
                       _c("ul", { staticClass: "counts" }, [
                         _c("li", { staticClass: "products" }, [
@@ -2773,7 +2787,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Total Products")
+                            _vm._v(_vm._s(_vm.__("Total Products", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),
@@ -2783,7 +2797,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Items Sold")
+                            _vm._v(_vm._s(_vm.__("Items Sold", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),
@@ -2793,14 +2807,14 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Store Visitors")
+                            _vm._v(_vm._s(_vm.__("Store Visitors", "dokan")))
                           ])
                         ])
                       ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "stat-summary revenue" }, [
-                      _c("h3", [_vm._v("Revenue")]),
+                      _c("h3", [_vm._v(_vm._s(_vm.__("Revenue", "dokan")))]),
                       _vm._v(" "),
                       _c("ul", { staticClass: "counts" }, [
                         _c("li", { staticClass: "orders" }, [
@@ -2811,7 +2825,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Orders Processed")
+                            _vm._v(_vm._s(_vm.__("Orders Processed", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),
@@ -2825,7 +2839,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Gross Sales")
+                            _vm._v(_vm._s(_vm.__("Gross Sales", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),
@@ -2839,14 +2853,14 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Total Earning")
+                            _vm._v(_vm._s(_vm.__("Total Earning", "dokan")))
                           ])
                         ])
                       ])
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "stat-summary others" }, [
-                      _c("h3", [_vm._v("Others")]),
+                      _c("h3", [_vm._v(_vm._s(_vm.__("Others", "dokan")))]),
                       _vm._v(" "),
                       _c("ul", { staticClass: "counts" }, [
                         _c("li", { staticClass: "commision" }, [
@@ -2857,7 +2871,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Earning Rate")
+                            _vm._v(_vm._s(_vm.__("Earning Rate", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),
@@ -2871,7 +2885,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Current Balance")
+                            _vm._v(_vm._s(_vm.__("Current Balance", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),
@@ -2881,7 +2895,7 @@ var render = function() {
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v("Reviews")
+                            _vm._v(_vm._s(_vm.__("Reviews", "dokan")))
                           ])
                         ])
                       ])
@@ -2892,7 +2906,7 @@ var render = function() {
                     _c("ul", [
                       _c("li", { staticClass: "registered" }, [
                         _c("div", { staticClass: "subhead" }, [
-                          _vm._v("Registered Since")
+                          _vm._v(_vm._s(_vm.__("Registered Since", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c("span", { staticClass: "date" }, [
@@ -2914,7 +2928,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("li", { staticClass: "social-profiles" }, [
                         _c("div", { staticClass: "subhead" }, [
-                          _vm._v("Social Profiles")
+                          _vm._v(_vm._s(_vm.__("Social Profiles", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "profiles" }, [
@@ -3047,7 +3061,7 @@ var render = function() {
                       _vm._v(" "),
                       _c("li", { staticClass: "payments" }, [
                         _c("div", { staticClass: "subhead" }, [
-                          _vm._v("Payment Methods")
+                          _vm._v(_vm._s(_vm.__("Payment Methods", "dokan")))
                         ]),
                         _vm._v(" "),
                         _c("div", { staticClass: "payment-methods" }, [
@@ -3056,12 +3070,12 @@ var render = function() {
                               "flaticon-money",
                               _vm.hasPaymentEmail("paypal") ? "active" : ""
                             ],
-                            attrs: { title: "PayPal Payment" }
+                            attrs: { title: _vm.__("PayPal Payment", "dokan") }
                           }),
                           _vm._v(" "),
                           _c("span", {
                             staticClass: "flaticon-stripe-logo",
-                            attrs: { title: "Stripe Connect" }
+                            attrs: { title: _vm.__("Stripe Connect", "dokan") }
                           }),
                           _vm._v(" "),
                           _c("span", {
@@ -3069,7 +3083,7 @@ var render = function() {
                               "flaticon-bank-building",
                               _vm.hasBank ? "active" : ""
                             ],
-                            attrs: { title: "Bank Payment" }
+                            attrs: { title: _vm.__("Bank Payment", "dokan") }
                           }),
                           _vm._v(" "),
                           _c("span", {
@@ -3077,14 +3091,14 @@ var render = function() {
                               "flaticon-skrill-pay-logo",
                               _vm.hasPaymentEmail("skrill") ? "active" : ""
                             ],
-                            attrs: { title: "Skrill" }
+                            attrs: { title: _vm.__("Skrill", "dokan") }
                           })
                         ])
                       ]),
                       _vm._v(" "),
                       _c("li", { staticClass: "publishing" }, [
                         _c("div", { staticClass: "subhead" }, [
-                          _vm._v("Product Publishing")
+                          _vm._v(_vm._s(_vm.__("Product Publishing", "dokan")))
                         ]),
                         _vm._v(" "),
                         _vm.store.trusted
@@ -3092,13 +3106,15 @@ var render = function() {
                               _c("span", {
                                 staticClass: "dashicons dashicons-shield"
                               }),
-                              _vm._v(" Direct")
+                              _vm._v(" " + _vm._s(_vm.__("Direct", "dokan")))
                             ])
                           : _c("span", [
                               _c("span", {
                                 staticClass: "dashicons dashicons-backup"
                               }),
-                              _vm._v(" Requires Review")
+                              _vm._v(
+                                " " + _vm._s(_vm.__("Requires Review", "dokan"))
+                              )
                             ])
                       ])
                     ])
@@ -3111,20 +3127,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticStyle: { "margin-bottom": "10px" } }, [
-      _c(
-        "a",
-        { staticClass: "button", attrs: { href: "javascript:history.go(-1)" } },
-        [_vm._v("← Go Back")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);

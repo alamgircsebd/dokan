@@ -1,33 +1,33 @@
 <template>
     <div class="dokan-vendor-single">
         <div style="margin-bottom: 10px">
-            <a class="button" href="javascript:history.go(-1)">&larr; Go Back</a>
+            <a class="button" href="javascript:history.go(-1)">&larr; {{ __( 'Go Back', 'dokan' ) }}</a>
         </div>
 
         <modal
-            title="Send Email"
+            :title="__( 'Send Email', 'dokan' )"
             v-if="showDialog"
             @close="showDialog = false"
         >
             <template slot="body">
                 <div class="form-row">
-                    <label for="mailto">To</label>
+                    <label for="mailto">{{ __( 'To', 'dokan' ) }}</label>
                     <input type="text" id="mailto" disabled="disabled" :value="mailTo">
                 </div>
 
                 <div class="form-row">
-                    <label for="subject">Subject</label>
+                    <label for="subject">{{ __( 'Subject', 'dokan' ) }}</label>
                     <input type="text" id="subject" v-model="mail.subject">
                 </div>
 
                 <div class="form-row">
-                    <label for="message">Message</label>
+                    <label for="message">{{ __( 'Message', 'dokan' ) }}</label>
                     <textarea id="message" rows="5" cols="60" v-model="mail.body"></textarea>
                 </div>
             </template>
 
             <template slot="footer">
-                <button class="button button-primary button-large" @click="sendEmail()">Send Email</button>
+                <button class="button button-primary button-large" @click="sendEmail()">{{ __( 'Send Email', 'dokan' ) }}</button>
             </template>
         </modal>
 
@@ -44,7 +44,7 @@
                     </div>
 
                     <div class="store-info">
-                        <h2 class="store-name">{{ store.store_name ? store.store_name : '(No Name)' }}</h2>
+                        <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
 
                         <div class="star-rating">
                             <span v-for="i in 5" :class="['dashicons', i <= store.rating.rating ? 'active' : '' ]"></span>
@@ -62,8 +62,8 @@
                         </ul>
 
                         <div class="actions">
-                            <button class="button message" @click="messageDialog()"><span class="dashicons dashicons-email"></span> Send Email</button>
-                            <button :class="['button', 'status', store.enabled ? 'enabled' : 'disabled']"><span class="dashicons"></span> {{ store.enabled ? 'Enabled' : 'Disabled' }}</button>
+                            <button class="button message" @click="messageDialog()"><span class="dashicons dashicons-email"></span> {{ __( 'Send Email', 'dokan' ) }}</button>
+                            <button :class="['button', 'status', store.enabled ? 'enabled' : 'disabled']"><span class="dashicons"></span> {{ store.enabled ? __( 'Enabled', 'dokan' ) : __( 'Disabled', 'dokan' ) }}</button>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
                     </div>
                     <div class="action-links">
-                        <a :href="store.shop_url" target="_blank" class="button visit-store">Visit Store <span class="dashicons dashicons-arrow-right-alt"></span></a>
+                        <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
                         <a :href="editUrl()" class="button edit-store"><span class="dashicons dashicons-edit"></span></a>
                     </div>
                 </div>
@@ -82,58 +82,58 @@
             <section class="vendor-summary" v-if="stats !== null">
                 <div class="summary-wrap products-revenue">
                     <div class="stat-summary products">
-                        <h3>Products</h3>
+                        <h3>{{ __( 'Products', 'dokan' ) }}</h3>
 
                         <ul class="counts">
                             <li class="products">
                                 <span class="count"><a :href="productUrl()">{{ stats.products.total }}</a></span>
-                                <span class="subhead">Total Products</span>
+                                <span class="subhead">{{ __( 'Total Products', 'dokan' ) }}</span>
                             </li>
                             <li class="items">
                                 <span class="count">{{ stats.products.sold }}</span>
-                                <span class="subhead">Items Sold</span>
+                                <span class="subhead">{{ __( 'Items Sold', 'dokan' ) }}</span>
                             </li>
                             <li class="visitors">
                                 <span class="count">{{ stats.products.visitor }}</span>
-                                <span class="subhead">Store Visitors</span>
+                                <span class="subhead">{{ __( 'Store Visitors', 'dokan' ) }}</span>
                             </li>
                         </ul>
                     </div>
 
                     <div class="stat-summary revenue">
-                        <h3>Revenue</h3>
+                        <h3>{{ __( 'Revenue', 'dokan' ) }}</h3>
 
                         <ul class="counts">
                             <li class="orders">
                                 <span class="count"><a :href="ordersUrl()">{{ stats.revenue.orders }}</a></span>
-                                <span class="subhead">Orders Processed</span>
+                                <span class="subhead">{{ __( 'Orders Processed', 'dokan' ) }}</span>
                             </li>
                             <li class="gross">
                                 <span class="count">{{ stats.revenue.sales | currency }}</span>
-                                <span class="subhead">Gross Sales</span>
+                                <span class="subhead">{{ __( 'Gross Sales', 'dokan' ) }}</span>
                             </li>
                             <li class="earning">
                                 <span class="count">{{ stats.revenue.earning | currency }}</span>
-                                <span class="subhead">Total Earning</span>
+                                <span class="subhead">{{ __( 'Total Earning', 'dokan' ) }}</span>
                             </li>
                         </ul>
                     </div>
 
                     <div class="stat-summary others">
-                        <h3>Others</h3>
+                        <h3>{{ __( 'Others', 'dokan' ) }}</h3>
 
                         <ul class="counts">
                             <li class="commision">
                                 <span class="count">{{ stats.others.commision_rate }}%</span>
-                                <span class="subhead">Earning Rate</span>
+                                <span class="subhead">{{ __( 'Earning Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
                                 <span class="count">{{ stats.others.balance | currency }}</span>
-                                <span class="subhead">Current Balance</span>
+                                <span class="subhead">{{ __( 'Current Balance', 'dokan' ) }}</span>
                             </li>
                             <li class="reviews">
                                 <span class="count">{{ stats.others.reviews }}</span>
-                                <span class="subhead">Reviews</span>
+                                <span class="subhead">{{ __( 'Reviews', 'dokan' ) }}</span>
                             </li>
                         </ul>
                     </div>
@@ -141,14 +141,14 @@
                 <div class="vendor-info">
                     <ul>
                         <li class="registered">
-                            <div class="subhead">Registered Since</div>
+                            <div class="subhead">{{ __( 'Registered Since', 'dokan' ) }}</div>
                             <span class="date">
                                 {{ moment(store.registered).format('MMM D, YYYY') }}
                                 ({{ moment(store.registered).toNow(true) }})
                             </span>
                         </li>
                         <li class="social-profiles">
-                            <div class="subhead">Social Profiles</div>
+                            <div class="subhead">{{ __( 'Social Profiles', 'dokan' ) }}</div>
 
                             <div class="profiles">
                                 <a :class="{ active: isSocialActive('fb') }" :href="store.social.fb" target="_blank"><span class="flaticon-facebook-logo"></span></a>
@@ -162,20 +162,20 @@
                             </div>
                         </li>
                         <li class="payments">
-                            <div class="subhead">Payment Methods</div>
+                            <div class="subhead">{{ __( 'Payment Methods', 'dokan' ) }}</div>
 
                             <div class="payment-methods">
-                                <span title="PayPal Payment" :class="['flaticon-money', hasPaymentEmail('paypal') ? 'active' : '']"></span>
-                                <span title="Stripe Connect" class="flaticon-stripe-logo"></span>
-                                <span title="Bank Payment" :class="['flaticon-bank-building', hasBank ? 'active': '' ]"></span>
-                                <span title="Skrill" :class="['flaticon-skrill-pay-logo', hasPaymentEmail('skrill') ? 'active' : '']"></span>
+                                <span :title="__( 'PayPal Payment', 'dokan' )" :class="['flaticon-money', hasPaymentEmail('paypal') ? 'active' : '']"></span>
+                                <span :title="__( 'Stripe Connect', 'dokan' )" class="flaticon-stripe-logo"></span>
+                                <span :title="__( 'Bank Payment', 'dokan' )" :class="['flaticon-bank-building', hasBank ? 'active': '' ]"></span>
+                                <span :title="__( 'Skrill', 'dokan' )" :class="['flaticon-skrill-pay-logo', hasPaymentEmail('skrill') ? 'active' : '']"></span>
                             </div>
                         </li>
                         <li class="publishing">
-                            <div class="subhead">Product Publishing</div>
+                            <div class="subhead">{{ __( 'Product Publishing', 'dokan' ) }}</div>
 
-                            <span v-if="store.trusted"><span class="dashicons dashicons-shield"></span> Direct</span>
-                            <span v-else><span class="dashicons dashicons-backup"></span> Requires Review</span>
+                            <span v-if="store.trusted"><span class="dashicons dashicons-shield"></span> {{ __( 'Direct', 'dokan' ) }}</span>
+                            <span v-else><span class="dashicons dashicons-backup"></span> {{ __( 'Requires Review', 'dokan' ) }}</span>
                         </li>
                     </ul>
                 </div>
@@ -285,9 +285,9 @@ export default {
                 body: this.mail.body
             } ).done(response => {
                 this.$notify({
-                    title: 'Success!',
+                    title: this.__( 'Success!', 'dokan' ),
                     type: 'success',
-                    text: 'Email has been sent successfully.'
+                    text: this.__( 'Email has been sent successfully.', 'dokan' )
                 });
             });
 

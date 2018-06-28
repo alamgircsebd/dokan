@@ -1,13 +1,13 @@
 <template>
     <div class="vendor-list">
-        <h1 class="wp-heading-inline">Vendors</h1>
+        <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
         <!-- <a href="#" class="page-title-action">Add New</a> -->
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
-            <li><router-link :to="{ name: 'Vendors', query: { status: 'all' }}" active-class="current" exact>All <span class="count">({{ counts.all }})</span></router-link> | </li>
-            <li><router-link :to="{ name: 'Vendors', query: { status: 'approved' }}" active-class="current" exact>Approved <span class="count">({{ counts.approved }})</span></router-link> | </li>
-            <li><router-link :to="{ name: 'Vendors', query: { status: 'pending' }}" active-class="current" exact>Pending <span class="count">({{ counts.pending }})</span></router-link></li>
+            <li><router-link :to="{ name: 'Vendors', query: { status: 'all' }}" active-class="current" exact v-html="sprintf( __( 'All <span class=\'count\'>(%s)</span>', 'dokan' ), counts.all )"></router-link> | </li>
+            <li><router-link :to="{ name: 'Vendors', query: { status: 'approved' }}" active-class="current" exact v-html="sprintf( __( 'Approved <span class=\'count\'>(%s)</span>', 'dokan' ), counts.approved )"></router-link> | </li>
+            <li><router-link :to="{ name: 'Vendors', query: { status: 'pending' }}" active-class="current" exact v-html="sprintf( __( 'Pending <span class=\'count\'>(%s)</span>', 'dokan' ), counts.pending )"></router-link></li>
         </ul>
 
         <list-table
@@ -36,7 +36,7 @@
         >
             <template slot="store_name" slot-scope="data">
                 <img :src="data.row.gravatar" :alt="data.row.store_name" width="50">
-                <strong><router-link :to="'/vendors/' + data.row.id">{{ data.row.store_name ? data.row.store_name : '(no name)' }}</router-link></strong>
+                <strong><router-link :to="'/vendors/' + data.row.id">{{ data.row.store_name ? data.row.store_name : __( '(no name)', 'dokan' ) }}</router-link></strong>
             </template>
 
             <template slot="email" slot-scope="data">
@@ -95,46 +95,46 @@ export default {
 
             columns: {
                 'store_name': {
-                    label: 'Store',
+                    label: this.__( 'Store', 'dokan' ),
                     sortable: true
                 },
                 'email': {
-                    label: 'E-mail'
+                    label: this.__( 'E-mail', 'dokan' )
                 },
                 'phone': {
-                    label: 'Phone'
+                    label: this.__( 'Phone', 'dokan' )
                 },
                 'registered': {
-                    label: 'Registered',
+                    label: this.__( 'Registered', 'dokan' ),
                     sortable: true
                 },
                 'enabled': {
-                    label: 'Status'
+                    label: this.__( 'Status', 'dokan' )
                 }
             },
             actionColumn: 'title',
             actions: [
                 {
                     key: 'edit',
-                    label: 'Edit'
+                    label: this.__( 'Edit', 'dokan' )
                 },
                 {
                     key: 'products',
-                    label: 'Products'
+                    label: this.__( 'Products', 'dokan' )
                 },
                 {
                     key: 'orders',
-                    label: 'Orders'
+                    label: this.__( 'Orders', 'dokan' )
                 },
             ],
             bulkActions: [
                 {
                     key: 'approved',
-                    label: 'Approve Vendors'
+                    label: this.__( 'Approve Vendors', 'dokan' )
                 },
                 {
                     key: 'pending',
-                    label: 'Disable Selling'
+                    label: this.__( 'Disable Selling', 'dokan' )
                 }
             ],
             vendors: []
@@ -232,14 +232,14 @@ export default {
 
         onSwitch(status, vendor_id) {
 
-            let message = ( status === false ) ? 'The vendor has been disabled.' : 'Selling has been enabled';
+            let message = ( status === false ) ? this.__( 'The vendor has been disabled.', 'dokan' ) : this.__( 'Selling has been enabled', 'dokan' );
 
             dokan.api.put('/stores/' + vendor_id + '/status', {
                 status: ( status === false ) ? 'inactive' : 'active'
             })
             .done(response => {
                 this.$notify({
-                    title: 'Success!',
+                    title: this.__( 'Success!', 'dokan' ),
                     type: 'success',
                     text: message,
                 });
@@ -327,13 +327,6 @@ export default {
         display: block;
         margin-bottom: .2em;
         font-size: 14px;
-    }
-
-    .vue-notification {
-        // &.success {
-        //     background: #68CD86;
-        //     border-left-color: #42A85F;
-        // }
     }
 }
 </style>
