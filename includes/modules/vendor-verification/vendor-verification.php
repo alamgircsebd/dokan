@@ -42,8 +42,8 @@ if ( !defined( 'ABSPATH' ) ) {
 
 define( 'DOKAN_VERIFICATION_PLUGIN_VERSION', '1.2.0' );
 define( 'DOKAN_VERFICATION_DIR', dirname( __FILE__ ) );
-define( 'DOKAN_VERFICATION_INC_DIR', dirname( __FILE__ ) . '/includes' );
-define( 'DOKAN_VERFICATION_LIB_DIR', dirname( __FILE__ ) . '/lib' );
+define( 'DOKAN_VERFICATION_INC_DIR', dirname( __FILE__ ) . '/includes/' );
+define( 'DOKAN_VERFICATION_LIB_DIR', dirname( __FILE__ ) . '/lib/' );
 define( 'DOKAN_VERFICATION_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
 // give a way to turn off loading styles and scripts from parent theme
 
@@ -66,6 +66,8 @@ class Dokan_Seller_Verification {
     public static $plugin_url;
     public static $plugin_path;
     public static $plugin_basename;
+    private $config;
+    private $base_url;
 
     public $e_msg = false;
 
@@ -94,6 +96,9 @@ class Dokan_Seller_Verification {
 
     public function init_hooks() {
         $installed_version = get_option( 'dokan_theme_version' );
+
+        $this->base_url = dokan_get_navigation_url( 'settings/verification' );
+        $this->config = $this->get_provider_config();
 
         add_action( 'init', array( $this, 'init_session' ) );
         add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ), 99 );
@@ -130,6 +135,78 @@ class Dokan_Seller_Verification {
 
         // usermeta update hook
         add_action( 'updated_user_meta', array( $this, 'dokan_v_recheck_verification_status_meta' ), 10, 4 );
+    }
+
+    public function get_provider_config() {
+        $config = array(
+            'base_url'   => $this->base_url,
+            'debug_mode' => false,
+
+            'providers' => array(
+                "Facebook" => array(
+                    "enabled" => true,
+                    "keys"    => array( "id" => "", "secret" => "" ),
+                    "scope"   => "email, public_profile"
+                ),
+                "Google"   => array(
+                    "enabled"         => true,
+                    "keys"            => array( "id" => "", "secret" => "" ),
+                    "scope"           => "https://www.googleapis.com/auth/userinfo.profile ". // optional
+                        "https://www.googleapis.com/auth/userinfo.email"   , // optional
+                    "access_type"     => "offline",
+                    "approval_prompt" => "force",
+                    "hd"              => home_url()
+                ),
+                "LinkedIn" => array(
+                    "enabled" => true,
+                    "keys"    => array( "id" => "", "secret" => "" ),
+                ),
+                "Twitter"  => array(
+                    "enabled" => true,
+                    "keys"    => array( "key" => "", "secret" => "" ),
+                ),
+            )
+        );
+
+        //facebook config from admin
+        $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_verification' );
+        $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_verification' );
+        if ( $fb_id != '' && $fb_secret != '' ) {
+            $config['providers']['Facebook']['keys']['id']     = $fb_id;
+            $config['providers']['Facebook']['keys']['secret'] = $fb_secret;
+        }
+        //google config from admin
+        $g_id     = dokan_get_option( 'google_app_id', 'dokan_verification' );
+        $g_secret = dokan_get_option( 'google_app_secret', 'dokan_verification' );
+        if ( $g_id != '' && $g_secret != '' ) {
+            $config['providers']['Google']['keys']['id']     = $g_id;
+            $config['providers']['Google']['keys']['secret'] = $g_secret;
+        }
+        //linkedin config from admin
+        $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_verification' );
+        $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_verification' );
+        if ( $l_id != '' && $l_secret != '' ) {
+            $config['providers']['LinkedIn']['keys']['id']     = $l_id;
+            $config['providers']['LinkedIn']['keys']['secret'] = $l_secret;
+        }
+        //Twitter config from admin
+        $twitter_id     = dokan_get_option( 'twitter_app_id', 'dokan_verification' );
+        $twitter_secret = dokan_get_option( 'twitter_app_secret', 'dokan_verification' );
+        if ( $twitter_id != '' && $twitter_secret != '' ) {
+            $config['providers']['Twitter']['keys']['key']    = $twitter_id;
+            $config['providers']['Twitter']['keys']['secret'] = $twitter_secret;
+        }
+
+        /**
+         * Filter the Config array of Hybridauth
+         *
+         * @since 1.0.0
+         *
+         * @param array $config
+         */
+        $config = apply_filters( 'dokan_verify_providers_config', $config );
+
+        return $config;
     }
 
     function load_verification_template_header( $heading, $query_vars ) {
@@ -201,12 +278,9 @@ class Dokan_Seller_Verification {
      * @return void
      */
     function includes_file() {
-        $lib_dir     = dirname( __FILE__ ) . '/lib/';
-        $inc_dir     = dirname( __FILE__ ) . '/includes/';
-        $classes_dir = dirname( __FILE__ ) . '/classes/';
+        $inc_dir = DOKAN_VERFICATION_INC_DIR;
+        $lib_dir = DOKAN_VERFICATION_LIB_DIR;
 
-        //require_once $inc_dir . 'wc-functions.php';
-        //require_once dirname( __FILE__ ) . '/templates/admin-verifications.php';
         require_once $lib_dir . 'sms-verification/gateways.php';
         require_once $inc_dir . 'theme-functions.php';
 
@@ -215,11 +289,6 @@ class Dokan_Seller_Verification {
 
         if ( is_admin() ) {
             require_once $inc_dir . 'admin/admin.php';
-        } else {
-
-            if ( !class_exists( 'Hybrid_Auth_dokan' ) ) {
-                require_once $lib_dir . '/Hybrid/Auth.php';
-            }
         }
     }
 
@@ -248,94 +317,24 @@ class Dokan_Seller_Verification {
      * @return void
      */
     public function monitor_autheticate_requests() {
-        global $current_user;
 
         if ( ! class_exists( 'WeDevs_Dokan' ) ) {
             return;
         }
 
-        $config = array(
-            'base_url'   => dokan_get_navigation_url( 'settings/verification' ),
-            "debug_mode" => false,
-
-            'providers' => array(
-                "Facebook" => array(
-                    "enabled" => true,
-                    "keys"    => array( "id" => "", "secret" => "" ),
-                    "scope"   => "email, public_profile"
-                ),
-                "Google"   => array(
-                    "enabled"         => true,
-                    "keys"            => array( "id" => "", "secret" => "" ),
-                    "scope"           => "https://www.googleapis.com/auth/userinfo.profile ". // optional
-                                        "https://www.googleapis.com/auth/userinfo.email"   , // optional
-                    "access_type"     => "offline",
-                    "approval_prompt" => "force",
-                    "hd"              => home_url()
-                ),
-                "LinkedIn" => array(
-                    "enabled" => true,
-                    "keys"    => array( "key" => "", "secret" => "" ),
-                ),
-                "Twitter"  => array(
-                    "enabled" => true,
-                    "keys"    => array( "key" => "", "secret" => "" ),
-                ),
-            )
-        );
-
-        //facebook config from admin
-        $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_verification' );
-        $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_verification' );
-        if ( $fb_id != '' && $fb_secret != '' ) {
-            $config['providers']['Facebook']['keys']['id']     = $fb_id;
-            $config['providers']['Facebook']['keys']['secret'] = $fb_secret;
-        }
-        //google config from admin
-        $g_id     = dokan_get_option( 'google_app_id', 'dokan_verification' );
-        $g_secret = dokan_get_option( 'google_app_secret', 'dokan_verification' );
-        if ( $g_id != '' && $g_secret != '' ) {
-            $config['providers']['Google']['keys']['id']     = $g_id;
-            $config['providers']['Google']['keys']['secret'] = $g_secret;
-        }
-        //linkedin config from admin
-        $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_verification' );
-        $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_verification' );
-        if ( $l_id != '' && $l_secret != '' ) {
-            $config['providers']['LinkedIn']['keys']['key']    = $l_id;
-            $config['providers']['LinkedIn']['keys']['secret'] = $l_secret;
-        }
-        //Twitter config from admin
-        $twitter_id     = dokan_get_option( 'twitter_app_id', 'dokan_verification' );
-        $twitter_secret = dokan_get_option( 'twitter_app_secret', 'dokan_verification' );
-        if ( $twitter_id != '' && $twitter_secret != '' ) {
-            $config['providers']['Twitter']['keys']['key']    = $twitter_id;
-            $config['providers']['Twitter']['keys']['secret'] = $twitter_secret;
-        }
-
-        /**
-         * Filter the Config array of Hybridauth
-         *
-         * @since 1.0.0
-         *
-         * @param array $config
-         */
-        $config = apply_filters( 'dokan_verify_providers_config', $config );
-
+        global $current_user;
+        $config = $this->config;
 
         if ( isset( $_GET['hauth_start'] ) || isset( $_GET['hauth_done'] ) ) {
-            require_once dirname( __FILE__ ) . '/lib/Hybrid/Endpoint.php';
+            require_once DOKAN_PRO_INC . '/lib/Hybrid/Endpoint.php';
 
             Hybrid_Endpoint::process();
             exit;
         }
 
         if ( isset( $_GET['dokan_auth_dc'] ) ) {
-
             $seller_profile = dokan_get_store_info( $current_user->ID );
-
             $provider_dc = sanitize_text_field( $_GET['dokan_auth_dc'] );
-
             $seller_profile['dokan_verification'][$provider_dc] = '';
 
             update_user_meta( $current_user->ID, 'dokan_profile_settings', $seller_profile );
@@ -343,27 +342,31 @@ class Dokan_Seller_Verification {
             return;
         }
 
-        if ( !isset( $_GET['dokan_auth'] ) ) {
+        if ( ! isset( $_GET['dokan_auth'] ) ) {
             return;
         }
 
-        $hybridauth = new Hybrid_Auth_dokan( $config );
+        $hybridauth = new Hybrid_Auth( $config );
         $provider   = $_GET['dokan_auth'];
 
         try {
             if ( $provider != '' ) {
-                $adapter        = $hybridauth->authenticate( $provider );
+                $adapter = $hybridauth->authenticate( $provider );
 
-                $user_profile   = $adapter->getUserProfile();
+                if ( $adapter->isUserConnected() ) {
+                    $user_profile = $adapter->getUserProfile();
+                } else {
+                    wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
+                    wp_redirect( $this->base_url );
+                }
+
                 $seller_profile = dokan_get_store_info( $current_user->ID );
-
                 $seller_profile['dokan_verification'][$provider] = (array) $user_profile;
 
                 update_user_meta( $current_user->ID, 'dokan_profile_settings', $seller_profile );
-                $seller_profile = dokan_get_store_info( $current_user->ID );
             }
         } catch ( Exception $e ) {
-           $this->e_msg = $e->getMessage();
+            $this->e_msg = $e->getMessage();
         }
     }
 
