@@ -777,10 +777,10 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
             $row_data[] = $name;
         }
         if ( $id ) {
-            $row_data[] = sprintf( __( 'ID %d', 'dpi_plugin' ), $id );
+            $row_data[] = sprintf( __( 'ID %d', 'dokan' ), $id );
         }
         if ( $sku ) {
-            $row_data[] = sprintf( __( 'SKU %s', 'dpi_plugin' ), $sku );
+            $row_data[] = sprintf( __( 'SKU %s', 'dokan' ), $sku );
         }
 
         return implode( ', ', $row_data );
@@ -821,17 +821,17 @@ class WC_Product_CSV_Importer extends WC_Product_Importer {
             }
 
             if ( $id_exists && !$update_existing ) {
-                $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'A product with this ID already exists.', 'dpi_plugin' ), array( 'id' => $id, 'row' => $this->get_row_id( $parsed_data ) ) );
+                $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'A product with this ID already exists.', 'dokan' ), array( 'id' => $id, 'row' => $this->get_row_id( $parsed_data ) ) );
                 continue;
             }
 
             if ( $sku_exists && !$update_existing ) {
-                $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'A product with this SKU already exists.', 'dpi_plugin' ), array( 'sku' => $sku, 'row' => $this->get_row_id( $parsed_data ) ) );
+                $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'A product with this SKU already exists.', 'dokan' ), array( 'sku' => $sku, 'row' => $this->get_row_id( $parsed_data ) ) );
                 continue;
             }
 
             if ( $update_existing && ( $id || $sku ) && !$id_exists && !$sku_exists ) {
-                $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'No matching product exists to update.', 'dpi_plugin' ), array( 'id' => $id, 'sku' => $sku, 'row' => $this->get_row_id( $parsed_data ) ) );
+                $data['skipped'][] = new WP_Error( 'woocommerce_product_importer_error', __( 'No matching product exists to update.', 'dokan' ), array( 'id' => $id, 'sku' => $sku, 'row' => $this->get_row_id( $parsed_data ) ) );
                 continue;
             }
 

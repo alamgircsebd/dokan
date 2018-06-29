@@ -306,6 +306,9 @@ if ( class_exists( 'WooCommerce' ) ) {
                     if ( ! empty( $method['settings']['cost'] ) ) {
                         $has_costs = true;
                         $cost = $method['settings']['cost'];
+                    } else {
+                        $has_costs = true;
+                        $cost = '0';
                     }
                 }
 

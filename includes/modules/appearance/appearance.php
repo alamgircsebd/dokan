@@ -88,7 +88,7 @@ class Dokan_Apperance {
     function init_hooks() {
 
         add_filter( 'dokan_settings_sections', array( $this, 'render_apperance_section' ) );
-        // add_filter( 'dokan_settings_fields', array( $this, 'render_apperance_settings' ) );
+        add_filter( 'dokan_settings_fields', array( $this, 'render_apperance_settings' ) );
 
         add_action( 'wp_head', array( $this, 'load_styles' ) );
     }

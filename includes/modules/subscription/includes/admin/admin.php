@@ -148,7 +148,7 @@ class DPS_Admin {
             $r['hierarchical']  = 1;
             $r['hide_empty']    = 0;
             $r['value']         = 'id';
-            $r['selected']      = $selected_cat;
+            $r['selected']      = array_map( 'absint', $selected_cat ) ;
             $r['orderby']       = 'name';
 
             $categories = get_terms( 'product_cat', $r );
@@ -327,32 +327,32 @@ class DPS_Admin {
         $pages_array = $this->get_post_type( 'page' );
 
         $settings_fields['dokan_product_subscription'] = array(
-            array(
+            'subscription_pack' => array(
                 'name'    => 'subscription_pack',
                 'label'   => __( 'Subscription', 'dokan' ),
                 'type'    => 'select',
                 'options' => $pages_array
             ),
-            array(
+            'enable_pricing' => array(
                 'name'  => 'enable_pricing',
                 'label' => __( 'Enable Product Subscription', 'dokan' ),
                 'desc'  => __( 'Enable product subscription for vendor', 'dokan' ),
                 'type'  => 'checkbox'
             ),
-            array(
+            'enable_subscription_pack_in_reg' => array(
                 'name'    => 'enable_subscription_pack_in_reg',
                 'label' => __( 'Enable Subscription in registration form', 'dokan' ),
                 'desc'  => __( 'Enable Subscription pack in registration form for new vendor', 'dokan' ),
                 'type'  => 'checkbox',
                 'default' => 'on'
             ),
-            array(
+            'notify_by_email' => array(
                 'name'  => 'notify_by_email',
                 'label' => __( 'Enable Email Notification', 'dokan' ),
                 'desc'  => __( 'Enable notification by email for vendor during end of the package expiration', 'dokan' ),
                 'type'  => 'checkbox'
             ),
-            array(
+            'no_of_days_before_mail' => array(
                 'name'    => 'no_of_days_before_mail',
                 'label'   => __( 'No. of Days', 'dokan' ),
                 'desc'    => __( 'Before an email will be sent to the vendor', 'dokan' ),
@@ -360,7 +360,7 @@ class DPS_Admin {
                 'size'    => 'midium',
                 'default' => '2'
             ),
-            array(
+            'product_status_after_end' => array(
                 'name'    => 'product_status_after_end',
                 'label'   => __( 'Product Status', 'dokan' ),
                 'desc'    => __( 'Product status when vendor pack validity will expire', 'dokan' ),
@@ -372,13 +372,14 @@ class DPS_Admin {
                     'draft'   => __( 'Draft', 'dokan' )
                 )
             ),
-            array(
-                'name'  => 'email_subject',
-                'label' => __( 'Email Subject', 'dokan' ),
-                'desc'  => __( 'Enter Subject text for email notification', 'dokan' ),
-                'type'  => 'text'
+            'email_subject' => array(
+                'name'    => 'email_subject',
+                'label'   => __( 'Email Subject', 'dokan' ),
+                'desc'    => __( 'Enter Subject text for email notification', 'dokan' ),
+                'type'    => 'text',
+                'default' => __( 'Subscription Email', 'dokan' )
             ),
-            array(
+            'email_body' => array(
                 'name'  => 'email_body',
                 'label' => __( 'Email body', 'dokan' ),
                 'desc'  => __( 'Enter body text for email notification', 'dokan' ),
@@ -649,6 +650,13 @@ class DPS_Admin {
             return;
         }
 
+        if ( ! empty( $_POST['vendor_allowed_categories'] ) ) {
+            $allowed_cat = array_map( 'intval', $_POST['vendor_allowed_categories'] );
+            update_user_meta( $user_id, 'vendor_allowed_categories', $allowed_cat );
+        } else {
+            delete_user_meta( $user_id, 'vendor_allowed_categories' );
+        }
+
         if ( get_user_meta( $user_id, 'product_package_id', true ) == $pack_id ) {
             return;
         }
@@ -680,13 +688,6 @@ class DPS_Admin {
 
         update_user_meta( $user_id, 'can_post_product' , 1 );
         update_user_meta( $user_id, '_customer_recurring_subscription', '' );
-
-        if ( !empty( $_POST['vendor_allowed_categories'] ) ) {
-            $allowed_cat = array_map( 'intval', $_POST['vendor_allowed_categories'] );
-            update_user_meta( $user_id, 'vendor_allowed_categories', $allowed_cat );
-        } else {
-            delete_user_meta( $user_id, 'vendor_allowed_categories' );
-        }
 
         if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
             update_user_meta( $user_id, 'dokan_admin_percentage', $admin_commission );

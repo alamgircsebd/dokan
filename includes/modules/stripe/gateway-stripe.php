@@ -152,8 +152,6 @@ class Dokan_Stripe {
 
         include_once dirname( __FILE__ ) . '/classes/class-dokan-stripe-connect.php';
         include_once dirname( __FILE__ ) . '/classes/class-dokan-stripe-connect-saved-cards.php';
-
-        load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
     }
 
     /**

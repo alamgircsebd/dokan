@@ -102,7 +102,7 @@ class Dokan_REST_Modules_Controller extends Dokan_REST_Admin_Controller {
 
         foreach ( $modules as $key => $module ) {
             $is_active = in_array( $key, $actives );
-            $item      = array_merge( $module, array( 'slug' => $key, 'active' => $is_active ) );
+            $item      = array_merge( $module, array( 'slug' => $key, 'id'=> $key, 'active' => $is_active ) );
 
             if ( $is_active ) {
                 $active_count++;
@@ -124,6 +124,14 @@ class Dokan_REST_Modules_Controller extends Dokan_REST_Admin_Controller {
                 default:
                     $result[] = $item;
                     break;
+            }
+        }
+
+        if (  ! empty( $request['orderby'] ) ) {
+            if ( 'asc' == $request['order'] ) {
+                usort( $result, 'dokan_module_short_by_name_asc' );
+            } else {
+                usort( $result, 'dokan_module_short_by_name_desc' );
             }
         }
 

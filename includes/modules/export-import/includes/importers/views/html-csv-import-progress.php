@@ -9,8 +9,8 @@ if ( !defined( 'ABSPATH' ) ) {
 <div class="wc-progress-form-content woocommerce-importer woocommerce-importer__importing">
     <header>
         <span class="spinner is-active"></span>
-        <h2><?php esc_html_e( 'Importing', 'dpi_plugin' ); ?></h2>
-        <p><?php esc_html_e( 'Your products are now being imported...', 'dpi_plugin' ); ?></p>
+        <h2><?php esc_html_e( 'Importing', 'dokan' ); ?></h2>
+        <p><?php esc_html_e( 'Your products are now being imported...', 'dokan' ); ?></p>
     </header>
     <section>
         <progress class="woocommerce-importer-progress" max="100" value="0"></progress>

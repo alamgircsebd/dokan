@@ -21,7 +21,6 @@ class Dokan_Pro_Admin_Settings {
      */
     public function __construct() {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
-        add_action( 'dokan_admin_menu', array( $this, 'tools_modules_menu' ), 99 );
 
         add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
 
@@ -59,39 +58,24 @@ class Dokan_Pro_Admin_Settings {
             $refund_text = sprintf( __( 'Refunds %s', 'dokan' ), '<span class="awaiting-mod count-1"><span class="pending-count">' . $refund['pending'] . '</span></span>' );
         }
 
-        add_submenu_page( 'dokan', __( 'Refund Requests', 'dokan' ), $refund_text, $capability, 'dokan-refund', array( $this, 'refund_request' ) );
-
         if ( current_user_can( $capability ) ) {
             $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
+            $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
+            $submenu[ $slug ][] = array( $refund_text, $capability, 'admin.php?page=' . $slug . '#/refund?status=pending' );
         }
 
-        // $vendor_lisitng = add_submenu_page( 'dokan', __( 'Vendors Listing', 'dokan' ), __( 'Vendors', 'dokan' ), $capability, 'dokan-sellers', array( $this, 'seller_listing' ) );
-        $report         = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
-        $announcement   = add_submenu_page( 'dokan', __( 'Vendor Announcements', 'dokan' ), __( 'Announcements', 'dokan' ), $capability, 'edit.php?post_type=dokan_announcement' );
+        $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
-        add_action( $report, array( $this, 'common_scripts' ) );
-        // add_action( $vendor_lisitng, array( $this, 'common_scripts' ) );
+        // Load tools ad modules menu
+        if ( current_user_can( $capability ) ) {
+            $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
+        }
 
-        add_action( 'admin_print_scripts-post-new.php', array( $this, 'announcement_scripts' ), 11 );
-        add_action( 'admin_print_scripts-post.php', array( $this, 'announcement_scripts' ), 11 );
-    }
-
-    /**
-     * Tools and modules menu
-     *
-     * Load these modules at the bottom
-     *
-     * @param  string $capability
-     *
-     * @return void
-     */
-    public function tools_modules_menu( $capability ) {
-        $modules = add_submenu_page( 'dokan', __( 'Modules', 'dokan' ), __( 'Modules', 'dokan' ), $capability, 'dokan-modules', array( $this, 'modules_page' ) );
         $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
-        add_action( $modules, array( $this, 'modules_scripts' ) );
+        add_action( $report, array( $this, 'common_scripts' ) );
     }
 
     /**
@@ -224,7 +208,7 @@ class Dokan_Pro_Admin_Settings {
             'hide_withdraw_option' => array(
                 'name'    => 'hide_withdraw_option',
                 'label'   => __( 'Hide Withdraw Option', 'dokan' ),
-                'desc'    => __( 'Hide withdraw option (when vendor is getting commission autometically) ', 'dokan' ),
+                'desc'    => __( 'Hide withdraw option (when vendor is getting commission automatically) ', 'dokan' ),
                 'default' => 'off',
                 'type'    => 'checkbox'
             ),
@@ -276,6 +260,50 @@ class Dokan_Pro_Admin_Settings {
             'component' => 'VendorSingle'
         );
 
+        $routes[] = array(
+            'path'      => '/announcement',
+            'name'      => 'Announcement',
+            'component' => 'Announcement'
+        );
+
+        $routes[] = array(
+            'path'      => '/announcement/new',
+            'name'      => 'NewAnnouncement',
+            'component' => 'NewAnnouncement'
+        );
+
+        $routes[] = array(
+            'path'      => '/announcement/:id/edit',
+            'name'      => 'EditAnnouncement',
+            'component' => 'EditAnnouncement'
+        );
+
+        $routes[] = array(
+            'path'      => '/refund',
+            'name'      => 'Refund',
+            'component' => 'Refund'
+        );
+
+        $routes[] = array(
+            'path'      => '/modules',
+            'component' => 'Modules',
+            'children' => [
+                [
+                    'path' => '',
+                    'name' => 'Modules',
+                    'component' => 'Modules',
+                    'children' => [
+                        [
+                            'path' => 'status/:status',
+                            'name' => 'ModulesStatus',
+                            'component' => 'Modules'
+                        ]
+                    ]
+                ],
+            ]
+        );
+
+
         return $routes;
     }
 
@@ -288,22 +316,6 @@ class Dokan_Pro_Admin_Settings {
     **/
     function modules_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-    }
-
-    /**
-     * Seller announcement scripts
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function announcement_scripts() {
-        global $post_type;
-
-        if ( 'dokan_announcement' == $post_type ) {
-            wp_enqueue_style( 'dokan-chosen-style' );
-            wp_enqueue_script( 'dokan-chosen' );
-        }
     }
 
     /**
@@ -465,7 +477,7 @@ class Dokan_Pro_Admin_Settings {
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
             'title'  => __( 'All Vendors', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan-sellers' )
+            'href'   => admin_url( 'admin.php?page=dokan#/vendors' )
         ) );
 
         $wp_admin_bar->add_menu( array(
@@ -479,7 +491,7 @@ class Dokan_Pro_Admin_Settings {
             'id'     => 'dokan-settings',
             'parent' => 'dokan',
             'title'  => __( 'Settings', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan-settings' )
+            'href'   => admin_url( 'admin.php?page=dokan#/settings' )
         ) );
     }
 
@@ -514,8 +526,8 @@ class Dokan_Pro_Admin_Settings {
                 'seller_id'    => __( 'Vendor', 'dokan' ),
                 'order_total'  => __( 'Order Total', 'dokan' ),
                 'net_amount'   => __( 'Vendor Earning', 'dokan' ),
-                'commision'    => __( 'Commision', 'dokan' ),
                 'order_status' => __( 'Status', 'dokan' ),
+                'commission'   => __( 'Commission', 'dokan' )
             );
 
             $filename = "Report-" . date( 'Y-m-d', time() );
@@ -525,6 +537,13 @@ class Dokan_Pro_Admin_Settings {
             fputcsv( $ob, array_values( $headers ) );
 
             foreach ( $all_logs as $a ) {
+                unset( $a['id'] );
+                unset( $a['post_date'] );
+
+                $a['seller_id'] = dokan()->vendor->get($a['seller_id'])->get_name();
+                $a['order_status'] = ucwords( substr( $a['order_status'], 3 ) );
+                $a['commission'] = $a['order_total'] - $a['net_amount'];
+
                 fputcsv( $ob, array_values( $a ) );
             }
             fclose( $ob );

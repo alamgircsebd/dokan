@@ -168,13 +168,23 @@ jQuery( function( $ ) {
 
             // variable product price error checking
             function dokan_show_variable_product_earning_suggestion() {
-                if ( dokan.commission_type == 'percentage' ) {
+                var selectedCategoryWrapper = $('select#product_cat').find('option:selected');
+
+                if ( selectedCategoryWrapper.data( 'commission' ) != '' ) {
+                    var vendor_percentage = selectedCategoryWrapper.data( 'commission' );
+                    var commission_type = selectedCategoryWrapper.data( 'commission_type' );
+                } else {
+                    var commission_type = $('span.vendor-earning').attr( 'data-commission_type' );
+                    var vendor_percentage = $('span.vendor-earning').attr( 'data-commission' );
+                }
+
+                if ( commission_type == 'percentage' ) {
                     if ( $('input.dokan-product-sales-price-variable' ).val() == '' ) {
                         $( 'input.dokan-product-regular-price-variable').each( function( i, elm ) {
                             var $element = $(elm);
 
                             $element.closest('.content-half-part').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( ( ( $(this).closest( elm ).val() * dokan.vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
+                                parseFloat( accounting.formatNumber( ( ( $(this).closest( elm ).val() * vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
                                 .toString()
                                 .replace( '.', dokan.mon_decimal_point )
                             )
@@ -186,7 +196,7 @@ jQuery( function( $ ) {
                             var $element = $( elm );
 
                             $element.closest('.variable_pricing').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( ( ( $(this).closest( elm ).val() * dokan.vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
+                                parseFloat( accounting.formatNumber( ( ( $(this).closest( elm ).val() * vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
                                 .toString()
                                 .replace( '.', dokan.mon_decimal_point )
                             )
@@ -200,7 +210,7 @@ jQuery( function( $ ) {
                             var $element = $(elm);
 
                             $element.closest('.variable_pricing').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( (  $(this).closest( elm ).val() - ( 100 - dokan.vendor_percentage ) ), dokan.rounding_precision, '' ) )
+                                parseFloat( accounting.formatNumber( (  $(this).closest( elm ).val() - vendor_percentage ), dokan.rounding_precision, '' ) )
                                 .toString()
                                 .replace( '.', dokan.mon_decimal_point )
                             );
@@ -213,7 +223,7 @@ jQuery( function( $ ) {
                             var $element = $( elm );
 
                             $element.closest('.variable_pricing').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( (  $(this).closest( elm ).val() - ( 100 - dokan.vendor_percentage ) ), dokan.rounding_precision, '' ) )
+                                parseFloat( accounting.formatNumber( (  $(this).closest( elm ).val() - vendor_percentage ), dokan.rounding_precision, '' ) )
                                 .toString()
                                 .replace( '.', dokan.mon_decimal_point )
                             );
@@ -226,7 +236,7 @@ jQuery( function( $ ) {
 
             $( "input.dokan-product-regular-price-variable, input.dokan-product-sales-price-variable" ).on( 'keyup', function () {
                 dokan_show_variable_product_earning_suggestion()
-            } );
+            } ).trigger( 'keyup' );
 
             // Datepicker fields
             $( '.sale_price_dates_fields', wrapper ).each( function() {

@@ -170,6 +170,9 @@ Class Dokan_Email_Verification {
      * @return void
      */
     function add_activation_link( $email ) {
+        if ( empty( $email ) ) {
+            return;
+        }
 
         if ( $email->id != 'customer_new_account' ) {
             return;
@@ -183,7 +186,7 @@ Class Dokan_Email_Verification {
             return;
         }
 
-        if ( in_array( 'seller', $user->roles ) ) {
+        if ( in_array( 'seller', $user->roles ) && dokan_get_option( 'disable_welcome_wizard', 'dokan_selling' ) == 'off' ) {
             $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID, 'page' => 'dokan-seller-setup' ), $this->base_url );
         } else {
             $verification_link = add_query_arg( array( 'dokan_email_verification' => $verification_key, 'id' => $user->ID ), $this->base_url );

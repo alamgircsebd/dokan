@@ -696,20 +696,20 @@ class Dokan_Store_Support {
                              <?php
                                 switch ( $topic->post_status ) {
                                     case 'open':
-                                        $c_status = 'closed';
+                                        $c_status = __( 'closed', 'dokan' );
                                         $btn_icon = 'fa-close';
                                         $topic_status = 'dokan-label-success';
                                         $btn_title = __( 'close topic' , 'dokan' );
                                         break;
                                     case 'closed':
-                                        $c_status = 'open';
+                                        $c_status = __( 'open', 'dokan' );
                                         $btn_icon = 'fa-file-o';
                                         $topic_status = 'dokan-label-danger';
                                         $btn_title = __( 're-open topic' , 'dokan' );
                                         break;
 
                                     default:
-                                        $c_status = 'closed';
+                                        $c_status = __( 'closed', 'dokan' );
                                         $btn_icon = 'fa-close';
                                         $topic_status = 'dokan-label-success';
                                         $btn_title = __( 'close topic' , 'dokan' );
@@ -1013,20 +1013,20 @@ class Dokan_Store_Support {
                         <?php
                             switch ( $topic->post_status ) {
                                 case 'open':
-                                    $c_status = 'closed';
+                                    $c_status = __( 'closed', 'dokan' );
                                     $btn_icon = 'fa-close';
                                     $topic_status = 'dokan-label-success';
                                     $btn_title = __( 'close topic' , 'dokan' );
                                     break;
                                 case 'closed':
-                                    $c_status = 'open';
+                                    $c_status = __( 'open', 'dokan' );
                                     $btn_icon = 'fa-file-o';
                                     $topic_status = 'dokan-label-danger';
                                     $btn_title = __( 're-open topic' , 'dokan' );
                                     break;
 
                                 default:
-                                    $c_status = 'closed';
+                                    $c_status = __( 'closed', 'dokan' );
                                     $btn_icon = 'fa-close';
                                     $topic_status = 'dokan-label-success';
                                     $btn_title = __( 'close topic' , 'dokan' );
@@ -1362,7 +1362,7 @@ class Dokan_Store_Support {
     function customer_topic_list( $file ) {
         global $wp;
         if ( isset($wp->query_vars['support-tickets']) && basename( $file ) == 'my-account.php' ) {
-            return DOKAN_STORE_SUPPORT_DIR . '/templates/support-tickets.php';
+            return DOKAN_STORE_SUPPORT_DIR . '/templates/store-support/support-tickets.php';
         }
         return $file;
     }
@@ -1518,8 +1518,8 @@ class Dokan_Store_Support {
     function place_support_menu( $items ) {
 
         unset( $items['customer-logout'] );
-        $items['support-tickets']   = __( "Seller Support Tickets", 'dokan-store-support' );
-        $items['customer-logout']   = __( 'Logout', 'dokan-store-support' );
+        $items['support-tickets']   = __( "Seller Support Tickets", 'dokan' );
+        $items['customer-logout']   = __( 'Logout', 'dokan' );
 
         return $items;
     }

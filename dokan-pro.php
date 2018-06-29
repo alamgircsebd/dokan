@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.8.1
+  Version: 2.8.2
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 3.3.5
+  WC tested up to: 3.4.3
   License: GPL2
   TextDomain: dokan
  */
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.8.1';
+    public $version = '2.8.2';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -111,6 +111,16 @@ class Dokan_Pro {
         require_once dirname( __FILE__ ) . '/includes/installer.php';
         $installer = new Dokan_Pro_Installer();
         $installer->do_install();
+    }
+
+
+    /**
+     * Initialize plugin for localization
+     *
+     * @uses load_plugin_textdomain()
+     */
+    public function localization_setup() {
+        load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
     /**
@@ -226,10 +236,10 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
-            require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
         }
 
+        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
         require_once DOKAN_PRO_INC . '/class-shipping-zone.php';
         require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
         require_once DOKAN_PRO_INC . '/shipping-gateway/vendor-shipping.php';
@@ -280,8 +290,9 @@ class Dokan_Pro {
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
-            new Dokan_Announcement();
         }
+
+        new Dokan_Announcement();
 
         Dokan_Pro_Ajax::init();
         Dokan_Pro_Shipping::init();
@@ -315,6 +326,8 @@ class Dokan_Pro {
      */
     public function load_actions() {
          // init the classes
+        add_action( 'init', array( $this, 'localization_setup' ) );
+
         add_action( 'init', array( $this, 'inistantiate' ), 10 );
         add_action( 'init', array( $this, 'register_scripts' ), 10 );
 
@@ -625,6 +638,8 @@ class Dokan_Pro {
             dirname( __FILE__ ) . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
             dirname( __FILE__ ) . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
             dirname( __FILE__ ) . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-refund-controller.php'            => 'Dokan_REST_Refund_Controller',
         );
 
         return array_merge( $class_map, $classes );

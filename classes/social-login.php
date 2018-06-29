@@ -96,7 +96,7 @@ Class Dokan_Social_Login {
                     "enabled"        => true,
                     "keys"           => array( "id" => "", "secret" => "" ),
                     "trustForwarded" => false,
-                    "scope"          => "email, public_profile, user_friends"
+                    "scope"          => "email, public_profile"
                 ),
                 "Twitter"    => array(
                     "enabled"      => true,

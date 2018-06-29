@@ -359,31 +359,48 @@ if ( !function_exists( 'dokan_render_customer_migration_template' ) ) {
 
 add_shortcode( 'dokan-customer-migration', 'dokan_render_customer_migration_template' );
 
-/**
- * Get Seller status counts, used in admin area
- *
- * @since 2.6.6
- *
- * @global WPDB $wpdb
- * @return array
- */
-function dokan_get_seller_status_count() {
-    $active_users = new WP_User_Query( array(
-        'role'       => 'seller',
-        'meta_key'   => 'dokan_enable_selling',
-        'meta_value' => 'yes'
-    ) );
+if ( ! function_exists( 'dokan_get_seller_status_count' ) ) {
+    /**
+     * Get Seller status counts, used in admin area
+     *
+     * @since 2.6.6
+     *
+     * @global WPDB $wpdb
+     * @return array
+     */
+    function dokan_get_seller_status_count() {
+        $active_users = new WP_User_Query( array(
+            'role'       => 'seller',
+            'meta_key'   => 'dokan_enable_selling',
+            'meta_value' => 'yes'
+        ) );
 
-    $all_users      = new WP_User_Query( array( 'role' => 'seller' ) );
-    $active_count   = $active_users->get_total();
-    $inactive_count = $all_users->get_total() - $active_count;
+        $all_users      = new WP_User_Query( array( 'role' => 'seller' ) );
+        $active_count   = $active_users->get_total();
+        $inactive_count = $all_users->get_total() - $active_count;
 
-    $counts =  array(
-        'total'    => $active_count + $inactive_count,
-        'active'   => $active_count,
-        'inactive' => $inactive_count,
-    );
+        $counts =  array(
+            'total'    => $active_count + $inactive_count,
+            'active'   => $active_count,
+            'inactive' => $inactive_count,
+        );
 
-    return $counts;
+        return $counts;
+    }
 }
 
+/**
+ * Send announcement email
+ *
+ * @param $sellers
+ *
+ * @param $data
+ *
+ * @since 2.8.2
+ */
+function dokan_send_announcement_email( $sellers, $data ) {
+    $announcement = new Dokan_Announcement();
+    $announcement->trigger_mail( $sellers, $data );
+}
+
+add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email', 10, 2 );

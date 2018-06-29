@@ -32,6 +32,6 @@ if ( !defined( 'ABSPATH' ) ) {
         do_action( 'dokan_dashboard_content_inside_before' );
         ?>
         <div class="dashboard-content-area wrap woocommerce">
-            <h1 class="entry-title"><?php esc_html_e( 'Import Products', 'dpi_plugin' ); ?></h1>
+            <h1 class="entry-title"><?php esc_html_e( 'Import Products', 'dokan' ); ?></h1>
 
             <div class="woocommerce-progress-form-wrapper">
