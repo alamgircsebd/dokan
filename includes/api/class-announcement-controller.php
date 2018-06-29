@@ -303,6 +303,9 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
         }
 
         $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
+
+        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $data );
+
         return rest_ensure_response( $data );
     }
 
