@@ -1,6 +1,47 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.8.2',
+        'released' => '2018-06-29',
+        'changes'  => array(
+            array(
+                'title'         => 'Live Chat Module',
+                'type'          => 'New',
+                'description'   => 'Vendors will now be able to provide live chat support to visitors and customers through this TalkJS integration. Talk from anywhere in your store, add attachments, get desktop notifications, enable email notifications, and store all your messages safely in Vendor Inbox.<br><iframe width="560" height="315" src="https://www.youtube.com/embed/BHuTLjY78cY" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'
+            ),
+            array(
+                'title'         => 'Added Refund and Announcement REST API',
+                'type'          => 'New',
+                'description'   => 'Admins can now modify refund and announcement section of Dokan easily through the Rest API'
+            ),
+            array(
+                'title'         => 'Local pickup is visible when the cost is set to zero',
+                'type'          => 'Fix',
+                'description'   => 'When local pickup cost in Dokan Zone-wise shipping is set to zero it will show on the cart/checkout page'
+            ),
+            array(
+                'title'         => 'Store Support ticket is visible in customer dashboard support menu',
+                'type'          => 'Fix',
+                'description'   => 'Now customers can view the support tickets they create in My Account> support ticket area'
+            ),
+            array(
+                'title'         => 'Added tax and shipping functionalities in auction product',
+                'type'          => 'Fix',
+                'description'   => 'Now admins can add shipping and tax rates for auctionable product'
+            ),
+            array(
+                'title'         => 'Appearance module for admins',
+                'type'          => 'Fix',
+                'description'   => 'Now Admins can view Color Customizer settings in backend without any problem'
+            ),
+            array(
+                'title'         => 'Unable to delete vendor form admin panel',
+                'type'          => 'Fix',
+                'description'   => 'Admin was unable to delete a vendor from admin panel'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.8.0',
         'released' => '2018-05-01',
         'changes'  => array(
