@@ -25,7 +25,6 @@ class Dokan_Announcement {
         $this->processor = new Dokan_Announcement_Background_Process();
 
         add_action( 'init', array( $this, 'post_types' ), 20 );
-        add_action( 'dokan_after_announcement_saved', array( $this, 'trigger_mail' ), 10, 2 );
     }
 
     /**

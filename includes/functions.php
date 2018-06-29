@@ -389,3 +389,18 @@ if ( ! function_exists( 'dokan_get_seller_status_count' ) ) {
     }
 }
 
+/**
+ * Send announcement email
+ *
+ * @param $sellers
+ *
+ * @param $data
+ *
+ * @since 2.8.2
+ */
+function dokan_send_announcement_email( $sellers, $data ) {
+    $announcement = new Dokan_Announcement();
+    $announcement->trigger_mail( $sellers, $data );
+}
+
+add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email', 10, 2 );
