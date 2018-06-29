@@ -148,7 +148,7 @@ class DPS_Admin {
             $r['hierarchical']  = 1;
             $r['hide_empty']    = 0;
             $r['value']         = 'id';
-            $r['selected']      = $selected_cat;
+            $r['selected']      = array_map( 'absint', $selected_cat ) ;
             $r['orderby']       = 'name';
 
             $categories = get_terms( 'product_cat', $r );
