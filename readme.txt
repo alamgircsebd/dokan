@@ -5,7 +5,7 @@ Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, stor
 Requires at least: 4.4
 Tested up to: 4.9.5
 WC requires at least: 3.0
-WC tested up to: 3.3.5
+WC tested up to: 3.4.3
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,31 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.8.2 -> June 29, 2018
+--------------------------
+- [new] Introduction of Dokan live chat module
+- [new] Added Refund and Announcement REST API
+- [tweak] Announcement, Refund and Module page in backend converted into vue single page
+- [tweak] Load Dokan shortcodes and assets_url only in the product and normal page
+- [tweak] Remove WooCommerce and dokan text from the shipping description
+- [fix] Local pickup is not visible when the cost is set to zero
+- [fix] Earning suggestion calculation fixing for multiple category selection
+- [fix] Vendor welcome wizard redirection issue fix for email verification module
+- [fix] Subscription package category can not be override from user profile (Subscription Module)
+- [fix] Support ticket is not visible in customer dashboard support menu (Vendor Support Module)
+- [fix] Report is not exporting properly from the frontend
+- [fix] Conflict between social login and vendor verification module
+- [fix] Store review count in front end and backend is not same
+- [fix] Variation of a variable product throws price earning suggestion warning
+- [fix] Column label and data are incorrect in csv file from the backend
+- [fix] Added tax and shipping functionalities in auction product
+- [fix] Make zone wise shipping responsive
+- [fix] Vendor earning report is wrong
+- [fix] Allowed category in subscription product is not rendering saved values
+- [fix] Announcement email was sending twice
+- [fix] Various string translation issue
+- [fix] Appearance module is not working ( Appearance Module )
 
 v2.8.1 -> May 3, 2018
 --------------------------

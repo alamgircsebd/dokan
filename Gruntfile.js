@@ -177,7 +177,9 @@ module.exports = function(grunt) {
                     type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
                     potHeaders: {
                         'report-msgid-bugs-to': 'https://wedevs.com/account/tickets/',
-                        'language-team': 'LANGUAGE <EMAIL@ADDRESS>'
+                        'language-team': 'LANGUAGE <EMAIL@ADDRESS>',
+                        poedit: true,
+                        'x-poedit-keywordslist': true
                     }
                 }
             }
