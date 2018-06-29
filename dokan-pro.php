@@ -113,6 +113,16 @@ class Dokan_Pro {
         $installer->do_install();
     }
 
+
+    /**
+     * Initialize plugin for localization
+     *
+     * @uses load_plugin_textdomain()
+     */
+    public function localization_setup() {
+        load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+    }
+
     /**
      * Dokan main plugin activation notice
      *
@@ -316,6 +326,8 @@ class Dokan_Pro {
      */
     public function load_actions() {
          // init the classes
+        add_action( 'init', array( $this, 'localization_setup' ) );
+
         add_action( 'init', array( $this, 'inistantiate' ), 10 );
         add_action( 'init', array( $this, 'register_scripts' ), 10 );
 
