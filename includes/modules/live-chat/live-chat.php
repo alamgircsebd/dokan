@@ -26,10 +26,9 @@ class Dokan_Live_Chat {
      */
     public function __construct() {
         self::$version = '1.0';
+
         $this->define_constants();
         $this->include_files();
-
-        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'flush_rewrite_rules' ) );
     }
 
     /**
@@ -107,20 +106,6 @@ class Dokan_Live_Chat {
     public static function deactivate() {
         $role = get_role( 'seller' );
         $role->remove_cap( 'dokan_view_inbox_menu' );
-    }
-
-    /**
-     * Flush rewrite endpoind after activation
-     *
-     * @since 1.0
-     *
-     * @return void
-     */
-    public function flush_rewrite_rules() {
-        if ( get_transient( 'dokan-live-chat' ) ) {
-            flush_rewrite_rules( true );
-            delete_transient( 'dokan-live-chat' );
-        }
     }
 
     /**

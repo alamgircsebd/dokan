@@ -66,12 +66,13 @@ class Dokan_Live_Chat_Start {
         add_action( 'init', array( $this, 'dokan_live_chat_shortcode' ) );
 
         // init chat sessions
-        add_action( 'template_redirect', array( $this, 'init_chat_sessions' ), 999 );
+        add_action( 'wp_head', array( $this, 'init_chat_sessions' ), 999 );
 
         // add inbox menu
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'dokan_add_inbox_menu' ), 22, 1 );
         add_filter( 'dokan_query_var_filter', array( $this, 'dokan_add_endpoint' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'dokan_load_inbox_template' ), 22 );
+        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'flush_rewrite_rules' ) );
     }
 
     /**
@@ -226,11 +227,6 @@ class Dokan_Live_Chat_Start {
      * @return array
      */
     public function dokan_add_inbox_menu( $urls ) {
-        if ( get_transient( 'dokan-live-chat' ) ) {
-            flush_rewrite_rules( true );
-            delete_transient( 'dokan-live-chat' );
-        }
-
         if ( dokan_get_option( 'enable', 'dokan_live_chat' ) !== 'on' ) {
             return $urls;
         }
@@ -282,6 +278,20 @@ class Dokan_Live_Chat_Start {
         }
 
         require_once DOKAN_LIVE_CHAT . '/templates/inbox.php';
+    }
+
+    /**
+     * Flush rewrite rules
+     *
+     * @since 1.1
+     *
+     * @return void;
+     */
+    public function flush_rewrite_rules() {
+        if ( get_transient( 'dokan-live-chat' ) ) {
+            flush_rewrite_rules( true );
+            delete_transient( 'dokan-live-chat' );
+        }
     }
 
     /**
