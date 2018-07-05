@@ -416,6 +416,11 @@ export default {
             var states = [];
 
             _.each( country, function( code ) {
+
+                if ( dokanShipping.states[code] === undefined ) {
+                    return;
+                }
+
                 var stateArray =  Object.keys( dokanShipping.states[code] ).map( statecode => ( {
                     code: code + ':' + statecode,
                     name: dokanShipping.states[code][statecode]
