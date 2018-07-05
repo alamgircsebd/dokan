@@ -497,7 +497,7 @@ class Dokan_WC_Booking {
         $posted_props = array(
             'apply_adjacent_buffer'      => isset( $_POST['_wc_booking_apply_adjacent_buffer'] ),
             'availability'               => $this->get_posted_availability(),
-            'base_cost'                  => wc_clean( $_POST['_wc_booking_base_cost'] ),
+            'block_cost'                 => wc_clean( $_POST['_wc_booking_block_cost'] ),
             'buffer_period'              => wc_clean( $_POST['_wc_booking_buffer_period'] ),
             'calendar_display_mode'      => wc_clean( $_POST['_wc_booking_calendar_display_mode'] ),
             'cancel_limit_unit'          => wc_clean( $_POST['_wc_booking_cancel_limit_unit'] ),
