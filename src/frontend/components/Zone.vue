@@ -193,7 +193,7 @@
                     </div>
                     <template v-for="shippingClass in shippingClasses">
                         <div class="dokan-form-group">
-                            <label :for="shippingClass.slug">{{ shippingClass.name }} {{ __( 'No shipping class cost', 'dokan' ) }}</label>
+                            <label :for="shippingClass.slug">"{{ shippingClass.name }}" {{ __( 'shipping class cost', 'dokan' ) }}</label>
                             <input type="text" :id="shippingClass.slug" class="dokan-form-control" v-model="editShippingMethodData.settings['class_cost_' + shippingClass.term_id]" placeholder="N\A">
                             <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
                         </div>
