@@ -85,7 +85,7 @@ function dokan_seller_sales_statement() {
     $opening_balance = $vendor->get_balance( false, $start_date );
     $status = implode( "', '", dokan_withdraw_get_active_order_status() );
 
-    $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE( balance_date ) >= %s AND DATE(balance_date) <= %s AND ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ORDER BY balance_date";
+    $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE( trn_date ) >= %s AND DATE(trn_date) <= %s AND ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ORDER BY trn_date";
     $statements = $wpdb->get_results( $wpdb->prepare( $sql, $vendor->id, $start_date, $end_date ) );
     ?>
 
@@ -93,7 +93,7 @@ function dokan_seller_sales_statement() {
         <thead>
             <tr>
                 <th><?php _e( 'Date', 'dokan' ); ?></th>
-                <th><?php _e( 'Trn Date', 'dokan' ); ?></th>
+                <th><?php _e( 'Balance Date', 'dokan' ); ?></th>
                 <th><?php _e( 'ID', 'dokan' ); ?></th>
                 <th><?php _e( 'Type', 'dokan' ); ?></th>
                 <th><?php _e( 'Debit', 'dokan' ); ?></th>
@@ -139,8 +139,8 @@ function dokan_seller_sales_statement() {
                     }
                     ?>
                     <tr>
-                        <td><?php echo date( 'Y-m-d', strtotime( $statement->balance_date ) ); ?></td>
                         <td><?php echo date( 'Y-m-d', strtotime( $statement->trn_date ) ); ?></td>
+                        <td><?php echo date( 'Y-m-d', strtotime( $statement->balance_date ) ); ?></td>
                         <td><a href="<?php echo $url; ?>">#<?php echo $statement->trn_id; ?></a></td>
                         <td><?php echo $type; ?></td>
                         <td><?php echo wc_price( $statement->debit ); ?></td>
