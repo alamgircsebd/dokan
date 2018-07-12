@@ -315,6 +315,8 @@ class Dokan_Live_Chat_Start {
             return;
         }
 
+        $this->make_popup_responsive();
+
         if ( dokan_is_user_seller( $seller->ID ) ) {
             // if is inbox page then return early
             global $wp_query;
@@ -330,6 +332,26 @@ class Dokan_Live_Chat_Start {
             $this->get_talkjs_script();
             $this->get_customer_seller_chat_js();
         }
+    }
+
+    /**
+     * Make the popup responsive
+     *
+     * @return string
+     *
+     * @since 1.1
+     */
+    public function make_popup_responsive() {
+        ?>
+        <style type="text/css">
+            @media only screen and (max-width: 600px) {
+                .__talkjs_popup {
+                    top: 100px !important;
+                    height: 80% !important;
+                }
+            }
+        </style>
+        <?php
     }
 
     /**
