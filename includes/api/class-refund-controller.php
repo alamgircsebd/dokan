@@ -189,10 +189,6 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'no_id', __( 'Invalid Refund ID', 'dokan' ), array( 'status' => 404 ) );
         }
 
-        if ( empty( $request['order_id'] ) ) {
-            return new WP_Error( 'no_order_id', __( 'Invalid Order ID', 'dokan' ), array( 'status' => 404 ) );
-        }
-
         $status = ! empty( $request['status'] ) ? $request['status'] : 'pending';
 
         if ( ! current_user_can( 'manage_options' ) ) {
@@ -210,7 +206,11 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
 
         $status_code = $this->get_status( $status );
 
-        $refund->update_status( $request['id'], $request['order_id'], $status_code );
+        if ( 1 == $status_code ) {
+            $this->approve_refund_request( $result );
+        }
+
+        $refund->update_status( $request['id'], $status_code );
         $response = $wpdb->get_row( $sql );
 
         return rest_ensure_response( $this->prepare_response_for_object( $response, $request ) );
@@ -293,9 +293,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         }
 
         if ( ! $amount || $max_refund < $amount || 0 > $amount ) {
-
             return new WP_Error( 'invalid_amount', __( 'Invalid refund amount', 'dokan' ), array( 'status' => 404 ) );
-
         }
 
         if ( $refund->has_pending_refund_request( $data['order_id'] ) ) {
@@ -372,6 +370,105 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         }
 
         return true;
+    }
+
+    /**
+     * Create refund post on approve refund request.
+     *
+     * @since 2.8.3
+     */
+    public function approve_refund_request( $data ) {
+        global $wpdb;
+
+        $order_id               = absint( $data->order_id );
+        $vendor_id              = dokan_get_seller_id_by_order( $order_id );
+        $refund_amount          = wc_format_decimal( sanitize_text_field( wp_unslash( $data->refund_amount ) ), wc_get_price_decimals() );
+        $refund_reason          = sanitize_text_field( $data->refund_reason );
+        $line_item_qtys         = json_decode( sanitize_text_field( wp_unslash( $data->item_qtys ) ), true );
+        $line_item_totals       = json_decode( sanitize_text_field( wp_unslash( $data->item_totals ) ), true );
+        $line_item_tax_totals   = json_decode( sanitize_text_field( wp_unslash( $data->item_tax_totals ) ), true );
+        $api_refund             = 'true' === $data->method;
+        $restock_refunded_items = 'true' === $data->restock_items;
+        $refund                 = false;
+
+        $vendor_refund = $fee_refund = 0;
+        $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
+
+        // Prepare line items which we are refunding.
+        $line_items = array();
+        $item_ids   = array_unique( array_merge( array_keys( $line_item_qtys, $line_item_totals ) ) );
+
+        foreach ( $item_ids as $item_id ) {
+            $line_items[ $item_id ] = array(
+                'qty'          => 0,
+                'refund_total' => 0,
+                'refund_tax'   => array(),
+            );
+        }
+
+        foreach ( $line_item_qtys as $item_id => $qty ) {
+            $line_items[ $item_id ]['qty'] = max( $qty, 0 );
+        }
+
+        foreach ( $line_item_totals as $item_id => $total ) {
+
+            $item = WC_Abstract_Order::get_item( $item_id );
+
+            if ( 'line_item' == $item['type'] ) {
+                $vendor_percentage  = dokan_get_seller_percentage( $vendor_id, $item['product_id'] );
+                $vendor_refund += $total * $vendor_percentage / 100;
+            } else {
+                $fee_refund += $total;
+            }
+
+            $line_items[ $item_id ]['refund_total'] = wc_format_decimal( $total );
+        }
+
+        foreach ( $line_item_tax_totals as $item_id => $tax_totals ) {
+            $fee_refund += $tax_totals;
+            $line_items[ $item_id ]['refund_tax'] = array_filter( array_map( 'wc_format_decimal', $tax_totals ) );
+        }
+
+        if ( 'seller' == $commission_recipient ) {
+            $vendor_refund += $fee_refund;
+        }
+
+        $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
+            array(
+                'vendor_id'     => $vendor_id,
+                'trn_id'        => $order_id,
+                'trn_type'      => 'dokan_refund',
+                'perticulars'   => $refund_reason,
+                'debit'         => 0,
+                'credit'        => $vendor_refund,
+                'status'        => 'approved',
+                'trn_date'      => current_time( 'mysql' ),
+                'balance_date'  => current_time( 'mysql' ),
+            ),
+            array(
+                '%d',
+                '%d',
+                '%s',
+                '%s',
+                '%f',
+                '%f',
+                '%s',
+                '%s',
+                '%s',
+            )
+        );
+
+        // Create the refund object.
+        $refund = wc_create_refund(
+            array(
+                'amount'         => $refund_amount,
+                'reason'         => $refund_reason,
+                'order_id'       => $order_id,
+                'line_items'     => $line_items,
+                'refund_payment' => $api_refund,
+                'restock_items'  => $restock_refunded_items,
+            )
+        );
     }
 
     /**

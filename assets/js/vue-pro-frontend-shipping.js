@@ -1343,7 +1343,7 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        _vm.wantToSetLocation($event)
+                        return _vm.wantToSetLocation($event)
                       }
                     }
                   },
@@ -1427,7 +1427,8 @@ var render = function() {
                                         $event.keyCode,
                                         "enter",
                                         13,
-                                        $event.key
+                                        $event.key,
+                                        "Enter"
                                       )
                                     ) {
                                       return null
@@ -1522,7 +1523,8 @@ var render = function() {
                                         $event.keyCode,
                                         "enter",
                                         13,
-                                        $event.key
+                                        $event.key,
+                                        "Enter"
                                       )
                                     ) {
                                       return null
@@ -1781,7 +1783,7 @@ var render = function() {
               on: {
                 click: function($event) {
                   $event.preventDefault()
-                  _vm.saveZoneSettings($event)
+                  return _vm.saveZoneSettings($event)
                 }
               }
             })
@@ -1875,7 +1877,7 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        _vm.addNewMethod($event)
+                        return _vm.addNewMethod($event)
                       }
                     }
                   },
@@ -2457,7 +2459,7 @@ var render = function() {
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        _vm.updateShippingMethodSettings($event)
+                        return _vm.updateShippingMethodSettings($event)
                       }
                     }
                   },
