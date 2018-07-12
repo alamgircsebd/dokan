@@ -8,6 +8,11 @@
   margin: 0 auto !important;
 }
 
+.dokan-form-group.login-to-chat {
+    display: flex;
+    justify-content: space-around;
+}
+
 .dokan-support-login-wrapper h2 {
   border-bottom: 1px solid #ddd;
   padding-bottom: 15px;

@@ -634,8 +634,11 @@ class Dokan_Live_Chat_Start {
                 <input required class="dokan-form-control" type="password" name='login-password' id='login-password'/>
             </div>
             <?php wp_nonce_field( 'dokan-chat-login-action', 'dokan-chat-login-nonce' ); ?>
-            <div class="dokan-form-group">
+            <div class="dokan-form-group login-to-chat ">
                 <input id='dokan-chat-login-btn' type="submit" value="<?php _e( 'Login', 'dokan' ) ?>" class="dokan-w5 dokan-btn dokan-btn-theme"/>
+                <a href="<?php echo get_permalink( wc_get_page_id( 'myaccount' ) ); ?>" class="dokan-w5 dokan-btn dokan-btn-theme">
+                    <?php _e( 'Register', 'dokan' ); ?>
+                </a>
             </div>
         </form>
         <div class="dokan-clearfix"></div>
