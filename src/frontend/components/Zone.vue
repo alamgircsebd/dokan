@@ -156,7 +156,7 @@
         </modal>
 
         <modal
-            title="Edit Shipping Methods"
+            :title="__( 'Edit Shipping Methods', 'dokan' )"
             v-if="editShippingMethodModal"
             @close="editShippingMethodModal = false"
         >
