@@ -3,7 +3,7 @@
 Plugin Name: Live Chat
 Plugin URI: http://wedevs.com/
 Description: Live Chat Between Vendor & Customer
-Version: 1.0
+Version: 1.1
 Thumbnail Name: live-chat.png
 Author: weDevs
 Author URI: http://wedevs.com/
@@ -25,7 +25,7 @@ class Dokan_Live_Chat {
      * Constructor method for this class
      */
     public function __construct() {
-        self::$version = '1.0';
+        self::$version = '1.1';
 
         $this->define_constants();
         $this->include_files();
@@ -59,6 +59,8 @@ class Dokan_Live_Chat {
         if ( $this->request( 'public_or_ajax' ) ) {
             require_once DOKAN_LIVE_CHAT_INC . '/public/class-settings.php';
             require_once DOKAN_LIVE_CHAT_INC . '/public/class-live-chat-start.php';
+            require_once DOKAN_LIVE_CHAT_INC . '/public/class-seller-inbox.php';
+            require_once DOKAN_LIVE_CHAT_INC . '/public/class-customer-inbox.php';
         }
     }
 

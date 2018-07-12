@@ -106,3 +106,15 @@
 .dokan-single-store .dokan-store-tabs ul li.dokan-store-support-btn-wrap{
     margin-right: 5px;
 }
+
+/**
+ * Customer Chat Inbox
+ */
+@media only screen and ( min-width: 850px ) {
+    #customer-inbox {
+        width: 500px;
+    }
+}
+
+
+
