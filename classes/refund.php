@@ -38,16 +38,16 @@ class Dokan_Pro_Refund {
      *
      * @return void
      */
-    function update_status( $row_id, $order_id, $status ) {
+    function update_status( $row_id, $status ) {
         global $wpdb;
 
         // 0 -> pending
-        // 1 -> active
+        // 1 -> approve
         // 2 -> cancelled
         $wpdb->query( $wpdb->prepare(
             "UPDATE {$wpdb->prefix}dokan_refund
-            SET status = %d WHERE order_id=%d AND id = %d",
-            $status, $order_id, $row_id
+            SET status = %d WHERE id = %d",
+            $status, $row_id
         ) );
     }
 
