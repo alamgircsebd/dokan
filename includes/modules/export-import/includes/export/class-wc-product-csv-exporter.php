@@ -186,7 +186,15 @@ class WC_Product_CSV_Exporter extends WC_CSV_Batch_Exporter {
      * @return int
      */
     protected function get_column_value_published( $product ) {
-        return 'publish' === $product->get_status( 'edit' ) ? 1 : 0;
+        $statuses = array(
+            'draft'   => -1,
+            'private' => 0,
+            'publish' => 1,
+        );
+
+        $status = $product->get_status( 'edit' );
+
+        return isset( $statuses[ $status ] ) ? $statuses[ $status ] : -1;
     }
 
     /**

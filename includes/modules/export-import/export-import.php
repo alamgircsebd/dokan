@@ -120,6 +120,7 @@ class Dokan_Product_Importer {
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'dokan_after_add_product_btn', array( $this, 'render_import_export_button' ) );
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
+        add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'change_product_status' ), 20, 2 );
 
         add_action( 'wp_footer', array( $this, 'bind_global_ajaxurl' ), 10 );
     }
@@ -1297,6 +1298,33 @@ class Dokan_Product_Importer {
             $active_menu = 'tools';
         }
         return $active_menu;
+    }
+
+    /**
+     * Change imported product status
+     *
+     * @param  object $object
+     * @param  array $item
+     *
+     * @since  2.8.3
+     *
+     * @return object
+     */
+    public function change_product_status( $object, $item ) {
+        $can_publish = get_user_meta( get_current_user_id(), 'dokan_publishing', true );
+        $product_status = dokan_get_option( 'product_status', 'dokan_selling' );
+
+        // if uploading pending product make it pending
+        if ( $object->get_status() == 'draft' ) {
+            $object->set_status( 'pending' );
+        }
+
+        // if new product status set to pending then make product status to pending
+        if ( $product_status == 'pending' && $can_publish != 'yes' ) {
+            $object->set_status( 'pending' );
+        }
+
+        return $object;
     }
 
     /**

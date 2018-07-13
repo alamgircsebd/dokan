@@ -69,5 +69,4 @@
     $(function() {
         Dokan_Live_Chat.init();
     });
-
 })(jQuery);
