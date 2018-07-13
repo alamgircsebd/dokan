@@ -410,9 +410,11 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             $line_items[ $item_id ]['qty'] = max( $qty, 0 );
         }
 
+        $order = new WC_Order();
+
         foreach ( $line_item_totals as $item_id => $total ) {
 
-            $item = WC_Abstract_Order::get_item( $item_id );
+            $item = $order->get_item( $item_id );
 
             if ( 'line_item' == $item['type'] ) {
                 $vendor_percentage  = dokan_get_seller_percentage( $vendor_id, $item['product_id'] );
