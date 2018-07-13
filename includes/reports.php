@@ -139,8 +139,8 @@ function dokan_seller_sales_statement() {
                     }
                     ?>
                     <tr>
-                        <td><?php echo date( 'Y-m-d', strtotime( $statement->trn_date ) ); ?></td>
-                        <td><?php echo date( 'Y-m-d', strtotime( $statement->balance_date ) ); ?></td>
+                        <td><?php echo date_i18n( get_option( 'date_format' ), strtotime( $statement->trn_date ) ); ?></td>
+                        <td><?php echo date_i18n( get_option( 'date_format' ), strtotime( $statement->balance_date ) ); ?></td>
                         <td><a href="<?php echo $url; ?>">#<?php echo $statement->trn_id; ?></a></td>
                         <td><?php echo $type; ?></td>
                         <td><?php echo wc_price( $statement->debit ); ?></td>
