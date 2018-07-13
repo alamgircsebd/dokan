@@ -78,7 +78,7 @@ class Dokan_Email_Refund_Request extends WC_Email {
 
             $this->replace['seller_name'] = $seller->display_name;
             $this->replace['order_id']    = $order_id;
-            $this->replace['refund_url']  = admin_url( 'admin.php?page=dokan-refund&status=pending' );
+            $this->replace['refund_url']  = admin_url( 'admin.php?page=dokan#/refund?status=pending' );
             $this->replace['site_name']   = $this->get_from_name();
             $this->replace['site_url']    = site_url();
 
