@@ -18,7 +18,7 @@ $wc_shipping_enabled    = get_option( 'woocommerce_calc_shipping' ) == 'yes' ? t
 $wc_tax_enabled         = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true : false;
 ?>
 
-<?php if ( ( $wc_shipping_enabled || $wc_tax_enabled ) && $dokan_shipping_enabled ) : ?>
+<?php if ( $wc_shipping_enabled || $wc_tax_enabled ) : ?>
 <div class="dokan-product-shipping-tax hide_if_virtual dokan-edit-row dokan-clearfix dokan-border-top <?php echo ! $wc_shipping_enabled ? 'woocommerce-no-shipping' : '' ?> <?php echo ! $wc_tax_enabled ? 'woocommerce-no-tax' : '' ?>">
     <div class="dokan-section-heading" data-togglehandler="dokan_product_shipping_tax">
         <h2><i class="fa fa-truck" aria-hidden="true"></i> <?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
