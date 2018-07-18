@@ -46,7 +46,7 @@
             </template>
 
             <template slot="date" slot-scope="data">
-                {{ moment(data.row.date).format('MMM D, YYYY') }}
+                {{ moment(data.row.created).format('MMM D, YYYY') }}
             </template>
 
             <template slot="row-actions" slot-scope="data">

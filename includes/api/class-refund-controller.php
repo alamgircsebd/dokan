@@ -471,6 +471,22 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
                 'restock_items'  => $restock_refunded_items,
             )
         );
+
+        if ( dokan_is_sub_order( $order_id ) ) {
+            $parent_order_id = wp_get_post_parent_id( $order_id );
+
+            // Create the refund object for parent order.
+            $refund = wc_create_refund(
+                array(
+                    'amount'         => $refund_amount,
+                    'reason'         => $refund_reason,
+                    'order_id'       => $parent_order_id,
+                    'line_items'     => '{}',
+                    'refund_payment' => $api_refund,
+                    'restock_items'  => false,
+                )
+            );
+        }
     }
 
     /**

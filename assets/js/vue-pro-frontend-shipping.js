@@ -703,6 +703,11 @@ var Modal = dokan_get_lib('Modal');
             var states = [];
 
             _.each(country, function (code) {
+
+                if (dokanShipping.states[code] === undefined) {
+                    return;
+                }
+
                 var stateArray = Object.keys(dokanShipping.states[code]).map(function (statecode) {
                     return {
                         code: code + ':' + statecode,
@@ -1893,7 +1898,7 @@ var render = function() {
         ? _c(
             "modal",
             {
-              attrs: { title: "Edit Shipping Methods" },
+              attrs: { title: _vm.__("Edit Shipping Methods", "dokan") },
               on: {
                 close: function($event) {
                   _vm.editShippingMethodModal = false
@@ -2131,11 +2136,12 @@ var render = function() {
                                     { attrs: { for: shippingClass.slug } },
                                     [
                                       _vm._v(
-                                        _vm._s(shippingClass.name) +
-                                          " " +
+                                        '"' +
+                                          _vm._s(shippingClass.name) +
+                                          '" ' +
                                           _vm._s(
                                             _vm.__(
-                                              "No shipping class cost",
+                                              "shipping class cost",
                                               "dokan"
                                             )
                                           )

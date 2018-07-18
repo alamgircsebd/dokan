@@ -1912,7 +1912,7 @@ var ListTable = dokan_get_lib('ListTable');
             totalPages: 1,
             perPage: 10,
             totalItems: 0,
-            notFound: this.__('No announcement found.', 'dokan'),
+            notFound: this.__('No request found.', 'dokan'),
             columns: {
                 'order_id': { label: this.__('Order ID', 'dokan') },
                 'vendor': { label: this.__('Vendor', 'dokan') },
@@ -5153,7 +5153,7 @@ var render = function() {
               return [
                 _vm._v(
                   "\n            " +
-                    _vm._s(_vm.moment(data.row.date).format("MMM D, YYYY")) +
+                    _vm._s(_vm.moment(data.row.created).format("MMM D, YYYY")) +
                     "\n        "
                 )
               ]
