@@ -92,7 +92,7 @@ export default {
             totalPages: 1,
             perPage: 10,
             totalItems: 0,
-            notFound: this.__( 'No announcement found.', 'dokan' ),
+            notFound: this.__( 'No request found.', 'dokan' ),
             columns: {
                 'order_id': { label: this.__( 'Order ID', 'dokan' ) },
                 'vendor': { label: this.__( 'Vendor', 'dokan' ) },
