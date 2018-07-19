@@ -1,6 +1,6 @@
 <?php
 $booking_cost         = get_post_meta( $post_id, '_wc_booking_cost', true );
-$booking_base_cost    = get_post_meta( $post_id, '_wc_booking_base_cost', true );
+$booking_block_cost   = get_post_meta( $post_id, '_wc_booking_block_cost', true );
 $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
 ?>
 
@@ -25,12 +25,12 @@ $booking_display_cost = get_post_meta( $post_id, '_wc_display_cost', true )
         <?php do_action( 'woocommerce_bookings_after_booking_base_cost', $post_id ); ?>
 
         <div class="dokan-form-group content-half-part">
-            <label for="_wc_booking_base_cost" class="form-label"><?php _e( 'Block cost', 'dokan' ); ?>
+            <label for="_wc_booking_block_cost" class="form-label"><?php _e( 'Block cost', 'dokan' ); ?>
                 <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'This is the cost per block booked. All other costs (for resources and persons) are added to this.', 'dokan' ); ?>">
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>
-            <?php dokan_post_input_box( $post_id, '_wc_booking_base_cost', array( 'min' => '0', 'step' => '0.1', 'value' => $booking_base_cost ), 'number' ); ?>
+            <?php dokan_post_input_box( $post_id, '_wc_booking_block_cost', array( 'min' => '0', 'step' => '0.1', 'value' => $booking_block_cost ), 'number' ); ?>
         </div>
         <?php do_action( 'woocommerce_bookings_after_booking_block_cost', $post_id ); ?>
 

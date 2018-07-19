@@ -497,7 +497,7 @@ class Dokan_WC_Booking {
         $posted_props = array(
             'apply_adjacent_buffer'      => isset( $_POST['_wc_booking_apply_adjacent_buffer'] ),
             'availability'               => $this->get_posted_availability(),
-            'base_cost'                  => wc_clean( $_POST['_wc_booking_base_cost'] ),
+            'block_cost'                 => wc_clean( $_POST['_wc_booking_block_cost'] ),
             'buffer_period'              => wc_clean( $_POST['_wc_booking_buffer_period'] ),
             'calendar_display_mode'      => wc_clean( $_POST['_wc_booking_calendar_display_mode'] ),
             'cancel_limit_unit'          => wc_clean( $_POST['_wc_booking_cancel_limit_unit'] ),
@@ -853,7 +853,10 @@ class Dokan_WC_Booking {
         $status = wc_clean( $_POST['booking_order_status'] );
 
         if ( $booking->update_status( $status ) ) {
-            echo sprintf( '<label class="dokan-label dokan-booking-label-%s">%s</label>', $status, get_post_status_object( $status )->label );
+            $html = '<label class="dokan-label dokan-booking-label-' . esc_attr( $status ) . ' ">' . get_post_status_object( $status )->label .  '</label>';
+
+            wp_send_json_success( $html );
+
         } else {
             echo _e( "Error Occured", 'dokan' );
         }

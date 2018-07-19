@@ -74,7 +74,7 @@ function dokan_sync_refund_order( $order_id, $refund_id ) {
     );
     update_post_meta( $order_id, 'dokan_refund_processing_id', $refund_id );
 }
-add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10, 2 );
+// add_action( 'woocommerce_order_refunded', 'dokan_sync_refund_order', 10, 2 );
 
 /**
  * Insert a order in sync table once a refund is deleted
@@ -89,7 +89,7 @@ function dokan_delete_refund_order( $refund_id, $order_id ) {
     dokan_sync_refund_order( $order_id, $refund_id );
     delete_post_meta( $order_id, 'dokan_refund_processing_id' );
 }
-add_action( 'woocommerce_refund_deleted', 'dokan_delete_refund_order', 10, 2 );
+// add_action( 'woocommerce_refund_deleted', 'dokan_delete_refund_order', 10, 2 );
 
 if ( !function_exists( 'dokan_sync_order_table' ) ) :
 

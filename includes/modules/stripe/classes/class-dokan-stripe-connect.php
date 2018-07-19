@@ -7,7 +7,7 @@
  */
 class Dokan_Stripe_Connect extends WC_Payment_Gateway {
 
-    function __construct() {
+    public function __construct() {
 
         $this->id           = 'dokan-stripe-connect';
         $this->method_title = __( 'Dokan Stripe Connect', 'dokan' );
@@ -42,7 +42,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
     /**
      * Check if SSL is enabled and notify the user
      */
-    function checks() {
+    public function checks() {
 
         global $woocommerce;
 
@@ -78,7 +78,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
     /**
      * Check if this gateway is enabled and available in the user's country
      */
-    function is_available() {
+    public function is_available() {
         global $woocommerce;
 
         if ( $this->enabled == "yes" ) {
@@ -107,7 +107,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
     /**
      * Initialise Gateway Settings Form Fields
      */
-    function init_form_fields() {
+    public function init_form_fields() {
         $this->form_fields = array(
             'enabled' => array(
                 'title'       => __( 'Enable/Disable', 'dokan' ),
@@ -115,77 +115,77 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 'type'        => 'checkbox',
                 'description' => '',
                 'default'     => 'no'
-                ),
+            ),
             'title' => array(
                 'title'       => __( 'Title', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'This controls the title which the user sees during checkout.', 'dokan' ),
                 'default'     => __( 'Dokan Credit card (Stripe)', 'dokan' )
-                ),
+            ),
             'description' => array(
                 'title'       => __( 'Description', 'dokan' ),
                 'type'        => 'textarea',
                 'description' => __( 'This controls the description which the user sees during checkout.', 'dokan' ),
                 'default'     => 'Pay with your credit card via Stripe.'
-                ),
+            ),
             'testmode' => array(
                 'title'       => __( 'Test mode', 'dokan' ),
                 'label'       => __( 'Enable Test Mode', 'dokan' ),
                 'type'        => 'checkbox',
                 'description' => __( 'Place the payment gateway in test mode using test API keys.', 'dokan' ),
                 'default'     => 'yes'
-                ),
+            ),
             'stripe_checkout' => array(
                 'title'       => __( 'Stripe Checkout', 'dokan' ),
                 'label'       => __( 'Enable Stripe Checkout', 'dokan' ),
                 'type'        => 'checkbox',
                 'description' => __( 'If enabled, this option shows a "pay" button and modal credit card form on the checkout, instead of credit card fields directly on the page.', 'dokan' ),
                 'default'     => 'no'
-                ),
-            'stripe_checkout_locale' => array(
-            'title'       => __( 'Stripe Checkout locale', 'dokan' ),
-            'type'        => 'select',
-            'class'       => 'wc-enhanced-select',
-            'description' => __( 'Language to display in Stripe Checkout modal. Specify Auto to display Checkout in the user\'s preferred language, if available. English will be used by default.', 'dokan' ),
-            'default'     => 'en',
-            'desc_tip'    => true,
-            'options'     => array(
-                'auto' => __( 'Auto', 'dokan' ),
-                'zh'   => __( 'Simplified Chinese', 'dokan' ),
-                'da'   => __( 'Danish', 'dokan' ),
-                'nl'   => __( 'Dutch', 'dokan' ),
-                'en'   => __( 'English', 'dokan' ),
-                'fi'   => __( 'Finnish', 'dokan' ),
-                'fr'   => __( 'French', 'dokan' ),
-                'de'   => __( 'German', 'dokan' ),
-                'it'   => __( 'Italian', 'dokan' ),
-                'ja'   => __( 'Japanese', 'dokan' ),
-                'no'   => __( 'Norwegian', 'dokan' ),
-                'es'   => __( 'Spanish', 'dokan' ),
-                'sv'   => __( 'Swedish', 'dokan' ),
             ),
+            'stripe_checkout_locale' => array(
+                'title'       => __( 'Stripe Checkout locale', 'dokan' ),
+                'type'        => 'select',
+                'class'       => 'wc-enhanced-select',
+                'description' => __( 'Language to display in Stripe Checkout modal. Specify Auto to display Checkout in the user\'s preferred language, if available. English will be used by default.', 'dokan' ),
+                'default'     => 'en',
+                'desc_tip'    => true,
+                'options'     => array(
+                    'auto' => __( 'Auto', 'dokan' ),
+                    'zh'   => __( 'Simplified Chinese', 'dokan' ),
+                    'da'   => __( 'Danish', 'dokan' ),
+                    'nl'   => __( 'Dutch', 'dokan' ),
+                    'en'   => __( 'English', 'dokan' ),
+                    'fi'   => __( 'Finnish', 'dokan' ),
+                    'fr'   => __( 'French', 'dokan' ),
+                    'de'   => __( 'German', 'dokan' ),
+                    'it'   => __( 'Italian', 'dokan' ),
+                    'ja'   => __( 'Japanese', 'dokan' ),
+                    'no'   => __( 'Norwegian', 'dokan' ),
+                    'es'   => __( 'Spanish', 'dokan' ),
+                    'sv'   => __( 'Swedish', 'dokan' ),
+                ),
             ),
             'stripe_bitcoin' => array(
-                    'title'       => __( 'Bitcoin Currency', 'dokan' ),
-                    'label'       => __( 'Enable Bitcoin Currency in Stripe Checkout', 'dokan' ),
-                    'type'        => 'checkbox',
-                    'description' => __( 'If enabled, an option to accept bitcoin will show on the checkout modal. Note: Stripe Checkout needs to be enabled and store currency must be set to USD.', 'dokan' ),
-                    'default'     => 'no',
-                    'desc_tip'    => true,
+                'title'       => __( 'Bitcoin Currency', 'dokan' ),
+                'label'       => __( 'Enable Bitcoin Currency in Stripe Checkout', 'dokan' ),
+                'type'        => 'checkbox',
+                'description' => __( 'If enabled, an option to accept bitcoin will show on the checkout modal. Note: Stripe Checkout needs to be enabled and store currency must be set to USD.', 'dokan' ),
+                'default'     => 'no',
+                'desc_tip'    => true,
             ),
             'stripe_checkout_image' => array(
-                    'title'       => __( 'Checkout Image', 'dokan' ),
-                    'description' => __( 'Optionally enter the URL to a 128x128px image of your brand or product. e.g. <code>https://yoursite.com/wp-content/uploads/2013/09/yourimage.jpg</code>', 'dokan' ),
-                    'type'        => 'text',
-                    'default'     => '',
-                    'desc_tip'    => true,
+                'title'       => __( 'Checkout Image', 'dokan' ),
+                'description' => __( 'Optionally enter the URL to a 128x128px image of your brand or product. e.g. <code>https://yoursite.com/wp-content/uploads/2013/09/yourimage.jpg</code>', 'dokan' ),
+                'type'        => 'text',
+                'default'     => '',
+                'desc_tip'    => true,
             ),
             'stripe_checkout_label' => array(
-                    'title'       => __( 'Checkout Button Label', 'dokan' ),
-                    'description' => __( 'Optionally enter a Label for PAY button', 'dokan' ),
-                    'type'        => 'text',
-                    'default'     => '',
-                    'desc_tip'    => true,
+                'title'       => __( 'Checkout Button Label', 'dokan' ),
+                'description' => __( 'Optionally enter a Label for PAY button', 'dokan' ),
+                'type'        => 'text',
+                'default'     => '',
+                'desc_tip'    => true,
             ),
             'saved_cards' => array(
                 'title'       => __( 'Saved cards', 'dokan' ),
@@ -193,59 +193,59 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 'type'        => 'checkbox',
                 'description' => __( 'If enabled, users will be able to pay with a saved card during checkout. Card details are saved on Stripe servers, not on your store.', 'dokan' ),
                 'default'     => 'no'
-                ),
+            ),
             'live-credentials-title' => array(
                 'title' => __( 'Live credentials', 'dokan' ),
                 'type'  => 'title',
-                ),
+            ),
             'secret_key' => array(
                 'title'       => __( 'Secret Key', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
                 'default'     => ''
-                ),
+            ),
             'publishable_key' => array(
                 'title'       => __( 'Publishable Key', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
                 'default'     => ''
-                ),
+            ),
             'client_id' => array(
                 'title'       => __( 'Client ID', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'Get your client ID from your stripe account, the Apps menu.', 'dokan' ),
                 'default'     => ''
-                ),
+            ),
             'test-credentials-title' => array(
                 'title' => __( 'Test credentials', 'dokan' ),
                 'type'  => 'title',
-                ),
+            ),
             'test_secret_key' => array(
                 'title'       => __( 'Test Secret Key', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
                 'default'     => ''
-                ),
+            ),
             'test_publishable_key' => array(
                 'title'       => __( 'Test Publishable Key', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'Get your API keys from your stripe account.', 'dokan' ),
                 'default'     => ''
-                ),
+            ),
             'test_client_id' => array(
                 'title'       => __( 'Test Client ID', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'Get your client ID from your stripe account, the Apps menu.', 'dokan' ),
                 'default'     => ''
-                ),
-            );
+            ),
+        );
     }
 
     /**
      * Admin Panel Options
      * - Options for bits like 'title' and availability on a country-by-country basis
      */
-    function admin_options() {
+    public function admin_options() {
         ?>
         <h3><?php _e( 'Stripe Connect', 'dokan' ); ?></h3>
         <p><?php _e( 'Stripe works by adding credit card fields on the checkout and then sending the details to Stripe for verification.', 'dokan' ); ?></p>
@@ -265,9 +265,8 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 <?php echo __( 'Choose a currency supported by Stripe as your store currency to enable Stripe Connect.', 'dokan' ); ?>
             </p>
         </div>
-        <?php
-    } /* End check currency*/
-}
+        <?php }
+    }
 
     /**
      * Get Stripe amount to pay
@@ -298,13 +297,14 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             $total = $total * 100; /* In cents*/
             break;
         }
+
         return $total;
     }
 
     /**
      * Payment form on checkout page
      */
-    function payment_fields() {
+    public function payment_fields() {
         $checked = 1;
         ?>
         <fieldset>
@@ -348,7 +348,6 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             </div>
         </fieldset>
         <?php
-
     }
 
     /**
@@ -382,7 +381,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
      *
      * @access public
      */
-    function payment_scripts() {
+    public function payment_scripts() {
 
         if ( ! is_checkout() ) {
             return;
@@ -451,7 +450,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
     /**
      * Process the payment
      */
-    function process_payment( $order_id ) {
+    public function process_payment( $order_id ) {
         global $woocommerce, $wpdb;
 
         $customer_id  = 0;
@@ -724,28 +723,6 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
 
             $charge_ids[ $seller_id ] = $charge->id;
 
-            // $charge->capture();
-
-            // if ( $charge->paid == true ){
-            //     $charge_ids[ $seller_id ] = $charge->id;
-
-            //     // if it's a sub-order, add the charge id to sub-order
-            //     if ( $order_id !== $tmp_order_id ) {
-            //         $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed via Dokan Stripe on Charge ID: %s', 'dokan' ), $tmp_order->get_order_number(), $charge->id ) );
-            //     }
-
-            // }
-            // else{
-            //     $default_args = array(
-            //         'amount' => $order_total,
-            //         'reason' => null,
-            //         'order_id' => $tmp_order_id,
-            //         'refund_id' => 0,
-            //         'line_items' => array(),
-            //         'date' => current_time( 'mysql', 0 )
-            //         );
-            //     wc_create_refund($default_args);
-            // }
             if ( $order_id !== $tmp_order_id ) {
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed via Dokan Stripe on Charge ID: %s', 'dokan' ), $tmp_order->get_order_number(), $charge->id ) );
             }
@@ -799,7 +776,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
      *
      * @return void
      */
-    function process_seller_withdraws( $all_withdraws ){
+    public function process_seller_withdraws( $all_withdraws ){
         $IP =  dokan_get_client_ip();
         $withdraw = new Dokan_Withdraw();
         foreach ( $all_withdraws as $withdraw_data ) {
@@ -810,7 +787,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 'method'  => 'dokan-stripe-connect',
                 'notes'   => sprintf( __( 'Order %d payment Auto paid via Dokan Stripe', 'dokan' ), $withdraw_data['order_id'] ),
                 'ip'      => $IP
-                );
+            );
 
             $data = array_merge( $data, $withdraw_data );
             $withdraw->insert_withdraw( $data );
@@ -824,7 +801,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
      *
      * @return void
      */
-    function add_customer( $order, $stripe_token ) {
+    public function add_customer( $order, $stripe_token ) {
 
         if ( ! $stripe_token ) {
             return;
@@ -850,7 +827,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             return $customer->id;
         }
 
-        if ( !empty( $customer->sources->data[0]->last4 )) {
+        if ( $this->saved_cards && !empty( $customer->sources->data[0]->last4 ) ) {
             add_user_meta( get_current_user_id(), '_stripe_customer_id', array(
                 'customer_id' => $customer->id,
                 'active_card' => !empty( $customer->sources->data[0]->last4 ) ? $customer->sources->data[0]->last4 : '',
@@ -896,7 +873,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
      *
      * @return array
      */
-    function stripe_request( $request, $api = 'charges' ) {
+    public function stripe_request( $request, $api = 'charges' ) {
         global $woocommerce;
 
         $response = wp_remote_post( $this->api_endpoint . 'v1/' . $api, array(
@@ -933,5 +910,4 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
 
         return $parsed_response;
     }
-
  }

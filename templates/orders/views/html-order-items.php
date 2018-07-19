@@ -218,7 +218,7 @@ if ( wc_tax_enabled() ) {
 				<tr>
 					<td><label for="refund_amount"><?php _e( 'Refund amount', 'dokan' ); ?>:</label></td>
 					<td class="total">
-						<input type="text" class="text" id="refund_amount" name="refund_amount" class="wc_input_price" />
+						<input type="text" class="text" id="refund_amount" name="refund_amount" class="wc_input_price" disabled="disabled" />
 						<div class="clear"></div>
 					</td>
 				</tr>

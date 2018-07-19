@@ -34,7 +34,7 @@
         >
 
             <template slot="order_id" slot-scope="data">
-                <a :href="orderUrl(data.row.id)"><strong>#{{ data.row.order_id }}</strong></a>
+                <a :href="orderUrl(data.row.order_id)"><strong>#{{ data.row.order_id }}</strong></a>
             </template>
 
             <template slot="amount" slot-scope="data">
@@ -42,11 +42,11 @@
             </template>
 
             <template slot="vendor" slot-scope="data">
-                <a :href="vendorUrl(data.row.id)" :title="data.row.vendor.email">{{ data.row.vendor.store_name }}</a>
+                <a :href="vendorUrl(data.row.vendor.id)" :title="data.row.vendor.email">{{ data.row.vendor.store_name }}</a>
             </template>
 
             <template slot="date" slot-scope="data">
-                {{ moment(data.row.date).format('MMM D, YYYY') }}
+                {{ moment(data.row.created).format('MMM D, YYYY') }}
             </template>
 
             <template slot="row-actions" slot-scope="data">
@@ -92,7 +92,7 @@ export default {
             totalPages: 1,
             perPage: 10,
             totalItems: 0,
-            notFound: this.__( 'No announcement found.', 'dokan' ),
+            notFound: this.__( 'No request found.', 'dokan' ),
             columns: {
                 'order_id': { label: this.__( 'Order ID', 'dokan' ) },
                 'vendor': { label: this.__( 'Vendor', 'dokan' ) },
@@ -106,7 +106,7 @@ export default {
             actions: [
                 {
                     key: 'approved',
-                    label: this.__( 'Refund Manually', 'dokan' )
+                    label: this.__( 'Approve Refund', 'dokan' )
                 },
                 {
                     key: 'cancelled',
@@ -136,7 +136,7 @@ export default {
                 return [
                     {
                         key: 'approved',
-                        label: this.__( 'Refund Manually', 'dokan' )
+                        label: this.__( 'Approve Refund', 'dokan' )
                     },
                     {
                         key: 'cancelled',

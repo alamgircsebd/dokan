@@ -217,7 +217,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                                         <span class="edit"><a href="#" class="dokan-refund-action do-api-refund" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php printf( _x( 'Refund via %s', 'Refund', 'dokan' ), $gateway_name ); ?></a> | </span>
                                     <?php } ?>
 
-                                    <span class="edit"><a href="#" class="dokan-refund-action" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Refund manually', 'dokan' ); ?></a> | </span>
+                                    <span class="edit"><a href="#" class="dokan-refund-action" data-status="approve" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Approve Refund', 'dokan' ); ?></a> | </span>
                                     <span class="edit"><a href="#" class="dokan-refund-action" data-status="cancel" data-refund_id = "<?php echo $row->id; ?>"><?php _e( 'Cancel', 'dokan' ); ?></a></span>
 
                                 <?php } elseif ( false ) { //$status == 'completed'?>

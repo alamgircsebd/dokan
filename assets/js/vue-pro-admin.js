@@ -1912,7 +1912,7 @@ var ListTable = dokan_get_lib('ListTable');
             totalPages: 1,
             perPage: 10,
             totalItems: 0,
-            notFound: this.__('No announcement found.', 'dokan'),
+            notFound: this.__('No request found.', 'dokan'),
             columns: {
                 'order_id': { label: this.__('Order ID', 'dokan') },
                 'vendor': { label: this.__('Vendor', 'dokan') },
@@ -1925,7 +1925,7 @@ var ListTable = dokan_get_lib('ListTable');
             actionColumn: 'order_id',
             actions: [{
                 key: 'approved',
-                label: this.__('Refund Manually', 'dokan')
+                label: this.__('Approve Refund', 'dokan')
             }, {
                 key: 'cancelled',
                 label: this.__('Cancel', 'dokan')
@@ -1949,7 +1949,7 @@ var ListTable = dokan_get_lib('ListTable');
             if ('pending' == this.$route.query.status) {
                 return [{
                     key: 'approved',
-                    label: this.__('Refund Manually', 'dokan')
+                    label: this.__('Approve Refund', 'dokan')
                 }, {
                     key: 'cancelled',
                     label: this.__('Cancel', 'dokan')
@@ -5112,7 +5112,7 @@ var render = function() {
             key: "order_id",
             fn: function(data) {
               return [
-                _c("a", { attrs: { href: _vm.orderUrl(data.row.id) } }, [
+                _c("a", { attrs: { href: _vm.orderUrl(data.row.order_id) } }, [
                   _c("strong", [_vm._v("#" + _vm._s(data.row.order_id))])
                 ])
               ]
@@ -5138,7 +5138,7 @@ var render = function() {
                   "a",
                   {
                     attrs: {
-                      href: _vm.vendorUrl(data.row.id),
+                      href: _vm.vendorUrl(data.row.vendor.id),
                       title: data.row.vendor.email
                     }
                   },
@@ -5153,7 +5153,7 @@ var render = function() {
               return [
                 _vm._v(
                   "\n            " +
-                    _vm._s(_vm.moment(data.row.date).format("MMM D, YYYY")) +
+                    _vm._s(_vm.moment(data.row.created).format("MMM D, YYYY")) +
                     "\n        "
                 )
               ]

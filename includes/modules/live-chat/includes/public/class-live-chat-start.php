@@ -19,9 +19,33 @@ class Dokan_Live_Chat_Start {
     protected $api_endpoint;
 
     /**
+     * Hold the app_id
+     *
+     * @var string
+     */
+    public $app_id;
+
+    /**
+     * Hold the app_secret
+     *
+     * @var string
+     */
+    public $app_secret;
+
+    /**
+     * Hold value of live chat on off
+     *
+     * @var string
+     */
+    public $enabled;
+
+    /**
      * Constructor method for this class
      */
     public function __construct() {
+        $this->app_id       = dokan_get_option( 'app_id', 'dokan_live_chat' );
+        $this->app_secret   = dokan_get_option( 'app_secret', 'dokan_live_chat' );
+        $this->enabled      = dokan_get_option( 'enable', 'dokan_live_chat' );
         $this->api_endpoint = 'https://api.talkjs.com/';
         $this->init_hooks();
     }
@@ -66,12 +90,7 @@ class Dokan_Live_Chat_Start {
         add_action( 'init', array( $this, 'dokan_live_chat_shortcode' ) );
 
         // init chat sessions
-        add_action( 'template_redirect', array( $this, 'init_chat_sessions' ), 999 );
-
-        // add inbox menu
-        add_filter( 'dokan_get_dashboard_nav', array( $this, 'dokan_add_inbox_menu' ), 22, 1 );
-        add_filter( 'dokan_query_var_filter', array( $this, 'dokan_add_endpoint' ) );
-        add_action( 'dokan_load_custom_template', array( $this, 'dokan_load_inbox_template' ), 22 );
+        add_action( 'wp_head', array( $this, 'init_chat_sessions' ), 999 );
     }
 
     /**
@@ -96,12 +115,13 @@ class Dokan_Live_Chat_Start {
      * @uses wp_enqueue_style
      */
     public function dokan_enqueue_scripts() {
-        if ( dokan_is_store_page() || is_product() ) {
+        if ( dokan_is_store_page() || is_product() || is_account_page() ) {
             wp_enqueue_style( 'dokan-live-chat-login', DOKAN_LIVE_CHAT_ASSETS . '/css/style.css' );
             wp_enqueue_script( 'dokan-live-chat-login', DOKAN_LIVE_CHAT_ASSETS . '/js/script.js', array( 'jquery' ), false, true );
 
             wp_localize_script( 'dokan-live-chat-login', 'dokan_live_chat', array(
-                'wait' => __( 'wait...', 'dokan' )
+                'wait'       => __( 'wait...', 'dokan' ),
+                'my_account' => 'yes'
             ) );
         }
 
@@ -149,9 +169,6 @@ class Dokan_Live_Chat_Start {
             return true;
         }
 
-        $app_id = dokan_get_option( 'app_id', 'dokan_live_chat' );
-        $app_secret = dokan_get_option( 'app_secret', 'dokan_live_chat' );
-
         if ( dokan_is_store_page() ) {
             $user_id = dokan()->vendor->get( get_query_var( 'author' ) )->get_id();
         } else {
@@ -162,12 +179,12 @@ class Dokan_Live_Chat_Start {
             return false;
         }
 
-        $url = $this->api_endpoint . 'v1/' . $app_id . '/users/' . $user_id . '/sessions' ;
+        $url = $this->api_endpoint . 'v1/' . $this->app_id . '/users/' . $user_id . '/sessions' ;
 
         $response = wp_remote_get( $url, array(
             'sslverify' => false,
             'headers' => array(
-                'Authorization' => 'Bearer '. $app_secret
+                'Authorization' => 'Bearer '. $this->app_secret
             )
         ) );
 
@@ -217,74 +234,6 @@ class Dokan_Live_Chat_Start {
     }
 
     /**
-     * Register inbox menu on seller dashboard
-     *
-     * @param array $urls
-     *
-     * @since 1.0
-     *
-     * @return array
-     */
-    public function dokan_add_inbox_menu( $urls ) {
-        if ( get_transient( 'dokan-live-chat' ) ) {
-            flush_rewrite_rules( true );
-            delete_transient( 'dokan-live-chat' );
-        }
-
-        if ( dokan_get_option( 'enable', 'dokan_live_chat' ) !== 'on' ) {
-            return $urls;
-        }
-
-        if ( empty( dokan_get_option( 'app_id', 'dokan_live_chat' ) ) ) {
-            return $urls;
-        }
-
-        if ( dokan_is_seller_enabled( get_current_user_id() ) ) {
-            $urls['inbox'] = array(
-                'title' => __( 'Inbox', 'dokan' ),
-                'icon'  => '<i class="fa fa-comment"></i>',
-                'url'   => dokan_get_navigation_url( 'inbox' ),
-                'pos'   => 195,
-                'permission' => 'dokan_view_inbox_menu'
-            );
-        }
-
-        return $urls;
-    }
-
-    /**
-     * Add inbox endpoint to Dashboard
-     *
-     * @param array $query_var
-     *
-     * @since 1.0
-     *
-     * @return array
-     */
-    public function dokan_add_endpoint( $query_var ) {
-        $query_var['inbox'] = 'inbox';
-
-        return $query_var;
-    }
-
-    /**
-     * Dokan Load inbox template
-     *
-     * @param  array $query_vars
-     *
-     * @since 1.0
-     *
-     * @return string
-     */
-    public function dokan_load_inbox_template( $query_vars ) {
-        if ( ! isset( $query_vars['inbox'] ) ) {
-            return;
-        }
-
-        require_once DOKAN_LIVE_CHAT . '/templates/inbox.php';
-    }
-
-    /**
      * Initialize seller chat sessions on every page so that we can
      * get new message notifications
      *
@@ -294,10 +243,11 @@ class Dokan_Live_Chat_Start {
      */
     public function init_chat_sessions() {
 
-        if ( empty( dokan_get_option( 'app_id', 'dokan_live_chat' ) ) ) {
+        if ( empty( $this->app_id ) ) {
             return;
         }
 
+        global $wp_query;
         $seller = wp_get_current_user();
 
         // if user is not logged in;
@@ -305,10 +255,15 @@ class Dokan_Live_Chat_Start {
             return;
         }
 
+        // if its customer my account page return early
+        if ( isset( $wp_query->query_vars['customer-inbox'] ) ) {
+            return;
+        }
+
+        $this->make_popup_responsive();
+
         if ( dokan_is_user_seller( $seller->ID ) ) {
             // if is inbox page then return early
-            global $wp_query;
-
             if ( isset( $wp_query->query_vars['inbox'] ) ) {
                 return;
             }
@@ -320,6 +275,26 @@ class Dokan_Live_Chat_Start {
             $this->get_talkjs_script();
             $this->get_customer_seller_chat_js();
         }
+    }
+
+    /**
+     * Make the popup responsive
+     *
+     * @return string
+     *
+     * @since 1.1
+     */
+    public function make_popup_responsive() {
+        ?>
+        <style type="text/css">
+            @media only screen and (max-width: 600px) {
+                .__talkjs_popup {
+                    top: 100px !important;
+                    height: 80% !important;
+                }
+            }
+        </style>
+        <?php
     }
 
     /**
@@ -343,7 +318,7 @@ class Dokan_Live_Chat_Start {
             });
 
             window.talkSession = new Talk.Session( {
-                appId: "<?php echo esc_attr( dokan_get_option( 'app_id', 'dokan_live_chat' ) ); ?>",
+                appId: "<?php echo esc_attr( $this->app_id ); ?>",
                 me: customer
             } );
 
@@ -354,6 +329,11 @@ class Dokan_Live_Chat_Start {
             window.talkSession.unreads.on('change', function (conversation) {
 
                 if ( typeof dokan_live_chat !== 'undefined' && dokan_live_chat.seller_dashboard == 'yes' ) {
+                    return;
+                }
+
+                // if it's customer my account page return early (disable popup)
+                if ( typeof dokan_live_chat !== 'undefined' && dokan_live_chat.my_account == 'yes' ) {
                     return;
                 }
 
@@ -416,6 +396,7 @@ class Dokan_Live_Chat_Start {
                     inboxCount.style.lineHeight     = '17px';
                     inboxCount.style.fontWeight     = 'bold';
                 }
+
             } );
         } );
         </script>
@@ -602,8 +583,11 @@ class Dokan_Live_Chat_Start {
                 <input required class="dokan-form-control" type="password" name='login-password' id='login-password'/>
             </div>
             <?php wp_nonce_field( 'dokan-chat-login-action', 'dokan-chat-login-nonce' ); ?>
-            <div class="dokan-form-group">
+            <div class="dokan-form-group login-to-chat ">
                 <input id='dokan-chat-login-btn' type="submit" value="<?php _e( 'Login', 'dokan' ) ?>" class="dokan-w5 dokan-btn dokan-btn-theme"/>
+                <a href="<?php echo get_permalink( wc_get_page_id( 'myaccount' ) ); ?>" class="dokan-w5 dokan-btn dokan-btn-theme">
+                    <?php _e( 'Register', 'dokan' ); ?>
+                </a>
             </div>
         </form>
         <div class="dokan-clearfix"></div>
@@ -739,7 +723,7 @@ class Dokan_Live_Chat_Start {
             } );
 
             window.talkSession = new Talk.Session( {
-                appId: "<?php echo esc_attr( dokan_get_option( 'app_id', 'dokan_live_chat' ) ); ?>",
+                appId: "<?php echo esc_attr( $this->app_id ); ?>",
                 me: customer
             } );
 
