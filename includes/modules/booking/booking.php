@@ -853,7 +853,10 @@ class Dokan_WC_Booking {
         $status = wc_clean( $_POST['booking_order_status'] );
 
         if ( $booking->update_status( $status ) ) {
-            echo sprintf( '<label class="dokan-label dokan-booking-label-%s">%s</label>', $status, get_post_status_object( $status )->label );
+            $html = '<label class="dokan-label dokan-booking-label-' . esc_attr( $status ) . ' ">' . get_post_status_object( $status )->label .  '</label>';
+
+            wp_send_json_success( $html );
+
         } else {
             echo _e( "Error Occured", 'dokan' );
         }
