@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.9.5
+Tested up to: 4.9.7
 WC requires at least: 3.0
 WC tested up to: 3.4.3
 Stable tag: trunk
@@ -171,6 +171,23 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.8.3 -> July 19, 2018
+--------------------------
+- [new] Customer inbox in live chat module ( Live Chat module )
+- [tweak] Refund system modification
+- [tweak] Statement calculation in vendor dashboard
+- [fix] Make live chat popup responsive ( Live Chat module )
+- [fix] Save the card info in checkout page only if admin wants to ( Stripe Module )
+- [fix] Zone wise shipping text typo
+- [fix] Zone wise shipping keeps loading issue
+- [fix] Product import export issue in vendor dashboard ( Import Export module )
+- [fix] Unable to insert shipping cost in decimal point in seller setup wizard
+- [fix] Booking block cost is not getting saved ( Booking module )
+- [fix] Admin can't access the refund request from email
+- [fix] When admin tries to manually complete a refund, admin is redirected to the my-account page
+- [fix] Vendor statement exporting problem fixed
+- [fix] Booking order status not editable ( Booking module )
 
 v2.8.2 -> June 29, 2018
 --------------------------
