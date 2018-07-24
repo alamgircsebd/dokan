@@ -75,7 +75,7 @@ class Dokan_Pro_Reports {
             //calculate opening balance
             global $wpdb;
             $vendor = dokan()->vendor->get( dokan_get_current_user_id() );
-            $opening_balance = $vendor->get_balance( false, $start_date );
+            $opening_balance = $vendor->get_balance( false, date( 'Y-m-d', strtotime( $start_date . ' -1 days' ) ) );
             $status = implode( "', '", dokan_withdraw_get_active_order_status() );
 
             $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE( trn_date ) >= %s AND DATE(trn_date) <= %s AND ( ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ) ORDER BY trn_date";
