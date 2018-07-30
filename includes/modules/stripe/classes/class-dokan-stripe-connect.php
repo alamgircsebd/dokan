@@ -566,13 +566,18 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             try {
                 $stripe_plan = \Stripe\Plan::retrieve( $product_pack_id );
             } catch ( Exception $e ) {
+                $stripe_product = \Stripe\Product::create( array(
+                   'name' => $product_pack_name,
+                   'type' => 'service'
+                ) );
+
                 \Stripe\Plan::create( array(
                     'amount'         => $order_total * 100,
                     'interval'       => $subscription_period,
                     'interval_count' => $subscription_interval,
-                    'name'           => $product_pack_name,
                     'currency'       => $currency,
                     'id'             => $product_pack_id,
+                    'product'        => $stripe_product->id
                 ) );
             }
 
