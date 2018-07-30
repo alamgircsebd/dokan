@@ -27,6 +27,8 @@ class Dokan_Pro_Products {
         add_action( 'woocommerce_product_options_advanced', array($this,'add_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
         add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
+        add_action( 'dokan_new_product_added', array( $this, 'set_product_tags' ), 10, 2 );
+        add_action( 'dokan_product_updated', array( $this, 'set_product_tags' ) );
         add_action( 'dokan_product_updated', array( $this, 'set_product_type' ), 11 );
         add_action( 'dokan_product_updated', array( $this, 'save_pro_product_data' ), 12 );
         add_action( 'dokan_product_updated', array( $this, 'updated_product_email' ), 20 );
@@ -39,6 +41,8 @@ class Dokan_Pro_Products {
 
         add_action( 'dokan_after_linked_product_fields', array( $this, 'group_product_content' ), 10, 2 );
         add_filter( 'woocommerce_duplicate_product_exclude_meta', array( $this, 'remove_unwanted_meta' ) );
+
+        add_filter( 'dokan_localized_args', array( $this, 'dokan_pro_localized_args' ) );
     }
 
     /**
@@ -383,6 +387,47 @@ class Dokan_Pro_Products {
     }
 
     /**
+     * Set new product tags
+     *
+     * @since 2.8.4
+     *
+     * @param int   $product_id
+     * @param array $posted_data
+     *
+     * @return void
+     */
+    public function set_product_tags( $product_id, $posted_data = [] ) {
+        if ( empty( $posted_data ) && ! empty( $_POST ) ) {
+            $posted_data = $_POST;
+        }
+
+        if ( ! isset( $posted_data['product_tag'] ) || ! is_array( $posted_data['product_tag'] ) ) {
+            return;
+        }
+
+        // Newly added tags will be string typed data
+        $tags = array_filter( $posted_data['product_tag'], function ( $tag ) {
+            return ! absint( $tag );
+        } );
+
+        if ( ! empty( $tags ) ) {
+            $tags_ids = array();
+
+            foreach ( $tags as $tag ) {
+                $new_tag = wp_insert_term( $tag, 'product_tag' );
+
+                if ( ! is_wp_error( $new_tag ) ) {
+                    $tags_ids[] = $new_tag['term_id'];
+                }
+            }
+
+            if ( ! empty( $tags_ids ) ) {
+                wp_set_object_terms( $product_id, $tags_ids, 'product_tag', true );
+            }
+        }
+    }
+
+    /**
     * Added duplicate row action
     *
     * @since 2.6.3
@@ -604,4 +649,20 @@ class Dokan_Pro_Products {
         return $meta_keys;
     }
 
+    /**
+     * Add Dokan Pro localized vars
+     *
+     * @since 2.8.4
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    public function dokan_pro_localized_args( $args ) {
+        $dokan_pro_args = array(
+            'product_vendors_can_create_tags' => dokan_get_option( 'product_vendors_can_create_tags', 'dokan_selling' )
+        );
+
+        return array_merge( $args, $dokan_pro_args );
+    }
 }

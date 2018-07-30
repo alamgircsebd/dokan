@@ -147,6 +147,13 @@ class Dokan_Pro_Admin_Settings {
                     'multiple' => __( 'Multiple', 'dokan' )
                 )
             ),
+            'product_vendors_can_create_tags' => array(
+                'name'    => 'product_vendors_can_create_tags',
+                'label'   => __( 'Vendors Can Create Tags', 'dokan' ),
+                'desc'    => __( 'Allow vendors to create new product tags from vendor dashboard.', 'dokan' ),
+                'type'    => 'checkbox',
+                'default' => 'off',
+            ),
             'product_status'         => array(
                 'name'    => 'product_status',
                 'label'   => __( 'New Product Status', 'dokan' ),

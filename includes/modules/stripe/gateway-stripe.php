@@ -135,7 +135,7 @@ class Dokan_Stripe {
                 }
 
                 foreach ( $vendor_names as $vendor_id => $data ) {
-                    $errors->add( 'stipe-not-configured', sprintf( '<strong>Error!</strong> The <strong>%s</strong> does not allowes the Stipe gateway. You can not purchase this products %s using Stripe Gateway', $data['name'], $data['products'] ) );
+                    $errors->add( 'stipe-not-configured', sprintf(__('<strong>Error!</strong> The <strong>%s</strong> does not allowes the Stipe gateway. You can not purchase this products %s using Stripe Gateway', 'dokan'), $data['name'], $data['products'] ) );
                 }
             }
         }
