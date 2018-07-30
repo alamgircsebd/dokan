@@ -1,6 +1,32 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.8.3',
+        'released' => '2018-07-19',
+        'changes'  => array(
+            array(
+                'title'         => 'Live Chat Module',
+                'type'          => 'Fix',
+                'description'   => 'Right now the chat box is available in customer myaccount page and also make responsive chat box window'
+            ),
+            array(
+                'title'         => 'Statement and Refund',
+                'type'          => 'Fix',
+                'description'   => 'Change core table structure for refund and statements. Now its easy to understand for vendor to check her statements. Also fixed statement exporting problem'
+            ),
+            array(
+                'title'         => 'Zonewise Shipping',
+                'type'          => 'Fix',
+                'description'   => 'Shipping state rendering issue fixed. If any country have no states then states not showing undefine problem'
+            ),
+            array(
+                'title'         => 'Stripe Module',
+                'type'          => 'Fix',
+                'description'   => 'Card is automatically saved if customer does not want to save his/her card info during checkout'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.8.2',
         'released' => '2018-06-29',
         'changes'  => array(
