@@ -626,13 +626,9 @@ class DPS_Admin {
     <?php
     }
 
-    public function save_meta_fields( $user_id ){
+    public function save_meta_fields( $user_id ) {
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            return;
-        }
-
-        if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
 
