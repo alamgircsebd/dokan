@@ -206,7 +206,7 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
 
         $data = array(
             'post_title'   => sanitize_text_field( $request['title'] ),
-            'post_content' => sanitize_textarea_field( $request['content'] ),
+            'post_content' => $request['content'],
             'post_status'  => $status,
             'post_type'    => 'dokan_announcement',
             'post_author'  => get_current_user_id()

@@ -140,7 +140,7 @@ class DPS_Admin {
         );
 
         echo '<p class="form-field _vendor_allowed_categories">';
-        $selected_cat = get_post_meta( $post->ID, '_vendor_allowed_categories', true );
+        $selected_cat = get_post_meta( $post->ID, '_vendor_allowed_categories' );
         echo '<label for="_vendor_allowed_categories">' . __( 'Allowed categories', 'dokan' ) .'</label>';
         echo '<select multiple="multiple" data-placeholder=" '. __( 'Select categories&hellip;', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_categories" name="_vendor_allowed_categories[]" style="width: 350px;">';
             $r = array();
@@ -626,13 +626,9 @@ class DPS_Admin {
     <?php
     }
 
-    public function save_meta_fields( $user_id ){
+    public function save_meta_fields( $user_id ) {
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            return;
-        }
-
-        if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
 
