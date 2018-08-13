@@ -92,8 +92,8 @@ class Dokan_Product_Importer {
 
         define( 'DOKAN_IE_PLUGIN_VERSION', $this->version );
         define( 'DOKAN_IE_FILE', __FILE__ );
-        define( 'DOKAN_IE_DIR', __DIR__ );
-        define( 'DOKAN_IE_INC_DIR', __DIR__ . '/includes' );
+        define( 'DOKAN_IE_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_IE_INC_DIR', dirname( __FILE__ ) . '/includes' );
         define( 'DOKAN_IE_ASSETS', plugins_url( 'assets', __FILE__ ) );
 
         add_action( 'init', array( $this, 'do_product_export' ), 99 );
