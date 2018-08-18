@@ -309,6 +309,7 @@ function dokan_module_class_map( $module ) {
         'stripe/gateway-stripe.php'                    => 'Dokan_Stripe',
         'subscription/product-subscription.php'        => 'Dokan_Product_Subscription',
         'vendor-verification/vendor-verification.php'  => 'Dokan_Seller_Verification',
+        'geolocation/geolocation.php'                  => 'Dokan_Geolocation',
     );
 
     if ( array_key_exists( $module, $modules) ) {

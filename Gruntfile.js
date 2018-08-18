@@ -109,7 +109,8 @@ module.exports = function(grunt) {
             images: 'assets/images',
             js: 'assets/js',
             devLessSrc: 'assets/src/less',
-            devJsSrc: 'assets/src/js'
+            devJsSrc: 'assets/src/js',
+            modulesPath: 'includes/modules'
         },
 
         // Compile all .less files.
@@ -124,7 +125,10 @@ module.exports = function(grunt) {
                     sourceMapRootpath: '../../'
                 },
                 files: {
-                    '<%= dirs.css %>/style.css': '<%= dirs.devLessSrc %>/style.less'
+                    '<%= dirs.css %>/style.css': '<%= dirs.devLessSrc %>/style.less',
+                    '<%= dirs.modulesPath %>/geolocation/assets/css/geolocation.css': '<%= dirs.modulesPath %>/geolocation/assets/less/geolocation.less',
+                    '<%= dirs.modulesPath %>/geolocation/assets/css/dokan-geolocation-locations-map.css': '<%= dirs.modulesPath %>/geolocation/assets/less/dokan-geolocation-locations-map.less',
+                    '<%= dirs.modulesPath %>/geolocation/assets/css/dokan-geolocation-filters.css': '<%= dirs.modulesPath %>/geolocation/assets/less/dokan-geolocation-filters.less',
                 }
             },
 
@@ -187,12 +191,15 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
-                files: '<%= dirs.devLessSrc %>/*.less',
+                files: [
+                    '<%= dirs.devLessSrc %>/*.less',
+                    '<%= dirs.modulesPath %>/geolocation/assets/less/*.less',
+                ],
                 tasks: ['less:core', 'less:admin']
             },
 
             js: {
-                files: '<%= dirs.devJsSrc %>/*.js',
+                files: ['<%= dirs.devJsSrc %>/*.js'],
                 tasks: [ 'concat:all_js', 'concat:backend_js' ]
             }
         },
