@@ -173,7 +173,9 @@ class Dokan_Stripe {
             return;
         }
 
-        if ( empty( $_GET['scope'] ) && empty( $_GET['code'] ) ) return;
+        if ( empty( $_GET['scope'] ) || empty( $_GET['code'] ) ) {
+            return;
+        }
 
         $settings   = get_option('woocommerce_dokan-stripe-connect_settings');
         $client_id  = $settings['testmode'] == 'yes' ? $settings['test_client_id'] : $settings['client_id'];
