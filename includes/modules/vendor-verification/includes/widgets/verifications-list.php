@@ -46,7 +46,7 @@ class Dokan_Verification_list extends WP_Widget {
 
             $this->seller_info = $store_info;
 
-            if ( !isset( $store_info['dokan_verification']['verified_info'] ) ) {
+            if ( ! isset( $store_info['dokan_verification']['verified_info'] ) || empty( $store_info['dokan_verification']['verified_info'] ) ) {
                 return;
             }
             extract( $args, EXTR_SKIP );
@@ -59,12 +59,10 @@ class Dokan_Verification_list extends WP_Widget {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
             if ( !isset( $store_info['dokan_verification']['info'] ) ) {
-
                 return;
             }
 
             if ( $store_info['dokan_verification']['info'] == '' || sizeof( $store_info['dokan_verification']['info'] ) < 0 ) {
-
                 return;
             }
             ?>
@@ -164,8 +162,7 @@ class Dokan_Verification_list extends WP_Widget {
             }
         }
 
-        if ( isset( $item['store_address'] ) ) {
-
+        if ( isset( $item['store_address']['v_status'] ) && $item['store_address']['v_status'] === 'approved' ) {
             if ( sizeof( $this->verify_address( $item['store_address'] ) ) == 0 ) {
                 ?>
                 <li class="clearfix">

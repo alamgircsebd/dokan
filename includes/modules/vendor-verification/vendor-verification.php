@@ -537,7 +537,7 @@ class Dokan_Seller_Verification {
             case 'approved':
                 if ( $postdata['type'] === 'id' ) {
 
-                    $seller_profile['dokan_verification']['verified_info'] = array(
+                    $seller_profile['dokan_verification']['verified_info']['photo'] = array(
                         'photo_id'        => $postdata['dokan_gravatar'],
                         'dokan_v_id_type' => $postdata['dokan_v_id_type'],
                     );
@@ -599,7 +599,7 @@ class Dokan_Seller_Verification {
 
                 if ( $postdata['type'] === 'id' ) {
 
-                    unset( $seller_profile['dokan_verification']['verified_info'] );
+                    unset( $seller_profile['dokan_verification']['verified_info']['photo'] );
                     $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'pending';
                 } elseif ( $postdata['type'] === 'address' ) {
 
