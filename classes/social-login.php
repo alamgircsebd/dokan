@@ -240,13 +240,13 @@ Class Dokan_Social_Login {
             ),
             'facebook_app_url'    => array(
                 'name'  => 'fb_app_url',
-                'label' => __( 'Site Url', 'dokan-social-api' ),
+                'label' => __( 'Site URL', 'dokan-social-api' ),
                 'type'  => 'html',
                 'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=facebook&hauth_done=Facebook' . '>',
             ),
             'facebook_app_id'     => array(
                 'name'  => 'fb_app_id',
-                'label' => __( 'App Id', 'dokan-social-api' ),
+                'label' => __( 'App ID', 'dokan-social-api' ),
                 'type'  => 'text',
             ),
             'facebook_app_secret' => array(
@@ -284,7 +284,7 @@ Class Dokan_Social_Login {
             ),
             'google_app_url'      => array(
                 'name'  => 'google_app_url',
-                'label' => __( 'Redirect URI', 'dokan-social-api' ),
+                'label' => __( 'Redirect URL', 'dokan-social-api' ),
                 'type'  => 'html',
                 'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=google&hauth.done=Google' . '>',
             ),
