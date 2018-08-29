@@ -46,4 +46,29 @@ jQuery( function($) {
         return false;
     });
 
+    jQuery(document).ready(function() {
+        var $billing_cpf_span = $('#billing_cpf_field span.optional');
+        var $billing_cpf = $('#billing_cpf_field');
+
+        if ( $('.payment_box.payment_method_dokan-moip-connect').css('display') !== 'block' ) {
+            $billing_cpf.hide();
+        } else {
+            $billing_cpf_span.html('<span style="color:red">*</span>');
+        }
+    });
+
+    jQuery(document).on('click','.wc_payment_methods.payment_methods li', function() {
+        var $billing_cpf_span = $('#billing_cpf_field span.optional');
+        var $billing_cpf = $('#billing_cpf_field');
+
+        setTimeout(function() {
+            if ( $('.payment_box.payment_method_dokan-moip-connect').css('display') == 'block' ) {
+                $billing_cpf.show();
+                $billing_cpf_span.html('<span style="color:red">*</span>');
+            } else {
+                $billing_cpf.hide();
+            }
+        }, 1000);
+    });
+
 } );

@@ -61,16 +61,21 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
 
         $base_url = $this->base_url . '/plans';
 
+        // if dokan billing cycle stop sets to never, set subscription_length to 999 (unlimited)
+        if ( empty( $subscription_length ) ) {
+            $subscription_length = 999;
+        }
+
         $plan_body = array(
             'code'          => $product->get_id(),
             'name'          => $product->get_name(),
             'description'   => $product->get_description(),
             'amount'        => $product->get_price() * 100,
             'interval'      => array(
-                'length'    => $subscription_length,
+                'length'    => $subscription_interval,
                 'unit'      => $subscription_period
             ),
-            'billing_cycles' => $subscription_interval,
+            'billing_cycles' => $subscription_length,
         );
 
         $args = array(
@@ -139,10 +144,10 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             'name'          => $product->get_name(),
             'amount'        => $product->get_price() * 100,
             'interval'      => array(
-                'length'    => $subscription_length,
+                'length'    => $subscription_interval,
                 'unit'      => $subscription_period
             ),
-            'billing_cycles' => $subscription_interval
+            'billing_cycles' => $subscription_length
         );
 
         $args = array(
@@ -488,7 +493,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             return;
         }
 
-        if ( get_option( 'retry_moip_payment' ) == 'yes' ) {
+        if ( get_option( 'retry_moip_payment_sandbox' ) == 'no' ) {
             return;
         }
 
@@ -528,7 +533,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             if ( strpos( $base_url, 'sandbox' ) ) {
                 update_option( 'retry_moip_payment_sandbox', 'yes' );
             } else {
-                update_option( 'retry_moip_payment', 'yes' );
+                update_option( 'retry_moip_payment_sandbox', 'no' );
             }
         }
     }

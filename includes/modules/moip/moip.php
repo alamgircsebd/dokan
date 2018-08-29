@@ -106,6 +106,150 @@ class Dokan_Moip {
 
         // retry to make payment of due invoice
         add_action( 'template_redirect', array( $this, 'retry_delayd_payment' ) );
+
+        // get moip access token
+        add_action( 'template_redirect', array( $this, 'get_moip_access_token' ) );
+
+        // register webhook
+        add_action( 'template_redirect', array( $this, 'register_webhook' ) );
+    }
+
+    /**
+     * Register webhook
+     *
+     * @return void
+     */
+    public function register_webhook() {
+        if ( get_option( 'dokan-moip-webhook-registered' ) == 'yes' ) {
+            return;
+        }
+
+        $settings   = get_option( 'woocommerce_dokan-moip-connect_settings' );
+
+        $key        = $settings['testmode'] == 'no' ? $settings['production_key'] : $settings['test_key'];
+        $token      = $settings['testmode'] == 'no' ? $settings['production_token'] : $settings['test_token'];
+        $public_key = $settings['testmode'] == 'no' ? $settings['production_public_key'] : $settings['test_public_key'];
+
+        if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
+            return;
+        }
+
+        $base_url = $settings['testmode'] == 'no' ? 'https://api.moip.com.br/assinaturas/v1/users/preferences' : 'https://sandbox.moip.com.br/assinaturas/v1/users/preferences';
+
+        $body = array(
+            'notification' => array(
+                'webhook'  => array(
+                    'url'  => get_site_url() . '?webhook=dokan-moip'
+                )
+            )
+        );
+
+        $args = array(
+            'timeout'       => 45,
+            'redirection'   => 5,
+            'headers'       => array(
+                'cache-control' => 'no-cache',
+                'Content-Type'  => 'application/json',
+                'Authorization' => 'Basic ' . base64_encode( $token . ':' . $key ),
+            ),
+            'body'          => json_encode( $body )
+        );
+
+        $response = wp_remote_post( $base_url, $args );
+
+        if ( is_wp_error( $response ) ) {
+            wp_send_json_error( 'Error', 'Something went wrong' );
+        }
+
+        if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
+            update_option( 'dokan-moip-webhook-registered', 'yes' );
+        }
+    }
+
+    /**
+     * Get moip access token
+     *
+     * @return void
+     */
+    public function get_moip_access_token() {
+        if ( get_option( 'got_access_token_sandbox' ) == 'no' ) {
+            return;
+        }
+
+        $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
+
+        if ( ! isset( $settings['enabled'] ) || $settings['enabled'] == 'no' ) {
+            return;
+        }
+
+        $key        = $settings['testmode'] == 'no' ? $settings['production_key'] : $settings['test_key'];
+        $token      = $settings['testmode'] == 'no' ? $settings['production_token'] : $settings['test_token'];
+        $public_key = $settings['testmode'] == 'no' ? $settings['production_public_key'] : $settings['test_public_key'];
+        $base_url   = $settings['testmode'] == 'no' ? 'https://api.moip.com.br/v2/channels' : 'https://sandbox.moip.com.br/v2/channels';
+
+        if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
+            return;
+        }
+
+        if ( strpos( $base_url, 'sandbox' ) ) {
+            if ( get_option( 'got_access_token_sandbox' ) == 'yes' ) {
+                return;
+            }
+        }
+
+        $body = array(
+            'name'        => get_bloginfo( 'name' ),
+            'description' => get_bloginfo( 'description' ),
+            'site'        => get_site_url(),
+            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes'
+        );
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Cache-Control: no-cache',
+            'Authorization: Basic ' . base64_encode( $token . ':' . $key ),
+        );
+
+        $curl = curl_init();
+
+        curl_setopt_array( $curl, array(
+          CURLOPT_URL => $base_url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => json_encode( $body ),
+          CURLOPT_HTTPHEADER => $headers,
+        ) );
+
+        $response = curl_exec( $curl );
+        $error    = curl_error( $curl );
+
+        curl_close( $curl );
+
+        if ( $error ) {
+            new WP_Error( 'Something went wrong: ' . $error );
+        }
+
+        $response = json_decode( $response );
+
+        if ( isset( $response->ERROR ) ) {
+            return;
+        }
+
+        if ( ! isset( $response->id, $response->secret, $response->accessToken ) ) {
+            return;
+        }
+
+        update_option( 'moip_app_id', $response->id );
+        update_option( 'moip_secret', $response->secret );
+        update_option( 'moip_access_token', $response->accessToken );
+
+        if ( strpos( $base_url, 'sandbox' ) ) {
+            update_option( 'got_access_token_sandbox', 'yes' );
+        } else {
+            update_option( 'got_access_token_sandbox', 'no' );
+        }
     }
 
     /**
@@ -210,6 +354,25 @@ class Dokan_Moip {
                 delete_user_meta( $user_id, '_customer_recurring_subscription' );
                 delete_user_meta( $user_id, 'dokan_seller_percentage' );
             }
+        }
+
+        if ( isset( $response->event ) && $response->event == 'subscription.expired' ) {
+            global $wpdb;
+
+            $subscription_code = $response->resource->code;
+            $user_id           = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = 'subscription_code' AND `meta_value`='$subscription_code'" );
+
+            // subscriptoin expired
+            update_user_meta( $user_id, 'can_post_product', '0' );
+            delete_user_meta( $user_id, 'product_package_id' );
+            delete_user_meta( $user_id, 'subscription_code' );
+            delete_user_meta( $user_id, 'product_order_id' );
+            delete_user_meta( $user_id, 'product_no_with_pack' );
+            delete_user_meta( $user_id, 'product_pack_startdate' );
+            delete_user_meta( $user_id, 'product_pack_enddate' );
+            delete_user_meta( $user_id, 'can_post_product' );
+            delete_user_meta( $user_id, '_customer_recurring_subscription' );
+            delete_user_meta( $user_id, 'dokan_seller_percentage' );
         }
     }
 
@@ -330,6 +493,7 @@ class Dokan_Moip {
      */
     public function add_cpf_field( $fields ) {
         $fields['billing']['billing_cpf'] = array(
+            'type'      => 'number',
             'label'     => __( 'CPF Number', 'dokan' ),
             'placeholder'   => _x( 'CPF Number', 'placeholder', 'dokan' ),
             'required'  => false,

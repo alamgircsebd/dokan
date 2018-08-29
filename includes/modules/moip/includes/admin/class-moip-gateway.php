@@ -156,10 +156,6 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
         // include js
         add_action( 'wp_enqueue_scripts', array( $this, 'include_moip_js' ) );
-
-        // create access token
-        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'get_moip_access_token' ) );
-        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'register_webhook' ) );
     }
 
     /**
@@ -190,8 +186,6 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @return void
      */
     public function payment_fields() {
-        $access_token = get_option( 'moip_access_token' );
-        $checked = 1;
         ?>
         <fieldset>
             <?php
@@ -346,7 +340,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 $quantity = 1;
 
                 foreach ( $items as $item ) {
-                    $moip_order->addItem( $item->get_product_id(), $quantity, 'sku1', (int) $item->get_total() * 100 );
+                    $moip_order->addItem( $item->get_product_id(), $quantity, 'sku1', (int) ( $item->get_total() + $item->get_total_tax() ) * 100 );
                 }
 
                 // Creating an order and splitting payment using 'addReceiver' method
@@ -470,7 +464,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             $quantity = 1;
 
             foreach ( $items as $item ) {
-                $moip_order->addItem( $item->get_product_id(), $quantity, 'sku1', (int) $item->get_total() * 100 );
+                $moip_order->addItem( $item->get_product_id(), $quantity, 'sku1', (int) $order_total * 100 );
             }
 
             $vendor_id = dokan_get_seller_id_by_order( $tmp_order->get_id() );
@@ -622,6 +616,10 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         if ( empty( $_POST['billing_cpf'] ) ) {
             throw new Exception( __( 'CPF number is required', 'dokan' ) );
         }
+
+        if ( strlen( $_POST['billing_cpf'] ) !== 11 ) {
+            throw new Exception( __( 'CPF number must be 11 character long', 'dokan' ) );
+        }
     }
 
     /**
@@ -644,115 +642,4 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
 
         return false;
     }
-
-    /**
-     * Get moip access token
-     *
-     * @return void
-     */
-    public function get_moip_access_token() {
-
-        if ( $this->enabled == 'no' ) {
-            return;
-        }
-
-        $base_url = $this->base_url . '/v2/channels';
-
-        $body = array(
-            'name'        => get_bloginfo( 'name' ),
-            'description' => get_bloginfo( 'description' ),
-            'site'        => get_site_url(),
-            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes'
-        );
-
-        $headers = array(
-            'Content-Type: application/json',
-            'Cache-Control: no-cache',
-            'Authorization: Basic ' . base64_encode( $this->token . ':' . $this->key ),
-        );
-
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-          CURLOPT_URL => $base_url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 30,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS => json_encode( $body ),
-          CURLOPT_HTTPHEADER => $headers,
-        ));
-
-        $response = curl_exec( $curl );
-        $error    = curl_error( $curl );
-
-        curl_close( $curl );
-
-        if ( $error ) {
-            new WP_Error( 'Something went wrong: ' . $error );
-        }
-
-        $response = json_decode( $response );
-
-        if ( isset( $response->ERROR ) ) {
-            wp_send_json_error( new WP_Error( 'Error', __( 'Token or Key Invalid', 'dokan' ) ) );
-        }
-
-        if ( ! isset( $response->id, $response->secret, $response->accessToken ) ) {
-            return;
-        }
-
-        update_option( 'moip_app_id', $response->id );
-        update_option( 'moip_secret', $response->secret );
-        update_option( 'moip_access_token', $response->accessToken );
-    }
-
-    /**
-     * Register webhook
-     *
-     * @return void
-     */
-    public function register_webhook() {
-
-        if ( empty( $this->token ) || empty( $this->key ) || empty( $this->public_key ) ) {
-            return;
-        }
-
-        if ( get_option( 'dokan-moip-webhook-registered' ) == 'yes' ) {
-            return;
-        }
-
-        $base_url = $this->base_url . '/assinaturas/v1/users/preferences';
-
-        $body = array(
-            'notification' => array(
-                'webhook'  => array(
-                    'url'  => get_site_url() . '?webhook=dokan-moip'
-                )
-            )
-        );
-
-        $args = array(
-            'timeout'       => 45,
-            'redirection'   => 5,
-            'headers'       => array(
-                'cache-control' => 'no-cache',
-                'Content-Type'  => 'application/json',
-                'Authorization' => 'Basic ' . base64_encode( $this->token . ':' . $this->key ),
-            ),
-            'body'          => json_encode( $body )
-        );
-
-        $response = wp_remote_post( $base_url, $args );
-
-        if ( is_wp_error( $response ) ) {
-            wp_send_json_error( 'Error', 'Something went wrong' );
-        }
-
-        if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
-            update_option( 'dokan-moip-webhook-registered', 'yes' );
-        }
-
-    }
-
 }
