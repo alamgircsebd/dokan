@@ -51,7 +51,22 @@ class Dokan_Geolocation_Vendor_Query {
      * @return void
      */
     public function __construct() {
+        add_filter( 'dokan_seller_listing_args', array( $this, 'filter_pre_user_query' ) );
+    }
+
+    /**
+     * Add action to filter vendor sql query
+     *
+     * @since 1.0.0
+     *
+     * @param array $seller_args
+     *
+     * @return array
+     */
+    public function filter_pre_user_query( $seller_args ) {
         add_action( 'pre_user_query', array( $this, 'add_user_query' ) );
+
+        return $seller_args;
     }
 
     /**
@@ -130,7 +145,7 @@ class Dokan_Geolocation_Vendor_Query {
      * @return void
      */
     private function filter_query_orderby() {
-        if ( $this->distance ) {
+        if ( $this->latitude && $this->longitude && $this->distance ) {
             $distance = absint( $this->distance );
             $this->user_query->query_orderby = "having geo_distance < {$distance} " . $this->user_query->query_orderby;
         }

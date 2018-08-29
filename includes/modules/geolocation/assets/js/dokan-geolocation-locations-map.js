@@ -6,16 +6,40 @@
         info_window: null,
 
         init: function () {
+            var self = this;
+
             var map_area = $( '#dokan-geolocation-locations-map' );
 
-            this.map = new google.maps.Map( map_area.get(0), {
+            self.map = new google.maps.Map( map_area.get(0), {
                 zoom: 11,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
-            this.info_window = new google.maps.InfoWindow();
+            self.info_window = new google.maps.InfoWindow();
 
-            this.setMarkers();
+            self.setMarkers();
+
+            self.map.addListener( 'clusterclick', function (cluster) {
+                var bounds = cluster.getBounds(),
+                    markers = cluster.getMarkers();
+
+                if ( bounds.b.f === bounds.b.b ) {
+                    var html = '<div class="white-popup dokan-geo-map-info-windows-in-popup">';
+
+                    markers.forEach( function ( marker ) {
+                        html += self.getInfoWindowContent(marker.info);
+                    } );
+
+                    html += '</div>';
+
+                    $.magnificPopup.open({
+                        items: {
+                            type: 'inline',
+                            src: html
+                        }
+                    });
+                }
+            } );
         },
 
         setMarkers: function () {
@@ -80,7 +104,8 @@
 
                 var marker_options = {
                     position: curpoint,
-                    map: self.map
+                    map: self.map,
+                    info: info
                 };
 
                 if ( DokanGeo.marker.image ) {
@@ -94,15 +119,9 @@
                         return;
                     }
 
-                    var info_window_template = DokanGeo.info_window_template;
+                    var info_window_content = self.getInfoWindowContent( info );
 
-                    var infoProp;
-
-                    for ( infoProp in info ) {
-                        info_window_template = info_window_template.replace( '{' + infoProp + '}', info[infoProp] );
-                    }
-
-                    self.info_window.setContent( info_window_template );
+                    self.info_window.setContent( info_window_content );
                     self.info_window.open( self.map, marker );
                     self.map.panTo( curpoint );
                 } );
@@ -129,6 +148,17 @@
                 gridSize: 40,
                 styles: styles
             } );
+        },
+
+        getInfoWindowContent: function ( info ) {
+            var content = DokanGeo.info_window_template,
+                infoProp;
+
+            for ( infoProp in info ) {
+                content = content.replace( '{' + infoProp + '}', info[infoProp] );
+            }
+
+            return content;
         }
     };
 

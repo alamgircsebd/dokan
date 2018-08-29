@@ -444,6 +444,10 @@
 
         for ( param in this.queries ) {
             if ( [ 'post_type', 'dokan_seller_search', 's' ].indexOf( param ) < 0 ) {
+                if ( param === 'distance' && ( ! this.latitude || ! this.longitude ) ) {
+                    continue;
+                }
+
                 search.push( param + '=' + this.queries[ param ] );
             }
         }
