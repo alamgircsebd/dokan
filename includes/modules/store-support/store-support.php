@@ -67,7 +67,8 @@ class Dokan_Store_Support {
     public function __construct() {
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-        add_action( 'init', array( $this, 'init_hooks' ) );
+
+        $this->init_hooks();
 
         require_once DOKAN_STORE_SUPPORT_DIR . '/support-widget.php';
     }
