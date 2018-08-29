@@ -302,4 +302,71 @@ class Dokan_Shipping_Zone {
         }
     }
 
+    /**
+     * Find a matching zone for a given package.
+     *
+     * @param  array $package Shipping package.
+     *
+     * @return WC_Shipping_Zone
+     */
+    public static function get_zone_matching_package( $package ) {
+        $country          = strtoupper( wc_clean( $package['destination']['country'] ) );
+        $state            = strtoupper( wc_clean( $package['destination']['state'] ) );
+        $postcode         = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
+        $cache_key        = WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'dokan_shipping_zone_' . md5( sprintf( '%s+%s+%s', $country, $state, $postcode ) );
+        $matching_zone_id = wp_cache_get( $cache_key, 'shipping_zones' );
+
+        if ( false === $matching_zone_id ) {
+            $matching_zone_id = self::get_zone_id_from_package( $package );
+            wp_cache_set( $cache_key, $matching_zone_id, 'shipping_zones' );
+        }
+
+        return new WC_Shipping_Zone( $matching_zone_id ? $matching_zone_id : 0 );
+    }
+
+    /**
+     * Find a matching zone ID for a given package.
+     *
+     * @param  object $package Package information.
+     *
+     * @return int
+     */
+    public static function get_zone_id_from_package( $package ) {
+        global $wpdb;
+
+        $country   = strtoupper( wc_clean( $package['destination']['country'] ) );
+        $state     = strtoupper( wc_clean( $package['destination']['state'] ) );
+        $continent = strtoupper( wc_clean( WC()->countries->get_continent_code_for_country( $country ) ) );
+        $postcode  = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
+
+        // Work out criteria for our zone search.
+        $criteria   = array();
+        $criteria[] = $wpdb->prepare( "( ( location_type = 'country' AND location_code = %s )", $country );
+        $criteria[] = $wpdb->prepare( "OR ( location_type = 'state' AND location_code = %s )", $country . ':' . $state );
+        $criteria[] = $wpdb->prepare( "OR ( location_type = 'continent' AND location_code = %s )", $continent );
+        $criteria[] = 'OR ( location_type IS NULL ) )';
+
+        // Postcode range and wildcard matching.
+        $postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}dokan_shipping_zone_locations WHERE location_type = 'postcode';" );
+
+
+        if ( $postcode_locations ) {
+            $zone_ids_with_postcode_rules = array_map( 'absint', wp_list_pluck( $postcode_locations, 'zone_id' ) );
+            $matches                      = wc_postcode_location_matcher( $postcode, $postcode_locations, 'zone_id', 'location_code', $country );
+            $do_not_match                 = array_unique( array_diff( $zone_ids_with_postcode_rules, array_keys( $matches ) ) );
+
+            if ( ! empty( $do_not_match ) ) {
+                $criteria[] = 'AND zones.zone_id NOT IN (' . implode( ',', $do_not_match ) . ')';
+            }
+        }
+
+        // Get matching zones.
+        return $wpdb->get_var(
+            "SELECT zones.zone_id FROM {$wpdb->prefix}woocommerce_shipping_zones as zones
+            LEFT OUTER JOIN {$wpdb->prefix}dokan_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
+            WHERE " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
+            . ' ORDER BY zone_order ASC, zone_id ASC LIMIT 1'
+        );
+    }
+
 }

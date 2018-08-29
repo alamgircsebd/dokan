@@ -226,7 +226,7 @@ if ( class_exists( 'WooCommerce' ) ) {
          */
         function calculate_shipping( $package = array() ) {
             $rates = array();
-            $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
+            $zone = Dokan_Shipping_Zone::get_zone_matching_package( $package );
             $seller_id = $package['seller_id'];
 
             if ( empty( $seller_id ) ) {
@@ -401,7 +401,7 @@ if ( class_exists( 'WooCommerce' ) ) {
                 return false;
             }
 
-            $zone = WC_Shipping_Zones::get_zone_matching_package( $package );
+            $zone      = Dokan_Shipping_Zone::get_zone_matching_package( $package );
             $locations = Dokan_Shipping_Zone::get_locations( $zone->get_id(), $seller_id );
 
             if ( empty( $locations ) ) {
@@ -436,6 +436,7 @@ if ( class_exists( 'WooCommerce' ) ) {
 
                 $is_available = true;
             }
+
 
             if ( isset( $location_group['postcode'] ) ) {
                 $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
