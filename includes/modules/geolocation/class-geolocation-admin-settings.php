@@ -32,7 +32,7 @@ class Dokan_Geolocation_Admin_Settings {
         $sections['dokan_geolocation'] = array(
             'id'    => 'dokan_geolocation',
             'title' => __( 'Geolocation', 'dokan' ),
-            'icon'  => 'dashicons-controls-repeat'
+            'icon'  => 'dashicons-location'
         );
 
         return $sections;
