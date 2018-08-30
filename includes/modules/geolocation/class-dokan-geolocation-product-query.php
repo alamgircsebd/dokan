@@ -42,6 +42,12 @@ class Dokan_Geolocation_Product_Query {
      * @return void
      */
     public function __construct() {
+        $api_key = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
+
+        if ( ! $api_key ) {
+            return;
+        }
+
         add_filter( 'query_vars', array( $this, 'add_query_vars' ) );
         add_action( 'woocommerce_product_query', array( $this, 'add_query_filters' ) );
     }

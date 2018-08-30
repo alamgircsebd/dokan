@@ -44,11 +44,20 @@ class Dokan_Geolocation {
     /**
      * Module version
      *
-     * @var string
-     *
      * @since 1.0.0
+     *
+     * @var string
      */
     public $version = '1.0.0';
+
+    /**
+     * Checks admin has set google map api key
+     *
+     * @since 1.0.0
+     *
+     * @var bool
+     */
+    public $has_gmap_api_key = false;
 
     /**
      * Class constructor
@@ -58,6 +67,8 @@ class Dokan_Geolocation {
      * @return void
      */
     public function __construct() {
+        $this->has_gmap_api_key = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
+
         $this->define_constants();
         $this->includes();
         $this->hooks();
@@ -87,11 +98,16 @@ class Dokan_Geolocation {
      * @return void
      */
     private function hooks() {
-        add_action( 'dokan_store_profile_saved', array( $this, 'save_vendor_geodata' ), 10, 2 );
-        add_action( 'dokan_product_edit_after_options', array( $this, 'add_product_editor_options' ) );
-        add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-        add_action( 'widgets_init', array( $this, 'register_widget' ) );
+        if ( $this->has_gmap_api_key ) {
+            add_action( 'dokan_store_profile_saved', array( $this, 'save_vendor_geodata' ), 10, 2 );
+            add_action( 'dokan_product_edit_after_options', array( $this, 'add_product_editor_options' ) );
+            add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
+            add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+            add_action( 'widgets_init', array( $this, 'register_widget' ) );
+        } else {
+            add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+        }
+
     }
 
     /**
@@ -103,16 +119,19 @@ class Dokan_Geolocation {
      */
     private function includes() {
         require_once DOKAN_GEOLOCATION_PATH . '/functions.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-scripts.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-shortcode.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-widget-filters.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-widget-product-location.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-query.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-view.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-vendor-query.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-vendor-view.php';
-        require_once DOKAN_GEOLOCATION_PATH . '/class-geolocation-single-product.php';
         require_once DOKAN_GEOLOCATION_PATH . '/class-geolocation-admin-settings.php';
+
+        if ( $this->has_gmap_api_key ) {
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-scripts.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-shortcode.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-widget-filters.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-widget-product-location.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-query.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-view.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-vendor-query.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-vendor-view.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-geolocation-single-product.php';
+        }
     }
 
     /**
@@ -123,14 +142,18 @@ class Dokan_Geolocation {
      * @return void
      */
     private function instances() {
-        new Dokan_Geolocation_Scripts();
-        new Dokan_Geolocation_Shortcode();
-        new Dokan_Geolocation_Product_Query();
-        new Dokan_Geolocation_Product_View();
-        new Dokan_Geolocation_Vendor_Query();
-        new Dokan_Geolocation_Vendor_View();
-        new Dokan_Geolocation_Single_Product();
         new Dokan_Geolocation_Admin_Settings();
+
+        if ( $this->has_gmap_api_key ) {
+            new Dokan_Geolocation_Scripts();
+            new Dokan_Geolocation_Shortcode();
+            new Dokan_Geolocation_Product_Query();
+            new Dokan_Geolocation_Product_View();
+            new Dokan_Geolocation_Vendor_Query();
+            new Dokan_Geolocation_Vendor_View();
+            new Dokan_Geolocation_Single_Product();
+        }
+
     }
 
     /**
@@ -218,7 +241,7 @@ class Dokan_Geolocation {
             'geo_address'        => $geo_address,
         );
 
-        dokan_get_template( 'product-editor-options.php', $args, DOKAN_GEOLOCATION_VIEWS, trailingslashit( DOKAN_GEOLOCATION_VIEWS ) );
+        dokan_geo_get_template( 'product-editor-options', $args );
     }
 
     /**
@@ -265,9 +288,27 @@ class Dokan_Geolocation {
         wp_enqueue_script( 'dokan-geolocation', DOKAN_GEOLOCATION_ASSETS . '/js/geolocation.js', array( 'jquery', 'google-maps' ), $this->version, true );
     }
 
+    /**
+     * Register module widgets
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
     public function register_widget() {
         register_widget( 'Dokan_Geolocation_Widget_Filters' );
         register_widget( 'Dokan_Geolocation_Widget_Product_Location' );
+    }
+
+    /**
+     * Show admin notices
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function admin_notices() {
+        dokan_geo_get_template( 'admin-notices' );
     }
 }
 
