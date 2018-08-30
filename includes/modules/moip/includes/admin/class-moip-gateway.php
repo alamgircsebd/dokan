@@ -43,6 +43,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         $this->description     = $this->get_option( 'description' );
         $this->enabled         = $this->get_option( 'enabled' );
         $this->testmode        = $this->get_option( 'testmode' );
+        $this->moip_fee        = $this->get_option( 'moip_fee' );
         $this->base_url        = $this->testmode == 'no' ? 'https://api.moip.com.br' : 'https://sandbox.moip.com.br';
         $this->token           = $this->testmode == 'no' ? $this->get_option( 'production_token' ) : $this->get_option( 'test_token' );
         $this->key             = $this->testmode == 'no' ? $this->get_option( 'production_key' ) : $this->get_option( 'test_key' );
@@ -64,6 +65,9 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @return array
      */
     public function load_form_fields() {
+        $test_url       = 'https://conta-sandbox.moip.com.br/configurations/api_credentials';
+        $production_url = 'https://conta.moip.com.br/configurations/api_credentials';
+
         return array(
             'enabled' => array(
                 'title'       => __( 'Enable/Disable', 'dokan' ),
@@ -76,13 +80,23 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'title'       => __( 'Title', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'This controls the title which the user sees during checkout.', 'dokan' ),
-                'default'     => __( 'Dokan Credit card (moip)', 'dokan' )
+                'default'     => __( 'Moip Credit Card', 'dokan' )
             ),
             'description' => array(
                 'title'       => __( 'Description', 'dokan' ),
                 'type'        => 'textarea',
                 'description' => __( 'This controls the description which the user sees during checkout.', 'dokan' ),
                 'default'     => 'Pay with your credit card via moip.'
+            ),
+            'moip_fee' => array(
+                'title'       => __( 'Moip Fee', 'dokan' ),
+                'type'        => 'select',
+                'options'     => array(
+                    'admin'   => __( 'Admin', 'dokan' ),
+                    'vendor'  => __( 'Vendor', 'dokan' ),
+                ),
+                'description' => __( 'Select who will bear the Moip transection fee.', 'dokan' ),
+                'default'     => 'vendor'
             ),
             'testmode' => array(
                 'title'       => __( 'Test mode', 'dokan' ),
@@ -98,19 +112,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             'production_token' => array(
                 'title'       => __( 'Production Token', 'dokan' ),
                 'type'        => 'text',
-                'description' => __( 'Get your API token from your moip account. (Required**)', 'dokan' ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API token from your moip account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'production_key' => array(
                 'title'       => __( 'Production Key', 'dokan' ),
                 'type'        => 'text',
-                'description' => __( 'Get your API keys from your moip account. (Required**)', 'dokan' ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API keys from your moip account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'production_public_key' => array(
                 'title'       => __( 'Production Public Key', 'dokan' ),
                 'type'        => 'textarea',
-                'description' => __( 'Get your public API keys from your moip account. (Required**)', 'dokan' ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion public API keys from your moip account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'test-credentials-title' => array(
@@ -120,19 +134,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             'test_token' => array(
                 'title'       => __( 'Test Token', 'dokan' ),
                 'type'        => 'text',
-                'description' => __( 'Get your test API token from your moip account. (Required**)', 'dokan' ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API token from your moip account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'test_key' => array(
                 'title'       => __( 'Test Key', 'dokan' ),
                 'type'        => 'text',
-                'description' => __( 'Get your test API keys from your moip account. (Required**)', 'dokan' ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API keys from your moip account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'test_public_key' => array(
                 'title'       => __( 'Test Public Key', 'dokan' ),
                 'type'        => 'textarea',
-                'description' => __( 'Get your public API keys from your moip account. (Required**)', 'dokan' ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test public API keys from your moip account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
         );
@@ -154,8 +168,29 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      */
     public function init_actions() {
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+        add_filter( 'woocommerce_credit_card_form_fields', array( $this, 'add_cpf_field' ), 10, 2 );
         // include js
         add_action( 'wp_enqueue_scripts', array( $this, 'include_moip_js' ) );
+    }
+
+    /**
+     * Add cpf field in the checkout page
+     *
+     * @param array $fileds
+     * @param string $id
+     *
+     * @return array
+     */
+    public function add_cpf_field( $fields, $id ) {
+        if ( $this->id == $id ) {
+            $fields['cpf_field'] = '<p class="form-row form-row-wide">
+                <label for="billing_cpf" class="">CPF Number&nbsp;<span class="optional"><span style="color:red">*</span></span></label>
+
+                <input type="number" style="padding: 10px; font-size:16px" class="input-text" name="billing_cpf" id="billing_cpf" placeholder="CPF Number">
+            </p>';
+        }
+
+        return $fields;
     }
 
     /**
@@ -467,13 +502,14 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 $moip_order->addItem( $item->get_product_id(), $quantity, 'sku1', (int) $order_total * 100 );
             }
 
-            $vendor_id = dokan_get_seller_id_by_order( $tmp_order->get_id() );
+            $vendor_id           = dokan_get_seller_id_by_order( $tmp_order->get_id() );
             $moip_vendor_account = get_user_meta( $vendor_id, 'vendor_moip_account', true );
+            $moip_fee_bearer     = $this->moip_fee == 'vendor' ? true : false;
 
             // Creating an order and splitting payment using 'addReceiver' method
             // Here we're setting a secondary account to receive vendor commission
             $moip_order->setCustomer( $moip_data['customer'] )
-            ->addReceiver( $moip_vendor_account, 'SECONDARY', $vendor_commission, null, true )
+            ->addReceiver( $moip_vendor_account, 'SECONDARY', $vendor_commission, null, $moip_fee_bearer )
             ->create();
 
             if ( ! isset( $_POST['moip_hash'] ) || empty( $_POST['moip_hash'] ) ) {

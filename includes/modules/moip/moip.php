@@ -462,7 +462,6 @@ class Dokan_Moip {
     public function init_filters() {
         // register the moip gateway
         add_filter( 'woocommerce_payment_gateways', array( $this, 'register_gateway' ) );
-        add_filter( 'woocommerce_checkout_fields', array( $this, 'add_cpf_field' ) );
 
         // prevent non moip vendor to add product
         add_filter( 'dokan_can_add_product', array( $this, 'can_seller_add_product' ) );
@@ -482,26 +481,6 @@ class Dokan_Moip {
         $methods[] = 'Dokan_Moip_Connect';
 
         return $methods;
-    }
-
-    /**
-     * Add cpf field in the checkout page
-     *
-     * @param array $fileds
-     *
-     * @return array
-     */
-    public function add_cpf_field( $fields ) {
-        $fields['billing']['billing_cpf'] = array(
-            'type'      => 'number',
-            'label'     => __( 'CPF Number', 'dokan' ),
-            'placeholder'   => _x( 'CPF Number', 'placeholder', 'dokan' ),
-            'required'  => false,
-            'class'     => array( 'form-row-wide' ),
-            'clear'     => true
-        );
-
-        return $fields;
     }
 
     /**
