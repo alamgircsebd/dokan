@@ -22,6 +22,7 @@ class Dokan_staffs {
         add_action( 'dokan_product_updated', array( $this, 'update_product' ), 10 );
         add_action( 'dokan_product_listing_arg', array( $this, 'listing_product' ), 10 );
         // add_action( 'dokan_get_current_user_id', array( $this, 'filter_current_user' ), 10 );
+        // add_filter( 'dokan_email_recipient_new_order', array( $this, 'send_email_to_staff' ), 10, 2 );
     }
 
     /**
@@ -352,6 +353,23 @@ class Dokan_staffs {
             // );
         }
         return $args;
+    }
+
+    public function send_email_to_staff( $email, $order_id ) {
+        $staff_ids = dokan_get_staff_id_by_order( $order_id );
+
+        if ( ! is_array( $staff_ids ) ) {
+            return $email;
+        }
+
+        foreach ( $staff_ids as $staff_id ) {
+            if ( user_can( $staff_id, 'dokan_view_order' ) ) {
+                $staff  = get_userdata( $staff_id );
+                $email .= ',' . $staff->user_email;
+            }
+        }
+
+        return $email;
     }
 
 }
