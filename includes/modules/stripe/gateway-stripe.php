@@ -261,8 +261,14 @@ class Dokan_Stripe {
      * @return array
      */
     function register_dokan_withdraw_gateway( $methods ) {
+        $settings = get_option('woocommerce_dokan-stripe-connect_settings');
+
+        if ( isset( $settings['enabled'] ) && $settings['enabled'] != 'yes' ) {
+            return $methods;
+        }
+
         $methods['dokan-stripe-connect'] = array(
-            'title'    => __( 'Dokan Stripe', 'dokan' ),
+            'title'    => __( 'Stripe', 'dokan' ),
             'callback' => array( $this, 'stripe_authorize_button' )
         );
 
@@ -280,6 +286,10 @@ class Dokan_Stripe {
 
         if ( ! $settings ) {
             _e( 'Stripe gateway is not configured. Please contact admin.', 'dokan' );
+            return;
+        }
+
+        if ( ! isset( $settings['enabled'] ) || $settings['enabled'] == 'no' ) {
             return;
         }
 
