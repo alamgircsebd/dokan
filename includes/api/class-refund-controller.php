@@ -487,6 +487,11 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
                 )
             );
         }
+
+        $vendor       = dokan()->vendor->get( $vendor_id );
+        $vendor_email = $vendor->get_email();
+
+        do_action( 'dokan_refund_processed_notification', $vendor_email, $order_id, 'approved', $refund_amount, $refund_reason );
     }
 
     /**
