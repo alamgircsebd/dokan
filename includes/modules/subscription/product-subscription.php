@@ -95,6 +95,7 @@ class Dokan_Product_Subscription {
 
         add_action( 'dps_schedule_pack_update', array( $this, 'schedule_task' ) );
         add_action( 'dokan_before_listing_product', array( $this, 'show_custom_subscription_info' ) );
+        add_filter( 'woocommerce_register_post_type_product', array( $this, 'disable_creating_new_product' ) );
 
         // add_action( 'dokan_after_delete_product_item', array( $this, 'update_meta_for_delete_product' ) );
         // add_action( 'valid-paypal-standard-ipn-request', array( $this, 'process_paypal_ipn_request' ), 9 );
@@ -1167,6 +1168,38 @@ class Dokan_Product_Subscription {
         if ( 'paypal' == $order->get_payment_method() ) {
             DPS_PayPal_Standard_Subscriptions::cancel_subscription_with_paypal( $order_id, $user_id );
         }
+    }
+
+    /**
+     * Disable creating new product from backend
+     *
+     * @param  array $args
+     *
+     * @return array
+     */
+    public function disable_creating_new_product( $args ) {
+
+        $user_id = get_current_user_id();
+
+        if ( current_user_can( 'manage_woocommerce' ) ) {
+            return $args;
+        }
+
+        if ( ! dokan_is_user_seller( $user_id ) ) {
+            return $args;
+        }
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            return $args;
+        }
+
+        $remaining_product = dps_user_remaining_product( $user_id );
+
+        if ( $remaining_product == 0 || ! self::can_post_product() ) {
+            $args['capabilities']['create_posts'] = 'do_not_allow';
+        }
+
+        return $args;
     }
 
 } // Dokan_Product_Subscription
