@@ -51,12 +51,6 @@ class Dokan_Geolocation_Vendor_Query {
      * @return void
      */
     public function __construct() {
-        $api_key = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
-
-        if ( ! $api_key ) {
-            return;
-        }
-
         add_filter( 'dokan_seller_listing_args', array( $this, 'filter_pre_user_query' ) );
     }
 
