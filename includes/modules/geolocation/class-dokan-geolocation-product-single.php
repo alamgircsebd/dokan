@@ -5,7 +5,7 @@
  *
  * @since 1.0.0
  */
-class Dokan_Geolocation_Single_Product {
+class Dokan_Geolocation_Product_Single {
 
     /**
      * Class constructor

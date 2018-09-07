@@ -26,12 +26,6 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function __construct() {
-        $api_key = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
-
-        if ( ! $api_key ) {
-            return;
-        }
-
         $this->map_location = dokan_get_option( 'show_locations_map', 'dokan_geolocation', 'top' );
 
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
