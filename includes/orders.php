@@ -103,8 +103,12 @@ if ( !function_exists( 'dokan_sync_order_table' ) ) :
 function dokan_sync_order_table( $order_id ) {
     global $wpdb;
 
+    if ( get_post_meta( $order_id, 'has_sub_order', true ) == '1' ) {
+        return;
+    }
+
     $order          = wc_get_order( $order_id );
-    $seller_id      = dokan_get_seller_id_by_order( $order_id );
+    $seller_id      = dokan_get_seller_id_by_order_id( $order_id );
     $order_total    = $order->get_total();
 
     if ( $order->get_total_refunded() ) {
