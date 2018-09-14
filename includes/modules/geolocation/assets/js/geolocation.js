@@ -6,8 +6,8 @@
     var gmap, marker, address, geocoder;
 
     function initMap() {
-        var lat      = $('[name="_dokan_geolocation_product_geo_latitude"]').val(),
-            lng      = $('[name="_dokan_geolocation_product_geo_longitude"]').val(),
+        var lat      = $('[name="_dokan_geolocation_product_dokan_geo_latitude"]').val(),
+            lng      = $('[name="_dokan_geolocation_product_dokan_geo_longitude"]').val(),
             map_area = $( '#dokan-geolocation-product-location-map' );
 
         address = $( '#_dokan_geolocation_product_location' );
@@ -47,8 +47,8 @@
     }
 
     function updateMap( lat, lng, formatted_address ) {
-        $('[name="_dokan_geolocation_product_geo_latitude"]').val( lat ),
-        $('[name="_dokan_geolocation_product_geo_longitude"]').val( lng );
+        $('[name="_dokan_geolocation_product_dokan_geo_latitude"]').val( lat ),
+        $('[name="_dokan_geolocation_product_dokan_geo_longitude"]').val( lng );
 
         var curpoint = new google.maps.LatLng( lat, lng )
 

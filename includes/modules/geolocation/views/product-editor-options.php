@@ -30,9 +30,9 @@
             </label>
 
             <div class="dokan-geolocation-product-location-container">
-                <input type="hidden" name="_dokan_geolocation_product_geo_latitude" value="<?php echo $geo_latitude ?>">
-                <input type="hidden" name="_dokan_geolocation_product_geo_longitude" value="<?php echo $geo_longitude ?>">
-                <input type="text" name="_dokan_geolocation_product_geo_address" value="<?php echo $geo_address ?>" class="dokan-form-control" id="_dokan_geolocation_product_location">
+                <input type="hidden" name="_dokan_geolocation_product_dokan_geo_latitude" value="<?php echo esc_attr( $dokan_geo_latitude ); ?>">
+                <input type="hidden" name="_dokan_geolocation_product_dokan_geo_longitude" value="<?php echo esc_attr( $dokan_geo_longitude ); ?>">
+                <input type="text" name="_dokan_geolocation_product_dokan_geo_address" value="<?php echo esc_attr( $dokan_geo_address ); ?>" class="dokan-form-control" id="_dokan_geolocation_product_location">
 
                 <?php if ( is_ssl() || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ): ?>
                     <i class="locate-icon" style="background-image: url(<?php echo DOKAN_GEOLOCATION_URL . '/assets/images/locate.svg'; ?>)"></i>

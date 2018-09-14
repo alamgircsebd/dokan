@@ -69,16 +69,16 @@ class Dokan_Geolocation_Product_Single {
     public function add_product_location_data() {
         global $product;
 
-        $latitude  = $product->get_meta( 'geo_latitude', true );
-        $longitude = $product->get_meta( 'geo_longitude', true );
-        $address   = $product->get_meta( 'geo_address', true );
+        $latitude  = $product->get_meta( 'dokan_geo_latitude', true );
+        $longitude = $product->get_meta( 'dokan_geo_longitude', true );
+        $address   = $product->get_meta( 'dokan_geo_address', true );
 
         $args = array(
-            'id'            => $product->get_id(),
-            'geo_latitude'  => $latitude,
-            'geo_longitude' => $longitude,
-            'geo_address'   => $address,
-            'info'          => null,
+            'id'                  => $product->get_id(),
+            'dokan_geo_latitude'  => $latitude,
+            'dokan_geo_longitude' => $longitude,
+            'dokan_geo_address'   => $address,
+            'info'                => null,
         );
 
         dokan_geo_get_template( 'item-geolocation-data', $args );

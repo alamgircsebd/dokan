@@ -1,4 +1,4 @@
-<form role="search" method="get" class="dokan-geolocation-location-filters" action="<?php echo esc_url( home_url( '/' ) ); ?>" data-scope="<?php echo $scope; ?>" data-display="<?php echo $display; ?>">
+<form role="search" method="get" class="dokan-geolocation-location-filters" action="<?php echo esc_url( home_url( '/' ) ); ?>" data-scope="<?php echo esc_attr( $scope ); ?>" data-display="<?php echo esc_attr( $display ); ?>">
     <div class="dokan-geolocation-filters-loading" style="text-align: center;">
         <img src="<?php echo DOKAN_PLUGIN_ASSEST.'/images/ajax-loader.gif'; ?>" alt="" style="display: inline-block;">
     </div>
@@ -7,12 +7,12 @@
         <div class="dokan-geo-filters-column">
             <div class="<?php echo ! $scope ? 'dokan-input-group': ' no-dropdown'; ?>">
                 <?php if ( 'vendor' === $scope ): ?>
-                    <input type="text" class="dokan-form-control" name="dokan_seller_search" placeholder="<?php echo $placeholders['search_vendors']; ?>" value="<?php echo $seller_s; ?>">
+                    <input type="text" class="dokan-form-control" name="dokan_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>" value="<?php echo esc_attr( $seller_s ); ?>">
                 <?php elseif ( 'product' === $scope ): ?>
-                    <input type="text" class="dokan-form-control" name="s" placeholder="<?php echo $placeholders['search_products']; ?>" value="<?php echo $s; ?>">
+                    <input type="text" class="dokan-form-control" name="s" placeholder="<?php echo esc_attr( $placeholders['search_products'] ); ?>" value="<?php echo esc_attr( $s ); ?>">
                 <?php else : ?>
-                    <input type="text" class="dokan-form-control" name="s" placeholder="<?php echo $placeholders['search_products']; ?>" value="<?php echo $s; ?>">
-                    <input type="text" class="dokan-form-control dokan-hide" name="dokan_seller_search" placeholder="<?php echo $placeholders['search_vendors']; ?>" value="<?php echo $seller_s; ?>">
+                    <input type="text" class="dokan-form-control" name="s" placeholder="<?php echo esc_attr( $placeholders['search_products'] ); ?>" value="<?php echo esc_attr( $s ); ?>">
+                    <input type="text" class="dokan-form-control dokan-hide" name="dokan_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>" value="<?php echo esc_attr( $seller_s ); ?>">
                 <?php endif; ?>
 
                 <?php if ( ! $scope ): ?>
@@ -32,7 +32,7 @@
 
         <div class="dokan-geo-filters-column">
             <div class="location-address">
-                <input type="text" placeholder="<?php echo $placeholders['location']; ?>" value="<?php echo $address; ?>">
+                <input type="text" placeholder="<?php echo esc_attr( $placeholders['location'] ); ?>" value="<?php echo esc_attr( $address ); ?>">
 
                 <?php if ( is_ssl() || ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ): ?>
                     <i class="locate-icon dokan-hides" style="background-image: url(<?php echo DOKAN_GEOLOCATION_URL . '/assets/images/locate.svg'; ?>)"></i>
@@ -64,16 +64,16 @@
                 <input
                     class="dokan-range-slider dokan-left"
                     type="range"
-                    value="<?php echo $distance; ?>"
-                    min="<?php echo $slider['min']; ?>"
-                    max="<?php echo $slider['max']; ?>"
+                    value="<?php echo esc_attr( $distance ); ?>"
+                    min="<?php echo esc_attr( $slider['min'] ); ?>"
+                    max="<?php echo esc_attr( $slider['max'] ); ?>"
                 >
             </div>
         </div>
     </div>
 
-    <input type="hidden" name="latitude" value="<?php echo $latitude; ?>">
-    <input type="hidden" name="longitude" value="<?php echo $longitude; ?>">
-    <input type="hidden" name="wc_shop_page" value="<?php echo $wc_shop_page; ?>">
-    <input type="hidden" name="dokan_store_listing_page" value="<?php echo $store_listing_page; ?>">
+    <input type="hidden" name="latitude" value="<?php echo esc_attr( $latitude ); ?>">
+    <input type="hidden" name="longitude" value="<?php echo esc_attr( $longitude ); ?>">
+    <input type="hidden" name="wc_shop_page" value="<?php echo esc_attr( $wc_shop_page ); ?>">
+    <input type="hidden" name="dokan_store_listing_page" value="<?php echo esc_attr( $store_listing_page ); ?>">
 </form>

@@ -131,7 +131,7 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public function seller_listing_footer_content( $seller ) {
-        if ( empty( $seller->geo_latitude ) || empty( $seller->geo_longitude ) ) {
+        if ( empty( $seller->dokan_geo_latitude ) || empty( $seller->dokan_geo_longitude ) ) {
             return;
         }
 
@@ -141,7 +141,7 @@ class Dokan_Geolocation_Vendor_View {
             'title'   => $vendor->get_shop_name(),
             'link'    => dokan_get_store_url( $seller->ID ),
             'image'   => $vendor->get_avatar(),
-            'address' => $vendor->data->data->geo_address,
+            'address' => $vendor->data->data->dokan_geo_address,
         );
 
         /**
@@ -155,11 +155,11 @@ class Dokan_Geolocation_Vendor_View {
         $info = apply_filters( 'dokan_geolocation_info_vendor', $info_window_data, $vendor );
 
         $args = array(
-            'id'            => $seller->ID,
-            'geo_latitude'  => $vendor->data->data->geo_latitude,
-            'geo_longitude' => $vendor->data->data->geo_longitude,
-            'geo_address'   => $vendor->data->data->geo_address,
-            'info'          => json_encode( $info ),
+            'id'                  => $seller->ID,
+            'dokan_geo_latitude'  => $vendor->data->data->dokan_geo_latitude,
+            'dokan_geo_longitude' => $vendor->data->data->dokan_geo_longitude,
+            'dokan_geo_address'   => $vendor->data->data->dokan_geo_address,
+            'info'                => json_encode( $info ),
         );
 
         dokan_geo_get_template( 'item-geolocation-data', $args );

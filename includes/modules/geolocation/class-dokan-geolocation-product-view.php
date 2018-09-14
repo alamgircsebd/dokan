@@ -123,7 +123,7 @@ class Dokan_Geolocation_Product_View {
             return;
         }
 
-        if ( empty( $post->geo_latitude ) || empty( $post->geo_longitude ) ) {
+        if ( empty( $post->dokan_geo_latitude ) || empty( $post->dokan_geo_longitude ) ) {
             return;
         }
 
@@ -139,7 +139,7 @@ class Dokan_Geolocation_Product_View {
             'title'   => $post->post_title,
             'link'    => get_permalink( $post->ID ),
             'image'   => $image,
-            'address' => $post->geo_address,
+            'address' => $post->dokan_geo_address,
         );
 
         /**
@@ -154,11 +154,11 @@ class Dokan_Geolocation_Product_View {
         $info = apply_filters( 'dokan_geolocation_info_product', $info_window_data, $post, $product );
 
         $args = array(
-            'id'            => $post->ID,
-            'geo_latitude'  => $post->geo_latitude,
-            'geo_longitude' => $post->geo_longitude,
-            'geo_address'   => $post->geo_address,
-            'info'          => json_encode( $info ),
+            'id'                  => $post->ID,
+            'dokan_geo_latitude'  => $post->dokan_geo_latitude,
+            'dokan_geo_longitude' => $post->dokan_geo_longitude,
+            'dokan_geo_address'   => $post->dokan_geo_address,
+            'info'                => json_encode( $info ),
         );
 
         dokan_geo_get_template( 'item-geolocation-data', $args );
