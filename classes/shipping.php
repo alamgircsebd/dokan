@@ -453,9 +453,11 @@ class Dokan_Pro_Shipping {
         ?>
             <tr class="enable-shipping">
                 <th scope="row"><label for="enable_shipping"><?php _e( 'Enable Shipping', 'dokan' ); ?></label></th>
-                <td>
-                    <input type="checkbox" name="enable_shipping" id="enable_shipping" class="input-checkbox" value="1"/>
-                    <label for="enable_shipping"><?php _e( 'Enable store shipping', 'dokan' ); ?></label>
+                <td class="checkbox">
+                    <input type="checkbox" name="enable_shipping" id="enable_shipping" class="switch-input" value="1">
+                    <label for="enable_shipping">
+                        <?php _e( 'Enable store shipping', 'dokan' ); ?>
+                    </label>
                 </td>
             </tr>
 
