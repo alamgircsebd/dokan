@@ -892,6 +892,9 @@ add_action( 'edit_term', 'dokan_save_category_commission_field', 10, 3 );
  * @return void
  */
 function dokan_add_category_commission_field() {
+    if ( dokan_get_option( 'product_category_style', 'dokan_selling' ) !== 'single' ) {
+        return;
+    }
     ?>
     <div class="form-field term-display-type-wrap">
         <label for="per_category_admin_commission_type"><?php _e( 'Commission type', 'dokan' ); ?></label>
@@ -921,6 +924,11 @@ function dokan_add_category_commission_field() {
 function dokan_edit_category_commission_field( $term ){
     $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission', true );
     $commission_type = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
+
+    if ( dokan_get_option( 'product_category_style', 'dokan_selling' ) !== 'single' ) {
+        return;
+    }
+
     ?>
     <tr class="form-field">
         <th scope="row" valign="top"><label><?php _e( 'Admin Commission type', 'dokan' ); ?></label></th>
