@@ -821,15 +821,15 @@ function dokan_display_quantity_discount() {
     <?php $total_discount_amount_for_lot = dokan_discount_for_lot_quantity(); ?>
     <?php if ( $total_discount_amount_for_lot > 0 ) : ?>
         <tr class="cart-discount">
-            <th><?php _e( 'Quantity discount', 'dokan' ); ?></th>
-            <td><?php echo wc_price( $total_discount_amount_for_lot ); ?></td>
+            <th><?php _e( 'Quantity Discount', 'dokan' ); ?></th>
+            <td data-title="<?php _e( 'Quantity Discount', 'dokan' ); ?>"><?php echo wc_price( $total_discount_amount_for_lot ); ?></td>
         </tr>
     <?php endif; ?>
     <?php $total_discount_amount_for_order = dokan_discount_for_minimum_order(); ?>
     <?php if ( $total_discount_amount_for_order > 0 ) : ?>
         <tr class="cart-discount">
-            <th><?php _e( 'Order discount', 'dokan' ); ?></th>
-            <td><?php echo wc_price( $total_discount_amount_for_order ); ?></td>
+            <th><?php _e( 'Order Discount', 'dokan' ); ?></th>
+            <td data-title="<?php _e( 'Order Discount', 'dokan' ); ?>"><?php echo wc_price( $total_discount_amount_for_order ); ?></td>
         </tr>
     <?php endif; ?>
     <?php
