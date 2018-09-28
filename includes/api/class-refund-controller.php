@@ -140,7 +140,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         if ( ! empty( $status ) ) {
             if ( $status == 'pending' ) {
                 $total_count = $refund_count['pending'];
-            } elseif( $status == 'completed' ) {
+            } elseif( $status == 'approved' ) {
                 $total_count = $refund_count['completed'];
             } else {
                 $total_count = $refund_count['cancelled'];
