@@ -329,4 +329,44 @@ export default {
         font-size: 14px;
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .vendor-list {
+        table {
+            td.store_name, td.enabled {
+                display: table-cell !important;
+            }
+
+            th:not(.check-column):not(.store_name):not(.enabled) {
+                display: none;
+            }
+
+            td:not(.check-column):not(.store_name):not(.enabled) {
+                display: none;
+            }
+
+            th.column, table td.column {
+                width: auto;
+            }
+
+            td.manage-column.column-cb.check-column {
+                padding-right: 15px;
+            }
+
+            th.column.enabled {
+                width: 25% !important;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width:320px) {
+    .vendor-list {
+        table {
+            .row-actions span {
+                font-size: 11px;
+            }
+        }
+    }
+}
 </style>

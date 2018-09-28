@@ -333,29 +333,61 @@
 </script>
 
 <style lang="less">
-    .dokan-modules-wrap {
+.dokan-modules-wrap {
 
-        .module-content {
-            position: relative;
+    .module-content {
+        position: relative;
 
-            .loading {
-                position: absolute;
-                width: 100%;
-                width: 100%;
-                height: 100%;
-                top: 0px;
-                left: 0px;
-                background: rgba( 255,255,255, 0.5);
+        .loading {
+            position: absolute;
+            width: 100%;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            background: rgba( 255,255,255, 0.5);
 
-                .dokan-loader {
-                    top: 30%;
-                    left: 47%;
+            .dokan-loader {
+                top: 30%;
+                left: 47%;
+            }
+        }
+
+        .dokan-modules {
+            .plugin-card {
+                .plugin-action-buttons {
+                    .switch {
+                        input:checked + .slider {
+                            background-color: #0068A0;
+                        }
+                    }
+                }
+            }
+        }
+
+        table.wp-list-table {
+            thead {
+                tr {
+                    th.active {
+                        width: 10%;
+                    }
+
+                    th.description {
+                        width: 55%;
+                    }
                 }
             }
 
-            .dokan-modules {
-                .plugin-card {
-                    .plugin-action-buttons {
+            tbody {
+                tr {
+                    td.name {
+                        img {
+                            float: left;
+                            margin-right: 10px;
+                        }
+                    }
+
+                    td.active {
                         .switch {
                             input:checked + .slider {
                                 background-color: #0068A0;
@@ -364,93 +396,106 @@
                     }
                 }
             }
-
-            table.wp-list-table {
-                thead {
-                    tr {
-                        th.active {
-                            width: 10%;
-                        }
-
-                        th.description {
-                            width: 55%;
-                        }
-                    }
-                }
-
-                tbody {
-                    tr {
-                        td.name {
-                            img {
-                                float: left;
-                                margin-right: 10px;
-                            }
-                        }
-
-                        td.active {
-                            .switch {
-                                input:checked + .slider {
-                                    background-color: #0068A0;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
-
-        .module-filter {
-            margin-bottom: 10px;
-            padding-left:0px;
-
-            .filter-items {
-                ul {
-                    margin: 0;
-                    overflow: hidden;
-                    margin-right: 30px;
-
-                    li {
-                        display: inline-block;
-                        line-height: 53px;
-                        margin: 0px;
-
-                        a{
-                            font-size: 14px;
-                            border-right: 1px solid #eee;
-                            width: 80px;
-                            display: block;
-                            text-align: center;
-                            font-weight: 500;
-                            box-shadow: none;
-
-                            &:hover {
-                                background: #fafafa;
-                            }
-
-                        }
-
-                        &.active {
-                            a {
-                                background: #fafafa;
-                            }
-                        }
-
-                        &:last-child {
-                            a {
-                                border-right: none;
-                            }
-                        }
-                    }
-                }
-            }
-
-            .search-form {
-                .view-switch {
-                    padding: 0px;
-                    margin: -2px 8px 1px 2px;
-                }
-            }
-        }
-
     }
+
+    .module-filter {
+        margin-bottom: 10px;
+        padding-left:0px;
+
+        .filter-items {
+            ul {
+                margin: 0;
+                overflow: hidden;
+                margin-right: 30px;
+
+                li {
+                    display: inline-block;
+                    line-height: 53px;
+                    margin: 0px;
+
+                    a{
+                        font-size: 14px;
+                        border-right: 1px solid #eee;
+                        width: 80px;
+                        display: block;
+                        text-align: center;
+                        font-weight: 500;
+                        box-shadow: none;
+
+                        &:hover {
+                            background: #fafafa;
+                        }
+
+                    }
+
+                    &.active {
+                        a {
+                            background: #fafafa;
+                        }
+                    }
+
+                    &:last-child {
+                        a {
+                            border-right: none;
+                        }
+                    }
+                }
+            }
+        }
+
+        .search-form {
+            .view-switch {
+                padding: 0px;
+                margin: -2px 8px 1px 2px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .dokan-modules-wrap {
+        input#media-search-input {
+            width: 74%;
+        }
+
+        .module-content {
+            .tablenav.top {
+                margin-top: -16px;
+            }
+        }
+
+        table {
+            td.name, td.active {
+                display: table-cell !important;
+            }
+
+            th:not(.check-column):not(.name):not(.active) {
+                display: none;
+            }
+
+            td:not(.check-column):not(.name):not(.active) {
+                display: none;
+            }
+
+            th.column, td.column {
+                width: auto;
+            }
+
+            th.column.name {
+                width: 50% !important;
+            }
+
+            th.column.active {
+                width: 20% !important;
+            }
+
+            td.column.order_id {
+                .row-actions {
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+}
 </style>

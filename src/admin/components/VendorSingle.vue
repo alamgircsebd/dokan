@@ -793,4 +793,39 @@ export default {
         }
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .dokan-vendor-single {
+        .vendor-header {
+            display: block;
+
+            .profile-info {
+                width: 100% !important;
+                margin-bottom: 10px;
+            }
+
+            .profile-banner {
+                width: 100% !important;
+            }
+        }
+
+        .vendor-summary {
+            display: block;
+            .summary-wrap {
+                display: block;
+                width: 100% !important;
+
+                .stat-summary {
+                    width: 100% !important;
+                    padding-bottom: 20px;
+                }
+            }
+            .vendor-info {
+                width: 100% !important;
+                margin-top: 20px;
+            }
+        }
+    }
+}
+
 </style>
