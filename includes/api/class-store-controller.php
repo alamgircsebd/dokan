@@ -230,7 +230,7 @@ class Dokan_Pro_REST_Store_Controller extends Dokan_REST_Store_Controller {
             'revenue'  => array(
                 'orders'  => $orders->{'wc-processing'} + $orders->{'wc-completed'},
                 'sales'   => $vendor->get_total_sales(),
-                'earning' => dokan_get_seller_earnings( $store_id )
+                'earning' => dokan_get_seller_earnings( $store_id, false )
             ),
             'others'   => array(
                 'commision_rate' => $vendor->get_percentage(),
