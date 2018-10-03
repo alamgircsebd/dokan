@@ -3,6 +3,10 @@
         "appearance"
     ],
 
+    "liquidweb" : [
+        "appearance", "stripe"
+    ],
+
     "professional": [
         "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "single-product-multiple-vendor"
     ],

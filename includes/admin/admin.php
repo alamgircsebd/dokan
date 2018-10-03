@@ -21,9 +21,7 @@ class Dokan_Pro_Admin_Settings {
      */
     public function __construct() {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
-
         add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
-
         add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
@@ -31,7 +29,6 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
         add_action( 'admin_notices', array( $this, 'show_whats_new_notice' ), 10 );
         add_action( 'wp_ajax_dokan-whats-new-notice', array( $this, 'dismiss_new_notice' ) );
-
         add_action( 'admin_init', array( $this, 'handle_seller_bulk_action' ), 10 );
     }
 

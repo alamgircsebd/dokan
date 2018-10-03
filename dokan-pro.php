@@ -124,6 +124,17 @@ class Dokan_Pro {
     }
 
     /**
+     * Get plan id
+     *
+     * @since 2.8.4
+     *
+     * @return void
+     */
+    public function get_plan() {
+        return $this->plan;
+    }
+
+    /**
      * Dokan main plugin activation notice
      *
      * @since 2.5.2
@@ -237,6 +248,7 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
+            require_once DOKAN_PRO_ADMIN_DIR . '/promotion.php';
         }
 
         require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
@@ -290,6 +302,7 @@ class Dokan_Pro {
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
+            new Dokan_Pro_Promotion();
         }
 
         new Dokan_Announcement();

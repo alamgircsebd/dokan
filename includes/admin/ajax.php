@@ -18,10 +18,7 @@ class Dokan_Pro_Admin_Ajax {
         add_action( 'wp_ajax_print_duplicate_suborders', array( $this, 'print_duplicate_suborders' ) );
         add_action( 'wp_ajax_dokan_duplicate_order_delete', array( $this, 'dokan_duplicate_order_delete' ) );
         add_action( 'wp_ajax_dokan_duplicate_orders_bulk_delete', array( $this, 'dokan_duplicate_orders_bulk_delete' ) );
-
         add_action( 'wp_ajax_dokan_refund_form_action', array( $this, 'handle_refund_action' ) );
-
-        // Toggle module action
         add_action( 'wp_ajax_dokan-toggle-module', array( $this, 'toggle_module' ), 10 );
     }
 
