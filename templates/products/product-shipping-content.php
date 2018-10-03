@@ -18,10 +18,12 @@ $wc_shipping_enabled    = get_option( 'woocommerce_calc_shipping' ) == 'yes' ? t
 $wc_tax_enabled         = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true : false;
 ?>
 <?php if ( $wc_shipping_enabled || $wc_tax_enabled ) : ?>
-<div class="dokan-product-shipping-tax hide_if_virtual hide_if_grouped dokan-edit-row dokan-clearfix dokan-border-top <?php echo ! $wc_shipping_enabled ? 'woocommerce-no-shipping' : '' ?> <?php echo ! $wc_tax_enabled ? 'woocommerce-no-tax' : '' ?>">
+<div class="dokan-product-shipping-tax hide_if_grouped dokan-edit-row dokan-clearfix dokan-border-top <?php echo ! $wc_shipping_enabled ? 'woocommerce-no-shipping' : '' ?> <?php echo ! $wc_tax_enabled ? 'woocommerce-no-tax' : '' ?>">
     <div class="dokan-section-heading" data-togglehandler="dokan_product_shipping_tax">
-        <h2><i class="fa fa-truck" aria-hidden="true"></i> <?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
-        <p><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>
+        <h2 class="hide_if_virtual"><i class="fa fa-truck" aria-hidden="true"></i> <?php _e( 'Shipping and Tax', 'dokan' ); ?></h2>
+        <h2 class="show_if_virtual"><i class="fa fa-truck" aria-hidden="true"></i> <?php _e( 'Tax', 'dokan' ); ?></h2>
+        <p class="hide_if_virtual"><?php _e( 'Manage shipping and tax for this product', 'dokan' ); ?></p>
+        <p class="show_if_virtual"><?php _e( 'Manage tax for this product', 'dokan' ); ?></p>
         <a href="#" class="dokan-section-toggle">
             <i class="fa fa-sort-desc fa-flip-vertical" aria-hidden="true"></i>
         </a>
@@ -30,7 +32,7 @@ $wc_tax_enabled         = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true
 
     <div class="dokan-section-content">
         <?php if ( $wc_shipping_enabled ) : ?>
-            <div class="dokan-clearfix dokan-shipping-container">
+            <div class="dokan-clearfix dokan-shipping-container hide_if_virtual">
                 <input type="hidden" name="product_shipping_class" value="0">
                 <div class="dokan-form-group">
                     <label class="dokan-checkbox-inline" for="_disable_shipping">
