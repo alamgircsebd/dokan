@@ -1,3 +1,35 @@
+v2.9.0 -> October 03, 2018
+--------------------------
+- [new] Add Geolocation module ( Business & Enterprise Package )
+- [new] Add Moip payment gateway module ( Professional, Business & Enterprise Package )
+- [new] Allow vendor to add product tag from vendor dashboard
+- [new] Allow admin to verify a vendor from the backend and add send email again functionalities
+- [new] Send new order email to vendor staff
+- [new] Make dokan admin backend pages responsive
+- [tweak] Upload vendor verification data to separate folder
+- [tweak] Replace all dir constant to dirname function
+- [tweak] Refund calculation for admin and vendor
+- [tweak] Dokan rebuild order table functionality
+- [fix] Subscription product shouldn't be listed on vendor product listing page
+- [fix] Unable to save category for a subscription product
+- [fix] Exporting product from admin panel issue
+- [fix] Send approved refund request email to vendor
+- [fix] Disable creating new product if a vendor is not subscribed to any package
+- [fix] Stripe payment gateway is still available in vendor dashboard even if it's turned off
+- [fix] Store support widget is not showing in backend widget page
+- [fix] Variation API schema added in dokan rest API
+- [fix] Shipping zone is not working correctly
+- [fix] Unable to buy subscription pack using stripe connect
+- [fix] Allow the shop manager to change user subscription from the backend
+- [fix] Image and hyperlink in the announcement body do not reach in the vendor dashboard
+- [fix] Disproving or rejecting Address which have previously been approved, still shows approved in store sidebar
+- [fix] Vendor should not be able to sell subscription product
+- [fix] Paypal credentials are not set warning even PayPal is turned off
+- [fix] Booking day view is not visible
+- [fix] Quantity discount is not visible in mobile device
+- [fix] Refund pagination is not showing in admin backend
+- [fix] Remove category commission options if multiple categories is allowed
+
 v2.8.3 -> July 19, 2018
 --------------------------
 - [new] Customer inbox in live chat module ( Live Chat module )
