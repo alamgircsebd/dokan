@@ -459,8 +459,6 @@ Class Dokan_Social_Login {
 
         if ( !is_wp_error( $user_id ) ) {
             $this->login_user( get_userdata( $user_id ) );
-            wp_redirect( $this->base_url );
-            exit();
         }
     }
 
@@ -483,6 +481,8 @@ Class Dokan_Social_Login {
         }
 
         update_user_caches( $wp_user );
+        wp_redirect( dokan_get_page_url( 'myaccount', 'woocommerce' ) );
+        exit;
     }
 
 }
