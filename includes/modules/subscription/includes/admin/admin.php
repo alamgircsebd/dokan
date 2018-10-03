@@ -140,7 +140,7 @@ class DPS_Admin {
         );
 
         echo '<p class="form-field _vendor_allowed_categories">';
-        $selected_cat = get_post_meta( $post->ID, '_vendor_allowed_categories' );
+        $selected_cat = get_post_meta( $post->ID, '_vendor_allowed_categories', true );
         echo '<label for="_vendor_allowed_categories">' . __( 'Allowed categories', 'dokan' ) .'</label>';
         echo '<select multiple="multiple" data-placeholder=" '. __( 'Select categories&hellip;', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_categories" name="_vendor_allowed_categories[]" style="width: 350px;">';
             $r = array();
@@ -148,7 +148,7 @@ class DPS_Admin {
             $r['hierarchical']  = 1;
             $r['hide_empty']    = 0;
             $r['value']         = 'id';
-            $r['selected']      = array_map( 'absint', $selected_cat ) ;
+            $r['selected']      = ! empty( $selected_cat ) ? array_map( 'absint', $selected_cat ) : '';
             $r['orderby']       = 'name';
 
             $categories = get_terms( 'product_cat', $r );
@@ -248,7 +248,7 @@ class DPS_Admin {
         update_post_meta( $post_id, '_subscription_product_admin_commission', $_POST['_subscription_product_admin_commission'] );
 
         if ( ! empty( $_POST['_vendor_allowed_categories'] ) ) {
-            update_post_meta( $post_id, '_vendor_allowed_categories', $_POST['_vendor_allowed_categories'] );
+            update_post_meta( $post_id, '_vendor_allowed_categories', wc_clean( $_POST['_vendor_allowed_categories'] ) );
         } else {
             delete_post_meta( $post_id, '_vendor_allowed_categories' );
         }
@@ -590,7 +590,7 @@ class DPS_Admin {
             <td><?php _e( 'Allowed categories', 'dokan' ); ?></td>
             <td>
                 <?php
-                    $selected_cat = !empty( $vendor_allowed_categories ) ? $vendor_allowed_categories : get_post_meta( $users_assigned_pack, '_vendor_allowed_categories', true );
+                    $selected_cat = ! empty( $vendor_allowed_categories ) ? $vendor_allowed_categories : get_post_meta( $users_assigned_pack, '_vendor_allowed_categories', true );
                     echo '<select multiple="multiple" data-placeholder=" '. __( 'Select categories&hellip;', 'dokan' ) .'" class="wc-enhanced-select" id="vendor_allowed_categories" name="vendor_allowed_categories[]" style="width: 350px;">';
                     $r = array();
                     $r['pad_counts']    = 1;
@@ -598,7 +598,7 @@ class DPS_Admin {
                     $r['hide_empty']    = 0;
                     $r['value']         = 'id';
                     $r['orderby']       = 'name';
-                    $r['selected']      = ! empty( $selected_cat ) ? $selected_cat : array();
+                    $r['selected']      = ! empty( $selected_cat ) ? array_map( 'absint', $selected_cat ) : '';
 
                     $categories = get_terms( 'product_cat', $r );
 
@@ -647,7 +647,7 @@ class DPS_Admin {
         }
 
         if ( ! empty( $_POST['vendor_allowed_categories'] ) ) {
-            $allowed_cat = array_map( 'intval', $_POST['vendor_allowed_categories'] );
+            $allowed_cat = wc_clean( $_POST['vendor_allowed_categories'] );
             update_user_meta( $user_id, 'vendor_allowed_categories', $allowed_cat );
         } else {
             delete_user_meta( $user_id, 'vendor_allowed_categories' );

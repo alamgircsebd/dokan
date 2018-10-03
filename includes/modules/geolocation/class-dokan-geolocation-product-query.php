@@ -89,7 +89,7 @@ class Dokan_Geolocation_Product_Query {
      * @return string
      */
     public function posts_fields_request( $fields ) {
-        $fields .= ', metalat.meta_value as geo_latitude, metalong.meta_value as geo_longitude, metaaddr.meta_value as geo_address';
+        $fields .= ', metalat.meta_value as dokan_geo_latitude, metalong.meta_value as dokan_geo_longitude, metaaddr.meta_value as dokan_geo_address';
 
         if ( $this->latitude && $this->longitude ) {
             // unit in kilometers or miles
@@ -127,9 +127,9 @@ class Dokan_Geolocation_Product_Query {
     public function posts_join_request( $join ) {
         global $wpdb;
 
-        $join .= " inner join {$wpdb->postmeta} as metalat on {$wpdb->posts}.ID = metalat.post_id and metalat.meta_key = 'geo_latitude'";
-        $join .= " inner join {$wpdb->postmeta} as metalong on {$wpdb->posts}.ID = metalong.post_id and metalong.meta_key = 'geo_longitude'";
-        $join .= " inner join {$wpdb->postmeta} as metaaddr on {$wpdb->posts}.ID = metaaddr.post_id and metaaddr.meta_key = 'geo_address'";
+        $join .= " inner join {$wpdb->postmeta} as metalat on {$wpdb->posts}.ID = metalat.post_id and metalat.meta_key = 'dokan_geo_latitude'";
+        $join .= " inner join {$wpdb->postmeta} as metalong on {$wpdb->posts}.ID = metalong.post_id and metalong.meta_key = 'dokan_geo_longitude'";
+        $join .= " inner join {$wpdb->postmeta} as metaaddr on {$wpdb->posts}.ID = metaaddr.post_id and metaaddr.meta_key = 'dokan_geo_address'";
 
         remove_filter( 'posts_join_request', array( $this, 'posts_join_request' ) );
 

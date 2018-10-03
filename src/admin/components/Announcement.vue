@@ -404,6 +404,40 @@
                 color: #761919
             }
         }
-
     }
+
+@media only screen and (max-width: 600px) {
+    .dokan-announcement-wrapper {
+        .help-block {
+            top: 45px !important;
+            left: 0 !important;
+        }
+
+        .subsubsub {
+            margin-top: 20px;
+        }
+
+        table {
+            td.title, td.content {
+                display: table-cell !important;
+            }
+
+            th:not(.check-column):not(.title):not(.content):not(.send_to) {
+                display: none;
+            }
+
+            td:not(.check-column):not(.title):not(.content):not(.send_to) {
+                display: none;
+            }
+
+            th.column, td.column {
+                width: auto;
+            }
+
+            td.manage-column.column-cb.check-column {
+                padding-right: 15px;
+            }
+        }
+    }
+}
 </style>

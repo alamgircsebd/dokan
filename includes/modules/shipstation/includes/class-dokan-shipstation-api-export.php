@@ -66,7 +66,6 @@ class Dokan_ShipStation_Api_Export extends Dokan_ShipStation_Api_Request {
         }
 
         if ( $raw_end_date && false === strtotime( $raw_end_date ) ) {
-            error_log( print_r( 'mark1', true ) );
             $month      = substr( $raw_end_date, 0, 2 );
             $day        = substr( $raw_end_date, 2, 2 );
             $year       = substr( $raw_end_date, 4, 4 );

@@ -73,6 +73,8 @@ class Dokan_Geolocation {
         $this->includes();
         $this->hooks();
         $this->instances();
+
+        dokan_register_activation_hook( __FILE__, array( $this, 'activate' ) );
     }
 
     /**
@@ -151,6 +153,35 @@ class Dokan_Geolocation {
             new Dokan_Geolocation_Product_View();
             new Dokan_Geolocation_Product_Single();
         }
+    }
+
+    /**
+     * Run upon module activation
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function activate() {
+        $updater_file = DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-update-location-data.php';
+
+        include_once $updater_file;
+        $processor = new Dokan_Geolocation_Update_Location_Data();
+
+        $processor->cancel_process();
+
+        $item = array(
+            'updating' => 'vendors',
+            'paged'    => 1,
+        );
+
+        $processor->push_to_queue( $item );
+        $processor->save()->dispatch();
+
+        $processes = get_option( 'dokan_background_processes', array() );
+        $processes['Dokan_Geolocation_Update_Location_Data'] = $updater_file;
+
+        update_option( 'dokan_background_processes', $processes, 'no' );
     }
 
     /**

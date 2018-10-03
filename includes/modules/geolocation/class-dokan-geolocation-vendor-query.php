@@ -100,7 +100,7 @@ class Dokan_Geolocation_Vendor_Query {
      * @return void
      */
     private function filter_query_fields() {
-        $this->user_query->query_fields .= ', metalat.meta_value as geo_latitude, metalong.meta_value as geo_longitude, metaaddr.meta_value as geo_address';
+        $this->user_query->query_fields .= ', metalat.meta_value as dokan_geo_latitude, metalong.meta_value as dokan_geo_longitude, metaaddr.meta_value as dokan_geo_address';
 
         if ( $this->latitude && $this->longitude ) {
             // unit in kilometers or miles
@@ -132,9 +132,9 @@ class Dokan_Geolocation_Vendor_Query {
     private function filter_query_from() {
         global $wpdb;
 
-        $this->user_query->query_from .= " inner join {$wpdb->usermeta} as metalat on {$wpdb->users}.ID = metalat.user_id and metalat.meta_key = 'geo_latitude'";
-        $this->user_query->query_from .= " inner join {$wpdb->usermeta} as metalong on {$wpdb->users}.ID = metalong.user_id and metalong.meta_key = 'geo_longitude'";
-        $this->user_query->query_from .= " inner join {$wpdb->usermeta} as metaaddr on {$wpdb->users}.ID = metaaddr.user_id and metaaddr.meta_key = 'geo_address'";
+        $this->user_query->query_from .= " inner join {$wpdb->usermeta} as metalat on {$wpdb->users}.ID = metalat.user_id and metalat.meta_key = 'dokan_geo_latitude'";
+        $this->user_query->query_from .= " inner join {$wpdb->usermeta} as metalong on {$wpdb->users}.ID = metalong.user_id and metalong.meta_key = 'dokan_geo_longitude'";
+        $this->user_query->query_from .= " inner join {$wpdb->usermeta} as metaaddr on {$wpdb->users}.ID = metaaddr.user_id and metaaddr.meta_key = 'dokan_geo_address'";
     }
 
     /**

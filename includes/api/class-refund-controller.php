@@ -140,7 +140,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         if ( ! empty( $status ) ) {
             if ( $status == 'pending' ) {
                 $total_count = $refund_count['pending'];
-            } elseif( $status == 'completed' ) {
+            } elseif( $status == 'approved' ) {
                 $total_count = $refund_count['completed'];
             } else {
                 $total_count = $refund_count['cancelled'];
@@ -417,8 +417,9 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             $item = $order->get_item( $item_id );
 
             if ( 'line_item' == $item['type'] ) {
+                $percentage_type    = dokan_get_commission_type( $vendor_id, $item['product_id'] );
                 $vendor_percentage  = dokan_get_seller_percentage( $vendor_id, $item['product_id'] );
-                $vendor_refund += $total * $vendor_percentage / 100;
+                $vendor_refund      += $percentage_type == 'percentage' ? (float) ( $total * $vendor_percentage ) / 100 : (float) ( $total * ( ( $item['subtotal'] - $vendor_percentage ) / $item['subtotal'] ) );
             } else {
                 $fee_refund += $total;
             }

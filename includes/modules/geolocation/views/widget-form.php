@@ -1,6 +1,6 @@
 <p>
-    <label for="<?php echo $scope_id; ?>"><?php _e( 'Type', 'dokan' ); ?></label>
-    <select name="<?php echo $scope_name; ?>" id="<?php echo $scope_id; ?>" class="widefat">
+    <label for="<?php echo esc_attr( $scope_id ); ?>"><?php _e( 'Type', 'dokan' ); ?></label>
+    <select name="<?php echo esc_attr( $scope_name ); ?>" id="<?php echo esc_attr( $scope_id ); ?>" class="widefat">
         <option value="both" <?php selected( $scope, 'both' ); ?>>
             <?php _e( 'Both', 'dokan' ); ?>
         </option>
@@ -17,10 +17,10 @@
     <input
         type="checkbox"
         class="checkbox"
-        id="<?php echo $display_id; ?>"
-        name="<?php echo $display_name; ?>"
+        id="<?php echo esc_attr( $display_id ); ?>"
+        name="<?php echo esc_attr( $display_name ); ?>"
         value="inline"
         <?php checked( $display, 'inline' ); ?>
     >
-    <label for="<?php echo $display_id; ?>"><?php _e( 'Display Inline', 'dokan' ); ?></label>
+    <label for="<?php echo esc_attr( $display_id ); ?>"><?php _e( 'Display Inline', 'dokan' ); ?></label>
 </p>

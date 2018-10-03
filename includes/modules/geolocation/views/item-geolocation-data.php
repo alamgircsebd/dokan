@@ -1,9 +1,9 @@
 <input
     type="hidden"
     name="dokan_geolocation[]"
-    value="<?php echo $id; ?>"'
-    data-latitude="<?php echo $geo_latitude; ?>"
-    data-longitude="<?php echo $geo_longitude; ?>"
-    data-address="<?php echo $geo_address; ?>"
-    data-info='<?php echo $info; ?>'
+    value="<?php echo esc_attr( $id ); ?>"'
+    data-latitude="<?php echo esc_attr( $dokan_geo_latitude ); ?>"
+    data-longitude="<?php echo esc_attr( $dokan_geo_longitude ); ?>"
+    data-address="<?php echo esc_attr( $dokan_geo_address ); ?>"
+    data-info="<?php echo esc_attr( $info ); ?>"
 >

@@ -59,6 +59,10 @@ Class Dokan_Email_Verification {
         add_action( 'woocommerce_login_redirect', array( $this, 'check_verification' ), 99, 2 );
         add_action( 'init', array( $this,'validate_email_link' ), 100 );
         add_action( 'woocommerce_email_footer', array( $this,'add_activation_link' ) );
+        add_action( 'dokan_seller_meta_fields', array( $this, 'add_email_verification_field' ) );
+        add_action( 'dokan_process_seller_meta_fields', array( $this, 'verify_vendor' ) );
+        add_action( 'template_redirect', array( $this, 'send_verification_email_again' ) );
+        add_action( 'template_redirect', array( $this, 'show_resend_email_notification' ) );
     }
 
     /**
@@ -108,7 +112,10 @@ Class Dokan_Email_Verification {
 
         wp_logout();
 
-        wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
+        $link = add_query_arg( 'dokan_email_verification_again', $user_id );
+
+        wc_add_notice( sprintf( '%s %s <a href="%s">%s</a>', $notice, __( 'Didn\'t get the email?', 'dokan' ), $link, __( 'Send again', 'dokan' ) ) );
+
         do_action( 'woocommerce_set_cart_cookies', true );
 
         return $this->base_url;
@@ -198,6 +205,113 @@ Class Dokan_Email_Verification {
     }
 
     /**
+     * Add email verification field
+     *
+     * @param object $user
+     *
+     * @return string
+     */
+    public function add_email_verification_field( $user ) {
+        $verified_vendor = empty( get_user_meta( $user->ID, '_dokan_email_pending_verification', true ) ) ? 'yes' : 'no';
+        ?>
+        <tr>
+            <th><?php esc_html_e( 'Verify Vendor', 'dokan' ); ?></th>
+            <td>
+                <label for="verify_vendor">
+                    <input name="verify_vendor" type="checkbox" id="verify_vendor" value="yes" <?php checked( $verified_vendor, 'yes' ); ?> />
+                    <?php esc_html_e( 'Make this vendor verified.', 'dokan' ) ?>
+                </label>
+            </td>
+        </tr>
+        <?php
+    }
+
+    /**
+     * Verify a vendor from user profile page
+     *
+     * @param  int $user_id
+     *
+     * @return void
+     */
+    public function verify_vendor( $user_id ) {
+
+        if ( ! isset( $_POST['verify_vendor'] ) ) {
+            return;
+        }
+
+        if ( empty( $_POST['verify_vendor'] ) ) {
+            return;
+        }
+
+        if ( empty( get_user_meta( $user_id, '_dokan_email_pending_verification' ) ) ) {
+            return;
+        }
+
+        if ( $_POST['verify_vendor'] == 'yes' ) {
+            delete_user_meta( $user_id, '_dokan_email_pending_verification' );
+            delete_user_meta( $user_id, '_dokan_email_verification_key' );
+        }
+    }
+
+    /**
+     * Send verification eamil again
+     *
+     * @return void
+     */
+    public function send_verification_email_again() {
+
+        if ( ! isset( $_GET['dokan_email_verification_again'] ) ) {
+            return;
+        }
+
+        if ( empty( $_GET['dokan_email_verification_again'] ) ) {
+            return;
+        }
+
+        if ( is_user_logged_in() ) {
+            return;
+        }
+
+        $user_id = wc_clean( $_GET['dokan_email_verification_again'] );
+
+        if ( get_userdata( $user_id ) === false ) {
+            return;
+        }
+
+        if ( ! class_exists( 'WC_Email_Customer_New_Account' ) ) {
+            require_once WC_ABSPATH . '/includes/emails/class-wc-email-customer-new-account.php';
+        }
+
+        $email = new WC_Email_Customer_New_Account;
+
+        $email->trigger( $user_id );
+
+        wp_redirect( add_query_arg( array( 'resend_email' => 'sent' ), wc_get_page_permalink( 'myaccount' ) ) );
+    }
+
+    /**
+     * Show the resend eamil notification message
+     *
+     * @return string
+     */
+    public function show_resend_email_notification() {
+
+        if ( ! isset( $_GET['resend_email'] ) || $_GET['resend_email'] !== 'sent' ) {
+            return;
+        }
+
+        if ( ! is_account_page() ) {
+            return;
+        }
+
+        if ( is_user_logged_in() ) {
+            return;
+        }
+
+        wc_add_notice( __( 'A new verification email has been sent to your eamil. Please verify to login.' ) );
+    }
+
+    /**
      * Filter admin menu settings section
      *
      * @param type $sections
@@ -226,22 +340,22 @@ Class Dokan_Email_Verification {
             'enabled' => array(
                 'name'  => 'enabled',
                 'label' => __( 'Enable Email Verification', 'dokan' ),
-                'type'  => "checkbox",
-                'desc'  => __( 'Enabling this will add Email verification after registration form to allow users to verify their emails', 'dokan' ),
+                'type'  => 'checkbox',
+                'desc'  => __( 'Enabling this will add email verification after registration form to allow users to verify their emails', 'dokan' ),
             ),
             'registration_notice' => array(
                 'name'  => 'registration_notice',
                 'label' => __( 'Registration Notice', 'dokan' ),
-                'type'  => "text",
+                'type'  => 'text',
                 'desc'  => __( 'This notice will be shown after a user has registered with pending email verification.', 'dokan' ),
-                'default' => __( 'Please Check your Email and complete Email Verification to Login.', 'dokan' ),
+                'default' => __( 'Please check your email and complete email verification to login.', 'dokan' ),
             ),
             'login_notice' => array(
                 'name'  => 'login_notice',
                 'label' => __( 'Login Notice', 'dokan' ),
-                'type'  => "text",
+                'type'  => 'text',
                 'desc'  => __( 'This notice will be shown when a user tries to login without email verification.', 'dokan' ),
-                'default' => __( 'Please Check your Email and complete Email Verification to Login.', 'dokan' ),
+                'default' => __( 'Please check your email and complete email verification to login.', 'dokan' ),
             ),
             // 'activation_notice' => array(
             //     'name'  => 'activation_notice',

@@ -6,7 +6,7 @@
             </span>
         </label>
         <div class="dokan-w8 dokan-text-left">
-            <input id="dokan-shipstation-auth-key" value="<?php echo esc_attr( $auth_key ); ?>" name="dokan_shipstation_auth_key" class="dokan-form-control" type="text" disabled>
+            <code style="padding: 8px 10px; font-size: 13px;"><?php echo esc_html( $auth_key ); ?></code>
         </div>
     </div>
 

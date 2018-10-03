@@ -121,6 +121,10 @@ class Dokan_Product_Subscription {
 
         // Handle popup error if subscription outdated
         add_action( 'dokan_new_product_popup_args', array( $this, 'can_create_product' ), 20, 2 );
+
+        // remove subscripton product from vendor product listing page
+        add_filter( 'dokan_product_listing_exclude_type', array( $this, 'exclude_subscription_product' ) );
+        add_filter( 'dokan_count_posts', array( $this, 'exclude_subscription_product_count' ) );
     }
 
     /**
@@ -1201,6 +1205,48 @@ class Dokan_Product_Subscription {
 
         return $args;
     }
+
+    /**
+     * Exclude subscriptoin product from product listing page
+     *
+     * @param  array $terms
+     *
+     * @return array
+     */
+    public function exclude_subscription_product( $terms ) {
+        $terms[] = 'product_pack';
+
+        return $terms;
+    }
+
+    /**
+     * Exclude subscription product from total product count
+     *
+     * @param  string $query
+     *
+     * @return string
+     */
+    public function exclude_subscription_product_count( $query ) {
+        global $wpdb;
+
+        $query = "SELECT post_status,
+            COUNT( ID ) as num_posts
+            FROM {$wpdb->posts}
+            WHERE post_type = %s
+            AND post_author = %d
+            AND ID NOT IN (
+                SELECT object_id
+                FROM {$wpdb->term_relationships}
+                WHERE term_taxonomy_id = (
+                    SELECT term_id FROM {$wpdb->terms}
+                    WHERE name = 'product_pack'
+                )
+            )
+            GROUP BY post_status";
+
+        return $query;
+    }
+
 
 } // Dokan_Product_Subscription
 

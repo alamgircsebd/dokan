@@ -35,7 +35,7 @@ function dokan_shipstation_get_orders( $seller_id, $args = array() ) {
         'end_date' => $current_time,
         'status' => null,
         'page' => 1,
-        'fields' => array( 'do.*', 'p.post_date' ),
+        'fields' => array( 'do.*', 'p.post_date_gmt' ),
         'limit' => DOKAN_SHIPSTATION_EXPORT_LIMIT * ( $args['page'] - 1 ),
         'offset' => DOKAN_SHIPSTATION_EXPORT_LIMIT,
     );
@@ -59,7 +59,7 @@ function dokan_shipstation_get_orders( $seller_id, $args = array() ) {
             $where .= $wpdb->prepare( ' AND order_status = %s', $args['status'] );
         }
 
-        $where .= $wpdb->prepare( ' AND DATE( p.post_date ) >= %s AND DATE( p.post_date ) <= %s', $args['start_date'], $args['end_date'] );
+        $where .= $wpdb->prepare( ' AND p.post_date_gmt >= %s AND p.post_date_gmt <= %s', $args['start_date'], $args['end_date'] );
 
         $select = ! $args['count'] ? "SELECT $select" : "SELECT COUNT(p.ID) as count";
         $from = " FROM {$wpdb->prefix}dokan_orders AS do";
@@ -68,7 +68,7 @@ function dokan_shipstation_get_orders( $seller_id, $args = array() ) {
 
         if ( ! $args['count'] ) {
             $group_by = ' GROUP BY do.order_id';
-            $order_by = ' ORDER BY p.post_date ASC';
+            $order_by = ' ORDER BY p.post_date_gmt ASC';
             $limit = $wpdb->prepare( ' LIMIT %d, %d', $args['limit'], $args['offset'] );
         } else {
             $group_by = '';
