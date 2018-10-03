@@ -1,6 +1,37 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.0',
+        'released' => '2018-10-03',
+        'changes'  => array(
+            array(
+                'title'         => 'Geolocation Module',
+                'type'          => 'New',
+                'description'   => 'Enable this module to let the customers search for a specific product or vendor using any location they want.'
+            ),
+            array(
+                'title'         => 'Moip Payment Gateway',
+                'type'          => 'New',
+                'description'   => 'Use one of the most popular payment system known for it\'s efficiency with Dokan.'
+            ),
+            array(
+                'title'         => 'Allow Vendor to crate tags',
+                'type'          => 'New',
+                'description'   => 'Your vendors don\'t need to rely on prebuilt tags anymore. Now they can create their own in seconds'
+            ),
+            array(
+                'title'         => 'Responsive Admin Pages',
+                'type'          => 'New',
+                'description'   => 'All the admin backend pages is now responsive for all devices'
+            ),
+            array(
+                'title'         => 'Staff email for New Order',
+                'type'          => 'New',
+                'description'   => 'Staff will able to get all emails for new order from customer'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.8.3',
         'released' => '2018-07-19',
         'changes'  => array(
