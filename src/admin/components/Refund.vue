@@ -270,36 +270,109 @@ export default {
 
 <style lang="less">
 
-    .dokan-refund-wrapper {
-        position: relative;
+.dokan-refund-wrapper {
+    position: relative;
 
-        .help-block {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+    .help-block {
+        position: absolute;
+        top: 10px;
+        right: 10px;
 
-            span.help-text {
-                display: inline-block;
-                margin-top: 4px;
-                margin-right: 6px;
-                a {
-                    text-decoration: none;
-                }
-            }
-
-            span.dashicons {
-                font-size: 25px;
+        span.help-text {
+            display: inline-block;
+            margin-top: 4px;
+            margin-right: 6px;
+            a {
+                text-decoration: none;
             }
         }
 
-        table {
-            thead {
-                tr {
-                    th.order_id {
-                        width: 17%;
-                    }
+        span.dashicons {
+            font-size: 25px;
+        }
+    }
+
+    table {
+        thead {
+            tr {
+                th.order_id {
+                    width: 17%;
                 }
             }
         }
     }
+}
+
+@media only screen and (max-width: 600px) {
+    .dokan-refund-wrapper {
+        .help-block {
+            top: 45px !important;
+            left: 0 !important;
+        }
+
+        .subsubsub {
+            margin-top: 20px;
+        }
+
+        table {
+            td.order_id, td.vendor, td.amount {
+                display: table-cell !important;
+            }
+
+            th:not(.check-column):not(.order_id):not(.vendor):not(.amount) {
+                display: none;
+            }
+
+            td:not(.check-column):not(.order_id):not(.vendor):not(.amount) {
+                display: none;
+            }
+
+            th.column, td.column {
+                width: auto;
+            }
+
+            th.column.amount {
+                width: 18% !important;
+            }
+
+            th.column.vendor {
+                width: 20% !important;
+            }
+
+            th.column.order_id {
+                width: 35% !important;
+            }
+
+            td.column.order_id {
+                .row-actions {
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 360px) {
+    .dokan-refund-wrapper {
+        table {
+            td.column.order_id {
+                .row-actions {
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 320px) {
+    .dokan-refund-wrapper {
+        table {
+            td.column.order_id {
+                .row-actions {
+                    font-size: 9px;
+                }
+            }
+        }
+    }
+}
 </style>

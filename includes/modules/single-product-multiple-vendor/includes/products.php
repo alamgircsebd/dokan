@@ -206,6 +206,10 @@ class Dokan_SPMV_Products {
     public function show_sell_now_btn() {
         global $product;
 
+        if ( $product->get_type() == 'product_pack' ) {
+            return;
+        }
+
         if ( ! $this->is_valid_user( $product->get_id() ) ) {
             return;
         }

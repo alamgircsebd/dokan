@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.8.3
+  Version: 2.9.0
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 3.4.3
+  WC tested up to: 3.4.5
   License: GPL2
   TextDomain: dokan
  */
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.8.3';
+    public $version = '2.9.0';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -121,6 +121,17 @@ class Dokan_Pro {
      */
     public function localization_setup() {
         load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+    }
+
+    /**
+     * Get plan id
+     *
+     * @since 2.8.4
+     *
+     * @return void
+     */
+    public function get_plan() {
+        return $this->plan;
     }
 
     /**
@@ -237,6 +248,7 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
+            require_once DOKAN_PRO_ADMIN_DIR . '/promotion.php';
         }
 
         require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
@@ -290,6 +302,7 @@ class Dokan_Pro {
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
+            new Dokan_Pro_Promotion();
         }
 
         new Dokan_Announcement();

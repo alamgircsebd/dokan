@@ -501,7 +501,7 @@ class DPS_PayPal_Standard_Subscriptions {
     public static function subscription_paypal_credential_verify(){
         $paypal_settings = self::get_wc_paypal_settings();
 
-        if( !isset( $paypal_settings['debug'] ) ){
+        if ( $paypal_settings && ! isset( $paypal_settings['debug'] ) ) {
 
             function dokan_paypal_credential_error() {
                 ?>

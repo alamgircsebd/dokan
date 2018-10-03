@@ -135,6 +135,9 @@ class Dokan_Seller_Verification {
 
         // usermeta update hook
         add_action( 'updated_user_meta', array( $this, 'dokan_v_recheck_verification_status_meta' ), 10, 4 );
+
+        // Custom dir for vendor uploaded file
+        add_filter( 'upload_dir', array( $this, 'dokan_customize_upload_dir' ), 10 );
     }
 
     public function get_provider_config() {
@@ -534,7 +537,7 @@ class Dokan_Seller_Verification {
             case 'approved':
                 if ( $postdata['type'] === 'id' ) {
 
-                    $seller_profile['dokan_verification']['verified_info'] = array(
+                    $seller_profile['dokan_verification']['verified_info']['photo'] = array(
                         'photo_id'        => $postdata['dokan_gravatar'],
                         'dokan_v_id_type' => $postdata['dokan_v_id_type'],
                     );
@@ -596,7 +599,7 @@ class Dokan_Seller_Verification {
 
                 if ( $postdata['type'] === 'id' ) {
 
-                    unset( $seller_profile['dokan_verification']['verified_info'] );
+                    unset( $seller_profile['dokan_verification']['verified_info']['photo'] );
                     $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'pending';
                 } elseif ( $postdata['type'] === 'address' ) {
 
@@ -749,7 +752,6 @@ class Dokan_Seller_Verification {
      * @return Ajax Success/fail
      *
      */
-
     public function dokan_v_verify_sms_code() {
 
         parse_str( $_POST['data'], $postdata );
@@ -781,6 +783,33 @@ class Dokan_Seller_Verification {
             );
             wp_send_json_success( $resp );
         }
+    }
+
+    /*
+     * Custom dir for vendor uploaded file
+     *
+     * @since 2.9.0
+     *
+     * @return array
+     *
+     */
+    public function dokan_customize_upload_dir( $upload ) {
+        global $wp;
+
+        if ( ! isset( $_SERVER['HTTP_REFERER'] ) ) {
+            return $upload;
+        }
+
+        if ( strpos( $_SERVER['HTTP_REFERER'], 'settings/verification' ) != false ) {
+            $user_id = get_current_user_id();
+            $user = get_user_by( 'id', $user_id );
+            $dirname = $user_id . '-' . $user->user_login;
+            $upload['subdir'] = '/verification/' . $dirname;
+            $upload['path']   = $upload['basedir'] . $upload['subdir'];
+            $upload['url']    = $upload['baseurl'] . $upload['subdir'];
+        }
+
+        return $upload;
     }
 
 }

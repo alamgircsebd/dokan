@@ -135,7 +135,7 @@ class Dokan_Stripe {
                 }
 
                 foreach ( $vendor_names as $vendor_id => $data ) {
-                    $errors->add( 'stipe-not-configured', sprintf( '<strong>Error!</strong> The <strong>%s</strong> does not allowes the Stipe gateway. You can not purchase this products %s using Stripe Gateway', $data['name'], $data['products'] ) );
+                    $errors->add( 'stipe-not-configured', sprintf(__('<strong>Error!</strong> The <strong>%s</strong> does not allowes the Stipe gateway. You can not purchase this products %s using Stripe Gateway', 'dokan'), $data['name'], $data['products'] ) );
                 }
             }
         }
@@ -173,7 +173,9 @@ class Dokan_Stripe {
             return;
         }
 
-        if ( empty( $_GET['scope'] ) && empty( $_GET['code'] ) ) return;
+        if ( empty( $_GET['scope'] ) || empty( $_GET['code'] ) ) {
+            return;
+        }
 
         $settings   = get_option('woocommerce_dokan-stripe-connect_settings');
         $client_id  = $settings['testmode'] == 'yes' ? $settings['test_client_id'] : $settings['client_id'];
@@ -259,8 +261,14 @@ class Dokan_Stripe {
      * @return array
      */
     function register_dokan_withdraw_gateway( $methods ) {
+        $settings = get_option('woocommerce_dokan-stripe-connect_settings');
+
+        if ( isset( $settings['enabled'] ) && $settings['enabled'] != 'yes' ) {
+            return $methods;
+        }
+
         $methods['dokan-stripe-connect'] = array(
-            'title'    => __( 'Dokan Stripe', 'dokan' ),
+            'title'    => __( 'Stripe', 'dokan' ),
             'callback' => array( $this, 'stripe_authorize_button' )
         );
 
@@ -278,6 +286,10 @@ class Dokan_Stripe {
 
         if ( ! $settings ) {
             _e( 'Stripe gateway is not configured. Please contact admin.', 'dokan' );
+            return;
+        }
+
+        if ( ! isset( $settings['enabled'] ) || $settings['enabled'] == 'no' ) {
             return;
         }
 

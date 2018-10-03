@@ -95,6 +95,7 @@ class Dokan_Product_Subscription {
 
         add_action( 'dps_schedule_pack_update', array( $this, 'schedule_task' ) );
         add_action( 'dokan_before_listing_product', array( $this, 'show_custom_subscription_info' ) );
+        add_filter( 'woocommerce_register_post_type_product', array( $this, 'disable_creating_new_product' ) );
 
         // add_action( 'dokan_after_delete_product_item', array( $this, 'update_meta_for_delete_product' ) );
         // add_action( 'valid-paypal-standard-ipn-request', array( $this, 'process_paypal_ipn_request' ), 9 );
@@ -120,6 +121,10 @@ class Dokan_Product_Subscription {
 
         // Handle popup error if subscription outdated
         add_action( 'dokan_new_product_popup_args', array( $this, 'can_create_product' ), 20, 2 );
+
+        // remove subscripton product from vendor product listing page
+        add_filter( 'dokan_product_listing_exclude_type', array( $this, 'exclude_subscription_product' ) );
+        add_filter( 'dokan_count_posts', array( $this, 'exclude_subscription_product_count' ) );
     }
 
     /**
@@ -474,14 +479,14 @@ class Dokan_Product_Subscription {
                         <?php printf( __( 'Your are using <span>%s</span> package.', 'dokan' ), $product->get_title() ); ?>
                     </p>
                     <p>
-                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) > '4000-10-10' ) {
+                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
                             printf( __( 'You can add <span>%s</span> product(s) for <span> unlimited days</span> days.', 'dokan' ), get_post_meta( $product->get_id(), '_no_of_product', true ) );
                         } else {
                             printf( __( 'You can add <span>%s</span> product(s) for <span>%s</span> days.', 'dokan' ), get_post_meta( $product->get_id(), '_no_of_product', true ), get_post_meta( $product->get_id(), '_pack_validity', true ) );
                         } ?>
                     </p>
                     <p>
-                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) > '4000-10-10' ) {
+                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
                             printf( __( 'You have a lifetime package.', 'dokan' ) );
                         } else {
                             printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( get_user_meta( $user_id, 'product_pack_enddate', true ) ) ) );
@@ -799,7 +804,7 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
 
                 if ( $pack_validity == 0 ) {
-                    update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
+                    update_user_meta( $customer_id, 'product_pack_enddate', 'unlimited' );
                 } else {
                     update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 }
@@ -947,11 +952,17 @@ class Dokan_Product_Subscription {
      * @return boolean
      */
     function has_pack_validity_seller( $product_id ) {
+        $user_id              = get_current_user_id();
+        $date                 = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+        $product_pack_enddate = get_user_meta( $user_id, 'product_pack_enddate', true );
+        $validation_date      = date( 'Y-m-d', strtotime( $product_pack_enddate ) );
+        $product_package_id   = get_user_meta( $user_id, 'product_package_id', true );
 
-        $date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-        $validation_date = date( 'Y-m-d', strtotime( get_user_meta( get_current_user_id(), 'product_pack_enddate', true ) ) );
+        if ( $product_pack_enddate == 'unlimited' && $product_package_id == $product_id ) {
+            return true;
+        }
 
-        if ( ( $date < $validation_date ) && ( get_user_meta( get_current_user_id(), 'product_package_id', true ) == $product_id ) ) {
+        if ( $date < $validation_date && $product_package_id == $product_id ) {
             return true;
         }
 
@@ -1168,6 +1179,80 @@ class Dokan_Product_Subscription {
             DPS_PayPal_Standard_Subscriptions::cancel_subscription_with_paypal( $order_id, $user_id );
         }
     }
+
+    /**
+     * Disable creating new product from backend
+     *
+     * @param  array $args
+     *
+     * @return array
+     */
+    public function disable_creating_new_product( $args ) {
+
+        $user_id = get_current_user_id();
+
+        if ( current_user_can( 'manage_woocommerce' ) ) {
+            return $args;
+        }
+
+        if ( ! dokan_is_user_seller( $user_id ) ) {
+            return $args;
+        }
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            return $args;
+        }
+
+        $remaining_product = dps_user_remaining_product( $user_id );
+
+        if ( $remaining_product == 0 || ! self::can_post_product() ) {
+            $args['capabilities']['create_posts'] = 'do_not_allow';
+        }
+
+        return $args;
+    }
+
+    /**
+     * Exclude subscriptoin product from product listing page
+     *
+     * @param  array $terms
+     *
+     * @return array
+     */
+    public function exclude_subscription_product( $terms ) {
+        $terms[] = 'product_pack';
+
+        return $terms;
+    }
+
+    /**
+     * Exclude subscription product from total product count
+     *
+     * @param  string $query
+     *
+     * @return string
+     */
+    public function exclude_subscription_product_count( $query ) {
+        global $wpdb;
+
+        $query = "SELECT post_status,
+            COUNT( ID ) as num_posts
+            FROM {$wpdb->posts}
+            WHERE post_type = %s
+            AND post_author = %d
+            AND ID NOT IN (
+                SELECT object_id
+                FROM {$wpdb->term_relationships}
+                WHERE term_taxonomy_id = (
+                    SELECT term_id FROM {$wpdb->terms}
+                    WHERE name = 'product_pack'
+                )
+            )
+            GROUP BY post_status";
+
+        return $query;
+    }
+
 
 } // Dokan_Product_Subscription
 

@@ -533,6 +533,7 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
 
 var Switches = dokan_get_lib('Switches');
 var Modal = dokan_get_lib('Modal');
@@ -577,7 +578,8 @@ var Modal = dokan_get_lib('Modal');
                 method_id: '',
                 instance_id: '0',
                 settings: {}
-            }
+            },
+            cost_description: this.__('Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan')
         };
     },
 
@@ -1991,12 +1993,7 @@ var render = function() {
                           ? _c("span", {
                               staticClass: "description",
                               domProps: {
-                                innerHTML: _vm._s(
-                                  _vm.__(
-                                    "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
-                                    "dokan"
-                                  )
-                                )
+                                innerHTML: _vm._s(_vm.cost_description)
                               }
                             })
                           : _vm._e()
@@ -2195,10 +2192,7 @@ var render = function() {
                                         staticClass: "description",
                                         domProps: {
                                           innerHTML: _vm._s(
-                                            _vm.__(
-                                              "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
-                                              "dokan"
-                                            )
+                                            _vm.cost_description
                                           )
                                         }
                                       })
@@ -2258,12 +2252,7 @@ var render = function() {
                                 ? _c("span", {
                                     staticClass: "description",
                                     domProps: {
-                                      innerHTML: _vm._s(
-                                        _vm.__(
-                                          "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
-                                          "dokan"
-                                        )
-                                      )
+                                      innerHTML: _vm._s(_vm.cost_description)
                                     }
                                   })
                                 : _vm._e()
@@ -2445,12 +2434,7 @@ var render = function() {
                         ? _c("span", {
                             staticClass: "description",
                             domProps: {
-                              innerHTML: _vm._s(
-                                _vm.__(
-                                  "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent='10' min_fee='20' max_fee='']</code> for percentage based fees.",
-                                  "dokan"
-                                )
-                              )
+                              innerHTML: _vm._s(_vm.cost_description)
                             }
                           })
                         : _vm._e()

@@ -67,6 +67,7 @@ class Dokan_Vendor_staff {
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
         add_action( 'admin_init', array( $this, 'disable_backend_access' ) );
         add_filter( 'show_admin_bar', array( $this, 'disable_admin_bar' ) );
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_staff_emails' ), 40 );
     }
 
     /**
@@ -348,6 +349,26 @@ class Dokan_Vendor_staff {
         }
 
         return $urls;
+    }
+
+    /**
+     * Load staff email class
+     *
+     * @param  array $emails
+     *
+     * @return array
+     */
+    public function load_staff_emails( $emails ) {
+        $emails['Dokan_Staff_New_Order'] = include( DOKAN_VENDOR_staff_INC_DIR . '/class-staff-new-order-email.php' );
+
+        return $emails;
+    }
+
+    public function filter_staff_order_email_content( $markup, $sent_to_admin, $order ) {
+
+        error_log( print_r( $markup, true ) );
+
+        // return $markup;
     }
 
 }

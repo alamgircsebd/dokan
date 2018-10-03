@@ -65,7 +65,7 @@
                         </td>
 
 
-                        <td><?php echo get_user_meta( $order->post->post_author, 'nickname', true ) ?></td>
+                        <td><?php echo get_user_meta( dokan_get_seller_id_by_order( $order->post->ID ), 'nickname', true ) ?></td>
 
                         <td class="" data-colname="Total">
                             <?php echo $order->get_formatted_order_total(); ?>

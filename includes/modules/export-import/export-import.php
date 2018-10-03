@@ -92,8 +92,8 @@ class Dokan_Product_Importer {
 
         define( 'DOKAN_IE_PLUGIN_VERSION', $this->version );
         define( 'DOKAN_IE_FILE', __FILE__ );
-        define( 'DOKAN_IE_DIR', __DIR__ );
-        define( 'DOKAN_IE_INC_DIR', __DIR__ . '/includes' );
+        define( 'DOKAN_IE_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_IE_INC_DIR', dirname( __FILE__ ) . '/includes' );
         define( 'DOKAN_IE_ASSETS', plugins_url( 'assets', __FILE__ ) );
 
         add_action( 'init', array( $this, 'do_product_export' ), 99 );
@@ -1135,7 +1135,7 @@ class Dokan_Product_Importer {
 
         if ( !isset( $_POST['file'] ) ) {
             wp_die( -1 );
-}
+        }
 
         include_once( WC_ABSPATH . 'includes/admin/importers/class-wc-product-csv-importer-controller.php' );
         include_once( WC_ABSPATH . 'includes/import/class-wc-product-csv-importer.php' );
@@ -1223,10 +1223,13 @@ class Dokan_Product_Importer {
      * AJAX callback for doing the actual export to the CSV file.
      */
     public function do_ajax_product_export() {
-//            check_ajax_referer( 'wc-product-export', 'security' );
 
         if ( !dokan_is_user_seller( get_current_user_id() ) ) {
             wp_die( -1 );
+        }
+
+        if ( current_user_can( 'manage_woocommerce' ) ) {
+            return;
         }
 
         include_once( DOKAN_IE_INC_DIR . '/export/class-wc-product-csv-exporter.php' );

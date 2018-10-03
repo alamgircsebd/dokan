@@ -169,7 +169,8 @@
                 <div class="dokan-form-group">
                     <label for="method_cost">{{ __( 'Cost', 'dokan' ) }}</label>
                     <input type="text" id="method_cost" class="dokan-form-control" v-model="editShippingMethodData.settings.cost" placeholder="0.00">
-                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
+                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="cost_description">
+                    </span>
                 </div>
 
                 <div class="dokan-form-group">
@@ -195,14 +196,14 @@
                         <div class="dokan-form-group">
                             <label :for="shippingClass.slug">"{{ shippingClass.name }}" {{ __( 'shipping class cost', 'dokan' ) }}</label>
                             <input type="text" :id="shippingClass.slug" class="dokan-form-control" v-model="editShippingMethodData.settings['class_cost_' + shippingClass.term_id]" placeholder="N\A">
-                            <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
+                            <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="cost_description"></span>
                         </div>
                     </template>
 
                     <div class="dokan-form-group">
                         <label for="no_class_cost">{{ __( 'No shipping class cost', 'dokan' ) }}</label>
                         <input type="text" id="no_class_cost" class="dokan-form-control" v-model="editShippingMethodData.settings.no_class_cost" placeholder="N\A">
-                        <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
+                        <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="cost_description"></span>
                     </div>
 
                     <div class="dokan-form-group">
@@ -225,7 +226,7 @@
                 <div class="dokan-form-group">
                     <label for="minimum_order_amount">{{ __( 'Minimum order amount for free shipping', 'dokan' ) }}</label>
                     <input type="text" id="minimum_order_amount" class="dokan-form-control" v-model="editShippingMethodData.settings.min_amount" placeholder="0.00">
-                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )"></span>
+                    <span class="description" v-if="editShippingMethodData.method_id == 'flat_rate'" v-html="cost_description"></span>
                 </div>
             </template>
 
@@ -280,7 +281,8 @@ export default {
                 method_id: '',
                 instance_id: '0',
                 settings: {}
-            }
+            },
+            cost_description: this.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )
         }
     },
 

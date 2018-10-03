@@ -1,6 +1,63 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.0',
+        'released' => '2018-10-03',
+        'changes'  => array(
+            array(
+                'title'         => 'Geolocation Module',
+                'type'          => 'New',
+                'description'   => 'Enable this module to let the customers search for a specific product or vendor using any location they want.'
+            ),
+            array(
+                'title'         => 'Moip Payment Gateway',
+                'type'          => 'New',
+                'description'   => 'Use one of the most popular payment system known for it\'s efficiency with Dokan.'
+            ),
+            array(
+                'title'         => 'Allow Vendor to crate tags',
+                'type'          => 'New',
+                'description'   => 'Your vendors don\'t need to rely on prebuilt tags anymore. Now they can create their own in seconds'
+            ),
+            array(
+                'title'         => 'Responsive Admin Pages',
+                'type'          => 'New',
+                'description'   => 'All the admin backend pages is now responsive for all devices'
+            ),
+            array(
+                'title'         => 'Staff email for New Order',
+                'type'          => 'New',
+                'description'   => 'Staff will able to get all emails for new order from customer'
+            )
+        )
+    ),
+    array(
+        'version'  => 'Version 2.8.3',
+        'released' => '2018-07-19',
+        'changes'  => array(
+            array(
+                'title'         => 'Live Chat Module',
+                'type'          => 'Fix',
+                'description'   => 'Right now the chat box is available in customer myaccount page and also make responsive chat box window'
+            ),
+            array(
+                'title'         => 'Statement and Refund',
+                'type'          => 'Fix',
+                'description'   => 'Change core table structure for refund and statements. Now its easy to understand for vendor to check her statements. Also fixed statement exporting problem'
+            ),
+            array(
+                'title'         => 'Zonewise Shipping',
+                'type'          => 'Fix',
+                'description'   => 'Shipping state rendering issue fixed. If any country have no states then states not showing undefine problem'
+            ),
+            array(
+                'title'         => 'Stripe Module',
+                'type'          => 'Fix',
+                'description'   => 'Card is automatically saved if customer does not want to save his/her card info during checkout'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.8.2',
         'released' => '2018-06-29',
         'changes'  => array(
