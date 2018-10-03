@@ -363,7 +363,7 @@ class Dokan_Shipping_Zone {
         // Get matching zones.
         return $wpdb->get_var(
             "SELECT zones.zone_id FROM {$wpdb->prefix}woocommerce_shipping_zones as zones
-            LEFT OUTER JOIN {$wpdb->prefix}dokan_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
+            LEFT OUTER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
             WHERE " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
             . ' ORDER BY zone_order ASC, zone_id ASC LIMIT 1'
         );

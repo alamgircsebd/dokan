@@ -67,12 +67,12 @@ function dokan_seller_sales_statement() {
 
     <form method="get" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
-            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
+            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
 
             <input type="hidden" name="chart" value="sales_statement">
             <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
@@ -467,12 +467,12 @@ function dokan_daily_sales() {
 
     <form method="post" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( $start_date ); ?>" />
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
-            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( $end_date ); ?>" />
+            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
 
             <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
         </div>
@@ -840,12 +840,12 @@ function dokan_top_sellers() {
     <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
         <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
-            <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $start_date) ); ?>" />
+            <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
-            <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
+            <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
         </div>
 
         <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
@@ -947,12 +947,12 @@ function dokan_top_earners() {
     <form method="post" action="" class="report-filter dokan-form-inline dokan-clearfix">
         <div class="dokan-form-group">
             <label for="from"><?php _e( 'From:', 'dokan' ); ?></label>
-            <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $start_date) ); ?>" />
+            <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
-            <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo esc_attr( date('Y-m-d', $end_date) ); ?>" />
+            <input type="text" class="datepicker" name="end_date" id="to" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
         </div>
 
         <input type="submit" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />

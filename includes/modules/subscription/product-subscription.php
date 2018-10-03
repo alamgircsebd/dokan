@@ -479,14 +479,14 @@ class Dokan_Product_Subscription {
                         <?php printf( __( 'Your are using <span>%s</span> package.', 'dokan' ), $product->get_title() ); ?>
                     </p>
                     <p>
-                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) > '4000-10-10' ) {
+                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
                             printf( __( 'You can add <span>%s</span> product(s) for <span> unlimited days</span> days.', 'dokan' ), get_post_meta( $product->get_id(), '_no_of_product', true ) );
                         } else {
                             printf( __( 'You can add <span>%s</span> product(s) for <span>%s</span> days.', 'dokan' ), get_post_meta( $product->get_id(), '_no_of_product', true ), get_post_meta( $product->get_id(), '_pack_validity', true ) );
                         } ?>
                     </p>
                     <p>
-                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) > '4000-10-10' ) {
+                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
                             printf( __( 'You have a lifetime package.', 'dokan' ) );
                         } else {
                             printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( get_user_meta( $user_id, 'product_pack_enddate', true ) ) ) );
@@ -804,7 +804,7 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
 
                 if ( $pack_validity == 0 ) {
-                    update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
+                    update_user_meta( $customer_id, 'product_pack_enddate', 'unlimited' );
                 } else {
                     update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 }
@@ -952,11 +952,17 @@ class Dokan_Product_Subscription {
      * @return boolean
      */
     function has_pack_validity_seller( $product_id ) {
+        $user_id              = get_current_user_id();
+        $date                 = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+        $product_pack_enddate = get_user_meta( $user_id, 'product_pack_enddate', true );
+        $validation_date      = date( 'Y-m-d', strtotime( $product_pack_enddate ) );
+        $product_package_id   = get_user_meta( $user_id, 'product_package_id', true );
 
-        $date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-        $validation_date = date( 'Y-m-d', strtotime( get_user_meta( get_current_user_id(), 'product_pack_enddate', true ) ) );
+        if ( $product_pack_enddate == 'unlimited' && $product_package_id == $product_id ) {
+            return true;
+        }
 
-        if ( ( $date < $validation_date ) && ( get_user_meta( get_current_user_id(), 'product_package_id', true ) == $product_id ) ) {
+        if ( $date < $validation_date && $product_package_id == $product_id ) {
             return true;
         }
 
