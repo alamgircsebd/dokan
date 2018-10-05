@@ -110,6 +110,10 @@ class Dokan_Stripe {
         // bailout if the gateway is not enabled
         if ( isset( $settings['enabled'] ) && $settings['enabled'] == 'yes' ) {
             if ( 'dokan-stripe-connect' == $data['payment_method'] ) {
+                if ( isset( $settings['allow_non_connected_sellers'] ) && 'yes' === $settings['allow_non_connected_sellers'] ) {
+                    return;
+                }
+
                 foreach ( WC()->cart->get_cart() as $item ) {
                     $product_id = $item['data']->get_id();
                     $available_vendors[get_post_field( 'post_author', $product_id )][] = $item['data'];
