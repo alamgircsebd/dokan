@@ -128,6 +128,13 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 'description' => __( 'This controls the description which the user sees during checkout.', 'dokan' ),
                 'default'     => 'Pay with your credit card via Stripe.'
             ),
+            'allow_non_connected_sellers' => array(
+                'title'       => __( 'Non-connected sellers', 'dokan' ),
+                'label'       => __( 'Allow ordering products from non-connected sellers', 'dokan' ),
+                'type'        => 'checkbox',
+                'description' => __( 'If this is enable, customers can order products from non-connected sellers. The payment will send to admin Stripe account.', 'dokan' ),
+                'default'     => 'no'
+            ),
             'testmode' => array(
                 'title'       => __( 'Test mode', 'dokan' ),
                 'label'       => __( 'Enable Test Mode', 'dokan' ),
@@ -700,10 +707,25 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
 
             $fee          = floatval( $do_order->order_total ) - floatval( $do_order->net_amount );
             $access_token = get_user_meta( $seller_id, '_stripe_connect_access_key', true );
-            $token        = \Stripe\Token::create( array( 'customer' => $customer_id ), $access_token );
+
+            $settings = get_option('woocommerce_dokan-stripe-connect_settings');
+
+            if ( isset( $settings['allow_non_connected_sellers'] ) && 'yes' === $settings['allow_non_connected_sellers'] ) {
+                $allow_non_connected_sellers = true;
+            } else {
+                $allow_non_connected_sellers = false;
+            }
+
+            if ( ! empty( $access_token ) ) {
+                $token = \Stripe\Token::create( array( 'customer' => $customer_id ), $access_token );
+            } else if ( $allow_non_connected_sellers ) {
+                $token = null;
+            } else {
+                throw new Exception( __( 'Unable to process with Stripe gateway', 'dokan' ) );
+            }
 
             $order_total     = round( $do_order->order_total, 2 );
-            $application_fee = round( $fee, 2 );
+            $application_fee = ! $allow_non_connected_sellers ? round( $fee, 2 ) : $order_total;
 
             if ( $do_order->order_total == 0 ) {
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed', 'dokan' ), $tmp_order->get_order_number() ) );
@@ -718,13 +740,26 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
 
             $all_withdraws[] = $withdraw_data;
 
-            $charge = \Stripe\Charge::create( array(
-                'amount'          => $order_total * 100,
-                'currency'        => $currency,
-                'application_fee' => $application_fee * 100,
-                'description'     => $order_desc,
-                'card'            => ! empty( $token->id ) ? $token->id : $stripe_token
-                ), $access_token );
+            if ( $token ) {
+                $charge = \Stripe\Charge::create( array(
+                    'amount'          => $order_total * 100,
+                    'currency'        => $currency,
+                    'application_fee' => $application_fee * 100,
+                    'description'     => $order_desc,
+                    'card'            => ! empty( $token->id ) ? $token->id : $stripe_token
+                    ), $access_token );
+            } else {
+                $order_desc   = sprintf( __( '%s - Order %s, suborder of %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $tmp_order_id, $order->get_order_number() );
+
+                $charge = \Stripe\Charge::create( [
+                    'amount'      => $order_total * 100,
+                    'currency'    => $currency,
+                    'description' => $order_desc,
+                    'customer'    => $customer_id
+                ] );
+
+                $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe', 'dokan' ) ) );
+            }
 
             $charge_ids[ $seller_id ] = $charge->id;
 
