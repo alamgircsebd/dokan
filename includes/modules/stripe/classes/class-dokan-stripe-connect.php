@@ -725,7 +725,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             }
 
             $order_total     = round( $do_order->order_total, 2 );
-            $application_fee = ! $allow_non_connected_sellers ? round( $fee, 2 ) : $order_total;
+            $application_fee = ( $allow_non_connected_sellers && ! $token ) ? $order_total : round( $fee, 2 );
 
             if ( $do_order->order_total == 0 ) {
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed', 'dokan' ), $tmp_order->get_order_number() ) );
