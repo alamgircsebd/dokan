@@ -315,6 +315,11 @@ class Dokan_Product_Subscription {
      * @return void
      */
     function load_template_from_plugin( $query_vars ) {
+
+        if ( current_user_can( 'vendor_staff' ) ) {
+            return dokan_get_template_part( 'global/no-permission' );
+        }
+
         if ( isset( $query_vars['subscription'] ) ) {
             $installed_version = get_option( 'dokan_theme_version' );
 
@@ -351,6 +356,10 @@ class Dokan_Product_Subscription {
         } else {
             $page_id = dokan_get_option( 'subscription_pack', 'dokan_product_subscription' );
             $permalink = get_permalink( $page_id );
+        }
+
+        if ( current_user_can( 'vendor_staff' ) ) {
+            return $urls;
         }
 
         if ( dokan_is_seller_enabled( get_current_user_id() ) ) {
@@ -448,7 +457,7 @@ class Dokan_Product_Subscription {
         global $post;
 
         $checkout_url = wc_get_checkout_url();
-        $user_id      = get_current_user_id();
+        $user_id      = dokan_get_current_user_id();
         $product      = wc_get_product( get_user_meta( $user_id, 'product_package_id', true ) );
         $order_id     = get_user_meta( $user_id, 'product_order_id', true );
 
@@ -656,7 +665,7 @@ class Dokan_Product_Subscription {
      * @return boolean
      */
     public static function can_post_product() {
-        if ( get_user_meta( get_current_user_id(), 'can_post_product', true ) == '1' ) {
+        if ( get_user_meta( dokan_get_current_user_id(), 'can_post_product', true ) == '1' ) {
             return true;
         }
 

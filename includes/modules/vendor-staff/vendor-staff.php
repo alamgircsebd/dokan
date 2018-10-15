@@ -363,14 +363,6 @@ class Dokan_Vendor_staff {
 
         return $emails;
     }
-
-    public function filter_staff_order_email_content( $markup, $sent_to_admin, $order ) {
-
-        error_log( print_r( $markup, true ) );
-
-        // return $markup;
-    }
-
 }
 
 $vendor_staff = Dokan_Vendor_staff::init();

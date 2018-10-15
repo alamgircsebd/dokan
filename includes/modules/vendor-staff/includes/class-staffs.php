@@ -13,16 +13,14 @@ class Dokan_staffs {
      * @since 1.0.0
      */
     public function __construct() {
-        add_action( 'dokan_add_staff_content', array( $this, 'display_errors' ), 10 );
-        add_action( 'dokan_add_staff_content', array( $this, 'add_staff_content' ), 15 );
-        add_action( 'template_redirect', array( $this, 'handle_staff' ), 10 );
-        add_action( 'template_redirect', array( $this, 'delete_staff' ), 99 );
-        add_action( 'template_redirect', array( $this, 'handle_pemission' ), 99 );
-        add_action( 'dokan_new_product_added', array( $this, 'filter_product' ), 10, 2 );
-        add_action( 'dokan_product_updated', array( $this, 'update_product' ), 10 );
+        add_action( 'dokan_add_staff_content',   array( $this, 'display_errors' ), 10 );
+        add_action( 'dokan_add_staff_content',   array( $this, 'add_staff_content' ), 15 );
+        add_action( 'template_redirect',         array( $this, 'handle_staff' ), 10 );
+        add_action( 'template_redirect',         array( $this, 'delete_staff' ), 99 );
+        add_action( 'template_redirect',         array( $this, 'handle_pemission' ), 99 );
+        add_action( 'dokan_new_product_added',   array( $this, 'filter_product' ), 10, 2 );
+        add_action( 'dokan_product_updated',     array( $this, 'update_product' ), 10 );
         add_action( 'dokan_product_listing_arg', array( $this, 'listing_product' ), 10 );
-        // add_action( 'dokan_get_current_user_id', array( $this, 'filter_current_user' ), 10 );
-        // add_filter( 'dokan_email_recipient_new_order', array( $this, 'send_email_to_staff' ), 10, 2 );
     }
 
     /**
@@ -307,29 +305,6 @@ class Dokan_staffs {
     }
 
     /**
-     * Filter current user ID as staff
-     *
-     * @since 1.0.0
-     *
-     * @return void
-     */
-    public function filter_current_user( $user_id ) {
-        if ( current_user_can( 'vendor_staff' ) ) {
-            $staff_id = get_current_user_id();
-            $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
-
-            if ( empty( $vendor_id ) ) {
-                return $user_id;
-            }
-
-
-            return $vendor_id;
-        }
-
-        return $user_id;
-    }
-
-    /**
      * Listing product argument filter
      *
      * @since 1.0.0
@@ -346,30 +321,8 @@ class Dokan_staffs {
             }
 
             $args['author'] = $vendor_id;
-            // $args['meta_query'][] = array(
-            //     'key' => '_staff_id',
-            //     'value' => $staff_id,
-            //     'compare' => '='
-            // );
         }
+
         return $args;
     }
-
-    public function send_email_to_staff( $email, $order_id ) {
-        $staff_ids = dokan_get_staff_id_by_order( $order_id );
-
-        if ( ! is_array( $staff_ids ) ) {
-            return $email;
-        }
-
-        foreach ( $staff_ids as $staff_id ) {
-            if ( user_can( $staff_id, 'dokan_view_order' ) ) {
-                $staff  = get_userdata( $staff_id );
-                $email .= ',' . $staff->user_email;
-            }
-        }
-
-        return $email;
-    }
-
 }
