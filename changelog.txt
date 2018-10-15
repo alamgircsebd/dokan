@@ -1,3 +1,12 @@
+v2.9.1 -> October 15, 2018
+--------------------------
+- [tweak] Allow customers to purchase from non-connected sellers with stripe
+- [fix] Allow vendor to create their own tags
+- [fix] Subscription issue for vendor staff
+- [fix] Booking date format
+- [fix] Booking order issue when order is created by admin
+- [fix] Store seo warning
+
 v2.9.0 -> October 03, 2018
 --------------------------
 - [new] Add Geolocation module ( Business & Enterprise Package )
