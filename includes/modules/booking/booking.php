@@ -87,6 +87,11 @@ class Dokan_WC_Booking {
 
         add_action( 'init', array( $this, 'init_hooks' ) );
 
+        // insert booking order into dokan_order_table if it's created by admin
+        if ( is_admin() ) {
+            add_action( 'woocommerce_bookings_create_booking_page_add_order_item', 'dokan_sync_insert_order' );
+        }
+
         add_action( 'dokan_new_product_added', array( $this, 'save_booking_data' ), 10 );
         add_action( 'dokan_product_updated', array( $this, 'save_booking_data' ), 10 );
 

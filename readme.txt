@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.9.7
+Tested up to: 4.9.8
 WC requires at least: 3.0
-WC tested up to: 3.4.3
+WC tested up to: 3.4.6
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,15 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.1 -> October 15, 2018
+--------------------------
+- [tweak] Allow customers to purchase from non-connected sellers with stripe
+- [fix] Allow vendor to create their own tags
+- [fix] Subscription issue for vendor staff
+- [fix] Booking date format
+- [fix] Booking order issue when order is created by admin
+- [fix] Store seo warning
 
 v2.9.0 -> October 03, 2018
 --------------------------

@@ -1169,6 +1169,9 @@ jQuery( function( $ ) {
             $( '.hide_if_order_discount' ).hide();
 
             // save attributes
+
+            $( 'body' ).on( 'dokan-product-editor-loaded', this.bindProductTagDropdown );
++           $( 'body' ).on( 'dokan-product-editor-popup-opened', this.bindProductTagDropdown );
         },
 
         editProduct: {
@@ -1465,6 +1468,21 @@ jQuery( function( $ ) {
                     Dokan_Editor.editProduct.shipping.showHideOverride();
                 }
             }
+        },
+
+        bindProductTagDropdown: function () {
+            if ( ! ( dokan.product_vendors_can_create_tags && 'on' === dokan.product_vendors_can_create_tags ) ) {
+                return;
+            }
+
+            $( '#product_tag' ).select2( {
+                tags: true,
+                language: {
+                    noResults: function () {
+                        return dokan.i18n_no_result_found;
+                    }
+                }
+            } );
         }
     }
 

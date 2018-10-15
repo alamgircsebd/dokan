@@ -8,6 +8,7 @@
  */
 function dps_user_remaining_product( $user_id ) {
     $dps             = Dokan_Product_Subscription::init();
+    $user_id         = dokan_get_current_user_id();
     $user_pack_id    = get_user_meta( $user_id, 'product_package_id', true );
     $pack_product_no = get_post_meta( $user_pack_id, '_no_of_product', true );
 
