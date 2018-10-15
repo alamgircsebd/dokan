@@ -207,7 +207,7 @@ class Dokan_Pro_Admin_Settings {
                 'label'   => __( 'Withdraw Threshold', 'dokan' ),
                 'desc'    => __( 'Days, ( Make order matured to make a withdraw request) <br> Value "0" will inactive this option', 'dokan' ),
                 'default' => '0',
-                'type'    => 'text',
+                'type'    => 'number',
             ),
             'hide_withdraw_option' => array(
                 'name'    => 'hide_withdraw_option',
