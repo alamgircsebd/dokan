@@ -181,8 +181,8 @@ class Dokan_Pro_Store_Seo {
             return;
         }
 
-        $desc     = $meta_values['store_seo']['dokan-seo-meta-desc'];
-        $keywords = $meta_values['store_seo']['dokan-seo-meta-keywords'];
+        $desc     = isset( $meta_values['store_seo']['dokan-seo-meta-desc'] ) ? $meta_values['store_seo']['dokan-seo-meta-desc'] : '';
+        $keywords = isset( $meta_values['store_seo']['dokan-seo-meta-keywords'] ) ? $meta_values['store_seo']['dokan-seo-meta-keywords'] : '';
 
         if ( $desc ) {
             echo PHP_EOL . '<meta name="description" content="' . $this->print_saved_meta( $desc ) . '"/>';
@@ -207,12 +207,12 @@ class Dokan_Pro_Store_Seo {
         $seller = get_userdata( get_query_var( 'author' ) );
 
         $og_url        = dokan_get_store_url( $seller->ID );
-        $og_title      = $meta_values['store_seo']['dokan-seo-og-title'];
-        $og_desc       = $meta_values['store_seo']['dokan-seo-og-desc'];
-        $og_img        = $meta_values['store_seo']['dokan-seo-og-image'];
-        $twitter_title = $meta_values['store_seo']['dokan-seo-twitter-title'];
-        $twitter_desc  = $meta_values['store_seo']['dokan-seo-twitter-desc'];
-        $twitter_img   = $meta_values['store_seo']['dokan-seo-twitter-image'];
+        $og_title      = isset( $meta_values['store_seo']['dokan-seo-og-title'] ) ? $meta_values['store_seo']['dokan-seo-og-title'] : '';
+        $og_desc       = isset( $meta_values['store_seo']['dokan-seo-og-desc'] ) ? $meta_values['store_seo']['dokan-seo-og-desc'] : '';
+        $og_img        = isset( $meta_values['store_seo']['dokan-seo-og-image'] ) ? $meta_values['store_seo']['dokan-seo-og-image'] : '';
+        $twitter_title = isset( $meta_values['store_seo']['dokan-seo-twitter-title'] ) ? $meta_values['store_seo']['dokan-seo-twitter-title'] : '';
+        $twitter_desc  = isset( $meta_values['store_seo']['dokan-seo-twitter-desc'] ) ? $meta_values['store_seo']['dokan-seo-twitter-desc'] : '';
+        $twitter_img   = isset( $meta_values['store_seo']['dokan-seo-twitter-image'] ) ? $meta_values['store_seo']['dokan-seo-twitter-image'] : '';
 
         if ( $og_url ) {
             echo PHP_EOL . '<meta property="og:url" content="' . $og_url . '">';
@@ -263,7 +263,7 @@ class Dokan_Pro_Store_Seo {
         }
 
         $key = 'dokan-seo-' . $type . '-' . $meta;
-        $val = $meta_values['store_seo'][$key];
+        $val = ! empty( $meta_values['store_seo'][$key] ) ? $meta_values['store_seo'][$key] : '';
 
         if ( $val ) {
             return $val;
@@ -355,7 +355,7 @@ class Dokan_Pro_Store_Seo {
             return $img_default;
         }
 
-        $img = $meta_values['store_seo']['dokan-seo-og-image'];
+        $img = ! empty( $meta_values['store_seo']['dokan-seo-og-image'] ) ? $meta_values['store_seo']['dokan-seo-og-image'] : '';
 
         if ( $img ) {
             return wp_get_attachment_url( $img );
@@ -378,7 +378,7 @@ class Dokan_Pro_Store_Seo {
             return;
         }
 
-        $og_img = $meta_values['store_seo']['dokan-seo-og-image'];
+        $og_img = ! empty( $meta_values['store_seo']['dokan-seo-og-image'] ) ? $meta_values['store_seo']['dokan-seo-og-image'] : '';
 
         if ( $og_img ) {
             echo '<meta property="og:image" content="' . wp_get_attachment_url( $og_img ) . '"/>';
@@ -429,7 +429,7 @@ class Dokan_Pro_Store_Seo {
             return $img_default;
         }
 
-        $img = $meta_values['store_seo']['dokan-seo-twitter-image'];
+        $img = ! empty( $meta_values['store_seo']['dokan-seo-twitter-image'] ) ? $meta_values['store_seo']['dokan-seo-twitter-image'] : '';
 
         if ( $img ) {
             return wp_get_attachment_url( $img );
@@ -452,7 +452,7 @@ class Dokan_Pro_Store_Seo {
             return;
         }
 
-        $tw_img = $meta_values['store_seo']['dokan-seo-twitter-image'];
+        $tw_img = ! empty( $meta_values['store_seo']['dokan-seo-twitter-image'] ) ? $meta_values['store_seo']['dokan-seo-twitter-image'] : '';
 
         if ( $tw_img ) {
             echo '<meta name="twitter:image" content="' . wp_get_attachment_url( $tw_img ) . '"/>';
