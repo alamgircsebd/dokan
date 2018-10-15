@@ -212,7 +212,7 @@ global $post;
                                         if ( $time_diff > 0 && $time_diff < 24 * 60 * 60 ) {
                                             $h_time = sprintf( __( '%s ago', 'dokan' ), human_time_diff( $time ) );
                                         } else {
-                                            $h_time = mysql2date( __( 'Y/m/d', 'dokan' ), $m_time );
+                                            $h_time = mysql2date( get_option( 'date_format' ), $m_time );
                                         }
                                     }
 
