@@ -11,7 +11,7 @@
             var map_area = $( '#dokan-geolocation-locations-map' );
 
             self.map = new google.maps.Map( map_area.get(0), {
-                zoom: 11,
+                zoom: parseInt( DokanGeo.map_zoom, 10 ),
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             });
 
