@@ -103,6 +103,16 @@ class Dokan_Geolocation_Admin_Settings {
                 'min'     => 1,
                 'default' => 10,
             ),
+
+            'map_zoom'     => array(
+                'name'    => 'map_zoom',
+                'label'   => __( 'Map Zoom Level', 'dokan' ),
+                'desc'    => __( 'To zoom out increase the number, to zoom in decrease the number.', 'dokan' ),
+                'type'    => 'number',
+                'min'     => 1,
+                'max'     => 18,
+                'default' => 11,
+            )
         );
 
         return $settings_fields;
