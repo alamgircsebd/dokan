@@ -162,7 +162,8 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         }
 
         if ( $query_vars == 'shipping' ) {
-            $header = __( 'Shipping Settings', 'dokan' );
+            $settings_url = dokan_get_navigation_url( 'settings/shipping' ) . '#/settings';
+            $header = sprintf( '%s <span style="position:absolute; right:0px;"><a href="%s" class="dokan-btn dokan-btn-default"><i class="fa fa-gear"></i></a></span>', __( 'Shipping Settings', 'dokan' ), $settings_url ) ;
         }
 
         if ( $query_vars == 'seo' ) {

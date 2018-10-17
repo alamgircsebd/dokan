@@ -42,7 +42,8 @@ class Dokan_Pro_Assets {
                 'continents'        => WC()->countries->get_continents(),
                 'states'            => WC()->countries->get_states(),
                 'shipping_class'    => WC()->shipping->get_shipping_classes(),
-                'i18n'             => array( 'dokan' => dokan_get_jed_locale_data( 'dokan' ) ) ,
+                'i18n'              => array( 'dokan' => dokan_get_jed_locale_data( 'dokan' ) ),
+                'processing_time'   => dokan_get_shipping_processing_times()
             );
 
             wp_localize_script( 'dokan-pro-vue-frontend-shipping', 'dokanShipping', $localize_array );

@@ -548,7 +548,7 @@ export default {
     created() {
         this.fetchZone();
     }
-}
+};
 </script>
 
 <style lang="less">

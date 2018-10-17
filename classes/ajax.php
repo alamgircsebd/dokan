@@ -75,6 +75,8 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_dokan-save-zone-settings', array( $this, 'save_zone_settings' ) );
         add_action( 'wp_ajax_dokan-add-shipping-method', array( $this, 'add_shipping_method' ) );
         add_action( 'wp_ajax_dokan-delete-shipping-method', array( $this, 'delete_shipping_method' ) );
+        add_action( 'wp_ajax_dokan-save-shipping-settings', array( $this, 'save_shipping_settings' ) );
+        add_action( 'wp_ajax_dokan-get-shipping-settings', array( $this, 'get_shipping_settings' ) );
     }
 
     /**
@@ -283,6 +285,65 @@ class Dokan_Pro_Ajax {
         }
 
         wp_send_json_success( __( 'Shipping method deleted', 'dokan' ) );
+    }
+
+    /**
+     * Save shipping Settings
+     *
+     * @since 2.9.2
+     *
+     * @return void
+     */
+    public function save_shipping_settings() {
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) ) {
+            wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
+        }
+
+        $settings = $_POST['settings'];
+        $user_id = dokan_get_current_user_id();
+
+        if ( isset( $settings['processing_time'] ) ) {
+            update_user_meta( $user_id, '_dps_pt', $settings['processing_time'] );
+        }
+
+        if ( isset( $settings['shipping_policy'] ) ) {
+            update_user_meta( $user_id, '_dps_ship_policy', $settings['shipping_policy'] );
+        }
+
+        if ( isset( $settings['refund_policy'] ) ) {
+            update_user_meta( $user_id, '_dps_refund_policy', $settings['refund_policy'] );
+        }
+
+        update_user_meta( $user_id, '_dps_zone_wise_settings', 'yes' );
+
+        wp_send_json_success( __( 'Settings save successfully', 'dokan' ) );
+    }
+
+    /**
+     * Get shipping settings
+     *
+     * @since 2.9.2
+     *
+     * @return void
+     */
+    public function get_shipping_settings() {
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) ) {
+            wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
+        }
+
+        $user_id = dokan_get_current_user_id();
+
+        $dps_processing  = get_user_meta( $user_id, '_dps_pt', true );
+        $shipping_policy = get_user_meta( $user_id, '_dps_ship_policy', true );
+        $refund_policy   = get_user_meta( $user_id, '_dps_refund_policy', true );
+
+        $shipping_data = array(
+            'processing_time' => $dps_processing,
+            'shipping_policy' => $shipping_policy,
+            'refund_policy' => $refund_policy,
+        );
+
+        wp_send_json_success( $shipping_data );
     }
 
     /**

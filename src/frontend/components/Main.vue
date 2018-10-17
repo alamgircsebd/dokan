@@ -88,7 +88,7 @@ export default {
     created() {
         this.fetchShippingZone();
     }
-}
+};
 </script>
 
 <style lang="less">
