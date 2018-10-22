@@ -48,7 +48,7 @@ unset( $status_list['total'] );
         <ul class="list-inline order-statuses-filter">
             <li<?php echo $status_class == 'total' ? ' class="active"' : ''; ?>>
             <a href="<?php echo $bookings_url; ?>">
-                <?php printf( __( 'All (%d)', 'dokan-wc-booking '), $orders_counts->total ); ?></span>
+                <?php printf( __( 'All (%d)', 'dokan' ), $orders_counts->total ); ?></span>
             </a>
         </li>
         <?php
@@ -56,7 +56,7 @@ unset( $status_list['total'] );
             ?>
             <li<?php echo $status_class == $status ? ' class="active"' : ''; ?>>
             <a href="<?php echo add_query_arg( 'booking_status', $status, $bookings_url ) ?>">
-                <?php echo sprintf( __( get_post_status_object( $status )->label.' (%d)', 'dokan-wc-booking '), $status_count ); ?></span>
+                <?php echo sprintf( __( get_post_status_object( $status )->label.' (%d)', 'dokan' ), $status_count ); ?></span>
             </a>
         </li>
         <?php
@@ -71,15 +71,15 @@ if ( $bookings ) {
     <table class="dokan-table dokan-table-striped dokan-bookings-table">
         <thead>
             <tr>
-                <th><?php _e( 'Booking Status', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( 'ID', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( 'Booked Product', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( 'Customer', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( '# of persons', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( 'Order', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( 'Start Date', 'dokan-wc-booking '); ?></th>
-                <th><?php _e( 'End Date', 'dokan-wc-booking '); ?></th>
-                <th width="17%"><?php _e( 'Action', 'dokan-wc-booking '); ?></th>
+                <th><?php _e( 'Booking Status', 'dokan' ); ?></th>
+                <th><?php _e( 'ID', 'dokan' ); ?></th>
+                <th><?php _e( 'Booked Product', 'dokan' ); ?></th>
+                <th><?php _e( 'Customer', 'dokan' ); ?></th>
+                <th><?php _e( '# of persons', 'dokan' ); ?></th>
+                <th><?php _e( 'Order', 'dokan' ); ?></th>
+                <th><?php _e( 'Start Date', 'dokan' ); ?></th>
+                <th><?php _e( 'End Date', 'dokan' ); ?></th>
+                <th width="17%"><?php _e( 'Action', 'dokan' ); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -179,7 +179,7 @@ if ( $bookings ) {
                     if ( in_array( $the_booking->get_status(), array( 'pending-confirmation' ) ) ) {
                         $actions['confirm'] = array(
                             'url' 		=> wp_nonce_url( admin_url( 'admin-ajax.php?action=dokan-wc-booking-confirm&booking_id=' . $the_booking->id ), 'wc-booking-confirm' ),
-                            'name' 		=> __( 'Confirm', 'dokan-wc-bookings' ),
+                            'name' 		=> __( 'Confirm', 'dokan' ),
                             'action' 	=> "confirm"
                             );
                     }
@@ -221,7 +221,7 @@ if ( $bookings ) {
     <?php } else { ?>
 
     <div class="dokan-error">
-        <?php _e( 'No Bookings found', 'dokan-wc-booking '); ?>
+        <?php _e( 'No Bookings found', 'dokan' ); ?>
     </div>
 
     <?php } ?>
