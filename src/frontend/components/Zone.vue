@@ -135,7 +135,7 @@
         </form>
 
         <modal
-            :title="__( 'Add Shipping Methods', 'dokan' )"
+            :title="__( 'Add Shipping Method', 'dokan' )"
             v-if="showAddShippingMethodModal"
             @close="showAddShippingMethodModal = false"
         >
@@ -156,7 +156,7 @@
         </modal>
 
         <modal
-            :title="__( 'Edit Shipping Methods', 'dokan' )"
+            :title="editShippingMethodTitle"
             v-if="editShippingMethodModal"
             @close="editShippingMethodModal = false"
         >
@@ -282,7 +282,8 @@ export default {
                 instance_id: '0',
                 settings: {}
             },
-            cost_description: this.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' )
+            cost_description: this.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' ),
+            editShippingMethodTitle: this.__( 'Edit Shipping Method', 'dokan' )
         }
     },
 
