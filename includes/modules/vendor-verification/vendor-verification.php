@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: Vendor Verification
-  Plugin URI: https://wedevs.com/products/dokan/seller-verification/ ‎
+  Plugin URI: https://wedevs.com/products/dokan/seller-verification/
   Description: Dokan add-on to verify sellers
   Version: 1.3.0
   Author: weDevs
