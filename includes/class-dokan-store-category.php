@@ -6,7 +6,8 @@ class Dokan_Store_Category {
         $this->register_taxonomy();
 
         add_action( 'dokan_settings_after_store_name', array( $this, 'add_store_category_option' ), 10, 2 );
-        add_action( 'dokan_store_profile_saved', array( $this, 'after_store_profile_saved' ), 10, 2 );
+        add_action( 'dokan_store_profile_saved', array( $this, 'after_store_profile_saved' ) );
+        add_action( 'dokan_store_profile_saved_via_rest', array( $this, 'after_store_profile_saved' ) );
     }
 
     private function register_taxonomy() {
