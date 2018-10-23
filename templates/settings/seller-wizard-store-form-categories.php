@@ -1,11 +1,10 @@
-<div class="dokan-form-group">
-    <label class="dokan-w3 dokan-control-label" for="dokan_store_categories"><?php echo esc_html( $label ); ?></label>
-
-    <div class="dokan-w5 dokan-text-left">
+<tr>
+    <th scope="row"><label for="dokan_store_categories[]"><?php echo esc_html( $label ); ?></label></th>
+    <td>
         <select
-            class="dokan-select2 dokan-form-control"
+            class="wc-enhanced-select"
             name="dokan_store_categories[]"
-            id="dokan_store_categories"
+            id="dokan_store_categories[]"
             data-placeholder="<?php esc_html_e( 'Select categories', 'dokan' ); ?>"
             <?php echo $is_multiple ? 'multiple': ''; ?>
         >
@@ -15,5 +14,5 @@
                 </option>
             <?php endforeach; ?>
         </select>
-    </div>
-</div>
+    </td>
+</tr>
