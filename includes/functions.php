@@ -405,3 +405,34 @@ function dokan_send_announcement_email( $sellers, $data ) {
 }
 
 add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email', 10, 2 );
+
+/**
+ * Set store categories
+ *
+ * @since 2.9.2
+ *
+ * @param int            $store_id
+ * @param array|int|null $categories
+ *
+ * @return array|WP_Error Term taxonomy IDs of the affected terms.
+ */
+function dokan_set_store_categories( $store_id, $categories = null ) {
+    if ( ! is_array( $categories ) ) {
+        $categories = array( $categories );
+    }
+
+    $categories = array_map( 'absint', $categories );
+    $categories = array_filter( $categories );
+
+    if ( empty( $categories ) ) {
+        $uncategorized_id = term_exists( 'Uncategorized', 'store_category' );
+
+        if ( ! $uncategorized_id ) {
+            $uncategorized_id = wp_insert_term( 'Uncategorized', 'store_category' );
+        }
+
+        $categories = array( absint( $uncategorized_id['term_id'] ) );
+    }
+
+    return wp_set_object_terms( $store_id, $categories, 'store_category' );
+}

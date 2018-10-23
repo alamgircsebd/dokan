@@ -260,7 +260,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/orders.php';
         require_once DOKAN_PRO_INC . '/reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
-        require_once DOKAN_PRO_INC . '/store-category/class-dokan-store-category.php';
+        require_once DOKAN_PRO_INC . '/class-dokan-store-category.php';
 
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
