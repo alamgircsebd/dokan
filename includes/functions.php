@@ -436,3 +436,14 @@ function dokan_set_store_categories( $store_id, $categories = null ) {
 
     return wp_set_object_terms( $store_id, $categories, 'store_category' );
 }
+
+/**
+ * Checks if store category feature is on or off
+ *
+ * @since 2.9.2
+ *
+ * @return bool
+ */
+function dokan_is_store_categories_feature_on() {
+    return 'none' !== dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
+}

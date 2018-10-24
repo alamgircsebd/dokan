@@ -2,6 +2,7 @@
     <div class="vendor-list">
         <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
         <!-- <a href="#" class="page-title-action">Add New</a> -->
+        <router-link class="page-title-action" :to="{name: 'StoreCategoriesIndex'}">{{ __( 'Store Categories', 'dokan' ) }}</router-link>
         <hr class="wp-header-end">
 
         <ul class="subsubsub">

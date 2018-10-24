@@ -4,16 +4,14 @@ class Dokan_Store_Category {
 
     public function __construct() {
         add_filter( 'dokan_settings_fields', array( $this, 'add_admin_settings' ) );
-        $category_type = dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
 
-        if ( 'single' === $category_type || 'multiple' === $category_type ) {
+        if ( dokan_is_store_categories_feature_on() ) {
             $this->register_taxonomy();
             add_action( 'dokan_settings_after_store_name', array( $this, 'add_store_category_option' ) );
             add_action( 'dokan_seller_wizard_store_setup_after_address_field', array( $this, 'seller_wizard_add_store_category_option' ) );
             add_action( 'dokan_store_profile_saved', array( $this, 'after_store_profile_saved' ) );
             add_action( 'dokan_store_profile_saved_via_rest', array( $this, 'after_store_profile_saved' ) );
             add_action( 'dokan_seller_wizard_store_field_save', array( $this, 'after_seller_wizard_store_field_save' ) );
-
         }
     }
 
