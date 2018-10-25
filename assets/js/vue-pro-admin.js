@@ -812,9 +812,310 @@ var VclTwitch = ContentLoading.VclTwitch;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var LazyInput = dokan_get_lib('LazyInput');
+var ListTable = dokan_get_lib('ListTable');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'StoreCategoriesIndex'
+    name: 'StoreCategoriesIndex',
+
+    components: {
+        LazyInput: LazyInput,
+        ListTable: ListTable
+    },
+
+    data: function data() {
+        return {
+            apiHandler: {
+                abort: function abort() {
+                    //
+                }
+            },
+            isCreating: false,
+            category: {
+                name: '',
+                slug: '',
+                description: ''
+            },
+            defaultCategory: 0,
+            search: '',
+            categories: [],
+            showCb: false,
+            totalItems: 0,
+            perPage: 20,
+            totalPages: 1,
+            loading: false,
+            notFound: this.__('No category found', 'dokan'),
+            columns: {
+                name: {
+                    label: this.__('Name', 'dokan'),
+                    sortable: true
+                },
+
+                description: {
+                    label: this.__('Description', 'dokan'),
+                    sortable: false
+                },
+
+                slug: {
+                    label: this.__('Slug', 'dokan'),
+                    sortable: true
+                },
+
+                count: {
+                    label: this.__('Count', 'dokan'),
+                    sortable: true
+                }
+            },
+            actionColumn: 'name',
+            actions: [{
+                key: 'edit',
+                label: this.__('Edit', 'dokan')
+            }, {
+                key: 'delete',
+                label: this.__('Delete', 'dokan')
+            }, {
+                key: 'set_as_default',
+                label: this.__('Set as default', 'dokan')
+            }],
+            bulkActions: [],
+            sortBy: 'name',
+            sortOrder: 'asc'
+        };
+    },
+
+
+    computed: {
+        currentPage: function currentPage() {
+            var page = this.$route.query.page || 1;
+
+            return parseInt(page);
+        }
+    },
+
+    created: function created() {
+        if (this.$router.currentRoute.query.search) {
+            this.search = this.$router.currentRoute.query.search;
+        }
+
+        this.fetchCategories();
+    },
+
+
+    watch: {
+        '$route.query': 'fetchCategories',
+        search: 'onChangeSearch'
+    },
+
+    methods: {
+        updateHeaderParams: function updateHeaderParams(xhr) {
+            this.totalPages = parseInt(xhr.getResponseHeader('X-WP-TotalPages'));
+            this.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
+            this.defaultCategory = parseInt(xhr.getResponseHeader('X-WP-Default-Category'));
+        },
+        addCategory: function addCategory() {
+            var self = this;
+
+            self.isCreating = true;
+
+            dokan.api.post('/store-categories', self.category).done(function () {
+                self.category = {
+                    name: '',
+                    slug: '',
+                    description: ''
+                };
+
+                self.fetchCategories();
+            }).always(function () {
+                self.isCreating = false;
+            }).fail(function (jqXHR) {
+                var message = jqXHR.responseJSON.message;
+                alert(message);
+            });
+        },
+        fetchCategories: function fetchCategories() {
+            var self = this;
+
+            self.apiHandler.abort();
+
+            self.loading = true;
+
+            var query = {
+                per_page: self.perPage,
+                page: self.currentPage,
+                status: self.currentStatus,
+                orderby: self.sortBy,
+                order: self.sortOrder
+            };
+
+            if (self.search) {
+                query.search = self.search;
+            }
+
+            self.apiHandler = dokan.api.get('/store-categories', query).done(function (response, status, xhr) {
+                self.categories = response;
+                self.updateHeaderParams(xhr);
+            }).always(function () {
+                self.loading = false;
+            });
+        },
+        deleteCategory: function deleteCategory(category) {
+            if (confirm(this.__('Are you sure you want to delete this category?', 'dokan'))) {
+                var self = this;
+
+                self.loading = true;
+
+                dokan.api.delete(self.$route.path + '/' + category.id + '?force=true').done(function (response) {
+                    self.fetchCategories();
+                }).fail(function (jqXHR) {
+                    self.loading = false;
+                    var message = jqXHR.responseJSON.message;
+                    alert(message);
+                });
+            }
+        },
+        onChangeSearch: function onChangeSearch(search) {
+            var query = $.extend(true, {}, this.$router.currentRoute.query);
+
+            if (search) {
+                query.search = search;
+            } else {
+                delete query.search;
+            }
+
+            this.$router.replace({
+                query: query
+            });
+        },
+        goToPage: function goToPage(page) {
+            this.$router.push({
+                name: 'StoreCategoriesIndex',
+                query: {
+                    status: this.currentStatus,
+                    page: page
+                }
+            });
+        },
+        makeDefaultCategory: function makeDefaultCategory(category) {
+            var self = this;
+
+            self.loading = true;
+
+            dokan.api.put(self.$route.path + '/default-category', category).done(function (response) {
+                self.fetchCategories();
+            }).fail(function (jqXHR) {
+                self.loading = false;
+                var message = jqXHR.responseJSON.message;
+                alert(message);
+            });
+        }
+    }
 });
 
 /***/ }),
@@ -826,9 +1127,115 @@ var VclTwitch = ContentLoading.VclTwitch;
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'StoreCategoriesShow'
+    name: 'StoreCategoriesShow',
+
+    data: function data() {
+        return {
+            category: {},
+            loading: true
+        };
+    },
+    created: function created() {
+        this.fetchCategory();
+    },
+
+
+    methods: {
+        fetchCategory: function fetchCategory() {
+            var self = this;
+
+            self.loading = true;
+
+            dokan.api.get(self.$route.path).done(function (response) {
+                self.category = response;
+            }).always(function () {
+                self.loading = false;
+            });
+        },
+        updateCategory: function updateCategory() {
+            var self = this;
+
+            self.loading = true;
+
+            dokan.api.put(self.$route.path, self.category).done(function (response) {
+                self.category = response;
+            }).always(function () {
+                self.loading = false;
+            }).fail(function (jqXHR) {
+                var message = jqXHR.responseJSON.message;
+                alert(message);
+            });
+        },
+        deleteCategory: function deleteCategory() {
+            var _this = this;
+
+            if (confirm(this.__('Are you sure you want to delete this category?', 'dokan'))) {
+                var self = this;
+
+                self.loading = true;
+
+                dokan.api.delete(self.$route.path + '?force=true').done(function (response) {
+                    _this.$router.push({
+                        name: 'StoreCategoriesIndex'
+                    });
+                }).always(function () {
+                    self.loading = false;
+                }).fail(function (jqXHR) {
+                    var message = jqXHR.responseJSON.message;
+                    alert(message);
+                });
+            }
+        }
+    }
 });
 
 /***/ }),
@@ -3252,7 +3659,348 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("StoreCategoriesIndex")])
+  return _c("div", { attrs: { id: "dokan-store-categories" } }, [
+    _c("h1", { staticClass: "wp-heading-inline" }, [
+      _vm._v(_vm._s(_vm.__("Store Categories", "dokan")))
+    ]),
+    _vm._v(" "),
+    _c("form", { staticClass: "search-form wp-clearfix" }, [
+      _c(
+        "p",
+        { staticClass: "search-box" },
+        [
+          _c("lazy-input", {
+            attrs: {
+              name: "s",
+              type: "search",
+              placeholder: _vm.__("Search Categories")
+            },
+            model: {
+              value: _vm.search,
+              callback: function($$v) {
+                _vm.search = $$v
+              },
+              expression: "search"
+            }
+          })
+        ],
+        1
+      )
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "wp-clearfix", attrs: { id: "col-container" } }, [
+      _c("div", { attrs: { id: "col-left" } }, [
+        _c("div", { staticClass: "col-wrap" }, [
+          _c("div", { staticClass: "form-wrap" }, [
+            _c("h2", [_vm._v(_vm._s(_vm.__("Add New Category", "dokan")))]),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                attrs: { id: "addtag" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.addCategory($event)
+                  }
+                }
+              },
+              [
+                _c("fieldset", { attrs: { disabled: _vm.isCreating } }, [
+                  _c(
+                    "div",
+                    { staticClass: "form-field form-required term-name-wrap" },
+                    [
+                      _c("label", { attrs: { for: "tag-name" } }, [
+                        _vm._v(_vm._s(_vm.__("Name", "dokan")))
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.category.name,
+                            expression: "category.name"
+                          }
+                        ],
+                        attrs: {
+                          id: "tag-name",
+                          type: "text",
+                          size: "40",
+                          "aria-required": "true"
+                        },
+                        domProps: { value: _vm.category.name },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(_vm.category, "name", $event.target.value)
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          _vm._s(_vm.__("The name of the category.", "dokan"))
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "form-field term-slug-wrap" }, [
+                    _c("label", { attrs: { for: "tag-slug" } }, [
+                      _vm._v(_vm._s(_vm.__("Slug", "dokan")))
+                    ]),
+                    _vm._v(" "),
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.category.slug,
+                          expression: "category.slug"
+                        }
+                      ],
+                      attrs: { id: "tag-slug", type: "text", size: "40" },
+                      domProps: { value: _vm.category.slug },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.category, "slug", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("p", [
+                      _vm._v(
+                        _vm._s(
+                          _vm.__(
+                            "The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.",
+                            "dokan"
+                          )
+                        )
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "form-field term-description-wrap" },
+                    [
+                      _c("label", { attrs: { for: "tag-description" } }, [
+                        _vm._v(_vm._s(_vm.__("Description", "dokan")))
+                      ]),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.category.description,
+                            expression: "category.description"
+                          }
+                        ],
+                        attrs: { id: "tag-description", rows: "5", cols: "40" },
+                        domProps: { value: _vm.category.description },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.$set(
+                              _vm.category,
+                              "description",
+                              $event.target.value
+                            )
+                          }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("p", [
+                        _vm._v(
+                          _vm._s(
+                            _vm.__(
+                              "The description is not prominent by default; however, some themes may show it.",
+                              "dokan"
+                            )
+                          )
+                        )
+                      ])
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "submit" }, [
+                    _c("input", {
+                      staticClass: "button button-primary",
+                      attrs: { type: "submit", name: "submit", id: "submit" },
+                      domProps: { value: _vm.__("Add New Category", "dokan") }
+                    })
+                  ])
+                ])
+              ]
+            )
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { attrs: { id: "col-right" } }, [
+        _c("div", { staticClass: "col-wrap" }, [
+          _c(
+            "form",
+            { attrs: { id: "post-filter" } },
+            [
+              _c("list-table", {
+                attrs: {
+                  columns: _vm.columns,
+                  loading: _vm.loading,
+                  rows: _vm.categories,
+                  actions: _vm.actions,
+                  "action-column": _vm.actionColumn,
+                  "show-cb": _vm.showCb,
+                  "total-items": _vm.totalItems,
+                  "bulk-actions": _vm.bulkActions,
+                  "total-pages": _vm.totalPages,
+                  "per-page": _vm.perPage,
+                  "current-page": _vm.currentPage,
+                  "not-found": _vm.notFound,
+                  "sort-by": _vm.sortBy,
+                  "sort-order": _vm.sortOrder
+                },
+                on: { pagination: _vm.goToPage },
+                scopedSlots: _vm._u([
+                  {
+                    key: "name",
+                    fn: function(ref) {
+                      var row = ref.row
+                      return [
+                        _c(
+                          "strong",
+                          [
+                            _c(
+                              "router-link",
+                              {
+                                attrs: {
+                                  to: {
+                                    name: "StoreCategoriesShow",
+                                    params: { id: row.id }
+                                  }
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  _vm._s(
+                                    row.name
+                                      ? row.name
+                                      : _vm.__("(no name)", "dokan")
+                                  )
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ]
+                    }
+                  },
+                  {
+                    key: "row-actions",
+                    fn: function(ref) {
+                      var row = ref.row
+                      return _vm._l(_vm.actions, function(action, index) {
+                        return _c(
+                          "span",
+                          { class: action.key },
+                          [
+                            action.key === "edit"
+                              ? _c("router-link", {
+                                  attrs: {
+                                    to: {
+                                      name: "StoreCategoriesShow",
+                                      params: { id: row.id }
+                                    }
+                                  },
+                                  domProps: {
+                                    textContent: _vm._s(action.label)
+                                  }
+                                })
+                              : _vm._e(),
+                            _vm._v(" "),
+                            row.id !== _vm.defaultCategory
+                              ? [
+                                  action.key === "delete"
+                                    ? _c("a", {
+                                        attrs: { href: "#delete" },
+                                        domProps: {
+                                          textContent: _vm._s(action.label)
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            _vm.deleteCategory(row)
+                                          }
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  action.key === "set_as_default"
+                                    ? _c("a", {
+                                        attrs: { href: "#make-default" },
+                                        domProps: {
+                                          textContent: _vm._s(action.label)
+                                        },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            _vm.makeDefaultCategory(row)
+                                          }
+                                        }
+                                      })
+                                    : _vm._e(),
+                                  _vm._v(" "),
+                                  index !== _vm.actions.length - 1
+                                    ? [_vm._v(" | ")]
+                                    : _vm._e()
+                                ]
+                              : _vm._e()
+                          ],
+                          2
+                        )
+                      })
+                    }
+                  },
+                  {
+                    key: "count",
+                    fn: function(ref) {
+                      var row = ref.row
+                      return [
+                        _c(
+                          "router-link",
+                          {
+                            attrs: {
+                              to: {
+                                name: "Vendors",
+                                query: { category: row.slug }
+                              }
+                            }
+                          },
+                          [_vm._v(_vm._s(row.count))]
+                        )
+                      ]
+                    }
+                  }
+                ])
+              })
+            ],
+            1
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -3327,7 +4075,192 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [_vm._v("StoreCategoriesShow")])
+  return _c("div", { attrs: { id: "dokan-store-category-single" } }, [
+    _c("h1", [
+      _vm._v(
+        "\n        " + _vm._s(_vm.__("Edit Category", "dokan")) + "\n\n        "
+      ),
+      _c(
+        "a",
+        {
+          staticClass: "alignright button",
+          attrs: { href: "#" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.deleteCategory($event)
+            }
+          }
+        },
+        [_vm._v(_vm._s(_vm.__("Delete Category", "dokan")))]
+      )
+    ]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.updateCategory($event)
+          }
+        }
+      },
+      [
+        _c("fieldset", { attrs: { disabled: _vm.loading } }, [
+          _c("table", { staticClass: "form-table" }, [
+            _c("tbody", [
+              _c(
+                "tr",
+                { staticClass: "form-field form-required term-name-wrap" },
+                [
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _c("label", { attrs: { for: "name" } }, [
+                      _vm._v(_vm._s(_vm.__("Name", "dokan")))
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.category.name,
+                          expression: "category.name"
+                        }
+                      ],
+                      attrs: {
+                        id: "name",
+                        type: "text",
+                        size: "40",
+                        "aria-required": "true"
+                      },
+                      domProps: { value: _vm.category.name },
+                      on: {
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.category, "name", $event.target.value)
+                        }
+                      }
+                    }),
+                    _vm._v(" "),
+                    _c("p", { staticClass: "description" }, [
+                      _vm._v(
+                        _vm._s(_vm.__("Name of the store category", "dokan"))
+                      )
+                    ])
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("tr", { staticClass: "form-field term-slug-wrap" }, [
+                _c("th", { attrs: { scope: "row" } }, [
+                  _c("label", { attrs: { for: "slug" } }, [
+                    _vm._v(_vm._s(_vm.__("Slug", "dokan")))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.category.slug,
+                        expression: "category.slug"
+                      }
+                    ],
+                    attrs: { id: "slug", type: "text", size: "40" },
+                    domProps: { value: _vm.category.slug },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.category, "slug", $event.target.value)
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "description" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.__(
+                          "The “slug” is the URL-friendly version of the name. It is usually all lowercase and contains only letters, numbers, and hyphens.",
+                          "dokan"
+                        )
+                      )
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("tr", { staticClass: "form-field term-description-wrap" }, [
+                _c("th", { attrs: { scope: "row" } }, [
+                  _c("label", { attrs: { for: "description" } }, [
+                    _vm._v(_vm._s(_vm.__("Description", "dokan")))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("td", [
+                  _c("textarea", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.category.description,
+                        expression: "category.description"
+                      }
+                    ],
+                    staticClass: "large-text",
+                    attrs: { id: "description", rows: "5", cols: "50" },
+                    domProps: { value: _vm.category.description },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(
+                          _vm.category,
+                          "description",
+                          $event.target.value
+                        )
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "description" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.__(
+                          "The description is not prominent by default; however, some themes may show it.",
+                          "dokan"
+                        )
+                      )
+                    )
+                  ])
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "edit-tag-actions" }, [
+            _c(
+              "button",
+              {
+                staticClass: "button button-primary",
+                attrs: { type: "submit" }
+              },
+              [_vm._v(_vm._s(_vm.__("Update", "dokan")))]
+            )
+          ])
+        ])
+      ]
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
