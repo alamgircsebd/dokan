@@ -425,13 +425,7 @@ function dokan_set_store_categories( $store_id, $categories = null ) {
     $categories = array_filter( $categories );
 
     if ( empty( $categories ) ) {
-        $uncategorized_id = term_exists( 'Uncategorized', 'store_category' );
-
-        if ( ! $uncategorized_id ) {
-            $uncategorized_id = wp_insert_term( 'Uncategorized', 'store_category' );
-        }
-
-        $categories = array( absint( $uncategorized_id['term_id'] ) );
+        $categories = array( dokan_get_default_store_category_id() );
     }
 
     return wp_set_object_terms( $store_id, $categories, 'store_category' );

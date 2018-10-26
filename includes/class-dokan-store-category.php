@@ -19,11 +19,14 @@ class Dokan_Store_Category {
             add_action( 'dokan_store_profile_saved', array( $this, 'after_store_profile_saved' ) );
             add_action( 'dokan_store_profile_saved_via_rest', array( $this, 'after_store_profile_saved' ) );
             add_action( 'dokan_seller_wizard_store_field_save', array( $this, 'after_seller_wizard_store_field_save' ) );
+            add_action( 'dokan_vendor_shop_data', array( $this, 'add_store_categories_in_vendor_shop_data' ), 10, 2 );
+            add_action( 'dokan_vendor_to_array', array( $this, 'add_store_categories_vendor_to_array' ), 10, 2 );
+            add_action( 'dokan_rest_prepare_store_item_for_response', array( $this, 'rest_prepare_store_item_for_response' ), 10, 2 );
         }
     }
 
     /**
-     * Register Store Category
+     * Register store category
      *
      * @since 2.9.2
      *
@@ -115,7 +118,7 @@ class Dokan_Store_Category {
     }
 
     /**
-     * Add Store Category option in provided template
+     * Add store category option in provided template
      *
      * @since 2.9.2
      *
@@ -126,11 +129,9 @@ class Dokan_Store_Category {
      * @return void
      */
     public function add_store_category_option( $current_user, $args = array(), $template_name = 'settings/store-form-categories' ) {
-        $store_categories = get_the_terms( $current_user, 'store_category' );
-
-        if ( ! term_exists( 'Uncategorized', 'store_category' ) ) {
-            wp_insert_term( 'Uncategorized', 'store_category' );
-        }
+        // We're not gonna use this id, but this will create
+        // a category, if none exists.
+        dokan_get_default_store_category_id();
 
         $categories = get_terms( array(
             'taxonomy'   => 'store_category',
@@ -155,7 +156,7 @@ class Dokan_Store_Category {
     }
 
     /**
-     * Add Store Categories option in seller wizard
+     * Add store categories option in seller wizard
      *
      * @since 2.9.2
      *
@@ -194,5 +195,72 @@ class Dokan_Store_Category {
     public function after_seller_wizard_store_field_save( $wizard ) {
         $store_categories = ! empty( $_POST['dokan_store_categories'] ) ? $_POST['dokan_store_categories'] : null;
         dokan_set_store_categories( $wizard->store_id, $store_categories );
+    }
+
+    /**
+     * Add store categories in Dokan_Vendor shop_data
+     *
+     * @since 2.9.2
+     *
+     * @param array        $shop_info
+     * @param Dokan_Vendor $vendor
+     *
+     * @return array
+     */
+    public function add_store_categories_in_vendor_shop_data( $shop_info, $vendor ) {
+        $store_categories = get_the_terms( $vendor->get_id(), 'store_category' );
+
+        $shop_info['categories'] = $store_categories;
+
+        return $shop_info;
+    }
+
+    /**
+     * Add store categories in Dokan_Vendor to_array data
+     *
+     * @since 2.9.2
+     *
+     * @param array        $data
+     * @param Dokan_Vendor $vendor
+     *
+     * @return array
+     */
+    public function add_store_categories_vendor_to_array( $data, $vendor ) {
+        $data['categories'] = $vendor->get_categories();
+
+        return $data;
+    }
+
+    /**
+     * Transform store categories data in REST response
+     *
+     * @since 2.9.2
+     *
+     * @param WP_REST_Response $response
+     *
+     * @return WP_REST_Response
+     */
+    public function rest_prepare_store_item_for_response( $response ) {
+        $data = $response->get_data();
+
+        if ( ! empty( $data['categories'] ) && is_array( $data['categories'] ) ) {
+            $categories = array();
+
+            foreach ( $data['categories'] as $category ) {
+                $categories[] = array(
+                    'id' => $category->term_id,
+                    'name' => $category->name,
+                    'slug' => $category->slug,
+                );
+            }
+
+            $data['categories'] = $categories;
+        } else {
+            $data['categories'] = array();
+        }
+
+        $response->set_data( $data );
+
+        return $response;
     }
 }
