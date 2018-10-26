@@ -109,11 +109,15 @@
                                 <span class="subhead">{{ __( 'Orders Processed', 'dokan' ) }}</span>
                             </li>
                             <li class="gross">
-                                <span class="count">{{ stats.revenue.sales | currency }}</span>
+                                <span class="count">
+                                    <currency :amount="stats.revenue.sales"></currency>
+                                </span>
                                 <span class="subhead">{{ __( 'Gross Sales', 'dokan' ) }}</span>
                             </li>
                             <li class="earning">
-                                <span class="count">{{ stats.revenue.earning | currency }}</span>
+                                <span class="count">
+                                    <currency :amount="stats.revenue.earning"></currency>
+                                </span>
                                 <span class="subhead">{{ __( 'Total Earning', 'dokan' ) }}</span>
                             </li>
                         </ul>
@@ -128,7 +132,9 @@
                                 <span class="subhead">{{ __( 'Earning Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
-                                <span class="count">{{ stats.others.balance | currency }}</span>
+                                <span class="count">
+                                    <currency :amount="stats.others.balance"></currency>
+                                </span>
                                 <span class="subhead">{{ __( 'Current Balance', 'dokan' ) }}</span>
                             </li>
                             <li class="reviews">
@@ -187,10 +193,11 @@
 
 <script>
 let ContentLoading = dokan_get_lib('ContentLoading');
-let Modal = dokan_get_lib('Modal');
+let Modal          = dokan_get_lib('Modal');
+let Currency       = dokan_get_lib('Currency');
 
 let VclFacebook = ContentLoading.VclFacebook;
-let VclTwitch = ContentLoading.VclTwitch;
+let VclTwitch   = ContentLoading.VclTwitch;
 
 export default {
 
@@ -200,6 +207,7 @@ export default {
         VclFacebook,
         VclTwitch,
         Modal,
+        Currency
     },
 
     data () {
