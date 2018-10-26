@@ -125,6 +125,9 @@ class Dokan_Product_Subscription {
         // remove subscripton product from vendor product listing page
         add_filter( 'dokan_product_listing_exclude_type', array( $this, 'exclude_subscription_product' ) );
         add_filter( 'dokan_count_posts', array( $this, 'exclude_subscription_product_count' ) );
+
+        // Allow vendor to import only allowed number of products
+        add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'import_products' ) );
     }
 
     /**
@@ -1260,6 +1263,34 @@ class Dokan_Product_Subscription {
             GROUP BY post_status";
 
         return $query;
+    }
+
+    /**
+     * Import number of allowed products
+     *
+     * @param  object $object
+     *
+     * @return object
+     */
+    public function import_products( $object ) {
+        $user_id = dokan_get_current_user_id();
+
+        if ( user_can( $user_id, 'manage_woocommerce' ) ) {
+            return $object;
+        }
+
+        if ( dps_user_remaining_product( $user_id ) < 1 ) {
+            $rf = new ReflectionProperty( get_class( $object ), 'data_store' );
+
+            if ( ! is_object( $rf ) ) {
+                return $object;
+            }
+
+            $rf->setAccessible( true );
+            $rf->setValue( $object, null );
+        }
+
+        return $object;
     }
 
 
