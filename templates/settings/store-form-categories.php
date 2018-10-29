@@ -6,7 +6,7 @@
             class="dokan-select2 dokan-form-control"
             name="dokan_store_categories[]"
             id="dokan_store_categories"
-            data-placeholder="<?php esc_html_e( 'Select categories', 'dokan' ); ?>"
+            data-placeholder="<?php echo esc_html( $label ); ?>"
             <?php echo $is_multiple ? 'multiple': ''; ?>
         >
             <?php foreach ( $categories as $category ): ?>

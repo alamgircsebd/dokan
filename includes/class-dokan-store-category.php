@@ -24,6 +24,9 @@ class Dokan_Store_Category {
             add_action( 'dokan_vendor_to_array', array( $this, 'add_store_categories_vendor_to_array' ), 10, 2 );
             add_action( 'dokan_rest_prepare_store_item_for_response', array( $this, 'rest_prepare_store_item_for_response' ), 10, 2 );
             add_action( 'dokan_rest_stores_update_store', array( $this, 'rest_stores_update_store_category' ), 10, 2 );
+            add_action( 'dokan_seller_search_form', array( $this, 'add_category_dropdown_in_seller_search_form' ) );
+            add_action( 'dokan_seller_listing_search_args', array( $this, 'add_category_to_listing_search_args' ) );
+            add_action( 'pre_user_query', array( $this, 'add_store_category_query' ) );
         }
     }
 
@@ -296,6 +299,16 @@ class Dokan_Store_Category {
         return $response;
     }
 
+    /**
+     * Store update hook to update store categories
+     *
+     * @since 2.9.2
+     *
+     * @param Dokan_Vendor    $store
+     * @param WP_REST_Request $request
+     *
+     * @return void
+     */
     public function rest_stores_update_store_category( $store, $request ) {
         $store_categories = ! empty( $request->get_param( 'categories' ) ) ? $request->get_param( 'categories' ) : null;
 
@@ -306,5 +319,64 @@ class Dokan_Store_Category {
         }
 
         dokan_set_store_categories( $store->get_id(), $store_categories );
+    }
+
+    /**
+     * Add store category dropdown in seller search form
+     *
+     * @since 2.9.2
+     *
+     * @return void
+     */
+    public function add_category_dropdown_in_seller_search_form() {
+        $category_query = ! empty( $_GET['dokan_seller_category'] ) ? sanitize_text_field( $_GET['dokan_seller_category'] ) : array();
+
+        $args = array(
+            'category_query' => $category_query
+        );
+
+        $this->add_store_category_option( 0, $args, 'seller-search-form-categories' );
+    }
+
+    /**
+     * Add tax_query param in seller_args for seller listing ajax search
+     *
+     * @since 2.9.2
+     *
+     * @param array $seller_args
+     *
+     * @return array
+     */
+    public function add_category_to_listing_search_args( $seller_args ) {
+        if ( ! empty( $_REQUEST['category'] ) ) {
+            $seller_args['store_category_query'][] = array(
+                'taxonomy' => 'store_category',
+                'field'    => 'slug',
+                'terms'    => $_REQUEST['category'],
+            );
+        }
+
+        return $seller_args;
+    }
+
+    /**
+     * Add store category filter to WP_User_Query
+     *
+     * @since 2.9.2
+     *
+     * @param WP_User_Query $wp_user_query
+     *
+     * @return void
+     */
+    public function add_store_category_query( $wp_user_query ) {
+        if ( ! empty( $wp_user_query->query_vars['store_category_query'] ) ) {
+            global $wpdb;
+
+            $store_category_query = new WP_Tax_Query( $wp_user_query->query_vars['store_category_query'] );
+            $clauses = $store_category_query->get_sql( $wpdb->users, 'ID' );
+
+            $wp_user_query->query_from .= $clauses['join'];
+            $wp_user_query->query_where .= $clauses['where'];
+        }
     }
 }
