@@ -253,6 +253,8 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Switches = dokan_get_lib('Switches');
@@ -2832,14 +2834,16 @@ var render = function() {
         _vm._v(_vm._s(_vm.__("Vendors", "dokan")))
       ]),
       _vm._v(" "),
-      _c(
-        "router-link",
-        {
-          staticClass: "page-title-action",
-          attrs: { to: { name: "StoreCategoriesIndex" } }
-        },
-        [_vm._v(_vm._s(_vm.__("Store Categories", "dokan")))]
-      ),
+      _vm.categories.length
+        ? _c(
+            "router-link",
+            {
+              staticClass: "page-title-action",
+              attrs: { to: { name: "StoreCategoriesIndex" } }
+            },
+            [_vm._v(_vm._s(_vm.__("Store Categories", "dokan")))]
+          )
+        : _vm._e(),
       _vm._v(" "),
       _c("hr", { staticClass: "wp-header-end" }),
       _vm._v(" "),

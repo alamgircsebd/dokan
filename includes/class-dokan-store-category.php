@@ -86,23 +86,6 @@ class Dokan_Store_Category {
             'default' => 'none'
         );
 
-        $default_category = dokan_get_default_store_category_id();
-
-        $categories = get_terms( array(
-            'taxonomy'   => 'store_category',
-            'hide_empty' => false,
-        ) );
-
-        $options = wp_list_pluck( $categories, 'name', 'term_id' );
-
-        $dokan_settings_fields['dokan_general']['store_category_default'] = array(
-            'name'    => 'store_category_default',
-            'label'   => __( 'Default Store Category', 'dokan' ),
-            'type'    => 'select',
-            'options' => $options,
-            'default' => $default_category,
-        );
-
         return $dokan_settings_fields;
     }
 
