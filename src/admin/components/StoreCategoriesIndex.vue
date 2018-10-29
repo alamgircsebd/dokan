@@ -100,7 +100,7 @@
                             </template>
 
                             <template slot="count" slot-scope="{ row }">
-                                <router-link :to="{ name: 'Vendors',query: { category: row.slug} }">{{ row.count }}</router-link>
+                                <router-link :to="{ name: 'Vendors',query: { store_category: row.slug} }">{{ row.count }}</router-link>
                             </template>
                         </list-table>
                     </form>

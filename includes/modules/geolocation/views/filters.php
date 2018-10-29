@@ -47,6 +47,19 @@
             </div>
         <?php endif; ?>
 
+        <?php if ( 'product' !== $scope && dokan_is_store_categories_feature_on() ): ?>
+            <div class="dokan-geo-filters-column dokan-geo-store-categories">
+                <select class="dropdown_product_cat" name="store_category" id="store-category-dropdown">
+                    <option value=""><?php echo esc_html( __( 'Select a store category', 'dokan' ) ); ?></option>
+                    <?php foreach ( $categories as $category ): ?>
+                        <option value="<?php echo esc_attr( $category->slug ); ?>" <?php echo ( $category->slug === $store_category ) ? 'selected' : ''; ?>>
+                            <?php echo esc_html( $category->name ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        <?php endif; ?>
+
         <?php if ( ! $scope ): ?>
             <div class="dokan-geo-filters-column">
                 <button type="button" class="dokan-btn dokan-geo-filters-search-btn">

@@ -150,6 +150,15 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         'store_listing_page' => $store_listing_page,
     );
 
+    if ( dokan_is_store_categories_feature_on() ) {
+        $args['categories'] = get_terms( array(
+            'taxonomy'   => 'store_category',
+            'hide_empty' => false,
+        ) );
+
+        $args['store_category'] = ! empty( $_GET['store_category'] ) ? sanitize_text_field( $_GET['store_category'] ) : null;
+    }
+
     dokan_geo_get_template( 'filters', $args );
 }
 

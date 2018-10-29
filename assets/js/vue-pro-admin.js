@@ -354,6 +354,9 @@ var Switches = dokan_get_lib('Switches');
         },
         sortOrder: function sortOrder() {
             return this.$route.query.order || 'desc';
+        },
+        storeCategory: function storeCategory() {
+            return this.$route.query.store_category || null;
         }
     },
 
@@ -375,30 +378,30 @@ var Switches = dokan_get_lib('Switches');
             this.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
         },
         fetchVendors: function fetchVendors() {
-            var _this = this;
 
             var self = this;
 
             self.loading = true;
 
-            // dokan.api.get('/stores?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
-            dokan.api.get('/stores', {
-                per_page: this.perPage,
-                page: this.currentPage,
-                status: this.currentStatus,
-                orderby: this.sortBy,
-                order: this.sortOrder
-            }).done(function (response, status, xhr) {
-                // console.log(response, status, xhr);
+            var data = {
+                per_page: self.perPage,
+                page: self.currentPage,
+                status: self.currentStatus,
+                orderby: self.sortBy,
+                order: self.sortOrder,
+                store_category: self.storeCategory
+            };
+
+            dokan.api.get('/stores', data).done(function (response, status, xhr) {
                 self.vendors = response;
                 self.loading = false;
 
-                _this.updatedCounts(xhr);
-                _this.updatePagination(xhr);
+                self.updatedCounts(xhr);
+                self.updatePagination(xhr);
             });
         },
         fetchCategories: function fetchCategories() {
-            var _this2 = this;
+            var _this = this;
 
             var self = this;
 
@@ -408,24 +411,24 @@ var Switches = dokan_get_lib('Switches');
 
                 self.columns = {
                     'store_name': {
-                        label: _this2.__('Store', 'dokan'),
+                        label: _this.__('Store', 'dokan'),
                         sortable: true
                     },
                     'email': {
-                        label: _this2.__('E-mail', 'dokan')
+                        label: _this.__('E-mail', 'dokan')
                     },
                     'categories': {
-                        label: self.isCategoryMultiple ? _this2.__('Categories', 'dokan') : _this2.__('Category', 'dokan')
+                        label: self.isCategoryMultiple ? _this.__('Categories', 'dokan') : _this.__('Category', 'dokan')
                     },
                     'phone': {
-                        label: _this2.__('Phone', 'dokan')
+                        label: _this.__('Phone', 'dokan')
                     },
                     'registered': {
-                        label: _this2.__('Registered', 'dokan'),
+                        label: _this.__('Registered', 'dokan'),
                         sortable: true
                     },
                     'enabled': {
-                        label: _this2.__('Status', 'dokan')
+                        label: _this.__('Status', 'dokan')
                     }
                 };
             });
@@ -438,21 +441,21 @@ var Switches = dokan_get_lib('Switches');
             }
         },
         onSwitch: function onSwitch(status, vendor_id) {
-            var _this3 = this;
+            var _this2 = this;
 
             var message = status === false ? this.__('The vendor has been disabled.', 'dokan') : this.__('Selling has been enabled', 'dokan');
 
             dokan.api.put('/stores/' + vendor_id + '/status', {
                 status: status === false ? 'inactive' : 'active'
             }).done(function (response) {
-                _this3.$notify({
-                    title: _this3.__('Success!', 'dokan'),
+                _this2.$notify({
+                    title: _this2.__('Success!', 'dokan'),
                     type: 'success',
                     text: message
                 });
 
-                if (_this3.currentStatus !== 'all') {
-                    _this3.fetchVendors();
+                if (_this2.currentStatus !== 'all') {
+                    _this2.fetchVendors();
                 }
             });
         },
@@ -479,7 +482,7 @@ var Switches = dokan_get_lib('Switches');
             });
         },
         onBulkAction: function onBulkAction(action, items) {
-            var _this4 = this;
+            var _this3 = this;
 
             var jsonData = {};
             jsonData[action] = items;
@@ -487,8 +490,8 @@ var Switches = dokan_get_lib('Switches');
             this.loading = true;
 
             dokan.api.put('/stores/batch', jsonData).done(function (response) {
-                _this4.loading = false;
-                _this4.fetchVendors();
+                _this3.loading = false;
+                _this3.fetchVendors();
             });
         },
         sortCallback: function sortCallback(column, order) {
@@ -4449,7 +4452,7 @@ var render = function() {
                             attrs: {
                               to: {
                                 name: "Vendors",
-                                query: { category: row.slug }
+                                query: { store_category: row.slug }
                               }
                             }
                           },

@@ -184,6 +184,10 @@ export default {
 
         sortOrder() {
             return this.$route.query.order || 'desc';
+        },
+
+        storeCategory() {
+            return this.$route.query.store_category || null;
         }
     },
 
@@ -212,22 +216,23 @@ export default {
 
             self.loading = true;
 
-            // dokan.api.get('/stores?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
-            dokan.api.get('/stores', {
-                per_page: this.perPage,
-                page: this.currentPage,
-                status: this.currentStatus,
-                orderby: this.sortBy,
-                order: this.sortOrder
-            })
-            .done((response, status, xhr) => {
-                // console.log(response, status, xhr);
-                self.vendors = response;
-                self.loading = false;
+            const data = {
+                per_page: self.perPage,
+                page: self.currentPage,
+                status: self.currentStatus,
+                orderby: self.sortBy,
+                order: self.sortOrder,
+                store_category: self.storeCategory
+            };
 
-                this.updatedCounts(xhr);
-                this.updatePagination(xhr);
-            });
+            dokan.api.get('/stores', data)
+                .done((response, status, xhr) => {
+                    self.vendors = response;
+                    self.loading = false;
+
+                    self.updatedCounts(xhr);
+                    self.updatePagination(xhr);
+                });
         },
 
         fetchCategories() {
