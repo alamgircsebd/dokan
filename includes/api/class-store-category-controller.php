@@ -81,6 +81,7 @@ class Dokan_REST_Store_Category_Controller extends WP_REST_Terms_Controller {
     public function get_items( $request ) {
         $response = parent::get_items( $request );
 
+        $response->header( 'X-WP-Store-Category-Type', dokan_get_option( 'store_category_type', 'dokan_general', 'none' ) );
         $response->header( 'X-WP-Default-Category', dokan_get_default_store_category_id() );
 
         return $response;

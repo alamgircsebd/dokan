@@ -66,7 +66,9 @@
                             @pagination="goToPage"
                         >
                             <template slot="name" slot-scope="{ row }">
-                                <strong><router-link :to="{ name: 'StoreCategoriesShow', params: { id: row.id } }">{{ row.name ? row.name : __( '(no name)', 'dokan' ) }}</router-link></strong>
+                                <strong>
+                                    <router-link :to="{ name: 'StoreCategoriesShow', params: { id: row.id } }" v-html="columnName( row )" />
+                                </strong>
                             </template>
 
                             <template slot="row-actions" slot-scope="{ row }">
@@ -316,7 +318,26 @@ export default {
                     const message = jqXHR.responseJSON.message;
                     alert( message );
                 } );
+        },
+
+        columnName( row ) {
+            let name = row.name ? row.name : __( '(no name)', 'dokan' );
+
+            if ( row.id === this.defaultCategory ) {
+                name += this.sprintf( '<span class="default-category"> - %s</span>', this.__( 'Default', 'dokan' ) );
+            }
+
+            return name;
         }
     }
 };
 </script>
+
+<style lang="less">
+    .wp-list-table {
+
+        .default-category {
+            color: #666;
+        }
+    }
+</style>

@@ -16,12 +16,14 @@ class Dokan_Store_Category {
         if ( dokan_is_store_categories_feature_on() ) {
             add_action( 'dokan_settings_after_store_name', array( $this, 'add_store_category_option' ) );
             add_action( 'dokan_seller_wizard_store_setup_after_address_field', array( $this, 'seller_wizard_add_store_category_option' ) );
+            add_action( 'dokan_new_seller_created', array( $this, 'after_dokan_new_seller_created' ) );
             add_action( 'dokan_store_profile_saved', array( $this, 'after_store_profile_saved' ) );
             add_action( 'dokan_store_profile_saved_via_rest', array( $this, 'after_store_profile_saved' ) );
             add_action( 'dokan_seller_wizard_store_field_save', array( $this, 'after_seller_wizard_store_field_save' ) );
             add_action( 'dokan_vendor_shop_data', array( $this, 'add_store_categories_in_vendor_shop_data' ), 10, 2 );
             add_action( 'dokan_vendor_to_array', array( $this, 'add_store_categories_vendor_to_array' ), 10, 2 );
             add_action( 'dokan_rest_prepare_store_item_for_response', array( $this, 'rest_prepare_store_item_for_response' ), 10, 2 );
+            add_action( 'dokan_rest_stores_update_store', array( $this, 'rest_stores_update_store_category' ), 10, 2 );
         }
     }
 
@@ -170,6 +172,19 @@ class Dokan_Store_Category {
     }
 
     /**
+     * Set default category to a newly created store
+     *
+     * @since 2.9.2
+     *
+     * @param int $user_id
+     *
+     * @return void
+     */
+    public function after_dokan_new_seller_created( $user_id ) {
+        dokan_set_store_categories( $user_id );
+    }
+
+    /**
      * Set store categories after store file is saved
      *
      * @since 2.9.2
@@ -209,6 +224,12 @@ class Dokan_Store_Category {
      */
     public function add_store_categories_in_vendor_shop_data( $shop_info, $vendor ) {
         $store_categories = get_the_terms( $vendor->get_id(), 'store_category' );
+
+        if ( empty( $store_categories ) ) {
+            dokan_set_store_categories( $vendor->get_id() );
+
+            return $this->add_store_categories_in_vendor_shop_data( $shop_info, $vendor );
+        }
 
         $shop_info['categories'] = $store_categories;
 
@@ -262,5 +283,17 @@ class Dokan_Store_Category {
         $response->set_data( $data );
 
         return $response;
+    }
+
+    public function rest_stores_update_store_category( $store, $request ) {
+        $store_categories = ! empty( $request->get_param( 'categories' ) ) ? $request->get_param( 'categories' ) : null;
+
+        if ( is_array( $store_categories ) ) {
+            $store_categories = array_map( function ( $category ) {
+                return $category['id'];
+            }, $store_categories );
+        }
+
+        dokan_set_store_categories( $store->get_id(), $store_categories );
     }
 }
