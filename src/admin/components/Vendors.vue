@@ -44,6 +44,10 @@
                 <a :href="'mailto:' + data.row.email">{{ data.row.email }}</a>
             </template>
 
+            <template slot="categories" slot-scope="{ row }">
+                {{ row.categories.map( category => category.name ).join( ', ' ) }}
+            </template>
+
             <template slot="registered" slot-scope="data">
                 {{ moment(data.row.registered).format('MMM D, YYYY') }}
             </template>
@@ -138,7 +142,9 @@ export default {
                     label: this.__( 'Disable Selling', 'dokan' )
                 }
             ],
-            vendors: []
+            vendors: [],
+            categories: [],
+            isCategoryMultiple: false
         }
     },
 
@@ -184,6 +190,7 @@ export default {
     created() {
 
         this.fetchVendors();
+        this.fetchCategories();
     },
 
     methods: {
@@ -221,6 +228,39 @@ export default {
                 this.updatedCounts(xhr);
                 this.updatePagination(xhr);
             });
+        },
+
+        fetchCategories() {
+            const self = this;
+
+            dokan.api.get( '/store-categories' )
+                .done( ( response, status, xhr ) => {
+                    self.categories = response;
+                    self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
+
+                    self.columns = {
+                        'store_name': {
+                            label: this.__( 'Store', 'dokan' ),
+                            sortable: true
+                        },
+                        'email': {
+                            label: this.__( 'E-mail', 'dokan' )
+                        },
+                        'categories': {
+                            label: self.isCategoryMultiple ? this.__( 'Categories', 'dokan' ) : this.__( 'Category', 'dokan' )
+                        },
+                        'phone': {
+                            label: this.__( 'Phone', 'dokan' )
+                        },
+                        'registered': {
+                            label: this.__( 'Registered', 'dokan' ),
+                            sortable: true
+                        },
+                        'enabled': {
+                            label: this.__( 'Status', 'dokan' )
+                        }
+                    };
+                } );
         },
 
         onActionClick(action, row) {

@@ -249,6 +249,10 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
+//
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Switches = dokan_get_lib('Switches');
@@ -314,7 +318,9 @@ var Switches = dokan_get_lib('Switches');
                 key: 'pending',
                 label: this.__('Disable Selling', 'dokan')
             }],
-            vendors: []
+            vendors: [],
+            categories: [],
+            isCategoryMultiple: false
         };
     },
 
@@ -354,6 +360,7 @@ var Switches = dokan_get_lib('Switches');
     created: function created() {
 
         this.fetchVendors();
+        this.fetchCategories();
     },
 
 
@@ -390,6 +397,39 @@ var Switches = dokan_get_lib('Switches');
                 _this.updatePagination(xhr);
             });
         },
+        fetchCategories: function fetchCategories() {
+            var _this2 = this;
+
+            var self = this;
+
+            dokan.api.get('/store-categories').done(function (response, status, xhr) {
+                self.categories = response;
+                self.isCategoryMultiple = 'multiple' === xhr.getResponseHeader('X-WP-Store-Category-Type');
+
+                self.columns = {
+                    'store_name': {
+                        label: _this2.__('Store', 'dokan'),
+                        sortable: true
+                    },
+                    'email': {
+                        label: _this2.__('E-mail', 'dokan')
+                    },
+                    'categories': {
+                        label: self.isCategoryMultiple ? _this2.__('Categories', 'dokan') : _this2.__('Category', 'dokan')
+                    },
+                    'phone': {
+                        label: _this2.__('Phone', 'dokan')
+                    },
+                    'registered': {
+                        label: _this2.__('Registered', 'dokan'),
+                        sortable: true
+                    },
+                    'enabled': {
+                        label: _this2.__('Status', 'dokan')
+                    }
+                };
+            });
+        },
         onActionClick: function onActionClick(action, row) {
             if ('trash' === action) {
                 if (confirm('Are you sure to delete?')) {
@@ -398,21 +438,21 @@ var Switches = dokan_get_lib('Switches');
             }
         },
         onSwitch: function onSwitch(status, vendor_id) {
-            var _this2 = this;
+            var _this3 = this;
 
             var message = status === false ? this.__('The vendor has been disabled.', 'dokan') : this.__('Selling has been enabled', 'dokan');
 
             dokan.api.put('/stores/' + vendor_id + '/status', {
                 status: status === false ? 'inactive' : 'active'
             }).done(function (response) {
-                _this2.$notify({
-                    title: _this2.__('Success!', 'dokan'),
+                _this3.$notify({
+                    title: _this3.__('Success!', 'dokan'),
                     type: 'success',
                     text: message
                 });
 
-                if (_this2.currentStatus !== 'all') {
-                    _this2.fetchVendors();
+                if (_this3.currentStatus !== 'all') {
+                    _this3.fetchVendors();
                 }
             });
         },
@@ -439,7 +479,7 @@ var Switches = dokan_get_lib('Switches');
             });
         },
         onBulkAction: function onBulkAction(action, items) {
-            var _this3 = this;
+            var _this4 = this;
 
             var jsonData = {};
             jsonData[action] = items;
@@ -447,8 +487,8 @@ var Switches = dokan_get_lib('Switches');
             this.loading = true;
 
             dokan.api.put('/stores/batch', jsonData).done(function (response) {
-                _this3.loading = false;
-                _this3.fetchVendors();
+                _this4.loading = false;
+                _this4.fetchVendors();
             });
         },
         sortCallback: function sortCallback(column, order) {
@@ -2936,6 +2976,25 @@ var render = function() {
                 _c("a", { attrs: { href: "mailto:" + data.row.email } }, [
                   _vm._v(_vm._s(data.row.email))
                 ])
+              ]
+            }
+          },
+          {
+            key: "categories",
+            fn: function(ref) {
+              var row = ref.row
+              return [
+                _vm._v(
+                  "\n            " +
+                    _vm._s(
+                      row.categories
+                        .map(function(category) {
+                          return category.name
+                        })
+                        .join(", ")
+                    ) +
+                    "\n        "
+                )
               ]
             }
           },

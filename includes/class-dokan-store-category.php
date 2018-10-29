@@ -267,7 +267,18 @@ class Dokan_Store_Category {
         if ( ! empty( $data['categories'] ) && is_array( $data['categories'] ) ) {
             $categories = array();
 
-            foreach ( $data['categories'] as $category ) {
+            $category_type = dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
+
+            if ( 'multiple' === $category_type ) {
+                foreach ( $data['categories'] as $category ) {
+                    $categories[] = array(
+                        'id' => $category->term_id,
+                        'name' => $category->name,
+                        'slug' => $category->slug,
+                    );
+                }
+            } else {
+                $category = $data['categories'][0];
                 $categories[] = array(
                     'id' => $category->term_id,
                     'name' => $category->name,
