@@ -166,7 +166,7 @@ function dokan_geo_product_location() {
     dokan_geo_enqueue_locations_map();
 
     $args = array(
-        'address' => $product->get_meta( 'geo_address', true )
+        'address' => $product->get_meta( 'dokan_geo_address', true )
     );
 
     dokan_geo_get_template( 'product-location', $args );
