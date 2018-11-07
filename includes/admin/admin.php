@@ -323,29 +323,6 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
-     * Refund request template
-     *
-     * @since 2.4.11
-     *
-     * @return void
-     */
-    function refund_request() {
-        include dirname( __FILE__ ) . '/refund.php';
-    }
-
-    /**
-     * Seller Listing template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function seller_listing() {
-        // echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
-        include dirname( __FILE__ ) . '/sellers.php';
-    }
-
-    /**
      * Report Tempalte
      *
      * @since 2.4
