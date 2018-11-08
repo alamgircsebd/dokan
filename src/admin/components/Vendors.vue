@@ -86,10 +86,6 @@ export default {
     data () {
         return {
             showCb: true,
-            search: {
-                title: 'Search Vendors'
-            },
-
             counts: {
                 pending: 0,
                 approved: 0,

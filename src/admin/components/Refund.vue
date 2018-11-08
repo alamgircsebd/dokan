@@ -90,10 +90,6 @@ export default {
         return {
             requests: [],
             loading: false,
-            search: {
-                title: 'Search Vendors'
-            },
-
 
             counts: {
                 pending: 0,
