@@ -15,6 +15,8 @@
             <li><router-link :to="{ name: 'Refund', query: { status: 'cancelled' }}" active-class="current" exact v-html="sprintf( __( 'Cancelled <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.cancelled )"></router-link></li>
         </ul>
 
+        <search title="Search Refund" @searched="doSearch"></search>
+
         <list-table
             :columns="columns"
             :rows="requests"
@@ -31,6 +33,7 @@
             @pagination="goToPage"
             @action:click="onActionClick"
             @bulk:click="onBulkAction"
+            @searched="doSearch"
         >
 
             <template slot="order_id" slot-scope="data">
@@ -71,6 +74,7 @@
 <script>
 let ListTable = dokan_get_lib('ListTable');
 let Currency  = dokan_get_lib('Currency');
+let Search    = dokan_get_lib('Search');
 
 export default {
 
@@ -78,13 +82,18 @@ export default {
 
     components: {
         ListTable,
-        Currency
+        Currency,
+        Search
     },
 
     data() {
         return {
             requests: [],
             loading: false,
+            search: {
+                title: 'Search Vendors'
+            },
+
 
             counts: {
                 pending: 0,
@@ -167,6 +176,25 @@ export default {
     },
 
     methods: {
+        doSearch(payload) {
+            if ( payload == '' ) {
+                return;
+            }
+
+            this.loading = true;
+
+            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
+            .done((response, status, xhr) => {
+                this.requests = response.filter((refund) => {
+                    return refund.order_id.includes(payload) || refund.vendor.store_name.includes(payload);
+                });
+
+                this.loading = false;
+                this.updatedCounts( xhr );
+                this.updatePagination( xhr );
+            });
+        },
+
         updatedCounts( xhr ) {
             this.counts.pending = parseInt( xhr.getResponseHeader('X-Status-Pending') );
             this.counts.approved   = parseInt( xhr.getResponseHeader('X-Status-Completed') );

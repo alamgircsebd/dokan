@@ -10,6 +10,8 @@
             <li><router-link :to="{ name: 'Vendors', query: { status: 'pending' }}" active-class="current" exact v-html="sprintf( __( 'Pending <span class=\'count\'>(%s)</span>', 'dokan' ), counts.pending )"></router-link></li>
         </ul>
 
+        <search title="Search Vendors" @searched="doSearch"></search>
+
         <list-table
             :columns="columns"
             :loading="loading"
@@ -33,6 +35,7 @@
             @pagination="goToPage"
             @action:click="onActionClick"
             @bulk:click="onBulkAction"
+            @searched="doSearch"
         >
             <template slot="store_name" slot-scope="data">
                 <img :src="data.row.gravatar" :alt="data.row.store_name" width="50">
@@ -68,6 +71,7 @@
 <script>
 let ListTable = dokan_get_lib('ListTable');
 let Switches  = dokan_get_lib('Switches');
+let Search    = dokan_get_lib('Search');
 
 export default {
 
@@ -75,12 +79,16 @@ export default {
 
     components: {
         ListTable,
-        Switches
+        Switches,
+        Search
     },
 
     data () {
         return {
             showCb: true,
+            search: {
+                title: 'Search Vendors'
+            },
 
             counts: {
                 pending: 0,
@@ -186,6 +194,33 @@ export default {
     },
 
     methods: {
+
+        doSearch(payload) {
+            if ( payload == '' ) {
+                return;
+            }
+
+            let self = this;
+
+            self.loading = true;
+
+            dokan.api.get('/stores', {
+                page: this.currentPage,
+                status: this.currentStatus,
+                orderby: this.sortBy,
+                order: this.sortOrder
+            })
+            .done((response, status, xhr) => {
+                self.vendors = response.filter((vendor) => {
+                    return vendor.store_name.includes(payload) || vendor.email.includes(payload);
+                });
+
+                self.loading = false;
+
+                this.updatedCounts(xhr);
+                this.updatePagination(xhr);
+            });
+        },
 
         updatedCounts(xhr) {
             this.counts.pending  = parseInt( xhr.getResponseHeader('X-Status-Pending') );
