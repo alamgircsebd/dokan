@@ -97,15 +97,14 @@
 
                 <span class="form-group">
                     <label for='chosen_store_name'<b><?php _e( 'Store Name : ', 'dokan' ); ?></b></label>
-                    <select id='chosen_store_name' name='chosen_store_name' data-placeholder= '<?php echo __( 'Select a Store...', 'dokan' ); ?>' style="width:350px;"  class="chosen-select">
+                    <select id='dokan-select2' name='chosen_store_name' data-placeholder= '<?php echo __( 'Select a Store...', 'dokan' ); ?>' style="width:350px;"  class="dokan-select2">
                         <option></option>
                         <?php
                         foreach ( $sellers as $user ) {
-                            $info = dokan_get_store_info( $user->ID );
-
-                            if ( isset( $info['store_name'] ) ) {
+                            $vendor = dokan()->vendor->get( $user->ID );
+                            if ( !empty( $vendor->get_shop_name() ) ) {
                                 ?>
-                                <option <?php selected( $seller_id, $user->ID); ?> value='<?php echo $user->ID  ?>'><?php echo esc_html( $info['store_name'] ) ?></option>
+                                <option <?php selected( $seller_id, $vendor->get_id() ); ?> value='<?php echo $vendor->get_id(); ?>'><?php echo esc_html( $vendor->get_shop_name() ) ?></option>
                             <?php } ?>
                         <?php } ?>
                     </select>
@@ -331,14 +330,8 @@
             $('.datepicker').datepicker({
                 dateFormat: 'yy-mm-dd'
             });
-            $('#chosen_store_name').chosen();
-            $('select').on('change', function ( params) {
-                submit_chosen_data(params.selected);
-            });
 
-            function submit_chosen_data(data) {
-                $('input[name="store_name"]').attr('value', data);
-            }
+            $('#dokan-select2').select2();
         });
     </script>
 </div>

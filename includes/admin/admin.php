@@ -235,12 +235,14 @@ class Dokan_Pro_Admin_Settings {
     function common_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
-        wp_enqueue_style( 'dokan-chosen-style' );
+        // wp_enqueue_style( 'dokan-chosen-style' );
+        wp_enqueue_style( 'dokan-select2-css' );
 
         wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'dokan-flot' );
         wp_enqueue_script( 'dokan-chart' );
-        wp_enqueue_script( 'dokan-chosen' );
+        // wp_enqueue_script( 'dokan-chosen' );
+        wp_enqueue_script( 'dokan-select2-js' );
     }
 
     /**
@@ -320,29 +322,6 @@ class Dokan_Pro_Admin_Settings {
     **/
     function modules_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-    }
-
-    /**
-     * Refund request template
-     *
-     * @since 2.4.11
-     *
-     * @return void
-     */
-    function refund_request() {
-        include dirname( __FILE__ ) . '/refund.php';
-    }
-
-    /**
-     * Seller Listing template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function seller_listing() {
-        // echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
-        include dirname( __FILE__ ) . '/sellers.php';
     }
 
     /**
