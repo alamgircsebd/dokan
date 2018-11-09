@@ -487,7 +487,8 @@ class Dokan_WC_Booking {
     function save_booking_data( $post_id ) {
         global $wpdb;
 
-        $product_type         = empty( $_POST['product_type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product_type'] ) );
+        $product_type = empty( $_POST['product_type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product_type'] ) );
+
         if ( 'booking' !== $product_type ) {
             return;
         }
@@ -497,6 +498,10 @@ class Dokan_WC_Booking {
         if ( !is_a( $product, 'WC_Product_Booking' ) ) {
             return;
         }
+
+        // Save shipping class
+        $product_shipping_class = isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 ? absint( $_POST['product_shipping_class'] ) : '';
+        wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
         $resources = $this->get_posted_resources();
         $posted_props = array(
