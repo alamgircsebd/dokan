@@ -181,8 +181,8 @@ class Dokan_Pro_Admin_Settings {
                 'label'   => __( 'Discount Editing', 'dokan' ),
                 'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
                 'type'    => 'multicheck',
-                'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
-                'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
+                'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
+                'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) )
             ),
             'hide_customer_info' => array(
                 'name'    => 'hide_customer_info',
@@ -235,12 +235,12 @@ class Dokan_Pro_Admin_Settings {
     function common_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
-        wp_enqueue_style( 'dokan-chosen-style' );
+        wp_enqueue_style( 'dokan-select2-css' );
 
         wp_enqueue_script( 'jquery-ui-datepicker' );
         wp_enqueue_script( 'dokan-flot' );
         wp_enqueue_script( 'dokan-chart' );
-        wp_enqueue_script( 'dokan-chosen' );
+        wp_enqueue_script( 'dokan-select2-js' );
     }
 
     /**
@@ -320,29 +320,6 @@ class Dokan_Pro_Admin_Settings {
     **/
     function modules_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-    }
-
-    /**
-     * Refund request template
-     *
-     * @since 2.4.11
-     *
-     * @return void
-     */
-    function refund_request() {
-        include dirname( __FILE__ ) . '/refund.php';
-    }
-
-    /**
-     * Seller Listing template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function seller_listing() {
-        // echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
-        include dirname( __FILE__ ) . '/sellers.php';
     }
 
     /**

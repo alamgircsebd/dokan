@@ -1,6 +1,48 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.2',
+        'released' => '2018-11-09',
+        'changes'  => array(
+            array(
+                'title'         => 'Geolocation Module',
+                'type'          => 'New',
+                'description'   => 'Added zoom level settings in geolocation module.'
+            ),
+            array(
+                'title'         => 'Zone Wise Shipping',
+                'type'          => 'New',
+                'description'   => 'Added shipping policy and processing time settings in zone wise shipping.'
+            ),
+            array(
+                'title'         => 'Rest API for Store Reviews',
+                'type'          => 'New',
+                'description'   => 'Added rest API support for store review post type.'
+            ),
+            array(
+                'title'         => 'Show Tax on Bookable Product',
+                'type'          => 'Fix',
+                'description'   => 'Show tax on bookable product for vendor'
+            ),
+
+            array(
+                'title'         => 'Product Importing Issue for Subscribed Vendor',
+                'type'          => 'Fix',
+                'description'   => 'Allow vendor to import only allowed number of products.'
+            ),
+            array(
+                'title'         => 'Product and Order Discount Issue',
+                'type'          => 'Fix',
+                'description'   => 'Product and order discount for vendor is not working.'
+            ),
+            array(
+                'title'         => 'Shipping Class Issue',
+                'type'          => 'Fix',
+                'description'   => 'Shipping class is not saving for bookable product.'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.0',
         'released' => '2018-10-03',
         'changes'  => array(

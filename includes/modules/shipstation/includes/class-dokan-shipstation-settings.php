@@ -13,7 +13,7 @@ class Dokan_ShipStation_Settings {
         add_filter( 'dokan_settings_fields', array( $this, 'add_admin_settings_fields' ), 11 );
         add_action( 'dokan_dashboard_content_before', array( $this, 'enqueue_scripts' ) );
         add_action( 'dokan_get_dashboard_settings_nav', array( $this, 'add_settings_nav' ) );
-        add_action( 'dokan_dashboard_settings_heading_title', array( $this, 'add_heading_title' ), 10, 2 );
+        add_filter( 'dokan_dashboard_settings_heading_title', array( $this, 'add_heading_title' ), 10, 2 );
         add_action( 'dokan_dashboard_settings_helper_text', array( $this, 'add_helper_text' ), 10, 2 );
         add_action( 'dokan_settings_content', array( $this, 'add_settings_content' ) );
         add_action( 'wp_ajax_dokan_shipstation_settings', array( $this, 'form_handler' ) );

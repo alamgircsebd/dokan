@@ -28,33 +28,11 @@ class Dokan_Geolocation_Vendor_View {
     public function __construct() {
         $this->map_location = dokan_get_option( 'show_locations_map', 'dokan_geolocation', 'top' );
 
-        add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'dokan_before_seller_listing_loop', array( $this, 'before_seller_listing_loop' ) );
         add_action( 'dokan_after_seller_listing_loop', array( $this, 'after_seller_listing_loop' ) );
         add_action( 'dokan_seller_listing_footer_content', array( $this, 'seller_listing_footer_content' ) );
 
         add_filter( 'dokan_show_seller_search', '__return_false' );
-    }
-
-    /**
-     * Enqueue locations map scripts in store listing page
-     *
-     * @since 1.0.0
-     *
-     * @return void
-     */
-    public function enqueue_scripts() {
-        global $post;
-
-        if ( empty( $post ) ) {
-            return;
-        }
-
-        $dokan_pages = get_option( 'dokan_pages' );
-
-        if ( isset( $dokan_pages['store_listing'] ) && absint( $dokan_pages['store_listing'] ) === absint( $post->ID ) ) {
-            dokan_geo_enqueue_locations_map();
-        }
     }
 
     /**
@@ -65,6 +43,8 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public function before_seller_listing_loop() {
+        dokan_geo_enqueue_locations_map();
+
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
         switch ( $this->map_location ) {

@@ -1,4 +1,4 @@
-<?php if ( ! is_int( key( $is_enable_op_discount ) ) && array_key_exists("product-discount", $is_enable_op_discount ) == "product-discount" ) : ?>
+<?php if ( isset( $is_enable_op_discount['product-discount'] ) && $is_enable_op_discount['product-discount'] == 'product-discount' ) : ?>
     <div class="dokan-discount-options dokan-edit-row dokan-clearfix">
         <div class="dokan-section-heading" data-togglehandler="dokan_discount_options">
             <h2><i class="fa fa-gift"></i> <?php _e( 'Discount Options', 'dokan' ); ?></h2>

@@ -155,8 +155,13 @@ function dokan_get_review_url( $user_id ) {
  */
 function dokan_render_order_table_items( $order_id ) {
     $data  = get_post_meta( $order_id );
-    $order    = new WC_Order( $order_id );
-    include( DOKAN_PRO_DIR . '/templates/orders/views/html-order-items.php' );
+    $order = new WC_Order( $order_id );
+
+    dokan_get_template_part( 'orders/views/html-order-items', '', array(
+        'pro'   => true,
+        'data'  => $data,
+        'order' => $order
+    ) );
 }
 
 /**

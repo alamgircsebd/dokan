@@ -155,7 +155,11 @@ class Dokan_Vendor_staff {
      * @return void
      */
     public function disable_backend_access() {
-        if ( ! current_user_can( 'vendor_staff') ) {
+        if ( is_super_admin() ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'vendor_staff' ) ) {
             return;
         }
 
@@ -172,6 +176,10 @@ class Dokan_Vendor_staff {
      * @return bool
      */
     public function disable_admin_bar( $show_admin_bar ) {
+        if ( is_super_admin() ) {
+            return $show_admin_bar;
+        }
+
         if ( current_user_can( 'vendor_staff' ) ) {
             return false;
         }

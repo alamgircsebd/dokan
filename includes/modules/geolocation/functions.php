@@ -78,7 +78,8 @@ function dokan_geo_enqueue_locations_map() {
             'clusterer' => $clusterer,
         ),
         'info_window_template' => $info_window_template,
-        'default_geolocation'  => dokan_geo_get_default_location()
+        'default_geolocation'  => dokan_geo_get_default_location(),
+        'map_zoom'             => dokan_get_option( 'map_zoom', 'dokan_geolocation', 11 ),
     ) );
 }
 
@@ -165,7 +166,7 @@ function dokan_geo_product_location() {
     dokan_geo_enqueue_locations_map();
 
     $args = array(
-        'address' => $product->get_meta( 'geo_address', true )
+        'address' => $product->get_meta( 'dokan_geo_address', true )
     );
 
     dokan_geo_get_template( 'product-location', $args );

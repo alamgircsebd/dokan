@@ -1,3 +1,17 @@
+v2.9.2 -> November 09, 2018
+--------------------------
+- [new] Added zoom level settings in geolocation module
+- [new] Added shipping policy and processing time settings in zone wise shipping
+- [new] Added rest API support for store review post type
+- [fix] Show tax on bookable product
+- [fix] Admin is unable to enter in admin dashboard in network site
+- [fix] Unable to override seller setup wizard button color with color module
+- [fix] Currency symbol is broken in dokan admin backend
+- [fix] Allow vendor to import only allowed number of products
+- [fix] Product and order discount for vendor is not working
+- [fix] Shipping class is not saving for bookable product
+- [tweak] Allow child to theme to override order templates
+
 v2.9.1 -> October 15, 2018
 --------------------------
 - [tweak] Allow customers to purchase from non-connected sellers with stripe
