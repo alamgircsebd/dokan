@@ -687,7 +687,6 @@ $template_args = array(
                 <!--hidden input for Firefox issue-->
                 <input type="hidden" name="_stock_status" value="instock"/>
                 <input type="hidden" name="_sku" value=""/>
-                <input type="hidden" name="product_shipping_class" value="-1"/>
                 <input type="hidden" name="price" value=""/>
                 <input type="hidden" name="product_type" value="booking"/>
             </form>
