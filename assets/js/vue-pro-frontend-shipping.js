@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 12);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -579,7 +579,8 @@ var Modal = dokan_get_lib('Modal');
                 instance_id: '0',
                 settings: {}
             },
-            cost_description: this.__('Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan')
+            cost_description: this.__('Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan'),
+            editShippingMethodTitle: this.__('Edit Shipping Method', 'dokan')
         };
     },
 
@@ -835,24 +836,159 @@ var Modal = dokan_get_lib('Modal');
 });
 
 /***/ }),
-/* 4 */,
+/* 4 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+
+    name: 'Settings',
+
+    data: function data() {
+        return {
+            successMessage: '',
+            shippingSettings: {
+                shipping_policy: '',
+                refund_policy: '',
+                processing_time: ''
+            }
+        };
+    },
+
+
+    methods: {
+        getProcessingTimes: function getProcessingTimes() {
+            return dokanShipping.processing_time;
+        },
+        saveSettings: function saveSettings() {
+            var self = this,
+                data = {
+                action: 'dokan-save-shipping-settings',
+                settings: self.shippingSettings,
+                nonce: dokan.nonce
+            };
+
+            jQuery('#shipping-settings').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+            jQuery.post(dokan.ajaxurl, data, function (resp) {
+                if (resp.success) {
+                    self.successMessage = resp.data;
+                    jQuery('#shipping-settings').unblock();
+                } else {
+                    jQuery('#shipping-settings').unblock();
+                    alert(resp.data);
+                }
+            });
+        },
+        getSettings: function getSettings() {
+            var self = this,
+                data = {
+                action: 'dokan-get-shipping-settings',
+                nonce: dokan.nonce
+            };
+
+            jQuery('#shipping-settings').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+            jQuery.post(dokan.ajaxurl, data, function (resp) {
+                if (resp.success) {
+                    self.shippingSettings = resp.data;
+                    jQuery('#shipping-settings').unblock();
+                } else {
+                    jQuery('#shipping-settings').unblock();
+                    alert(resp.data);
+                }
+            });
+        }
+    },
+
+    created: function created() {
+        this.getSettings();
+    }
+});
+
+/***/ }),
 /* 5 */,
 /* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _shipping = __webpack_require__(12);
+var _shipping = __webpack_require__(13);
 
 var _shipping2 = _interopRequireDefault(_shipping);
 
-var _router = __webpack_require__(15);
+var _router = __webpack_require__(16);
 
 var _router2 = _interopRequireDefault(_router);
 
@@ -873,18 +1009,18 @@ new Vue({
 });
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_shipping_vue__ = __webpack_require__(1);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f887a63_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_shipping_vue__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f887a63_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_shipping_vue__ = __webpack_require__(15);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(13)
+  __webpack_require__(14)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -930,13 +1066,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -963,7 +1099,7 @@ if (false) {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -973,15 +1109,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _Main = __webpack_require__(16);
+var _Main = __webpack_require__(17);
 
 var _Main2 = _interopRequireDefault(_Main);
 
-var _Zone = __webpack_require__(19);
+var _Zone = __webpack_require__(20);
 
 var _Zone2 = _interopRequireDefault(_Zone);
 
-var _Settings = __webpack_require__(57);
+var _Settings = __webpack_require__(23);
 
 var _Settings2 = _interopRequireDefault(_Settings);
 
@@ -999,18 +1135,18 @@ exports.default = new Router({
 });
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Main_vue__ = __webpack_require__(2);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7b991f8e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Main_vue__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7b991f8e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Main_vue__ = __webpack_require__(19);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(17)
+  __webpack_require__(18)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1056,13 +1192,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1210,18 +1346,18 @@ if (false) {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Zone_vue__ = __webpack_require__(3);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a2ade7fe_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Zone_vue__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_a2ade7fe_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Zone_vue__ = __webpack_require__(22);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(20)
+  __webpack_require__(21)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -1267,13 +1403,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1809,7 +1945,7 @@ var render = function() {
         ? _c(
             "modal",
             {
-              attrs: { title: _vm.__("Add Shipping Methods", "dokan") },
+              attrs: { title: _vm.__("Add Shipping Method", "dokan") },
               on: {
                 close: function($event) {
                   _vm.showAddShippingMethodModal = false
@@ -1904,7 +2040,7 @@ var render = function() {
         ? _c(
             "modal",
             {
-              attrs: { title: _vm.__("Edit Shipping Methods", "dokan") },
+              attrs: { title: _vm.editShippingMethodTitle },
               on: {
                 close: function($event) {
                   _vm.editShippingMethodModal = false
@@ -2480,53 +2616,18 @@ if (false) {
 }
 
 /***/ }),
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */,
-/* 28 */,
-/* 29 */,
-/* 30 */,
-/* 31 */,
-/* 32 */,
-/* 33 */,
-/* 34 */,
-/* 35 */,
-/* 36 */,
-/* 37 */,
-/* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */,
-/* 56 */,
-/* 57 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Settings_vue__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Settings_vue__ = __webpack_require__(4);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_70ed6a78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Settings_vue__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_70ed6a78_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Settings_vue__ = __webpack_require__(25);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(60)
+  __webpack_require__(24)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2572,142 +2673,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 58 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 24 */
+/***/ (function(module, exports) {
 
-"use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-
-    name: 'Settings',
-
-    data: function data() {
-        return {
-            successMessage: '',
-            shippingSettings: {
-                shipping_policy: '',
-                refund_policy: '',
-                processing_time: ''
-            }
-        };
-    },
-
-
-    methods: {
-        getProcessingTimes: function getProcessingTimes() {
-            return dokanShipping.processing_time;
-        },
-        saveSettings: function saveSettings() {
-            var self = this,
-                data = {
-                action: 'dokan-save-shipping-settings',
-                settings: self.shippingSettings,
-                nonce: dokan.nonce
-            };
-
-            jQuery('#shipping-settings').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
-
-            jQuery.post(dokan.ajaxurl, data, function (resp) {
-                if (resp.success) {
-                    self.successMessage = resp.data;
-                    jQuery('#shipping-settings').unblock();
-                } else {
-                    jQuery('#shipping-settings').unblock();
-                    alert(resp.data);
-                }
-            });
-        },
-        getSettings: function getSettings() {
-            var self = this,
-                data = {
-                action: 'dokan-get-shipping-settings',
-                nonce: dokan.nonce
-            };
-
-            jQuery('#shipping-settings').block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
-
-            jQuery.post(dokan.ajaxurl, data, function (resp) {
-                if (resp.success) {
-                    self.shippingSettings = resp.data;
-                    jQuery('#shipping-settings').unblock();
-                } else {
-                    jQuery('#shipping-settings').unblock();
-                    alert(resp.data);
-                }
-            });
-        }
-    },
-
-    created: function created() {
-        this.getSettings();
-    }
-});
+// removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 59 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2984,12 +2956,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-70ed6a78", esExports)
   }
 }
-
-/***/ }),
-/* 60 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);
