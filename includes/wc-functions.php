@@ -746,22 +746,28 @@ function dokan_discount_for_lot_quantity() {
     $flag_for_lot_discount         = false;
 
     foreach ( WC()->cart->get_cart() as $cart_data ) {
-        $product_id        = $cart_data['product_id'];
-        $row_item_quantity = $cart_data['quantity'];
-        $line_total        = $cart_data['line_total'];
-        $is_lot_discount   = get_post_meta( $product_id, '_is_lot_discount', true );
-        if ( $is_lot_discount == 'yes' ) {
+        $product_id                  = $cart_data['product_id'];
+        $row_item_quantity           = $cart_data['quantity'];
+        $line_total                  = $cart_data['line_total'];
+        $is_lot_discount             = get_post_meta( $product_id, '_is_lot_discount', true );
+        $is_enable_op_discount       = dokan_get_option( 'discount_edit', 'dokan_selling' );
+        $is_product_discount_enabled = isset( $is_enable_op_discount['product-discount'] ) && $is_enable_op_discount['product-discount'] == 'product-discount';
+
+        if ( $is_product_discount_enabled && $is_lot_discount == 'yes' ) {
             $lot_discount_percentage = get_post_meta( $product_id, '_lot_discount_amount', true );
             $lot_discount_quantity   = get_post_meta( $product_id, '_lot_discount_quantity', true );
+
             if ( $row_item_quantity >= $lot_discount_quantity ) { // if line quantity is greater than or equal to setting minimum quantity
                 $total_discount_amount_for_lot = $total_discount_amount_for_lot + ( $line_total * $lot_discount_percentage / 100 );
                 $flag_for_lot_discount         = true;
             }
         }
     }
+
     if ( $flag_for_lot_discount == false ) {
         $total_discount_amount_for_lot = 0;
     }
+
     return apply_filters( 'return_calculated_lot_discount', $total_discount_amount_for_lot );
 }
 
@@ -792,9 +798,13 @@ function dokan_discount_for_minimum_order() {
                 $total_order_amount = $total_order_amount + $cart_data['line_total'];
             }
         }
-        $seller_info           = dokan_get_store_info( $u_seller_ids );
-        $is_min_order_discount = isset( $seller_info['show_min_order_discount'] ) ? $seller_info['show_min_order_discount'] : 'no';
-        if ( $is_min_order_discount == "yes" ) {
+
+        $seller_info               = dokan_get_store_info( $u_seller_ids );
+        $is_min_order_discount     = isset( $seller_info['show_min_order_discount'] ) ? $seller_info['show_min_order_discount'] : 'no';
+        $is_enable_op_discount     = dokan_get_option( 'discount_edit', 'dokan_selling' );
+        $is_order_discount_enabled = isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount['order-discount'] == 'order-discount';
+
+        if ( $is_order_discount_enabled && $is_min_order_discount == 'yes' ) {
             $min_order_discount            = isset( $seller_info['setting_minimum_order_amount'] ) ? $seller_info['setting_minimum_order_amount'] : 0;
             $min_order_discount_percentage = isset( $seller_info['setting_order_percentage'] ) ? $seller_info['setting_order_percentage'] : 0;
             if ( $total_order_amount >= $min_order_discount ) {

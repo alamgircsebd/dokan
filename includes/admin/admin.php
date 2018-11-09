@@ -181,8 +181,8 @@ class Dokan_Pro_Admin_Settings {
                 'label'   => __( 'Discount Editing', 'dokan' ),
                 'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
                 'type'    => 'multicheck',
-                'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
-                'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
+                'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
+                'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) )
             ),
             'hide_customer_info' => array(
                 'name'    => 'hide_customer_info',
