@@ -1,0 +1,5 @@
+table.dokan-rma-addon-warranty-table tbody tr td input,
+table.dokan-rma-addon-warranty-table tbody tr td select {
+    display: inline-block;
+    width: 80px !important;
+}
