@@ -45,9 +45,11 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function enqueue_scripts() {
-        if ( is_shop() ) {
-            dokan_geo_enqueue_locations_map();
+        if ( ! is_shop() && ! is_product_taxonomy() ) {
+            return;
         }
+
+        dokan_geo_enqueue_locations_map();
     }
 
     /**
@@ -58,6 +60,10 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function start_column_layout() {
+        if ( ! is_shop() && ! is_product_taxonomy() ) {
+            return;
+        }
+
         if ( 'right' === $this->map_location ) {
             echo '<div class="dokan-geolocation-row dokan-geolocation-map-right"><div class="dokan-geolocation-col-7">';
 
@@ -78,6 +84,10 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function end_column_layout() {
+        if ( ! is_shop() && ! is_product_taxonomy() ) {
+            return;
+        }
+
         if ( 'right' === $this->map_location ) {
             echo '</div><div class="dokan-geolocation-col-5">';
 
@@ -98,6 +108,10 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function before_shop_loop() {
+        if ( ! is_shop() && ! is_product_taxonomy() ) {
+            return;
+        }
+
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
         if ( 'on' === $show_filters ) {
@@ -117,11 +131,11 @@ class Dokan_Geolocation_Product_View {
      * @return void
      */
     public function after_shop_loop_item() {
-        global $post, $product;
-
-        if ( ! is_shop() ) {
+        if ( ! is_shop() && ! is_product_taxonomy() ) {
             return;
         }
+
+        global $post, $product;
 
         if ( empty( $post->dokan_geo_latitude ) || empty( $post->dokan_geo_longitude ) ) {
             return;
