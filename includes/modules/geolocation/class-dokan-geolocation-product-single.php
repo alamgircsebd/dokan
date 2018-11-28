@@ -16,7 +16,7 @@ class Dokan_Geolocation_Product_Single {
      */
     public function __construct() {
         add_filter( 'woocommerce_product_tabs', array( $this, 'add_tab' ) );
-        add_filter( 'woocommerce_after_single_product_summary', array( $this, 'add_product_location_data' ), 30 );
+        add_action( 'dokan_geo_product_location_tab_data', array( $this, 'add_product_location_data' ), 30 );
     }
 
     /**
@@ -57,6 +57,8 @@ class Dokan_Geolocation_Product_Single {
         printf( '<h2>%s</h2>', __( 'Product Location', 'dokan' ) );
 
         dokan_geo_product_location();
+
+        do_action( 'dokan_geo_product_location_tab_data' );
     }
 
     /**
