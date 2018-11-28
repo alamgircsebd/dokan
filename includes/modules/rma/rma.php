@@ -1,0 +1,196 @@
+<?php
+/*
+Plugin Name: Return and Warranty Request
+Plugin URI: http://wedevs.com/
+Description: Manage return and warranty from vendor end
+Version: 1.0.0
+Author: weDevs
+Author URI: http://wedevs.com/
+Thumbnail Name: product-enquiry.png
+License: GPL2
+*/
+
+/**
+ * Copyright (c) 2014 weDevs (email: info@wedevs.com). All rights reserved.
+ *
+ * Released under the GPL license
+ * http://www.opensource.org/licenses/gpl-license.php
+ *
+ * This is an add-on for WordPress
+ * http://wordpress.org/
+ *
+ * **********************************************************************
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ * **********************************************************************
+ */
+
+// don't call the file directly
+if ( !defined( 'ABSPATH' ) ) exit;
+
+/**
+* className
+*/
+class Dokan_RMA {
+
+    /**
+     * Load autometically when class initiate
+     *
+     * @since 1.0.0
+     */
+    public function __construct() {
+
+        $this->define();
+
+        $this->includes();
+
+        $this->initiate();
+
+        $this->hooks();
+    }
+
+    /**
+     * Initializes the Dokan_Auction() class
+     *
+     * Checks for an existing Dokan_Auction() instance
+     * and if it doesn't find one, creates it.
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_RMA();
+        }
+
+        return $instance;
+    }
+
+    /**
+     * hooks
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function define() {
+        define( 'DOKAN_RMA_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_RMA_INC_DIR', DOKAN_RMA_DIR . '/includes' );
+        define( 'DOKAN_RMA_ASSETS_DIR', plugins_url( 'assets', __FILE__ ) );
+    }
+
+    /**
+    * Get plugin path
+    *
+    * @since 1.5.1
+    *
+    * @return void
+    **/
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
+    }
+
+    /**
+     * includes all necessary class a functions file
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function includes() {
+        if ( is_admin() ) {
+            require_once DOKAN_RMA_INC_DIR . '/class-admin.php';
+        }
+
+        require_once DOKAN_RMA_INC_DIR . '/class-trait-rma.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-vendor.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-product.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-fronend.php';
+
+        // Load all helper functions
+        require_once DOKAN_RMA_INC_DIR . '/functions.php';
+    }
+
+    /**
+     * Initiate all classes
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function initiate() {
+        if ( is_admin() ) {
+            new Dokan_RMA_Admin();
+        }
+
+        new Dokan_RMA_Vendor();
+        new Dokan_RMA_Frontend();
+        new Dokan_RMA_Product();
+        new Dokan_RMA_Order();
+
+    }
+
+    /**
+     * Init all hooks
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function hooks() {
+        //tinysort.min.js
+        add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+    }
+
+    /**
+     * Load scripts
+     *
+     * @since 1.0.0
+     *
+     * @return void
+    */
+    public function load_scripts() {
+        global $wp;
+
+        if ( ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'rma' )
+            || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+            wp_enqueue_script( 'dokan-rma-script', DOKAN_RMA_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
+            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        }
+    }
+
+    /**
+     * Create Mapping table for product and vendor
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public static function activate() {
+        global $wp_roles;
+
+        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles();
+        }
+
+        $wp_roles->add_cap( 'seller', 'dokan_view_store_rma_menu' );
+        $wp_roles->add_cap( 'administrator', 'dokan_view_store_rma_menu' );
+        $wp_roles->add_cap( 'shop_manager', 'dokan_view_store_rma_menu' );
+    }
+
+}
+
+Dokan_RMA::init();
+
+dokan_register_activation_hook( __FILE__, array( 'Dokan_RMA', 'activate' ) );
+
