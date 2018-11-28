@@ -1,7 +1,6 @@
 <template>
     <div class="vendor-list">
         <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
-        <!-- <a href="#" class="page-title-action">Add New</a> -->
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
@@ -190,27 +189,21 @@ export default {
     },
 
     methods: {
-
         doSearch(payload) {
             if ( payload == '' ) {
                 return;
             }
 
-            let self = this;
-
+            let self     = this;
             self.loading = true;
 
-            dokan.api.get('/stores', {
+            dokan.api.get(`/stores?search=${payload}`, {
                 page: this.currentPage,
-                status: this.currentStatus,
                 orderby: this.sortBy,
                 order: this.sortOrder
             })
             .done((response, status, xhr) => {
-                self.vendors = response.filter((vendor) => {
-                    return vendor.store_name.includes(payload) || vendor.email.includes(payload);
-                });
-
+                self.vendors = response;
                 self.loading = false;
 
                 this.updatedCounts(xhr);
