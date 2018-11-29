@@ -3,3 +3,92 @@ table.dokan-rma-addon-warranty-table tbody tr td select {
     display: inline-block;
     width: 80px !important;
 }
+
+.dokan-warranty-request-wrap table.dokan-rma-order-item-table {
+    margin: 20px 0px;
+}
+
+.dokan-warranty-request-wrap .warranty-form-row {
+    margin: 10px 0px;
+}
+.dokan-warranty-request-wrap .warranty-form-row label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.dokan-warranty-request-wrap .warranty-form-row input:not([type="submit"]),
+.dokan-warranty-request-wrap .warranty-form-row select,
+.dokan-warranty-request-wrap .warranty-form-row textarea {
+    width: 100%;
+}
+
+.dokan-warranty-request-wrap .warranty-form-row input:not([type="submit"]),
+.dokan-warranty-request-wrap .warranty-form-row select {
+    height: 30px;
+}
+
+.dokan-rma-request-area ul.request-statuses-filter {
+    font-size: 12px;
+}
+
+.dokan-rma-request-area ul.request-statuses-filter li:after{
+    content: " | ";
+    color: #ddd;
+    margin: 0 2px;
+}
+.dokan-rma-request-area ul.request-statuses-filter li:last-child:after{
+    content: " ";
+    margin: 0px;
+}
+
+table.rma-request-listing-table tbody tr td.details .row-actions {
+    visibility: hidden;
+    font-size: 12px;
+    color: #ccc;
+    margin: 3px 0px;
+}
+table.rma-request-listing-table tbody tr td.details .row-actions .delete a {
+    color: #A05;
+}
+table.rma-request-listing-table tbody tr td.details .row-actions .delete a:hover {
+    color: red;
+}
+
+table.rma-request-listing-table tbody tr:hover td.details .row-actions {
+    visibility: visible;
+}
+
+.dokan-rma-single-request-area header span.left-header-content {
+    font-size: 14px;
+    top: 10px;
+    position: relative;
+}
+
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content {
+    margin-right: 3%;
+}
+
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content table.dokan-table tr {
+    border-bottom: 1px solid #ddd;
+}
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content table.dokan-table tr:last-child {
+    border-bottom: none;
+}
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content table.dokan-table tr td{
+    padding: 10px;
+    border-top: none;
+}
+
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content .additional-details {
+    padding: 10px;
+}
+
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content .additional-details .details-row {
+    margin: 15px 0px;
+}
+.dokan-rma-single-request-area .dokan-rma-single-request-left-content .additional-details .details-row p.details-label{
+    font-weight: bold;
+}
+.dokan-rma-single-request-area .dokan-rma-single-request-right-content .dokan-btn-default{
+    margin-right: px;
+}

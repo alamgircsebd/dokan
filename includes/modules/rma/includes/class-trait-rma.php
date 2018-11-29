@@ -6,6 +6,54 @@
 trait Dokan_RMA_Common {
 
     /**
+     * Transform warranty request items
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function transform_warranty_requests( $request ) {
+        $product_ids = explode( ',', $request['products'] );
+        $quantites = explode( ',', $request['quantity'] );
+        $items = [];
+
+        foreach ( $product_ids as $key => $product_id ) {
+            $product = wc_get_product( $product_id );
+            $items[] = [
+                'title'     => $product->get_title(),
+                'thumbnail' => wp_get_attachment_url( $product->get_image_id() ),
+                'quantity'  => $quantites[$key],
+                'url'       => $product->get_permalink(),
+                'price'     => $product->get_price_html()
+            ];
+        }
+
+        $vendor = dokan()->vendor->get( $request['vendor_id'] );
+        $customer = get_user_by( 'id', $request['customer_id'] );
+
+        return apply_filters( 'dokan_get_warranty_single_request_data', [
+            'id'          => $request['id'],
+            'order_id'    => $request['order_id'],
+            'vendor'   => [
+                'store_id'   => $vendor->get_id(),
+                'store_name' => $vendor->get_shop_name(),
+                'store_url'  => $vendor->get_shop_url()
+            ],
+            'customer' => [
+                'id'   => $customer->ID,
+                'name' => $customer->display_name,
+            ],
+            'type'        => $request['type'],
+            'status'      => $request['status'],
+            'reasons'     => $request['reasons'],
+            'details'     => $request['details'],
+            'note'        => $request['note'],
+            'created_at'  => $request['created_at'],
+            'items'       => $items
+        ] );
+    }
+
+    /**
      * Transform post request for rma settings
      *
      * @since 1.0.0
@@ -87,16 +135,15 @@ trait Dokan_RMA_Common {
              * has product ID and get product rma settings if have. If not set in product then
              * return those product store owner default settings
              */
-
             $override_default = get_post_meta( $product_id, '_dokan_rma_override_product', true );
 
             if ( 'yes' == $override_default ) {
                 $rma_settings         = get_post_meta( $product_id, '_dokan_rma_settings', true );
                 $rma_settings['from'] = 'product';
             } else {
-                $seller_id            = get_post_field( 'post_author', $product_id );
-                $rma_settings         = get_user_meta( $seller_id, '_dokan_rma_settings', true );
-                $rma_settings['from'] = 'store';
+                $seller_id    = get_post_field( 'post_author', $product_id );
+                $rma_settings = get_user_meta( $seller_id, '_dokan_rma_settings', true );
+                $rma_settings = dokan_parse_args( $rma_settings, $default );
             }
 
         } else {
@@ -109,6 +156,7 @@ trait Dokan_RMA_Common {
             }
 
             $rma_settings         = get_user_meta( $user_id, '_dokan_rma_settings', true );
+            $rma_settings         = dokan_parse_args( $rma_settings, $default );
             $rma_settings['from'] = 'store';
         }
 
@@ -122,7 +170,7 @@ trait Dokan_RMA_Common {
      * @return bool
      */
     function check_required_warranty( $product_id ) {
-        $warranty       = $this->get_settings( $product_id );
+        $warranty = $this->get_settings( $product_id );
 
         if ( $warranty['type'] == 'addon_warranty' && ! isset( $_REQUEST['dokan_warranty'] ) ) {
             return true;

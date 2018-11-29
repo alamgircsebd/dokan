@@ -113,9 +113,13 @@ class Dokan_RMA {
         }
 
         require_once DOKAN_RMA_INC_DIR . '/class-trait-rma.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-ajax.php';
         require_once DOKAN_RMA_INC_DIR . '/class-vendor.php';
         require_once DOKAN_RMA_INC_DIR . '/class-product.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-order.php';
         require_once DOKAN_RMA_INC_DIR . '/class-fronend.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-warranty-request.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-warranty-item.php';
 
         // Load all helper functions
         require_once DOKAN_RMA_INC_DIR . '/functions.php';
@@ -133,11 +137,11 @@ class Dokan_RMA {
             new Dokan_RMA_Admin();
         }
 
+        new Dokan_RMA_Ajax();
         new Dokan_RMA_Vendor();
         new Dokan_RMA_Frontend();
         new Dokan_RMA_Product();
         new Dokan_RMA_Order();
-
     }
 
     /**
@@ -149,7 +153,7 @@ class Dokan_RMA {
      */
     public function hooks() {
         //tinysort.min.js
-        add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
+        add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
     }
 
     /**
@@ -166,6 +170,29 @@ class Dokan_RMA {
             || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
             wp_enqueue_script( 'dokan-rma-script', DOKAN_RMA_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
             wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        }
+
+
+        if ( is_account_page() && isset( $wp->query_vars[ 'request-warranty' ] ) ) {
+            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        }
+
+        if ( isset( $wp->query_vars[ 'return-request' ] ) ) {
+            wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+            wp_enqueue_script( 'dokan-rma-script', DOKAN_RMA_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
+
+            wp_localize_script( 'dokan-rma-script', 'DokanRMA', [
+                'ajaxurl' => admin_url( 'admin-ajax.php' ),
+                'nonce'   => wp_create_nonce( 'dokan_rma_nonce' )
+            ] );
+        }
+
+        if ( is_account_page() ) {
+            $custom_css = '
+            body.woocommerce-account ul li.woocommerce-MyAccount-navigation-link--rma-requests a:before{
+                content: "\f0e2"
+            }';
+            wp_add_inline_style( 'woocommerce-layout', $custom_css );
         }
     }
 
@@ -186,6 +213,10 @@ class Dokan_RMA {
         $wp_roles->add_cap( 'seller', 'dokan_view_store_rma_menu' );
         $wp_roles->add_cap( 'administrator', 'dokan_view_store_rma_menu' );
         $wp_roles->add_cap( 'shop_manager', 'dokan_view_store_rma_menu' );
+
+        $wp_roles->add_cap( 'seller', 'dokan_view_store_rma_settings_menu' );
+        $wp_roles->add_cap( 'administrator', 'dokan_view_store_rma_settings_menu' );
+        $wp_roles->add_cap( 'shop_manager', 'dokan_view_store_rma_settings_menu' );
     }
 
 }

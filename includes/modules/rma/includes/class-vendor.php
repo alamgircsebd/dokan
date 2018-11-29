@@ -23,7 +23,27 @@ class Dokan_RMA_Vendor {
         add_filter( 'dokan_dashboard_settings_helper_text', [ $this, 'load_settings_helper_text' ], 12, 2 );
         add_action( 'dokan_render_settings_content', [ $this, 'load_settings_content' ], 12 );
 
+        add_filter( 'dokan_get_dashboard_nav', [ $this, 'add_rma_menu' ], 10, 1 );
+        add_filter( 'dokan_query_var_filter', [ $this, 'rma_endpoints' ] );
+        add_action( 'dokan_load_custom_template', [ $this, 'load_rma_template' ], 10, 1 );
+        add_action( 'dokan_rma_request_content_inside_before', [ $this, 'show_seller_enable_message' ] );
+
         add_action( 'template_redirect', [ $this, 'save_rma_settings' ], 10 );
+    }
+
+    /**
+     * Show Seller Enable Error Message
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function show_seller_enable_message() {
+        $user_id = get_current_user_id();
+
+        if ( ! dokan_is_seller_enabled( $user_id ) ) {
+            echo dokan_seller_not_enabled_notice();
+        }
     }
 
     /**
@@ -42,6 +62,105 @@ class Dokan_RMA_Vendor {
         }
 
         return $template_path;
+    }
+
+    /**
+     * Add vendor rma menu
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_rma_menu( $urls ) {
+        if ( dokan_is_seller_enabled( dokan_get_current_user_id() ) ) {
+            $urls['return-request'] = array(
+                'title'      => __( 'Return Request', 'dokan' ),
+                'icon'       => '<i class="fa fa-undo" aria-hidden="true"></i>',
+                'url'        => dokan_get_navigation_url( 'return-request' ),
+                'pos'        => 170,
+                'permission' => 'dokan_view_store_rma_menu'
+            );
+        }
+
+        return $urls;
+    }
+
+    /**
+     * Return request endpoind
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function rma_endpoints( $query_var ) {
+        $query_var[] = 'return-request';
+
+        return $query_var;
+    }
+
+    /**
+     * Load rma template for vendor
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function load_rma_template( $query_vars ) {
+        if ( isset( $query_vars['return-request'] ) ) {
+            if ( ! current_user_can( 'dokan_view_store_rma_menu' ) ) {
+                dokan_get_template_part( 'global/dokan-error', '', [ 'deleted' => false, 'message' => __( 'You have no permission to view this requests page', 'dokan' ) ] );
+            } else {
+                $warrnty_requests = new Dokan_RMA_Warranty_Request();
+
+                if ( ! empty( $_GET['request'] ) ) {
+                    dokan_get_template_part( 'rma/vendor-rma-single-request', '', [
+                        'is_rma'   => true,
+                        'request' => $warrnty_requests->get( $_GET['request'] ),
+                    ] );
+                } else {
+                    $data            = [];
+                    $pagination_html = '';
+                    $item_per_page   = 20;
+                    $total_count     = dokan_get_warranty_request( [ 'count' => true ] );
+                    $page            = isset( $_GET['page'] ) ? abs( (int) $_GET['page'] ) : 1;
+                    $offset          = ( $page * $item_per_page ) - $item_per_page;
+                    $total_page      = ceil( $total_count['total_count']/$item_per_page );
+
+                    if ( ! empty( $_GET['status'] ) ) {
+                        $data['status'] = $_GET['status'];
+                    }
+
+                    $data['number']    = $item_per_page;
+                    $data['offset']    = $offset;
+                    $data['vendor_id'] = dokan_get_current_user_id();
+
+                    if( $total_page > 1 ){
+                        $pagination_html = '<div class="pagination-wrap">';
+                        $page_links = paginate_links( array(
+                            'base'      => add_query_arg( 'page', '%#%' ),
+                            'format'    => '',
+                            'type'      => 'array',
+                            'prev_text' => __( '&laquo; Previous', 'dokan-lite' ),
+                            'next_text' => __( 'Next &raquo;', 'dokan-lite' ),
+                            'total'     => $total_page,
+                            'current'   => $page
+                        ) );
+                        $pagination_html .= '<ul class="pagination"><li>';
+                        $pagination_html .= join( "</li>\n\t<li>", $page_links );
+                        $pagination_html .= "</li>\n</ul>\n";
+                        $pagination_html .= '</div>';
+                    };
+
+                    dokan_get_template_part( 'rma/vendor-rma-requests', '', [
+                        'is_rma'          => true,
+                        'requests'        => $warrnty_requests->all( $data ),
+                        'total_count'     => $total_count,
+                        'pagination_html' => $pagination_html
+                    ] );
+                }
+            }
+            return;
+        }
     }
 
     /**

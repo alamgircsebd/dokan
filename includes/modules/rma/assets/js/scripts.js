@@ -11,7 +11,11 @@
             $( 'table.dokan-rma-addon-warranty-table').on( 'click', 'a.add-item', this.addRow );
             $( 'table.dokan-rma-addon-warranty-table').on( 'click', 'a.remove-item', this.removeRow );
 
+            $( 'form#dokan-update-request-status' ).on( 'submit', this.changeRequestStatus );
+
             this.initialize();
+
+
         },
 
         initialize: function() {
@@ -87,6 +91,27 @@
 
             $('.show_if_' + val ).show();
             $('.hide_if_' + val ).hide();
+        },
+
+        changeRequestStatus: function(e) {
+            e.preventDefault();
+
+            var self = $(this),
+                data = {
+                    action: 'dokan-update-return-request',
+                    nonce: DokanRMA.nonce,
+                    formData: self.serialize()
+                }
+
+            jQuery( '.dokan-status-update-panel' ).block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+            $.post( DokanRMA.ajaxurl, data, function(resp){
+                if ( resp.success ) {
+                    jQuery( '.dokan-status-update-panel' ).unblock();
+                } else {
+                    alert( resp.data );
+                }
+            });
         }
 
     }

@@ -25,6 +25,7 @@ class Dokan_RMA_Frontend {
         add_filter( 'add_to_cart_text', [ $this, 'add_to_cart_text' ], 15 );
         add_filter( 'woocommerce_product_add_to_cart_text', [ $this, 'add_to_cart_text' ], 15, 2 );
 
+        add_action( 'template_redirect', [ $this, 'handle_warranty_submit_request' ], 10 );
     }
 
     /**
@@ -294,6 +295,51 @@ class Dokan_RMA_Frontend {
         return $text;
     }
 
+    /**
+     * Handle customer submit request
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function handle_warranty_submit_request() {
+        if ( !isset( $_POST['warranty_submit_request'] ) ) {
+            return;
+        }
 
+        if ( ! wp_verify_nonce( $_POST['dokan_save_warranty_request_nonce'], 'dokan_save_warranty_request' ) ) {
+            return;
+        }
+
+        if ( ! isset( $_POST['request_item'] ) ) {
+            wc_add_notice( __( 'Please select some item for sending request', 'dokan' ), 'error' );
+            return;
+        }
+
+        $product_map = [];
+
+        // Mapping all product with quantity
+        foreach ( $_POST['request_item'] as $key => $product_id ) {
+            $product_map[] = [
+                'product_id' => $product_id,
+                'quantity'   => ! empty( $_POST['request_item_qty'][$key] ) ? $_POST['request_item_qty'][$key] : 1
+            ];
+        }
+
+        $data          = $_POST;
+        $data['items'] = $product_map;
+
+        $result = dokan_save_warranty_request( $data );
+
+        if ( is_wp_error( $result ) ) {
+            wc_add_notice( $result->get_error_message(), 'error' );
+            return;
+        }
+
+        wc_add_notice( __( 'Request has been successfully submitted', 'dokan' ), 'success' );
+
+        wp_redirect( wc_get_account_endpoint_url( 'rma-requests' ) );
+        exit();
+    }
 
 }

@@ -49,6 +49,28 @@ class Dokan_RMA_Admin {
                 'default' => 'seller',
                 'options' => wc_get_order_statuses(),
             ),
+            'rma_enable_refund_request' => array(
+                'name'    => 'rma_enable_refund_request',
+                'label'   => __( 'Enable Refund Requests', 'dokan' ),
+                'type'    => 'select',
+                'desc'    => __( 'Allow customers to request for refunds', 'dokan' ),
+                'default' => 'no',
+                'options' => [
+                    'yes' => __( 'Yes', 'dokan' ),
+                    'no' => __( 'No', 'dokan' )
+                ],
+            ),
+            'rma_enable_coupon_request' => array(
+                'name'    => 'rma_enable_coupon_request',
+                'label'   => __( 'Enable Coupon Requests', 'dokan' ),
+                'type'    => 'select',
+                'desc'    => __( 'Allow customers to request for coupons as store credit', 'dokan' ),
+                'default' => 'no',
+                'options' => [
+                    'yes' => __( 'Yes', 'dokan' ),
+                    'no' => __( 'No', 'dokan' )
+                ],
+            ),
 
             'rma_reasons' => array(
                 'name'    => 'rma_reasons',
