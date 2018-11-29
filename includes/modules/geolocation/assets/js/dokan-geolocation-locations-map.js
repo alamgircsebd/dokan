@@ -23,7 +23,16 @@
                 var bounds = cluster.getBounds(),
                     markers = cluster.getMarkers();
 
-                if ( bounds.b.f === bounds.b.b ) {
+                // At first I was using if ( bounds.b.f === bounds.b.b ) condition,
+                // then saw that bounds doesn't contain b any more. So, I'm trying to
+                // use dynamic key properties here.
+
+                var bounds_props = Object.keys( bounds ),
+                    bound_1st_prop_props = Object.keys( bounds[ bounds_props[0] ] ),
+                    f = bounds[ bounds_props[0] ][ bound_1st_prop_props[0] ],
+                    b = bounds[ bounds_props[0] ][ bound_1st_prop_props[1] ];
+
+                if ( f === b ) {
                     var html = '<div class="white-popup dokan-geo-map-info-windows-in-popup">';
 
                     markers.forEach( function ( marker ) {
