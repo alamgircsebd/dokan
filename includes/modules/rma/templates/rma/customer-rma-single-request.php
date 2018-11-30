@@ -69,5 +69,14 @@
             ?>
         </div>
     <p>
+
+    <?php
+        dokan_get_template_part( 'rma/conversations', '', array(
+            'is_rma'        => true,
+            'request'       => $request,
+            'conversations' => $conversations,
+            'from'          => 'customer'
+        ) );
+    ?>
 <?php endif ?>
 

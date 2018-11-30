@@ -391,7 +391,8 @@ function dokan_save_warranty_request( $data = [] ) {
             [
                 'request_id' => $request_id,
                 'product_id' => $item['product_id'],
-                'quantity'   => $item['quantity']
+                'quantity'   => $item['quantity'],
+                'item_id'    => $item['item_id']
             ],
             [ '%d', '%d', '%d' ]
         );
@@ -466,7 +467,7 @@ function dokan_get_warranty_request( $data = [] ) {
     if ( $data['count'] ) {
         $sql = "SELECT count('id') as total_count FROM {$request_table} as rt WHERE 1=1";
     } else {
-        $sql = "SELECT rt.*, GROUP_CONCAT( rit.product_id SEPARATOR ',') AS 'products', GROUP_CONCAT( rit.quantity SEPARATOR ', ') AS 'quantity' FROM {$request_table} as rt INNER JOIN {$request_item_table} as rit ON rt.id=rit.request_id WHERE 1=1";
+        $sql = "SELECT rt.*, GROUP_CONCAT( rit.product_id SEPARATOR ',') AS 'products', GROUP_CONCAT( rit.quantity SEPARATOR ', ') AS 'quantity', GROUP_CONCAT( rit.item_id SEPARATOR ', ') AS 'item_id' FROM {$request_table} as rt INNER JOIN {$request_item_table} as rit ON rt.id=rit.request_id WHERE 1=1";
     }
 
     if ( ! empty( $data['type'] ) ) {

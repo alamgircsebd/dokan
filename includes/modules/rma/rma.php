@@ -120,6 +120,7 @@ class Dokan_RMA {
         require_once DOKAN_RMA_INC_DIR . '/class-fronend.php';
         require_once DOKAN_RMA_INC_DIR . '/class-warranty-request.php';
         require_once DOKAN_RMA_INC_DIR . '/class-warranty-item.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-warranty-request-conversation.php';
 
         // Load all helper functions
         require_once DOKAN_RMA_INC_DIR . '/functions.php';
@@ -173,7 +174,7 @@ class Dokan_RMA {
         }
 
 
-        if ( is_account_page() && isset( $wp->query_vars[ 'request-warranty' ] ) ) {
+        if ( is_account_page() && ( isset( $wp->query_vars[ 'request-warranty' ] ) || isset( $wp->query_vars['view-rma-requests'] ) ) ) {
             wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
         }
 

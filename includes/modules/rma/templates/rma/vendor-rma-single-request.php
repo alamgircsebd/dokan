@@ -55,7 +55,11 @@
                     <div class="dokan-clearfix"></div>
                 </header>
 
-                <?php if ( $request ): ?>
+                <?php if ( ! $request ): ?>
+                    <?php dokan_get_template_part( 'global/dokan-error', '', [ 'deleted' => false, 'message' => __( 'Invalid request id. Not found', 'dokan' ) ] ); ?>
+                <?php elseif( dokan_get_current_user_id() != $request['vendor']['store_id'] ): ?>
+                    <?php dokan_get_template_part( 'global/dokan-error', '', [ 'deleted' => false, 'message' => __( 'Error! this is not your request.', 'dokan' ) ] ); ?>
+                <?php else: ?>
                     <div class="dokan-w8 dokan-rma-single-request-left-content">
                         <div class="dokan-clearfix">
                             <div class="dokan-panel dokan-panel-default">
@@ -149,14 +153,54 @@
                                             <input type="hidden" name="id" value="<?php echo $request['id']; ?>">
                                             <input type="hidden" name="vendor_id" value="<?php echo $request['vendor']['store_id']; ?>">
                                             <input type="submit" class="dokan-right dokan-btn dokan-btn-default" value="<?php _e( 'Update', 'dokan' ) ?>">
+
+                                            <?php if ( 'yes' == dokan_get_option( 'rma_enable_refund_request', 'dokan_rma', 'no' ) && 'refund' == $request['type'] && 'completed' == $request['status'] ): ?>
+                                                <a href="#" class="dokan-btn dokan-btn-default dokan-send-refund-request" data-request_id="<?php echo $request['id']; ?>"><?php _e( 'Send Refund', 'dokan' ) ?></a>
+                                            <?php endif ?>
+
+                                            <?php if ( 'yes' == dokan_get_option( 'rma_enable_coupon_request', 'dokan_rma', 'no' ) && 'coupon' == $request['type'] && 'completed' == $request['status'] ): ?>
+                                                <a href="#" class="dokan-btn dokan-btn-default"><?php _e( 'Send Coupon', 'dokan' ) ?></a>
+                                            <?php endif ?>
+
+                                                <?php
+                                                    $refund = new Dokan_Pro_Refund;
+                                                    if (  $refund->has_pending_refund_request( $request['order_id'] ) ) {
+                                                        ?>
+                                                        <p class="dokan-alert dokan-alert-info" style="margin-top: 10px;">
+                                                            <?php _e( 'Already Send Refund request', 'dokan' ); ?>
+                                                        </p>
+                                                        <?php
+                                                    };
+                                                ?>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <?php else: ?>
-                    <?php dokan_get_template_part( 'global/dokan-error', '', [ 'deleted' => false, 'message' => __( 'Invalid request id. Not found', 'dokan' ) ] ); ?>
+
+                    <div class="dokan-clearfix"></div>
+
+                    <div class="dokan-w12">
+                        <div class="dokan-clearfix">
+                            <div class="dokan-panel dokan-panel-default">
+                                <div class="dokan-panel-heading">
+                                    <?php _e( 'Conversations', 'dokan' ) ?>
+                                </div>
+
+                                <div class="dokan-panel-body">
+                                    <?php
+                                        dokan_get_template_part( 'rma/conversations', '', array(
+                                            'is_rma'        => true,
+                                            'request'       => $request,
+                                            'conversations' => $conversations,
+                                            'from'          => 'vendor',
+                                        ) );
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 <?php endif ?>
             </article>
 

@@ -52,6 +52,7 @@ $count_warranty_product = 0;
                     <th>
                         <?php if ( $has_warranty ): ?>
                             <input type="checkbox" name="request_item[]" value="<?php echo $_product->get_id() ?>">
+                            <input type="checkbox" name="request_item_id[]" value="<?php echo $item->get_id() ?>">
                         <?php endif ?>
                     </th>
                     <td><a href="<?php echo $_product->get_permalink(); ?>"><?php echo $_product->get_title(); ?></a></td>

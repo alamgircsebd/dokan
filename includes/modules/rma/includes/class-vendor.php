@@ -27,8 +27,9 @@ class Dokan_RMA_Vendor {
         add_filter( 'dokan_query_var_filter', [ $this, 'rma_endpoints' ] );
         add_action( 'dokan_load_custom_template', [ $this, 'load_rma_template' ], 10, 1 );
         add_action( 'dokan_rma_request_content_inside_before', [ $this, 'show_seller_enable_message' ] );
-
+        add_action( 'dokan_rma_reqeusts_after', [ $this, 'add_popup_template' ], 10 );
         add_action( 'template_redirect', [ $this, 'save_rma_settings' ], 10 );
+
     }
 
     /**
@@ -44,6 +45,17 @@ class Dokan_RMA_Vendor {
         if ( ! dokan_is_seller_enabled( $user_id ) ) {
             echo dokan_seller_not_enabled_notice();
         }
+    }
+
+    /**
+     * Add popup template from refund
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_popup_template() {
+        dokan_get_template_part( 'rma/tmpl-add-refund-popup', '', [ 'is_rma' => true ] );
     }
 
     /**
@@ -111,11 +123,13 @@ class Dokan_RMA_Vendor {
                 dokan_get_template_part( 'global/dokan-error', '', [ 'deleted' => false, 'message' => __( 'You have no permission to view this requests page', 'dokan' ) ] );
             } else {
                 $warrnty_requests = new Dokan_RMA_Warranty_Request();
+                $conversation_request = new Dokan_RMA_Conversation();
 
                 if ( ! empty( $_GET['request'] ) ) {
                     dokan_get_template_part( 'rma/vendor-rma-single-request', '', [
-                        'is_rma'   => true,
-                        'request' => $warrnty_requests->get( $_GET['request'] ),
+                        'is_rma'        => true,
+                        'request'       => $warrnty_requests->get( $_GET['request'] ),
+                        'conversations' => $conversation_request->get( [ 'request_id' => $_GET['request'] ] )
                     ] );
                 } else {
                     $data            = [];

@@ -5,6 +5,24 @@
 */
 trait Dokan_RMA_Common {
 
+
+    /**
+     * Transform conversation response
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function transform_request_conversation( $request ) {
+        return apply_filters( 'dokan_get_request_conversation_data', [
+            'id'         => $request['id'],
+            'from'       => $request['from'],
+            'to'         => $request['to'],
+            'message'    => $request['message'],
+            'created_at' => $request['created_at'],
+        ] );
+
+    }
     /**
      * Transform warranty request items
      *
@@ -15,16 +33,19 @@ trait Dokan_RMA_Common {
     public function transform_warranty_requests( $request ) {
         $product_ids = explode( ',', $request['products'] );
         $quantites = explode( ',', $request['quantity'] );
+        $item_id = explode( ',', $request['item_id'] );
         $items = [];
 
         foreach ( $product_ids as $key => $product_id ) {
             $product = wc_get_product( $product_id );
             $items[] = [
+                'id'        => $product->get_id(),
                 'title'     => $product->get_title(),
                 'thumbnail' => wp_get_attachment_url( $product->get_image_id() ),
                 'quantity'  => $quantites[$key],
                 'url'       => $product->get_permalink(),
-                'price'     => $product->get_price_html()
+                'price'     => $product->get_price(),
+                'item_id'   => $item_id[$key]
             ];
         }
 

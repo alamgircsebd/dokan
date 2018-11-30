@@ -104,13 +104,16 @@ class Dokan_RMA_Order {
      */
     public function content_rma_requests_view() {
         $warrnty_requests = new Dokan_RMA_Warranty_Request();
+        $conversation_request = new Dokan_RMA_Conversation();
 
-        $request_id = get_query_var( 'view-rma-requests' );
-        $request = $warrnty_requests->get( $request_id );
+        $request_id   = get_query_var( 'view-rma-requests' );
+        $request      = $warrnty_requests->get( $request_id );
+        $conversations = $conversation_request->get( [ 'request_id' => $request_id ] );
 
         dokan_get_template_part( 'rma/customer-rma-single-request', '', array(
-            'is_rma'  => true,
-            'request' => $request,
+            'is_rma'        => true,
+            'request'       => $request,
+            'conversations' => $conversations
         ) );
     }
 

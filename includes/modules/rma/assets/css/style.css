@@ -30,7 +30,9 @@ table.dokan-rma-addon-warranty-table tbody tr td select {
 .dokan-rma-request-area ul.request-statuses-filter {
     font-size: 12px;
 }
-
+.dokan-rma-request-area ul.request-statuses-filter li.active a {
+    color: #999;
+}
 .dokan-rma-request-area ul.request-statuses-filter li:after{
     content: " | ";
     color: #ddd;
@@ -89,6 +91,73 @@ table.rma-request-listing-table tbody tr:hover td.details .row-actions {
 .dokan-rma-single-request-area .dokan-rma-single-request-left-content .additional-details .details-row p.details-label{
     font-weight: bold;
 }
-.dokan-rma-single-request-area .dokan-rma-single-request-right-content .dokan-btn-default{
-    margin-right: px;
+
+.dokan-rma-request-conversations ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    padding: 0px 15px;
+}
+
+.dokan-rma-request-conversations ul li {
+    width: 85%;
+    position: relative;
+}
+
+.dokan-rma-request-conversations ul li.left .message:after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: -15px;
+    width: 0;
+    height: 0;
+    border-width: 0px 0px 25px 21px;
+    border-style: solid;
+    border-color: #efefef transparent;
+}
+.dokan-rma-request-conversations ul li.right .message:after {
+    content: "";
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    right: -15px;
+    width: 0;
+    height: 0;
+    border-width: 0px 21px 25px 0px;
+    border-style: solid;
+    border-color: #efefef transparent;
+}
+
+.dokan-rma-request-conversations ul li.left {
+    float: left;
+    padding: 10px !important;
+    background: #eeee;
+    margin: 10px 0px !important;
+}
+
+.dokan-rma-request-conversations ul li.right {
+    float: right;
+    padding: 10px !important;
+    background: #eeee;
+    margin: 10px 0px !important;
+}
+
+#dokan-send-refund-popup h2 {
+    font-size: 17px;
+    padding: 15px 20px 10px;
+    margin: 0px;
+    border-bottom: 1px solid #eee;
+}
+
+#dokan-send-refund-popup .refund-content {
+    padding: 20px;
+}
+#dokan-send-refund-popup .refund-action {
+    padding: 10px 20px;
+    text-align: right;
+    border-top: 1px solid #eee;
+}
+#dokan-send-refund-popup .refund-content .dokan-popup-total-refund-amount {
+    padding: 0px 10px;
 }

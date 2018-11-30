@@ -26,6 +26,7 @@ class Dokan_RMA_Frontend {
         add_filter( 'woocommerce_product_add_to_cart_text', [ $this, 'add_to_cart_text' ], 15, 2 );
 
         add_action( 'template_redirect', [ $this, 'handle_warranty_submit_request' ], 10 );
+        add_action( 'template_redirect', [ $this, 'handle_warranty_conversation' ], 10 );
     }
 
     /**
@@ -322,7 +323,8 @@ class Dokan_RMA_Frontend {
         foreach ( $_POST['request_item'] as $key => $product_id ) {
             $product_map[] = [
                 'product_id' => $product_id,
-                'quantity'   => ! empty( $_POST['request_item_qty'][$key] ) ? $_POST['request_item_qty'][$key] : 1
+                'quantity'   => ! empty( $_POST['request_item_qty'][$key] ) ? $_POST['request_item_qty'][$key] : 1,
+                'item_id'    => ! empty( $_POST['request_item_id'][$key] ) ? $_POST['request_item_id'][$key] : 0
             ];
         }
 
@@ -339,6 +341,54 @@ class Dokan_RMA_Frontend {
         wc_add_notice( __( 'Request has been successfully submitted', 'dokan' ), 'success' );
 
         wp_redirect( wc_get_account_endpoint_url( 'rma-requests' ) );
+        exit();
+    }
+
+    /**
+     * undocumented function
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function handle_warranty_conversation() {
+        if ( ! isset( $_POST['dokan_rma_send_message'] ) ) {
+            return;
+        }
+
+        if ( ! wp_verify_nonce( $_POST['dokan_rma_send_message_nonce'], 'dokan_rma_send_message' ) ) {
+            return;
+        }
+
+        if ( empty( $_POST['message'] ) ) {
+            wc_add_notice( __( 'Please enter some text for messaging', 'dokan' ), 'error' );
+            return;
+        }
+
+        if ( empty( $_POST['request_id'] ) ) {
+            wc_add_notice( __( 'No request found for conversation', 'dokan' ), 'error' );
+            return;
+        }
+
+        $data = [
+            'request_id'  => $_POST['request_id'],
+            'customer_id' => $_POST['customer_id'],
+            'vendor_id'   => $_POST['vendor_id'],
+            'message'     => sanitize_textarea_field( $_POST['message'] ),
+            'created_at'  => current_time( 'mysql' )
+        ];
+
+        $conversation = new Dokan_RMA_Conversation();
+        $result       =  $conversation->insert( $data );
+
+        if ( is_wp_error( $result ) ) {
+            wc_add_notice( $result->get_error_message(), 'error' );
+            return;
+        }
+
+        wc_add_notice( __( 'Message send successfully', 'dokan' ), 'success' );
+
+        wp_redirect( $_POST['_wp_http_referer'] );
         exit();
     }
 

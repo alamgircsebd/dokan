@@ -13,6 +13,9 @@
 
             $( 'form#dokan-update-request-status' ).on( 'submit', this.changeRequestStatus );
 
+            $( 'a.dokan-send-refund-request' ).on( 'click', this.openRefundPopup );
+            $( 'body' ).on( 'submit', 'form#dokan-send-refund-popup-form', this.submitRefundRequest );
+
             this.initialize();
 
 
@@ -112,6 +115,75 @@
                     alert( resp.data );
                 }
             });
+        },
+
+        openRefundPopup: function(e) {
+            e.preventDefault();
+            var self = $(this),
+                refundTemplate = wp.template( 'dokan-send-refund' );
+
+            $.magnificPopup.open({
+                fixedContentPos: true,
+                items: {
+                    src: refundTemplate().trim(),
+                    type: 'inline'
+                },
+                callbacks: {
+                    open: function() {
+                        $(this.content).closest('.mfp-wrap').removeAttr('tabindex');
+                        var data = {
+                            action: 'dokan-get-refund-order-data',
+                            nonce: DokanRMA.nonce,
+                            request_id: self.data( 'request_id' )
+                        };
+
+                        $( '#dokan-send-refund-popup' ).block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+                        $.post( DokanRMA.ajaxurl, data, function(resp) {
+                            $( '#dokan-send-refund-popup' ).find( '.refund-content' ).html( resp.data );
+                            $( '#dokan-send-refund-popup' ).unblock();
+
+                            $('table.dokan-refund-item-list-table').find( 'input.refund_item_amount' ).on( 'keyup', function(){
+                                total = 0.0;
+                                $('table.dokan-refund-item-list-table').find( 'input.refund_item_amount' ).each( function( item, key ) {
+                                    total += parseFloat( accounting.unformat( $(key).val(), dokan_refund.mon_decimal_point ) );
+                                });
+
+                                $('.dokan-popup-total-refund-amount').find('span.amount').text( accounting.formatNumber( total, dokan_refund.currency_format_num_decimals, '', dokan_refund.mon_decimal_point ) );
+                                $('input[name="refund_total_amount"]').val(accounting.formatNumber( total, dokan_refund.currency_format_num_decimals, '', dokan_refund.mon_decimal_point ));
+                            });
+                        } );
+
+                        $( 'body' ).trigger( 'dokan-refund-popup-opened', Dokan_RMA );
+                    },
+                    close: function() {
+
+                    }
+                }
+            });
+        },
+
+        submitRefundRequest: function(e) {
+            e.preventDefault();
+
+            var self = $(this),
+                data = {
+                    action: 'dokan-send-refund-request',
+                    nonce: DokanRMA.nonce,
+                    formData: self.serialize()
+                };
+
+            $( '#dokan-send-refund-popup' ).block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+            $.post( DokanRMA.ajaxurl, data, function(resp) {
+                if ( resp.success ) {
+                    $( '#dokan-send-refund-popup' ).unblock()
+                    window.location.reload();
+                } else {
+                    $( '#dokan-send-refund-popup' ).unblock()
+                    alert( resp.data );
+                }
+            } )
         }
 
     }
