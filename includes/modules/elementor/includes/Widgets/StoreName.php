@@ -94,6 +94,17 @@ class StoreName extends Widget_Heading {
     }
 
     /**
+     * Set wrapper classes
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    protected function get_html_wrapper_class() {
+        return parent::get_html_wrapper_class() . ' dokan-store-name elementor-page-title elementor-widget-' . parent::get_name();
+    }
+
+    /**
      * Frontend render method
      *
      * @since 1.0.0
@@ -102,9 +113,9 @@ class StoreName extends Widget_Heading {
      */
     protected function render() {
         $this->add_render_attribute(
-            '_wrapper',
+            'title',
             'class',
-            [ 'store-name', 'elementor-page-title', 'elementor-widget-' . parent::get_name() ]
+            [ 'entry-title' ]
         );
 
         parent::render();
@@ -121,7 +132,8 @@ class StoreName extends Widget_Heading {
         ?>
             <#
                 settings.link = {url: ''};
-                view.addRenderAttribute( '_wrapper', 'class', [ 'store-name' ] );
+                view.addRenderAttribute( '_wrapper', 'class', [ 'dokan-store-name' ] );
+                view.addRenderAttribute( 'title', 'class', [ 'entry-title' ] );
             #>
         <?php
 
