@@ -155,19 +155,25 @@
                                             <input type="submit" class="dokan-right dokan-btn dokan-btn-default" value="<?php _e( 'Update', 'dokan' ) ?>">
 
                                             <?php if ( 'yes' == dokan_get_option( 'rma_enable_refund_request', 'dokan_rma', 'no' ) && 'refund' == $request['type'] && 'completed' == $request['status'] ): ?>
-                                                <a href="#" class="dokan-btn dokan-btn-default dokan-send-refund-request" data-request_id="<?php echo $request['id']; ?>"><?php _e( 'Send Refund', 'dokan' ) ?></a>
+                                                <?php
+                                                    $refund                     = new Dokan_Pro_Refund;
+                                                    $has_already_refund_request = $refund->has_pending_refund_request( $request['order_id'] );
+                                                ?>
+                                                <?php if ( $has_already_refund_request ): ?>
+                                                    <a href="#" class="dokan-btn dokan-btn-default" disabled><?php _e( 'Send Refund', 'dokan' ) ?></a>
+                                                <?php else: ?>
+                                                    <a href="#" class="dokan-btn dokan-btn-default dokan-send-refund-request" data-request_id="<?php echo $request['id']; ?>"><?php _e( 'Send Refund', 'dokan' ) ?></a>
+                                                <?php endif ?>
                                             <?php endif ?>
 
                                             <?php if ( 'yes' == dokan_get_option( 'rma_enable_coupon_request', 'dokan_rma', 'no' ) && 'coupon' == $request['type'] && 'completed' == $request['status'] ): ?>
-                                                <a href="#" class="dokan-btn dokan-btn-default"><?php _e( 'Send Coupon', 'dokan' ) ?></a>
+                                                <a href="#" class="dokan-btn dokan-btn-default dokan-send-coupon-request" data-request_id="<?php echo $request['id']; ?>"><?php _e( 'Send Coupon', 'dokan' ) ?></a>
                                             <?php endif ?>
-
                                                 <?php
-                                                    $refund = new Dokan_Pro_Refund;
-                                                    if (  $refund->has_pending_refund_request( $request['order_id'] ) ) {
+                                                    if ( isset( $has_already_refund_request ) && $has_already_refund_request ) {
                                                         ?>
                                                         <p class="dokan-alert dokan-alert-info" style="margin-top: 10px;">
-                                                            <?php _e( 'Already Send Refund request', 'dokan' ); ?>
+                                                            <?php _e( 'Already send refund request. Wait for admin approval', 'dokan' ); ?>
                                                         </p>
                                                         <?php
                                                     };

@@ -56,6 +56,7 @@ class Dokan_RMA_Vendor {
      */
     public function add_popup_template() {
         dokan_get_template_part( 'rma/tmpl-add-refund-popup', '', [ 'is_rma' => true ] );
+        dokan_get_template_part( 'rma/tmpl-send-coupon-popup', '', [ 'is_rma' => true ] );
     }
 
     /**

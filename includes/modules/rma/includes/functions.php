@@ -678,6 +678,33 @@ function dokan_get_item_warranty_expiry( $duration_value = '', $duration_type = 
     return $expiry;
 }
 
+/**
+ * Check and generate an unique random copuon code
+ *
+ * @since 1.0.0
+ *
+ * @return string
+ */
+function dokan_rma_generate_coupon_code() {
+    global $wpdb;
+
+    $chars = 'abcdefghijklmnopqrstuvwxyz01234567890';
+    do {
+
+        $code = '';
+        for ( $x = 0; $x < 8; $x++ ) {
+            $code .= $chars[ rand( 0, strlen( $chars )-1 ) ];
+        }
+
+        $check = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}posts WHERE post_title = %s AND post_type = 'shop_coupon'", $code ) );
+        if ( $check == 0 ) {
+            break;
+        }
+
+    } while ( true );
+
+    return $code;
+}
 
 
 

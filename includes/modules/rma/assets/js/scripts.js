@@ -14,7 +14,10 @@
             $( 'form#dokan-update-request-status' ).on( 'submit', this.changeRequestStatus );
 
             $( 'a.dokan-send-refund-request' ).on( 'click', this.openRefundPopup );
+            $( 'a.dokan-send-coupon-request' ).on( 'click', this.openCouponPopup );
+
             $( 'body' ).on( 'submit', 'form#dokan-send-refund-popup-form', this.submitRefundRequest );
+            $( 'body' ).on( 'submit', 'form#dokan-send-coupon-popup-form', this.sendCouponRequest );
 
             this.initialize();
 
@@ -111,7 +114,9 @@
             $.post( DokanRMA.ajaxurl, data, function(resp){
                 if ( resp.success ) {
                     jQuery( '.dokan-status-update-panel' ).unblock();
+                    window.location.reload();
                 } else {
+                    jQuery( '.dokan-status-update-panel' ).unblock();
                     alert( resp.data );
                 }
             });
@@ -137,7 +142,7 @@
                             request_id: self.data( 'request_id' )
                         };
 
-                        $( '#dokan-send-refund-popup' ).block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+                        $( '#dokan-send-refund-popup' ).block( { message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } } );
 
                         $.post( DokanRMA.ajaxurl, data, function(resp) {
                             $( '#dokan-send-refund-popup' ).find( '.refund-content' ).html( resp.data );
@@ -155,9 +160,49 @@
                         } );
 
                         $( 'body' ).trigger( 'dokan-refund-popup-opened', Dokan_RMA );
-                    },
-                    close: function() {
+                    }
+                }
+            });
+        },
 
+        openCouponPopup: function(e) {
+            e.preventDefault();
+            var self = $(this),
+                couponTemplate = wp.template( 'dokan-send-coupon' );
+
+            $.magnificPopup.open({
+                fixedContentPos: true,
+                items: {
+                    src: couponTemplate().trim(),
+                    type: 'inline'
+                },
+                callbacks: {
+                    open: function() {
+                        $(this.content).closest('.mfp-wrap').removeAttr('tabindex');
+                        var data = {
+                            action: 'dokan-get-coupon-order-data',
+                            nonce: DokanRMA.nonce,
+                            request_id: self.data( 'request_id' )
+                        };
+
+                        $( '#dokan-send-coupon-popup' ).block( { message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } } );
+
+                        $.post( DokanRMA.ajaxurl, data, function(resp) {
+                            $( '#dokan-send-coupon-popup' ).find( '.coupon-content' ).html( resp.data );
+                            $( '#dokan-send-coupon-popup' ).unblock();
+
+                            $('table.dokan-refund-item-list-table').find( 'input.refund_item_amount' ).on( 'keyup', function(){
+                                total = 0.0;
+                                $('table.dokan-refund-item-list-table').find( 'input.refund_item_amount' ).each( function( item, key ) {
+                                    total += parseFloat( accounting.unformat( $(key).val(), dokan_refund.mon_decimal_point ) );
+                                });
+
+                                $('.dokan-popup-total-refund-amount').find('span.amount').text( accounting.formatNumber( total, dokan_refund.currency_format_num_decimals, '', dokan_refund.mon_decimal_point ) );
+                                $('input[name="refund_total_amount"]').val(accounting.formatNumber( total, dokan_refund.currency_format_num_decimals, '', dokan_refund.mon_decimal_point ));
+                            });
+                        } );
+
+                        $( 'body' ).trigger( 'dokan-coupon-popup-opened', Dokan_RMA );
                     }
                 }
             });
@@ -184,6 +229,29 @@
                     alert( resp.data );
                 }
             } )
+        },
+
+        sendCouponRequest: function(e) {
+            e.preventDefault();
+            var self = $(this),
+                data = {
+                    action: 'dokan-send-coupon-request',
+                    nonce: DokanRMA.nonce,
+                    formData: self.serialize()
+                };
+
+            $( '#dokan-send-coupon-popup' ).block({ message: null, overlayCSS: { background: '#fff url(' + dokan.ajax_loader + ') no-repeat center', opacity: 0.6 } });
+
+            $.post( DokanRMA.ajaxurl, data, function(resp) {
+                if ( resp.success ) {
+                    $( '#dokan-send-coupon-popup' ).unblock()
+                    window.location.reload();
+                } else {
+                    $( '#dokan-send-coupon-popup' ).unblock()
+                    alert( resp.data );
+                }
+            } )
+
         }
 
     }

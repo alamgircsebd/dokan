@@ -52,7 +52,7 @@ $count_warranty_product = 0;
                     <th>
                         <?php if ( $has_warranty ): ?>
                             <input type="checkbox" name="request_item[]" value="<?php echo $_product->get_id() ?>">
-                            <input type="checkbox" name="request_item_id[]" value="<?php echo $item->get_id() ?>">
+                            <input type="hidden" name="request_item_id[]" value="<?php echo $item->get_id() ?>">
                         <?php endif ?>
                     </th>
                     <td><a href="<?php echo $_product->get_permalink(); ?>"><?php echo $_product->get_title(); ?></a></td>
@@ -125,6 +125,7 @@ $count_warranty_product = 0;
             <?php wp_nonce_field( 'dokan_save_warranty_request', 'dokan_save_warranty_request_nonce' ); ?>
             <input type="submit" name="warranty_submit_request" class="dokan-btn dokan-btn-theme" value="<?php _e( 'Submit Request', 'dokan' ); ?>">
         </div>
+
     <?php endif ?>
 
 </form>

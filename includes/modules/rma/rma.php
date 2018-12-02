@@ -155,6 +155,36 @@ class Dokan_RMA {
     public function hooks() {
         //tinysort.min.js
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
+
+        // dokan simple auciton email
+        add_filter( 'woocommerce_email_classes', [ $this, 'load_rma_email_classes' ] );
+        add_filter( 'woocommerce_email_actions', [ $this, 'register_rma_email_actions' ] );
+    }
+
+    /**
+     * Load all email class related with RMA
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function load_rma_email_classes( $wc_emails ) {
+        $wc_emails['Dokan_Send_Coupon_Email'] = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-coupin-email.php' );
+
+        return $wc_emails;
+    }
+
+    /**
+     * Register all email actions
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function register_rma_email_actions( $actions ) {
+        $actions[] = 'dokan_send_coupon_to_customer';
+
+        return $actions;
     }
 
     /**

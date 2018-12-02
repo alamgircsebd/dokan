@@ -371,11 +371,11 @@ class Dokan_RMA_Frontend {
         }
 
         $data = [
-            'request_id'  => $_POST['request_id'],
-            'customer_id' => $_POST['customer_id'],
-            'vendor_id'   => $_POST['vendor_id'],
-            'message'     => sanitize_textarea_field( $_POST['message'] ),
-            'created_at'  => current_time( 'mysql' )
+            'request_id' => $_POST['request_id'],
+            'from'       => $_POST['from'],
+            'to'         => $_POST['to'],
+            'message'    => sanitize_textarea_field( $_POST['message'] ),
+            'created_at' => current_time( 'mysql' )
         ];
 
         $conversation = new Dokan_RMA_Conversation();

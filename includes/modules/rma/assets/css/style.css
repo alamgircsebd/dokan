@@ -143,21 +143,21 @@ table.rma-request-listing-table tbody tr:hover td.details .row-actions {
     margin: 10px 0px !important;
 }
 
-#dokan-send-refund-popup h2 {
+.dokan-rma-popup h2 {
     font-size: 17px;
     padding: 15px 20px 10px;
     margin: 0px;
     border-bottom: 1px solid #eee;
 }
 
-#dokan-send-refund-popup .refund-content {
+.dokan-rma-popup .rma-popup-content {
     padding: 20px;
 }
-#dokan-send-refund-popup .refund-action {
+.dokan-rma-popup .rma-popup-action {
     padding: 10px 20px;
     text-align: right;
     border-top: 1px solid #eee;
 }
-#dokan-send-refund-popup .refund-content .dokan-popup-total-refund-amount {
+.dokan-rma-popup .rma-popup-content .dokan-popup-total-refund-amount {
     padding: 0px 10px;
 }

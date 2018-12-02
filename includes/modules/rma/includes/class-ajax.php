@@ -13,7 +13,9 @@ class Dokan_RMA_Ajax {
     public function __construct() {
         add_action( 'wp_ajax_dokan-update-return-request', [ $this, 'update_status' ], 10 );
         add_action( 'wp_ajax_dokan-get-refund-order-data', [ $this, 'get_order_data' ], 10 );
+        add_action( 'wp_ajax_dokan-get-coupon-order-data', [ $this, 'get_order_data' ], 10 );
         add_action( 'wp_ajax_dokan-send-refund-request', [ $this, 'send_refund_request' ], 10 );
+        add_action( 'wp_ajax_dokan-send-coupon-request', [ $this, 'send_coupon_request' ], 10 );
 
     }
 
@@ -38,7 +40,7 @@ class Dokan_RMA_Ajax {
             wp_send_json_error( $updated->get_error_message() );
         }
 
-        wp_send_json_success( __( 'Status changed successfully', 'dokan' ) );
+        wp_send_json_success( [ 'message' => __( 'Status changed successfully', 'dokan' ) ] );
     }
 
     /**
@@ -91,6 +93,7 @@ class Dokan_RMA_Ajax {
                     </tbody>
                 </table>
                 <input type="hidden" name="refund_total_amount" value="0">
+                <input type="hidden" name="request_id" value="<?php echo $request['id']; ?>">
                 <input type="hidden" name="refund_order_id" value="<?php echo $request['order_id'] ?>">
                 <input type="hidden" name="refund_vendor_id" value="<?php echo $request['vendor']['store_id']; ?>">
                 <div class="dokan-popup-total-refund-amount dokan-right"><?php _e( 'Total Amount : ', 'dokan' ) ?> <strong><span><?php echo get_woocommerce_currency_symbol(); ?></span><span class="amount">0.00</span></strong></div>
@@ -139,9 +142,19 @@ class Dokan_RMA_Ajax {
             wp_send_json_error( __( 'Refund amount must be greater than 0', 'dokan' ) );
         }
 
+        $warranty_request = new Dokan_RMA_Warranty_Request();
+        $request_data     = $warranty_request->get( $data['request_id'] );
+
+        $refund_max_amount = [];
+        foreach ( $request_data['items'] as $request_item ) {
+            $refund_max_amount[] = $request_item['price']*$request_item['quantity'];
+        }
+
+        $total_amount = wc_format_decimal( array_sum( $refund_max_amount ), wc_get_price_decimals() );
+
         // Validate that the refund can occur
         $refund_amount = wc_format_decimal( sanitize_text_field( $data['refund_total_amount'] ), wc_get_price_decimals() );
-        $max_refund    = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
+        $max_refund    = wc_format_decimal( $total_amount - $order->get_total_refunded(), wc_get_price_decimals() );
 
         $refund = new Dokan_Pro_Refund;
 
@@ -172,5 +185,90 @@ class Dokan_RMA_Ajax {
         }
 
         wp_send_json_error( __( 'Something is wrong, Please try again', 'dokan' ) );
+    }
+
+    /**
+     * Send coupon to customer
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function send_coupon_request() {
+        parse_str( $_POST['formData'], $data );
+
+        if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_rma_nonce' ) ) {
+            wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
+        }
+
+        if ( empty( $data['refund_order_id'] ) ) {
+            wp_send_json_error( __( 'No order found', 'dokan' ) );
+        }
+
+        $order = wc_get_order( $data['refund_order_id'] );
+
+        if ( ! $order ) {
+            wp_send_json_error( __( 'No order found', 'dokan' ) );
+        }
+
+        if ( empty( $data['refund_vendor_id'] ) ) {
+            wp_send_json_error( __( 'No vendor found', 'dokan' ) );
+        }
+
+        if ( $data['refund_vendor_id'] != dokan_get_current_user_id() ) {
+            wp_send_json_error( __( 'Error! This is not your request.', 'dokan' ) );
+        }
+
+        if ( $data['refund_total_amount'] <= 0 ) {
+            wp_send_json_error( __( 'Refund amount must be greater than 0', 'dokan' ) );
+        }
+
+        $warranty_request  = new Dokan_RMA_Warranty_Request();
+        $request_data      = $warranty_request->get( $data['request_id'] );
+        $refund_max_amount = [];
+
+        foreach ( $request_data['items'] as $request_item ) {
+            $refund_max_amount[] = $request_item['price']*$request_item['quantity'];
+        }
+
+        $refund_amount = wc_format_decimal( sanitize_text_field( $data['refund_total_amount'] ), wc_get_price_decimals() );
+        $total_amount = wc_format_decimal( array_sum( $refund_max_amount ), wc_get_price_decimals() );
+
+        $coupon = new WC_Coupon();
+
+        $coupon->set_code( dokan_rma_generate_coupon_code() );
+        $coupon->set_amount( $refund_amount );
+        $coupon->set_date_created( date("Y-m-d H:i:s") );
+        $coupon->set_date_expires( null );
+        $coupon->set_discount_type( 'fixed_cart' );
+        $coupon->set_description( '' );
+        $coupon->set_usage_count( 0 );
+        $coupon->set_individual_use( false );
+        $coupon->set_product_ids( [] );
+        $coupon->set_excluded_product_ids( [] );
+        $coupon->set_usage_limit( '1' );
+        $coupon->set_usage_limit_per_user( '1' );
+        $coupon->set_limit_usage_to_x_items( null );
+        $coupon->set_free_shipping( false );
+        $coupon->set_product_categories( [] );
+        $coupon->set_excluded_product_categories( [] );
+        $coupon->set_exclude_sale_items( false );
+        $coupon->set_minimum_amount( '' );
+        $coupon->set_maximum_amount( '' );
+        $coupon->set_email_restrictions( [ $order->get_billing_email() ] );
+        $coupon->set_used_by( [] );
+        $coupon->set_virtual( false );
+
+        $coupon->save();
+        $coupon_id = $coupon->get_id();
+
+        wp_update_post( [
+            'ID' => $coupon_id,
+            'post_author' => dokan_get_current_user_id()
+        ] );
+
+        do_action( 'dokan_send_coupon_to_customer', $coupon, $data );
+
+        wp_send_json_success( __( 'Coupon has been created successfully and send to customer email', 'dokan' ) );
     }
 }
