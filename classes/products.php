@@ -10,6 +10,13 @@
 class Dokan_Pro_Products {
 
     /**
+     * Holds the inline edit options
+     *
+     * @var array
+     */
+    private $inline_edit_options = array();
+
+    /**
      * Load autometically when class initiate
      *
      * @since 2.4
@@ -34,6 +41,8 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_updated', array( $this, 'updated_product_email' ), 20 );
         add_action( 'template_redirect', array( $this, 'handle_duplicate_product' ), 10 );
         add_action( 'dokan_product_dashboard_errors', array( $this, 'display_duplicate_message' ), 10 );
+        add_action( 'dokan_product_list_table_after_row', array( $this, 'add_product_inline_edit_form' ), 10, 2 );
+        add_action( 'wp_ajax_dokan_product_inline_edit', array( $this, 'product_inline_edit' ) );
 
         add_filter( 'dokan_product_row_actions', array( $this, 'product_row_action' ), 10, 2 );
         add_filter( 'dokan_update_product_post_data', array( $this, 'save_product_post_data' ), 10 );
@@ -435,24 +444,29 @@ class Dokan_Pro_Products {
     * @return void
     **/
     public function product_row_action( $row_action, $post ) {
-
         if ( empty( $post->ID ) ) {
             return $row_action;
         }
 
-        if ( ! current_user_can( 'dokan_duplicate_product' ) ) {
-            return $row_action;
+        if ( current_user_can( 'dokan_edit_product' ) ) {
+            $row_action['quick-edit'] = array(
+                'title' => __( 'Quick Edit', 'dokan' ),
+                'url'   => '#quick-edit',
+                'class' => 'item-inline-edit',
+                'other' => 'data-product-id="' . $post->ID . '"',
+            );
         }
 
-        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) == 'off' ) {
-            return $row_action;
-        }
+        $can_duplicate_product = current_user_can( 'dokan_duplicate_product' );
+        $vendor_can_duplicate_product = dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' );
 
-        $row_action['duplicate'] = array(
-            'title' => __( 'Duplicate', 'dokan' ),
-            'url'   => wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $post->ID ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ),
-            'class' => 'duplicate',
-        );
+        if ( $can_duplicate_product && 'on' === $vendor_can_duplicate_product ) {
+            $row_action['duplicate'] = array(
+                'title' => __( 'Duplicate', 'dokan' ),
+                'url'   => wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $post->ID ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ),
+                'class' => 'duplicate',
+            );
+        }
 
         return $row_action;
     }
@@ -660,9 +674,230 @@ class Dokan_Pro_Products {
      */
     public function dokan_pro_localized_args( $args ) {
         $dokan_pro_args = array(
-            'product_vendors_can_create_tags' => dokan_get_option( 'product_vendors_can_create_tags', 'dokan_selling' )
+            'product_vendors_can_create_tags' => dokan_get_option( 'product_vendors_can_create_tags', 'dokan_selling' ),
+            'product_inline_edit_nonce' => wp_create_nonce( 'product-inline-edit' ),
         );
 
         return array_merge( $args, $dokan_pro_args );
+    }
+
+    /**
+     * Inline edit form
+     *
+     * @since 2.9.0
+     *
+     * @param WC_Product $product
+     * @param WP_Post    $post
+     *
+     * @return void
+     */
+    public function add_product_inline_edit_form( $product, $post ) {
+        $options = $this->get_inline_edit_options();
+
+        $wp_terms = get_the_terms( $post, 'product_cat' );
+        $cats = wp_list_pluck( $wp_terms, 'term_id' );
+
+        if ( $options['using_single_category_style'] && ! empty( $cats ) ) {
+            $cats = array_pop( $cats );
+        }
+
+        $wp_terms = get_the_terms( $post, 'product_tag' );
+        $tags = wp_list_pluck( $wp_terms, 'term_id' );
+
+        $args = array(
+            'pro' => true,
+            'id'  => 'dokan-product-list-table',
+            'options' => $this->get_inline_edit_options(),
+
+            // product informations
+            'product_id' => $product->get_id(),
+            'post_title' => $product->get_title(),
+            'product_cat' => $cats,
+            'product_tag' => $tags,
+            'product_type' => $product->get_type(),
+            'is_virtual' => $product->is_virtual(),
+            'reviews_allowed' => $product->get_reviews_allowed(),
+            'post_status' => $post->post_status,
+            'sku'   => $product->get_sku(),
+            '_regular_price' => $product->get_regular_price(),
+            '_sale_price' => $product->get_sale_price(),
+            'weight' => $product->get_weight(),
+            'length' => $product->get_length(),
+            'width' => $product->get_width(),
+            'height' => $product->get_height(),
+            'shipping_class_id' => $product->get_shipping_class_id(),
+            '_visibility' => ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post->ID, '_visibility', true ),
+            'manage_stock' => $product->get_manage_stock(),
+            'stock_quantity' => $product->get_stock_quantity(),
+            'stock_status' => $product->get_stock_status(),
+            'backorders' => $product->get_backorders(),
+        );
+
+        dokan_get_template_part( 'products/edit/product-list-table-inline-edit-form', '', $args );
+    }
+
+    /**
+     * Reusable inline edit options
+     *
+     * @since 2.9.0
+     *
+     * @return array
+     */
+    private function get_inline_edit_options() {
+        if ( ! empty( $this->inline_edit_options ) ) {
+            return $this->inline_edit_options;
+        }
+
+        $args = array(
+            'taxonomy'   => 'product_cat',
+            'number'     => false,
+            'orderby'    => 'name',
+            'order'      => 'asc',
+            'hide_empty' => false,
+        );
+
+        $categories = get_terms( $args );
+
+        $using_single_category_style = ( 'single' === dokan_get_option( 'product_category_style', 'dokan_selling', 'single' ) ) || false;
+
+        $args = array(
+            'taxonomy'   => 'product_tag',
+            'number'     => false,
+            'orderby'    => 'name',
+            'order'      => 'asc',
+            'hide_empty' => false,
+        );
+
+        $tags = get_terms( $args );
+
+        $this->inline_edit_options = array(
+            'using_single_category_style' => $using_single_category_style,
+            'categories' => $categories,
+            'tags'  => $tags,
+            'post_statuses' => array(
+                'publish' => __( 'Online', 'dokan' ),
+                'draft'   => __( 'Draft', 'dokan' ),
+            ),
+            'is_sku_enabled' => wc_product_sku_enabled(),
+            'is_weight_enabled' => wc_product_weight_enabled(),
+            'is_dimensions_enabled' => wc_product_dimensions_enabled(),
+            'shipping_classes' => WC()->shipping->get_shipping_classes(),
+            'visibilities' => dokan_get_product_visibility_options(),
+            'can_manage_stock' => get_option( 'woocommerce_manage_stock' ),
+            'stock_statuses' => array(
+                'instock'    => __( 'In Stock', 'dokan' ),
+                'outofstock' => __( 'Out of Stock', 'dokan' ),
+            ),
+            'backorder_options' => array(
+                'no'     => __( 'Do not allow', 'dokan' ),
+                'notify' => __( 'Allow but notify customer', 'dokan' ),
+                'yes'    => __( 'Allow', 'dokan' ),
+            ),
+        );
+
+        return $this->inline_edit_options;
+    }
+
+    /**
+     * Save quick edit product data
+     *
+     * @since 2.9.0
+     *
+     * @return void
+     */
+    public function product_inline_edit() {
+        if ( ! wp_verify_nonce( $_POST['security'], 'product-inline-edit' ) ) {
+            wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
+        }
+
+        if ( empty( $_POST['data'] ) ) {
+            wp_send_json_error( __( 'data is empty' ), 422 );
+        }
+
+        $posted_data = $_POST['data'];
+
+        if ( empty( $posted_data['ID'] ) ) {
+            wp_send_json_error( __( 'Product ID field is required', 'dokan' ), 422 );
+        }
+
+        $args = array(
+            'ID'             => 0,
+            'post_title'     => '',
+            'post_status'    => '',
+            'product_cat'    => array(),
+            'product_tag'    => array(),
+            'product_type'   => 'simple',
+            '_regular_price' => '',
+            '_sale_price'    => '',
+            '_visibility'    => 'visible',
+        );
+
+        $data = array();
+
+        foreach ( $args as $field => $default_val ) {
+            $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
+        }
+
+        $product_id = dokan_save_product( $data );
+
+        if ( is_wp_error( $product_id ) ) {
+            wp_send_json_error( __( 'Error updating product data', 'dokan' ), 422 );
+        }
+
+        $product = wc_get_product( $product_id );
+
+        $product_props = array(
+            'reviews_allowed',
+            'sku',
+            'weight',
+            'length',
+            'width',
+            'height',
+            'shipping_class_id',
+            'manage_stock',
+            'stock_quantity',
+            'stock_status',
+            'backorders',
+        );
+
+        foreach ( $product_props as $prop ) {
+            $method_name = "set_{$prop}";
+
+            if ( isset( $posted_data[ $prop ] ) && method_exists( $product, $method_name ) ) {
+                $product->$method_name( $posted_data[ $prop ] );
+            }
+        }
+
+        if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
+            $product->set_catalog_visibility( $data['_visibility'] );
+        }
+
+        $product_id = $product->save();
+
+        if ( is_wp_error( $product_id ) ) {
+            wp_send_json_error( __( 'Error updating product data', 'dokan' ), 422 );
+        }
+
+        $post = get_post( $product_id );
+        $row_actions = dokan_product_get_row_action( $post );
+        $tr_class = ( $post->post_status == 'pending' ) ? ' class="danger"' : '';
+
+        $row_args = array(
+            'post' => $post,
+            'product' => $product,
+            'tr_class' => $tr_class,
+            'row_actions' => $row_actions,
+        );
+
+        ob_start();
+        dokan_get_template_part( 'products/products-listing-row', '', $row_args );
+        $html = ob_get_clean();
+
+        $message = array(
+            'message' => __( 'Product updated successfully', 'dokan' ),
+            'row' => $html,
+        );
+
+        wp_send_json_success( $message );
     }
 }
