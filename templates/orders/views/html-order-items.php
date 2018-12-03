@@ -237,6 +237,13 @@ if ( wc_tax_enabled() ) {
         <div class="wc-order-data-row wc-order-refund-items" style="display: none;">
             <table class="wc-order-totals dokan-table dokan-table-strip">
 
+                <?php if ( 'yes' === get_option( 'woocommerce_manage_stock' ) ) : ?>
+                    <tr>
+                        <td><?php _e( 'Restock refunded items', 'dokan' ); ?>:</td>
+                        <td class="total"><input type="checkbox" id="restock_refunded_items" name="restock_refunded_items" <?php checked( apply_filters( 'dokan_restock_refunded_items', true ) ); ?> /></td>
+                    </tr>
+                <?php endif; ?>
+
                 <tr>
                     <td><?php _e( 'Amount already refunded', 'dokan' ); ?>:</td>
                     <td class="total">-<?php echo wc_price( $order->get_total_refunded(), array( 'currency' => dokan_replace_func( 'get_order_currency', 'get_currency', $order ) ) ); ?></td>
