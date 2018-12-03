@@ -105,11 +105,11 @@ class Dokan_Template_Auction {
                 return;
             }
 
-            $post_title = trim( $_POST['post_title'] );
-            $post_content = trim( $_POST['post_content'] );
-            $post_excerpt = trim( $_POST['post_excerpt'] );
-            $product_cat = intval( $_POST['product_cat'] );
-            $featured_image = absint( $_POST['feat_image_id'] );
+            $post_title     = isset( $_POST['post_title'] ) ? trim( $_POST['post_title'] ) : '';
+            $post_content   = isset( $_POST['post_content'] ) ? trim( $_POST['post_content'] ) : '';
+            $post_excerpt   = isset( $_POST['post_excerpt'] ) ? trim( $_POST['post_excerpt'] ) : '';
+            $product_cat    = isset( $_POST['product_cat'] ) ? absint( $_POST['product_cat'] ) : '';
+            $featured_image = isset( $_POST['feat_image_id'] ) ? absint( $_POST['feat_image_id'] ) : '';
 
             if ( empty( $post_title ) ) {
                 $errors[] = __( 'Please enter product title', 'dokan' );
@@ -200,7 +200,7 @@ class Dokan_Template_Auction {
             if ( ! current_user_can( 'dokan_edit_auction_product' ) ) {
                 return;
             }
-            
+
             $product_info = array(
                 'ID'             => $post_id,
                 'post_title'     => sanitize_text_field( $_POST['post_title'] ),

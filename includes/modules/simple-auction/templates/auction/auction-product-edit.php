@@ -23,7 +23,7 @@ $_auction_item_condition       = get_post_meta( $post_id, '_auction_item_conditi
 $_auction_type                 = get_post_meta( $post_id, '_auction_type', true );
 
 $_auction_proxy                = get_post_meta( $post_id, '_auction_proxy', true );
-$_auction_sealed              = get_post_meta( $post_id, '_auction_sealed', true );
+$_auction_sealed               = get_post_meta( $post_id, '_auction_sealed', true );
 $_auction_start_price          = get_post_meta( $post_id, '_auction_start_price', true );
 $_auction_bid_increment        = get_post_meta( $post_id, '_auction_bid_increment', true );
 $_auction_reserved_price       = get_post_meta( $post_id, '_auction_reserved_price', true );
