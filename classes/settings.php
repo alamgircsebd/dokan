@@ -475,7 +475,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['gravatar'] = $profile_picture_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf(__( 'Add Profile Picture to gain %s%% progress', 'dokan' ), $profile_picture_val);
+                    $next_add = 'profile_picture_val';
                 }
             }
         endif;
@@ -493,9 +493,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 if ( isset( $social_val[$key] ) && $value == false ) {
 
                     if ( strlen( $next_add ) == 0 ) {
-                        //replace keys to nice name
-                        $nice_name = ( $key === 'fb' ) ? __( 'Facebook', 'dokan' ) : ( ( $key === 'gplus' ) ? __( 'Google+', 'dokan' ) : $key);
-                        $next_add = sprintf( __( 'Add %s profile link to gain %s%% progress', 'dokan' ), $nice_name, $social_val[$key] );
+                        $next_add = 'social_val' . '-' . $key;
                     }
                 }
             }
@@ -509,7 +507,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['phone'] = $phone_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf( __( 'Add Phone to gain %s%% progress', 'dokan' ), $phone_val );
+                    $next_add = 'phone_val';
                 }
             }
 
@@ -522,7 +520,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $profile_val         = $profile_val + $banner_val;
                 $track_val['banner'] = $banner_val;
             } else {
-                $next_add = sprintf(__( 'Add Banner to gain %s%% progress', 'dokan' ), $banner_val);
+                $next_add = 'banner_val';
             }
 
         endif;
@@ -534,7 +532,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['store_name'] = $store_name_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf( __( 'Add Store Name to gain %s%% progress', 'dokan' ), $store_name_val );
+                    $next_add = 'store_name_val';
                 }
             }
         endif;
@@ -546,7 +544,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
                 $track_val['address'] = $address_val;
             } else {
                 if ( strlen( $next_add ) == 0 ) {
-                    $next_add = sprintf(__( 'Add address to gain %s%% progress', 'dokan' ),$address_val);
+                    $next_add = 'address_val';
                 }
             }
         endif;
@@ -604,7 +602,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         // set message if no payment method found
         if ( strlen( $next_add ) == 0 && $payment_method_val !=0 ) {
-            $next_add = sprintf( __( 'Add a Payment method to gain %s%% progress', 'dokan' ), $payment_method_val );
+            $next_add = 'payment_method_val';
         }
 
         if ( isset( $dokan_settings['location'] ) && strlen(trim($dokan_settings['location'])) != 0 ) {
@@ -612,7 +610,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             $track_val['location'] = $map_val;
         } else {
             if ( strlen( $next_add ) == 0 ) {
-                $next_add = sprintf( __( 'Add Map location to gain %s%% progress', 'dokan' ), $map_val );
+                $next_add = 'map_val';
             }
         }
 
