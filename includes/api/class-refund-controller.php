@@ -348,23 +348,36 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $allowed_status = array( 'approved', 'cancelled', 'pending', 'delete' );
 
         foreach ( $params as $status => $value ) {
-            if ( in_array( $status, $allowed_status ) ) {
+            if ( ! in_array( $status, $allowed_status ) ) {
+                return false;
+            }
 
-                if ( 'delete' === $status ) {
-                    $refund = new Dokan_Pro_Admin_Refund();
-                    foreach ( $value as $refund_id ) {
-                        $refund->delete_refund( $refund_id );
-                    }
-                } else {
-                    foreach ( $value as $refund_id ) {
-                        $status_code = $this->get_status( $status );
+            $refund = new Dokan_Pro_Admin_Refund();
 
-                        $wpdb->query( $wpdb->prepare(
-                            "UPDATE {$wpdb->prefix}dokan_refund
-                            SET status = %d WHERE id = %d",
-                            $status_code, $refund_id
-                        ) );
-                    }
+            if ( 'delete' === $status ) {
+                foreach ( $value as $refund_id ) {
+                    $refund->delete_refund( $refund_id );
+                }
+            }
+
+            if ( 'approved' === $status && $this->get_status( $status ) == 1 ) {
+                foreach ( $value as $refund_id ) {
+                    $sql    = "SELECT * FROM `{$wpdb->prefix}dokan_refund` WHERE `id`={$refund_id}";
+                    $result = $wpdb->get_row( $sql );
+
+                    $this->approve_refund_request( $result );
+                }
+            }
+
+            if ( $status !== 'delete' ) {
+                foreach ( $value as $refund_id ) {
+                    $status_code = $this->get_status( $status );
+
+                    $wpdb->query( $wpdb->prepare(
+                        "UPDATE {$wpdb->prefix}dokan_refund
+                        SET status = %d WHERE id = %d",
+                        $status_code, $refund_id
+                    ) );
                 }
             }
         }
