@@ -128,7 +128,7 @@
 
                         <ul class="counts">
                             <li class="commision">
-                                <span class="count">{{ stats.others.commision_rate }}%</span>
+                                <span class="count">{{ getEearningRate }}</span>
                                 <span class="subhead">{{ __( 'Earning Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
@@ -238,6 +238,14 @@ export default {
             }
 
             return false;
+        },
+
+        getEearningRate() {
+            if ( this.stats.others.commission_type == 'percentage' ) {
+                return this.stats.others.commission_rate + '%';
+            } else {
+                return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' )
+            }
         }
     },
 
