@@ -22,13 +22,14 @@ class Dokan_Send_Coupon_Email extends WC_Email {
      * Constructor.
      */
     public function __construct() {
-        $this->id               = 'Dokan_Send_Coupon_Email';
-        $this->title            = __( 'Send Coupon To Customer', 'dokan' );
-        $this->description      = __( 'This email send to customer when customer send return request and vendor send a store credit to customer', 'dokan' );
+        $this->id             = 'Dokan_Send_Coupon_Email';
+        $this->title          = __( 'Send Coupon To Customer', 'dokan' );
+        $this->description    = __( 'This email send to customer when customer send return request and vendor send a store credit to customer', 'dokan' );
 
-        $this->template_base    = DOKAN_RMA_DIR . '/templates/';
-        $this->template_html    = 'emails/send-coupon.php';
-        $this->template_plain   = 'emails/plain/send-coupon.php';
+        $this->template_base  = DOKAN_RMA_DIR . '/templates/';
+        $this->template_html  = 'emails/send-coupon.php';
+        $this->template_plain = 'emails/plain/send-coupon.php';
+        $this->customer_email = true;
 
         // Triggers for this email
         add_action( 'dokan_send_coupon_to_customer', [ $this, 'trigger' ], 30, 2 );

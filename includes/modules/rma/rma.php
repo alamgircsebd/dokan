@@ -259,6 +259,58 @@ class Dokan_RMA {
         $wp_roles->add_cap( 'seller', 'dokan_view_store_rma_settings_menu' );
         $wp_roles->add_cap( 'administrator', 'dokan_view_store_rma_settings_menu' );
         $wp_roles->add_cap( 'shop_manager', 'dokan_view_store_rma_settings_menu' );
+
+        self::create_tables();
+    }
+
+    /**
+     * Create all tables related with RMA
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public static function create_tables() {
+        global $wpdb;
+
+        include_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+        $request_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_rma_request` (
+          `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `order_id` int(11) NOT NULL,
+          `vendor_id` int(11) NOT NULL,
+          `customer_id` int(11) NOT NULL,
+          `type` varchar(25) NOT NULL DEFAULT '',
+          `status` varchar(25) NOT NULL DEFAULT '',
+          `reasons` text NOT NULL,
+          `details` longtext,
+          `note` longtext,
+          `created_at` datetime NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+
+        $request_product_map = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_rma_request_product` (
+          `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `request_id` int(11) NOT NULL,
+          `product_id` int(11) NOT NULL,
+          `quantity` int(11) NOT NULL,
+          `item_id` int(11) NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+
+        $conversation_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_rma_conversations` (
+          `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+          `request_id` int(11) NOT NULL,
+          `from` int(11) NOT NULL,
+          `to` int(11) NOT NULL,
+          `message` longtext,
+          `created_at` datetime NOT NULL,
+          PRIMARY KEY (`id`)
+        ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;";
+
+        dbDelta( $request_table );
+        dbDelta( $request_product_map );
+        dbDelta( $conversation_table );
     }
 
 }

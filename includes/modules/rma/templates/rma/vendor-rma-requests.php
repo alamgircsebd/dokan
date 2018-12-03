@@ -70,7 +70,7 @@
                                             $order_link = '<strong>' . sprintf( __( 'Order %s', 'dokan-lite' ), esc_attr( $request['order_id'] ) ) . '</strong>';
                                         }
 
-                                        echo sprintf( '#%d by %s on %s', $request['id'], $request['customer']['name'], $order_link );
+                                        echo sprintf( '<a href="%s">#%d</a> by %s on %s', add_query_arg( [ 'request' => $request['id'] ], dokan_get_navigation_url( 'return-request' ) ), $request['id'], $request['customer']['name'], $order_link );
                                         ?>
 
                                         <div class="row-actions">
@@ -108,7 +108,11 @@
                                 </tr>
                             <?php endforeach ?>
                         <?php else: ?>
-
+                            <tr>
+                                <td colspan="6">
+                                    <?php _e( 'No request found', 'dokan' ); ?>
+                                </td>
+                            </tr>
                         <?php endif ?>
 
                     </tbody>
