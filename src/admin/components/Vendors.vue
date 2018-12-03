@@ -294,7 +294,7 @@ export default {
         },
 
         ordersUrl(id) {
-            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&vendor_id=' + id;
         },
 
         editUrl(id) {
