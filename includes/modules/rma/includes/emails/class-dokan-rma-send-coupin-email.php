@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-if ( ! class_exists( 'Dokan_Auction_Email' ) ) :
+// if ( ! class_exists( 'Dokan_Send_Coupon_Email' ) ) :
 
 /**
  * New Product Published Email to vendor.
@@ -31,7 +31,7 @@ class Dokan_Send_Coupon_Email extends WC_Email {
         $this->template_plain   = 'emails/plain/send-coupon.php';
 
         // Triggers for this email
-        add_action( 'dokan_send_coupon_to_customer', [ $this, 'trigger' ], 10 );
+        add_action( 'dokan_send_coupon_to_customer', [ $this, 'trigger' ], 30, 2 );
 
         // Call parent constructor
         parent::__construct();
@@ -65,7 +65,10 @@ class Dokan_Send_Coupon_Email extends WC_Email {
      * @param int $product_id The product ID.
      * @param array $postdata.
      */
-    public function trigger() {
+    public function trigger( $coupon, $data ) {
+        $this->object = $coupon;
+
+
         $this->setup_locale();
         $this->send( $this->get_recipient(), $this->get_subject(), $this->get_content(), $this->get_headers(), $this->get_attachments() );
         $this->restore_locale();
@@ -81,9 +84,8 @@ class Dokan_Send_Coupon_Email extends WC_Email {
     public function get_content_html() {
         ob_start();
         wc_get_template( $this->template_html, array(
-            'product'       => $this->object,
+            'couopn'       => $this->object,
             'email_heading' => $this->get_heading(),
-            'sent_to_admin' => true,
             'plain_text'    => false,
             'email'         => $this,
             'data'          => $this->replace
@@ -100,9 +102,8 @@ class Dokan_Send_Coupon_Email extends WC_Email {
     public function get_content_plain() {
         ob_start();
         wc_get_template( $this->template_html, array(
-            'product'       => $this->object,
+            'coupon'       => $this->object,
             'email_heading' => $this->get_heading(),
-            'sent_to_admin' => true,
             'plain_text'    => true,
             'email'         => $this,
             'data'          => $this->replace
@@ -161,6 +162,6 @@ class Dokan_Send_Coupon_Email extends WC_Email {
     }
 }
 
-endif;
+// endif;
 
 return new Dokan_Send_Coupon_Email();

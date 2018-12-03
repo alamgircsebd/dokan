@@ -16,7 +16,6 @@ class Dokan_RMA_Ajax {
         add_action( 'wp_ajax_dokan-get-coupon-order-data', [ $this, 'get_order_data' ], 10 );
         add_action( 'wp_ajax_dokan-send-refund-request', [ $this, 'send_refund_request' ], 10 );
         add_action( 'wp_ajax_dokan-send-coupon-request', [ $this, 'send_coupon_request' ], 10 );
-
     }
 
     /**
@@ -234,38 +233,38 @@ class Dokan_RMA_Ajax {
         $refund_amount = wc_format_decimal( sanitize_text_field( $data['refund_total_amount'] ), wc_get_price_decimals() );
         $total_amount = wc_format_decimal( array_sum( $refund_max_amount ), wc_get_price_decimals() );
 
-        $coupon = new WC_Coupon();
+        // $coupon = new WC_Coupon();
 
-        $coupon->set_code( dokan_rma_generate_coupon_code() );
-        $coupon->set_amount( $refund_amount );
-        $coupon->set_date_created( date("Y-m-d H:i:s") );
-        $coupon->set_date_expires( null );
-        $coupon->set_discount_type( 'fixed_cart' );
-        $coupon->set_description( '' );
-        $coupon->set_usage_count( 0 );
-        $coupon->set_individual_use( false );
-        $coupon->set_product_ids( [] );
-        $coupon->set_excluded_product_ids( [] );
-        $coupon->set_usage_limit( '1' );
-        $coupon->set_usage_limit_per_user( '1' );
-        $coupon->set_limit_usage_to_x_items( null );
-        $coupon->set_free_shipping( false );
-        $coupon->set_product_categories( [] );
-        $coupon->set_excluded_product_categories( [] );
-        $coupon->set_exclude_sale_items( false );
-        $coupon->set_minimum_amount( '' );
-        $coupon->set_maximum_amount( '' );
-        $coupon->set_email_restrictions( [ $order->get_billing_email() ] );
-        $coupon->set_used_by( [] );
-        $coupon->set_virtual( false );
+        // $coupon->set_code( dokan_rma_generate_coupon_code() );
+        // $coupon->set_amount( $refund_amount );
+        // $coupon->set_date_created( date("Y-m-d H:i:s") );
+        // $coupon->set_date_expires( null );
+        // $coupon->set_discount_type( 'fixed_cart' );
+        // $coupon->set_description( '' );
+        // $coupon->set_usage_count( 0 );
+        // $coupon->set_individual_use( false );
+        // $coupon->set_product_ids( [] );
+        // $coupon->set_excluded_product_ids( [] );
+        // $coupon->set_usage_limit( '1' );
+        // $coupon->set_usage_limit_per_user( '1' );
+        // $coupon->set_limit_usage_to_x_items( null );
+        // $coupon->set_free_shipping( false );
+        // $coupon->set_product_categories( [] );
+        // $coupon->set_excluded_product_categories( [] );
+        // $coupon->set_exclude_sale_items( false );
+        // $coupon->set_minimum_amount( '' );
+        // $coupon->set_maximum_amount( '' );
+        // $coupon->set_email_restrictions( [ $order->get_billing_email() ] );
+        // $coupon->set_used_by( [] );
+        // $coupon->set_virtual( false );
 
-        $coupon->save();
-        $coupon_id = $coupon->get_id();
+        // $coupon->save();
+        // $coupon_id = $coupon->get_id();
 
-        wp_update_post( [
-            'ID' => $coupon_id,
-            'post_author' => dokan_get_current_user_id()
-        ] );
+        // wp_update_post( [
+        //     'ID' => $coupon_id,
+        //     'post_author' => dokan_get_current_user_id()
+        // ] );
 
         do_action( 'dokan_send_coupon_to_customer', $coupon, $data );
 

@@ -156,9 +156,21 @@ class Dokan_RMA {
         //tinysort.min.js
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
 
+        add_action( 'dokan_loaded', [ $this, 'load_emails' ], 20 );
         // dokan simple auciton email
-        add_filter( 'woocommerce_email_classes', [ $this, 'load_rma_email_classes' ] );
-        add_filter( 'woocommerce_email_actions', [ $this, 'register_rma_email_actions' ] );
+
+    }
+
+    /**
+     * Load emails
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function load_emails() {
+        add_filter( 'woocommerce_email_classes', [ $this, 'load_rma_email_classes' ], 99 );
+        add_filter( 'dokan_email_actions', [ $this, 'register_rma_email_actions' ] );
     }
 
     /**
@@ -170,7 +182,6 @@ class Dokan_RMA {
      */
     public function load_rma_email_classes( $wc_emails ) {
         $wc_emails['Dokan_Send_Coupon_Email'] = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-coupin-email.php' );
-
         return $wc_emails;
     }
 
