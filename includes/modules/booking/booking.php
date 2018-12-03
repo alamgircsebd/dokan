@@ -95,6 +95,9 @@ class Dokan_WC_Booking {
         add_action( 'dokan_new_product_added', array( $this, 'save_booking_data' ), 10 );
         add_action( 'dokan_product_updated', array( $this, 'save_booking_data' ), 10 );
 
+        // save per product commission for bookable product
+        add_action( 'woocommerce_process_product_meta_booking', array( 'Dokan_Pro_Products', 'save_per_product_commission_options' ), 20 );
+
         //ajax
         add_action( 'wp_ajax_add_new_resource', array( $this, 'add_new_resource' ) );
         add_action( 'wp_ajax_nopriv_add_new_resource', array( $this, 'add_new_resource' ) );
