@@ -22,7 +22,7 @@ class Dokan_Pro_Admin_Settings {
     public function __construct() {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
         add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
-        add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
+        add_action( 'wp_ajax_create_pages', array( $this, 'create_default_pages' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
         add_action( 'init', array( $this, 'dokan_export_all_logs' ), 99 );
@@ -68,9 +68,10 @@ class Dokan_Pro_Admin_Settings {
         // Load tools ad modules menu
         if ( current_user_can( $capability ) ) {
             $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
+            $submenu[ $slug ][] = array( __( 'Tools', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/tools' );
         }
 
-        $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
+        // $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
         add_action( $report, array( $this, 'common_scripts' ) );
     }
@@ -307,6 +308,12 @@ class Dokan_Pro_Admin_Settings {
             ]
         );
 
+        $routes[] = array(
+            'path'      => '/tools',
+            'name'      => 'Tools',
+            'component' => 'Tools'
+        );
+
 
         return $routes;
     }
@@ -355,37 +362,59 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
-     * Tools Toggole Handler
+     * Create default pages
      *
      * @since 2.4
      *
      * @return void
      */
-    function tools_page_handler() {
+    function create_default_pages() {
 
-        if ( isset( $_GET['dokan_action'] ) && current_user_can( 'manage_options' ) ) {
-            $action = $_GET['dokan_action'];
-            check_admin_referer( 'dokan-tools-action' );
-            $page_created = get_option( 'dokan_pages_created', false );
+        if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'create_pages' ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
 
-            $pages = array(
-                array(
-                    'post_title' => __( 'Dashboard', 'dokan' ),
-                    'slug'       => 'dashboard',
-                    'page_id'    => 'dashboard',
-                    'content'    => '[dokan-dashboard]'
-                ),
-                array(
-                    'post_title' => __( 'Store List', 'dokan' ),
-                    'slug'       => 'store-listing',
-                    'page_id'    => 'my_orders',
-                    'content'    => '[dokan-stores]'
-                ),
-            );
-            $dokan_pages = array() ;
-            if ( ! $page_created ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
 
-                foreach ( $pages as $page ) {
+        $page_created = get_option( 'dokan_pages_created', false );
+        $pages = array(
+            array(
+                'post_title' => __( 'Dashboard', 'dokan' ),
+                'slug'       => 'dashboard',
+                'page_id'    => 'dashboard',
+                'content'    => '[dokan-dashboard]'
+            ),
+            array(
+                'post_title' => __( 'Store List', 'dokan' ),
+                'slug'       => 'store-listing',
+                'page_id'    => 'my_orders',
+                'content'    => '[dokan-stores]'
+            ),
+        );
+
+        $dokan_pages = array() ;
+
+        if ( ! $page_created ) {
+
+            foreach ( $pages as $page ) {
+                $page_id = wp_insert_post( array(
+                    'post_title'     => $page['post_title'],
+                    'post_name'      => $page['slug'],
+                    'post_content'   => $page['content'],
+                    'post_status'    => 'publish',
+                    'post_type'      => 'page',
+                    'comment_status' => 'closed'
+                        ) );
+                $dokan_pages[$page['slug']] = $page_id ;
+            }
+            update_option( 'dokan_pages', $dokan_pages );
+            flush_rewrite_rules();
+        } else {
+            foreach ( $pages as $page ) {
+
+                if ( !$this->dokan_page_exist( $page['slug'] ) ) {
                     $page_id = wp_insert_post( array(
                         'post_title'     => $page['post_title'],
                         'post_name'      => $page['slug'],
@@ -395,33 +424,19 @@ class Dokan_Pro_Admin_Settings {
                         'comment_status' => 'closed'
                             ) );
                     $dokan_pages[$page['slug']] = $page_id ;
-                }
-                update_option( 'dokan_pages', $dokan_pages );
-                flush_rewrite_rules();
-            } else {
-                foreach ( $pages as $page ) {
-
-                    if ( !$this->dokan_page_exist( $page['slug'] ) ) {
-                        $page_id = wp_insert_post( array(
-                            'post_title'     => $page['post_title'],
-                            'post_name'      => $page['slug'],
-                            'post_content'   => $page['content'],
-                            'post_status'    => 'publish',
-                            'post_type'      => 'page',
-                            'comment_status' => 'closed'
-                                ) );
-                        $dokan_pages[$page['slug']] = $page_id ;
-                        update_option( 'dokan_pages', $dokan_pages );
-                    }
-
+                    update_option( 'dokan_pages', $dokan_pages );
                 }
 
-                flush_rewrite_rules();
             }
-            update_option( 'dokan_pages_created', 1 );
-            wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
-            exit;
+
+            flush_rewrite_rules();
         }
+
+        update_option( 'dokan_pages_created', 1 );
+        wp_send_json_success( array(
+            'message' => __( 'All the default pages has been created!', 'dokan' )
+        ), 201 );
+        exit;
     }
 
     /**
@@ -434,18 +449,18 @@ class Dokan_Pro_Admin_Settings {
      * @return boolean
      */
     function dokan_page_exist( $slug ) {
-
         $page_created = get_option( 'dokan_pages_created', false );
+
         if ( ! $page_created ) {
             return FALSE;
         }
+
         $page_list = get_option( 'dokan_pages', '' );
-        $page = get_post( $page_list[$slug] );
+        $page      = isset( $page_list[$slug] ) ? get_post( $page_list[$slug] ) : null;
 
         if ( $page == null ) {
             return FALSE;
         } else {
-
             return TRUE;
         }
     }
