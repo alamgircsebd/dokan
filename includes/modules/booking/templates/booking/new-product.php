@@ -131,7 +131,7 @@ $template_args = array(
                             $select_name = "multiple" == $multiple ? 'product_cat[]' : 'product_cat';
 
                             include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
-                            $drop_down_category = wp_dropdown_categories( array(
+                            $category_args = array(
                                 'show_option_none' => __( '', 'dokan' ),
                                 'hierarchical'     => 1,
                                 'hide_empty'       => 0,
@@ -144,9 +144,10 @@ $template_args = array(
                                 'selected'         => $term,
                                 'echo'             => 0,
                                 'walker'           => new DokanTaxonomyWalker( $post_id )
-                            ) );
+                            );
 
-                            $replace_attrb = "<select data-placeholder='".__( 'Select product category','dokan' )."' ". $multiple ;
+                            $drop_down_category = wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
+                            $replace_attrb      = "<select data-placeholder='".__( 'Select product category','dokan' )."' ". $multiple ;
 
                             echo str_replace( '<select', $replace_attrb, $drop_down_category );
                             ?>

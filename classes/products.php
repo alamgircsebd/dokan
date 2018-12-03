@@ -31,9 +31,9 @@ class Dokan_Pro_Products {
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_lot_discount_content' ), 25, 2 );
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2 );
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
-        add_action( 'woocommerce_product_options_advanced', array($this,'add_per_product_commission_options' ),15 );
-        add_action( 'woocommerce_process_product_meta_simple', array($this,'save_per_product_commission_options' ),15 );
-        add_action( 'woocommerce_process_product_meta_variable', array($this,'save_per_product_commission_options' ),15 );
+        add_action( 'woocommerce_product_options_advanced', array( $this,'add_per_product_commission_options' ), 15 );
+        add_action( 'woocommerce_process_product_meta_simple', array( $this,'save_per_product_commission_options' ), 15 );
+        add_action( 'woocommerce_process_product_meta_variable', array( $this,'save_per_product_commission_options' ), 15 );
         add_action( 'dokan_new_product_added', array( $this, 'set_product_tags' ), 10, 2 );
         add_action( 'dokan_product_updated', array( $this, 'set_product_tags' ) );
         add_action( 'dokan_product_updated', array( $this, 'set_product_type' ), 11 );
@@ -257,7 +257,7 @@ class Dokan_Pro_Products {
                 'percentage'  => __( 'Percentage', 'dokan' ),
                 'flat'        => __( 'Flat', 'dokan' ),
             ),
-            'wrapper_class' => 'per-product-commission-type show_if_simple show_if_variable',
+            'wrapper_class' => 'per-product-commission-type show_if_simple show_if_variable show_if_booking',
             'description'   => __( 'Set the commission type admin will get from this product', 'dokan' ),
             'data_type'     => 'price'
         ) );
@@ -265,7 +265,7 @@ class Dokan_Pro_Products {
             array(
                 'id'            => '_per_product_admin_commission',
                 'label'         => __( 'Admin Commission', 'dokan' ),
-                'wrapper_class' => 'per-product-commission show_if_simple show_if_variable',
+                'wrapper_class' => 'per-product-commission show_if_simple show_if_variable show_if_booking',
                 'description'   => __( 'Override the default commission admin will get from this product', 'dokan' ),
                 'data_type'     => 'price'
             )
@@ -281,7 +281,7 @@ class Dokan_Pro_Products {
      *
      * @return void
      */
-    function save_per_product_commission_options( $post_id ) {
+    public static function save_per_product_commission_options( $post_id ) {
 
         if ( !current_user_can( 'manage_woocommerce' ) ) {
             return;

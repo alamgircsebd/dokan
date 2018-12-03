@@ -10,14 +10,34 @@ const config = require( './config.json' );
 
 // Naming and path settings
 var appName = 'app';
-var entryPoint = {
+
+var entryPoints = {};
+
+var rootEntryPoints = {
     // 'vue-pro-frontend': './src/frontend/main.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
+    // 'vue-pro-admin': './includes/modules/subscription/src/main.js',
     // style: './less/style.less',
 };
 
-var exportPath = path.resolve(__dirname, './assets/js');
+var moduleEntryPoints = {
+    'subscription': {
+        'subscription': 'main.js'
+    }
+};
+
+Object.keys(rootEntryPoints).forEach(function (output) {
+    entryPoints[ `assets/js/${output}` ] = rootEntryPoints[output];
+});
+
+Object.keys(moduleEntryPoints).forEach(function (module) {
+    var modulePath = `includes/modules/${module}`;
+
+    Object.keys(moduleEntryPoints[module]).forEach(function (moduleOutput) {
+        entryPoints[`${modulePath}/assets/js/${moduleOutput}`] = `./${modulePath}/src/${moduleEntryPoints[module][moduleOutput]}`;
+    });
+});
 
 // Enviroment flag
 var plugins = [];
@@ -82,9 +102,9 @@ if ( isProduction() ) {
 }
 
 module.exports = {
-    entry: entryPoint,
+    entry: entryPoints,
     output: {
-        path: exportPath,
+        path: path.resolve(__dirname),
         filename: appName
     },
 

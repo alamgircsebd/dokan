@@ -32,6 +32,8 @@ do_action( 'dokan_dashboard_content_after' );
 
 </div><!-- .dokan-dashboard-wrap -->
 
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>
+
 <style>
     .woocommerce-exporter-wrapper .wc-progress-steps li.done, .woocommerce-importer-wrapper .wc-progress-steps li.done, .woocommerce-progress-form-wrapper .wc-progress-steps li.done{
         border-color: #fd8f6f;

@@ -1,3 +1,5 @@
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
     <?php
         /**
@@ -64,3 +66,5 @@
         </article>
     </div>
 </div>
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>

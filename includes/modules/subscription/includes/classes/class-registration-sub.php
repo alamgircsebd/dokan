@@ -20,13 +20,12 @@ class DPS_Pack_On_Registration {
      * @return void
      */
     function init_hooks() {
-
         add_action( 'dokan_seller_registration_field_after', array( $this, 'generate_form_fields' ) );
         add_action( 'dokan_after_seller_migration_fields', array( $this, 'generate_form_fields') );
         add_filter( 'woocommerce_registration_redirect', array( $this, 'redirect_to_checkout' ), 99, 1 );
-        add_filter( 'dokan_ww_payment_redirect', array( $this, 'redirect_to_checkout_after_wizard' ), 10, 1);
         add_filter( 'dokan_customer_migration_required_fields', array( $this, 'add_subscription_to_dokan_customer_migration_required_fields' ) );
         add_filter( 'dokan_customer_migration_redirect', array( $this, 'redirect_after_migration' ) );
+        add_action( 'woocommerce_thankyou', array( $this, 'redirect_to_seller_setup_wizard_after_checkout' ) );
     }
 
     public static function init() {
@@ -171,28 +170,13 @@ class DPS_Pack_On_Registration {
         return $redirect_url;
     }
 
+
     /**
-     * Redirect users to checkout after wizard ready
-     *
-     * @since 1.1.4
-     * @param string url
-     * @return string url
-     */
-    function redirect_to_checkout_after_wizard( $url ) {
-        if( isset( $_GET['subscription-pack'] ) ){
-         $subscription_id = $_GET[ 'subscription-pack' ];
-         if( !empty( $subscription_id ) ){
-             $url = get_site_url() . '/?add-to-cart=' . $subscription_id;
-            }
-        }
-        return $url;
-    }
-     /**
-     * Check if subscriptin pack is selected
-     * @since 1.1.5
-     * @param array $fields
-     * @return array $fields
-     */
+    * Check if subscriptin pack is selected
+    * @since 1.1.5
+    * @param array $fields
+    * @return array $fields
+    */
     public function add_subscription_to_dokan_customer_migration_required_fields( $fields ) {
         $fields['dokan-subscription-pack'] = __( 'Select subscription a pack', 'dokan' );
 
@@ -213,6 +197,42 @@ class DPS_Pack_On_Registration {
         return $url;
     }
 
+    /**
+     * Get subscription pack id
+     *
+     * @return string
+     */
+    public function redirect_to_seller_setup_wizard_after_checkout( $order_id ) {
+        $order = wc_get_order( $order_id );
+        $items = $order->get_items( 'line_item' );
+
+        if ( empty( $items ) || ! is_array( $items ) ) {
+            return;
+        }
+
+        foreach ( $items as $item ) {
+            $product_id = $item->get_product_id();
+            break;
+        }
+
+        if ( ! $product_id ) {
+            return;
+        }
+
+        $redirect_url = get_site_url() . '/?page=dokan-seller-setup';
+
+        if ( Dokan_Product_Subscription::is_subscription_product( $product_id ) ) {
+            ?>
+            <script>
+                jQuery(document).ready(function() {
+                    setTimeout(function(){
+                        window.location.replace("<?php echo $redirect_url; ?>");
+                    }, 3000);
+                });
+            </script>
+            <?php
+        }
+    }
 }
 
 $dps_enable = dokan_get_option( 'enable_pricing', 'dokan_product_subscription' );

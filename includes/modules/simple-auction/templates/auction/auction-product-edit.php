@@ -23,7 +23,7 @@ $_auction_item_condition       = get_post_meta( $post_id, '_auction_item_conditi
 $_auction_type                 = get_post_meta( $post_id, '_auction_type', true );
 
 $_auction_proxy                = get_post_meta( $post_id, '_auction_proxy', true );
-$_auction_sealed              = get_post_meta( $post_id, '_auction_sealed', true );
+$_auction_sealed               = get_post_meta( $post_id, '_auction_sealed', true );
 $_auction_start_price          = get_post_meta( $post_id, '_auction_start_price', true );
 $_auction_bid_increment        = get_post_meta( $post_id, '_auction_bid_increment', true );
 $_auction_reserved_price       = get_post_meta( $post_id, '_auction_reserved_price', true );
@@ -37,6 +37,9 @@ $_auction_relist_duration      = get_post_meta( $post_id, '_auction_relist_durat
 $_visibility                   = ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post_id, '_visibility', true );
 $visibility_options            = dokan_get_product_visibility_options();
 ?>
+
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 <?php
 do_action( 'dokan_dashboard_content_before' );
@@ -496,6 +499,8 @@ wp_reset_postdata();
 wp_reset_query();
 ?>
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>
 
 <style>
     .show_if_variable {
