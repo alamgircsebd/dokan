@@ -128,6 +128,9 @@ class Dokan_Product_Subscription {
 
         // Allow vendor to import only allowed number of products
         add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'import_products' ) );
+
+        // include rest api class
+        add_filter( 'dokan_rest_api_class_map', array( $this, 'rest_api_class_map' ) );
     }
 
     /**
@@ -1293,6 +1296,18 @@ class Dokan_Product_Subscription {
         return $object;
     }
 
+    /**
+     * Include subscription api class
+     *
+     * @param  array $classes
+     *
+     * @return array
+     */
+    public function rest_api_class_map( $classes ) {
+        $class = [ dirname( __FILE__ ) . '/api/class-subscription-controller.php' => 'Dokan_REST_Subscription_Controller' ];
+
+        return array_merge( $classes, $class );
+    }
 
 } // Dokan_Product_Subscription
 
