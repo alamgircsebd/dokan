@@ -55,12 +55,13 @@
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
                         <template v-if="index !== ( actions.length - 1)"> | </template>
                     </span>
+
                     <span :class="action.key" v-if="action.key == 'cancelled' && currentStatus == 'pending'">
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
                     </span>
-                    <span :class="action.key" v-if="action.key == 'delete' && currentStatus != 'pending'">
+
+                     <span :class="action.key" v-if="action.key == 'delete' && currentStatus == 'cancelled'">
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
-                        <template v-if="index !== ( actions.length - 1)"> | </template>
                     </span>
                 </template>
             </template>
@@ -145,13 +146,15 @@ export default {
                         label: this.__( 'Cancel', 'dokan' )
                     }
                 ];
-            } else {
+            } else if ( 'cancelled' == this.$route.query.status ) {
                 return [
                     {
                         key: 'delete',
                         label: this.__( 'Delete', 'dokan' )
                     }
                 ];
+            } else {
+                return []
             }
         }
     },
@@ -230,21 +233,20 @@ export default {
                     this.fetchRefunds();
                     this.loading = false;
                 });
-            } else if( 'cancelled' == action )  {
+            } else if( 'cancelled' === action )  {
                 jsonData.status   = 'cancelled';
                 dokan.api.put('/refund/' + data.row.id, jsonData )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
                 });
-            } else if ( 'delete' == action ) {
+            } else if ( 'delete' === action ) {
                 dokan.api.delete('/refund/' + data.row.id )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
                 });
             }
-
         },
 
         onBulkAction( action, items ) {
