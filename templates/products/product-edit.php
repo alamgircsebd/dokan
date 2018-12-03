@@ -372,7 +372,7 @@ if ( ! $from_shortcode ) {
                                             </div>
                                         </div>
 
-                                        <?php do_action( 'dokan_product_edit_after_main' ); ?>
+                                        <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
 
                                     </div> <!-- #edit-product -->
 

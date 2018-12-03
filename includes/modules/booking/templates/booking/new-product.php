@@ -604,8 +604,7 @@ $template_args = array(
                     <?php wp_editor( $post_content, 'post_content', array( 'editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content' ) ); ?>
                 </div>
 
-                <?php do_action( 'dokan_new_product_form' ); ?>
-
+                <?php do_action( 'dokan_new_product_form', $post, $post_id ); ?>
 
                 <?php if ( !empty( $post_id ) ): ?>
 

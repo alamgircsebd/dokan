@@ -460,7 +460,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                         </div><!-- .dokan-other-options -->
                     </div>
 
-                    <?php do_action( 'dokan_product_edit_after_main' ); ?>
+                    <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
 
                     <input type="hidden" name="dokan_product_id" id="dokan-edit-product-id" value="<?php echo $post_id; ?>"/>
                     <input type="hidden" name="product-type" value="auction">
