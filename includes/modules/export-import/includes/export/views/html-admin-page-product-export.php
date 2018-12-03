@@ -14,6 +14,9 @@ $product_count   = wp_count_posts( 'product' );
 $variation_count = wp_count_posts( 'product' );
 $total_rows      = $product_count->publish + $product_count->private + $variation_count->publish + $variation_count->private;
 ?>
+
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 
     <?php
@@ -124,6 +127,9 @@ $total_rows      = $product_count->publish + $product_count->private + $variatio
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>
+
 <script>
     window.ajaxurl = dokan.ajaxurl;
 </script>
