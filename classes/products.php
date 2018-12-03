@@ -694,15 +694,20 @@ class Dokan_Pro_Products {
     public function add_product_inline_edit_form( $product, $post ) {
         $options = $this->get_inline_edit_options();
 
-        $wp_terms = get_the_terms( $post, 'product_cat' );
-        $cats = wp_list_pluck( $wp_terms, 'term_id' );
+        $wp_cats = get_the_terms( $post, 'product_cat' );
+        $cats    = wp_list_pluck( $wp_cats, 'term_id' );
 
         if ( $options['using_single_category_style'] && ! empty( $cats ) ) {
             $cats = array_pop( $cats );
         }
 
-        $wp_terms = get_the_terms( $post, 'product_tag' );
-        $tags = wp_list_pluck( $wp_terms, 'term_id' );
+        $wp_tags = get_the_terms( $post, 'product_tag' );
+
+        if ( $wp_tags ) {
+            $tags = wp_list_pluck( $wp_tags, 'term_id' );
+        } else {
+            $tags = array();
+        }
 
         $args = array(
             'pro' => true,
