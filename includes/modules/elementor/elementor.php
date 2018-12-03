@@ -163,7 +163,11 @@ final class DokanElementor {
      */
     public function default_store_data( $prop = null ) {
         $data = [
-            'store_name' => __( 'Store Name', 'dokan' ),
+            'name'            => __( 'Store Name', 'dokan' ),
+            'profile_picture' => [
+                'id'  => 0,
+                'url' => get_avatar_url( 0 ),
+            ]
         ];
 
         $use_last_store_data_in_builder = dokan_get_option( 'use_last_store_data_in_builder', 'dokan_elementor', true );
@@ -175,7 +179,12 @@ final class DokanElementor {
 
             if ( ! empty( $store ) ) {
                 $store = array_pop( $store );
-                $data['store_name'] = $store->get_name();
+
+                $data['name'] = $store->get_name();
+                $data['profile_picture'] = [
+                    'id' => $store->get_info_part( 'gravatar' ),
+                    'url' => $store->get_avatar(),
+                ];
             }
         }
 

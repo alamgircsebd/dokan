@@ -49,6 +49,7 @@ class Module extends ModuleBase {
     public function get_widgets() {
         return [
             'StoreName',
+            'StoreProfilePicture',
             // 'StoreAddress',
             // 'StorePhone',
         ];
@@ -83,6 +84,7 @@ class Module extends ModuleBase {
     public function register_tags() {
         $tags = [
             'StoreName',
+            'StoreProfilePicture',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;

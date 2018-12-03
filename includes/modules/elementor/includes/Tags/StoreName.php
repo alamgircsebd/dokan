@@ -47,6 +47,6 @@ class StoreName extends TagBase {
      * @return void
      */
     public function render() {
-        echo dokan_elementor()->default_store_data( 'store_name' );
+        echo dokan_elementor()->default_store_data( 'name' );
     }
 }
