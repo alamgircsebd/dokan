@@ -463,3 +463,27 @@ function dokan_send_announcement_email( $sellers, $data ) {
 }
 
 add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email', 10, 2 );
+
+/**
+ * Check if the refund request is allowed to be approved
+ *
+ * @param int $order_id
+ *
+ * @return boolean
+ */
+function dokan_is_refund_allowed_to_approve( $order_id ) {
+    if ( ! $order_id ) {
+        return false;
+    }
+
+    $order                       = wc_get_order( $order_id );
+    $order_status                = 'wc-' . $order->get_status();
+    $active_order_status         = dokan_withdraw_get_active_order_status();
+    $is_offline_payment_excluded = dokan_exclude_offline_payment( $order_id );
+
+    if ( ! $is_offline_payment_excluded && in_array( $order_status, $active_order_status ) ) {
+        return true;
+    }
+
+    return false;
+}

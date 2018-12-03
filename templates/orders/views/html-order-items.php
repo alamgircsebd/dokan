@@ -222,7 +222,7 @@ if ( wc_tax_enabled() ) {
     <div class="clear"></div>
 </div>
 
-<?php if ( current_user_can( 'dokan_manage_refund' ) ): ?>
+<?php if ( current_user_can( 'dokan_manage_refund' ) && dokan_is_refund_allowed_to_approve( $order->get_id() ) ): ?>
     <div class="wc-order-data-row wc-order-bulk-actions">
         <p class="add-items">
 

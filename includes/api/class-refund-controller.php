@@ -202,11 +202,12 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'not_cancel_request', __( 'This refund is not pending. Only pending request status can be changed', 'dokan' ), array( 'status' => 400 ) );
         }
 
-        $refund = new Dokan_Pro_Admin_Refund();
+        $refund      = new Dokan_Pro_Admin_Refund();
 
         $status_code = $this->get_status( $status );
+        $order_id    = isset( $request['order_id'] ) ? $request['order_id'] : '';
 
-        if ( 1 == $status_code ) {
+        if ( 1 == $status_code && dokan_is_refund_allowed_to_approve( $order_id ) ) {
             $this->approve_refund_request( $result );
         }
 
@@ -404,8 +405,8 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $restock_refunded_items = 'true' === $data->restock_items;
         $refund                 = false;
 
-        $vendor_refund = $fee_refund = 0;
-        $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
+        $vendor_refund          = $fee_refund = 0;
+        $commission_recipient   = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
 
         // Prepare line items which we are refunding.
         $line_items = array();
