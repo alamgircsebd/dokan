@@ -338,6 +338,8 @@ class Dokan_RMA_Frontend {
             return;
         }
 
+        do_action( 'dokan_rma_send_warranty_request', $data );
+
         wc_add_notice( __( 'Request has been successfully submitted', 'dokan' ), 'success' );
 
         wp_redirect( wc_get_account_endpoint_url( 'rma-requests' ) );

@@ -181,7 +181,9 @@ class Dokan_RMA {
      * @return void
      */
     public function load_rma_email_classes( $wc_emails ) {
-        $wc_emails['Dokan_Send_Coupon_Email'] = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-coupin-email.php' );
+        $wc_emails['Dokan_Send_Coupon_Email']         = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-coupin-email.php' );
+        $wc_emails['Dokan_Rma_Send_Warranty_Request'] = include( DOKAN_RMA_INC_DIR. '/emails/class-dokan-rma-send-warranty-request.php' );
+
         return $wc_emails;
     }
 
@@ -194,6 +196,7 @@ class Dokan_RMA {
      */
     public function register_rma_email_actions( $actions ) {
         $actions[] = 'dokan_send_coupon_to_customer';
+        $actions[] = 'dokan_rma_send_warranty_request';
 
         return $actions;
     }
