@@ -176,10 +176,6 @@ export default {
 
     methods: {
         doSearch(payload) {
-            if ( payload == '' ) {
-                return;
-            }
-
             this.loading = true;
 
             dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)

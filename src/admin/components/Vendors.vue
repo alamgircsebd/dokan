@@ -190,10 +190,6 @@ export default {
 
     methods: {
         doSearch(payload) {
-            if ( payload == '' ) {
-                return;
-            }
-
             let self     = this;
             self.loading = true;
 
