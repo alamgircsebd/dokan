@@ -2,10 +2,12 @@
 
 namespace DokanPro\Modules\Elementor\Widgets;
 
-use Elementor\Controls_Manager;
+use DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Widget_Image;
 
 class StoreProfilePicture extends Widget_Image {
+
+    use PositionControls;
 
     /**
      * Widget name
@@ -83,6 +85,8 @@ class StoreProfilePicture extends Widget_Image {
                 'recursive' => true,
             ]
         );
+
+        $this->add_position_controls();
     }
 
     protected function get_html_wrapper_class() {
