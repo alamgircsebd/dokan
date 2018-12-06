@@ -117,7 +117,7 @@ class Dokan_RMA {
         require_once DOKAN_RMA_INC_DIR . '/class-vendor.php';
         require_once DOKAN_RMA_INC_DIR . '/class-product.php';
         require_once DOKAN_RMA_INC_DIR . '/class-order.php';
-        require_once DOKAN_RMA_INC_DIR . '/class-fronend.php';
+        require_once DOKAN_RMA_INC_DIR . '/class-frontend.php';
         require_once DOKAN_RMA_INC_DIR . '/class-warranty-request.php';
         require_once DOKAN_RMA_INC_DIR . '/class-warranty-item.php';
         require_once DOKAN_RMA_INC_DIR . '/class-warranty-request-conversation.php';

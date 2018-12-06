@@ -313,6 +313,14 @@ function dokan_warranty_request_type( $type = '' ) {
         'coupon'  => __( 'Refund as store credit', 'dokan' )
     ] );
 
+    if ( 'no' == dokan_get_option( 'rma_enable_refund_request', 'dokan_rma', 'no' ) ) {
+        unset( $types['refund'] );
+    }
+
+    if ( 'no' == dokan_get_option( 'rma_enable_coupon_request', 'dokan_rma', 'no' ) ) {
+        unset( $types['coupon'] );
+    }
+
     if ( ! empty( $type ) ) {
         return ! empty( $types[$type] ) ? $types[$type] : '';
     }
