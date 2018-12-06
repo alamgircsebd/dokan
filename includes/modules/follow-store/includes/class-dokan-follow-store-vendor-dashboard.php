@@ -65,7 +65,7 @@ class Dokan_Follow_Store_Vendor_Dashboard {
 
         $followers = $wpdb->get_results(
             $wpdb->prepare(
-                  "select customer_id, vendor_id, followed_at"
+                  "select follower_id, vendor_id, followed_at"
                 . " from {$wpdb->prefix}dokan_follow_store_followers"
                 . " where vendor_id = %d"
                 . "     and unfollowed_at is null",
