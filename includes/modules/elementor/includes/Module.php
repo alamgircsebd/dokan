@@ -26,6 +26,8 @@ class Module extends ModuleBase {
 
         add_action( 'elementor/documents/register', [ $this, 'register_documents' ] );
         add_action( 'elementor/dynamic_tags/register_tags', [ $this, 'register_tags' ] );
+        add_action( 'elementor/controls/controls_registered', [ $this, 'register_controls' ] );
+        add_action( 'elementor/editor/footer', [ $this, 'add_editor_templates' ], 9 );
     }
 
     /**
@@ -50,8 +52,7 @@ class Module extends ModuleBase {
         return [
             'StoreName',
             'StoreProfilePicture',
-            // 'StoreAddress',
-            // 'StorePhone',
+            'StoreInfo',
         ];
     }
 
@@ -95,6 +96,43 @@ class Module extends ModuleBase {
 
         foreach ( $tags as $tag ) {
             $module->register_tag( "\\DokanPro\\Modules\\Elementor\\Tags\\{$tag}" );
+        }
+    }
+
+    /**
+     * Register controls
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function register_controls() {
+        $controls = [
+            'SortableList',
+        ];
+
+        $controls_manager = dokan_elementor()->elementor()->controls_manager;
+
+        foreach ( $controls as $control ) {
+            $control_class = "\\DokanPro\\Modules\\Elementor\\Controls\\{$control}";
+            $controls_manager->register_control( $control_class::CONTROL_TYPE, new $control_class() );
+        }
+    }
+
+    /**
+     * Add editor templates
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_editor_templates() {
+        $template_names = [
+            'sortable-list-row',
+        ];
+
+        foreach ( $template_names as $template_name ) {
+            dokan_elementor()->elementor()->common->add_template( DOKAN_ELEMENTOR_VIEWS . "/editor-templates/$template_name.php" );
         }
     }
 }
