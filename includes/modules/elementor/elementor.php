@@ -162,13 +162,28 @@ final class DokanElementor {
      * @return mixed
      */
     public function default_store_data( $prop = null ) {
+        // Defaults are intentionally skipped from translating
         $data = [
-            'name'            => __( 'Store Name', 'dokan' ),
+            'name'            => 'Store Name',
             'profile_picture' => [
                 'id'  => 0,
                 'url' => get_avatar_url( 0 ),
-            ]
+            ],
+            'address'    => 'New York, United States (US)',
+            'phone'      => '123-456-7890',
+            'email'      => 'mail@store.com',
+            'rating'     => '5 rating from 100 reviews',
+            'open_close' => 'Store Opensss',
         ];
+
+        /**
+         * Filter to modify default
+         *
+         * @since 1.0.0
+         *
+         * @param array $data
+         */
+        $data = apply_filters( 'dokan_elementor_default_store_data_defaults', $data );
 
         $use_last_store_data_in_builder = dokan_get_option( 'use_last_store_data_in_builder', 'dokan_elementor', true );
 
@@ -185,6 +200,53 @@ final class DokanElementor {
                     'id' => $store->get_info_part( 'gravatar' ),
                     'url' => $store->get_avatar(),
                 ];
+
+                $address = dokan_get_seller_short_address( $store->get_id(), false );
+
+                if ( ! empty( $address ) ) {
+                    $data['address'] = $address;
+                }
+
+                $phone = $store->get_phone();
+
+                if ( ! empty( $phone ) ) {
+                    $data['phone'] = $phone;
+                }
+
+                $email = $store->get_email();
+
+                if ( ! empty( $email ) ) {
+                    $data['email'] = $email;
+                }
+
+                $rating = $store->get_readable_rating( false );
+
+                if ( ! empty( $rating ) ) {
+                    $data['rating'] = $rating;
+                }
+
+                $store_info               = $store->get_shop_info();
+                $dokan_store_time_enabled = isset( $store_info['dokan_store_time_enabled'] ) ? $store_info['dokan_store_time_enabled'] : '';
+                $store_open_notice        = isset( $store_info['dokan_store_open_notice'] ) && ! empty( $store_info['dokan_store_open_notice'] ) ? $store_info['dokan_store_open_notice'] : __( 'Store Open', 'dokan-lite' );
+                $store_closed_notice      = isset( $store_info['dokan_store_close_notice'] ) && ! empty( $store_info['dokan_store_close_notice'] ) ? $store_info['dokan_store_close_notice'] : __( 'Store Closed', 'dokan-lite' );
+                $show_store_open_close    = dokan_get_option( 'store_open_close', 'dokan_general', 'on' );
+
+                if ( $show_store_open_close == 'on' && $dokan_store_time_enabled == 'yes') {
+                    if ( dokan_is_store_open( $store->get_id() ) ) {
+                        $data['open_close'] = esc_attr( $store_open_notice );
+                    } else {
+                        $data['open_close'] = esc_attr( $store_closed_notice );
+                    }
+                }
+
+                /**
+                 * Filter to modify store data
+                 *
+                 * @since 1.0.0
+                 *
+                 * @param array $data
+                 */
+                $data = apply_filters( 'dokan_elementor_default_store_data_store', $data );
             }
         }
 

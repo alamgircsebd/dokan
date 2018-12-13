@@ -1,6 +1,10 @@
 ( function ( $ ) {
     var SortableListRowView = elementor.modules.RepeaterRowView.extend( {
-        template: Marionette.TemplateCache.get( '#tmpl-elementor-sortable-list-row' )
+        template: Marionette.TemplateCache.get( '#tmpl-elementor-sortable-list-row' ),
+
+        setTitle: function setTitle() {
+            this.ui.itemTitle.html( this.model.get( 'title' ) );
+        },
     } );
 
     var ControlSortableListView = elementor.modules.controls.Repeater.extend( {

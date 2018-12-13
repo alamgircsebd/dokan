@@ -75,95 +75,59 @@ class StoreInfo extends Widget_Icon_List {
      * @return void
      */
     protected function _register_controls() {
-        $this->start_controls_section(
+        parent::_register_controls();
+
+        $this->update_control(
             'section_icon',
             [
-                'label' => __( 'Icon List', 'dokan' ),
-            ]
-        );
-
-        $this->add_control(
-            'view',
-            [
-                'label' => __( 'Layout', 'dokan' ),
-                'type' => Controls_Manager::CHOOSE,
-                'default' => 'traditional',
-                'options' => [
-                    'traditional' => [
-                        'title' => __( 'Default', 'dokan' ),
-                        'icon' => 'eicon-editor-list-ul',
-                    ],
-                    'inline' => [
-                        'title' => __( 'Inline', 'dokan' ),
-                        'icon' => 'eicon-ellipsis-h',
-                    ],
-                ],
-                'render_type' => 'template',
-                'classes' => 'elementor-control-start-end',
-                'label_block' => false,
-                'style_transfer' => true,
+                'label' => __( 'Store Info', 'dokan' ),
             ]
         );
 
         $repeater = new Repeater();
 
         $repeater->add_control(
+            'title',
+            [
+                'label'       => __( 'Title', 'dokan' ),
+                'type'        => Controls_Manager::HIDDEN,
+                'default'     => __( 'Title', 'dokan' ),
+            ]
+        );
+
+        $repeater->add_control(
             'text',
             [
-                'label' => __( 'Text', 'dokan' ),
-                'type' => Controls_Manager::TEXT,
-                'label_block' => true,
-                'placeholder' => __( 'List Item', 'dokan' ),
-                'default' => __( 'List Item', 'dokan' ),
+                'type'    => Controls_Manager::HIDDEN
             ]
         );
 
         $repeater->add_control(
             'icon',
             [
-                'label' => __( 'Icon', 'dokan' ),
-                'type' => Controls_Manager::ICON,
+                'label'       => __( 'Icon', 'dokan' ),
+                'type'        => Controls_Manager::ICON,
                 'label_block' => true,
-                'default' => 'fa fa-check',
+                'default'     => 'fa fa-check',
             ]
         );
 
         $repeater->add_control(
             'show',
             [
-                'type' => Controls_Manager::HIDDEN,
+                'type'    => Controls_Manager::HIDDEN,
                 'default' => true,
             ]
         );
 
-        $this->add_control(
+        $this->update_control(
             'icon_list',
             [
-                'label' => '',
-                'type' => SortableList::CONTROL_TYPE,
-                'fields' => $repeater->get_controls(),
-                'default' => [
-                    [
-                        'text' => __( 'List Item #1', 'dokan' ),
-                        'icon' => 'fa fa-check',
-                        'show' => true,
-                    ],
-                    [
-                        'text' => __( 'List Item #2', 'dokan' ),
-                        'icon' => 'fa fa-times',
-                        'show' => true,
-                    ],
-                    [
-                        'text' => __( 'List Item #3', 'dokan' ),
-                        'icon' => 'fa fa-dot-circle-o',
-                        'show' => true,
-                    ],
-                ],
-                'title_field' => '<i class="{{ icon }}" aria-hidden="true"></i> {{{ text }}}',
+                'type'    => SortableList::CONTROL_TYPE,
+                'fields'  => $repeater->get_controls(),
+                'default' => dokan_elementor()->elementor()->dynamic_tags->get_tag_data_content( null, 'dokan-store-info' ),
             ]
         );
-
-        $this->end_controls_section();
     }
 
     /**

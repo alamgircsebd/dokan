@@ -86,6 +86,7 @@ class Module extends ModuleBase {
         $tags = [
             'StoreName',
             'StoreProfilePicture',
+            'StoreInfo',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;

@@ -35,11 +35,11 @@ class SortableList extends Control_Repeater {
      */
     protected function get_default_settings() {
         return [
-            'fields' => [],
-            'title_field' => '',
+            'fields'        => [],
+            'title_field'   => '',
             'prevent_empty' => true,
-            'is_repeater' => true,
-            'item_actions' => [
+            'is_repeater'   => true,
+            'item_actions'  => [
                 'sort' => true,
             ],
         ];
