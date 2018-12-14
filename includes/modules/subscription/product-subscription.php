@@ -124,7 +124,7 @@ class Dokan_Product_Subscription {
 
         // remove subscripton product from vendor product listing page
         add_filter( 'dokan_product_listing_exclude_type', array( $this, 'exclude_subscription_product' ) );
-        add_filter( 'dokan_count_posts', array( $this, 'exclude_subscription_product_count' ) );
+        add_filter( 'dokan_count_posts', array( $this, 'exclude_subscription_product_count' ), 10, 3 );
 
         // Allow vendor to import only allowed number of products
         add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'import_products' ) );
@@ -1247,7 +1247,7 @@ class Dokan_Product_Subscription {
      *
      * @return string
      */
-    public function exclude_subscription_product_count( $query ) {
+    public function exclude_subscription_product_count( $query, $post_type, $user_id ) {
         global $wpdb;
 
         $query = "SELECT post_status,
@@ -1265,7 +1265,13 @@ class Dokan_Product_Subscription {
             )
             GROUP BY post_status";
 
-        return $query;
+        $results = $wpdb->get_results(
+            $wpdb->prepare(
+                $query,
+                $post_type, $user_id
+            ),
+            ARRAY_A
+        );
     }
 
     /**
