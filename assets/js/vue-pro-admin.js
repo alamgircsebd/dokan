@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 26);
+/******/ 	return __webpack_require__(__webpack_require__.s = 28);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -248,9 +248,12 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Switches = dokan_get_lib('Switches');
+var Search = dokan_get_lib('Search');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -258,13 +261,13 @@ var Switches = dokan_get_lib('Switches');
 
     components: {
         ListTable: ListTable,
-        Switches: Switches
+        Switches: Switches,
+        Search: Search
     },
 
     data: function data() {
         return {
             showCb: true,
-
             counts: {
                 pending: 0,
                 approved: 0,
@@ -357,6 +360,24 @@ var Switches = dokan_get_lib('Switches');
 
 
     methods: {
+        doSearch: function doSearch(payload) {
+            var _this = this;
+
+            var self = this;
+            self.loading = true;
+
+            dokan.api.get('/stores?search=' + payload, {
+                page: this.currentPage,
+                orderby: this.sortBy,
+                order: this.sortOrder
+            }).done(function (response, status, xhr) {
+                self.vendors = response;
+                self.loading = false;
+
+                _this.updatedCounts(xhr);
+                _this.updatePagination(xhr);
+            });
+        },
         updatedCounts: function updatedCounts(xhr) {
             this.counts.pending = parseInt(xhr.getResponseHeader('X-Status-Pending'));
             this.counts.approved = parseInt(xhr.getResponseHeader('X-Status-Approved'));
@@ -367,7 +388,7 @@ var Switches = dokan_get_lib('Switches');
             this.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
         },
         fetchVendors: function fetchVendors() {
-            var _this = this;
+            var _this2 = this;
 
             var self = this;
 
@@ -385,8 +406,8 @@ var Switches = dokan_get_lib('Switches');
                 self.vendors = response;
                 self.loading = false;
 
-                _this.updatedCounts(xhr);
-                _this.updatePagination(xhr);
+                _this2.updatedCounts(xhr);
+                _this2.updatePagination(xhr);
             });
         },
         onActionClick: function onActionClick(action, row) {
@@ -397,21 +418,21 @@ var Switches = dokan_get_lib('Switches');
             }
         },
         onSwitch: function onSwitch(status, vendor_id) {
-            var _this2 = this;
+            var _this3 = this;
 
             var message = status === false ? this.__('The vendor has been disabled.', 'dokan') : this.__('Selling has been enabled', 'dokan');
 
             dokan.api.put('/stores/' + vendor_id + '/status', {
                 status: status === false ? 'inactive' : 'active'
             }).done(function (response) {
-                _this2.$notify({
-                    title: _this2.__('Success!', 'dokan'),
+                _this3.$notify({
+                    title: _this3.__('Success!', 'dokan'),
                     type: 'success',
                     text: message
                 });
 
-                if (_this2.currentStatus !== 'all') {
-                    _this2.fetchVendors();
+                if (_this3.currentStatus !== 'all') {
+                    _this3.fetchVendors();
                 }
             });
         },
@@ -438,7 +459,7 @@ var Switches = dokan_get_lib('Switches');
             });
         },
         onBulkAction: function onBulkAction(action, items) {
-            var _this3 = this;
+            var _this4 = this;
 
             var jsonData = {};
             jsonData[action] = items;
@@ -446,8 +467,8 @@ var Switches = dokan_get_lib('Switches');
             this.loading = true;
 
             dokan.api.put('/stores/batch', jsonData).done(function (response) {
-                _this3.loading = false;
-                _this3.fetchVendors();
+                _this4.loading = false;
+                _this4.fetchVendors();
             });
         },
         sortCallback: function sortCallback(column, order) {
@@ -465,7 +486,7 @@ var Switches = dokan_get_lib('Switches');
             return dokan.urls.adminRoot + 'edit.php?post_type=product&author=' + id;
         },
         ordersUrl: function ordersUrl(id) {
-            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + id;
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&vendor_id=' + id;
         },
         editUrl: function editUrl(id) {
             return dokan.urls.adminRoot + 'user-edit.php?user_id=' + id;
@@ -716,6 +737,13 @@ var VclTwitch = ContentLoading.VclTwitch;
             }
 
             return false;
+        },
+        getEearningRate: function getEearningRate() {
+            if (this.stats.others.commission_type == 'percentage') {
+                return this.stats.others.commission_rate + '%';
+            } else {
+                return this.stats.others.commission_rate + ' ' + this.__('Flat', 'dokan');
+            }
         }
     },
 
@@ -1897,9 +1925,14 @@ var Postbox = dokan_get_lib('Postbox');
 //
 //
 //
+//
+//
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Currency = dokan_get_lib('Currency');
+var Search = dokan_get_lib('Search');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -1907,7 +1940,8 @@ var Currency = dokan_get_lib('Currency');
 
     components: {
         ListTable: ListTable,
-        Currency: Currency
+        Currency: Currency,
+        Search: Search
     },
 
     data: function data() {
@@ -1965,11 +1999,13 @@ var Currency = dokan_get_lib('Currency');
                     key: 'cancelled',
                     label: this.__('Cancel', 'dokan')
                 }];
-            } else {
+            } else if ('cancelled' == this.$route.query.status) {
                 return [{
                     key: 'delete',
                     label: this.__('Delete', 'dokan')
                 }];
+            } else {
+                return [];
             }
         }
     },
@@ -1984,6 +2020,21 @@ var Currency = dokan_get_lib('Currency');
     },
 
     methods: {
+        doSearch: function doSearch(payload) {
+            var _this = this;
+
+            this.loading = true;
+
+            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
+                _this.requests = response.filter(function (refund) {
+                    return refund.order_id.includes(payload) || refund.vendor.store_name.includes(payload);
+                });
+
+                _this.loading = false;
+                _this.updatedCounts(xhr);
+                _this.updatePagination(xhr);
+            });
+        },
         updatedCounts: function updatedCounts(xhr) {
             this.counts.pending = parseInt(xhr.getResponseHeader('X-Status-Pending'));
             this.counts.approved = parseInt(xhr.getResponseHeader('X-Status-Completed'));
@@ -1994,16 +2045,16 @@ var Currency = dokan_get_lib('Currency');
             this.totalItems = parseInt(xhr.getResponseHeader('X-WP-Total'));
         },
         fetchRefunds: function fetchRefunds() {
-            var _this = this;
+            var _this2 = this;
 
             this.loading = true;
 
             dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
-                _this.requests = response;
-                _this.loading = false;
+                _this2.requests = response;
+                _this2.loading = false;
 
-                _this.updatedCounts(xhr);
-                _this.updatePagination(xhr);
+                _this2.updatedCounts(xhr);
+                _this2.updatePagination(xhr);
             });
         },
         moment: function (_moment) {
@@ -2038,7 +2089,7 @@ var Currency = dokan_get_lib('Currency');
             console.log(action, row);
         },
         rowAction: function rowAction(action, data) {
-            var _this2 = this;
+            var _this3 = this;
 
             this.loading = true;
             var jsonData = {};
@@ -2048,24 +2099,24 @@ var Currency = dokan_get_lib('Currency');
             if ('approved' === action) {
                 jsonData.status = 'approved';
                 dokan.api.put('/refund/' + data.row.id, jsonData).done(function (response, status, xhr) {
-                    _this2.fetchRefunds();
-                    _this2.loading = false;
+                    _this3.fetchRefunds();
+                    _this3.loading = false;
                 });
-            } else if ('cancelled' == action) {
+            } else if ('cancelled' === action) {
                 jsonData.status = 'cancelled';
                 dokan.api.put('/refund/' + data.row.id, jsonData).done(function (response, status, xhr) {
-                    _this2.fetchRefunds();
-                    _this2.loading = false;
+                    _this3.fetchRefunds();
+                    _this3.loading = false;
                 });
-            } else if ('delete' == action) {
+            } else if ('delete' === action) {
                 dokan.api.delete('/refund/' + data.row.id).done(function (response, status, xhr) {
-                    _this2.fetchRefunds();
-                    _this2.loading = false;
+                    _this3.fetchRefunds();
+                    _this3.loading = false;
                 });
             }
         },
         onBulkAction: function onBulkAction(action, items) {
-            var _this3 = this;
+            var _this4 = this;
 
             this.loading = true;
             var jsonData = {};
@@ -2074,8 +2125,8 @@ var Currency = dokan_get_lib('Currency');
             console.log(jsonData);
 
             dokan.api.put('/refund/batch', jsonData).done(function (response, status, xhr) {
-                _this3.fetchRefunds();
-                _this3.loading = false;
+                _this4.fetchRefunds();
+                _this4.loading = false;
             });
         }
     },
@@ -2086,7 +2137,191 @@ var Currency = dokan_get_lib('Currency');
 });
 
 /***/ }),
-/* 12 */,
+/* 12 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+var Postbox = dokan_get_lib('Postbox');
+var Progressbar = dokan_get_lib('Progressbar');
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'Tools',
+
+    components: {
+        Postbox: Postbox,
+        Progressbar: Progressbar
+    },
+
+    data: function data() {
+        return {
+            progressValue: 0,
+            showBar: '',
+            types: [{
+                name: this.__('Page Installation', 'dokan'),
+                desc: this.__('Clicking this button will create required pages for the plugin.', 'dokan'),
+                button: this.__('Install Dokan Pages', 'dokan'),
+                action: 'create_pages'
+            }, {
+                name: this.__('Regenerate Order Sync Table', 'dokan'),
+                desc: this.__('This tool will delete all orders from the Dokan\'s sync table and re-build it.', 'dokan'),
+                button: this.__('Re-build', 'dokan'),
+                total_orders: 0,
+                offset: 0,
+                limit: 100,
+                action: 'regen_sync_table'
+            }, {
+                name: this.__('Check for Duplicate Orders', 'dokan'),
+                desc: this.__('This tool will check for duplicate orders from the Dokan\'s sync table.', 'dokan'),
+                button: this.__('Check Orders', 'dokan'),
+                total_orders: 0,
+                offset: 0,
+                limit: 100,
+                action: 'check_duplicate_suborders'
+            }]
+
+        };
+    },
+
+
+    methods: {
+        doAction: function doAction(key) {
+            switch (key) {
+                case 0:
+                    this.createPages();
+                    break;
+                case 1:
+                    this.rebuildOrderTable();
+                    this.showProgressBar(key);
+                    break;
+                case 2:
+                    this.checkDuplicateOrder();
+                    this.showProgressBar(key);
+                    break;
+            }
+        },
+        createPages: function createPages() {
+            var self = this;
+            var data = this.types[0];
+
+            jQuery.post(dokan.ajaxurl, data, function (res) {
+                if (res.success) {
+                    self.$notify({
+                        title: self.__('Success!', 'dokan'),
+                        text: res.data.message,
+                        type: 'success'
+                    });
+                } else {
+                    self.$notify({
+                        title: self.__('Failure!', 'dokan'),
+                        text: self.__('Something went wrong.'),
+                        type: 'warn'
+                    });
+                }
+            });
+        },
+        rebuildOrderTable: function rebuildOrderTable() {
+            var self = this;
+            var data = this.types[1];
+
+            jQuery.post(dokan.ajaxurl, data, function (res) {
+                if (res.success) {
+                    var completed = res.data.done * 100 / res.data.total_orders;
+
+                    if (!isNaN(completed)) {
+                        self.progressValue = Math.round(completed);
+                    }
+
+                    if (res.data.done != 'All') {
+                        self.types[1].offset = res.data.offset;
+                        self.types[1].total_orders = res.data.total_orders;
+
+                        self.$notify({
+                            title: self.__('Order re-build in progress...', 'dokan'),
+                            text: res.data.message,
+                            type: 'success'
+                        });
+
+                        return self.rebuildOrderTable();
+                    }
+
+                    self.$notify({
+                        title: self.__('Success!', 'dokan'),
+                        text: res.data.message,
+                        type: 'success'
+                    });
+                } else {
+                    self.$notify({
+                        title: self.__('Failure!', 'dokan'),
+                        text: self.__('Something went wrong.'),
+                        type: 'warn'
+                    });
+                }
+            });
+        },
+        checkDuplicateOrder: function checkDuplicateOrder() {
+            var self = this;
+            var data = this.types[2];
+
+            jQuery.post(dokan.ajaxurl, data, function (res) {
+                if (res.success) {
+                    var completed = res.data.done * 100 / res.data.total_orders;
+
+                    if (!isNaN(completed)) {
+                        self.progressValue = Math.round(completed);
+                    }
+
+                    if (res.data.done != 'All') {
+                        self.types[2].offset = res.data.offset;
+                        self.types[2].total_orders = res.data.total_orders;
+                        self.types[2].done = res.data.done;
+
+                        self.$notify({
+                            title: self.__('Checking Duplication in Progress...', 'dokan'),
+                            text: res.data.message,
+                            type: 'success'
+                        });
+
+                        return self.checkDuplicateOrder();
+                    }
+
+                    self.$notify({
+                        title: self.__('Success!', 'dokan'),
+                        text: res.data.message,
+                        type: 'success'
+                    });
+                } else {
+                    self.$notify({
+                        title: self.__('Failure!', 'dokan'),
+                        text: self.__('Something went wrong.'),
+                        type: 'warn'
+                    });
+                }
+            });
+        },
+        showProgressBar: function showProgressBar(key) {
+            return this.showBar = key;
+        }
+    }
+});
+
+/***/ }),
 /* 13 */,
 /* 14 */,
 /* 15 */,
@@ -2100,39 +2335,45 @@ var Currency = dokan_get_lib('Currency');
 /* 23 */,
 /* 24 */,
 /* 25 */,
-/* 26 */
+/* 26 */,
+/* 27 */,
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _Vendors = __webpack_require__(27);
+var _Vendors = __webpack_require__(29);
 
 var _Vendors2 = _interopRequireDefault(_Vendors);
 
-var _VendorSingle = __webpack_require__(30);
+var _VendorSingle = __webpack_require__(32);
 
 var _VendorSingle2 = _interopRequireDefault(_VendorSingle);
 
-var _Modules = __webpack_require__(33);
+var _Modules = __webpack_require__(35);
 
 var _Modules2 = _interopRequireDefault(_Modules);
 
-var _Announcement = __webpack_require__(36);
+var _Announcement = __webpack_require__(38);
 
 var _Announcement2 = _interopRequireDefault(_Announcement);
 
-var _NewAnnouncement = __webpack_require__(39);
+var _NewAnnouncement = __webpack_require__(41);
 
 var _NewAnnouncement2 = _interopRequireDefault(_NewAnnouncement);
 
-var _EditAnnouncement = __webpack_require__(42);
+var _EditAnnouncement = __webpack_require__(44);
 
 var _EditAnnouncement2 = _interopRequireDefault(_EditAnnouncement);
 
-var _Refund = __webpack_require__(45);
+var _Refund = __webpack_require__(47);
 
 var _Refund2 = _interopRequireDefault(_Refund);
+
+var _Tools = __webpack_require__(50);
+
+var _Tools2 = _interopRequireDefault(_Tools);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2143,20 +2384,21 @@ dokan_add_route(_Announcement2.default);
 dokan_add_route(_NewAnnouncement2.default);
 dokan_add_route(_EditAnnouncement2.default);
 dokan_add_route(_Refund2.default);
+dokan_add_route(_Tools2.default);
 
 /***/ }),
-/* 27 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Vendors_vue__ = __webpack_require__(5);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_7a477aab_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Vendors_vue__ = __webpack_require__(31);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(28)
+  __webpack_require__(30)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2202,13 +2444,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 28 */
+/* 30 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2296,6 +2538,11 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _c("search", {
+        attrs: { title: "Search Vendors" },
+        on: { searched: _vm.doSearch }
+      }),
+      _vm._v(" "),
       _c("list-table", {
         attrs: {
           columns: _vm.columns,
@@ -2318,7 +2565,8 @@ var render = function() {
           sort: _vm.sortCallback,
           pagination: _vm.goToPage,
           "action:click": _vm.onActionClick,
-          "bulk:click": _vm.onBulkAction
+          "bulk:click": _vm.onBulkAction,
+          searched: _vm.doSearch
         },
         scopedSlots: _vm._u([
           {
@@ -2445,18 +2693,18 @@ if (false) {
 }
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_VendorSingle_vue__ = __webpack_require__(6);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_849fac40_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_VendorSingle_vue__ = __webpack_require__(34);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(31)
+  __webpack_require__(33)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -2502,13 +2750,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2885,9 +3133,7 @@ var render = function() {
                       _c("ul", { staticClass: "counts" }, [
                         _c("li", { staticClass: "commision" }, [
                           _c("span", { staticClass: "count" }, [
-                            _vm._v(
-                              _vm._s(_vm.stats.others.commision_rate) + "%"
-                            )
+                            _vm._v(_vm._s(_vm.getEearningRate))
                           ]),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
@@ -3162,18 +3408,18 @@ if (false) {
 }
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Modules_vue__ = __webpack_require__(7);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2f819007_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Modules_vue__ = __webpack_require__(37);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(34)
+  __webpack_require__(36)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -3219,13 +3465,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3518,18 +3764,18 @@ if (false) {
 }
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Announcement_vue__ = __webpack_require__(8);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b4865812_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Announcement_vue__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_b4865812_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Announcement_vue__ = __webpack_require__(40);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(37)
+  __webpack_require__(39)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -3575,13 +3821,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3993,18 +4239,18 @@ if (false) {
 }
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_NewAnnouncement_vue__ = __webpack_require__(9);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0a129b87_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_NewAnnouncement_vue__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_0a129b87_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_NewAnnouncement_vue__ = __webpack_require__(43);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(40)
+  __webpack_require__(42)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -4050,13 +4296,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4422,18 +4668,18 @@ if (false) {
 }
 
 /***/ }),
-/* 42 */
+/* 44 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_EditAnnouncement_vue__ = __webpack_require__(10);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_34d4b3be_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_EditAnnouncement_vue__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_34d4b3be_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_EditAnnouncement_vue__ = __webpack_require__(46);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(43)
+  __webpack_require__(45)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -4479,13 +4725,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 43 */
+/* 45 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 44 */
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4933,18 +5179,18 @@ if (false) {
 }
 
 /***/ }),
-/* 45 */
+/* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Refund_vue__ = __webpack_require__(11);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_21df77a8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Refund_vue__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_21df77a8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Refund_vue__ = __webpack_require__(49);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(46)
+  __webpack_require__(48)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -4990,13 +5236,13 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 46 */
+/* 48 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 47 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5110,6 +5356,11 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
+      _c("search", {
+        attrs: { title: "Search Refund" },
+        on: { searched: _vm.doSearch }
+      }),
+      _vm._v(" "),
       _c("list-table", {
         attrs: {
           columns: _vm.columns,
@@ -5128,7 +5379,8 @@ var render = function() {
         on: {
           pagination: _vm.goToPage,
           "action:click": _vm.onActionClick,
-          "bulk:click": _vm.onBulkAction
+          "bulk:click": _vm.onBulkAction,
+          searched: _vm.doSearch
         },
         scopedSlots: _vm._u([
           {
@@ -5227,31 +5479,22 @@ var render = function() {
                         ])
                       : _vm._e(),
                     _vm._v(" "),
-                    action.key == "delete" && _vm.currentStatus != "pending"
-                      ? _c(
-                          "span",
-                          { class: action.key },
-                          [
-                            _c(
-                              "a",
-                              {
-                                attrs: { href: "#" },
-                                on: {
-                                  click: function($event) {
-                                    $event.preventDefault()
-                                    _vm.rowAction(action.key, data)
-                                  }
+                    action.key == "delete" && _vm.currentStatus == "cancelled"
+                      ? _c("span", { class: action.key }, [
+                          _c(
+                            "a",
+                            {
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.rowAction(action.key, data)
                                 }
-                              },
-                              [_vm._v(_vm._s(action.label))]
-                            ),
-                            _vm._v(" "),
-                            index !== _vm.actions.length - 1
-                              ? [_vm._v(" | ")]
-                              : _vm._e()
-                          ],
-                          2
-                        )
+                              }
+                            },
+                            [_vm._v(_vm._s(action.label))]
+                          )
+                        ])
                       : _vm._e()
                   ]
                 })
@@ -5272,6 +5515,114 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-21df77a8", esExports)
+  }
+}
+
+/***/ }),
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Tools_vue__ = __webpack_require__(12);
+/* empty harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_9a79bb4a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Tools_vue__ = __webpack_require__(51);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Tools_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_9a79bb4a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Tools_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/admin/components/Tools.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-9a79bb4a", Component.options)
+  } else {
+    hotAPI.reload("data-v-9a79bb4a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["default"] = (Component.exports);
+
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "tools-page" },
+    [
+      _c("h1", { staticClass: "wp-heading-inline" }, [
+        _vm._v(_vm._s(_vm.__("Tools Page", "dokan")))
+      ]),
+      _vm._v(" "),
+      _vm._l(_vm.types, function(type, key) {
+        return _c("postbox", { key: key, attrs: { title: type.name } }, [
+          _c("p", { domProps: { textContent: _vm._s(type.desc) } }),
+          _vm._v(" "),
+          _vm.showBar == key && key != ""
+            ? _c(
+                "div",
+                [_c("progressbar", { attrs: { value: _vm.progressValue } })],
+                1
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c("a", {
+            staticClass: "button button-primary",
+            domProps: { textContent: _vm._s(type.button) },
+            on: {
+              click: function($event) {
+                _vm.doAction(key)
+              }
+            }
+          })
+        ])
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-9a79bb4a", esExports)
   }
 }
 
