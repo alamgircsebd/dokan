@@ -885,7 +885,7 @@ class Dokan_Pro_Products {
 
         $post = get_post( $product_id );
         $row_actions = dokan_product_get_row_action( $post );
-        $tr_class = ( $post->post_status == 'pending' ) ? ' class="danger"' : '';
+        $tr_class = ( $post->post_status == 'pending' ) ? 'danger' : '';
 
         $row_args = array(
             'post' => $post,
