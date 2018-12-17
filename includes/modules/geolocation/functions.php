@@ -163,6 +163,10 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
 function dokan_geo_product_location() {
     global $product;
 
+    if ( ! $product instanceof WC_Product ) {
+        $product = wc_get_product( get_the_ID() );
+    }
+
     dokan_geo_enqueue_locations_map();
 
     $args = array(
