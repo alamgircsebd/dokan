@@ -410,7 +410,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $refund                 = false;
 
         $vendor_refund          = $fee_refund = 0;
-        $commission_recipient   = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
+        $shipping_fee_recipient = dokan_get_option( 'shipping_fee_recipient', 'dokan_general', 'seller' );
 
         // Prepare line items which we are refunding.
         $line_items = array();
@@ -446,11 +446,13 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         }
 
         foreach ( $line_item_tax_totals as $item_id => $tax_totals ) {
-            $fee_refund += $tax_totals;
-            $line_items[ $item_id ]['refund_tax'] = array_filter( array_map( 'wc_format_decimal', $tax_totals ) );
+            foreach ( $tax_totals as $total_tax ) {
+                $fee_refund += $total_tax;
+                $line_items[ $item_id ]['refund_tax'] = wc_format_decimal( $total_tax );
+            }
         }
 
-        if ( 'seller' == $commission_recipient ) {
+        if ( 'seller' == $shipping_fee_recipient ) {
             $vendor_refund += $fee_refund;
         }
 
