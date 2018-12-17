@@ -53,9 +53,19 @@ class Dokan_Follow_Store_My_Account {
      * @return void
      */
     public function add_wc_account_content() {
+        global $wpdb;
+
         $customer_id = get_current_user_id();
 
-        $following_stores = get_user_meta( $customer_id, 'dokan_following_stores', false );
+        $following_stores = $wpdb->get_col(
+            $wpdb->prepare(
+                  "select `vendor_id`"
+                . " from {$wpdb->prefix}dokan_follow_store_followers"
+                . " where `follower_id` = %d"
+                . " and `unfollowed_at` is null",
+                $customer_id
+            )
+        );
 
         if ( empty( $following_stores ) ) {
             $vendors = array(
@@ -82,6 +92,10 @@ class Dokan_Follow_Store_My_Account {
             'search_enabled'  => false,
             'image_size'      => 'full',
         );
+
+        if ( function_exists( 'dokan_geo_remove_seller_listing_footer_content_hook' ) ) {
+            dokan_geo_remove_seller_listing_footer_content_hook();
+        }
 
         dokan_get_template_part( 'store-lists-loop', false, $template_args );
     }

@@ -16,7 +16,7 @@ class Dokan_Geolocation_Vendor_View {
      *
      * @var string
      */
-    private $map_location = 'top';
+    private static $map_location = 'top';
 
     /**
      * Class constructor
@@ -26,11 +26,11 @@ class Dokan_Geolocation_Vendor_View {
      * @return void
      */
     public function __construct() {
-        $this->map_location = dokan_get_option( 'show_locations_map', 'dokan_geolocation', 'top' );
+        self::$map_location = dokan_get_option( 'show_locations_map', 'dokan_geolocation', 'top' );
 
-        add_action( 'dokan_before_seller_listing_loop', array( $this, 'before_seller_listing_loop' ) );
-        add_action( 'dokan_after_seller_listing_loop', array( $this, 'after_seller_listing_loop' ) );
-        add_action( 'dokan_seller_listing_footer_content', array( $this, 'seller_listing_footer_content' ) );
+        add_action( 'dokan_before_seller_listing_loop', array( self::class, 'before_seller_listing_loop' ) );
+        add_action( 'dokan_after_seller_listing_loop', array( self::class, 'after_seller_listing_loop' ) );
+        add_action( 'dokan_seller_listing_footer_content', array( self::class, 'seller_listing_footer_content' ) );
 
         add_filter( 'dokan_show_seller_search', '__return_false' );
     }
@@ -42,12 +42,12 @@ class Dokan_Geolocation_Vendor_View {
      *
      * @return void
      */
-    public function before_seller_listing_loop() {
+    public static function before_seller_listing_loop() {
         dokan_geo_enqueue_locations_map();
 
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
-        switch ( $this->map_location ) {
+        switch ( self::$map_location ) {
             case 'right':
                 echo '<div class="dokan-geolocation-row dokan-geolocation-map-right"><div class="dokan-geolocation-col-7">';
 
@@ -84,8 +84,8 @@ class Dokan_Geolocation_Vendor_View {
      *
      * @return void
      */
-    public function after_seller_listing_loop() {
-        switch ( $this->map_location ) {
+    public static function after_seller_listing_loop() {
+        switch ( self::$map_location ) {
             case 'right':
                 echo '</div><div class="dokan-geolocation-col-5">';
                 dokan_geo_get_template( 'map', [ 'layout' => 'right' ] );
@@ -110,7 +110,7 @@ class Dokan_Geolocation_Vendor_View {
      *
      * @return void
      */
-    public function seller_listing_footer_content( $seller ) {
+    public static function seller_listing_footer_content( $seller ) {
         if ( empty( $seller->dokan_geo_latitude ) || empty( $seller->dokan_geo_longitude ) ) {
             return;
         }
