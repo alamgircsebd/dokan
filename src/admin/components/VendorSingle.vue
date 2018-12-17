@@ -322,7 +322,7 @@ export default {
         },
 
         ordersUrl() {
-            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + this.store.id;
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&vendor_id=' + this.store.id;
         },
 
         editUrl() {
