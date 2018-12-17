@@ -207,7 +207,11 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $status_code = $this->get_status( $status );
         $order_id    = isset( $request['order_id'] ) ? $request['order_id'] : '';
 
-        if ( 1 == $status_code && dokan_is_refund_allowed_to_approve( $order_id ) ) {
+        if ( 1 == $status_code ) {
+            if ( ! dokan_is_refund_allowed_to_approve( $order_id ) ) {
+                return new WP_Error( 'unable_to_approve', __( 'This refund request is not allowed to approve.', 'dokan' ), array( 'status' => 200 ) );
+            }
+
             $this->approve_refund_request( $result );
         }
 
