@@ -2877,7 +2877,7 @@ var render = function() {
                 [
                   _vm._v(
                     "\n                    " +
-                      _vm._s(_vm.__("Shipping Policy", "dokan")) +
+                      _vm._s(_vm.__("Refund Policy", "dokan")) +
                       "\n                    "
                   ),
                   _c(

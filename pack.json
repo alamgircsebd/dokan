@@ -8,14 +8,14 @@
     ],
 
     "professional": [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "single-product-multiple-vendor", "moip"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "single-product-multiple-vendor", "moip", "follow-store"
     ],
 
     "business" : [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor", "vendor-staff", "live-chat", "geolocation", "moip"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor", "vendor-staff", "live-chat", "geolocation", "moip", "follow-store", "shipstation"
     ],
 
     "enterprise" : [
-        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor", "vendor-staff", "live-chat", "geolocation", "moip"
+        "appearance" , "store-reviews", "store-support", "vendor-verification", "paypal-adaptive-payments", "stripe", "subscription", "live-search", "booking", "seller-vacation", "product-enquiry", "export-import", "simple-auction", "single-product-multiple-vendor", "vendor-staff", "live-chat", "geolocation", "moip", "follow-store", "shipstation"
     ]
 }
