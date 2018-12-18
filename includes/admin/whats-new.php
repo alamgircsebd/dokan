@@ -1,6 +1,67 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.3',
+        'released' => '2018-12-18',
+        'changes'  => array(
+            array(
+                'title'         => 'ShipStation Module(Bussiness Package)',
+                'type'          => 'New',
+                'description'   => 'Added new ShipStation module'
+            ),
+            array(
+                'title'         => 'Follow Store Module(Professional Package)',
+                'type'          => 'New',
+                'description'   => 'Added Follow Store module'
+            ),
+            array(
+                'title'         => 'Product Quick Edit',
+                'type'          => 'New',
+                'description'   => 'Added Quick edit option for product in vendor dashboard.'
+            ),
+            array(
+                'title'         => 'Searching Option',
+                'type'          => 'New',
+                'description'   => 'Add searching option in dokan vendor and refund page'
+            ),
+            array(
+                'title'         => 'Admin Tools & Subscription Page Improvement',
+                'type'          => 'Improvement',
+                'description'   => 'Rewrite admin tools & subscription page in vue js'
+            ),
+            array(
+                'title'         => 'Filter form & Map in Category Page',
+                'type'          => 'Fix',
+                'description'   => 'Show filter form and map in product category pages (geolocation module)'
+            ),
+            array(
+                'title'         => 'Bookable Product Commission',
+                'type'          => 'Fix',
+                'description'   => 'Add per product commission option for bookable product'
+            ),
+            array(
+                'title'         => 'Refund Calculation Issue',
+                'type'          => 'Fix',
+                'description'   => 'Refund calculation is wrong when shipping fee recipient is set to vendor'
+            ),
+            array(
+                'title'         => 'Bulk Refund is Not Working',
+                'type'          => 'Fix',
+                'description'   => 'Approving batch refund is not working in admin backend'
+            ),
+            array(
+                'title'         => 'Product Stock Issue on Refund',
+                'type'          => 'Fix',
+                'description'   => 'Increase stock ammount if the product is refunded'
+            ),
+            array(
+                'title'         => 'Category Restriction Issue',
+                'type'          => 'Fix',
+                'description'   => 'Booking product category restriction for subscription pack is not working'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.2',
         'released' => '2018-11-09',
         'changes'  => array(
