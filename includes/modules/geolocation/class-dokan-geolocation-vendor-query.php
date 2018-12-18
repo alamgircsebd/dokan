@@ -77,8 +77,14 @@ class Dokan_Geolocation_Vendor_Query {
      * @param WP_User_Query $user_query
      */
     public function add_user_query( $user_query ) {
-        if ( empty( $user_query->query_vars['role'] ) || 'seller' !== $user_query->query_vars['role'] ) {
-            return;
+        if ( version_compare( DOKAN_PLUGIN_VERSION, '2.9.6', '>' ) ) {
+            if ( empty( $user_query->query_vars['role__in'] ) || $user_query->query_vars['role__in'] !== ['seller', 'administrator'] ) {
+                return;
+            }
+        } else {
+            if ( empty( $user_query->query_vars['role'] ) || 'seller' !== $user_query->query_vars['role'] ) {
+                return;
+            }
         }
 
         $this->user_query = $user_query;

@@ -25,6 +25,10 @@ class Dokan_Follow_Store_Follow_Button {
      * @return void
      */
     public function add_follow_button( $vendor, $button_classes = array() ) {
+        if ( ! get_current_user_id() ) {
+            return;
+        }
+
         $btn_labels = dokan_follow_store_button_labels();
 
         $customer_id = get_current_user_id();
@@ -64,6 +68,10 @@ class Dokan_Follow_Store_Follow_Button {
      * @return void
      */
     public function add_follow_button_after_store_tabs( $vendor_id ) {
+        if ( ! get_current_user_id() ) {
+            return;
+        }
+
         $vendor = dokan()->vendor->get( $vendor_id );
 
         ob_start();

@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 4.9.8
+Tested up to: 5.0.1
 WC requires at least: 3.0
-WC tested up to: 3.4.6
+WC tested up to: 3.5.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,32 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.3 -> December 18, 2018
+------------------------------------
+- [new] Add ShipStation module(Business, Enterprise)
+- [new] Add Follow Store module ( Professional, Business, Enterprise )
+- [new] Add Quick edit option for product in vendor dashboard
+- [tweak] Rewrite admin tools page in vue js
+- [tweak] Rewrite admin subscription page in vue js
+- [tweak] Remove delete option for approved refund request in the admin backend
+- [fix] Show filter form and map in product category pages (geolocation module)
+- [fix] Markercluster popup show when multiple item have same location (geolocation module)
+- [fix] Fatal error in vendor product edit page
+- [fix] Add per product commission option for bookable product
+- [fix] Vendor orders are not showing in the admin backend properly
+- [fix] Increase stock ammount if the product is refunded
+- [fix] Add searching option in dokan vendor and refund page
+- [fix] Show correct commission type in dokan single vendor page
+- [fix] Remove old shipping settings from seller setup wizard
+- [fix] Refund calculation is wrong when vendor is the shipping fee recipient
+- [fix] Auction product editing issue in vendor dashboard
+- [fix] Moip CPF Number is not getting translated (moip module)
+- [fix] Seller setup wizard doesn't show up when registered using a subscription pack
+- [fix] Booking product category restriction for subscription pack is not working
+- [fix] Approving batch refund is not working in admin backend
+- [fix] Progress values are not getting translated in vendor dashboard
+- [fix] Geo product location widget is not working in the single product page (geolocation module)
 
 v2.9.2 -> November 09, 2018
 --------------------------

@@ -11,7 +11,8 @@ class DPS_Admin {
 
         $this->response = '';
 
-        add_action( 'admin_enqueue_scripts', array($this, 'admin_enqueue_scripts') );
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+        add_action( 'dokan-vue-admin-scripts', array( $this, 'vue_admin_enqueue_scripts' ) );
 
         // add product area in admin panel
         add_filter( 'product_type_selector', array( $this, 'add_product_type' ), 1 );
@@ -19,6 +20,7 @@ class DPS_Admin {
         add_action( 'woocommerce_process_product_meta', array( $this, 'general_fields_save' ), 99 );
 
         add_action( 'dokan_admin_menu', array( $this, 'add_submenu_in_dokan_dashboard' ), 15 );
+        add_filter( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
 
         // settings section
         add_filter( 'dokan_settings_sections', array( $this, 'add_new_section_admin_panael' ) );
@@ -29,8 +31,6 @@ class DPS_Admin {
 
         //save user meta
         add_action( 'dokan_process_seller_meta_fields', array( $this, 'save_meta_fields' ) );
-
-        add_action( 'admin_init', array( $this, 'handle_cancel_subscription'), 10 );
     }
 
     public function admin_enqueue_scripts() {
@@ -43,23 +43,8 @@ class DPS_Admin {
         ) );
     }
 
-    /**
-    * Handle cancel subscription
-    *
-    * @since 1.2.1
-    *
-    * @return void
-    **/
-    public function handle_cancel_subscription() {
-        if ( isset( $_POST['admin_subs_cancel'] ) && current_user_can( 'manage_options' ) ) {
-            $result = $this->handle_cancel_subscription_pack();
-
-            if ( $result ) {
-                $this->response = __( 'Successfully Cancelled Subscription', 'dokan' );
-            } else {
-                $this->response = __( 'Sorry Something wrong please try again', 'dokan' );
-            }
-        }
+    public function vue_admin_enqueue_scripts() {
+        wp_enqueue_script( 'dps-subscription', DPS_URL . '/assets/js/subscription.js', array(  'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
     }
 
     /**
@@ -395,134 +380,32 @@ class DPS_Admin {
     }
 
     /**
-     * Hanlde Delete Subscription form Admin panel by Admin
-     *
-     * @return boolean
-     */
-    function handle_cancel_subscription_pack() {
-        $status = get_terms( 'shop_order_status' );
-
-        if ( is_wp_error( $status ) ) {
-            register_taxonomy( 'shop_order_status', array( 'shop_order' ), array( 'rewrite' => false ) );
-        }
-
-        $user_id    = (int) $_POST['user_id'];
-        $order_id   = get_user_meta( $user_id, 'product_order_id', true );
-
-        if ( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
-            dokan_dps_log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
-
-            do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id );
-
-            return true;
-        } else {
-            dokan_dps_log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
-            Dokan_Product_Subscription::delete_subscription_pack( $user_id, $order_id );
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Add submenu page in dokan Dashboard
      */
-    function add_submenu_in_dokan_dashboard() {
-        add_submenu_page( 'dokan', __( 'Dokan Subscription', 'dokan' ), __( 'Subscriptions', 'dokan' ), 'activate_plugins' , 'dokan-subscription', array( $this, 'admin_user_list' ) );
+    function add_submenu_in_dokan_dashboard( $capability ) {
+        global $submenu;
+        $slug = 'dokan';
+
+        if ( current_user_can( 'manage_options' ) ) {
+            $submenu[ $slug ][] = array( __( 'Subscriptions', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/subscriptions' );
+        }
     }
 
     /**
-     * Call back function for showing user subscriptions in admin panel
+     * Add subscripton route
      *
-     * @return none
+     * @param  array $routes
+     *
+     * @return array
      */
-    function admin_user_list() {
+    public function vue_admin_routes( $routes ) {
+        $routes[] = [
+            'path'      => '/subscriptions',
+            'name'      => 'Subscriptions',
+            'component' => 'Subscriptions'
+        ];
 
-        if ( !current_user_can( 'manage_options' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.' ) );
-        }
-        ?>
-        <div class="wrap">
-            <div id="icon-users" class="icon32"></div>
-            <h2><?php _e( 'Subscription User List', 'dokan' ); ?></h2>
-
-            <?php if ( $this->response ): ?>
-                <div class="updated settings-error">
-                   <p><strong><?php echo $this->response; ?></strong></p>
-                </div>
-            <?php endif?>
-
-            <table class="widefat fixed wp_payme_table">
-                <thead>
-                    <tr>
-                        <th><?php _e( 'Username', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Subscription Pack', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Start date', 'dokan' ); ?> </th>
-                        <th><?php _e( 'End date', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Status', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Action', 'dokan' ); ?> </th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th><?php _e( 'Username', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Subscription Pack', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Start date', 'dokan' ); ?> </th>
-                        <th><?php _e( 'End date', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Status', 'dokan' ); ?> </th>
-                        <th><?php _e( 'Action', 'dokan' ); ?> </th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                <?php
-                $user_query = new WP_User_Query( array(
-                    'role' => 'seller',
-                    'meta_query' => array(
-                        array(
-                            'key'   => 'can_post_product',
-                            'value' => '1'
-                        ),
-                        array(
-                            'key'   => 'dokan_enable_selling',
-                            'value' => 'yes'
-                        ),
-                    )
-                ) );
-
-                $users = $user_query->get_results();
-
-                if ( $users ) {
-                    foreach ( $users as $user ) {
-                        ?>
-                        <tr>
-                            <td><a href="<?php echo get_edit_user_link( $user->ID ); ?>"><?php echo $user->data->user_nicename; ?></a></td>
-                            <td><a href="<?php echo get_edit_post_link( get_user_meta( $user->ID, 'product_package_id', true ) ); ?>"><?php echo get_the_title( get_user_meta( $user->ID, 'product_package_id', true ) ); ?></a></td>
-                            <td><?php echo date( 'F j, Y', strtotime( get_user_meta( $user->ID, 'product_pack_startdate', true ) ) ); ?></td>
-                            <td><?php echo date( 'F j, Y', strtotime( get_user_meta( $user->ID, 'product_pack_enddate', true ) ) ); ?></td>
-                            <td><?php echo ( get_user_meta( $user->ID, 'can_post_product', true ) == 1 )? __( 'Active', 'dokan' ) : __( 'Cancelled', 'dokan' ) ?></td>
-                            <td>
-                                <form action="" method="POST">
-                                    <input type="hidden" name="user_id" value="<?php echo $user->ID; ?>">
-                                    <input type="submit" name="admin_subs_cancel" value="<?php _e( 'Cancel', 'dokan' ); ?>" class="button button-primary">
-                                </form>
-                            </td>
-                        </tr>
-                    <?php
-                    }
-                } else {
-                    ?>
-                    <tr>
-                        <td colspan="6">
-                            <?php _e( 'No users with subscription found!', 'dokan' ); ?>
-                        </td>
-                    </tr>
-                    <?php
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
-        <?php
+        return $routes;
     }
 
     /**

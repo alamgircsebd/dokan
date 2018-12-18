@@ -202,11 +202,16 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'not_cancel_request', __( 'This refund is not pending. Only pending request status can be changed', 'dokan' ), array( 'status' => 400 ) );
         }
 
-        $refund = new Dokan_Pro_Admin_Refund();
+        $refund      = new Dokan_Pro_Admin_Refund();
 
         $status_code = $this->get_status( $status );
+        $order_id    = isset( $request['order_id'] ) ? $request['order_id'] : '';
 
         if ( 1 == $status_code ) {
+            if ( ! dokan_is_refund_allowed_to_approve( $order_id ) ) {
+                return new WP_Error( 'unable_to_approve', __( 'This refund request is not allowed to approve.', 'dokan' ), array( 'status' => 200 ) );
+            }
+
             $this->approve_refund_request( $result );
         }
 
@@ -348,23 +353,36 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $allowed_status = array( 'approved', 'cancelled', 'pending', 'delete' );
 
         foreach ( $params as $status => $value ) {
-            if ( in_array( $status, $allowed_status ) ) {
+            if ( ! in_array( $status, $allowed_status ) ) {
+                return false;
+            }
 
-                if ( 'delete' === $status ) {
-                    $refund = new Dokan_Pro_Admin_Refund();
-                    foreach ( $value as $refund_id ) {
-                        $refund->delete_refund( $refund_id );
-                    }
-                } else {
-                    foreach ( $value as $refund_id ) {
-                        $status_code = $this->get_status( $status );
+            $refund = new Dokan_Pro_Admin_Refund();
 
-                        $wpdb->query( $wpdb->prepare(
-                            "UPDATE {$wpdb->prefix}dokan_refund
-                            SET status = %d WHERE id = %d",
-                            $status_code, $refund_id
-                        ) );
-                    }
+            if ( 'delete' === $status ) {
+                foreach ( $value as $refund_id ) {
+                    $refund->delete_refund( $refund_id );
+                }
+            }
+
+            if ( 'approved' === $status && $this->get_status( $status ) == 1 ) {
+                foreach ( $value as $refund_id ) {
+                    $sql    = "SELECT * FROM `{$wpdb->prefix}dokan_refund` WHERE `id`={$refund_id}";
+                    $result = $wpdb->get_row( $sql );
+
+                    $this->approve_refund_request( $result );
+                }
+            }
+
+            if ( $status !== 'delete' ) {
+                foreach ( $value as $refund_id ) {
+                    $status_code = $this->get_status( $status );
+
+                    $wpdb->query( $wpdb->prepare(
+                        "UPDATE {$wpdb->prefix}dokan_refund
+                        SET status = %d WHERE id = %d",
+                        $status_code, $refund_id
+                    ) );
                 }
             }
         }
@@ -391,8 +409,8 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $restock_refunded_items = 'true' === $data->restock_items;
         $refund                 = false;
 
-        $vendor_refund = $fee_refund = 0;
-        $commission_recipient = dokan_get_option( 'extra_fee_recipient', 'dokan_general', 'seller' );
+        $vendor_refund          = $fee_refund = 0;
+        $shipping_fee_recipient = dokan_get_option( 'shipping_fee_recipient', 'dokan_general', 'seller' );
 
         // Prepare line items which we are refunding.
         $line_items = array();
@@ -428,11 +446,13 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         }
 
         foreach ( $line_item_tax_totals as $item_id => $tax_totals ) {
-            $fee_refund += $tax_totals;
-            $line_items[ $item_id ]['refund_tax'] = array_filter( array_map( 'wc_format_decimal', $tax_totals ) );
+            foreach ( $tax_totals as $total_tax ) {
+                $fee_refund += $total_tax;
+                $line_items[ $item_id ]['refund_tax'] = wc_format_decimal( $total_tax );
+            }
         }
 
-        if ( 'seller' == $commission_recipient ) {
+        if ( 'seller' == $shipping_fee_recipient ) {
             $vendor_refund += $fee_refund;
         }
 

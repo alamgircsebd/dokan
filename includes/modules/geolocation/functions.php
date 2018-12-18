@@ -163,6 +163,10 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
 function dokan_geo_product_location() {
     global $product;
 
+    if ( ! $product instanceof WC_Product ) {
+        $product = wc_get_product( get_the_ID() );
+    }
+
     dokan_geo_enqueue_locations_map();
 
     $args = array(
@@ -170,4 +174,17 @@ function dokan_geo_product_location() {
     );
 
     dokan_geo_get_template( 'product-location', $args );
+}
+
+/**
+ * A helper function to remove Geolocation hook in seller listing footer content
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function dokan_geo_remove_seller_listing_footer_content_hook() {
+    add_action( 'dokan_seller_listing_footer_content', function () {
+        remove_action( 'dokan_seller_listing_footer_content', array( Dokan_Geolocation_Vendor_View::class, 'seller_listing_footer_content' ) );
+    }, 9 );
 }

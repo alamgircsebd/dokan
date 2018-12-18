@@ -39,7 +39,7 @@
 
                 <div class="dokan-form-group">
                     <label class="dokan-w3" for="_dps_refund_policy">
-                        {{ __( 'Shipping Policy', 'dokan' ) }}
+                        {{ __( 'Refund Policy', 'dokan' ) }}
                         <span class="dokan-tooltips-help tips" v-tooltip :title="__( 'Write your terms, conditions and instructions about refund', 'dokan' )">
                             <i class="fa fa-question-circle"></i>
                         </span>

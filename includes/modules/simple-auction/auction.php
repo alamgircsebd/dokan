@@ -487,13 +487,17 @@ class Dokan_Auction {
      * @return string
      */
     public function send_bid_email( $recipient, $object ) {
+        if ( ! $object ) {
+            return;
+        }
+
         $product_id = $object->get_id();
 
         if ( empty( $product_id ) ) {
             return $recipient;
         }
 
-        $vendor_id = get_post_field( 'post_author', $product_id );
+        $vendor_id    = get_post_field( 'post_author', $product_id );
         $vendor_email = dokan()->vendor->get( $vendor_id )->get_email();
 
         return $recipient . ',' . $vendor_email;

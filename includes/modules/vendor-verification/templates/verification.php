@@ -18,6 +18,8 @@ $phone_no       = isset( $seller_profile['dokan_verification']['verified_info'][
 
 ?>
 
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
     <?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'settings/verification' ) ); ?>
 
@@ -392,3 +394,5 @@ $phone_no       = isset( $seller_profile['dokan_verification']['verified_info'][
         </div>
     </div>
 </div>
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>

@@ -15,6 +15,8 @@
             <li><router-link :to="{ name: 'Refund', query: { status: 'cancelled' }}" active-class="current" exact v-html="sprintf( __( 'Cancelled <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.cancelled )"></router-link></li>
         </ul>
 
+        <search title="Search Refund" @searched="doSearch"></search>
+
         <list-table
             :columns="columns"
             :rows="requests"
@@ -31,6 +33,7 @@
             @pagination="goToPage"
             @action:click="onActionClick"
             @bulk:click="onBulkAction"
+            @searched="doSearch"
         >
 
             <template slot="order_id" slot-scope="data">
@@ -55,12 +58,13 @@
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
                         <template v-if="index !== ( actions.length - 1)"> | </template>
                     </span>
+
                     <span :class="action.key" v-if="action.key == 'cancelled' && currentStatus == 'pending'">
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
                     </span>
-                    <span :class="action.key" v-if="action.key == 'delete' && currentStatus != 'pending'">
+
+                     <span :class="action.key" v-if="action.key == 'delete' && currentStatus == 'cancelled'">
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
-                        <template v-if="index !== ( actions.length - 1)"> | </template>
                     </span>
                 </template>
             </template>
@@ -71,6 +75,7 @@
 <script>
 let ListTable = dokan_get_lib('ListTable');
 let Currency  = dokan_get_lib('Currency');
+let Search    = dokan_get_lib('Search');
 
 export default {
 
@@ -78,7 +83,8 @@ export default {
 
     components: {
         ListTable,
-        Currency
+        Currency,
+        Search
     },
 
     data() {
@@ -145,13 +151,15 @@ export default {
                         label: this.__( 'Cancel', 'dokan' )
                     }
                 ];
-            } else {
+            } else if ( 'cancelled' == this.$route.query.status ) {
                 return [
                     {
                         key: 'delete',
                         label: this.__( 'Delete', 'dokan' )
                     }
                 ];
+            } else {
+                return []
             }
         }
     },
@@ -167,6 +175,21 @@ export default {
     },
 
     methods: {
+        doSearch(payload) {
+            this.loading = true;
+
+            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
+            .done((response, status, xhr) => {
+                this.requests = response.filter((refund) => {
+                    return refund.order_id.includes(payload) || refund.vendor.store_name.includes(payload);
+                });
+
+                this.loading = false;
+                this.updatedCounts( xhr );
+                this.updatePagination( xhr );
+            });
+        },
+
         updatedCounts( xhr ) {
             this.counts.pending = parseInt( xhr.getResponseHeader('X-Status-Pending') );
             this.counts.approved   = parseInt( xhr.getResponseHeader('X-Status-Completed') );
@@ -230,21 +253,20 @@ export default {
                     this.fetchRefunds();
                     this.loading = false;
                 });
-            } else if( 'cancelled' == action )  {
+            } else if( 'cancelled' === action )  {
                 jsonData.status   = 'cancelled';
                 dokan.api.put('/refund/' + data.row.id, jsonData )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
                 });
-            } else if ( 'delete' == action ) {
+            } else if ( 'delete' === action ) {
                 dokan.api.delete('/refund/' + data.row.id )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
                 });
             }
-
         },
 
         onBulkAction( action, items ) {

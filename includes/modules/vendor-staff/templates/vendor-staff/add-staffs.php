@@ -12,6 +12,9 @@
 <?php
     $is_edit = ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && ! empty( $_GET['staff_id'] ) ) ? $_GET['staff_id'] : 0;
 ?>
+
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 
     <?php
@@ -90,3 +93,5 @@
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>

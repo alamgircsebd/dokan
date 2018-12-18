@@ -38,6 +38,9 @@
   margin-left: -15px;
   margin-top: 5px;
 }
+.dokan-follow-store-button.dokan-follow-store-button-working > span {
+  opacity: 0;
+}
 .dokan-single-store .dokan-store-tabs ul li.dokan-store-follow-store-button-container {
   margin: 3px 5px 0 0;
 }
