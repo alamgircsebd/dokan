@@ -113,12 +113,12 @@ class Dokan_Pro_Assets {
                 'in_footer' => true
             ],
 
-            'dokan-pro-vue-frontend' => [
-                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend.js',
-                'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
-                'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-frontend.js' ),
-                'in_footer' => true
-            ],
+            // 'dokan-pro-vue-frontend' => [
+            //     'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend.js',
+            //     'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
+            //     'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-frontend.js' ),
+            //     'in_footer' => true
+            // ],
 
             'dokan-pro-vue-frontend-shipping' => [
                 'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend-shipping.js',
