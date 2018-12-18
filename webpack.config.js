@@ -11,6 +11,8 @@ const config = require( './config.json' );
 // Naming and path settings
 var appName = 'app';
 
+var exportPath = path.resolve(__dirname, './assets/js');
+
 var entryPoints = {};
 
 var rootEntryPoints = {
@@ -28,14 +30,14 @@ var moduleEntryPoints = {
 };
 
 Object.keys(rootEntryPoints).forEach(function (output) {
-    entryPoints[ `assets/js/${output}` ] = rootEntryPoints[output];
+    entryPoints[ output ] = rootEntryPoints[output];
 });
 
-Object.keys(moduleEntryPoints).forEach(function (module) {
-    var modulePath = `includes/modules/${module}`;
+Object.keys(moduleEntryPoints).forEach(function (dokanModule) {
+    var modulePath = `includes/modules/${dokanModule}`;
 
-    Object.keys(moduleEntryPoints[module]).forEach(function (moduleOutput) {
-        entryPoints[`${modulePath}/assets/js/${moduleOutput}`] = `./${modulePath}/src/${moduleEntryPoints[module][moduleOutput]}`;
+    Object.keys(moduleEntryPoints[dokanModule]).forEach(function (moduleOutput) {
+        entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/src/${moduleEntryPoints[dokanModule][moduleOutput]}`;
     });
 });
 
@@ -49,7 +51,9 @@ function isProduction() {
 
 // extract css into its own file
 const extractCss = new ExtractTextPlugin({
-    filename: "../css/[name].css",
+    filename(getPath) {
+        return getPath('../css/[name].css').replace('assets/js', 'assets/css');
+    }
 });
 
 plugins.push( extractCss );
@@ -104,7 +108,7 @@ if ( isProduction() ) {
 module.exports = {
     entry: entryPoints,
     output: {
-        path: path.resolve(__dirname),
+        path: exportPath,
         filename: appName
     },
 

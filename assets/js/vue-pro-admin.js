@@ -830,7 +830,7 @@ var VclTwitch = ContentLoading.VclTwitch;
             return dokan.urls.adminRoot + 'edit.php?post_type=product&author=' + this.store.id;
         },
         ordersUrl: function ordersUrl() {
-            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + this.store.id;
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&vendor_id=' + this.store.id;
         },
         editUrl: function editUrl() {
             return dokan.urls.adminRoot + 'user-edit.php?user_id=' + this.store.id;
