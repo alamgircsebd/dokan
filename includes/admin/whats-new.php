@@ -5,12 +5,12 @@ $changelog = array(
         'released' => '2018-12-18',
         'changes'  => array(
             array(
-                'title'         => 'ShipStation Module(Bussiness Package)',
+                'title'         => 'ShipStation Module(Business, Enterprise Package)',
                 'type'          => 'New',
                 'description'   => 'Added new ShipStation module'
             ),
             array(
-                'title'         => 'Follow Store Module(Professional Package)',
+                'title'         => 'Follow Store Module(Professional, Business, Enterprise Package)',
                 'type'          => 'New',
                 'description'   => 'Added Follow Store module'
             ),
