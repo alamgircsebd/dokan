@@ -47,4 +47,32 @@ class Store extends Library_Document {
 
         return $categories;
     }
+
+    /**
+     * Document library type
+     *
+     * @since 1.0.0
+     *
+     * @return string
+     */
+    public function get_remote_library_type() {
+        return 'single store';
+    }
+
+    /**
+     * Set edit url
+     *
+     * @since 1.0.0
+     *
+     * @return string
+     */
+    public function get_edit_url() {
+        $url = parent::get_edit_url();
+
+        if ( isset( $_GET['action'] ) && 'elementor_new_post' === $_GET['action'] ) {
+            $url .= '#library';
+        }
+
+        return $url;
+    }
 }

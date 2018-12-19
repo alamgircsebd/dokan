@@ -138,6 +138,7 @@ final class DokanElementor {
      * @return void
      */
     private function instances() {
+        \DokanPro\Modules\Elementor\Templates::instance();
         \DokanPro\Modules\Elementor\Module::instance();
     }
 
