@@ -3,9 +3,10 @@
 namespace DokanPro\Modules\Elementor\Widgets;
 
 use DokanPro\Modules\Elementor\Traits\PositionControls;
+use Elementor\Controls_Manager;
 use Elementor\Widget_Image;
 
-class StoreProfilePicture extends Widget_Image {
+class StoreBanner extends Widget_Image {
 
     use PositionControls;
 
@@ -17,7 +18,7 @@ class StoreProfilePicture extends Widget_Image {
      * @return string
      */
     public function get_name() {
-        return 'dokan-store-profile-picture';
+        return 'dokan-store-banner';
     }
 
     /**
@@ -28,7 +29,7 @@ class StoreProfilePicture extends Widget_Image {
      * @return string
      */
     public function get_title() {
-        return __( 'Profile Picture', 'dokan' );
+        return __( 'Store Banner', 'dokan' );
     }
 
     /**
@@ -39,7 +40,7 @@ class StoreProfilePicture extends Widget_Image {
      * @return string
      */
     public function get_icon() {
-        return 'eicon-image';
+        return 'eicon-image-box';
     }
 
     /**
@@ -61,7 +62,7 @@ class StoreProfilePicture extends Widget_Image {
      * @return array
      */
     public function get_keywords() {
-        return [ 'dokan', 'store', 'vendor', 'profile', 'picture', 'image', 'avatar' ];
+        return [ 'dokan', 'store', 'vendor', 'banner', 'picture', 'image', 'avatar' ];
     }
 
     /**
@@ -77,7 +78,7 @@ class StoreProfilePicture extends Widget_Image {
         $this->update_control(
             'section_image',
             [
-                'label' => __( 'Profile Picture', 'dokan' ),
+                'label' => __( 'Banner', 'dokan' ),
             ]
         );
 
@@ -85,7 +86,7 @@ class StoreProfilePicture extends Widget_Image {
             'image',
             [
                 'dynamic' => [
-                    'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-profile-picture' ),
+                    'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-banner' ),
                 ],
             ],
             [
@@ -93,9 +94,37 @@ class StoreProfilePicture extends Widget_Image {
             ]
         );
 
+        $this->update_control(
+            'caption_source',
+            [
+                'type' => Controls_Manager::HIDDEN,
+            ]
+        );
+
+        $this->update_control(
+            'caption',
+            [
+                'type' => Controls_Manager::HIDDEN,
+            ]
+        );
+
+        $this->update_control(
+            'link_to',
+            [
+                'type' => Controls_Manager::HIDDEN,
+            ]
+        );
+
         $this->add_position_controls();
     }
 
+    /**
+     * Html wrapper class
+     *
+     * @since 1.0.0
+     *
+     * @return string
+     */
     protected function get_html_wrapper_class() {
         return parent::get_html_wrapper_class() . ' elementor-widget-' . parent::get_name();
     }

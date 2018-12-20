@@ -50,6 +50,7 @@ class Module extends ModuleBase {
      */
     public function get_widgets() {
         return [
+            'StoreBanner',
             'StoreName',
             'StoreProfilePicture',
             'StoreInfo',
@@ -84,6 +85,7 @@ class Module extends ModuleBase {
      */
     public function register_tags() {
         $tags = [
+            'StoreBanner',
             'StoreName',
             'StoreProfilePicture',
             'StoreInfo',

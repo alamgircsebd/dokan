@@ -5,7 +5,7 @@ namespace DokanPro\Modules\Elementor\Tags;
 use DokanPro\Modules\Elementor\Abstracts\DataTagBase;
 use Elementor\Controls_Manager;
 
-class StoreProfilePicture extends DataTagBase {
+class StoreBanner extends DataTagBase {
 
     /**
      * Class constructor
@@ -26,7 +26,7 @@ class StoreProfilePicture extends DataTagBase {
      * @return string
      */
     public function get_name() {
-        return 'dokan-store-profile-picture';
+        return 'dokan-store-banner';
     }
 
     /**
@@ -37,7 +37,7 @@ class StoreProfilePicture extends DataTagBase {
      * @return string
      */
     public function get_title() {
-        return __( 'Profile Picture', 'dokan' );
+        return __( 'Store Banner', 'dokan' );
     }
 
     /**
@@ -48,7 +48,7 @@ class StoreProfilePicture extends DataTagBase {
      * @return void
      */
     protected function get_value( array $options = [] ) {
-        return dokan_elementor()->default_store_data( 'profile_picture' );
+        return dokan_elementor()->default_store_data( 'banner' );
     }
 
     /**
@@ -65,7 +65,7 @@ class StoreProfilePicture extends DataTagBase {
                 'label' => __( 'Fallback', 'dokan' ),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
-                    'url' => get_avatar_url( 0 ),
+                    'url' => DOKAN_PLUGIN_ASSEST . '/images/default-store-banner.png',
                 ]
             ]
         );

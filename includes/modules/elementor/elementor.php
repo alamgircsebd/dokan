@@ -165,6 +165,10 @@ final class DokanElementor {
     public function default_store_data( $prop = null ) {
         // Defaults are intentionally skipped from translating
         $data = [
+            'banner'          => [
+                'id'  => 0,
+                'url' => DOKAN_PLUGIN_ASSEST . '/images/default-store-banner.png',
+            ],
             'name'            => 'Store Name',
             'profile_picture' => [
                 'id'  => 0,
@@ -196,11 +200,25 @@ final class DokanElementor {
             if ( ! empty( $store ) ) {
                 $store = array_pop( $store );
 
+                $banner_id = $store->get_info_part( 'banner' );
+
+                if ( $banner_id ) {
+                    $data['banner'] = [
+                        'id'  => $banner_id,
+                        'url' => $store->get_banner(),
+                    ];
+                }
+
                 $data['name'] = $store->get_name();
-                $data['profile_picture'] = [
-                    'id' => $store->get_info_part( 'gravatar' ),
-                    'url' => $store->get_avatar(),
-                ];
+
+                $profile_picture_id = $store->get_info_part( 'gravatar' );
+
+                if ( $profile_picture_id ) {
+                    $data['profile_picture'] = [
+                        'id'  => $profile_picture_id,
+                        'url' => $store->get_avatar(),
+                    ];
+                }
 
                 $address = dokan_get_seller_short_address( $store->get_id(), false );
 
