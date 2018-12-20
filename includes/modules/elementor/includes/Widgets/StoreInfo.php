@@ -10,7 +10,7 @@ use Elementor\Widget_Icon_List;
 
 class StoreInfo extends Widget_Icon_List {
 
-    // use PositionControls;
+    use PositionControls;
 
     /**
      * Widget name
@@ -128,6 +128,8 @@ class StoreInfo extends Widget_Icon_List {
                 'default' => dokan_elementor()->elementor()->dynamic_tags->get_tag_data_content( null, 'dokan-store-info' ),
             ]
         );
+
+        $this->add_position_controls();
     }
 
     /**
