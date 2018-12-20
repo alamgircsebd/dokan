@@ -64,6 +64,8 @@ class Dokan_Geolocation_Product_Single {
     /**
      * Add product location data in product single page
      *
+     * @todo This should be a reusable function
+     *
      * @since 1.0.0
      *
      * @return void
