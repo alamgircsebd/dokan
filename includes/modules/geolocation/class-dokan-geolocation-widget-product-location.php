@@ -95,6 +95,35 @@ class Dokan_Geolocation_Widget_Product_Location extends WP_Widget {
 
         dokan_geo_product_location();
 
+        $this->add_product_location_data();
+
         echo $after_widget;
+    }
+
+    /**
+     * Add product location data in product single page
+     *
+     * @todo This should be a reusable function
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function add_product_location_data() {
+        global $product;
+
+        $latitude  = $product->get_meta( 'dokan_geo_latitude', true );
+        $longitude = $product->get_meta( 'dokan_geo_longitude', true );
+        $address   = $product->get_meta( 'dokan_geo_address', true );
+
+        $args = array(
+            'id'                  => $product->get_id(),
+            'dokan_geo_latitude'  => $latitude,
+            'dokan_geo_longitude' => $longitude,
+            'dokan_geo_address'   => $address,
+            'info'                => null,
+        );
+
+        dokan_geo_get_template( 'item-geolocation-data', $args );
     }
 }
