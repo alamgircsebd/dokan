@@ -44,7 +44,8 @@ trait PositionControls {
                 'tablet_default'  => 'relative',
                 'mobile_default'  => 'relative',
                 'selectors' => [
-                    '{{WRAPPER}}' => 'position: {{VALUE}};',
+                    '{{WRAPPER}}' => 'position: relative; min-height: 1px',
+                    '{{WRAPPER}} > .elementor-widget-container' => 'position: {{VALUE}};',
                 ],
             ]
         );
@@ -56,7 +57,7 @@ trait PositionControls {
                 'type'      => Controls_Manager::TEXT,
                 'default'   => '',
                 'selectors' => [
-                    '{{WRAPPER}}' => 'top: {{VALUE}};',
+                    '{{WRAPPER}} > .elementor-widget-container' => 'top: {{VALUE}};',
                 ],
             ]
         );
@@ -68,7 +69,7 @@ trait PositionControls {
                 'type'      => Controls_Manager::TEXT,
                 'default'   => '',
                 'selectors' => [
-                    '{{WRAPPER}}' => 'right: {{VALUE}};',
+                    '{{WRAPPER}} > .elementor-widget-container' => 'right: {{VALUE}};',
                 ],
             ]
         );
@@ -80,7 +81,7 @@ trait PositionControls {
                 'type'      => Controls_Manager::TEXT,
                 'default'   => '',
                 'selectors' => [
-                    '{{WRAPPER}}' => 'bottom: {{VALUE}};',
+                    '{{WRAPPER}} > .elementor-widget-container' => 'bottom: {{VALUE}};',
                 ],
             ]
         );
@@ -92,7 +93,7 @@ trait PositionControls {
                 'type'      => Controls_Manager::TEXT,
                 'default'   => '',
                 'selectors' => [
-                    '{{WRAPPER}}' => 'left: {{VALUE}};',
+                    '{{WRAPPER}} > .elementor-widget-container' => 'left: {{VALUE}};',
                 ],
             ]
         );

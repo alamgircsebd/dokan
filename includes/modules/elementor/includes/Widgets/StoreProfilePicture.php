@@ -3,6 +3,7 @@
 namespace DokanPro\Modules\Elementor\Widgets;
 
 use DokanPro\Modules\Elementor\Traits\PositionControls;
+use Elementor\Controls_Manager;
 use Elementor\Widget_Image;
 
 class StoreProfilePicture extends Widget_Image {
@@ -90,6 +91,27 @@ class StoreProfilePicture extends Widget_Image {
             ],
             [
                 'recursive' => true,
+            ]
+        );
+
+        $this->update_control(
+            'caption_source',
+            [
+                'type' => Controls_Manager::HIDDEN,
+            ]
+        );
+
+        $this->update_control(
+            'caption',
+            [
+                'type' => Controls_Manager::HIDDEN,
+            ]
+        );
+
+        $this->update_control(
+            'link_to',
+            [
+                'type' => Controls_Manager::HIDDEN,
             ]
         );
 

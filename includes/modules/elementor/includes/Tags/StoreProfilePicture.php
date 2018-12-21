@@ -65,6 +65,7 @@ class StoreProfilePicture extends DataTagBase {
                 'label' => __( 'Fallback', 'dokan' ),
                 'type' => Controls_Manager::MEDIA,
                 'default' => [
+                    'id'  => 0,
                     'url' => get_avatar_url( 0 ),
                 ]
             ]

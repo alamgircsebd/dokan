@@ -70,11 +70,11 @@ class Templates {
 
         $store_templates = [
             [
-                'id' => "1000001",
+                'id' => "1000003",
                 'source' => "remote",
                 'type' => "block",
                 'subtype' => "single store",
-                'title' => "Hero UI Kit",
+                'title' => "Store Header Layout 3",
                 'thumbnail' => DOKAN_ELEMENTOR_ASSETS . '/images/store-header.png',
                 'tmpl_created' => "1475067229",
                 'author' => "Elementor",
