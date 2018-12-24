@@ -55,9 +55,7 @@
         gmap.setCenter( curpoint );
         marker.setPosition( curpoint );
 
-        if ( formatted_address ) {
-            address.val( formatted_address );
-        } else {
+        if ( ! formatted_address ) {
             geocoder.geocode( {
                 location: {
                     lat: lat,
