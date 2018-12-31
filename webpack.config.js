@@ -25,7 +25,10 @@ var rootEntryPoints = {
 
 var moduleEntryPoints = {
     'subscription': {
-        'subscription': 'main.js'
+        'subscription': 'main.js',
+    },
+    'wholesale': {
+        'admin': 'main.js'
     }
 };
 
