@@ -40,3 +40,20 @@ function dokan_wholesale_get_customer_status_count() {
 
     return $counts;
 }
+
+/**
+ * Check if customer has permission to see wholesale
+ *
+ * @since 1.0.0
+ *
+ * @return void
+ */
+function dokan_wholesale_can_see_price() {
+    $wholesale_price_display = dokan_get_option( 'wholesale_price_display', 'dokan_wholesale', 'wholesale_customer' );
+
+    if ( 'all_user' == $wholesale_price_display ) {
+        return true;
+    }
+
+    return current_user_can( 'dokan_wholesale_customer' ) ;
+}

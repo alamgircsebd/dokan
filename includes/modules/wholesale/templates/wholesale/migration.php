@@ -1,4 +1,4 @@
-<?php if ( 'yes' == $is_wholesale_customer ): ?>
+<?php if ( $is_wholesale_customer ): ?>
     <?php if ( ! $is_active_wholesale ): ?>
         <li class="dokan-wholesale-migration-wrapper">
             <div class="woocommerce-info" style="margin-bottom:0px"><?php _e( 'Your wholesale customer request send to the admin. Please wait for approval', 'dokan' ); ?></div>

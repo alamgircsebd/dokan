@@ -26,8 +26,7 @@ class Dokan_Wholesale_Customer {
     public function render_migration_html() {
         $user_id            = get_current_user_id();
         $user               = get_user_by( 'id', $user_id );
-        $wholesale_customer = get_user_meta( $user_id, '_is_dokan_wholesale_customer', true );
-
+        $wholesale_customer = metadata_exists( 'user', $user_id, '_is_dokan_wholesale_customer' );
         dokan_get_template_part( 'wholesale/migration', '', [ 'is_wholesale' => true, 'user' => $user, 'is_wholesale_customer' => $wholesale_customer, 'is_active_wholesale' => $user->has_cap( 'dokan_wholesale_customer' ) ] );
     }
 }

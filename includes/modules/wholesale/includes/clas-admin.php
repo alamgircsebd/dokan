@@ -45,12 +45,12 @@ class Dokan_Wholesale_Admin {
      */
     public function load_settings_fields( $fields ) {
         $fields['dokan_wholesale'] = array(
-            'price_display' => array(
+            'wholesale_price_display' => array(
                 'name'    => 'wholesale_price_display',
                 'label'   => __( 'Who can see wholesale price', 'dokan' ),
                 'type'    => 'radio',
                 'desc'    => __( 'Who can actually see the wholesale price in product page', 'dokan' ),
-                'default' => 'all_user',
+                'default' => 'wholesale_customer',
                 'options' => [
                     'all_user'           => __( 'Display wholesale price to all users' ),
                     'wholesale_customer' => __( 'Display wholesale price to Wholesale customer only' ),
