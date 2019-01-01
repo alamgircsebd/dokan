@@ -170,6 +170,15 @@ class Dokan_Wholesale {
 
             if ( $product && $product->is_type( 'variable' ) ) {
                 wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
+                wp_localize_script( 'dokan-wholesale-script', 'DokanWholesale', [
+                        'currency_symbol'   => get_woocommerce_currency_symbol(),
+                        'check_permission'  => current_user_can( 'dokan_wholesale_customer' ),
+                        'variation_wholesale_string' => apply_filters( 'dokan_variable_product_wholesale_string', [
+                            'wholesale_price' => __( 'Wholesale Price', 'dokan' ),
+                            'minimum_quantity' => __( 'Minimum Quantity', 'dokan' )
+                        ] )
+                    ]
+                );
             }
         }
     }

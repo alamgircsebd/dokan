@@ -114,8 +114,6 @@ class Dokan_Wholesale_Vendor {
             ];
         }
 
-        error_log( print_r( $data, true ) );
-
         foreach ( $data as $key => $wholesale_data ) {
             update_post_meta( $_POST['variable_post_id'][$key], '_dokan_wholesale_meta', $wholesale_data );
         }

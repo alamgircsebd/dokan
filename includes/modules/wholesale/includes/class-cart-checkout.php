@@ -14,6 +14,7 @@ class Dokan_Wholesale_Cart_Checkout {
      */
     public function __construct() {
         add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'show_wholesale_price' ], 10 );
+        add_filter( 'woocommerce_available_variation', [ $this, 'add_variation_data' ], 10, 3 );
         add_action( 'woocommerce_before_calculate_totals', [ $this, 'calculate_cart' ], 12, 1 );
         add_action( 'woocommerce_before_mini_cart' , [ $this , 'recalculate_cart_totals' ] );
         add_action( 'woocommerce_after_cart_item_name', [ $this, 'show_wholesale_info' ], 10, 2 );
@@ -36,6 +37,25 @@ class Dokan_Wholesale_Cart_Checkout {
         return $key;
     }
 
+    /**
+     * Add warranty data to all variations
+     *
+     * @param $data
+     * @param $product
+     * @param $variation
+     *
+     * @return mixed
+     */
+    function add_variation_data( $data, $product, $variation ) {
+        $variation_id = ( version_compare( WC_VERSION, '3.0', '<' ) && isset( $variation->variation_id ) ) ? $variation->variation_id : $variation->get_id();
+        $wholesale     = get_post_meta( $variation_id, '_dokan_wholesale_meta', true );
+
+        $data['_enable_wholesale']   = ! empty( $wholesale['enable_wholesale'] ) ? $wholesale['enable_wholesale'] : 'no';
+        $data['_wholesale_price']    = ! empty( $wholesale['price'] ) ? $wholesale['price'] : '';
+        $data['_wholesale_quantity'] = ! empty( $wholesale['quantity'] ) ? $wholesale['quantity'] : '';
+
+        return $data;
+    }
 
     /**
      * Show wholesale price
@@ -51,14 +71,7 @@ class Dokan_Wholesale_Cart_Checkout {
             return;
         }
 
-        error_log( print_r( $product->get_id(), true ) );
-        // if ( $product->is_type( 'variation' ) ) {
-        //     error_log( print_r( $product->get_id() , true ) );
-        // }
-
         $wholesale = get_post_meta( $product->get_id(), '_dokan_wholesale_meta', true );
-
-        // error_log( print_r( $wholesale, true ) );
 
         if ( ! isset( $wholesale['enable_wholesale'] ) ) {
             return;
@@ -95,30 +108,29 @@ class Dokan_Wholesale_Cart_Checkout {
         }
 
         foreach ( $cart_obj->get_cart() as $cart_key => $cart ) {
-            if ( 'simple' == $cart['data']->get_type() ) {
-                $product_id = $cart['product_id'];
-                $wholesale  = get_post_meta( $product_id, '_dokan_wholesale_meta', true );
-                WC()->cart->cart_contents[$cart_key]['wholesale'] = $wholesale;
+            $product_id = ! empty( $cart['variation_id'] ) ? $cart['variation_id'] : $cart['product_id'];
+            $wholesale  = get_post_meta( $product_id, '_dokan_wholesale_meta', true );
 
-                if ( ! isset( $wholesale['enable_wholesale'] ) ) {
-                    continue;
-                }
+            WC()->cart->cart_contents[$cart_key]['wholesale'] = $wholesale;
 
-                if ( 'no' == $wholesale['enable_wholesale'] ) {
-                    continue;
-                }
+            if ( ! isset( $wholesale['enable_wholesale'] ) ) {
+                continue;
+            }
 
-                if ( empty( $wholesale['price'] ) ) {
-                    continue;
-                }
+            if ( 'no' == $wholesale['enable_wholesale'] ) {
+                continue;
+            }
 
-                if ( $wholesale['quantity'] <= 0 ) {
-                    continue;
-                }
+            if ( empty( $wholesale['price'] ) ) {
+                continue;
+            }
 
-                if (  $wholesale['quantity'] <= $cart['quantity'] ) {
-                    $cart['data']->set_price( $wholesale['price'] );
-                }
+            if ( $wholesale['quantity'] <= 0 ) {
+                continue;
+            }
+
+            if (  $wholesale['quantity'] <= $cart['quantity'] ) {
+                $cart['data']->set_price( $wholesale['price'] );
             }
         }
     }
@@ -142,7 +154,7 @@ class Dokan_Wholesale_Cart_Checkout {
      * @return void
      */
     public function show_wholesale_info( $cart_item, $cart_item_key ) {
-        if (  current_user_can( 'dokan_wholesale_customer' ) ) {
+        if ( ! current_user_can( 'dokan_wholesale_customer' ) ) {
             return;
         }
 
@@ -165,8 +177,6 @@ class Dokan_Wholesale_Cart_Checkout {
      * @return void
      */
     public function order_item_meta( $item, $cart_item_key, $values ) {
-        $_product       = $values['data'];
-        $_product_id    = ( version_compare( WC_VERSION, '3.0', '<' ) && isset( $_product->variation_id ) ) ? $_product->variation_id : $_product->get_id();
         $cart_contents  = WC()->cart->get_cart();
 
         if ( ! current_user_can( 'dokan_wholesale_customer' ) ) {
@@ -177,7 +187,7 @@ class Dokan_Wholesale_Cart_Checkout {
 
         if ( isset( $cart_item['wholesale'] ) ) {
             if ( 'yes' == $cart_item['wholesale']['enable_wholesale'] ) {
-                if ( $cart_item['wholesale']['quantity'] < $cart_item['quantity'] ) {
+                if ( $cart_item['wholesale']['quantity'] <= $cart_item['quantity'] ) {
                     $item_id = $item->save();
                     error_log( print_r( 'Yes found wholesale item', true ) );
                     wc_add_order_item_meta( $item_id, '_dokan_item_wholesale', 'yes' );
