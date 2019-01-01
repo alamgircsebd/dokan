@@ -2,9 +2,25 @@
 
 namespace DokanPro\Modules\Elementor\Documents;
 
-use Elementor\Modules\Library\Documents\Library_Document;
+use ElementorPro\Modules\ThemeBuilder\Documents\Single;
 
-class Store extends Library_Document {
+class Store extends Single {
+
+    /**
+     * Document properties
+     *
+     * @since 1.0.0
+     *
+     * @return array
+     */
+    public static function get_properties() {
+        $properties = parent::get_properties();
+
+        $properties['location'] = 'single';
+        $properties['condition_type'] = 'general';
+
+        return $properties;
+    }
 
     /**
      * Document name
@@ -57,22 +73,5 @@ class Store extends Library_Document {
      */
     public function get_remote_library_type() {
         return 'single store';
-    }
-
-    /**
-     * Set edit url
-     *
-     * @since 1.0.0
-     *
-     * @return string
-     */
-    public function get_edit_url() {
-        $url = parent::get_edit_url();
-
-        if ( isset( $_GET['action'] ) && 'elementor_new_post' === $_GET['action'] ) {
-            $url .= '#library';
-        }
-
-        return $url;
     }
 }

@@ -3,7 +3,8 @@
 namespace DokanPro\Modules\Elementor;
 
 use DokanPro\Modules\Elementor\Abstracts\ModuleBase;
-use DokanPro\Modules\Elementor\Documents\Store;
+use DokanPro\Modules\Elementor\Conditions\Store as StoreCondition;
+use DokanPro\Modules\Elementor\Documents\Store as StoreDocument;
 
 class Module extends ModuleBase {
 
@@ -28,6 +29,8 @@ class Module extends ModuleBase {
         add_action( 'elementor/dynamic_tags/register_tags', [ $this, 'register_tags' ] );
         add_action( 'elementor/controls/controls_registered', [ $this, 'register_controls' ] );
         add_action( 'elementor/editor/footer', [ $this, 'add_editor_templates' ], 9 );
+        add_action( 'elementor/theme/register_conditions', [ $this, 'register_conditions' ] );
+        add_filter( 'dokan_locate_template', [ $this, 'locate_template_for_store_page' ], 10, 3 );
     }
 
     /**
@@ -68,7 +71,7 @@ class Module extends ModuleBase {
      */
     public function register_documents( $documents_manager ) {
         $this->docs_types = [
-            'store' => Store::get_class_full_name(),
+            'store' => StoreDocument::get_class_full_name(),
         ];
 
         foreach ( $this->docs_types as $type => $class_name ) {
@@ -137,5 +140,46 @@ class Module extends ModuleBase {
         foreach ( $template_names as $template_name ) {
             dokan_elementor()->elementor()->common->add_template( DOKAN_ELEMENTOR_VIEWS . "/editor-templates/$template_name.php" );
         }
+    }
+
+    /**
+     * Register condition for the module
+     *
+     * @since 1.0.0
+     *
+     * @param \ElementorPro\Modules\ThemeBuilder\Classes\Conditions_Manager $conditions_manager
+     *
+     * @return void
+     */
+    public function register_conditions( $conditions_manager ) {
+        $condition = new StoreCondition();
+        $conditions_manager->get_condition( 'general' )->register_sub_condition( $condition );
+    }
+
+    /**
+     * Filter to show the elementor built store template
+     *
+     * @since 1.0.0
+     *
+     * @param string $template
+     * @param string $template_name
+     * @param string $template_path
+     *
+     * @return string
+     */
+    public static function locate_template_for_store_page( $template, $template_name, $template_path ) {
+        if ( dokan_is_store_page() ) {
+            $page_templates_module = dokan_elementor()->elementor()->modules_manager->get_modules( 'page-templates' );
+
+            $page_templates_module->set_print_callback( function() {
+                \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_locations_manager()->do_location( 'single' );
+            } );
+
+            $template_path = $page_templates_module->get_template_path( $page_templates_module::TEMPLATE_HEADER_FOOTER );
+
+            return $template_path;
+        }
+
+        return $template;
     }
 }

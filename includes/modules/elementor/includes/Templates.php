@@ -70,21 +70,21 @@ class Templates {
 
         $store_templates = [
             [
-                'id' => "1000003",
-                'source' => "remote",
-                'type' => "block",
-                'subtype' => "single store",
-                'title' => "Store Header Layout 3",
-                'thumbnail' => DOKAN_ELEMENTOR_ASSETS . '/images/store-header.png',
-                'tmpl_created' => "1475067229",
-                'author' => "Elementor",
-                'tags' => '',
-                'is_pro' => false,
-                'popularity_index' => 1,
-                'trend_index' => 1,
-                'favorite' => false,
+                'id'                => "1000003",
+                'source'            => "remote",
+                'type'              => "block",
+                'subtype'           => "single store",
+                'title'             => "Store Header Layout 3",
+                'thumbnail'         => DOKAN_ELEMENTOR_ASSETS . '/images/store-header.png',
+                'tmpl_created'      => "1475067229",
+                'author'            => "weDevs",
+                'tags'              => '',
+                'is_pro'            => false,
+                'popularity_index'  => 1,
+                'trend_index'       => 1,
+                'favorite'          => false,
                 'has_page_settings' => false,
-                'url' => 'https://wedevs.com',
+                'url'               => 'https://wedevs.com',
             ]
         ];
 
