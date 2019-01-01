@@ -3,7 +3,7 @@
 * Plugin Name: Elementor
 * Plugin URI: https://wedevs.com/products/plugins/dokan/
 * Description: Elementor Page Builder widgets for Dokan
-* Version: 1.0.0
+* Version: DOKAN_PRO_SINCE
 * Author: weDevs
 * Author URI: https://wedevs.com/
 * Thumbnail Name: elementor.png
@@ -44,16 +44,16 @@ final class DokanElementor {
     /**
      * Module version
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @var string
      */
-    public $version = '1.0.0';
+    public $version = 'DOKAN_PRO_SINCE';
 
     /**
      * Singleton class instance holder
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @var object
      */
@@ -62,7 +62,7 @@ final class DokanElementor {
     /**
      * Make a class instance
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return object
      */
@@ -81,7 +81,7 @@ final class DokanElementor {
     /**
      * Exec after first instance has been created
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -92,7 +92,7 @@ final class DokanElementor {
     /**
      * Load module
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -105,7 +105,7 @@ final class DokanElementor {
     /**
      * Module constants
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -122,7 +122,7 @@ final class DokanElementor {
     /**
      * Include module related files
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -133,7 +133,7 @@ final class DokanElementor {
     /**
      * Create module related class instances
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -145,7 +145,7 @@ final class DokanElementor {
     /**
      * Elementor\Plugin instance
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return \Elementor\Plugin
      */
@@ -156,7 +156,7 @@ final class DokanElementor {
     /**
      * Default dynamic store data for widgets
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param string $prop
      *
@@ -184,7 +184,7 @@ final class DokanElementor {
         /**
          * Filter to modify default
          *
-         * @since 1.0.0
+         * @since DOKAN_PRO_SINCE
          *
          * @param array $data
          */
@@ -268,7 +268,7 @@ final class DokanElementor {
             /**
              * Filter to modify store data
              *
-             * @since 1.0.0
+             * @since DOKAN_PRO_SINCE
              *
              * @param array $data
              */

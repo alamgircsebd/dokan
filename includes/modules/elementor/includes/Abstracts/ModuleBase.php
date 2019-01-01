@@ -11,7 +11,7 @@ abstract class ModuleBase {
     /**
      * Runs after first instance
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -22,7 +22,7 @@ abstract class ModuleBase {
     /**
      * Module name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -31,7 +31,7 @@ abstract class ModuleBase {
     /**
      * Module widgets
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -42,7 +42,7 @@ abstract class ModuleBase {
     /**
      * Register module widgets
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */

@@ -9,7 +9,7 @@ trait PositionControls {
     /**
      * Add css position controls
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */

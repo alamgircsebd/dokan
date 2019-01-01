@@ -10,7 +10,7 @@ class StoreInfo extends DataTagBase {
     /**
      * Class constructor
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param array $data
      */
@@ -21,7 +21,7 @@ class StoreInfo extends DataTagBase {
     /**
      * Tag name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class StoreInfo extends DataTagBase {
     /**
      * Tag title
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class StoreInfo extends DataTagBase {
     /**
      * Store profile picture
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -87,7 +87,7 @@ class StoreInfo extends DataTagBase {
         /**
          * Filter to modify tag values
          *
-         * @since 1.0.0
+         * @since DOKAN_PRO_SINCE
          *
          * @param array $store_info
          */

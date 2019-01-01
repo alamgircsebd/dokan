@@ -9,7 +9,7 @@ class Store extends Single {
     /**
      * Document properties
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -25,7 +25,7 @@ class Store extends Single {
     /**
      * Document name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -36,7 +36,7 @@ class Store extends Single {
     /**
      * Document title
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -47,7 +47,7 @@ class Store extends Single {
     /**
      * Elementor builder panel categories
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -67,7 +67,7 @@ class Store extends Single {
     /**
      * Document library type
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */

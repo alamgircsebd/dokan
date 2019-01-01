@@ -9,7 +9,7 @@ class StoreName extends TagBase {
     /**
      * Class constructor
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param array $data
      */
@@ -20,7 +20,7 @@ class StoreName extends TagBase {
     /**
      * Tag name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -31,7 +31,7 @@ class StoreName extends TagBase {
     /**
      * Tag title
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -42,7 +42,7 @@ class StoreName extends TagBase {
     /**
      * Render tag
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */

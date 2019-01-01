@@ -15,7 +15,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -26,7 +26,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget title
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -37,7 +37,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget icon class
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -48,7 +48,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget categories
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -59,7 +59,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget keywords
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -70,7 +70,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Register widget controls
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -135,7 +135,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Set wrapper classes
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -148,7 +148,7 @@ class StoreInfo extends Widget_Icon_List {
      *
      * Written in PHP and used to generate the final HTML.
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -197,7 +197,7 @@ class StoreInfo extends Widget_Icon_List {
      *
      * Written as a Backbone JavaScript template and used to generate the live preview.
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -241,7 +241,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Render widget plain content
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */

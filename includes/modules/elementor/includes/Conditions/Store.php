@@ -9,7 +9,7 @@ class Store extends Condition_Base {
     /**
      * Type of condition
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -20,7 +20,7 @@ class Store extends Condition_Base {
     /**
      * Condition name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -31,7 +31,7 @@ class Store extends Condition_Base {
     /**
      * Condition label
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -42,7 +42,7 @@ class Store extends Condition_Base {
     /**
      * Condition label for all items
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -53,7 +53,7 @@ class Store extends Condition_Base {
     /**
      * Check if proper conditions are met
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param array $args
      *

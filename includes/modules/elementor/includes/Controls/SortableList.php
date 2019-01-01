@@ -9,7 +9,7 @@ class SortableList extends Control_Repeater {
     /**
      * Control type
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @var string
      */
@@ -18,7 +18,7 @@ class SortableList extends Control_Repeater {
     /**
      * Get repeater control type.
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -29,7 +29,7 @@ class SortableList extends Control_Repeater {
     /**
      * Get repeater control default settings.
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -48,7 +48,7 @@ class SortableList extends Control_Repeater {
     /**
      * Render repeater control output in the editor.
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -64,7 +64,7 @@ class SortableList extends Control_Repeater {
     /**
      * Enqueue control scripts
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */

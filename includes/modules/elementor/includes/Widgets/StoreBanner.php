@@ -13,7 +13,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Widget name
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -24,7 +24,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Widget title
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -35,7 +35,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Widget icon class
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -46,7 +46,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Widget categories
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -57,7 +57,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Widget keywords
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -68,7 +68,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Register widget controls
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -124,7 +124,7 @@ class StoreBanner extends Widget_Image {
     /**
      * Html wrapper class
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */

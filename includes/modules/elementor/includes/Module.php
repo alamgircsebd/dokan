@@ -11,14 +11,14 @@ class Module extends ModuleBase {
     /**
      * Widget group
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      */
     const DOKAN_GROUP = 'dokan';
 
     /**
      * Run after first instance
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class Module extends ModuleBase {
     /**
      * Name of the elementor module
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return string
      */
@@ -47,7 +47,7 @@ class Module extends ModuleBase {
     /**
      * Module widgets
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
@@ -63,7 +63,7 @@ class Module extends ModuleBase {
     /**
      * Register module documents
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param Elementor\Core\Documents_Manager $documents_manager
      *
@@ -82,7 +82,7 @@ class Module extends ModuleBase {
     /**
      * Register module tags
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -108,7 +108,7 @@ class Module extends ModuleBase {
     /**
      * Register controls
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -128,7 +128,7 @@ class Module extends ModuleBase {
     /**
      * Add editor templates
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
@@ -145,7 +145,7 @@ class Module extends ModuleBase {
     /**
      * Register condition for the module
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param \ElementorPro\Modules\ThemeBuilder\Classes\Conditions_Manager $conditions_manager
      *
@@ -159,7 +159,7 @@ class Module extends ModuleBase {
     /**
      * Filter to show the elementor built store template
      *
-     * @since 1.0.0
+     * @since DOKAN_PRO_SINCE
      *
      * @param string $template
      * @param string $template_name
