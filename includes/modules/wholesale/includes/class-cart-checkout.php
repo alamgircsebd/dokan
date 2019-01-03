@@ -160,7 +160,7 @@ class Dokan_Wholesale_Cart_Checkout {
         }
 
         if ( isset( $cart_item['wholesale'] ) ) {
-            if ( 'yes' == $cart_item['wholesale']['enable_wholesale'] ) {
+            if ( isset( $cart_item['wholesale']['enable_wholesale'] ) && 'yes' == $cart_item['wholesale']['enable_wholesale'] ) {
                 $remaining_qty = absint( $cart_item['wholesale']['quantity'] - $cart_item['quantity'] );
                 if ( $remaining_qty > 0 ) {
                     echo '<br>';
@@ -187,7 +187,7 @@ class Dokan_Wholesale_Cart_Checkout {
         $cart_item = $cart_contents[$cart_item_key];
 
         if ( isset( $cart_item['wholesale'] ) ) {
-            if ( 'yes' == $cart_item['wholesale']['enable_wholesale'] ) {
+            if ( isset( $cart_item['wholesale']['enable_wholesale'] ) && 'yes' == $cart_item['wholesale']['enable_wholesale'] ) {
                 if ( $cart_item['wholesale']['quantity'] <= $cart_item['quantity'] ) {
                     $item_id = $item->save();
                     wc_add_order_item_meta( $item_id, '_dokan_item_wholesale', 'yes' );
@@ -205,8 +205,6 @@ class Dokan_Wholesale_Cart_Checkout {
      */
     public function show_loop_wholesale_price( $price, $product ) {
         $is_diplay_shop_archive = dokan_get_option( 'display_price_in_shop_archieve', 'dokan_wholesale', 'no' );
-
-        error_log( print_r( $is_diplay_shop_archive, true ) );
 
         if ( 'off' == $is_diplay_shop_archive ) {
             return $price;
