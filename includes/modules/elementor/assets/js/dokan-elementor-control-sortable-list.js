@@ -2,7 +2,7 @@
     var SortableListRowView = elementor.modules.RepeaterRowView.extend( {
         template: Marionette.TemplateCache.get( '#tmpl-elementor-sortable-list-row' ),
 
-        setTitle: function setTitle() {
+        setTitle: function() {
             this.ui.itemTitle.html( this.model.get( 'title' ) );
         },
     } );
@@ -24,7 +24,7 @@
             };
         },
 
-        toggleItem: function ( event ) {
+        toggleItem: function( event ) {
             // finding index should be easier than this :(
             var input = $( event.target ),
                 parent = input.parents( '.elementor-repeater-fields' ),

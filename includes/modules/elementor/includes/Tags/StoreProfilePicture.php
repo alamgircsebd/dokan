@@ -48,7 +48,7 @@ class StoreProfilePicture extends DataTagBase {
      * @return void
      */
     protected function get_value( array $options = [] ) {
-        return dokan_elementor()->default_store_data( 'profile_picture' );
+        return dokan_elementor()->get_store_data( 'profile_picture' );
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace DokanPro\Modules\Elementor\Widgets;
 
+use DokanPro\Modules\Elementor\Controls\DynamicHidden;
 use DokanPro\Modules\Elementor\Controls\SortableList;
 use DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Controls_Manager;
@@ -98,7 +99,7 @@ class StoreInfo extends Widget_Icon_List {
         $repeater->add_control(
             'text',
             [
-                'type'    => Controls_Manager::HIDDEN
+                'type'    => Controls_Manager::HIDDEN,
             ]
         );
 
@@ -125,7 +126,23 @@ class StoreInfo extends Widget_Icon_List {
             [
                 'type'    => SortableList::CONTROL_TYPE,
                 'fields'  => $repeater->get_controls(),
-                'default' => dokan_elementor()->elementor()->dynamic_tags->get_tag_data_content( null, 'dokan-store-info' ),
+                'default' => json_decode(
+                    dokan_elementor()->elementor()->dynamic_tags->get_tag_data_content( null, 'dokan-store-info' ), true
+                ),
+            ]
+        );
+
+        $this->add_control(
+            'store_info',
+            [
+                'type' => DynamicHidden::CONTROL_TYPE,
+                'dynamic' => [
+                    'active'  => true,
+                    'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-info' )
+                ]
+            ],
+            [
+                'position' => [ 'of' => 'icon_list' ]
             ]
         );
 
@@ -163,32 +180,52 @@ class StoreInfo extends Widget_Icon_List {
             $this->add_render_attribute( 'list_item', 'class', 'elementor-inline-item' );
         }
         ?>
-        <ul <?php echo $this->get_render_attribute_string( 'icon_list' ); ?>>
-            <?php
-            foreach ( $settings['icon_list'] as $index => $item ) :
-                $repeater_setting_key = $this->get_repeater_setting_key( 'text', 'icon_list', $index );
+        <?php if ( ! empty( $settings['icon_list'] ) && ! empty( $settings['store_info'] ) ): ?>
+            <?php $store_info = json_decode( $settings['store_info'], true ); ?>
+            <?php if ( is_array( $store_info ) ): ?>
+                <ul <?php echo $this->get_render_attribute_string( 'icon_list' ); ?>>
+                    <?php
+                    foreach ( $settings['icon_list'] as $index => $item ) :
+                        $repeater_setting_key = $this->get_repeater_setting_key( 'text', 'icon_list', $index );
 
-                $this->add_render_attribute( $repeater_setting_key, 'class', 'elementor-icon-list-text' );
+                        $this->add_render_attribute( $repeater_setting_key, 'class', 'elementor-icon-list-text' );
 
-                $this->add_inline_editing_attributes( $repeater_setting_key );
+                        $this->add_inline_editing_attributes( $repeater_setting_key );
 
-                if ( $item['show'] ):
-                ?>
-                    <li class="elementor-icon-list-item" >
+                        if ( $item['show'] ):
+                            $info_item = array_filter( $store_info, function ( $list_item ) use ( $item ) {
+                                return $list_item['key'] === $item['key'];
+                            } );
+
+                            if ( empty( $info_item ) ) {
+                                continue;
+                            }
+
+                            $info_item = array_pop( $info_item );
+
+                            $text = $info_item['text'];
+
+                            if ( ! $text ) {
+                                continue;
+                            }
+                        ?>
+                            <li class="elementor-icon-list-item" >
+                                <?php
+                                if ( ! empty( $item['icon'] ) ) :
+                                    ?>
+                                    <span class="elementor-icon-list-icon">
+                                        <i class="<?php echo esc_attr( $item['icon'] ); ?>" aria-hidden="true"></i>
+                                    </span>
+                                <?php endif; ?>
+                                <span <?php echo $this->get_render_attribute_string( $repeater_setting_key ); ?>><?php echo $text; ?></span>
+                            </li>
                         <?php
-                        if ( ! empty( $item['icon'] ) ) :
-                            ?>
-                            <span class="elementor-icon-list-icon">
-                                <i class="<?php echo esc_attr( $item['icon'] ); ?>" aria-hidden="true"></i>
-                            </span>
-                        <?php endif; ?>
-                        <span <?php echo $this->get_render_attribute_string( $repeater_setting_key ); ?>><?php echo $item['text']; ?></span>
-                    </li>
-                <?php
-                endif;
-            endforeach;
-            ?>
-        </ul>
+                        endif;
+                    endforeach;
+                    ?>
+                </ul>
+            <?php endif; ?>
+        <?php endif; ?>
         <?php
     }
 
@@ -212,7 +249,8 @@ class StoreInfo extends Widget_Icon_List {
                 view.addRenderAttribute( 'list_item', 'class', 'elementor-inline-item' );
             }
         #>
-        <# if ( settings.icon_list ) { #>
+        <# if ( settings.icon_list && settings.store_info ) { #>
+            <# var store_info = JSON.parse( settings.store_info ); #>
             <ul {{{ view.getRenderAttributeString( 'icon_list' ) }}}>
             <# _.each( settings.icon_list, function( item, index ) {
                     var iconTextKey = view.getRepeaterSettingKey( 'text', 'icon_list', index );
@@ -222,13 +260,16 @@ class StoreInfo extends Widget_Icon_List {
                     view.addInlineEditingAttributes( iconTextKey ); #>
 
                     <# if ( item.show ) { #>
+                        <#
+                            var text = _.findWhere( store_info, { key: item.key } ).text;
+                        #>
                         <li {{{ view.getRenderAttributeString( 'list_item' ) }}}>
                             <# if ( item.icon ) { #>
                             <span class="elementor-icon-list-icon">
                                 <i class="{{ item.icon }}" aria-hidden="true"></i>
                             </span>
                             <# } #>
-                            <span {{{ view.getRenderAttributeString( iconTextKey ) }}}>{{{ item.text }}}</span>
+                            <span {{{ view.getRenderAttributeString( iconTextKey ) }}}>{{{ text }}}</span>
                         </li>
                     <# } #>
                 <#

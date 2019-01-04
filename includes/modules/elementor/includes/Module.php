@@ -115,6 +115,7 @@ class Module extends ModuleBase {
     public function register_controls() {
         $controls = [
             'SortableList',
+            'DynamicHidden',
         ];
 
         $controls_manager = dokan_elementor()->elementor()->controls_manager;
