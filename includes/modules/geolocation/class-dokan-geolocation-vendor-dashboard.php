@@ -17,6 +17,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
     public function __construct() {
         add_action( 'dokan_store_profile_saved', array( $this, 'save_vendor_geodata' ), 10, 2 );
         add_action( 'dokan_product_edit_after_options', array( $this, 'add_product_editor_options' ) );
+        add_action( 'dokan_new_product_added', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
     }
 
@@ -152,7 +153,11 @@ class Dokan_Geolocation_Vendor_Dashboard {
         $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
         $dokan_geo_address   = get_user_meta( $store_id, 'dokan_geo_address', true );
 
-        $use_store_settings = ( 'yes' === $_POST['_dokan_geolocation_use_store_settings'] ) ? 'yes' : 'no';
+        $use_store_settings = 'yes';
+
+        if ( isset( $_POST['_dokan_geolocation_use_store_settings'] ) && 'yes' !== $_POST['_dokan_geolocation_use_store_settings'] ) {
+            $use_store_settings = 'no';
+        }
 
         update_post_meta( $post_id, '_dokan_geolocation_use_store_settings', $use_store_settings );
 
