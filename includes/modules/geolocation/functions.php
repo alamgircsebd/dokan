@@ -188,3 +188,14 @@ function dokan_geo_remove_seller_listing_footer_content_hook() {
         remove_action( 'dokan_seller_listing_footer_content', array( Dokan_Geolocation_Vendor_View::class, 'seller_listing_footer_content' ) );
     }, 9 );
 }
+
+/**
+ * A helper function to escape float values
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return float
+ */
+function dokan_geo_float_val( $val ) {
+    return floatval( preg_replace( '/[^-0-9\.]/', '', $val ) );
+}
