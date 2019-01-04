@@ -70,6 +70,7 @@
     }
 
     $( '#_dokan_geolocation_use_store_settings' ).on( 'change', function () {
+        $( '#dokan-geolocation-product-location-no-store-settings' ).toggleClass( 'dokan-hide' );
         $( '#dokan-geolocation-product-location' ).toggleClass( 'dokan-hide' );
     } );
 

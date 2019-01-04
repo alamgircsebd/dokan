@@ -103,10 +103,12 @@ class Dokan_Geolocation_Vendor_Dashboard {
      * @return void
      */
     public function add_product_editor_options( $post_id ) {
-        $use_store_settings = $this->use_store_settings( $post_id );
+        $store_id            = dokan_get_current_user_id();
+        $store_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
+
+        $use_store_settings  = $this->use_store_settings( $post_id );
 
         if ( ! $use_store_settings ) {
-            $store_id      = dokan_get_current_user_id();
             $dokan_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
             $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
             $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
@@ -132,6 +134,8 @@ class Dokan_Geolocation_Vendor_Dashboard {
             'dokan_geo_longitude' => $dokan_geo_longitude,
             'dokan_geo_public'    => $dokan_geo_public,
             'dokan_geo_address'   => $dokan_geo_address,
+            'store_has_settings'  => ! empty( $store_geo_latitude ),
+            'store_settings_url'  => dokan_get_navigation_url( 'settings/store' ),
         );
 
         dokan_geo_get_template( 'product-editor-options', $args );
@@ -147,7 +151,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
      * @return void
      */
     public function update_product_settings( $post_id ) {
-        $store_id      = dokan_get_current_user_id();
+        $store_id            = dokan_get_current_user_id();
         $dokan_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
         $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
         $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
