@@ -45,6 +45,13 @@ class Dokan_Store_Support_Widget extends WP_Widget {
                 return;
             }
 
+            $defaults = array(
+                'title'       => __( 'Contact Vendor', 'dokan-lite' ),
+                'description' => '',
+            );
+
+            $instance = wp_parse_args( $instance, $defaults );
+
             $title     = apply_filters( 'dokan_store_support_widget_title', $instance['title'] );
             $desc      = $instance['description'];
 
