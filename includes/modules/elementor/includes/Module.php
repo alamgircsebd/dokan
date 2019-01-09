@@ -58,6 +58,8 @@ class Module extends ModuleBase {
             'StoreName',
             'StoreProfilePicture',
             'StoreInfo',
+            'StoreShareButton',
+            'StoreSupportButton',
         ];
     }
 
@@ -93,6 +95,7 @@ class Module extends ModuleBase {
             'StoreName',
             'StoreProfilePicture',
             'StoreInfo',
+            'StoreSupportButton',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;

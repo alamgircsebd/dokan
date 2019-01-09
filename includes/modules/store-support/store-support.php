@@ -257,6 +257,38 @@ class Dokan_Store_Support {
     		'label_count'               => _n_noop( 'Closed <span class="count">(%s)</span>', 'Closed <span class="count">(%s)</span>' ),
     	) );
     }
+
+    /**
+     * Get store support button
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $store_id
+     *
+     * @return array
+     */
+    public function get_support_button( $store_id ) {
+        $button = array(
+            'show'  => false,
+            'class' => 'user_logged_out',
+            'text'  => '',
+        );
+
+        if ( is_user_logged_in() ) {
+            $button['class'] = 'user_logged';
+        }
+
+        $store_info = dokan_get_store_info( $store_id );
+
+        if ( isset( $store_info['show_support_btn'] ) && 'yes' === $store_info['show_support_btn'] ) {
+            $button['show'] = true;
+        }
+
+        $button['text'] = isset( $store_info['support_btn_name'] ) && !empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : __( 'Get Support', 'dokan' );
+
+        return $button;
+    }
+
     /**
      * prints Get support button on store page
      *
@@ -264,22 +296,15 @@ class Dokan_Store_Support {
      * @param int store_id
      */
     function generate_support_button( $store_id ) {
-        $store_info = dokan_get_store_info( $store_id );
+        $button = $this->get_support_button( $store_id );
 
-        if ( isset( $store_info['show_support_btn'] ) && $store_info['show_support_btn'] == 'no' ) {
+        if ( ! $button['show'] ) {
             return;
         }
 
-        $user_logged_in = 'user_logged_out';
-
-        if ( is_user_logged_in() ) {
-            $user_logged_in = 'user_logged';
-        }
-
-        $support_text = isset( $store_info['support_btn_name'] ) && !empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : __( 'Get Support', 'dokan' );
         ?>
         <li class="dokan-store-support-btn-wrap dokan-right">
-            <button data-store_id="<?php echo $store_id; ?>" class="dokan-store-support-btn dokan-btn dokan-btn-theme dokan-btn-sm <?php echo $user_logged_in ?>"><?php echo esc_html( $support_text ); ?></button>
+            <button data-store_id="<?php echo $store_id; ?>" class="dokan-store-support-btn dokan-btn dokan-btn-theme dokan-btn-sm <?php echo $button['class']; ?>"><?php echo esc_html( $button['text'] ); ?></button>
         </li>
         <?php
     }

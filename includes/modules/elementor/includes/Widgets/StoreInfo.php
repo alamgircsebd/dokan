@@ -90,16 +90,16 @@ class StoreInfo extends Widget_Icon_List {
         $repeater->add_control(
             'title',
             [
-                'label'       => __( 'Title', 'dokan' ),
-                'type'        => Controls_Manager::HIDDEN,
-                'default'     => __( 'Title', 'dokan' ),
+                'label'   => __( 'Title', 'dokan' ),
+                'type'    => Controls_Manager::HIDDEN,
+                'default' => __( 'Title', 'dokan' ),
             ]
         );
 
         $repeater->add_control(
             'text',
             [
-                'type'    => Controls_Manager::HIDDEN,
+                'type' => Controls_Manager::HIDDEN,
             ]
         );
 
@@ -135,7 +135,7 @@ class StoreInfo extends Widget_Icon_List {
         $this->add_control(
             'store_info',
             [
-                'type' => DynamicHidden::CONTROL_TYPE,
+                'type'    => DynamicHidden::CONTROL_TYPE,
                 'dynamic' => [
                     'active'  => true,
                     'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-info' )

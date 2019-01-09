@@ -69,6 +69,7 @@ class StoreData {
          * @param array $data
          */
         $this->store_data = apply_filters( 'dokan_elementor_store_data_defaults', [
+            'id'              => 0,
             'banner'          => [
                 'id'  => 0,
                 'url' => DOKAN_PLUGIN_ASSEST . '/images/default-store-banner.png',
@@ -89,6 +90,8 @@ class StoreData {
         $store = dokan()->vendor->get( get_query_var( 'author' ) );
 
         if ( $store->id ) {
+            $this->store_data['id'] = $store->id;
+
             $banner_id = $store->get_info_part( 'banner' );
 
             if ( $banner_id ) {
@@ -178,6 +181,7 @@ class StoreData {
          * @param array $this->store_data_editing
          */
         return apply_filters( 'dokan_elementor_store_data_defaults_for_editing', [
+            'id'              => 0,
             'banner'          => [
                 'id'  => 0,
                 'url' => DOKAN_PLUGIN_ASSEST . '/images/default-store-banner.png',
