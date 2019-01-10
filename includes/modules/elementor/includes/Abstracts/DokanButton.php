@@ -79,59 +79,6 @@ abstract class DokanButton extends Widget_Button {
             ]
         );
 
-        $this->add_control(
-            'icon_font_size',
-            [
-                'label'      => __( 'Icon Font Size', 'dokan' ),
-                'type'       => Controls_Manager::SLIDER,
-                'size_units' => [ 'px', 'em', 'rem' ],
-                'range'      => [
-                    'px' => [
-                        'min' => 1,
-                        'max' => 200,
-                    ],
-                ],
-                'responsive' => true,
-                'selectors'  => [
-                    '{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementor-button .elementor-align-icon-left'  => 'font-size: {{SIZE}}{{UNIT}};',],
-            ],
-            [
-                'position' => [ 'of' => 'typography_font_size' ]
-            ]
-        );
-
-        $this->add_control(
-            'icon_line_height',
-            [
-                'label'           => __( 'Icon Line Height', 'dokan' ),
-                'type'            => Controls_Manager::SLIDER,
-                'desktop_default' => [
-                    'unit' => 'em',
-                ],
-                'tablet_default'  => [
-                    'unit' => 'em',
-                ],
-                'mobile_default'  => [
-                    'unit' => 'em',
-                ],
-                'range'           => [
-                    'px' => [
-                        'min' => 1,
-                    ],
-                ],
-                'responsive'      => true,
-                'size_units'      => [ 'px', 'em' ],
-                'selectors'       => [
-                    '{{WRAPPER}} .elementor-button .elementor-align-icon-right' => 'line-height: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementor-button .elementor-align-icon-left'  => 'line-height: {{SIZE}}{{UNIT}};',
-                ],
-            ],
-            [
-                'position' => [ 'of' => 'typography_line_height' ]
-            ]
-        );
-
         $this->add_position_controls();
     }
 

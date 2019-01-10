@@ -5,6 +5,7 @@ namespace DokanPro\Modules\Elementor;
 use DokanPro\Modules\Elementor\Abstracts\ModuleBase;
 use DokanPro\Modules\Elementor\Conditions\Store as StoreCondition;
 use DokanPro\Modules\Elementor\Documents\Store as StoreDocument;
+use Elementor\Controls_Manager;
 
 class Module extends ModuleBase {
 
@@ -32,6 +33,7 @@ class Module extends ModuleBase {
         add_action( 'elementor/theme/register_conditions', [ $this, 'register_conditions' ] );
         add_filter( 'dokan_locate_template', [ $this, 'locate_template_for_store_page' ], 10, 3 );
         add_action( 'elementor/widgets/wordpress/widget_args', [ $this, 'add_widget_args' ], 10, 2 );
+        add_action( 'elementor/element/before_section_end', [ $this, 'add_column_wrapper_padding_control' ], 10, 3 );
     }
 
     /**
@@ -58,6 +60,7 @@ class Module extends ModuleBase {
             'StoreName',
             'StoreProfilePicture',
             'StoreInfo',
+            'StoreTabItems',
             'StoreShareButton',
             'StoreSupportButton',
         ];
@@ -95,6 +98,7 @@ class Module extends ModuleBase {
             'StoreName',
             'StoreProfilePicture',
             'StoreInfo',
+            'StoreTabItems',
             'StoreSupportButton',
         ];
 
@@ -212,5 +216,31 @@ class Module extends ModuleBase {
         }
 
         return $default_widget_args;
+    }
+
+    /**
+     * Add column wrapper padding control for sections
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public static function add_column_wrapper_padding_control( $control_stack, $section_id, $args ) {
+        if ( 'section' === $control_stack->get_name() && 'section_advanced' === $section_id ) {
+            $control_stack->add_responsive_control(
+                'column_wrapper_padding',
+                [
+                    'label' => __( 'Column Wrapper Padding', 'dokan' ),
+                    'type' => Controls_Manager::DIMENSIONS,
+                    'size_units' => [ 'px', 'em', '%' ],
+                    'selectors' => [
+                        '{{WRAPPER}} .elementor-column-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    ],
+                ],
+                [
+                    'position' => [ 'of' => 'padding' ]
+                ]
+            );
+        }
     }
 }

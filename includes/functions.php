@@ -196,9 +196,13 @@ function dokan_get_refund_localize_data() {
  * @return string
  */
 function dokan_get_review_url( $user_id ) {
+    if ( ! $user_id ) {
+        return '';
+    }
+
     $userstore = dokan_get_store_url( $user_id );
 
-    return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
+    return apply_filters( 'dokan_get_seller_review_url', $userstore . 'reviews' );
 }
 
 /**
