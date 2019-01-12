@@ -65,6 +65,7 @@ class Module extends ModuleBase {
             'StoreTabContents',
             'StoreShareButton',
             'StoreSupportButton',
+            'StoreVacationMessage',
         ];
     }
 
@@ -103,6 +104,7 @@ class Module extends ModuleBase {
             'StoreTabItems',
             'StoreSupportButton',
             'StoreDummyProducts',
+            'StoreVacationMessage',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;
