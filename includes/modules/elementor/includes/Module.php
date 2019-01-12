@@ -34,6 +34,7 @@ class Module extends ModuleBase {
         add_filter( 'dokan_locate_template', [ $this, 'locate_template_for_store_page' ], 10, 3 );
         add_action( 'elementor/widgets/wordpress/widget_args', [ $this, 'add_widget_args' ], 10, 2 );
         add_action( 'elementor/element/before_section_end', [ $this, 'add_column_wrapper_padding_control' ], 10, 3 );
+        add_action( 'dokan_elementor_store_tab_content', [ $this, 'store_tab_content' ] );
     }
 
     /**
@@ -61,6 +62,7 @@ class Module extends ModuleBase {
             'StoreProfilePicture',
             'StoreInfo',
             'StoreTabItems',
+            'StoreTabContents',
             'StoreShareButton',
             'StoreSupportButton',
         ];
@@ -100,6 +102,7 @@ class Module extends ModuleBase {
             'StoreInfo',
             'StoreTabItems',
             'StoreSupportButton',
+            'StoreDummyProducts',
         ];
 
         $module = dokan_elementor()->elementor()->dynamic_tags;
@@ -230,10 +233,10 @@ class Module extends ModuleBase {
             $control_stack->add_responsive_control(
                 'column_wrapper_padding',
                 [
-                    'label' => __( 'Column Wrapper Padding', 'dokan' ),
-                    'type' => Controls_Manager::DIMENSIONS,
+                    'label'      => __( 'Column Wrapper Padding', 'dokan' ),
+                    'type'       => Controls_Manager::DIMENSIONS,
                     'size_units' => [ 'px', 'em', '%' ],
-                    'selectors' => [
+                    'selectors'  => [
                         '{{WRAPPER}} .elementor-column-wrap' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                     ],
                 ],
@@ -242,5 +245,29 @@ class Module extends ModuleBase {
                 ]
             );
         }
+    }
+
+    /**
+     * Store tab contents
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function store_tab_content() {
+        $tab = 'products';
+
+        if ( get_query_var( 'toc' ) ) {
+            $tab = 'toc';
+        }
+
+        if ( get_query_var( 'store_review' ) ) {
+            $tab = 'reviews';
+        }
+
+        $template = DOKAN_ELEMENTOR_VIEWS . '/store-tab-contents/' . $tab . '.php';
+        $template = apply_filters( 'dokan_elementor_store_tab_content_template', $template );
+
+        include_once $template;
     }
 }

@@ -48,7 +48,7 @@ class StoreTabItems extends StoreInfo {
      * @return array
      */
     public function get_keywords() {
-        return [ 'dokan', 'store', 'vendor', 'info', 'summery', 'informations' ];
+        return [ 'dokan', 'store', 'vendor', 'tab', 'menu', 'items' ];
     }
 
     /**
