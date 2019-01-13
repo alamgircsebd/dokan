@@ -167,6 +167,28 @@ final class DokanElementor {
 
         return $store_data->get_data( $prop );
     }
+
+    /**
+     * Social network name mapping to elementor icon names
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_social_networks_map() {
+        $map = [
+            'fb'        => 'fa fa-facebook',
+            'gplus'     => 'fa fa-google-plus',
+            'twitter'   => 'fa fa-twitter',
+            'pinterest' => 'fa fa-pinterest',
+            'linkedin'  => 'fa fa-linkedin',
+            'youtube'   => 'fa fa-youtube',
+            'instagram' => 'fa fa-instagram',
+            'flickr'    => 'fa fa-flickr',
+        ];
+
+        return apply_filters( 'dokan_elementor_social_network_map', $map );
+    }
 }
 
 /**
