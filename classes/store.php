@@ -114,22 +114,13 @@ class Dokan_Pro_Store {
         return $template;
     }
 
-    /**
-     * Show seller coupons in the store page
-     *
-     * @param  WP_User  $store_user
-     * @param  array    $store_info
-     *
-     * @since 2.4.12
-     *
-     * @return void
-     */
-    public function show_store_coupons( $store_user, $store_info ) {
+    public function get_store_coupons( $store_user, $store_info ) {
+        $coupons = array();
+
         $seller_coupons = dokan_get_seller_coupon( $store_user->ID, true );
 
-        // var_dump( $seller_coupons );
         if ( ! $seller_coupons ) {
-            return;
+            return $coupons;
         }
         // WC 3.0 compatibility
         if ( class_exists( 'WC_DateTime' ) ) {
@@ -139,13 +130,11 @@ class Dokan_Pro_Store {
             $current_time = current_time( 'timestamp' );
         }
 
-        echo '<div class="store-coupon-wrap">';
-
         foreach ( $seller_coupons as $coupon ) {
-            $coup = new WC_Coupon( $coupon->ID );
+            $wc_coupon = new WC_Coupon( $coupon->ID );
 
-            $expiry_date = dokan_get_prop( $coup, 'expiry_date', 'get_date_expires' );
-            $coup_exists = dokan_get_prop( $coup, 'exists', 'is_valid' );
+            $expiry_date = dokan_get_prop( $wc_coupon, 'expiry_date', 'get_date_expires' );
+            $coup_exists = dokan_get_prop( $wc_coupon, 'exists', 'is_valid' );
 
             if ( class_exists( 'WC_DateTime' ) && $expiry_date ) {
                 $expiry_date = new WC_DateTime( $expiry_date );
@@ -158,34 +147,55 @@ class Dokan_Pro_Store {
 
             $coupon_type = version_compare( WC_VERSION, '2.7', '>' ) ? 'percent' : 'percent_product';
 
-            if ( $coupon_type == dokan_get_prop( $coup, 'type', 'get_discount_type' ) ) {
-                $coupon_amount_formated = dokan_get_prop( $coup, 'amount' ) . '%';
+            if ( $coupon_type == dokan_get_prop( $wc_coupon, 'type', 'get_discount_type' ) ) {
+                $coupon_amount_formatted = dokan_get_prop( $wc_coupon, 'amount' ) . '%';
             } else {
-                $coupon_amount_formated = wc_price( dokan_get_prop( $coup, 'amount' ) );
+                $coupon_amount_formatted = wc_price( dokan_get_prop( $wc_coupon, 'amount' ) );
             }
-            ?>
-                <div class="code">
-                    <span class="outside">
-                        <span class="inside">
-                            <div class="coupon-title"><?php printf( __( '%s Discount', 'dokan' ), $coupon_amount_formated ); ?></div>
-                            <div class="coupon-body">
-                                <?php if ( !empty( $coupon->post_content ) ) { ?>
-                                    <span class="coupon-details"><?php echo esc_html( $coupon->post_content ); ?></span>
-                                <?php } ?>
-                                <span class="coupon-code"><?php printf( __( 'Coupon Code: <strong>%s</strong>', 'dokan' ), $coupon->post_title ); ?></span>
 
-                                <?php if ( $expiry_date ) {
-                                    $expiry_date = is_object( $expiry_date ) ? $expiry_date->getTimestamp() : $expiry_date; ?>
-                                    <span class="expiring-in">(<?php printf( __( 'Expiring in %s', 'dokan' ), human_time_diff( $current_time, $expiry_date ) ); ?>)</span>
-                                <?php } ?>
-                            </div>
-                        </span>
-                    </span>
-                </div>
-            <?php
+            $coupons[] = [
+                'coupon'                  => $coupon,
+                'coupon_amount_formatted' => $coupon_amount_formatted,
+                'expiry_date'             => $expiry_date,
+                'current_time'            => $current_time,
+            ];
+        }
+
+        /**
+         * Store Coupons
+         *
+         * @since DOKAN_PRO_SINCE
+         *
+         * @var $array
+         */
+        return apply_filters( 'dokan_pro_store_coupons', $coupons );
+    }
+
+    /**
+     * Show seller coupons in the store page
+     *
+     * @param  WP_User  $store_user
+     * @param  array    $store_info
+     *
+     * @since 2.4.12
+     *
+     * @return void
+     */
+    public function show_store_coupons( $store_user, $store_info ) {
+        $coupons = $this->get_store_coupons( $store_user, $store_info );
+
+        if ( empty( $coupons ) ) {
+            return;
+        }
+
+        echo '<div class="store-coupon-wrap">';
+
+        foreach ( $coupons as $coupon ) {
+            dokan_get_template_part( 'coupon/store', '', array_merge( array(
+                'pro' => true,
+            ), $coupon ) );
         }
 
         echo '</div>';
     }
-
 }
