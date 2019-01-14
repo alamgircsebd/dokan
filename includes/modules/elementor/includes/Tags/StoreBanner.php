@@ -41,6 +41,17 @@ class StoreBanner extends DataTagBase {
     }
 
     /**
+     * Tag categories
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_categories() {
+        return [ \Elementor\Modules\DynamicTags\Module::IMAGE_CATEGORY ];
+    }
+
+    /**
      * Store profile picture
      *
      * @since DOKAN_PRO_SINCE

@@ -26,6 +26,6 @@ abstract class DataTagBase extends Data_Tag {
      * @return array
      */
     public function get_categories() {
-        return [ \Elementor\Modules\DynamicTags\Module::TEXT_CATEGORY ];
+        return [ \Elementor\Modules\DynamicTags\Module::BASE_GROUP ];
     }
 }
