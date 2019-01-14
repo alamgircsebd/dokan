@@ -140,6 +140,10 @@ class StoreVacationMessage extends Widget_Alert {
     protected function render() {
         $settings = $this->get_settings_for_display();
 
+        if ( empty( $settings['alert_description'] ) ) {
+            return;
+        }
+
         if ( ! empty( $settings['alert_title'] ) ) {
             $this->add_render_attribute( 'alert_title', 'class', 'elementor-alert-title' );
 

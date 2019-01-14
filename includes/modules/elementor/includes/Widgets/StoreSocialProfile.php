@@ -165,17 +165,43 @@ class StoreSocialProfile extends Widget_Social_Icons {
         $this->update_control(
             'social_icon_list',
             [
-                'fields' => $repeater->get_controls(),
+                'fields'  => $repeater->get_controls(),
+                'default' => [
+                    [
+                        'social' => 'fa fa-facebook',
+                    ],
+                    [
+                        'social' => 'fa fa-google-plus',
+                    ],
+                    [
+                        'social' => 'fa fa-twitter',
+                    ],
+                    [
+                        'social' => 'fa fa-pinterest',
+                    ],
+                    [
+                        'social' => 'fa fa-linkedin',
+                    ],
+                    [
+                        'social' => 'fa fa-youtube',
+                    ],
+                    [
+                        'social' => 'fa fa-instagram',
+                    ],
+                    [
+                        'social' => 'fa fa-flickr',
+                    ],
+                ],
             ]
         );
 
         $this->add_control(
             'store_social_links',
             [
-                'type' => DynamicHidden::CONTROL_TYPE,
+                'type'    => DynamicHidden::CONTROL_TYPE,
                 'dynamic' => [
                     'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-social-profile-tag' ),
-                    'active' => true,
+                    'active'  => true,
                 ]
             ],
             [
@@ -210,6 +236,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
         $store_social_links = json_decode( $settings['store_social_links'], true );
 
         if ( dokan_is_store_page() && empty( $store_social_links ) ) {
+            echo '<div></div>';
             return;
         }
 
@@ -230,7 +257,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
 
                 $link_key = 'link_' . $index;
 
-                $this->add_render_attribute( $link_key, 'href', $item['link']['url'] );
+                $this->add_render_attribute( $link_key, 'href', $store_social_links[ $item['social'] ] );
 
                 if ( $item['link']['is_external'] ) {
                     $this->add_render_attribute( $link_key, 'target', '_blank' );
