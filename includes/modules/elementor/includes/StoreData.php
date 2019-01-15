@@ -27,21 +27,10 @@ class StoreData {
      * @return mixed
      */
     public function get_data( $prop = null ) {
-        $is_edit_mode    = dokan_elementor()->elementor()->editor->is_edit_mode();
-        $is_preview_mode = dokan_elementor()->elementor()->preview->is_preview_mode();
-
-        if ( empty( $is_edit_mode ) && empty( $is_preview_mode ) ) {
-            if ( ! empty( $_REQUEST['action'] ) && ! empty( $_REQUEST['editor_post_id'] ) ) {
-                $is_edit_mode = true;
-            } else if ( ! empty( $_REQUEST['preview'] ) && $_REQUEST['preview'] && ! empty( $_REQUEST['theme_template_id'] ) ) {
-                $is_preview_mode = true;
-            }
-        }
-
-        if ( ! $is_edit_mode && ! $is_preview_mode ) {
-            $data = $this->get_store_data();
-        } else {
+        if ( dokan_elementor()->is_edit_or_preview_mode() ) {
             $data = $this->get_store_data_for_editing();
+        } else {
+            $data = $this->get_store_data();
         }
 
         return ( $prop && isset( $data[ $prop ] ) ) ? $data[ $prop ] : $data;

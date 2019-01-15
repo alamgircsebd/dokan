@@ -32,9 +32,9 @@ class Module extends ModuleBase {
         add_action( 'elementor/editor/footer', [ $this, 'add_editor_templates' ], 9 );
         add_action( 'elementor/theme/register_conditions', [ $this, 'register_conditions' ] );
         add_filter( 'dokan_locate_template', [ $this, 'locate_template_for_store_page' ], 10, 3 );
-        add_action( 'elementor/widgets/wordpress/widget_args', [ $this, 'add_widget_args' ], 10, 2 );
         add_action( 'elementor/element/before_section_end', [ $this, 'add_column_wrapper_padding_control' ], 10, 3 );
         add_action( 'dokan_elementor_store_tab_content', [ $this, 'store_tab_content' ] );
+        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_editor_scripts' ] );
     }
 
     /**
@@ -200,32 +200,6 @@ class Module extends ModuleBase {
     }
 
     /**
-     * Add store widget args in Elementor ecosystem
-     *
-     * @since 1.0.0
-     *
-     * @param array             $default_widget_args
-     * @param \Widget_WordPress $widget_wordpress
-     *
-     * @return array
-     */
-    public static function add_widget_args( $default_widget_args, $widget_wordpress ) {
-        $widget_class_name = get_class( $widget_wordpress->get_widget_instance() );
-
-        if ( 0 === strpos( $widget_class_name, 'Dokan_Store_') ) {
-            $widget = $widget_wordpress->get_widget_instance();
-
-            $id = str_replace( 'REPLACE_TO_ID', $widget_wordpress->get_id(), $widget->id );
-            $default_widget_args['before_widget'] = sprintf( '<aside id="%1$s" class="widget dokan-store-widget %2$s">', $id, $widget->widget_options['classname'] );
-            $default_widget_args['after_widget']  = '</aside>';
-            $default_widget_args['before_title']  = '<h3 class="widget-title">';
-            $default_widget_args['after_title']   = '</h3>';
-        }
-
-        return $default_widget_args;
-    }
-
-    /**
      * Add column wrapper padding control for sections
      *
      * @since 1.0.0
@@ -273,5 +247,18 @@ class Module extends ModuleBase {
         $template = apply_filters( 'dokan_elementor_store_tab_content_template', $template );
 
         include_once $template;
+    }
+
+    /**
+     * Enqueue scripts in editing or preview mode
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function enqueue_editor_scripts() {
+        if ( dokan_elementor()->is_edit_or_preview_mode() ) {
+            dokan()->scripts->load_gmap_script();
+        }
     }
 }

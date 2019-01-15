@@ -139,6 +139,7 @@ final class DokanElementor {
      */
     private function instances() {
         \DokanPro\Modules\Elementor\Templates::instance();
+        \DokanPro\Modules\Elementor\StoreWPWidgets::instance();
         \DokanPro\Modules\Elementor\Module::instance();
     }
 
@@ -151,6 +152,32 @@ final class DokanElementor {
      */
     public function elementor() {
         return \Elementor\Plugin::instance();
+    }
+
+    /**
+     * Is editing or preview mode running
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public function is_edit_or_preview_mode() {
+        $is_edit_mode    = $this->elementor()->editor->is_edit_mode();
+        $is_preview_mode = $this->elementor()->preview->is_preview_mode();
+
+        if ( empty( $is_edit_mode ) && empty( $is_preview_mode ) ) {
+            if ( ! empty( $_REQUEST['action'] ) && ! empty( $_REQUEST['editor_post_id'] ) ) {
+                $is_edit_mode = true;
+            } else if ( ! empty( $_REQUEST['preview'] ) && $_REQUEST['preview'] && ! empty( $_REQUEST['theme_template_id'] ) ) {
+                $is_preview_mode = true;
+            }
+        }
+
+        if ( $is_edit_mode || $is_preview_mode ) {
+            return true;
+        }
+
+        return false;
     }
 
     /**

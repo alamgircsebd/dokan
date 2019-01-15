@@ -67,6 +67,8 @@ class Dokan_Store_Support_Widget extends WP_Widget {
 
             echo $after_widget;
         }
+
+        do_action( 'dokan_pro_widget_store_support_render', $args, $instance, $this );
     }
 
     /**
@@ -94,7 +96,7 @@ class Dokan_Store_Support_Widget extends WP_Widget {
      */
     function form( $instance ) {
         $instance = wp_parse_args( (array) $instance, array(
-            'title'       => __( 'Store Support' , 'dokan' ),
+            'title'       => __( 'Contact Vendor' , 'dokan' ),
             'description' => '',
         ) );
 
