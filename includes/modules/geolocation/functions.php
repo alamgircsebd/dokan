@@ -121,9 +121,8 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         'show_count' => 0,
     ) );
 
-    $dokan_pages = get_option( 'dokan_pages' );
-    $store_listing_page = isset( $dokan_pages['store_listing'] ) ? get_permalink( $dokan_pages['store_listing'] ) : '';
-    $wc_shop_page = get_permalink( wc_get_page_id( 'shop' ) );
+    $store_listing_page = dokan_get_permalink( 'store_listing' );
+    $wc_shop_page       = get_permalink( wc_get_page_id( 'shop' ) );
 
     $args = array(
         'scope'      => $scope,
