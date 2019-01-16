@@ -397,8 +397,14 @@ class Dokan_Pro_Admin_Settings {
             array(
                 'post_title' => __( 'Store List', 'dokan' ),
                 'slug'       => 'store-listing',
-                'page_id'    => 'my_orders',
+                'page_id'    => 'store_listing',
                 'content'    => '[dokan-stores]'
+            ),
+            array(
+                'post_title' => __( 'My Orders', 'dokan-lite' ),
+                'slug'       => 'my-orders',
+                'page_id'    => 'my_orders',
+                'content'    => '[dokan-my-orders]',
             ),
         );
 
@@ -415,8 +421,9 @@ class Dokan_Pro_Admin_Settings {
                     'post_type'      => 'page',
                     'comment_status' => 'closed'
                         ) );
-                $dokan_pages[$page['slug']] = $page_id ;
+                $dokan_pages[ $page['page_id'] ] = $page_id ;
             }
+
             update_option( 'dokan_pages', $dokan_pages );
             flush_rewrite_rules();
         } else {
@@ -431,10 +438,9 @@ class Dokan_Pro_Admin_Settings {
                         'post_type'      => 'page',
                         'comment_status' => 'closed'
                             ) );
-                    $dokan_pages[$page['slug']] = $page_id ;
+                    $dokan_pages[ $page['page_id'] ] = $page_id ;
                     update_option( 'dokan_pages', $dokan_pages );
                 }
-
             }
 
             flush_rewrite_rules();
@@ -457,19 +463,24 @@ class Dokan_Pro_Admin_Settings {
      * @return boolean
      */
     function dokan_page_exist( $slug ) {
+        if ( ! $slug ) {
+            return false;
+        }
+
         $page_created = get_option( 'dokan_pages_created', false );
 
         if ( ! $page_created ) {
-            return FALSE;
+            return false;
         }
 
         $page_list = get_option( 'dokan_pages', '' );
+        $slug      = str_replace( '-', '_', $slug );
         $page      = isset( $page_list[$slug] ) ? get_post( $page_list[$slug] ) : null;
 
-        if ( $page == null ) {
-            return FALSE;
+        if ( $page === null ) {
+            return false;
         } else {
-            return TRUE;
+            return true;
         }
     }
 
