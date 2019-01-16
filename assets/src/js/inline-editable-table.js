@@ -17,6 +17,10 @@ jQuery( document ).ready( function ( $ ) {
         self.$table.on( 'click', '.item-inline-edit', function ( e ) {
             e.preventDefault();
 
+            if ( ! dokan.is_vendor_enabled ) {
+                return alert( dokan.not_enable_message );
+            }
+
             self.$table.find( 'tr.dokan-product-list-inline-edit-form' ).addClass( 'dokan-hide' );
 
             var anchor = $( this ).children( 'a' );
