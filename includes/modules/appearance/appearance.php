@@ -214,7 +214,7 @@ class Dokan_Apperance {
     function load_styles() {
         $page = ( isset( $_GET['page'] ) && $_GET['page'] == 'dokan-seller-setup' ) ? 'seller-setup' : '';
 
-        if ( ( ! dokan_is_seller_dashboard() && get_query_var( 'post_type' ) != 'product' ) && $page != 'seller-setup' ) {
+        if ( ( ! dokan_is_seller_dashboard() && get_query_var( 'post_type' ) !== 'product' ) && $page !== 'seller-setup' && ! dokan_is_store_listing() && ! is_account_page() ) {
             return;
         }
 
