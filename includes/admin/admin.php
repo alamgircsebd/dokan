@@ -61,9 +61,10 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
             $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
             $submenu[ $slug ][] = array( $refund_text, $capability, 'admin.php?page=' . $slug . '#/refund?status=pending' );
+            $submenu[ $slug ][] = array( __( 'Reports', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/reports' );
         }
 
-        $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
+        // $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
@@ -75,7 +76,7 @@ class Dokan_Pro_Admin_Settings {
 
         // $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
 
-        add_action( $report, array( $this, 'common_scripts' ) );
+        // add_action( $report, array( $this, 'common_scripts' ) );
     }
 
     /**
@@ -316,6 +317,11 @@ class Dokan_Pro_Admin_Settings {
             'component' => 'Tools'
         );
 
+        $routes[] = array(
+            'path'      => '/reports',
+            'name'      => 'Reports',
+            'component' => 'Reports'
+        );
 
         return $routes;
     }
@@ -474,15 +480,15 @@ class Dokan_Pro_Admin_Settings {
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
-            'title'  => __( 'All Vendors', 'dokan' ),
+            'title'  => __( 'Vendors', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan#/vendors' )
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-reports',
             'parent' => 'dokan',
-            'title'  => __( 'Earning Reports', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan-reports' )
+            'title'  => __( 'Reports', 'dokan' ),
+            'href'   => admin_url( 'admin.php?page=dokan#/reports' )
         ) );
 
         $wp_admin_bar->add_menu( array(
