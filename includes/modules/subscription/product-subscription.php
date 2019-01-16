@@ -84,6 +84,10 @@ class Dokan_Product_Subscription {
             return;
         }
 
+        $this->init_hooks();
+    }
+
+    public function init_hooks() {
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 99 );
 
@@ -131,6 +135,19 @@ class Dokan_Product_Subscription {
 
         // include rest api class
         add_filter( 'dokan_rest_api_class_map', array( $this, 'rest_api_class_map' ) );
+
+        // include email class
+        add_action( 'dokan_loaded', [ $this, 'load_emails' ], 20 );
+    }
+
+    /**
+     * Load email classes
+     *
+     * @return void
+     */
+    public function load_emails() {
+        add_filter( 'dokan_email_classes', array( $this, 'register_email_class' ) );
+        add_filter( 'dokan_email_actions', array( $this, 'register_email_action' ) );
     }
 
     /**
@@ -1124,6 +1141,8 @@ class Dokan_Product_Subscription {
             return;
         }
 
+        do_action( 'dokan_subscription_cancelled', $customer_id, get_user_meta( $customer_id, 'product_package_id', true ) );
+
         delete_user_meta( $customer_id, 'product_package_id' );
         delete_user_meta( $customer_id, 'product_order_id' );
         delete_user_meta( $customer_id, 'product_no_with_pack' );
@@ -1342,6 +1361,32 @@ class Dokan_Product_Subscription {
         $class = [ dirname( __FILE__ ) . '/api/class-subscription-controller.php' => 'Dokan_REST_Subscription_Controller' ];
 
         return array_merge( $classes, $class );
+    }
+
+    /**
+     * Register email class
+     *
+     * @param  array $wc_emails
+     *
+     * @return array
+     */
+    public function register_email_class( $wc_emails ) {
+        $wc_emails['Dokan_Subscription_Cancelled'] = require_once DPS_PATH . '/includes/emails/subscription-cancelled.php';
+
+        return $wc_emails;
+    }
+
+    /**
+     * Register email action
+     *
+     * @param array $actions
+     *
+     * @return array
+     */
+    public function register_email_action( $actions ) {
+        $actions[] = 'dokan_subscription_cancelled';
+
+        return $actions;
     }
 
 } // Dokan_Product_Subscription
