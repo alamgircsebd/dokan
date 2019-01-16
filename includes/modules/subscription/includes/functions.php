@@ -12,6 +12,10 @@ function dps_user_remaining_product( $user_id ) {
     $user_pack_id    = get_user_meta( $user_id, 'product_package_id', true );
     $pack_product_no = get_post_meta( $user_pack_id, '_no_of_product', true );
 
+    if ( '-1' === $pack_product_no ) {
+        return '-1';
+    }
+
     $remaining_product =  $pack_product_no - $dps->get_number_of_product_by_seller( $user_id );
     $remaining_product = $remaining_product < 0 ? 0 : $remaining_product;
 

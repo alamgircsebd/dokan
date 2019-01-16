@@ -79,12 +79,12 @@ class DPS_Admin {
             array(
                 'id'                => '_no_of_product',
                 'label'             => __( 'Number of Products', 'dokan' ),
-                'placeholder'       => 10,
+                'placeholder'       => __( 'Put -1 for unlimited products', 'dokan' ),
                 'description'       => __( 'Enter the no of product you want to give this package.', 'dokan' ),
                 'type'              => 'number',
                 'custom_attributes' => array(
                     'step' => 'any',
-                    'min'  => '0'
+                    'min'  => '-1'
                 )
             )
         );

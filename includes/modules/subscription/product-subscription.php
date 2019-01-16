@@ -245,6 +245,10 @@ class Dokan_Product_Subscription {
 
             $remaining_product = dps_user_remaining_product( get_current_user_id() );
 
+            if ( '-1' === $remaining_product ) {
+                return printf( '<p class="dokan-info">%s</p>', __( 'You can add unlimited products', 'dokan' ) );
+            }
+
             if ( $remaining_product == 0 || !self::can_post_product() ) {
                 if( self::is_dokan_plugin() ) {
                     $permalink = dokan_get_navigation_url('subscription');
@@ -253,7 +257,7 @@ class Dokan_Product_Subscription {
                     $permalink = get_permalink( $page_id );
                 }
                 // $page_id = dokan_get_option( 'subscription_pack', 'dokan_product_subscription' );
-                $info    = sprintf( __( 'Sorry! You can not add or publish any more product. Please <a href="%s">update your package</a>.', 'dokan' ), $permalink );
+                $info = sprintf( __( 'Sorry! You can not add or publish any more product. Please <a href="%s">update your package</a>.', 'dokan' ), $permalink );
                 echo "<p class='dokan-info'>" . $info . "</p>";
                 echo "<style>.dokan-add-product-link{display : none !important}</style>";
             } else {
@@ -402,6 +406,10 @@ class Dokan_Product_Subscription {
 
             $remaining_product = dps_user_remaining_product( $user_id );
 
+            if ( '-1' === $remaining_product ) {
+                return;
+            }
+
             if ( $remaining_product <= 0 ) {
                 $errors[] = __( "Sorry your subscription exceeds your package limits please update your package subscription", 'dokan' );
                 return $errors;
@@ -494,11 +502,15 @@ class Dokan_Product_Subscription {
                         <?php printf( __( 'Your are using <span>%s</span> package.', 'dokan' ), $product->get_title() ); ?>
                     </p>
                     <p>
-                        <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
-                            printf( __( 'You can add <span>%s</span> product(s) for <span> unlimited days</span> days.', 'dokan' ), get_post_meta( $product->get_id(), '_no_of_product', true ) );
-                        } else {
-                            printf( __( 'You can add <span>%s</span> product(s) for <span>%s</span> days.', 'dokan' ), get_post_meta( $product->get_id(), '_no_of_product', true ), get_post_meta( $product->get_id(), '_pack_validity', true ) );
-                        } ?>
+                        <?php
+                            $no_of_product = '-1' !== get_post_meta( $product->get_id(), '_no_of_product', true ) ? get_post_meta( $product->get_id(), '_no_of_product', true ) : __( 'unlimited', 'dokan' );
+
+                            if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
+                                printf( __( 'You can add <span>%s</span> product(s) for <span> unlimited days</span> days.', 'dokan' ), $no_of_product );
+                            } else {
+                                printf( __( 'You can add <span>%s</span> product(s) for <span>%s</span> days.', 'dokan' ), $no_of_product, get_post_meta( $product->get_id(), '_pack_validity', true ) );
+                            }
+                        ?>
                     </p>
                     <p>
                         <?php if ( get_user_meta( $user_id, 'product_pack_enddate', true ) == 'unlimited' ) {
@@ -568,7 +580,13 @@ class Dokan_Product_Subscription {
                                 <?php the_content();
 
                                 $no_of_product = get_post_meta( get_the_id(), '_no_of_product', true );
-                                printf( __( '<div class="pack_data_option"><strong>%d</strong> Products <br />', 'dokan' ), $no_of_product );
+
+                                if ( '-1' === $no_of_product ) {
+                                    printf( __( '<div class="pack_data_option"><strong>Unlimited</strong> Products <br />', 'dokan' ) );
+                                } else {
+                                    printf( __( '<div class="pack_data_option"><strong>%d</strong> Products <br />', 'dokan' ), $no_of_product );
+                                }
+
                                 ?>
 
                                 <?php if ( $is_recurring && $recurring_interval >= 1 ) { ?>
@@ -643,6 +661,10 @@ class Dokan_Product_Subscription {
         if ( dokan_is_user_seller( $user_id ) ) {
 
             $remaining_product = dps_user_remaining_product( $user_id );
+
+            if ( '-1' === $remaining_product ) {
+                return;
+            }
 
             if ( $remaining_product <= 0 ) {
                 $errors = new WP_Error( 'no-subscription', __( 'Sorry your subscription exceeds your package limits please update your package subscription', 'dokan' ) );
@@ -1288,7 +1310,14 @@ class Dokan_Product_Subscription {
             return $object;
         }
 
-        if ( dps_user_remaining_product( $user_id ) < 1 ) {
+        $user_remaining_product = dps_user_remaining_product( $user_id );
+
+        // -1 menas unlimited products
+        if ( '-1' === $user_remaining_product ) {
+            return $object;
+        }
+
+        if ( $user_remaining_product < 1 ) {
             $rf = new ReflectionProperty( get_class( $object ), 'data_store' );
 
             if ( ! is_object( $rf ) ) {
