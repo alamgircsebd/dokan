@@ -843,6 +843,8 @@ class Dokan_Pro_Products {
             $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
         }
 
+        $data = apply_filters( 'dokan_update_product_post_data', $data );
+
         $product_id = dokan_save_product( $data );
 
         if ( is_wp_error( $product_id ) ) {
