@@ -5,6 +5,7 @@ namespace DokanPro\Modules\Elementor\Widgets;
 use DokanPro\Modules\Elementor\Controls\DynamicHidden;
 use DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Controls_Manager;
+use Elementor\Group_Control_Box_Shadow;
 use Elementor\Repeater;
 use Elementor\Widget_Social_Icons;
 
@@ -192,6 +193,17 @@ class StoreSocialProfile extends Widget_Social_Icons {
                         'social' => 'fa fa-flickr',
                     ],
                 ],
+            ]
+        );
+
+        $this->add_group_control(
+            Group_Control_Box_Shadow::get_type(),
+            [
+                'name'     => 'box_shadow',
+                'selector' => '{{WRAPPER}} .elementor-social-icon',
+            ],
+            [
+                'position' => [ 'of' => 'icon_spacing' ]
             ]
         );
 
