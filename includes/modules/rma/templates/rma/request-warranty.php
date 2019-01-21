@@ -95,7 +95,7 @@ $count_warranty_product = 0;
             <label for=""><?php _e( 'I want to request for a', 'dokan' ) ?></label>
             <select name="type" id="type">
                 <?php foreach ( dokan_warranty_request_type() as $type_key => $type_value ): ?>
-                    <option value="<?php $type_key; ?>"><?php echo $type_value; ?></option>
+                    <option value="<?php echo $type_key; ?>"><?php echo $type_value; ?></option>
                 <?php endforeach ?>
             </select>
         </div>
