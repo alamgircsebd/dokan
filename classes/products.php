@@ -675,7 +675,9 @@ class Dokan_Pro_Products {
     public function dokan_pro_localized_args( $args ) {
         $dokan_pro_args = array(
             'product_vendors_can_create_tags' => dokan_get_option( 'product_vendors_can_create_tags', 'dokan_selling' ),
-            'product_inline_edit_nonce' => wp_create_nonce( 'product-inline-edit' ),
+            'product_inline_edit_nonce'       => wp_create_nonce( 'product-inline-edit' ),
+            'is_vendor_enabled'               => dokan_is_seller_enabled( dokan_get_current_user_id() ),
+            'not_enable_message'              => __( 'Error! Your account is not enabled for selling, please contact the admin', 'dokan' ),
         );
 
         return array_merge( $args, $dokan_pro_args );
@@ -842,6 +844,8 @@ class Dokan_Pro_Products {
         foreach ( $args as $field => $default_val ) {
             $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
         }
+
+        $data = apply_filters( 'dokan_update_product_post_data', $data );
 
         $product_id = dokan_save_product( $data );
 

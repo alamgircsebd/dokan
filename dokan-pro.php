@@ -653,6 +653,7 @@ class Dokan_Pro {
             dirname( __FILE__ ) . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
             dirname( __FILE__ ) . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
             dirname( __FILE__ ) . '/includes/api/class-refund-controller.php'            => 'Dokan_REST_Refund_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-logs-controller.php'              => 'Dokan_REST_Logs_Controller',
         );
 
         return array_merge( $class_map, $classes );

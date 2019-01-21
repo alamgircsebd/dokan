@@ -121,9 +121,8 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         'show_count' => 0,
     ) );
 
-    $dokan_pages = get_option( 'dokan_pages' );
-    $store_listing_page = isset( $dokan_pages['store_listing'] ) ? get_permalink( $dokan_pages['store_listing'] ) : '';
-    $wc_shop_page = get_permalink( wc_get_page_id( 'shop' ) );
+    $store_listing_page = dokan_get_permalink( 'store_listing' );
+    $wc_shop_page       = get_permalink( wc_get_page_id( 'shop' ) );
 
     $args = array(
         'scope'      => $scope,
@@ -187,4 +186,15 @@ function dokan_geo_remove_seller_listing_footer_content_hook() {
     add_action( 'dokan_seller_listing_footer_content', function () {
         remove_action( 'dokan_seller_listing_footer_content', array( Dokan_Geolocation_Vendor_View::class, 'seller_listing_footer_content' ) );
     }, 9 );
+}
+
+/**
+ * A helper function to escape float values
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return float
+ */
+function dokan_geo_float_val( $val ) {
+    return floatval( preg_replace( '/[^-0-9\.]/', '', $val ) );
 }

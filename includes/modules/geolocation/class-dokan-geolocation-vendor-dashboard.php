@@ -17,6 +17,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
     public function __construct() {
         add_action( 'dokan_store_profile_saved', array( $this, 'save_vendor_geodata' ), 10, 2 );
         add_action( 'dokan_product_edit_after_options', array( $this, 'add_product_editor_options' ) );
+        add_action( 'dokan_new_product_added', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
     }
 
@@ -102,10 +103,12 @@ class Dokan_Geolocation_Vendor_Dashboard {
      * @return void
      */
     public function add_product_editor_options( $post_id ) {
-        $use_store_settings = $this->use_store_settings( $post_id );
+        $store_id            = dokan_get_current_user_id();
+        $store_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
+
+        $use_store_settings  = $this->use_store_settings( $post_id );
 
         if ( ! $use_store_settings ) {
-            $store_id      = dokan_get_current_user_id();
             $dokan_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
             $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
             $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
@@ -131,6 +134,8 @@ class Dokan_Geolocation_Vendor_Dashboard {
             'dokan_geo_longitude' => $dokan_geo_longitude,
             'dokan_geo_public'    => $dokan_geo_public,
             'dokan_geo_address'   => $dokan_geo_address,
+            'store_has_settings'  => ! empty( $store_geo_latitude ),
+            'store_settings_url'  => dokan_get_navigation_url( 'settings/store' ),
         );
 
         dokan_geo_get_template( 'product-editor-options', $args );
@@ -146,13 +151,17 @@ class Dokan_Geolocation_Vendor_Dashboard {
      * @return void
      */
     public function update_product_settings( $post_id ) {
-        $store_id      = dokan_get_current_user_id();
+        $store_id            = dokan_get_current_user_id();
         $dokan_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
         $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
         $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
         $dokan_geo_address   = get_user_meta( $store_id, 'dokan_geo_address', true );
 
-        $use_store_settings = ( 'yes' === $_POST['_dokan_geolocation_use_store_settings'] ) ? 'yes' : 'no';
+        $use_store_settings = 'yes';
+
+        if ( isset( $_POST['_dokan_geolocation_use_store_settings'] ) && 'yes' !== $_POST['_dokan_geolocation_use_store_settings'] ) {
+            $use_store_settings = 'no';
+        }
 
         update_post_meta( $post_id, '_dokan_geolocation_use_store_settings', $use_store_settings );
 
