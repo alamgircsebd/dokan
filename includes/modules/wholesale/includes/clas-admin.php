@@ -6,7 +6,7 @@
 class Dokan_Wholesale_Admin {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since DOKAN_PRO_SINCE
      */
@@ -59,7 +59,7 @@ class Dokan_Wholesale_Admin {
 
             'display_price_in_shop_archieve' => array(
                 'name'    => 'display_price_in_shop_archieve',
-                'label'   => __( 'Show wholesale price on shop arichive', 'dokan' ),
+                'label'   => __( 'Show wholesale price on shop archive', 'dokan' ),
                 'type'    => 'checkbox',
                 'desc'    => __( 'Show in price column', 'dokan' ),
                 'default' => 'no',

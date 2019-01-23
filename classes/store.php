@@ -9,7 +9,7 @@
 class Dokan_Pro_Store {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.4.3
      *

@@ -12,7 +12,7 @@ class Dokan_RMA_Product {
     use Dokan_RMA_Common;
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 1.0.0
      */

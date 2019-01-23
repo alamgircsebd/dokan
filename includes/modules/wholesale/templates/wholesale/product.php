@@ -28,7 +28,7 @@
 
         <div class="dokan-form-group content-half-part">
             <label class="form-label" for="dokan-wholesale-qty"><?php _e( 'Minimum Quantity for Wholesale: ', 'dokan' ); ?>
-                <span class="dokan-tooltips-help tips" data-placement="bottom" data-original-title="<?php _e( 'Set your minimum qunatity for applying wholesale price autometically', 'dokan' ); ?>">
+                <span class="dokan-tooltips-help tips" data-placement="bottom" data-original-title="<?php _e( 'Set your minimum quantity for applying wholesale price automatically', 'dokan' ); ?>">
                     <i class="fa fa-question-circle"></i>
                 </span>
             </label>

@@ -31,7 +31,7 @@ class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Control
     protected $post_type = 'product_variation';
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.8.0
      */

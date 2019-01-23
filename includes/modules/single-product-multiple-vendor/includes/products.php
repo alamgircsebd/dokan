@@ -8,7 +8,7 @@
 class Dokan_SPMV_Products {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 1.0.0
      */

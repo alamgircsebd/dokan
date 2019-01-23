@@ -9,7 +9,7 @@
 class Dokan_Pro_Ajax {
 
     /**
-     * Loadin autometically when class initiate
+     * Loading automatically when class initiate
      *
      * @since 2.4
      *

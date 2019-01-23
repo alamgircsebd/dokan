@@ -13,7 +13,7 @@ class Dokan_Pro_Store_Seo {
     private $store_info = false;
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @uses actions hook
      * @uses filter hook

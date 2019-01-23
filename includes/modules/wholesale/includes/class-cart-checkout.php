@@ -8,7 +8,7 @@
 class Dokan_Wholesale_Cart_Checkout {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since DOKAN_PRO_SINCE
      */

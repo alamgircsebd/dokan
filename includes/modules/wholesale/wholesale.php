@@ -6,7 +6,7 @@ Description: Offer any customer to buy product as a wholesale price from any ven
 Version: DOKAN_PRO_SINCE
 Author: weDevs
 Author URI: http://wedevs.com/
-Thumbnail Name: product-enquiry.png
+Thumbnail Name: wholesale.png
 License: GPL2
 */
 
@@ -45,7 +45,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class Dokan_Wholesale {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since DOKAN_PRO_SINCE
      */

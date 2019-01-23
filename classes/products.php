@@ -17,7 +17,7 @@ class Dokan_Pro_Products {
     private $inline_edit_options = array();
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.4
      *

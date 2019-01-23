@@ -16,7 +16,7 @@
  * Dokan Pro Feature Loader
  *
  * Load all pro functionality in this class
- * if pro folder exist then autometically load this class file
+ * if pro folder exist then automatically load this class file
  *
  * @since 2.4
  *

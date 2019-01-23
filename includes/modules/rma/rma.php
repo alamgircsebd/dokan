@@ -6,7 +6,7 @@ Description: Manage return and warranty from vendor end
 Version: 1.0.0
 Author: weDevs
 Author URI: http://wedevs.com/
-Thumbnail Name: product-enquiry.png
+Thumbnail Name: rma.png
 License: GPL2
 */
 
@@ -45,7 +45,7 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class Dokan_RMA {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 1.0.0
      */
