@@ -72,6 +72,10 @@ class Dokan_Wholesale_Cart_Checkout {
             return;
         }
 
+        if ( ! $product->is_type( 'simple' ) ) {
+            return;
+        }
+
         $wholesale = get_post_meta( $product->get_id(), '_dokan_wholesale_meta', true );
 
         if ( ! isset( $wholesale['enable_wholesale'] ) ) {
