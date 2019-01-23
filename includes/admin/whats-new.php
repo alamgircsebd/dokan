@@ -1,6 +1,37 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.4',
+        'released' => '2019-01-23',
+        'changes'  => array(
+            array(
+                'title'         => 'Wholesale Module(Business, Enterprise Package)',
+                'type'          => 'New',
+                'description'   => 'Added new Wholesale module. Vendor can offer wholesale price for his/her products.'
+            ),
+            array(
+                'title'         => 'Return and Warranty Module(Professional, Business, Enterprise Package)',
+                'type'          => 'New',
+                'description'   => 'Vendor can offer warranty and return system for their products and customer can take this warranty offers'
+            ),
+            array(
+                'title'         => 'Subscription cancellation email',
+                'type'          => 'New',
+                'description'   => 'Now admin can get email if any subscription is cancelled by vendor'
+            ),
+            array(
+                'title'         => 'Subscription Unlimited pack',
+                'type'          => 'New',
+                'description'   => 'Admin can offer unlimited package for vendor subscription'
+            ),
+            array(
+                'title'         => 'MOIP Gateway connection issue',
+                'type'          => 'Fix',
+                'description'   => 'Change some gateway api params for connection moip gateway'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.3',
         'released' => '2018-12-18',
         'changes'  => array(
