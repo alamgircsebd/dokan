@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 56);
+/******/ 	return __webpack_require__(__webpack_require__.s = 61);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -175,23 +175,7 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ 56:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _WholesaleCustomer = __webpack_require__(73);
-
-var _WholesaleCustomer2 = _interopRequireDefault(_WholesaleCustomer);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-dokan_add_route(_WholesaleCustomer2.default);
-
-/***/ }),
-
-/***/ 72:
+/***/ 15:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -521,18 +505,34 @@ var Search = dokan_get_lib('Search');
 
 /***/ }),
 
-/***/ 73:
+/***/ 61:
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _WholesaleCustomer = __webpack_require__(62);
+
+var _WholesaleCustomer2 = _interopRequireDefault(_WholesaleCustomer);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+dokan_add_route(_WholesaleCustomer2.default);
+
+/***/ }),
+
+/***/ 62:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_WholesaleCustomer_vue__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_WholesaleCustomer_vue__ = __webpack_require__(15);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5706824d_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_WholesaleCustomer_vue__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_5706824d_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_WholesaleCustomer_vue__ = __webpack_require__(64);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
-  __webpack_require__(77)
+  __webpack_require__(63)
 }
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -579,7 +579,14 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 75:
+/***/ 63:
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 64:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -821,13 +828,6 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-5706824d", esExports)
   }
 }
-
-/***/ }),
-
-/***/ 77:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 

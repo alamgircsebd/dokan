@@ -1,3 +1,17 @@
+v2.9.4 -> January 23, 2018
+------------------------------------
+- [new] Wholesale Module ( Business and Enterprise package )
+- [new] Return and Warranty(RMA) Module ( Professiona, Business and Enterprise package )
+- [new] Send subscription cancelled email to admin (Subscription Module)
+- [new] Add unlimited products option for vendor subscription packs (Subscription Module)
+- [fix] Color customizer is not working on store listing & my-account page (Color Customizer Module)
+- [fix] Default pages are not creating correctly
+- [fix] Show seller is not enable warning message in vendor product quick edit page
+- [fix] Vendor is unable to connect their account to Moip (Moip Module)
+- [fix] Map address input in product editor form & showing location in widget map (Geolocation Module)
+- [tweak] Rewrite admin report page in vue js
+- [tweak] Show an alert message when vendor tries to set product geolocation same as store but store has no geodata (Geolocation Module)
+
 v2.9.3 -> December 18, 2018
 ------------------------------------
 - [new] Add ShipStation module(Business, Enterprise)

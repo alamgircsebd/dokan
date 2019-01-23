@@ -30,7 +30,7 @@ class Dokan_Wholesale_Admin {
         $section[] = array(
             'id'    => 'dokan_wholesale',
             'title' => __( 'Wholesale', 'dokan' ),
-            'icon'  => 'dashicons-store'
+            'icon'  => 'dashicons-admin-multisite'
         );
 
         return $section;
