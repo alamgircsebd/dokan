@@ -6,7 +6,7 @@
 class Dokan_Pro_Installer {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.8.0
      */

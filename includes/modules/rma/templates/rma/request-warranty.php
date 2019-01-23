@@ -94,9 +94,9 @@ $count_warranty_product = 0;
         <div class="warranty-form-row">
             <label for=""><?php _e( 'I want to request for a', 'dokan' ) ?></label>
             <select name="type" id="type">
-                <option value="replace"><?php _e( 'Replacement Item', 'dokan' ); ?></option>
-                <option value="refund"><?php _e( 'Refund', 'dokan' ); ?></option>
-                <option value="coupon"><?php _e( 'Refund as store credit', 'dokan' ); ?></option>
+                <?php foreach ( dokan_warranty_request_type() as $type_key => $type_value ): ?>
+                    <option value="<?php echo $type_key; ?>"><?php echo $type_value; ?></option>
+                <?php endforeach ?>
             </select>
         </div>
 

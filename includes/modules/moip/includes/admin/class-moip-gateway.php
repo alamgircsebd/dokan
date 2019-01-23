@@ -168,9 +168,81 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      */
     public function init_actions() {
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'get_moip_access_token' ) );
         add_filter( 'woocommerce_credit_card_form_fields', array( $this, 'add_cpf_field' ), 10, 2 );
         // include js
         add_action( 'wp_enqueue_scripts', array( $this, 'include_moip_js' ) );
+    }
+
+    /**
+     * Get moip access token
+     *
+     * @return void
+     */
+    public function get_moip_access_token() {
+        $post_data = wp_unslash( $_POST );
+        $field_key = "woocommerce_{$this->id}_";
+
+        if ( ! isset( $post_data["{$field_key}enabled"] ) || $post_data["{$field_key}enabled"] != 1 ) {
+            return;
+        }
+
+        $key        = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_key"] ) : wc_clean( $post_data["{$field_key}production_key"] );
+        $token      = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_token"] ) : wc_clean( $post_data["{$field_key}production_token"] );
+        $public_key = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_public_key"] ) : wc_clean( $post_data["{$field_key}production_public_key"] );
+        $base_url   = $post_data["{$field_key}testmode"] == 1 ? esc_url( 'https://sandbox.moip.com.br/v2/channels' ) : esc_url( 'https://api.moip.com.br/v2/channels' );
+
+        if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
+            return;
+        }
+
+        $body = array(
+            'name'        => get_bloginfo( 'name' ),
+            'description' => get_bloginfo( 'description' ),
+            'site'        => get_site_url(),
+            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes'
+        );
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Cache-Control: no-cache',
+            'Authorization: Basic ' . base64_encode( $token . ':' . $key ),
+        );
+
+        $curl = curl_init();
+
+        curl_setopt_array( $curl, array(
+          CURLOPT_URL => $base_url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => json_encode( $body ),
+          CURLOPT_HTTPHEADER => $headers,
+        ) );
+
+        $response = curl_exec( $curl );
+        $error    = curl_error( $curl );
+
+        curl_close( $curl );
+
+        if ( $error ) {
+            new WP_Error( __( 'Something went wrong:', 'dokan' ) . $error );
+        }
+
+        $response = json_decode( $response );
+
+        if ( isset( $response->ERROR ) ) {
+            return wp_send_json_error( $response->ERROR );
+        }
+
+        if ( ! isset( $response->id, $response->secret, $response->accessToken ) ) {
+            return;
+        }
+
+        update_option( 'moip_app_id', $response->id );
+        update_option( 'moip_secret', $response->secret );
+        update_option( 'moip_access_token', $response->accessToken );
     }
 
     /**

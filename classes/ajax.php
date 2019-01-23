@@ -9,7 +9,7 @@
 class Dokan_Pro_Ajax {
 
     /**
-     * Loadin autometically when class initiate
+     * Loading automatically when class initiate
      *
      * @since 2.4
      *
@@ -435,10 +435,10 @@ class Dokan_Pro_Ajax {
 
         // Get attributes
         $attributes        = array();
-        $posted_attributes = wp_unslash( $_POST['attributes'] );
+        $posted_attributes = json_decode( wp_unslash( $_POST['attributes'] ) );
 
         foreach ( $posted_attributes as $key => $value ) {
-            $attributes[ $key ] = array_map( 'wc_clean', $value );
+            $attributes[ $key ] = array_map( 'wc_clean', (array)$value );
         }
 
         // Get tax classes

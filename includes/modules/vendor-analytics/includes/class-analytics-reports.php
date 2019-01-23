@@ -6,7 +6,7 @@
 class Dokan_Vendor_Analytics_Reports {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 1.0.0
      */

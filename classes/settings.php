@@ -10,7 +10,7 @@
 class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.4
      *

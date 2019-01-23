@@ -55,9 +55,7 @@
         gmap.setCenter( curpoint );
         marker.setPosition( curpoint );
 
-        if ( formatted_address ) {
-            address.val( formatted_address );
-        } else {
+        if ( ! formatted_address ) {
             geocoder.geocode( {
                 location: {
                     lat: lat,
@@ -72,6 +70,7 @@
     }
 
     $( '#_dokan_geolocation_use_store_settings' ).on( 'change', function () {
+        $( '#dokan-geolocation-product-location-no-store-settings' ).toggleClass( 'dokan-hide' );
         $( '#dokan-geolocation-product-location' ).toggleClass( 'dokan-hide' );
     } );
 

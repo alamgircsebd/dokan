@@ -587,7 +587,7 @@ function dokan_report_sales_overview( $start_date, $end_date, $heading = '' ) {
         'worth_of_coupons_used' => array(
             'title' => sprintf( __( '%s worth of coupons used', 'dokan' ), '<strong>' . wc_price( $total_coupons ) . '</strong>' ),
         ),
-    ), $order_totals, $total_items, $total_coupons );
+    ) );
     ?>
     <div id="poststuff" class="dokan-reports-wrap">
         <div class="dokan-reports-sidebar report-left dokan-left">

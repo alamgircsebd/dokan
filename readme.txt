@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.0.1
+Tested up to: 5.0.3
 WC requires at least: 3.0
-WC tested up to: 3.5.2
+WC tested up to: 3.5.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,20 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.4 -> January 23, 2018
+------------------------------------
+- [new] Wholesale Module ( Business and Enterprise package )
+- [new] Return and Warranty(RMA) Module ( Professiona, Business and Enterprise package )
+- [new] Send subscription cancelled email to admin (Subscription Module)
+- [new] Add unlimited products option for vendor subscription packs (Subscription Module)
+- [fix] Color customizer is not working on store listing & my-account page (Color Customizer Module)
+- [fix] Default pages are not creating correctly
+- [fix] Show seller is not enable warning message in vendor product quick edit page
+- [fix] Vendor is unable to connect their account to Moip (Moip Module)
+- [fix] Map address input in product editor form & showing location in widget map (Geolocation Module)
+- [tweak] Rewrite admin report page in vue js
+- [tweak] Show an alert message when vendor tries to set product geolocation same as store but store has no geodata (Geolocation Module)
 
 v2.9.3 -> December 18, 2018
 ------------------------------------

@@ -107,9 +107,6 @@ class Dokan_Moip {
         // retry to make payment of due invoice
         add_action( 'template_redirect', array( $this, 'retry_delayd_payment' ) );
 
-        // get moip access token
-        add_action( 'template_redirect', array( $this, 'get_moip_access_token' ) );
-
         // register webhook
         add_action( 'template_redirect', array( $this, 'register_webhook' ) );
     }
@@ -163,92 +160,6 @@ class Dokan_Moip {
 
         if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
             update_option( 'dokan-moip-webhook-registered', 'yes' );
-        }
-    }
-
-    /**
-     * Get moip access token
-     *
-     * @return void
-     */
-    public function get_moip_access_token() {
-        if ( get_option( 'got_access_token_sandbox' ) == 'no' ) {
-            return;
-        }
-
-        $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
-
-        if ( ! isset( $settings['enabled'] ) || $settings['enabled'] == 'no' ) {
-            return;
-        }
-
-        $key        = $settings['testmode'] == 'no' ? $settings['production_key'] : $settings['test_key'];
-        $token      = $settings['testmode'] == 'no' ? $settings['production_token'] : $settings['test_token'];
-        $public_key = $settings['testmode'] == 'no' ? $settings['production_public_key'] : $settings['test_public_key'];
-        $base_url   = $settings['testmode'] == 'no' ? 'https://api.moip.com.br/v2/channels' : 'https://sandbox.moip.com.br/v2/channels';
-
-        if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
-            return;
-        }
-
-        if ( strpos( $base_url, 'sandbox' ) ) {
-            if ( get_option( 'got_access_token_sandbox' ) == 'yes' ) {
-                return;
-            }
-        }
-
-        $body = array(
-            'name'        => get_bloginfo( 'name' ),
-            'description' => get_bloginfo( 'description' ),
-            'site'        => get_site_url(),
-            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes'
-        );
-
-        $headers = array(
-            'Content-Type: application/json',
-            'Cache-Control: no-cache',
-            'Authorization: Basic ' . base64_encode( $token . ':' . $key ),
-        );
-
-        $curl = curl_init();
-
-        curl_setopt_array( $curl, array(
-          CURLOPT_URL => $base_url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 30,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS => json_encode( $body ),
-          CURLOPT_HTTPHEADER => $headers,
-        ) );
-
-        $response = curl_exec( $curl );
-        $error    = curl_error( $curl );
-
-        curl_close( $curl );
-
-        if ( $error ) {
-            new WP_Error( 'Something went wrong: ' . $error );
-        }
-
-        $response = json_decode( $response );
-
-        if ( isset( $response->ERROR ) ) {
-            return;
-        }
-
-        if ( ! isset( $response->id, $response->secret, $response->accessToken ) ) {
-            return;
-        }
-
-        update_option( 'moip_app_id', $response->id );
-        update_option( 'moip_secret', $response->secret );
-        update_option( 'moip_access_token', $response->accessToken );
-
-        if ( strpos( $base_url, 'sandbox' ) ) {
-            update_option( 'got_access_token_sandbox', 'yes' );
-        } else {
-            update_option( 'got_access_token_sandbox', 'no' );
         }
     }
 

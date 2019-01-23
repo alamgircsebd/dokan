@@ -20,7 +20,7 @@
         <div class="dokan-product-rma-option-wrapper">
             <div class="dokan-form-group">
                 <label class="form-label" for="dokan-rma-label"><?php _e( 'Label: ', 'dokan' ); ?>
-                    <span class="dokan-tooltips-help tips" data-placement="bottom" data-original-title="<?php _e( 'Warrany label what customer will be seen', 'dokan' ); ?>">
+                    <span class="dokan-tooltips-help tips" data-placement="bottom" data-original-title="<?php _e( 'Warrany label what customer will be see', 'dokan' ); ?>">
                         <i class="fa fa-question-circle"></i>
                     </span>
                 </label>

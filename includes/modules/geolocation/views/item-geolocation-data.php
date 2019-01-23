@@ -1,3 +1,7 @@
+<?php
+    $dokan_geo_latitude  = dokan_geo_float_val( $dokan_geo_latitude );
+    $dokan_geo_longitude = dokan_geo_float_val( $dokan_geo_longitude );
+?>
 <input
     type="hidden"
     name="dokan_geolocation[]"

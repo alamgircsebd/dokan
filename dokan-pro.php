@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.9.3
+  Version: 2.9.4
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 3.5.2
+  WC tested up to: 3.5.4
   License: GPL2
   TextDomain: dokan
  */
@@ -16,7 +16,7 @@
  * Dokan Pro Feature Loader
  *
  * Load all pro functionality in this class
- * if pro folder exist then autometically load this class file
+ * if pro folder exist then automatically load this class file
  *
  * @since 2.4
  *
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.3';
+    public $version = '2.9.4';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -653,6 +653,7 @@ class Dokan_Pro {
             dirname( __FILE__ ) . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
             dirname( __FILE__ ) . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
             dirname( __FILE__ ) . '/includes/api/class-refund-controller.php'            => 'Dokan_REST_Refund_Controller',
+            dirname( __FILE__ ) . '/includes/api/class-logs-controller.php'              => 'Dokan_REST_Logs_Controller',
         );
 
         return array_merge( $class_map, $classes );

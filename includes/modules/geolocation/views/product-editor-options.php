@@ -24,6 +24,14 @@
             ?>
         </div>
 
+        <?php if ( ! $store_has_settings ): ?>
+            <div class="dokan-form-group<?php echo ( 'yes' !== $use_store_settings ) ? ' dokan-hide' : ''; ?>" id="dokan-geolocation-product-location-no-store-settings">
+                <p class="dokan-error">
+                    <?php printf( __( "Your store doesn't have geolocation settings. Please set it first in your <a href=\"%s\" target=\"_blank\">store settings</a>.", 'dokan' ), $store_settings_url ); ?>
+                </p>
+            </div>
+        <?php endif; ?>
+
         <div class="dokan-form-group<?php echo ( 'yes' === $use_store_settings ) ? ' dokan-hide' : '' ?>" id="dokan-geolocation-product-location">
             <label for="_dokan_geolocation_product_location" class="form-label">
                 <?php _e( 'Product Location', 'dokan' ); ?>

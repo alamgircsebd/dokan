@@ -57,7 +57,7 @@ class Dokan_Follow_Store_Vendor_Dashboard {
     public function load_dashboard_template( $query_vars ) {
         global $wpdb;
 
-        if ( ! array_key_exists( 'followers' , $query_vars ) ) {
+        if ( empty( $query_vars ) || ! array_key_exists( 'followers' , $query_vars ) ) {
             return;
         }
 

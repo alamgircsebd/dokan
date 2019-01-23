@@ -10,7 +10,7 @@
 class Dokan_Pro_Admin_Ajax {
 
     /**
-     * Load autometically all actions
+     * Load automatically all actions
      */
     function __construct() {
         add_action( 'wp_ajax_regen_sync_table', array( $this, 'regen_sync_order_table' ) );

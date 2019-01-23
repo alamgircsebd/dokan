@@ -352,6 +352,7 @@ extract( $variation_data );
                 ?>
                 <div class="dokan-clearfix"></div>
             </div>
+
             <?php do_action( 'dokan_product_after_variable_attributes', $loop, $variation_data, $variation ); ?>
         </div>
     </div>

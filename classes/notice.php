@@ -13,7 +13,7 @@ class Dokan_Pro_Notice {
     public $notice_id;
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.4
      *
