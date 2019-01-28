@@ -1,5 +1,5 @@
 ( function ( $ ) {
-    var SortableListRowView = elementor.modules.RepeaterRowView.extend( {
+    var SortableListRowView = elementor.modules.controls.RepeaterRow.extend( {
         template: Marionette.TemplateCache.get( '#tmpl-elementor-sortable-list-row' ),
 
         setTitle: function() {

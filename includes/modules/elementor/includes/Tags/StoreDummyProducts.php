@@ -52,7 +52,7 @@ class StoreDummyProducts extends TagBase {
         }
 
         echo '<div class="site-main">';
-        echo do_shortcode( '[products]' );
+        echo do_shortcode( '[products limit="15"]' );
         echo '</div>';
     }
 }

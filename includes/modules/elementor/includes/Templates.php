@@ -66,7 +66,13 @@ class Templates {
      * @param array $value
      */
     public static function add_template_library( $value ) {
-        $value['categories'][] = 'single store';
+        if ( 'string' === gettype($value['categories']) ) {
+            $categories          = json_decode( $value['categories'], true );
+            $categories[]        = 'single store';
+            $value['categories'] = $categories;
+        } else {
+            $value['categories'][] = 'single store';
+        }
 
         $store_templates = [
             [

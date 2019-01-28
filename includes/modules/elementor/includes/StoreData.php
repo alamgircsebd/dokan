@@ -90,7 +90,7 @@ class StoreData {
                 ];
             }
 
-            $this->store_data['name'] = $store->get_name();
+            $this->store_data['name'] = $store->get_shop_name();
 
             $profile_picture_id = $store->get_info_part( 'gravatar' );
 

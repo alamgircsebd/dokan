@@ -11,3 +11,7 @@
     border-collapse: collapse;
     border: 1px solid #d5dadf;
 }
+
+.elementor-control-type-sortable_list .elementor-label-inline > .elementor-control-content > .elementor-control-field > .elementor-control-input-wrapper {
+    margin-left: 0;
+}
