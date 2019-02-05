@@ -74,7 +74,9 @@
                     </div>
                     <div class="action-links">
                         <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
-                        <a :href="editUrl()" class="button edit-store"><span class="dashicons dashicons-edit"></span></a>
+                        <router-link :to="`${id}/edit`" class="button edit-store">
+                            <span class="dashicons dashicons-edit"></span>
+                        </router-link>
                     </div>
                 </div>
             </section>

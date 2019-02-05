@@ -1,6 +1,7 @@
 <template>
     <div class="vendor-list">
         <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
+        <button @click="addNew()" class="dokan-btn">{{ __( 'Add New', 'dokan' ) }}</button>
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
@@ -10,6 +11,7 @@
         </ul>
 
         <search title="Search Vendors" @searched="doSearch"></search>
+        <add-vendor v-if="loadAddVendor" />
 
         <list-table
             :columns="columns"
@@ -55,6 +57,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <span v-for="(action, index) in actions" :class="action.key">
+                    <router-link :to="`/vendors/${data.row.id}/edit`">{{ __('Edit Vendor', 'dokan') }}</router-link> |
                     <a v-if="action.key == 'edit'" :href="editUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'products'" :href="productUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'orders'" :href="ordersUrl(data.row.id)">{{ action.label }}</a>
@@ -68,6 +71,7 @@
 </template>
 
 <script>
+import AddVendor from 'admin/components/AddVendor.vue'
 let ListTable = dokan_get_lib('ListTable');
 let Switches  = dokan_get_lib('Switches');
 let Search    = dokan_get_lib('Search');
@@ -79,7 +83,8 @@ export default {
     components: {
         ListTable,
         Switches,
-        Search
+        Search,
+        AddVendor
     },
 
     data () {
@@ -140,7 +145,8 @@ export default {
                     label: this.__( 'Disable Selling', 'dokan' )
                 }
             ],
-            vendors: []
+            vendors: [],
+            loadAddVendor: false
         }
     },
 
@@ -184,11 +190,18 @@ export default {
     },
 
     created() {
+        this.$root.$on('modalClosed', () => {
+            this.loadAddVendor = false;
+        });
 
         this.fetchVendors();
     },
 
     methods: {
+        addNew() {
+            this.loadAddVendor = true;
+        },
+
         doSearch(payload) {
             let self     = this;
             self.loading = true;
@@ -326,6 +339,12 @@ export default {
 
 <style lang="less">
 .vendor-list {
+    .dokan-btn {
+        padding: 5px 10px;
+        font-size: 15px;
+        border-radius: 3px;
+        color: #2873aa;
+    }
 
     .image {
         width: 10%;

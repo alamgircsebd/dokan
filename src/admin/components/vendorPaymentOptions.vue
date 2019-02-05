@@ -1,0 +1,161 @@
+<template>
+    <div class="account-info">
+        <div class="content-header">
+            {{__( 'Payment Options', 'dokan' )}}
+        </div>
+
+        <div class="content-body">
+            <div class="dokan-form-group">
+                <div class="column">
+                    <label for="account-name">{{ __( 'Account Name', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.ac_name" :placeholder="__( 'Type here', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="account-number">{{ __( 'Account Number', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.ac_number" :placeholder="__( 'Type here', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="bank-name">{{ __( 'Bank Name', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.bank_name" :placeholder="__( 'Type here', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="bank-address">{{ __( 'Bank Address', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.bank_addr" :placeholder="__( 'Type here', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="routing-number">{{ __( 'Routing Number', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.routing_number" :placehoder="__( 'Type here', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="iban">{{ __( 'IBAN', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.iban" :placehoder="__( 'Type here', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="swift">{{ __( 'Swift', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.swift" :placehoder="__( 'Type here', 'dokan')">
+                </div>
+            </div>
+
+            <div class="dokan-form-group">
+                <div class="checkbox-group">
+                    <div class="checkbox-left">
+                        <span>{{__( 'Selling', 'dokan' )}}</span>
+                    </div>
+
+                    <div class="checkbox-right">
+                        <switches @input="setValue" :enabled="enabled" value="enabled"></switches>
+                        <span class="desc">{{ __( 'Enable Selling', 'dokan' ) }}</span>
+                        <!-- <span class="desc_btm">{{ __( 'Enable or Disable Selling Functionality', 'dokan' ) }}</span> -->
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-left">
+                        <span>{{__( 'Publishing', 'dokan' )}}</span>
+                    </div>
+
+                    <div class="checkbox-right">
+                        <switches @input="setValue" :enabled="trusted" value="trusted"></switches>
+                        <span class="desc">{{ __( 'Publish Product Directly', 'dokan' ) }}</span>
+                        <!-- <span class="desc_btm">{{ __( 'Enable or Disable Selling Functionality', 'dokan' ) }}</span> -->
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <div class="checkbox-left">
+                        <span>{{__( 'Featured', 'dokan' )}}</span>
+                    </div>
+
+                    <div class="checkbox-right">
+                        <switches @input="setValue" :enabled="featured" value="featured"></switches>
+                        <span class="desc">{{ __( 'Make Vendor Featured', 'dokan' ) }}</span>
+                        <!-- <span class="desc_btm">{{ __( 'Enable or Disable Selling Functionality', 'dokan' ) }}</span> -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</template>
+
+<script>
+let Switches  = dokan_get_lib('Switches');
+
+export default {
+    name: 'vendorPaymentOptions',
+
+    components: {
+        Switches,
+    },
+
+    props: {
+        vendorInfo: {
+            type: Object
+        },
+    },
+
+    data() {
+        return {
+            enabled: false,
+            trusted: false,
+            featured: false
+        }
+    },
+
+    methods: {
+        setValue( status, key ) {
+            if ( 'enabled' === key ) {
+                if ( status ) {
+                    this.vendorInfo.enabled = 'yes';
+                } else {
+                    this.vendorInfo.enabled = 'no'
+                }
+            }
+
+            if ( 'trusted' === key ) {
+                if ( status ) {
+                    this.vendorInfo.trusted = 'yes';
+                } else {
+                    this.vendorInfo.trusted = 'no';
+                }
+            }
+
+            if ( 'featured' === key ) {
+                if ( status ) {
+                    this.vendorInfo.featured = 'yes';
+                } else {
+                    this.vendorInfo.featured = 'no'
+                }
+            }
+        }
+    }
+
+};
+</script>
+
+<style lang="less">
+.checkbox-group {
+    margin-top: 20px;
+    padding: 0 10px;
+
+    .checkbox-left, .checkbox-right {
+        display: inline-block;
+    }
+
+    .checkbox-left {
+        width: 20%;
+    }
+
+    .checkbox-right {
+        .switch {
+            margin-right: 10px;
+        }
+    }
+}
+</style>

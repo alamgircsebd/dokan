@@ -269,6 +269,12 @@ class Dokan_Pro_Admin_Settings {
         );
 
         $routes[] = array(
+            'path'      => '/vendors/:id/edit',
+            'name'      => 'VendorEdit',
+            'component' => 'VendorEdit'
+        );
+
+        $routes[] = array(
             'path'      => '/announcement',
             'name'      => 'Announcement',
             'component' => 'Announcement'
