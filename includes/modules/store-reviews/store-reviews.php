@@ -119,6 +119,7 @@ class Dokan_Store_Reviews {
      */
     function includes() {
         require_once DOKAN_SELLER_RATINGS_DIR.'/classes/DSR_View.php';
+        require_once DOKAN_SELLER_RATINGS_DIR . '/functions.php';
     }
 
      /**
