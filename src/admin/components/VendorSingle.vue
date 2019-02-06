@@ -74,8 +74,8 @@
                     </div>
                     <div class="action-links">
                         <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
-                        <router-link :to="`${id}/edit`" class="button edit-store">
-                            <span class="dashicons dashicons-edit"></span>
+                        <router-link :to="id" class="button edit-store" @click.native="loadEditVendor = true">
+                               <span class="dashicons dashicons-edit"></span>
                         </router-link>
                     </div>
                 </div>
@@ -190,10 +190,13 @@
             </section>
         </div>
         <vcl-twitch v-else height="300" primary="#ffffff"></vcl-twitch>
+
+        <add-vendor v-if="loadEditVendor" />
     </div>
 </template>
 
 <script>
+import AddVendor from 'admin/components/AddVendor.vue';
 let ContentLoading = dokan_get_lib('ContentLoading');
 let Modal          = dokan_get_lib('Modal');
 let Currency       = dokan_get_lib('Currency');
@@ -209,7 +212,8 @@ export default {
         VclFacebook,
         VclTwitch,
         Modal,
-        Currency
+        Currency,
+        AddVendor
     },
 
     data () {
@@ -220,7 +224,8 @@ export default {
             mail: {
                 subject: '',
                 body: ''
-            }
+            },
+            loadEditVendor: false
         };
     },
 
@@ -261,6 +266,10 @@ export default {
     created() {
         this.fetch();
         this.fetchStats();
+
+        this.$root.$on('modalClosed', () => {
+            this.loadEditVendor = false;
+        });
     },
 
     methods: {

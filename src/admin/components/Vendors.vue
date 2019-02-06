@@ -11,7 +11,6 @@
         </ul>
 
         <search title="Search Vendors" @searched="doSearch"></search>
-        <add-vendor v-if="loadAddVendor" />
 
         <list-table
             :columns="columns"
@@ -57,8 +56,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <span v-for="(action, index) in actions" :class="action.key">
-                    <router-link :to="`/vendors/${data.row.id}/edit`">{{ __('Edit Vendor', 'dokan') }}</router-link> |
-                    <a v-if="action.key == 'edit'" :href="editUrl(data.row.id)">{{ action.label }}</a>
+                    <a v-if="action.key == 'edit'" href="#" @click.prevent="addNew(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'products'" :href="productUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'orders'" :href="ordersUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else href="#">{{ action.label }}</a>
@@ -67,6 +65,9 @@
                 </span>
             </template>
         </list-table>
+
+        <add-vendor :vendor-id="vendorId" v-if="loadAddVendor" />
+
     </div>
 </template>
 
@@ -95,7 +96,7 @@ export default {
                 approved: 0,
                 all: 0
             },
-
+            vendorId:0,
             totalItems: 0,
             perPage: 20,
             totalPages: 1,
@@ -198,7 +199,12 @@ export default {
     },
 
     methods: {
-        addNew() {
+        addNew(vendorId = null) {
+
+            if ( vendorId ) {
+                this.vendorId = vendorId;
+            }
+
             this.loadAddVendor = true;
         },
 

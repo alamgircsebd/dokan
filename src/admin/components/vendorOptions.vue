@@ -49,6 +49,17 @@ export default {
             },
         }
     },
+
+    created() {
+        if ( this.vendorInfo.gravatar ) {
+            this.images.gravatar = this.vendorInfo.gravatar;
+        }
+
+        if ( this.vendorInfo.banner ) {
+            this.images.banner = this.vendorInfo.banner;
+        }
+    },
+
     methods: {
         getDefaultPic() {
             return dokan.urls.assetsUrl + '/images/store-pic.png';

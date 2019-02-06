@@ -26,7 +26,12 @@
                 </div>
             </div>
 
-            <div slot="footer">
+            <!-- Change the button name if it's vendor edit page -->
+            <div slot="footer" v-if="storeId">
+                <button class="dokan-btn" @click="updateVendor">{{ __( 'Update Vendor', 'dokan' ) }}</button>
+            </div>
+
+            <div slot="footer" v-else>
                 <button class="dokan-btn" @click="createVendor">{{ 'vendorPaymentOptions' === currentTab ? __( 'Create Vendor', 'dokan' ) : this.nextBtn }}</button>
             </div>
         </modal>
@@ -48,6 +53,8 @@ export default {
 
     name: 'AddVendor',
 
+    props: ['vendorId'],
+
     components: {
         Modal,
         Loading,
@@ -64,6 +71,7 @@ export default {
             styleObject: {
                 '--width': '100%'
             },
+            storeId: '',
             nextBtn: this.__( 'Next', 'dokan' ),
             title: this.__( 'Add New Vendor', 'dokan' ),
             tabs: {
@@ -98,9 +106,8 @@ export default {
                 store_name: '',
                 store_url: '',
                 user_email: '',
-                user_name: '',
+                user_nicename: '',
                 phone: '',
-                website: '',
                 banner: '',
                 gravatar: '',
                 social: {
@@ -135,24 +142,19 @@ export default {
     },
 
     created() {
-        // this.fetch();
-
         this.$root.$on('uploadedImage', (images) => {
             this.store.banner   = images.bannerId;
             this.store.gravatar = images.gravatarId;
         } );
+
+        // edit vendor if it's vendor single page or pass vendorId to edit a vendor
+        if ( this.getId() || this.vendorId ) {
+            this.storeId = this.getId() ? this.getId() : this.vendorId;
+
+            this.title = this.__( 'Edit Vendor', 'dokan' );
+            this.fetch();
+        }
     },
-
-    // watch: {
-    //     currentTab: (tab) => {
-    //         if ( 'vendorPaymentOptions' === tab ) {
-    //             console.log('yes');
-    //             this.nextBtn = 'Test';
-    //             console.log( this.nextBtn );
-    //         }
-    //     }
-    // },
-
 
     methods: {
         getId() {
@@ -167,32 +169,33 @@ export default {
             this.$swal( $title, $des, $status );
         },
 
-        // fetch() {
-        //     dokan.api.get('/stores/' + this.getId() )
-        //     .done(response => {
-        //         this.store.vendorPaymentOptions.payment = response.payment;
-        //         this.store.vendorAddress.address = response.address;
-        //         this.store.vendorSocial.social  = response.social;
+        fetch() {
+            dokan.api.get('/stores/' + this.storeId )
+            .done((response) => {
+                this.store = response;
+                this.transformer(response);
+            })
+        },
 
-        //         // setup vendorAccountInfo & vendorOptons tab
-        //         let accountKeys = ['store_name', 'shop_url', 'phone', 'email'];
-        //         let optionKeys  = ['banner', 'gravatar'];
+        // map response props to store props
+        transformer(response) {
+            if ( 'email' in response ) {
+                this.store.user_email = response.email;
+            }
 
-        //         for ( let key in response ) {
-        //             // setup vendorAccountInfo tab
-        //             if ( accountKeys.includes(key) ) {
-        //                 this.store.vendorAccountInfo[key] = response[key];
-        //             }
+            if ( 'shop_url' in response ) {
+                this.store.user_nicename = this.getStoreName(response.shop_url);
+            }
+        },
 
-        //             // setup vendorOptions tab
-        //             if ( optionKeys.includes(key) ) {
-        //                 this.store.vendorOptions[key] = response[key];
-        //             }
-        //         }
+        // get sotre name from url
+        getStoreName(url) {
+            let storeName = url.split('/').filter((value) => {
+                return value !== '';
+            });
 
-        //         this.isLoading = false;
-        //     });
-        // },
+            return storeName[storeName.length - 1];
+        },
 
         createVendor() {
             // only for validation|if success create the vendor
@@ -222,8 +225,39 @@ export default {
                 })
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                })
+                });
             }
+
+            // move next tab
+            this.currentTab = this.nextTab(this.tabs, this.currentTab);
+        },
+
+        updateVendor() {
+            if ( 'vendorPaymentOptions' === this.currentTab ) {
+                // close the modal on vendor update
+                this.$root.$emit('modalClosed');
+
+                dokan.api.put('/stores/' + this.getId(), this.store )
+                .done((response) => {
+                    // close the modal on vendor update
+                    this.$root.$emit('modalClosed');
+
+                    this.showAlert(
+                        this.__( 'Vendor Updated', 'dokan' ),
+                        this.__( 'The vendor has been updated!', 'dokan' ),
+                        'success'
+                    );
+
+                })
+                .fail((response) => {
+                    this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+                });
+            }
+
+            dokan.api.put('/stores/' + this.getId(), this.store )
+            .fail((response) => {
+                this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+            });
 
             // move next tab
             this.currentTab = this.nextTab(this.tabs, this.currentTab);
@@ -237,36 +271,14 @@ export default {
             return nextTab;
         },
 
-        // createVendor() {
-        //     this.isLoading = true;
-
-        //     let vendorData = this.
-
-        //     dokan.api.post('/stores/', this.store)
-        //     .then((response) => {
-        //         console.log(response)
-        //     })
-        // },
-
         closeModal() {
             this.$root.$emit('modalClosed');
         }
-
     }
 };
 </script>
 
 <style lang="less">
-.component-fade-enter-active, .component-fade-leave-active {
-  transition: opacity .3s ease;
-}
-.component-fade-enter, .component-fade-leave-to
-/* .component-fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
-}
-.swal2-container {
-    z-index: 999999 !important;
-}
 
 .dokan-vendor-edit {
     .tab-header {
@@ -346,6 +358,16 @@ export default {
                     float: left;
                     width: 50%;
                     padding: 0 10px;
+
+                    .store-url {
+                        margin: 0;
+                        padding: 0;
+                        position: relative;
+                        bottom: 10px;
+                        font-style: italic;
+                        color: #a09f9f;
+                        font-size: 12px;
+                    }
                 }
 
                 .bank-info {
@@ -417,13 +439,15 @@ export default {
         border-top: none;
         box-shadow: none;
     }
-
-    // .loading {
-    //     position: absolute;
-    //     left: 40%;
-    //     top: 25%;
-    //     transform: translate(-50%, -50%);
-    //     z-index: 9999999;
-    // }
+    .component-fade-enter-active, .component-fade-leave-active {
+      transition: opacity .3s ease;
+    }
+    .component-fade-enter, .component-fade-leave-to
+    /* .component-fade-leave-active below version 2.1.8 */ {
+      opacity: 0;
+    }
+    .swal2-container {
+        z-index: 999999 !important;
+    }
 }
 </style>

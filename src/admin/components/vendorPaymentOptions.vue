@@ -108,6 +108,23 @@ export default {
         }
     },
 
+    created() {
+        if ( this.vendorInfo.enabled ) {
+            this.enabled = true;
+            this.vendorInfo.enabled = 'yes';
+        }
+
+        if ( this.vendorInfo.trusted ) {
+            this.trusted = true;
+            this.vendorInfo.trusted = 'yes';
+        }
+
+        if ( this.vendorInfo.featured ) {
+            this.featured = true;
+            this.vendorInfo.featured = 'yes';
+        }
+    },
+
     methods: {
         setValue( status, key ) {
             if ( 'enabled' === key ) {
