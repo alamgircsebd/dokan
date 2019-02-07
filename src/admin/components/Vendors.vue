@@ -193,6 +193,7 @@ export default {
     created() {
         this.$root.$on('modalClosed', () => {
             this.loadAddVendor = false;
+            this.vendorId = 0;
         });
 
         this.fetchVendors();

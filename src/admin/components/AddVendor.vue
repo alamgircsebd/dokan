@@ -8,9 +8,9 @@
             <div slot="body">
                 <div class="tab-header">
                     <ul class="tab-list">
-                        <li v-for="(tab, index) in tabs" :key="index" class="tab-title">
+                        <li v-for="(tab, index) in tabs" :key="index" :class="{'tab-title': true, 'active': currentTab === tab.name}">
                             <div class="tab-link" :style="currentTab === tab.name ? styleObject : ''">
-                                <i class="icon">
+                                <i :class="{'icon': true, 'first': tab.name === 'vendorAccountInfo'}">
                                     <img :src="getIcon(tab.icon)">
                                 </i>
                                 <a href="#" @click.prevent="currentTab = tab.name">{{tab.label}}</a>
@@ -237,24 +237,20 @@ export default {
                 // close the modal on vendor update
                 this.$root.$emit('modalClosed');
 
-                dokan.api.put('/stores/' + this.getId(), this.store )
+                dokan.api.put('/stores/' + this.storeId, this.store )
                 .done((response) => {
-                    // close the modal on vendor update
-                    this.$root.$emit('modalClosed');
-
                     this.showAlert(
                         this.__( 'Vendor Updated', 'dokan' ),
                         this.__( 'The vendor has been updated!', 'dokan' ),
                         'success'
                     );
-
                 })
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
                 });
             }
 
-            dokan.api.put('/stores/' + this.getId(), this.store )
+            dokan.api.put('/stores/' + this.storeId, this.store )
             .fail((response) => {
                 this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
             });
@@ -284,46 +280,131 @@ export default {
     .tab-header {
 
         .tab-list {
-            display: flex;
-            justify-content: space-around;
-            border: 2px solid #e0dede96;
-            padding: 10px 0 10px 0;
-            border-radius: 5px;
+            // display: flex;
+            // justify-content: space-around;
+            // border: 2px solid #e0dede96;
+            // padding: 10px 0 10px 0;
+            // border-radius: 5px;
+
+            // .tab-title {
+            //     color: #000;
+            //     font-size: 15px;
+            //     font-weight: 500;
+            //     margin: 0;
+            //     position: relative;
+
+            //     .tab-link {
+            //         display: flex;
+
+            //         &:after {
+            //             content: "";
+            //             position: absolute;
+            //             bottom: -11px;
+            //             left: 0;
+            //             width: var(--width);
+            //             height: 1px;
+            //             background: #3b80f4;
+            //         }
+
+            //         .icon {
+            //             padding-right: 8px;
+            //             position: relative;
+            //             top: 1px;
+            //         }
+
+            //         a {
+            //             text-decoration: none;
+            //             &:active {
+            //                 display: contents;
+            //             }
+            //         }
+            //     }
+            // }
+
+            // margin: 40px;
+            // padding: 0;
+            overflow: hidden;
 
             .tab-title {
-                color: #000;
-                font-size: 15px;
-                font-weight: 500;
-                margin: 0;
+                float: left;
+                margin-left: 0;
+                width: auto;
+                height: 50px;
+                list-style-type: none;
+                padding: 5px 20px 5px 38px;; /* padding around text, last should include arrow width */
+                border-right: 10px solid white; /* width: gap between arrows, color: background of document */
                 position: relative;
+                background-color: #f5f5f5;
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-                .tab-link {
-                    display: flex;
+                .icon {
+                    position: relative;
+                    top: 1px;
+                }
 
-                    &:after {
-                        content: "";
-                        position: absolute;
-                        bottom: -11px;
-                        left: 0;
-                        width: var(--width);
-                        height: 1px;
-                        background: #3b80f4;
-                    }
+                a {
+                    color: #000;
+                    text-decoration: none;
 
-                    .icon {
-                        padding-right: 8px;
-                        position: relative;
-                        top: 1px;
-                    }
+                    // &:active {
+                    //     display: contents;
+                    // }
+                }
 
-                    a {
-                        text-decoration: none;
-                        &:active {
-                            display: contents;
-                        }
-                    }
+                &:first-child {
+                    padding-left: 5px;
+                }
+
+                &:nth-child(n+2)::before {
+                    position: absolute;
+                    top:0;
+                    left:0;
+                    display: block;
+                    border-left: 25px solid white; /* width: arrow width, color: background of document */
+                    border-top: 25px solid transparent; /* width: half height */
+                    border-bottom: 25px solid transparent; /* width: half height */
+                    width: 0;
+                    height: 0;
+                    content: " ";
+                }
+
+                &:after {
+                    z-index: 1; /* need to bring this above the next item */
+                    position: absolute;
+                    top: 0;
+                    right: -25px; /* arrow width (negated) */
+                    display: block;
+                    border-left: 25px solid #f5f5f5; /* width: arrow width */
+                    border-top: 25px solid transparent; /* width: half height */
+                    border-bottom: 25px solid transparent; /* width: half height */
+                    width:0;
+                    height:0;
+                    content: " ";
+                    border-left-color: #f5f5f5;
                 }
             }
+            .tab-title.active {
+                background-color: #2C70A3;
+
+                a {
+                    color: #fff;
+                }
+
+                &:after {
+                    border-left-color: #2C70A3;
+                }
+            }
+
+            .tab-title.active ~.tab-title {
+                // background-color: #EBEBEB;
+
+                &:after ~.tab-title {
+                    border-left-color: #EBEBEB;
+                }
+            }
+
         }
     }
 

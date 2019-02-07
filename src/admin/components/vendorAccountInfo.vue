@@ -40,8 +40,14 @@
 </template>
 
 <script>
+const Loading = dokan_get_lib('Loading');
+
 export default {
     name: 'vendorAccountInfo',
+
+    components: {
+        Loading
+    },
 
     props: {
         vendorInfo: {
@@ -51,13 +57,15 @@ export default {
 
     data() {
         return {
+            isLoading: true,
             storeUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/'
         }
     },
 
     methods: {
         getId() {
-            return this.$route.params.id;
+            return this.vendorInfo.id ? this.vendorInfo.id : this.$route.params.id;
+            this.isLoading = false;
         },
     }
 };
