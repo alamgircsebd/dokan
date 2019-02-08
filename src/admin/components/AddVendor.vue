@@ -1,6 +1,6 @@
 <template>
     <div class="dokan-vendor-edit">
-        <modal :title="title" width="800px" height="640px" @close="closeModal">
+        <modal :title="title" width="800px" @close="closeModal">
             <div slot="body">
                 <div class="tab-header">
                     <ul class="tab-list">
@@ -302,7 +302,6 @@ export default {
         font-size: 30px;
         font-weight: 400;
     }
-
 }
 
 .dokan-vendor-edit {
@@ -320,7 +319,7 @@ export default {
                 padding: 5px 20px 5px 38px;; /* padding around text, last should include arrow width */
                 border-right: 10px solid white; /* width: gap between arrows, color: background of document */
                 position: relative;
-                background-color: #f5f5f5;
+                background-color: #1a9ed4;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -331,7 +330,7 @@ export default {
                 }
 
                 a {
-                    color: #000;
+                    color: #fff;
                     text-decoration: none;
                     padding: 17px;
                     margin: -17px;
@@ -378,7 +377,7 @@ export default {
                     width:0;
                     height:0;
                     content: " ";
-                    border-left-color: #f5f5f5;
+                    border-left-color: #1a9ed4;
                 }
             }
             .tab-title.active {
@@ -394,8 +393,14 @@ export default {
             }
 
             .tab-title.active ~.tab-title {
-                &:after ~.tab-title {
-                    border-left-color: #EBEBEB;
+                background-color: #f5f5f5;
+
+                &:after {
+                    border-left-color: #f5f5f5;
+                }
+
+                a {
+                    color: #000;
                 }
             }
 
@@ -525,16 +530,20 @@ export default {
     }
 
     .dokan-modal {
-        .modal-body {
-            max-height: 500px;
-            min-height: 200px;
-        }
+        .dokan-modal-content {
+            height: 640px !important;
 
-        .modal-footer {
-            padding: 15px;
-            bottom: 0;
-            border-top: none;
-            box-shadow: none;
+            .modal-body {
+                max-height: 500px;
+                min-height: 200px;
+            }
+
+            .modal-footer {
+                padding: 15px;
+                bottom: 0;
+                border-top: none;
+                box-shadow: none;
+            }
         }
     }
 
@@ -545,5 +554,18 @@ export default {
     .component-fade-enter, .component-fade-leave-to {
       opacity: 0;
     }
+
+    @media only screen and ( max-width: 600px ) {
+        .dokan-modal {
+            .dokan-modal-content {
+                height: 400px;
+
+                .modal-body {
+                    max-height: 300px;
+                }
+            }
+        }
+    }
+
 }
 </style>

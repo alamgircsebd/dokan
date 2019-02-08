@@ -391,7 +391,7 @@ export default {
         .profile-banner {
             position: relative;
             width: ~"calc(100% - 285px + 30px)";
-            max-width: 850px;
+            // max-width: 850px;
             height: 315px;
             border: 1px solid #dfdfdf;
             background: #fff;
