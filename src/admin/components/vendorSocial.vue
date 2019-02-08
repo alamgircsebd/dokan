@@ -62,6 +62,6 @@ export default {
         vendorInfo: {
             type: Object
         }
-    }
+    },
 };
 </script>

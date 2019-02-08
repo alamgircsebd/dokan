@@ -19,7 +19,7 @@
 
                 <div class="column">
                     <label for="store-phone">{{ __( 'Phone Number', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.phone" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="number" class="dokan-form-input" v-model="vendorInfo.phone" :placeholder="__( 'Type here', 'dokan')">
                 </div>
 
                 <div class="column">
@@ -33,21 +33,21 @@
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.user_login" :placehoder="__( 'Type here', 'dokan')">
                 </div>
 
+                <div class="column">
+                    <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label>
+                    <input type="password" class="dokan-form-input" v-model="vendorInfo.user_pass" placehoder="******">
+                </div>
+
             </div>
 
         </div>
     </div>
+
 </template>
 
 <script>
-const Loading = dokan_get_lib('Loading');
-
 export default {
     name: 'vendorAccountInfo',
-
-    components: {
-        Loading
-    },
 
     props: {
         vendorInfo: {
@@ -57,7 +57,6 @@ export default {
 
     data() {
         return {
-            isLoading: true,
             storeUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/'
         }
     },
@@ -65,7 +64,6 @@ export default {
     methods: {
         getId() {
             return this.vendorInfo.id ? this.vendorInfo.id : this.$route.params.id;
-            this.isLoading = false;
         },
     }
 };

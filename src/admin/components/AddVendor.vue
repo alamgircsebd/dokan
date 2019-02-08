@@ -1,26 +1,29 @@
 <template>
     <div class="dokan-vendor-edit">
-        <div class="loading" v-if="isLoading">
-            <loading></loading>
-        </div>
-
         <modal :title="title" width="800px" @close="closeModal">
             <div slot="body">
                 <div class="tab-header">
                     <ul class="tab-list">
                         <li v-for="(tab, index) in tabs" :key="index" :class="{'tab-title': true, 'active': currentTab === tab.name}">
-                            <div class="tab-link" :style="currentTab === tab.name ? styleObject : ''">
+                            <div class="tab-link">
                                 <i :class="{'icon': true, 'first': tab.name === 'vendorAccountInfo'}">
                                     <img :src="getIcon(tab.icon)">
                                 </i>
-                                <a href="#" @click.prevent="currentTab = tab.name">{{tab.label}}</a>
+                                <a href="#" @click.prevent="currentTab = tab.name" :class="{'first': tab.name === 'vendorAccountInfo'}">
+                                    {{tab.label}}
+                                </a>
                             </div>
                         </li>
                     </ul>
                 </div>
 
                 <div class="tab-contents" v-if="currentTab">
-                    <transition name="component-fade" mode="out-in">
+
+                    <div class="loading" v-if="isLoading">
+                        <loading></loading>
+                    </div>
+
+                    <transition name="component-fade" mode="out-in" v-if="! isLoading">
                         <component :vendorInfo="store" :is="currentTab" />
                     </transition>
                 </div>
@@ -68,9 +71,6 @@ export default {
     data() {
         return {
             isLoading: false,
-            styleObject: {
-                '--width': '100%'
-            },
             storeId: '',
             nextBtn: this.__( 'Next', 'dokan' ),
             title: this.__( 'Add New Vendor', 'dokan' ),
@@ -104,6 +104,7 @@ export default {
             currentTab: 'vendorAccountInfo',
             store: {
                 store_name: '',
+                user_pass: '',
                 store_url: '',
                 user_email: '',
                 user_nicename: '',
@@ -138,6 +139,7 @@ export default {
                     country: ''
                 }
             },
+            fakeStore: {}
         };
     },
 
@@ -151,6 +153,7 @@ export default {
         if ( this.getId() || this.vendorId ) {
             this.storeId = this.getId() ? this.getId() : this.vendorId;
 
+            this.isLoading = true;
             this.title = this.__( 'Edit Vendor', 'dokan' );
             this.fetch();
         }
@@ -172,13 +175,23 @@ export default {
         fetch() {
             dokan.api.get('/stores/' + this.storeId )
             .done((response) => {
-                this.store = response;
+                this.fakeStore = this.store;
+                this.store     = response;
                 this.transformer(response);
-            })
+                this.isLoading = false;
+            });
         },
 
         // map response props to store props
         transformer(response) {
+            this.store.editPage = true;
+
+            for ( let res in response ) {
+                if ( Array.isArray(response[res]) && 0 === response[res].length ) {
+                    this.store[res] = this.fakeStore[res];
+                }
+            }
+
             if ( 'email' in response ) {
                 this.store.user_email = response.email;
             }
@@ -197,9 +210,11 @@ export default {
             return storeName[storeName.length - 1];
         },
 
+        // create vendor
         createVendor() {
             // only for validation|if success create the vendor
             if ( 'vendorAccountInfo' === this.currentTab ) {
+
                 dokan.api.post('/stores/', this.store)
                 .done((response) => {
                     this.store.id = response.id;
@@ -211,10 +226,8 @@ export default {
             }
 
             if ( 'vendorPaymentOptions' === this.currentTab ) {
-                // close the modal on vendor creation
-                this.$root.$emit('modalClosed');
+                this.isLoading = true;
 
-                // edit the vendor
                 dokan.api.put('/stores/' + this.store.id, this.store)
                 .done((response) => {
                     this.showAlert(
@@ -225,17 +238,20 @@ export default {
                 })
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                });
+                })
+                .always(() => {
+                    this.$root.$emit('modalClosed');
+                })
             }
 
             // move next tab
-            this.currentTab = this.nextTab(this.tabs, this.currentTab);
+            this.currentTab = 'vendorPaymentOptions' === this.currentTab ? 'vendorPaymentOptions' : this.nextTab(this.tabs, this.currentTab);
         },
 
+        // update vendor
         updateVendor() {
             if ( 'vendorPaymentOptions' === this.currentTab ) {
-                // close the modal on vendor update
-                this.$root.$emit('modalClosed');
+                this.isLoading = true;
 
                 dokan.api.put('/stores/' + this.storeId, this.store )
                 .done((response) => {
@@ -247,16 +263,19 @@ export default {
                 })
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+                })
+                .always(() => {
+                    this.$root.$emit('modalClosed');
                 });
             }
 
             dokan.api.put('/stores/' + this.storeId, this.store )
             .fail((response) => {
                 this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-            });
+            })
 
             // move next tab
-            this.currentTab = this.nextTab(this.tabs, this.currentTab);
+            this.currentTab = 'vendorPaymentOptions' === this.currentTab ? 'vendorPaymentOptions' : this.nextTab(this.tabs, this.currentTab);
         },
 
         nextTab(tabs, currentTab) {
@@ -275,54 +294,21 @@ export default {
 </script>
 
 <style lang="less">
+.swal2-container {
+    z-index: 9999999 !important;
+
+    .swal2-popup .swal2-title {
+        line-height: 35px;
+        font-size: 30px;
+        font-weight: 400;
+    }
+
+}
 
 .dokan-vendor-edit {
     .tab-header {
 
         .tab-list {
-            // display: flex;
-            // justify-content: space-around;
-            // border: 2px solid #e0dede96;
-            // padding: 10px 0 10px 0;
-            // border-radius: 5px;
-
-            // .tab-title {
-            //     color: #000;
-            //     font-size: 15px;
-            //     font-weight: 500;
-            //     margin: 0;
-            //     position: relative;
-
-            //     .tab-link {
-            //         display: flex;
-
-            //         &:after {
-            //             content: "";
-            //             position: absolute;
-            //             bottom: -11px;
-            //             left: 0;
-            //             width: var(--width);
-            //             height: 1px;
-            //             background: #3b80f4;
-            //         }
-
-            //         .icon {
-            //             padding-right: 8px;
-            //             position: relative;
-            //             top: 1px;
-            //         }
-
-            //         a {
-            //             text-decoration: none;
-            //             &:active {
-            //                 display: contents;
-            //             }
-            //         }
-            //     }
-            // }
-
-            // margin: 40px;
-            // padding: 0;
             overflow: hidden;
 
             .tab-title {
@@ -347,10 +333,20 @@ export default {
                 a {
                     color: #000;
                     text-decoration: none;
+                    padding: 17px;
+                    margin: -17px;
 
-                    // &:active {
-                    //     display: contents;
-                    // }
+                    &:active, &:focus {
+                        outline: none;
+                        outline-style: none;
+                        border-color: transparent;
+                        box-shadow: none;
+                    }
+                }
+
+                a.first {
+                    position: relative;
+                    top: -5px;
                 }
 
                 &:first-child {
@@ -414,6 +410,12 @@ export default {
         max-height: 500px;
         overflow: scroll;
 
+        .loading {
+            position: relative;
+            left: 46%;
+            top: 5px;
+        }
+
         .content-header {
             background: #F9F9F9;
             margin: 0;
@@ -464,7 +466,8 @@ export default {
                 box-sizing: border-box; /* Make sure that padding and width stays in place */
                 margin-top: 6px; /* Add a top margin */
                 margin-bottom: 16px; /* Bottom margin */
-                resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+                resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
+                height: auto
             }
 
             .picture {
@@ -512,6 +515,14 @@ export default {
         padding: 10px 20px;
         color: white;
         border-radius: 3px;
+        cursor: pointer;
+
+        &:active, &:focus {
+            outline: none;
+            outline-style: none;
+            border-color: transparent;
+            box-shadow: none;
+        }
     }
 
     .dokan-modal .modal-footer {
@@ -520,15 +531,13 @@ export default {
         border-top: none;
         box-shadow: none;
     }
+
     .component-fade-enter-active, .component-fade-leave-active {
       transition: opacity .3s ease;
     }
-    .component-fade-enter, .component-fade-leave-to
-    /* .component-fade-leave-active below version 2.1.8 */ {
+
+    .component-fade-enter, .component-fade-leave-to {
       opacity: 0;
-    }
-    .swal2-container {
-        z-index: 999999 !important;
     }
 }
 </style>
