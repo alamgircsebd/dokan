@@ -1,6 +1,6 @@
 <template>
     <div class="dokan-vendor-edit">
-        <modal :title="title" width="800px" @close="closeModal">
+        <modal :title="title" width="800px" height="640px" @close="closeModal">
             <div slot="body">
                 <div class="tab-header">
                     <ul class="tab-list">
@@ -394,8 +394,6 @@ export default {
             }
 
             .tab-title.active ~.tab-title {
-                // background-color: #EBEBEB;
-
                 &:after ~.tab-title {
                     border-left-color: #EBEBEB;
                 }
@@ -407,13 +405,12 @@ export default {
     .tab-contents {
         border: 1px solid #e5e5e5;
         border-radius: 3px;
-        max-height: 500px;
-        overflow: scroll;
+        min-height: 400px;
 
         .loading {
             position: relative;
             left: 46%;
-            top: 5px;
+            top: 160px;
         }
 
         .content-header {
@@ -425,7 +422,6 @@ export default {
         .content-body {
             padding-top: 20px;
             padding-bottom: 20px;
-            // display: flex;
 
             .dokan-form-group {
                 margin: 0 10px;
@@ -491,12 +487,14 @@ export default {
                 }
             }
             .picture.banner {
-                margin-top: 40px !important;
-                padding: 70px 0 !important;
+                margin-top: 40px;
+                padding: 70px 0;
 
                 .banner-image {
                     img {
                         width: 100%;
+                        height: 315px;
+                        padding: 15px 15px 0 15px;
                     }
 
                     button {
@@ -504,6 +502,7 @@ export default {
                         color: white;
                         padding: 10px 15px;
                         border-radius: 3px;
+                        margin: 20px 0;
                     }
                 }
             }
@@ -525,15 +524,22 @@ export default {
         }
     }
 
-    .dokan-modal .modal-footer {
-        padding: 15px;
-        bottom: 0;
-        border-top: none;
-        box-shadow: none;
+    .dokan-modal {
+        .modal-body {
+            max-height: 500px;
+            min-height: 200px;
+        }
+
+        .modal-footer {
+            padding: 15px;
+            bottom: 0;
+            border-top: none;
+            box-shadow: none;
+        }
     }
 
     .component-fade-enter-active, .component-fade-leave-active {
-      transition: opacity .3s ease;
+      transition: opacity .2s ease;
     }
 
     .component-fade-enter, .component-fade-leave-to {

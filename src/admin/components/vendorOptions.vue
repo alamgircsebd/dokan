@@ -15,7 +15,7 @@
                 <p class="picture-footer">{{ __( 'You can change your profile picutre on Gravatar', 'dokan' ) }}</p>
             </div>
 
-            <div class="picture banner">
+            <div class="picture banner" :style="images.banner ? 'padding: 0' : ''">
                 <div class="banner-image">
                     <img :src="images.banner" :alt="images.banner ? 'banner-image' : ''">
                     <button @click="uploadBanner">{{__( 'Upload Banner', 'dokan' ) }}</button>

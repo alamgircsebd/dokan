@@ -45,37 +45,22 @@
             <div class="dokan-form-group">
                 <div class="checkbox-group">
                     <div class="checkbox-left">
-                        <span>{{__( 'Selling', 'dokan' )}}</span>
-                    </div>
-
-                    <div class="checkbox-right">
                         <switches @input="setValue" :enabled="enabled" value="enabled"></switches>
                         <span class="desc">{{ __( 'Enable Selling', 'dokan' ) }}</span>
-                        <!-- <span class="desc_btm">{{ __( 'Enable or Disable Selling Functionality', 'dokan' ) }}</span> -->
                     </div>
                 </div>
 
                 <div class="checkbox-group">
                     <div class="checkbox-left">
-                        <span>{{__( 'Publishing', 'dokan' )}}</span>
-                    </div>
-
-                    <div class="checkbox-right">
                         <switches @input="setValue" :enabled="trusted" value="trusted"></switches>
                         <span class="desc">{{ __( 'Publish Product Directly', 'dokan' ) }}</span>
-                        <!-- <span class="desc_btm">{{ __( 'Enable or Disable Selling Functionality', 'dokan' ) }}</span> -->
                     </div>
                 </div>
 
                 <div class="checkbox-group">
                     <div class="checkbox-left">
-                        <span>{{__( 'Featured', 'dokan' )}}</span>
-                    </div>
-
-                    <div class="checkbox-right">
                         <switches @input="setValue" :enabled="featured" value="featured"></switches>
                         <span class="desc">{{ __( 'Make Vendor Featured', 'dokan' ) }}</span>
-                        <!-- <span class="desc_btm">{{ __( 'Enable or Disable Selling Functionality', 'dokan' ) }}</span> -->
                     </div>
                 </div>
             </div>
@@ -161,17 +146,14 @@ export default {
     margin-top: 20px;
     padding: 0 10px;
 
-    .checkbox-left, .checkbox-right {
+    .checkbox-left {
         display: inline-block;
     }
 
     .checkbox-left {
-        width: 20%;
-    }
-
-    .checkbox-right {
         .switch {
             margin-right: 10px;
+            display: inline-block;
         }
     }
 }
