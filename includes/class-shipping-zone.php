@@ -338,6 +338,7 @@ class Dokan_Shipping_Zone {
         $state     = strtoupper( wc_clean( $package['destination']['state'] ) );
         $continent = strtoupper( wc_clean( WC()->countries->get_continent_code_for_country( $country ) ) );
         $postcode  = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
+        $vendor_id = self::get_vendor_id_from_package( $package );
 
         // Work out criteria for our zone search.
         $criteria   = array();
@@ -347,8 +348,7 @@ class Dokan_Shipping_Zone {
         $criteria[] = 'OR ( location_type IS NULL ) )';
 
         // Postcode range and wildcard matching.
-        $postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}dokan_shipping_zone_locations WHERE location_type = 'postcode';" );
-
+        $postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}dokan_shipping_zone_locations WHERE location_type = 'postcode' AND seller_id = {$vendor_id};" );
 
         if ( $postcode_locations ) {
             $zone_ids_with_postcode_rules = array_map( 'absint', wp_list_pluck( $postcode_locations, 'zone_id' ) );
@@ -369,4 +369,24 @@ class Dokan_Shipping_Zone {
         );
     }
 
+    /**
+     * Get vendor id from package
+     *
+     * @param  int $package
+     *
+     * @return int
+     */
+    public static function get_vendor_id_from_package( $package ) {
+        if ( ! $package ) {
+            return 0;
+        }
+
+        $vendor_id = isset( $package['seller_id'] ) ? $package['seller_id'] : '';
+
+        if ( ! $vendor_id ) {
+            return 0;
+        }
+
+        return $vendor_id;
+    }
 }
