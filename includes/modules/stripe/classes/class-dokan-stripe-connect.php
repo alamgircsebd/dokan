@@ -31,6 +31,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         $this->accept_bitcoin  = ( 'USD' === strtoupper( get_woocommerce_currency() ) && 'yes' === $this->get_option( 'stripe_bitcoin' ) ) ? true : false;
         $this->checkout_image  = $this->get_option( 'stripe_checkout_image' );
         $this->checkout_label  = $this->get_option( 'stripe_checkout_label' );
+        $this->stripe_meta_key = '_dokan_stripe_charge_id_';
 
         /** All actions */
         add_action( 'wp_enqueue_scripts', array( &$this, 'payment_scripts' ) );
@@ -762,6 +763,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             }
 
             $charge_ids[ $seller_id ] = $charge->id;
+            update_post_meta( $tmp_order_id, $this->stripe_meta_key . $seller_id, $charge->id );
 
             if ( $order_id !== $tmp_order_id ) {
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed via Dokan Stripe on Charge ID: %s', 'dokan' ), $tmp_order->get_order_number(), $charge->id ) );
@@ -772,12 +774,14 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
 
         /* Payment complete*/
+        $order->update_status( 'completed' );
         $order->payment_complete();
 
+        $this->insert_into_vendor_balance( $all_withdraws );
         $this->process_seller_withdraws( $all_withdraws );
 
         foreach ( $charge_ids as $seller_id => $charge_id ) {
-            $meta_key = '_dokan_stripe_charge_id_' . $seller_id;
+            $meta_key = $this->stripe_meta_key . $seller_id;
             update_post_meta( $order_id, $meta_key, $charge_id );
         }
 
@@ -805,6 +809,48 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         }
 
         return false;
+    }
+
+    /**
+     * Insert withdraw data into vendor balnace table
+     *
+     * @param  array $all_withdraw
+     *
+     * @return void
+     */
+    public function insert_into_vendor_balance( $all_withdraws ) {
+        if ( ! $all_withdraws ) {
+            return;
+        }
+
+        global $wpdb;
+
+        foreach ( $all_withdraws as $withdraw ) {
+            $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
+                array(
+                    'vendor_id'     => $withdraw['user_id'],
+                    'trn_id'        => $withdraw['order_id'],
+                    'trn_type'      => 'dokan_withdraw',
+                    'perticulars'   => 'Paid Via Stripe',
+                    'debit'         => 0,
+                    'credit'        => $withdraw['amount'],
+                    'status'        => 'approved',
+                    'trn_date'      => current_time( 'mysql' ),
+                    'balance_date'  => current_time( 'mysql' ),
+                ),
+                array(
+                    '%d',
+                    '%d',
+                    '%s',
+                    '%s',
+                    '%f',
+                    '%f',
+                    '%s',
+                    '%s',
+                    '%s',
+                )
+            );
+        }
     }
 
     /**

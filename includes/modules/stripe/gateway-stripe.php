@@ -80,6 +80,9 @@ class Dokan_Stripe {
         // add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'add_to_cart_validation' ), 15, 3 );
 
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'check_vendor_configure_stripe' ), 15, 2 );
+
+        // approve refund request automatically such as stripe connect
+        add_action( 'dokan_after_refund_request', [ $this, 'process_refund_request' ], 10, 2 );
     }
 
     function filter_gateways(  $gateways ){
@@ -653,6 +656,80 @@ class Dokan_Stripe {
         update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
     }
 
+    /**
+     * Process refund request
+     *
+     * @param  int $refund_id
+     * @param  array $data
+     *
+     * @return void
+     */
+    public function process_refund_request( $refund_id, $data ) {
+
+        if ( ! $data['order_id'] ) {
+            return wp_send_json( __( 'No refund data to be processed', 'dokan' ) );
+        }
+
+        $order_id         = $data['order_id'];
+        $order            = wc_get_order( $order_id );
+        $vendor_id        = dokan_get_seller_id_by_order( $order_id );
+        $vendor_token     = get_user_meta( $vendor_id, '_stripe_connect_access_key', true );
+        $vendor_charge_id = $order->get_meta( "_dokan_stripe_charge_id_{$vendor_id}" );
+
+        // if vendor charge id is not found, meaning it's a not purcahsed with sitripe so return early
+        if ( ! $vendor_charge_id ) {
+            return true;
+        }
+
+        require_once 'classes/lib/init.php';
+
+        $stripe_options = get_option('woocommerce_dokan-stripe-connect_settings');
+        $secret_key     = $stripe_options['testmode'] == 'yes' ? $stripe_options['test_secret_key'] : $stripe_options['secret_key'];
+
+        \Stripe\Stripe::setApiKey( $secret_key );
+
+        try {
+            $refund = \Stripe\Refund::create( [
+                'charge' => $vendor_charge_id,
+                'amount' => $data['refund_amount'] * 100, // in cents
+                'reason' => __( 'requested_by_customer', 'dokan' )
+            ], $vendor_token );
+        } catch( Exception $e ) {
+            return wp_send_json_error( $e->getMessage() );
+        }
+
+        if ( ! $refund->id ) {
+            return wp_send_json_error( __( 'Refund ID is not found', 'dokan' ) );
+        }
+
+        $order->add_order_note( sprintf( __( 'Refund Processed Via Stripe ( Refund ID: %s )', 'dokan' ), $refund->id ) );
+
+        if ( ! class_exists( 'Dokan_REST_Refund_Controller' ) ) {
+            require_once DOKAN_PRO_INC . '/api/class-refund-controller.php';
+        }
+
+        global $wpdb;
+
+        $refund_data = $wpdb->get_row(
+            $wpdb->prepare( "SELECT * FROM `{$wpdb->prefix}dokan_refund` WHERE `id`= %d", $refund_id )
+        );
+
+        $refund_api     = new Dokan_REST_Refund_Controller;
+        $approve_refund = $refund_api->approve_refund_request( $refund_data );
+
+        if ( ! $approve_refund ) {
+            return wp_send_json_error( __( 'Refund request has been sent but not approved', 'dokan' ) );
+        }
+
+        if ( ! class_exists( 'Dokan_Pro_Admin_Refund' ) ) {
+            require_once DOKAN_PRO_CLASS . '/admin-refund.php';
+        }
+
+        $refund = new Dokan_Pro_Admin_Refund();
+        $refund->update_status( $refund_id, 1 );
+
+        return wp_send_json_success( __( 'Your refund request has been processed.', 'dokan' ) );
+    }
 }
 
 new Dokan_Stripe();

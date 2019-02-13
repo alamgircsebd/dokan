@@ -1096,22 +1096,23 @@ class Dokan_Pro_Ajax {
         $max_refund  = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
 
         $refund = new Dokan_Pro_Refund;
+
         if ( ! $refund_amount || $max_refund < $refund_amount || 0 > $refund_amount ) {
-            $data =  __( 'Invalid refund amount', 'dokan' );
+            $data = __( 'Invalid refund amount', 'dokan' );
             wp_send_json_error( $data );
         } else if ( $refund->has_pending_refund_request( $_POST['order_id'] ) ) {
-            $data =  __( 'You have already a processing refund request for this order.', 'dokan' );
+            $data = __( 'You have already a processing refund request for this order.', 'dokan' );
             wp_send_json_error( $data );
         } else{
-            $refund = new Dokan_Pro_Refund;
-            $refund->insert_refund($_POST);
+            $refund    = new Dokan_Pro_Refund;
+            $refund_id = $refund->insert_refund( $_POST );
 
-            do_action( 'dokan_refund_request_notification',  $_POST['order_id'] );
-//            Dokan_Email::init()->dokan_refund_request( $_POST['order_id'] );
+            do_action( 'dokan_after_refund_request', $refund_id, $_POST );
+            do_action( 'dokan_refund_request_notification', $_POST['order_id'] );
+
             $data = __( 'Refund request sent successfully', 'dokan' );
             wp_send_json_success( $data );
         }
-
     }
 
     /**
