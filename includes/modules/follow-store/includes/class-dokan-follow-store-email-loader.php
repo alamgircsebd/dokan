@@ -26,8 +26,10 @@ class Dokan_Follow_Store_Email_Loader {
      */
     public function add_email_class( $wc_emails ) {
         require_once DOKAN_FOLLOW_STORE_INCLUDES . '/class-dokan-follow-store-email.php';
+        require_once DOKAN_FOLLOW_STORE_INCLUDES . '/class-dokan-follow-store-vendor-email.php';
 
-        $wc_emails['Dokan_Follow_Store_Email'] = new Dokan_Follow_Store_Email();
+        $wc_emails['Dokan_Follow_Store_Email']        = new Dokan_Follow_Store_Email();
+        $wc_emails['Dokan_Follow_Store_Vendor_Email'] = new Dokan_Follow_Store_Vendor_Email();
 
         return $wc_emails;
     }
@@ -42,7 +44,8 @@ class Dokan_Follow_Store_Email_Loader {
      * @return array
      */
     public function add_email_template_file( $template_files ) {
-        $template_files[] = 'follow-store-updates-email-html.php' ;
+        $template_files[] = 'follow-store-updates-email-html.php';
+        $template_files[] = 'follow-store-vendor-email-html.php';
 
         return $template_files;
     }
@@ -58,6 +61,7 @@ class Dokan_Follow_Store_Email_Loader {
      */
     public function add_email_action( $actions ) {
         $actions[] = 'dokan_follow_store_send_update_email';
+        $actions[] = 'dokan_follow_store_toggle_status';
 
         return $actions;
     }
