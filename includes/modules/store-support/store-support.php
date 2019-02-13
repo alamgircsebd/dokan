@@ -376,7 +376,7 @@ class Dokan_Store_Support {
                             <select class="dokan-form-control dokan-select" name="order_id">
                                 <option><?php _e( 'Select Order ID', 'dokan' ); ?></option>
                                 <?php foreach ( $customer_orders as $order ) {
-                                    echo "<option value='$order->ID'>Order #$order->ID</option>";
+                                    echo "<option value='$order'>Order #$order</option>";
                                 } ?>
                             </select>
                 <?php endif; ?>
@@ -1555,31 +1555,3 @@ Dokan_Store_Support::init();
 
 dokan_register_activation_hook( __FILE__, array( 'Dokan_Store_Support', 'activate' ) );
 
-if ( ! function_exists( 'dokan_get_customer_orders_by_seller' ) ) :
-
-    /**
-     * Get Customer Orders by Seller
-     *
-     * @since 2.6.6
-     *
-     * @param int $customer_id
-     *
-     * @param int $seller_id
-     *
-     * @return Object $order
-     */
-    function dokan_get_customer_orders_by_seller( $customer_id, $seller_id ) {
-
-        $customer_orders = get_posts( array(
-            'numberposts' => -1,
-            'author'      => $seller_id,
-            'meta_key'    => '_customer_user',
-            'meta_value'  => $customer_id,
-            'post_type'   => wc_get_order_types(),
-            'post_status' => array_keys( wc_get_order_statuses() ),
-        ) );
-
-        return $customer_orders;
-    }
-
-endif;
