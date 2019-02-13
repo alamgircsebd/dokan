@@ -1,8 +1,8 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-    exit;
-}
+use DokanPro\Modules\Subscription\SubscriptionPack;
+
+defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'Dokan_Subscription_Cancelled' ) ) :
 
@@ -71,18 +71,18 @@ class Dokan_Subscription_Cancelled extends WC_Email {
                 return;
             }
 
-            $vendor  = dokan()->vendor->get( $customer_id );
-            $product = wc_get_product( $product_id );
+            $vendor       = dokan()->vendor->get( $customer_id );
+            $subscription = dokan()->subscription->get( $product_id );
 
             if ( $vendor ) {
                 $this->object = $vendor;
 
-                $this->find['site_name']      = '{site_name}';
-                $this->find['vendor_name']    = '{vendor_name}';
+                $this->find['site_name']       = '{site_name}';
+                $this->find['vendor_name']     = '{vendor_name}';
 
-                $this->replace['site_name']   = $this->get_from_name();
-                $this->replace['vendor_name'] = $vendor->get_store_name();
-                $this->replace['product']     = $product;
+                $this->replace['site_name']    = $this->get_from_name();
+                $this->replace['vendor_name']  = $vendor->get_store_name();
+                $this->replace['subscription'] = $subscription;
             }
 
             $this->setup_locale();

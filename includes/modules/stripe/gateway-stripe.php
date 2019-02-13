@@ -543,6 +543,11 @@ class Dokan_Stripe {
                         }
                     }
 
+                    if ( 'customer.subscription.trial_will_end' == $event->type ) {
+                        // it will trigger 3 days before an trail ends
+                        do_action( 'dokan_vendor_subscription_will_end' );
+                    }
+
                 } catch ( Exception $e ) {
                     // something failed, perhaps log a notice or email the site admin
                 }

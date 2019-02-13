@@ -1,4 +1,7 @@
 <?php
+
+use DokanPro\Modules\Subscription\Helper;
+
 /**
  * Admin related functions
  *
@@ -15,22 +18,22 @@ class DPS_Admin {
         add_action( 'dokan-vue-admin-scripts', array( $this, 'vue_admin_enqueue_scripts' ) );
 
         // add product area in admin panel
-        add_filter( 'product_type_selector', array( $this, 'add_product_type' ), 1 );
-        add_action( 'woocommerce_product_options_general_product_data', array( $this, 'general_fields' ) );
-        add_action( 'woocommerce_process_product_meta', array( $this, 'general_fields_save' ), 99 );
+        add_filter( 'product_type_selector', [ __CLASS__, 'add_product_type' ], 1 );
+        add_action( 'woocommerce_product_options_general_product_data', [ __CLASS__, 'general_fields' ] );
+        add_action( 'woocommerce_process_product_meta', [ __CLASS__, 'general_fields_save' ], 99 );
 
-        add_action( 'dokan_admin_menu', array( $this, 'add_submenu_in_dokan_dashboard' ), 15 );
-        add_filter( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
+        add_action( 'dokan_admin_menu', [ __CLASS__, 'add_submenu_in_dokan_dashboard' ], 15 );
+        add_filter( 'dokan-admin-routes', [ __CLASS__, 'vue_admin_routes' ] );
 
         // settings section
-        add_filter( 'dokan_settings_sections', array( $this, 'add_new_section_admin_panael' ) );
-        add_filter( 'dokan_settings_fields', array( $this, 'add_new_setting_field_admin_panael' ), 12, 1 );
+        add_filter( 'dokan_settings_sections', [ __CLASS__, 'add_new_section_admin_panael' ] );
+        add_filter( 'dokan_settings_fields', [ __CLASS__, 'add_new_setting_field_admin_panael' ], 12, 1 );
 
         //add dropdown field with subscription packs
-        add_action( 'dokan_seller_meta_fields', array( $this, 'add_subscription_packs_dropdown' ), 10, 1 );
+        add_action( 'dokan_seller_meta_fields', [ __CLASS__, 'add_subscription_packs_dropdown' ], 10, 1 );
 
         //save user meta
-        add_action( 'dokan_process_seller_meta_fields', array( $this, 'save_meta_fields' ) );
+        add_action( 'dokan_process_seller_meta_fields', [ __CLASS__, 'save_meta_fields' ] );
     }
 
     public function admin_enqueue_scripts() {
@@ -39,7 +42,7 @@ class DPS_Admin {
 
         wp_localize_script( 'dps-custom-admin-js', 'dokanSubscription', array(
             'ajaxurl'             => admin_url( 'admin-ajax.php' ),
-            'subscriptionLengths' => DPS_Manager::get_subscription_ranges()
+            'subscriptionLengths' => Helper::get_subscription_ranges()
         ) );
     }
 
@@ -53,7 +56,7 @@ class DPS_Admin {
      * @param array   $types
      * @param array   $product_type
      */
-    function add_product_type( $types ) {
+    public static function add_product_type( $types ) {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return $types;
         }
@@ -66,7 +69,7 @@ class DPS_Admin {
     /**
      * Add extra custom field in woocommerce product type
      */
-    function general_fields() {
+    public static function general_fields() {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
@@ -124,6 +127,16 @@ class DPS_Admin {
             )
         );
 
+        // vendor allowed product types
+        echo '<p class="form-field dokan_subscription_allowed_product_types">';
+        echo '<label for="dokan_subscription_allowed_product_types">' . __( 'Allowed Product Type', 'dokan' ) .'</label>';
+        echo '<select multiple="multiple" data-placeholder=" '. __( 'Select Product Type&hellip;', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_product_type" name="dokan_subscription_allowed_product_types[]" style="width: 350px;">';
+            Helper::get_product_types_options();
+        echo '</select>';
+        echo '<span class="description">' . __( 'Select product type for this package. Leave empty to allow any product type.', 'dokan' ) . '</span>';
+        echo '</p>';
+
+        // vendor allowed categories
         echo '<p class="form-field _vendor_allowed_categories">';
         $selected_cat = get_post_meta( $post->ID, '_vendor_allowed_categories', true );
         echo '<label for="_vendor_allowed_categories">' . __( 'Allowed categories', 'dokan' ) .'</label>';
@@ -147,6 +160,14 @@ class DPS_Admin {
 
         woocommerce_wp_checkbox(
             array(
+                'id'          => '_enable_gallery_restriction',
+                'label'       => __( 'Restrict Gallery Image Upload', 'dokan' ),
+                'description' => __( 'Please check this if you want to restrict gallery image uploading.', 'dokan' ),
+            )
+        );
+
+        woocommerce_wp_checkbox(
+            array(
                 'id'          => '_enable_recurring_payment',
                 'label'       => __( 'Recurring Payment', 'dokan' ),
                 'description' => __( 'Please check this if you want to enable recurring payment system', 'dokan' ),
@@ -165,15 +186,15 @@ class DPS_Admin {
             'id'      => '_subscription_period_interval',
             'class'   => 'wc_input_subscription_period_interval',
             'label'   => __( 'Billing cycle', 'dokan' ),
-            'options' => DPS_Manager::get_subscription_period_interval_strings(),
+            'options' => Helper::get_subscription_period_interval_strings(),
         ) );
 
         // Billing Period
         woocommerce_wp_select( array(
             'id'          => '_subscription_period',
             'class'       => 'wc_input_subscription_period',
-            'label'   => __( '', 'dokan' ),
-            'options'     => DPS_Manager::get_subscription_period_strings(),
+            'label'       => '',
+            'options'     => Helper::get_subscription_period_strings(),
         ) );
 
         echo '</div>';
@@ -185,10 +206,25 @@ class DPS_Admin {
             'id'          => '_subscription_length',
             'class'       => 'wc_input_subscription_length',
             'label'       => __( 'Billing cycle stop', 'dokan' ),
-            'options'     => DPS_Manager::get_subscription_ranges( $subscription_period ),
+            'options'     => Helper::get_subscription_ranges( $subscription_period ),
 
         ) );
 
+        woocommerce_wp_checkbox(
+            array(
+                'id'          => 'dokan_subscription_enable_trial',
+                'label'       => __( 'Enable Trial', 'dokan' ),
+                'description' => __( 'Please check this if you want to allow trial subscirption.', 'dokan' ),
+            )
+        );
+
+        echo '<p class="form-field dokan_subscription_trial_period">';
+        echo '<label for="dokan_subscription_trial_period">' . __( 'Trial Period', 'dokan' ) .'</label>';
+
+        Helper::get_trial_period_options();
+
+        echo '<span class="description">' . __( 'Define the trial period', 'dokan' ) . '</span>';
+        echo '</p>';
         echo '</div>';
 
         do_action( 'dps_subscription_product_fields' );
@@ -200,7 +236,7 @@ class DPS_Admin {
      *
      * @param integer $post_id
      */
-    function general_fields_save( $post_id ) {
+    public static function general_fields_save( $post_id ) {
 
         if ( ! isset( $_POST['product-type'] ) || $_POST['product-type'] != 'product_pack' ) {
             return;
@@ -232,11 +268,42 @@ class DPS_Admin {
 
         update_post_meta( $post_id, '_subscription_product_admin_commission', $_POST['_subscription_product_admin_commission'] );
 
+        if ( ! empty( $_POST['dokan_subscription_allowed_product_types'] ) ) {
+            update_post_meta( $post_id, 'dokan_subscription_allowed_product_types', wc_clean( $_POST['dokan_subscription_allowed_product_types'] ) );
+        } else {
+            delete_post_meta( $post_id, 'dokan_subscription_allowed_product_types' );
+        }
+
         if ( ! empty( $_POST['_vendor_allowed_categories'] ) ) {
             update_post_meta( $post_id, '_vendor_allowed_categories', wc_clean( $_POST['_vendor_allowed_categories'] ) );
         } else {
             delete_post_meta( $post_id, '_vendor_allowed_categories' );
         }
+
+        $woocommerce_enable_gallery_restriction = isset( $_POST['_enable_gallery_restriction'] ) ? 'yes' : 'no';
+
+        if ( ! empty( $woocommerce_enable_gallery_restriction ) ) {
+            update_post_meta( $post_id, '_enable_gallery_restriction', wc_clean( $woocommerce_enable_gallery_restriction ) );
+        }
+
+        $dokan_subscription_enable_trial = isset( $_POST['dokan_subscription_enable_trial'] ) ? 'yes' : 'no';
+
+        if ( ! empty( $dokan_subscription_enable_trial ) ) {
+            update_post_meta( $post_id, 'dokan_subscription_enable_trial', wc_clean( $dokan_subscription_enable_trial ) );
+        }
+
+        $dokan_subscription_trail_range = isset( $_POST['dokan_subscription_trail_range'] ) ? $_POST['dokan_subscription_trail_range'] : '1';
+
+        if ( ! empty( $dokan_subscription_trail_range ) ) {
+            update_post_meta( $post_id, 'dokan_subscription_trail_range', wc_clean( $dokan_subscription_trail_range ) );
+        }
+
+        $dokan_subscription_trial_period_types = isset( $_POST['dokan_subscription_trial_period_types'] ) ? $_POST['dokan_subscription_trial_period_types'] : 'days';
+
+        if ( ! empty( $dokan_subscription_trial_period_types ) ) {
+            update_post_meta( $post_id, 'dokan_subscription_trial_period_types', wc_clean( $dokan_subscription_trial_period_types ) );
+        }
+
 
         $woocommerce_enable_recurring_field = isset( $_POST['_enable_recurring_payment'] ) ? 'yes' : 'no';
 
@@ -271,7 +338,7 @@ class DPS_Admin {
      *
      * @param array   $sections
      */
-    function add_new_section_admin_panael( $sections ) {
+    public static function add_new_section_admin_panael( $sections ) {
         $sections['dokan_product_subscription'] = array(
             'id'    => 'dokan_product_subscription',
             'title' => __( 'Product Subscription', 'dokan' ),
@@ -287,7 +354,7 @@ class DPS_Admin {
      * @param string  $post_type
      * @return array
      */
-    function get_post_type( $post_type ) {
+    public static function get_post_type( $post_type ) {
 
         $pages_array = array( '-1' => __( '- select -', 'dokan' ) );
         $pages = get_posts( array( 'post_type' => $post_type, 'numberposts' => -1 ) );
@@ -308,8 +375,8 @@ class DPS_Admin {
      * @param array   $settings_fields
      * @return array
      */
-    function add_new_setting_field_admin_panael( $settings_fields ) {
-        $pages_array = $this->get_post_type( 'page' );
+    public static function add_new_setting_field_admin_panael( $settings_fields ) {
+        $pages_array = self::get_post_type( 'page' );
 
         $settings_fields['dokan_product_subscription'] = array(
             'subscription_pack' => array(
@@ -382,8 +449,9 @@ class DPS_Admin {
     /**
      * Add submenu page in dokan Dashboard
      */
-    function add_submenu_in_dokan_dashboard( $capability ) {
+    public static function add_submenu_in_dokan_dashboard( $capability ) {
         global $submenu;
+
         $slug = 'dokan';
 
         if ( current_user_can( 'manage_options' ) ) {
@@ -398,7 +466,7 @@ class DPS_Admin {
      *
      * @return array
      */
-    public function vue_admin_routes( $routes ) {
+    public static function vue_admin_routes( $routes ) {
         $routes[] = [
             'path'      => '/subscriptions',
             'name'      => 'Subscriptions',
@@ -411,9 +479,9 @@ class DPS_Admin {
     /**
      * Add subscription packs in drowpdown to let admin select a pack for the seller
      */
-    public function add_subscription_packs_dropdown( $user ){
+    public static function add_subscription_packs_dropdown( $user ){
 
-        $users_assigned_pack = get_user_meta( $user->ID, 'product_package_id', true );
+        $users_assigned_pack       = get_user_meta( $user->ID, 'product_package_id', true );
         $vendor_allowed_categories = get_user_meta( $user->ID, 'vendor_allowed_categories', true );
 
         $args = array(
@@ -509,7 +577,14 @@ class DPS_Admin {
     <?php
     }
 
-    public function save_meta_fields( $user_id ) {
+    /**
+     * Save meta fields
+     *
+     * @param int $user_id
+     *
+     * @return void
+     */
+    public static function save_meta_fields( $user_id ) {
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
@@ -545,7 +620,7 @@ class DPS_Admin {
             $order_id = get_user_meta( $user_id, 'product_order_id', true );
 
             if ( $order_id ) {
-                dokan_dps_log( 'Subscription cancel check: On assign pack by admin cancel Recurring Subscription of User #' . $user_id . ' on order #' . $order_id );
+                Helper::log( 'Subscription cancel check: On assign pack by admin cancel Recurring Subscription of User #' . $user_id . ' on order #' . $order_id );
                 DPS_PayPal_Standard_Subscriptions::cancel_subscription_with_paypal( $order_id , $user_id );
             }
         }

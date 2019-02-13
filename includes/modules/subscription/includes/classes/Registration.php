@@ -1,4 +1,11 @@
 <?php
+
+namespace DokanPro\Modules\Subscription;
+
+use Dokan\Traits\Singleton;
+use DokanPro\Modules\Subscription\Helper;
+use DokanPro\Modules\Subscription\SubscriptionPack;
+
 /**
 * Description of Pack_On_Registration
 *
@@ -8,9 +15,15 @@
 *
 * @since 1.0.2
 */
-class DPS_Pack_On_Registration {
+class Registration {
+    use Singleton;
 
-    public function __construct() {
+    /**
+     * Boot method
+     *
+     * @return void
+     */
+    public function boot() {
         $this->init_hooks();
     }
 
@@ -28,27 +41,17 @@ class DPS_Pack_On_Registration {
         add_action( 'woocommerce_thankyou', array( $this, 'redirect_to_seller_setup_wizard_after_checkout' ) );
     }
 
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new DPS_Pack_On_Registration();
-        }
-        return $instance;
-    }
-
     /**
      * Generate select options and details for created subscription packs
      *
      * @since 1.0.2
      *
      */
-    function generate_form_fields() {
-        //get packs
-        $query = $this->get_subscription_packs();
-        $available_recurring_period = DPS_Manager::get_subscription_period_strings();
+    public function generate_form_fields() {
+        $subscription_packs         = dokan()->subscription->all();
+        $available_recurring_period = Helper::get_subscription_period_strings();
 
-        $packs = $query->get_posts();
+        $packs = $subscription_packs->get_posts();
 
         //if packs not empty show dropdown
         if ( empty( $packs ) ) {
@@ -60,8 +63,8 @@ class DPS_Pack_On_Registration {
 
             <select required="required" class="dokan-form-control" name="dokan-subscription-pack" id="dokan-subscription-pack">
                 <?php
-                while ( $query->have_posts() ) {
-                    $query->the_post();
+                while ( $subscription_packs->have_posts() ) {
+                    $subscription_packs->the_post();
                     ?>
                     <option value="<?php echo get_the_ID() ?>"><?php echo the_title() ?></option>
                     <?php
@@ -69,11 +72,14 @@ class DPS_Pack_On_Registration {
                 ?>
             </select>
             <?php
-            while ( $query->have_posts() ) {
-                $query->the_post();
-                $is_recurring       = ( get_post_meta( get_the_ID(), '_enable_recurring_payment', true ) == 'yes' ) ? true : false;
-                $recurring_interval = (int) get_post_meta( get_the_ID(), '_subscription_period_interval', true );
-                $recurring_period   = get_post_meta( get_the_ID(), '_subscription_period', true );
+            while ( $subscription_packs->have_posts() ) {
+                $subscription_packs->the_post();
+
+                // get individual subscriptoin pack details
+                $sub_pack           = dokan()->subscription->get( get_the_ID() );
+                $is_recurring       = $sub_pack->is_recurring();
+                $recurring_interval = $sub_pack->get_recurring_interval();
+                $recurring_period   = $sub_pack->get_period_type();
                 ?>
 
                 <div class="dps-pack dps-pack-<?php echo get_the_ID() ?>">
@@ -125,45 +131,22 @@ class DPS_Pack_On_Registration {
         }
 
     /**
-     * Query subscription packs
-     *
-     * @return object subscription_query
-     */
-    private function get_subscription_packs() {
-
-        $args = array(
-            'post_type'      => 'product',
-            'posts_per_page' => -1,
-            'tax_query'      => array(
-                array(
-                    'taxonomy' => 'product_type',
-                    'field'    => 'slug',
-                    'terms'    => 'product_pack'
-                )
-            ),
-            'orderby'        => 'menu_order title',
-            'order'          => 'ASC'
-        );
-
-        $query = new WP_Query( apply_filters( 'dokan_sub_get_reg_sub_packs_args', $args ) );
-
-        return $query;
-    }
-
-    /**
      * Redirect users to checkout directly with selected
      * subscription added in cart
      *
      * @since 1.0.2
      * @param string redirect_url
+     *
      * @return string redirect_url
      */
-      function redirect_to_checkout( $redirect_url ) {
+    public function redirect_to_checkout( $redirect_url ) {
 
-        if ( current_user_can( 'dokandar' ) && dokan_get_option('enable_subscription_pack_in_reg', 'dokan_product_subscription' ) == 'on' ) {
-            if ( !isset( $_POST['dokan-subscription-pack'] ) ) {
+        if ( current_user_can( 'dokandar' ) && Helper::is_subscription_enabled_on_registration() ) {
+
+            if ( ! isset( $_POST['dokan-subscription-pack'] ) ) {
                 return $redirect_url;
             }
+
             return get_site_url() . '/?add-to-cart=' . $_POST['dokan-subscription-pack'];
         }
 
@@ -221,7 +204,7 @@ class DPS_Pack_On_Registration {
 
         $redirect_url = get_site_url() . '/?page=dokan-seller-setup';
 
-        if ( Dokan_Product_Subscription::is_subscription_product( $product_id ) ) {
+        if ( Helper::is_subscription_product( $product_id ) ) {
             ?>
             <script>
                 jQuery(document).ready(function() {
@@ -235,9 +218,9 @@ class DPS_Pack_On_Registration {
     }
 }
 
-$dps_enable = dokan_get_option( 'enable_pricing', 'dokan_product_subscription' );
-$dps_enable_in_registration =  dokan_get_option('enable_subscription_pack_in_reg', 'dokan_product_subscription' );
+$dps_enable                 = Helper::is_subscription_module_enabled();
+$dps_enable_in_registration = Helper::is_subscription_enabled_on_registration();
 
-if ( $dps_enable == 'on' && $dps_enable_in_registration == 'on' ) {
-    $dps_on_reg = DPS_Pack_On_Registration::init();
+if ( $dps_enable && $dps_enable_in_registration ) {
+    Registration::instance();
 }
