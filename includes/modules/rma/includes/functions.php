@@ -225,7 +225,7 @@ function dokan_get_warranty_duration_string( $warranty, $order ) {
         if ( $warranty['length'] == 'lifetime' ) {
             $warranty_string = __( 'Lifetime', 'dokan' );
         } else {
-            $order_date         = ( $completed ) ? $completed : $order->get_order_date();
+            $order_date         = ( $completed ) ? $completed : $order->get_date_paid()->date( 'Y-m-d H:i:s' );
             $warranty_string    = __( 'Expiry Date: ', 'dokan' ) . dokan_rma_get_date( $order_date, $warranty['length_value'], $warranty['length_duration'] );
         }
     } elseif ( $warranty['type'] == 'addon_warranty' ) {
@@ -234,7 +234,7 @@ function dokan_get_warranty_duration_string( $warranty, $order ) {
 
         if ( isset( $warranty['addon_settings'][$idx] ) ) {
             $addon           = $warranty['addon_settings'][$idx];
-            $order_date      = ($completed) ? $completed : $order->get_order_date();
+            $order_date      = ($completed) ? $completed : $order->get_date_paid()->date( 'Y-m-d H:i:s' );
             $warranty_string = __( 'Expiry Date: ', 'dokan' ) . dokan_rma_get_date( $order_date, $addon['length'], $addon['duration'] );
         }
     }
