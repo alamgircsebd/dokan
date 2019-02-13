@@ -579,9 +579,17 @@ class Dokan_Pro_Products {
      */
     public function save_product_post_data( $product ) {
         //update product status to pending-review if set by admin
-        if ( $product['post_status'] == 'publish' && dokan_get_option( 'edited_product_status', 'dokan_selling' ) == 'on' ) {
-            $product['post_status'] = 'pending';
+        if ( 'publish' !== $product['post_status'] || 'on' !== dokan_get_option( 'edited_product_status', 'dokan_selling' ) ) {
+            return $product;
         }
+
+        $vendor_id = dokan_get_current_user_id();
+        // return early if vendor can publish product directly
+        if ( 'yes' === get_user_meta( $vendor_id, 'dokan_publishing', true ) ) {
+            return $product;
+        }
+
+        $product['post_status'] = 'pending';
 
         return $product;
     }
