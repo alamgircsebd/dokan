@@ -264,18 +264,17 @@ class Dokan_Store_Support {
      * @param int store_id
      */
     function generate_support_button( $store_id ) {
+        $store_info = dokan_get_store_info( $store_id );
 
         if ( isset( $store_info['show_support_btn'] ) && $store_info['show_support_btn'] == 'no' ) {
             return;
         }
 
+        $user_logged_in = 'user_logged_out';
+
         if ( is_user_logged_in() ) {
             $user_logged_in = 'user_logged';
-        } else {
-            $user_logged_in = 'user_logged_out';
         }
-
-        $store_info = dokan_get_store_info( $store_id );
 
         $support_text = isset( $store_info['support_btn_name'] ) && !empty( $store_info['support_btn_name'] ) ? $store_info['support_btn_name'] : __( 'Get Support', 'dokan' );
         ?>
