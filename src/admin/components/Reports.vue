@@ -173,7 +173,7 @@
                 </template>
 
                 <template slot="order_total" slot-scope="data">
-                    <currency :amount="data.row.order_id"></currency>
+                    <currency :amount="data.row.order_total"></currency>
                 </template>
 
                 <template slot="vendor_earning" slot-scope="data">
