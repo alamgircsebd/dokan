@@ -20,9 +20,9 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 	function dokan_get_profile_progressbar() {
 	    global $current_user;
 
-	    $profile_info  = dokan_get_store_info( $current_user->ID );
-	    $progress      = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : '';
-	    $next_todo     = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : __( 'Start with adding a Banner to gain profile progress', 'dokan' );
+        $profile_info  = dokan_get_store_info( $current_user->ID );
+        $progress      = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : '';
+        $next_todo     = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : '';
         $progress_vals = isset( $profile_info['profile_completion']['progress_vals'] ) ? $profile_info['profile_completion']['progress_vals'] : 0;
 
         if ( strpos( $next_todo, '-' ) !== false ) {
@@ -35,9 +35,7 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 	    ob_start();
 
-	    if (  strlen( trim( $next_todo ) ) != 0 ) {
-	    	dokan_get_template_part( 'global/profile-progressbar', '', array( 'pro'=>true, 'progress' => $progress, 'next_todo' => $next_todo, 'value' => $progress_vals ) );
-	    }
+	    dokan_get_template_part( 'global/profile-progressbar', '', array( 'pro'=>true, 'progress' => $progress, 'next_todo' => $next_todo, 'value' => $progress_vals ) );
 
 	    $output = ob_get_clean();
 
@@ -85,7 +83,7 @@ function dokan_progressbar_translated_string( $string = '', $value = 15 ) {
             break;
 
         default:
-            return sprintf( __( 'Add %s profile link to gain %s%% progress', 'dokan' ), $string, number_format_i18n( $value ) );
+            return sprintf( __( 'Start with adding a Banner to gain profile progress', 'dokan' ) );
             break;
     }
 }
