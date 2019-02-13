@@ -80,8 +80,6 @@ function dokan_rma_refund_reasons( $reason = '' ) {
     if ( $reason ) {
         return isset( $reasons[$reason] ) ? $reasons[$reason] : '';
     }
-
-    return $reasons;
 }
 
 /**
