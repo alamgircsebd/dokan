@@ -151,6 +151,11 @@ class Dokan_Pro_Store_Seo {
                 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
         <?php foreach ( $sellers as $seller ) {
                 $product = dokan_get_latest_products( 1, $seller->ID );
+
+                if ( ! $product->post->post_modified ) {
+                    continue;
+                }
+
                 $last_modified = $product->post->post_modified;
             ?>
                 <url>
