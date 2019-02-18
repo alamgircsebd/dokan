@@ -291,7 +291,7 @@ class Dokan_Pro_Products {
             update_post_meta( $post_id, '_per_product_admin_commission_type', $value );
         }
         if ( isset( $_POST['_per_product_admin_commission'] ) ) {
-            $value = empty( $_POST['_per_product_admin_commission'] ) ? '' : (float) $_POST['_per_product_admin_commission'];
+            $value = '' === $_POST['_per_product_admin_commission'] ? '' : (float) $_POST['_per_product_admin_commission'];
             update_post_meta( $post_id, '_per_product_admin_commission', $value );
         }
     }
@@ -579,9 +579,17 @@ class Dokan_Pro_Products {
      */
     public function save_product_post_data( $product ) {
         //update product status to pending-review if set by admin
-        if ( $product['post_status'] == 'publish' && dokan_get_option( 'edited_product_status', 'dokan_selling' ) == 'on' ) {
-            $product['post_status'] = 'pending';
+        if ( 'publish' !== $product['post_status'] || 'on' !== dokan_get_option( 'edited_product_status', 'dokan_selling' ) ) {
+            return $product;
         }
+
+        $vendor_id = dokan_get_current_user_id();
+        // return early if vendor can publish product directly
+        if ( 'yes' === get_user_meta( $vendor_id, 'dokan_publishing', true ) ) {
+            return $product;
+        }
+
+        $product['post_status'] = 'pending';
 
         return $product;
     }
@@ -844,6 +852,11 @@ class Dokan_Pro_Products {
         foreach ( $args as $field => $default_val ) {
             $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
         }
+
+        // save post content & excerpt; (ei: see `dokan_save_product` function)
+        $saved_post           = get_post( $data['ID'] );
+        $data['post_content'] = $saved_post ? $saved_post->post_content : '';
+        $data['post_excerpt'] = $saved_post ? $saved_post->post_excerpt : '';
 
         $data = apply_filters( 'dokan_update_product_post_data', $data );
 

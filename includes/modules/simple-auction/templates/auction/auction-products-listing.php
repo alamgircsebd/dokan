@@ -15,6 +15,7 @@
              *  @since 2.4
              */
             do_action( 'dokan_auction_product_listing_inside_before' );
+            do_action( 'dokan_before_listing_product' );
         ?>
 
         <?php do_action( 'dokan_before_listing_auction_product' ); ?>

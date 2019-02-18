@@ -410,33 +410,6 @@ Class Dokan_Social_Login {
     }
 
     /**
-     * Recursive function to generate a unique username.
-     *
-     * If the username already exists, will add a numerical suffix which will increase until a unique username is found.
-     *
-     * @param string $username
-     *
-     * @return string The unique username.
-     */
-    function generate_unique_username( $username ) {
-        static $i;
-        if ( null === $i ) {
-            $i = 1;
-        } else {
-            $i++;
-        }
-        if ( !username_exists( $username ) ) {
-            return $username;
-        }
-        $new_username = sprintf( '%s_%s', $username, $i );
-        if ( !username_exists( $new_username ) ) {
-            return $new_username;
-        } else {
-            return call_user_func( array( $this, 'generate_unique_username' ), $username );
-        }
-    }
-
-    /**
      * Register a new user
      *
      * @param object $data
@@ -448,7 +421,7 @@ Class Dokan_Social_Login {
     private function register_new_user( $data, $provider ) {
 
         $userdata = array(
-            'user_login' => $this->generate_unique_username( $data->displayName ),
+            'user_login' => dokan_generate_username( $data->displayName ),
             'user_email' => $data->email,
             'first_name' => $data->firstName,
             'last_name'  => $data->lastName,

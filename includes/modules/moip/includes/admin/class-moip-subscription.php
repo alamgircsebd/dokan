@@ -57,7 +57,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
      *
      * @return void
      */
-    public function create_plan( $product, $subscription_interval, $subscription_period, $subscription_length ) {
+    public function create_plan( $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] ) {
 
         $base_url = $this->base_url . '/plans';
 
@@ -67,15 +67,19 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
         }
 
         $plan_body = array(
-            'code'          => $product->get_id(),
-            'name'          => $product->get_name(),
-            'description'   => $product->get_description(),
-            'amount'        => $product->get_price() * 100,
-            'interval'      => array(
-                'length'    => $subscription_interval,
-                'unit'      => $subscription_period
+            'code'           => $product->get_id(),
+            'name'           => $product->get_name(),
+            'description'    => $product->get_description(),
+            'amount'         => $product->get_price() * 100,
+            'interval'       => array(
+                'length'     => $subscription_interval,
+                'unit'       => $subscription_period
             ),
             'billing_cycles' => $subscription_length,
+            'trial'          => array(
+                'days'       => ! empty( $trail_details['days'] ) ? $trail_details['days'] : 0,
+                'enabled'    => ! empty( $trail_details['is_enabled'] ) ? $trail_details['is_enabled'] : false
+            )
         );
 
         $args = array(
@@ -102,7 +106,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             $error = json_decode( wp_remote_retrieve_body( $response ) );
 
             if ( isset( $error->errors[0]->code ) && $error->errors[0]->code == 'MA6' ) {
-                $plan_id = $this->edit_plan( $product->get_id(), $product, $subscription_interval, $subscription_period, $subscription_length );
+                $plan_id = $this->edit_plan( $product->get_id(), $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] );
 
                 if ( $plan_id ) {
                     return $plan_id;
@@ -128,7 +132,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
      *
      * @return int $plan_id
      */
-    public function edit_plan( $plan_id, $product, $subscription_interval, $subscription_period, $subscription_length ) {
+    public function edit_plan( $plan_id, $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] ) {
         if ( empty( $plan_id ) || empty( $product ) ) {
             return false;
         }
@@ -147,7 +151,11 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
                 'length'    => $subscription_interval,
                 'unit'      => $subscription_period
             ),
-            'billing_cycles' => $subscription_length
+            'billing_cycles' => $subscription_length,
+            'trial'          => array(
+                'days'       => ! empty( $trail_details['days'] ) ? $trail_details['days'] : 0,
+                'enabled'    => ! empty( $trail_details['is_enabled'] ) ? $trail_details['is_enabled'] : false
+            )
         );
 
         $args = array(
@@ -186,15 +194,15 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
     public function create_subscription( $order, $plan_id ) {
         $base_url = $this->base_url . '/subscriptions?new_customer=true';
 
-        $customer_info = array();
-        $customer_info['full_name']    = $order->get_formatted_billing_full_name();
-        $customer_info['email']        = $order->get_billing_email();
-        $customer_info['birthdate']    = '';
-        $customer_info['tax_document'] = wc_clean( $_POST['billing_cpf'] );
-        $customer_info['phone_prefix'] = substr( $order->get_billing_phone(), 0, 2 );
-        $customer_info['phone_sufix']  = substr( $order->get_billing_phone(), 2 );
-        $customer_info['card_number']  = wc_clean( $_POST['dokan-moip-connect-card-number'] );
-        $customer_info['card_expiry_month']  = wc_clean( substr( $_POST['dokan-moip-connect-card-expiry'], 0, 2 ) );
+        $customer_info                      = array();
+        $customer_info['full_name']         = $order->get_formatted_billing_full_name();
+        $customer_info['email']             = $order->get_billing_email();
+        $customer_info['birthdate']         = '';
+        $customer_info['tax_document']      = wc_clean( $_POST['billing_cpf'] );
+        $customer_info['phone_prefix']      = substr( $order->get_billing_phone(), 0, 3 );
+        $customer_info['phone_sufix']       = substr( $order->get_billing_phone(), 3 );
+        $customer_info['card_number']       = wc_clean( str_replace( ' ', '', $_POST['dokan-moip-connect-card-number'] ) );
+        $customer_info['card_expiry_month'] = wc_clean( substr( $_POST['dokan-moip-connect-card-expiry'], 0, 2 ) );
         $customer_info['card_expiry_year']  = wc_clean( substr( $_POST['dokan-moip-connect-card-expiry'], 5 ) );
 
         $subscription_code = rand();

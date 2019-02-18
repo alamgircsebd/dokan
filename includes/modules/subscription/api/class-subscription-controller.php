@@ -1,5 +1,7 @@
 <?php
 
+use DokanPro\Modules\Subscription\Helper;
+
 /**
 * Subscription API controller
 *
@@ -160,13 +162,13 @@ class Dokan_REST_Subscription_Controller extends Dokan_REST_Controller {
         }
 
         if ( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
-            dokan_dps_log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+            Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
 
             do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id );
         } else {
-            dokan_dps_log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+            Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
 
-            Dokan_Product_Subscription::delete_subscription_pack( $user_id, $order_id );
+            Helper::delete_subscription_pack( $user_id, $order_id );
         }
 
         $response = $this->prepare_item_for_response( $user, $request );
@@ -200,13 +202,13 @@ class Dokan_REST_Subscription_Controller extends Dokan_REST_Controller {
             }
 
             if ( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
-                dokan_dps_log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+                Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
 
                 do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id );
             } else {
-                dokan_dps_log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+                Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
 
-                Dokan_Product_Subscription::delete_subscription_pack( $user_id, $order_id );
+                Helper::delete_subscription_pack( $user_id, $order_id );
             }
         }
 
@@ -224,15 +226,21 @@ class Dokan_REST_Subscription_Controller extends Dokan_REST_Controller {
      * @return WP_REST_Response $response Response data.
      */
     public function prepare_item_for_response( $user, $request ) {
+        $subscription = dokan()->vendor->get( $user->ID )->subscription;
+
+        if ( ! $subscription ) {
+            return new WP_Error( 'no_subscription', __( 'No subscription is found to be deleted.', 'dokan' ), [ 'status' => 200 ] );
+        }
+
         $data = [
             'id'                 => $user->ID,
             'user_link'          => get_edit_user_link( $user->ID ),
             'user_name'          => $user->data->user_nicename,
-            'subscription_id'    => get_user_meta( $user->ID, 'product_package_id', true ),
-            'subscription_title' => get_the_title( get_user_meta( $user->ID, 'product_package_id', true ) ),
-            'start_date'         => date( 'F j, Y', strtotime( get_user_meta( $user->ID, 'product_pack_startdate', true ) ) ),
-            'end_date'           => date( 'F j, Y', strtotime( get_user_meta( $user->ID, 'product_pack_enddate', true ) ) ),
-            'status'             => get_user_meta( $user->ID, 'can_post_product', true ),
+            'subscription_id'    => $subscription->get_id(),
+            'subscription_title' => $subscription->get_package_title(),
+            'start_date'         => date( 'F j, Y', strtotime( $subscription->get_pack_start_date() ) ),
+            'end_date'           => date( 'F j, Y', strtotime( $subscription->get_pack_end_date() ) ),
+            'status'             => $subscription->can_post_product()
         ];
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';

@@ -1,5 +1,7 @@
 <?php
 
+use DokanPro\Modules\Subscription\SubscriptionPack;
+
 /**
  * Dokan_Stripe_Connect class.
  *
@@ -31,6 +33,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         $this->accept_bitcoin  = ( 'USD' === strtoupper( get_woocommerce_currency() ) && 'yes' === $this->get_option( 'stripe_bitcoin' ) ) ? true : false;
         $this->checkout_image  = $this->get_option( 'stripe_checkout_image' );
         $this->checkout_label  = $this->get_option( 'stripe_checkout_label' );
+        $this->stripe_meta_key = '_dokan_stripe_charge_id_';
 
         /** All actions */
         add_action( 'wp_enqueue_scripts', array( &$this, 'payment_scripts' ) );
@@ -554,21 +557,23 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         }
 
         // We assume that if a subscription product added into a cart then no other product doesn't exist in cart so we get only one product
-        $order_items       = $order->get_items();
-        $product_pack_item = reset( $order_items );
-        $product_pack      = wc_get_product( $product_pack_item->get_product_id() );
+        $order_items        = $order->get_items();
+        $product_pack_item  = reset( $order_items );
+        $product_pack       = wc_get_product( $product_pack_item->get_product_id() );
 
-        $product_pack_name = $product_pack->get_title() . ' #' . $product_pack->get_id();
-        $product_pack_id   = $product_pack->get_slug() . '-' . $product_pack->get_id();
-        $is_recurring      = get_post_meta( $product_pack->get_id(), '_enable_recurring_payment', true );
-        $customer_user_id  = $order->get_customer_id();
-        $order_total       = round( $order->get_total(), 2 );
+        $product_pack_name  = $product_pack->get_title() . ' #' . $product_pack->get_id();
+        $product_pack_id    = $product_pack->get_slug() . '-' . $product_pack->get_id();
+        $customer_user_id   = $order->get_customer_id();
+        $order_total        = round( $order->get_total(), 2 );
 
-        if ( 'yes' == $is_recurring ) {
+        $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
+
+        if ( $dokan_subscription->is_recurring() ) {
             // If reccuring pack
-            $subscription_interval = get_post_meta( $product_pack->get_id(), '_subscription_period_interval', true );
-            $subscription_period   = get_post_meta( $product_pack->get_id(), '_subscription_period', true );
-            $subscription_length   = get_post_meta( $product_pack->get_id(), '_subscription_length', true );
+            $subscription_interval = $dokan_subscription->get_recurring_interval();
+            $subscription_period   = $dokan_subscription->get_period_type();
+            $subscription_length   = $dokan_subscription->get_period_length();
+            $trial_period_days     = $dokan_subscription->is_trial() ? $dokan_subscription->get_trial_period_length() : 0;
 
             try {
                 $stripe_plan = \Stripe\Plan::retrieve( $product_pack_id );
@@ -579,12 +584,13 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 ) );
 
                 \Stripe\Plan::create( array(
-                    'amount'         => $order_total * 100,
-                    'interval'       => $subscription_period,
-                    'interval_count' => $subscription_interval,
-                    'currency'       => $currency,
-                    'id'             => $product_pack_id,
-                    'product'        => $stripe_product->id
+                    'amount'            => $order_total * 100,
+                    'interval'          => $subscription_period,
+                    'interval_count'    => $subscription_interval,
+                    'currency'          => $currency,
+                    'id'                => $product_pack_id,
+                    'product'           => $stripe_product->id,
+                    'trial_period_days' => $trial_period_days
                 ) );
             }
 
@@ -762,6 +768,7 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             }
 
             $charge_ids[ $seller_id ] = $charge->id;
+            update_post_meta( $tmp_order_id, $this->stripe_meta_key . $seller_id, $charge->id );
 
             if ( $order_id !== $tmp_order_id ) {
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed via Dokan Stripe on Charge ID: %s', 'dokan' ), $tmp_order->get_order_number(), $charge->id ) );
@@ -772,12 +779,14 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
 
         /* Payment complete*/
+        $order->update_status( 'completed' );
         $order->payment_complete();
 
+        $this->insert_into_vendor_balance( $all_withdraws );
         $this->process_seller_withdraws( $all_withdraws );
 
         foreach ( $charge_ids as $seller_id => $charge_id ) {
-            $meta_key = '_dokan_stripe_charge_id_' . $seller_id;
+            $meta_key = $this->stripe_meta_key . $seller_id;
             update_post_meta( $order_id, $meta_key, $charge_id );
         }
 
@@ -805,6 +814,48 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
         }
 
         return false;
+    }
+
+    /**
+     * Insert withdraw data into vendor balnace table
+     *
+     * @param  array $all_withdraw
+     *
+     * @return void
+     */
+    public function insert_into_vendor_balance( $all_withdraws ) {
+        if ( ! $all_withdraws ) {
+            return;
+        }
+
+        global $wpdb;
+
+        foreach ( $all_withdraws as $withdraw ) {
+            $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
+                array(
+                    'vendor_id'     => $withdraw['user_id'],
+                    'trn_id'        => $withdraw['order_id'],
+                    'trn_type'      => 'dokan_withdraw',
+                    'perticulars'   => 'Paid Via Stripe',
+                    'debit'         => 0,
+                    'credit'        => $withdraw['amount'],
+                    'status'        => 'approved',
+                    'trn_date'      => current_time( 'mysql' ),
+                    'balance_date'  => current_time( 'mysql' ),
+                ),
+                array(
+                    '%d',
+                    '%d',
+                    '%s',
+                    '%s',
+                    '%f',
+                    '%f',
+                    '%s',
+                    '%s',
+                    '%s',
+                )
+            );
+        }
     }
 
     /**

@@ -1100,3 +1100,8 @@ if ( !function_exists( 'dokan_social_reg_handler' ) ) {
 }
 
 add_action( 'template_redirect', 'dokan_social_reg_handler' );
+
+if ( function_exists( 'dokan_add_privacy_policy' ) ) {
+    // show privacy policy text in product enquiry form
+    add_action( 'dokan_product_enquiry_after_form', 'dokan_add_privacy_policy' );
+}

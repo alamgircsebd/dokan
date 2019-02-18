@@ -121,6 +121,9 @@ class Dokan_WC_Booking {
         add_filter( 'dokan_booking_menu_title', array( $this, 'dokan_get_bookings_menu_title' ) );
 
         add_filter( 'dokan_set_template_path', array( $this, 'load_booking_templates' ), 10, 3 );
+
+        // insert bookable porduct type
+        add_filter( 'dokan_get_product_types', array( $this, 'insert_bookable_product_type' ) );
     }
 
     /**
@@ -166,6 +169,19 @@ class Dokan_WC_Booking {
         }
 
         return $template_path;
+    }
+
+    /**
+     * Insert bookable product type
+     *
+     * @param  array $types
+     *
+     * @return array
+     */
+    public function insert_bookable_product_type( $types ) {
+        $types['booking'] = __( 'Bookable Product', 'dokan' );
+
+        return $types;
     }
 
     /**

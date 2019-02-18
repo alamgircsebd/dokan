@@ -65,6 +65,12 @@ class Dokan_RMA_Ajax {
             wp_send_json_error( __( 'Invalid Request', 'dokan' ) );
         }
 
+        $wc_tax_enabled = get_option( 'woocommerce_calc_taxes' ) === 'yes' ? true : false;
+
+        $order_id        = $request['order_id'];
+        $order           = wc_get_order( $order_id );
+        $order_tax_total = $order->get_total_tax();
+
         if ( ! empty( $request['items'] ) ) {
             ob_start();
             ?>
@@ -73,7 +79,18 @@ class Dokan_RMA_Ajax {
                         <tr>
                             <th width="50%"><?php _e( 'Product', 'dokan' ); ?></th>
                             <th width="20%"><?php _e( 'Qty', 'dokan' ); ?></th>
+
+                            <?php if ( $wc_tax_enabled ) : ?>
+                                <th width="20%"><?php _e( 'Tax', 'dokan' ); ?></th>
+                            <?php endif; ?>
+
                             <th width="20%"><?php _e( 'Total', 'dokan' ); ?></th>
+
+                            <?php if ( $wc_tax_enabled ) : ?>
+                                <th width="20%"><?php _e( 'Tax Refund', 'dokan' ); ?></th>
+                            <?php endif; ?>
+
+                            <th width="20%"><?php _e( 'Total Refund', 'dokan' ); ?></th>
                             <th width="15%"></th>
                         </tr>
                     </thead>
@@ -82,10 +99,22 @@ class Dokan_RMA_Ajax {
                             <tr>
                                 <td><a href="<?php echo $item['url']; ?>"><?php echo $item['title'] ?></a></td>
                                 <td><?php echo $item['quantity'] ?></td>
+
+                                <?php if ( $wc_tax_enabled ) : ?>
+                                   <td><?php echo $order_tax_total; ?></td>
+                                <?php endif; ?>
+
                                 <td><?php echo wc_price( $item['price'] * $item['quantity'] ); ?></td>
+
+                                <?php if ( $wc_tax_enabled ) : ?>
+                                    <td>
+                                        <input type="number" min="0" step="any" max="<?php echo $item['price'] * $item['quantity']; ?>" name="refund_tax" class="refund_item_amount">
+                                    </td>
+                                <?php endif; ?>
                                 <td>
                                     <input type="hidden" name="item_id[]" value="<?php echo $item['item_id']; ?>">
                                     <input type="number" min="0" step="any" max="<?php echo $item['price'] * $item['quantity']; ?>" name="refund_amount[]" class="refund_item_amount">
+                                    <input type="hidden" name="line_item_qtys" value="<?php echo $item['quantity'] ?>">
                                 </td>
                             </tr>
                         <?php endforeach ?>
@@ -162,23 +191,29 @@ class Dokan_RMA_Ajax {
         } else if ( $refund->has_pending_refund_request( $data['refund_order_id'] ) ) {
             wp_send_json_error( __( 'You have already a processing refund request for this order.', 'dokan' ) );
         } else {
+
+            $refund_obj_qty   = [ $data['item_id'][0] => $data['line_item_qtys'] ];
+            $refund_obj_total = [ $data['item_id'][0] => $data['refund_amount'][0] ];
+            $refund_obj_tax   = ! empty( $data['refund_tax'] ) ? [ $data['item_id'][0] => [ $data['line_item_qtys'] => $data['refund_tax'] ] ] : [];
+
             $postdata = [
                 'order_id'               => $data['refund_order_id'],
                 'seller_id'              => $data['refund_vendor_id'],
                 'refund_amount'          => $data['refund_total_amount'],
                 'refund_reason'          => __( 'Warranty Request from Customer', 'dokan' ),
-                'line_item_qtys'         => null,
-                'line_item_totals'       => null,
-                'line_item_tax_totals'   => null,
+                'line_item_qtys'         => json_encode( $refund_obj_qty ),
+                'line_item_totals'       => json_encode( $refund_obj_total ),
+                'line_item_tax_totals'   => json_encode( $refund_obj_tax ),
                 'api_refund'             => false,
                 'restock_refunded_items' => null,
                 'status'                 => 0
             ];
 
             $refund = new Dokan_Pro_Refund;
+
             $refund->insert_refund( $postdata );
 
-            do_action( 'dokan_refund_request_notification',  $data['order_id'] );
+            do_action( 'dokan_refund_request_notification',  $data['refund_order_id'] );
 
             wp_send_json_success( $data );
         }

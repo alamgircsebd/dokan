@@ -238,8 +238,9 @@
 </template>
 
 <script>
-let Switches = dokan_get_lib('Switches');
-let Modal = dokan_get_lib('Modal');
+let Switches    = dokan_get_lib('Switches');
+let Modal       = dokan_get_lib('Modal');
+let Multiselect = dokan_get_lib('Multiselect');
 
 export default {
 
@@ -247,7 +248,8 @@ export default {
 
     components: {
         Switches,
-        Modal
+        Modal,
+        Multiselect
     },
 
     data () {

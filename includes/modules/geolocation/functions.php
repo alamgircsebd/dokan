@@ -191,7 +191,7 @@ function dokan_geo_remove_seller_listing_footer_content_hook() {
 /**
  * A helper function to escape float values
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.5
  *
  * @return float
  */

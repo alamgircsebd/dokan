@@ -8,7 +8,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Load automatically when class initiate
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      */
     public function __construct() {
         add_filter( 'dokan_settings_sections', [ $this, 'load_settings_section' ], 20 );
@@ -22,7 +22,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Load admin settings section
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Load all settings fields
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -84,7 +84,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Enqueue vue component js
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -96,7 +96,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Add submenu page in dokan Dashboard
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */

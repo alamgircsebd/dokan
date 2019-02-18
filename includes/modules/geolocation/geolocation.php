@@ -130,6 +130,7 @@ class Dokan_Geolocation {
             require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-query.php';
             require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-view.php';
             require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-single.php';
+            require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-product-import.php';
         }
     }
 
@@ -152,6 +153,7 @@ class Dokan_Geolocation {
             new Dokan_Geolocation_Product_Query();
             new Dokan_Geolocation_Product_View();
             new Dokan_Geolocation_Product_Single();
+            new Dokan_Geolocation_Product_Import();
         }
     }
 

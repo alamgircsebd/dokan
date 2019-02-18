@@ -105,7 +105,7 @@ class Dokan_Geolocation_Widget_Product_Location extends WP_Widget {
      *
      * @todo This should be a reusable function
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
