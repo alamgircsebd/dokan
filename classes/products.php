@@ -291,7 +291,7 @@ class Dokan_Pro_Products {
             update_post_meta( $post_id, '_per_product_admin_commission_type', $value );
         }
         if ( isset( $_POST['_per_product_admin_commission'] ) ) {
-            $value = empty( $_POST['_per_product_admin_commission'] ) ? '' : (float) $_POST['_per_product_admin_commission'];
+            $value = '' === $_POST['_per_product_admin_commission'] ? '' : (float) $_POST['_per_product_admin_commission'];
             update_post_meta( $post_id, '_per_product_admin_commission', $value );
         }
     }
