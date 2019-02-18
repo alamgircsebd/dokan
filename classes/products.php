@@ -853,6 +853,11 @@ class Dokan_Pro_Products {
             $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
         }
 
+        // save post content & excerpt; (ei: see `dokan_save_product` function)
+        $saved_post           = get_post( $data['ID'] );
+        $data['post_content'] = $saved_post ? $saved_post->post_content : '';
+        $data['post_excerpt'] = $saved_post ? $saved_post->post_excerpt : '';
+
         $data = apply_filters( 'dokan_update_product_post_data', $data );
 
         $product_id = dokan_save_product( $data );
