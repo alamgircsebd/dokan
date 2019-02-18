@@ -3,14 +3,14 @@
 /**
 * Cart and checkout handler Class
 *
-* @since DOKAN_PRO_SINCE
+* @since 2.9.5
 */
 class Dokan_Wholesale_Cart_Checkout {
 
     /**
      * Load automatically when class initiate
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      */
     public function __construct() {
         add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'show_wholesale_price' ], 10 );
@@ -26,7 +26,7 @@ class Dokan_Wholesale_Cart_Checkout {
     /**
      * Get formatter data for wholesale
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -61,7 +61,7 @@ class Dokan_Wholesale_Cart_Checkout {
     /**
      * Show wholesale price
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -103,7 +103,7 @@ class Dokan_Wholesale_Cart_Checkout {
     /**
      * Calculate cart item for wholesales
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */

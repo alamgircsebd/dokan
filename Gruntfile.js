@@ -85,7 +85,7 @@ module.exports = function(grunt) {
         };
 
         replacePack[val] = {
-            src: [ 'build/dokan-pro.php', 'build/*' ],
+            src: [ 'build/dokan-pro.php' ],
             overwrite: true,
             replacements: [
                 {
@@ -96,10 +96,6 @@ module.exports = function(grunt) {
                 {
                     from: "private $plan = 'dokan-pro';",
                     to: "private $plan = 'dokan-" + val + "';"
-                },
-                {
-                    from: "DOKAN_PRO_SINCE",
-                    to: pkg.version
                 }
             ]
         };

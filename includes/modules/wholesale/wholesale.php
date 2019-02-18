@@ -3,7 +3,7 @@
 Plugin Name: Wholesale
 Plugin URI: http://wedevs.com/
 Description: Offer any customer to buy product as a wholesale price from any vendors
-Version: DOKAN_PRO_SINCE
+Version: 2.9.5
 Author: weDevs
 Author URI: http://wedevs.com/
 Thumbnail Name: wholesale.png
@@ -47,7 +47,7 @@ class Dokan_Wholesale {
     /**
      * Load automatically when class initiate
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      */
     public function __construct() {
 
@@ -79,7 +79,7 @@ class Dokan_Wholesale {
     /**
      * hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -92,7 +92,7 @@ class Dokan_Wholesale {
     /**
     * Get plugin path
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 2.9.5
     *
     * @return void
     **/
@@ -103,7 +103,7 @@ class Dokan_Wholesale {
     /**
      * includes all necessary class a functions file
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -123,7 +123,7 @@ class Dokan_Wholesale {
     /**
      * Initiate all classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -140,7 +140,7 @@ class Dokan_Wholesale {
     /**
      * Init all hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -154,7 +154,7 @@ class Dokan_Wholesale {
     /**
      * Load scripts
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
     */
@@ -186,7 +186,7 @@ class Dokan_Wholesale {
     /**
      * Set template path for Wholesale
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -201,7 +201,7 @@ class Dokan_Wholesale {
     /**
      * Create Mapping table for product and vendor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */
@@ -212,7 +212,7 @@ class Dokan_Wholesale {
     /**
      * REST API classes Mapping
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */

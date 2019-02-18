@@ -16,7 +16,7 @@ class Dokan_Geolocation_Product_Import {
     /**
      * Dokan format geo data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @param array $data
      *
