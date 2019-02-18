@@ -108,7 +108,7 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
     /**
      * Validate store
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @param mixed            $value
      * @param \WP_REST_Request $request
@@ -195,7 +195,7 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
     /**
      * Create review permission callback
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @param \WP_REST_Request $request
      *
@@ -218,7 +218,7 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
     /**
      * Validate rating
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @param mixed            $value
      * @param \WP_REST_Request $request
@@ -239,7 +239,7 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
     /**
      * Creates a store review
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @param \WP_REST_Request $request
      *

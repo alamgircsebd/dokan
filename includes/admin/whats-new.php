@@ -1,6 +1,47 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.5',
+        'released' => '2019-02-18',
+        'changes'  => array(
+            array(
+                'title'         => 'Automate order refund process via stripe',
+                'type'          => 'New',
+                'description'   => 'Vendor can now send automatic refund to their customer from vendor order dashboard'
+            ),
+            array(
+                'title'         => 'Add trial subscription (Subscription Module)',
+                'type'          => 'New',
+                'description'   => 'Admin can now offer trail subscription for vendors'
+            ),
+            array(
+                'title'         => 'Product type & gallery image restriction',
+                'type'          => 'New',
+                'description'   => 'Admin can now restrict product type & gallery image upload for vendor subscription'
+            ),
+            array(
+                'title'         => 'Privacy and Policy',
+                'type'          => 'New',
+                'description'   => 'Admin can configure privacy policy info for frontend product enquiry form'
+            ),
+            array(
+                'title'         => 'Email notification for store follow',
+                'type'          => 'Fix',
+                'description'   => 'Now vendor can get email notification on store follows and unfollows'
+            ),
+            array(
+                'title'         => 'Unable to select country or state in vendor shipping',
+                'type'          => 'Fix',
+                'description'   => 'Country dropdown not working in shipping and announcement'
+            ),
+            array(
+                'title'         => 'Admin report logs calculation issue is fixed in admin dashboard',
+                'type'          => 'Fix',
+                'description'   => 'Some calculation issue fixed in admin reports'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.4',
         'released' => '2019-01-23',
         'changes'  => array(

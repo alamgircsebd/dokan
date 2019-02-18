@@ -3,14 +3,14 @@
 /**
 * Customer related functionality
 *
-* @since DOKAN_PRO_SINCE
+* @since 2.9.5
 */
 class Dokan_Wholesale_Customer {
 
     /**
      * Load automatically when class initiate
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      */
     public function __construct() {
         add_action( 'dokan_customer_account_migration_list', [ $this, 'render_migration_html' ], 10 );

@@ -3,7 +3,7 @@
  * Single product template
  * For disolaying wholesale price as ver perdon settings
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.5
  *
  * @package dokan
  */
