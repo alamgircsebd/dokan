@@ -1259,7 +1259,7 @@ class Dokan_Pro_Ajax {
             array(
                 'status' => 'trash',
             ),
-            array( 'post_id' => $row_id, 'user_id' => get_current_user_id() )
+            array( 'post_id' => $row_id, 'user_id' => dokan_get_current_user_id() )
         );
 
         ob_start();

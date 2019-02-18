@@ -106,7 +106,11 @@ class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
             'meta_value'  => 'all_seller',
         );
 
+        $template_notice->add_query_filter();
+
         $all_seller_posts = new WP_Query( $args );
+
+        $template_notice->remove_query_filter();
 
         $notices = array_merge( $all_seller_posts->posts, $query->posts );
 
