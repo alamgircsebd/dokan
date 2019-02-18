@@ -34,9 +34,9 @@ class Dokan_Shipping_Zone {
         }
 
         // Everywhere zone if has method called vendor shipping
-        $overall_zone         = new WC_Shipping_Zone(0);
-        $enabled_methods  = $overall_zone->get_shipping_methods( true );
-        $methods_id = wp_list_pluck( $enabled_methods, 'id' );
+        $overall_zone    = new WC_Shipping_Zone(0);
+        $enabled_methods = $overall_zone->get_shipping_methods( true );
+        $methods_id      = wp_list_pluck( $enabled_methods, 'id' );
 
         if ( in_array( 'dokan_vendor_shipping', $methods_id ) ) {
             $zones[ $overall_zone->get_id() ]                            = $overall_zone->get_data();
@@ -361,12 +361,19 @@ class Dokan_Shipping_Zone {
         }
 
         // Get matching zones.
-        return $wpdb->get_var(
+        $zone_id = $wpdb->get_var(
             "SELECT zones.zone_id FROM {$wpdb->prefix}woocommerce_shipping_zones as zones
             LEFT OUTER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
             WHERE " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
             . ' ORDER BY zone_order ASC, zone_id ASC LIMIT 1'
         );
+
+        // if zone id is not found in vendor's available zone id, assume it falls under `Locations not covered by your other zones`.
+        if ( ! in_array( $zone_id, self::get_vendor_all_zone_ids( $package ) ) ) {
+            return 0;
+        }
+
+        return $zone_id;
     }
 
     /**
@@ -388,5 +395,30 @@ class Dokan_Shipping_Zone {
         }
 
         return $vendor_id;
+    }
+
+    /**
+     * Get all the zone ids of a vendor
+     *
+     * @param  object $package
+     *
+     * @return array
+     */
+    public static function get_vendor_all_zone_ids( $package ) {
+        global $wpdb;
+        $vendor_id = isset( $package['seller_id'] ) ? $package['seller_id'] : '';
+
+        if ( ! $vendor_id ) {
+            return 0;
+        }
+
+        $table_name = "{$wpdb->prefix}dokan_shipping_zone_methods";
+        $results    = $wpdb->get_results( $wpdb->prepare( "SELECT zone_id FROM {$table_name} WHERE seller_id=%d", $vendor_id ) );
+
+        $zone_ids = array_map( function( $zone ) {
+            return (int) $zone->zone_id;
+        }, $results );
+
+        return $zone_ids;
     }
 }
