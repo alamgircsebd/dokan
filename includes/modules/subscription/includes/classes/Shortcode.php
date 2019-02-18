@@ -170,7 +170,7 @@ class Shortcode {
                                         <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
                                     </span>
                                 <?php else :
-                                    if ( $sub_pack->get_pack_valid_days() == '0' ) {
+                                    if ( $sub_pack->get_pack_valid_days() == 0 ) {
                                         printf( __( 'For<br /><strong>Unlimited</strong> Days</div>', 'dokan' ) );
                                     } else {
                                         $pack_validity = $sub_pack->get_pack_valid_days();

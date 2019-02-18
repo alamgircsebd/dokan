@@ -466,6 +466,10 @@ class Helper {
      * @return boolean
      */
     public static function alert_before_two_days( $user_id ) {
+        if ( 'unlimited' === self::get_pack_end_date( $user_id ) ) {
+            return false;
+        }
+
         $alert_days = dokan_get_option( 'no_of_days_before_mail', 'dokan_product_subscription' );
 
         if ( $alert_days == 0 ) {
@@ -498,6 +502,10 @@ class Helper {
      * @return boolean
      */
     public static function maybe_cancel_subscription( $vendor_id ) {
+        if ( 'unlimited' === self::get_pack_end_date( $vendor_id ) ) {
+            return false;
+        }
+
         $date            = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
         $validation_date = date( 'Y-m-d', strtotime( self::get_pack_end_date( $vendor_id ) ) );
 

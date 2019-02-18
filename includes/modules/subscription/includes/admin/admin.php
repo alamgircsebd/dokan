@@ -122,15 +122,15 @@ class DPS_Admin {
                 'id'            => '_subscription_product_admin_commission',
                 'label'         => __( 'Admin Commission', 'dokan' ),
                 'placeholder'   => '',
-                'description'   => __( 'How much (%) a vendor will get from each order, Leave empty ( not "0" ) if you don\'t apply any ovverride', 'dokan' ),
+                'description'   => __( 'Amount you will get from sales, Leave empty ( not "0" ) if you don\'t apply any ovverride', 'dokan' ),
                 'data_type'     => 'price'
             )
         );
 
         // vendor allowed product types
         echo '<p class="form-field dokan_subscription_allowed_product_types">';
-        echo '<label for="dokan_subscription_allowed_product_types">' . __( 'Allowed Product Type', 'dokan' ) .'</label>';
-        echo '<select multiple="multiple" data-placeholder=" '. __( 'Select Product Type&hellip;', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_product_type" name="dokan_subscription_allowed_product_types[]" style="width: 350px;">';
+        echo '<label for="dokan_subscription_allowed_product_types">' . __( 'Allowed Product Types', 'dokan' ) .'</label>';
+        echo '<select multiple="multiple" data-placeholder=" '. __( 'Any product types', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_product_type" name="dokan_subscription_allowed_product_types[]" style="width: 350px;">';
             Helper::get_product_types_options();
         echo '</select>';
         echo '<span class="description">' . __( 'Select product type for this package. Leave empty to allow any product type.', 'dokan' ) . '</span>';
@@ -140,7 +140,7 @@ class DPS_Admin {
         echo '<p class="form-field _vendor_allowed_categories">';
         $selected_cat = get_post_meta( $post->ID, '_vendor_allowed_categories', true );
         echo '<label for="_vendor_allowed_categories">' . __( 'Allowed categories', 'dokan' ) .'</label>';
-        echo '<select multiple="multiple" data-placeholder=" '. __( 'Select categories&hellip;', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_categories" name="_vendor_allowed_categories[]" style="width: 350px;">';
+        echo '<select multiple="multiple" data-placeholder=" '. __( 'Any categories', 'dokan' ) .'" class="wc-enhanced-select" id="_vendor_allowed_categories" name="_vendor_allowed_categories[]" style="width: 350px;">';
             $r = array();
             $r['pad_counts']    = 1;
             $r['hierarchical']  = 1;
@@ -522,7 +522,7 @@ class DPS_Admin {
             <tr>
                 <td><?php _e( 'End Date :' ) ;?></td>
                 <td>
-                    <?php if ( get_user_meta( $user->ID, 'product_pack_enddate', true ) > '4000-10-10' ) {
+                    <?php if ( 'unlimited' === get_user_meta( $user->ID, 'product_pack_enddate', true ) ) {
                         printf( __( 'Lifetime package.', 'dokan' ) );
                     } else {
                         echo date( get_option( 'date_format' ), strtotime( get_user_meta( $user->ID, 'product_pack_enddate', true ) ) );
@@ -635,7 +635,7 @@ class DPS_Admin {
         update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
 
         if ( $pack_validity == 0 ) {
-            update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+999999 days" ) ) );
+            update_user_meta( $user_id, 'product_pack_enddate', 'unlimited' );
         } else {
             update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
         }

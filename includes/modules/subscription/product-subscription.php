@@ -96,7 +96,7 @@ class Dokan_Product_Subscription {
         // filter product types
         add_filter( 'dokan_product_types', [ __CLASS__, 'filter_product_types' ], 99 );
 
-        // filter capapbilies
+        // filter capapbilies of accessing pages
         add_filter( 'map_meta_cap', [ __CLASS__, 'filter_capability' ], 20, 2 );
 
         // filter gallery iamge uploading
@@ -579,8 +579,10 @@ class Dokan_Product_Subscription {
      * @return array
      */
     public static function filter_capability( $caps, $cap ) {
+        global $wp_query;
 
-        if ( ! dokan_is_seller_dashboard() ) {
+        // if not vendor dashboard and not product edit page
+        if ( ! dokan_is_seller_dashboard() && empty( $wp_query->query_vars['edit'] ) ) {
             return $caps;
         }
 
