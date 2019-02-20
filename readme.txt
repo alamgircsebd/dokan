@@ -175,6 +175,7 @@ v2.9.6 -> Feb 20, 2018
 ----------------------------------------------
 - [fix] Add csv export functionality for all log in backend dashboard report section
 - [fix] Fix js compiling issues
+- [fix] Fix backend report routing isssue
 
 v2.9.5 -> Feb 18, 2018
 ----------------------------------------------
