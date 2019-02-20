@@ -171,6 +171,10 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+v2.9.6 -> Feb 20, 2018
+----------------------------------------------
+- [fix] Add csv export functionality for all log in backend dashboard report section
+- [fix] Fix js compiling issues
 
 v2.9.5 -> Feb 18, 2018
 ----------------------------------------------

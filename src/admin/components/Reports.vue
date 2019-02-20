@@ -4,7 +4,7 @@
             <router-link :to="{ name: 'Reports', query: { tab: 'report', type: 'by-day'}}" class="nav-tab" active-class="nav-tab-active">
                 {{ __( 'Reports', 'dokan' ) }}
             </router-link>
-            <router-link :to="{ name: 'Reports', query: { tab: 'logs'}}" class="nav-tab" active-class="nav-tab-active" exact>
+            <router-link :to="{ name: 'Reports', query: { tab: 'logs' }}" class="nav-tab" active-class="nav-tab-active" exact>
                 {{ __( 'All Logs', 'dokan' ) }}
             </router-link>
         </h2>
@@ -300,13 +300,6 @@ export default {
             this.report   = null;
             this.overview = null;
 
-            if ( this.$route.query.tab === 'logs' ) {
-                this.prepareLogArea();
-                this.fetchLogs();
-            } else {
-                this.prepareReportArea();
-            }
-
             if ( this.$route.query.type === 'by-year' ) {
                 this.prepareYearView();
                 this.showByYear();
@@ -314,19 +307,26 @@ export default {
 
             if ( this.$route.query.type === 'by-vendor' ) {
                 this.prepareVendorView();
-                this.fetchReport();
-                this.fetchOverview();
             }
 
             if ( this.$route.query.type === 'by-day' ) {
                 this.prepareDayView();
-                this.fetchReport();
-                this.fetchOverview();
             }
         },
 
         '$route.query.page'() {
             this.fetchLogs();
+        },
+
+        '$route.query.tab'() {
+            if ( this.$route.query.tab === 'logs' ) {
+                this.prepareLogArea();
+                this.fetchLogs();
+            } else {
+                this.prepareReportArea();
+                this.fetchReport();
+                this.fetchOverview();
+            }
         }
     },
 
@@ -535,7 +535,18 @@ export default {
                 for (let index in array[i]) {
                     if (line != '') line += ','
 
-                    line += array[i][index];
+                    if ( 'commission' == index || 'order_total' == index || 'vendor_earning' == index ) {
+                        line += accounting.formatMoney(
+                            array[i][index],
+                            '',
+                            dokan.precision,
+                            dokan.currency.thousand,
+                            dokan.currency.decimal,
+                            dokan.currency.format
+                        );
+                    } else {
+                        line += array[i][index];
+                    }
                 }
 
                 str += line + '\r\n';
@@ -565,7 +576,7 @@ export default {
             }
         }
     }
-}
+};
 </script>
 
 <style lang="less" scoped>
