@@ -107,6 +107,11 @@
     margin-right: 5px;
 }
 
+.dokan-live-chat {
+    position: relative;
+    margin-top: 3px;
+}
+
 /**
  * Customer Chat Inbox
  */
