@@ -57,7 +57,7 @@ class StoreInfo extends TagBase {
                 'icon'        => 'fa fa-mobile',
                 'show'        => true,
                 '__dynamic__' => [
-                    'text' => $store_data['address'],
+                    'text' => $store_data['phone'],
                 ]
             ],
             [
@@ -67,7 +67,7 @@ class StoreInfo extends TagBase {
                 'icon'        => 'fa fa-envelope-o',
                 'show'        => true,
                 '__dynamic__' => [
-                    'text' => $store_data['address'],
+                    'text' => $store_data['email'],
                 ]
             ],
             [
@@ -77,7 +77,7 @@ class StoreInfo extends TagBase {
                 'icon'        => 'fa fa-star',
                 'show'        => true,
                 '__dynamic__' => [
-                    'text' => $store_data['address'],
+                    'text' => $store_data['rating'],
                 ]
             ],
             [
@@ -87,7 +87,7 @@ class StoreInfo extends TagBase {
                 'icon'        => 'fa fa-shopping-cart',
                 'show'        => true,
                 '__dynamic__' => [
-                    'text' => $store_data['address'],
+                    'text' => $store_data['open_close'],
                 ]
             ],
         ];
