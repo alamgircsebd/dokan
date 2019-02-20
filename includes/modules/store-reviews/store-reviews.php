@@ -197,7 +197,7 @@ class Dokan_Store_Reviews {
                 $rating += intval( get_post_meta( $review->ID, 'rating', true ) );
             }
 
-            $rating = floatval( $rating / $review_count );
+            $rating = number_format( $rating / $review_count, 2 );
         } else {
             $rating = __( 'No Ratings found yet', 'dokan' );
         }
