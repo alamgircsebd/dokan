@@ -86,6 +86,7 @@ final class DokanElementor {
      * @return void
      */
     public function boot() {
+        add_action( 'admin_notices', [ $this, 'admin_notices' ] );
         add_action( 'elementor/init', [ $this, 'init' ] );
     }
 
@@ -141,6 +142,41 @@ final class DokanElementor {
         \DokanPro\Modules\Elementor\Templates::instance();
         \DokanPro\Modules\Elementor\StoreWPWidgets::instance();
         \DokanPro\Modules\Elementor\Module::instance();
+    }
+
+    /**
+     * Show admin notices
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return 1.0.0
+     */
+    public function admin_notices() {
+        $notice = '';
+
+        if ( ! class_exists( '\Elementor\Plugin' ) || ! class_exists( '\ElementorPro\Plugin' ) ) {
+            $notice = sprintf(
+                __( 'Dokan Elementor module requires both %s and %s to be activated', 'dokan' ),
+                '<strong>Elementor</strong>',
+                '<strong>Elementor Pro</strong>'
+            );
+        }
+
+        if ( version_compare( ELEMENTOR_VERSION , '2.4.4', '<' ) ) {
+            $notice = sprintf(
+                __( 'Dokan Elementor module requires atleast %s.', 'dokan' ),
+                '<strong>Elementor v2.4.4</strong>'
+            );
+        } else if ( version_compare( ELEMENTOR_PRO_VERSION , '2.4.0', '<' ) ) {
+            $notice = sprintf(
+                __( 'Dokan Elementor module requires atleast %s.', 'dokan' ),
+                '<strong>Elementor Pro v2.4.0</strong>'
+            );
+        }
+
+        if ( $notice ) {
+            printf( '<div class="error"><p>' . $notice . '</p></div>' );
+        }
     }
 
     /**
@@ -221,7 +257,7 @@ final class DokanElementor {
 /**
  * Load Dokan Plugin when all plugins loaded
  *
- * @return void
+ * @return \DokanElementor
  */
 function dokan_elementor() {
     return DokanElementor::instance();
