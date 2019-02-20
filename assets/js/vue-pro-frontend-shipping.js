@@ -537,6 +537,7 @@ module.exports = function normalizeComponent (
 
 var Switches = dokan_get_lib('Switches');
 var Modal = dokan_get_lib('Modal');
+var Multiselect = dokan_get_lib('Multiselect');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -544,7 +545,8 @@ var Modal = dokan_get_lib('Modal');
 
     components: {
         Switches: Switches,
-        Modal: Modal
+        Modal: Modal,
+        Multiselect: Multiselect
     },
 
     data: function data() {

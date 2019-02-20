@@ -1579,13 +1579,15 @@ var Modal = dokan_get_lib('Modal');
 
 var TextEditor = dokan_get_lib('TextEditor');
 var Postbox = dokan_get_lib('Postbox');
+var Multiselect = dokan_get_lib('Multiselect');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'NewAnnouncement',
 
     components: {
         Postbox: Postbox,
-        TextEditor: TextEditor
+        TextEditor: TextEditor,
+        Multiselect: Multiselect
     },
 
     data: function data() {
@@ -1758,13 +1760,15 @@ var Postbox = dokan_get_lib('Postbox');
 
 var TextEditor = dokan_get_lib('TextEditor');
 var Postbox = dokan_get_lib('Postbox');
+var Multiselect = dokan_get_lib('Multiselect');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'EditAnnouncement',
 
     components: {
         Postbox: Postbox,
-        TextEditor: TextEditor
+        TextEditor: TextEditor,
+        Multiselect: Multiselect
     },
 
     data: function data() {
@@ -2326,6 +2330,12 @@ var Progressbar = dokan_get_lib('Progressbar');
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+//
+//
+//
+//
 //
 //
 //
@@ -2624,13 +2634,6 @@ var ListTable = dokan_get_lib('ListTable');
             this.report = null;
             this.overview = null;
 
-            if (this.$route.query.tab === 'logs') {
-                this.prepareLogArea();
-                this.fetchLogs();
-            } else {
-                this.prepareReportArea();
-            }
-
             if (this.$route.query.type === 'by-year') {
                 this.prepareYearView();
                 this.showByYear();
@@ -2638,18 +2641,24 @@ var ListTable = dokan_get_lib('ListTable');
 
             if (this.$route.query.type === 'by-vendor') {
                 this.prepareVendorView();
-                this.fetchReport();
-                this.fetchOverview();
             }
 
             if (this.$route.query.type === 'by-day') {
                 this.prepareDayView();
-                this.fetchReport();
-                this.fetchOverview();
             }
         },
         '$route.query.page': function $routeQueryPage() {
             this.fetchLogs();
+        },
+        '$route.query.tab': function $routeQueryTab() {
+            if (this.$route.query.tab === 'logs') {
+                this.prepareLogArea();
+                this.fetchLogs();
+            } else {
+                this.prepareReportArea();
+                this.fetchReport();
+                this.fetchOverview();
+            }
         }
     },
 
@@ -2830,6 +2839,55 @@ var ListTable = dokan_get_lib('ListTable');
         },
         editUserUrl: function editUserUrl(id) {
             return dokan.urls.adminRoot + 'user-edit.php?user_id=' + id;
+        },
+        exportLogs: function exportLogs() {
+            var csv = this.convertToCSV(this.logs);
+
+            this.exportCSVFile(csv);
+        },
+        convertToCSV: function convertToCSV(data) {
+            var array = (typeof data === 'undefined' ? 'undefined' : _typeof(data)) != 'object' ? JSON.parse(data) : data;
+            var str = '';
+
+            for (var i = 0; i < array.length; i++) {
+                var line = '';
+
+                for (var index in array[i]) {
+                    if (line != '') line += ',';
+
+                    if ('commission' == index || 'order_total' == index || 'vendor_earning' == index) {
+                        line += accounting.formatMoney(array[i][index], '', dokan.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format);
+                    } else {
+                        line += array[i][index];
+                    }
+                }
+
+                str += line + '\r\n';
+            }
+
+            return str;
+        },
+        exportCSVFile: function exportCSVFile(csv, fileTitle) {
+            var exportedFilenmae = 'logs-' + moment().format('Y-MM-DD') + '.csv';
+            var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+            if (navigator.msSaveBlob) {
+                // IE 10+
+                navigator.msSaveBlob(blob, exportedFilenmae);
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) {
+                    // feature detection
+                    // Browsers that support HTML5 download attribute
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", exportedFilenmae);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
         }
     }
 });
@@ -6262,6 +6320,24 @@ var render = function() {
       1
     ),
     _vm._v(" "),
+    _vm.showLogsAarea
+      ? _c("div", { staticClass: "export-area" }, [
+          _c(
+            "button",
+            {
+              staticClass: "button",
+              attrs: { id: "export-logs" },
+              on: {
+                click: function($event) {
+                  _vm.exportLogs()
+                }
+              }
+            },
+            [_vm._v(_vm._s(_vm.__("Export Logs", "dokan")))]
+          )
+        ])
+      : _vm._e(),
+    _vm._v(" "),
     _vm.showReportArea
       ? _c("div", { staticClass: "report-area" }, [
           _c(
@@ -6890,7 +6966,9 @@ var render = function() {
                   key: "order_total",
                   fn: function(data) {
                     return [
-                      _c("currency", { attrs: { amount: data.row.order_id } })
+                      _c("currency", {
+                        attrs: { amount: data.row.order_total }
+                      })
                     ]
                   }
                 },
