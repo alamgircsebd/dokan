@@ -107,7 +107,7 @@
     margin-right: 5px;
 }
 
-.dokan-live-chat {
+.dokan-live-chat, .dokan-live-chat-login {
     position: relative;
     margin-top: 3px;
 }
