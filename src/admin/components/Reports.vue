@@ -9,6 +9,10 @@
             </router-link>
         </h2>
 
+        <div class="export-area" v-if="showLogsAarea">
+            <button @click="exportLogs()" id="export-logs" class="button">{{ __('Export Logs', 'dokan') }}</button>
+        </div>
+
         <div class="report-area" v-if="showReportArea">
             <ul class="subsubsub dokan-report-sub" style="float: none;">
                 <li>
@@ -514,12 +518,69 @@ export default {
         editUserUrl(id) {
             return `${dokan.urls.adminRoot}user-edit.php?user_id=${id}`;
         },
+
+        exportLogs() {
+            let csv = this.convertToCSV( this.logs );
+
+            this.exportCSVFile(csv);
+        },
+
+        convertToCSV(data) {
+            let array = typeof data != 'object' ? JSON.parse(data) : data;
+            let str = '';
+
+            for (let i = 0; i < array.length; i++) {
+                let line = '';
+
+                for (let index in array[i]) {
+                    if (line != '') line += ','
+
+                    line += array[i][index];
+                }
+
+                str += line + '\r\n';
+            }
+
+            return str;
+        },
+
+        exportCSVFile(csv, fileTitle) {
+            let exportedFilenmae = 'logs-' + moment().format('Y-MM-DD') + '.csv';
+            let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(blob, exportedFilenmae);
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) { // feature detection
+                    // Browsers that support HTML5 download attribute
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", exportedFilenmae);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        }
     }
 }
 </script>
 
 <style lang="less" scoped>
 .reports-page {
+    .export-area {
+        position: absolute;
+        right: 19px;
+        top: 19px;
+
+        #export-logs {
+            padding: 0px 10px !important;
+            height: 30px !important;
+        }
+    }
+
     .widgets-wrapper {
         display: block;
         overflow: hidden;
