@@ -92,7 +92,7 @@ class StoreShareButton extends DokanButton {
      * @return string
      */
     protected function get_button_wrapper_class() {
-        return 'dokan-share-btn-wrap';
+        return parent::get_button_wrapper_class() . ' dokan-share-btn-wrap';
     }
     /**
      * Button class

@@ -5,7 +5,7 @@ namespace DokanPro\Modules\Elementor\Widgets;
 use DokanPro\Modules\Elementor\Abstracts\DokanButton;
 use Elementor\Controls_Manager;
 
-class StoreSupportButton extends DokanButton {
+class StoreLiveChatButton extends DokanButton {
 
     /**
      * Widget name
@@ -15,7 +15,7 @@ class StoreSupportButton extends DokanButton {
      * @return string
      */
     public function get_name() {
-        return 'dokan-store-support-button';
+        return 'dokan-store-live-chat-button';
     }
 
     /**
@@ -26,7 +26,7 @@ class StoreSupportButton extends DokanButton {
      * @return string
      */
     public function get_title() {
-        return __( 'Store Support Button', 'dokan' );
+        return __( 'Store Live Button', 'dokan' );
     }
 
     /**
@@ -37,7 +37,7 @@ class StoreSupportButton extends DokanButton {
      * @return string
      */
     public function get_icon() {
-        return 'eicon-person';
+        return 'eicon-comments';
     }
 
     /**
@@ -48,7 +48,7 @@ class StoreSupportButton extends DokanButton {
      * @return array
      */
     public function get_keywords() {
-        return [ 'dokan', 'store', 'vendor', 'button', 'support' ];
+        return [ 'dokan', 'store', 'vendor', 'button', 'support', 'live', 'chat', 'message' ];
     }
 
     /**
@@ -65,11 +65,11 @@ class StoreSupportButton extends DokanButton {
             'text',
             [
                 'dynamic'   => [
-                    'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-support-button-tag' ),
+                    'default' => dokan_elementor()->elementor()->dynamic_tags->tag_data_to_tag_text( null, 'dokan-store-live-chat-button-tag' ),
                     'active'  => true,
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .dokan-store-support-btn' => 'width: auto; margin: 0;',
+                    '{{WRAPPER}} > .elementor-widget-container > .elementor-button-wrapper > .dokan-store-live-chat-btn' => 'width: auto; margin: 0;',
                 ]
             ]
         );
@@ -90,7 +90,7 @@ class StoreSupportButton extends DokanButton {
      * @return string
      */
     protected function get_button_wrapper_class() {
-        return parent::get_button_wrapper_class() . ' dokan-store-support-btn-wrap';
+        return parent::get_button_wrapper_class() . ' dokan-store-live-chat-btn-wrap';
     }
     /**
      * Button class
@@ -100,7 +100,11 @@ class StoreSupportButton extends DokanButton {
      * @return string
      */
     protected function get_button_class() {
-        return 'dokan-store-support-btn';
+        $classes = 'dokan-store-live-chat-btn ';
+
+        $classes .= is_user_logged_in() ? 'dokan-live-chat' : 'dokan-live-chat-login';
+
+        return $classes;
     }
 
     /**
@@ -111,25 +115,38 @@ class StoreSupportButton extends DokanButton {
      * @return void
      */
     protected function render() {
-        if ( dokan_is_store_page() ) {
-            if ( ! class_exists( 'Dokan_Store_Support' ) ) {
-                return;
-            }
+        if ( ! dokan_is_store_page() ) {
+            parent::render();
+        }
 
-            $id = dokan_elementor()->get_store_data( 'id' );
+        if ( ! class_exists( 'Dokan_Live_Chat_Start' ) ) {
+            return;
+        }
 
-            if ( ! $id ) {
-                return;
-            }
+        $id = dokan_elementor()->get_store_data( 'id' );
 
-            $store_support  = \Dokan_Store_Support::init();
-            $support_button = $store_support->get_support_button( $id );
+        if ( ! $id ) {
+            return;
+        }
 
-            if ( ! $support_button['show'] ) {
-                return;
-            }
+        $live_chat = \Dokan_Live_Chat_Start::init();
+
+        $store = dokan()->vendor->get( $id )->get_shop_info();
+
+        if ( ! isset( $store['live_chat'] ) || $store['live_chat'] !== 'yes' ) {
+            return;
+        }
+
+        if ( dokan_get_option( 'chat_button_seller_page', 'dokan_live_chat' ) !== 'on' ) {
+            return;
+        }
+
+        if ( ! is_user_logged_in() ) {
+            parent::render();
+            return $live_chat->login_to_chat();
         }
 
         parent::render();
+        echo do_shortcode( '[dokan-live-chat]' );
     }
 }

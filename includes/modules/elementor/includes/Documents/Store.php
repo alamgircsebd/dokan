@@ -29,14 +29,12 @@ class Store extends Single {
      * @return void
      */
     public function enqueue_scripts() {
-        if ( ! dokan_elementor()->is_edit_or_preview_mode() ) {
-            wp_enqueue_style(
-                'dokan-elementor-doc-store',
-                DOKAN_ELEMENTOR_ASSETS . '/css/dokan-elementor-document-store.css',
-                [],
-                DOKAN_ELEMENTOR_VERSION
-            );
-        }
+        wp_enqueue_style(
+            'dokan-elementor-doc-store',
+            DOKAN_ELEMENTOR_ASSETS . '/css/dokan-elementor-document-store.css',
+            [],
+            DOKAN_ELEMENTOR_VERSION
+        );
     }
 
     /**
