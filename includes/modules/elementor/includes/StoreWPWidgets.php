@@ -182,7 +182,7 @@ class StoreWPWidgets {
     public function widget_store_categories( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() ) {
             $defaults = array(
-                'title' => __( 'Store Location', 'dokan' ),
+                'title' => __( 'Store Category', 'dokan' ),
             );
 
             $instance = wp_parse_args( $instance, $defaults );
@@ -222,7 +222,7 @@ class StoreWPWidgets {
     public function widget_store_open_close( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() ) {
             $defaults = array(
-                'title' => __( 'Store Location', 'dokan' ),
+                'title' => __( 'Store Time', 'dokan' ),
             );
 
             $instance = wp_parse_args( $instance, $defaults );
