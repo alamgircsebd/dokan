@@ -26,7 +26,7 @@ class FormFields {
             'hide_empty'        => 0,
             'name'              => 'product_brand[]',
             'id'                => 'product_brand',
-            'taxonomy'          => 'yith_product_brand',
+            'taxonomy'          => dokan()->brands->get_taxonomy(),
             'title_li'          => '',
             'class'             => 'dokan_product_brand dokan-form-control dokan-select2',
             'exclude'           => '',
@@ -82,7 +82,7 @@ class FormFields {
     public static function product_edit_form_field( $post, $post_id ) {
         require_once DOKAN_LIB_DIR . '/class.taxonomy-walker.php';
 
-        $selected = wp_get_post_terms( $post_id, 'yith_product_brand', [ 'fields' => 'ids' ] );
+        $selected = wp_get_post_terms( $post_id, dokan()->brands->get_taxonomy(), [ 'fields' => 'ids' ] );
 
         if ( 'single' === dokan()->brands->settings['mode'] ) {
             $selected = ( count( $selected ) > 0 ) ? $selected[0]: '';
@@ -115,6 +115,6 @@ class FormFields {
             }
         }
 
-        wp_set_object_terms( $product_id, $brand_ids, 'yith_product_brand' );
+        wp_set_object_terms( $product_id, $brand_ids, dokan()->brands->get_taxonomy() );
     }
 }
