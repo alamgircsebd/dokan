@@ -87,7 +87,7 @@ final class DokanElementor {
      */
     public function boot() {
         add_action( 'admin_notices', [ $this, 'admin_notices' ] );
-        add_action( 'elementor/init', [ $this, 'init' ] );
+        add_action( 'elementor_pro/init', [ $this, 'init' ] );
     }
 
     /**
