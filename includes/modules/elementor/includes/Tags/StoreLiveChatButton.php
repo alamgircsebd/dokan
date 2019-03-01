@@ -36,7 +36,7 @@ class StoreLiveChatButton extends TagBase {
      * @return string
      */
     public function get_title() {
-        return __( 'Store Support Button', 'dokan' );
+        return __( 'Store Live Chat Button', 'dokan' );
     }
 
     /**
