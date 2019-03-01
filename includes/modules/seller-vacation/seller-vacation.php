@@ -292,27 +292,30 @@ class Dokan_Seller_Vacation {
     }
 
     /**
-     * Show Vacation message in store page
-     * @param  array $store_user
-     * @param  array $store_info
-     * @return void
+     * Decides whether to show or not the vacation message
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $store_info
+     *
+     * @return bool
      */
-    function show_vacation_message( $store_user, $store_info ) {
+    public function should_show_message( $store_info ) {
         //if vacation is not enabled return
         if ( ! isset( $store_info['setting_go_vacation'] ) || $store_info['setting_go_vacation'] == 'no' ) {
-            return;
+            return false;
         }
 
         //disable showing vacation notice
-        $show_notice = false;
+        $show = false;
 
         //if closing type instant show notice
         if ( $store_info['settings_closing_style'] == 'instantly' ) {
-            $show_notice = true;
+            $show = true;
         } else {
 
             if ( $store_info['settings_close_from'] == '' || $store_info['settings_close_to'] == '' ) {
-                return;
+                return false;
             }
 
             $from_date = date( 'Y-m-d', strtotime( $store_info['settings_close_from'] ) );
@@ -320,20 +323,31 @@ class Dokan_Seller_Vacation {
             $now       = date( 'Y-m-d' );
 
             if ( $from_date <= $now && $to_date >= $now ) {
-                $show_notice = true;
+                $show = true;
             }
         }
 
-        if ( !$show_notice ) {
-            return;
+        if ( $show ) {
+            return true;
         }
 
-        //check if vacation is instant
-        ?>
-            <div class="dokan-alert dokan-alert-info">
-                <p><?php _e( $store_info['setting_vacation_message'], 'dokan' ); ?></p>
-            </div>
-        <?php
+        return false;
+    }
+
+    /**
+     * Show Vacation message in store page
+     * @param  array $store_user
+     * @param  array $store_info
+     * @return void
+     */
+    function show_vacation_message( $store_user, $store_info ) {
+        if ( $this->should_show_message( $store_info ) ):
+            ?>
+                <div class="dokan-alert dokan-alert-info">
+                    <p><?php _e( $store_info['setting_vacation_message'], 'dokan' ); ?></p>
+                </div>
+            <?php
+        endif;
     }
 
     /**
