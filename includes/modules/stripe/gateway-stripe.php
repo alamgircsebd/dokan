@@ -695,9 +695,10 @@ class Dokan_Stripe {
 
         try {
             $refund = \Stripe\Refund::create( [
-                'charge' => $vendor_charge_id,
-                'amount' => $data['refund_amount'] * 100, // in cents
-                'reason' => __( 'requested_by_customer', 'dokan' )
+                'charge'                 => $vendor_charge_id,
+                'amount'                 => $data['refund_amount'] * 100, // in cents
+                'reason'                 => __( 'requested_by_customer', 'dokan' ),
+                'refund_application_fee' => true
             ], $vendor_token );
         } catch( Exception $e ) {
             return wp_send_json_error( $e->getMessage() );
