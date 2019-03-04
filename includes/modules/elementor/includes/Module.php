@@ -67,6 +67,7 @@ class Module extends ModuleBase {
             'StoreShareButton',
             'StoreSupportButton',
             'StoreLiveChatButton',
+            'StoreFollowButton',
             'StoreVacationMessage',
             'StoreCoupons',
         ];
@@ -108,6 +109,7 @@ class Module extends ModuleBase {
             'StoreTabItems',
             'StoreSupportButton',
             'StoreLiveChatButton',
+            'StoreFollowButton',
             'StoreDummyProducts',
             'StoreVacationMessage',
             'StoreCoupons',

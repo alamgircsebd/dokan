@@ -25,32 +25,7 @@ class Dokan_Follow_Store_Follow_Button {
      * @return void
      */
     public function add_follow_button( $vendor, $button_classes = array() ) {
-        $btn_labels = dokan_follow_store_button_labels();
-
-        $customer_id = get_current_user_id();
-
-        $status = null;
-
-        if ( dokan_follow_store_is_following_store( $vendor->ID, $customer_id ) ) {
-            $label_current = $btn_labels['following'];
-            $status = 'following';
-        } else {
-            $label_current = $btn_labels['follow'];
-        }
-
-        $button_classes = array_merge(
-            array( 'dokan-btn', 'dokan-btn-theme', 'dokan-follow-store-button' ),
-            $button_classes
-        );
-
-        $args = array(
-            'label_current'  => $label_current,
-            'label_unfollow' => $btn_labels['unfollow'],
-            'vendor_id'      => $vendor->ID,
-            'status'         => $status,
-            'button_classes' => implode( ' ', $button_classes ),
-            'is_logged_in'   => $customer_id,
-        );
+        $args = dokan_follow_store_get_button_args( $vendor, $button_classes );
 
         dokan_follow_store_get_template( 'follow-button', $args );
     }
