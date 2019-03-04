@@ -26,7 +26,7 @@ class StoreLiveChatButton extends DokanButton {
      * @return string
      */
     public function get_title() {
-        return __( 'Store Live Button', 'dokan' );
+        return __( 'Store Live Chat Button', 'dokan' );
     }
 
     /**
