@@ -163,6 +163,102 @@ final class DokanReportAbuse {
 
         dbDelta( $request_table );
     }
+
+    /**
+     * Create abuse report
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $args
+     * @param bool  $send_notification
+     *
+     * @return array
+     */
+    public function create( $args, $send_notification = true ) {
+        global $wpdb;
+
+        $defaults = [
+            'reason'        => '',
+            'product_id'     => 0,
+            'customer_id'    => 0,
+            'customer_name'  => '',
+            'customer_email' => '',
+            'description'    => '',
+        ];
+
+        $args = wp_parse_args( $args, $defaults );
+
+        if ( empty( $args['product_id'] ) ) {
+            return new WP_Error( 'missing_product_id', __( 'Missing product_id param.', 'dokan' ) );
+        }
+
+        $product = wc_get_product( $args['product_id'] );
+
+        if ( ! $product instanceof WC_Product ) {
+            return new WP_Error( 'invalid_product_id', __( 'Product not found.', 'dokan' ) );
+        }
+
+        $vendor = dokan_get_vendor_by_product( $product );
+
+        $customer = null;
+
+        if ( ! empty( $args['customer_id'] ) ) {
+            $customer = new WC_Customer( $args['customer_id'] );
+
+            if ( ! $customer->get_id() ) {
+                return new WP_Error( 'invalid_customer_id', __( 'Customer not found.', 'dokan' ) );
+            }
+        }
+
+        $args['reason']         = wp_trim_words( $args['reason'], 191 );
+        $args['customer_name']  = wp_trim_words( $args['customer_name'], 191 );
+        $args['customer_email'] = wp_trim_words( $args['customer_email'], 100 );
+
+        $report = [
+            'reason'         => $args['reason'],
+            'product_id'     => $args['product_id'],
+            'vendor_id'      => $vendor->get_id(),
+            'customer_id'    => $args['customer_id'],
+            'customer_name'  => $args['customer_name'],
+            'customer_email' => $args['customer_email'],
+            'description'    => $args['description'],
+            'created_at'     => current_time( 'mysql' ),
+        ];
+
+        $inserted = $wpdb->insert(
+            $wpdb->prefix . 'dokan_report_abuse_reports',
+            $report,
+            [
+                '%s',
+                '%d',
+                '%d',
+                '%d',
+                '%s',
+                '%s',
+                '%s',
+                '%s',
+            ]
+        );
+
+        if ( ! $inserted ) {
+            return new WP_Error( 'unable_to_create_report', __( 'Unable to create abuse report.', 'dokan' ) );
+        }
+
+        /**
+         * Fires after created an abuse report
+         *
+         * @since DOKAN_PRO_SINCE
+         *
+         * @param array             $report
+         * @param bool              $send_notification
+         * @param \WC_Product       $product
+         * @param \Dokan_Vendor     $vendor
+         * @param null|\WC_Customer $customer
+         */
+        do_action( 'dokan_report_abuse_created_report', $report, $send_notification, $product, $vendor, $customer );
+
+        return $report;
+    }
 }
 
 /**
