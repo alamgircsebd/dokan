@@ -118,6 +118,50 @@ final class DokanReportAbuse {
 
             update_option( 'dokan_report_abuse', $option, false );
         }
+
+        self::create_tables();
+    }
+
+    /**
+     * Create module related tables
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    private static function create_tables() {
+        global $wpdb;
+
+        $collate = '';
+
+        if ( $wpdb->has_cap( 'collation' ) ) {
+            if ( ! empty($wpdb->charset ) ) {
+                $collate .= "AUTO_INCREMENT=1 DEFAULT CHARACTER SET $wpdb->charset";
+            }
+
+            if ( ! empty($wpdb->collate ) ) {
+                $collate .= " AUTO_INCREMENT=1 COLLATE $wpdb->collate";
+            }
+        }
+
+        include_once ABSPATH . 'wp-admin/includes/upgrade.php';
+
+        $request_table = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dokan_report_abuse_reports` (
+          `id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          `reason` VARCHAR(191) NOT NULL,
+          `product_id` BIGINT(20) NOT NULL,
+          `vendor_id` BIGINT(20) NOT NULL,
+          `customer_id` BIGINT(20) DEFAULT NULL,
+          `customer_name` VARCHAR(191) DEFAULT NULL,
+          `customer_email` VARCHAR(100) DEFAULT NULL,
+          `description` TEXT DEFAULT NULL,
+          `created_at` DATETIME NOT NULL,
+          INDEX `reason` (`reason`),
+          INDEX `product_id` (`product_id`),
+          INDEX `vendor_id` (`vendor_id`)
+        ) $collate";
+
+        dbDelta( $request_table );
     }
 }
 
@@ -126,8 +170,8 @@ final class DokanReportAbuse {
  *
  * @return \DokanReportAbuse
  */
-function dokan_abuse_report() {
+function dokan_report_abuse() {
     return DokanReportAbuse::instance();
 }
 
-dokan_abuse_report();
+dokan_report_abuse();
