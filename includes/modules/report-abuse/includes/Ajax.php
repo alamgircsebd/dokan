@@ -89,8 +89,14 @@ class Ajax {
             ], 400 );
         }
 
+        // Call WC_Emails once
+        wc()->mailer();
+
+        do_action( 'dokan_report_abuse_send_admin_email', $report );
+
         $response = [
             'message' => esc_html__( 'Your report has been submitted. Thank you for your response.', 'dokan' ),
+            'report'  => $report,
         ];
 
         wp_send_json_success( $response, 200 );

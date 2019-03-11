@@ -86,8 +86,10 @@ function dokan_report_abuse_create_report( $args ) {
         }
 
         $report['customer_id'] = $customer_id;
-        $placeholders[]      = '%d';
-
+        $placeholders[]        = '%d';
+    } else if ( $customer ) {
+        $report['customer_id'] = $customer_id;
+        $placeholders[]        = '%d';
     } else {
         if ( empty( $args['customer_name'] ) ) {
             return new WP_Error( 'missing_field', esc_html__( 'customer_name is required.', 'dokan' ) );
@@ -122,12 +124,16 @@ function dokan_report_abuse_create_report( $args ) {
         return new WP_Error( 'unable_to_create_report', esc_html__( 'Unable to create abuse report.', 'dokan' ) );
     }
 
+    $report = $wpdb->get_row(
+        "select * from {$wpdb->prefix}dokan_report_abuse_reports where id = {$wpdb->insert_id}"
+    );
+
     /**
      * Fires after created an abuse report
      *
      * @since DOKAN_PRO_SINCE
      *
-     * @param array             $report
+     * @param object            $report
      * @param \WC_Product       $product
      * @param \Dokan_Vendor     $vendor
      * @param null|\WC_Customer $customer
@@ -137,6 +143,16 @@ function dokan_report_abuse_create_report( $args ) {
     return $report;
 }
 
+/**
+ * Report Abuse Form
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param array $args
+ * @param bool  $echo
+ *
+ * @return void|string
+ */
 function dokan_report_abuse_report_form( $args = [], $echo = false ) {
     $defaults = [
         'text'                 => esc_html__( 'Why are you reporting this?', 'dokan' ),
