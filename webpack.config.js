@@ -27,8 +27,13 @@ var moduleEntryPoints = {
     'subscription': {
         'subscription': 'main.js',
     },
+
     'wholesale': {
         'admin': 'main.js'
+    },
+
+    'report-abuse': {
+        'dokan-report-abuse': 'js/main.js'
     }
 };
 
@@ -108,6 +113,10 @@ if ( isProduction() ) {
     appName = '[name].js';
 }
 
+plugins.push(new webpack.ProvidePlugin({
+    $: 'jquery'
+}));
+
 module.exports = {
     entry: entryPoints,
     output: {
@@ -128,7 +137,7 @@ module.exports = {
         ]
     },
     externals: {
-        jquery: 'jQuery',
+        jquery: 'jQuery'
     },
 
     plugins,
