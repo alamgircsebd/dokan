@@ -533,19 +533,19 @@ export default {
                 let line = '';
 
                 for (let index in array[i]) {
-                    if (line != '') line += ','
+                    if (line != '') line += ',';
 
                     if ( 'commission' == index || 'order_total' == index || 'vendor_earning' == index ) {
-                        line += accounting.formatMoney(
+                        line += '"' + accounting.formatMoney(
                             array[i][index],
                             '',
                             dokan.precision,
                             dokan.currency.thousand,
                             dokan.currency.decimal,
                             dokan.currency.format
-                        );
+                        ) + '"';
                     } else {
-                        line += array[i][index];
+                        line += '"' + array[i][index] +'"';
                     }
                 }
 
@@ -555,7 +555,7 @@ export default {
             return str;
         },
 
-        exportCSVFile(csv, fileTitle) {
+        exportCSVFile(csv) {
             let exportedFilenmae = 'logs-' + moment().format('Y-MM-DD') + '.csv';
             let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 
