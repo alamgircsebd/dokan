@@ -131,7 +131,7 @@ $template_args = array(
                             $select_name = "multiple" == $multiple ? 'product_cat[]' : 'product_cat';
 
                             include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
-                            $drop_down_category = wp_dropdown_categories( array(
+                            $category_args = array(
                                 'show_option_none' => __( '', 'dokan' ),
                                 'hierarchical'     => 1,
                                 'hide_empty'       => 0,
@@ -144,9 +144,10 @@ $template_args = array(
                                 'selected'         => $term,
                                 'echo'             => 0,
                                 'walker'           => new DokanTaxonomyWalker( $post_id )
-                            ) );
+                            );
 
-                            $replace_attrb = "<select data-placeholder='".__( 'Select product category','dokan' )."' ". $multiple ;
+                            $drop_down_category = wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
+                            $replace_attrb      = "<select data-placeholder='".__( 'Select product category','dokan' )."' ". $multiple ;
 
                             echo str_replace( '<select', $replace_attrb, $drop_down_category );
                             ?>
@@ -604,8 +605,7 @@ $template_args = array(
                     <?php wp_editor( $post_content, 'post_content', array( 'editor_height' => 50, 'quicktags' => false, 'media_buttons' => false, 'teeny' => true, 'editor_class' => 'post_content' ) ); ?>
                 </div>
 
-                <?php do_action( 'dokan_new_product_form' ); ?>
-
+                <?php do_action( 'dokan_new_product_form', $post, $post_id ); ?>
 
                 <?php if ( !empty( $post_id ) ): ?>
 
@@ -687,7 +687,6 @@ $template_args = array(
                 <!--hidden input for Firefox issue-->
                 <input type="hidden" name="_stock_status" value="instock"/>
                 <input type="hidden" name="_sku" value=""/>
-                <input type="hidden" name="product_shipping_class" value="-1"/>
                 <input type="hidden" name="price" value=""/>
                 <input type="hidden" name="product_type" value="booking"/>
             </form>

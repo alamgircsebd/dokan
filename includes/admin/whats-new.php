@@ -1,6 +1,181 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.5',
+        'released' => '2019-02-18',
+        'changes'  => array(
+            array(
+                'title'         => 'Automate order refund process via stripe',
+                'type'          => 'New',
+                'description'   => 'Vendor can now send automatic refund to their customer from vendor order dashboard'
+            ),
+            array(
+                'title'         => 'Add trial subscription (Subscription Module)',
+                'type'          => 'New',
+                'description'   => 'Admin can now offer trail subscription for vendors'
+            ),
+            array(
+                'title'         => 'Product type & gallery image restriction',
+                'type'          => 'New',
+                'description'   => 'Admin can now restrict product type & gallery image upload for vendor subscription'
+            ),
+            array(
+                'title'         => 'Privacy and Policy',
+                'type'          => 'New',
+                'description'   => 'Admin can configure privacy policy info for frontend product enquiry form'
+            ),
+            array(
+                'title'         => 'Email notification for store follow',
+                'type'          => 'Fix',
+                'description'   => 'Now vendor can get email notification on store follows and unfollows'
+            ),
+            array(
+                'title'         => 'Unable to select country or state in vendor shipping',
+                'type'          => 'Fix',
+                'description'   => 'Country dropdown not working in shipping and announcement'
+            ),
+            array(
+                'title'         => 'Admin report logs calculation issue is fixed in admin dashboard',
+                'type'          => 'Fix',
+                'description'   => 'Some calculation issue fixed in admin reports'
+            ),
+        )
+    ),
+    array(
+        'version'  => 'Version 2.9.4',
+        'released' => '2019-01-23',
+        'changes'  => array(
+            array(
+                'title'         => 'Wholesale Module(Business, Enterprise Package)',
+                'type'          => 'New',
+                'description'   => 'Added new Wholesale module. Vendor can offer wholesale price for his/her products.'
+            ),
+            array(
+                'title'         => 'Return and Warranty Module(Professional, Business, Enterprise Package)',
+                'type'          => 'New',
+                'description'   => 'Vendor can offer warranty and return system for their products and customer can take this warranty offers'
+            ),
+            array(
+                'title'         => 'Subscription cancellation email',
+                'type'          => 'New',
+                'description'   => 'Now admin can get email if any subscription is cancelled by vendor'
+            ),
+            array(
+                'title'         => 'Subscription Unlimited pack',
+                'type'          => 'New',
+                'description'   => 'Admin can offer unlimited package for vendor subscription'
+            ),
+            array(
+                'title'         => 'MOIP Gateway connection issue',
+                'type'          => 'Fix',
+                'description'   => 'Change some gateway api params for connection moip gateway'
+            ),
+        )
+    ),
+    array(
+        'version'  => 'Version 2.9.3',
+        'released' => '2018-12-18',
+        'changes'  => array(
+            array(
+                'title'         => 'ShipStation Module(Business, Enterprise Package)',
+                'type'          => 'New',
+                'description'   => 'Added new ShipStation module'
+            ),
+            array(
+                'title'         => 'Follow Store Module(Professional, Business, Enterprise Package)',
+                'type'          => 'New',
+                'description'   => 'Added Follow Store module'
+            ),
+            array(
+                'title'         => 'Product Quick Edit',
+                'type'          => 'New',
+                'description'   => 'Added Quick edit option for product in vendor dashboard.'
+            ),
+            array(
+                'title'         => 'Searching Option',
+                'type'          => 'New',
+                'description'   => 'Add searching option in dokan vendor and refund page'
+            ),
+            array(
+                'title'         => 'Admin Tools & Subscription Page Improvement',
+                'type'          => 'Improvement',
+                'description'   => 'Rewrite admin tools & subscription page in vue js'
+            ),
+            array(
+                'title'         => 'Filter form & Map in Category Page',
+                'type'          => 'Fix',
+                'description'   => 'Show filter form and map in product category pages (geolocation module)'
+            ),
+            array(
+                'title'         => 'Bookable Product Commission',
+                'type'          => 'Fix',
+                'description'   => 'Add per product commission option for bookable product'
+            ),
+            array(
+                'title'         => 'Refund Calculation Issue',
+                'type'          => 'Fix',
+                'description'   => 'Refund calculation is wrong when shipping fee recipient is set to vendor'
+            ),
+            array(
+                'title'         => 'Bulk Refund is Not Working',
+                'type'          => 'Fix',
+                'description'   => 'Approving batch refund is not working in admin backend'
+            ),
+            array(
+                'title'         => 'Product Stock Issue on Refund',
+                'type'          => 'Fix',
+                'description'   => 'Increase stock ammount if the product is refunded'
+            ),
+            array(
+                'title'         => 'Category Restriction Issue',
+                'type'          => 'Fix',
+                'description'   => 'Booking product category restriction for subscription pack is not working'
+            )
+        )
+    ),
+    array(
+        'version'  => 'Version 2.9.2',
+        'released' => '2018-11-09',
+        'changes'  => array(
+            array(
+                'title'         => 'Geolocation Module',
+                'type'          => 'New',
+                'description'   => 'Added zoom level settings in geolocation module.'
+            ),
+            array(
+                'title'         => 'Zone Wise Shipping',
+                'type'          => 'New',
+                'description'   => 'Added shipping policy and processing time settings in zone wise shipping.'
+            ),
+            array(
+                'title'         => 'Rest API for Store Reviews',
+                'type'          => 'New',
+                'description'   => 'Added rest API support for store review post type.'
+            ),
+            array(
+                'title'         => 'Show Tax on Bookable Product',
+                'type'          => 'Fix',
+                'description'   => 'Show tax on bookable product for vendor'
+            ),
+
+            array(
+                'title'         => 'Product Importing Issue for Subscribed Vendor',
+                'type'          => 'Fix',
+                'description'   => 'Allow vendor to import only allowed number of products.'
+            ),
+            array(
+                'title'         => 'Product and Order Discount Issue',
+                'type'          => 'Fix',
+                'description'   => 'Product and order discount for vendor is not working.'
+            ),
+            array(
+                'title'         => 'Shipping Class Issue',
+                'type'          => 'Fix',
+                'description'   => 'Shipping class is not saving for bookable product.'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.0',
         'released' => '2018-10-03',
         'changes'  => array(

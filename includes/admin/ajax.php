@@ -10,7 +10,7 @@
 class Dokan_Pro_Admin_Ajax {
 
     /**
-     * Load autometically all actions
+     * Load automatically all actions
      */
     function __construct() {
         add_action( 'wp_ajax_regen_sync_table', array( $this, 'regen_sync_order_table' ) );
@@ -44,22 +44,33 @@ class Dokan_Pro_Admin_Ajax {
      * @return json success|error|data
      */
     function regen_sync_order_table() {
-        global $wpdb;
 
-        parse_str( $_POST['data'], $data );
-
-        if ( ! wp_verify_nonce( $data['_wpnonce'], 'regen_sync_table' ) ) {
-            wp_send_json_error();
+        if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'regen_sync_table' ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
         }
 
-        $limit        = $data['limit'];
-        $offset       = $data['offset'];
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
+
+        global $wpdb;
+
+        $limit        = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
+        $offset       = isset( $_POST['offset'] ) ? $_POST['offset'] : 0;
         $total_orders = isset( $_POST['total_orders'] ) ? $_POST['total_orders'] : 0;
 
         if ( $offset == 0 ) {
             $wpdb->query( 'TRUNCATE TABLE ' . $wpdb->dokan_orders );
-            $total_orders = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->posts
-                WHERE post_type = 'shop_order'"  );
+
+            $total_orders = $wpdb->get_var( "SELECT count(ID)
+                FROM $wpdb->posts
+                WHERE post_type = 'shop_order'" );
+
+            $parent_orders = $wpdb->get_var( "SELECT count(ID)
+                FROM {$wpdb->posts} as p
+                LEFT JOIN {$wpdb->postmeta} as m ON p.ID = m.post_id
+                WHERE m.meta_key = 'has_sub_order' and p.post_type = 'shop_order' " );
+            $total_orders = $total_orders - $parent_orders;
         }
 
         $sql = "SELECT ID FROM $wpdb->posts
@@ -73,10 +84,10 @@ class Dokan_Pro_Admin_Ajax {
                 dokan_sync_order_table( $order->ID );
             }
 
-            $sql = "SELECT * FROM " . $wpdb->dokan_orders;
+            $sql       = "SELECT * FROM " . $wpdb->dokan_orders;
             $generated = $wpdb->get_results( $sql );
+            $done      = count( $generated );
 
-            $done        = count( $generated );
             wp_send_json_success( array(
                 'offset'       => $offset + 1,
                 'total_orders' => $total_orders,
@@ -101,46 +112,45 @@ class Dokan_Pro_Admin_Ajax {
      * @return json success|error|data
      */
     function check_duplicate_suborders(){
-        if(session_id() == ''){
+
+        if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'check_duplicate_suborders' ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
+
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
+
+        if ( session_id() == '' ) {
             session_start();
         }
 
         global $wpdb;
 
-        parse_str( $_POST['data'], $data );
-
-        if ( ! wp_verify_nonce( $data['_wpnonce'], 'regen_sync_table' ) ) {
-            wp_send_json_error();
-        }
-
-        $limit        = $data['limit'];
-        $offset       = $data['offset'];
-        $prev_done    = $_POST['done'];
-
+        $limit        = isset( $_POST['limit'] ) ? $_POST['limit'] : 0;
+        $offset       = isset( $_POST['offset'] ) ? $_POST['offset'] : 0;
+        $prev_done    = isset( $_POST['done'] ) ? $_POST['done'] : 0;
         $total_orders = isset( $_POST['total_orders'] ) ? $_POST['total_orders'] : 0;
 
         if ( $offset == 0 ) {
-
-            unset($_SESSION['dokan_duplicate_order_ids']);
+            unset( $_SESSION['dokan_duplicate_order_ids'] );
             $total_orders = $wpdb->get_var( "SELECT count(ID) FROM $wpdb->posts AS p
                 LEFT JOIN $wpdb->postmeta AS m ON p.ID = m.post_id
                 WHERE post_type = 'shop_order' AND m.meta_key = 'has_sub_order'" );
         }
 
         $sql = "SELECT ID FROM $wpdb->posts AS p
-                LEFT JOIN $wpdb->postmeta AS m ON p.ID = m.post_id
-                WHERE post_type = 'shop_order' AND m.meta_key = 'has_sub_order'
-                LIMIT %d,%d";
+        LEFT JOIN $wpdb->postmeta AS m ON p.ID = m.post_id
+        WHERE post_type = 'shop_order' AND m.meta_key = 'has_sub_order'
+        LIMIT %d,%d";
 
-        $orders = $wpdb->get_results( $wpdb->prepare( $sql, $offset * $limit, $limit ) );
-
+        $orders           = $wpdb->get_results( $wpdb->prepare( $sql, $offset * $limit, $limit ) );
         $duplicate_orders = isset( $_SESSION['dokan_duplicate_order_ids'] ) ? $_SESSION['dokan_duplicate_order_ids'] : array();
 
         if ( $orders ) {
             foreach ( $orders as $order ) {
 
                 $sellers_count = count( dokan_get_sellers_by( $order->ID ) );
-
                 $sub_order_ids = dokan_get_suborder_ids_by( $order->ID );
 
                 if ( $sellers_count < count( $sub_order_ids ) ) {
@@ -151,15 +161,19 @@ class Dokan_Pro_Admin_Ajax {
             if ( count( $duplicate_orders ) ) {
                 $_SESSION['dokan_duplicate_order_ids'] = $duplicate_orders;
             }
+
             $done = $prev_done + count($orders);
+
             wp_send_json_success( array(
                 'offset'       => $offset + 1,
                 'total_orders' => $total_orders,
                 'done'         => $done,
                 'message'      => sprintf( __( '%d orders checked out of %d', 'dokan' ), $done, $total_orders )
             ) );
+
         } else {
-            if( count( $duplicate_orders ) ){
+
+            if( count( $duplicate_orders ) ) {
                wp_send_json_success( array(
                     'offset'  => 0,
                     'done'    => 'All',
@@ -167,7 +181,9 @@ class Dokan_Pro_Admin_Ajax {
                     'duplicate' => true
                 ) );
             }
+
             $dashboard_link = sprintf( '<a href="%s">%s</a>', admin_url( 'admin.php?page=dokan' ), __( 'Go to Dashboard &rarr;', 'dokan' ) );
+
             wp_send_json_success( array(
                     'offset'  => 0,
                     'done'    => 'All',

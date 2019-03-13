@@ -22,13 +22,15 @@ class Dokan_Pro_Admin_Settings {
     public function __construct() {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
         add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
-        add_action( 'admin_init', array( $this, 'tools_page_handler' ) );
+        add_action( 'wp_ajax_create_pages', array( $this, 'create_default_pages' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
         add_action( 'init', array( $this, 'dokan_export_all_logs' ), 99 );
         add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
         add_action( 'admin_notices', array( $this, 'show_whats_new_notice' ), 10 );
+        add_action( 'admin_notices', array( $this, 'show_chirstmas_notice' ), 10 );
         add_action( 'wp_ajax_dokan-whats-new-notice', array( $this, 'dismiss_new_notice' ) );
+        add_action( 'wp_ajax_dokan-dismiss-christmas-offer-notice', array( $this, 'dismiss_christmas_offer' ) );
         add_action( 'admin_init', array( $this, 'handle_seller_bulk_action' ), 10 );
     }
 
@@ -59,20 +61,16 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
             $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
             $submenu[ $slug ][] = array( $refund_text, $capability, 'admin.php?page=' . $slug . '#/refund?status=pending' );
+            $submenu[ $slug ][] = array( __( 'Reports', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/reports' );
         }
-
-        $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
 
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
         // Load tools ad modules menu
         if ( current_user_can( $capability ) ) {
             $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
+            $submenu[ $slug ][] = array( __( 'Tools', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/tools' );
         }
-
-        $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
-
-        add_action( $report, array( $this, 'common_scripts' ) );
     }
 
     /**
@@ -181,8 +179,8 @@ class Dokan_Pro_Admin_Settings {
                 'label'   => __( 'Discount Editing', 'dokan' ),
                 'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
                 'type'    => 'multicheck',
-                'default' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) ),
-                'options' => array( 'product-discount' => __( 'Discount product', 'dokan' ), 'order-discount' => __( 'Discount Order', 'dokan' ) )
+                'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
+                'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) )
             ),
             'hide_customer_info' => array(
                 'name'    => 'hide_customer_info',
@@ -223,24 +221,6 @@ class Dokan_Pro_Admin_Settings {
         $settings_fields['dokan_withdraw'] = array_merge( $settings_fields['dokan_withdraw'], $new_settings_fields['dokan_withdraw'] );
 
         return $settings_fields;
-    }
-
-    /**
-     * Load Report Scripts
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function common_scripts() {
-        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-        wp_enqueue_style( 'jquery-ui' );
-        wp_enqueue_style( 'dokan-chosen-style' );
-
-        wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'dokan-flot' );
-        wp_enqueue_script( 'dokan-chart' );
-        wp_enqueue_script( 'dokan-chosen' );
     }
 
     /**
@@ -320,6 +300,18 @@ class Dokan_Pro_Admin_Settings {
             );
         }
 
+        $routes[] = array(
+            'path'      => '/tools',
+            'name'      => 'Tools',
+            'component' => 'Tools'
+        );
+
+        $routes[] = array(
+            'path'      => '/reports',
+            'name'      => 'Reports',
+            'component' => 'Reports'
+        );
+
         return $routes;
     }
 
@@ -335,52 +327,6 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
-     * Refund request template
-     *
-     * @since 2.4.11
-     *
-     * @return void
-     */
-    function refund_request() {
-        include dirname( __FILE__ ) . '/refund.php';
-    }
-
-    /**
-     * Seller Listing template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function seller_listing() {
-        // echo '<div class="wrap"><div id="vue-admin-app"></div></div>';
-        include dirname( __FILE__ ) . '/sellers.php';
-    }
-
-    /**
-     * Report Tempalte
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function report_page() {
-        global $wpdb;
-        include dirname( __FILE__ ) . '/reports.php';
-    }
-
-    /**
-     * Tools Template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function tools_page() {
-        include dirname( __FILE__ ) . '/tools.php';
-    }
-
-    /**
      * Whats new page for dokan pro
      *
      * @return void
@@ -390,37 +336,66 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
-     * Tools Toggole Handler
+     * Create default pages
      *
      * @since 2.4
      *
      * @return void
      */
-    function tools_page_handler() {
+    function create_default_pages() {
 
-        if ( isset( $_GET['dokan_action'] ) && current_user_can( 'manage_options' ) ) {
-            $action = $_GET['dokan_action'];
-            check_admin_referer( 'dokan-tools-action' );
-            $page_created = get_option( 'dokan_pages_created', false );
+        if ( ! isset( $_POST['action'] ) || $_POST['action'] !== 'create_pages' ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
 
-            $pages = array(
-                array(
-                    'post_title' => __( 'Dashboard', 'dokan' ),
-                    'slug'       => 'dashboard',
-                    'page_id'    => 'dashboard',
-                    'content'    => '[dokan-dashboard]'
-                ),
-                array(
-                    'post_title' => __( 'Store List', 'dokan' ),
-                    'slug'       => 'store-listing',
-                    'page_id'    => 'my_orders',
-                    'content'    => '[dokan-stores]'
-                ),
-            );
-            $dokan_pages = array() ;
-            if ( ! $page_created ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return wp_send_json_error( __( 'You don\'t have enough permission', 'dokan', '403' ) );
+        }
 
-                foreach ( $pages as $page ) {
+        $page_created = get_option( 'dokan_pages_created', false );
+        $pages = array(
+            array(
+                'post_title' => __( 'Dashboard', 'dokan' ),
+                'slug'       => 'dashboard',
+                'page_id'    => 'dashboard',
+                'content'    => '[dokan-dashboard]'
+            ),
+            array(
+                'post_title' => __( 'Store List', 'dokan' ),
+                'slug'       => 'store-listing',
+                'page_id'    => 'store_listing',
+                'content'    => '[dokan-stores]'
+            ),
+            array(
+                'post_title' => __( 'My Orders', 'dokan-lite' ),
+                'slug'       => 'my-orders',
+                'page_id'    => 'my_orders',
+                'content'    => '[dokan-my-orders]',
+            ),
+        );
+
+        $dokan_pages = array() ;
+
+        if ( ! $page_created ) {
+
+            foreach ( $pages as $page ) {
+                $page_id = wp_insert_post( array(
+                    'post_title'     => $page['post_title'],
+                    'post_name'      => $page['slug'],
+                    'post_content'   => $page['content'],
+                    'post_status'    => 'publish',
+                    'post_type'      => 'page',
+                    'comment_status' => 'closed'
+                        ) );
+                $dokan_pages[ $page['page_id'] ] = $page_id ;
+            }
+
+            update_option( 'dokan_pages', $dokan_pages );
+            flush_rewrite_rules();
+        } else {
+            foreach ( $pages as $page ) {
+
+                if ( !$this->dokan_page_exist( $page['slug'] ) ) {
                     $page_id = wp_insert_post( array(
                         'post_title'     => $page['post_title'],
                         'post_name'      => $page['slug'],
@@ -429,34 +404,19 @@ class Dokan_Pro_Admin_Settings {
                         'post_type'      => 'page',
                         'comment_status' => 'closed'
                             ) );
-                    $dokan_pages[$page['slug']] = $page_id ;
+                    $dokan_pages[ $page['page_id'] ] = $page_id ;
+                    update_option( 'dokan_pages', $dokan_pages );
                 }
-                update_option( 'dokan_pages', $dokan_pages );
-                flush_rewrite_rules();
-            } else {
-                foreach ( $pages as $page ) {
-
-                    if ( !$this->dokan_page_exist( $page['slug'] ) ) {
-                        $page_id = wp_insert_post( array(
-                            'post_title'     => $page['post_title'],
-                            'post_name'      => $page['slug'],
-                            'post_content'   => $page['content'],
-                            'post_status'    => 'publish',
-                            'post_type'      => 'page',
-                            'comment_status' => 'closed'
-                                ) );
-                        $dokan_pages[$page['slug']] = $page_id ;
-                        update_option( 'dokan_pages', $dokan_pages );
-                    }
-
-                }
-
-                flush_rewrite_rules();
             }
-            update_option( 'dokan_pages_created', 1 );
-            wp_redirect( admin_url( 'admin.php?page=dokan-tools&msg=page_installed' ) );
-            exit;
+
+            flush_rewrite_rules();
         }
+
+        update_option( 'dokan_pages_created', 1 );
+        wp_send_json_success( array(
+            'message' => __( 'All the default pages has been created!', 'dokan' )
+        ), 201 );
+        exit;
     }
 
     /**
@@ -469,19 +429,24 @@ class Dokan_Pro_Admin_Settings {
      * @return boolean
      */
     function dokan_page_exist( $slug ) {
+        if ( ! $slug ) {
+            return false;
+        }
 
         $page_created = get_option( 'dokan_pages_created', false );
+
         if ( ! $page_created ) {
-            return FALSE;
+            return false;
         }
+
         $page_list = get_option( 'dokan_pages', '' );
-        $page = get_post( $page_list[$slug] );
+        $slug      = str_replace( '-', '_', $slug );
+        $page      = isset( $page_list[$slug] ) ? get_post( $page_list[$slug] ) : null;
 
-        if ( $page == null ) {
-            return FALSE;
+        if ( $page === null ) {
+            return false;
         } else {
-
-            return TRUE;
+            return true;
         }
     }
 
@@ -492,15 +457,15 @@ class Dokan_Pro_Admin_Settings {
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-sellers',
             'parent' => 'dokan',
-            'title'  => __( 'All Vendors', 'dokan' ),
+            'title'  => __( 'Vendors', 'dokan' ),
             'href'   => admin_url( 'admin.php?page=dokan#/vendors' )
         ) );
 
         $wp_admin_bar->add_menu( array(
             'id'     => 'dokan-reports',
             'parent' => 'dokan',
-            'title'  => __( 'Earning Reports', 'dokan' ),
-            'href'   => admin_url( 'admin.php?page=dokan-reports' )
+            'title'  => __( 'Reports', 'dokan' ),
+            'href'   => admin_url( 'admin.php?page=dokan#/reports' )
         ) );
 
         $wp_admin_bar->add_menu( array(
@@ -618,6 +583,9 @@ class Dokan_Pro_Admin_Settings {
     }
 
     public function dismiss_new_notice() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
 
         if ( !empty( $_POST['dokan_promotion_dismissed'] ) ) {
             $versions = get_option( 'dokan_whats_new_versions', array() );
@@ -627,6 +595,82 @@ class Dokan_Pro_Admin_Settings {
             }
 
             update_option( 'dokan_whats_new_versions', $versions );
+        }
+    }
+
+    /**
+     * Added xmas promotion notice
+     *
+     * @since  2.9.3
+     *
+     * @return void
+     */
+    public function show_chirstmas_notice() {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return;
+        }
+
+        // check if it has already been dismissed
+        $offer_key   = 'dokan_pro_christmas_notice';
+        $hide_notice = get_option( $offer_key, 'show' );
+        $offer_link  = 'https://wedevs.com/dokan/pricing/#dokan-compare-table-section';
+        $offer_last_date = strtotime( '2018-12-31 12:00:00' );
+        $content = __( '<p>Christmas Offer! <strong>Save 30%%</strong> Upgrading Your Dokan Package. <strong>Coupon: “XMAS30”</strong>. Offer Ends in 31st Dec, 12.00 PM! <a target="_blank" href="%s">Grab The Deal</a></p>', 'dokan-lite' );
+
+        if ( 'hide' == $hide_notice ) {
+            return;
+        }
+
+        if ( current_time( 'timestamp' ) > $offer_last_date ) {
+            return;
+        }
+
+        ?>
+            <div class="notice notice-success is-dismissible" id="dokan-christmas-notice">
+                <?php printf( wp_kses_post( $content ), esc_url( $offer_link ) ); ?>
+            </div>
+
+            <style>
+                #dokan-christmas-notice p {
+                    font-size: 14px;
+                }
+            </style>
+
+            <script type='text/javascript'>
+                jQuery('body').on('click', '#dokan-christmas-notice .notice-dismiss', function(e) {
+                    e.preventDefault();
+
+                    wp.ajax.post( 'dokan-dismiss-christmas-offer-notice', {
+                        dokan_christmas_dismissed: true,
+                        nonce: '<?php echo esc_attr( wp_create_nonce( 'dokan_admin' ) ); ?>'
+                    });
+                });
+            </script>
+        <?php
+    }
+
+    /**
+     * Dismiss promotion notice
+     *
+     * @since  2.9.3
+     *
+     * @return void
+     */
+    public function dismiss_christmas_offer() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_send_json_error( __( 'You have no permission to do that', 'dokan-lite' ) );
+        }
+
+        $nonce = isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '';
+
+        if ( ! wp_verify_nonce( $nonce, 'dokan_admin' ) ) {
+            wp_send_json_error( __( 'Invalid nonce', 'dokan-lite' ) );
+        }
+
+        if ( ! empty( $_POST['dokan_christmas_dismissed'] ) ) {
+            $offer_key = 'dokan_pro_christmas_notice';
+            update_option( $offer_key, 'hide' );
         }
     }
 

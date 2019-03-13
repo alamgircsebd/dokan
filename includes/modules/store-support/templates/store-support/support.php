@@ -8,6 +8,8 @@ if( is_numeric( $topic_id ) ) {
 }
 ?>
 
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 
     <?php
@@ -57,3 +59,5 @@ if( is_numeric( $topic_id ) ) {
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>

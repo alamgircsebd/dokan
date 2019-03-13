@@ -79,7 +79,10 @@ class Dokan_Pro_Refund {
         );
 
         $format = array( '%d', '%d', '%f', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s' );
-        return $wpdb->insert( $table_name, $postdata, $format );
+
+        $wpdb->insert( $table_name, $postdata, $format );
+
+        return $wpdb->insert_id;
     }
 
     /**

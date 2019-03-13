@@ -91,6 +91,7 @@ class Dokan_Apperance {
         add_filter( 'dokan_settings_fields', array( $this, 'render_apperance_settings' ) );
 
         add_action( 'wp_head', array( $this, 'load_styles' ) );
+        add_action( 'dokan_setup_wizard_styles', array( $this, 'load_styles' ) );
     }
 
     /**
@@ -211,8 +212,9 @@ class Dokan_Apperance {
      * return void
      */
     function load_styles() {
+        $page = ( isset( $_GET['page'] ) && $_GET['page'] == 'dokan-seller-setup' ) ? 'seller-setup' : '';
 
-        if ( ! dokan_is_seller_dashboard() && get_query_var( 'post_type' ) != 'product' ) {
+        if ( ( ! dokan_is_seller_dashboard() && get_query_var( 'post_type' ) !== 'product' ) && $page !== 'seller-setup' && ! dokan_is_store_listing() && ! is_account_page() ) {
             return;
         }
 
@@ -231,9 +233,9 @@ class Dokan_Apperance {
         ?>
         <style>
             input[type="submit"].dokan-btn-theme, a.dokan-btn-theme, .dokan-btn-theme {
-                color: <?php echo $btn_text ?>;
-                background-color: <?php echo $btn_bg ?>;
-                border-color: <?php echo $btn_border ?>;
+                color: <?php echo $btn_text ?> !important;
+                background-color: <?php echo $btn_bg ?> !important;
+                border-color: <?php echo $btn_border ?> !important;
             }
             input[type="submit"].dokan-btn-theme:hover,
             a.dokan-btn-theme:hover, .dokan-btn-theme:hover,
@@ -246,31 +248,31 @@ class Dokan_Apperance {
             .open .dropdown-toggleinput[type="submit"].dokan-btn-theme,
             .open .dropdown-togglea.dokan-btn-theme,
             .open .dropdown-toggle.dokan-btn-theme{
-                color: <?php echo $btn_h_text ?> ;
-                background-color: <?php echo $btn_h_bg ?>;
-                border-color: <?php echo $btn_h_border ?>;
+                color: <?php echo $btn_h_text ?> !important;
+                background-color: <?php echo $btn_h_bg ?> !important;
+                border-color: <?php echo $btn_h_border ?> !important;
             }
 
             .dokan-dashboard .dokan-dash-sidebar,
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu{
-                background-color : <?php echo $dash_nav_bg ?>;
+                background-color : <?php echo $dash_nav_bg ?> !important;
             }
 
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a{
-                color : <?php echo $dash_nav_text ?> ;
+                color : <?php echo $dash_nav_text ?> !important;
             }
 
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.active,
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li:hover,
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.active,
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.dokan-common-links a:hover{
-                background-color : <?php echo $dash_active_menu ?>
+                background-color : <?php echo $dash_active_menu ?> !important;
             }
 
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li,
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li a,
             .dokan-dashboard .dokan-dash-sidebar ul.dokan-dashboard-menu li.dokan-common-links a{
-                border-color : <?php echo $dash_nav_border ?>
+                border-color : <?php echo $dash_nav_border ?> !important;
             }
         </style>
 

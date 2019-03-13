@@ -10,14 +10,39 @@ const config = require( './config.json' );
 
 // Naming and path settings
 var appName = 'app';
-var entryPoint = {
+
+var exportPath = path.resolve(__dirname, './assets/js');
+
+var entryPoints = {};
+
+var rootEntryPoints = {
     // 'vue-pro-frontend': './src/frontend/main.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
+    // 'vue-pro-admin': './includes/modules/subscription/src/main.js',
     // style: './less/style.less',
 };
 
-var exportPath = path.resolve(__dirname, './assets/js');
+var moduleEntryPoints = {
+    'subscription': {
+        'subscription': 'main.js',
+    },
+    'wholesale': {
+        'admin': 'main.js'
+    }
+};
+
+Object.keys(rootEntryPoints).forEach(function (output) {
+    entryPoints[ output ] = rootEntryPoints[output];
+});
+
+Object.keys(moduleEntryPoints).forEach(function (dokanModule) {
+    var modulePath = `includes/modules/${dokanModule}`;
+
+    Object.keys(moduleEntryPoints[dokanModule]).forEach(function (moduleOutput) {
+        entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/src/${moduleEntryPoints[dokanModule][moduleOutput]}`;
+    });
+});
 
 // Enviroment flag
 var plugins = [];
@@ -29,7 +54,9 @@ function isProduction() {
 
 // extract css into its own file
 const extractCss = new ExtractTextPlugin({
-    filename: "../css/[name].css",
+    filename(getPath) {
+        return getPath('../css/[name].css').replace('assets/js', 'assets/css');
+    }
 });
 
 plugins.push( extractCss );
@@ -82,7 +109,7 @@ if ( isProduction() ) {
 }
 
 module.exports = {
-    entry: entryPoint,
+    entry: entryPoints,
     output: {
         path: exportPath,
         filename: appName

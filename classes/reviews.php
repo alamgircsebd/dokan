@@ -14,7 +14,7 @@ class Dokan_Pro_Reviews {
     private $post_type;
 
     /**
-     * Load autometically when class inistantiate
+     * Load automatically when class inistantiate
      *
      * @since 2.4
      *

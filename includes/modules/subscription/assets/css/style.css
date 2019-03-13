@@ -25,6 +25,8 @@
   -moz-box-shadow: 0px 0px 25px 0px #ddd;
   -ms-box-shadow: 0px 0px 25px 0px #ddd;
   box-shadow: 0px 0px 25px 0px #ddd;
+  display: flex;
+  justify-content: center;
 }
 .dokan-subscription-content .pack_content_wrapper .product_pack_item.current_pack {
   border-bottom: 2px solid #f05025;
@@ -45,6 +47,12 @@
 .dokan-subscription-content .pack_content_wrapper .product_pack_item .pack_price .dps-rec-period {
   font-size: 16px;
 }
+
+.dokan-subscription-content .pack_content_wrapper .product_pack_item .pack_content .dps-rec-period .trail-details {
+  font-weight: bold;
+  padding-top: 10px;
+}
+
 .dokan-subscription-content .pack_content_wrapper .product_pack_item .pack_content {
   margin-top: 40px;
 }
@@ -77,7 +85,6 @@
 .dokan-subscription-content .pack_content_wrapper .product_pack_item .buy_pack_button {
   position: absolute;
   bottom: 15px;
-  left: 32.22%;
 }
 .woocommerce_options_panel .subscription_pricing {
   float: left;

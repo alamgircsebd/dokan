@@ -43,15 +43,15 @@ if ( !defined( 'ABSPATH' ) ) {
                         ?>
                     </td>
                 </tr>
-<!--				<tr>
-                        <th><label for="woocommerce-importer-update-existing"><?php _e( 'Update existing products', 'dokan' ); ?></label><br/></th>
-                        <td>
-                                <input type="hidden" name="update_existing" value="0" />
-                                <input type="checkbox" id="woocommerce-importer-update-existing" name="update_existing" value="1" />
-                                <label for="woocommerce-importer-update-existing"><?php esc_html_e( 'If a product being imported matches an existing product by ID or SKU, update the existing product rather than creating a new product or skipping the row.', 'dokan' ); ?></label>
-                        </td>
-                </tr>-->
-<!--				<tr class="woocommerce-importer-advanced hidden">
+				<tr>
+                    <th><label for="woocommerce-importer-update-existing"><?php _e( 'Update existing products', 'dokan' ); ?></label><br/></th>
+                    <td>
+                        <input type="hidden" name="update_existing" value="0" />
+                        <input type="checkbox" id="woocommerce-importer-update-existing" name="update_existing" value="1" />
+                        <label for="woocommerce-importer-update-existing"><?php esc_html_e( 'Existing products that match by ID or SKU will be updated. Products that do not exist will be skipped.', 'dokan' ); ?></label>
+                    </td>
+                </tr>
+<!-- 				<tr class="woocommerce-importer-advanced hidden">
                         <th>
                                 <label for="woocommerce-importer-file-url"><?php _e( '<em>or</em> enter the path to a CSV file on your server:', 'dokan' ); ?></label>
                         </th>
@@ -64,8 +64,8 @@ if ( !defined( 'ABSPATH' ) ) {
                 <tr class="woocommerce-importer-advanced hidden">
                         <th><label><?php _e( 'CSV Delimiter', 'dokan' ); ?></label><br/></th>
                         <td><input type="text" name="delimiter" placeholder="," size="2" /></td>
-                </tr>-->
-            </tbody>
+                </tr>
+ -->            </tbody>
         </table>
     </section>
     <script type="text/javascript">

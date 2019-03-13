@@ -6,9 +6,11 @@ if ( ! defined( 'WPINC' ) ) exit;
 
 require_once MOIP_LIB . '/vendor/autoload.php';
 
-use Moip\Auth\Connect;
-use Moip\Auth\OAuth;
 use Moip\Moip;
+use Moip\Auth\OAuth;
+use Moip\Auth\Connect;
+use DokanPro\Modules\Subscription\SubscriptionPack;
+
 /**
  * Dokan Moip Gateway
  */
@@ -168,9 +170,81 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      */
     public function init_actions() {
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
+        add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'get_moip_access_token' ) );
         add_filter( 'woocommerce_credit_card_form_fields', array( $this, 'add_cpf_field' ), 10, 2 );
         // include js
         add_action( 'wp_enqueue_scripts', array( $this, 'include_moip_js' ) );
+    }
+
+    /**
+     * Get moip access token
+     *
+     * @return void
+     */
+    public function get_moip_access_token() {
+        $post_data = wp_unslash( $_POST );
+        $field_key = "woocommerce_{$this->id}_";
+
+        if ( ! isset( $post_data["{$field_key}enabled"] ) || $post_data["{$field_key}enabled"] != 1 ) {
+            return;
+        }
+
+        $key        = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_key"] ) : wc_clean( $post_data["{$field_key}production_key"] );
+        $token      = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_token"] ) : wc_clean( $post_data["{$field_key}production_token"] );
+        $public_key = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_public_key"] ) : wc_clean( $post_data["{$field_key}production_public_key"] );
+        $base_url   = $post_data["{$field_key}testmode"] == 1 ? esc_url( 'https://sandbox.moip.com.br/v2/channels' ) : esc_url( 'https://api.moip.com.br/v2/channels' );
+
+        if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
+            return;
+        }
+
+        $body = array(
+            'name'        => get_bloginfo( 'name' ),
+            'description' => get_bloginfo( 'description' ),
+            'site'        => get_site_url(),
+            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes'
+        );
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Cache-Control: no-cache',
+            'Authorization: Basic ' . base64_encode( $token . ':' . $key ),
+        );
+
+        $curl = curl_init();
+
+        curl_setopt_array( $curl, array(
+          CURLOPT_URL => $base_url,
+          CURLOPT_RETURNTRANSFER => true,
+          CURLOPT_MAXREDIRS => 10,
+          CURLOPT_TIMEOUT => 30,
+          CURLOPT_CUSTOMREQUEST => 'POST',
+          CURLOPT_POSTFIELDS => json_encode( $body ),
+          CURLOPT_HTTPHEADER => $headers,
+        ) );
+
+        $response = curl_exec( $curl );
+        $error    = curl_error( $curl );
+
+        curl_close( $curl );
+
+        if ( $error ) {
+            new WP_Error( __( 'Something went wrong:', 'dokan' ) . $error );
+        }
+
+        $response = json_decode( $response );
+
+        if ( isset( $response->ERROR ) ) {
+            return wp_send_json_error( $response->ERROR );
+        }
+
+        if ( ! isset( $response->id, $response->secret, $response->accessToken ) ) {
+            return;
+        }
+
+        update_option( 'moip_app_id', $response->id );
+        update_option( 'moip_secret', $response->secret );
+        update_option( 'moip_access_token', $response->accessToken );
     }
 
     /**
@@ -184,9 +258,9 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
     public function add_cpf_field( $fields, $id ) {
         if ( $this->id == $id ) {
             $fields['cpf_field'] = '<p class="form-row form-row-wide">
-                <label for="billing_cpf" class="">CPF Number&nbsp;<span class="optional"><span style="color:red">*</span></span></label>
+                <label for="billing_cpf" class="">' . esc_html__( 'CPF Number', 'dokan' ) . '&nbsp;<span class="optional"><span style="color:red">*</span></span></label>
 
-                <input type="number" style="padding: 10px; font-size:16px" class="input-text" name="billing_cpf" id="billing_cpf" placeholder="CPF Number">
+                <input type="number" style="padding: 10px; font-size:16px" class="input-text" name="billing_cpf" id="billing_cpf" placeholder="' . esc_html__( 'CPF Number', 'dokan' ) . '">
             </p>';
         }
 
@@ -300,26 +374,27 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         }
 
         // We assume that if a subscription product added into a cart then no other product doesn't exist in cart so we get only one product
-        $order_items       = $order->get_items();
-        $product_pack_item = reset( $order_items );
-        $product_pack      = wc_get_product( $product_pack_item->get_product_id() );
+        $order_items        = $order->get_items();
+        $product_pack_item  = reset( $order_items );
+        $product_pack       = wc_get_product( $product_pack_item->get_product_id() );
+        $customer_user_id   = $order->get_customer_id();
+        $order_total        = round( $order->get_total(), 2 );
+        $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
 
-        $product_pack_name = $product_pack->get_title() . ' #' . $product_pack->get_id();
-        $product_pack_id   = $product_pack->get_slug() . '-' . $product_pack->get_id();
-        $is_recurring      = get_post_meta( $product_pack->get_id(), '_enable_recurring_payment', true );
-        $customer_user_id  = $order->get_customer_id();
-        $order_total       = round( $order->get_total(), 2 );
-
-        if ( $is_recurring == 'yes' ) {
+        if ( $dokan_subscription->is_recurring() ) {
             require_once MOIP_INC . '/admin/class-moip-subscription.php';
             // If reccuring pack
-            $subscription_interval = get_post_meta( $product_pack->get_id(), '_subscription_period_interval', true );
-            $subscription_period   = get_post_meta( $product_pack->get_id(), '_subscription_period', true );
-            $subscription_length   = get_post_meta( $product_pack->get_id(), '_subscription_length', true );
+            $subscription_interval = $dokan_subscription->get_recurring_interval();
+            $subscription_period   = $dokan_subscription->get_period_type();
+            $subscription_length   = $dokan_subscription->get_period_length();
+            $trial_details         = array(
+                'days'             => $dokan_subscription->is_trial() ? $dokan_subscription->get_trial_period_length() : 0,
+                'is_enabled'       => $dokan_subscription->is_trial()
+            );
 
             $moip_subscriptoin = new Dokan_Moip_Subscription();
 
-            $plan_id = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length );
+            $plan_id = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length, $trial_details );
 
             if ( $plan_id ) {
                 $subscription_code = $moip_subscriptoin->create_subscription( $order, $plan_id );

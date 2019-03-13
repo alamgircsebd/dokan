@@ -1,3 +1,5 @@
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
     <?php
     do_action( 'dokan_dashboard_content_before' );
@@ -13,6 +15,7 @@
              *  @since 2.4
              */
             do_action( 'dokan_auction_product_listing_inside_before' );
+            do_action( 'dokan_before_listing_product' );
         ?>
 
         <?php do_action( 'dokan_before_listing_auction_product' ); ?>
@@ -266,3 +269,5 @@
         do_action( 'dokan_auction_product_listing_content_after' );
     ?>
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>

@@ -4,6 +4,8 @@ $parser = new Dokan_WXR_Parser();
 
 ?>
 
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 	<?php
 
@@ -87,7 +89,7 @@ $parser = new Dokan_WXR_Parser();
                                             <a href="<?php echo dokan_get_navigation_url( 'tools/csv-import' ) ?>" class="dokan-btn dokan-btn-theme">
                                                 <?php _e( 'Import CSV', 'dokan' ) ?>
                                             </a>
-                                            
+
     				  	</div>
                     <?php endif ?>
                     <?php if ( current_user_can( 'dokan_export_product' ) ): ?>
@@ -145,6 +147,8 @@ $parser = new Dokan_WXR_Parser();
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>
 
 <script>
     (function($){

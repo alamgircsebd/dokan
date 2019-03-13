@@ -5459,7 +5459,7 @@ msgstr ""
 msgid ""
 "Recurring subscription requires webhooks to be configured. Go to <a "
 "href=\"%s\">webhook</a> and set your webhook url <code>%s</code>. Otherwise "
-"recurring payment not working autometically"
+"recurring payment not working automatically"
 msgstr ""
 
 #: includes/modules/stripe/classes/class-dokan-stripe-connect.php:265

@@ -472,7 +472,10 @@
             base_url = '';
 
         if ( 'product' === scope ) {
-            search.push( 's=' + s );
+            if ( s ) {
+                search.push( 's=' + s );
+            }
+
             search.push( 'post_type=product' );
             base_url = this.form.find( '[name="wc_shop_page"]' ).val();
         } else {

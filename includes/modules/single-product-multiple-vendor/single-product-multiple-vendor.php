@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Dokan_Single_Product_Multi_Vendor {
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 1.0.0
      */

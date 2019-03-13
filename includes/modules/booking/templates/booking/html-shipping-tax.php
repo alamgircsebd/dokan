@@ -113,7 +113,7 @@ $wc_tax_enabled         = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true
         <?php endif; ?>
 
         <?php if ( $wc_tax_enabled ) { ?>
-        <div class="dokan-clearfix dokan-tax-container show_if_variable show_if_simple">
+        <div class="dokan-clearfix dokan-tax-container">
             <div class="dokan-tax-product-options">
                 <div class="dokan-form-group content-half-part">
                     <label class="dokan-control-label" for="_tax_status"><?php _e( 'Tax Status', 'dokan' ); ?></label>

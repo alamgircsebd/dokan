@@ -3,7 +3,7 @@
 (function($){
 
     var wrapper = $( '.dokan-store-tabs' );
-    
+
     var support_btn = $( '.dokan-store-support-btn' );
     var custom_support_btn = support_btn.html();
     //console.log(custom_support_btn);
@@ -19,7 +19,7 @@
         },
         popUp : {
             show : function(e){
-
+                e.preventDefault();
                 support_btn.html( wait_string.wait );
                 if (support_btn.hasClass('user_logged_out')){
                     Dokan_Store_Support.popUp.getForm( 'login_form' );
@@ -79,7 +79,7 @@
                 e.preventDefault();
                 //prevent multiple submission
                 $( '#support-submit-btn' ).prop('disabled', true);
-                
+
                 var self = $(this);
                 var s_data = {
                     action : 'dokan_support_ajax_handler',

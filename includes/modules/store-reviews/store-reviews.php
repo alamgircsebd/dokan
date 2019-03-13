@@ -62,7 +62,6 @@ class Dokan_Store_Reviews {
      * @uses add_action()
      */
     public function __construct() {
-
         //hooks
         add_action( 'init', array( $this, 'register_dokan_store_review_type' ) );
         add_action( 'dokan_seller_rating_value', array( $this, 'replace_rating_value' ), 10, 2 );
@@ -120,6 +119,7 @@ class Dokan_Store_Reviews {
      */
     function includes() {
         require_once DOKAN_SELLER_RATINGS_DIR.'/classes/DSR_View.php';
+        require_once DOKAN_SELLER_RATINGS_DIR . '/functions.php';
     }
 
      /**
@@ -157,6 +157,7 @@ class Dokan_Store_Reviews {
             'public'            => false,
             'publicly_queryable' => true,
             'show_in_menu'      => false,
+            'show_in_rest'      => true,
             'menu_position'     => 5,
             'show_in_admin_bar' => false,
             'rewrite'           => array( 'slug' => '' ),
@@ -196,7 +197,7 @@ class Dokan_Store_Reviews {
                 $rating += intval( get_post_meta( $review->ID, 'rating', true ) );
             }
 
-            $rating = floatval( $rating / $review_count );
+            $rating = number_format( $rating / $review_count, 2 );
         } else {
             $rating = __( 'No Ratings found yet', 'dokan' );
         }

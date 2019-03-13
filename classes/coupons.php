@@ -13,7 +13,7 @@ class Dokan_Pro_Coupons {
     public $is_edit_page;
 
     /**
-     * Load autometically when class inistantiate
+     * Load automatically when class inistantiate
      *
      * @since 2.4
      *

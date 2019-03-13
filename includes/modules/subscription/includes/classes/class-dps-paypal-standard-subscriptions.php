@@ -1,5 +1,8 @@
 <?php
 
+use DokanPro\Modules\Subscription\Helper;
+use DokanPro\Modules\Subscription\SubscriptionPack;
+
 /**
  * PayPal Standard Subscription Class.
  *
@@ -11,14 +14,6 @@
  * @author      Sabbir Ahmed
  * @since       1.0
  */
-
-/**
- * Needs to be called after init so that $woocommerce global is setup
- * */
-// function create_paypal_standard_subscriptions() {
-// }
-
-// add_action( 'init', 'create_paypal_standard_subscriptions', 10 );
 
 class DPS_PayPal_Standard_Subscriptions {
 
@@ -157,10 +152,10 @@ class DPS_PayPal_Standard_Subscriptions {
         $order       = new WC_Order( $order_id );
         $order_items = $order->get_items();
 
-            // Only one subscription allowed in the cart when PayPal Standard is active
+        // Only one subscription allowed in the cart when PayPal Standard is active
         $product = $order->get_product_from_item( array_pop( $order_items ) );
 
-        if ( ! Dokan_Product_Subscription::is_subscription_product( $product->get_id() ) ) {
+        if ( ! Helper::is_subscription_product( $product->get_id() ) ) {
             return $paypal_args;
         }
 
@@ -168,11 +163,14 @@ class DPS_PayPal_Standard_Subscriptions {
             return $paypal_args;
         }
 
+        $subscription = dokan()->subscription->get( $product->get_id() );
+
         $paypal_args['cmd']       = '_xclick-subscriptions';
         $paypal_args['item_name'] = $product->get_title();
 
         $unconverted_periods = array(
-            'billing_period' => get_post_meta( $product->get_id(), '_subscription_period', true )
+            'billing_period' => $subscription->get_period_type(),
+            'trial_period'   => $subscription->get_trial_period_types(),
         );
 
         $converted_periods = array();
@@ -196,11 +194,24 @@ class DPS_PayPal_Standard_Subscriptions {
         }
 
         $initial_payment           = $order->get_total();
-        $subscription_interval     = get_post_meta( $product->get_id(), '_subscription_period_interval', true );
-        $subscription_installments = get_post_meta( $product->get_id(), '_subscription_length', true );
+        $subscription_interval     = $subscription->get_recurring_interval();
+        $subscription_installments = $subscription->get_period_length();
+        $trial_end_timestamp       = $subscription->get_trial_end_time();
+        $subscription_trial_lenth  = $subscription->get_trial_period_length();
 
         // We have a recurring payment
-        if ( !isset( $param_number ) || $param_number == 1 ) {
+        if ( ! isset( $param_number ) || $param_number == 1 ) {
+
+            if ( $subscription->is_trial() ) {
+                // Trial period 1 price. For a free trial period, specify 0.
+                $paypal_args['a1'] = 0;
+
+                // trail subscription
+                $paypal_args['p1'] = $subscription_trial_lenth;
+
+                // trail period
+                $paypal_args['t1'] = $converted_periods['trial_period'];
+            }
 
             // Subscription price
             $paypal_args['a3'] = $initial_payment;
@@ -211,7 +222,6 @@ class DPS_PayPal_Standard_Subscriptions {
             // Subscription period
             $paypal_args['t3'] = $converted_periods['billing_period'];
         }
-
 
         // Recurring payments
         if ( $subscription_installments == 1 ) {
@@ -227,6 +237,7 @@ class DPS_PayPal_Standard_Subscriptions {
             }
         }
 
+        // Force return URL so that order description & instructions display
         $paypal_args['rm'] = 2;
 
         return $paypal_args;
@@ -242,7 +253,7 @@ class DPS_PayPal_Standard_Subscriptions {
 
         $transaction_details = stripslashes_deep( $transaction_details );
 
-        dokan_dps_log( 'Transaction details check: ' .print_r( $transaction_details, true ) );
+        Helper::log( 'Transaction details check: ' .print_r( $transaction_details, true ) );
 
         if ( !in_array( $transaction_details['txn_type'], array('subscr_signup', 'subscr_payment', 'subscr_cancel', 'subscr_eot', 'subscr_failed', 'subscr_modify') ) ) {
             return;
@@ -294,7 +305,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subs_interval . " " . $subs_period . "" . $add_s ) ) );
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
-                
+
                 $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
@@ -367,8 +378,8 @@ class DPS_PayPal_Standard_Subscriptions {
                 $order->add_order_note( __( 'IPN subscription cancelled for order.', 'dokan' ) );
 
                 if ( get_user_meta( $customer_id, 'product_order_id', true ) == $order_id ) {
-                    dokan_dps_log( 'Subscription cancel check: PayPal ( subscr_cancel ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
-                    Dokan_Product_Subscription::delete_subscription_pack( $customer_id, $order_id );
+                    Helper::log( 'Subscription cancel check: PayPal ( subscr_cancel ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
+                    Helper::delete_subscription_pack( $customer_id, $order_id );
                 }
 
                 break;
@@ -386,8 +397,8 @@ class DPS_PayPal_Standard_Subscriptions {
                     $order->add_order_note( __( 'IPN subscription end-of-term for order.', 'dokan' ) );
 
                     // Ended due to failed payments so cancel the subscription
-                    dokan_dps_log( 'Subscription cancel check: PayPal ( subscr_eot ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
-                    Dokan_Product_Subscription::delete_subscription_pack( $customer_id, $order_id );
+                    Helper::log( 'Subscription cancel check: PayPal ( subscr_eot ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
+                    Helper::delete_subscription_pack( $customer_id, $order_id );
                 }
 
                 break;
@@ -400,8 +411,8 @@ class DPS_PayPal_Standard_Subscriptions {
                 $order->add_order_note( __( 'IPN subscription payment failure.', 'dokan' ) );
 
                 // First payment on order, don't generate a renewal order
-                dokan_dps_log( 'Subscription cancel check: PayPal ( subscr_failed ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
-                Dokan_Product_Subscription::delete_subscription_pack( $customer_id, $order_id );
+                Helper::log( 'Subscription cancel check: PayPal ( subscr_failed ) has canceled Subscription of User #' . $customer_id . ' on order #' . $order_id );
+                Helper::delete_subscription_pack( $customer_id, $order_id );
 
                 break;
         }
@@ -423,7 +434,7 @@ class DPS_PayPal_Standard_Subscriptions {
 
         if ( $response ) {
             update_user_meta( $user_id, '_dps_user_subscription_status', 'cancelled' );
-            Dokan_Product_Subscription::delete_subscription_pack( $user_id, $order_id );
+            Helper::delete_subscription_pack( $user_id, $order_id );
 
             $order->add_order_note( __( 'Subscription cancelled with PayPal', 'dokan' ) );
         }

@@ -11,7 +11,7 @@
 class Dokan_Pro_Reports {
 
     /**
-     * Load autometically when class inistantiate
+     * Load automatically when class inistantiate
      *
      * @since 2.4
      *

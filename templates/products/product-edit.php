@@ -66,6 +66,8 @@ if ( ! $from_shortcode ) {
     do_action( 'dokan_edit_product_wrap_before', $post, $post_id );
 ?>
 
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 
     <?php
@@ -372,7 +374,7 @@ if ( ! $from_shortcode ) {
                                             </div>
                                         </div>
 
-                                        <?php do_action( 'dokan_product_edit_after_main' ); ?>
+                                        <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
 
                                     </div> <!-- #edit-product -->
 
@@ -470,6 +472,8 @@ if ( ! $from_shortcode ) {
     ?>
 
 </div><!-- .dokan-dashboard-wrap -->
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>
 
 <?php
 

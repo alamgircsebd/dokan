@@ -161,11 +161,15 @@
                                 <span class="subhead">{{ __( 'Orders Processed', 'dokan' ) }}</span>
                             </li>
                             <li class="gross">
-                                <span class="count">{{ stats.revenue.sales | currency }}</span>
+                                <span class="count">
+                                    <currency :amount="stats.revenue.sales"></currency>
+                                </span>
                                 <span class="subhead">{{ __( 'Gross Sales', 'dokan' ) }}</span>
                             </li>
                             <li class="earning">
-                                <span class="count">{{ stats.revenue.earning | currency }}</span>
+                                <span class="count">
+                                    <currency :amount="stats.revenue.earning"></currency>
+                                </span>
                                 <span class="subhead">{{ __( 'Total Earning', 'dokan' ) }}</span>
                             </li>
                         </ul>
@@ -176,11 +180,13 @@
 
                         <ul class="counts">
                             <li class="commision">
-                                <span class="count">{{ stats.others.commision_rate }}%</span>
+                                <span class="count">{{ getEearningRate }}</span>
                                 <span class="subhead">{{ __( 'Earning Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
-                                <span class="count">{{ stats.others.balance | currency }}</span>
+                                <span class="count">
+                                    <currency :amount="stats.others.balance"></currency>
+                                </span>
                                 <span class="subhead">{{ __( 'Current Balance', 'dokan' ) }}</span>
                             </li>
                             <li class="reviews">
@@ -239,10 +245,11 @@
 
 <script>
 let ContentLoading = dokan_get_lib('ContentLoading');
-let Modal = dokan_get_lib('Modal');
+let Modal          = dokan_get_lib('Modal');
+let Currency       = dokan_get_lib('Currency');
 
 let VclFacebook = ContentLoading.VclFacebook;
-let VclTwitch = ContentLoading.VclTwitch;
+let VclTwitch   = ContentLoading.VclTwitch;
 
 export default {
 
@@ -252,6 +259,7 @@ export default {
         VclFacebook,
         VclTwitch,
         Modal,
+        Currency
     },
 
     data () {
@@ -333,6 +341,14 @@ export default {
                         self.categoriesFlattened[ categories ]
                     ]
                 }
+            }
+        },
+
+        getEearningRate() {
+            if ( this.stats.others.commission_type == 'percentage' ) {
+                return this.stats.others.commission_rate + '%';
+            } else {
+                return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' );
             }
         }
     },
@@ -418,7 +434,7 @@ export default {
         },
 
         ordersUrl() {
-            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&author=' + this.store.id;
+            return dokan.urls.adminRoot + 'edit.php?post_type=shop_order&vendor_id=' + this.store.id;
         },
 
         editUrl() {

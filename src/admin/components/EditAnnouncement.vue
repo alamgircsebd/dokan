@@ -80,15 +80,17 @@
 </template>
 
 <script>
-    let TextEditor = dokan_get_lib('TextEditor');
-    let Postbox = dokan_get_lib('Postbox');
+    let TextEditor  = dokan_get_lib('TextEditor');
+    let Postbox     = dokan_get_lib('Postbox');
+    let Multiselect = dokan_get_lib('Multiselect');
 
     export default {
         name: 'EditAnnouncement',
 
         components: {
             Postbox,
-            TextEditor
+            TextEditor,
+            Multiselect
         },
 
         data() {

@@ -15,7 +15,7 @@ interface Moip_Subscription_Interface {
      *
      * @return void
      */
-    public function create_plan( $product, $subscription_interval, $subscription_period, $subscription_length );
+    public function create_plan( $product, $subscription_interval, $subscription_period, $subscription_length, $trial_details = [] );
 
     /**
      * Edit a plan
@@ -28,7 +28,7 @@ interface Moip_Subscription_Interface {
      *
      * @return int $plan_id
      */
-    public function edit_plan( $plan_id, $product, $subscription_interval, $subscription_period, $subscription_length );
+    public function edit_plan( $plan_id, $product, $subscription_interval, $subscription_period, $subscription_length, $trial_details = [] );
 
     /**
      * Create moip subscription

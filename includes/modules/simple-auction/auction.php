@@ -52,6 +52,9 @@ class Dokan_Auction {
         // Hooking all caps
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
 
+        // insert auction porduct type
+        add_filter( 'dokan_get_product_types', array( $this, 'insert_auction_product_type' ) );
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'dokan_seller_meta_fields', array( $this, 'add_admin_user_options' ) );
@@ -170,6 +173,19 @@ class Dokan_Auction {
         );
 
         return $capabilities;
+    }
+
+    /**
+     * Insert auction product type
+     *
+     * @param  array $types
+     *
+     * @return array
+     */
+    public function insert_auction_product_type( $types ) {
+        $types['auction'] = __( 'Auction Product', 'dokan' );
+
+        return $types;
     }
 
     /**
@@ -487,13 +503,17 @@ class Dokan_Auction {
      * @return string
      */
     public function send_bid_email( $recipient, $object ) {
+        if ( ! $object ) {
+            return;
+        }
+
         $product_id = $object->get_id();
 
         if ( empty( $product_id ) ) {
             return $recipient;
         }
 
-        $vendor_id = get_post_field( 'post_author', $product_id );
+        $vendor_id    = get_post_field( 'post_author', $product_id );
         $vendor_email = dokan()->vendor->get( $vendor_id )->get_email();
 
         return $recipient . ',' . $vendor_email;

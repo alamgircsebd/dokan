@@ -39,6 +39,33 @@ li.dokan-share-btn-wrap .dokan-share-btn {
   max-width: 350px;
   padding: 5px;
 }
+ul.dokan-account-migration-lists {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid #eee;
+}
+ul.dokan-account-migration-lists li {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+ul.dokan-account-migration-lists li:last-child {
+  border-bottom: none;
+}
+ul.dokan-account-migration-lists li .left-content {
+  text-align: left;
+  flex: 2;
+}
+ul.dokan-account-migration-lists li .left-content p {
+  margin: 0px;
+}
+ul.dokan-account-migration-lists li .right-content {
+  text-align: right;
+  flex: 1;
+}
 @-webkit-keyframes progress-bar-stripes {
   from {
     background-position: 40px 0;
@@ -893,4 +920,41 @@ and open the template in the editor.
   top: 50%;
   right: 0;
   margin: -2px -4px 0 0;
+}
+.dokan-product-list-inline-edit-form fieldset {
+  padding: 0;
+  margin: 0;
+}
+.dokan-product-list-inline-edit-form .dokan-inline-edit-column {
+  padding: 0 10px;
+}
+.dokan-product-list-inline-edit-form .dokan-inline-edit-field-row {
+  margin-bottom: 10px;
+}
+.dokan-product-list-inline-edit-form hr {
+  display: block;
+  margin: 12px 0;
+  opacity: 0;
+}
+.dokan-product-list-inline-edit-form .dokan-inline-edit-section-title {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+.dokan-product-list-inline-edit-form label {
+  display: block;
+  margin: 8px 0 4px;
+  font-size: 14px;
+}
+.dokan-product-list-inline-edit-form .inline-edit-submit-button {
+  position: relative;
+}
+.dokan-product-list-inline-edit-form .inline-edit-submit-button .dokan-spinner {
+  top: 8px;
+  left: -30px;
+  visibility: hidden;
+}
+.dokan-product-list-inline-edit-form .inline-edit-submit-button.show-loading-animation .dokan-spinner {
+  visibility: visible;
 }

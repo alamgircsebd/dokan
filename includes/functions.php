@@ -20,21 +20,72 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 	function dokan_get_profile_progressbar() {
 	    global $current_user;
 
-	    $profile_info = dokan_get_store_info( $current_user->ID );
-	    $progress     = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : 0;
-	    $next_todo    = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : __('Start with adding a Banner to gain profile progress','dokan');
+        $profile_info  = dokan_get_store_info( $current_user->ID );
+        $progress      = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : '';
+        $next_todo     = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : '';
+        $progress_vals = isset( $profile_info['profile_completion']['progress_vals'] ) ? $profile_info['profile_completion']['progress_vals'] : 0;
+
+        if ( strpos( $next_todo, '-' ) !== false ) {
+            $next_todo     = substr( $next_todo, strpos( $next_todo, '-' ) + 1 );
+            $progress_vals = isset( $profile_info['profile_completion']['progress_vals'] ) ? $profile_info['profile_completion']['progress_vals'] : 0;
+            $progress_vals = isset( $progress_vals['social_val'][$next_todo] ) ? $progress_vals['social_val'][$next_todo] : 0;
+        } else {
+            $progress_vals = isset( $progress_vals[$next_todo] ) ? $progress_vals[$next_todo] : 15;
+        }
 
 	    ob_start();
 
-	    if (  strlen( trim( $next_todo ) ) != 0 ) {
-	    	dokan_get_template_part( 'global/profile-progressbar', '', array( 'pro'=>true, 'progress'=>$progress, 'next_todo' => $next_todo ) );
-	    }
+	    dokan_get_template_part( 'global/profile-progressbar', '', array( 'pro'=>true, 'progress' => $progress, 'next_todo' => $next_todo, 'value' => $progress_vals ) );
 
 	    $output = ob_get_clean();
 
 	    return $output;
 	}
 
+}
+
+/**
+ * Dokan progressbar translated string
+ *
+ * @param  string $string
+ * @param  int $value
+ *
+ * @return string
+ */
+function dokan_progressbar_translated_string( $string = '', $value = 15 ) {
+    switch ( $string ) {
+        case 'profile_picture_val':
+            return sprintf( __( 'Add Profile Picture to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        case 'phone_val':
+            return sprintf( __( 'Add Phone to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        case 'banner_val':
+            return sprintf( __( 'Add Banner to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        case 'store_name_val':
+            return sprintf( __( 'Add Store Name to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        case 'address_val':
+            return sprintf( __( 'Add address to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        case 'payment_method_val':
+            return sprintf( __( 'Add a Payment method to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        case 'map_val':
+            return sprintf( __( 'Add Map location to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            break;
+
+        default:
+            return sprintf( __( 'Start with adding a Banner to gain profile progress', 'dokan' ) );
+            break;
+    }
 }
 
 /**
@@ -145,9 +196,13 @@ function dokan_get_refund_localize_data() {
  * @return string
  */
 function dokan_get_review_url( $user_id ) {
+    if ( ! $user_id ) {
+        return '';
+    }
+
     $userstore = dokan_get_store_url( $user_id );
 
-    return apply_filters( 'dokan_get_seller_review_url', $userstore ."reviews" );
+    return apply_filters( 'dokan_get_seller_review_url', $userstore . 'reviews' );
 }
 
 /**
@@ -155,8 +210,13 @@ function dokan_get_review_url( $user_id ) {
  */
 function dokan_render_order_table_items( $order_id ) {
     $data  = get_post_meta( $order_id );
-    $order    = new WC_Order( $order_id );
-    include( DOKAN_PRO_DIR . '/templates/orders/views/html-order-items.php' );
+    $order = new WC_Order( $order_id );
+
+    dokan_get_template_part( 'orders/views/html-order-items', '', array(
+        'pro'   => true,
+        'data'  => $data,
+        'order' => $order
+    ) );
 }
 
 /**
@@ -487,4 +547,27 @@ function dokan_set_default_store_category_id( $category_id ) {
     $updated_default = update_option( 'default_store_category', $category_id, false );
 
     return $updated_settings && $updated_default;
+}
+
+/**
+ * Check if the refund request is allowed to be approved
+ *
+ * @param int $order_id
+ *
+ * @return boolean
+ */
+function dokan_is_refund_allowed_to_approve( $order_id ) {
+    if ( ! $order_id ) {
+        return false;
+    }
+
+    $order                       = wc_get_order( $order_id );
+    $order_status                = 'wc-' . $order->get_status();
+    $active_order_status         = dokan_withdraw_get_active_order_status();
+
+    if ( in_array( $order_status, $active_order_status ) ) {
+        return true;
+    }
+
+    return false;
 }

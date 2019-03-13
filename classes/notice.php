@@ -13,7 +13,7 @@ class Dokan_Pro_Notice {
     public $notice_id;
 
     /**
-     * Load autometically when class initiate
+     * Load automatically when class initiate
      *
      * @since 2.4
      *
@@ -122,7 +122,7 @@ class Dokan_Pro_Notice {
      */
     function get_announcement_by_users( $per_page = NULL ) {
 
-        $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
 
         $args = array(
             'post_type'      => 'dokan_announcement',
@@ -163,7 +163,11 @@ class Dokan_Pro_Notice {
             'meta_value'     => 'all_seller',
         );
 
+        $this->add_query_filter();
+
         $all_seller_posts = new WP_Query( $args );
+
+        $this->remove_query_filter();
 
         $notices = array_merge( $all_seller_posts->posts, $query->posts );
 

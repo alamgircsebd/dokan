@@ -1,3 +1,90 @@
+v2.9.6 -> Feb 20, 2018
+----------------------------------------------
+- [fix] Add csv export functionality for all log in backend dashboard report section
+- [fix] Fix js compiling issues
+- [fix] Fix backend report routing isssue
+
+v2.9.5 -> Feb 18, 2018
+----------------------------------------------
+- [new] Automate order refund process via stripe
+- [new] Add create review REST endpoint (Store Review Module)
+- [new] Add trial subscription functionality in (Subscription Module)
+- [new] Add product type & gallery image upload restriction in vendor subscription (Subscription Module)
+- [new] Show privacy policy info in product enquiry form
+- [new] Send email to vendor on store follows and unfollows
+- [tweak] Refund calculation process in rma module(RMA Module)
+- [fix] Incorrect shipping zone in cart page, when a vendor limit his zone with postcode
+- [fix] Store SEO time formating issue on Google console
+- [fix] Unable to select country or state in vendor shipping
+- [fix] Unable to send announcement to a single vendor
+- [fix] Import export module does not allow to update any existing product (Import Export Module)
+- [fix] Format geo meta data while importing from CSV (Geolocaiton Module)
+- [fix] Remove unnecessary quote from template (geolocation Module)
+- [fix] Store support button appears even after disabling it from vendor dashboard
+- [fix] Warning on customer my-order page (RMA Module)
+- [fix] Customer is unable to ask for support throw Store Support form (Store Support Module)
+- [fix] Product status changes even the vendor has the ability to publish product directly
+- [fix] Show default vendor profile progress message in vendor dashboard
+- [fix] Admin report logs calculation issue is fixed in admin dashboard
+- [fix] Unable to save product wise commission to 0
+- [fix] Product description and short description is getting deleted on quick edit
+- [fix] if zone id is not found in vendor's available zone id, assume it falls under Locations not covered by your other zones
+- [fix] When admin sends an announcement to all the vendors, newly registered vendors sees "no notice found"
+
+v2.9.4 -> January 23, 2018
+------------------------------------
+- [new] Wholesale Module ( Business and Enterprise package )
+- [new] Return and Warranty(RMA) Module ( Professiona, Business and Enterprise package )
+- [new] Send subscription cancelled email to admin (Subscription Module)
+- [new] Add unlimited products option for vendor subscription packs (Subscription Module)
+- [fix] Color customizer is not working on store listing & my-account page (Color Customizer Module)
+- [fix] Default pages are not creating correctly
+- [fix] Show seller is not enable warning message in vendor product quick edit page
+- [fix] Vendor is unable to connect their account to Moip (Moip Module)
+- [fix] Map address input in product editor form & showing location in widget map (Geolocation Module)
+- [tweak] Rewrite admin report page in vue js
+- [tweak] Show an alert message when vendor tries to set product geolocation same as store but store has no geodata (Geolocation Module)
+
+v2.9.3 -> December 18, 2018
+------------------------------------
+- [new] Add ShipStation module(Business, Enterprise)
+- [new] Add Follow Store module ( Professional, Business, Enterprise )
+- [new] Add Quick edit option for product in vendor dashboard
+- [tweak] Rewrite admin tools page in vue js
+- [tweak] Rewrite admin subscription page in vue js
+- [tweak] Remove delete option for approved refund request in the admin backend
+- [fix] Show filter form and map in product category pages (geolocation module)
+- [fix] Markercluster popup show when multiple item have same location (geolocation module)
+- [fix] Fatal error in vendor product edit page
+- [fix] Add per product commission option for bookable product
+- [fix] Vendor orders are not showing in the admin backend properly
+- [fix] Increase stock ammount if the product is refunded
+- [fix] Add searching option in dokan vendor and refund page
+- [fix] Show correct commission type in dokan single vendor page
+- [fix] Remove old shipping settings from seller setup wizard
+- [fix] Refund calculation is wrong when vendor is the shipping fee recipient
+- [fix] Auction product editing issue in vendor dashboard
+- [fix] Moip CPF Number is not getting translated (moip module)
+- [fix] Seller setup wizard doesn't show up when registered using a subscription pack
+- [fix] Booking product category restriction for subscription pack is not working
+- [fix] Approving batch refund is not working in admin backend
+- [fix] Progress values are not getting translated in vendor dashboard
+- [fix] Geo product location widget is not working in the single product page (geolocation module)
+
+v2.9.2 -> November 09, 2018
+--------------------------
+- [new] Added zoom level settings in geolocation module
+- [new] Added shipping policy and processing time settings in zone wise shipping
+- [new] Added rest API support for store review post type
+- [fix] Show tax on bookable product
+- [fix] Admin is unable to enter in admin dashboard in network site
+- [fix] Unable to override seller setup wizard button color with color module
+- [fix] Currency symbol is broken in dokan admin backend
+- [fix] Allow vendor to import only allowed number of products
+- [fix] Product and order discount for vendor is not working
+- [fix] Shipping class is not saving for bookable product
+- [tweak] Allow child to theme to override order templates
+
 v2.9.1 -> October 15, 2018
 --------------------------
 - [tweak] Allow customers to purchase from non-connected sellers with stripe

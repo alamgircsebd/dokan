@@ -4,6 +4,9 @@
  */
 
 ?>
+
+<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+
 <div class="dokan-dashboard-wrap">
 	<?php dokan_get_template( 'dashboard-nav.php', array( 'active_menu' => 'subscription' ) ); ?>
 
@@ -21,3 +24,5 @@
 
 	</div><!-- #primary .content-area -->
 </div>
+
+<?php do_action( 'dokan_dashboard_wrap_end' ); ?>

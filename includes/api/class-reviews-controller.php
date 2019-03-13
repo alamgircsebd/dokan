@@ -69,6 +69,61 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
                 ),
             ),
         ) );
+
+        register_rest_route( $this->namespace, '/stores/(?P<id>[\d]+)/reviews' , array(
+            'args' => array(
+                'id' => array(
+                    'description'       => __( 'Unique identifier for the object.', 'dokan' ),
+                    'type'              => 'integer',
+                    'validate_callback' => array( $this, 'is_valid_store' ),
+                ),
+            ),
+            array(
+                'methods'  => WP_REST_Server::CREATABLE,
+                'callback' => array( $this, 'create_item' ),
+                'permission_callback' => array( $this, 'create_item_permissions_check' ),
+                'args'     => array(
+                    'title' => array(
+                        'required'    => true,
+                        'type'        => 'string',
+                        'description' => __( 'Review title.', 'dokan' ),
+                    ),
+                    'content' => array(
+                        'required'    => true,
+                        'type'        => 'string',
+                        'description' => __( 'Review content.', 'dokan' ),
+                    ),
+                    'rating' => array(
+                        'required'          => false,
+                        'type'              => 'integer',
+                        'description'       => __( 'Review rating', 'dokan' ),
+                        'validate_callback' => array( $this, 'is_valid_rating' ),
+                        'default'           => 0,
+                    ),
+                )
+            ),
+        ) );
+    }
+
+    /**
+     * Validate store
+     *
+     * @since 2.9.5
+     *
+     * @param mixed            $value
+     * @param \WP_REST_Request $request
+     * @param string           $param
+     *
+     * @return bool|\WP_Error
+     */
+    public function is_valid_store( $value, $request, $param ) {
+        $store = dokan()->vendor->get( $value );
+
+        if ( absint( $store->id ) ) {
+            return true;
+        }
+
+        return new WP_Error( 'rest_dokan_store_review_invalid_store', __( 'Invalid store id. Store not exists.', 'dokan' ) );
     }
 
     /**
@@ -135,6 +190,97 @@ class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
         $response = rest_ensure_response( $data );
         $response = $this->format_collection_response( $response, $request, $count );
         return $response;
+    }
+
+    /**
+     * Create review permission callback
+     *
+     * @since 2.9.5
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return bool
+     */
+    public function create_item_permissions_check( $request ) {
+        if ( ! class_exists( 'Dokan_Store_Reviews' ) ) {
+            return false;
+        }
+
+        if ( current_user_can( 'dokan_manage_reviews' ) ) {
+            return true;
+        }
+
+        $dsr_view = DSR_View::init();
+
+        return $dsr_view->check_if_valid_customer( $request['id'], get_current_user_id() );
+    }
+
+    /**
+     * Validate rating
+     *
+     * @since 2.9.5
+     *
+     * @param mixed            $value
+     * @param \WP_REST_Request $request
+     * @param string           $param
+     *
+     * @return bool|\WP_Error
+     */
+    public function is_valid_rating( $value, $request, $param ) {
+        $rating = absint( $request['rating'] );
+
+        if ( $rating >= 0 && $rating <= 5 ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Creates a store review
+     *
+     * @since 2.9.5
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return \WP_Error|\WP_REST_Response
+     */
+    public function create_item( $request ) {
+        $post_id = dsr_save_store_review( $request['id'], array(
+            'title'       => $request['title'],
+            'content'     => $request['content'],
+            'reviewer_id' => get_current_user_id(),
+            'rating'      => $request['rating'],
+        ) );
+
+        if ( is_wp_error( $post_id ) ) {
+            return $post_id;
+        }
+
+        $post = get_post( $post_id );
+
+        $user          = get_user_by( 'id', $post->post_author );
+        $user_gravatar = get_avatar_url( $user->user_email );
+
+        $data = [
+            'id'            => absint( $post->ID ) ,
+            'author'        => array(
+                'id'     => $user->ID,
+                'name'   => $user->user_login,
+                'email'  => $user->user_email,
+                'url'    => $user->user_url,
+                'avatar' => $user_gravatar
+            ),
+            'title'         => $post->post_title,
+            'content'       => $post->post_content,
+            'permalink'     => null,
+            'product_id'    => null,
+            'approved'      => true,
+            'date'          => mysql_to_rfc3339( $post->post_date ),
+            'rating'        => absint( get_post_meta( $post->ID, 'rating', true ) ),
+        ];
+
+        return rest_ensure_response( $data );
     }
 
     /**
