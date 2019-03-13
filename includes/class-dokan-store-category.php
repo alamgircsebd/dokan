@@ -211,7 +211,7 @@ class Dokan_Store_Category {
      * @return array
      */
     public function add_store_categories_in_vendor_shop_data( $shop_info, $vendor ) {
-        $store_categories = get_the_terms( $vendor->get_id(), 'store_category' );
+        $store_categories = wp_get_object_terms( $vendor->get_id(), 'store_category' );
 
         if ( empty( $store_categories ) ) {
             dokan_set_store_categories( $vendor->get_id() );
