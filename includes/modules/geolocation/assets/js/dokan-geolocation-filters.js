@@ -362,10 +362,8 @@
     };
 
     GeolocationFilter.prototype.set_search_term = function ( s ) {
-        if ( s.length ) {
-            this.set_param( 's', s );
-            this.set_param( 'dokan_seller_search', s );
-        }
+        this.set_param( 's', s );
+        this.set_param( 'dokan_seller_search', s );
     };
 
     GeolocationFilter.prototype.set_address = function ( address ) {
@@ -442,7 +440,12 @@
         }
 
         this[param] = val;
-        this.queries[param] = val;
+
+        if ( val ) {
+            this.queries[param] = val;
+        } else {
+            delete this.queries[param];
+        }
 
         if ( this.scope ) {
             if ( 'distance' === param && ( ! this.latitude || ! this.longitude ) ) {
@@ -479,7 +482,10 @@
             search.push( 'post_type=product' );
             base_url = this.form.find( '[name="wc_shop_page"]' ).val();
         } else {
-            search.push( 'dokan_seller_search=' + dokan_seller_search );
+            if ( dokan_seller_search ) {
+                search.push( 'dokan_seller_search=' + dokan_seller_search );
+            }
+
             base_url = this.form.find( '[name="dokan_store_listing_page"]' ).val();
         }
 
