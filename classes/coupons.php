@@ -344,6 +344,8 @@ class Dokan_Pro_Coupons {
         update_post_meta( $post_id, 'minimum_amount', $minimum_amount );
         update_post_meta( $post_id, 'customer_email', $customer_email );
 
+        do_action( 'dokan_after_coupon_create', $post_id );
+
         if ( !defined( 'DOING_AJAX' ) ) {
             wp_redirect( add_query_arg( array('message' => $message), dokan_get_navigation_url( 'coupons' ) ) );
         }
