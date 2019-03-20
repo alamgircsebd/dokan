@@ -467,6 +467,89 @@ function dokan_send_announcement_email( $sellers, $data ) {
 add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email', 10, 2 );
 
 /**
+ * Set store categories
+ *
+ * @since 2.9.2
+ *
+ * @param int            $store_id
+ * @param array|int|null $categories
+ *
+ * @return array|WP_Error Term taxonomy IDs of the affected terms.
+ */
+function dokan_set_store_categories( $store_id, $categories = null ) {
+    if ( ! is_array( $categories ) ) {
+        $categories = array( $categories );
+    }
+
+    $categories = array_map( 'absint', $categories );
+    $categories = array_filter( $categories );
+
+    if ( empty( $categories ) ) {
+        $categories = array( dokan_get_default_store_category_id() );
+    }
+
+    return wp_set_object_terms( $store_id, $categories, 'store_category' );
+}
+
+/**
+ * Checks if store category feature is on or off
+ *
+ * @since 2.9.2
+ *
+ * @return bool
+ */
+function dokan_is_store_categories_feature_on() {
+    return 'none' !== dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
+}
+
+/**
+ * Get the default store category id
+ *
+ * @since 2.9.2
+ *
+ * @return int
+ */
+function dokan_get_default_store_category_id() {
+    $default_category = get_option( 'default_store_category', null );
+
+    if ( ! $default_category ) {
+        $uncategorized_id = term_exists( 'Uncategorized', 'store_category' );
+
+        if ( ! $uncategorized_id ) {
+            $uncategorized_id = wp_insert_term( 'Uncategorized', 'store_category' );
+        }
+
+        $default_category = $uncategorized_id['term_id'];
+
+        dokan_set_default_store_category_id( $default_category );
+    }
+
+    return absint( $default_category );
+}
+
+/**
+ * Set the default store category id
+ *
+ * Make sure to category exists before calling
+ * this function.
+ *
+ * @since 2.9.2
+ *
+ * @param int $category_id
+ *
+ * @return bool
+ */
+function dokan_set_default_store_category_id( $category_id ) {
+    $general_settings = get_option( 'dokan_general', array() );
+    $general_settings['store_category_default'] = $category_id;
+
+    $updated_settings = update_option( 'dokan_general', $general_settings );
+    $updated_default = update_option( 'default_store_category', $category_id, false );
+
+    return $updated_settings && $updated_default;
+}
+
+/**
  * Check if the refund request is allowed to be approved
  *
  * @param int $order_id

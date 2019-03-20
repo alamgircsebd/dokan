@@ -260,6 +260,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/orders.php';
         require_once DOKAN_PRO_INC . '/reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
+        require_once DOKAN_PRO_INC . '/class-dokan-store-category.php';
 
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
@@ -301,6 +302,8 @@ class Dokan_Pro {
      * @return void
      */
     public function inistantiate() {
+        new Dokan_Store_Category();
+
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
@@ -647,6 +650,7 @@ class Dokan_Pro {
      */
     function rest_api_class_map( $class_map ) {
         $classes = array(
+            dirname( __FILE__ ) . '/includes/api/class-store-category-controller.php'    => 'Dokan_REST_Store_Category_Controller',
             dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
             dirname( __FILE__ ) . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
             dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',

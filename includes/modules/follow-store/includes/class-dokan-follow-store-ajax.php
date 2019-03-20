@@ -67,10 +67,6 @@ class Dokan_Follow_Store_Ajax {
 
         $is_following = dokan_follow_store_is_following_store( $vendor_id, $customer_id );
 
-        if ( is_wp_error( $status ) ) {
-            wp_send_json_error( $status, 422 );
-        }
-
         wp_send_json_success( array(
             'is_following' => $is_following,
             'nonce'        => wp_create_nonce( 'dokan_follow_store' ),

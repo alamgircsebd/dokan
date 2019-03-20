@@ -4,7 +4,7 @@ namespace DokanPro\Modules\Elementor\Tags;
 
 use DokanPro\Modules\Elementor\Abstracts\TagBase;
 
-class StoreLiveChatButton extends TagBase {
+class StoreFollowButton extends TagBase {
 
     /**
      * Class constructor
@@ -25,7 +25,7 @@ class StoreLiveChatButton extends TagBase {
      * @return string
      */
     public function get_name() {
-        return 'dokan-store-live-chat-button-tag';
+        return 'dokan-store-follow-store-button-tag';
     }
 
     /**
@@ -36,7 +36,7 @@ class StoreLiveChatButton extends TagBase {
      * @return string
      */
     public function get_title() {
-        return __( 'Store Live Chat Button', 'dokan' );
+        return __( 'Store Follow Button', 'dokan' );
     }
 
     /**
@@ -47,20 +47,7 @@ class StoreLiveChatButton extends TagBase {
      * @return void
      */
     public function render() {
-        $online_indicator = '';
-
-        if ( dokan_is_store_page() && class_exists( 'Dokan_Live_Chat_Start' ) ) {
-            $live_chat = \Dokan_Live_Chat_Start::init();
-
-            if ( $live_chat->dokan_is_seller_online() ) {
-                $online_indicator = '<i class="fa fa-circle" aria-hidden="true"></i>';
-            }
-        }
-
-        printf(
-            '%s%s',
-            $online_indicator,
-            __( 'Chat Now', 'dokan' )
-        );
+        // Executes only in template builder
+        echo __( 'Follow', 'dokan' );
     }
 }
