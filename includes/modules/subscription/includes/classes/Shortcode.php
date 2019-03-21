@@ -125,92 +125,90 @@ class Shortcode {
                     $is_recurring       = $sub_pack->is_recurring();
                     $recurring_interval = $sub_pack->get_recurring_interval();
                     $recurring_period   = $sub_pack->get_period_type();
-
-                    if ( ( '0' === $sub_pack->get_price() ) && Helper::has_used_free_pack( get_current_user_id(), get_the_id() ) ) {
-                        continue;
-                    }
-
                     ?>
 
-                        <div class="product_pack_item <?php echo ( Helper::is_vendor_subscribed_pack( get_the_ID() ) || Helper::pack_renew_seller( get_the_ID() ) ) ? 'current_pack ' : ''; ?><?php echo ( ( '0' === $sub_pack->get_price() ) && Helper::has_used_free_pack( get_current_user_id(), get_the_id() ) ) ? 'fp_already_taken' : ''; ?>">
-                            <div class="pack_price">
+                    <div class="product_pack_item <?php echo ( Helper::is_vendor_subscribed_pack( get_the_ID() ) || Helper::pack_renew_seller( get_the_ID() ) ) ? 'current_pack ' : ''; ?><?php echo ( $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id(), get_the_id() ) ) ? 'fp_already_taken' : ''; ?>">
+                        <div class="pack_price">
 
-                                <span class="dps-amount">
-                                    <?php echo wc_price( $sub_pack->get_price() ); ?>
+                            <span class="dps-amount">
+                                <?php echo wc_price( $sub_pack->get_price() ); ?>
+                            </span>
+
+                            <?php if ( $is_recurring && $recurring_interval === 1 ) { ?>
+                                <span class="dps-rec-period">
+                                    <span class="sep">/</span><?php echo Helper::recurring_period( $recurring_period ); ?>
                                 </span>
+                            <?php } ?>
+                        </div><!-- .pack_price -->
 
-                                <?php if ( $is_recurring && $recurring_interval === 1 ) { ?>
-                                    <span class="dps-rec-period">
-                                        <span class="sep">/</span><?php echo Helper::recurring_period( $recurring_period ); ?>
-                                    </span>
-                                <?php } ?>
-                            </div><!-- .pack_price -->
+                        <div class="pack_content">
+                            <h2><?php echo $sub_pack->get_package_title(); ?></h2>
 
-                            <div class="pack_content">
-                                <h2><?php echo $sub_pack->get_package_title(); ?></h2>
+                            <?php the_content();
 
-                                <?php the_content();
+                            $no_of_product = $sub_pack->get_number_of_products();
 
-                                $no_of_product = $sub_pack->get_number_of_products();
+                            if ( '-1' === $no_of_product ) {
+                                printf( __( '<div class="pack_data_option"><strong>Unlimited</strong> Products <br />', 'dokan' ) );
+                            } else {
+                                printf( __( '<div class="pack_data_option"><strong>%d</strong> Products <br />', 'dokan' ), $no_of_product );
+                            }
 
-                                if ( '-1' === $no_of_product ) {
-                                    printf( __( '<div class="pack_data_option"><strong>Unlimited</strong> Products <br />', 'dokan' ) );
+                            ?>
+
+                            <?php if ( $is_recurring && $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id(), get_the_id() ) ) : ?>
+                                <span class="dps-rec-period">
+                                    <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
+                                </span>
+                            <?php elseif ( $is_recurring && $sub_pack->is_trial() ) : ?>
+                                <span class="dps-rec-period">
+                                    <?php printf( __( 'In every %d %s(s) <p class="trail-details">%d %s(s) trial </p> </div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ), $sub_pack->get_trial_range(), Helper::recurring_period( $sub_pack->get_trial_period_types() ) ); ?>
+                                </span>
+                            <?php elseif ( $is_recurring && $recurring_interval >= 1) : ?>
+                                <span class="dps-rec-period">
+                                    <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
+                                </span>
+                            <?php else :
+                                if ( $sub_pack->get_pack_valid_days() == 0 ) {
+                                    printf( __( 'For<br /><strong>Unlimited</strong> Days</div>', 'dokan' ) );
                                 } else {
-                                    printf( __( '<div class="pack_data_option"><strong>%d</strong> Products <br />', 'dokan' ), $no_of_product );
+                                    $pack_validity = $sub_pack->get_pack_valid_days();
+                                    printf( __( 'For<br /><strong>%s</strong> Days</div>', 'dokan' ), $pack_validity );
                                 }
+                            endif; ?>
 
-                                ?>
-
-                                <?php if ( $is_recurring && $sub_pack->is_trial() ) : ?>
-                                    <span class="dps-rec-period">
-                                        <?php printf( __( 'In every %d %s(s) <p class="trail-details">%d %s(s) trial </p> </div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ), $sub_pack->get_trial_range(), Helper::recurring_period( $sub_pack->get_trial_period_types() ) ); ?>
-                                    </span>
-                                <?php elseif ( $is_recurring && $recurring_interval >= 1) : ?>
-                                    <span class="dps-rec-period">
-                                        <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
-                                    </span>
-                                <?php else :
-                                    if ( $sub_pack->get_pack_valid_days() == 0 ) {
-                                        printf( __( 'For<br /><strong>Unlimited</strong> Days</div>', 'dokan' ) );
-                                    } else {
-                                        $pack_validity = $sub_pack->get_pack_valid_days();
-                                        printf( __( 'For<br /><strong>%s</strong> Days</div>', 'dokan' ), $pack_validity );
-                                    }
-                                endif; ?>
-
-                            </div>
-
-                            <div class="buy_pack_button">
-                                <?php if ( Helper::is_vendor_subscribed_pack( get_the_ID() ) ): ?>
-
-                                    <a href="<?php echo get_permalink( get_the_ID() ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Your Pack', 'dokan' ); ?></a>
-
-                                <?php elseif ( Helper::pack_renew_seller( get_the_ID() ) ): ?>
-
-                                    <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Renew', 'dokan' ); ?></a>
-
-                                <?php else: ?>
-
-                                    <?php if ( ( '0' === $sub_pack->get_price() ) && Helper::has_used_free_pack( get_current_user_id(), get_the_id() ) ): ?>
-                                        <p><?php _e( 'Subscribed', 'dokan' ); ?></p>
-
-                                    <?php elseif ( ! get_user_meta( dokan_get_current_user_id(), 'product_package_id', true ) ) : ?>
-                                            <?php if ( $sub_pack->is_trial() ) : ?>
-                                                <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack trial_pack"><?php _e( 'Start Free Trial', 'dokan' ); ?></a>
-                                            <?php else: ?>
-                                                <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Buy Now', 'dokan' ); ?></a>
-                                            <?php endif; ?>
-
-                                    <?php else:
-
-                                        $btn_link = sprintf('<a href="%s" class="dokan-btn dokan-btn-theme buy_product_pack">%s</a>', get_permalink( get_the_ID() ), __( 'View Details', 'dokan' ) ) ;
-
-                                        echo apply_filters( 'dokan_notsubscribed_pack_button_text', $btn_link );
-
-                                    endif; ?>
-                                <?php endif; ?>
-                            </div>
                         </div>
+
+                        <div class="buy_pack_button">
+                            <?php if ( Helper::is_vendor_subscribed_pack( get_the_ID() ) ): ?>
+
+                                <a href="<?php echo get_permalink( get_the_ID() ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Your Pack', 'dokan' ); ?></a>
+
+                            <?php elseif ( Helper::pack_renew_seller( get_the_ID() ) ): ?>
+
+                                <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Renew', 'dokan' ); ?></a>
+
+                            <?php else: ?>
+
+                                <?php if ( $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id(), get_the_id() ) ): ?>
+                                    <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Buy Now', 'dokan' ); ?></a>
+                                <?php elseif ( ! get_user_meta( dokan_get_current_user_id(), 'product_package_id', true ) ) : ?>
+                                        <?php if ( $sub_pack->is_trial() ) : ?>
+                                            <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack trial_pack"><?php _e( 'Start Free Trial', 'dokan' ); ?></a>
+                                        <?php else: ?>
+                                            <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Buy Now', 'dokan' ); ?></a>
+                                        <?php endif; ?>
+
+                                <?php else:
+
+                                    $btn_link = sprintf('<a href="%s" class="dokan-btn dokan-btn-theme buy_product_pack">%s</a>', get_permalink( get_the_ID() ), __( 'View Details', 'dokan' ) ) ;
+
+                                    echo apply_filters( 'dokan_notsubscribed_pack_button_text', $btn_link );
+
+                                endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                     <?php
                 }
             } else {

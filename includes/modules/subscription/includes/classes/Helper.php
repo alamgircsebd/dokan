@@ -525,7 +525,7 @@ class Helper {
      *
      * @return boolean
      */
-    public static function has_used_free_pack( $user_id, $pack_id ) {
+    public static function has_used_trial_pack( $user_id, $pack_id ) {
         $has_used = get_user_meta( $user_id, 'dps_fp_used', true );
 
         if ( $has_used == '' ) {

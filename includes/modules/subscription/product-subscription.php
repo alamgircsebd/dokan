@@ -694,8 +694,8 @@ class Dokan_Product_Subscription {
 
             if ( Helper::is_subscription_product( $product['product_id'] ) ) {
 
-                if ( ! Helper::has_used_free_pack( $customer_id, $product['product_id'] ) ) {
-                    $this->add_used_free_pack( $customer_id, $product['product_id'] );
+                if ( ! Helper::has_used_trial_pack( $customer_id, $product['product_id'] ) ) {
+                    $this->add_used_trial_pack( $customer_id, $product['product_id'] );
                 }
 
                 if ( get_post_meta( $product['product_id'], '_enable_recurring_payment', true ) == 'yes' ) {
@@ -771,12 +771,12 @@ class Dokan_Product_Subscription {
     }
 
     /**
-     * Add a free used pack to the user account
+     * Add a used trial pack to the user account
      *
      * @param int     $user_id
      * @param int     $pack_id
      */
-    public function add_used_free_pack( $user_id, $pack_id ) {
+    public function add_used_trial_pack( $user_id, $pack_id ) {
         $has_used = get_user_meta( $user_id, 'dps_fp_used', true );
         $has_used = is_array( $has_used ) ? $has_used : array();
 
