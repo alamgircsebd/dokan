@@ -287,8 +287,8 @@ class Dokan_Pro {
             }
         }
 
-        if ( !class_exists( 'Hybrid_Auth' ) ) {
-            require_once DOKAN_PRO_INC . '/lib/Hybrid/Auth.php';
+        if ( ! class_exists( 'Hybrid_Auth' ) ) {
+            require_once DOKAN_PRO_INC . '/lib/hybridauth/autoload.php';
         }
 
         require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
