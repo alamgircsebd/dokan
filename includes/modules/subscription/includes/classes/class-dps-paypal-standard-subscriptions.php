@@ -193,6 +193,8 @@ class DPS_PayPal_Standard_Subscriptions {
             }
         }
 
+        // max trial period length in days for paypal
+        $max_trial_length_in_days  = 720;
         $initial_payment           = $order->get_total();
         $subscription_interval     = $subscription->get_recurring_interval();
         $subscription_installments = $subscription->get_period_length();
@@ -206,8 +208,12 @@ class DPS_PayPal_Standard_Subscriptions {
                 // Trial period 1 price. For a free trial period, specify 0.
                 $paypal_args['a1'] = 0;
 
+                if ( $subscription_trial_lenth > $max_trial_length_in_days ) {
+                    throw new Exception( __( 'Trial subscription can\'t be more than 720 days for PayPal', 'dokan' ) );
+                }
+
                 // trail subscription
-                $paypal_args['p1'] = $subscription_trial_lenth;
+                $paypal_args['p1'] = $subscription->get_trial_range();;
 
                 // trail period
                 $paypal_args['t1'] = $converted_periods['trial_period'];
