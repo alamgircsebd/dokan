@@ -177,6 +177,9 @@
                 </template>
 
                 <template slot="order_total" slot-scope="data">
+                    <del v-if="data.row.has_refund">
+                        <currency :amount="data.row.previous_order_total"></currency>
+                    </del>
                     <currency :amount="data.row.order_total"></currency>
                 </template>
 
@@ -186,6 +189,10 @@
 
                 <template slot="commission" slot-scope="data">
                     <currency :amount="data.row.commission"></currency>
+                </template>
+
+                <template slot="date" slot-scope="data">
+                    {{ moment(data.row.date).format('MMM D, YYYY') }}
                 </template>
 
             </list-table>
@@ -265,6 +272,9 @@ export default {
                 },
                 'status': {
                     label: this.__( 'Status', 'dokan' )
+                },
+                'date' : {
+                    label: this.__( 'date', 'dokan' )
                 }
             },
             logs: []
@@ -535,7 +545,7 @@ export default {
                 for (let index in array[i]) {
                     if (line != '') line += ',';
 
-                    if ( 'commission' == index || 'order_total' == index || 'vendor_earning' == index ) {
+                    if ( 'commission' == index || 'previous_order_total' == index || 'order_total' == index || 'vendor_earning' == index ) {
                         line += '"' + accounting.formatMoney(
                             array[i][index],
                             '',
@@ -544,6 +554,8 @@ export default {
                             dokan.currency.decimal,
                             dokan.currency.format
                         ) + '"';
+                    } else if ( 'has_refund' == index ) {
+                        line += '';
                     } else {
                         line += '"' + array[i][index] +'"';
                     }
@@ -574,13 +586,27 @@ export default {
                     document.body.removeChild(link);
                 }
             }
+        },
+
+        moment(date) {
+            return moment(date);
         }
     }
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .reports-page {
+    .logs-area {
+        .order_total {
+            display: flex;
+
+            del {
+                padding-right: 5px;
+            }
+        }
+    }
+
     .export-area {
         position: absolute;
         right: 19px;
