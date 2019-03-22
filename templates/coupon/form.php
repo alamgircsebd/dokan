@@ -31,8 +31,9 @@
 
         <div class="dokan-w5 dokan-text-left">
             <select id="discount_type" name="discount_type" class="dokan-form-control">
-                <option value="fixed_product"><?php _e( 'Product Discount', 'dokan' ); ?></option>
-                <option value="percent_product" <?php echo $discount_type; ?> ><?php _e( 'Product % Discount', 'dokan' ); ?></option>
+                <?php foreach ( Dokan_Pro_Coupons::get_coupon_types() as $key => $value ) : ?>
+                    <option <?php selected( $discount_type, $key ); ?> value="<?php echo esc_attr( $key ) ?>"><?php printf( __( '%s', 'dokan' ), $value ) ?></option>
+                <?php endforeach; ?>
             </select>
         </div>
     </div>
