@@ -82,6 +82,21 @@ function dokan_progressbar_translated_string( $string = '', $value = 15 ) {
             return sprintf( __( 'Add Map location to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
             break;
 
+        case 'fb':
+            return sprintf( __( 'Add facebook to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+
+        case 'gplus':
+            return sprintf( __( 'Add Google Plus to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+
+        case 'twitter':
+            return sprintf( __( 'Add Twitter to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+
+        case 'youtube':
+            return sprintf( __( 'Add Youtube to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+
+        case 'linkedin':
+            return sprintf( __( 'Add LinkedIn to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+
         default:
             return sprintf( __( 'Start with adding a Banner to gain profile progress', 'dokan' ) );
             break;
