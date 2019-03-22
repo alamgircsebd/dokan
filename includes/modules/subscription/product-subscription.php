@@ -83,6 +83,11 @@ class Dokan_Product_Subscription {
         $this->init_hooks();
     }
 
+    /**
+     * Init hooks
+     *
+     * @return void
+     */
     public function init_hooks() {
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 99 );
@@ -200,6 +205,15 @@ class Dokan_Product_Subscription {
      * Placeholder for deactivation function
      */
     public static function deactivate() {
+        $users = get_users( [
+            'role'   => 'seller',
+            'fields' => [ 'ID', 'user_email' ]
+        ] );
+
+        foreach ( $users as $user ) {
+            Helper::make_product_publish( $user->ID );
+        }
+
         wp_clear_scheduled_hook( 'dps_schedule_pack_update' );
     }
 
@@ -636,16 +650,46 @@ class Dokan_Product_Subscription {
      *
      */
     public function schedule_task() {
-        $users = get_users( 'role=seller' );
+        $users = get_users( [
+            'role'   => 'seller',
+            'fields' => [ 'ID', 'user_email' ]
+        ] );
 
         foreach ( $users as $user ) {
 
-            $is_seller_enabled = dokan_is_seller_enabled( $user->ID );
-            $can_post_product  = get_user_meta( $user->ID, 'can_post_product', true );
-            $recurring_status  = get_user_meta( $user->ID, '_customer_recurring_subscription', true );
-            $has_subscription  = get_user_meta( $user->ID, 'product_package_id', true );
+            if ( Helper::maybe_cancel_subscription( $user->ID ) ) {
 
-            if ( $has_subscription && $is_seller_enabled && ( $can_post_product == '1' ) && ( $recurring_status != 'active' ) ) {
+                if ( Helper::check_vendor_has_existing_product( $user->ID ) ) {
+                    Helper::update_product_status( $user->ID );
+                }
+
+                $order_id = get_user_meta( $user->ID, 'product_order_id', true );
+
+                if ( $order_id ) {
+                    $subject = ( dokan_get_option( 'email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_subject', 'dokan_product_subscription' ) : __( 'Subscription Package Cancel notification', 'dokan' );
+                    $message = ( dokan_get_option( 'email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_body', 'dokan_product_subscription' ) : __( 'Due to finish your Package validation we are canceling your Subscription Package', 'dokan' );
+                    $headers = 'From: ' . get_option( 'blogname' ) . ' <' . get_option( 'admin_email' ) . '>' . "\r\n";
+
+                    wp_mail( $user->user_email, $subject, $message, $headers );
+
+                    Helper::log( 'Subscription cancel check: As the package has expired for order #' . $order_id . ', we are cancelling the Subscription Package of user #' . $user->ID );
+                    Helper::delete_subscription_pack( $user->ID, $order_id );
+                }
+            }
+
+            $vendor = dokan()->vendor->get( $user->ID )->subscription;
+
+            // if no vendor is not subscribed to any pack, skip the vendor
+            if ( ! $vendor ) {
+                continue;
+            }
+
+            $is_seller_enabled  = dokan_is_seller_enabled( $user->ID );
+            $can_post_product   = $vendor->can_post_product();
+            $has_recurring_pack = $vendor->has_recurring_pack();
+            $has_subscription   = $vendor->has_subscription();
+
+            if ( ! $has_recurring_pack && $is_seller_enabled && $has_subscription && $can_post_product ) {
 
                 if ( Helper::alert_before_two_days( $user->ID ) ) {
                     $subject = ( dokan_get_option( 'email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_subject', 'dokan_product_subscription' ) : __( 'Package End notification alert', 'dokan' );
@@ -653,23 +697,6 @@ class Dokan_Product_Subscription {
                     $headers = 'From: ' . get_option( 'blogname' ) . ' <' . get_option( 'admin_email' ) . '>' . "\r\n";
 
                     wp_mail( $user->user_email, $subject, $message, $headers );
-                }
-
-                if ( Helper::maybe_cancel_subscription( $user->ID ) ) {
-                    $subject = ( dokan_get_option( 'email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_subject', 'dokan_product_subscription' ) : __( 'Subscription Package Cancel notification', 'dokan' );
-                    $message = ( dokan_get_option( 'email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_body', 'dokan_product_subscription' ) : __( 'Due to finish your Package validation we are canceling your Subscription Package', 'dokan' );
-                    $headers = 'From: ' . get_option( 'blogname' ) . ' <' . get_option( 'admin_email' ) . '>' . "\r\n";
-
-                    wp_mail( $user->user_email, $subject, $message, $headers );
-
-                    if ( Helper::check_vendor_has_existing_product( $user->ID ) ) {
-                        Helper::update_product_status( $user->ID );
-                    }
-
-                    $order_id = get_user_meta( $user->ID, 'product_order_id', true );
-
-                    Helper::log( 'Subscription cancel check: As the package has expired for order #' . $order_id . ', we are cancelling the Subscription Package of user #' . $user->ID );
-                    Helper::delete_subscription_pack( $user->ID, $order_id );
                 }
             }
         }
@@ -690,22 +717,23 @@ class Dokan_Product_Subscription {
 
             $product_items = $order->get_items();
 
-            $product = reset( $product_items );
+            $product    = reset( $product_items );
+            $product_id = $product['product_id'];
 
-            if ( Helper::is_subscription_product( $product['product_id'] ) ) {
+            if ( Helper::is_subscription_product( $product_id ) ) {
 
-                if ( ! Helper::has_used_trial_pack( $customer_id, $product['product_id'] ) ) {
-                    $this->add_used_trial_pack( $customer_id, $product['product_id'] );
+                if ( ! Helper::has_used_trial_pack( $customer_id ) ) {
+                    Helper::add_used_trial_pack( $customer_id, $product_id );
                 }
 
-                if ( get_post_meta( $product['product_id'], '_enable_recurring_payment', true ) == 'yes' ) {
+                if ( get_post_meta( $product_id, '_enable_recurring_payment', true ) == 'yes' ) {
                     return;
                 }
 
-                $pack_validity = get_post_meta( $product['product_id'], '_pack_validity', true );
-                update_user_meta( $customer_id, 'product_package_id', $product['product_id'] );
+                $pack_validity = get_post_meta( $product_id, '_pack_validity', true );
+                update_user_meta( $customer_id, 'product_package_id', $product_id );
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
-                update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product['product_id'], '_no_of_product', true ) );
+                update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product_id, '_no_of_product', true ) );
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
 
                 if ( $pack_validity == 0 ) {
@@ -717,8 +745,8 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', '' );
 
-                $admin_commission        = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
-                $admin_commission_type   = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
+                $admin_commission      = get_post_meta( $product_id, '_subscription_product_admin_commission', true );
+                $admin_commission_type = get_post_meta( $product_id, '_subscription_product_admin_commission_type', true );
 
                 if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
@@ -726,6 +754,8 @@ class Dokan_Product_Subscription {
                 } else {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
                 }
+
+                Helper::make_product_publish( $customer_id );
             }
         }
     }
@@ -768,20 +798,6 @@ class Dokan_Product_Subscription {
         }
 
         return $valid;
-    }
-
-    /**
-     * Add a used trial pack to the user account
-     *
-     * @param int     $user_id
-     * @param int     $pack_id
-     */
-    public function add_used_trial_pack( $user_id, $pack_id ) {
-        $has_used = get_user_meta( $user_id, 'dps_fp_used', true );
-        $has_used = is_array( $has_used ) ? $has_used : array();
-
-        $has_used[$pack_id] = $pack_id;
-        update_user_meta( $user_id, 'dps_fp_used', $has_used );
     }
 
     /**

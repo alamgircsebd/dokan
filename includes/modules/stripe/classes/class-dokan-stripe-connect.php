@@ -1,5 +1,6 @@
 <?php
 
+use DokanPro\Modules\Subscription\Helper;
 use DokanPro\Modules\Subscription\SubscriptionPack;
 
 /**
@@ -574,6 +575,12 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             $subscription_length   = $dokan_subscription->get_period_length();
             $trial_period_days     = $dokan_subscription->is_trial() ? $dokan_subscription->get_trial_period_length() : 0;
 
+            // if vendor already has used a trial pack, create a new plan without trial period
+            if ( Helper::has_used_trial_pack( get_current_user_id() ) ) {
+                $trial_period_days = 0;
+                $product_pack_id   = $product_pack_id . '-' . random_int( 1, 99999 );
+            }
+
             try {
                 $stripe_plan = \Stripe\Plan::retrieve( $product_pack_id );
             } catch ( Exception $e ) {
@@ -616,6 +623,8 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, 'can_post_product', '1' );
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
 
+            Helper::make_product_publish( $customer_user_id );
+
             $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
             $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
@@ -643,6 +652,8 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 update_user_meta( $customer_user_id, 'can_post_product', '1' );
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
+
+                Helper::make_product_publish( $customer_user_id );
 
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );

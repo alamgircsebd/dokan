@@ -548,6 +548,14 @@ class Dokan_Stripe {
                         do_action( 'dokan_vendor_subscription_will_end' );
                     }
 
+                    // update pack end date
+                    if ( 'customer.subscription.created' == $event->type ) {
+                        $invoice = $event->data->object;
+                        $user_id = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = '_stripe_subscription_id' AND `meta_value`='$invoice->id'" );
+
+                        update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', $invoice->current_period_end ) );
+                    }
+
                 } catch ( Exception $e ) {
                     // something failed, perhaps log a notice or email the site admin
                 }

@@ -156,7 +156,7 @@ class Shortcode {
 
                             ?>
 
-                            <?php if ( $is_recurring && $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id(), get_the_id() ) ) : ?>
+                            <?php if ( $is_recurring && $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id() ) ) : ?>
                                 <span class="dps-rec-period">
                                     <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
                                 </span>
@@ -190,7 +190,7 @@ class Shortcode {
 
                             <?php else: ?>
 
-                                <?php if ( $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id(), get_the_id() ) ): ?>
+                                <?php if ( $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id() ) ): ?>
                                     <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Buy Now', 'dokan' ); ?></a>
                                 <?php elseif ( ! get_user_meta( dokan_get_current_user_id(), 'product_package_id', true ) ) : ?>
                                         <?php if ( $sub_pack->is_trial() ) : ?>

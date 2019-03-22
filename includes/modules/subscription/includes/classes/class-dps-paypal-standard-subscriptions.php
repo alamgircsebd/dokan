@@ -204,7 +204,8 @@ class DPS_PayPal_Standard_Subscriptions {
         // We have a recurring payment
         if ( ! isset( $param_number ) || $param_number == 1 ) {
 
-            if ( $subscription->is_trial() ) {
+            // if vendor has already used a trial pack, then make the tiral to a normal recurring pack
+            if ( ! Helper::has_used_trial_pack( get_current_user_id() ) && $subscription->is_trial() ) {
                 // Trial period 1 price. For a free trial period, specify 0.
                 $paypal_args['a1'] = 0;
 
@@ -217,16 +218,16 @@ class DPS_PayPal_Standard_Subscriptions {
 
                 // trail period
                 $paypal_args['t1'] = $converted_periods['trial_period'];
+            } else {
+                // Subscription price
+                $paypal_args['a3'] = $initial_payment;
+
+                // Subscription duration
+                $paypal_args['p3'] = $subscription_interval;
+
+                // Subscription period
+                $paypal_args['t3'] = $converted_periods['billing_period'];
             }
-
-            // Subscription price
-            $paypal_args['a3'] = $initial_payment;
-
-            // Subscription duration
-            $paypal_args['p3'] = $subscription_interval;
-
-            // Subscription period
-            $paypal_args['t3'] = $converted_periods['billing_period'];
         }
 
         // Recurring payments
@@ -312,6 +313,9 @@ class DPS_PayPal_Standard_Subscriptions {
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
 
+                // make all the existing product publish
+                Helper::make_product_publish( $customer_user_id );
+
                 $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
@@ -344,6 +348,9 @@ class DPS_PayPal_Standard_Subscriptions {
                     update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subs_interval . " " . $subs_period . "" . $add_s ) ) );
                     update_user_meta( $customer_id, 'can_post_product', '1' );
                     update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
+
+                    // make all the existing product publish
+                    Helper::make_product_publish( $customer_user_id );
 
                     $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
                     $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );

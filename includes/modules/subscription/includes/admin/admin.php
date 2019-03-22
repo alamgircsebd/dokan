@@ -649,6 +649,8 @@ class DPS_Admin {
         } else {
             update_user_meta( $user_id, 'dokan_admin_percentage', '' );
         }
+
+        Helper::make_product_publish( $user_id );
     }
 }
 
