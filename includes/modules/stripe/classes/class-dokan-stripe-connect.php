@@ -72,10 +72,9 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
             return;
         }
 
-        if ( get_option( 'woocommerce_force_ssl_checkout' ) == 'no' && ! class_exists( 'WordPressHTTPS' ) ) {
-            echo '<div class="error"><p>' . sprintf( __( 'Stripe is enabled, but the <a href="%s">force SSL option</a> is disabled; your checkout may not be secure! Please enable SSL and ensure your server has a valid SSL certificate - Stripe will only work in test mode.', 'dokan' ), admin_url( 'admin.php?page=woocommerce' ) ) . '</p></div>';
+        if ( ! wc_site_is_https() && get_option( 'woocommerce_force_ssl_checkout' ) == 'no' && ! class_exists( 'WordPressHTTPS' ) ) {
+            echo '<div class="error"><p>' . sprintf( __( 'Stripe is enabled, but the <a href="%s">force SSL option</a> is disabled; your checkout may not be secure! Please enable SSL and ensure your server has a valid SSL certificate - Stripe will only work in test mode.', 'dokan' ), admin_url( 'admin.php?page=wc-settings&tab=advanced' ) ) . '</p></div>';
         }
-
     }
 
     /**
