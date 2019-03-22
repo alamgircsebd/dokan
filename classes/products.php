@@ -720,32 +720,32 @@ class Dokan_Pro_Products {
         }
 
         $args = array(
-            'pro' => true,
-            'id'  => 'dokan-product-list-table',
+            'pro'     => true,
+            'id'      => 'dokan-product-list-table',
             'options' => $this->get_inline_edit_options(),
 
             // product informations
-            'product_id' => $product->get_id(),
-            'post_title' => $product->get_title(),
-            'product_cat' => $cats,
-            'product_tag' => $tags,
-            'product_type' => $product->get_type(),
-            'is_virtual' => $product->is_virtual(),
-            'reviews_allowed' => $product->get_reviews_allowed(),
-            'post_status' => $post->post_status,
-            'sku'   => $product->get_sku(),
-            '_regular_price' => $product->get_regular_price(),
-            '_sale_price' => $product->get_sale_price(),
-            'weight' => $product->get_weight(),
-            'length' => $product->get_length(),
-            'width' => $product->get_width(),
-            'height' => $product->get_height(),
+            'product_id'        => $product->get_id(),
+            'post_title'        => $product->get_title(),
+            'product_cat'       => $cats,
+            'product_tag'       => $tags,
+            'product_type'      => $product->get_type(),
+            'is_virtual'        => $product->is_virtual(),
+            'reviews_allowed'   => $product->get_reviews_allowed(),
+            'post_status'       => $post->post_status,
+            'sku'               => $product->get_sku(),
+            '_regular_price'    => $product->get_regular_price(),
+            '_sale_price'       => $product->get_sale_price(),
+            'weight'            => $product->get_weight(),
+            'length'            => $product->get_length(),
+            'width'             => $product->get_width(),
+            'height'            => $product->get_height(),
             'shipping_class_id' => $product->get_shipping_class_id(),
-            '_visibility' => ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post->ID, '_visibility', true ),
-            'manage_stock' => $product->get_manage_stock(),
-            'stock_quantity' => $product->get_stock_quantity(),
-            'stock_status' => $product->get_stock_status(),
-            'backorders' => $product->get_backorders(),
+            '_visibility'       => ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post->ID, '_visibility', true ),
+            'manage_stock'      => $product->get_manage_stock(),
+            'stock_quantity'    => $product->get_stock_quantity(),
+            'stock_status'      => $product->get_stock_status(),
+            'backorders'        => $product->get_backorders(),
         );
 
         dokan_get_template_part( 'products/edit/product-list-table-inline-edit-form', '', $args );
@@ -857,6 +857,7 @@ class Dokan_Pro_Products {
         $saved_post           = get_post( $data['ID'] );
         $data['post_content'] = $saved_post ? $saved_post->post_content : '';
         $data['post_excerpt'] = $saved_post ? $saved_post->post_excerpt : '';
+        $data['post_status']  = $saved_post && 'pending' === $saved_post->post_status ? 'pending' : $data['post_status'];
 
         $data = apply_filters( 'dokan_update_product_post_data', $data );
 
