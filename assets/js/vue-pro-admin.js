@@ -3137,6 +3137,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 var Chart = dokan_get_lib('Chart');
 var Postbox = dokan_get_lib('Postbox');
@@ -3208,6 +3215,9 @@ var ListTable = dokan_get_lib('ListTable');
                 },
                 'status': {
                     label: this.__('Status', 'dokan')
+                },
+                'date': {
+                    label: this.__('date', 'dokan')
                 }
             },
             logs: []
@@ -3464,10 +3474,12 @@ var ListTable = dokan_get_lib('ListTable');
                 for (var index in array[i]) {
                     if (line != '') line += ',';
 
-                    if ('commission' == index || 'order_total' == index || 'vendor_earning' == index) {
-                        line += accounting.formatMoney(array[i][index], '', dokan.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format);
+                    if ('commission' == index || 'previous_order_total' == index || 'order_total' == index || 'vendor_earning' == index) {
+                        line += '"' + accounting.formatMoney(array[i][index], '', dokan.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format) + '"';
+                    } else if ('has_refund' == index) {
+                        line += '';
                     } else {
-                        line += array[i][index];
+                        line += '"' + array[i][index] + '"';
                     }
                 }
 
@@ -3476,7 +3488,7 @@ var ListTable = dokan_get_lib('ListTable');
 
             return str;
         },
-        exportCSVFile: function exportCSVFile(csv, fileTitle) {
+        exportCSVFile: function exportCSVFile(csv) {
             var exportedFilenmae = 'logs-' + moment().format('Y-MM-DD') + '.csv';
             var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
 
@@ -3497,7 +3509,20 @@ var ListTable = dokan_get_lib('ListTable');
                     document.body.removeChild(link);
                 }
             }
-        }
+        },
+        moment: function (_moment) {
+            function moment(_x7) {
+                return _moment.apply(this, arguments);
+            }
+
+            moment.toString = function () {
+                return _moment.toString();
+            };
+
+            return moment;
+        }(function (date) {
+            return moment(date);
+        })
     }
 });
 
@@ -7820,7 +7845,7 @@ if (false) {
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Reports_vue__ = __webpack_require__(15);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6806de3f_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Reports_vue__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6806de3f_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Reports_vue__ = __webpack_require__(63);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -7837,12 +7862,12 @@ var __vue_template_functional__ = false
 /* styles */
 var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = "data-v-6806de3f"
+var __vue_scopeId__ = null
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Reports_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6806de3f_hasScoped_true_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Reports_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6806de3f_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Reports_vue__["a" /* default */],
   __vue_template_functional__,
   __vue_styles__,
   __vue_scopeId__,
@@ -8575,6 +8600,18 @@ var render = function() {
                   key: "order_total",
                   fn: function(data) {
                     return [
+                      data.row.has_refund
+                        ? _c(
+                            "del",
+                            [
+                              _c("currency", {
+                                attrs: { amount: data.row.previous_order_total }
+                              })
+                            ],
+                            1
+                          )
+                        : _vm._e(),
+                      _vm._v(" "),
                       _c("currency", {
                         attrs: { amount: data.row.order_total }
                       })
@@ -8596,6 +8633,20 @@ var render = function() {
                   fn: function(data) {
                     return [
                       _c("currency", { attrs: { amount: data.row.commission } })
+                    ]
+                  }
+                },
+                {
+                  key: "date",
+                  fn: function(data) {
+                    return [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(
+                            _vm.moment(data.row.date).format("MMM D, YYYY")
+                          ) +
+                          "\n            "
+                      )
                     ]
                   }
                 }

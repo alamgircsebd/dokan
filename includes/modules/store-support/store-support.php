@@ -261,7 +261,7 @@ class Dokan_Store_Support {
     /**
      * Get store support button
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @param int $store_id
      *

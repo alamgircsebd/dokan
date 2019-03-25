@@ -164,7 +164,7 @@ class Dokan_Pro_Store {
         /**
          * Store Coupons
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 2.9.7
          *
          * @var $array
          */
