@@ -64,8 +64,6 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Reports', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/reports' );
         }
 
-        // $report = add_submenu_page( 'dokan', __( 'Earning Reports', 'dokan' ), __( 'Reports', 'dokan' ), $capability, 'dokan-reports', array( $this, 'report_page' ) );
-
         add_submenu_page( null, __( 'Whats New', 'dokan' ), __( 'Whats New', 'dokan' ), $capability, 'whats-new-dokan', array( $this, 'whats_new_page' ) );
 
         // Load tools ad modules menu
@@ -73,10 +71,6 @@ class Dokan_Pro_Admin_Settings {
             $submenu[ $slug ][] = array( __( 'Modules', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/modules' );
             $submenu[ $slug ][] = array( __( 'Tools', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/tools' );
         }
-
-        // $tools   = add_submenu_page( 'dokan', __( 'Tools', 'dokan' ), __( 'Tools', 'dokan' ), $capability, 'dokan-tools', array( $this, 'tools_page' ) );
-
-        // add_action( $report, array( $this, 'common_scripts' ) );
     }
 
     /**
@@ -230,24 +224,6 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
-     * Load Report Scripts
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function common_scripts() {
-        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-        wp_enqueue_style( 'jquery-ui' );
-        wp_enqueue_style( 'dokan-select2-css' );
-
-        wp_enqueue_script( 'jquery-ui-datepicker' );
-        wp_enqueue_script( 'dokan-flot' );
-        wp_enqueue_script( 'dokan-chart' );
-        wp_enqueue_script( 'dokan-select2-js' );
-    }
-
-    /**
      * Add vue routes for admin pages
      *
      * @param  array $routes
@@ -311,6 +287,19 @@ class Dokan_Pro_Admin_Settings {
             ]
         );
 
+        if ( dokan_is_store_categories_feature_on() ) {
+            $routes[] = array(
+                'path' => '/store-categories',
+                'name' => 'StoreCategoriesIndex',
+                'component' => 'StoreCategoriesIndex',
+            );
+            $routes[] = array(
+                'path' => '/store-categories/:id',
+                'name' => 'StoreCategoriesShow',
+                'component' => 'StoreCategoriesShow',
+            );
+        }
+
         $routes[] = array(
             'path'      => '/tools',
             'name'      => 'Tools',
@@ -335,29 +324,6 @@ class Dokan_Pro_Admin_Settings {
     **/
     function modules_scripts() {
         wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
-    }
-
-    /**
-     * Report Tempalte
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function report_page() {
-        global $wpdb;
-        include dirname( __FILE__ ) . '/reports.php';
-    }
-
-    /**
-     * Tools Template
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    function tools_page() {
-        include dirname( __FILE__ ) . '/tools.php';
     }
 
     /**

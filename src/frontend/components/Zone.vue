@@ -238,8 +238,9 @@
 </template>
 
 <script>
-let Switches = dokan_get_lib('Switches');
-let Modal = dokan_get_lib('Modal');
+let Switches    = dokan_get_lib('Switches');
+let Modal       = dokan_get_lib('Modal');
+let Multiselect = dokan_get_lib('Multiselect');
 
 export default {
 
@@ -247,7 +248,8 @@ export default {
 
     components: {
         Switches,
-        Modal
+        Modal,
+        Multiselect
     },
 
     data () {
@@ -470,8 +472,11 @@ export default {
                     self.zone = resp.data;
                     self.zoneShippingMethod = resp.data.shipping_methods;
 
-                    var zoneLocationTypes = Object.keys(self.zoneLocation);
+                    if ( self.zone.locations.length < 1 ) {
+                        self.zone.locations = resp.data.data.zone_locations;
+                    }
 
+                    var zoneLocationTypes = Object.keys(self.zoneLocation);
                     if (zoneLocationTypes.indexOf('postcode') < 0) {
                         if (zoneLocationTypes.indexOf('state') >= 0) {
                             self.showPostCodeList = true;

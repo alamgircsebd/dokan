@@ -4,10 +4,14 @@
             <router-link :to="{ name: 'Reports', query: { tab: 'report', type: 'by-day'}}" class="nav-tab" active-class="nav-tab-active">
                 {{ __( 'Reports', 'dokan' ) }}
             </router-link>
-            <router-link :to="{ name: 'Reports', query: { tab: 'logs'}}" class="nav-tab" active-class="nav-tab-active" exact>
+            <router-link :to="{ name: 'Reports', query: { tab: 'logs' }}" class="nav-tab" active-class="nav-tab-active" exact>
                 {{ __( 'All Logs', 'dokan' ) }}
             </router-link>
         </h2>
+
+        <div class="export-area" v-if="showLogsAarea">
+            <button @click="exportLogs()" id="export-logs" class="button">{{ __('Export Logs', 'dokan') }}</button>
+        </div>
 
         <div class="report-area" v-if="showReportArea">
             <ul class="subsubsub dokan-report-sub" style="float: none;">
@@ -173,7 +177,10 @@
                 </template>
 
                 <template slot="order_total" slot-scope="data">
-                    <currency :amount="data.row.order_id"></currency>
+                    <del v-if="data.row.has_refund">
+                        <currency :amount="data.row.previous_order_total"></currency>
+                    </del>
+                    <currency :amount="data.row.order_total"></currency>
                 </template>
 
                 <template slot="vendor_earning" slot-scope="data">
@@ -182,6 +189,10 @@
 
                 <template slot="commission" slot-scope="data">
                     <currency :amount="data.row.commission"></currency>
+                </template>
+
+                <template slot="date" slot-scope="data">
+                    {{ moment(data.row.date).format('MMM D, YYYY') }}
                 </template>
 
             </list-table>
@@ -261,6 +272,9 @@ export default {
                 },
                 'status': {
                     label: this.__( 'Status', 'dokan' )
+                },
+                'date' : {
+                    label: this.__( 'date', 'dokan' )
                 }
             },
             logs: []
@@ -296,13 +310,6 @@ export default {
             this.report   = null;
             this.overview = null;
 
-            if ( this.$route.query.tab === 'logs' ) {
-                this.prepareLogArea();
-                this.fetchLogs();
-            } else {
-                this.prepareReportArea();
-            }
-
             if ( this.$route.query.type === 'by-year' ) {
                 this.prepareYearView();
                 this.showByYear();
@@ -310,19 +317,26 @@ export default {
 
             if ( this.$route.query.type === 'by-vendor' ) {
                 this.prepareVendorView();
-                this.fetchReport();
-                this.fetchOverview();
             }
 
             if ( this.$route.query.type === 'by-day' ) {
                 this.prepareDayView();
-                this.fetchReport();
-                this.fetchOverview();
             }
         },
 
         '$route.query.page'() {
             this.fetchLogs();
+        },
+
+        '$route.query.tab'() {
+            if ( this.$route.query.tab === 'logs' ) {
+                this.prepareLogArea();
+                this.fetchLogs();
+            } else {
+                this.prepareReportArea();
+                this.fetchReport();
+                this.fetchOverview();
+            }
         }
     },
 
@@ -514,12 +528,96 @@ export default {
         editUserUrl(id) {
             return `${dokan.urls.adminRoot}user-edit.php?user_id=${id}`;
         },
+
+        exportLogs() {
+            let csv = this.convertToCSV( this.logs );
+
+            this.exportCSVFile(csv);
+        },
+
+        convertToCSV(data) {
+            let array = typeof data != 'object' ? JSON.parse(data) : data;
+            let str = '';
+
+            for (let i = 0; i < array.length; i++) {
+                let line = '';
+
+                for (let index in array[i]) {
+                    if (line != '') line += ',';
+
+                    if ( 'commission' == index || 'previous_order_total' == index || 'order_total' == index || 'vendor_earning' == index ) {
+                        line += '"' + accounting.formatMoney(
+                            array[i][index],
+                            '',
+                            dokan.precision,
+                            dokan.currency.thousand,
+                            dokan.currency.decimal,
+                            dokan.currency.format
+                        ) + '"';
+                    } else if ( 'has_refund' == index ) {
+                        line += '';
+                    } else {
+                        line += '"' + array[i][index] +'"';
+                    }
+                }
+
+                str += line + '\r\n';
+            }
+
+            return str;
+        },
+
+        exportCSVFile(csv) {
+            let exportedFilenmae = 'logs-' + moment().format('Y-MM-DD') + '.csv';
+            let blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+
+            if (navigator.msSaveBlob) { // IE 10+
+                navigator.msSaveBlob(blob, exportedFilenmae);
+            } else {
+                var link = document.createElement("a");
+                if (link.download !== undefined) { // feature detection
+                    // Browsers that support HTML5 download attribute
+                    var url = URL.createObjectURL(blob);
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", exportedFilenmae);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
+        },
+
+        moment(date) {
+            return moment(date);
+        }
     }
-}
+};
 </script>
 
-<style lang="less" scoped>
+<style lang="less">
 .reports-page {
+    .logs-area {
+        .order_total {
+            display: flex;
+
+            del {
+                padding-right: 5px;
+            }
+        }
+    }
+
+    .export-area {
+        position: absolute;
+        right: 19px;
+        top: 19px;
+
+        #export-logs {
+            padding: 0px 10px !important;
+            height: 30px !important;
+        }
+    }
+
     .widgets-wrapper {
         display: block;
         overflow: hidden;

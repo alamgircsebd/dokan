@@ -149,6 +149,15 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         'store_listing_page' => $store_listing_page,
     );
 
+    if ( dokan_is_store_categories_feature_on() ) {
+        $args['categories'] = get_terms( array(
+            'taxonomy'   => 'store_category',
+            'hide_empty' => false,
+        ) );
+
+        $args['store_category'] = ! empty( $_GET['store_category'] ) ? sanitize_text_field( $_GET['store_category'] ) : null;
+    }
+
     dokan_geo_get_template( 'filters', $args );
 }
 
@@ -191,7 +200,7 @@ function dokan_geo_remove_seller_listing_footer_content_hook() {
 /**
  * A helper function to escape float values
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.5
  *
  * @return float
  */

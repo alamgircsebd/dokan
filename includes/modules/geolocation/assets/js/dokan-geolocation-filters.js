@@ -181,6 +181,7 @@
         this.address = '';
         this.distance = 0;
         this.geocoder = null;
+        this.isStoreCategoryOn = false;
 
         this.form = form;
 
@@ -227,9 +228,13 @@
         self.form.find( '[name="product_cat"]' ).on( 'change', function () {
             var category = $(this).val();
 
-            if ( category ) {
-                self.set_param( 'product_cat', category );
-            }
+            self.set_param( 'product_cat', category );
+        } );
+
+        self.form.find( '[name="store_category"]' ).on( 'change', function () {
+            var category = $(this).val();
+
+            self.set_param( 'store_category', category );
         } );
 
         self.form.find( '.dokan-geo-filters-search-btn' ).on( 'click', function ( e ) {
@@ -248,11 +253,15 @@
         self.form.find( '.dokan-row' ).removeClass( 'dokan-hide' );
         self.scope = self.form.data( 'scope' );
         self.display = self.form.data( 'display' );
+        self.isStoreCategoryOn = self.form.find( '#store-category-dropdown' ).length;
 
         if ( 'inline' !== self.display ) {
             self.form.find( '.dokan-geo-filters-column' ).addClass( 'dokan-w12' );
 
         } else if ( 'product' === self.scope ) {
+            self.form.find( '.dokan-geo-filters-column' ).addClass( 'dokan-w4' );
+
+        } else if ( 'vendor' === self.scope && self.isStoreCategoryOn ) {
             self.form.find( '.dokan-geo-filters-column' ).addClass( 'dokan-w4' );
 
         } else if ( 'vendor' === self.scope ) {
@@ -264,6 +273,7 @@
 
         if ( ! self.scope ) {
             self.switchable_scope = 'product';
+            self.form.find( '[name="store_category"]' ).parent().addClass( 'dokan-hide' );
         }
 
         var scope_switch = self.form.find( '.dokan-geo-filter-scope-switch a' ),
@@ -279,11 +289,16 @@
                 self.form.find( '[name="dokan_seller_search"]' ).addClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-product-categories' ).removeClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-filters-column' ).removeClass( 'dokan-w4' ).addClass( 'dokan-w3' );
+                self.form.find( '[name="store_category"]' ).parent().addClass( 'dokan-hide' );
             } else {
+                var removeClass = self.isStoreCategoryOn ? 'dokan-w4' : 'dokan-w3';
+                var addClass = self.isStoreCategoryOn ? 'dokan-w3' : 'dokan-w4';
+
                 self.form.find( '[name="s"]' ).addClass( 'dokan-hide' );
                 self.form.find( '[name="dokan_seller_search"]' ).removeClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-product-categories' ).addClass( 'dokan-hide' );
-                self.form.find( '.dokan-geo-filters-column' ).removeClass( 'dokan-w3' ).addClass( 'dokan-w4' );
+                self.form.find( '.dokan-geo-filters-column' ).removeClass( removeClass ).addClass( addClass );
+                self.form.find( '[name="store_category"]' ).parent().removeClass( 'dokan-hide' );
             }
 
             scope_label.html( $( this ).html() );
@@ -347,10 +362,8 @@
     };
 
     GeolocationFilter.prototype.set_search_term = function ( s ) {
-        if ( s.length ) {
-            this.set_param( 's', s );
-            this.set_param( 'dokan_seller_search', s );
-        }
+        this.set_param( 's', s );
+        this.set_param( 'dokan_seller_search', s );
     };
 
     GeolocationFilter.prototype.set_address = function ( address ) {
@@ -427,7 +440,12 @@
         }
 
         this[param] = val;
-        this.queries[param] = val;
+
+        if ( val ) {
+            this.queries[param] = val;
+        } else {
+            delete this.queries[param];
+        }
 
         if ( this.scope ) {
             if ( 'distance' === param && ( ! this.latitude || ! this.longitude ) ) {
@@ -457,11 +475,17 @@
             base_url = '';
 
         if ( 'product' === scope ) {
-            search.push( 's=' + s );
+            if ( s ) {
+                search.push( 's=' + s );
+            }
+
             search.push( 'post_type=product' );
             base_url = this.form.find( '[name="wc_shop_page"]' ).val();
         } else {
-            search.push( 'dokan_seller_search=' + dokan_seller_search );
+            if ( dokan_seller_search ) {
+                search.push( 'dokan_seller_search=' + dokan_seller_search );
+            }
+
             base_url = this.form.find( '[name="dokan_store_listing_page"]' ).val();
         }
 

@@ -121,6 +121,9 @@ class Dokan_WC_Booking {
         add_filter( 'dokan_booking_menu_title', array( $this, 'dokan_get_bookings_menu_title' ) );
 
         add_filter( 'dokan_set_template_path', array( $this, 'load_booking_templates' ), 10, 3 );
+
+        // insert bookable porduct type
+        add_filter( 'dokan_get_product_types', array( $this, 'insert_bookable_product_type' ) );
     }
 
     /**
@@ -166,6 +169,19 @@ class Dokan_WC_Booking {
         }
 
         return $template_path;
+    }
+
+    /**
+     * Insert bookable product type
+     *
+     * @param  array $types
+     *
+     * @return array
+     */
+    public function insert_bookable_product_type( $types ) {
+        $types['booking'] = __( 'Bookable Product', 'dokan' );
+
+        return $types;
     }
 
     /**
@@ -261,7 +277,7 @@ class Dokan_WC_Booking {
             $jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
 
             $suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-            wp_register_script( 'wc_bookings_writepanel_js', WC_BOOKINGS_PLUGIN_URL . '/assets/js/writepanel' . $suffix . '.js', array( 'jquery', 'jquery-ui-datepicker' ), WC_BOOKINGS_VERSION, true );
+            wp_register_script( 'wc_bookings_writepanel_js', DOKAN_WC_BOOKING_PLUGIN_ASSEST . '/js/writepanel.min.js', array( 'jquery', 'jquery-ui-datepicker' ), DOKAN_WC_BOOKING_PLUGIN_VERSION, true );
             wp_register_script( 'wc_bookings_settings_js', WC_BOOKINGS_PLUGIN_URL . '/assets/js/settings' . $suffix . '.js', array( 'jquery' ), WC_BOOKINGS_VERSION, true );
             wp_register_script( 'jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), WC_VERSION, true );
             $post_id = isset( $post->ID ) ? $post->ID : '';
@@ -297,7 +313,7 @@ class Dokan_WC_Booking {
             wp_enqueue_script( 'wc_bookings_writepanel_js' );
             wp_enqueue_script( 'jquery-tiptip' );
 
-            wp_enqueue_style( 'wc_bookings_admin_styles', WC_BOOKINGS_PLUGIN_URL . '/assets/css/admin.css', null, WC_BOOKINGS_VERSION );
+            wp_enqueue_style( 'wc_bookings_admin_styles', DOKAN_WC_BOOKING_PLUGIN_ASSEST . '/css/admin.css', null, DOKAN_WC_BOOKING_PLUGIN_VERSION );
             wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', null, WC_VERSION );
             wp_enqueue_style( 'jquery-ui-style', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_version . '/themes/smoothness/jquery-ui.css' );
 

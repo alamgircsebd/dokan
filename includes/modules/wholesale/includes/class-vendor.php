@@ -3,14 +3,14 @@
 /**
 * Vendor related functionality
 *
-* @since DOKAN_PRO_SINCE
+* @since 2.9.5
 */
 class Dokan_Wholesale_Vendor {
 
     /**
      * Load automatically when class initiate
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      */
     public function __construct() {
         add_action( 'dokan_product_edit_after_inventory_variants', [ $this, 'load_wholesale_content' ], 30, 2 );
@@ -24,7 +24,7 @@ class Dokan_Wholesale_Vendor {
     /**
     * Render product rma options
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 2.9.5
     *
     * @return void
     **/
@@ -65,7 +65,7 @@ class Dokan_Wholesale_Vendor {
     /**
      * Save RMA data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.5
      *
      * @return void
      */

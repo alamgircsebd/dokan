@@ -344,6 +344,8 @@ class Dokan_Pro_Coupons {
         update_post_meta( $post_id, 'minimum_amount', $minimum_amount );
         update_post_meta( $post_id, 'customer_email', $customer_email );
 
+        do_action( 'dokan_after_coupon_create', $post_id );
+
         if ( !defined( 'DOING_AJAX' ) ) {
             wp_redirect( add_query_arg( array('message' => $message), dokan_get_navigation_url( 'coupons' ) ) );
         }
@@ -507,13 +509,6 @@ class Dokan_Pro_Coupons {
             exit();
         }
 
-        $discount_type = isset( $discount_type ) ? $discount_type : '';
-        if ( isset( $discount_type ) ) {
-            if ( $discount_type == 'percent_product' ) {
-                $discount_type = 'selected';
-            }
-        }
-
         $amount                     = isset( $amount ) ? $amount : '';
         $products                   = isset( $products ) ? $products : '';
         $exclude_products           = isset( $exclude_products ) ? $exclude_products : '';
@@ -559,14 +554,8 @@ class Dokan_Pro_Coupons {
             $post_id       = $_POST['post_id'];
             $post_title    = $_POST['title'];
             $description   = $_POST['description'];
-
             $discount_type = $_POST['discount_type'];
-
-            if ( $discount_type == 'percent_product' ) {
-                $discount_type = 'selected';
-            }
-
-            $amount = $_POST['amount'];
+            $amount        = $_POST['amount'];
 
             if ( isset( $_POST['product_drop_down'] ) ) {
                 $products = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_drop_down'] ) ) );
@@ -647,6 +636,18 @@ class Dokan_Pro_Coupons {
                 'products_id'                => $products_id,
             ) );
         }
+    }
 
+    /**
+     * Get coupon types
+     *
+     * @return array
+     */
+    public static function get_coupon_types() {
+        return apply_filters( 'dokan_get_coupon_types', [
+            'fixed_product'   => 'Product Discount',
+            'percent_product' => 'Product % Discount',
+            'booking_person'  => 'Booking Person Discount (Amount Off Per Person)'
+        ] );
     }
 }

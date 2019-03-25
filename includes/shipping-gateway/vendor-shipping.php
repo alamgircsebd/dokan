@@ -393,8 +393,8 @@ if ( class_exists( 'WooCommerce' ) ) {
         public function is_available( $package ) {
             $seller_id = $package['seller_id'];
 
-            $destination_country = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
-            $destination_state = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
+            $destination_country  = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
+            $destination_state    = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
             $destination_postcode = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
 
             if ( empty( $seller_id ) ) {

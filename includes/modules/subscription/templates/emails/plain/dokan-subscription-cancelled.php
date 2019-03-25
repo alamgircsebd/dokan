@@ -13,8 +13,6 @@ if ( ! $vendor ) {
     return;
 }
 
-$product = data['product'];
-
 echo "= " . $email_heading . " =\n\n";
 ?>
 
@@ -27,11 +25,11 @@ echo "= " . $email_heading . " =\n\n";
 <?php echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n"; ?>
 
 <?php
-    if ( $product ) {
+    if ( $subscription ) {
         printf( __( 'Subscription Details:', 'dokan' ) ); echo " \n";
 
-        printf( '<p>%s</p>', __( 'Subscription Pack: ' . $product->get_title(), 'dokan' ) ); echo " \n";
-        printf( '<p>%s</p>', __( 'Price : ' . wc_price( $product->get_price() ) , 'dokan' ) ); echo " \n";
+        printf( '<p>%s</p>', __( 'Subscription Pack: ' . $subscription->get_package_title(), 'dokan' ) ); echo " \n";
+        printf( '<p>%s</p>', __( 'Price : ' . wc_price( $subscription->get_price() ) , 'dokan' ) ); echo " \n";
     }
 ?>
 

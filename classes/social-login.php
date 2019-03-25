@@ -9,9 +9,14 @@
  *
  */
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
+use Hybridauth\Storage\Session;
+
 Class Dokan_Social_Login {
 
-    private $base_url;
+    private $callback;
     private $config;
 
     /**
@@ -22,7 +27,7 @@ Class Dokan_Social_Login {
      * @uses actions|filter hooks
      */
     public function __construct() {
-        $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' ) . 'dokan-registration/edit';
+        $this->callback = dokan_get_page_url( 'myaccount', 'woocommerce' );
         $this->init_hooks();
     }
 
@@ -36,7 +41,7 @@ Class Dokan_Social_Login {
     public static function init() {
         static $instance = false;
 
-        if ( !$instance ) {
+        if ( ! $instance ) {
             $instance = new Dokan_Social_Login();
         }
 
@@ -84,54 +89,62 @@ Class Dokan_Social_Login {
      * @return array
      */
     private function get_providers_config() {
-
-        $config    = array( 'providers' => array(
-                'base_url'   => $this->base_url,
-                "debug_mode" => false,
-                "Google"     => array(
+        $config = [
+            'callback' => $this->callback,
+            'providers' => [
+                "Google"     => [
                     "enabled" => true,
-                    "keys"    => array( "id" => "", "secret" => "" ),
-                ),
-                "Facebook"   => array(
+                    "keys"    => [ "id" => "", "secret" => "" ],
+                ],
+                "Facebook"    => [
                     "enabled"        => true,
-                    "keys"           => array( "id" => "", "secret" => "" ),
+                    "keys"           => [ "id" => "", "secret" => "" ],
                     "trustForwarded" => false,
                     "scope"          => "email, public_profile"
-                ),
-                "Twitter"    => array(
+                ],
+                "Twitter"    => [
                     "enabled"      => true,
-                    "keys"         => array( "key" => "", "secret" => "" ),
+                    "keys"         => [ "key" => "", "secret" => "" ],
                     "includeEmail" => true,
-                ),
-                "LinkedIn"   => array(
+                ],
+                "LinkedIn"   => [
                     "enabled" => true,
-                    "keys"    => array( "id" => "", "secret" => "" ),
-                ),
-        ) );
+                    "keys"    => [ "id" => "", "secret" => "" ],
+                ],
+            ],
+        ];
+
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_social_api' );
         $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_social_api' );
+
         if ( $fb_id != '' && $fb_secret != '' ) {
             $config['providers']['Facebook']['keys']['id']     = $fb_id;
             $config['providers']['Facebook']['keys']['secret'] = $fb_secret;
         }
+
         //google config from admin
         $g_id     = dokan_get_option( 'google_app_id', 'dokan_social_api' );
         $g_secret = dokan_get_option( 'google_app_secret', 'dokan_social_api' );
+
         if ( $g_id != '' && $g_secret != '' ) {
             $config['providers']['Google']['keys']['id']     = $g_id;
             $config['providers']['Google']['keys']['secret'] = $g_secret;
         }
+
         //linkedin config from admin
         $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_social_api' );
         $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_social_api' );
+
         if ( $l_id != '' && $l_secret != '' ) {
             $config['providers']['LinkedIn']['keys']['id']     = $l_id;
             $config['providers']['LinkedIn']['keys']['secret'] = $l_secret;
         }
+
         //Twitter config from admin
         $twitter_id     = dokan_get_option( 'twitter_app_id', 'dokan_social_api' );
         $twitter_secret = dokan_get_option( 'twitter_app_secret', 'dokan_social_api' );
+
         if ( $twitter_id != '' && $twitter_secret != '' ) {
             $config['providers']['Twitter']['keys']['key']    = $twitter_id;
             $config['providers']['Twitter']['keys']['secret'] = $twitter_secret;
@@ -155,48 +168,57 @@ Class Dokan_Social_Login {
      * @return void
      */
     public function monitor_autheticate_requests() {
-
-        if ( !class_exists( 'WeDevs_Dokan' ) ) {
-            return;
-        }
-
-        $config = $this->config;
-
-        if ( isset( $_GET['hauth_start'] ) || isset( $_GET['hauth_done'] ) ) {
-            require_once DOKAN_PRO_INC . '/lib/Hybrid/Endpoint.php';
-
-            Hybrid_Endpoint::process();
-            exit;
-        }
-
-        if ( !isset( $_GET['dokan_reg'] ) ) {
-            return;
-        }
-
-        $hybridauth = new Hybrid_Auth( $config );
-        $provider   = $_GET['dokan_reg'];
-
         try {
-            if ( $provider != '' ) {
+            /**
+             * Feed the config array to Hybridauth
+             *
+             * @var Hybridauth
+             */
+            $hybridauth = new Hybridauth( $this->config );
+
+            /**
+             * Initialize session storage.
+             *
+             * @var Session
+             */
+            $storage = new Session();
+
+            /**
+             * Hold information about provider when user clicks on Sign In.
+             */
+            $provider = ! empty( $_GET['dokan_reg'] ) ? $_GET['dokan_reg'] : '';
+
+            if ( $provider ) {
+                $storage->set( 'provider', $provider );
+            }
+
+            if ( $provider = $storage->get( 'provider' ) ) {
                 $adapter = $hybridauth->authenticate( $provider );
 
-                if ( $adapter->isUserConnected() ) {
-                    $user_profile = $adapter->getUserProfile();
-                } else {
-                    wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
-                    wp_redirect( $this->base_url );
-                }
-
-                $wp_user = get_user_by( 'email', $user_profile->email );
-
-                if ( !$wp_user ) {
-                    $this->register_new_user( $user_profile, $provider );
-                } else {
-                    $this->login_user( $wp_user );
-                }
+                $storage->set('provider', null);
             }
+
+            if ( ! isset( $adapter ) ) {
+                return;
+            }
+
+            $user_profile = $adapter->getUserProfile();
+
+            if ( ! $user_profile ) {
+                wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
+                wp_redirect( $this->callback );
+            }
+
+            $wp_user = get_user_by( 'email', $user_profile->email );
+
+            if ( ! $wp_user ) {
+                $this->register_new_user( $user_profile );
+            } else {
+                $this->login_user( $wp_user );
+            }
+
         } catch ( Exception $e ) {
-            $this->e_msg = $e->getMessage();
+            echo $e->getMessage();
         }
     }
 
@@ -242,7 +264,7 @@ Class Dokan_Social_Login {
                 'name'  => 'fb_app_url',
                 'label' => __( 'Site URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=facebook&hauth_done=Facebook' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'facebook_app_id'     => array(
                 'name'  => 'fb_app_id',
@@ -264,7 +286,7 @@ Class Dokan_Social_Login {
                 'name'  => 'twitter_app_url',
                 'label' => __( 'Callback URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '/?dokan_reg=twitter&hauth.done=Twitter' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'twitter_app_id'      => array(
                 'name'  => 'twitter_app_id',
@@ -286,7 +308,7 @@ Class Dokan_Social_Login {
                 'name'  => 'google_app_url',
                 'label' => __( 'Redirect URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=google&hauth.done=Google' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'google_app_id'       => array(
                 'name'  => 'google_app_id',
@@ -308,7 +330,7 @@ Class Dokan_Social_Login {
                 'name'  => 'linkedin_app_url',
                 'label' => __( 'Redirect URL', 'dokan-social-api' ),
                 'type'  => 'html',
-                'desc'  => "<input class='regular-text' type='text' disabled value=" . $this->base_url . '?dokan_reg=linkedin&hauth.done=LinkedIn' . '>',
+                'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'linkedin_app_id'     => array(
                 'name'  => 'linkedin_app_id',
@@ -364,29 +386,36 @@ Class Dokan_Social_Login {
      * @return void
      */
     public function render_social_logins() {
-        $configured_providers = array();
+        $configured_providers = [];
 
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_social_api' );
         $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_social_api' );
+
         if ( $fb_id != '' && $fb_secret != '' ) {
             $configured_providers [] = 'facebook';
         }
+
         //google config from admin
         $g_id     = dokan_get_option( 'google_app_id', 'dokan_social_api' );
         $g_secret = dokan_get_option( 'google_app_secret', 'dokan_social_api' );
+
         if ( $g_id != '' && $g_secret != '' ) {
             $configured_providers [] = 'google';
         }
+
         //linkedin config from admin
         $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_social_api' );
         $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_social_api' );
+
         if ( $l_id != '' && $l_secret != '' ) {
             $configured_providers [] = 'linkedin';
         }
+
         //Twitter config from admin
         $twitter_id     = dokan_get_option( 'twitter_app_id', 'dokan_social_api' );
         $twitter_secret = dokan_get_option( 'twitter_app_secret', 'dokan_social_api' );
+
         if ( $twitter_id != '' && $twitter_secret != '' ) {
             $configured_providers [] = 'twitter';
         }
@@ -401,39 +430,12 @@ Class Dokan_Social_Login {
         $providers = apply_filters( 'dokan_social_provider_list', $configured_providers );
 
         $data = array(
-            'base_url'  => $this->base_url,
+            'base_url'  => $this->callback,
             'providers' => $providers,
             'pro'       => true
         );
 
         dokan_get_template_part( 'global/social-registration', '', $data );
-    }
-
-    /**
-     * Recursive function to generate a unique username.
-     *
-     * If the username already exists, will add a numerical suffix which will increase until a unique username is found.
-     *
-     * @param string $username
-     *
-     * @return string The unique username.
-     */
-    function generate_unique_username( $username ) {
-        static $i;
-        if ( null === $i ) {
-            $i = 1;
-        } else {
-            $i++;
-        }
-        if ( !username_exists( $username ) ) {
-            return $username;
-        }
-        $new_username = sprintf( '%s_%s', $username, $i );
-        if ( !username_exists( $new_username ) ) {
-            return $new_username;
-        } else {
-            return call_user_func( array( $this, 'generate_unique_username' ), $username );
-        }
     }
 
     /**
@@ -445,10 +447,10 @@ Class Dokan_Social_Login {
      *
      * @return void
      */
-    private function register_new_user( $data, $provider ) {
+    private function register_new_user( $data ) {
 
         $userdata = array(
-            'user_login' => $this->generate_unique_username( $data->displayName ),
+            'user_login' => dokan_generate_username( $data->displayName ),
             'user_email' => $data->email,
             'first_name' => $data->firstName,
             'last_name'  => $data->lastName,

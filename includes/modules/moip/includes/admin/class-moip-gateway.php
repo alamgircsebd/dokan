@@ -6,9 +6,12 @@ if ( ! defined( 'WPINC' ) ) exit;
 
 require_once MOIP_LIB . '/vendor/autoload.php';
 
-use Moip\Auth\Connect;
-use Moip\Auth\OAuth;
 use Moip\Moip;
+use Moip\Auth\OAuth;
+use Moip\Auth\Connect;
+use DokanPro\Modules\Subscription\Helper;
+use DokanPro\Modules\Subscription\SubscriptionPack;
+
 /**
  * Dokan Moip Gateway
  */
@@ -372,26 +375,33 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         }
 
         // We assume that if a subscription product added into a cart then no other product doesn't exist in cart so we get only one product
-        $order_items       = $order->get_items();
-        $product_pack_item = reset( $order_items );
-        $product_pack      = wc_get_product( $product_pack_item->get_product_id() );
+        $order_items        = $order->get_items();
+        $product_pack_item  = reset( $order_items );
+        $product_pack       = wc_get_product( $product_pack_item->get_product_id() );
+        $customer_user_id   = $order->get_customer_id();
+        $order_total        = round( $order->get_total(), 2 );
+        $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
 
-        $product_pack_name = $product_pack->get_title() . ' #' . $product_pack->get_id();
-        $product_pack_id   = $product_pack->get_slug() . '-' . $product_pack->get_id();
-        $is_recurring      = get_post_meta( $product_pack->get_id(), '_enable_recurring_payment', true );
-        $customer_user_id  = $order->get_customer_id();
-        $order_total       = round( $order->get_total(), 2 );
-
-        if ( $is_recurring == 'yes' ) {
+        if ( $dokan_subscription->is_recurring() ) {
             require_once MOIP_INC . '/admin/class-moip-subscription.php';
             // If reccuring pack
-            $subscription_interval = get_post_meta( $product_pack->get_id(), '_subscription_period_interval', true );
-            $subscription_period   = get_post_meta( $product_pack->get_id(), '_subscription_period', true );
-            $subscription_length   = get_post_meta( $product_pack->get_id(), '_subscription_length', true );
+            $subscription_interval = $dokan_subscription->get_recurring_interval();
+            $subscription_period   = $dokan_subscription->get_period_type();
+            $subscription_length   = $dokan_subscription->get_period_length();
+            $trial_details         = array(
+                'days'             => $dokan_subscription->is_trial() ? $dokan_subscription->get_trial_period_length() : 0,
+                'is_enabled'       => $dokan_subscription->is_trial()
+            );
+
+            // if vendor has already used a trial pack, then make trial to a normal recurring pack
+            if ( Helper::has_used_trial_pack( get_current_user_id() ) ) {
+                $trial_details['days']       = 0;
+                $trial_details['is_enabled'] = false;
+            }
 
             $moip_subscriptoin = new Dokan_Moip_Subscription();
 
-            $plan_id = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length );
+            $plan_id = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length, $trial_details );
 
             if ( $plan_id ) {
                 $subscription_code = $moip_subscriptoin->create_subscription( $order, $plan_id );
@@ -410,6 +420,9 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
             update_user_meta( $customer_user_id, 'can_post_product', '1' );
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
+
+            // make all the existing product publish if not
+            Helper::make_product_publish( $customer_user_id );
 
             $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
             $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
@@ -480,6 +493,9 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 update_user_meta( $customer_user_id, 'can_post_product', '1' );
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
+
+                // make all the existing product publish if not
+                Helper::make_product_publish( $customer_user_id );
 
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );

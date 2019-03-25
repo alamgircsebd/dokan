@@ -291,7 +291,7 @@ class Dokan_Pro_Products {
             update_post_meta( $post_id, '_per_product_admin_commission_type', $value );
         }
         if ( isset( $_POST['_per_product_admin_commission'] ) ) {
-            $value = empty( $_POST['_per_product_admin_commission'] ) ? '' : (float) $_POST['_per_product_admin_commission'];
+            $value = '' === $_POST['_per_product_admin_commission'] ? '' : (float) $_POST['_per_product_admin_commission'];
             update_post_meta( $post_id, '_per_product_admin_commission', $value );
         }
     }
@@ -579,9 +579,17 @@ class Dokan_Pro_Products {
      */
     public function save_product_post_data( $product ) {
         //update product status to pending-review if set by admin
-        if ( $product['post_status'] == 'publish' && dokan_get_option( 'edited_product_status', 'dokan_selling' ) == 'on' ) {
-            $product['post_status'] = 'pending';
+        if ( 'publish' !== $product['post_status'] || 'on' !== dokan_get_option( 'edited_product_status', 'dokan_selling' ) ) {
+            return $product;
         }
+
+        $vendor_id = dokan_get_current_user_id();
+        // return early if vendor can publish product directly
+        if ( 'yes' === get_user_meta( $vendor_id, 'dokan_publishing', true ) ) {
+            return $product;
+        }
+
+        $product['post_status'] = 'pending';
 
         return $product;
     }
@@ -712,32 +720,32 @@ class Dokan_Pro_Products {
         }
 
         $args = array(
-            'pro' => true,
-            'id'  => 'dokan-product-list-table',
+            'pro'     => true,
+            'id'      => 'dokan-product-list-table',
             'options' => $this->get_inline_edit_options(),
 
             // product informations
-            'product_id' => $product->get_id(),
-            'post_title' => $product->get_title(),
-            'product_cat' => $cats,
-            'product_tag' => $tags,
-            'product_type' => $product->get_type(),
-            'is_virtual' => $product->is_virtual(),
-            'reviews_allowed' => $product->get_reviews_allowed(),
-            'post_status' => $post->post_status,
-            'sku'   => $product->get_sku(),
-            '_regular_price' => $product->get_regular_price(),
-            '_sale_price' => $product->get_sale_price(),
-            'weight' => $product->get_weight(),
-            'length' => $product->get_length(),
-            'width' => $product->get_width(),
-            'height' => $product->get_height(),
+            'product_id'        => $product->get_id(),
+            'post_title'        => $product->get_title(),
+            'product_cat'       => $cats,
+            'product_tag'       => $tags,
+            'product_type'      => $product->get_type(),
+            'is_virtual'        => $product->is_virtual(),
+            'reviews_allowed'   => $product->get_reviews_allowed(),
+            'post_status'       => $post->post_status,
+            'sku'               => $product->get_sku(),
+            '_regular_price'    => $product->get_regular_price(),
+            '_sale_price'       => $product->get_sale_price(),
+            'weight'            => $product->get_weight(),
+            'length'            => $product->get_length(),
+            'width'             => $product->get_width(),
+            'height'            => $product->get_height(),
             'shipping_class_id' => $product->get_shipping_class_id(),
-            '_visibility' => ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post->ID, '_visibility', true ),
-            'manage_stock' => $product->get_manage_stock(),
-            'stock_quantity' => $product->get_stock_quantity(),
-            'stock_status' => $product->get_stock_status(),
-            'backorders' => $product->get_backorders(),
+            '_visibility'       => ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post->ID, '_visibility', true ),
+            'manage_stock'      => $product->get_manage_stock(),
+            'stock_quantity'    => $product->get_stock_quantity(),
+            'stock_status'      => $product->get_stock_status(),
+            'backorders'        => $product->get_backorders(),
         );
 
         dokan_get_template_part( 'products/edit/product-list-table-inline-edit-form', '', $args );
@@ -844,6 +852,12 @@ class Dokan_Pro_Products {
         foreach ( $args as $field => $default_val ) {
             $data[ $field ] = isset( $posted_data[ $field ] ) ? $posted_data[ $field ] : $default_val;
         }
+
+        // save post content & excerpt; (ei: see `dokan_save_product` function)
+        $saved_post           = get_post( $data['ID'] );
+        $data['post_content'] = $saved_post ? $saved_post->post_content : '';
+        $data['post_excerpt'] = $saved_post ? $saved_post->post_excerpt : '';
+        $data['post_status']  = $saved_post && 'pending' === $saved_post->post_status ? 'pending' : $data['post_status'];
 
         $data = apply_filters( 'dokan_update_product_post_data', $data );
 

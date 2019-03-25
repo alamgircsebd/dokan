@@ -50,6 +50,58 @@
                             <span v-for="i in 5" :class="['dashicons', i <= store.rating.rating ? 'active' : '' ]"></span>
                         </div>
 
+                        <template v-if="categories.length">
+                            <template v-if="! editingCategories">
+                                <template v-if="! store.categories.length">
+                                    <a
+                                        class="store-categoy-names"
+                                        href="#edit-categories"
+                                        v-html="isCategoryMultiple ? __( 'Add Categories', 'dokan' ) : __( 'Add Category', 'dokan' )"
+                                        @click.prevent="editingCategories = true"
+                                    />
+                                </template>
+                                <template v-else>
+                                    <a
+                                        class="store-categoy-names"
+                                        href="#edit-categories"
+                                        v-html="store.categories.map( category => category.name ).join( ', ' )"
+                                        @click.prevent="editingCategories = true"
+                                    />
+                                </template>
+                            </template>
+                            <template v-else>
+                                <div class="store-categories-editing">
+                                    <h4>{{ isCategoryMultiple ? __( 'Set Store Categories', 'dokan' ) : __( 'Set Store Category', 'dokan' ) }}</h4>
+                                    <!-- NOTE: This fieldset should wrap this full component if we implement whole editing in this same page -->
+                                    <fieldset :disabled="isUpdating">
+                                        <ul class="category-select-list">
+                                            <li v-for="category in categories" :key="category.id">
+                                                <label>
+                                                    <input
+                                                        :type="isCategoryMultiple ? 'checkbox' : 'radio'"
+                                                        :value="category.id"
+                                                        v-model="storeCategories"
+                                                    > {{ category.name }}
+                                                </label>
+                                            </li>
+                                        </ul>
+                                        <p>
+                                            <button
+                                                class="button button-primary button-small"
+                                                v-text="__( 'Done', 'dokan' )"
+                                                @click="updateStore"
+                                            />
+                                            <button
+                                                class="button button-link button-small"
+                                                v-text="__( 'Cancel', 'dokan' )"
+                                                @click="editingCategories = false"
+                                            />
+                                        </p>
+                                    </fieldset>
+                                </div>
+                            </template>
+                        </template>
+
                         <ul class="store-details">
                             <li class="address">
                                 <span class="street_1">{{ store.address.street_1 }}, </span>
@@ -226,11 +278,14 @@ export default {
                 body: ''
             },
             loadEditVendor: false
+            isUpdating: false,
+            categories: [],
+            isCategoryMultiple: false,
+            editingCategories: false
         };
     },
 
     computed: {
-
         id() {
             return this.$route.params.id;
         },
@@ -247,11 +302,60 @@ export default {
             return false;
         },
 
+        categoriesFlattened() {
+            const categories = {};
+            let i = 0;
+
+            for ( i = 0; i < this.categories.length; i++ ) {
+                const category = this.categories[ i ];
+
+                categories[ category.id ] = {
+                    id: category.id,
+                    name: category.name,
+                    slug: category.slug
+                };
+            }
+
+            return categories;
+        },
+
+        storeCategories: {
+            get() {
+                const self = this;
+
+                if ( ! self.isCategoryMultiple ) {
+                    if ( self.store.categories.length ) {
+                        return self.store.categories[0].id;
+                    } else {
+                        return null;
+                    }
+                } else {
+                    return self.store.categories.map( ( category ) => {
+                        return category.id;
+                    } );
+                }
+            },
+
+            set( categories ) {
+                const self = this;
+
+                if ( $.isArray( categories ) ) {
+                    self.store.categories = categories.map( ( category_id ) => {
+                        return self.categoriesFlattened[ category_id ];
+                    } );
+                } else {
+                    self.store.categories = [
+                        self.categoriesFlattened[ categories ]
+                    ]
+                }
+            }
+        },
+
         getEearningRate() {
             if ( this.stats.others.commission_type == 'percentage' ) {
                 return this.stats.others.commission_rate + '%';
             } else {
-                return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' )
+                return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' );
             }
         }
     },
@@ -275,8 +379,16 @@ export default {
     methods: {
 
         fetch() {
-            dokan.api.get('/stores/' + this.id )
-            .done(response => this.store = response);
+            const self = this;
+
+            dokan.api.get('/stores/' + self.id )
+            .done(response => self.store = response);
+
+            dokan.api.get( '/store-categories' )
+                .done( ( response, status, xhr ) => {
+                    self.categories = response;
+                    self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
+                } );
         },
 
         fetchStats() {
@@ -339,6 +451,19 @@ export default {
         editUrl() {
             return dokan.urls.adminRoot + 'user-edit.php?user_id=' + this.store.id;
         },
+
+        updateStore() {
+            const self = this;
+
+            self.isUpdating = true;
+
+            dokan.api.put( `/stores/${self.store.id}`, self.store )
+                .done( ( response ) => {
+                    self.store = response;
+                    self.isUpdating = false;
+                    self.editingCategories = false;
+                } );
+        }
     }
 };
 </script>
@@ -577,6 +702,40 @@ export default {
                             content: "\f158";
                         }
                     }
+                }
+            }
+
+            a.store-categoy-names {
+                text-align: center;
+                font-weight: 500;
+                font-size: 14px;
+                margin: 8px 0 14px;
+                color: #444;
+                text-decoration: none;
+                display: block;
+                line-height: 1.6;
+
+                &:hover {
+                    color: #0073aa;
+                }
+            }
+
+            .store-categories-editing {
+
+                h4 {
+                    font-size: 15px;
+                    font-weight: 700;
+                    margin-bottom: 5px;
+                }
+
+                ul {
+                    padding: 0;
+                    margin: 0;
+                    list-style-type: none;
+                }
+
+                .button-link {
+                    text-decoration: none;
                 }
             }
         }
@@ -854,5 +1013,4 @@ export default {
         }
     }
 }
-
 </style>

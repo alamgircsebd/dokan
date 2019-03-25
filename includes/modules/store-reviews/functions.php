@@ -3,7 +3,7 @@
 /**
  * Create or update a store review
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.5
  *
  * @param int   $store_id
  * @param array $data

@@ -1,5 +1,5 @@
 === Dokan (Pro) Multivendor Marketplace Plugin ===
-Contributors: tareq1988, wedevs
+Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
@@ -171,6 +171,38 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+v2.9.6 -> Feb 20, 2018
+----------------------------------------------
+- [fix] Add csv export functionality for all log in backend dashboard report section
+- [fix] Fix js compiling issues
+- [fix] Fix backend report routing isssue
+
+v2.9.5 -> Feb 18, 2018
+----------------------------------------------
+- [new] Automate order refund process via stripe
+- [new] Add create review REST endpoint (Store Review Module)
+- [new] Add trial subscription functionality in (Subscription Module)
+- [new] Add product type & gallery image upload restriction in vendor subscription (Subscription Module)
+- [new] Show privacy policy info in product enquiry form
+- [new] Send email to vendor on store follows and unfollows
+- [tweak] Refund calculation process in rma module(RMA Module)
+- [fix] Incorrect shipping zone in cart page, when a vendor limit his zone with postcode
+- [fix] Store SEO time formating issue on Google console
+- [fix] Unable to select country or state in vendor shipping
+- [fix] Unable to send announcement to a single vendor
+- [fix] Import export module does not allow to update any existing product (Import Export Module)
+- [fix] Format geo meta data while importing from CSV (Geolocaiton Module)
+- [fix] Remove unnecessary quote from template (geolocation Module)
+- [fix] Store support button appears even after disabling it from vendor dashboard
+- [fix] Warning on customer my-order page (RMA Module)
+- [fix] Customer is unable to ask for support throw Store Support form (Store Support Module)
+- [fix] Product status changes even the vendor has the ability to publish product directly
+- [fix] Show default vendor profile progress message in vendor dashboard
+- [fix] Admin report logs calculation issue is fixed in admin dashboard
+- [fix] Unable to save product wise commission to 0
+- [fix] Product description and short description is getting deleted on quick edit
+- [fix] if zone id is not found in vendor's available zone id, assume it falls under Locations not covered by your other zones
+- [fix] When admin sends an announcement to all the vendors, newly registered vendors sees "no notice found"
 
 v2.9.4 -> January 23, 2018
 ------------------------------------
