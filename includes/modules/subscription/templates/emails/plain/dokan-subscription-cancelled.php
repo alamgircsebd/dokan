@@ -13,8 +13,6 @@ if ( ! $vendor ) {
     return;
 }
 
-$subscription = data['subscription'];
-
 echo "= " . $email_heading . " =\n\n";
 ?>
 

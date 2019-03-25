@@ -74,14 +74,21 @@ class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
         $statuses = wc_get_order_statuses();
 
         foreach ( $results as $result ) {
+            $order       = wc_get_order( $result->order_id );
+            $order_total = $order->get_total();
+            $has_refund  = $order->get_total_refunded() ? true : false;
+
             $logs[] = [
-                'order_id'       => $result->order_id,
-                'vendor_id'      => $result->seller_id,
-                'vendor_name'    => dokan()->vendor->get( $result->seller_id )->get_shop_name(),
-                'order_total'    => $result->order_total,
-                'vendor_earning' => $result->net_amount,
-                'commission'     => $result->order_total - $result->net_amount,
-                'status'         => $statuses[ $result->order_status ],
+                'order_id'             => $result->order_id,
+                'vendor_id'            => $result->seller_id,
+                'vendor_name'          => dokan()->vendor->get( $result->seller_id )->get_shop_name(),
+                'previous_order_total' => $order_total,
+                'order_total'          => $result->order_total,
+                'vendor_earning'       => $result->net_amount,
+                'commission'           => $result->order_total - $result->net_amount,
+                'status'               => $statuses[ $result->order_status ],
+                'date'                 => $result->post_date,
+                'has_refund'           => $has_refund,
             ];
         }
 

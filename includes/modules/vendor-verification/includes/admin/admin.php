@@ -19,6 +19,8 @@ function dokan_verification_admin_settings( $sections ) {
 add_filter( 'dokan_settings_fields', 'dokan_verification_admin_settings_fields' );
 
 function dokan_verification_admin_settings_fields( $settings_fields ) {
+    $callback = dokan_get_navigation_url( 'settings/verification' );
+
     $settings_fields['dokan_verification'] = array(
         'facebook_app_label'    => array(
             'name'  => 'fb_app_label',
@@ -30,7 +32,7 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name'  => 'fb_app_url',
             'label' => __( 'Site Url', 'dokan' ),
             'type'  => 'html',
-            'desc'  => "<input class='regular-text' type='text' disabled value=" . dokan_get_navigation_url( 'settings/verification' ).'?hauth.done=Facebook'.'>',
+            'desc'  => "<input class='regular-text' type='text' disabled value='{$callback}'>",
         ),
         'facebook_app_id'     => array(
             'name'  => 'fb_app_id',
@@ -52,7 +54,7 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name'  => 'twitter_app_url',
             'label' => __( 'Callback URL', 'dokan' ),
             'type'  => 'html',
-            'desc'  => "<input class='regular-text' type='text' disabled value=".dokan_get_navigation_url( 'settings/verification' ).'?hauth.done=Twitter'.'>',
+            'desc'  => "<input class='regular-text' type='text' disabled value='{$callback}'>",
         ),
         'twitter_app_id'      => array(
             'name'  => 'twitter_app_id',
@@ -74,7 +76,7 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name'  => 'google_app_url',
             'label' => __( 'Redirect URI', 'dokan' ),
             'type'  => 'html',
-            'desc'  => "<input class='regular-text' type='text' disabled value=".dokan_get_navigation_url( 'settings/verification' ).'?hauth.done=Google'.'>',
+            'desc'  => "<input class='regular-text' type='text' disabled value='{$callback}'>",
         ),
         'google_app_id'       => array(
             'name'  => 'google_app_id',
@@ -96,7 +98,8 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name'  => 'linkedin_app_url',
             'label' => __( 'Redirect URL', 'dokan' ),
             'type'  => 'html',
-            'desc'  => "<input class='regular-text' type='text' disabled value=".dokan_get_navigation_url( 'settings/verification' ).'?hauth.done=LinkedIn'.'>',
+            'desc'  => "<input class='regular-text' type='text' disabled value='{$callback}'>",
+
         ),
         'linkedin_app_id'     => array(
             'name'  => 'linkedin_app_id',

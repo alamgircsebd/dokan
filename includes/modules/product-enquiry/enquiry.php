@@ -58,14 +58,30 @@ class Dokan_Product_Enquiry {
      * @uses add_action()
      */
     public function __construct() {
+        $this->define_constants();
+
         add_action( 'wp_ajax_dokan_product_enquiry', array( $this, 'send_email' ) );
         add_action( 'wp_ajax_nopriv_dokan_product_enquiry', array( $this, 'send_email' ) );
 
         add_filter( 'woocommerce_product_tabs', array( $this, 'register_tab' ), 99 );
         add_filter( 'dokan_settings_fields', array( $this, 'guest_user_settings' ), 10 );
 
+        add_filter( 'dokan_email_classes', array( $this, 'add_email_class' ) );
+        add_filter( 'dokan_email_list', array( $this, 'add_email_template_file' ) );
+        add_filter( 'dokan_email_actions', array( $this, 'add_email_action' ) );
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+    }
+
+    /**
+     * Define constants
+     *
+     * @return void
+     */
+    public function define_constants() {
+        define( 'DOKAN_ENQUIRY_INC', __DIR__ . '/includes' );
+        define( 'DOKAN_ENQUIRY_VIEWS', __DIR__ . '/views' );
     }
 
     /**
@@ -141,23 +157,19 @@ class Dokan_Product_Enquiry {
         check_ajax_referer( 'dokan_product_enquiry' );
 
         $posted = $_POST;
+        $url    = isset( $_POST['url'] ) ? $_POST['url'] : '';
 
-        $url = isset( $_POST['url'] ) ? $_POST['url'] : '';
-
-        if ( !empty( $url ) ) {
+        if ( ! empty( $url ) ) {
             wp_send_json_error( __( 'Boo ya!', 'dokan' ) );
         }
 
         if ( is_user_logged_in() ) {
-            $sender = wp_get_current_user();
-
-            $from_name = $sender->display_name;
-            $from_email = $sender->user_email;
-
+            $sender     = wp_get_current_user();
+            $customer_name  = $sender->display_name;
+            $customer_email = $sender->user_email;
         } else {
-
-            $from_name = trim( strip_tags( $posted['author'] ) );
-            $from_email = trim( strip_tags( $posted['email'] ) );
+            $customer_name  = trim( strip_tags( $posted['author'] ) );
+            $customer_email = trim( strip_tags( $posted['email'] ) );
         }
 
         $message = esc_attr( trim( $posted['enq_message'] ) );
@@ -167,95 +179,37 @@ class Dokan_Product_Enquiry {
         }
 
         $product_id = (int) $posted['enquiry_id'];
-        $seller_id = (int) $posted['seller_id'];
-        $seller = get_user_by( 'id', $seller_id );
+        $vendor_id  = (int) $posted['seller_id'];
+        $vendor     = dokan()->vendor->get( $vendor_id );
 
         // no seller found
-        if ( !$seller || is_wp_error( $seller ) ) {
+        if ( ! $vendor || is_wp_error( $vendor ) ) {
             $message = sprintf( '<div class="alert alert-success">%s</div>', __( 'Something went wrong!', 'dokan' ) );
             wp_send_json_error( $message );
         }
 
         // no product found
-        $product = get_post( $product_id );
-        if ( !$product ) {
+        $product = wc_get_product( $product_id );
+
+        if ( ! $product ) {
             $message = sprintf( '<div class="alert alert-success">%s</div>', __( 'Something went wrong!', 'dokan' ) );
             wp_send_json_error( $message );
         }
 
-        $template = dirname( __FILE__ ) . '/includes/email.php';
-        ob_start();
-        include $template;
-        $body = ob_get_clean();
-
-        $find = array(
-            '%from_name%',
-            '%from_email%',
-            '%user_ip%',
-            '%user_agent%',
-            '%message%',
-            '%site_name%',
-            '%site_url%',
-            '%product_name%',
-            '%product_url%',
-            '%seller_name%'
-        );
-
-        $replace = array(
-            $from_name,
-            $from_email,
+        $email_args = array(
+            $vendor,
+            $product,
             dokan_get_client_ip(),
             $this->get_user_agent(),
-            $message,
-            $this->get_from_name(),
-            home_url(),
-            $product->post_title,
-            get_permalink( $product_id ),
-            $seller->display_name
+            $customer_name,
+            $customer_email,
+            $message
         );
 
-        $subject = sprintf( __( '"%s" sent you a message from your "%s" store', 'dokan' ), $from_name, $this->get_from_name() );
-        $body    = str_replace( $find, $replace, $body);
-        $headers = array( "Reply-To: {$from_name}<{$from_email}>" );
-
-        $this->send( $seller->user_email, $subject, $body, $headers );
-
-        do_action( 'dokan_enquiry_email_sent', array(
-            'to'           => $seller->user_email,
-            'subject'      => $subject,
-            'message'      => $message,
-            'sender_email' => $from_email,
-            'sender_name'  => $from_name,
-            'headers'      => $headers,
-        ) );
+        do_action_ref_array( 'dokan_send_enquiry_email', $email_args );
 
         $success = sprintf( '<div class="alert alert-success">%s</div>', __( 'Email sent successfully!', 'dokan' ) );
         wp_send_json_success( $success );
-    }
-
-    /**
-     * Send the email.
-     *
-     * @since 0.1
-     *
-     * @access public
-     *
-     * @param mixed $to
-     * @param mixed $subject
-     * @param mixed $message
-     * @param string $headers
-     * @param string $attachments
-     *
-     * @return void
-     */
-    function send( $to, $subject, $message, $headers = array() ) {
-        add_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
-        add_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
-
-        wp_mail( $to, $subject, $message, $headers );
-
-        remove_filter( 'wp_mail_from', array( $this, 'get_from_address' ) );
-        remove_filter( 'wp_mail_from_name', array( $this, 'get_from_name' ) );
     }
 
     /**
@@ -355,6 +309,47 @@ class Dokan_Product_Enquiry {
             </div>
         </div>
         <?php
+    }
+
+    /**
+     * Add email class
+     *
+     * @param array $classes
+     *
+     * @return array
+     */
+    public function add_email_class( $classes ) {
+        require_once DOKAN_ENQUIRY_INC . '/dokan-product-enquiry-email.php';
+
+        $classes['Dokan_Product_Enquiry_Email'] = new Dokan_Product_Enquiry_Email();
+
+        return $classes;
+    }
+
+    /**
+     * Add email template file
+     *
+     * @param array $templare_files
+     *
+     * @return array
+     */
+    public function add_email_template_file( $template_files ) {
+        $template_files[] = 'product-enquery-email-html.php';
+
+        return $template_files;
+    }
+
+    /**
+     * Add eamil aciton
+     *
+     * @param array $actions
+     *
+     * @return array
+     */
+    public function add_email_action( $actions ) {
+        $actions[] = 'dokan_send_enquiry_email';
+
+        return $actions;
     }
 
 } // Dokan_Product_Enquiry

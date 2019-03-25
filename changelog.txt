@@ -1,3 +1,28 @@
+v2.9.7 -> Mar 25, 2018
+--------------------------------------------
+- [new]   Add Store Category
+- [new]   Make Dokan YITH WC Brand add-on compatible
+- [new]   Add date and refund column in admin logs area
+- [new]   Change product status according to subscription status (Subscriptions)
+- [fix]   Show button for non logged-in user (Follow Store)
+- [fix]   Only show force SSL notice if, site is not under https
+- [fix]   Any change with quick edit makes pending product to publish
+- [fix]   Number_format for store rating (Store Review)
+- [fix]   Store tab button classes for logged and non logged in users (Live Chat)
+- [fix]   Send refund admin commission to customer (Stripe Connect)
+- [fix]   Error on subscription cancellation email (Subscriptions)
+- [fix]   Booking compatibility issue with the latest version of WC booking (Booking)
+- [fix]   Get store terms conflict with caching
+- [fix]   CSV report formatting issue in all log section (Admin Backend)
+- [fix]   Filter form for empty search param (Geolocation)
+- [fix]   Return rma defaults reasons and added hook after create coupon (RMA)
+- [fix]   Add max trial subscription period length for PayPal (Subscriptions)
+- [fix]   When a vendor subscribe to a trial subscription, make all other trial to non-trial subscription for that vendor (Subscriptions)
+- [fix]   Add email class for product enquiry email (Product Enquiry)
+- [fix]   Progressbar translation function is not working correctly
+- [fix]   If admin creates a shipping zone with a zip code and vendor don't create a shipping method under that zone, shipping calculation is getting wrong.
+- [fix]   Update social login and vendor verification API
+
 v2.9.6 -> Feb 20, 2018
 ----------------------------------------------
 - [fix] Add csv export functionality for all log in backend dashboard report section

@@ -13,8 +13,6 @@ if ( ! $vendor ) {
     return;
 }
 
-$subscription = $data['subscription'];
-
 do_action( 'woocommerce_email_header', $email_heading, $email );
 
 printf( '<p>%s</p>', __( 'Hello there', 'dokan' ) );

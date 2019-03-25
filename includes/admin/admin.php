@@ -287,6 +287,19 @@ class Dokan_Pro_Admin_Settings {
             ]
         );
 
+        if ( dokan_is_store_categories_feature_on() ) {
+            $routes[] = array(
+                'path' => '/store-categories',
+                'name' => 'StoreCategoriesIndex',
+                'component' => 'StoreCategoriesIndex',
+            );
+            $routes[] = array(
+                'path' => '/store-categories/:id',
+                'name' => 'StoreCategoriesShow',
+                'component' => 'StoreCategoriesShow',
+            );
+        }
+
         $routes[] = array(
             'path'      => '/tools',
             'name'      => 'Tools',

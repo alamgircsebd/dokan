@@ -1,6 +1,7 @@
 <template>
     <div class="vendor-list">
         <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
+        <router-link v-if="categories.length" class="page-title-action" :to="{name: 'StoreCategoriesIndex'}">{{ __( 'Store Categories', 'dokan' ) }}</router-link>
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
@@ -43,6 +44,10 @@
 
             <template slot="email" slot-scope="data">
                 <a :href="'mailto:' + data.row.email">{{ data.row.email }}</a>
+            </template>
+
+            <template slot="categories" slot-scope="{ row }">
+                {{ row.categories.map( category => category.name ).join( ', ' ) }}
             </template>
 
             <template slot="registered" slot-scope="data">
@@ -140,7 +145,9 @@ export default {
                     label: this.__( 'Disable Selling', 'dokan' )
                 }
             ],
-            vendors: []
+            vendors: [],
+            categories: [],
+            isCategoryMultiple: false
         }
     },
 
@@ -180,12 +187,17 @@ export default {
 
         sortOrder() {
             return this.$route.query.order || 'desc';
+        },
+
+        storeCategory() {
+            return this.$route.query.store_category || null;
         }
     },
 
     created() {
 
         this.fetchVendors();
+        this.fetchCategories();
     },
 
     methods: {
@@ -224,22 +236,56 @@ export default {
 
             self.loading = true;
 
-            // dokan.api.get('/stores?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
-            dokan.api.get('/stores', {
-                per_page: this.perPage,
-                page: this.currentPage,
-                status: this.currentStatus,
-                orderby: this.sortBy,
-                order: this.sortOrder
-            })
-            .done((response, status, xhr) => {
-                // console.log(response, status, xhr);
-                self.vendors = response;
-                self.loading = false;
+            const data = {
+                per_page: self.perPage,
+                page: self.currentPage,
+                status: self.currentStatus,
+                orderby: self.sortBy,
+                order: self.sortOrder,
+                store_category: self.storeCategory
+            };
 
-                this.updatedCounts(xhr);
-                this.updatePagination(xhr);
-            });
+            dokan.api.get('/stores', data)
+                .done((response, status, xhr) => {
+                    self.vendors = response;
+                    self.loading = false;
+
+                    self.updatedCounts(xhr);
+                    self.updatePagination(xhr);
+                });
+        },
+
+        fetchCategories() {
+            const self = this;
+
+            dokan.api.get( '/store-categories' )
+                .done( ( response, status, xhr ) => {
+                    self.categories = response;
+                    self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
+
+                    self.columns = {
+                        'store_name': {
+                            label: this.__( 'Store', 'dokan' ),
+                            sortable: true
+                        },
+                        'email': {
+                            label: this.__( 'E-mail', 'dokan' )
+                        },
+                        'categories': {
+                            label: self.isCategoryMultiple ? this.__( 'Categories', 'dokan' ) : this.__( 'Category', 'dokan' )
+                        },
+                        'phone': {
+                            label: this.__( 'Phone', 'dokan' )
+                        },
+                        'registered': {
+                            label: this.__( 'Registered', 'dokan' ),
+                            sortable: true
+                        },
+                        'enabled': {
+                            label: this.__( 'Status', 'dokan' )
+                        }
+                    };
+                } );
         },
 
         onActionClick(action, row) {

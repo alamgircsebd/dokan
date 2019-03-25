@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.9.6
+  Version: 2.9.7
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 3.5.4
+  WC tested up to: 3.5.7
   License: GPL2
   TextDomain: dokan
  */
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.6';
+    public $version = '2.9.7';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -260,6 +260,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/orders.php';
         require_once DOKAN_PRO_INC . '/reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
+        require_once DOKAN_PRO_INC . '/class-dokan-store-category.php';
 
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
@@ -286,9 +287,11 @@ class Dokan_Pro {
             }
         }
 
-        if ( !class_exists( 'Hybrid_Auth' ) ) {
-            require_once DOKAN_PRO_INC . '/lib/Hybrid/Auth.php';
+        if ( ! class_exists( 'Hybrid_Auth' ) ) {
+            require_once DOKAN_PRO_INC . '/lib/hybridauth/autoload.php';
         }
+
+        require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
     }
 
     /**
@@ -299,6 +302,8 @@ class Dokan_Pro {
      * @return void
      */
     public function inistantiate() {
+        new Dokan_Store_Category();
+
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
             new Dokan_Pro_Admin_Settings();
@@ -645,6 +650,7 @@ class Dokan_Pro {
      */
     function rest_api_class_map( $class_map ) {
         $classes = array(
+            dirname( __FILE__ ) . '/includes/api/class-store-category-controller.php'    => 'Dokan_REST_Store_Category_Controller',
             dirname( __FILE__ ) . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
             dirname( __FILE__ ) . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
             dirname( __FILE__ ) . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',

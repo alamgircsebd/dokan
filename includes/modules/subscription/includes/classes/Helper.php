@@ -452,7 +452,7 @@ class Helper {
      *
      * @return void
      */
-    function update_product_status( $user_id ) {
+    public static function update_product_status( $user_id ) {
         global $wpdb;
 
         $status = dokan_get_option( 'product_status_after_end', 'dokan_product_subscription', 'draft' );
@@ -521,24 +521,53 @@ class Helper {
      * Determine if the user has used a free pack before
      *
      * @param int $user_id
-     * @param int $pack_id
      *
      * @return boolean
      */
-    public static function has_used_free_pack( $user_id, $pack_id ) {
-        $has_used = get_user_meta( $user_id, 'dps_fp_used', true );
+    public static function has_used_trial_pack( $user_id ) {
+        $has_used = get_user_meta( $user_id, 'dokan_used_trial_pack', true );
 
-        if ( $has_used == '' ) {
+        if ( ! $has_used ) {
             return false;
         }
 
-        if ( is_array( $has_used ) && isset( $has_used[$pack_id] ) ) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
+    /**
+     * Make product status publish
+     *
+     * @param int $user_id
+     *
+     * @return void
+     */
+    public static function make_product_publish( $user_id ) {
+        global $wpdb;
+
+        $wpdb->query( "UPDATE $wpdb->posts SET post_status = 'publish' WHERE post_author = '$user_id' AND post_type = 'product' AND post_status != 'publish'" );
+    }
+
+    /**
+     * Add used trial pack
+     *
+     * @param int $user_id
+     * @param int $pack_id
+     *
+     * @return void
+     */
+    public static function add_used_trial_pack( $user_id, $pack_id ) {
+        $subscription = dokan()->subscription->get( $pack_id );
+
+        if ( empty( $subscription->pack_id ) ) {
+            return false;
+        }
+
+        if ( ! $subscription->is_trial() ) {
+            return false;
+        }
+
+        update_user_meta( $user_id, 'dokan_used_trial_pack', true );
+    }
 }
 
 Helper::instance();

@@ -11,6 +11,7 @@ class Dokan_Follow_Store_Ajax {
      */
     public function __construct() {
         add_action( 'wp_ajax_dokan_follow_store_toggle_status', array( $this, 'toggle_follow_status' ) );
+        add_filter( 'wp_ajax_dokan_follow_store_get_current_status', array( $this, 'get_current_status' ) );
     }
 
     /**
@@ -43,5 +44,32 @@ class Dokan_Follow_Store_Ajax {
         }
 
         wp_send_json_success( array( 'status' => $status ), 200 );
+    }
+
+    /**
+     * Get current follow status
+     *
+     * @since 2.9.7
+     *
+     * @return void
+     */
+    public function get_current_status() {
+        if ( empty( $_GET['vendor_id'] ) ) {
+            wp_send_json_error( array( 'message' => __( 'vendor_id is required.' ) ), 400 );
+        }
+
+        $vendor_id   = absint( $_GET['vendor_id'] );
+        $customer_id = get_current_user_id();
+
+        if ( ! $customer_id ) {
+            wp_send_json_error( array( 'message' => __( 'You have to logged in to get your status.' ) ), 400 );
+        }
+
+        $is_following = dokan_follow_store_is_following_store( $vendor_id, $customer_id );
+
+        wp_send_json_success( array(
+            'is_following' => $is_following,
+            'nonce'        => wp_create_nonce( 'dokan_follow_store' ),
+        ) );
     }
 }

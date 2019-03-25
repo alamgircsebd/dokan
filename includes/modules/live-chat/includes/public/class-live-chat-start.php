@@ -429,8 +429,10 @@ class Dokan_Live_Chat_Start {
         }
 
         ?>
-        <li class="dokan-store-support-btn-wrap dokan-right" style="margin-top: 3px">
-            <?php printf( '<button type="submit" style="margin-left: 5px; border-radius:3px" class="dokan-live-chat button alt">%s</button>', __( 'Chat Now', 'dokan' ) ); ?>
+        <li class="dokan-store-support-btn-wrap dokan-right">
+            <button class="dokan-btn dokan-btn-theme dokan-btn-sm dokan-live-chat">
+                <?php echo esc_html__( 'Chat Now', 'dokan' ); ?>
+            </button>
             <?php echo do_shortcode( '[dokan-live-chat]' ); ?>
         </li>
 
@@ -552,10 +554,13 @@ class Dokan_Live_Chat_Start {
      */
     public function get_login_to_chat_button() {
         if ( dokan_is_store_page() ) {
-            printf( '<li class="dokan-store-support-btn-wrap dokan-right" style="margin-top: 3px">
-                    <button type="submit" class="dokan-live-chat-login button alt">%s</button>
-                </li>', __( 'Chat Now', 'dokan' )
-            );
+            ?>
+                <li class="dokan-store-support-btn-wrap dokan-right">
+                    <button class="dokan-btn dokan-btn-theme dokan-btn-sm dokan-live-chat-login">
+                        <?php echo esc_html__( 'Chat Now', 'dokan' ); ?>
+                    </button>
+                </li>
+            <?php
         } else {
             printf( '<button type="submit" style="margin-left: 5px" class="dokan-live-chat-login button alt">%s</button>', __( 'Chat Now', 'dokan' ) );
         }
