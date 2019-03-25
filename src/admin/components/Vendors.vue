@@ -152,12 +152,9 @@ export default {
                 }
             ],
             vendors: [],
-<<<<<<< HEAD
             loadAddVendor: false
-=======
             categories: [],
             isCategoryMultiple: false
->>>>>>> f03996629989ee6eede3ced5a2f6896ef9040d70
         }
     },
 
