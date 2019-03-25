@@ -49,7 +49,7 @@ class Dokan_Follow_Store_Ajax {
     /**
      * Get current follow status
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */

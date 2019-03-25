@@ -203,7 +203,7 @@ function dokan_follower_can_user_coupon( $follower_emails, $coupon ) {
 /**
  * Get arg values for Follow Store button
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.7
  *
  * @param WP_User $vendor
  * @param array   $button_classes
