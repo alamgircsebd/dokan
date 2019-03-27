@@ -12,6 +12,7 @@ class Dokan_Store_Category {
 
         add_filter( 'dokan_settings_fields', array( $this, 'add_admin_settings' ) );
         add_action( 'dokan_after_saving_settings', array( $this, 'set_default_category' ), 10, 2 );
+        add_filter( 'dokan_admin_localize_script', array( $this, 'add_localized_data' ) );
 
         if ( dokan_is_store_categories_feature_on() ) {
             add_action( 'dokan_settings_after_store_name', array( $this, 'add_store_category_option' ) );
@@ -105,6 +106,20 @@ class Dokan_Store_Category {
         if ( ! empty( $option_value['store_category_default'] ) ) {
             update_option( 'default_store_category', $option_value['store_category_default'], false );
         }
+    }
+
+    /**
+     * Add localized script data in admin panel
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function add_localized_data( $data ) {
+        $data['store_category_type'] = dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
+        return $data;
     }
 
     /**

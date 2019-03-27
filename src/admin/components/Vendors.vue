@@ -147,7 +147,8 @@ export default {
             ],
             vendors: [],
             categories: [],
-            isCategoryMultiple: false
+            isCategoryMultiple: false,
+            storeCategoryType: dokan.store_category_type
         }
     },
 
@@ -170,7 +171,6 @@ export default {
     },
 
     computed: {
-
         currentStatus() {
             return this.$route.query.status || 'all';
         },
@@ -195,9 +195,11 @@ export default {
     },
 
     created() {
-
         this.fetchVendors();
-        this.fetchCategories();
+
+        if (this.storeCategoryType !== 'none') {
+            this.fetchCategories();
+        }
     },
 
     methods: {
