@@ -1,5 +1,5 @@
 <template>
-    <div class="account-info">
+    <div class="payment-info">
         <div class="content-header">
             {{__( 'Payment Options', 'dokan' )}}
         </div>
@@ -70,7 +70,7 @@
 </template>
 
 <script>
-let Switches  = dokan_get_lib('Switches');
+let Switches = dokan_get_lib('Switches');
 
 export default {
     name: 'vendorPaymentOptions',
@@ -96,17 +96,17 @@ export default {
     created() {
         if ( this.vendorInfo.enabled ) {
             this.enabled = true;
-            this.vendorInfo.enabled = 'yes';
+            this.vendorInfo.enabled = true;
         }
 
         if ( this.vendorInfo.trusted ) {
             this.trusted = true;
-            this.vendorInfo.trusted = 'yes';
+            this.vendorInfo.trusted = true;
         }
 
         if ( this.vendorInfo.featured ) {
             this.featured = true;
-            this.vendorInfo.featured = 'yes';
+            this.vendorInfo.featured = true
         }
     },
 
@@ -114,25 +114,25 @@ export default {
         setValue( status, key ) {
             if ( 'enabled' === key ) {
                 if ( status ) {
-                    this.vendorInfo.enabled = 'yes';
+                    this.vendorInfo.enabled = true;
                 } else {
-                    this.vendorInfo.enabled = 'no'
+                    this.vendorInfo.enabled = false;
                 }
             }
 
             if ( 'trusted' === key ) {
                 if ( status ) {
-                    this.vendorInfo.trusted = 'yes';
+                    this.vendorInfo.trusted = true;
                 } else {
-                    this.vendorInfo.trusted = 'no';
+                    this.vendorInfo.trusted = false;
                 }
             }
 
             if ( 'featured' === key ) {
                 if ( status ) {
-                    this.vendorInfo.featured = 'yes';
+                    this.vendorInfo.featured = true;
                 } else {
-                    this.vendorInfo.featured = 'no'
+                    this.vendorInfo.featured = false;
                 }
             }
         }

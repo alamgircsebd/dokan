@@ -1,5 +1,5 @@
 <template>
-    <div class="account-info">
+    <div class="social-info">
         <div class="content-header">
             {{__( 'Social Options', 'dokan' )}}
         </div>

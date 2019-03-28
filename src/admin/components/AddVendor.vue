@@ -6,10 +6,10 @@
                     <ul class="tab-list">
                         <li v-for="(tab, index) in tabs" :key="index" :class="{'tab-title': true, 'active': currentTab === tab.name}">
                             <div class="tab-link">
-                                <i :class="{'icon': true, 'first': tab.name === 'vendorAccountInfo'}">
-                                    <img :src="getIcon(tab.icon)">
-                                </i>
                                 <a href="#" @click.prevent="currentTab = tab.name" :class="{'first': tab.name === 'vendorAccountInfo'}">
+                                    <i :class="{'icon': true, 'first': tab.name === 'vendorAccountInfo'}">
+                                        <img :src="getIcon(tab.icon)">
+                                    </i>
                                     {{tab.label}}
                                 </a>
                             </div>
@@ -30,11 +30,11 @@
             </div>
 
             <!-- Change the button name if it's vendor edit page -->
-            <div slot="footer" v-if="storeId">
+<!--             <div slot="footer" v-if="storeId">
                 <button class="dokan-btn" @click="updateVendor">{{ __( 'Update Vendor', 'dokan' ) }}</button>
-            </div>
+            </div> -->
 
-            <div slot="footer" v-else>
+            <div slot="footer">
                 <button class="dokan-btn" @click="createVendor">{{ 'vendorPaymentOptions' === currentTab ? __( 'Create Vendor', 'dokan' ) : this.nextBtn }}</button>
             </div>
         </modal>
@@ -47,10 +47,11 @@ const Modal   = dokan_get_lib('Modal');
 const Loading = dokan_get_lib('Loading');
 
 import vendorAccountInfo from './vendorAccountInfo.vue';
-import vendorOptions from './vendorOptions.vue';
-import vendorSocial from './vendorSocial.vue';
 import vendorAddress from './vendorAddress.vue';
 import vendorPaymentOptions from './vendorPaymentOptions.vue';
+
+// import vendorOptions from './vendorOptions.vue';
+// import vendorSocial from './vendorSocial.vue';
 
 export default {
 
@@ -62,10 +63,10 @@ export default {
         Modal,
         Loading,
         vendorAccountInfo,
-        vendorOptions,
         vendorAddress,
-        vendorSocial,
         vendorPaymentOptions,
+        // vendorOptions,
+        // vendorSocial,
     },
 
     data() {
@@ -80,20 +81,20 @@ export default {
                     name: 'vendorAccountInfo',
                     icon: 'account',
                 },
-                vendorOptions: {
-                    label: this.__( 'Dokan Options', 'dokan' ),
-                    name: 'vendorOptions',
-                    icon: 'options',
-                },
+                // vendorOptions: {
+                //     label: this.__( 'Dokan Options', 'dokan' ),
+                //     name: 'vendorOptions',
+                //     icon: 'options',
+                // },
+                // vendorSocial: {
+                //     label: this.__( 'Social', 'dokan' ),
+                //     name: 'vendorSocial',
+                //     icon: 'social',
+                // },
                 vendorAddress: {
                     label: this.__( 'Address', 'dokan' ),
                     name: 'vendorAddress',
                     icon: 'address',
-                },
-                vendorSocial: {
-                    label: this.__( 'Social', 'dokan' ),
-                    name: 'vendorSocial',
-                    icon: 'social',
                 },
                 vendorPaymentOptions: {
                     label: this.__( 'Payment Options', 'dokan' ),
@@ -136,10 +137,11 @@ export default {
                     street_2: '',
                     city: '',
                     zip: '',
+                    state: '',
                     country: ''
                 }
             },
-            fakeStore: {}
+            // fakeStore: {}
         };
     },
 
@@ -150,13 +152,13 @@ export default {
         } );
 
         // edit vendor if it's vendor single page or pass vendorId to edit a vendor
-        if ( this.getId() || this.vendorId ) {
-            this.storeId = this.getId() ? this.getId() : this.vendorId;
+        // if ( this.getId() || this.vendorId ) {
+        //     this.storeId = this.getId() ? this.getId() : this.vendorId;
 
-            this.isLoading = true;
-            this.title = this.__( 'Edit Vendor', 'dokan' );
-            this.fetch();
-        }
+        //     this.isLoading = true;
+        //     this.title = this.__( 'Edit Vendor', 'dokan' );
+        //     this.fetch();
+        // }
     },
 
     methods: {
@@ -165,50 +167,50 @@ export default {
         },
 
         getIcon(name = '') {
-            return dokan.urls.assetsUrl + '/images/' + name + '.png';
+            return dokan.urls.proAssetsUrl + '/images/' + name + '.png';
         },
 
         showAlert( $title, $des, $status ) {
             this.$swal( $title, $des, $status );
         },
 
-        fetch() {
-            dokan.api.get('/stores/' + this.storeId )
-            .done((response) => {
-                this.fakeStore = this.store;
-                this.store     = response;
-                this.transformer(response);
-                this.isLoading = false;
-            });
-        },
+        // fetch() {
+        //     dokan.api.get('/stores/' + this.storeId )
+        //     .done((response) => {
+        //         this.fakeStore = this.store;
+        //         this.store     = response;
+        //         this.transformer(response);
+        //         this.isLoading = false;
+        //     });
+        // },
 
         // map response props to store props
-        transformer(response) {
-            this.store.editPage = true;
+        // transformer(response) {
+        //     this.store.editPage = true;
 
-            for ( let res in response ) {
-                if ( Array.isArray(response[res]) && 0 === response[res].length ) {
-                    this.store[res] = this.fakeStore[res];
-                }
-            }
+        //     for ( let res in response ) {
+        //         if ( Array.isArray(response[res]) && 0 === response[res].length ) {
+        //             this.store[res] = this.fakeStore[res];
+        //         }
+        //     }
 
-            if ( 'email' in response ) {
-                this.store.user_email = response.email;
-            }
+        //     if ( 'email' in response ) {
+        //         this.store.user_email = response.email;
+        //     }
 
-            if ( 'shop_url' in response ) {
-                this.store.user_nicename = this.getStoreName(response.shop_url);
-            }
-        },
+        //     if ( 'shop_url' in response ) {
+        //         this.store.user_nicename = this.getStoreName(response.shop_url);
+        //     }
+        // },
 
         // get sotre name from url
-        getStoreName(url) {
-            let storeName = url.split('/').filter((value) => {
-                return value !== '';
-            });
+        // getStoreName(url) {
+        //     let storeName = url.split('/').filter((value) => {
+        //         return value !== '';
+        //     });
 
-            return storeName[storeName.length - 1];
-        },
+        //     return storeName[storeName.length - 1];
+        // },
 
         // create vendor
         createVendor() {
@@ -235,6 +237,9 @@ export default {
                         this.__( 'A vendor has been created successfully!', 'dokan' ),
                         'success'
                     );
+
+                    // reload to see newly created vendor
+                    location.reload();
                 })
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
@@ -249,34 +254,34 @@ export default {
         },
 
         // update vendor
-        updateVendor() {
-            if ( 'vendorPaymentOptions' === this.currentTab ) {
-                this.isLoading = true;
+        // updateVendor() {
+        //     if ( 'vendorPaymentOptions' === this.currentTab ) {
+        //         this.isLoading = true;
 
-                dokan.api.put('/stores/' + this.storeId, this.store )
-                .done((response) => {
-                    this.showAlert(
-                        this.__( 'Vendor Updated', 'dokan' ),
-                        this.__( 'The vendor has been updated!', 'dokan' ),
-                        'success'
-                    );
-                })
-                .fail((response) => {
-                    this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                })
-                .always(() => {
-                    this.$root.$emit('modalClosed');
-                });
-            }
+        //         dokan.api.put('/stores/' + this.storeId, this.store )
+        //         .done((response) => {
+        //             this.showAlert(
+        //                 this.__( 'Vendor Updated', 'dokan' ),
+        //                 this.__( 'The vendor has been updated!', 'dokan' ),
+        //                 'success'
+        //             );
+        //         })
+        //         .fail((response) => {
+        //             this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+        //         })
+        //         .always(() => {
+        //             this.$root.$emit('modalClosed');
+        //         });
+        //     }
 
-            dokan.api.put('/stores/' + this.storeId, this.store )
-            .fail((response) => {
-                this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-            })
+        //     dokan.api.put('/stores/' + this.storeId, this.store )
+        //     .fail((response) => {
+        //         this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+        //     })
 
-            // move next tab
-            this.currentTab = 'vendorPaymentOptions' === this.currentTab ? 'vendorPaymentOptions' : this.nextTab(this.tabs, this.currentTab);
-        },
+        //     // move next tab
+        //     this.currentTab = 'vendorPaymentOptions' === this.currentTab ? 'vendorPaymentOptions' : this.nextTab(this.tabs, this.currentTab);
+        // },
 
         nextTab(tabs, currentTab) {
             let keys      = Object.keys(tabs);
@@ -316,7 +321,7 @@ export default {
                 width: auto;
                 height: 50px;
                 list-style-type: none;
-                padding: 5px 20px 5px 38px;; /* padding around text, last should include arrow width */
+                // padding: 5px 20px 5px 38px;; /* padding around text, last should include arrow width */
                 border-right: 10px solid white; /* width: gap between arrows, color: background of document */
                 position: relative;
                 background-color: #1a9ed4;
@@ -332,8 +337,8 @@ export default {
                 a {
                     color: #fff;
                     text-decoration: none;
-                    padding: 17px;
-                    margin: -17px;
+                    padding: 70px;
+                    // margin: -17px;
 
                     &:active, &:focus {
                         outline: none;
@@ -471,44 +476,60 @@ export default {
                 height: auto
             }
 
-            .picture {
-                background: #fcfcfc;
-                margin: 0 20px;
-                border-radius: 3px;
-                padding: 10px 20px;
-                border: 2px dashed #d2d2d2;
-                text-align: center;
+            .vendor-image {
+                display: flex;
+                align-items: stretch;
+                padding-bottom: 20px;
 
-                .profile-image {
-                    max-width: 100px;
-                    margin: 0 auto;
-                }
+                .picture {
+                    background: #fcfcfc;
+                    border-radius: 3px;
+                    padding: 5px 10px;
+                    border: 2px dashed #d2d2d2;
+                    text-align: center;
+                    flex-grow: 1;
+                    width: 150px;
+                    margin-left: 20px;
 
-                .profile-image img {
-                    border: 1px solid #E5E5E5;
-                    padding: 15px 10px 0;
-                    cursor: pointer;
-                    width: 100%;
-                }
-            }
-            .picture.banner {
-                margin-top: 40px;
-                padding: 70px 0;
+                    .profile-image {
+                        max-width: 100px;
+                        margin: 0 auto;
+                    }
 
-                .banner-image {
-                    img {
+                    .profile-image img {
+                        border: 1px solid #E5E5E5;
+                        padding: 15px 10px 0;
+                        cursor: pointer;
                         width: 100%;
-                        height: 315px;
-                        padding: 15px 15px 0 15px;
                     }
+                }
+                .picture.banner {
+                    // margin-top: 40px;
+                    // padding: 70px 0;
+                    flex-grow: 10;
+                    margin-right: 20px;
 
-                    button {
-                        background: #1A9ED4;
-                        color: white;
-                        padding: 10px 15px;
-                        border-radius: 3px;
-                        margin: 20px 0;
+                    .banner-image {
+                        padding-top: 5%;
+                        img {
+                            width: 100%;
+                            height: 315px;
+                            padding: 15px 15px 0 15px;
+                        }
+
+                        button {
+                            background: #1A9ED4;
+                            color: white;
+                            padding: 10px 15px;
+                            border-radius: 3px;
+                            margin: 20px 0;
+                        }
                     }
+                }
+
+                .picture-footer {
+                    color: #808080;
+                    font-weight: 300;
                 }
             }
         }

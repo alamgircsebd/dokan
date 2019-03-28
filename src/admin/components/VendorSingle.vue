@@ -39,12 +39,26 @@
                         <span title="Featured Vendor" class="dashicons dashicons-star-filled"></span>
                     </div>
 
-                    <div class="profile-icon">
-                        <img :src="store.gravatar" :alt="store.store_name">
+                    <div :class="{'profile-icon': true, 'edit-mode': editMode}">
+                        <template v-if="editMode">
+                            <UploadImage @uploadedImage="uploadGravatar" :src="store.gravatar" :alt="store.store_name" />
+                        </template>
+                        <template v-else>
+                            <img :src="store.gravatar" :alt="store.store_name">
+                        </template>
+                        <span class="edit-photo" v-if="editMode">
+                            {{ __( 'Change store photo', 'dokan' ) }}
+                        </span>
                     </div>
 
                     <div class="store-info">
-                        <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
+                        <template v-if="editMode">
+                            <input type="text" v-model="store.store_name" class="dokan-form-input">
+                        </template>
+
+                        <template v-else>
+                            <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
+                        </template>
 
                         <div class="star-rating">
                             <span v-for="i in 5" :class="['dashicons', i <= store.rating.rating ? 'active' : '' ]"></span>
@@ -102,15 +116,22 @@
                             </template>
                         </template>
 
-                        <ul class="store-details">
-                            <li class="address">
-                                <span class="street_1">{{ store.address.street_1 }}, </span>
-                                <span class="city">{{ store.address.city }}, </span>
-                                <span class="state-zip">{{ store.address.state }} {{ store.address.zip }}</span>
-                            </li>
-                            <li class="phone">
-                                {{ store.phone ? store.phone : '—' }}
-                            </li>
+                        <ul :class="{'store-details': true, 'edit-mode': editMode}">
+                            <template v-if="editMode">
+                                <vendorAddress :vendorInfo="store" />
+                            </template>
+                            <template v-else>
+                                <li class="address">
+                                    <span class="street_1" v-if="store.address.street_1">{{ store.address.street_1 }}, </span>
+                                    <span class="street_2" v-if="store.address.street_2">{{ store.address.street_2 }}, </span>
+                                    <span class="city" v-if="store.address.city">{{ store.address.city }}, </span>
+                                    <span class="state-zip" v-if="store.address.state">{{ store.address.state }} {{ store.address.zip }}</span>
+                                    <span class="country" v-if="store.address.country">{{ store.address.country }}</span>
+                                </li>
+                                <li class="phone">
+                                    {{ store.phone ? store.phone : '—' }}
+                                </li>
+                            </template>
                         </ul>
 
                         <div class="actions">
@@ -120,15 +141,31 @@
                     </div>
                 </div>
 
-                <div class="profile-banner">
+                <div :class="{'profile-banner': true, 'edit-mode': editMode}">
                     <div class="banner-wrap">
-                        <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
+                        <template v-if="editMode">
+                            <UploadImage @uploadedImage="uploadBanner" :src="store.banner" />
+                        </template>
+                        <template v-else>
+                            <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
+                        </template>
+                        <span class="edit-banner" v-if="editMode">
+                            <i class="change-banner dashicons dashicons-format-image"></i>
+                            {{ __( 'Change Store Banner', 'dokan' ) }}
+                        </span>
                     </div>
                     <div class="action-links">
-                        <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
-                        <router-link :to="id" class="button edit-store" @click.native="loadEditVendor = true">
-                               <span class="dashicons dashicons-edit"></span>
-                        </router-link>
+                        <template v-if="editMode">
+                            <button @click="editMode = false" class="button visit-store">{{ __( 'Cancel', 'dokan' ) }} <span class="dashicons dashicons-no-alt"></span></button>
+                            <button @click="updateStore" class="button button-primary">{{ saveBtn }} <span class="dashicons dashicons-yes"></span></button>
+                        </template>
+
+                        <template v-else>
+                            <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
+                            <router-link :to="id" class="button" @click.native="editMode = true">
+                                   <span class="dashicons dashicons-edit"></span>
+                            </router-link>
+                        </template>
                     </div>
                 </div>
             </section>
@@ -240,15 +277,24 @@
                     </ul>
                 </div>
             </section>
+
+            <section class="vendor-other-info" v-if="editMode">
+                <vendorSocial :vendorInfo="store" />
+                <vendorPaymentOptions :vendorInfo="store" />
+            </section>
+
         </div>
         <vcl-twitch v-else height="300" primary="#ffffff"></vcl-twitch>
-
-        <add-vendor v-if="loadEditVendor" />
     </div>
 </template>
 
 <script>
 import AddVendor from 'admin/components/AddVendor.vue';
+import UploadImage from 'admin/components/UploadImage.vue';
+import vendorSocial from 'admin/components/vendorSocial.vue';
+import vendorPaymentOptions from 'admin/components/vendorPaymentOptions.vue';
+import vendorAddress from 'admin/components/vendorAddress.vue';
+
 let ContentLoading = dokan_get_lib('ContentLoading');
 let Modal          = dokan_get_lib('Modal');
 let Currency       = dokan_get_lib('Currency');
@@ -265,23 +311,65 @@ export default {
         VclTwitch,
         Modal,
         Currency,
-        AddVendor
+        AddVendor,
+        UploadImage,
+        vendorSocial,
+        vendorPaymentOptions,
+        vendorAddress
     },
 
     data () {
         return {
             showDialog: false,
-            store: {},
             stats: null,
             mail: {
                 subject: '',
                 body: ''
             },
-            loadEditVendor: false
+            editMode: false,
             isUpdating: false,
             categories: [],
             isCategoryMultiple: false,
-            editingCategories: false
+            editingCategories: false,
+            store: {
+                store_name: '',
+                user_pass: '',
+                store_url: '',
+                user_email: '',
+                user_nicename: '',
+                phone: '',
+                banner: '',
+                gravatar: '',
+                social: {
+                    fb: '',
+                    gplus: '',
+                    youtube: '',
+                    twitter: '',
+                    linkedin: '',
+                    pinterest: '',
+                    instagram: '',
+                },
+                payment: {
+                    bank: {
+                        ac_name: '',
+                        ac_number: '',
+                        bank_name: '',
+                        bank_addr: '',
+                        routing_number: '',
+                        iban: '',
+                        swift: ''
+                    }
+                },
+                address: {
+                    street_1: '',
+                    street_2: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    country: ''
+                }
+            },
+            fakeStore: {},
         };
     },
 
@@ -357,6 +445,10 @@ export default {
             } else {
                 return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' );
             }
+        },
+
+        saveBtn() {
+            return this.isUpdating ? this.__( 'Saving...', 'dokan' ) : this.__( 'Save Changes' )
         }
     },
 
@@ -371,9 +463,9 @@ export default {
         this.fetch();
         this.fetchStats();
 
-        this.$root.$on('modalClosed', () => {
-            this.loadEditVendor = false;
-        });
+        // this.$root.$on('modalClosed', () => {
+        //     this.loadEditVendor = false;
+        // });
     },
 
     methods: {
@@ -382,13 +474,45 @@ export default {
             const self = this;
 
             dokan.api.get('/stores/' + self.id )
-            .done(response => self.store = response);
+            .done( ( response ) => {
+                self.fakeStore = self.store;
+                self.store     = response;
+                self.transformer(response);
+            } );
 
             dokan.api.get( '/store-categories' )
                 .done( ( response, status, xhr ) => {
                     self.categories = response;
                     self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
                 } );
+        },
+
+        // map response props to store props
+        transformer(response) {
+            this.store.editPage = true;
+
+            for ( let res in response ) {
+                if ( Array.isArray(response[res]) && 0 === response[res].length ) {
+                    this.store[res] = this.fakeStore[res];
+                }
+            }
+
+            if ( 'email' in response ) {
+                this.store.user_email = response.email;
+            }
+
+            if ( 'shop_url' in response ) {
+                this.store.user_nicename = this.getStoreName(response.shop_url);
+            }
+        },
+
+        // get sotre name from url
+        getStoreName(url) {
+            let storeName = url.split('/').filter((value) => {
+                return value !== '';
+            });
+
+            return storeName[storeName.length - 1];
         },
 
         fetchStats() {
@@ -459,10 +583,32 @@ export default {
 
             dokan.api.put( `/stores/${self.store.id}`, self.store )
                 .done( ( response ) => {
+                    self.editMode = false;
                     self.store = response;
                     self.isUpdating = false;
                     self.editingCategories = false;
-                } );
+
+                    this.showAlert(
+                        this.__( 'Vendor Updated', 'dokan' ),
+                        this.__( 'Vendor updated successfully!', 'dokan' ),
+                        'success'
+                    );
+                } )
+                .fail((response) => {
+                    this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+                });
+        },
+
+        uploadGravatar( image ) {
+            this.store.gravatar = image.id;
+        },
+
+        uploadBanner( image ) {
+            this.store.banner = image.id
+        },
+
+        showAlert( $title, $des, $status ) {
+            this.$swal( $title, $des, $status );
         }
     }
 };
@@ -470,6 +616,18 @@ export default {
 
 <style lang="less">
 .dokan-vendor-single {
+
+    .dokan-form-input {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+        height: auto;
+    }
 
     * {
         box-sizing: border-box;
@@ -517,14 +675,14 @@ export default {
             position: relative;
             width: ~"calc(100% - 285px + 30px)";
             // max-width: 850px;
-            height: 315px;
+            height: 350px;
             border: 1px solid #dfdfdf;
-            background: #fff;
+            background: #496a94;
             overflow: hidden;
 
             img {
-                height: 315px;
-                width: auto;
+                height: 350px;
+                width: 100%;
             }
 
             .action-links {
@@ -574,9 +732,69 @@ export default {
             text-align: center;
             margin: 0 auto;
 
+            .edit-photo {
+                position: absolute;
+                left: 33%;
+                top: 46px;
+                color: white;
+                width: 80px;
+            }
+
             img {
-                height: auto;
-                width: 64px;
+                height: 120px;
+                width: 120px;
+                border-radius: 50%
+            }
+        }
+
+        .profile-icon.edit-mode {
+            img {
+                border: 5px solid #1a9ed4;
+
+                cursor: pointer;
+                opacity: .8;
+
+                &:hover {
+                    padding: 5px;
+                    background-color: #f1f1f1;
+                    transition: padding .2s;
+                }
+            }
+        }
+
+        .profile-banner.edit-mode {
+            cursor: pointer;
+
+            .banner-wrap {
+                display: flex;
+                justify-content: center;
+
+                img {
+                    border: 5px solid #5ca9d3;
+                    opacity: .5;
+
+                    &:hover {
+                        padding: 5px;
+                        background-color: #f1f1f1;
+                        transition: padding .2s;
+                    }
+                }
+
+                .edit-banner {
+                    position: absolute;
+                    top: 75%;
+                    font-size: 30px;
+                    font-weight: 400;
+                    color: white;
+
+                    i.change-banner {
+                        font-size: 50px;
+                        margin-top: -70px;
+                        position: relative;
+                        left: 140px;
+                    }
+                }
+
             }
         }
 
@@ -645,6 +863,16 @@ export default {
                         content: "\f525";
                         transform: scale(-1, 1);
                     }
+                }
+            }
+
+            .store-details.edit-mode {
+                .content-header {
+                    display: none;
+                }
+
+                li {
+                    padding-left: 0;
                 }
             }
 
@@ -976,6 +1204,23 @@ export default {
                 .flaticon-bank-building.active { color: #444; }
                 .flaticon-skrill-pay-logo.active { color: #721052; }
             }
+        }
+    }
+
+    .vendor-other-info {
+        display: flex;
+        justify-content: space-between;
+        background: white;
+        padding: 10px 20px;
+        margin-top: 30px;
+
+        .content-header {
+            padding: 20px 0px;
+            font-size: 20px;
+        }
+
+        .social-info, .payment-info {
+            width: 48%
         }
     }
 }

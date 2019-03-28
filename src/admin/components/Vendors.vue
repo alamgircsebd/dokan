@@ -1,7 +1,7 @@
 <template>
     <div class="vendor-list">
         <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
-        <button @click="addNew()" class="dokan-btn">{{ __( 'Add New', 'dokan' ) }}</button>
+        <button @click="addNew()" class="page-title-action">{{ __( 'Add New', 'dokan' ) }}</button>
         <router-link v-if="categories.length" class="page-title-action" :to="{name: 'StoreCategoriesIndex'}">{{ __( 'Store Categories', 'dokan' ) }}</router-link>
         <hr class="wp-header-end">
 
@@ -61,7 +61,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <span v-for="(action, index) in actions" :class="action.key">
-                    <a v-if="action.key == 'edit'" href="#" @click.prevent="addNew(data.row.id)">{{ action.label }}</a>
+                    <router-link v-if="action.key == 'edit'" :to="'/vendors/' + data.row.id">{{ action.label }}</router-link>
                     <a v-else-if="action.key == 'products'" :href="productUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'orders'" :href="ordersUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else href="#">{{ action.label }}</a>
@@ -152,7 +152,7 @@ export default {
                 }
             ],
             vendors: [],
-            loadAddVendor: false
+            loadAddVendor: false,
             categories: [],
             isCategoryMultiple: false
         }
@@ -212,12 +212,7 @@ export default {
     },
 
     methods: {
-        addNew(vendorId = null) {
-
-            if ( vendorId ) {
-                this.vendorId = vendorId;
-            }
-
+        addNew() {
             this.loadAddVendor = true;
         },
 
