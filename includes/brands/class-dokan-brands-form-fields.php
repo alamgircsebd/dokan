@@ -7,7 +7,7 @@ class FormFields {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class FormFields {
     /**
      * Add brands dropdown
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @param \WP_Post $post
      * @param int      $post_id
@@ -94,7 +94,7 @@ class FormFields {
     /**
      * Save form data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @param int   $product_id
      * @param array $data

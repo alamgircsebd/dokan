@@ -1,6 +1,57 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.7',
+        'released' => '2019-03-25',
+        'changes'  => array(
+            array(
+                'title'         => 'Store Category',
+                'type'          => 'New',
+                'description'   => 'Vendor will be able to register under specefic cateogry. ei(Furniture, Mobile)'
+            ),
+            array(
+                'title'         => 'YITH WC Brand Compatible',
+                'type'          => 'New',
+                'description'   => 'Make Dokan YITH WC Brand add-on compatible'
+            ),
+            array(
+                'title'         => 'Date and refund column in admin logs area',
+                'type'          => 'New',
+                'description'   => 'Add date and refund column in admin logs area to get more detaild overview.'
+            ),
+            array(
+                'title'         => 'Product Status',
+                'type'          => 'New',
+                'description'   => 'Change product status according to subscription status '
+            ),
+            array(
+                'title'         => 'Show button for non logged-in user',
+                'type'          => 'Fix',
+                'description'   => 'Show button for non logged-in user'
+            ),
+            array(
+                'title'         => 'Refund Calculation Issue',
+                'type'          => 'Fix',
+                'description'   => 'Send refund admin commission to customer '
+            ),
+            array(
+                'title'         => 'Error on subscription cancellation email ',
+                'type'          => 'Fix',
+                'description'   => 'There was an error on subscription cancellation, which has been fixed in this release.'
+            ),
+            array(
+                'title'         => 'Trial Subscription',
+                'type'          => 'Improvement',
+                'description'   => 'When a vendor subscribe to a trial subscription, make all other trial to non-trial subscription for that vendor'
+            ),
+            array(
+                'title'         => 'Social Login Issue',
+                'type'          => 'Fix',
+                'description'   => 'Update social login and vendor verification API'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.5',
         'released' => '2019-02-18',
         'changes'  => array(

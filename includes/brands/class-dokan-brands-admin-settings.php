@@ -7,7 +7,7 @@ class AdminSettings {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class AdminSettings {
     /**
      * Add admin settings for Brands feature
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @param array           $settings_fields
      * @param \Dokan_Settings $dokan_settings
