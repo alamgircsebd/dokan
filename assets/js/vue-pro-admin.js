@@ -323,7 +323,8 @@ var Search = dokan_get_lib('Search');
             }],
             vendors: [],
             categories: [],
-            isCategoryMultiple: false
+            isCategoryMultiple: false,
+            storeCategoryType: dokan.store_category_type
         };
     },
 
@@ -364,9 +365,11 @@ var Search = dokan_get_lib('Search');
     },
 
     created: function created() {
-
         this.fetchVendors();
-        this.fetchCategories();
+
+        if (this.storeCategoryType !== 'none') {
+            this.fetchCategories();
+        }
     },
 
 
