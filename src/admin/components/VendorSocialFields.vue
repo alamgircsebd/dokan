@@ -43,20 +43,13 @@
                 </div>
             </div>
 
-<!--             <div class="dokan-form-group">
-                <div class="column" v-for="(value, key) in data.social" :key="key">
-                    <label for="value">{{key.replace('_', ' ') | capitalize }}</label>
-                    <input type="text" class="dokan-form-input" v-model="data.social[key]">
-                </div>
-            </div> -->
-
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: 'vendorSocial',
+    name: 'VendorSocialFields',
 
     props: {
         vendorInfo: {

@@ -1,5 +1,5 @@
 <template>
-    <div class="payment-info">
+    <div :class="{'payment-info': true, 'edit-mode': getId()}">
         <div class="content-header">
             {{__( 'Payment Options', 'dokan' )}}
         </div>
@@ -43,6 +43,12 @@
             </div>
 
             <div class="dokan-form-group">
+
+                <div :class="{'column': getId(), 'checkbox-group': ! getId()}">
+                    <label for="account-name">{{ __( 'PayPal Email', 'dokan') }}</label>
+                    <input type="email" class="dokan-form-input" v-model="vendorInfo.payment.paypal.email" :placeholder="__( 'Type here', 'dokan')">
+                </div>
+
                 <div class="checkbox-group">
                     <div class="checkbox-left">
                         <switches @input="setValue" :enabled="enabled" value="enabled"></switches>
@@ -73,7 +79,7 @@
 let Switches = dokan_get_lib('Switches');
 
 export default {
-    name: 'vendorPaymentOptions',
+    name: 'VendorPaymentFields',
 
     components: {
         Switches,
@@ -135,7 +141,12 @@ export default {
                     this.vendorInfo.featured = false;
                 }
             }
-        }
+        },
+
+        getId() {
+            return this.$route.params.id;
+        },
+
     }
 
 };
@@ -155,6 +166,11 @@ export default {
             margin-right: 10px;
             display: inline-block;
         }
+    }
+}
+.payment-info.edit-mode {
+    .checkbox-group {
+        padding: 0;
     }
 }
 </style>

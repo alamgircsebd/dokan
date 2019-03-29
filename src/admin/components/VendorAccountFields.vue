@@ -5,7 +5,7 @@
         </div>
 
         <div class="content-body">
-            <div class="vendor-image">
+            <div class="vendor-image" v-if="! getId()">
                 <div class="picture">
                     <p class="picture-header">{{ __( 'Vendor Picture', 'dokan' ) }}</p>
 
@@ -38,7 +38,8 @@
                 <div class="column">
                     <label for="store-url">{{ __( 'Store URL', 'dokan') }}</label>
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.user_nicename" :placeholder="__( 'Type here', 'dokan')">
-                    <p class="store-url">{{storeUrl}}</p>
+                    <p class="store-url" v-if="showStoreUrl">{{storeUrl}}</p>
+                    <p class="store-url" v-else>{{otherStoreUrl}}</p>
                 </div>
 
                 <div class="column">
@@ -46,21 +47,22 @@
                     <input type="number" class="dokan-form-input" v-model="vendorInfo.phone" :placeholder="__( 'Type here', 'dokan')">
                 </div>
 
-                <div class="column">
-                    <label for="store-email">{{ __( 'Email', 'dokan') }}</label>
-                    <input type="email" class="dokan-form-input" v-model="vendorInfo.user_email" :placeholder="__( 'Type here', 'dokan')">
-                </div>
+                <template v-if="! getId()">
+                    <div class="column">
+                        <label for="store-email">{{ __( 'Email', 'dokan') }}</label>
+                        <input type="email" class="dokan-form-input" v-model="vendorInfo.user_email" :placeholder="__( 'Type here', 'dokan')">
+                    </div>
 
-                <!--Show this feild when creating a new vendor  -->
-                <div class="column" v-if="! getId()">
-                    <label for="store-username">{{ __( 'User Name', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.user_login" :placehoder="__( 'Type here', 'dokan')">
-                </div>
+                    <div class="column">
+                        <label for="store-username">{{ __( 'User Name', 'dokan') }}</label>
+                        <input type="text" class="dokan-form-input" v-model="vendorInfo.user_login" :placehoder="__( 'Type here', 'dokan')">
+                    </div>
 
-                <div class="column">
-                    <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label>
-                    <input type="password" class="dokan-form-input" v-model="vendorInfo.user_pass" placehoder="******">
-                </div>
+                    <div class="column">
+                        <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label>
+                        <input type="password" class="dokan-form-input" v-model="vendorInfo.user_pass" placehoder="******">
+                    </div>
+                </template>
 
             </div>
 
@@ -71,7 +73,7 @@
 
 <script>
 export default {
-    name: 'vendorAccountInfo',
+    name: 'VendorAccountFields',
 
     props: {
         vendorInfo: {
@@ -81,23 +83,37 @@ export default {
 
     data() {
         return {
+            showStoreUrl: true,
+            otherStoreUrl: null,
             images: {
                 banner: '',
                 bannerId: '',
                 gravatar: '',
-                gravatarId: ''
+                gravatarId: '',
             },
+            defaultUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/'
+        }
+    },
+
+    watch: {
+        'vendorInfo.store_name'( value ) {
+            this.showStoreUrl = true;
+        },
+
+        'vendorInfo.user_nicename'( newValue ) {
+            this.showStoreUrl = false;
+            this.otherStoreUrl = this.defaultUrl + newValue.trim().split(' ').join('-');
+            this.vendorInfo.user_nicename = newValue.split(' ').join('-');
         }
     },
 
     computed: {
         storeUrl() {
-            let defaultUrl = dokan.urls.siteUrl + dokan.urls.storePrefix + '/';
-            let storeUrl   = this.vendorInfo.store_name.trim().split(' ').join('-');
-
+            let storeUrl = this.vendorInfo.store_name.trim().split(' ').join('-');
             this.vendorInfo.user_nicename = storeUrl;
+            this.otherStoreUrl = this.defaultUrl + storeUrl;
 
-            return defaultUrl + storeUrl;
+            return this.defaultUrl + storeUrl;
         }
     },
 
@@ -112,10 +128,6 @@ export default {
     },
 
     methods: {
-        getId() {
-            return this.vendorInfo.id ? this.vendorInfo.id : this.$route.params.id;
-        },
-
         getDefaultPic() {
             return dokan.urls.proAssetsUrl + '/images/store-pic.png';
         },

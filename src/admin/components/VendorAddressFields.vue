@@ -45,7 +45,7 @@
 let Multiselect = dokan_get_lib('Multiselect');
 
 export default {
-    name: 'vendorAddress',
+    name: 'VendorAddressFields',
 
     components: {
         Multiselect

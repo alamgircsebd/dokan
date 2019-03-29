@@ -61,7 +61,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <span v-for="(action, index) in actions" :class="action.key">
-                    <router-link v-if="action.key == 'edit'" :to="'/vendors/' + data.row.id">{{ action.label }}</router-link>
+                    <router-link v-if="action.key == 'edit'" :to="{ path: 'vendors/' + data.row.id, query:{edit:'true'} }">{{ action.label }}</router-link>
                     <a v-else-if="action.key == 'products'" :href="productUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'orders'" :href="ordersUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else href="#">{{ action.label }}</a>

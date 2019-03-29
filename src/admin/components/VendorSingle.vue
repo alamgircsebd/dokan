@@ -4,6 +4,10 @@
             <a class="button" href="javascript:history.go(-1)">&larr; {{ __( 'Go Back', 'dokan' ) }}</a>
         </div>
 
+        <div class="dokan-hide">
+            {{store.store_name}}
+        </div>
+
         <modal
             :title="__( 'Send Email', 'dokan' )"
             v-if="showDialog"
@@ -51,20 +55,21 @@
                         </span>
                     </div>
 
-                    <div class="store-info">
-                        <template v-if="editMode">
-                            <input type="text" v-model="store.store_name" class="dokan-form-input">
-                        </template>
-
-                        <template v-else>
+                    <div :class="{'store-info': true, 'edit-mode': editMode}">
+                        <template v-if="! editMode">
                             <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
                         </template>
 
-                        <div class="star-rating">
+                        <div class="star-rating" v-if="! editMode">
                             <span v-for="i in 5" :class="['dashicons', i <= store.rating.rating ? 'active' : '' ]"></span>
                         </div>
 
-                        <template v-if="categories.length">
+                        <template v-if="editMode">
+                            <VendorAccountFields :vendorInfo="store" />
+                        </template>
+
+
+                        <template v-if="categories.length && ! editMode">
                             <template v-if="! editingCategories">
                                 <template v-if="! store.categories.length">
                                     <a
@@ -116,25 +121,20 @@
                             </template>
                         </template>
 
-                        <ul :class="{'store-details': true, 'edit-mode': editMode}">
-                            <template v-if="editMode">
-                                <vendorAddress :vendorInfo="store" />
-                            </template>
-                            <template v-else>
-                                <li class="address">
-                                    <span class="street_1" v-if="store.address.street_1">{{ store.address.street_1 }}, </span>
-                                    <span class="street_2" v-if="store.address.street_2">{{ store.address.street_2 }}, </span>
-                                    <span class="city" v-if="store.address.city">{{ store.address.city }}, </span>
-                                    <span class="state-zip" v-if="store.address.state">{{ store.address.state }} {{ store.address.zip }}</span>
-                                    <span class="country" v-if="store.address.country">{{ store.address.country }}</span>
-                                </li>
-                                <li class="phone">
-                                    {{ store.phone ? store.phone : '—' }}
-                                </li>
-                            </template>
+                        <ul :class="{'store-details': true, 'edit-mode': editMode}" v-if="! editMode">
+                            <li class="address">
+                                <span class="street_1" v-if="store.address.street_1">{{ store.address.street_1 }}, </span>
+                                <span class="street_2" v-if="store.address.street_2">{{ store.address.street_2 }}, </span>
+                                <span class="city" v-if="store.address.city">{{ store.address.city }}, </span>
+                                <span class="state-zip" v-if="store.address.state">{{ store.address.state }} {{ store.address.zip }}</span>
+                                <span class="country" v-if="store.address.country">{{ store.address.country }}</span>
+                            </li>
+                            <li class="phone">
+                                {{ store.phone ? store.phone : '—' }}
+                            </li>
                         </ul>
 
-                        <div class="actions">
+                        <div class="actions" v-if="! editMode">
                             <button class="button message" @click="messageDialog()"><span class="dashicons dashicons-email"></span> {{ __( 'Send Email', 'dokan' ) }}</button>
                             <button :class="['button', 'status', store.enabled ? 'enabled' : 'disabled']"><span class="dashicons"></span> {{ store.enabled ? __( 'Enabled', 'dokan' ) : __( 'Disabled', 'dokan' ) }}</button>
                         </div>
@@ -154,9 +154,9 @@
                             {{ __( 'Change Store Banner', 'dokan' ) }}
                         </span>
                     </div>
-                    <div class="action-links">
+                    <div :class="{'action-links': true, 'edit-mode': editMode}">
                         <template v-if="editMode">
-                            <button @click="editMode = false" class="button visit-store">{{ __( 'Cancel', 'dokan' ) }} <span class="dashicons dashicons-no-alt"></span></button>
+                            <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }} <span class="dashicons dashicons-no-alt"></span></button>
                             <button @click="updateStore" class="button button-primary">{{ saveBtn }} <span class="dashicons dashicons-yes"></span></button>
                         </template>
 
@@ -170,7 +170,7 @@
                 </div>
             </section>
 
-            <section class="vendor-summary" v-if="stats !== null">
+            <section class="vendor-summary" v-if="stats !== null && !editMode">
                 <div class="summary-wrap products-revenue">
                     <div class="stat-summary products">
                         <h3>{{ __( 'Products', 'dokan' ) }}</h3>
@@ -279,9 +279,21 @@
             </section>
 
             <section class="vendor-other-info" v-if="editMode">
-                <vendorSocial :vendorInfo="store" />
-                <vendorPaymentOptions :vendorInfo="store" />
+                <div class="address-social-info">
+                    <VendorAddressFields :vendorInfo="store" />
+                    <VendorSocialFields :vendorInfo="store" />
+                </div>
+                <div class="payment-info">
+                    <VendorPaymentFields :vendorInfo="store" />
+                </div>
             </section>
+
+            <div :class="{'action-links': true, 'footer': true, 'edit-mode': editMode}">
+                <template v-if="editMode">
+                    <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }} <span class="dashicons dashicons-no-alt"></span></button>
+                    <button @click="updateStore" class="button button-primary">{{ saveBtn }} <span class="dashicons dashicons-yes"></span></button>
+                </template>
+            </div>
 
         </div>
         <vcl-twitch v-else height="300" primary="#ffffff"></vcl-twitch>
@@ -289,15 +301,16 @@
 </template>
 
 <script>
-import AddVendor from 'admin/components/AddVendor.vue';
 import UploadImage from 'admin/components/UploadImage.vue';
-import vendorSocial from 'admin/components/vendorSocial.vue';
-import vendorPaymentOptions from 'admin/components/vendorPaymentOptions.vue';
-import vendorAddress from 'admin/components/vendorAddress.vue';
+import VendorSocialFields from 'admin/components/VendorSocialFields.vue';
+import VendorAccountFields from 'admin/components/VendorAccountFields.vue';
+import VendorPaymentFields from 'admin/components/VendorPaymentFields.vue';
+import VendorAddressFields from 'admin/components/VendorAddressFields.vue';
 
 let ContentLoading = dokan_get_lib('ContentLoading');
 let Modal          = dokan_get_lib('Modal');
 let Currency       = dokan_get_lib('Currency');
+
 
 let VclFacebook = ContentLoading.VclFacebook;
 let VclTwitch   = ContentLoading.VclTwitch;
@@ -311,11 +324,11 @@ export default {
         VclTwitch,
         Modal,
         Currency,
-        AddVendor,
         UploadImage,
-        vendorSocial,
-        vendorPaymentOptions,
-        vendorAddress
+        VendorSocialFields,
+        VendorPaymentFields,
+        VendorAccountFields,
+        VendorAddressFields,
     },
 
     data () {
@@ -358,6 +371,9 @@ export default {
                         routing_number: '',
                         iban: '',
                         swift: ''
+                    },
+                    paypal: {
+                        email: ''
                     }
                 },
                 address: {
@@ -370,6 +386,8 @@ export default {
                 }
             },
             fakeStore: {},
+            showStoreUrl: true,
+            otherStoreUrl: null,
         };
     },
 
@@ -449,6 +467,14 @@ export default {
 
         saveBtn() {
             return this.isUpdating ? this.__( 'Saving...', 'dokan' ) : this.__( 'Save Changes' )
+        },
+        storeUrl() {
+            let defaultUrl = dokan.urls.siteUrl + dokan.urls.storePrefix + '/';
+            let storeUrl = this.store.store_name.trim().split(' ').join('-');
+            this.store.user_nicename = storeUrl;
+            this.otherStoreUrl = defaultUrl + storeUrl;
+
+            return defaultUrl + storeUrl;
         }
     },
 
@@ -457,15 +483,25 @@ export default {
             this.fetch();
             this.fetchStats();
         },
+
+        'store.store_name'( value ) {
+            this.showStoreUrl = true;
+        },
+
+        'store.user_nicename'( value ) {
+            this.showStoreUrl = false;
+            this.otherStoreUrl = this.defaultUrl + value.trim().split(' ').join('-');
+            this.store.user_nicename = value.split(' ').join('-');
+        },
     },
 
     created() {
         this.fetch();
         this.fetchStats();
 
-        // this.$root.$on('modalClosed', () => {
-        //     this.loadEditVendor = false;
-        // });
+        if ( this.$route.query.edit && this.$route.query.edit === 'true' ) {
+            this.editMode = true;
+        }
     },
 
     methods: {
@@ -475,8 +511,10 @@ export default {
 
             dokan.api.get('/stores/' + self.id )
             .done( ( response ) => {
-                self.fakeStore = self.store;
-                self.store     = response;
+                Object.assign( self.fakeStore, self.store );
+                // self.store = response;
+                Object.assign( self.store, response );
+                // console.log(self.store)
                 self.transformer(response);
             } );
 
@@ -489,13 +527,21 @@ export default {
 
         // map response props to store props
         transformer(response) {
-            this.store.editPage = true;
-
             for ( let res in response ) {
+
                 if ( Array.isArray(response[res]) && 0 === response[res].length ) {
                     this.store[res] = this.fakeStore[res];
                 }
             }
+
+            // set default payment object for v-model
+            if ( 'payment' in response && response.payment.bank && response.payment.bank.length < 1 ) {
+                this.store.payment = this.fakeStore.payment;
+            }
+
+            // if ( 'payment' in response && response.payment.paypal && response.payment.paypal.email.length < 1 ) {
+            //     this.store.payment = this.fakeStore.payment;
+            // }
 
             if ( 'email' in response ) {
                 this.store.user_email = response.email;
@@ -616,6 +662,21 @@ export default {
 
 <style lang="less">
 .dokan-vendor-single {
+    .dokan-hide {
+        display: none;
+    }
+
+    .vendor-profile {
+        .action-links.edit-mode {
+            .button span {
+                line-height: 27px
+            }
+        }
+        .action-links.footer.edit-mode {
+            float: right;
+            margin-top: 20px;
+        }
+    }
 
     .dokan-form-input {
         width: 100%;
@@ -967,6 +1028,38 @@ export default {
                 }
             }
         }
+
+        .store-info.edit-mode {
+            .account-info {
+                .content-header {
+                    display: none;
+                }
+
+                .column {
+                    // display: flex;
+                    label {
+                        float: left;
+                        clear: both;
+                        margin-top: 10px;
+                        margin-left: -4px;
+                    }
+                    .dokan-form-input {
+                        width: 60%;
+                        padding: 5px;
+                        float: right;
+                        margin-right: -4px;
+                    }
+                    .store-url {
+                        margin: 0;
+                        padding: 0;
+                        bottom: 10px;
+                        font-style: italic;
+                        color: #a09f9f;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
     }
 
     .vendor-summary {
@@ -1208,19 +1301,60 @@ export default {
     }
 
     .vendor-other-info {
-        display: flex;
-        justify-content: space-between;
-        background: white;
-        padding: 10px 20px;
-        margin-top: 30px;
+        .address-social-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
 
-        .content-header {
-            padding: 20px 0px;
-            font-size: 20px;
+            .content-header {
+                font-size: 18px;
+                margin: 0;
+                padding: 10px;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .social-info, .account-info {
+                width: 48%;
+                background-color: white;
+
+                .content-body {
+                    padding: 10px 20px;
+                }
+            }
+
+            .account-info {
+                .store-url {
+                    margin: 0;
+                    padding: 0;
+                    position: relative;
+                    bottom: 10px;
+                    font-style: italic;
+                    color: #a09f9f;
+                    font-size: 12px;
+                }
+            }
         }
 
-        .social-info, .payment-info {
-            width: 48%
+        .payment-info {
+            background-color: white;
+            margin-top: 30px;
+
+            .content-header {
+                font-size: 18px;
+                margin: 0;
+                padding: 10px;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .content-body {
+                display: flex;
+                justify-content: space-between;
+
+                .dokan-form-group {
+                    width: 48%;
+                    padding: 10px 20px;
+                }
+            }
         }
     }
 }

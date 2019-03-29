@@ -6,8 +6,8 @@
                     <ul class="tab-list">
                         <li v-for="(tab, index) in tabs" :key="index" :class="{'tab-title': true, 'active': currentTab === tab.name}">
                             <div class="tab-link">
-                                <a href="#" @click.prevent="currentTab = tab.name" :class="{'first': tab.name === 'vendorAccountInfo'}">
-                                    <i :class="{'icon': true, 'first': tab.name === 'vendorAccountInfo'}">
+                                <a href="#" @click.prevent="currentTab = tab.name" :class="{'first': tab.name === 'VendorAccountFields'}">
+                                    <i :class="{'icon': true, 'first': tab.name === 'VendorAccountFields'}">
                                         <img :src="getIcon(tab.icon)">
                                     </i>
                                     {{tab.label}}
@@ -35,7 +35,7 @@
             </div> -->
 
             <div slot="footer">
-                <button class="dokan-btn" @click="createVendor">{{ 'vendorPaymentOptions' === currentTab ? __( 'Create Vendor', 'dokan' ) : this.nextBtn }}</button>
+                <button class="dokan-btn" @click="createVendor">{{ 'VendorPaymentFields' === currentTab ? __( 'Create Vendor', 'dokan' ) : this.nextBtn }}</button>
             </div>
         </modal>
     </div>
@@ -46,9 +46,9 @@
 const Modal   = dokan_get_lib('Modal');
 const Loading = dokan_get_lib('Loading');
 
-import vendorAccountInfo from './vendorAccountInfo.vue';
-import vendorAddress from './vendorAddress.vue';
-import vendorPaymentOptions from './vendorPaymentOptions.vue';
+import VendorAccountFields from './VendorAccountFields.vue';
+import VendorAddressFields from './VendorAddressFields.vue';
+import VendorPaymentFields from './VendorPaymentFields.vue';
 
 // import vendorOptions from './vendorOptions.vue';
 // import vendorSocial from './vendorSocial.vue';
@@ -62,9 +62,9 @@ export default {
     components: {
         Modal,
         Loading,
-        vendorAccountInfo,
-        vendorAddress,
-        vendorPaymentOptions,
+        VendorAccountFields,
+        VendorAddressFields,
+        VendorPaymentFields,
         // vendorOptions,
         // vendorSocial,
     },
@@ -76,9 +76,9 @@ export default {
             nextBtn: this.__( 'Next', 'dokan' ),
             title: this.__( 'Add New Vendor', 'dokan' ),
             tabs: {
-                vendorAccountInfo: {
+                VendorAccountFields: {
                     label: this.__( 'Account Info', 'dokan' ),
-                    name: 'vendorAccountInfo',
+                    name: 'VendorAccountFields',
                     icon: 'account',
                 },
                 // vendorOptions: {
@@ -91,18 +91,18 @@ export default {
                 //     name: 'vendorSocial',
                 //     icon: 'social',
                 // },
-                vendorAddress: {
+                VendorAddressFields: {
                     label: this.__( 'Address', 'dokan' ),
-                    name: 'vendorAddress',
+                    name: 'VendorAddressFields',
                     icon: 'address',
                 },
-                vendorPaymentOptions: {
+                VendorPaymentFields: {
                     label: this.__( 'Payment Options', 'dokan' ),
-                    name: 'vendorPaymentOptions',
+                    name: 'VendorPaymentFields',
                     icon: 'payment',
                 }
             },
-            currentTab: 'vendorAccountInfo',
+            currentTab: 'VendorAccountFields',
             store: {
                 store_name: '',
                 user_pass: '',
@@ -130,6 +130,9 @@ export default {
                         routing_number: '',
                         iban: '',
                         swift: ''
+                    },
+                    paypal: {
+                        email: ''
                     }
                 },
                 address: {
@@ -215,7 +218,7 @@ export default {
         // create vendor
         createVendor() {
             // only for validation|if success create the vendor
-            if ( 'vendorAccountInfo' === this.currentTab ) {
+            if ( 'VendorAccountFields' === this.currentTab ) {
 
                 dokan.api.post('/stores/', this.store)
                 .done((response) => {
@@ -223,11 +226,11 @@ export default {
                 })
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                    this.currentTab = 'vendorAccountInfo';
+                    this.currentTab = 'VendorAccountFields';
                 })
             }
 
-            if ( 'vendorPaymentOptions' === this.currentTab ) {
+            if ( 'VendorPaymentFields' === this.currentTab ) {
                 this.isLoading = true;
 
                 dokan.api.put('/stores/' + this.store.id, this.store)
@@ -250,12 +253,12 @@ export default {
             }
 
             // move next tab
-            this.currentTab = 'vendorPaymentOptions' === this.currentTab ? 'vendorPaymentOptions' : this.nextTab(this.tabs, this.currentTab);
+            this.currentTab = 'VendorPaymentFields' === this.currentTab ? 'VendorPaymentFields' : this.nextTab(this.tabs, this.currentTab);
         },
 
         // update vendor
         // updateVendor() {
-        //     if ( 'vendorPaymentOptions' === this.currentTab ) {
+        //     if ( 'VendorPaymentFields' === this.currentTab ) {
         //         this.isLoading = true;
 
         //         dokan.api.put('/stores/' + this.storeId, this.store )
@@ -280,7 +283,7 @@ export default {
         //     })
 
         //     // move next tab
-        //     this.currentTab = 'vendorPaymentOptions' === this.currentTab ? 'vendorPaymentOptions' : this.nextTab(this.tabs, this.currentTab);
+        //     this.currentTab = 'VendorPaymentFields' === this.currentTab ? 'VendorPaymentFields' : this.nextTab(this.tabs, this.currentTab);
         // },
 
         nextTab(tabs, currentTab) {
