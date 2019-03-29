@@ -48,7 +48,7 @@ class Dokan_Geolocation {
      *
      * @var string
      */
-    public $version = '1.0.0';
+    public $version = null;
 
     /**
      * Checks admin has set google map api key
@@ -67,6 +67,7 @@ class Dokan_Geolocation {
      * @return void
      */
     public function __construct() {
+        $this->version          = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
         $this->has_gmap_api_key = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
 
         $this->define_constants();
