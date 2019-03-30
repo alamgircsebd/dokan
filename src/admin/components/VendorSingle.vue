@@ -5,7 +5,7 @@
         </div>
 
         <div class="dokan-hide">
-            {{store.store_name}}
+            {{store}}
         </div>
 
         <modal
@@ -45,17 +45,17 @@
 
                     <div :class="{'profile-icon': true, 'edit-mode': editMode}">
                         <template v-if="editMode">
-                            <UploadImage @uploadedImage="uploadGravatar" :src="store.gravatar" :alt="store.store_name" />
+                            <upload-image @uploadedImage="uploadGravatar" :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name" />
                         </template>
                         <template v-else>
-                            <img :src="store.gravatar" :alt="store.store_name">
+                            <img :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name">
                         </template>
                         <span class="edit-photo" v-if="editMode">
                             {{ __( 'Change store photo', 'dokan' ) }}
                         </span>
                     </div>
 
-                    <div :class="{'store-info': true, 'edit-mode': editMode}">
+                    <div :class="{'store-info': true, 'edit-mode': editMode}">
                         <template v-if="! editMode">
                             <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
                         </template>
@@ -144,7 +144,7 @@
                 <div :class="{'profile-banner': true, 'edit-mode': editMode}">
                     <div class="banner-wrap">
                         <template v-if="editMode">
-                            <UploadImage @uploadedImage="uploadBanner" :src="store.banner" />
+                            <upload-image @uploadedImage="uploadBanner" :src="store.banner" />
                         </template>
                         <template v-else>
                             <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
@@ -352,7 +352,9 @@ export default {
                 user_nicename: '',
                 phone: '',
                 banner: '',
+                banner_id: '',
                 gravatar: '',
+                gravatar_id: '',
                 social: {
                     fb: '',
                     gplus: '',
@@ -636,9 +638,10 @@ export default {
 
                     this.showAlert(
                         this.__( 'Vendor Updated', 'dokan' ),
-                        this.__( 'Vendor updated successfully!', 'dokan' ),
+                        this.__( 'Vendor Updated Successfully!', 'dokan' ),
                         'success'
                     );
+
                 } )
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
@@ -646,15 +649,19 @@ export default {
         },
 
         uploadGravatar( image ) {
-            this.store.gravatar = image.id;
+            this.store.gravatar_id = image.id;
         },
 
         uploadBanner( image ) {
-            this.store.banner = image.id
+            this.store.banner_id = image.id
         },
 
         showAlert( $title, $des, $status ) {
             this.$swal( $title, $des, $status );
+        },
+
+        getDefaultPic() {
+            return dokan.urls.proAssetsUrl + '/images/store-pic.png';
         }
     }
 };

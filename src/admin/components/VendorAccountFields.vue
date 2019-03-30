@@ -10,22 +10,21 @@
                     <p class="picture-header">{{ __( 'Vendor Picture', 'dokan' ) }}</p>
 
                     <div class="profile-image">
-                        <img @click="uploadGravatar" :src="images.gravatar ? images.gravatar : getDefaultPic()" alt="store picture" :style="images.gravatar ? {padding: '5px'} : ''">
+                        <upload-image @uploadedImage="uploadGravatar" />
                     </div>
 
-                    <p
-                        class="picture-footer"
+                    <p class="picture-footer"
                         v-html="sprintf( __( 'You can change your profile picutre on %s', 'dokan' ), '<a href=\'https://gravatar.com/\' target=\'_blank\'>Gravatar</a>' )"
                     />
                 </div>
 
-                <div class="picture banner" :style="images.banner ? 'padding: 0' : ''">
+                <div class="picture banner" :style="banner ? 'padding: 0' : ''">
                     <div class="banner-image">
-                        <img v-if="images.banner" :src="images.banner" :alt="images.banner ? 'banner-image' : ''">
+                        <img v-if="banner" :src="banner" :alt="banner ? 'banner-image' : ''">
                         <button @click="uploadBanner">{{__( 'Upload Banner', 'dokan' ) }}</button>
                     </div>
 
-                    <p v-if="! images.banner" class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
+                    <p v-if="! banner" class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
                 </div>
             </div>
 
@@ -72,8 +71,14 @@
 </template>
 
 <script>
+import UploadImage from 'admin/components/UploadImage.vue';
+
 export default {
     name: 'VendorAccountFields',
+
+    components: {
+        UploadImage
+    },
 
     props: {
         vendorInfo: {
@@ -85,12 +90,7 @@ export default {
         return {
             showStoreUrl: true,
             otherStoreUrl: null,
-            images: {
-                banner: '',
-                bannerId: '',
-                gravatar: '',
-                gravatarId: '',
-            },
+            banner: '',
             defaultUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/'
         }
     },
@@ -101,9 +101,11 @@ export default {
         },
 
         'vendorInfo.user_nicename'( newValue ) {
-            this.showStoreUrl = false;
-            this.otherStoreUrl = this.defaultUrl + newValue.trim().split(' ').join('-');
-            this.vendorInfo.user_nicename = newValue.split(' ').join('-');
+            if ( typeof newValue !== 'undefined' ) {
+                this.showStoreUrl = false;
+                this.otherStoreUrl = this.defaultUrl + newValue.trim().split(' ').join('-');
+                this.vendorInfo.user_nicename = newValue.split(' ').join('-');
+            }
         }
     },
 
@@ -118,44 +120,31 @@ export default {
     },
 
     created() {
-        if ( this.vendorInfo.gravatar ) {
-            this.images.gravatar = this.vendorInfo.gravatar;
-        }
+        // if ( this.vendorInfo.gravatar ) {
+        //     this.images.gravatar = this.vendorInfo.gravatar;
+        // }
 
-        if ( this.vendorInfo.banner ) {
-            this.images.banner = this.vendorInfo.banner;
-        }
+        // if ( this.vendorInfo.banner ) {
+        //     this.images.banner = this.vendorInfo.banner;
+        // }
     },
 
     methods: {
-        getDefaultPic() {
-            return dokan.urls.proAssetsUrl + '/images/store-pic.png';
-        },
-
         uploadBanner() {
-            this.openMediaManager(this.onSelectBanner);
+            this.openMediaManager( this.onSelectBanner );
         },
 
-        uploadGravatar() {
-            this.openMediaManager(this.onSelectGravatar);
+        uploadGravatar( image ) {
+            this.vendorInfo.gravatar_id = image.id;
         },
 
         getId() {
             return this.$route.params.id;
         },
 
-        onSelectGravatar(image) {
-            this.images.gravatar   = image.url;
-            this.images.gravatarId = image.id;
-
-            this.$root.$emit('uploadedImage', this.images);
-        },
-
-        onSelectBanner(image) {
-            this.images.banner   = image.url;
-            this.images.bannerId = image.id;
-
-            this.$root.$emit('uploadedImage', this.images);
+        onSelectBanner( image ) {
+            this.banner = image.url;
+            this.vendorInfo.banner_id = image.id;
         },
 
         openMediaManager(callback) {

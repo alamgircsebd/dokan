@@ -111,7 +111,9 @@ export default {
                 user_nicename: '',
                 phone: '',
                 banner: '',
+                banner_id: '',
                 gravatar: '',
+                gravatar_id: '',
                 social: {
                     fb: '',
                     gplus: '',
@@ -149,19 +151,10 @@ export default {
     },
 
     created() {
-        this.$root.$on('uploadedImage', (images) => {
-            this.store.banner   = images.bannerId;
-            this.store.gravatar = images.gravatarId;
-        } );
-
-        // edit vendor if it's vendor single page or pass vendorId to edit a vendor
-        // if ( this.getId() || this.vendorId ) {
-        //     this.storeId = this.getId() ? this.getId() : this.vendorId;
-
-        //     this.isLoading = true;
-        //     this.title = this.__( 'Edit Vendor', 'dokan' );
-        //     this.fetch();
-        // }
+        // this.$root.$on('uploadedImage', (image) => {
+        //     this.store.banner_id   = image.bannerId;
+        //     this.store.gravatar_id = image.gravatarId;
+        // } );
     },
 
     methods: {
@@ -177,45 +170,6 @@ export default {
             this.$swal( $title, $des, $status );
         },
 
-        // fetch() {
-        //     dokan.api.get('/stores/' + this.storeId )
-        //     .done((response) => {
-        //         this.fakeStore = this.store;
-        //         this.store     = response;
-        //         this.transformer(response);
-        //         this.isLoading = false;
-        //     });
-        // },
-
-        // map response props to store props
-        // transformer(response) {
-        //     this.store.editPage = true;
-
-        //     for ( let res in response ) {
-        //         if ( Array.isArray(response[res]) && 0 === response[res].length ) {
-        //             this.store[res] = this.fakeStore[res];
-        //         }
-        //     }
-
-        //     if ( 'email' in response ) {
-        //         this.store.user_email = response.email;
-        //     }
-
-        //     if ( 'shop_url' in response ) {
-        //         this.store.user_nicename = this.getStoreName(response.shop_url);
-        //     }
-        // },
-
-        // get sotre name from url
-        // getStoreName(url) {
-        //     let storeName = url.split('/').filter((value) => {
-        //         return value !== '';
-        //     });
-
-        //     return storeName[storeName.length - 1];
-        // },
-
-        // create vendor
         createVendor() {
             // only for validation|if success create the vendor
             if ( 'VendorAccountFields' === this.currentTab ) {
@@ -233,58 +187,39 @@ export default {
             if ( 'VendorPaymentFields' === this.currentTab ) {
                 this.isLoading = true;
 
-                dokan.api.put('/stores/' + this.store.id, this.store)
-                .done((response) => {
-                    this.showAlert(
-                        this.__( 'Vendor Created', 'dokan' ),
-                        this.__( 'A vendor has been created successfully!', 'dokan' ),
-                        'success'
-                    );
+                dokan.api.put( '/stores/' + this.store.id, this.store )
+                .done( ( response ) => {
+                    this.$swal( {
+                        type: 'success',
+                        title: this.__( 'Vendor Created', 'dokan' ),
+                        text: this.__( 'A vendor has been created successfully!', 'dokan' ),
+                        showCloseButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: this.__( 'Add Another', 'dokan' ),
+                        cancelButtonText: this.__( 'Edit Vendor', 'dokan' )
+                    } )
+                    .then( ( result ) => {
+                        if ( result.value ) {
+                            location.reload();
+                        } else if ( result.dismiss === this.$swal.DismissReason.cancel ) {
+                            this.$router.push( { path: 'vendors/' + this.store.id, query:{ edit: 'true' } } );
+                        } else {
+                            location.reload();
+                        }
+                    } );
 
-                    // reload to see newly created vendor
-                    location.reload();
-                })
-                .fail((response) => {
+                } )
+                .fail( ( response ) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                })
-                .always(() => {
+                } )
+                .always( () => {
                     this.$root.$emit('modalClosed');
-                })
+                } )
             }
 
             // move next tab
             this.currentTab = 'VendorPaymentFields' === this.currentTab ? 'VendorPaymentFields' : this.nextTab(this.tabs, this.currentTab);
         },
-
-        // update vendor
-        // updateVendor() {
-        //     if ( 'VendorPaymentFields' === this.currentTab ) {
-        //         this.isLoading = true;
-
-        //         dokan.api.put('/stores/' + this.storeId, this.store )
-        //         .done((response) => {
-        //             this.showAlert(
-        //                 this.__( 'Vendor Updated', 'dokan' ),
-        //                 this.__( 'The vendor has been updated!', 'dokan' ),
-        //                 'success'
-        //             );
-        //         })
-        //         .fail((response) => {
-        //             this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-        //         })
-        //         .always(() => {
-        //             this.$root.$emit('modalClosed');
-        //         });
-        //     }
-
-        //     dokan.api.put('/stores/' + this.storeId, this.store )
-        //     .fail((response) => {
-        //         this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-        //     })
-
-        //     // move next tab
-        //     this.currentTab = 'VendorPaymentFields' === this.currentTab ? 'VendorPaymentFields' : this.nextTab(this.tabs, this.currentTab);
-        // },
 
         nextTab(tabs, currentTab) {
             let keys      = Object.keys(tabs);
@@ -526,6 +461,7 @@ export default {
                             padding: 10px 15px;
                             border-radius: 3px;
                             margin: 20px 0;
+                            cursor: pointer;
                         }
                     }
                 }

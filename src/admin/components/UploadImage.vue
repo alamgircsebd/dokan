@@ -1,5 +1,5 @@
 <template>
-    <img @click="uploadGravatar" :src="images.url" :alt="images.alt" :style="images.id ? {padding: '5px'} : ''">
+    <img @click="uploadImage" :src="image.url" :alt="image.alt" :style="image.id ? {padding: '5px'} : ''">
 </template>
 
 <script>
@@ -7,11 +7,11 @@ export default {
     name: 'UploadImage',
 
     props: {
-        images: {
+        image: {
             type: Object,
             default: () => {
                 return {
-                    url: '',
+                    url: dokan.urls.proAssetsUrl + '/images/store-pic.png',
                     id: '',
                     alt: ''
                 }
@@ -21,39 +21,22 @@ export default {
 
     data() {
         return {
-            // images: {
-                // banner: '',
-                // bannerId: '',
-                // gravatar: '',
-                // gravatarId: ''
-            // },
         }
     },
 
     methods: {
-        // uploadBanner() {
-        //     this.openMediaManager(this.onSelectBanner);
-        // },
-
-        uploadGravatar() {
-            this.openMediaManager(this.onSelectGravatar);
+        uploadImage() {
+            this.openMediaManager( this.onSelectImage );
         },
 
-        onSelectGravatar(image) {
-            this.images.url = image.url;
-            this.images.id = image.id;
+        onSelectImage( image ) {
+            this.image.url = image.url;
+            this.image.id = image.id;
 
-            this.$emit('uploadedImage', this.images);
+            this.$emit( 'uploadedImage', this.image );
         },
 
-        // onSelectBanner(image) {
-        //     this.images.banner   = image.url;
-        //     this.images.bannerId = image.id;
-
-        //     this.$root.$emit('uploadedImage', this.images);
-        // },
-
-        openMediaManager(callback) {
+        openMediaManager( callback ) {
             const self = this;
 
             if (self.fileFrame) {
