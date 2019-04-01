@@ -187,3 +187,80 @@ function dokan_report_abuse_report_form( $args = [], $echo = false ) {
         return ob_get_clean();
     }
 }
+
+/**
+ * Get abuse reports
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param array $args
+ *
+ * @return array
+ */
+function dokan_report_abuse_get_reports( $args = [] ) {
+    global $wpdb;
+
+    $defaults = [
+        'per_page' => 20,
+        'page'     => 1
+    ];
+
+    $args = wp_parse_args( $args, $defaults );
+
+    $limit = 20;
+
+    $offset = $args['per_page'] * ( $args['page'] - 1 );
+
+    $results = $wpdb->get_results(
+        $wpdb->prepare(
+            'select * from ' . $wpdb->prefix . 'dokan_report_abuse_reports'
+            . ' order by id desc'
+            . ' limit %d offset %d',
+            $limit, $offset
+        )
+    );
+
+    $reports = [];
+
+    foreach ( $results as $i => $result ) {
+        $reports[ $i ]['id']     = absint( $result->id );
+        $reports[ $i ]['reason'] = $result->reason;
+
+        $product = wc_get_product( $result->product_id );
+        $reports[ $i ]['product'] = [
+            'id'        => $product->get_id(),
+            'title'     => $product->get_title(),
+            'admin_url' => admin_url( sprintf( 'post.php?post=%d&action=edit', $product->get_id() ) ),
+        ];
+
+        $vendor = dokan_get_vendor( $result->vendor_id );
+        $reports[ $i ]['vendor'] = [
+            'id'        => $vendor->get_id(),
+            'name'      => $vendor->get_shop_name(),
+            'admin_url' => admin_url( sprintf( 'user-edit.php?user_id=%d', $vendor->get_id() ) ),
+        ];
+
+        if ( $result->customer_id ) {
+            $customer       = new WC_Customer( $result->customer_id );
+            $customer_name  = $customer->get_username();
+            $customer_email = $customer->get_email();
+            $admin_url      = admin_url( sprintf( 'user-edit.php?user_id=%d', $customer->get_id() ) );
+        } else {
+            $customer_name  = $result->customer_name;
+            $customer_email = $result->customer_email;
+            $admin_url      = null;
+        }
+
+        $reports[ $i ]['reported_by'] = [
+            'id'        => absint( $result->customer_id ),
+            'name'      => $customer_name,
+            'email'     => $customer_email,
+            'admin_url' => $admin_url,
+        ];
+
+        $reports[ $i ]['description'] = $result->description;
+        $reports[ $i ]['reported_at'] = mysql_to_rfc3339( $result->created_at );
+    }
+
+    return $reports;
+}

@@ -89,6 +89,8 @@ final class DokanReportAbuse {
         require_once DOKAN_REPORT_ABUSE_INCLUDES . '/Ajax.php';
         require_once DOKAN_REPORT_ABUSE_INCLUDES . '/SingleProduct.php';
         require_once DOKAN_REPORT_ABUSE_INCLUDES . '/EmailLoader.php';
+        require_once DOKAN_REPORT_ABUSE_INCLUDES . '/Admin.php';
+        require_once DOKAN_REPORT_ABUSE_INCLUDES . '/Rest.php';
     }
 
     /**
@@ -103,6 +105,8 @@ final class DokanReportAbuse {
         new \DokanPro\ReportAbuse\Ajax();
         new \DokanPro\ReportAbuse\SingleProduct();
         new \DokanPro\ReportAbuse\EmailLoader();
+        new \DokanPro\ReportAbuse\Admin();
+        new \DokanPro\ReportAbuse\Rest();
     }
 
     /**
