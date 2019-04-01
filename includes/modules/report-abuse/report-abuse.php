@@ -91,6 +91,7 @@ final class DokanReportAbuse {
         require_once DOKAN_REPORT_ABUSE_INCLUDES . '/EmailLoader.php';
         require_once DOKAN_REPORT_ABUSE_INCLUDES . '/Admin.php';
         require_once DOKAN_REPORT_ABUSE_INCLUDES . '/Rest.php';
+        require_once DOKAN_REPORT_ABUSE_INCLUDES . '/AdminSingleProduct.php';
     }
 
     /**
@@ -107,6 +108,7 @@ final class DokanReportAbuse {
         new \DokanPro\ReportAbuse\EmailLoader();
         new \DokanPro\ReportAbuse\Admin();
         new \DokanPro\ReportAbuse\Rest();
+        new \DokanPro\ReportAbuse\AdminSingleProduct();
     }
 
     /**

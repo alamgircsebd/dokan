@@ -201,24 +201,36 @@ function dokan_report_abuse_get_reports( $args = [] ) {
     global $wpdb;
 
     $defaults = [
+        'order_by' => 'id',
+        'order'    => 'desc',
         'per_page' => 20,
-        'page'     => 1
+        'page'     => 1,
     ];
 
     $args = wp_parse_args( $args, $defaults );
 
-    $limit = 20;
+    $sql = 'select * from ' . $wpdb->prefix . 'dokan_report_abuse_reports where 1=1';
 
+    if ( ! empty( $args['product_id'] ) ) {
+        $sql .= $wpdb->prepare(
+            ' and product_id = %d',
+            absint( $args['product_id'] )
+        );
+    }
+
+    if ( in_array( $args['order_by'], [ 'id', 'reason', 'product_id', 'vendor_id', 'created_at' ] ) && in_array( strtolower( $args['order'] ) , [ 'asc', 'desc' ] ) ) {
+        $sql .= ' order by ' . $args['order_by'] . ' ' . $args['order'];
+    }
+
+    $limit  = 20;
     $offset = $args['per_page'] * ( $args['page'] - 1 );
 
-    $results = $wpdb->get_results(
-        $wpdb->prepare(
-            'select * from ' . $wpdb->prefix . 'dokan_report_abuse_reports'
-            . ' order by id desc'
-            . ' limit %d offset %d',
-            $limit, $offset
-        )
+    $sql .= $wpdb->prepare(
+        ' limit %d offset %d',
+        $args['per_page'], $offset
     );
+
+    $results = $wpdb->get_results( $sql );
 
     $reports = [];
 
