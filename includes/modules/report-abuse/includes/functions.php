@@ -144,6 +144,32 @@ function dokan_report_abuse_create_report( $args ) {
 }
 
 /**
+ * Get module admin settings
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_report_abuse_get_option() {
+    $option = get_option( 'dokan_report_abuse', [] );
+
+    if ( empty( $option['reported_by_logged_in_users_only'] ) || 'on' !== $option['reported_by_logged_in_users_only'] ) {
+        $option['reported_by_logged_in_users_only'] = 'off';
+    }
+
+    if ( empty( $option['abuse_reasons'] ) ) {
+        $option['abuse_reasons'] = [];
+
+        $option['abuse_reasons'][] = [
+            'id'    => 'other',
+            'value' => esc_html__( 'Other', 'dokan' ),
+        ];
+    }
+
+    return $option;
+}
+
+/**
  * Report Abuse Form
  *
  * @since DOKAN_PRO_SINCE
@@ -162,20 +188,7 @@ function dokan_report_abuse_report_form( $args = [], $echo = false ) {
     ];
 
     $args   = wp_parse_args( $args, $defaults );
-    $option = get_option( 'dokan_report_abuse', [] );
-
-    if ( empty( $option['reported_by_logged_in_users_only'] ) || 'on' !== $option['reported_by_logged_in_users_only'] ) {
-        $option['reported_by_logged_in_users_only'] = 'off';
-    }
-
-    if ( empty( $option['abuse_reasons'] ) ) {
-        $option['abuse_reasons'] = [];
-
-        $option['abuse_reasons'][] = [
-            'id'    => 'other',
-            'value' => esc_html__( 'Other', 'dokan' ),
-        ];
-    }
+    $option = dokan_report_abuse_get_option();
 
     $args = array_merge( $args, $option );
 
@@ -201,15 +214,38 @@ function dokan_report_abuse_get_reports( $args = [] ) {
     global $wpdb;
 
     $defaults = [
-        'order_by' => 'id',
-        'order'    => 'desc',
-        'per_page' => 20,
-        'page'     => 1,
+        'reason'     => '',
+        'product_id' => 0,
+        'order_by'   => 'id',
+        'order'      => 'desc',
+        'per_page'   => 20,
+        'page'       => 1,
+        'count'      => false,
     ];
 
     $args = wp_parse_args( $args, $defaults );
 
-    $sql = 'select * from ' . $wpdb->prefix . 'dokan_report_abuse_reports where 1=1';
+    if ( ! $args['count'] ) {
+        $sql = 'select * from ' . $wpdb->prefix . 'dokan_report_abuse_reports where 1=1';
+    } else {
+        $sql = 'select count(*) from ' . $wpdb->prefix . 'dokan_report_abuse_reports where 1=1';
+    }
+
+    if ( ! empty( $args['reason'] ) ) {
+        $option        = dokan_report_abuse_get_option();
+        $abuse_reasons = $option['abuse_reasons'];
+        $no_of_reasons = count( $abuse_reasons );
+
+        for ( $i = 0; $i < $no_of_reasons; $i++ ) {
+            if ( $abuse_reasons[$i]['value'] === $args['reason'] ) {
+                $sql .= $wpdb->prepare(
+                    ' and reason = %s', $args['reason']
+                );
+
+                break;
+            }
+        }
+    }
 
     if ( ! empty( $args['product_id'] ) ) {
         $sql .= $wpdb->prepare(
@@ -218,17 +254,22 @@ function dokan_report_abuse_get_reports( $args = [] ) {
         );
     }
 
-    if ( in_array( $args['order_by'], [ 'id', 'reason', 'product_id', 'vendor_id', 'created_at' ] ) && in_array( strtolower( $args['order'] ) , [ 'asc', 'desc' ] ) ) {
-        $sql .= ' order by ' . $args['order_by'] . ' ' . $args['order'];
+    if ( ! $args['count'] ) {
+        if ( in_array( $args['order_by'], [ 'id', 'reason', 'product_id', 'vendor_id', 'created_at' ] ) && in_array( strtolower( $args['order'] ) , [ 'asc', 'desc' ] ) ) {
+            $sql .= ' order by ' . $args['order_by'] . ' ' . $args['order'];
+        }
+
+        $offset = $args['per_page'] * ( $args['page'] - 1 );
+
+        $sql .= $wpdb->prepare(
+            ' limit %d offset %d',
+            $args['per_page'], $offset
+        );
     }
 
-    $limit  = 20;
-    $offset = $args['per_page'] * ( $args['page'] - 1 );
-
-    $sql .= $wpdb->prepare(
-        ' limit %d offset %d',
-        $args['per_page'], $offset
-    );
+    if ( $args['count'] ) {
+        return $wpdb->get_var($sql);
+    }
 
     $results = $wpdb->get_results( $sql );
 

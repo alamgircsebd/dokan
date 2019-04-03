@@ -179,6 +179,7 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_AbuseReasonsDropdown_vue__ = __webpack_require__(88);
 //
 //
 //
@@ -269,6 +270,17 @@ module.exports = function normalizeComponent (
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 var ListTable = dokan_get_lib('ListTable');
 var Modal = dokan_get_lib('Modal');
@@ -277,6 +289,7 @@ var Modal = dokan_get_lib('Modal');
     name: 'AbuseReports',
 
     components: {
+        AbuseReasonsDropdown: __WEBPACK_IMPORTED_MODULE_0__components_AbuseReasonsDropdown_vue__["a" /* default */],
         ListTable: ListTable,
         Modal: Modal
     },
@@ -312,7 +325,11 @@ var Modal = dokan_get_lib('Modal');
             totalPages: 1,
             perPage: 10,
             showModal: false,
-            report: {}
+            report: {},
+            query: {},
+            filter: {
+                reason: ''
+            }
         };
     },
 
@@ -321,10 +338,19 @@ var Modal = dokan_get_lib('Modal');
         currentPage: function currentPage() {
             var page = this.$route.query.page || 1;
             return parseInt(page);
+        },
+        queryFilterReason: function queryFilterReason() {
+            return this.$route.query.reason || '';
         }
     },
 
     created: function created() {
+        if (this.queryFilterReason) {
+            this.filter.reason = this.queryFilterReason;
+            this.query.reason = this.queryFilterReason;
+        }
+
+        console.log('before');
         this.fetchReports();
     },
 
@@ -332,24 +358,38 @@ var Modal = dokan_get_lib('Modal');
     watch: {
         '$route.query.page': function $routeQueryPage() {
             this.fetchReports();
+        },
+        '$route.query.reason': function $routeQueryReason() {
+            this.fetchReports();
+        },
+        'filter.reason': function filterReason(reason) {
+            this.query = {};
+
+            if (reason) {
+                this.query = {
+                    reason: reason
+                };
+            }
+
+            this.goTo(this.query);
         }
     },
 
     methods: {
         fetchReports: function fetchReports() {
-            var _this = this;
-
             var self = this;
 
             self.loading = true;
 
-            dokan.api.get('/abuse-reports', {
-                page: this.currentPage
-            }).done(function (response, status, xhr) {
+            if (self.currentPage > 1) {
+                self.query.page = self.currentPage;
+            }
+
+            dokan.api.get('/abuse-reports', self.query).done(function (response, status, xhr) {
                 self.reports = response;
                 self.loading = false;
 
-                _this.updatePagination(xhr);
+                self.updatePagination(xhr);
             });
         },
         updatePagination: function updatePagination(xhr) {
@@ -370,11 +410,13 @@ var Modal = dokan_get_lib('Modal');
             return moment(date);
         }),
         goToPage: function goToPage(page) {
+            this.query.page = page;
+            this.goTo(this.query);
+        },
+        goTo: function goTo(query) {
             this.$router.push({
                 name: 'AbuseReports',
-                query: {
-                    page: page
-                }
+                query: query
             });
         },
         showReport: function showReport(report) {
@@ -477,122 +519,163 @@ var render = function() {
       _vm._v(" "),
       _c("hr", { staticClass: "wp-header-end" }),
       _vm._v(" "),
-      _c("list-table", {
-        attrs: {
-          columns: _vm.columns,
-          loading: _vm.loading,
-          rows: _vm.reports,
-          actions: _vm.actions,
-          "bulk-actions": _vm.bulkActions,
-          "show-cb": false,
-          "total-items": _vm.totalItems,
-          "total-pages": _vm.totalPages,
-          "per-page": _vm.perPage,
-          "current-page": _vm.currentPage
-        },
-        on: { pagination: _vm.goToPage },
-        scopedSlots: _vm._u([
-          {
-            key: "reason",
-            fn: function(ref) {
-              var row = ref.row
-              return [
-                _c("strong", [
+      _c(
+        "list-table",
+        {
+          attrs: {
+            columns: _vm.columns,
+            loading: _vm.loading,
+            rows: _vm.reports,
+            actions: _vm.actions,
+            "bulk-actions": _vm.bulkActions,
+            "show-cb": false,
+            "total-items": _vm.totalItems,
+            "total-pages": _vm.totalPages,
+            "per-page": _vm.perPage,
+            "current-page": _vm.currentPage
+          },
+          on: { pagination: _vm.goToPage },
+          scopedSlots: _vm._u([
+            {
+              key: "reason",
+              fn: function(ref) {
+                var row = ref.row
+                return [
+                  _c("strong", [
+                    _c(
+                      "a",
+                      {
+                        attrs: { href: "#view-report" },
+                        on: {
+                          click: function($event) {
+                            $event.preventDefault()
+                            _vm.showReport(row)
+                          }
+                        }
+                      },
+                      [_vm._v(_vm._s(row.reason))]
+                    )
+                  ])
+                ]
+              }
+            },
+            {
+              key: "product",
+              fn: function(ref) {
+                var row = ref.row
+                return [
+                  _c("a", { attrs: { href: row.product.admin_url } }, [
+                    _vm._v(_vm._s(row.product.title))
+                  ])
+                ]
+              }
+            },
+            {
+              key: "vendor",
+              fn: function(ref) {
+                var row = ref.row
+                return [
                   _c(
-                    "a",
+                    "router-link",
+                    { attrs: { to: "/vendors/" + row.vendor.id } },
+                    [
+                      _vm._v(
+                        "\n                " +
+                          _vm._s(
+                            row.vendor.name
+                              ? row.vendor.name
+                              : _vm.__("(no name)", "dokan")
+                          ) +
+                          "\n            "
+                      )
+                    ]
+                  )
+                ]
+              }
+            },
+            {
+              key: "reported_by",
+              fn: function(ref) {
+                var row = ref.row
+                return [
+                  row.reported_by.admin_url
+                    ? _c("a", {
+                        attrs: {
+                          href: row.reported_by.admin_url,
+                          target: "_blank"
+                        },
+                        domProps: { textContent: _vm._s(row.reported_by.name) }
+                      })
+                    : [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(row.reported_by.name) +
+                            " <" +
+                            _vm._s(row.reported_by.email) +
+                            ">\n            "
+                        )
+                      ]
+                ]
+              }
+            },
+            {
+              key: "reported_at",
+              fn: function(ref) {
+                var row = ref.row
+                return [
+                  _vm._v(
+                    "\n            " +
+                      _vm._s(
+                        _vm
+                          .moment(row.reported_at)
+                          .format("MMM D, YYYY h:mm:ss a")
+                      ) +
+                      "\n        "
+                  )
+                ]
+              }
+            }
+          ])
+        },
+        [
+          _c(
+            "template",
+            { slot: "filters" },
+            [
+              _c("abuse-reasons-dropdown", {
+                attrs: {
+                  placeholder: _vm.__("Filter by abuse reason", "dokan")
+                },
+                model: {
+                  value: _vm.filter.reason,
+                  callback: function($$v) {
+                    _vm.$set(_vm.filter, "reason", $$v)
+                  },
+                  expression: "filter.reason"
+                }
+              }),
+              _vm._v(" "),
+              _vm.filter.reason
+                ? _c(
+                    "button",
                     {
-                      attrs: { href: "#view-report" },
+                      staticClass: "button",
+                      attrs: { type: "button" },
                       on: {
                         click: function($event) {
-                          $event.preventDefault()
-                          _vm.showReport(row)
+                          _vm.filter.reason = ""
                         }
                       }
                     },
-                    [_vm._v(_vm._s(row.reason))]
+                    [_vm._v("×")]
                   )
-                ])
-              ]
-            }
-          },
-          {
-            key: "product",
-            fn: function(ref) {
-              var row = ref.row
-              return [
-                _c("a", { attrs: { href: row.product.admin_url } }, [
-                  _vm._v(_vm._s(row.product.title))
-                ])
-              ]
-            }
-          },
-          {
-            key: "vendor",
-            fn: function(ref) {
-              var row = ref.row
-              return [
-                _c(
-                  "router-link",
-                  { attrs: { to: "/vendors/" + row.vendor.id } },
-                  [
-                    _vm._v(
-                      "\n                " +
-                        _vm._s(
-                          row.vendor.name
-                            ? row.vendor.name
-                            : _vm.__("(no name)", "dokan")
-                        ) +
-                        "\n            "
-                    )
-                  ]
-                )
-              ]
-            }
-          },
-          {
-            key: "reported_by",
-            fn: function(ref) {
-              var row = ref.row
-              return [
-                row.reported_by.admin_url
-                  ? _c("a", {
-                      attrs: {
-                        href: row.reported_by.admin_url,
-                        target: "_blank"
-                      },
-                      domProps: { textContent: _vm._s(row.reported_by.name) }
-                    })
-                  : [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(row.reported_by.name) +
-                          " <" +
-                          _vm._s(row.reported_by.email) +
-                          ">\n            "
-                      )
-                    ]
-              ]
-            }
-          },
-          {
-            key: "reported_at",
-            fn: function(ref) {
-              var row = ref.row
-              return [
-                _vm._v(
-                  "\n            " +
-                    _vm._s(
-                      _vm
-                        .moment(row.reported_at)
-                        .format("MMM D, YYYY h:mm:ss a")
-                    ) +
-                    "\n        "
-                )
-              ]
-            }
-          }
-        ])
-      }),
+                : _vm._e()
+            ],
+            1
+          )
+        ],
+        2
+      ),
       _vm._v(" "),
       _vm.showModal
         ? _c(
@@ -608,7 +691,7 @@ var render = function() {
               _c("template", { slot: "body" }, [
                 _c("p", { staticStyle: { "margin-top": "0" } }, [
                   _c("strong", [
-                    _vm._v(_vm._s(_vm.__("Reported for", "dokan")) + ":")
+                    _vm._v(_vm._s(_vm.__("Reported Product", "dokan")) + ":")
                   ]),
                   _vm._v(" "),
                   _c("a", { attrs: { href: _vm.report.product.admin_url } }, [
@@ -717,6 +800,202 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-23efc86a", esExports)
+  }
+}
+
+/***/ }),
+
+/***/ 88:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReasonsDropdown_vue__ = __webpack_require__(89);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41faa61c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReasonsDropdown_vue__ = __webpack_require__(90);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReasonsDropdown_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41faa61c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReasonsDropdown_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "includes/modules/report-abuse/src/js/components/AbuseReasonsDropdown.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-41faa61c", Component.options)
+  } else {
+    hotAPI.reload("data-v-41faa61c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 89:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'AbuseReasonsDropdown',
+
+    props: {
+        value: {
+            type: String,
+            required: true
+        },
+
+        placeholder: {
+            type: String,
+            required: false,
+            default: ''
+        }
+    },
+
+    data: function data() {
+        return {
+            abuseReasons: []
+        };
+    },
+
+
+    computed: {
+        selectedReason: {
+            get: function get() {
+                var _this = this;
+
+                var reason = this.abuseReasons.filter(function (reason) {
+                    return _this.value === reason.value;
+                });
+
+                if (reason.length) {
+                    return reason[0].value;
+                }
+
+                return '';
+            },
+            set: function set(reason) {
+                this.$emit('input', reason || '');
+            }
+        },
+
+        noneText: function noneText() {
+            return this.placeholder || this.__('Select a reason', 'dokan');
+        }
+    },
+
+    created: function created() {
+        this.fetchAbuseReasons();
+    },
+
+
+    methods: {
+        fetchAbuseReasons: function fetchAbuseReasons() {
+            var self = this;
+
+            dokan.api.get('/abuse-reports/abuse-reasons').done(function (response) {
+                self.abuseReasons = response;
+            });
+        }
+    }
+});
+
+/***/ }),
+
+/***/ 90:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "select",
+    {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.selectedReason,
+          expression: "selectedReason"
+        }
+      ],
+      on: {
+        change: function($event) {
+          var $$selectedVal = Array.prototype.filter
+            .call($event.target.options, function(o) {
+              return o.selected
+            })
+            .map(function(o) {
+              var val = "_value" in o ? o._value : o.value
+              return val
+            })
+          _vm.selectedReason = $event.target.multiple
+            ? $$selectedVal
+            : $$selectedVal[0]
+        }
+      }
+    },
+    [
+      _c("option", { attrs: { value: "" } }, [_vm._v(_vm._s(_vm.noneText))]),
+      _vm._v(" "),
+      _vm._l(_vm.abuseReasons, function(reason) {
+        return _c("option", {
+          key: reason.id,
+          domProps: { textContent: _vm._s(reason.value) }
+        })
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-41faa61c", esExports)
   }
 }
 

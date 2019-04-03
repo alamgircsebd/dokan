@@ -47,6 +47,16 @@
             <template slot="reported_at" slot-scope="{ row }">
                 {{ moment(row.reported_at).format('MMM D, YYYY h:mm:ss a') }}
             </template>
+
+            <template slot="filters">
+                <abuse-reasons-dropdown v-model="filter.reason" :placeholder="__('Filter by abuse reason', 'dokan')" />
+                <button
+                    v-if="filter.reason"
+                    type="button"
+                    class="button"
+                    @click="filter.reason = ''"
+                >&times;</button>
+            </template>
         </list-table>
 
         <modal
@@ -56,7 +66,7 @@
             @close="hideReport"
         >
             <template slot="body">
-                <p style="margin-top: 0;"><strong>{{ __('Reported for', 'dokan') }}:</strong> <a :href="report.product.admin_url">{{ report.product.title }}</a></p>
+                <p style="margin-top: 0;"><strong>{{ __('Reported Product', 'dokan') }}:</strong> <a :href="report.product.admin_url">{{ report.product.title }}</a></p>
                 <p><strong>{{ __('Reason', 'dokan') }}:</strong> {{ report.reason }}</p>
                 <p><strong>{{ __('Description', 'dokan') }}:</strong> {{ report.description || '―' }}</p>
                 <p>
@@ -89,6 +99,7 @@
 </template>
 
 <script>
+    import AbuseReasonsDropdown from '../../components/AbuseReasonsDropdown.vue';
     const ListTable = dokan_get_lib('ListTable');
     const Modal = dokan_get_lib('Modal');
 
@@ -96,6 +107,7 @@
         name: 'AbuseReports',
 
         components: {
+            AbuseReasonsDropdown,
             ListTable,
             Modal
         },
@@ -131,7 +143,11 @@
                 totalPages: 1,
                 perPage: 10,
                 showModal: false,
-                report: {}
+                report: {},
+                query: {},
+                filter: {
+                    reason: ''
+                },
             };
         },
 
@@ -140,9 +156,19 @@
                 const page = this.$route.query.page || 1;
                 return parseInt(page);
             },
+
+            queryFilterReason() {
+                return this.$route.query.reason || '';
+            }
         },
 
         created() {
+            if (this.queryFilterReason) {
+                this.filter.reason = this.queryFilterReason;
+                this.query.reason = this.queryFilterReason;
+            }
+
+            console.log('before');
             this.fetchReports();
         },
 
@@ -150,6 +176,22 @@
             '$route.query.page'() {
                 this.fetchReports();
             },
+
+            '$route.query.reason'() {
+                this.fetchReports();
+            },
+
+            'filter.reason'(reason) {
+                this.query = {};
+
+                if (reason) {
+                    this.query = {
+                        reason
+                    };
+                }
+
+                this.goTo(this.query);
+            }
         },
 
         methods: {
@@ -158,13 +200,15 @@
 
                 self.loading = true;
 
-                dokan.api.get('/abuse-reports', {
-                    page: this.currentPage
-                }).done((response, status, xhr) => {
+                if (self.currentPage > 1) {
+                    self.query.page = self.currentPage;
+                }
+
+                dokan.api.get('/abuse-reports', self.query).done((response, status, xhr) => {
                     self.reports = response;
                     self.loading = false;
 
-                    this.updatePagination(xhr);
+                    self.updatePagination(xhr);
                 })
             },
 
@@ -178,11 +222,14 @@
             },
 
             goToPage(page) {
+                this.query.page = page;
+                this.goTo(this.query);
+            },
+
+            goTo(query) {
                 this.$router.push({
                     name: 'AbuseReports',
-                    query: {
-                        page: page
-                    }
+                    query
                 });
             },
 

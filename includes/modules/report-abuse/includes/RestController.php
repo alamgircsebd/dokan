@@ -36,6 +36,14 @@ class RestController extends WP_REST_Controller {
                 'permission_callback' => [ $this, 'is_dokandar' ]
             ]
         ] );
+
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/abuse-reasons', [
+            [
+                'methods'             => WP_REST_Server::READABLE,
+                'callback'            => [ $this, 'get_abuse_reasons' ],
+                'permission_callback' => [ $this, 'is_dokandar' ]
+            ]
+        ] );
     }
 
     /**
@@ -63,18 +71,40 @@ class RestController extends WP_REST_Controller {
 
         $per_page = 20;
         $page     = ! empty( $request['page'] ) ? $request['page'] : 1;
+        $reason   = ! empty( $request['reason'] ) ? $request['reason'] : '';
 
-        $data = dokan_report_abuse_get_reports( [
-            'page' => $page
-        ] );
+        $args =  [
+            'page'   => $page,
+            'reason' => $reason,
+        ];
+
+        $data = dokan_report_abuse_get_reports( $args );
 
         $response = rest_ensure_response( $data );
 
-        $total = $wpdb->get_var( 'select count(*) from ' . $wpdb->prefix . 'dokan_report_abuse_reports' );
+        $args['count'] = true;
+        $total = dokan_report_abuse_get_reports( $args );
         $response->header( 'X-Dokan-AbuseReports-Total', $total );
 
         $max_pages = ceil( $total / $per_page );
         $response->header( 'X-Dokan-AbuseReports-TotalPages', (int) $max_pages );
+
+        return $response;
+    }
+
+    /**
+     * Get abuse reasons
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return \WP_REST_Response
+     */
+    public function get_abuse_reasons( $request ) {
+        $option = dokan_report_abuse_get_option();
+
+        $response = rest_ensure_response( $option['abuse_reasons'] );
 
         return $response;
     }
