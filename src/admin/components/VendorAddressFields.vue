@@ -36,6 +36,13 @@
                     <label for="state">{{ __( 'State', 'dokan') }}</label>
                     <Multiselect @input="saveState" v-model="selectedState" :options="getStatesFromCountryCode( selectedCode )" :multiselect="false" label="name" track-by="name" :placeholder="__( 'Select State', 'dokan' )" />
                 </div>
+
+                <!-- Add other address fields here -->
+                <component v-for="(component, index) in getAddressFields"
+                    :key="index"
+                    :is="component"
+                    :vendorInfo="vendorInfo"
+                />
             </div>
         </div>
     </div>
@@ -63,6 +70,7 @@ export default {
             states: [],
             selectedCountry: {},
             selectedState: {},
+            getAddressFields: dokan.hooks.applyFilters( 'getVendorAddressFields', [] ),
         }
     },
 

@@ -45,7 +45,7 @@
 
                     <div :class="{'profile-icon': true, 'edit-mode': editMode}">
                         <template v-if="editMode">
-                            <upload-image @uploadedImage="uploadGravatar" :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name" />
+                            <upload-image @uploadedImage="uploadGravatar" :src="store.gravatar ? store.gravatar : getDefaultPic()" />
                         </template>
                         <template v-else>
                             <img :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name">
@@ -144,7 +144,7 @@
                 <div :class="{'profile-banner': true, 'edit-mode': editMode}">
                     <div class="banner-wrap">
                         <template v-if="editMode">
-                            <upload-image @uploadedImage="uploadBanner" :src="store.banner" />
+                            <upload-image @uploadedImage="uploadBanner" :src="store.banner ? store.banner : ''" />
                         </template>
                         <template v-else>
                             <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
@@ -311,7 +311,6 @@ let ContentLoading = dokan_get_lib('ContentLoading');
 let Modal          = dokan_get_lib('Modal');
 let Currency       = dokan_get_lib('Currency');
 
-
 let VclFacebook = ContentLoading.VclFacebook;
 let VclTwitch   = ContentLoading.VclTwitch;
 
@@ -325,8 +324,8 @@ export default {
         Modal,
         Currency,
         UploadImage,
-        VendorSocialFields,
         VendorPaymentFields,
+        VendorSocialFields,
         VendorAccountFields,
         VendorAddressFields,
     },
@@ -470,14 +469,14 @@ export default {
         saveBtn() {
             return this.isUpdating ? this.__( 'Saving...', 'dokan' ) : this.__( 'Save Changes' )
         },
-        storeUrl() {
-            let defaultUrl = dokan.urls.siteUrl + dokan.urls.storePrefix + '/';
-            let storeUrl = this.store.store_name.trim().split(' ').join('-');
-            this.store.user_nicename = storeUrl;
-            this.otherStoreUrl = defaultUrl + storeUrl;
+        // storeUrl() {
+        //     let defaultUrl = dokan.urls.siteUrl + dokan.urls.storePrefix + '/';
+        //     let storeUrl = this.store.store_name.trim().split(' ').join('-');
+        //     this.store.user_nicename = storeUrl;
+        //     this.otherStoreUrl = defaultUrl + storeUrl;
 
-            return defaultUrl + storeUrl;
-        }
+        //     return defaultUrl + storeUrl;
+        // }
     },
 
     watch: {
@@ -486,15 +485,15 @@ export default {
             this.fetchStats();
         },
 
-        'store.store_name'( value ) {
-            this.showStoreUrl = true;
-        },
+        // 'store.store_name'( value ) {
+        //     this.showStoreUrl = true;
+        // },
 
-        'store.user_nicename'( value ) {
-            this.showStoreUrl = false;
-            this.otherStoreUrl = this.defaultUrl + value.trim().split(' ').join('-');
-            this.store.user_nicename = value.split(' ').join('-');
-        },
+        // 'store.user_nicename'( value ) {
+        //     this.showStoreUrl = false;
+        //     this.otherStoreUrl = this.defaultUrl + value.trim().split(' ').join('-');
+        //     this.store.user_nicename = value.split(' ').join('-');
+        // },
     },
 
     created() {

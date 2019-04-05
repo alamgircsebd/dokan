@@ -212,6 +212,10 @@ export default {
         if (this.storeCategoryType !== 'none') {
             this.fetchCategories();
         }
+
+        if ( this.$route.query.addnew && this.$route.query.addnew === 'true' ) {
+            this.loadAddVendor = true;
+        }
     },
 
     methods: {

@@ -41,6 +41,13 @@
                     <label for="">{{ __( 'Instagram', 'dokan' ) }}</label>
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.social.instagram" :placeholder="__( 'https://exmaple.com' )">
                 </div>
+
+                <!-- Add other social fields here -->
+                <component v-for="(component, index) in getSocialFields"
+                    :key="index"
+                    :is="component"
+                    :vendorInfo="vendorInfo"
+                />
             </div>
 
         </div>
@@ -56,5 +63,11 @@ export default {
             type: Object
         }
     },
+
+    data() {
+        return {
+            getSocialFields: dokan.hooks.applyFilters( 'getVendorSocialFields', [] ),
+        }
+    }
 };
 </script>

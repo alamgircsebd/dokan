@@ -1,26 +1,40 @@
 <template>
-    <img @click="uploadImage" :src="image.url" :alt="image.alt" :style="image.id ? {padding: '5px'} : ''">
+    <div class="dokan-upload-image">
+        <img v-if="! showButton" @click="uploadImage" :src="image.src ? image.src : src" :style="image.id ? {padding: '5px'} : ''">
+
+        <button v-if="showButton" @click.prevent="uploadImage">
+            {{ buttonLabel }}
+        </button>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'UploadImage',
 
+    inheritAttrs: false,
+
     props: {
-        image: {
-            type: Object,
-            default: () => {
-                return {
-                    url: dokan.urls.proAssetsUrl + '/images/store-pic.png',
-                    id: '',
-                    alt: ''
-                }
-            }
+        src: {
+            type: String,
+            default: dokan.urls.proAssetsUrl + '/images/store-pic.png',
+        },
+        showButton: {
+            type: Boolean,
+            default: false,
+        },
+        buttonLabel: {
+            type: String,
+            default: 'Upload Image'
         }
     },
 
     data() {
         return {
+            image: {
+                src: '',
+                id: '',
+            }
         }
     },
 
@@ -30,9 +44,9 @@ export default {
         },
 
         onSelectImage( image ) {
-            this.image.url = image.url;
+            this.image.src = image.url;
             this.image.id = image.id;
-
+            // this.showButton = false;
             this.$emit( 'uploadedImage', this.image );
         },
 
@@ -93,3 +107,10 @@ export default {
     }
 };
 </script>
+<style lang="less">
+    .dokan-upload-image {
+        img {
+            cursor: pointer;
+        }
+    }
+</style>

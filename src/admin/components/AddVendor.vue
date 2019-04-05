@@ -4,12 +4,10 @@
             <div slot="body">
                 <div class="tab-header">
                     <ul class="tab-list">
-                        <li v-for="(tab, index) in tabs" :key="index" :class="{'tab-title': true, 'active': currentTab === tab.name}">
+                        <li v-for="(tab, index) in tabs" :key="index" :class="{'tab-title': true, 'active': currentTab === tab.name, 'last': tab.name === 'VendorPaymentFields'}">
                             <div class="tab-link">
                                 <a href="#" @click.prevent="currentTab = tab.name" :class="{'first': tab.name === 'VendorAccountFields'}">
-                                    <i :class="{'icon': true, 'first': tab.name === 'VendorAccountFields'}">
-                                        <img :src="getIcon(tab.icon)">
-                                    </i>
+                                    <span :class="[ tab.icon ]"></span>
                                     {{tab.label}}
                                 </a>
                             </div>
@@ -23,8 +21,18 @@
                         <loading></loading>
                     </div>
 
+<!--                     <div class="form-erros" v-if="errors.length > 1">
+                        <ul>
+                            <li v-for="error in errors" :key="error">
+                                <div class="notice-error">
+                                    {{ error + ' is required' }}
+                                </div>
+                            </li>
+                        </ul>
+                    </div> -->
+
                     <transition name="component-fade" mode="out-in" v-if="! isLoading">
-                        <component :vendorInfo="store" :is="currentTab" />
+                        <component :vendorInfo="store" :is="currentTab" :errors="errors" />
                     </transition>
                 </div>
             </div>
@@ -79,7 +87,7 @@ export default {
                 VendorAccountFields: {
                     label: this.__( 'Account Info', 'dokan' ),
                     name: 'VendorAccountFields',
-                    icon: 'account',
+                    icon: 'dashicons dashicons-admin-users',
                 },
                 // vendorOptions: {
                 //     label: this.__( 'Dokan Options', 'dokan' ),
@@ -94,12 +102,12 @@ export default {
                 VendorAddressFields: {
                     label: this.__( 'Address', 'dokan' ),
                     name: 'VendorAddressFields',
-                    icon: 'address',
+                    icon: 'dashicons dashicons-admin-home',
                 },
                 VendorPaymentFields: {
                     label: this.__( 'Payment Options', 'dokan' ),
                     name: 'VendorPaymentFields',
-                    icon: 'payment',
+                    icon: 'dashicons dashicons-money',
                 }
             },
             currentTab: 'VendorAccountFields',
@@ -146,7 +154,14 @@ export default {
                     country: ''
                 }
             },
-            // fakeStore: {}
+            requiredFields: [
+                'store_name',
+                'user_login',
+                'user_pass',
+                'user_email'
+            ],
+            errors: [],
+            storeAvailable: false
         };
     },
 
@@ -155,6 +170,14 @@ export default {
         //     this.store.banner_id   = image.bannerId;
         //     this.store.gravatar_id = image.gravatarId;
         // } );
+
+        this.$root.$on( 'gotError', ( error ) => {
+            if ( error.hasError ) {
+                this.storeAvailable = false;
+            } else {
+                this.storeAvailable = true;
+            }
+        } );
     },
 
     methods: {
@@ -163,7 +186,8 @@ export default {
         },
 
         getIcon(name = '') {
-            return dokan.urls.proAssetsUrl + '/images/' + name + '.png';
+            return name;
+            // return dokan.urls.proAssetsUrl + '/images/' + name + '.png';
         },
 
         showAlert( $title, $des, $status ) {
@@ -171,6 +195,11 @@ export default {
         },
 
         createVendor() {
+
+            if ( ! this.formIsValid() ) {
+                return;
+            }
+
             // only for validation|if success create the vendor
             if ( 'VendorAccountFields' === this.currentTab ) {
 
@@ -201,6 +230,7 @@ export default {
                     .then( ( result ) => {
                         if ( result.value ) {
                             location.reload();
+                            this.$router.push( { path: 'vendors/', query:{ addnew: 'true' } } );
                         } else if ( result.dismiss === this.$swal.DismissReason.cancel ) {
                             this.$router.push( { path: 'vendors/' + this.store.id, query:{ edit: 'true' } } );
                         } else {
@@ -231,6 +261,27 @@ export default {
 
         closeModal() {
             this.$root.$emit('modalClosed');
+        },
+
+        formIsValid() {
+            let requiredFields = this.requiredFields;
+            let allFields = this.store;
+
+            // empty the errors array on new form submit
+            this.errors = [];
+
+            requiredFields.forEach( ( field ) => {
+                if ( field in allFields && allFields[field].length < 1 ) {
+                    this.errors.push( field );
+                }
+            } );
+
+            // if no error && store_slug is available, return true
+            if ( this.errors.length < 1 && this.storeAvailable ) {
+                return true;
+            }
+
+            return false;
         }
     }
 };
@@ -252,15 +303,17 @@ export default {
 
         .tab-list {
             overflow: hidden;
+            display: flex;
+            justify-content: space-between;
 
             .tab-title {
-                float: left;
-                margin-left: 0;
-                width: auto;
+                // float: left;
+                // margin-left: 0;
+                // width: auto;
                 height: 50px;
                 list-style-type: none;
                 // padding: 5px 20px 5px 38px;; /* padding around text, last should include arrow width */
-                border-right: 10px solid white; /* width: gap between arrows, color: background of document */
+                // border-right: 10px solid white; /* width: gap between arrows, color: background of document */
                 position: relative;
                 background-color: #1a9ed4;
                 display: flex;
@@ -275,7 +328,7 @@ export default {
                 a {
                     color: #fff;
                     text-decoration: none;
-                    padding: 70px;
+                    padding: 75px;
                     // margin: -17px;
 
                     &:active, &:focus {
@@ -284,11 +337,12 @@ export default {
                         border-color: transparent;
                         box-shadow: none;
                     }
-                }
 
-                a.first {
-                    position: relative;
-                    top: -5px;
+                    span {
+                        position: relative;
+                        top: -1px;
+                        left: -3px;
+                    }
                 }
 
                 &:first-child {
@@ -332,6 +386,13 @@ export default {
 
                 &:after {
                     border-left-color: #2C70A3;
+                }
+            }
+
+            // remove arrow for last element
+            .tab-title.last {
+                &:after {
+                    border-left: 0;
                 }
             }
 
@@ -386,14 +447,29 @@ export default {
                     width: 50%;
                     padding: 0 10px;
 
-                    .store-url {
-                        margin: 0;
-                        padding: 0;
-                        position: relative;
-                        bottom: 10px;
-                        font-style: italic;
-                        color: #a09f9f;
-                        font-size: 12px;
+                    .store-avaibility-info {
+                        display: flex;
+                        justify-content: space-between;
+
+                        .store-url, span {
+                            margin: 0;
+                            padding: 0;
+                            position: relative;
+                            bottom: 10px;
+                            font-style: italic;
+                            color: #a09f9f;
+                            font-size: 12px;
+                        }
+
+                        .is-available {
+                            color: green;
+                            font-weight: 600;
+                        }
+
+                        .not-available {
+                            color: red;
+                            font-weight: 600;
+                        }
                     }
                 }
 
@@ -414,9 +490,13 @@ export default {
                 height: auto
             }
 
+            .dokan-form-input.has-error::placeholder {
+                color: red;
+            }
+
             .vendor-image {
                 display: flex;
-                align-items: stretch;
+                // align-items: flex-start;
                 padding-bottom: 20px;
 
                 .picture {

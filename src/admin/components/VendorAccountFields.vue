@@ -20,49 +20,91 @@
 
                 <div class="picture banner" :style="banner ? 'padding: 0' : ''">
                     <div class="banner-image">
-                        <img v-if="banner" :src="banner" :alt="banner ? 'banner-image' : ''">
-                        <button @click="uploadBanner">{{__( 'Upload Banner', 'dokan' ) }}</button>
+
+                        <upload-image @uploadedImage="uploadBanner" :showButton="showButton" :buttonLabel="__( 'Upload Banner', 'dokan' )" />
+
+                        <!-- <img v-if="banner" :src="banner" :alt="banner ? 'banner-image' : ''"> -->
+                        <!-- <button @click="uploadBanner">{{__( 'Upload Banner', 'dokan' ) }}</button> -->
                     </div>
 
-                    <p v-if="! banner" class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
+                    <p class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
                 </div>
             </div>
 
             <div class="dokan-form-group">
+
                 <div class="column">
-                    <label for="store-name">{{ __( 'Store Name', 'dokan') }}</label>
-                    <input type="text" required class="dokan-form-input" v-model="vendorInfo.store_name" :placeholder="__( 'Type here', 'dokan')">
+                    <label for="store-email">{{ __( 'First Name', 'dokan') }}</label>
+                    <input type="email" class="dokan-form-input" v-model="vendorInfo.first_name" :placeholder="__( 'First Name', 'dokan')">
                 </div>
 
                 <div class="column">
+                    <label for="store-email">{{ __( 'Last Name', 'dokan') }}</label>
+                    <input type="email" class="dokan-form-input" v-model="vendorInfo.last_name" :placeholder="__( 'Last Name', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="store-name">{{ __( 'Store Name', 'dokan') }}</label>
+                    <span v-if="! getId()" class="required-field">*</span>
+
+                    <input type="text"
+                        v-model="vendorInfo.store_name"
+                        :class="{'dokan-form-input': true, 'has-error': getError('store_name')}"
+                        :placeholder="getError( 'store_name' ) ? __( 'Store Name is required', 'dokan' ) : __( 'Store Name', 'dokan' )">
+                </div>
+
+                <div class="column" v-if="! getId()">
                     <label for="store-url">{{ __( 'Store URL', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.user_nicename" :placeholder="__( 'Type here', 'dokan')">
-                    <p class="store-url" v-if="showStoreUrl">{{storeUrl}}</p>
-                    <p class="store-url" v-else>{{otherStoreUrl}}</p>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.user_nicename" :placeholder="__( 'Store Url', 'dokan')">
+
+                    <div class="store-avaibility-info">
+                        <p class="store-url" v-if="showStoreUrl">{{ storeUrl }}</p>
+                        <p class="store-url" v-else>{{ otherStoreUrl }}</p>
+                        <span :class="{'is-available': storeAvailable, 'not-available': !storeAvailable}">{{ storeAvailabilityText }}</span>
+                    </div>
                 </div>
 
                 <div class="column">
                     <label for="store-phone">{{ __( 'Phone Number', 'dokan') }}</label>
-                    <input type="number" class="dokan-form-input" v-model="vendorInfo.phone" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="number" class="dokan-form-input" v-model="vendorInfo.phone" :placeholder="__( '123456789', 'dokan')">
+                </div>
+
+                <div class="column">
+                    <label for="store-email">{{ __( 'Email', 'dokan') }}</label>
+                    <span v-if="! getId()" class="required-field">*</span>
+
+                    <input type="email"
+                        v-model="vendorInfo.user_email"
+                        :class="{'dokan-form-input': true, 'has-error': getError('user_email')}"
+                        :placeholder="getError( 'user_email' ) ? __( 'Email is required', 'dokan' ) : __( 'store@email.com', 'dokan' )"
+                    >
                 </div>
 
                 <template v-if="! getId()">
                     <div class="column">
-                        <label for="store-email">{{ __( 'Email', 'dokan') }}</label>
-                        <input type="email" class="dokan-form-input" v-model="vendorInfo.user_email" :placeholder="__( 'Type here', 'dokan')">
+                        <label for="store-username">{{ __( 'Username', 'dokan') }}</label><span class="required-field">*</span>
+                        <input type="text" class="dokan-form-input"
+                            v-model="vendorInfo.user_login"
+                            :class="{'dokan-form-input': true, 'has-error': getError('user_login')}"
+                            :placeholder="getError( 'user_login' ) ? __( 'Username is required', 'dokan' ) : __( 'Username', 'dokan' )">
                     </div>
 
                     <div class="column">
-                        <label for="store-username">{{ __( 'User Name', 'dokan') }}</label>
-                        <input type="text" class="dokan-form-input" v-model="vendorInfo.user_login" :placehoder="__( 'Type here', 'dokan')">
-                    </div>
-
-                    <div class="column">
-                        <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label>
-                        <input type="password" class="dokan-form-input" v-model="vendorInfo.user_pass" placehoder="******">
+                        <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label><span class="required-field">*</span>
+                        <input type="password"
+                            v-model="vendorInfo.user_pass"
+                            :class="{'dokan-form-input': true, 'has-error': getError('user_pass')}"
+                            :placeholder="getError( 'user_pass' ) ? __( 'Password is required', 'dokan' ) : '********'"
+                        >
                     </div>
                 </template>
 
+                <!-- Add other account fields here -->
+                <component v-for="(component, index) in getAccountFields"
+                    :key="index"
+                    :is="component"
+                    :vendorInfo="vendorInfo"
+                />
             </div>
 
         </div>
@@ -72,6 +114,8 @@
 
 <script>
 import UploadImage from 'admin/components/UploadImage.vue';
+
+let debounce = dokan_get_lib( 'Debounce' );
 
 export default {
     name: 'VendorAccountFields',
@@ -83,6 +127,10 @@ export default {
     props: {
         vendorInfo: {
             type: Object
+        },
+        errors: {
+            type: Array,
+            required: false
         }
     },
 
@@ -91,7 +139,13 @@ export default {
             showStoreUrl: true,
             otherStoreUrl: null,
             banner: '',
-            defaultUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/'
+            defaultUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/',
+            showButton: true,
+            placeholderData: '',
+            delay: 500,
+            storeAvailable: null,
+            storeAvailabilityText: '',
+            getAccountFields: dokan.hooks.applyFilters( 'getVendorAccountFields', [] ),
         }
     },
 
@@ -105,6 +159,9 @@ export default {
                 this.showStoreUrl = false;
                 this.otherStoreUrl = this.defaultUrl + newValue.trim().split(' ').join('-');
                 this.vendorInfo.user_nicename = newValue.split(' ').join('-');
+
+                // check if the typed url is available
+                this.makeDelay();
             }
         }
     },
@@ -120,6 +177,7 @@ export default {
     },
 
     created() {
+        // this.what = debounce('', '');
         // if ( this.vendorInfo.gravatar ) {
         //     this.images.gravatar = this.vendorInfo.gravatar;
         // }
@@ -127,17 +185,29 @@ export default {
         // if ( this.vendorInfo.banner ) {
         //     this.images.banner = this.vendorInfo.banner;
         // }
+
+        // if ( this.errors.length > 1 ) {
+        //     this.errors.forEach( ( field ) => {
+        //         console.log(field)
+        //     } );
+        // }
+
+        this.makeDelay = debounce( this.checkStore, this.delay );
     },
 
     methods: {
-        uploadBanner() {
-            this.openMediaManager( this.onSelectBanner );
+        uploadBanner( image ) {
+            this.vendorInfo.banner_id = image.id;
+
+            // hide button and footer text after uploading banner
+            this.showButton = false;
         },
 
         uploadGravatar( image ) {
             this.vendorInfo.gravatar_id = image.id;
         },
 
+        // getId function has been used to identify whether is it vendor edit page or not
         getId() {
             return this.$route.params.id;
         },
@@ -147,60 +217,44 @@ export default {
             this.vendorInfo.banner_id = image.id;
         },
 
-        openMediaManager(callback) {
-            const self = this;
+        getError( key ) {
+            let errors = this.errors;
 
-            if (self.fileFrame) {
-                self.fileFrame.open();
+            if ( ! errors || typeof errors === 'undefined' ) {
+                return false;
+            }
+
+            if ( errors.length < 1 ) {
+                return false;
+            }
+
+            if ( errors.includes( key ) ) {
+                return key;
+            }
+        },
+
+        checkStore() {
+            const storeName = this.vendorInfo.user_nicename;
+
+            if ( ! storeName ) {
                 return;
             }
 
-            const fileStatesOptions = {
-                library: wp.media.query(),
-                multiple: false, // set it true for multiple image
-                title: this.__('Select Image', 'dokan'),
-                priority: 20,
-                filterable: 'uploaded'
-            };
+            dokan.api.get( `/stores/check`, {
+                store_slug: storeName
+            } ).then( ( response ) => {
+                if ( response.available ) {
+                    this.$root.$emit( 'gotError', { hasError: false } );
+                    this.storeAvailable = true;
+                    this.storeAvailabilityText = this.__( 'Available', 'dokan' )
+                } else {
+                    this.$root.$emit( 'gotError', { hasError: true } );
+                    this.storeAvailable = false;
+                    this.storeAvailabilityText = this.__( 'Not Available', 'dokan' );
+                }
+            } );
+        }
 
-            const fileStates = [
-                new wp.media.controller.Library(fileStatesOptions)
-            ];
-
-            const mediaOptions = {
-                title: this.__('Select Image', 'dokan'),
-                button: {
-                    text: this.__('Select Image', 'dokan')
-                },
-                multiple: false
-            };
-
-            mediaOptions.states = fileStates;
-
-            self.fileFrame = wp.media(mediaOptions);
-
-            self.fileFrame.on('select', () => {
-                const selection = self.fileFrame.state().get('selection');
-
-                const files = selection.map((attachment) => {
-                    return attachment.toJSON();
-                });
-
-                const file = files.pop();
-
-                callback(file);
-
-                self.fileFrame = null;
-            });
-
-            self.fileFrame.on('ready', () => {
-                self.fileFrame.uploader.options.uploader.params = {
-                    type: 'dokan-vendor-option-media'
-                };
-            });
-
-            self.fileFrame.open();
-        },
     }
 };
 </script>

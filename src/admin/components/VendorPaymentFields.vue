@@ -8,46 +8,74 @@
             <div class="dokan-form-group">
                 <div class="column">
                     <label for="account-name">{{ __( 'Account Name', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.ac_name" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.ac_name" :placeholder="__( 'Account Name', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="account-number">{{ __( 'Account Number', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.ac_number" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.ac_number" :placeholder="__( '1233456789', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="bank-name">{{ __( 'Bank Name', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.bank_name" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.bank_name" :placeholder="__( 'Bank Name', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="bank-address">{{ __( 'Bank Address', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.bank_addr" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.bank_addr" :placeholder="__( 'Bank Address', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="routing-number">{{ __( 'Routing Number', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.routing_number" :placehoder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.routing_number" :placeholder="__( '123456789', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="iban">{{ __( 'IBAN', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.iban" :placehoder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.iban" :placeholder="__( '123456789', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="swift">{{ __( 'Swift', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.swift" :placehoder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.payment.bank.swift" :placeholder="__( '123456789', 'dokan')">
                 </div>
+
+                <!-- Add other bank fields here -->
+                <component v-for="(component, index) in getBankFields"
+                    :key="index"
+                    :is="component"
+                    :vendorInfo="vendorInfo"
+                />
             </div>
 
             <div class="dokan-form-group">
 
                 <div :class="{'column': getId(), 'checkbox-group': ! getId()}">
                     <label for="account-name">{{ __( 'PayPal Email', 'dokan') }}</label>
-                    <input type="email" class="dokan-form-input" v-model="vendorInfo.payment.paypal.email" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="email" class="dokan-form-input" v-model="vendorInfo.payment.paypal.email" :placeholder="__( 'store@email.com', 'dokan')">
                 </div>
+
+                <!-- Admin commission only load on vendor edit page -->
+                <template v-if="getId()">
+                    <div class="column">
+                        <label>{{ __( 'Admin Commission Type', 'dokan' ) }}</label>
+
+                        <div class="column">
+                            <select class="dokan-form-select" v-model="vendorInfo.admin_commission_type">
+                                <option disabled value="">{{ __( 'Please Select One', 'dokan' ) }}</option>
+                                <option value="flat">{{ __( 'Flat', 'dokan' )  }}</option>
+                                <option value="percentage">{{ __( 'Percentage', 'dokan' ) }}</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="column">
+                        <label>{{ __( 'Admin Commission', 'dokan' )  }}</label>
+                        <input type="number" class="dokan-form-input" placeholder="10" v-model="vendorInfo.admin_commission">
+                    </div>
+                </template>
 
                 <div class="checkbox-group">
                     <div class="checkbox-left">
@@ -69,8 +97,15 @@
                         <span class="desc">{{ __( 'Make Vendor Featured', 'dokan' ) }}</span>
                     </div>
                 </div>
+
             </div>
 
+            <!-- Add other payment fields here -->
+            <component v-for="(component, index) in getPyamentFields"
+                :key="index"
+                :is="component"
+                :vendorInfo="vendorInfo"
+            />
         </div>
     </div>
 </template>
@@ -95,7 +130,9 @@ export default {
         return {
             enabled: false,
             trusted: false,
-            featured: false
+            featured: false,
+            getBankFields: dokan.hooks.applyFilters( 'getVendorBankFields', [] ),
+            getPyamentFields: dokan.hooks.applyFilters( 'AfterPyamentFields', [] ),
         }
     },
 
@@ -171,6 +208,11 @@ export default {
 .payment-info.edit-mode {
     .checkbox-group {
         padding: 0;
+    }
+
+    .dokan-form-select {
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 }
 </style>
