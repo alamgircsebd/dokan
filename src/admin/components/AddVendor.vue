@@ -115,6 +115,7 @@ export default {
                 store_name: '',
                 user_pass: '',
                 store_url: '',
+                user_login: '',
                 user_email: '',
                 user_nicename: '',
                 phone: '',
@@ -157,26 +158,18 @@ export default {
             requiredFields: [
                 'store_name',
                 'user_login',
-                'user_pass',
                 'user_email'
             ],
             errors: [],
-            storeAvailable: false
+            storeAvailable: false,
+            userNameAvailable: false,
         };
     },
 
     created() {
-        // this.$root.$on('uploadedImage', (image) => {
-        //     this.store.banner_id   = image.bannerId;
-        //     this.store.gravatar_id = image.gravatarId;
-        // } );
-
-        this.$root.$on( 'gotError', ( error ) => {
-            if ( error.hasError ) {
-                this.storeAvailable = false;
-            } else {
-                this.storeAvailable = true;
-            }
+        this.$root.$on( 'usernameChecked', ( payload ) => {
+            this.storeAvailable    = payload.storeAvailable;
+            this.userNameAvailable = payload.userNameAvailable;
         } );
     },
 
@@ -201,22 +194,23 @@ export default {
             }
 
             // only for validation|if success create the vendor
-            if ( 'VendorAccountFields' === this.currentTab ) {
+            // if ( 'VendorAccountFields' === this.currentTab ) {
 
-                dokan.api.post('/stores/', this.store)
-                .done((response) => {
-                    this.store.id = response.id;
-                })
-                .fail((response) => {
-                    this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                    this.currentTab = 'VendorAccountFields';
-                })
-            }
+            //     dokan.api.post('/stores/', this.store)
+            //     .done((response) => {
+            //         this.store.id = response.id;
+            //     })
+            //     .fail((response) => {
+            //         this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+            //         this.currentTab = 'VendorAccountFields';
+            //     })
+            // }
 
             if ( 'VendorPaymentFields' === this.currentTab ) {
                 this.isLoading = true;
 
-                dokan.api.put( '/stores/' + this.store.id, this.store )
+                // dokan.api.put( '/stores/' + this.store.id, this.store )
+                dokan.api.post( '/stores/', this.store )
                 .done( ( response ) => {
                     this.$swal( {
                         type: 'success',
@@ -276,8 +270,8 @@ export default {
                 }
             } );
 
-            // if no error && store_slug is available, return true
-            if ( this.errors.length < 1 && this.storeAvailable ) {
+            // if no error && store_slug & username is available, return true
+            if ( this.errors.length < 1 && this.storeAvailable && this.userNameAvailable ) {
                 return true;
             }
 
@@ -470,6 +464,10 @@ export default {
                             color: red;
                             font-weight: 600;
                         }
+                    }
+
+                    .password-generator {
+                        margin-top: 6px;
                     }
                 }
 

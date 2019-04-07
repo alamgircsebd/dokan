@@ -87,15 +87,27 @@
                             v-model="vendorInfo.user_login"
                             :class="{'dokan-form-input': true, 'has-error': getError('user_login')}"
                             :placeholder="getError( 'user_login' ) ? __( 'Username is required', 'dokan' ) : __( 'Username', 'dokan' )">
+
+                            <div class="store-avaibility-info">
+                                <span :class="{'is-available': userNameAvailable, 'not-available': !userNameAvailable}">{{ userNameAvailabilityText }}</span>
+                            </div>
                     </div>
 
                     <div class="column">
-                        <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label><span class="required-field">*</span>
-                        <input type="password"
+                        <label for="store-password">{{ __( 'Passwrod', 'dokan') }}</label>
+                        <input
+                            v-if="showPassword"
+                            type="text"
                             v-model="vendorInfo.user_pass"
-                            :class="{'dokan-form-input': true, 'has-error': getError('user_pass')}"
-                            :placeholder="getError( 'user_pass' ) ? __( 'Password is required', 'dokan' ) : '********'"
+                            class="dokan-form-input"
+                            placeholder="********"
                         >
+
+                        <password-generator
+                            @passwordGenerated="setPassword"
+                            :title="__('Generate Password', 'dokan')"
+                        />
+
                     </div>
                 </template>
 
@@ -114,6 +126,7 @@
 
 <script>
 import UploadImage from 'admin/components/UploadImage.vue';
+import PasswordGenerator from 'admin/components/passwordGenerator.vue';
 
 let debounce = dokan_get_lib( 'Debounce' );
 
@@ -121,7 +134,8 @@ export default {
     name: 'VendorAccountFields',
 
     components: {
-        UploadImage
+        UploadImage,
+        PasswordGenerator
     },
 
     props: {
@@ -137,6 +151,7 @@ export default {
     data() {
         return {
             showStoreUrl: true,
+            showPassword: false,
             otherStoreUrl: null,
             banner: '',
             defaultUrl: dokan.urls.siteUrl + dokan.urls.storePrefix + '/',
@@ -144,7 +159,9 @@ export default {
             placeholderData: '',
             delay: 500,
             storeAvailable: null,
+            userNameAvailable: null,
             storeAvailabilityText: '',
+            userNameAvailabilityText: '',
             getAccountFields: dokan.hooks.applyFilters( 'getVendorAccountFields', [] ),
         }
     },
@@ -161,8 +178,12 @@ export default {
                 this.vendorInfo.user_nicename = newValue.split(' ').join('-');
 
                 // check if the typed url is available
-                this.makeDelay();
+                this.checkStoreName();
             }
+        },
+
+        'vendorInfo.user_login'( value ) {
+            this.checkUsername();
         }
     },
 
@@ -177,22 +198,11 @@ export default {
     },
 
     created() {
-        // this.what = debounce('', '');
-        // if ( this.vendorInfo.gravatar ) {
-        //     this.images.gravatar = this.vendorInfo.gravatar;
-        // }
-
-        // if ( this.vendorInfo.banner ) {
-        //     this.images.banner = this.vendorInfo.banner;
-        // }
-
-        // if ( this.errors.length > 1 ) {
-        //     this.errors.forEach( ( field ) => {
-        //         console.log(field)
-        //     } );
-        // }
-
-        this.makeDelay = debounce( this.checkStore, this.delay );
+        this.checkStoreName = debounce( this.checkStore, this.delay );
+        this.checkUsername = debounce( this.searchUsername, this.delay );
+        this.$root.$on( 'passwordCancelled', () => {
+            this.showPassword = false;
+        } );
     },
 
     methods: {
@@ -240,19 +250,62 @@ export default {
                 return;
             }
 
+            this.storeAvailabilityText = this.__( 'Searching...', 'dokan' );
+
             dokan.api.get( `/stores/check`, {
                 store_slug: storeName
             } ).then( ( response ) => {
                 if ( response.available ) {
-                    this.$root.$emit( 'gotError', { hasError: false } );
                     this.storeAvailable = true;
+                    this.$root.$emit( 'usernameChecked', {
+                        userNameAvailable: this.userNameAvailable,
+                        storeAvailable: this.storeAvailable
+                    } );
                     this.storeAvailabilityText = this.__( 'Available', 'dokan' )
                 } else {
-                    this.$root.$emit( 'gotError', { hasError: true } );
                     this.storeAvailable = false;
+                    this.$root.$emit( 'usernameChecked', {
+                        userNameAvailable: this.userNameAvailable,
+                        storeAvailable: this.storeAvailable
+                    } );
                     this.storeAvailabilityText = this.__( 'Not Available', 'dokan' );
                 }
             } );
+        },
+
+        searchUsername() {
+            const userName = this.vendorInfo.user_login;
+
+            if ( ! userName ) {
+                return;
+            }
+
+            this.userNameAvailabilityText = this.__( 'Searching...', 'dokan' );
+
+            dokan.api.get( `/stores/check`, {
+                store_slug: userName
+            } ).then( ( response ) => {
+                if ( response.available ) {
+                    this.userNameAvailable = true;
+                    this.$root.$emit( 'usernameChecked', {
+                        userNameAvailable: this.userNameAvailable,
+                        storeAvailable: this.storeAvailable
+                    } );
+                    this.userNameAvailabilityText = this.__( 'Available', 'dokan' )
+                } else {
+                    this.userNameAvailable = false;
+                    this.$root.$emit( 'usernameChecked', {
+                        userNameAvailable: this.userNameAvailable,
+                        storeAvailable: this.storeAvailable
+                    } );
+                    this.userNameAvailabilityText = this.__( 'Not Available', 'dokan' );
+                }
+            } );
+        },
+
+        setPassword( password ) {
+            this.showPassword = true;
+            this.vendorInfo.user_pass = password;
         }
 
     }
