@@ -50,15 +50,9 @@
                 <td data-title="<?php _e('Coupon type', 'dokan'); ?>">
                     <?php
                     $discount_type = get_post_meta( $post->ID, 'discount_type', true );
-                    $type = '';
+                    $types         = Dokan_Pro_Coupons::get_coupon_types();
 
-                    if ( $discount_type == 'fixed_product' ) {
-                        $type = __( 'Fixed Amount', 'dokan' );
-                    } elseif ( $discount_type == 'percent_product' ) {
-                        $type = __( 'Percent', 'dokan' );
-                    }
-
-                    echo $type;
+                    printf( __( '%s', 'dokan' ), $types[$discount_type] );
                     ?>
                 </td>
 

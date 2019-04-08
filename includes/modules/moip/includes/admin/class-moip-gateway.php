@@ -9,6 +9,7 @@ require_once MOIP_LIB . '/vendor/autoload.php';
 use Moip\Moip;
 use Moip\Auth\OAuth;
 use Moip\Auth\Connect;
+use DokanPro\Modules\Subscription\Helper;
 use DokanPro\Modules\Subscription\SubscriptionPack;
 
 /**
@@ -392,6 +393,12 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'is_enabled'       => $dokan_subscription->is_trial()
             );
 
+            // if vendor has already used a trial pack, then make trial to a normal recurring pack
+            if ( Helper::has_used_trial_pack( get_current_user_id() ) ) {
+                $trial_details['days']       = 0;
+                $trial_details['is_enabled'] = false;
+            }
+
             $moip_subscriptoin = new Dokan_Moip_Subscription();
 
             $plan_id = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length, $trial_details );
@@ -413,6 +420,9 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
             update_user_meta( $customer_user_id, 'can_post_product', '1' );
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
+
+            // make all the existing product publish if not
+            Helper::make_product_publish( $customer_user_id );
 
             $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
             $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
@@ -483,6 +493,9 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 update_user_meta( $customer_user_id, 'can_post_product', '1' );
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
+
+                // make all the existing product publish if not
+                Helper::make_product_publish( $customer_user_id );
 
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );

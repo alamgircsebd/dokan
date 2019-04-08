@@ -55,6 +55,11 @@ if ( !defined( 'DOKAN_VERFICATION_LOAD_SCRIPTS' ) ) {
     define( 'DOKAN_VERFICATION_LOAD_SCRIPTS', true );
 }
 
+use Hybridauth\Exception\Exception;
+use Hybridauth\Hybridauth;
+use Hybridauth\HttpClient;
+use Hybridauth\Storage\Session;
+
 /**
  * Dokan_Seller_Verification class
  *
@@ -142,7 +147,7 @@ class Dokan_Seller_Verification {
 
     public function get_provider_config() {
         $config = array(
-            'base_url'   => $this->base_url,
+            'callback'   => $this->base_url,
             'debug_mode' => false,
 
             'providers' => array(
@@ -320,54 +325,64 @@ class Dokan_Seller_Verification {
      * @return void
      */
     public function monitor_autheticate_requests() {
-
-        if ( ! class_exists( 'WeDevs_Dokan' ) ) {
-            return;
-        }
-
-        global $current_user;
-        $config = $this->config;
-
-        if ( isset( $_GET['hauth_start'] ) || isset( $_GET['hauth_done'] ) ) {
-            require_once DOKAN_PRO_INC . '/lib/Hybrid/Endpoint.php';
-
-            Hybrid_Endpoint::process();
-            exit;
-        }
+        $vendor_id = dokan_get_current_user_id();
 
         if ( isset( $_GET['dokan_auth_dc'] ) ) {
-            $seller_profile = dokan_get_store_info( $current_user->ID );
-            $provider_dc = sanitize_text_field( $_GET['dokan_auth_dc'] );
+            $seller_profile = dokan_get_store_info( $vendor_id );
+            $provider_dc    = sanitize_text_field( $_GET['dokan_auth_dc'] );
+
             $seller_profile['dokan_verification'][$provider_dc] = '';
 
-            update_user_meta( $current_user->ID, 'dokan_profile_settings', $seller_profile );
-
+            update_user_meta( $vendor_id, 'dokan_profile_settings', $seller_profile );
             return;
         }
-
-        if ( ! isset( $_GET['dokan_auth'] ) ) {
-            return;
-        }
-
-        $hybridauth = new Hybrid_Auth( $config );
-        $provider   = $_GET['dokan_auth'];
 
         try {
-            if ( $provider != '' ) {
+            /**
+             * Feed the config array to Hybridauth
+             *
+             * @var Hybridauth
+             */
+            $hybridauth = new Hybridauth( $this->config );
+
+            /**
+             * Initialize session storage.
+             *
+             * @var Session
+             */
+            $storage = new Session();
+
+            /**
+             * Hold information about provider when user clicks on Sign In.
+             */
+            $provider = ! empty( $_GET['dokan_auth'] ) ? $_GET['dokan_auth'] : '';
+
+            if ( $provider ) {
+                $storage->set( 'provider', $provider );
+            }
+
+            if ( $provider = $storage->get( 'provider' ) ) {
                 $adapter = $hybridauth->authenticate( $provider );
 
-                if ( $adapter->isUserConnected() ) {
-                    $user_profile = $adapter->getUserProfile();
-                } else {
-                    wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
-                    wp_redirect( $this->base_url );
-                }
-
-                $seller_profile = dokan_get_store_info( $current_user->ID );
-                $seller_profile['dokan_verification'][$provider] = (array) $user_profile;
-
-                update_user_meta( $current_user->ID, 'dokan_profile_settings', $seller_profile );
+                $storage->set('provider', null);
             }
+
+            if ( ! isset( $adapter ) ) {
+                return;
+            }
+
+            $user_profile = $adapter->getUserProfile();
+
+            if ( ! $user_profile ) {
+                wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
+                wp_redirect( $this->callback );
+            }
+
+            $seller_profile = dokan_get_store_info( $vendor_id );
+            $seller_profile['dokan_verification'][$provider] = (array) $user_profile;
+
+            update_user_meta( $vendor_id, 'dokan_profile_settings', $seller_profile );
+
         } catch ( Exception $e ) {
             $this->e_msg = $e->getMessage();
         }

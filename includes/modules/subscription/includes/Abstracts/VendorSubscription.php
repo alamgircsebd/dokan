@@ -163,4 +163,19 @@ abstract class VendorSubscription {
 
         return false;
     }
+
+    /**
+     * Vendor has recurring subscription pack
+     *
+     * @return boolean
+     */
+    public function has_recurring_pack() {
+        $status = get_user_meta( $this->get_vendor(), '_customer_recurring_subscription', true );
+
+        if ( 'active' === $status ) {
+            return true;
+        }
+
+        return false;
+    }
 }

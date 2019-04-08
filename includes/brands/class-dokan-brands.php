@@ -11,7 +11,7 @@ class Brands {
     /**
      * Is YITH plugin active or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @var bool
      */
@@ -20,7 +20,7 @@ class Brands {
     /**
      * Is YITH premium plugin active or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @var bool
      */
@@ -29,7 +29,7 @@ class Brands {
     /**
      * Feature related admin settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @var array
      */
@@ -38,7 +38,7 @@ class Brands {
     /**
      * Executes after first class instantiation
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */
@@ -50,7 +50,7 @@ class Brands {
     /**
      * Initiate functionalities
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */
@@ -72,7 +72,7 @@ class Brands {
     /**
      * Add `brands` container to WeDevs_Dokan class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @param array $container
      *
@@ -86,7 +86,7 @@ class Brands {
     /**
      * Include feature related files
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class Brands {
     /**
      * Feature related class instances
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return void
      */
@@ -113,7 +113,7 @@ class Brands {
      * When premium addon is active, admin can switch
      * taxonomy from admin panel settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @return string
      */

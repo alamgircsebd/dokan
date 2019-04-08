@@ -609,6 +609,8 @@ $template_args = array(
 
                 <?php if ( !empty( $post_id ) ): ?>
 
+                <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
+
                 <div class="dokan-other-options dokan-edit-row dokan-clearfix">
                     <div class="dokan-section-heading" data-togglehandler="dokan_other_options">
                         <h2><i class="fa fa-cog" aria-hidden="true"></i> <?php _e( 'Other Options', 'dokan' ); ?></h2>

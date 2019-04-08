@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.0.3
+Tested up to: 5.1.1
 WC requires at least: 3.0
-WC tested up to: 3.5.4
+WC tested up to: 3.5.7
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,32 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.7 -> Mar 25, 2018
+--------------------------------------------
+- [new]   Add Store Category
+- [new]   Make Dokan YITH WC Brand add-on compatible (Brand)
+- [new]   Add date and refund column in admin logs area
+- [new]   Change product status according to subscription status (Subscriptions)
+- [fix]   Show button for non logged-in user (Follow Store)
+- [fix]   Only show force SSL notice if, site is not under https
+- [fix]   Any change with quick edit makes pending product to publish
+- [fix]   Number_format for store rating (Store Review)
+- [fix]   Store tab button classes for logged and non logged in users (Live Chat)
+- [fix]   Send refund admin commission to customer (Stripe Connect)
+- [fix]   Error on subscription cancellation email (Subscriptions)
+- [fix]   Booking compatibility issue with the latest version of WC booking (Booking)
+- [fix]   Get store terms conflict with caching
+- [fix]   CSV report formatting issue in all log section (Admin Backend)
+- [fix]   Filter form for empty search param (Geolocation)
+- [fix]   Return rma defaults reasons and added hook after create coupon (RMA)
+- [fix]   Add max trial subscription period length for PayPal (Subscriptions)
+- [fix]   When a vendor subscribe to a trial subscription, make all other trial to non-trial subscription for that vendor (Subscriptions)
+- [fix]   Add email class for product enquiry email (Product Enquiry)
+- [fix]   Progressbar translation function is not working correctly
+- [fix]   If admin creates a shipping zone with a zip code and vendor don't create a shipping method under that zone, shipping calculation is getting wrong.
+- [fix]   Update social login and vendor verification API
+
 v2.9.6 -> Feb 20, 2018
 ----------------------------------------------
 - [fix] Add csv export functionality for all log in backend dashboard report section

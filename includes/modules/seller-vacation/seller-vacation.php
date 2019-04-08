@@ -294,7 +294,7 @@ class Dokan_Seller_Vacation {
     /**
      * Decides whether to show or not the vacation message
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.7
      *
      * @param array $store_info
      *
