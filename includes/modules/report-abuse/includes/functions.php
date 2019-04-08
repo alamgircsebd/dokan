@@ -214,8 +214,10 @@ function dokan_report_abuse_get_reports( $args = [] ) {
     global $wpdb;
 
     $defaults = [
+        'ids'        => [],
         'reason'     => '',
         'product_id' => 0,
+        'vendor_id'  => 0,
         'order_by'   => 'id',
         'order'      => 'desc',
         'per_page'   => 20,
@@ -229,6 +231,12 @@ function dokan_report_abuse_get_reports( $args = [] ) {
         $sql = 'select * from ' . $wpdb->prefix . 'dokan_report_abuse_reports where 1=1';
     } else {
         $sql = 'select count(*) from ' . $wpdb->prefix . 'dokan_report_abuse_reports where 1=1';
+    }
+
+    if ( ! empty( $args['ids'] ) && is_array( $args['ids'] ) ) {
+        $ids = array_filter( $args['ids'], 'absint' );
+
+        $sql .= ' and id in (' . implode( ',', $ids ) . ')';
     }
 
     if ( ! empty( $args['reason'] ) ) {
@@ -245,6 +253,12 @@ function dokan_report_abuse_get_reports( $args = [] ) {
                 break;
             }
         }
+    }
+
+    if ( ! empty( $args['vendor_id'] ) ) {
+        $sql .= $wpdb->prepare(
+            ' and vendor_id = %d', $args['vendor_id']
+        );
     }
 
     if ( ! empty( $args['product_id'] ) ) {
@@ -316,4 +330,14 @@ function dokan_report_abuse_get_reports( $args = [] ) {
     }
 
     return $reports;
+}
+
+function dokan_report_abuse_delete_reports( $ids ) {
+    global $wpdb;
+
+    $ids = implode( ',', $ids );
+
+    return $wpdb->query(
+        "delete from {$wpdb->prefix}dokan_report_abuse_reports where id in ({$ids})"
+    );
 }

@@ -69,10 +69,11 @@ class Admin {
      * @return void
      */
     public static function enqueue_admin_script() {
+        wp_enqueue_style( 'woocommerce_select2', WC()->plugin_url() . '/assets/css/select2.css', [], WC_VERSION );
         wp_enqueue_script(
             'dokan-report-abuse-admin-vue',
             DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse-admin.js',
-            [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
+            [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap', 'selectWoo' ],
             DOKAN_PRO_PLUGIN_VERSION,
             true
         );

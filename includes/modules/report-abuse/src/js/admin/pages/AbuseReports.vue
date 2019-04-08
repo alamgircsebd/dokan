@@ -9,12 +9,12 @@
             :rows="reports"
             :actions="actions"
             :bulk-actions="bulkActions"
-            :show-cb="false"
             :total-items="totalItems"
             :total-pages="totalPages"
             :per-page="perPage"
             :current-page="currentPage"
             @pagination="goToPage"
+            @bulk:click="onBulkAction"
         >
             <template slot="reason" slot-scope="{ row }">
                 <strong>
@@ -55,6 +55,30 @@
                     type="button"
                     class="button"
                     @click="filter.reason = ''"
+                >&times;</button>
+
+                <select
+                    id="filter-products"
+                    style="width: 190px;"
+                    :data-placeholder="__('Filter by product', 'dokan')"
+                />
+                <button
+                    v-if="filter.product_id"
+                    type="button"
+                    class="button"
+                    @click="filter.product_id = 0"
+                >&times;</button>
+
+                <select
+                    id="filter-vendors"
+                    style="width: 190px;"
+                    :data-placeholder="__('Filter by vendor', 'dokan')"
+                />
+                <button
+                    v-if="filter.vendor_id"
+                    type="button"
+                    class="button"
+                    @click="filter.vendor_id = 0"
                 >&times;</button>
             </template>
         </list-table>
@@ -102,6 +126,7 @@
     import AbuseReasonsDropdown from '../../components/AbuseReasonsDropdown.vue';
     const ListTable = dokan_get_lib('ListTable');
     const Modal = dokan_get_lib('Modal');
+    const Multiselect = dokan_get_lib('Multiselect');
 
     export default {
         name: 'AbuseReports',
@@ -109,7 +134,8 @@
         components: {
             AbuseReasonsDropdown,
             ListTable,
-            Modal
+            Modal,
+            Multiselect
         },
 
         data() {
@@ -138,7 +164,12 @@
                 loading: false,
                 reports: [],
                 actions: [],
-                bulkActions: [],
+                bulkActions: [
+                    {
+                        key: 'delete',
+                        label: this.__('Delete', 'dokan')
+                    }
+                ],
                 totalItems: 0,
                 totalPages: 1,
                 perPage: 10,
@@ -146,8 +177,10 @@
                 report: {},
                 query: {},
                 filter: {
-                    reason: ''
-                },
+                    reason: '',
+                    vendor_id: 0,
+                    product_id: 0
+                }
             };
         },
 
@@ -168,8 +201,71 @@
                 this.query.reason = this.queryFilterReason;
             }
 
-            console.log('before');
+            // @todo: Filter by product and vendor on page load
+
             this.fetchReports();
+        },
+
+        mounted() {
+            const self = this;
+
+            $('#filter-products').selectWoo({
+                ajax: {
+                    url: `${dokan.rest.root}wc/v3/products`,
+                    dataType: 'json',
+                    headers: {
+                        "X-WP-Nonce" : dokan.rest.nonce
+                    },
+                    data(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults(data) {
+                        return {
+                            results: data.map((product) => {
+                                return {
+                                    id: product.id,
+                                    text: product.name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+            $('#filter-products').on('select2:select', (e) => {
+                self.filter.product_id = e.params.data.id;
+            });
+
+            $('#filter-vendors').selectWoo({
+                ajax: {
+                    url: `${dokan.rest.root}dokan/v1/stores`,
+                    dataType: 'json',
+                    headers: {
+                        "X-WP-Nonce" : dokan.rest.nonce
+                    },
+                    data(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults(data) {
+                        return {
+                            results: data.map((store) => {
+                                return {
+                                    id: store.id,
+                                    text: store.store_name
+                                };
+                            })
+                        };
+                    }
+                }
+            });
+
+            $('#filter-vendors').on('select2:select', (e) => {
+                self.filter.vendor_id = e.params.data.id;
+            });
         },
 
         watch: {
@@ -181,6 +277,14 @@
                 this.fetchReports();
             },
 
+            '$route.query.product_id'() {
+                this.fetchReports();
+            },
+
+            '$route.query.vendor_id'() {
+                this.fetchReports();
+            },
+
             'filter.reason'(reason) {
                 this.query = {};
 
@@ -188,6 +292,28 @@
                     this.query = {
                         reason
                     };
+                }
+
+                this.goTo(this.query);
+            },
+
+            'filter.product_id'(product_id) {
+                if (product_id) {
+                    this.query.product_id = product_id;
+                } else if (this.query.product_id) {
+                    delete this.query.product_id;
+                    this.clearSelection('#filter-products');
+                }
+
+                this.goTo(this.query);
+            },
+
+            'filter.vendor_id'(vendor_id) {
+                if (vendor_id) {
+                    this.query.vendor_id = vendor_id;
+                } else if (this.query.vendor_id) {
+                    delete this.query.vendor_id;
+                    this.clearSelection('#filter-vendors');
                 }
 
                 this.goTo(this.query);
@@ -241,7 +367,29 @@
             hideReport() {
                 this.report = {};
                 this.showModal = false;
-            }
+            },
+
+            clearSelection(element) {
+                $(element).val(null).trigger('change');
+            },
+
+            onBulkAction(action, items) {
+                // let jsonData = {};
+                // jsonData[action] = items;
+
+                // this.loading = true;
+
+                // dokan.api.put('/stores/batch', jsonData)
+                // .done(response => {
+                //     this.loading = false;
+                //     this.fetchVendors();
+                // });
+
+                dokan.api.delete('/abuse-reports/batch', { items: items })
+                    .done((response) => {
+                        console.log(response);
+                    });
+            },
         }
     };
 </script>

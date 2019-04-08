@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 68);
+/******/ 	return __webpack_require__(__webpack_require__.s = 69);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -179,7 +179,31 @@ module.exports = function normalizeComponent (
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_AbuseReasonsDropdown_vue__ = __webpack_require__(88);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_AbuseReasonsDropdown_vue__ = __webpack_require__(71);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -284,6 +308,7 @@ module.exports = function normalizeComponent (
 
 var ListTable = dokan_get_lib('ListTable');
 var Modal = dokan_get_lib('Modal');
+var Multiselect = dokan_get_lib('Multiselect');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'AbuseReports',
@@ -291,7 +316,8 @@ var Modal = dokan_get_lib('Modal');
     components: {
         AbuseReasonsDropdown: __WEBPACK_IMPORTED_MODULE_0__components_AbuseReasonsDropdown_vue__["a" /* default */],
         ListTable: ListTable,
-        Modal: Modal
+        Modal: Modal,
+        Multiselect: Multiselect
     },
 
     data: function data() {
@@ -320,7 +346,10 @@ var Modal = dokan_get_lib('Modal');
             loading: false,
             reports: [],
             actions: [],
-            bulkActions: [],
+            bulkActions: [{
+                key: 'delete',
+                label: this.__('Delete', 'dokan')
+            }],
             totalItems: 0,
             totalPages: 1,
             perPage: 10,
@@ -328,7 +357,9 @@ var Modal = dokan_get_lib('Modal');
             report: {},
             query: {},
             filter: {
-                reason: ''
+                reason: '',
+                vendor_id: 0,
+                product_id: 0
             }
         };
     },
@@ -350,8 +381,70 @@ var Modal = dokan_get_lib('Modal');
             this.query.reason = this.queryFilterReason;
         }
 
-        console.log('before');
+        // @todo: Filter by product and vendor on page load
+
         this.fetchReports();
+    },
+    mounted: function mounted() {
+        var self = this;
+
+        $('#filter-products').selectWoo({
+            ajax: {
+                url: dokan.rest.root + 'wc/v3/products',
+                dataType: 'json',
+                headers: {
+                    "X-WP-Nonce": dokan.rest.nonce
+                },
+                data: function data(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function processResults(data) {
+                    return {
+                        results: data.map(function (product) {
+                            return {
+                                id: product.id,
+                                text: product.name
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        $('#filter-products').on('select2:select', function (e) {
+            self.filter.product_id = e.params.data.id;
+        });
+
+        $('#filter-vendors').selectWoo({
+            ajax: {
+                url: dokan.rest.root + 'dokan/v1/stores',
+                dataType: 'json',
+                headers: {
+                    "X-WP-Nonce": dokan.rest.nonce
+                },
+                data: function data(params) {
+                    return {
+                        search: params.term
+                    };
+                },
+                processResults: function processResults(data) {
+                    return {
+                        results: data.map(function (store) {
+                            return {
+                                id: store.id,
+                                text: store.store_name
+                            };
+                        })
+                    };
+                }
+            }
+        });
+
+        $('#filter-vendors').on('select2:select', function (e) {
+            self.filter.vendor_id = e.params.data.id;
+        });
     },
 
 
@@ -362,6 +455,12 @@ var Modal = dokan_get_lib('Modal');
         '$route.query.reason': function $routeQueryReason() {
             this.fetchReports();
         },
+        '$route.query.product_id': function $routeQueryProduct_id() {
+            this.fetchReports();
+        },
+        '$route.query.vendor_id': function $routeQueryVendor_id() {
+            this.fetchReports();
+        },
         'filter.reason': function filterReason(reason) {
             this.query = {};
 
@@ -369,6 +468,26 @@ var Modal = dokan_get_lib('Modal');
                 this.query = {
                     reason: reason
                 };
+            }
+
+            this.goTo(this.query);
+        },
+        'filter.product_id': function filterProduct_id(product_id) {
+            if (product_id) {
+                this.query.product_id = product_id;
+            } else if (this.query.product_id) {
+                delete this.query.product_id;
+                this.clearSelection('#filter-products');
+            }
+
+            this.goTo(this.query);
+        },
+        'filter.vendor_id': function filterVendor_id(vendor_id) {
+            if (vendor_id) {
+                this.query.vendor_id = vendor_id;
+            } else if (this.query.vendor_id) {
+                delete this.query.vendor_id;
+                this.clearSelection('#filter-vendors');
             }
 
             this.goTo(this.query);
@@ -426,6 +545,108 @@ var Modal = dokan_get_lib('Modal');
         hideReport: function hideReport() {
             this.report = {};
             this.showModal = false;
+        },
+        clearSelection: function clearSelection(element) {
+            $(element).val(null).trigger('change');
+        },
+        onBulkAction: function onBulkAction(action, items) {
+            // let jsonData = {};
+            // jsonData[action] = items;
+
+            // this.loading = true;
+
+            // dokan.api.put('/stores/batch', jsonData)
+            // .done(response => {
+            //     this.loading = false;
+            //     this.fetchVendors();
+            // });
+
+            dokan.api.delete('/abuse-reports/batch', { items: items }).done(function (response) {
+                console.log(response);
+            });
+        }
+    }
+});
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(68)))
+
+/***/ }),
+
+/***/ 17:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+    name: 'AbuseReasonsDropdown',
+
+    props: {
+        value: {
+            type: String,
+            required: true
+        },
+
+        placeholder: {
+            type: String,
+            required: false,
+            default: ''
+        }
+    },
+
+    data: function data() {
+        return {
+            abuseReasons: []
+        };
+    },
+
+
+    computed: {
+        selectedReason: {
+            get: function get() {
+                var _this = this;
+
+                var reason = this.abuseReasons.filter(function (reason) {
+                    return _this.value === reason.value;
+                });
+
+                if (reason.length) {
+                    return reason[0].value;
+                }
+
+                return '';
+            },
+            set: function set(reason) {
+                this.$emit('input', reason || '');
+            }
+        },
+
+        noneText: function noneText() {
+            return this.placeholder || this.__('Select a reason', 'dokan');
+        }
+    },
+
+    created: function created() {
+        this.fetchAbuseReasons();
+    },
+
+
+    methods: {
+        fetchAbuseReasons: function fetchAbuseReasons() {
+            var self = this;
+
+            dokan.api.get('/abuse-reports/abuse-reasons').done(function (response) {
+                self.abuseReasons = response;
+            });
         }
     }
 });
@@ -433,12 +654,19 @@ var Modal = dokan_get_lib('Modal');
 /***/ }),
 
 /***/ 68:
+/***/ (function(module, exports) {
+
+module.exports = jQuery;
+
+/***/ }),
+
+/***/ 69:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _AbuseReports = __webpack_require__(69);
+var _AbuseReports = __webpack_require__(70);
 
 var _AbuseReports2 = _interopRequireDefault(_AbuseReports);
 
@@ -448,14 +676,14 @@ dokan_add_route(_AbuseReports2.default);
 
 /***/ }),
 
-/***/ 69:
+/***/ 70:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReports_vue__ = __webpack_require__(16);
 /* empty harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_23efc86a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReports_vue__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_23efc86a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReports_vue__ = __webpack_require__(73);
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
@@ -502,7 +730,121 @@ if (false) {(function () {
 
 /***/ }),
 
-/***/ 70:
+/***/ 71:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReasonsDropdown_vue__ = __webpack_require__(17);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41faa61c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReasonsDropdown_vue__ = __webpack_require__(72);
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReasonsDropdown_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41faa61c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReasonsDropdown_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "includes/modules/report-abuse/src/js/components/AbuseReasonsDropdown.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-41faa61c", Component.options)
+  } else {
+    hotAPI.reload("data-v-41faa61c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 72:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "select",
+    {
+      directives: [
+        {
+          name: "model",
+          rawName: "v-model",
+          value: _vm.selectedReason,
+          expression: "selectedReason"
+        }
+      ],
+      on: {
+        change: function($event) {
+          var $$selectedVal = Array.prototype.filter
+            .call($event.target.options, function(o) {
+              return o.selected
+            })
+            .map(function(o) {
+              var val = "_value" in o ? o._value : o.value
+              return val
+            })
+          _vm.selectedReason = $event.target.multiple
+            ? $$selectedVal
+            : $$selectedVal[0]
+        }
+      }
+    },
+    [
+      _c("option", { attrs: { value: "" } }, [_vm._v(_vm._s(_vm.noneText))]),
+      _vm._v(" "),
+      _vm._l(_vm.abuseReasons, function(reason) {
+        return _c("option", {
+          key: reason.id,
+          domProps: { textContent: _vm._s(reason.value) }
+        })
+      })
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+var esExports = { render: render, staticRenderFns: staticRenderFns }
+/* harmony default export */ __webpack_exports__["a"] = (esExports);
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-41faa61c", esExports)
+  }
+}
+
+/***/ }),
+
+/***/ 73:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -528,13 +870,12 @@ var render = function() {
             rows: _vm.reports,
             actions: _vm.actions,
             "bulk-actions": _vm.bulkActions,
-            "show-cb": false,
             "total-items": _vm.totalItems,
             "total-pages": _vm.totalPages,
             "per-page": _vm.perPage,
             "current-page": _vm.currentPage
           },
-          on: { pagination: _vm.goToPage },
+          on: { pagination: _vm.goToPage, "bulk:click": _vm.onBulkAction },
           scopedSlots: _vm._u([
             {
               key: "reason",
@@ -664,6 +1005,54 @@ var render = function() {
                       on: {
                         click: function($event) {
                           _vm.filter.reason = ""
+                        }
+                      }
+                    },
+                    [_vm._v("×")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("select", {
+                staticStyle: { width: "190px" },
+                attrs: {
+                  id: "filter-products",
+                  "data-placeholder": _vm.__("Filter by product", "dokan")
+                }
+              }),
+              _vm._v(" "),
+              _vm.filter.product_id
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "button",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          _vm.filter.product_id = 0
+                        }
+                      }
+                    },
+                    [_vm._v("×")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _c("select", {
+                staticStyle: { width: "190px" },
+                attrs: {
+                  id: "filter-vendors",
+                  "data-placeholder": _vm.__("Filter by vendor", "dokan")
+                }
+              }),
+              _vm._v(" "),
+              _vm.filter.vendor_id
+                ? _c(
+                    "button",
+                    {
+                      staticClass: "button",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          _vm.filter.vendor_id = 0
                         }
                       }
                     },
@@ -800,202 +1189,6 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-23efc86a", esExports)
-  }
-}
-
-/***/ }),
-
-/***/ 88:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReasonsDropdown_vue__ = __webpack_require__(89);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41faa61c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReasonsDropdown_vue__ = __webpack_require__(90);
-var disposed = false
-var normalizeComponent = __webpack_require__(0)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_AbuseReasonsDropdown_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_41faa61c_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_AbuseReasonsDropdown_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "includes/modules/report-abuse/src/js/components/AbuseReasonsDropdown.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-41faa61c", Component.options)
-  } else {
-    hotAPI.reload("data-v-41faa61c", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-
-/***/ 89:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["a"] = ({
-    name: 'AbuseReasonsDropdown',
-
-    props: {
-        value: {
-            type: String,
-            required: true
-        },
-
-        placeholder: {
-            type: String,
-            required: false,
-            default: ''
-        }
-    },
-
-    data: function data() {
-        return {
-            abuseReasons: []
-        };
-    },
-
-
-    computed: {
-        selectedReason: {
-            get: function get() {
-                var _this = this;
-
-                var reason = this.abuseReasons.filter(function (reason) {
-                    return _this.value === reason.value;
-                });
-
-                if (reason.length) {
-                    return reason[0].value;
-                }
-
-                return '';
-            },
-            set: function set(reason) {
-                this.$emit('input', reason || '');
-            }
-        },
-
-        noneText: function noneText() {
-            return this.placeholder || this.__('Select a reason', 'dokan');
-        }
-    },
-
-    created: function created() {
-        this.fetchAbuseReasons();
-    },
-
-
-    methods: {
-        fetchAbuseReasons: function fetchAbuseReasons() {
-            var self = this;
-
-            dokan.api.get('/abuse-reports/abuse-reasons').done(function (response) {
-                self.abuseReasons = response;
-            });
-        }
-    }
-});
-
-/***/ }),
-
-/***/ 90:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c(
-    "select",
-    {
-      directives: [
-        {
-          name: "model",
-          rawName: "v-model",
-          value: _vm.selectedReason,
-          expression: "selectedReason"
-        }
-      ],
-      on: {
-        change: function($event) {
-          var $$selectedVal = Array.prototype.filter
-            .call($event.target.options, function(o) {
-              return o.selected
-            })
-            .map(function(o) {
-              var val = "_value" in o ? o._value : o.value
-              return val
-            })
-          _vm.selectedReason = $event.target.multiple
-            ? $$selectedVal
-            : $$selectedVal[0]
-        }
-      }
-    },
-    [
-      _c("option", { attrs: { value: "" } }, [_vm._v(_vm._s(_vm.noneText))]),
-      _vm._v(" "),
-      _vm._l(_vm.abuseReasons, function(reason) {
-        return _c("option", {
-          key: reason.id,
-          domProps: { textContent: _vm._s(reason.value) }
-        })
-      })
-    ],
-    2
-  )
-}
-var staticRenderFns = []
-render._withStripped = true
-var esExports = { render: render, staticRenderFns: staticRenderFns }
-/* harmony default export */ __webpack_exports__["a"] = (esExports);
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-41faa61c", esExports)
   }
 }
 

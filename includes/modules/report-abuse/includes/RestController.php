@@ -37,6 +37,14 @@ class RestController extends WP_REST_Controller {
             ]
         ] );
 
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/batch', [
+            [
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => [ $this, 'delete_items' ],
+                'permission_callback' => [ $this, 'is_dokandar' ]
+            ]
+        ] );
+
         register_rest_route( $this->namespace, '/' . $this->rest_base . '/abuse-reasons', [
             [
                 'methods'             => WP_REST_Server::READABLE,
@@ -69,21 +77,25 @@ class RestController extends WP_REST_Controller {
     public function get_items( $request ) {
         global $wpdb;
 
-        $per_page = 20;
-        $page     = ! empty( $request['page'] ) ? $request['page'] : 1;
-        $reason   = ! empty( $request['reason'] ) ? $request['reason'] : '';
+        // These defaults should be replaced by schema
+        $per_page   = 20;
+        $page       = ! empty( $request['page'] ) ? $request['page'] : 1;
+        $reason     = ! empty( $request['reason'] ) ? $request['reason'] : '';
+        $product_id = ! empty( $request['product_id'] ) ? $request['product_id'] : 0;
+        $vendor_id  = ! empty( $request['vendor_id'] ) ? $request['vendor_id'] : 0;
 
         $args =  [
-            'page'   => $page,
-            'reason' => $reason,
+            'page'       => $page,
+            'reason'     => $reason,
+            'product_id' => $product_id,
+            'vendor_id'  => $vendor_id,
         ];
 
-        $data = dokan_report_abuse_get_reports( $args );
-
+        $data     = dokan_report_abuse_get_reports( $args );
         $response = rest_ensure_response( $data );
 
         $args['count'] = true;
-        $total = dokan_report_abuse_get_reports( $args );
+        $total         = dokan_report_abuse_get_reports( $args );
         $response->header( 'X-Dokan-AbuseReports-Total', $total );
 
         $max_pages = ceil( $total / $per_page );
@@ -107,5 +119,23 @@ class RestController extends WP_REST_Controller {
         $response = rest_ensure_response( $option['abuse_reasons'] );
 
         return $response;
+    }
+
+    public function delete_items( $request ) {
+        $ids = $request['items'];
+
+        if ( ! is_array( $ids ) ) {
+            return new WP_Error( 'invalid_data', __( 'items must be an array of report ids', 'dokan' ) );
+        }
+
+        $reports = dokan_report_abuse_get_reports( [ 'ids' => $ids ] );
+
+        $ids = array_map( function ( $report ) {
+            return $report['id'];
+        }, $reports );
+
+        dokan_report_abuse_delete_reports( $ids );
+
+        return rest_ensure_response( $reports );
     }
 }
