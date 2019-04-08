@@ -37,6 +37,20 @@ class RestController extends WP_REST_Controller {
             ]
         ] );
 
+        register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', [
+            'args' => [
+                'id' => [
+                    'description' => __( 'Abuse report id', 'dokan' ),
+                    'type'        => 'integer',
+                ],
+            ],
+            [
+                'methods'             => WP_REST_Server::DELETABLE,
+                'callback'            => [ $this, 'delete_item' ],
+                'permission_callback' => [ $this, 'is_dokandar' ],
+            ],
+        ] );
+
         register_rest_route( $this->namespace, '/' . $this->rest_base . '/batch', [
             [
                 'methods'             => WP_REST_Server::DELETABLE,
@@ -121,11 +135,41 @@ class RestController extends WP_REST_Controller {
         return $response;
     }
 
+    /**
+     * Delete report
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return \WP_REST_Response
+     */
+    public function delete_item( $request ) {
+        $report = dokan_report_abuse_get_reports( [ 'id' => $request['id'] ] );
+
+        if ( empty( $report ) ) {
+            return new \WP_Error( 'report_not_found', __( 'Report not found', 'dokan' ) );
+        }
+
+        dokan_report_abuse_delete_reports( [ $report['id'] ] );
+
+        return rest_ensure_response( $report );
+    }
+
+    /**
+     * Delete reports in bulk
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return \WP_REST_Response
+     */
     public function delete_items( $request ) {
         $ids = $request['items'];
 
         if ( ! is_array( $ids ) ) {
-            return new WP_Error( 'invalid_data', __( 'items must be an array of report ids', 'dokan' ) );
+            return new \WP_Error( 'invalid_data', __( 'items must be an array of report ids', 'dokan' ) );
         }
 
         $reports = dokan_report_abuse_get_reports( [ 'ids' => $ids ] );

@@ -34,7 +34,8 @@ var moduleEntryPoints = {
 
     'report-abuse': {
         'dokan-report-abuse': 'js/frontend/main.js',
-        'dokan-report-abuse-admin': 'js/admin/main.js'
+        'dokan-report-abuse-admin': 'js/admin/main.js',
+        'dokan-report-abuse-admin-single-product': 'js/admin/single-product.js'
     }
 };
 

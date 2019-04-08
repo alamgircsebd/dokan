@@ -215,6 +215,7 @@ function dokan_report_abuse_get_reports( $args = [] ) {
 
     $defaults = [
         'ids'        => [],
+        'id'         => 0,
         'reason'     => '',
         'product_id' => 0,
         'vendor_id'  => 0,
@@ -237,6 +238,10 @@ function dokan_report_abuse_get_reports( $args = [] ) {
         $ids = array_filter( $args['ids'], 'absint' );
 
         $sql .= ' and id in (' . implode( ',', $ids ) . ')';
+    } else if ( ! empty( $args['id'] ) ) {
+        $sql .= $wpdb->prepare(
+            ' and id = %d', $args['id']
+        );
     }
 
     if ( ! empty( $args['reason'] ) ) {
@@ -329,9 +334,22 @@ function dokan_report_abuse_get_reports( $args = [] ) {
         $reports[ $i ]['reported_at'] = mysql_to_rfc3339( $result->created_at );
     }
 
+    if ( ! empty( $args['id'] ) && ! empty( $reports ) ) {
+        $reports = $reports[0];
+    }
+
     return $reports;
 }
 
+/**
+ * Delete abuse reports
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param array $ids
+ *
+ * @return int
+ */
 function dokan_report_abuse_delete_reports( $ids ) {
     global $wpdb;
 

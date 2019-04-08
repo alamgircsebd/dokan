@@ -45,5 +45,20 @@ class AdminSingleProduct {
             'date_format' => get_option( 'date_format', 'F j, Y' ),
             'time_format' => get_option( 'time_format', 'g:i a' ),
         ] );
+
+        wp_enqueue_style( 'dokan-report-abuse-admin-single-product', DOKAN_REPORT_ABUSE_ASSETS . '/css/dokan-report-abuse-admin-single-product.css', ['dokan-fontawesome'], DOKAN_PRO_PLUGIN_VERSION );
+        wp_enqueue_script( 'dokan-report-abuse-admin-single-product', DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse-admin-single-product.js', ['jquery'], DOKAN_PRO_PLUGIN_VERSION, true );
+
+        wp_localize_script( 'dokan-report-abuse-admin-single-product', 'dokanReportAbuse', [
+            'rest' => [
+                'root'    => esc_url_raw( get_rest_url() ),
+                'nonce'   => wp_create_nonce( 'wp_rest' ),
+            ],
+            'i18n' => [
+                'delete'   => esc_html__( 'Delete', 'dokan' ),
+                'deleting' => esc_html__( 'Deleting', 'dokan' ),
+                'deletedSuccessfully' => esc_html__( 'Report successfully deleted.', 'dokan' ),
+            ]
+        ] );
     }
 }
