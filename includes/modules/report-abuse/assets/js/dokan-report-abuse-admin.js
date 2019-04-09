@@ -557,19 +557,14 @@ var Multiselect = dokan_get_lib('Multiselect');
             $(element).val(null).trigger('change');
         },
         onBulkAction: function onBulkAction(action, items) {
-            // let jsonData = {};
-            // jsonData[action] = items;
+            var self = this;
 
-            // this.loading = true;
-
-            // dokan.api.put('/stores/batch', jsonData)
-            // .done(response => {
-            //     this.loading = false;
-            //     this.fetchVendors();
-            // });
+            if (!confirm(this.__('Are you sure you want to delete this report', 'dokan'))) {
+                return;
+            }
 
             dokan.api.delete('/abuse-reports/batch', { items: items }).done(function (response) {
-                console.log(response);
+                self.fetchReports();
             });
         }
     }

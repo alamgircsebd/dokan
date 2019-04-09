@@ -374,20 +374,15 @@
             },
 
             onBulkAction(action, items) {
-                // let jsonData = {};
-                // jsonData[action] = items;
+                const self = this;
 
-                // this.loading = true;
-
-                // dokan.api.put('/stores/batch', jsonData)
-                // .done(response => {
-                //     this.loading = false;
-                //     this.fetchVendors();
-                // });
+                if (! confirm(this.__('Are you sure you want to delete this report', 'dokan'))) {
+                    return;
+                }
 
                 dokan.api.delete('/abuse-reports/batch', { items: items })
                     .done((response) => {
-                        console.log(response);
+                        self.fetchReports();
                     });
             },
         }

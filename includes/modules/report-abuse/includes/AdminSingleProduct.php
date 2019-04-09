@@ -55,9 +55,10 @@ class AdminSingleProduct {
                 'nonce'   => wp_create_nonce( 'wp_rest' ),
             ],
             'i18n' => [
-                'delete'   => esc_html__( 'Delete', 'dokan' ),
-                'deleting' => esc_html__( 'Deleting', 'dokan' ),
+                'delete'              => esc_html__( 'Delete', 'dokan' ),
+                'deleting'            => esc_html__( 'Deleting', 'dokan' ),
                 'deletedSuccessfully' => esc_html__( 'Report successfully deleted.', 'dokan' ),
+                'confirmDelete'       => esc_html__( 'Are you sure you want to delete this report', 'dokan' ),
             ]
         ] );
     }
