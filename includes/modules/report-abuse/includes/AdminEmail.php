@@ -154,7 +154,7 @@ class AdminEmail extends WC_Email {
                 'customer'       => $this->report->customer_id ? new \WC_Customer( $this->report->customer_id ) : 0,
                 'customer_name'  => $this->report->customer_name,
                 'customer_email' => $this->report->customer_email,
-                'reported_at'    => strtotime( $this->report->created_at ),
+                'reported_at'    => strtotime( $this->report->reported_at ),
                 'report'         => $this->report,
             ],
         ], 'dokan/', $this->template_base );

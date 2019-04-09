@@ -111,7 +111,7 @@ function dokan_report_abuse_create_report( $args ) {
         $placeholders[]        = '%s';
     }
 
-    $report['created_at'] = current_time( 'mysql' );
+    $report['reported_at'] = current_time( 'mysql' );
     $placeholders[]       = '%s';
 
     $inserted = $wpdb->insert(
@@ -274,7 +274,7 @@ function dokan_report_abuse_get_reports( $args = [] ) {
     }
 
     if ( ! $args['count'] ) {
-        if ( in_array( $args['order_by'], [ 'id', 'reason', 'product_id', 'vendor_id', 'created_at' ] ) && in_array( strtolower( $args['order'] ) , [ 'asc', 'desc' ] ) ) {
+        if ( in_array( $args['order_by'], [ 'id', 'reason', 'product_id', 'vendor_id', 'reported_at' ] ) && in_array( strtolower( $args['order'] ) , [ 'asc', 'desc' ] ) ) {
             $sql .= ' order by ' . $args['order_by'] . ' ' . $args['order'];
         }
 
@@ -331,7 +331,7 @@ function dokan_report_abuse_get_reports( $args = [] ) {
         ];
 
         $reports[ $i ]['description'] = $result->description;
-        $reports[ $i ]['reported_at'] = mysql_to_rfc3339( $result->created_at );
+        $reports[ $i ]['reported_at'] = mysql_to_rfc3339( $result->reported_at );
     }
 
     if ( ! empty( $args['id'] ) && ! empty( $reports ) ) {

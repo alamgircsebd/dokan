@@ -168,7 +168,7 @@ final class DokanReportAbuse {
           `customer_name` VARCHAR(191) DEFAULT NULL,
           `customer_email` VARCHAR(100) DEFAULT NULL,
           `description` TEXT DEFAULT NULL,
-          `created_at` DATETIME NOT NULL,
+          `reported_at` DATETIME NOT NULL,
           INDEX `reason` (`reason`),
           INDEX `product_id` (`product_id`),
           INDEX `vendor_id` (`vendor_id`)
