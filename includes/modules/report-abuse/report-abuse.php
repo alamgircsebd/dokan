@@ -124,9 +124,37 @@ final class DokanReportAbuse {
         if ( empty( $option['abuse_reasons'] ) ) {
             $option['abuse_reasons'] = [
                 [
+                    'id'    => 'report_as_spam',
+                    'value' => esc_html__( 'This content is spam', 'dokan' ),
+                ],
+                [
+                    'id'    => 'report_as_adult',
+                    'value' => esc_html__( 'This content should marked as adult', 'dokan' ),
+                ],
+                [
+                    'id'    => 'report_as_abusive',
+                    'value' => esc_html__( 'This content is abusive', 'dokan' ),
+                ],
+                [
+                    'id'    => 'report_as_violent',
+                    'value' => esc_html__( 'This content is violent', 'dokan' ),
+                ],
+                [
+                    'id'    => 'report_as_risk_of_hurting',
+                    'value' => esc_html__( 'This content suggests the author might be risk of hurting themselves', 'dokan' ),
+                ],
+                [
+                    'id'    => 'report_as_infringes_copyright',
+                    'value' => esc_html__( 'This content infringes upon my copyright', 'dokan' ),
+                ],
+                [
+                    'id'    => 'report_as_contains_private_info',
+                    'value' => esc_html__( 'This content contains my private information', 'dokan' ),
+                ],
+                [
                     'id' => 'other',
-                    'value' => __( 'Other', 'dokan' )
-                ]
+                    'value' => esc_html__( 'Other', 'dokan' )
+                ],
             ];
 
             update_option( 'dokan_report_abuse', $option, false );
