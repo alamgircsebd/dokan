@@ -18,16 +18,12 @@
                     />
                 </div>
 
-                <div class="picture banner" :style="banner ? 'padding: 0' : ''">
+                <div :class="['picture banner', {'has-banner': vendorInfo.banner_id}]">
                     <div class="banner-image">
-
                         <upload-image @uploadedImage="uploadBanner" :showButton="showButton" :buttonLabel="__( 'Upload Banner', 'dokan' )" />
-
-                        <!-- <img v-if="banner" :src="banner" :alt="banner ? 'banner-image' : ''"> -->
-                        <!-- <button @click="uploadBanner">{{__( 'Upload Banner', 'dokan' ) }}</button> -->
                     </div>
 
-                    <p class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
+                    <p v-if="showButton" class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
                 </div>
             </div>
 
@@ -78,6 +74,10 @@
                         :class="{'dokan-form-input': true, 'has-error': getError('user_email')}"
                         :placeholder="getError( 'user_email' ) ? __( 'Email is required', 'dokan' ) : __( 'store@email.com', 'dokan' )"
                     >
+
+                    <div class="store-avaibility-info">
+                        <span :class="{'is-available': emailAvailable, 'not-available': !emailAvailable}">{{ emailAvailabilityText }}</span>
+                    </div>
                 </div>
 
                 <template v-if="! getId()">
@@ -91,6 +91,12 @@
                             <div class="store-avaibility-info">
                                 <span :class="{'is-available': userNameAvailable, 'not-available': !userNameAvailable}">{{ userNameAvailabilityText }}</span>
                             </div>
+
+
+                        <div class="checkbox-left notify-vendor">
+                            <switches @input="sendEmail" :enabled="true" value="notify_vendor"></switches>
+                            <span class="desc">{{ __( 'Send the vendor an email about their account.', 'dokan' ) }}</span>
+                        </div>
                     </div>
 
                     <div class="column">
@@ -129,11 +135,13 @@ import UploadImage from 'admin/components/UploadImage.vue';
 import PasswordGenerator from 'admin/components/passwordGenerator.vue';
 
 let debounce = dokan_get_lib( 'Debounce' );
+let Switches = dokan_get_lib('Switches');
 
 export default {
     name: 'VendorAccountFields',
 
     components: {
+        Switches,
         UploadImage,
         PasswordGenerator
     },
@@ -160,8 +168,10 @@ export default {
             delay: 500,
             storeAvailable: null,
             userNameAvailable: null,
+            emailAvailable: null,
             storeAvailabilityText: '',
             userNameAvailabilityText: '',
+            emailAvailabilityText: '',
             getAccountFields: dokan.hooks.applyFilters( 'getVendorAccountFields', [] ),
         }
     },
@@ -184,7 +194,11 @@ export default {
 
         'vendorInfo.user_login'( value ) {
             this.checkUsername();
-        }
+        },
+
+        'vendorInfo.user_email'( value ) {
+            this.checkEmail();
+        },
     },
 
     computed: {
@@ -200,6 +214,7 @@ export default {
     created() {
         this.checkStoreName = debounce( this.checkStore, this.delay );
         this.checkUsername = debounce( this.searchUsername, this.delay );
+        this.checkEmail = debounce( this.searchEmail, this.delay );
         this.$root.$on( 'passwordCancelled', () => {
             this.showPassword = false;
         } );
@@ -257,16 +272,18 @@ export default {
             } ).then( ( response ) => {
                 if ( response.available ) {
                     this.storeAvailable = true;
-                    this.$root.$emit( 'usernameChecked', {
+                    this.$root.$emit( 'vendorInfoChecked', {
                         userNameAvailable: this.userNameAvailable,
-                        storeAvailable: this.storeAvailable
+                        storeAvailable: this.storeAvailable,
+                        emailAvailable: this.emailAvailable
                     } );
                     this.storeAvailabilityText = this.__( 'Available', 'dokan' )
                 } else {
                     this.storeAvailable = false;
-                    this.$root.$emit( 'usernameChecked', {
+                    this.$root.$emit( 'vendorInfoChecked', {
                         userNameAvailable: this.userNameAvailable,
-                        storeAvailable: this.storeAvailable
+                        storeAvailable: this.storeAvailable,
+                        emailAvailable: this.emailAvailable
                     } );
                     this.storeAvailabilityText = this.__( 'Not Available', 'dokan' );
                 }
@@ -283,22 +300,56 @@ export default {
             this.userNameAvailabilityText = this.__( 'Searching...', 'dokan' );
 
             dokan.api.get( `/stores/check`, {
-                store_slug: userName
+                username: userName
             } ).then( ( response ) => {
                 if ( response.available ) {
                     this.userNameAvailable = true;
-                    this.$root.$emit( 'usernameChecked', {
+                    this.$root.$emit( 'vendorInfoChecked', {
                         userNameAvailable: this.userNameAvailable,
-                        storeAvailable: this.storeAvailable
+                        storeAvailable: this.storeAvailable,
+                        emailAvailable: this.emailAvailable
                     } );
                     this.userNameAvailabilityText = this.__( 'Available', 'dokan' )
                 } else {
                     this.userNameAvailable = false;
-                    this.$root.$emit( 'usernameChecked', {
+                    this.$root.$emit( 'vendorInfoChecked', {
                         userNameAvailable: this.userNameAvailable,
-                        storeAvailable: this.storeAvailable
+                        storeAvailable: this.storeAvailable,
+                        emailAvailable: this.emailAvailable
                     } );
                     this.userNameAvailabilityText = this.__( 'Not Available', 'dokan' );
+                }
+            } );
+        },
+
+        searchEmail() {
+            const userEmail = this.vendorInfo.user_email;
+
+            if ( ! userEmail ) {
+                return;
+            }
+
+            this.emailAvailabilityText = this.__( 'Searching...', 'dokan' );
+
+            dokan.api.get( `/stores/check`, {
+                user_email: userEmail
+            } ).then( ( response ) => {
+                if ( response.available ) {
+                    this.emailAvailable = true;
+                    this.$root.$emit( 'vendorInfoChecked', {
+                        userNameAvailable: this.userNameAvailable,
+                        storeAvailable: this.storeAvailable,
+                        emailAvailable: this.emailAvailable
+                    } );
+                    this.emailAvailabilityText = this.__( 'Available', 'dokan' )
+                } else {
+                    this.emailAvailable = false;
+                    this.$root.$emit( 'vendorInfoChecked', {
+                        userNameAvailable: this.userNameAvailable,
+                        storeAvailable: this.storeAvailable,
+                        emailAvailable: this.emailAvailable
+                    } );
+                    this.emailAvailabilityText = response.message ? response.message : this.__( 'This email is already registered, please choose another one.', 'dokan' );
                 }
             } );
         },
@@ -306,6 +357,14 @@ export default {
         setPassword( password ) {
             this.showPassword = true;
             this.vendorInfo.user_pass = password;
+        },
+
+        sendEmail( status, key ) {
+            if ( 'notify_vendor' !== key ) {
+                return;
+            }
+
+            this.vendorInfo.notify_vendor = status;
         }
 
     }

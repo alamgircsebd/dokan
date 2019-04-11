@@ -144,8 +144,9 @@
                 <div :class="{'profile-banner': true, 'edit-mode': editMode}">
                     <div class="banner-wrap">
                         <template v-if="editMode">
-                            <upload-image @uploadedImage="uploadBanner" :src="store.banner ? store.banner : ''" />
+                                <upload-image @uploadedImage="uploadBanner" :src="store.banner" />
                         </template>
+
                         <template v-else>
                             <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
                         </template>

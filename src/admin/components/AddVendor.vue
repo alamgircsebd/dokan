@@ -21,26 +21,11 @@
                         <loading></loading>
                     </div>
 
-<!--                     <div class="form-erros" v-if="errors.length > 1">
-                        <ul>
-                            <li v-for="error in errors" :key="error">
-                                <div class="notice-error">
-                                    {{ error + ' is required' }}
-                                </div>
-                            </li>
-                        </ul>
-                    </div> -->
-
                     <transition name="component-fade" mode="out-in" v-if="! isLoading">
                         <component :vendorInfo="store" :is="currentTab" :errors="errors" />
                     </transition>
                 </div>
             </div>
-
-            <!-- Change the button name if it's vendor edit page -->
-<!--             <div slot="footer" v-if="storeId">
-                <button class="dokan-btn" @click="updateVendor">{{ __( 'Update Vendor', 'dokan' ) }}</button>
-            </div> -->
 
             <div slot="footer">
                 <button class="dokan-btn" @click="createVendor">{{ 'VendorPaymentFields' === currentTab ? __( 'Create Vendor', 'dokan' ) : this.nextBtn }}</button>
@@ -58,9 +43,6 @@ import VendorAccountFields from './VendorAccountFields.vue';
 import VendorAddressFields from './VendorAddressFields.vue';
 import VendorPaymentFields from './VendorPaymentFields.vue';
 
-// import vendorOptions from './vendorOptions.vue';
-// import vendorSocial from './vendorSocial.vue';
-
 export default {
 
     name: 'AddVendor',
@@ -72,9 +54,7 @@ export default {
         Loading,
         VendorAccountFields,
         VendorAddressFields,
-        VendorPaymentFields,
-        // vendorOptions,
-        // vendorSocial,
+        VendorPaymentFields
     },
 
     data() {
@@ -89,16 +69,6 @@ export default {
                     name: 'VendorAccountFields',
                     icon: 'dashicons dashicons-admin-users',
                 },
-                // vendorOptions: {
-                //     label: this.__( 'Dokan Options', 'dokan' ),
-                //     name: 'vendorOptions',
-                //     icon: 'options',
-                // },
-                // vendorSocial: {
-                //     label: this.__( 'Social', 'dokan' ),
-                //     name: 'vendorSocial',
-                //     icon: 'social',
-                // },
                 VendorAddressFields: {
                     label: this.__( 'Address', 'dokan' ),
                     name: 'VendorAddressFields',
@@ -118,6 +88,7 @@ export default {
                 user_login: '',
                 user_email: '',
                 user_nicename: '',
+                notify_vendor: true,
                 phone: '',
                 banner: '',
                 banner_id: '',
@@ -163,24 +134,21 @@ export default {
             errors: [],
             storeAvailable: false,
             userNameAvailable: false,
+            emailAvailable: false
         };
     },
 
     created() {
-        this.$root.$on( 'usernameChecked', ( payload ) => {
+        this.$root.$on( 'vendorInfoChecked', ( payload ) => {
             this.storeAvailable    = payload.storeAvailable;
             this.userNameAvailable = payload.userNameAvailable;
+            this.emailAvailable    = payload.emailAvailable;
         } );
     },
 
     methods: {
         getId() {
             return this.$route.params.id;
-        },
-
-        getIcon(name = '') {
-            return name;
-            // return dokan.urls.proAssetsUrl + '/images/' + name + '.png';
         },
 
         showAlert( $title, $des, $status ) {
@@ -193,23 +161,9 @@ export default {
                 return;
             }
 
-            // only for validation|if success create the vendor
-            // if ( 'VendorAccountFields' === this.currentTab ) {
-
-            //     dokan.api.post('/stores/', this.store)
-            //     .done((response) => {
-            //         this.store.id = response.id;
-            //     })
-            //     .fail((response) => {
-            //         this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-            //         this.currentTab = 'VendorAccountFields';
-            //     })
-            // }
-
             if ( 'VendorPaymentFields' === this.currentTab ) {
                 this.isLoading = true;
 
-                // dokan.api.put( '/stores/' + this.store.id, this.store )
                 dokan.api.post( '/stores/', this.store )
                 .done( ( response ) => {
                     this.$swal( {
@@ -219,14 +173,15 @@ export default {
                         showCloseButton: true,
                         showCancelButton: true,
                         confirmButtonText: this.__( 'Add Another', 'dokan' ),
-                        cancelButtonText: this.__( 'Edit Vendor', 'dokan' )
+                        cancelButtonText: this.__( 'Edit Vendor', 'dokan' ),
+                        focusConfirm: false
                     } )
                     .then( ( result ) => {
                         if ( result.value ) {
                             location.reload();
                             this.$router.push( { path: 'vendors/', query:{ addnew: 'true' } } );
                         } else if ( result.dismiss === this.$swal.DismissReason.cancel ) {
-                            this.$router.push( { path: 'vendors/' + this.store.id, query:{ edit: 'true' } } );
+                            this.$router.push( { path: 'vendors/' + response.id, query:{ edit: 'true' } } );
                         } else {
                             location.reload();
                         }
@@ -271,7 +226,7 @@ export default {
             } );
 
             // if no error && store_slug & username is available, return true
-            if ( this.errors.length < 1 && this.storeAvailable && this.userNameAvailable ) {
+            if ( this.errors.length < 1 && this.storeAvailable && this.userNameAvailable && this.emailAvailable ) {
                 return true;
             }
 
@@ -468,6 +423,18 @@ export default {
 
                     .password-generator {
                         margin-top: 6px;
+
+                        .regen-button {
+                            margin-right: 5px;
+
+                            span {
+                                line-height: 26px;
+                            }
+                        }
+                    }
+
+                    .checkbox-left.notify-vendor {
+                        margin-top: 6px;
                     }
                 }
 
@@ -510,27 +477,30 @@ export default {
                     .profile-image {
                         max-width: 100px;
                         margin: 0 auto;
-                    }
 
-                    .profile-image img {
-                        border: 1px solid #E5E5E5;
-                        padding: 15px 10px 0;
-                        cursor: pointer;
-                        width: 100%;
+                        img {
+                            border: 1px solid #E5E5E5;
+                            padding: 15px 10px 0;
+                            cursor: pointer;
+                            width: 100%;
+                            padding: 5px;
+                        }
                     }
                 }
                 .picture.banner {
-                    // margin-top: 40px;
-                    // padding: 70px 0;
+                    padding: 0;
                     flex-grow: 10;
                     margin-right: 20px;
+                    height: 228px;
+                    padding-top: 5%;
 
                     .banner-image {
-                        padding-top: 5%;
+                        // padding-top: 5%;
                         img {
                             width: 100%;
-                            height: 315px;
-                            padding: 15px 15px 0 15px;
+                            height: 223px;
+                            padding: 0;
+                            // padding: 15px 15px 0 15px;
                         }
 
                         button {
@@ -542,6 +512,10 @@ export default {
                             cursor: pointer;
                         }
                     }
+                }
+
+                .picture.banner.has-banner {
+                    padding-top: 0;
                 }
 
                 .picture-footer {

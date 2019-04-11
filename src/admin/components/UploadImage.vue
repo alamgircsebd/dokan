@@ -1,6 +1,6 @@
 <template>
-    <div class="dokan-upload-image">
-        <img v-if="! showButton" @click="uploadImage" :src="image.src ? image.src : src" :style="image.id ? {padding: '5px'} : ''">
+    <div class="dokan-upload-image" @click="uploadImage">
+        <img v-if="! showButton" :src="image.src ? image.src : src" :style="">
 
         <button v-if="showButton" @click.prevent="uploadImage">
             {{ buttonLabel }}
@@ -63,7 +63,8 @@ export default {
                 multiple: false, // set it true for multiple image
                 title: this.__('Select Image', 'dokan'),
                 priority: 20,
-                filterable: 'uploaded'
+                filterable: 'uploaded',
+                autoSelect: true
             };
 
             const fileStates = [
@@ -109,6 +110,8 @@ export default {
 </script>
 <style lang="less">
     .dokan-upload-image {
+        width: 100%;
+
         img {
             cursor: pointer;
         }
