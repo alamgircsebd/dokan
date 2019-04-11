@@ -27,8 +27,15 @@ var moduleEntryPoints = {
     'subscription': {
         'subscription': 'main.js',
     },
+
     'wholesale': {
         'admin': 'main.js'
+    },
+
+    'report-abuse': {
+        'dokan-report-abuse': 'js/frontend/main.js',
+        'dokan-report-abuse-admin': 'js/admin/main.js',
+        'dokan-report-abuse-admin-single-product': 'js/admin/single-product.js'
     }
 };
 
@@ -108,6 +115,10 @@ if ( isProduction() ) {
     appName = '[name].js';
 }
 
+plugins.push(new webpack.ProvidePlugin({
+    $: 'jquery'
+}));
+
 module.exports = {
     entry: entryPoints,
     output: {
@@ -128,7 +139,7 @@ module.exports = {
         ]
     },
     externals: {
-        jquery: 'jQuery',
+        jquery: 'jQuery'
     },
 
     plugins,
