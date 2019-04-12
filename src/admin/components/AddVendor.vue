@@ -230,6 +230,9 @@ export default {
                 return true;
             }
 
+            // go back to first tab, if there are errors
+            this.currentTab = 'VendorAccountFields';
+
             return false;
         }
     }
