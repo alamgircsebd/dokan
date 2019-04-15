@@ -178,15 +178,14 @@ export default {
                     } )
                     .then( ( result ) => {
                         if ( result.value ) {
-                            location.reload();
                             this.$router.push( { path: 'vendors/', query:{ addnew: 'true' } } );
+                            location.reload();
                         } else if ( result.dismiss === this.$swal.DismissReason.cancel ) {
                             this.$router.push( { path: 'vendors/' + response.id, query:{ edit: 'true' } } );
                         } else {
                             location.reload();
                         }
                     } );
-
                 } )
                 .fail( ( response ) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
@@ -577,6 +576,74 @@ export default {
 
                 .modal-body {
                     max-height: 300px;
+                }
+            }
+        }
+    }
+
+    @media only screen and ( max-width: 500px ) {
+        .tab-list {
+            .tab-title {
+                .tab-link {
+                    display: flex;
+                    a {
+                        padding: 12px;
+                        margin-left: 17px;
+
+                        span {
+                            display: block;
+                            margin: 0 auto;
+                        }
+                    }
+                }
+            }
+        }
+        .tab-contents p, .tab-contents input, .tab-contents button {
+            font-size: 13px;
+        }
+
+        .tab-contents {
+            .vendor-image {
+                display: block !important;
+                .picture {
+                    margin-right: 20px !important;
+                    width: auto !important;
+                }
+                .picture.banner {
+                    margin-top: 15px;
+                }
+            }
+        }
+    }
+
+    @media only screen and ( max-width: 375px ) {
+        .tab-list {
+            .tab-title {
+                .tab-link {
+                    display: flex;
+                    a {
+                        padding: 5px;
+                        margin-left: 20px;
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+        .tab-contents p, .tab-contents input, .tab-contents button {
+            font-size: 12px;
+        }
+    }
+
+    @media only screen and ( max-width: 320px ) {
+        .tab-list {
+            .tab-title {
+                .tab-link {
+                    display: flex;
+                    a {
+                        padding: 2px;
+                        margin-left: 20px;
+                        font-size: 10px;
+                    }
                 }
             }
         }
