@@ -23,7 +23,7 @@
                         <upload-image @uploadedImage="uploadBanner" :showButton="showButton" :buttonLabel="__( 'Upload Banner', 'dokan' )" />
                     </div>
 
-                    <p v-if="showButton" class="picture-footer">{{ __( 'Upload banner for your store. Banner size is (825x300) pixels', 'dokan' ) }}</p>
+                    <p v-if="showButton" class="picture-footer">{{ getUploadBannerText() }}</p>
                 </div>
             </div>
 
@@ -365,6 +365,13 @@ export default {
             }
 
             this.vendorInfo.notify_vendor = status;
+        },
+
+        getUploadBannerText() {
+            let width  = dokan.store_banner_dimension.width;
+            let height = dokan.store_banner_dimension.height;
+
+            return this.__( `Upload banner for your store. Banner size is (${width}x${height}) pixels.`, 'dokan' );
         }
 
     }
