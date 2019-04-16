@@ -13,6 +13,11 @@
                 </div>
 
                 <div class="column">
+                    <label for="">{{ __( 'Flickr', 'dokan' ) }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.social.flickr" :placeholder="__( 'https://exmaple.com' )">
+                </div>
+
+                <div class="column">
                     <label for="">{{ __( 'Google Plus', 'dokan' ) }}</label>
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.social.gplus" :placeholder="__( 'https://exmaple.com' )">
                 </div>
@@ -23,17 +28,17 @@
                 </div>
 
                 <div class="column">
-                    <label for="">{{ __( 'Instagram', 'dokan' ) }}</label>
+                    <label for="">{{ __( 'Youtube', 'dokan' ) }}</label>
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.social.youtube" :placeholder="__( 'https://exmaple.com' )">
                 </div>
 
                 <div class="column">
-                    <label for="">{{ __( 'Instagram', 'dokan' ) }}</label>
+                    <label for="">{{ __( 'Linkedin', 'dokan' ) }}</label>
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.social.linkedin" :placeholder="__( 'https://exmaple.com' )">
                 </div>
 
                 <div class="column">
-                    <label for="">{{ __( 'Instagram', 'dokan' ) }}</label>
+                    <label for="">{{ __( 'Pinterest', 'dokan' ) }}</label>
                     <input type="text" class="dokan-form-input" v-model="vendorInfo.social.pinterest" :placeholder="__( 'https://exmaple.com' )">
                 </div>
 
