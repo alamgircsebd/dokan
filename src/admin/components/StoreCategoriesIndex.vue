@@ -1,7 +1,7 @@
 <template>
     <div id="dokan-store-categories">
         <h1 class="wp-heading-inline">{{ __( 'Store Categories', 'dokan' ) }}</h1>
-        <form class="search-form wp-clearfix">
+        <form class="search-form wp-clearfix" @submit.prevent>
             <p class="search-box">
                 <lazy-input
                     v-model="search"
