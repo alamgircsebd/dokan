@@ -194,7 +194,7 @@ class Dokan_SPMV_Product_Duplicator {
     public function set_map_id( $map_id, $product_ids ) {
         global $wpdb;
 
-        $values = array();
+        $values = [];
         foreach ( $product_ids as $product_id ) {
             $seller_id = get_post_field( 'post_author', $product_id );
             $values[] = '(' . $map_id . ',' . $product_id . ',' . $seller_id . ')';

@@ -45,3 +45,27 @@ function dokan_spmv_get_product_clones( $product ) {
 
     return $clones;
 }
+
+/**
+ * Get product show order options
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_spmv_get_show_order_options() {
+    return apply_filters( 'dokan_spmv_show_order_options', [
+        [
+            'name'  => 'show_all',
+            'label' => __( 'Show all products', 'dokan' ),
+        ],
+        [
+            'name'  => 'min_price',
+            'label' => __( 'Min price', 'dokan' ),
+        ],
+        [
+            'name'  => 'max_price',
+            'label' => __( 'Max price', 'dokan' ),
+        ],
+    ] );
+}
