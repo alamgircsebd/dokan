@@ -134,7 +134,7 @@ export default {
             const mediaOptions = {
                 title: this.__('Select Image', 'dokan'),
                 button: {
-                    text: this.__('Select & Crop Image', 'dokan'),
+                    text: this.__('Select Image', 'dokan'),
                     close: false
                 },
                 multiple: false
@@ -164,6 +164,10 @@ export default {
 
                 callback(file);
 
+                self.fileFrame = null;
+            });
+
+            self.fileFrame.on('close', () => {
                 self.fileFrame = null;
             });
 

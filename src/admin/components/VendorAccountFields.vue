@@ -134,7 +134,7 @@
 import UploadImage from 'admin/components/UploadImage.vue';
 import PasswordGenerator from 'admin/components/passwordGenerator.vue';
 
-let debounce = dokan_get_lib( 'Debounce' );
+let debounce = dokan_get_lib( 'debounce' );
 let Switches = dokan_get_lib('Switches');
 
 export default {
