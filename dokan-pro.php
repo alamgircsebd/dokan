@@ -287,7 +287,7 @@ class Dokan_Pro {
             }
         }
 
-        if ( ! class_exists( 'Hybrid_Auth' ) ) {
+        if ( ! class_exists( 'Hybridauth' ) ) {
             require_once DOKAN_PRO_INC . '/lib/hybridauth/autoload.php';
         }
 
