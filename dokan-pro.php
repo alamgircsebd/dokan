@@ -47,6 +47,8 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
+        $this->define_constants();
+
         add_action( 'plugins_loaded', array( $this, 'check_dokan_lite_exist' ), 10 );
         add_action( 'dokan_loaded', array( $this, 'init_plugin' ), 10 );
     }
@@ -77,11 +79,9 @@ class Dokan_Pro {
      * @return void
      */
     public function init_plugin() {
-        $this->defined();
         spl_autoload_register( array( $this, 'dokan_pro_autoload' ) );
 
         $this->includes();
-
         $this->load_actions();
         $this->load_filters();
     }
@@ -224,7 +224,7 @@ class Dokan_Pro {
      *
      * @return void
      */
-    public function defined() {
+    public function define_constants() {
         define( 'DOKAN_PRO_PLUGIN_VERSION', $this->version );
         define( 'DOKAN_PRO_FILE', __FILE__ );
         define( 'DOKAN_PRO_DIR', dirname( __FILE__ ) );
