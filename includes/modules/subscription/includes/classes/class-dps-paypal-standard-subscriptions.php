@@ -159,14 +159,10 @@ class DPS_PayPal_Standard_Subscriptions {
             return $paypal_args;
         }
 
-        if ( get_post_meta( $product->get_id(), '_enable_recurring_payment', true ) == 'no' ) {
-            return $paypal_args;
-        }
-
         $subscription = dokan()->subscription->get( $product->get_id() );
 
         $paypal_args['cmd']       = '_xclick-subscriptions';
-        $paypal_args['item_name'] = $product->get_title();
+        $paypal_args['item_name'] = $subscription->get_package_title();
 
         $unconverted_periods = array(
             'billing_period' => $subscription->get_period_type(),
@@ -202,8 +198,7 @@ class DPS_PayPal_Standard_Subscriptions {
         $subscription_trial_lenth  = $subscription->get_trial_period_length();
 
         // We have a recurring payment
-        if ( ! isset( $param_number ) || $param_number == 1 ) {
-
+        if ( $subscription->is_recurring() ) {
             // if vendor has already used a trial pack, then make the tiral to a normal recurring pack
             if ( ! Helper::has_used_trial_pack( get_current_user_id() ) && $subscription->is_trial() ) {
                 // Trial period 1 price. For a free trial period, specify 0.
@@ -218,6 +213,15 @@ class DPS_PayPal_Standard_Subscriptions {
 
                 // trail period
                 $paypal_args['t1'] = $converted_periods['trial_period'];
+
+                // Subscription price
+                $paypal_args['a3'] = $initial_payment;
+
+                // Subscription duration
+                $paypal_args['p3'] = $subscription_interval;
+
+                // Subscription period
+                $paypal_args['t3'] = $converted_periods['billing_period'];
             } else {
                 // Subscription price
                 $paypal_args['a3'] = $initial_payment;
@@ -228,20 +232,33 @@ class DPS_PayPal_Standard_Subscriptions {
                 // Subscription period
                 $paypal_args['t3'] = $converted_periods['billing_period'];
             }
-        }
 
-        // Recurring payments
-        if ( $subscription_installments == 1 ) {
+            if ( $subscription_installments === 1 ) {
+                // Non-recurring payments
+                $paypal_args['src'] = 0;
+            } else {
+                $paypal_args['src'] = 1;
 
-            // Non-recurring payments
-            $paypal_args['src'] = 0;
-        } else {
+                if ( $subscription_installments < 2 || $subscription_installments > 52 ) {
+                    throw new Exception( __( 'Billing cycle can\'t be less than 2 or greater than 52 for PayPal', 'dokan' ) );
+                }
 
-            $paypal_args['src'] = 1;
-
-            if ( $subscription_installments > 0 ) {
                 $paypal_args['srt'] = $subscription_installments;
             }
+        }
+
+        // if non-recurring pack
+        if ( ! $subscription->is_recurring() ) {
+            $paypal_args['src'] = 0;
+
+            // Subscription price
+            $paypal_args['a3'] = $initial_payment;
+
+            // Subscription duration
+            $paypal_args['p3'] = $subscription->get_pack_valid_days();
+
+            // Subscription period
+            $paypal_args['t3'] = 'D';
         }
 
         // Force return URL so that order description & instructions display

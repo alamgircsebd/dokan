@@ -516,7 +516,7 @@ export default {
                                 });
                             } else if ( 'postcode' == key ) {
                                 // Render comma string from postcode location array
-                                self.postcode = _.pluck( locationResp[key], 'code').join(',');
+                                self.postcode = _.pluck( self.zoneLocation.postcode, 'code' ).join( ',' );
                             }
                         });
                     }

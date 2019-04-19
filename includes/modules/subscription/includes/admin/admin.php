@@ -625,12 +625,25 @@ class DPS_Admin {
             }
         }
 
+        // create a order for the subscription
+        try {
+            $order = new WC_Order();
+            $order->add_product( wc_get_product( $pack_id ) );
+            $order->set_created_via( 'dokan' );
+            $order->set_customer_id( $user_id );
+            $order->calculate_totals();
+            $order->set_status( 'completed' );
+            $order->save();
+        } catch( Exception $e ) {
+            return new WP_Error( 'dokan-order-error', $e->getMessage() );
+        }
+
         $pack_validity           = get_post_meta( $pack_id, '_pack_validity', true );
         $admin_commission        = get_post_meta( $pack_id, '_subscription_product_admin_commission', true );
         $admin_commission_type   = get_post_meta( $pack_id, '_subscription_product_admin_commission_type', true );
 
         update_user_meta( $user_id, 'product_package_id', $pack_id );
-        update_user_meta( $user_id, 'product_order_id', '' );
+        update_user_meta( $user_id, 'product_order_id', $order->get_id() );
         update_user_meta( $user_id, 'product_no_with_pack' , get_post_meta( $pack_id, '_no_of_product', true ) ); //number of products
         update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
 

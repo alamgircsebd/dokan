@@ -932,8 +932,8 @@ function dokan_add_category_commission_field() {
  * @return void
  */
 function dokan_edit_category_commission_field( $term ){
-    $commission = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission', true );
-    $commission_type = get_woocommerce_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
+    $commission      = get_term_meta( $term->term_id, 'per_category_admin_commission', true );
+    $commission_type = get_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
 
     if ( dokan_get_option( 'product_category_style', 'dokan_selling' ) !== 'single' ) {
         return;
@@ -974,11 +974,11 @@ function dokan_edit_category_commission_field( $term ){
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
 
     if ( isset( $_POST['per_category_admin_commission_type'] ) && 'product_cat' === $taxonomy ) {
-        update_woocommerce_term_meta( $term_id, 'per_category_admin_commission_type', esc_attr( $_POST['per_category_admin_commission_type'] ) );
+        update_term_meta( $term_id, 'per_category_admin_commission_type', esc_attr( $_POST['per_category_admin_commission_type'] ) );
     }
 
     if ( isset( $_POST['per_category_admin_commission'] ) && 'product_cat' === $taxonomy ) {
-        update_woocommerce_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
+        update_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
     }
 }
 

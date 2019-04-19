@@ -346,19 +346,20 @@ class Dokan_Product_Subscription {
      * @return void
      */
     function load_template_from_plugin( $query_vars ) {
+        if ( ! isset( $query_vars['subscription' ] ) ) {
+            return $query_vars;
+        }
 
         if ( current_user_can( 'vendor_staff' ) ) {
             return dokan_get_template_part( 'global/no-permission' );
         }
 
-        if ( isset( $query_vars['subscription'] ) ) {
-            $installed_version = get_option( 'dokan_theme_version' );
+        $installed_version = get_option( 'dokan_theme_version' );
 
-            if ( $installed_version > '2.3' ) {
-                dokan_get_template_part( 'subscription/product_subscription_plugin_new', '', array( 'is_subscription' => true ) );
-            } else {
-                dokan_get_template_part( 'subscription/product_subscription_plugin', '', array( 'is_subscription' => true ) );
-            }
+        if ( $installed_version > '2.3' ) {
+            dokan_get_template_part( 'subscription/product_subscription_plugin_new', '', array( 'is_subscription' => true ) );
+        } else {
+            dokan_get_template_part( 'subscription/product_subscription_plugin', '', array( 'is_subscription' => true ) );
         }
     }
 

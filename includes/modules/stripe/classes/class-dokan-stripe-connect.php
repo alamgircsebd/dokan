@@ -607,11 +607,14 @@ class Dokan_Stripe_Connect extends WC_Payment_Gateway {
                 $existing->cancel();
             }
 
-            $customer       = \Stripe\Customer::retrieve( $customer_id );
-            $subscription   = $customer->subscriptions->create( array( 'plan' => $product_pack_id ) );
-            $transaction_id = $subscription->id;
+            $customer     = \Stripe\Customer::retrieve( $customer_id );
+            $subscription = $customer->subscriptions->create( [
+                'plan'            => $product_pack_id,
+                'trial_from_plan' => true
+            ] );
 
-            $add_s = ( $subscription_interval != 1 ) ? 's' : '';
+            $transaction_id                = $subscription->id;
+            $add_s                         = ( $subscription_interval != 1 ) ? 's' : '';
             $charge_ids[$customer_user_id] = $transaction_id;
 
             update_user_meta( $customer_user_id, '_stripe_subscription_id', $transaction_id );

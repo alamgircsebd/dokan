@@ -274,7 +274,7 @@ class Dokan_RMA_Order {
         $warranty       = $this->get_settings( $_product_id );
         $warranty_label = $warranty['label'];
 
-        if ( $warranty ) {
+        if ( $warranty && 'no_warranty' !== $warranty['type'] ) {
             $item_id = $item->save();
 
             if ( $warranty['type'] == 'addon_warranty' ) {
