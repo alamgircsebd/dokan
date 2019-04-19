@@ -297,7 +297,14 @@ class SubscriptionPack extends VendorSubscription {
      * @return int
      */
     public function get_period_length() {
-        return get_post_meta( $this->get_id(), '_subscription_length', true );
+        $length = (int) get_post_meta( $this->get_id(), '_subscription_length', true );
+
+        // if billing cycle stop selected to never(0), make it 52 ( max for paypal )
+        if ( ! $length ) {
+            $length = 52;
+        }
+
+        return $length;
     }
 
     /**
