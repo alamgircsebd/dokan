@@ -437,10 +437,32 @@ if ( class_exists( 'WooCommerce' ) ) {
                 $is_available = true;
             }
 
-
             if ( isset( $location_group['postcode'] ) ) {
                 $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
-                $postcode_array = array_map( 'trim', $postcode_array );
+
+                // if postcode is set as ranges (e.g. 10001...10010)
+                if ( strstr( $postcode_array[0], '...' ) ) {
+                    $range = array_map( 'trim', explode( '...', $postcode_array[0] ) );
+
+                    if ( 2 !== count( $range ) ) {
+                        return false;
+                    }
+
+                    list( $min, $max ) = $range;
+
+                    // If the postcode is non-numeric, make it numeric.
+                    if ( ! is_numeric( $min ) || ! is_numeric( $max ) ) {
+                        $min = str_pad( wc_make_numeric_postcode( $min ), strlen( $compare ), '0' );
+                        $max = str_pad( wc_make_numeric_postcode( $max ), strlen( $compare ), '0' );
+                    }
+
+                    $postcode_array = range( $min, $max );
+
+                } else if ( strstr( $postcode_array[0], '*' ) ) {
+                    return true;
+                } else {
+                    $postcode_array = array_map( 'trim', $postcode_array );
+                }
 
                 if ( ! in_array( $destination_postcode, $postcode_array ) ) {
                     return false;
