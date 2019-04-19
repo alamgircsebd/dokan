@@ -35,7 +35,6 @@ class Registration {
     function init_hooks() {
         add_action( 'dokan_seller_registration_field_after', array( $this, 'generate_form_fields' ) );
         add_action( 'dokan_after_seller_migration_fields', array( $this, 'generate_form_fields') );
-        add_action( 'register_form', array( $this, 'generate_form_fields') );
         add_filter( 'woocommerce_registration_redirect', array( $this, 'redirect_to_checkout' ), 99, 1 );
         add_filter( 'dokan_customer_migration_required_fields', array( $this, 'add_subscription_to_dokan_customer_migration_required_fields' ) );
         add_filter( 'dokan_customer_migration_redirect', array( $this, 'redirect_after_migration' ) );
