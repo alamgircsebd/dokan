@@ -10,7 +10,7 @@
                     <p class="picture-header">{{ __( 'Vendor Picture', 'dokan' ) }}</p>
 
                     <div class="profile-image">
-                        <upload-image @uploadedImage="uploadGravatar" />
+                        <upload-image @uploadedImage="uploadGravatar" :croppingWidth="150" :croppingHeight="150" />
                     </div>
 
                     <p class="picture-footer"

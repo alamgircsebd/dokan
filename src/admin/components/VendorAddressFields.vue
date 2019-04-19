@@ -8,33 +8,33 @@
             <div class="dokan-form-group">
 
                 <div class="column">
-                    <label for="street-1">{{ __( 'Stree 1', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.street_1" :placeholder="__( 'Type here', 'dokan')">
+                    <label for="street-1">{{ __( 'Street 1', 'dokan') }}</label>
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.street_1" :placeholder="__( 'Street 1', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="street-2">{{ __( 'Street 2', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.street_2" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.street_2" :placeholder="__( 'Street 2', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="city">{{ __( 'City', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.city" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.city" :placeholder="__( 'City', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="zip">{{ __( 'Zip', 'dokan') }}</label>
-                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.zip" :placeholder="__( 'Type here', 'dokan')">
+                    <input type="text" class="dokan-form-input" v-model="vendorInfo.address.zip" :placeholder="__( 'Zip', 'dokan')">
                 </div>
 
                 <div class="column">
                     <label for="country">{{ __( 'Country', 'dokan') }}</label>
-                    <Multiselect @input="saveCountry" v-model="selectedCountry" :options="countries" :multiselect="false" label="name" track-by="name" :placeholder="__( 'Select Country', 'dokan' )" />
+                    <Multiselect @input="saveCountry" v-model="selectedCountry" :options="countries" :multiselect="false" label="name" track-by="name" :showLabels="false" :placeholder="__( 'Select Country', 'dokan' )" />
                 </div>
 
                 <div class="column">
                     <label for="state">{{ __( 'State', 'dokan') }}</label>
-                    <Multiselect @input="saveState" v-model="selectedState" :options="getStatesFromCountryCode( selectedCode )" :multiselect="false" label="name" track-by="name" :placeholder="__( 'Select State', 'dokan' )" />
+                    <Multiselect @input="saveState" v-model="selectedState" :options="getStatesFromCountryCode( selectedCode )" :multiselect="false" :showLabels="false" label="name" track-by="name" :placeholder="__( 'Select State', 'dokan' )" />
                 </div>
 
                 <!-- Add other address fields here -->

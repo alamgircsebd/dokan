@@ -45,7 +45,7 @@
 
                     <div :class="{'profile-icon': true, 'edit-mode': editMode}">
                         <template v-if="editMode">
-                            <upload-image @uploadedImage="uploadGravatar" :src="store.gravatar ? store.gravatar : getDefaultPic()" />
+                            <upload-image @uploadedImage="uploadGravatar" :croppingWidth="150" :croppingHeight="150" :src="store.gravatar ? store.gravatar : getDefaultPic()" />
                         </template>
                         <template v-else>
                             <img :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name">
@@ -157,8 +157,8 @@
                     </div>
                     <div :class="{'action-links': true, 'edit-mode': editMode}">
                         <template v-if="editMode">
-                            <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }} <span class="dashicons dashicons-no-alt"></span></button>
-                            <button @click="updateStore" class="button button-primary">{{ saveBtn }} <span class="dashicons dashicons-yes"></span></button>
+                            <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }}</button>
+                            <button @click="updateStore" class="button button-primary">{{ saveBtn }}</button>
                         </template>
 
                         <template v-else>
@@ -221,7 +221,7 @@
                         <ul class="counts">
                             <li class="commision">
                                 <span class="count">{{ getEearningRate }}</span>
-                                <span class="subhead">{{ __( 'Earning Rate', 'dokan' ) }}</span>
+                                <span class="subhead">{{ __( 'Commission Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
                                 <span class="count">
@@ -291,8 +291,8 @@
 
             <div :class="{'action-links': true, 'footer': true, 'edit-mode': editMode}">
                 <template v-if="editMode">
-                    <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }} <span class="dashicons dashicons-no-alt"></span></button>
-                    <button @click="updateStore" class="button button-primary">{{ saveBtn }} <span class="dashicons dashicons-yes"></span></button>
+                    <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }}</button>
+                    <button @click="updateStore" class="button button-primary">{{ saveBtn }}</button>
                 </template>
             </div>
 
@@ -463,7 +463,7 @@ export default {
             if ( this.stats.others.commission_type == 'percentage' ) {
                 return this.stats.others.commission_rate + '%';
             } else {
-                return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' );
+                return accounting.formatMoney( this.stats.others.commission_rate );
             }
         },
 
@@ -1202,7 +1202,7 @@ export default {
                         color: #FB0A4C;
 
                         &:before { background-color: #FB0A4C; }
-                        &:after { content: "\f513"; }
+                        &:after { content: "\f524"; }
                     }
 
                     &.balance {

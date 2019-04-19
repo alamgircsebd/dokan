@@ -1,6 +1,6 @@
 <template>
     <div class="password-generator">
-        <button class="button button-primary" v-if="! hideGenerateButton" @click.prevent="generatePassword">
+        <button class="button button-secondary" v-if="! hideGenerateButton" @click.prevent="generatePassword">
             {{ title }}
         </button>
 

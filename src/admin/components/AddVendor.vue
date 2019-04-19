@@ -414,12 +414,10 @@ export default {
 
                         .is-available {
                             color: green;
-                            font-weight: 600;
                         }
 
                         .not-available {
                             color: red;
-                            font-weight: 600;
                         }
                     }
 
@@ -437,6 +435,10 @@ export default {
 
                     .checkbox-left.notify-vendor {
                         margin-top: 6px;
+                    }
+
+                    .multiselect__option--highlight {
+                        background: #3c9fd4;
                     }
                 }
 

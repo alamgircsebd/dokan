@@ -26,6 +26,12 @@ export default {
         buttonLabel: {
             type: String,
             default: 'Upload Image'
+        },
+        croppingWidth: {
+            type: Number
+        },
+        croppingHeight: {
+            type: Number
         }
     },
 
@@ -78,8 +84,8 @@ export default {
            const cropControl = {
                id: "control-id",
                params: {
-                    width: parseInt( dokan.store_banner_dimension.width, 10 ),
-                    height: parseInt( dokan.store_banner_dimension.height, 10 ),
+                    width: this.croppingWidth ? parseInt( this.croppingWidth, 10 ) : parseInt( dokan.store_banner_dimension.width, 10 ),
+                    height: this.croppingHeight ? parseInt( this.croppingHeight, 10 ) : parseInt( dokan.store_banner_dimension.height, 10 ),
                     flex_width: !! parseInt( dokan.store_banner_dimension['flex-width'], 10 ),
                     flex_height: !! parseInt( dokan.store_banner_dimension['flex-height'], 10 ),
                }
@@ -89,7 +95,6 @@ export default {
 
             // If the width and height are both flexible
             // then the user does not need to crop the image.
-
             if ( true === flexW && true === flexH ) {
                 return false;
             }
@@ -189,8 +194,8 @@ export default {
          * @return object
          */
         calculateImageSelectOptions: function(attachment, controller) {
-            let xInit      = parseInt( dokan.store_banner_dimension.width, 10 );
-            let yInit      = parseInt( dokan.store_banner_dimension.height, 10 );
+            let xInit      = this.croppingWidth ? parseInt( this.croppingWidth, 10 ) : parseInt( dokan.store_banner_dimension.width, 10 );
+            let yInit      = this.croppingHeight ? parseInt( this.croppingHeight, 10 ) : parseInt( dokan.store_banner_dimension.height, 10 );
             let flexWidth  = !! parseInt( dokan.store_banner_dimension['flex-width'], 10 );
             let flexHeight = !! parseInt( dokan.store_banner_dimension['flex-height'], 10 );
 
