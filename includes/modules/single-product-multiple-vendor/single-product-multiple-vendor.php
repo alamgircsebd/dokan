@@ -34,9 +34,9 @@ class Dokan_Single_Product_Multi_Vendor {
     }
 
     /**
-     * Initializes the Dokan_Auction() class
+     * Initializes the Dokan_Single_Product_Multi_Vendor() class
      *
-     * Checks for an existing Dokan_Auction() instance
+     * Checks for an existing Dokan_Single_Product_Multi_Vendor() instance
      * and if it doesn't find one, creates it.
      */
     public static function init() {
@@ -143,6 +143,7 @@ class Dokan_Single_Product_Multi_Vendor {
                 `product_id` bigint(20) DEFAULT NULL,
                 `seller_id` bigint(20) DEFAULT NULL,
                 `is_trash` tinyint(4) NOT NULL DEFAULT '0',
+                `visibility` tinyint(1) DEFAULT '1',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
