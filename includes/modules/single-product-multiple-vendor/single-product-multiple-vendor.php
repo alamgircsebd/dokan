@@ -80,6 +80,7 @@ class Dokan_Single_Product_Multi_Vendor {
         }
 
         require_once DOKAN_SPMV_INC_DIR . '/products.php';
+        require_once DOKAN_SPMV_INC_DIR . '/product-visibility.php';
     }
 
     /**
@@ -92,7 +93,6 @@ class Dokan_Single_Product_Multi_Vendor {
     public function initiate() {
         if ( is_admin() ) {
             new Dokan_SPMV_Admin();
-            new Dokan_SPMV_Products_Admin();
         }
 
         new Dokan_SPMV_Products();
@@ -112,7 +112,12 @@ class Dokan_Single_Product_Multi_Vendor {
             return;
         }
 
-        //tinysort.min.js
+        if ( is_admin() ) {
+            new Dokan_SPMV_Products_Admin();
+        }
+
+        new Dokan_SPMV_Product_Visibility();
+
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
     }
 

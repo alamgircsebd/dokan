@@ -143,7 +143,7 @@ class Dokan_SPMV_Products_Admin {
                 foreach ( $results as $vendor ) {
                     $vendors[] = [
                         'id'     => $vendor->get_id(),
-                        'name'   => $vendor->get_shop_name(),
+                        'name'   => $vendor->get_name(),
                         'avatar' => $vendor->get_avatar(),
                     ];
                 }

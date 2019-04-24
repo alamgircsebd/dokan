@@ -69,3 +69,93 @@ function dokan_spmv_get_show_order_options() {
         ],
     ] );
 }
+
+/**
+ * Update visibilities for a group of cloned products
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param int $map_id
+ *
+ * @return array
+ */
+function dokan_spmv_update_clone_visibilities( $map_id ) {
+    global $wpdb;
+
+    $table_name = $wpdb->prefix . 'dokan_product_map';
+    $show_order = dokan_get_option( 'show_order', 'dokan_spmv', 'show_all' );
+
+    $product_ids = $wpdb->get_col( $wpdb->prepare(
+        "select product_id from {$table_name} where map_id = %d",
+        $map_id
+    ) );
+
+    $clones = wc_get_products( [
+        'post_status' => 'publish',
+        'include'    => $product_ids,
+        'orderby'     => 'ID',
+        'order'       => 'ASC'
+    ] );
+
+    $has_diff = false;
+
+    @usort( $clones, function ( $a, $b ) use ( $show_order, &$has_diff ) {
+        switch ( $show_order ) {
+            case 'max_price':
+                $diff = $b->get_price() - $a->get_price();
+                break;
+
+            case 'min_price':
+            default:
+                $diff = $a->get_price() - $b->get_price();
+                break;
+        }
+
+        $has_diff = $diff || false;
+
+        return apply_filters( 'dokan_spmv_cloned_product_order', $diff, $a, $b, $show_order );
+    } );
+
+    // If a group of products has no difference, then we should show them all.
+    // If there is a difference, then we'll hide them all first by making visibilty 0
+    // and set 1 for the first one from sorted array.
+    $wpdb->update(
+        $table_name,
+        [
+            'visibility' => $has_diff ? 0 : 1
+        ],
+        [
+            'map_id' => $map_id
+        ],
+        [
+            '%d',
+        ],
+        [
+            '%d',
+        ]
+    );
+
+    if ( $has_diff ) {
+        $clone = $clones[0];
+
+        $wpdb->update(
+            $table_name,
+            [
+                'visibility' => 1,
+            ],
+            [
+                'map_id'     => $map_id,
+                'product_id' => $clone->get_id(),
+            ],
+            [
+                '%d',
+            ],
+            [
+                '%d',
+                '%d',
+            ]
+        );
+    }
+
+    return $clones;
+}
