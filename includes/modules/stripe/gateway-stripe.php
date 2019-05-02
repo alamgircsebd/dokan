@@ -121,6 +121,13 @@ class Dokan_Stripe {
                     $available_vendors[get_post_field( 'post_author', $product_id )][] = $item['data'];
                 }
 
+                // if it's subscription product return early
+                $subscription_product = wc_get_product( $product_id );
+
+                if ( $subscription_product && 'product_pack' === $subscription_product->get_type() ) {
+                    return;
+                }
+
                 $vendor_names = array();
 
                 foreach ( array_keys( $available_vendors ) as $vendor_id ) {
