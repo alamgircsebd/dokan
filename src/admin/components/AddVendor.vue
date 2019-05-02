@@ -166,6 +166,8 @@ export default {
 
                 dokan.api.post( '/stores/', this.store )
                 .done( ( response ) => {
+                    this.$root.$emit( 'vendorAdded', response );
+
                     this.$swal( {
                         type: 'success',
                         title: this.__( 'Vendor Created', 'dokan' ),
@@ -178,12 +180,9 @@ export default {
                     } )
                     .then( ( result ) => {
                         if ( result.value ) {
-                            this.$router.push( { path: 'vendors/', query:{ addnew: 'true' } } );
-                            location.reload();
+                            this.$root.$emit( 'addAnotherVendor' );
                         } else if ( result.dismiss === this.$swal.DismissReason.cancel ) {
                             this.$router.push( { path: 'vendors/' + response.id, query:{ edit: 'true' } } );
-                        } else {
-                            location.reload();
                         }
                     } );
                 } )
@@ -250,6 +249,11 @@ export default {
 }
 
 .dokan-vendor-edit {
+    h1 {
+        font-size: 23px;
+        font-weight: 400;
+    }
+
     .tab-header {
 
         .tab-list {
@@ -437,8 +441,34 @@ export default {
                         margin-top: 6px;
                     }
 
+                    .multiselect {
+                        margin-top: 5px;
+                    }
+
                     .multiselect__option--highlight {
                         background: #3c9fd4;
+                    }
+
+                    .multiselect__tags {
+                        min-height: 45px;
+                    }
+
+                    .multiselect__single {
+                        padding-top: 3px;
+                    }
+
+                    .multiselect__select {
+                        &:before {
+                            top: 70%;
+                        }
+                    }
+
+                    .multiselect__input {
+                        &:focus {
+                            box-shadow: none;
+                            border: none;
+                            outline: none;
+                        }
                     }
                 }
 
@@ -457,6 +487,10 @@ export default {
                 margin-bottom: 16px; /* Bottom margin */
                 resize: vertical; /* Allow the user to vertically resize the textarea (not horizontally) */
                 height: auto
+            }
+
+            .dokan-form-input::placeholder {
+                color: #bcbcbc;
             }
 
             .dokan-form-input.has-error::placeholder {
@@ -499,12 +533,10 @@ export default {
                     padding-top: 5%;
 
                     .banner-image {
-                        // padding-top: 5%;
                         img {
                             width: 100%;
                             height: 223px;
                             padding: 0;
-                            // padding: 15px 15px 0 15px;
                         }
 
                         button {

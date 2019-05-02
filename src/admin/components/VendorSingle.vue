@@ -45,13 +45,13 @@
 
                     <div :class="{'profile-icon': true, 'edit-mode': editMode}">
                         <template v-if="editMode">
-                            <upload-image @uploadedImage="uploadGravatar" :croppingWidth="150" :croppingHeight="150" :src="store.gravatar ? store.gravatar : getDefaultPic()" />
+                            <upload-image @uploadedImage="uploadGravatar" :croppingWidth="150" :croppingHeight="150" :src="store.gravatar_id && store.gravatar ? store.gravatar : getDefaultPic()" />
                         </template>
                         <template v-else>
                             <img :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name">
                         </template>
-                        <span class="edit-photo" v-if="editMode">
-                            {{ __( 'Change store photo', 'dokan' ) }}
+                        <span class="edit-photo" v-if="editMode" :style="{color: ! store.gravatar_id ? 'black' : '' }">
+                            {{ __( 'Change Store Photo', 'dokan' ) }}
                         </span>
                     </div>
 
@@ -697,6 +697,11 @@ export default {
         height: auto;
     }
 
+    .dokan-form-input::placeholder {
+        color: #bcbcbc;
+    }
+
+
     * {
         box-sizing: border-box;
     }
@@ -763,12 +768,13 @@ export default {
                 }
 
                 .button.visit-store {
-                    background: #FD563A;
-                    border-color: #FD563A;
+                    background: #0085ba;
+                    border-color: #0085ba;
                     color: #fff;
 
                     &:hover {
-                        background: darken(#FD563A, 5%);
+                        background: #008ec2;
+                        border-color: #006799;
                     }
 
                     .dashicons {
@@ -806,6 +812,7 @@ export default {
                 top: 46px;
                 color: white;
                 width: 80px;
+                // color: black;
             }
 
             img {
@@ -816,6 +823,11 @@ export default {
         }
 
         .profile-icon.edit-mode {
+            .dokan-upload-image {
+                max-width: 120px;
+                margin: 0 auto;
+            }
+
             img {
                 border: 5px solid #1a9ed4;
 
@@ -1308,6 +1320,12 @@ export default {
     }
 
     .vendor-other-info {
+        .content-header {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            padding-left: 12px !important;
+        }
+
         .address-social-info {
             display: flex;
             justify-content: space-between;
@@ -1363,6 +1381,36 @@ export default {
                 }
             }
         }
+
+        .multiselect {
+            margin-top: 5px;
+        }
+
+        .multiselect__select {
+            &:before {
+                top: 55%;
+            }
+        }
+
+        .multiselect__tags {
+            min-height: 34px;
+        }
+
+        .multiselect__single {
+            font-size: 14px;
+            padding-left: 0px;
+            margin-bottom: 4px;
+            margin-top: -2px;
+        }
+
+        .multiselect__input {
+            &:focus {
+                box-shadow: none;
+                border: none;
+                outline: none;
+            }
+        }
+
     }
 }
 

@@ -34,7 +34,12 @@
 
                 <div class="column">
                     <label for="state">{{ __( 'State', 'dokan') }}</label>
-                    <Multiselect @input="saveState" v-model="selectedState" :options="getStatesFromCountryCode( selectedCode )" :multiselect="false" :showLabels="false" label="name" track-by="name" :placeholder="__( 'Select State', 'dokan' )" />
+                    <template v-if="getStatesFromCountryCode(selectedCode).length < 1">
+                        <input class="dokan-form-input" type="text" v-model="vendorInfo.address.state" :placeholder="__( 'State', 'dokan' )">
+                    </template>
+                    <template v-else>
+                        <Multiselect @input="saveState" v-model="selectedState" :options="getStatesFromCountryCode( selectedCode )" :multiselect="false" :showLabels="false" label="name" track-by="name" :placeholder="__( 'Select State', 'dokan' )" />
+                    </template>
                 </div>
 
                 <!-- Add other address fields here -->

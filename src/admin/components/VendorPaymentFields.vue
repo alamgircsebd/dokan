@@ -59,16 +59,10 @@
                 <!-- Admin commission only load on vendor edit page -->
                 <template v-if="getId()">
                     <div class="column">
-                        <label>{{ __( 'Admin Commission Type', 'dokan' ) }}</label>
-
                         <div class="column">
-                            <select class="dokan-form-select" v-model="vendorInfo.admin_commission_type">
-                                <option disabled value="">{{ __( 'Please Select One', 'dokan' ) }}</option>
-                                <option value="flat">{{ __( 'Flat', 'dokan' )  }}</option>
-                                <option value="percentage">{{ __( 'Percentage', 'dokan' ) }}</option>
-                            </select>
+                            <label>{{ __( 'Admin Commission Type', 'dokan' ) }}</label>
+                            <Multiselect @input="saveCommissionType" v-model="selectedCommissionType" :options="commissionTypes" :multiselect="false" :searchable="false" :showLabels="false" :placeholder="__( 'Please Select One', 'dokan' )" />
                         </div>
-
                     </div>
 
                     <div class="column">
@@ -112,12 +106,14 @@
 
 <script>
 let Switches = dokan_get_lib('Switches');
+let Multiselect = dokan_get_lib('Multiselect');
 
 export default {
     name: 'VendorPaymentFields',
 
     components: {
         Switches,
+        Multiselect
     },
 
     props: {
@@ -131,6 +127,11 @@ export default {
             enabled: false,
             trusted: false,
             featured: false,
+            commissionTypes: [
+                'Flat',
+                'Percentage'
+            ],
+            selectedCommissionType: '',
             getBankFields: dokan.hooks.applyFilters( 'getVendorBankFields', [] ),
             getPyamentFields: dokan.hooks.applyFilters( 'AfterPyamentFields', [] ),
         }
@@ -150,6 +151,12 @@ export default {
         if ( this.vendorInfo.featured ) {
             this.featured = true;
             this.vendorInfo.featured = true
+        }
+
+        let commissionType = this.vendorInfo.admin_commission_type;
+
+        if ( '' !== commissionType ) {
+            this.selectedCommissionType = commissionType.charAt( 0 ).toUpperCase() + commissionType.slice( 1 );
         }
     },
 
@@ -183,6 +190,14 @@ export default {
         getId() {
             return this.$route.params.id;
         },
+
+        saveCommissionType( value ) {
+            if ( ! value ) {
+                return;
+            }
+
+            this.vendorInfo.admin_commission_type = value.toLowerCase();
+        }
 
     }
 

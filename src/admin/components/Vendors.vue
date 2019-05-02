@@ -213,9 +213,13 @@ export default {
             this.fetchCategories();
         }
 
-        if ( this.$route.query.addnew && this.$route.query.addnew === 'true' ) {
+        this.$root.$on( 'vendorAdded', ( payload ) => {
+            this.vendors.unshift( payload );
+        } );
+
+        this.$root.$on( 'addAnotherVendor', () => {
             this.loadAddVendor = true;
-        }
+        } );
     },
 
     methods: {

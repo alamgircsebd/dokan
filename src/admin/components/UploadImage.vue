@@ -16,7 +16,6 @@ export default {
 
     props: {
         src: {
-            type: String,
             default: dokan.urls.proAssetsUrl + '/images/store-pic.png',
         },
         showButton: {
