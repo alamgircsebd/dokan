@@ -209,6 +209,7 @@ let Currency    = dokan_get_lib('Currency');
 let Datepicker  = dokan_get_lib('Datepicker');
 let Multiselect = dokan_get_lib('Multiselect');
 let ListTable   = dokan_get_lib('ListTable');
+let debounce    = dokan_get_lib('debounce');
 
 export default {
     name: 'Reports',
@@ -449,18 +450,23 @@ export default {
             return yearRange;
         },
 
-        searchStore(payload) {
+        searchStore: debounce( function( payload ) {
             this.isLoading = true;
 
+            if ( ! payload ) {
+                return this.isLoading = false;
+            }
+
             dokan.api.get(`/stores?search=${payload}`)
-            .done(response => {
+            .done( response => {
                 this.getStoreList = response.map((store) => {
                     return { id: store.id, name: store.store_name };
-                })
+                } )
 
                 this.isLoading = false;
-            });
-        },
+            } );
+
+        }, 300 ),
 
         prepareVendorView() {
             this.showDatePicker  = true;
