@@ -274,7 +274,7 @@ export default {
                     label: this.__( 'Status', 'dokan' )
                 },
                 'date' : {
-                    label: this.__( 'date', 'dokan' )
+                    label: this.__( 'Date', 'dokan' )
                 }
             },
             logs: []
@@ -539,13 +539,16 @@ export default {
             let array = typeof data != 'object' ? JSON.parse(data) : data;
             let str = '';
 
+            str += '"Order ID", "Vendor ID", "Vendor Name", "Order Total", "Refund Total", "Vendor Earning", "Commission", "Status", "Date"';
+            str += '\r\n';
+
             for (let i = 0; i < array.length; i++) {
                 let line = '';
 
                 for (let index in array[i]) {
                     if (line != '') line += ',';
 
-                    if ( 'commission' == index || 'previous_order_total' == index || 'order_total' == index || 'vendor_earning' == index ) {
+                    if ( 'commission' == index || 'previous_order_total' == index || 'vendor_earning' == index ) {
                         line += '"' + accounting.formatMoney(
                             array[i][index],
                             '',
@@ -556,6 +559,23 @@ export default {
                         ) + '"';
                     } else if ( 'has_refund' == index ) {
                         line += '';
+                    } else if ( 'order_total' == index ) {
+
+                        // if there is refund for an order, calculate refund total
+                        let total_refund = 0;
+
+                        if ( array[i]['has_refund'] ) {
+                            total_refund = array[i]['previous_order_total'] - array[i]['order_total'];
+                        }
+
+                        line += '"' + accounting.formatMoney(
+                            total_refund,
+                            '',
+                            dokan.precision,
+                            dokan.currency.thousand,
+                            dokan.currency.decimal,
+                            dokan.currency.format
+                        ) + '"';
                     } else {
                         line += '"' + array[i][index] +'"';
                     }
