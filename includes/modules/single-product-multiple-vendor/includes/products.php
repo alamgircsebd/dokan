@@ -16,7 +16,7 @@ class Dokan_SPMV_Products {
         $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'off' );
         $display_position = dokan_get_option( 'available_vendor_list_position', 'dokan_spmv', 'below_tabs' );
 
-        if ( 'off' == $enable_option ) {
+        if ( ! filter_var( $enable_option, FILTER_VALIDATE_BOOLEAN ) ) {
             return;
         }
 
