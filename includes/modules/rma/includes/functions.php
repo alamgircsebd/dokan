@@ -384,7 +384,7 @@ function dokan_save_warranty_request( $data = [] ) {
             'type'        => $data['type'],
             'status'      => $data['status'],
             'reasons'     => $data['reasons'],
-            'details'     => $data['details'],
+            'details'     => wp_kses_post( $data['details'] ),
             'note'        => $data['note'],
             'created_at'  => $data['created_at'],
         ],

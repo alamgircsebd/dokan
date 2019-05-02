@@ -60,6 +60,7 @@ class Dokan_Single_Product_Multi_Vendor {
         define( 'DOKAN_SPMV_DIR', dirname( __FILE__ ) );
         define( 'DOKAN_SPMV_INC_DIR', DOKAN_SPMV_DIR . '/includes' );
         define( 'DOKAN_SPMV_ASSETS_DIR', plugins_url( 'assets', __FILE__ ) );
+        define( 'DOKAN_SPMV_VIEWS', DOKAN_SPMV_DIR . '/views' );
     }
 
     /**
@@ -70,8 +71,12 @@ class Dokan_Single_Product_Multi_Vendor {
      * @return void
      */
     public function includes() {
+        require_once DOKAN_SPMV_INC_DIR . '/functions.php';
+        require_once DOKAN_SPMV_INC_DIR . '/product-duplicator.php';
+
         if ( is_admin() ) {
             require_once DOKAN_SPMV_INC_DIR . '/admin.php';
+            require_once DOKAN_SPMV_INC_DIR . '/products-admin.php';
         }
 
         require_once DOKAN_SPMV_INC_DIR . '/products.php';
@@ -87,6 +92,7 @@ class Dokan_Single_Product_Multi_Vendor {
     public function initiate() {
         if ( is_admin() ) {
             new Dokan_SPMV_Admin();
+            new Dokan_SPMV_Products_Admin();
         }
 
         new Dokan_SPMV_Products();

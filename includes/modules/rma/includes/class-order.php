@@ -139,8 +139,9 @@ class Dokan_RMA_Order {
             $data['status'] = $_GET['status'];
         }
 
-        $data['number'] = $item_per_page;
-        $data['offset'] = $offset;
+        $data['number']      = $item_per_page;
+        $data['offset']      = $offset;
+        $data['customer_id'] = dokan_get_current_user_id();
 
         if( $total_page > 1 ){
             $pagination_html = '<div class="pagination-wrap">';

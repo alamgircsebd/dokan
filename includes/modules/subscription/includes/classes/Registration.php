@@ -39,6 +39,7 @@ class Registration {
         add_filter( 'dokan_customer_migration_required_fields', array( $this, 'add_subscription_to_dokan_customer_migration_required_fields' ) );
         add_filter( 'dokan_customer_migration_redirect', array( $this, 'redirect_after_migration' ) );
         add_action( 'woocommerce_thankyou', array( $this, 'redirect_to_seller_setup_wizard_after_checkout' ) );
+        add_action( 'dokan_seller_wizard_introduction', array( $this, 'make_vendor_has_seen_setup_wizard' ) );
     }
 
     /**
@@ -202,19 +203,55 @@ class Registration {
             return;
         }
 
-        $redirect_url = get_site_url() . '/?page=dokan-seller-setup';
-
-        if ( Helper::is_subscription_product( $product_id ) ) {
-            ?>
-            <script>
-                jQuery(document).ready(function() {
-                    setTimeout(function(){
-                        window.location.replace("<?php echo $redirect_url; ?>");
-                    }, 3000);
-                });
-            </script>
-            <?php
+        if ( ! Helper::is_subscription_product( $product_id ) ) {
+            return;
         }
+
+        $redirect_url             = get_site_url() . '/?page=dokan-seller-setup';
+        $is_setup_wizard_disabled = dokan_get_option( 'disable_welcome_wizard', 'dokan_selling', 'off' );
+        $is_setup_wizard_disabled = 'on' === $is_setup_wizard_disabled ? true : false;
+
+        if ( $is_setup_wizard_disabled || $this->vendor_has_seen_setup_wizard() ) {
+            return;
+        }
+
+        ?>
+        <script>
+            jQuery(document).ready(function() {
+                setTimeout(function(){
+                    window.location.replace("<?php echo $redirect_url; ?>");
+                }, 3000);
+            });
+        </script>
+        <?php
+    }
+
+    /**
+     * Vendor has seen setup wizard
+     *
+     * @since  DOKAN_PLUGIN_SINCE
+     *
+     * @return void
+     */
+    public function make_vendor_has_seen_setup_wizard( $store ) {
+        $vendor_id = $store->store_id;
+
+        if ( ! $vendor_id ) {
+            return;
+        }
+
+        update_user_meta( $vendor_id, 'dokan_vendor_seen_setup_wizard', true );
+    }
+
+    /**
+     * Check whether vendor has seen setup wizard or not
+     *
+     * @since  DOKAN_PLUGIN_SINCE
+     *
+     * @return boolean
+     */
+    public function vendor_has_seen_setup_wizard() {
+        return get_user_meta( dokan_get_current_user_id(), 'dokan_vendor_seen_setup_wizard', true );
     }
 }
 

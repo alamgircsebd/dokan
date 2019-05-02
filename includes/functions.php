@@ -18,9 +18,7 @@
 if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
 
 	function dokan_get_profile_progressbar() {
-	    global $current_user;
-
-        $profile_info  = dokan_get_store_info( $current_user->ID );
+        $profile_info  = dokan_get_store_info( dokan_get_current_user_id() );
         $progress      = isset( $profile_info['profile_completion']['progress'] ) ? $profile_info['profile_completion']['progress'] : '';
         $next_todo     = isset( $profile_info['profile_completion']['next_todo'] ) ? $profile_info['profile_completion']['next_todo'] : '';
         $progress_vals = isset( $profile_info['profile_completion']['progress_vals'] ) ? $profile_info['profile_completion']['progress_vals'] : 0;

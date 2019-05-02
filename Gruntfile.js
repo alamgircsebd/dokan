@@ -130,6 +130,7 @@ module.exports = function(grunt) {
                     '<%= dirs.modulesPath %>/geolocation/assets/css/dokan-geolocation-locations-map.css': '<%= dirs.modulesPath %>/geolocation/assets/less/dokan-geolocation-locations-map.less',
                     '<%= dirs.modulesPath %>/geolocation/assets/css/dokan-geolocation-filters.css': '<%= dirs.modulesPath %>/geolocation/assets/less/dokan-geolocation-filters.less',
                     '<%= dirs.modulesPath %>/follow-store/assets/css/follow-store.css': '<%= dirs.modulesPath %>/follow-store/assets/less/follow-store.less',
+                    '<%= dirs.modulesPath %>/single-product-multiple-vendor/assets/css/dokan-spmv-products-admin.css': '<%= dirs.modulesPath %>/single-product-multiple-vendor/assets/less/dokan-spmv-products-admin.less',
                 }
             },
 
@@ -195,7 +196,8 @@ module.exports = function(grunt) {
                 files: [
                     '<%= dirs.devLessSrc %>/*.less',
                     '<%= dirs.modulesPath %>/geolocation/assets/less/*.less',
-                    '<%= dirs.modulesPath %>/follow-store/assets/less/follow-store.less'
+                    '<%= dirs.modulesPath %>/follow-store/assets/less/follow-store.less',
+                    '<%= dirs.modulesPath %>/single-product-multiple-vendor/assets/less/dokan-spmv-products-admin.less'
                 ],
                 tasks: ['less:core', 'less:admin']
             },

@@ -14,8 +14,8 @@ class Dokan_SPMV_Admin {
      */
     public function __construct() {
         // settings section
-        add_filter( 'dokan_settings_sections', array( $this, 'add_new_section_admin_panael' ) );
-        add_filter( 'dokan_settings_fields', array( $this, 'add_new_setting_field_admin_panael' ), 12, 1 );
+        add_filter( 'dokan_settings_sections', array( $this, 'add_new_section_admin_panel' ) );
+        add_filter( 'dokan_settings_fields', array( $this, 'add_new_setting_field_admin_panel' ), 12, 1 );
     }
 
     /**
@@ -25,7 +25,7 @@ class Dokan_SPMV_Admin {
      *
      * @return array
      */
-    function add_new_section_admin_panael( $sections ) {
+    function add_new_section_admin_panel( $sections ) {
         $sections['dokan_spmv'] = array(
             'id'    => 'dokan_spmv',
             'title' => __( 'Single Product MultiVendor', 'dokan' ),
@@ -42,7 +42,7 @@ class Dokan_SPMV_Admin {
      *
      * @return array
      */
-    function add_new_setting_field_admin_panael( $settings_fields ) {
+    function add_new_setting_field_admin_panel( $settings_fields ) {
 
         $settings_fields['dokan_spmv'] = array(
             'enable_pricing' => array(
