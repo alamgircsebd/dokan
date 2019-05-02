@@ -8,7 +8,7 @@ do_action( 'woocommerce_account_navigation' ); ?>
 		$topic_id = get_query_var( 'support-tickets' );
 
 		if( is_numeric( $topic_id ) ) {
-		    $topic = $dss ->get_single_topic_by_customer( $topic_id, dokan_get_current_user_id() );
+		    $topic = $dss->get_single_topic_by_customer( $topic_id, dokan_get_current_user_id() );
 		}
 	?>
 	<div class="dokan-support-customer-listing dokan-support-topic-wrapper">
