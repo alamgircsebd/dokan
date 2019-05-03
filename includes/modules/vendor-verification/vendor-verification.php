@@ -364,7 +364,7 @@ class Dokan_Seller_Verification {
             if ( $provider = $storage->get( 'provider' ) ) {
                 $adapter = $hybridauth->authenticate( $provider );
 
-                $storage->set('provider', null);
+                $storage->clear();
             }
 
             if ( ! isset( $adapter ) ) {
