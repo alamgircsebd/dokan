@@ -4,6 +4,10 @@
             <a class="button" href="javascript:history.go(-1)">&larr; {{ __( 'Go Back', 'dokan' ) }}</a>
         </div>
 
+        <div class="dokan-hide">
+            {{store}}
+        </div>
+
         <modal
             :title="__( 'Send Email', 'dokan' )"
             v-if="showDialog"
@@ -39,18 +43,33 @@
                         <span title="Featured Vendor" class="dashicons dashicons-star-filled"></span>
                     </div>
 
-                    <div class="profile-icon">
-                        <img :src="store.gravatar" :alt="store.store_name">
+                    <div :class="{'profile-icon': true, 'edit-mode': editMode}">
+                        <template v-if="editMode">
+                            <upload-image @uploadedImage="uploadGravatar" :croppingWidth="150" :croppingHeight="150" :src="store.gravatar_id && store.gravatar ? store.gravatar : getDefaultPic()" />
+                        </template>
+                        <template v-else>
+                            <img :src="store.gravatar ? store.gravatar : getDefaultPic()" :alt="store.store_name">
+                        </template>
+                        <span class="edit-photo" v-if="editMode" :style="{color: ! store.gravatar_id ? 'black' : '' }">
+                            {{ __( 'Change Store Photo', 'dokan' ) }}
+                        </span>
                     </div>
 
-                    <div class="store-info">
-                        <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
+                    <div :class="{'store-info': true, 'edit-mode': editMode}">
+                        <template v-if="! editMode">
+                            <h2 class="store-name">{{ store.store_name ? store.store_name : __( '(No Name)', 'dokan' ) }}</h2>
+                        </template>
 
-                        <div class="star-rating">
+                        <div class="star-rating" v-if="! editMode">
                             <span v-for="i in 5" :class="['dashicons', i <= store.rating.rating ? 'active' : '' ]"></span>
                         </div>
 
-                        <template v-if="categories.length">
+                        <template v-if="editMode">
+                            <VendorAccountFields :vendorInfo="store" />
+                        </template>
+
+
+                        <template v-if="categories.length && ! editMode">
                             <template v-if="! editingCategories">
                                 <template v-if="! store.categories.length">
                                     <a
@@ -102,36 +121,57 @@
                             </template>
                         </template>
 
-                        <ul class="store-details">
+                        <ul :class="{'store-details': true, 'edit-mode': editMode}" v-if="! editMode">
                             <li class="address">
-                                <span class="street_1">{{ store.address.street_1 }}, </span>
-                                <span class="city">{{ store.address.city }}, </span>
-                                <span class="state-zip">{{ store.address.state }} {{ store.address.zip }}</span>
+                                <span class="street_1" v-if="store.address.street_1">{{ store.address.street_1 }}, </span>
+                                <span class="street_2" v-if="store.address.street_2">{{ store.address.street_2 }}, </span>
+                                <span class="city" v-if="store.address.city">{{ store.address.city }}, </span>
+                                <span class="state-zip" v-if="store.address.state">{{ store.address.state }} {{ store.address.zip }}</span>
+                                <span class="country" v-if="store.address.country">{{ store.address.country }}</span>
                             </li>
                             <li class="phone">
                                 {{ store.phone ? store.phone : '—' }}
                             </li>
                         </ul>
 
-                        <div class="actions">
+                        <div class="actions" v-if="! editMode">
                             <button class="button message" @click="messageDialog()"><span class="dashicons dashicons-email"></span> {{ __( 'Send Email', 'dokan' ) }}</button>
                             <button :class="['button', 'status', store.enabled ? 'enabled' : 'disabled']"><span class="dashicons"></span> {{ store.enabled ? __( 'Enabled', 'dokan' ) : __( 'Disabled', 'dokan' ) }}</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="profile-banner">
+                <div :class="{'profile-banner': true, 'edit-mode': editMode}">
                     <div class="banner-wrap">
-                        <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
+                        <template v-if="editMode">
+                                <upload-image @uploadedImage="uploadBanner" :src="store.banner" />
+                        </template>
+
+                        <template v-else>
+                            <img v-if="store.banner" :src="store.banner" :alt="store.store_name">
+                        </template>
+                        <span class="edit-banner" v-if="editMode">
+                            <i class="change-banner dashicons dashicons-format-image"></i>
+                            {{ __( 'Change Store Banner', 'dokan' ) }}
+                        </span>
                     </div>
-                    <div class="action-links">
-                        <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
-                        <a :href="editUrl()" class="button edit-store"><span class="dashicons dashicons-edit"></span></a>
+                    <div :class="{'action-links': true, 'edit-mode': editMode}">
+                        <template v-if="editMode">
+                            <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }}</button>
+                            <button @click="updateStore" class="button button-primary">{{ saveBtn }}</button>
+                        </template>
+
+                        <template v-else>
+                            <a :href="store.shop_url" target="_blank" class="button visit-store">{{ __( 'Visit Store', 'dokan' ) }} <span class="dashicons dashicons-arrow-right-alt"></span></a>
+                            <router-link :to="id" class="button" @click.native="editMode = true">
+                                   <span class="dashicons dashicons-edit"></span>
+                            </router-link>
+                        </template>
                     </div>
                 </div>
             </section>
 
-            <section class="vendor-summary" v-if="stats !== null">
+            <section class="vendor-summary" v-if="stats !== null && !editMode">
                 <div class="summary-wrap products-revenue">
                     <div class="stat-summary products">
                         <h3>{{ __( 'Products', 'dokan' ) }}</h3>
@@ -181,7 +221,7 @@
                         <ul class="counts">
                             <li class="commision">
                                 <span class="count">{{ getEearningRate }}</span>
-                                <span class="subhead">{{ __( 'Earning Rate', 'dokan' ) }}</span>
+                                <span class="subhead">{{ __( 'Commission Rate', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
                                 <span class="count">
@@ -238,12 +278,36 @@
                     </ul>
                 </div>
             </section>
+
+            <section class="vendor-other-info" v-if="editMode">
+                <div class="address-social-info">
+                    <VendorAddressFields :vendorInfo="store" />
+                    <VendorSocialFields :vendorInfo="store" />
+                </div>
+                <div class="payment-info">
+                    <VendorPaymentFields :vendorInfo="store" />
+                </div>
+            </section>
+
+            <div :class="{'action-links': true, 'footer': true, 'edit-mode': editMode}">
+                <template v-if="editMode">
+                    <button @click="editMode = false" class="button">{{ __( 'Cancel', 'dokan' ) }}</button>
+                    <button @click="updateStore" class="button button-primary">{{ saveBtn }}</button>
+                </template>
+            </div>
+
         </div>
         <vcl-twitch v-else height="300" primary="#ffffff"></vcl-twitch>
     </div>
 </template>
 
 <script>
+import UploadImage from 'admin/components/UploadImage.vue';
+import VendorSocialFields from 'admin/components/VendorSocialFields.vue';
+import VendorAccountFields from 'admin/components/VendorAccountFields.vue';
+import VendorPaymentFields from 'admin/components/VendorPaymentFields.vue';
+import VendorAddressFields from 'admin/components/VendorAddressFields.vue';
+
 let ContentLoading = dokan_get_lib('ContentLoading');
 let Modal          = dokan_get_lib('Modal');
 let Currency       = dokan_get_lib('Currency');
@@ -259,22 +323,73 @@ export default {
         VclFacebook,
         VclTwitch,
         Modal,
-        Currency
+        Currency,
+        UploadImage,
+        VendorPaymentFields,
+        VendorSocialFields,
+        VendorAccountFields,
+        VendorAddressFields,
     },
 
     data () {
         return {
             showDialog: false,
-            store: {},
             stats: null,
             mail: {
                 subject: '',
                 body: ''
             },
+            editMode: false,
             isUpdating: false,
             categories: [],
             isCategoryMultiple: false,
-            editingCategories: false
+            editingCategories: false,
+            store: {
+                store_name: '',
+                user_pass: '',
+                store_url: '',
+                user_email: '',
+                user_nicename: '',
+                phone: '',
+                banner: '',
+                banner_id: '',
+                gravatar: '',
+                gravatar_id: '',
+                social: {
+                    fb: '',
+                    gplus: '',
+                    youtube: '',
+                    twitter: '',
+                    linkedin: '',
+                    pinterest: '',
+                    instagram: '',
+                },
+                payment: {
+                    bank: {
+                        ac_name: '',
+                        ac_number: '',
+                        bank_name: '',
+                        bank_addr: '',
+                        routing_number: '',
+                        iban: '',
+                        swift: ''
+                    },
+                    paypal: {
+                        email: ''
+                    }
+                },
+                address: {
+                    street_1: '',
+                    street_2: '',
+                    city: '',
+                    zip: '',
+                    state: '',
+                    country: ''
+                }
+            },
+            fakeStore: {},
+            showStoreUrl: true,
+            otherStoreUrl: null,
         };
     },
 
@@ -348,9 +463,21 @@ export default {
             if ( this.stats.others.commission_type == 'percentage' ) {
                 return this.stats.others.commission_rate + '%';
             } else {
-                return this.stats.others.commission_rate +' '+ this.__( 'Flat', 'dokan' );
+                return accounting.formatMoney( this.stats.others.commission_rate );
             }
-        }
+        },
+
+        saveBtn() {
+            return this.isUpdating ? this.__( 'Saving...', 'dokan' ) : this.__( 'Save Changes' )
+        },
+        // storeUrl() {
+        //     let defaultUrl = dokan.urls.siteUrl + dokan.urls.storePrefix + '/';
+        //     let storeUrl = this.store.store_name.trim().split(' ').join('-');
+        //     this.store.user_nicename = storeUrl;
+        //     this.otherStoreUrl = defaultUrl + storeUrl;
+
+        //     return defaultUrl + storeUrl;
+        // }
     },
 
     watch: {
@@ -358,11 +485,25 @@ export default {
             this.fetch();
             this.fetchStats();
         },
+
+        // 'store.store_name'( value ) {
+        //     this.showStoreUrl = true;
+        // },
+
+        // 'store.user_nicename'( value ) {
+        //     this.showStoreUrl = false;
+        //     this.otherStoreUrl = this.defaultUrl + value.trim().split(' ').join('-');
+        //     this.store.user_nicename = value.split(' ').join('-');
+        // },
     },
 
     created() {
         this.fetch();
         this.fetchStats();
+
+        if ( this.$route.query.edit && this.$route.query.edit === 'true' ) {
+            this.editMode = true;
+        }
     },
 
     methods: {
@@ -371,13 +512,55 @@ export default {
             const self = this;
 
             dokan.api.get('/stores/' + self.id )
-            .done(response => self.store = response);
+            .done( ( response ) => {
+                Object.assign( self.fakeStore, self.store );
+                // self.store = response;
+                Object.assign( self.store, response );
+                // console.log(self.store)
+                self.transformer(response);
+            } );
 
             dokan.api.get( '/store-categories' )
                 .done( ( response, status, xhr ) => {
                     self.categories = response;
                     self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
                 } );
+        },
+
+        // map response props to store props
+        transformer(response) {
+            for ( let res in response ) {
+
+                if ( Array.isArray(response[res]) && 0 === response[res].length ) {
+                    this.store[res] = this.fakeStore[res];
+                }
+            }
+
+            // set default payment object for v-model
+            if ( 'payment' in response && response.payment.bank && response.payment.bank.length < 1 ) {
+                this.store.payment = this.fakeStore.payment;
+            }
+
+            // if ( 'payment' in response && response.payment.paypal && response.payment.paypal.email.length < 1 ) {
+            //     this.store.payment = this.fakeStore.payment;
+            // }
+
+            if ( 'email' in response ) {
+                this.store.user_email = response.email;
+            }
+
+            if ( 'shop_url' in response ) {
+                this.store.user_nicename = this.getStoreName(response.shop_url);
+            }
+        },
+
+        // get sotre name from url
+        getStoreName(url) {
+            let storeName = url.split('/').filter((value) => {
+                return value !== '';
+            });
+
+            return storeName[storeName.length - 1];
         },
 
         fetchStats() {
@@ -448,10 +631,37 @@ export default {
 
             dokan.api.put( `/stores/${self.store.id}`, self.store )
                 .done( ( response ) => {
+                    self.editMode = false;
                     self.store = response;
                     self.isUpdating = false;
                     self.editingCategories = false;
-                } );
+
+                    this.showAlert(
+                        this.__( 'Vendor Updated', 'dokan' ),
+                        this.__( 'Vendor Updated Successfully!', 'dokan' ),
+                        'success'
+                    );
+
+                } )
+                .fail((response) => {
+                    this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
+                });
+        },
+
+        uploadGravatar( image ) {
+            this.store.gravatar_id = image.id;
+        },
+
+        uploadBanner( image ) {
+            this.store.banner_id = image.id
+        },
+
+        showAlert( $title, $des, $status ) {
+            this.$swal( $title, $des, $status );
+        },
+
+        getDefaultPic() {
+            return dokan.urls.proAssetsUrl + '/images/store-pic.png';
         }
     }
 };
@@ -459,6 +669,38 @@ export default {
 
 <style lang="less">
 .dokan-vendor-single {
+    .dokan-hide {
+        display: none;
+    }
+
+    .vendor-profile {
+        .action-links.edit-mode {
+            .button span {
+                line-height: 27px
+            }
+        }
+        .action-links.footer.edit-mode {
+            float: right;
+            margin-top: 20px;
+        }
+    }
+
+    .dokan-form-input {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        margin-top: 6px;
+        margin-bottom: 16px;
+        resize: vertical;
+        height: auto;
+    }
+
+    .dokan-form-input::placeholder {
+        color: #bcbcbc;
+    }
+
 
     * {
         box-sizing: border-box;
@@ -505,15 +747,15 @@ export default {
         .profile-banner {
             position: relative;
             width: ~"calc(100% - 285px + 30px)";
-            max-width: 850px;
-            height: 315px;
+            // max-width: 850px;
+            height: 350px;
             border: 1px solid #dfdfdf;
-            background: #fff;
+            background: #496a94;
             overflow: hidden;
 
             img {
-                height: 315px;
-                width: auto;
+                height: 350px;
+                width: 100%;
             }
 
             .action-links {
@@ -526,12 +768,13 @@ export default {
                 }
 
                 .button.visit-store {
-                    background: #FD563A;
-                    border-color: #FD563A;
+                    background: #0085ba;
+                    border-color: #0085ba;
                     color: #fff;
 
                     &:hover {
-                        background: darken(#FD563A, 5%);
+                        background: #008ec2;
+                        border-color: #006799;
                     }
 
                     .dashicons {
@@ -563,9 +806,75 @@ export default {
             text-align: center;
             margin: 0 auto;
 
+            .edit-photo {
+                position: absolute;
+                left: 33%;
+                top: 46px;
+                color: white;
+                width: 80px;
+                // color: black;
+            }
+
             img {
-                height: auto;
-                width: 64px;
+                height: 120px;
+                width: 120px;
+                border-radius: 50%
+            }
+        }
+
+        .profile-icon.edit-mode {
+            .dokan-upload-image {
+                max-width: 120px;
+                margin: 0 auto;
+            }
+
+            img {
+                border: 5px solid #1a9ed4;
+
+                cursor: pointer;
+                opacity: .8;
+
+                &:hover {
+                    padding: 5px;
+                    background-color: #f1f1f1;
+                    transition: padding .2s;
+                }
+            }
+        }
+
+        .profile-banner.edit-mode {
+            cursor: pointer;
+
+            .banner-wrap {
+                display: flex;
+                justify-content: center;
+
+                img {
+                    border: 5px solid #5ca9d3;
+                    opacity: .5;
+
+                    &:hover {
+                        padding: 5px;
+                        background-color: #f1f1f1;
+                        transition: padding .2s;
+                    }
+                }
+
+                .edit-banner {
+                    position: absolute;
+                    top: 75%;
+                    font-size: 30px;
+                    font-weight: 400;
+                    color: white;
+
+                    i.change-banner {
+                        font-size: 50px;
+                        margin-top: -70px;
+                        position: relative;
+                        left: 140px;
+                    }
+                }
+
             }
         }
 
@@ -634,6 +943,16 @@ export default {
                         content: "\f525";
                         transform: scale(-1, 1);
                     }
+                }
+            }
+
+            .store-details.edit-mode {
+                .content-header {
+                    display: none;
+                }
+
+                li {
+                    padding-left: 0;
                 }
             }
 
@@ -725,6 +1044,38 @@ export default {
 
                 .button-link {
                     text-decoration: none;
+                }
+            }
+        }
+
+        .store-info.edit-mode {
+            .account-info {
+                .content-header {
+                    display: none;
+                }
+
+                .column {
+                    // display: flex;
+                    label {
+                        float: left;
+                        clear: both;
+                        margin-top: 10px;
+                        margin-left: -4px;
+                    }
+                    .dokan-form-input {
+                        width: 60%;
+                        padding: 5px;
+                        float: right;
+                        margin-right: -4px;
+                    }
+                    .store-url {
+                        margin: 0;
+                        padding: 0;
+                        bottom: 10px;
+                        font-style: italic;
+                        color: #a09f9f;
+                        font-size: 12px;
+                    }
                 }
             }
         }
@@ -863,7 +1214,7 @@ export default {
                         color: #FB0A4C;
 
                         &:before { background-color: #FB0A4C; }
-                        &:after { content: "\f513"; }
+                        &:after { content: "\f524"; }
                     }
 
                     &.balance {
@@ -966,6 +1317,100 @@ export default {
                 .flaticon-skrill-pay-logo.active { color: #721052; }
             }
         }
+    }
+
+    .vendor-other-info {
+        .content-header {
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            padding-left: 12px !important;
+        }
+
+        .address-social-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+
+            .content-header {
+                font-size: 18px;
+                margin: 0;
+                padding: 10px;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .social-info, .account-info {
+                width: 48%;
+                background-color: white;
+
+                .content-body {
+                    padding: 10px 20px;
+                }
+            }
+
+            .account-info {
+                .store-url {
+                    margin: 0;
+                    padding: 0;
+                    position: relative;
+                    bottom: 10px;
+                    font-style: italic;
+                    color: #a09f9f;
+                    font-size: 12px;
+                }
+            }
+        }
+
+        .payment-info {
+            background-color: white;
+            margin-top: 30px;
+
+            .content-header {
+                font-size: 18px;
+                margin: 0;
+                padding: 10px;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .content-body {
+                display: flex;
+                justify-content: space-between;
+
+                .dokan-form-group {
+                    width: 48%;
+                    padding: 10px 20px;
+                }
+            }
+        }
+
+        .multiselect {
+            margin-top: 5px;
+        }
+
+        .multiselect__select {
+            &:before {
+                top: 55%;
+            }
+        }
+
+        .multiselect__tags {
+            min-height: 34px;
+        }
+
+        .multiselect__single {
+            font-size: 14px;
+            padding-left: 0px;
+            margin-bottom: 4px;
+            margin-top: -2px;
+        }
+
+        .multiselect__input {
+            &:focus {
+                box-shadow: none;
+                border: none;
+                outline: none;
+            }
+        }
+
     }
 }
 

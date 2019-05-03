@@ -1,6 +1,7 @@
 <template>
     <div class="vendor-list">
         <h1 class="wp-heading-inline">{{ __( 'Vendors', 'dokan') }}</h1>
+        <button @click="addNew()" class="page-title-action">{{ __( 'Add New', 'dokan' ) }}</button>
         <router-link v-if="categories.length" class="page-title-action" :to="{name: 'StoreCategoriesIndex'}">{{ __( 'Store Categories', 'dokan' ) }}</router-link>
         <hr class="wp-header-end">
 
@@ -60,7 +61,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <span v-for="(action, index) in actions" :class="action.key">
-                    <a v-if="action.key == 'edit'" :href="editUrl(data.row.id)">{{ action.label }}</a>
+                    <router-link v-if="action.key == 'edit'" :to="{ path: 'vendors/' + data.row.id, query:{edit:'true'} }">{{ action.label }}</router-link>
                     <a v-else-if="action.key == 'products'" :href="productUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else-if="action.key == 'orders'" :href="ordersUrl(data.row.id)">{{ action.label }}</a>
                     <a v-else href="#">{{ action.label }}</a>
@@ -69,10 +70,14 @@
                 </span>
             </template>
         </list-table>
+
+        <add-vendor :vendor-id="vendorId" v-if="loadAddVendor" />
+
     </div>
 </template>
 
 <script>
+import AddVendor from 'admin/components/AddVendor.vue'
 let ListTable = dokan_get_lib('ListTable');
 let Switches  = dokan_get_lib('Switches');
 let Search    = dokan_get_lib('Search');
@@ -84,7 +89,8 @@ export default {
     components: {
         ListTable,
         Switches,
-        Search
+        Search,
+        AddVendor
     },
 
     data () {
@@ -95,7 +101,7 @@ export default {
                 approved: 0,
                 all: 0
             },
-
+            vendorId:0,
             totalItems: 0,
             perPage: 20,
             totalPages: 1,
@@ -146,6 +152,7 @@ export default {
                 }
             ],
             vendors: [],
+            loadAddVendor: false,
             categories: [],
             isCategoryMultiple: false,
             storeCategoryType: dokan.store_category_type
@@ -195,14 +202,31 @@ export default {
     },
 
     created() {
+        this.$root.$on('modalClosed', () => {
+            this.loadAddVendor = false;
+            this.vendorId = 0;
+        });
+
         this.fetchVendors();
 
         if (this.storeCategoryType !== 'none') {
             this.fetchCategories();
         }
+
+        this.$root.$on( 'vendorAdded', ( payload ) => {
+            this.vendors.unshift( payload );
+        } );
+
+        this.$root.$on( 'addAnotherVendor', () => {
+            this.loadAddVendor = true;
+        } );
     },
 
     methods: {
+        addNew() {
+            this.loadAddVendor = true;
+        },
+
         doSearch(payload) {
             let self     = this;
             self.loading = true;
@@ -374,6 +398,12 @@ export default {
 
 <style lang="less">
 .vendor-list {
+    .dokan-btn {
+        padding: 5px 10px;
+        font-size: 15px;
+        border-radius: 3px;
+        color: #2873aa;
+    }
 
     .image {
         width: 10%;

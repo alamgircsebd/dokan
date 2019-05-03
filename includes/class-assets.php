@@ -10,6 +10,7 @@ class Dokan_Pro_Assets {
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'register' ], 5 );
             add_action( 'dokan-vue-admin-scripts', [ $this, 'enqueue_admin_scripts' ] );
+            add_filter( 'dokan_admin_localize_script', [ $this, 'admin_localize_script' ] );
         } else {
             add_action( 'wp_enqueue_scripts', [ $this, 'register' ], 5 );
             add_action( 'dokan_enqueue_scripts', [ $this, 'enqueue_frontend_scripts' ], 5 );
@@ -156,4 +157,27 @@ class Dokan_Pro_Assets {
         return $styles;
     }
 
+    /**
+     * Admin localize Script
+     *
+     * @param  array $scripts
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function admin_localize_script( $scripts ) {
+        $general_settings                  = get_option( 'dokan_general', [] );
+        $banner_width                      = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
+        $banner_height                     = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+        $has_flex_width                    = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
+        $has_flex_height                   = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
+
+        $scripts['states']                 = WC()->countries->get_allowed_country_states();
+        $scripts['countries']              = WC()->countries->get_allowed_countries();
+        $scripts['urls']['proAssetsUrl']   = DOKAN_PRO_PLUGIN_ASSEST;
+        $scripts['store_banner_dimension'] = [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width'  => $has_flex_width, 'flex-height' => $has_flex_height ];
+
+        return $scripts;
+    }
 }
