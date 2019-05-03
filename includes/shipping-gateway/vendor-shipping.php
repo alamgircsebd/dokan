@@ -427,17 +427,17 @@ if ( class_exists( 'WooCommerce' ) ) {
             }
 
             if ( isset( $location_group['state'] ) ) {
-                $states = wp_list_pluck( $location_group['state'], 'code' );
-                $state_array = array_map( array( $this, 'split_state_code' ), $states );
+                $states       = wp_list_pluck( $location_group['state'], 'code' );
+                $state_array  = array_map( array( $this, 'split_state_code' ), $states );
+                $is_available = false;
 
-                if ( ! in_array( $destination_state, $state_array ) ) {
-                    return false;
+                if ( in_array( $destination_state, $state_array ) ) {
+                    $is_available = true;
                 }
-
-                $is_available = true;
             }
 
             if ( isset( $location_group['postcode'] ) ) {
+                $is_available   = false;
                 $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
 
                 // if postcode is set as ranges (e.g. 10001...10010)
@@ -445,7 +445,7 @@ if ( class_exists( 'WooCommerce' ) ) {
                     $range = array_map( 'trim', explode( '...', $postcode_array[0] ) );
 
                     if ( 2 !== count( $range ) ) {
-                        return false;
+                        return $is_available;
                     }
 
                     list( $min, $max ) = $range;
@@ -457,25 +457,21 @@ if ( class_exists( 'WooCommerce' ) ) {
                     }
 
                     $postcode_array = range( $min, $max );
-
-                } else if ( strstr( $postcode_array[0], '*' ) ) {
-                    return true;
                 } else {
                     $postcode_array = array_map( 'trim', $postcode_array );
                 }
 
-                if ( ! in_array( $destination_postcode, $postcode_array ) ) {
-                    return false;
+                if ( in_array( $destination_postcode, $postcode_array ) ) {
+                    $is_available = true;
                 }
 
-                $is_available = true;
+                // if postcode is set as wilecard range (e.g 1000*)
+                if ( strstr( $postcode_array[0], '*' ) ) {
+                    $is_available = true;
+                }
             }
 
-            if ( $is_available ) {
-                return true;
-            }
-
-            return false;
+            return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
         }
 
         /**
