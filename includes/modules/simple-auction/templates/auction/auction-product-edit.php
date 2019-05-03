@@ -512,7 +512,12 @@ wp_reset_query();
 ;(function($){
     $(document).ready(function(){
         $('.auction-datepicker').datetimepicker({
-            dateFormat : 'yy-mm-dd'
+            dateFormat : 'yy-mm-dd',
+            currentText: dokan.datepicker.now,
+            closeText: dokan.datepicker.done,
+            timeText: dokan.datepicker.time,
+            hourText: dokan.datepicker.hour,
+            minuteText: dokan.datepicker.minute
         });
 
         if($('#_auction_automatic_relist').prop('checked')){

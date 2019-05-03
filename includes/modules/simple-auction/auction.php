@@ -75,6 +75,8 @@ class Dokan_Auction {
 
         // send bid email to admin and vendor
         add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
+
+        add_filter( 'dokan_localized_args', array( $this, 'set_localized_args' ) );
     }
 
     /**
@@ -517,6 +519,32 @@ class Dokan_Auction {
         $vendor_email = dokan()->vendor->get( $vendor_id )->get_email();
 
         return $recipient . ',' . $vendor_email;
+    }
+
+    /**
+     * Set localized args
+     *
+     * @param array $args
+     *
+     * @since DOKAN_PLUGIN_SINCE
+     *
+     * @return array
+     */
+    public function set_localized_args( $args ) {
+        $auction_args = [
+            'datepicker' => [
+                'now'         => __( 'Now', 'dokan' ),
+                'done'        => __( 'Done', 'dokan' ),
+                'time'        => __( 'Time', 'dokan' ),
+                'hour'        => __( 'Hour', 'dokan' ),
+                'minute'      => __( 'Minute', 'dokan' ),
+                'second'      => __( 'Second', 'dokan' ),
+                'time-zone'   => __( 'Time Zone', 'dokan' ),
+                'choose-time' => __( 'Choose Time', 'dokan' ),
+            ]
+        ];
+
+        return array_merge( $args, $auction_args );
     }
 
 } // Dokan_Auction
