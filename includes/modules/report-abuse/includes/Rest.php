@@ -7,7 +7,7 @@ class Rest {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class Rest {
     /**
      * Add module REST Controller
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $class_map
      */

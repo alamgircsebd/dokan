@@ -17,7 +17,7 @@ function dokan_report_abuse_template( $name, $args = [] ) {
 /**
  * Create abuse report
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @param array $args
  *
@@ -131,7 +131,7 @@ function dokan_report_abuse_create_report( $args ) {
     /**
      * Fires after created an abuse report
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param object            $report
      * @param \WC_Product       $product
@@ -146,7 +146,7 @@ function dokan_report_abuse_create_report( $args ) {
 /**
  * Get module admin settings
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @return array
  */
@@ -172,7 +172,7 @@ function dokan_report_abuse_get_option() {
 /**
  * Report Abuse Form
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @param array $args
  * @param bool  $echo
@@ -204,7 +204,7 @@ function dokan_report_abuse_report_form( $args = [], $echo = false ) {
 /**
  * Get abuse reports
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @param array $args
  *
@@ -344,7 +344,7 @@ function dokan_report_abuse_get_reports( $args = [] ) {
 /**
  * Delete abuse reports
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @param array $ids
  *

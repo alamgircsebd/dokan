@@ -86,8 +86,8 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 .dokan-toggle-switch .slider:before {
   position: absolute;
@@ -97,8 +97,8 @@
   left: 3px;
   bottom: 4px;
   background-color: white;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 .dokan-toggle-switch input:checked + .slider {
   background-color: #0073aa;
@@ -170,8 +170,8 @@
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 .switch .slider:before {
   position: absolute;
@@ -181,8 +181,8 @@
   left: 2px;
   bottom: 2px;
   background-color: white;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: .4s;
+  transition: .4s;
 }
 .switch .slider.round {
   border-radius: 34px;

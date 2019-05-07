@@ -7,7 +7,7 @@ class SingleProduct {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -19,7 +19,7 @@ class SingleProduct {
     /**
      * Add report button
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class SingleProduct {
     /**
      * Enqueue scripts
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */

@@ -111,7 +111,7 @@ class Dokan_Store_Category {
     /**
      * Add localized script data in admin panel
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $data
      *

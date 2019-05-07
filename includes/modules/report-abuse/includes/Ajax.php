@@ -7,7 +7,7 @@ class Ajax {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -23,7 +23,7 @@ class Ajax {
     /**
      * Add nonce to login form popup response
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $response
      *
@@ -37,7 +37,7 @@ class Ajax {
     /**
      * Get report form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -54,7 +54,7 @@ class Ajax {
     /**
      * Submit report form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */

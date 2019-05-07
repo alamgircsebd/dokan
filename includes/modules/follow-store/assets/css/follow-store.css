@@ -24,7 +24,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   position: absolute;
-  top: calc(50% - 10px);
+  top: calc(40%);
   left: 50%;
   color: #fff;
   font-size: 20px;

@@ -5,7 +5,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Add metabox
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -32,7 +32,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Metabox
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param WP_Post $post
      *
@@ -55,7 +55,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Enqueue scripts in product editing admin page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param string $hook
      *
@@ -76,7 +76,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Add additional localized vars
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $params
      *
@@ -101,7 +101,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Ajax method to search vendors
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -158,7 +158,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Clone products for vendors
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -205,7 +205,7 @@ class Dokan_SPMV_Products_Admin {
     /**
      * Delete cloned product
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */

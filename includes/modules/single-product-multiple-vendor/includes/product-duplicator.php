@@ -22,7 +22,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Clone a product
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return int|WP_Error
      */
@@ -101,7 +101,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Set product author
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $args
      */
@@ -114,7 +114,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Check is seller is elligible for sell this item
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -141,7 +141,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Check already cloned this product
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Get mapping ID for next execution
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -187,7 +187,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Set mapping ids for product
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -217,7 +217,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Udpate product visibility in product mapping table
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param integer $product_id
      * @param string $visibility [ 0 -> publish | 1 -> trash | 2 -> pending | 3 -> draft ]
@@ -246,7 +246,7 @@ class Dokan_SPMV_Product_Duplicator {
     /**
      * Get mapping status
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
