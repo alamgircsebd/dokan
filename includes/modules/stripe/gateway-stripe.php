@@ -62,7 +62,6 @@ class Dokan_Stripe {
         add_filter( 'woocommerce_payment_gateways', array( $this, 'register_gateway' ) );
 
         add_filter( 'dokan_withdraw_methods', array( $this, 'register_dokan_withdraw_gateway' ) );
-        add_filter( 'dokan_can_add_product', array( $this, 'can_seller_add_product' ) );
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'remove_withdraw_page' ) );
         add_filter( 'dokan_query_var_filter', array( $this, 'remove_withdraw_query_var' ), 80 );
 
@@ -120,6 +119,13 @@ class Dokan_Stripe {
                 foreach ( WC()->cart->get_cart() as $item ) {
                     $product_id = $item['data']->get_id();
                     $available_vendors[get_post_field( 'post_author', $product_id )][] = $item['data'];
+                }
+
+                // if it's subscription product return early
+                $subscription_product = wc_get_product( $product_id );
+
+                if ( $subscription_product && 'product_pack' === $subscription_product->get_type() ) {
+                    return;
                 }
 
                 $vendor_names = array();
@@ -231,33 +237,6 @@ class Dokan_Stripe {
         }
 
         return $validation;
-    }
-
-    /**
-     * Prevents non-stripe connected users from creating new product posts
-     *
-     * @param  array  $errors
-     *
-     * @return array
-     */
-    function can_seller_add_product( $errors ) {
-
-        $payment_gateways = new WC_Payment_Gateways;
-        $available_gateways = $payment_gateways->get_available_payment_gateways();
-        $settings = get_option('woocommerce_dokan-stripe-connect_settings');
-        // bailout if the gateway is not enabled
-        if ( isset( $settings['enabled'] ) && $settings['enabled'] !== 'yes' ) {
-            return $errors;
-        }
-
-        $user_id   = get_current_user_id();
-        $stripe_id = get_user_meta( $user_id, '_stripe_connect_access_key', true );
-
-        if ( empty( $stripe_id ) && count( $available_gateways ) < 2 ) {
-            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Stripe account isn\'t active yet. Please connect to stripe first!', 'dokan' ), dokan_get_navigation_url('settings/payment'), __( 'Connect to Stripe', 'dokan' ) );
-        }
-
-        return $errors;
     }
 
     /**

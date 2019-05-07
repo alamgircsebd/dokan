@@ -213,17 +213,15 @@ class DSR_View {
         $rating = intval ( $_POST['rating'] );
 
         $my_post = array(
-            'post_title'     => $postdata['dokan-review-title'],
-            'post_content'   => $postdata['dokan-review-details'],
+            'post_title'     => sanitize_text_field( $postdata['dokan-review-title'] ),
+            'post_content'   => wp_kses_post( $postdata['dokan-review-details'] ),
             'author'         => get_current_user_id(),
             'post_type'      => 'dokan_store_reviews',
             'post_status'    => 'publish'
         );
 
         if ( isset( $postdata[ 'post_id' ] ) ) {
-
             $post_id = intval( $postdata[ 'post_id' ] );
-
             $post    = get_post( $post_id );
 
             if ( get_current_user_id() == $post->post_author ) {
@@ -237,20 +235,14 @@ class DSR_View {
             $post_id = wp_insert_post( $my_post );
         }
 
-
-
         if ( $post_id ) {
-
             update_post_meta( $post_id, 'store_id', $postdata['store_id'] );
             update_post_meta( $post_id, 'rating', $rating );
-
-            //$this->send_email_to_seller( $postdata['store_id'], $post_id );
 
             wp_send_json( array(
                 'success' => true,
                 'msg'     => __( 'Thanks for your review', 'dokan' ),
             ) );
-
         } else {
             wp_send_json( array(
                 'success' => false,

@@ -549,7 +549,7 @@ class Dokan_Pro_Coupons {
         $minimum_amount = isset( $minimum_amount ) ? $minimum_amount : '';
         $customer_email = isset( $customer_email ) ? implode( ',', $customer_email ) : '';
 
-        if ( is_wp_error( $validated ) ) {
+        if ( is_wp_error( self::$validated ) ) {
 
             $post_id       = $_POST['post_id'];
             $post_title    = $_POST['title'];
@@ -608,6 +608,7 @@ class Dokan_Pro_Coupons {
 
         $exclude_products = str_replace( ' ', '', $exclude_products );
         $exclude_products = explode( ',', $exclude_products );
+        $discount_type    = ! empty( $_POST['discount_type'] ) ? $_POST['discount_type'] : '';
 
         if ( empty( $post_id ) && ! current_user_can( 'dokan_add_coupon' ) ) {
             dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to add coupon', 'dokan' ) ) );

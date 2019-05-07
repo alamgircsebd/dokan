@@ -173,5 +173,19 @@ div.dokan-booking-wrapper input.dokan-btn{
     display:none
 }
 
+.dokan-booking-day-restriction {
+  border: 1px solid #decfcf;
+  margin-bottom: 10px;
+}
+.dokan-booking-day-restriction td {
+  padding: 8px 10px;
+}
+.dokan-booking-day-restriction td .checkbox {
+  vertical-align: middle;
+  margin: 4px auto;
+}
 
+.dokan-booking-day-restriction table {
+  width: 100%;
+}
 

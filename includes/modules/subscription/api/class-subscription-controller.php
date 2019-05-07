@@ -232,15 +232,17 @@ class Dokan_REST_Subscription_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'no_subscription', __( 'No subscription is found to be deleted.', 'dokan' ), [ 'status' => 200 ] );
         }
 
+        $end_date = $subscription->get_pack_end_date();
+
         $data = [
             'id'                 => $user->ID,
             'user_link'          => get_edit_user_link( $user->ID ),
             'user_name'          => $user->data->user_nicename,
             'subscription_id'    => $subscription->get_id(),
             'subscription_title' => $subscription->get_package_title(),
-            'start_date'         => date( 'F j, Y', strtotime( $subscription->get_pack_start_date() ) ),
-            'end_date'           => date( 'F j, Y', strtotime( $subscription->get_pack_end_date() ) ),
-            'status'             => $subscription->can_post_product()
+            'start_date'         => date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_start_date() ) ),
+            'end_date'           => 'unlimited' === $end_date ? __( 'Unlimited', 'dokan' ) : date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ),
+            'status'             => $subscription->has_subscription()
         ];
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';

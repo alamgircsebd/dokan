@@ -248,35 +248,48 @@ $template_args = array(
                 </div><!-- .dokan-form-top-area -->
                 <div class="booking_fields">
                     <?php
-                    $duration_type = get_post_meta( $post_id, '_wc_booking_duration_type', true );
-                    $duration      = max( absint( get_post_meta( $post_id, '_wc_booking_duration', true ) ), 1 );
-                    $duration_unit = get_post_meta( $post_id, '_wc_booking_duration_unit', true );
+                    $duration_type                     = get_post_meta( $post_id, '_wc_booking_duration_type', true );
+                    $duration                          = max( absint( get_post_meta( $post_id, '_wc_booking_duration', true ) ), 1 );
+                    $duration_unit                     = get_post_meta( $post_id, '_wc_booking_duration_unit', true );
 
                     //availability
-                    $wc_booking_qty        = max( absint( get_post_meta( $post_id, '_wc_booking_qty', true ) ), 1 );
-                    $booking_min_date_unit = get_post_meta( $post_id, '_wc_booking_min_date_unit', true );
-                    $booking_max_date_unit = get_post_meta( $post_id, '_wc_booking_max_date_unit', true );
+                    $wc_booking_qty                    = max( absint( get_post_meta( $post_id, '_wc_booking_qty', true ) ), 1 );
+                    $booking_min_date_unit             = get_post_meta( $post_id, '_wc_booking_min_date_unit', true );
+                    $booking_max_date_unit             = get_post_meta( $post_id, '_wc_booking_max_date_unit', true );
 
 
-                    $booking_buffer_period  = absint( get_post_meta( $post_id, '_wc_booking_buffer_period', true ) );
-                    $adjacent_buffer_period = get_post_meta( $post_id, '_wc_booking_apply_adjacent_buffer', true );
+                    $booking_buffer_period             = absint( get_post_meta( $post_id, '_wc_booking_buffer_period', true ) );
+                    $adjacent_buffer_period            = get_post_meta( $post_id, '_wc_booking_apply_adjacent_buffer', true );
 
                     $booking_default_date_availability = get_post_meta( $post_id, '_wc_booking_default_date_availability', true );
-                    $booking_check_availability = get_post_meta( $post_id, '_wc_booking_check_availability_against', true );
+                    $booking_check_availability        = get_post_meta( $post_id, '_wc_booking_check_availability_against', true );
 
-                    $booking_range_picker = get_post_meta( $post_id, '_wc_booking_enable_range_picker', true );
-                    $booking_first_block  = get_post_meta( $post_id, '_wc_booking_first_block_time', true );
+                    $booking_range_picker              = get_post_meta( $post_id, '_wc_booking_enable_range_picker', true );
+                    $booking_first_block               = get_post_meta( $post_id, '_wc_booking_first_block_time', true );
 
-                    $booking_confirmation = get_post_meta( $post_id, '_wc_booking_requires_confirmation', true );
-                    $booking_cancellation = get_post_meta( $post_id, '_wc_booking_user_can_cancel', true );
-                    $cancellation_limit   = get_post_meta( $post_id, '_wc_booking_cancel_limit', true );
-                    $cancellation_limit_unit = get_post_meta( $post_id, '_wc_booking_cancel_limit_unit', true );
+                    $booking_confirmation              = get_post_meta( $post_id, '_wc_booking_requires_confirmation', true );
+                    $booking_cancellation              = get_post_meta( $post_id, '_wc_booking_user_can_cancel', true );
+                    $cancellation_limit                = get_post_meta( $post_id, '_wc_booking_cancel_limit', true );
+                    $cancellation_limit_unit           = get_post_meta( $post_id, '_wc_booking_cancel_limit_unit', true );
                     //costs
                     //resources
-                    $booking_resource_label      = get_post_meta( $post_id, '_wc_booking_resource_label', true );
-                    $booking_resource_assignment = get_post_meta( $post_id, '_wc_booking_resources_assignment', true );
+                    $booking_resource_label            = get_post_meta( $post_id, '_wc_booking_resource_label', true );
+                    $booking_resource_assignment       = get_post_meta( $post_id, '_wc_booking_resources_assignment', true );
 
-                    $calendar_display_mode = get_post_meta($post_id,'_wc_booking_calendar_display_mode',true);
+                    $calendar_display_mode             = get_post_meta( $post_id,'_wc_booking_calendar_display_mode',true );
+
+                    $booking_product                   = new WC_Product_Booking( $post_id );
+                    $booking_has_restricted_days       = $booking_product->has_restricted_days();
+                    $booking_restricted_days           = $booking_product->get_restricted_days();
+
+                    for ( $i = 0; $i < 7; $i++ ) {
+
+                        if ( $booking_restricted_days && in_array( $i, $booking_restricted_days ) ) {
+                            $restricted_days[ $i ] = $i;
+                        } else {
+                            $restricted_days[ $i ] = false;
+                        }
+                    }
 
                     ?>
 
@@ -486,6 +499,50 @@ $template_args = array(
                                 <label for="_wc_booking_first_block_time" class="form-label"><?php _e( 'First block starts at...', 'dokan' ); ?></label>
                                 <input type="time" name="_wc_booking_first_block_time" id="_wc_booking_first_block_time" value="<?php echo $booking_first_block ?>" placeholder="HH:MM:">
                             </div>
+
+                            <div class="dokan-form-group dokan_booking_has_restricted_days_field">
+                                <label class="form-label">
+                                    <input type="checkbox" name="_wc_booking_has_restricted_days" id="dokan_booking_has_restricted_days_field" value="yes" <?php checked( $booking_has_restricted_days, 'yes' ) ?>>
+                                    <?php _e( 'Restrict start and end days?', 'dokan' ); ?>
+
+                                    <span class="dokan-tooltips-help tips" title="" data-original-title="<?php _e( 'Restrict bookings so that they can only start on certain days of the week. Does not affect availability.', 'dokan' ) ?>">
+                                        <i class="fa fa-question-circle"></i>
+                                    </span>
+
+                                </label>
+                            </div>
+
+                            <div class="dokan-booking-day-restriction">
+                                <table class="widefat">
+                                    <tbody>
+                                        <tr>
+                                            <td>&nbsp;</td>
+                                            <?php
+                                                $weekdays = [
+                                                    __( 'Sunday', 'dokan' ),
+                                                    __( 'Monday', 'dokan' ),
+                                                    __( 'Tuesday', 'dokan' ),
+                                                    __( 'Wednesday', 'dokan' ),
+                                                    __( 'Thursday', 'dokan' ),
+                                                    __( 'Friday', 'dokan' ),
+                                                    __( 'Saturday', 'dokan' ),
+                                                ];
+
+                                                for ( $i = 0; $i < 7; $i++ ) {
+                                                    ?>
+                                                        <td>
+                                                            <label class="checkbox" for="_wc_booking_restricted_days[<?php echo $i; ?>]"><?php echo $weekdays[ $i ]; ?>&nbsp;</label>
+                                                            <input type="checkbox" class="checkbox" name="_wc_booking_restricted_days[<?php echo $i; ?>]" id="_wc_booking_restricted_days[<?php echo $i; ?>]" value="<?php echo $i; ?>" <?php checked( $restricted_days[ $i ], $i ); ?>>
+                                                        </td>
+                                                    <?php
+                                                }
+                                            ?>
+                                            <td>&nbsp;</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
                             <div class="dokan-form-group">
                                 <label for="_wc_booking_range_availability" class="form-label"><?php _e( 'Set Availability Range :', 'dokan' ); ?></label>
                             </div>
@@ -609,6 +666,8 @@ $template_args = array(
 
                 <?php if ( !empty( $post_id ) ): ?>
 
+                <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
+
                 <div class="dokan-other-options dokan-edit-row dokan-clearfix">
                     <div class="dokan-section-heading" data-togglehandler="dokan_other_options">
                         <h2><i class="fa fa-cog" aria-hidden="true"></i> <?php _e( 'Other Options', 'dokan' ); ?></h2>
@@ -725,6 +784,20 @@ $template_args = array(
                 duration_unit.on( 'change', function () {
                     duration_label.html( duration_unit.val() + 's' );
                 } );
+
+                var restrict_field = $( '#dokan_booking_has_restricted_days_field' );
+
+                restrict_field.on( 'change', function() {
+                    var self = $(this);
+                    var restricted_days = $( '.dokan-booking-day-restriction' );
+
+                    if ( self.is( ':checked' ) ) {
+                        restricted_days.show();
+                    } else {
+                        restricted_days.hide();
+                    }
+                } ).trigger( 'change' );
+
             } );
 
         } )( jQuery );

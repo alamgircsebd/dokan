@@ -354,7 +354,6 @@ class Dokan_Shipping_Zone {
             $zone_ids_with_postcode_rules = array_map( 'absint', wp_list_pluck( $postcode_locations, 'zone_id' ) );
             $matches                      = wc_postcode_location_matcher( $postcode, $postcode_locations, 'zone_id', 'location_code', $country );
             $do_not_match                 = array_unique( array_diff( $zone_ids_with_postcode_rules, array_keys( $matches ) ) );
-
             if ( ! empty( $do_not_match ) ) {
                 $criteria[] = 'AND zones.zone_id NOT IN (' . implode( ',', $do_not_match ) . ')';
             }

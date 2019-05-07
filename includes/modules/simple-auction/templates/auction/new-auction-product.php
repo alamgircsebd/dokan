@@ -356,7 +356,12 @@
     ;(function($){
         $(document).ready(function(){
             $('.auction-datepicker').datetimepicker({
-                dateFormat : 'yy-mm-dd'
+                dateFormat : 'yy-mm-dd',
+                currentText: dokan.datepicker.now,
+                closeText: dokan.datepicker.done,
+                timeText: dokan.datepicker.time,
+                hourText: dokan.datepicker.hour,
+                minuteText: dokan.datepicker.minute
             });
             $('#_auction_automatic_relist').on( 'click', function(){
               if($(this).prop('checked')){

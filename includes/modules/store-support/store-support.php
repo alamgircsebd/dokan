@@ -472,8 +472,8 @@ class Dokan_Store_Support {
         }
 
         $my_post = array(
-            'post_title'     => $postdata['dokan-support-subject'],
-            'post_content'   => $postdata['dokan-support-msg'],
+            'post_title'     => sanitize_text_field( $postdata['dokan-support-subject'] ),
+            'post_content'   => wp_kses_post( $postdata['dokan-support-msg'] ),
             'post_status'    => 'open',
             'post_author'    => dokan_get_current_user_id(),
             'post_type'      => 'dokan_store_support',

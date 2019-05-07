@@ -139,8 +139,9 @@ class Dokan_RMA_Order {
             $data['status'] = $_GET['status'];
         }
 
-        $data['number'] = $item_per_page;
-        $data['offset'] = $offset;
+        $data['number']      = $item_per_page;
+        $data['offset']      = $offset;
+        $data['customer_id'] = dokan_get_current_user_id();
 
         if( $total_page > 1 ){
             $pagination_html = '<div class="pagination-wrap">';
@@ -176,7 +177,7 @@ class Dokan_RMA_Order {
      */
     public function dokan_rma_requests_link( $menu_links ){
         $menu_links = array_slice( $menu_links, 0, 5, true )
-        + array( 'rma-requests' => 'RMA Requests' )
+        + array( 'rma-requests' => __( 'RMA Requests', 'dokan' ) )
         + array_slice( $menu_links, 5, NULL, true );
 
         return $menu_links;
@@ -274,7 +275,7 @@ class Dokan_RMA_Order {
         $warranty       = $this->get_settings( $_product_id );
         $warranty_label = $warranty['label'];
 
-        if ( $warranty ) {
+        if ( $warranty && 'no_warranty' !== $warranty['type'] ) {
             $item_id = $item->save();
 
             if ( $warranty['type'] == 'addon_warranty' ) {

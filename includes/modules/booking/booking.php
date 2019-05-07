@@ -563,6 +563,8 @@ class Dokan_WC_Booking {
             'resource_ids'               => array_keys( $resources ),
             'resources_assignment'       => isset( $_POST['_wc_booking_resources_assignment'] ) ? wc_clean( $_POST['_wc_booking_resources_assignment'] ) : '',
             'user_can_cancel'            => isset( $_POST['_wc_booking_user_can_cancel'] ),
+            'has_restricted_days'        => isset( $_POST['_wc_booking_has_restricted_days' ] ) ? wc_clean( $_POST['_wc_booking_has_restricted_days'] ) : '',
+            'restricted_days'            => isset( $_POST['_wc_booking_restricted_days'] ) ? wc_clean( $_POST['_wc_booking_restricted_days'] ) : ''
         );
 
         $product->set_props( $posted_props );

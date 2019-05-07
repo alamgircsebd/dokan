@@ -16,9 +16,10 @@ class Dokan_Geolocation_Vendor_Dashboard {
      */
     public function __construct() {
         add_action( 'dokan_store_profile_saved', array( $this, 'save_vendor_geodata' ), 10, 2 );
-        add_action( 'dokan_product_edit_after_options', array( $this, 'add_product_editor_options' ) );
+        add_action( 'dokan_product_edit_after_main', array( $this, 'add_product_editor_options' ) );
         add_action( 'dokan_new_product_added', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
+        add_action( 'dokan_update_auction_product', array( $this, 'update_product_settings' ) );
     }
 
     /**
@@ -106,9 +107,13 @@ class Dokan_Geolocation_Vendor_Dashboard {
         $store_id            = dokan_get_current_user_id();
         $store_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
 
+        if ( $post_id instanceof WP_Post ) {
+            $post_id = $post_id->ID;
+        }
+
         $use_store_settings  = $this->use_store_settings( $post_id );
 
-        if ( ! $use_store_settings ) {
+        if ( 'yes' === $use_store_settings ) {
             $dokan_geo_latitude  = get_user_meta( $store_id, 'dokan_geo_latitude', true );
             $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
             $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );

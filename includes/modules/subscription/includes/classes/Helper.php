@@ -284,7 +284,7 @@ class Helper {
      */
     public static function get_subscription_ranges( $subscription_period = '' ) {
         $subscription_ranges = array();
-        $subscription_ranges[''] = __( 'Never', 'dokan' );
+        $subscription_ranges[] = __( 'Never', 'dokan' );
 
         for ( $i = 1; $i <= 30; $i++ ) {
             $subscription_ranges[$i] = $i;

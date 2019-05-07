@@ -461,9 +461,9 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                 </div>
                             </div>
                         </div><!-- .dokan-other-options -->
-                    </div>
 
-                    <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
+                        <?php do_action( 'dokan_product_edit_after_main', $post, $post_id ); ?>
+                    </div>
 
                     <input type="hidden" name="dokan_product_id" id="dokan-edit-product-id" value="<?php echo $post_id; ?>"/>
                     <input type="hidden" name="product-type" value="auction">
@@ -512,7 +512,12 @@ wp_reset_query();
 ;(function($){
     $(document).ready(function(){
         $('.auction-datepicker').datetimepicker({
-            dateFormat : 'yy-mm-dd'
+            dateFormat : 'yy-mm-dd',
+            currentText: dokan.datepicker.now,
+            closeText: dokan.datepicker.done,
+            timeText: dokan.datepicker.time,
+            hourText: dokan.datepicker.hour,
+            minuteText: dokan.datepicker.minute
         });
 
         if($('#_auction_automatic_relist').prop('checked')){

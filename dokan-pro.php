@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.9.7
+  Version: 2.9.8
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 3.5.7
+  WC tested up to: 3.6.2
   License: GPL2
   TextDomain: dokan
  */
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.7';
+    public $version = '2.9.8';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -47,6 +47,8 @@ class Dokan_Pro {
      * @return void
      */
     public function __construct() {
+        $this->define_constants();
+
         add_action( 'plugins_loaded', array( $this, 'check_dokan_lite_exist' ), 10 );
         add_action( 'dokan_loaded', array( $this, 'init_plugin' ), 10 );
     }
@@ -77,11 +79,9 @@ class Dokan_Pro {
      * @return void
      */
     public function init_plugin() {
-        $this->defined();
         spl_autoload_register( array( $this, 'dokan_pro_autoload' ) );
 
         $this->includes();
-
         $this->load_actions();
         $this->load_filters();
     }
@@ -224,7 +224,7 @@ class Dokan_Pro {
      *
      * @return void
      */
-    public function defined() {
+    public function define_constants() {
         define( 'DOKAN_PRO_PLUGIN_VERSION', $this->version );
         define( 'DOKAN_PRO_FILE', __FILE__ );
         define( 'DOKAN_PRO_DIR', dirname( __FILE__ ) );
@@ -287,7 +287,7 @@ class Dokan_Pro {
             }
         }
 
-        if ( ! class_exists( 'Hybrid_Auth' ) ) {
+        if ( ! class_exists( 'Hybridauth' ) ) {
             require_once DOKAN_PRO_INC . '/lib/hybridauth/autoload.php';
         }
 

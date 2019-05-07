@@ -29,7 +29,7 @@
                 dokan_get_template_part( 'rma/request-warranty', '', array(
                     'is_rma'    => true,
                     'order'     => $order,
-                    'vendor_id' => dokan_get_seller_id_by_order_id( $order->get_id() )
+                    'vendor_id' => dokan_get_seller_id_by_order( $order->get_id() )
                 ) );
             }
 

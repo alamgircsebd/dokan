@@ -169,7 +169,7 @@ class Dokan_Seller_Vacation {
         ?>
 
         <div class="dokan-form-group goto_vacation_settings">
-            <label class="dokan-w3 control-label" for="setting_go_vacation"><?php _e( 'Go to Vacation', 'dokan' ); ?></label>
+            <label class="dokan-w3 dokan-control-label" for="setting_go_vacation"><?php _e( 'Go to Vacation', 'dokan' ); ?></label>
             <div class="dokan-w5">
                 <div class="checkbox">
                     <label>
@@ -181,7 +181,7 @@ class Dokan_Seller_Vacation {
         </div>
         <div class="show_if_go_vacation">
             <div class="dokan-form-group sotre_vacation">
-                <label class="dokan-w3 control-label" for="settings_closing_style"><?php _e( 'Closing Style', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label" for="settings_closing_style"><?php _e( 'Closing Style', 'dokan' ); ?></label>
                 <div class="dokan-w5">
                     <label>
                        <select class="form-control" name="settings_closing_style" id="settings_closing_style">
@@ -194,7 +194,7 @@ class Dokan_Seller_Vacation {
             </div>
 
             <div class="dokan-form-group datewise_close_store">
-                <label class="dokan-w3 control-label" for="settings_close_from"><?php _e( 'Date Range', 'dokan' ); ?></label>
+                <label class="dokan-w3 dokan-control-label" for="settings_close_from"><?php _e( 'Date Range', 'dokan' ); ?></label>
                 <div class="dokan-w5">
                     <div class="row">
                       <div class="col-md-6">
@@ -208,7 +208,7 @@ class Dokan_Seller_Vacation {
             </div>
 
             <div class="dokan-form-group vacation_message">
-                <label class="dokan-w3 control-label" for="setting_vacation_message"><?php _e( 'Set Vacation Message', 'dokan' ) ?></label>
+                <label class="dokan-w3 dokan-control-label" for="setting_vacation_message"><?php _e( 'Set Vacation Message', 'dokan' ) ?></label>
                 <div class="dokan-w5">
                     <textarea class="form-control" rows="4" id="setting_vacation_message" name="setting_vacation_message"><?php echo $setting_vacation_message; ?></textarea>
                 </div>

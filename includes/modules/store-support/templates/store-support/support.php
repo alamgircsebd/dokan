@@ -4,7 +4,7 @@ $dss = Dokan_Store_Support::init();
 $topic_id = get_query_var( 'support' );
 
 if( is_numeric( $topic_id ) ) {
-    $topic = $dss ->get_single_topic( $topic_id, dokan_get_current_user_id() );
+    $topic = $dss->get_single_topic( $topic_id, dokan_get_current_user_id() );
 }
 ?>
 

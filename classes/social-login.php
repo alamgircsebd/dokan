@@ -195,7 +195,7 @@ Class Dokan_Social_Login {
             if ( $provider = $storage->get( 'provider' ) ) {
                 $adapter = $hybridauth->authenticate( $provider );
 
-                $storage->set('provider', null);
+                $storage->clear();
             }
 
             if ( ! isset( $adapter ) ) {

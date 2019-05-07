@@ -427,33 +427,51 @@ if ( class_exists( 'WooCommerce' ) ) {
             }
 
             if ( isset( $location_group['state'] ) ) {
-                $states = wp_list_pluck( $location_group['state'], 'code' );
-                $state_array = array_map( array( $this, 'split_state_code' ), $states );
+                $states       = wp_list_pluck( $location_group['state'], 'code' );
+                $state_array  = array_map( array( $this, 'split_state_code' ), $states );
+                $is_available = false;
 
-                if ( ! in_array( $destination_state, $state_array ) ) {
-                    return false;
+                if ( in_array( $destination_state, $state_array ) ) {
+                    $is_available = true;
                 }
-
-                $is_available = true;
             }
-
 
             if ( isset( $location_group['postcode'] ) ) {
+                $is_available   = false;
                 $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
-                $postcode_array = array_map( 'trim', $postcode_array );
 
-                if ( ! in_array( $destination_postcode, $postcode_array ) ) {
-                    return false;
+                // if postcode is set as ranges (e.g. 10001...10010)
+                if ( strstr( $postcode_array[0], '...' ) ) {
+                    $range = array_map( 'trim', explode( '...', $postcode_array[0] ) );
+
+                    if ( 2 !== count( $range ) ) {
+                        return $is_available;
+                    }
+
+                    list( $min, $max ) = $range;
+
+                    // If the postcode is non-numeric, make it numeric.
+                    if ( ! is_numeric( $min ) || ! is_numeric( $max ) ) {
+                        $min = str_pad( wc_make_numeric_postcode( $min ), strlen( $compare ), '0' );
+                        $max = str_pad( wc_make_numeric_postcode( $max ), strlen( $compare ), '0' );
+                    }
+
+                    $postcode_array = range( $min, $max );
+                } else {
+                    $postcode_array = array_map( 'trim', $postcode_array );
                 }
 
-                $is_available = true;
+                if ( in_array( $destination_postcode, $postcode_array ) ) {
+                    $is_available = true;
+                }
+
+                // if postcode is set as wilecard range (e.g 1000*)
+                if ( strstr( $postcode_array[0], '*' ) ) {
+                    $is_available = true;
+                }
             }
 
-            if ( $is_available ) {
-                return true;
-            }
-
-            return false;
+            return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
         }
 
         /**
