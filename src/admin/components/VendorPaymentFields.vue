@@ -155,7 +155,7 @@ export default {
 
         let commissionType = this.vendorInfo.admin_commission_type;
 
-        if ( '' !== commissionType ) {
+        if ( commissionType ) {
             this.selectedCommissionType = commissionType.charAt( 0 ).toUpperCase() + commissionType.slice( 1 );
         }
     },

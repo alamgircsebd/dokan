@@ -470,14 +470,6 @@ export default {
         saveBtn() {
             return this.isUpdating ? this.__( 'Saving...', 'dokan' ) : this.__( 'Save Changes' )
         },
-        // storeUrl() {
-        //     let defaultUrl = dokan.urls.siteUrl + dokan.urls.storePrefix + '/';
-        //     let storeUrl = this.store.store_name.trim().split(' ').join('-');
-        //     this.store.user_nicename = storeUrl;
-        //     this.otherStoreUrl = defaultUrl + storeUrl;
-
-        //     return defaultUrl + storeUrl;
-        // }
     },
 
     watch: {
@@ -485,16 +477,6 @@ export default {
             this.fetch();
             this.fetchStats();
         },
-
-        // 'store.store_name'( value ) {
-        //     this.showStoreUrl = true;
-        // },
-
-        // 'store.user_nicename'( value ) {
-        //     this.showStoreUrl = false;
-        //     this.otherStoreUrl = this.defaultUrl + value.trim().split(' ').join('-');
-        //     this.store.user_nicename = value.split(' ').join('-');
-        // },
     },
 
     created() {
@@ -514,9 +496,7 @@ export default {
             dokan.api.get('/stores/' + self.id )
             .done( ( response ) => {
                 Object.assign( self.fakeStore, self.store );
-                // self.store = response;
                 Object.assign( self.store, response );
-                // console.log(self.store)
                 self.transformer(response);
             } );
 
@@ -540,10 +520,6 @@ export default {
             if ( 'payment' in response && response.payment.bank && response.payment.bank.length < 1 ) {
                 this.store.payment = this.fakeStore.payment;
             }
-
-            // if ( 'payment' in response && response.payment.paypal && response.payment.paypal.email.length < 1 ) {
-            //     this.store.payment = this.fakeStore.payment;
-            // }
 
             if ( 'email' in response ) {
                 this.store.user_email = response.email;
@@ -636,6 +612,8 @@ export default {
                     self.isUpdating = false;
                     self.editingCategories = false;
 
+                    this.updateCommissonRate();
+
                     this.showAlert(
                         this.__( 'Vendor Updated', 'dokan' ),
                         this.__( 'Vendor Updated Successfully!', 'dokan' ),
@@ -645,7 +623,12 @@ export default {
                 } )
                 .fail((response) => {
                     this.showAlert( this.__( response.responseJSON.message, 'dokan' ), '', 'error' );
-                });
+                } )
+                .always( () => {
+                    this.$router.push( {
+                        query: {edit: false}
+                    } );
+                } );
         },
 
         uploadGravatar( image ) {
@@ -662,6 +645,18 @@ export default {
 
         getDefaultPic() {
             return dokan.urls.proAssetsUrl + '/images/store-pic.png';
+        },
+
+        updateCommissonRate() {
+            let admin_commission = this.store.admin_commission;
+
+            if ( this.store.admin_commission_type === 'percentage' ) {
+                this.stats.others.commission_rate = 100 - admin_commission;
+            } else {
+                this.stats.others.commission_rate = admin_commission;
+            }
+
+            this.stats.others.commission_type = this.store.admin_commission_type;
         }
     }
 };
