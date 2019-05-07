@@ -109,9 +109,9 @@
                 <p>
                     <strong>{{ __('Product Vendor', 'dokan') }}:</strong>
                     <a
-                        v-if="report.reported_by.admin_url"
-                        :href="report.reported_by.admin_url"
-                        v-text="report.reported_by.name"
+                        v-if="report.vendor.admin_url"
+                        :href="report.vendor.admin_url"
+                        v-text="report.vendor.name"
                     />
                     <template v-else>
                         {{ report.reported_by.name }} &lt;{{ report.reported_by.email }}&gt;
