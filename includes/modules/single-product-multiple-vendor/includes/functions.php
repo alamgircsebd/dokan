@@ -3,7 +3,7 @@
 /**
  * Include module templates
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @param string $name
  * @param array  $args
@@ -17,7 +17,7 @@ function dokan_spmv_get_template( $name, $args = [] ) {
 /**
  * Get other reseller vendors
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.8
  *
  * @param int $product_id
  *

@@ -16,7 +16,7 @@ class AdminEmail extends WC_Email {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -46,7 +46,7 @@ class AdminEmail extends WC_Email {
     /**
      * Email settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -84,7 +84,7 @@ class AdminEmail extends WC_Email {
     /**
      * Email default subject
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return string
      */
@@ -98,7 +98,7 @@ class AdminEmail extends WC_Email {
     /**
      * Email default heading
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return string
      */
@@ -109,7 +109,7 @@ class AdminEmail extends WC_Email {
     /**
      * Send email
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -130,7 +130,7 @@ class AdminEmail extends WC_Email {
     /**
      * Email content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return string
      */

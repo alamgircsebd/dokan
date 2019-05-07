@@ -7,7 +7,7 @@ class EmailLoader {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return array
      */
@@ -20,7 +20,7 @@ class EmailLoader {
     /**
      * Add email class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $wc_emails
      *
@@ -37,7 +37,7 @@ class EmailLoader {
     /**
      * Add email template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $template_files
      *
@@ -52,7 +52,7 @@ class EmailLoader {
     /**
      * Add email action
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $actions
      *

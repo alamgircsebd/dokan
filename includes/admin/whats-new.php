@@ -1,5 +1,56 @@
 <?php
 $changelog = array(
+     array(
+        'version'  => 'Version 2.9.8',
+        'released' => '2019-05-07',
+        'changes'  => array(
+            array(
+                'title'         => 'Report Abuse',
+                'type'          => 'New',
+                'description'   => 'Customer will be able to report againts product.'
+            ),
+            array(
+                'title'         => 'Vendor Add Edit',
+                'type'          => 'New',
+                'description'   => 'Admin will be able to create new Vendor from the backend'
+            ),
+            array(
+                'title'         => 'Dokan Booking',
+                'type'          => 'New',
+                'description'   => 'Add restricted days functionality in dokan booking module'
+            ),
+            array(
+                'title'         => 'Single Product Multi Vendor',
+                'type'          => 'New',
+                'description'   => 'Enable SPMV for admins to duplicate products from admin panel'
+            ),
+            array(
+                'title'         => 'Store Category',
+                'type'          => 'Fix',
+                'description'   => 'Fix store category list table search form'
+            ),
+            array(
+                'title'         => 'Duplicate Subscription Form',
+                'type'          => 'Fix',
+                'description'   => 'Subscription form is rendering twice in registration form'
+            ),
+            array(
+                'title'         => 'Subscription Cancellation',
+                'type'          => 'Fix',
+                'description'   => 'Cancel subscription doesn\'t work for manually assigned subscription'
+            ),
+            array(
+                'title'         => 'Vendor Shipping',
+                'type'          => 'new',
+                'description'   => 'Add wilecard and range matching for vendor shipping zone'
+            ),
+            array(
+                'title'         => 'Depricated Functions',
+                'type'          => 'Improvement',
+                'description'   => 'Replace get_woocommerce_term_meta with get_term_meta as it was deprecated'
+            ),
+        )
+    ),
     array(
         'version'  => 'Version 2.9.7',
         'released' => '2019-03-25',

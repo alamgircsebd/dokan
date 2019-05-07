@@ -162,7 +162,7 @@ class Dokan_Pro_Assets {
      *
      * @param  array $scripts
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return array
      */

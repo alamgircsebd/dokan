@@ -3,7 +3,7 @@
 * Plugin Name: Report Abuse
 * Plugin URI: https://wedevs.com/products/plugins/dokan/
 * Description: CHANGE_THIS_DESCRIPTION
-* Version: DOKAN_PRO_SINCE
+* Version: 2.9.8
 * Author: weDevs
 * Author URI: https://wedevs.com/
 * Thumbnail Name: abuse-report.png
@@ -48,7 +48,7 @@ final class DokanReportAbuse {
     /**
      * Exec after first instance has been created
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -63,7 +63,7 @@ final class DokanReportAbuse {
     /**
      * Module constants
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -79,7 +79,7 @@ final class DokanReportAbuse {
     /**
      * Include module related files
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -97,7 +97,7 @@ final class DokanReportAbuse {
     /**
      * Create module related class instances
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -114,7 +114,7 @@ final class DokanReportAbuse {
     /**
      * Executes on module activation
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -166,7 +166,7 @@ final class DokanReportAbuse {
     /**
      * Create module related tables
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */

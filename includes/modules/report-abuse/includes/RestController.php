@@ -24,7 +24,7 @@ class RestController extends WP_REST_Controller {
     /**
      * Register routes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class RestController extends WP_REST_Controller {
     /**
      * Permission callback
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return bool
      */
@@ -82,7 +82,7 @@ class RestController extends WP_REST_Controller {
     /**
      * Get reports
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param \WP_REST_Request $request
      *
@@ -121,7 +121,7 @@ class RestController extends WP_REST_Controller {
     /**
      * Get abuse reasons
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param \WP_REST_Request $request
      *
@@ -138,7 +138,7 @@ class RestController extends WP_REST_Controller {
     /**
      * Delete report
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param \WP_REST_Request $request
      *
@@ -159,7 +159,7 @@ class RestController extends WP_REST_Controller {
     /**
      * Delete reports in bulk
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param \WP_REST_Request $request
      *

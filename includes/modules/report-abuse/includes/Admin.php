@@ -7,7 +7,7 @@ class Admin {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class Admin {
     /**
      * Add Dokan submenu
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param string $capability
      * @param int    $menu_position
@@ -39,7 +39,7 @@ class Admin {
     /**
      * Add admin page Route
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @param array $routes
      *
@@ -64,7 +64,7 @@ class Admin {
     /**
      * Enqueue admin script
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.8
      *
      * @return void
      */

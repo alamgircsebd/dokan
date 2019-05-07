@@ -1,4 +1,34 @@
-v2.9.7 -> Mar 25, 2018
+v2.9.8 -> May 07, 2019
+--------------------------------------------
+- [new]   Add Report Abuse for customer (Module)
+- [new]   Allow adding new vendor from the admin backend
+- [new]   Add restricted days functionality in dokan booking (Booking)
+- [new]   Enable SPMV for admins to duplicate products from admin panel (Single Product Multi Vendor)
+- [fix]   Prevent sending REST request when feature is not active (Store Category)
+- [fix]   Fix store category list table search form (Store Category)
+- [fix]   Make Auction Integration module compatible (Geolocation)
+- [fix]   Vendor store settings uniform class names
+- [fix]   There is no order id in booking order (Booking)
+- [fix]   Localize auction date time picker (Auction)
+- [fix]   RMA Warranty Request is appearning even though the customer wans't  (RMA)
+- [fix]   Subscription form is rendering twice in registration form (Vendor Subscription)
+- [fix]   Cancel subscription doesn't work for manually assigned subscription (Vendor Subscription)
+- [fix]   Subscription is redirecting to seller setup wizard even for previous user and upgrading package (Vendor Subscription)
+- [fix]   Add wilecard and range matching for vendor shipping zone
+- [fix]   Product attributes with different language other than english was rendering incorrectly
+- [fix]   There are two dashboard when vendor staff module is active (Vendor Staff)
+- [fix]   This seller is not connected to stripe notice is appearing for subscription product (Stripe)
+- [fix]   While creating subscription from plan, inherit trial details from plan (Vendor Subscription)
+- [fix]   Conflict between social login & vendor verification with sessions (Social Login & Vendor Verification)
+- [tweak] Add hook in product editing form (Booking)
+- [tweak] Make delay while searching vendor in backend report page
+- [tweak] Sanitize various input fields (Store Support, Store Review & RMA)
+- [tweak] Show column title in exported CSV logs (Report All Logs)
+- [tweak] Subscription handeling with paypal (Vendor Subscription)
+- [tweak] Replace get_woocommerce_term_meta with get_term_meta as it was deprecated
+- [tweak] Define constants variables in the constructor method so that it works on module activation
+
+v2.9.7 -> Mar 25, 2019
 --------------------------------------------
 - [new]   Add Store Category
 - [new]   Make Dokan YITH WC Brand add-on compatible
@@ -23,13 +53,13 @@ v2.9.7 -> Mar 25, 2018
 - [fix]   If admin creates a shipping zone with a zip code and vendor don't create a shipping method under that zone, shipping calculation is getting wrong.
 - [fix]   Update social login and vendor verification API
 
-v2.9.6 -> Feb 20, 2018
+v2.9.6 -> Feb 20, 2019
 ----------------------------------------------
 - [fix] Add csv export functionality for all log in backend dashboard report section
 - [fix] Fix js compiling issues
 - [fix] Fix backend report routing isssue
 
-v2.9.5 -> Feb 18, 2018
+v2.9.5 -> Feb 18, 2019
 ----------------------------------------------
 - [new] Automate order refund process via stripe
 - [new] Add create review REST endpoint (Store Review Module)
@@ -56,7 +86,7 @@ v2.9.5 -> Feb 18, 2018
 - [fix] if zone id is not found in vendor's available zone id, assume it falls under Locations not covered by your other zones
 - [fix] When admin sends an announcement to all the vendors, newly registered vendors sees "no notice found"
 
-v2.9.4 -> January 23, 2018
+v2.9.4 -> January 23, 2019
 ------------------------------------
 - [new] Wholesale Module ( Business and Enterprise package )
 - [new] Return and Warranty(RMA) Module ( Professiona, Business and Enterprise package )
