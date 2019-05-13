@@ -2,11 +2,11 @@
 /*
 * Plugin Name: Report Abuse
 * Plugin URI: https://wedevs.com/products/plugins/dokan/
-* Description: CHANGE_THIS_DESCRIPTION
+* Description: Let customers report fraudulent or fake products.
 * Version: 2.9.8
 * Author: weDevs
 * Author URI: https://wedevs.com/
-* Thumbnail Name: abuse-report.png
+* Thumbnail Name: report-abuse.png
 * License: GPL2
 */
 
