@@ -30,10 +30,11 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @since 1.0
      */
     protected function set_settings() {
-        $this->id           = 'dokan-moip-connect';
-        $this->method_title = __( 'Dokan Moip Connect', 'dokan' );
-        $this->has_fields   = true;
-        $this->supports     = array( 'products' );
+        $this->id                 = 'dokan-moip-connect';
+        $this->method_title       = __( 'Dokan Wirecard Connect', 'dokan' );
+        $this->method_description = __( 'Have your customers pay with credit card.', 'dokan' );
+        $this->has_fields         = true;
+        $this->supports           = array( 'products' );
 
         // load form fields
         $this->init_form_fields();
@@ -74,7 +75,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         return array(
             'enabled' => array(
                 'title'       => __( 'Enable/Disable', 'dokan' ),
-                'label'       => __( 'Enable Moip', 'dokan' ),
+                'label'       => __( 'Enable Wirecard', 'dokan' ),
                 'type'        => 'checkbox',
                 'description' => '',
                 'default'     => 'no'
@@ -83,22 +84,22 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'title'       => __( 'Title', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'This controls the title which the user sees during checkout.', 'dokan' ),
-                'default'     => __( 'Moip Credit Card', 'dokan' )
+                'default'     => __( 'Wirecard Credit Card', 'dokan' )
             ),
             'description' => array(
                 'title'       => __( 'Description', 'dokan' ),
                 'type'        => 'textarea',
                 'description' => __( 'This controls the description which the user sees during checkout.', 'dokan' ),
-                'default'     => 'Pay with your credit card via moip.'
+                'default'     => 'Pay with your credit card via Wirecard.'
             ),
             'moip_fee' => array(
-                'title'       => __( 'Moip Fee', 'dokan' ),
+                'title'       => __( 'Wirecard Fee', 'dokan' ),
                 'type'        => 'select',
                 'options'     => array(
                     'admin'   => __( 'Admin', 'dokan' ),
                     'vendor'  => __( 'Vendor', 'dokan' ),
                 ),
-                'description' => __( 'Select who will bear the Moip transection fee.', 'dokan' ),
+                'description' => __( 'Select who will bear the Wirecard transection fee.', 'dokan' ),
                 'default'     => 'vendor'
             ),
             'testmode' => array(
@@ -115,19 +116,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             'production_token' => array(
                 'title'       => __( 'Production Token', 'dokan' ),
                 'type'        => 'text',
-                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API token from your moip account. (Required**)', 'dokan' ) ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API token from your wirecard account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'production_key' => array(
                 'title'       => __( 'Production Key', 'dokan' ),
                 'type'        => 'text',
-                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API keys from your moip account. (Required**)', 'dokan' ) ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API keys from your wirecard account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'production_public_key' => array(
                 'title'       => __( 'Production Public Key', 'dokan' ),
                 'type'        => 'textarea',
-                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion public API keys from your moip account. (Required**)', 'dokan' ) ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion public API keys from your wirecard account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'test-credentials-title' => array(
@@ -137,19 +138,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             'test_token' => array(
                 'title'       => __( 'Test Token', 'dokan' ),
                 'type'        => 'text',
-                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API token from your moip account. (Required**)', 'dokan' ) ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API token from your wirecard account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'test_key' => array(
                 'title'       => __( 'Test Key', 'dokan' ),
                 'type'        => 'text',
-                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API keys from your moip account. (Required**)', 'dokan' ) ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API keys from your wirecard account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
             'test_public_key' => array(
                 'title'       => __( 'Test Public Key', 'dokan' ),
                 'type'        => 'textarea',
-                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test public API keys from your moip account. (Required**)', 'dokan' ) ),
+                'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test public API keys from your wirecard account. (Required**)', 'dokan' ) ),
                 'default'     => ''
             ),
         );
@@ -281,9 +282,10 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         wp_enqueue_script( 'dokan-moip', MOIP_ASSETS . '/js/moip.js' , array(), false, false );
 
         $moip_params = array(
-            'public_key' => $this->public_key,
-            'card_error' => __( 'Card number is not valid', 'dokan' ),
-            'cvc_error'  => __( 'Card expriy date is not valid', 'dokan' ),
+            'public_key'   => $this->public_key,
+            'card_error'   => __( 'Card number is not valid', 'dokan' ),
+            'expriy_error' => __( 'Card expriy date is not valid', 'dokan' ),
+            'cvc_error'    => __( 'Card CVC number is not valid', 'dokan' ),
         );
 
         wp_enqueue_script( 'dokan-moip-checkout', MOIP_ASSETS . '/js/moip-checkout.js' , array( 'jquery' ), false, false );
@@ -617,7 +619,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 throw new Exception( __( 'Payment id not found', 'dokan' ) );
             }
 
-            $order->payment_complete();
+            $order->payment_complete( $payment_id );
 
             if ( $do_order->order_total == 0 ) {
                 $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed', 'dokan' ), $tmp_order->get_order_number() ) );
@@ -693,7 +695,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'date'    => current_time( 'mysql' ),
                 'status'  => 1,
                 'method'  => 'dokan-moip-connect',
-                'notes'   => sprintf( __( 'Order %d payment auto paid via Dokan Moip', 'dokan' ), $withdraw_data['order_id'] ),
+                'notes'   => sprintf( __( 'Order %d payment auto paid via Dokan Wirecard', 'dokan' ), $withdraw_data['order_id'] ),
                 'ip'      => $IP
             );
 

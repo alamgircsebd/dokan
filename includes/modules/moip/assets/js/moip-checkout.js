@@ -17,8 +17,13 @@ jQuery( function($) {
             return false;
         }
 
+        if ( ! MoipSdkJs.MoipValidator.isSecurityCodeValid( $card_number, $card_cvc ) ) {
+            $('#dokan-moip-connect-card-cvc').closest('p').before( '<ul class="woocommerce_error woocommerce-error"><li>' + moip_params.cvc_error + '</li></ul>' );
+            return false;
+        }
+
         if ( ! MoipSdkJs.MoipValidator.isExpiryDateValid( $card_expiry_month, $card_expiry_year ) ) {
-            $('#dokan-moip-connect-card-expiry').closest('p').before( '<ul class="woocommerce_error woocommerce-error"><li>' + moip_params.cvc_error + '</li></ul>' );
+            $('#dokan-moip-connect-card-expiry').closest('p').before( '<ul class="woocommerce_error woocommerce-error"><li>' + moip_params.expriy_error + '</li></ul>' );
             return false;
         }
 

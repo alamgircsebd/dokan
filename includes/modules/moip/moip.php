@@ -1,12 +1,12 @@
 <?php
 /*
-Plugin Name: Moip
+Plugin Name: Wirecard
 Plugin URI: https://wedevs.com
-Description: Moip payment gateway for dokan
+Description: Wirecard payment gateway for dokan
 Version: 1.0
 Author: weDevs, LLC
 Author URI: https://wedevs.com/
-Thumbnail Name: moip-connect.png
+Thumbnail Name: wirecard-connect.png
 License: GPL2
 */
 
