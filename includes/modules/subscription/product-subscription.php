@@ -94,6 +94,7 @@ class Dokan_Product_Subscription {
 
         // Loads all actions
         add_filter( 'dokan_can_add_product', array( $this, 'seller_add_products' ), 1, 1 );
+        add_filter( 'dokan_update_product_post_data', array( $this, 'make_product_draft' ), 1 );
         add_action( 'dokan_can_post_notice', array( $this, 'display_product_pack' ) );
         add_filter( 'dokan_can_post', array( $this, 'can_post_product' ) );
         add_filter( 'dokan_product_cat_dropdown_args', [ __CLASS__, 'filter_category' ] );
@@ -443,6 +444,29 @@ class Dokan_Product_Subscription {
         }
     }
 
+    /**
+     * Make product status draft when vendor's remaining product is zero
+     *
+     * @param array $data
+     *
+     *  @return array
+     */
+    public function make_product_draft( $data ) {
+        $vendor_id = dokan_get_current_user_id();
+
+        if ( Helper::get_vendor_remaining_products( $vendor_id ) ) {
+            return $data;
+        }
+
+        // if product status was not publish and pending then make it draft
+        $product = wc_get_product( $data['ID'] );
+
+        if ( 'publish' !== $product->get_status() && 'pending' !== $product->get_status() ) {
+            $data['post_status'] = 'draft';
+        }
+
+        return $data;
+    }
 
     /**
      * Get number of product by seller
