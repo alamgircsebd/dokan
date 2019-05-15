@@ -1,6 +1,32 @@
 <?php
 $changelog = array(
      array(
+        'version'  => 'Version 2.9.9',
+        'released' => '2019-05-15',
+        'changes'  => array(
+            array(
+                'title'         => 'Translation issue',
+                'type'          => 'Fix',
+                'description'   => 'Make coupon strings translatable'
+            ),
+            array(
+                'title'         => 'Report Abuse Module thumbnail',
+                'type'          => 'Improvement',
+                'description'   => 'Add thumbnail and description of report abuse module'
+            ),
+            array(
+                'title'         => 'Social login and vendor verification',
+                'type'          => 'Improvement',
+                'description'   => 'Refactor social login and vendor verification module'
+            ),
+            array(
+                'title'         => 'Change Moip brand to wirecard',
+                'type'          => 'Improvement',
+                'description'   => 'Rename Moip to Wirecard payment gateway'
+            ),
+        )
+    ),
+     array(
         'version'  => 'Version 2.9.8',
         'released' => '2019-05-07',
         'changes'  => array(
