@@ -1,3 +1,12 @@
+v2.9.9 -> May 15, 2019
+--------------------------------------------
+- [fix]   Make coupon strings translatable
+- [fix]   Make product status draft when vendors remaining product is zero (Subscription)
+- [fix]   Vendor can duplicate product more than the subscription product limit (Subscription)
+- [tweak] Add thumbnail and description of report abuse module
+- [tweak] Refactor social login and vendor verification module
+- [tweak] Rename Moip to Wirecard payment gateway
+
 v2.9.8 -> May 07, 2019
 --------------------------------------------
 - [new]   Add Report Abuse for customer (Module)
