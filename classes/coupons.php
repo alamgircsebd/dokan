@@ -646,9 +646,9 @@ class Dokan_Pro_Coupons {
      */
     public static function get_coupon_types() {
         return apply_filters( 'dokan_get_coupon_types', [
-            'fixed_product'   => 'Product Discount',
-            'percent_product' => 'Product % Discount',
-            'booking_person'  => 'Booking Person Discount (Amount Off Per Person)'
+            'fixed_product'   => __( 'Product Discount', 'dokan' ),
+            'percent_product' => __( 'Product % Discount', 'dokan' ),
+            'booking_person'  => __( 'Booking Person Discount (Amount Off Per Person)', 'dokan' )
         ] );
     }
 }
