@@ -327,6 +327,10 @@ class Dokan_Seller_Verification {
     public function monitor_autheticate_requests() {
         $vendor_id = dokan_get_current_user_id();
 
+        if ( ! $vendor_id ) {
+            return;
+        }
+
         if ( isset( $_GET['dokan_auth_dc'] ) ) {
             $seller_profile = dokan_get_store_info( $vendor_id );
             $provider_dc    = sanitize_text_field( $_GET['dokan_auth_dc'] );

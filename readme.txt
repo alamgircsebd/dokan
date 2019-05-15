@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.1.1
+Tested up to: 5.2
 WC requires at least: 3.0
 WC tested up to: 3.6.2
 Stable tag: trunk
@@ -171,6 +171,15 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.9 -> May 15, 2019
+--------------------------------------------
+- [fix]   Make coupon strings translatable
+- [fix]   Make product status draft when vendors remaining product is zero (Subscription)
+- [fix]   Vendor can duplicate product more than the subscription product limit (Subscription)
+- [tweak] Add thumbnail and description of report abuse module
+- [tweak] Refactor social login and vendor verification module
+- [tweak] Rename Moip to Wirecard payment gateway
 
 v2.9.8 -> May 07, 2019
 --------------------------------------------

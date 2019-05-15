@@ -131,7 +131,7 @@ class Dokan_Moip_Withdraw {
         }
 
         $methods['dokan-moip-connect'] = array(
-            'title'    => __( 'Moip', 'dokan' ),
+            'title'    => __( 'Wirecard', 'dokan' ),
             'callback' => array( $this, 'moip_authorize_button' )
         );
 
@@ -174,7 +174,7 @@ class Dokan_Moip_Withdraw {
                 if ( empty( $vendor_moip_account ) ) {
 
                     echo '<div class="dokan-alert dokan-alert-danger">';
-                        _e( 'Your account is not yet connected with Moip. Connect with Moip to receive your commissions.', 'dokan' );
+                        _e( 'Your account is not yet connected with Wirecard. Connect with Wirecard to receive your commissions.', 'dokan' );
                     echo '</div>';
 
                     $token  = $this->settings['testmode'] == 'yes' ? $this->settings['test_token'] : $this->settings['production_token'];
@@ -203,13 +203,13 @@ class Dokan_Moip_Withdraw {
                     ?>
                     <br/>
                     <a class="clear dokan-btn dokan-btn-theme" href="<?php echo $url; ?>" target="_TOP">
-                        <?php _e( 'Connect With Moip', 'dokan' ); ?>
+                        <?php _e( 'Connect With Wirecard', 'dokan' ); ?>
                     </a>
                     <?php
                 } else {
                     ?>
                     <div class="dokan-alert dokan-alert-success">
-                        <?php _e( 'Your account is connected with Moip.', 'dokan' ); ?>
+                        <?php _e( 'Your account is connected with Wirecard.', 'dokan' ); ?>
                         <a  class="dokan-btn dokan-btn-danger dokan-btn-theme" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-disconnect-moip' ), dokan_get_navigation_url( 'settings/payment' ) ), 'dokan-disconnect-moip' ); ?>"><?php _e( 'Disconnect', 'dokan' ); ?></a>
                     </div>
                     <?php

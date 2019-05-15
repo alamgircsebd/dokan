@@ -168,6 +168,12 @@ Class Dokan_Social_Login {
      * @return void
      */
     public function monitor_autheticate_requests() {
+
+        // if not my account page, return early
+        if ( ! is_account_page() ) {
+            return;
+        }
+
         try {
             /**
              * Feed the config array to Hybridauth
@@ -459,9 +465,11 @@ Class Dokan_Social_Login {
 
         $user_id = @wp_insert_user( $userdata );
 
-        if ( !is_wp_error( $user_id ) ) {
-            $this->login_user( get_userdata( $user_id ) );
+        if ( is_wp_error( $user_id ) ) {
+            throw new Exception( $user_id->get_error_message() );
         }
+
+        $this->login_user( get_userdata( $user_id ) );
     }
 
     /**

@@ -238,7 +238,7 @@ class SubscriptionPack extends VendorSubscription {
     /**
      * Get subscription product instance
      *
-     * @return object
+     * @return object|false on failure
      */
     public function get_product() {
         return wc_get_product( $this->get_id() );
@@ -250,7 +250,9 @@ class SubscriptionPack extends VendorSubscription {
      * @return stirng
      */
     public function get_package_title() {
-        return $this->get_product()->get_title();
+        $package = $this->get_product();
+
+        return $package ? $package->get_title() : '';
     }
 
     /**
@@ -313,6 +315,8 @@ class SubscriptionPack extends VendorSubscription {
      * @return flaot
      */
     public function get_price() {
-        return $this->get_product()->get_price();
+        $package = $this->get_product();
+
+        return $package ? $package->get_price() : 0;
     }
 }
