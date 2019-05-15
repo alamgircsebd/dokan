@@ -492,15 +492,8 @@ class Dokan_Pro_Products {
             return;
         }
 
-        if ( class_exists( 'Dokan_Product_Subscription' ) ) {
-            $enable_option = get_option( 'dokan_product_subscription' );
-
-            if ( isset( $enable_option['enable_pricing'] ) && $enable_option['enable_pricing'] == 'on' ) {
-
-                if ( ! Dokan_Product_Subscription::can_post_product() ) {
-                    return;
-                }
-            }
+        if ( ! apply_filters( 'dokan_vendor_can_duplicate_product', true ) ) {
+            return;
         }
 
         if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-duplicate-product' ) {

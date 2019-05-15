@@ -94,6 +94,7 @@ class Dokan_Product_Subscription {
 
         // Loads all actions
         add_filter( 'dokan_can_add_product', array( $this, 'seller_add_products' ), 1, 1 );
+        add_filter( 'dokan_vendor_can_duplicate_product', array( $this, 'vendor_can_duplicate_product' ) );
         add_filter( 'dokan_update_product_post_data', array( $this, 'make_product_draft' ), 1 );
         add_action( 'dokan_can_post_notice', array( $this, 'display_product_pack' ) );
         add_filter( 'dokan_can_post', array( $this, 'can_post_product' ) );
@@ -442,6 +443,21 @@ class Dokan_Product_Subscription {
                 return $errors;
             }
         }
+    }
+
+    /**
+     * Vendor can duplicate product
+     *
+     * @return boolean
+     */
+    public function vendor_can_duplicate_product() {
+        $vendor_id = dokan_get_current_user_id();
+
+        if ( ! Helper::get_vendor_remaining_products( $vendor_id ) ) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
