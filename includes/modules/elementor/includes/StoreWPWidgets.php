@@ -67,10 +67,10 @@ class StoreWPWidgets {
      */
     public function widget_store_support( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() && ! is_product() ) {
-            $defaults = array(
+            $defaults = [
                 'title'       => __( 'Contact Vendor', 'dokan' ),
                 'description' => '',
-            );
+            ];
 
             $instance    = wp_parse_args( $instance, $defaults );
             $title       = apply_filters( 'dokan_store_support_widget_title', $instance['title'] );
@@ -107,9 +107,9 @@ class StoreWPWidgets {
      */
     public function widget_store_contact_form( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() && ! is_product() ) {
-            $defaults = array(
+            $defaults = [
                 'title' => __( 'Contact Vendor', 'dokan' ),
-            );
+            ];
 
             $instance = wp_parse_args( $instance, $defaults );
 
@@ -121,12 +121,12 @@ class StoreWPWidgets {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
 
-            dokan_get_template_part( 'widgets/store-contact-form', '', array(
+            dokan_get_template_part( 'widgets/store-contact-form', '', [
                 'seller_id'  => 0,
                 'store_info' => [],
                 'username'   => 'username',
                 'email'      => 'email@example.com',
-            ) );
+            ] );
 
             echo $args['after_widget'];
         }
@@ -145,9 +145,9 @@ class StoreWPWidgets {
      */
     public function widget_store_location( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() ) {
-            $defaults = array(
+            $defaults = [
                 'title' => __( 'Store Location', 'dokan' ),
-            );
+            ];
 
             $instance = wp_parse_args( $instance, $defaults );
 
@@ -159,10 +159,10 @@ class StoreWPWidgets {
                 echo $args['before_title'] . $title . $args['after_title'];
             }
 
-            dokan_get_template_part( 'widgets/store-map', '', array(
+            dokan_get_template_part( 'widgets/store-map', '', [
                 'seller_id'    => 0,
                 'map_location' => '23.8374439,90.3746137',
-            ) );
+            ] );
 
             echo $args['after_widget'];
         }
@@ -181,9 +181,9 @@ class StoreWPWidgets {
      */
     public function widget_store_categories( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() ) {
-            $defaults = array(
+            $defaults = [
                 'title' => __( 'Store Category', 'dokan' ),
-            );
+            ];
 
             $instance = wp_parse_args( $instance, $defaults );
             $title    = apply_filters( 'widget_title', $instance['title'] );
@@ -221,9 +221,9 @@ class StoreWPWidgets {
      */
     public function widget_store_open_close( $args, $instance, $widget ) {
         if ( ! dokan_is_store_page() ) {
-            $defaults = array(
+            $defaults = [
                 'title' => __( 'Store Time', 'dokan' ),
-            );
+            ];
 
             $instance = wp_parse_args( $instance, $defaults );
             $title    = apply_filters( 'widget_title', $instance['title'] );
@@ -235,13 +235,13 @@ class StoreWPWidgets {
             }
 
             $open = [
-                'open'         => 'open',
+                'status'         => 'open',
                 'opening_time' => '8:00 AM',
                 'closing_time' => '05:00 PM',
             ];
 
             $close = [
-                'open'         => 'close',
+                'status'         => 'close',
                 'opening_time' => '',
                 'closing_time' => '',
             ];
@@ -256,9 +256,9 @@ class StoreWPWidgets {
                 'sunday'    => $close,
             ];
 
-            dokan_get_template_part( 'widgets/store-open-close', '', array(
+            dokan_get_template_part( 'widgets/store-open-close', '', [
                 'dokan_store_time' => $store_time,
-            ) );
+            ] );
 
             echo $args['after_widget'];
         }
