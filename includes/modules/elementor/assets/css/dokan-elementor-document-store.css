@@ -10,3 +10,7 @@
     margin-right: 4px;
     color: #79e379;
 }
+
+.dokan-elementor-flex-right .elementor-widget-wrap {
+    justify-content: flex-end;
+}
