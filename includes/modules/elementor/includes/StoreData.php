@@ -81,7 +81,7 @@ class StoreData {
         if ( $store->id ) {
             $this->store_data['id'] = $store->id;
 
-            $banner_id = $store->get_info_part( 'banner' );
+            $banner_id = $store->get_info_part( 'banner_id' );
 
             if ( $banner_id ) {
                 $this->store_data['banner'] = [
@@ -92,7 +92,7 @@ class StoreData {
 
             $this->store_data['name'] = $store->get_shop_name();
 
-            $profile_picture_id = $store->get_info_part( 'gravatar' );
+            $profile_picture_id = $store->get_info_part( 'gravatar_id' );
 
             if ( $profile_picture_id ) {
                 $this->store_data['profile_picture'] = [

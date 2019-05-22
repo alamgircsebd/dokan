@@ -48,7 +48,17 @@ class StoreProfilePicture extends DataTagBase {
      * @return void
      */
     protected function get_value( array $options = [] ) {
-        return dokan_elementor()->get_store_data( 'profile_picture' );
+        $picture = dokan_elementor()->get_store_data( 'profile_picture' );
+
+        if ( empty( $picture['id'] ) ) {
+            $settings = $this->get_settings();
+
+            if ( ! empty( $settings['fallback']['id'] ) ) {
+                $picture = $settings['fallback'];
+            }
+        }
+
+        return $picture;
     }
 
     /**

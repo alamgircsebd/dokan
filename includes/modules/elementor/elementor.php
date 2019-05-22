@@ -162,15 +162,15 @@ final class DokanElementor {
             );
         }
 
-        if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION , '2.4.4', '<' ) ) {
+        if ( defined( 'ELEMENTOR_VERSION' ) && version_compare( ELEMENTOR_VERSION , '2.5.15', '<' ) ) {
             $notice = sprintf(
                 __( 'Dokan Elementor module requires atleast %s.', 'dokan' ),
-                '<strong>Elementor v2.4.4</strong>'
+                '<strong>Elementor v2.5.15</strong>'
             );
-        } else if ( defined( 'ELEMENTOR_PRO_VERSION' ) && version_compare( ELEMENTOR_PRO_VERSION , '2.4.0', '<' ) ) {
+        } else if ( defined( 'ELEMENTOR_PRO_VERSION' ) && version_compare( ELEMENTOR_PRO_VERSION , '2.5.3', '<' ) ) {
             $notice = sprintf(
                 __( 'Dokan Elementor module requires atleast %s.', 'dokan' ),
-                '<strong>Elementor Pro v2.4.0</strong>'
+                '<strong>Elementor Pro v2.5.3</strong>'
             );
         }
 

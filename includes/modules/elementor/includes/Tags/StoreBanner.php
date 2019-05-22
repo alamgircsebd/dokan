@@ -59,7 +59,17 @@ class StoreBanner extends DataTagBase {
      * @return void
      */
     protected function get_value( array $options = [] ) {
-        return dokan_elementor()->get_store_data( 'banner' );
+        $banner = dokan_elementor()->get_store_data( 'banner' );
+
+        if ( empty( $banner['id'] ) ) {
+            $settings = $this->get_settings();
+
+            if ( ! empty( $settings['fallback']['id'] ) ) {
+                $banner = $settings['fallback'];
+            }
+        }
+
+        return $banner;
     }
 
     /**
