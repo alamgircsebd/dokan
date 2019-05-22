@@ -81,7 +81,7 @@ class StoreData {
         if ( $store->id ) {
             $this->store_data['id'] = $store->id;
 
-            $banner_id = $store->get_info_part( 'banner_id' );
+            $banner_id = $store->get_banner_id();
 
             if ( $banner_id ) {
                 $this->store_data['banner'] = [
@@ -92,7 +92,7 @@ class StoreData {
 
             $this->store_data['name'] = $store->get_shop_name();
 
-            $profile_picture_id = $store->get_info_part( 'gravatar_id' );
+            $profile_picture_id = $store->get_avatar_id();
 
             if ( $profile_picture_id ) {
                 $this->store_data['profile_picture'] = [
@@ -125,17 +125,13 @@ class StoreData {
                 $this->store_data['rating'] = $rating;
             }
 
-            $store_info               = $store->get_shop_info();
-            $dokan_store_time_enabled = isset( $store_info['dokan_store_time_enabled'] ) ? $store_info['dokan_store_time_enabled'] : '';
-            $store_open_notice        = isset( $store_info['dokan_store_open_notice'] ) && ! empty( $store_info['dokan_store_open_notice'] ) ? $store_info['dokan_store_open_notice'] : __( 'Store Open', 'dokan-lite' );
-            $store_closed_notice      = isset( $store_info['dokan_store_close_notice'] ) && ! empty( $store_info['dokan_store_close_notice'] ) ? $store_info['dokan_store_close_notice'] : __( 'Store Closed', 'dokan-lite' );
-            $show_store_open_close    = dokan_get_option( 'store_open_close', 'dokan_general', 'on' );
+            $show_store_open_close = dokan_get_option( 'store_open_close', 'dokan_general', 'on' );
 
-            if ( $show_store_open_close == 'on' && $dokan_store_time_enabled == 'yes') {
+            if ( $show_store_open_close == 'on' && $store->is_store_time_enabled() ) {
                 if ( dokan_is_store_open( $store->get_id() ) ) {
-                    $this->store_data['open_close'] = esc_attr( $store_open_notice );
+                    $this->store_data['open_close'] = $store->get_store_open_notice();
                 } else {
-                    $this->store_data['open_close'] = esc_attr( $store_closed_notice );
+                    $this->store_data['open_close'] = $store->get_store_close_notice();
                 }
             }
 
