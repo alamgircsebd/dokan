@@ -53,14 +53,12 @@ class StoreVacationMessage extends TagBase {
         }
 
         if ( dokan_is_store_page() ) {
-            $seller_vacation = \Dokan_Seller_Vacation::init();
+            $seller_vacation = \Dokan_Seller_Vacation::instance();
             $store           = dokan()->vendor->get( get_query_var( 'author' ) );
             $shop_info       = $store->get_shop_info();
-            $should_show_message = $seller_vacation->should_show_message( $shop_info );
 
-            if ( $should_show_message ) {
-                echo esc_textarea( $shop_info['setting_vacation_message'] );
-            }
+            $seller_vacation->show_vacation_message( $store->data, $shop_info, true );
+
         } else {
             echo esc_html_e( 'Store vacation message set in vendor dashboard will show here.', 'dokan' );
         }

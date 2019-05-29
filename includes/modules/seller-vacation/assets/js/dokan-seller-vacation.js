@@ -34,7 +34,7 @@
             } );
 
             self.date_from = self.from_input.datepicker( {
-                defaultDate: '+1w',
+                defaultDate: 'today',
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: self.date_format
@@ -44,7 +44,7 @@
             } );
 
             self.date_to = self.to_input.datepicker( {
-                defaultDate: '+1w',
+                defaultDate: 'today',
                 changeMonth: true,
                 numberOfMonths: 1,
                 dateFormat: self.date_format
@@ -154,9 +154,23 @@
             $( 'body' ).on( 'dokan:seller_vacation:activate dokan:seller_vacation:switch_style', function () {
                 if ( self.is_activate && 'datewise' === self.closing_style ) {
                     $( '#dokan-seller-vacation-vacation-dates' ).removeClass( 'dokan-hide' );
-                    $( '#dokan-seller-vacation-vacation-instant-vacation-message' ).addClass( 'dokan-hide' );
                 } else {
                     $( '#dokan-seller-vacation-vacation-dates' ).addClass( 'dokan-hide' );
+                }
+            } );
+
+            $( 'body' ).on( 'dokan:seller_vacation:activate', function () {
+                if ( ! self.is_activate ) {
+                    $( '#dokan-seller-vacation-vacation-instant-vacation-message' ).addClass( 'dokan-hide' );
+                } else if ( 'datewise' !== self.closing_style ) {
+                    $( '#dokan-seller-vacation-vacation-instant-vacation-message' ).removeClass( 'dokan-hide' );
+                }
+            } );
+
+            $( 'body' ).on( 'dokan:seller_vacation:switch_style', function () {
+                if ( 'datewise' === self.closing_style ) {
+                    $( '#dokan-seller-vacation-vacation-instant-vacation-message' ).addClass( 'dokan-hide' );
+                } else {
                     $( '#dokan-seller-vacation-vacation-instant-vacation-message' ).removeClass( 'dokan-hide' );
                 }
             } );
