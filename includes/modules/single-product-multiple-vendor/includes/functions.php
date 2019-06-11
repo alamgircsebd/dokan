@@ -100,14 +100,23 @@ function dokan_spmv_update_clone_visibilities( $map_id ) {
     $has_diff = false;
 
     @usort( $clones, function ( $a, $b ) use ( $show_order, &$has_diff ) {
+        if ( $a instanceof WC_Product_Variable && $b instanceof WC_Product_Variable ) {
+            $min_or_max = ( 'max_price' === $show_order ) ? 'max' : 'min';
+            $a_price = $a->get_variation_price( $min_or_max );
+            $b_price = $b->get_variation_price( $min_or_max );
+        } else {
+            $a_price = $a->get_price();
+            $b_price = $b->get_price();
+        }
+
         switch ( $show_order ) {
             case 'max_price':
-                $diff = $b->get_price() - $a->get_price();
+                $diff = $b_price - $a_price;
                 break;
 
             case 'min_price':
             default:
-                $diff = $a->get_price() - $b->get_price();
+                $diff = $a_price - $b_price;
                 break;
         }
 
