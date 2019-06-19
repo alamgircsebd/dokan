@@ -7,7 +7,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends Abstract_Dokan_
     /**
      * Process action id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @var string
      */
@@ -16,7 +16,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends Abstract_Dokan_
     /**
      * Following vendors
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @var array
      */
@@ -25,7 +25,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends Abstract_Dokan_
     /**
      * Perform task
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param array $args
      *
@@ -49,7 +49,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends Abstract_Dokan_
     /**
      * Switch status from vacation to publish
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param array $args
      */
@@ -62,7 +62,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends Abstract_Dokan_
     /**
      * Switch status from publish to vacation
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param array $args
      */
@@ -75,7 +75,7 @@ class Dokan_Seller_Vacation_Update_Seller_Product_Status extends Abstract_Dokan_
     /**
      * Update products
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param array $args
      *

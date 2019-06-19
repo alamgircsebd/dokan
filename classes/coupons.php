@@ -656,7 +656,7 @@ class Dokan_Pro_Coupons {
     /**
      * Ensure coupon amount is valid or throw exception.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param bool $invalid
      * @param WC_Coupon $coupon

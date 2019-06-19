@@ -1,6 +1,52 @@
 <?php
 $changelog = array(
-     array(
+    array(
+        'version'  => 'Version 2.9.10',
+        'released' => '2019-06-19',
+        'changes'  => array(
+            array(
+                'title'         => 'Vendor Biography Tab',
+                'type'          => 'New',
+                'description'   => 'Add vendor biography tab in dokan store page'
+            ),
+            array(
+                'title'         => 'Filtering and Searching Options',
+                'type'          => 'New',
+                'description'   => 'Add filtering and searching option in admin report logs area'
+            ),
+            array(
+                'title'         => 'Vendor Vacation',
+                'type'          => 'New',
+                'description'   => 'Add multiple vacation date system for vendor'
+            ),
+            array(
+                'title'         => 'Refund Request Validation',
+                'type'          => 'Fix',
+                'description'   => 'Validate refund request in seller dashboard'
+            ),
+            array(
+                'title'         => 'Coupon Validation',
+                'type'          => 'Fix',
+                'description'   => 'Ensure coupon works on vendors product not the cart'
+            ),
+            array(
+                'title'         => 'Best Selling and Top Rated Widget',
+                'type'          => 'Fix',
+                'description'   => 'Remove subscription product from best selling and top rated product widget'
+            ),
+            array(
+                'title'         => 'Subscription Renew and Cancellation',
+                'type'          => 'Fix',
+                'description'   => 'Subscription renew and cancellation with PayPal'
+            ),
+            array(
+                'title'         => 'Store Progressbar',
+                'type'          => 'Improvement',
+                'description'   => 'Store progress serialization and congrats message on 100% profile completenes'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.9',
         'released' => '2019-05-15',
         'changes'  => array(
@@ -26,7 +72,7 @@ $changelog = array(
             ),
         )
     ),
-     array(
+    array(
         'version'  => 'Version 2.9.8',
         'released' => '2019-05-07',
         'changes'  => array(
@@ -517,151 +563,7 @@ $changelog = array(
                 'description'   => 'Registration process through email verification doesn\'t verify vendors properly'
             )
         )
-    ),
-
-    array(
-        'version'  => 'Version 2.7.4',
-        'released' => '2018-02-12',
-        'changes' => array(
-            array(
-                'title'       => 'Shipping rendering problem',
-                'type'        => 'Fix',
-                'description' => 'Shipping calculation is not showing on cart and checkout page if dokan shipping is disabled.'
-            ),
-            array(
-                'title'       => 'Vendor verification and store support widgets are not showing on widget area',
-                'type'        => 'Fix',
-                'description' => 'Because of plugin loading sequesnce, the vendor verification and store support widget are not showing in Theme widget area.'
-            ),
-            array(
-                'title'       => 'Vendor verifcation permission issue',
-                'type'        => 'Fix',
-                'description' => 'Due to wrong permission checking in vendor verification settings page and error is always showing in Vendor settings dashboard'
-            ),
-            array(
-                'title'       => 'Compatibility Testing for WooCommerce 3.3+',
-                'type'        => 'Improvement',
-                'description' => 'Dokan pro are now compatible with WooCommerce 3.3+'
-            )
-        )
-    ),
-
-    array(
-        'version'  => 'Version 2.7.3',
-        'released' => '2018-02-04',
-        'changes' => array(
-            array(
-                    'title'       => 'Email Verification on registration',
-                    'type'        => 'New',
-                    'description' => 'Now you can simply enable Email Verification from your Dokan Settings panel to restrict Registration to valid users only.'
-                ),
-            array(
-                'title'       => 'Vendor Staff Management Module',
-                'type'        => 'New',
-                'description' => 'Dokan Vendor Staff Manager Module is a new introduction to Dokan Premium Modules Family. This module gives the sellers of your multivendor marketplace a unique opportunity to appoint an unlimited number of personnel or staffs to manage their individual stores. <a href="https://wedevs.com/docs/dokan/modules/dokan-vendor-staff-manager/">More Details and Documentation</a>
-                                  Vendor Staff Manager is available in Dokan Business and Enterprise Packages. <br><iframe width="560" height="315" src="https://www.youtube.com/embed/z4yinwCxabI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>'
-            ),
-            array(
-                'title'       => 'Appearance   :  Color scheme not working on product edit page',
-                'type'        => 'Fix',
-                'description' => 'Fixed the color scheme customizer module not working properly on product edit page.'
-            ),
-            array(
-                'title'       => 'Booking      :  Person type unlink or remove not working',
-                'type'        => 'Fix',
-                'description' => 'Fixed person type is not removable from booking type products'
-            ),
-            array(
-                'title'       => 'Various other Bug fixes and Improvements',
-                'type'        => 'Improvement',
-                'description' => 'Many other improvements were made to improve the UX and Performance optimization. See the Change log for more details.'
-            ),
-        )
-    ),
-//    array(
-//        'version'  => 'Version 2.7.2',
-//        'released' => '2017-12-24',
-//        'changes' => array(
-//            array(
-//                'title'       => 'Attributes not being saved properly in product edit section',
-//                'type'        => 'Fix',
-//                'description' => 'Vendor\'s product edit section under dashboard wasn\'t saving attributes properly , so variations were not created properly. This issue is resolved now with proper saving of attributes.'
-//            ),
-//            array(
-//                'title'       => 'Dokan Import Export Module Importer showing blank page',
-//                'type'        => 'Fix',
-//                'description' => 'Import page for Dokan Import Export module was showing a blank page due to internal error. This issue is now resolved'
-//            ),
-//        )
-//    ),
-    //    array(
-    //        'version'  => 'Version 2.7.1',
-    //        'released' => '2017-12-13',
-    //        'changes' => array(
-    //            array(
-    //                'title'       => 'Enable/Disable Withdraw menu for the payment modules',
-    //                'type'        => 'New',
-    //                'description' => 'Now admins using the modules Dokan Stripe and Dokan PayPal Adaptive have the option to display or hide the Withdraw menu on vendors dashboard.'
-    //            ),
-    //            array(
-    //                'title'       => 'Help links added on Social API settings page',
-    //                'type'        => 'New',
-    //                'description' => 'For ease of configuration and creation, we have added links to our detailed documentation on social login & registration under Dokan Social API settings.'
-    //            ),
-    //            array(
-    //                'title'       => 'Introducing a new module: “Single Product Multiple Vendor” [For Professional, Business & Enterprise Packages]',
-    //                'type'        => 'New',
-    //                'description' => 'With this module, vendors will be able to duplicate and sell another vendor\'s product without a hassle. Thus, one product can be sold by multiple vendors.
-    //                <img src="https://wedevs.com/wp-content/uploads/2017/12/dokan-single-product-multivendor.gif" alt="Single Product Multiple Vendor Module">'
-    //            ),
-    //            array(
-    //                'title'       => 'Verification widget for single product page. [For Professional, Business & Enterprise Packages]',
-    //                'type'        => 'New',
-    //                'description' => 'Previously, the verification widget was only available for the store page. Now it\'s available for both store and single product pages.'
-    //            ),
-    //            array(
-    //                'title'       => 'New email template introduced for Auction-able products',
-    //                'type'        => 'New',
-    //                'description' => 'Admins can now customize a built-in email template and receive automatic email notifications every time a vendor adds a new auction type product'
-    //            ),
-    //
-    //            array(
-    //                'title'       => 'Product attribute saving issue',
-    //                'type'        => 'Fix',
-    //                'description' => 'When a pointing or comma terms need to add as a attribute value, the values are not saving properperly'
-    //            ),
-    //
-    //        )
-    //    ),
-    // array(
-    //     'version'  => 'Version 2.7.0',
-    //     'released' => '2017-11-23',
-    //     'changes' => array(
-    //         array(
-    //             'title'       => 'Introducing All New modules and packaging System',
-    //             'type'        => 'New',
-    //             'description' => 'Say bye bye to previous add-ons, which were very difficult to manage. From our new update, we are going to transform all our add-ons into modules. Guess what, you will be able to manage all of them from a single place. So, we have added a new menu called ‘Modules’ and removed the old ‘Add-ons’ menu. This is how the new page looks like.
-    //             <img src="https://wedevs.com/wp-content/uploads/2017/11/Dokan-new-module-activation-deactivation.gif" alt="Dokan Module">'
-    //         ),
-    //         array(
-    //             'title'       => 'Automatic Updates for Modules',
-    //             'type'        => 'New',
-    //             'description' => 'Previously, you didn’t get a live update for any of the Dokan add-ons. Now, you can manage them from a single place as well as get live updates directly with Dokan plugin. So, no more manual updates! You don’t have to download each add-ons and install them separately every time you get an update.'
-    //         ),
-    //         array(
-    //             'title'       => 'Interactive Settings Page to Manage it All',
-    //             'type'        => 'New',
-    //             'description' => 'Dokan now has better and improved settings page where you can easily configure everything for your Dokan Multivendor.
-    //             <img src="https://wedevs-com-wedevs.netdna-ssl.com/wp-content/uploads/2017/11/dokan-new-settings-page.png" alt="Dokan Settings">'
-    //         ),
-    //         array(
-    //             'title'       => 'Shipping options showing for product edit while dokan shipping is disabled',
-    //             'type'        => 'Fix',
-    //             'description' => 'Shipping option all time showing in edit product page due to disable dokan shipping option. This problem fixed if dokan main shipping is disabled then shipping option are not showing in edit product page'
-    //         ),
-
-    //     )
-    // )
+    )
 );
 
 function _dokan_changelog_content( $content ) {

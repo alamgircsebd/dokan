@@ -43,7 +43,7 @@ class DPS_PayPal_Standard_Subscriptions {
     /**
      * Set api credentials
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */

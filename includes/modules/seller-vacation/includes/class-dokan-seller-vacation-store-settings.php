@@ -5,7 +5,7 @@ class Dokan_Seller_Vacation_Store_Settings {
     /**
      * Class construct
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -19,7 +19,7 @@ class Dokan_Seller_Vacation_Store_Settings {
     /**
      * Store settings form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param object $current_user
      * @param array  $profile_info
@@ -82,7 +82,7 @@ class Dokan_Seller_Vacation_Store_Settings {
     /**
      * Save vacation settings with store settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param int   $store_id
      * @param array $dokan_settings

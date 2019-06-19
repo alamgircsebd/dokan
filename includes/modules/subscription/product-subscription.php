@@ -1108,7 +1108,7 @@ class Dokan_Product_Subscription {
     /**
      * Exclude subscription products from the best selling products
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param array $args
      *
