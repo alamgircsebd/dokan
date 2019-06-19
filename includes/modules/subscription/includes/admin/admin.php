@@ -450,6 +450,10 @@ class DPS_Admin {
      * Add submenu page in dokan Dashboard
      */
     public static function add_submenu_in_dokan_dashboard( $capability ) {
+        if ( ! Helper::is_subscription_module_enabled() ) {
+            return;
+        }
+
         global $submenu;
 
         $slug = 'dokan';
