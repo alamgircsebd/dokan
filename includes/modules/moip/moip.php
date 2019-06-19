@@ -342,7 +342,7 @@ class Dokan_Moip {
                         return;
                     }
 
-                    $errors->add( 'moip-not-configured', sprintf( __( '<strong>Error!</strong> The <strong>%s</strong> does not allowes the Moip gateway. You can not purchase this products %s using Moip Gateway', 'dokan' ), $data['name'], $data['products'] ) );
+                    $errors->add( 'moip-not-configured', sprintf( __( '<strong>Error!</strong> The <strong>%s</strong> does not allowes the Wirecard gateway. You can not purchase this products %s using Wirecard Gateway', 'dokan' ), $data['name'], $data['products'] ) );
                 }
             }
         }
@@ -415,7 +415,7 @@ class Dokan_Moip {
         $vendor_moip_account = get_user_meta( $user_id, 'vendor_moip_account', true );
 
         if ( empty( $vendor_moip_account ) && count( $available_gateways ) < 2 ) {
-            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Moip account isn\'t active yet. Please connect to Moip first!', 'dokan' ), dokan_get_navigation_url('settings/payment'), __( 'Connect to Moip', 'dokan' ) );
+            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Wirecard account isn\'t active yet. Please connect to Wirecard first!', 'dokan' ), dokan_get_navigation_url('settings/payment'), __( 'Connect to Moip', 'dokan' ) );
         }
 
         return $errors;
@@ -462,12 +462,12 @@ class Dokan_Moip {
 
         $vendor_moip_account = get_user_meta( $user->ID, 'vendor_moip_account', true );
         ?>
-        <h3><?php _e( 'Dokan Moip Settings', 'dokan' );?></h3>
+        <h3><?php _e( 'Dokan Wirecard Settings', 'dokan' );?></h3>
         <?php
         if ( ! empty( $vendor_moip_account ) ) : ?>
-            <?php submit_button( __( 'Disconnect User Moip Account', 'dokan' ) ,'delete', 'disconnect_user_moip'); ?>
+            <?php submit_button( __( 'Disconnect User Wirecard Account', 'dokan' ) ,'delete', 'disconnect_user_moip'); ?>
         <?php else : ?>
-            <h4><?php _e( 'User account not connected to Moip', 'dokan' );?></h4>
+            <h4><?php _e( 'User account not connected to Wirecard', 'dokan' );?></h4>
         <?php
         endif;
     }

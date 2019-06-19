@@ -451,7 +451,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 $moip_data = $this->set_moip_customer_holder( $moip, $order );
 
                 if ( empty( $moip_data ) ) {
-                    throw new Exception( __( 'Moip data is not found', 'dokan' ) );
+                    throw new Exception( __( 'Wirecard data is not found', 'dokan' ) );
                 }
 
                 // get all the order items and add to moip_order item
@@ -512,7 +512,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 $order->payment_complete();
 
             } catch ( Exception $e ) {
-                $order->add_order_note( sprintf( __( 'Moip Payment Error: %s', 'dokan' ), $e->getMessage() ) );
+                $order->add_order_note( sprintf( __( 'Wirecard Payment Error: %s', 'dokan' ), $e->getMessage() ) );
 
                 throw new Exception( $e->getMessage() );
             }
@@ -563,7 +563,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         $moip_data = $this->set_moip_customer_holder( $moip, $order );
 
         if ( empty( $moip_data ) ) {
-            throw new Exception( __( 'Moip data is not found', 'dokan' ) );
+            throw new Exception( __( 'Wirecard data is not found', 'dokan' ) );
         }
 
         foreach ( $all_orders as $tmp_order ) {

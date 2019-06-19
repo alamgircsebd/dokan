@@ -150,7 +150,7 @@ class Dokan_Moip_Withdraw {
         $redirect_uri = dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes';
 
         if ( ! $this->settings ) {
-            _e( 'Moip gateway is not configured. Please contact admin.', 'dokan' );
+            _e( 'Wirecard gateway is not configured. Please contact admin.', 'dokan' );
             return;
         }
 
