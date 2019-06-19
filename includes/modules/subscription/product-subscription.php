@@ -136,6 +136,10 @@ class Dokan_Product_Subscription {
         add_filter( 'dokan_product_listing_exclude_type', array( $this, 'exclude_subscription_product' ) );
         add_filter( 'dokan_count_posts', array( $this, 'exclude_subscription_product_count' ), 10, 3 );
 
+        // remove subscription product from best selling and top rated product query
+        add_filter( 'dokan_best_selling_products_query', array( $this, 'exclude_subscription_product_query' ) );
+        add_filter( 'dokan_top_rated_products_query', array( $this, 'exclude_subscription_product_query' ) );
+
         // Allow vendor to import only allowed number of products
         add_filter( 'woocommerce_product_import_pre_insert_product_object', [ __CLASS__, 'import_products' ] );
 
@@ -1099,6 +1103,26 @@ class Dokan_Product_Subscription {
         }
 
         $vendor->subscription = $subscription_pack;
+    }
+
+    /**
+     * Exclude subscription products from the best selling products
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $args
+     *
+     * @return array
+     */
+    public function exclude_subscription_product_query( $args ) {
+        $args['tax_query'][] = [
+            'taxonomy' => 'product_type',
+            'field'    => 'slug',
+            'terms'    => 'product_pack',
+            'operator' => 'NOT IN'
+        ];
+
+        return $args;
     }
 
 } // Dokan_Product_Subscription
