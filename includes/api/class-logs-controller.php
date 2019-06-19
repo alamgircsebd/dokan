@@ -45,10 +45,20 @@ class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
         $limit  = isset( $params['per_page'] ) ? (int) $params['per_page'] : 20;
         $offset = isset( $params['page'] ) ? (int) ( $params['page'] - 1 ) * $params['per_page'] : 0;
 
+        // filter the log query
+        $order_id      = ! empty( $params['order_id'] ) ? $params['order_id'] : 0;
+        $vendor_id     = ! empty( $params['vendor_id'] ) ? (int) $params['vendor_id'] : 0;
+        $order_status  = ! empty( $params['order_status'] ) ? $params['order_status'] : '';
+
+        $order_clause  = $order_id ? "order_id = {$order_id}" : "order_id != 0";
+        $seller_clause = $vendor_id ? "seller_id = {$vendor_id}" : "seller_id != 0";
+        $status_clause = $order_status ? "p.post_status = '{$order_status}'" : "p.post_status != 'trash'";
+        $where_query   = "{$seller_clause} AND {$status_clause} AND {$order_clause}";
+
         $items = $wpdb->get_row(
             "SELECT COUNT( do.id ) as total FROM {$wpdb->prefix}dokan_orders do
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
-            WHERE seller_id != 0 AND p.post_status != 'trash' AND seller_id != 0
+            WHERE $where_query
             ORDER BY do.order_id"
         );
 
@@ -63,7 +73,7 @@ class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
         $sql = $wpdb->prepare(
             "SELECT do.*, p.post_date FROM {$wpdb->prefix}dokan_orders do
             LEFT JOIN $wpdb->posts p ON do.order_id = p.ID
-            WHERE seller_id != 0 AND p.post_status != 'trash' AND seller_id != 0
+            WHERE $where_query
             ORDER BY do.order_id DESC LIMIT %d OFFSET %d",
             $limit,
             $offset
