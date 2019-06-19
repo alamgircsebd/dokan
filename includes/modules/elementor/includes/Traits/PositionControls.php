@@ -29,7 +29,7 @@ trait PositionControls {
         );
 
         $this->add_responsive_control(
-            '_position',
+            '_dokan_position',
             [
                 'label'   => __( 'Position', 'dokan' ),
                 'type'    => Controls_Manager::SELECT,
@@ -51,7 +51,7 @@ trait PositionControls {
         );
 
         $this->add_responsive_control(
-            '_position_top',
+            '_dokan_position_top',
             [
                 'label'     => __( 'Top', 'dokan' ),
                 'type'      => Controls_Manager::TEXT,
@@ -63,7 +63,7 @@ trait PositionControls {
         );
 
         $this->add_responsive_control(
-            '_position_right',
+            '_dokan_position_right',
             [
                 'label'     => __( 'Right', 'dokan' ),
                 'type'      => Controls_Manager::TEXT,
@@ -75,7 +75,7 @@ trait PositionControls {
         );
 
         $this->add_responsive_control(
-            '_position_bottom',
+            '_dokan_position_bottom',
             [
                 'label'     => __( 'Bottom', 'dokan' ),
                 'type'      => Controls_Manager::TEXT,
@@ -87,7 +87,7 @@ trait PositionControls {
         );
 
         $this->add_responsive_control(
-            '_position_left',
+            '_dokan_position_left',
             [
                 'label'     => __( 'Left', 'dokan' ),
                 'type'      => Controls_Manager::TEXT,

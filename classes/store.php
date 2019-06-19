@@ -23,6 +23,12 @@ class Dokan_Pro_Store {
         add_filter( 'dokan_query_var_filter', array( $this, 'load_store_review_query_var' ), 10, 2 );
         add_filter( 'dokan_store_tabs', array( $this, 'add_review_tab_in_store' ), 10, 2 );
         add_filter( 'template_include', array( $this, 'store_review_template' ), 99 );
+
+        // vendor biography
+        add_action( 'dokan_rewrite_rules_loaded', array( $this, 'load_biography_rewrite_rules' ) );
+        add_action( 'dokan_query_var_filter', array( $this, 'load_biography_query_var' ), 10, 2 );
+        add_filter( 'dokan_store_tabs', array( $this, 'add_vendor_biography_tab' ), 10, 2 );
+        add_filter( 'template_include', array( $this, 'load_vendor_biography_template' ), 99 );
     }
 
     /**
@@ -197,5 +203,75 @@ class Dokan_Pro_Store {
         }
 
         echo '</div>';
+    }
+
+    /**
+     * Add vendor biography tab
+     *
+     * @param array $tabs
+     * @param int $store_id
+     *
+     * @since 2.9.10
+     *
+     * @return array
+     */
+    public function add_vendor_biography_tab( $tabs, $store_id ) {
+        $store_info = dokan_get_store_info( $store_id );
+
+        if ( empty( $store_info['vendor_biography'] ) ) {
+            return $tabs;
+        }
+
+        $tabs['vendor_biography'] = [
+            'title' => apply_filters( 'dokan_vendor_biography_title', __( 'Vendor Biography', 'dokan' ) ),
+            'url'   => dokan_get_store_url( $store_id ) . 'biography'
+        ];
+
+        return $tabs;
+    }
+
+    /**
+     * Load biography rewrite rules
+     *
+     * @param string $store_url
+     *
+     * @since 2.9.10
+     *
+     * @return void
+     */
+    public function load_biography_rewrite_rules( $store_url ) {
+        add_rewrite_rule( $store_url.'/([^/]+)/biography?$', 'index.php?' . $store_url . '=$matches[1]&biography=true', 'top' );
+    }
+
+    /**
+     * Load biography query var
+     *
+     * @param array $query_vars
+     *
+     * @since 2.9.10
+     *
+     * @return array
+     */
+    public function load_biography_query_var( $query_vars ) {
+        $query_vars[] = 'biography';
+
+        return $query_vars;
+    }
+
+    /**
+     * Load vendor biography template
+     *
+     * @param string $template
+     *
+     * @since 2.9.10
+     *
+     * @return string
+     */
+    public function load_vendor_biography_template( $template ) {
+        if ( ! get_query_var( 'biography' ) ) {
+            return $template;
+        }
+
+        return dokan_locate_template( 'vendor-biography.php', '', DOKAN_PRO_DIR . '/templates/', true );
     }
 }

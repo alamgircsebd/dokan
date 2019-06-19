@@ -124,20 +124,20 @@ function dokan_rma_get_date( $order_date, $warranty_duration, $warranty_unit ) {
 
     if ( $warranty_unit == 'days' ) {
 
-        $expired_time = $order_time + $warranty_duration*86400;
+        $expired_time = $order_time + (int) $warranty_duration*86400;
         $expired_date = date( 'Y-m-d', $expired_time )." 23:59:59";
         $expired_time = strtotime( $expired_date );
 
     } elseif ( $warranty_unit == 'weeks' ) {
 
-        $add = (86400 * 7) * $warranty_duration;
+        $add = (86400 * 7) * (int) $warranty_duration;
         $expired_time = $order_time + $add;
         $expired_date = date( 'Y-m-d', $expired_time )." 23:59:59";
         $expired_time = strtotime( $expired_date );
 
     } elseif ( $warranty_unit == 'months' ) {
         $warranty_day   = $order_date['day'];
-        $warranty_month = $order_date['month'] + $warranty_duration;
+        $warranty_month = $order_date['month'] + (int) $warranty_duration;
         $warranty_year  = $order_date['year'] + ( $warranty_month / 12 );
         $warranty_month = $warranty_month % 12;
 
@@ -149,7 +149,7 @@ function dokan_rma_get_date( $order_date, $warranty_duration, $warranty_unit ) {
             $expired_time = mktime( 23, 59, 59, $warranty_month, ( $warranty_day - 1 ) , $warranty_year );
         }
     } elseif ( $warranty_unit == 'years' ) {
-        $warranty_year = $order_date['year'] + $warranty_duration;
+        $warranty_year = $order_date['year'] + (int) $warranty_duration;
 
         if ( checkdate( $order_date['month'], $order_date['day'], $warranty_year ) ) {
             $expired_time = mktime( 23, 59, 59, $order_date['month'], $order_date['day'], $warranty_year );

@@ -59,26 +59,6 @@ abstract class DokanButton extends Widget_Button {
             ]
         );
 
-        $this->add_control(
-            'float',
-            [
-                'label'     => __( 'Float', 'dokan' ),
-                'type'      => Controls_Manager::SELECT,
-                'default'   => 'none',
-                'options'   => [
-                    'none'  => __( 'None', 'dokan' ),
-                    'left'  => __( 'Left', 'dokan' ),
-                    'right' => __( 'Right', 'dokan' ),
-                ],
-                'selectors' => [
-                    '{{WRAPPER}}' => 'float: {{VALUE}}',
-                ]
-            ],
-            [
-                'position' => [ 'of' => 'align' ]
-            ]
-        );
-
         $this->add_position_controls();
     }
 

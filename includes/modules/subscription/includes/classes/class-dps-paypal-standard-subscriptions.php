@@ -16,13 +16,13 @@ use DokanPro\Modules\Subscription\SubscriptionPack;
  */
 
 class DPS_PayPal_Standard_Subscriptions {
-
     protected static $log;
     protected static $debug;
-    public static $api_username;
-    public static $api_password;
-    public static $api_signature;
-    public static $api_endpoint;
+    protected static $paypal_settings;
+    protected static $api_username;
+    protected static $api_password;
+    protected static $api_signature;
+    protected static $api_endpoint;
 
     /**
      * Bootstraps the class and hooks required actions & filters.
@@ -30,27 +30,50 @@ class DPS_PayPal_Standard_Subscriptions {
      * @since 1.0
      */
     public static function init() {
-
-        $paypal_settings = self::get_wc_paypal_settings();
-
-        // logs
+        self::set_api_credentials();
         self::subscription_paypal_credential_verify();
 
-        // Set creds
-        self::$api_username = ( isset( $paypal_settings['api_username'] ) ) ? $paypal_settings['api_username'] : '';
-        self::$api_password = ( isset( $paypal_settings['api_password'] ) ) ? $paypal_settings['api_password'] : '';
-        self::$api_signature = ( isset( $paypal_settings['api_signature'] ) ) ? $paypal_settings['api_signature'] : '';
-
-        add_action( 'valid-paypal-standard-ipn-request', __CLASS__ . '::process_paypal_ipn_request', 11 );
-
+        // Check paypal ipn response before woocommerce does to as it's exit PHP process on payment_status_completed or pending. See WC_Gateway_Paypal_IPN_Handler::valid_response
+        add_action( 'valid-paypal-standard-ipn-request', __CLASS__ . '::process_paypal_ipn_request', 0 );
         add_filter( 'woocommerce_paypal_args', __CLASS__ . '::paypal_standard_subscription_args' );
-
         add_action( 'woocommerce_settings_api_form_fields_paypal', __CLASS__ . '::paypal_settings_args' );
-
         add_action( 'woocommerce_update_options_payment_gateways_paypal', __CLASS__ . '::save_subscription_form_fields', 11 );
-
     }
 
+    /**
+     * Set api credentials
+     *
+     * @since 2.9.10
+     *
+     * @return void
+     */
+    private static function set_api_credentials() {
+        self::$paypal_settings = self::get_wc_paypal_settings();
+
+        if ( ! empty( self::$paypal_settings['debug'] ) && 'yes' === self::$paypal_settings ) {
+            self::$debug = true;
+        }
+
+        if ( ! empty( self::$paypal_settings['testmode'] ) && 'yes' === self::$paypal_settings['testmode'] ) {
+            self::$api_endpoint  = 'https://api-3t.sandbox.paypal.com/nvp';
+            self::$api_username  = ! empty( self::$paypal_settings['sandbox_api_username'] ) ? self::$paypal_settings['sandbox_api_username'] : '';
+            self::$api_password  = ! empty( self::$paypal_settings['sandbox_api_password'] ) ? self::$paypal_settings['sandbox_api_password'] : '';
+            self::$api_signature = ! empty( self::$paypal_settings['sandbox_api_signature'] ) ? self::$paypal_settings['sandbox_api_signature'] : '';
+        } else {
+            self::$api_endpoint = 'https://api-3t.paypal.com/nvp';
+            self::$api_username  = ! empty( self::$paypal_settings['api_username'] ) ? self::$paypal_settings['api_username'] : '';
+            self::$api_password  = ! empty( self::$paypal_settings['api_password'] ) ? self::$paypal_settings['api_password'] : '';
+            self::$api_signature = ! empty( self::$paypal_settings['api_signature'] ) ? self::$paypal_settings['api_signature'] : '';
+        }
+    }
+
+    /**
+     * Set log
+     *
+     * @param  string $message
+     *
+     * @return void
+     */
     private static function log( $message = '' ) {
         $paypal_settings = self::get_wc_paypal_settings();
 
@@ -331,7 +354,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
 
                 // make all the existing product publish
-                Helper::make_product_publish( $customer_user_id );
+                Helper::make_product_publish( $customer_id );
 
                 $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
@@ -367,7 +390,7 @@ class DPS_PayPal_Standard_Subscriptions {
                     update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
 
                     // make all the existing product publish
-                    Helper::make_product_publish( $customer_user_id );
+                    Helper::make_product_publish( $customer_id );
 
                     $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
                     $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
@@ -383,7 +406,7 @@ class DPS_PayPal_Standard_Subscriptions {
                         $order->payment_complete();
                     }
 
-                                        // Subscription Payment completed
+                    // Subscription Payment completed
                     $order->add_order_note( sprintf( __( 'IPN subscription payment completed. txn_id#%s', 'dokan' ), $transaction_details['txn_id'] ) );
 
                 } elseif ( 'failed' == strtolower( $transaction_details['payment_status'] ) ) {
@@ -490,14 +513,6 @@ class DPS_PayPal_Standard_Subscriptions {
             break;
         }
 
-        $paypal_settings = self::get_wc_paypal_settings();
-
-        // Set creds
-        self::$api_endpoint  = ( $paypal_settings['testmode'] == 'no' ) ? 'https://api-3t.paypal.com/nvp' : 'https://api-3t.sandbox.paypal.com/nvp';
-        self::$api_username  = ( isset( $paypal_settings['api_username'] ) ) ? $paypal_settings['api_username'] : '';
-        self::$api_password  = ( isset( $paypal_settings['api_password'] ) ) ? $paypal_settings['api_password'] : '';
-        self::$api_signature = ( isset( $paypal_settings['api_signature'] ) ) ? $paypal_settings['api_signature'] : '';
-
         $request = wp_remote_post( self::$api_endpoint, array(
             'timeout'   => 15,
             'sslverify' => false,
@@ -510,8 +525,8 @@ class DPS_PayPal_Standard_Subscriptions {
                 'PROFILEID' => $profile_id,
                 'ACTION'    => $new_status,
                 'NOTE'      => sprintf( __( 'Subscription %s at %s', 'dokan' ), $new_status_string, get_bloginfo( 'name' ) )
-                )
-            ) );
+            )
+        ) );
 
         if ( is_wp_error( $request ) || $request['response']['code'] != 200 ) {
             self::log( 'Subscription Cancel - HTTP error' );

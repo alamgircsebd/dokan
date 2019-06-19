@@ -11,7 +11,7 @@ if ( isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount
         <div class="dokan-w5 dokan-text-left">
             <div class="checkbox">
                 <label class="dokan-control-label" for="lbl_setting_minimum_quantity">
-                    <input type="hidden" name="setting_show_minimum_discount_option" value="no">
+                    <input type="hidden" name="setting_show_minimum_order_discount_option" value="no">
                     <input id="lbl_setting_minimum_quantity" type="checkbox" name="setting_show_minimum_order_discount_option" value="yes"<?php checked( $is_enable_order_discount, 'yes' ); ?>>
                     <?php _e( 'Enable storewide discount', 'dokan' ); ?>
                 </label>

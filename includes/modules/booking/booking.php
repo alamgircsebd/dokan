@@ -112,7 +112,7 @@ class Dokan_WC_Booking {
         add_action( 'woocommerce_new_booking', array( $this, 'add_seller_id_meta' ) );
         add_action( 'shutdown', array( $this, 'add_seller_manage_cap' ) );
         add_action( 'wp_ajax_dokan-wc-booking-confirm', array( $this, 'mark_booking_confirmed' ) );
-        add_action( 'woocommerce_after_order_itemmeta', array( $this, 'booking_display' ), 10, 3 );
+
         // booking person type delete
         add_action( 'wp_ajax_woocommerce_remove_bookable_person', array( $this, 'dokan_remove_bookable_person' ) );
 
@@ -1135,41 +1135,6 @@ class Dokan_WC_Booking {
         }
 
         return $resources;
-    }
-
-    /**
-     * Show booking data if a line item is linked to a booking ID.
-     */
-    public function booking_display( $item_id, $item, $product ) {
-        $booking_ids = WC_Booking_Data_Store::get_booking_ids_from_order_item_id( $item_id );
-        $booking_details_url = dokan_get_navigation_url( 'booking/booking-details' );
-        if ( $booking_ids ) {
-            foreach ( $booking_ids as $booking_id ) {
-                    $booking = new WC_Booking( $booking_id );
-                    ?>
-                    <div class="wc-booking-summary" style="width:160%">
-                            <strong class="wc-booking-summary-number">
-                                    <?php printf( __( 'Booking #%s', 'woocommerce-bookings' ), esc_html( $booking->get_id() ) ); ?>
-                                <div>
-                                    <span class="status-<?php echo esc_attr( $booking->get_status() ); ?>">
-                                            <?php echo esc_html( wc_bookings_get_status_label( $booking->get_status() ) ) ?>
-                                    </span>
-                                </div>
-                            </strong>
-                            <?php wc_bookings_get_summary_list( $booking ); ?>
-                            <div class="wc-booking-summary-actions">
-                                    <?php if ( in_array( $booking->get_status(), array( 'pending-confirmation' ) ) ) : ?>
-                                            <a href="<?php echo  wp_nonce_url( admin_url( 'admin-ajax.php?action=dokan-wc-booking-confirm&booking_id=' . $booking->get_id() ), 'wc-booking-confirm' ); ?>"><?php _e( 'Confirm booking', 'woocommerce-bookings' ); ?></a>
-                                    <?php endif; ?>
-
-                                    <?php if ( $booking_id ) : ?>
-                                            <a href="<?php echo add_query_arg( 'booking_id', $booking_id, $booking_details_url ) ?>"><?php _e( 'View booking &rarr;', 'woocommerce-bookings' ); ?></a>
-                                    <?php endif; ?>
-                            </div>
-                    </div>
-                    <?php
-            }
-        }
     }
 
     /**

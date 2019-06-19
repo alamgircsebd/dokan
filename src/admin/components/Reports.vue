@@ -1,10 +1,10 @@
 <template>
     <div class="reports-page dokan-dashboard">
         <h2 class="nav-tab-wrapper woo-nav-tab-wrapper">
-            <router-link :to="{ name: 'Reports', query: { tab: 'report', type: 'by-day'}}" class="nav-tab" active-class="nav-tab-active">
+            <router-link :to="{ name: 'Reports', query: { tab: 'report', type: 'by-day'}}" :class="['nav-tab', {'nav-tab-active': $route.path === '/reports' && $route.query.tab !== 'logs' }]">
                 {{ __( 'Reports', 'dokan' ) }}
             </router-link>
-            <router-link :to="{ name: 'Reports', query: { tab: 'logs' }}" class="nav-tab" active-class="nav-tab-active" exact>
+            <router-link :to="{ name: 'Reports', query: { tab: 'logs' }}" :class="['nav-tab', {'nav-tab-active': $route.query.tab === 'logs'} ]">
                 {{ __( 'All Logs', 'dokan' ) }}
             </router-link>
         </h2>
@@ -168,6 +168,25 @@
                 :not-found="noLogFound"
                 @pagination="goToPage"
             >
+            <template slot="filters">
+
+                <select
+                    id="filter-vendors"
+                    style="width: 190px;"
+                    :data-placeholder="__('Filter by vendor', 'dokan')">
+                </select>
+
+                <select
+                    id="filter-status"
+                    style="width: 190px;">
+                </select>
+
+                <div class="search-by-order">
+                    <search @searched="searchByOrder" :title="__( 'Search by order', 'dokan' )" />
+                </div>
+
+            </template>
+
                 <template slot="order_id" slot-scope="data">
                     <a target="_blank" :href="editOrderUrl(data.row.order_id)">#{{ data.row.order_id }}</a>
                 </template>
@@ -210,6 +229,7 @@ let Datepicker  = dokan_get_lib('Datepicker');
 let Multiselect = dokan_get_lib('Multiselect');
 let ListTable   = dokan_get_lib('ListTable');
 let debounce    = dokan_get_lib('debounce');
+let Search      = dokan_get_lib('Search');
 
 export default {
     name: 'Reports',
@@ -221,7 +241,8 @@ export default {
         Currency,
         Datepicker,
         Multiselect,
-        ListTable
+        ListTable,
+        Search
     },
 
     data() {
@@ -254,7 +275,45 @@ export default {
             actions: [],
             bulkActions: [],
             noLogFound: this.__( 'No logs found.', 'dokan' ),
-
+            order_statuses: [
+                {
+                    id: 0,
+                    text: this.__( 'Filter by status', 'dokan' )
+                },
+                {
+                    id: 1,
+                    text: this.__( 'Processing', 'dokan' )
+                },
+                {
+                    id: 2,
+                    text: this.__( 'Completed', 'dokan' )
+                },
+                {
+                    id: 3,
+                    text: this.__( 'On-hold', 'dokan' )
+                },
+                {
+                    id: 4,
+                    text: this.__( 'Cancelled', 'dokan' )
+                },
+                {
+                    id: 5,
+                    text: this.__( 'Refunded', 'dokan' )
+                },
+                {
+                    id: 6,
+                    text: this.__( 'Failed', 'dokan' )
+                },
+                {
+                    id: 7,
+                    text: this.__( 'Pending Payment', 'dokan' )
+                }
+            ],
+            filter: {
+                query: {
+                    tab: 'logs'
+                }
+            },
             columns: {
                 'order_id': {
                     label: this.__( 'Order ID', 'dokan' ),
@@ -333,12 +392,35 @@ export default {
             if ( this.$route.query.tab === 'logs' ) {
                 this.prepareLogArea();
                 this.fetchLogs();
+                this.prepareLogsFilter();
             } else {
                 this.prepareReportArea();
                 this.fetchReport();
                 this.fetchOverview();
             }
+        },
+
+        '$route.query'() {
+            if ( this.$route.query.tab !== 'logs' ) {
+                return;
+            }
+
+            if ( ! this.$route.query.order_status ) {
+                delete this.filter.query.order_status;
+                this.clearSelection( '#filter-status');
+            }
+
+            if ( ! this.$route.query.vendor_id ) {
+                delete this.filter.query.vendor_id;
+                this.clearSelection( '#filter-vendors')
+            }
+
+            this.fetchLogs();
         }
+    },
+
+    mounted() {
+        this.prepareLogsFilter();
     },
 
     methods: {
@@ -498,13 +580,24 @@ export default {
 
         // all logs methods
         fetchLogs() {
+
             this.loading = true;
 
             dokan.api.get('/admin/logs',{
                 per_page: this.perPage,
                 page: this.currentPage,
+                vendor_id: this.$route.query.vendor_id || 0,
+                order_status: this.$route.query.order_status || '',
+                order_id: this.$route.query.order_id || 0,
             })
             .done((response, status, xhr) => {
+                if ( 'success' in response && response.success === false ) {
+                    this.logs = [];
+                    this.loading = false;
+                    this.updatePagination(xhr);
+                    return;
+                }
+
                 this.logs = response;
                 this.loading = false;
 
@@ -616,6 +709,90 @@ export default {
 
         moment(date) {
             return moment(date);
+        },
+
+        setRoute( query ) {
+            this.$router.push( {
+                name: 'Reports',
+                query: query
+            } );
+        },
+
+        searchByOrder( payload ) {
+
+            if ( ! payload ) {
+                delete this.filter.query.order_id;
+                this.setRoute( this.filter.query );
+            }
+
+            let order_id = Number.parseInt( payload );
+
+            if ( Number.isNaN( order_id ) ) {
+                return;
+            }
+
+            if ( typeof order_id !== 'number' ) {
+                return;
+            }
+
+            this.filter.query.order_id = order_id
+
+            this.setRoute( this.filter.query );
+        },
+
+        clearSelection( element ) {
+            $( element ).val( null ).trigger( 'change' );
+        },
+
+        async prepareLogsFilter() {
+            await this.$nextTick();
+
+            $( '#filter-vendors' ).selectWoo( {
+                ajax: {
+                    url: `${dokan.rest.root}dokan/v1/stores`,
+                    delay: 500,
+                    dataType: 'json',
+                    headers: {
+                        "X-WP-Nonce" : dokan.rest.nonce
+                    },
+                    data(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults(data) {
+                        return {
+                            results: data.map((store) => {
+                                return {
+                                    id: store.id,
+                                    text: store.store_name
+                                };
+                            })
+                        };
+                    }
+                }
+            } );
+
+            $( '#filter-vendors').on( 'select2:select', (e) => {
+                this.filter.query.vendor_id = e.params.data.id;
+                this.setRoute( this.filter.query );
+            } );
+
+            $( '#filter-status' ).selectWoo( {
+                data: this.order_statuses,
+            } );
+
+            $( '#filter-status' ).on('select2:select', (e) => {
+                let status = e.params.data.text.toLowerCase();
+
+                if ( e.params.data.id == 0 ) {
+                    delete this.filter.query.order_status;
+                    return this.setRoute( this.filter.query );
+                }
+
+                this.filter.query.order_status = 'wc-' + status;
+                this.setRoute( this.filter.query );
+            });
         }
     }
 };
@@ -631,6 +808,30 @@ export default {
                 padding-right: 5px;
             }
         }
+
+        .tablenav {
+            .actions {
+                overflow: visible;
+            }
+        }
+
+        .search-by-order {
+            display: inline;
+            margin-left: 5px;
+
+            .search-box #post-search-input {
+                border-radius: 3px;
+                border: 1px solid #aaaaaa;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                padding-left: 8px !important;
+            }
+
+            .search-box #post-search-input::placeholder {
+                color: #999 !important;
+            }
+        }
+
     }
 
     .export-area {
@@ -750,6 +951,21 @@ export default {
             .dokan-loader {
                 margin-top: 30px;
             }
+        }
+    }
+
+    .report-area {
+        .report-filter {
+            .multiselect__input {
+                border: none;
+                box-shadow: none;
+                &:focus {
+                    border: none;
+                    box-shadow: none;
+                    outline: none;
+                }
+            }
+
         }
     }
 }

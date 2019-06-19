@@ -15,6 +15,6 @@
             <?php echo $progress . __( '% Profile complete', 'dokan' ) ?>
         </div>
     </div>
-    <div class="dokan-alert dokan-alert-info dokan-panel-alert"><?php echo dokan_progressbar_translated_string( $next_todo, $value ); ?></div>
+    <div class="dokan-alert dokan-alert-info dokan-panel-alert"><?php echo dokan_progressbar_translated_string( $next_todo, $value, $progress ); ?></div>
    </div>
 </div>
