@@ -56,7 +56,7 @@ class Dokan_Seller_Vacation {
      * Sets up all the appropriate hooks and actions
      * within our plugin.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -78,7 +78,7 @@ class Dokan_Seller_Vacation {
     /**
      * Module constants
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -94,7 +94,7 @@ class Dokan_Seller_Vacation {
     /**
      * Include module related files
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -109,7 +109,7 @@ class Dokan_Seller_Vacation {
     /**
      * Create module related class instances
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */

@@ -18,8 +18,9 @@ class Dokan_Pro_Assets {
     }
 
     public function enqueue_admin_scripts() {
-        wp_enqueue_script( 'dokan-pro-vue-admin' );
         wp_enqueue_style( 'dokan-pro-vue-admin' );
+        wp_enqueue_style( 'woocommerce_select2', WC()->plugin_url() . '/assets/css/select2.css', [], WC_VERSION );
+        wp_enqueue_script( 'dokan-pro-vue-admin' );
     }
 
     /**
@@ -49,10 +50,6 @@ class Dokan_Pro_Assets {
 
             wp_localize_script( 'dokan-pro-vue-frontend-shipping', 'dokanShipping', $localize_array );
         }
-
-
-        // wp_enqueue_script( 'dokan-pro-vue-frontend' );
-        // wp_enqueue_style( 'dokan-pro-vue-frontend' );
     }
 
     /**
@@ -109,17 +106,10 @@ class Dokan_Pro_Assets {
         $scripts = [
             'dokan-pro-vue-admin' => [
                 'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-admin.js',
-                'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
+                'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap', 'selectWoo' ],
                 'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-admin.js' ),
                 'in_footer' => true
             ],
-
-            // 'dokan-pro-vue-frontend' => [
-            //     'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend.js',
-            //     'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
-            //     'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-frontend.js' ),
-            //     'in_footer' => true
-            // ],
 
             'dokan-pro-vue-frontend-shipping' => [
                 'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend-shipping.js',

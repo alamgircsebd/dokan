@@ -4847,8 +4847,29 @@ var Progressbar = dokan_get_lib('Progressbar');
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+/* WEBPACK VAR INJECTION */(function($) {var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -5061,6 +5082,7 @@ var Datepicker = dokan_get_lib('Datepicker');
 var Multiselect = dokan_get_lib('Multiselect');
 var ListTable = dokan_get_lib('ListTable');
 var debounce = dokan_get_lib('debounce');
+var Search = dokan_get_lib('Search');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
     name: 'Reports',
@@ -5072,7 +5094,8 @@ var debounce = dokan_get_lib('debounce');
         Currency: Currency,
         Datepicker: Datepicker,
         Multiselect: Multiselect,
-        ListTable: ListTable
+        ListTable: ListTable,
+        Search: Search
     },
 
     data: function data() {
@@ -5105,7 +5128,36 @@ var debounce = dokan_get_lib('debounce');
             actions: [],
             bulkActions: [],
             noLogFound: this.__('No logs found.', 'dokan'),
-
+            order_statuses: [{
+                id: 0,
+                text: this.__('Filter by status', 'dokan')
+            }, {
+                id: 1,
+                text: this.__('Processing', 'dokan')
+            }, {
+                id: 2,
+                text: this.__('Completed', 'dokan')
+            }, {
+                id: 3,
+                text: this.__('On-hold', 'dokan')
+            }, {
+                id: 4,
+                text: this.__('Cancelled', 'dokan')
+            }, {
+                id: 5,
+                text: this.__('Refunded', 'dokan')
+            }, {
+                id: 6,
+                text: this.__('Failed', 'dokan')
+            }, {
+                id: 7,
+                text: this.__('Pending Payment', 'dokan')
+            }],
+            filter: {
+                query: {
+                    tab: 'logs'
+                }
+            },
             columns: {
                 'order_id': {
                     label: this.__('Order ID', 'dokan')
@@ -5182,13 +5234,36 @@ var debounce = dokan_get_lib('debounce');
             if (this.$route.query.tab === 'logs') {
                 this.prepareLogArea();
                 this.fetchLogs();
+                this.prepareLogsFilter();
             } else {
                 this.prepareReportArea();
                 this.fetchReport();
                 this.fetchOverview();
             }
+        },
+        '$route.query': function $routeQuery() {
+            if (this.$route.query.tab !== 'logs') {
+                return;
+            }
+
+            if (!this.$route.query.order_status) {
+                delete this.filter.query.order_status;
+                this.clearSelection('#filter-status');
+            }
+
+            if (!this.$route.query.vendor_id) {
+                delete this.filter.query.vendor_id;
+                this.clearSelection('#filter-vendors');
+            }
+
+            this.fetchLogs();
         }
     },
+
+    mounted: function mounted() {
+        this.prepareLogsFilter();
+    },
+
 
     methods: {
         fetchOverview: function fetchOverview() {
@@ -5348,8 +5423,18 @@ var debounce = dokan_get_lib('debounce');
 
             dokan.api.get('/admin/logs', {
                 per_page: this.perPage,
-                page: this.currentPage
+                page: this.currentPage,
+                vendor_id: this.$route.query.vendor_id || 0,
+                order_status: this.$route.query.order_status || '',
+                order_id: this.$route.query.order_id || 0
             }).done(function (response, status, xhr) {
+                if ('success' in response && response.success === false) {
+                    _this4.logs = [];
+                    _this4.loading = false;
+                    _this4.updatePagination(xhr);
+                    return;
+                }
+
                 _this4.logs = response;
                 _this4.loading = false;
 
@@ -5451,9 +5536,108 @@ var debounce = dokan_get_lib('debounce');
             return moment;
         }(function (date) {
             return moment(date);
-        })
+        }),
+        setRoute: function setRoute(query) {
+            this.$router.push({
+                name: 'Reports',
+                query: query
+            });
+        },
+        searchByOrder: function searchByOrder(payload) {
+
+            if (!payload) {
+                delete this.filter.query.order_id;
+                this.setRoute(this.filter.query);
+            }
+
+            var order_id = Number.parseInt(payload);
+
+            if (Number.isNaN(order_id)) {
+                return;
+            }
+
+            if (typeof order_id !== 'number') {
+                return;
+            }
+
+            this.filter.query.order_id = order_id;
+
+            this.setRoute(this.filter.query);
+        },
+        clearSelection: function clearSelection(element) {
+            $(element).val(null).trigger('change');
+        },
+        prepareLogsFilter: function prepareLogsFilter() {
+            var _this5 = this;
+
+            return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _context.next = 2;
+                                return _this5.$nextTick();
+
+                            case 2:
+
+                                $('#filter-vendors').selectWoo({
+                                    ajax: {
+                                        url: dokan.rest.root + 'dokan/v1/stores',
+                                        delay: 500,
+                                        dataType: 'json',
+                                        headers: {
+                                            "X-WP-Nonce": dokan.rest.nonce
+                                        },
+                                        data: function data(params) {
+                                            return {
+                                                search: params.term
+                                            };
+                                        },
+                                        processResults: function processResults(data) {
+                                            return {
+                                                results: data.map(function (store) {
+                                                    return {
+                                                        id: store.id,
+                                                        text: store.store_name
+                                                    };
+                                                })
+                                            };
+                                        }
+                                    }
+                                });
+
+                                $('#filter-vendors').on('select2:select', function (e) {
+                                    _this5.filter.query.vendor_id = e.params.data.id;
+                                    _this5.setRoute(_this5.filter.query);
+                                });
+
+                                $('#filter-status').selectWoo({
+                                    data: _this5.order_statuses
+                                });
+
+                                $('#filter-status').on('select2:select', function (e) {
+                                    var status = e.params.data.text.toLowerCase();
+
+                                    if (e.params.data.id == 0) {
+                                        delete _this5.filter.query.order_status;
+                                        return _this5.setRoute(_this5.filter.query);
+                                    }
+
+                                    _this5.filter.query.order_status = 'wc-' + status;
+                                    _this5.setRoute(_this5.filter.query);
+                                });
+
+                            case 6:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, _this5);
+            }))();
+        }
     }
 });
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
 /* 28 */,
@@ -12104,10 +12288,16 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "nav-tab",
+            class: [
+              "nav-tab",
+              {
+                "nav-tab-active":
+                  _vm.$route.path === "/reports" &&
+                  _vm.$route.query.tab !== "logs"
+              }
+            ],
             attrs: {
-              to: { name: "Reports", query: { tab: "report", type: "by-day" } },
-              "active-class": "nav-tab-active"
+              to: { name: "Reports", query: { tab: "report", type: "by-day" } }
             }
           },
           [
@@ -12122,12 +12312,11 @@ var render = function() {
         _c(
           "router-link",
           {
-            staticClass: "nav-tab",
-            attrs: {
-              to: { name: "Reports", query: { tab: "logs" } },
-              "active-class": "nav-tab-active",
-              exact: ""
-            }
+            class: [
+              "nav-tab",
+              { "nav-tab-active": _vm.$route.query.tab === "logs" }
+            ],
+            attrs: { to: { name: "Reports", query: { tab: "logs" } } }
           },
           [
             _vm._v(
@@ -12725,120 +12914,156 @@ var render = function() {
           "div",
           { staticClass: "logs-area" },
           [
-            _c("list-table", {
-              attrs: {
-                columns: _vm.columns,
-                loading: _vm.loading,
-                rows: _vm.logs,
-                actions: _vm.actions,
-                "bulk-actions": _vm.bulkActions,
-                "show-cb": _vm.showCb,
-                "total-items": _vm.totalItems,
-                "total-pages": _vm.totalPages,
-                "per-page": _vm.perPage,
-                "current-page": _vm.currentPage,
-                "not-found": _vm.noLogFound
-              },
-              on: { pagination: _vm.goToPage },
-              scopedSlots: _vm._u([
-                {
-                  key: "order_id",
-                  fn: function(data) {
-                    return [
-                      _c(
-                        "a",
-                        {
-                          attrs: {
-                            target: "_blank",
-                            href: _vm.editOrderUrl(data.row.order_id)
-                          }
-                        },
-                        [_vm._v("#" + _vm._s(data.row.order_id))]
-                      )
-                    ]
-                  }
+            _c(
+              "list-table",
+              {
+                attrs: {
+                  columns: _vm.columns,
+                  loading: _vm.loading,
+                  rows: _vm.logs,
+                  actions: _vm.actions,
+                  "bulk-actions": _vm.bulkActions,
+                  "show-cb": _vm.showCb,
+                  "total-items": _vm.totalItems,
+                  "total-pages": _vm.totalPages,
+                  "per-page": _vm.perPage,
+                  "current-page": _vm.currentPage,
+                  "not-found": _vm.noLogFound
                 },
-                {
-                  key: "vendor_id",
-                  fn: function(data) {
-                    return [
-                      _c(
-                        "a",
-                        {
-                          attrs: {
-                            target: "_blank",
-                            href: _vm.editUserUrl(data.row.vendor_id)
-                          }
-                        },
-                        [
-                          _vm._v(
-                            _vm._s(
-                              data.row.vendor_name
-                                ? data.row.vendor_name
-                                : _vm.__("(no name)", "dokan")
+                on: { pagination: _vm.goToPage },
+                scopedSlots: _vm._u([
+                  {
+                    key: "order_id",
+                    fn: function(data) {
+                      return [
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              target: "_blank",
+                              href: _vm.editOrderUrl(data.row.order_id)
+                            }
+                          },
+                          [_vm._v("#" + _vm._s(data.row.order_id))]
+                        )
+                      ]
+                    }
+                  },
+                  {
+                    key: "vendor_id",
+                    fn: function(data) {
+                      return [
+                        _c(
+                          "a",
+                          {
+                            attrs: {
+                              target: "_blank",
+                              href: _vm.editUserUrl(data.row.vendor_id)
+                            }
+                          },
+                          [
+                            _vm._v(
+                              _vm._s(
+                                data.row.vendor_name
+                                  ? data.row.vendor_name
+                                  : _vm.__("(no name)", "dokan")
+                              )
                             )
-                          )
-                        ]
-                      )
-                    ]
+                          ]
+                        )
+                      ]
+                    }
+                  },
+                  {
+                    key: "order_total",
+                    fn: function(data) {
+                      return [
+                        data.row.has_refund
+                          ? _c(
+                              "del",
+                              [
+                                _c("currency", {
+                                  attrs: {
+                                    amount: data.row.previous_order_total
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          : _vm._e(),
+                        _vm._v(" "),
+                        _c("currency", {
+                          attrs: { amount: data.row.order_total }
+                        })
+                      ]
+                    }
+                  },
+                  {
+                    key: "vendor_earning",
+                    fn: function(data) {
+                      return [
+                        _c("currency", {
+                          attrs: { amount: data.row.vendor_earning }
+                        })
+                      ]
+                    }
+                  },
+                  {
+                    key: "commission",
+                    fn: function(data) {
+                      return [
+                        _c("currency", {
+                          attrs: { amount: data.row.commission }
+                        })
+                      ]
+                    }
+                  },
+                  {
+                    key: "date",
+                    fn: function(data) {
+                      return [
+                        _vm._v(
+                          "\n                " +
+                            _vm._s(
+                              _vm.moment(data.row.date).format("MMM D, YYYY")
+                            ) +
+                            "\n            "
+                        )
+                      ]
+                    }
                   }
-                },
-                {
-                  key: "order_total",
-                  fn: function(data) {
-                    return [
-                      data.row.has_refund
-                        ? _c(
-                            "del",
-                            [
-                              _c("currency", {
-                                attrs: { amount: data.row.previous_order_total }
-                              })
-                            ],
-                            1
-                          )
-                        : _vm._e(),
-                      _vm._v(" "),
-                      _c("currency", {
-                        attrs: { amount: data.row.order_total }
+                ])
+              },
+              [
+                _c("template", { slot: "filters" }, [
+                  _c("select", {
+                    staticStyle: { width: "190px" },
+                    attrs: {
+                      id: "filter-vendors",
+                      "data-placeholder": _vm.__("Filter by vendor", "dokan")
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("select", {
+                    staticStyle: { width: "190px" },
+                    attrs: { id: "filter-status" }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "search-by-order" },
+                    [
+                      _c("search", {
+                        attrs: { title: _vm.__("Search by order", "dokan") },
+                        on: { searched: _vm.searchByOrder }
                       })
-                    ]
-                  }
-                },
-                {
-                  key: "vendor_earning",
-                  fn: function(data) {
-                    return [
-                      _c("currency", {
-                        attrs: { amount: data.row.vendor_earning }
-                      })
-                    ]
-                  }
-                },
-                {
-                  key: "commission",
-                  fn: function(data) {
-                    return [
-                      _c("currency", { attrs: { amount: data.row.commission } })
-                    ]
-                  }
-                },
-                {
-                  key: "date",
-                  fn: function(data) {
-                    return [
-                      _vm._v(
-                        "\n                " +
-                          _vm._s(
-                            _vm.moment(data.row.date).format("MMM D, YYYY")
-                          ) +
-                          "\n            "
-                      )
-                    ]
-                  }
-                }
-              ])
-            })
+                    ],
+                    1
+                  )
+                ])
+              ],
+              2
+            )
           ],
           1
         )

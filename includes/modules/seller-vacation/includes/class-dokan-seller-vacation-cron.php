@@ -5,7 +5,7 @@ class Dokan_Seller_Vacation_Cron {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class Dokan_Seller_Vacation_Cron {
     /**
      * Unschedule cron
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */

@@ -617,7 +617,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
     /**
      * Render biography form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -641,7 +641,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
     /**
      * Save biography data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */

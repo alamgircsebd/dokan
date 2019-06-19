@@ -3,7 +3,7 @@
 /**
  * Include module template
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @param string $name
  * @param array  $args
@@ -18,7 +18,7 @@ function dokan_seller_vacation_get_template( $name, $args = array() ) {
 /**
  * Get vacation schedules
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @param array $profile_info
  *
@@ -50,7 +50,7 @@ function dokan_seller_vacation_get_vacation_schedules( $profile_info ) {
 /**
  * Trigger background process to change product status
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @param array $vendors
  * @param bool  $cancel_all_process
@@ -85,7 +85,7 @@ function dokan_seller_vacation_update_product_status( $vendors = array(), $cance
 /**
  * Check if seller is on vacation
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @param int $vendor_id
  *

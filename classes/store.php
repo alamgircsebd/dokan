@@ -211,7 +211,7 @@ class Dokan_Pro_Store {
      * @param array $tabs
      * @param int $store_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return array
      */
@@ -235,7 +235,7 @@ class Dokan_Pro_Store {
      *
      * @param string $store_url
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -248,7 +248,7 @@ class Dokan_Pro_Store {
      *
      * @param array $query_vars
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return array
      */
@@ -263,7 +263,7 @@ class Dokan_Pro_Store {
      *
      * @param string $template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return string
      */

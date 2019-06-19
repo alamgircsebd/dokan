@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.2
+Tested up to: 5.2.1
 WC requires at least: 3.0
-WC tested up to: 3.6.2
+WC tested up to: 3.6.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,23 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.10 -> June 19, 2019
+--------------------------------------------
+- [new]   Add vendor biography tab in dokan store page
+- [new]   Add filter and search option in admin report all logs area
+- [new]   Add multiple vacation date system for vendor
+- [fix]   Validate refund request in seller dashboard
+- [fix]   Ensure coupon works on vendors product not the cart
+- [fix]   Replace some moip text with wirecard (Wirecard)
+- [fix]   Remove subscription product from best selling and top rated product widget (Subscription)
+- [fix]   Booking is missing in calendar day view (Booking)
+- [fix]   Split product discount on sub orders
+- [fix]   Booking order shows duplicate line items in admin backend (Booking)
+- [fix]   Warning on my account order details page (RMA)
+- [fix]   Subscription renew and cancellation with PayPal (Subscription)
+- [fix]   Remove subscription menu in admin backend if subscription is not enabled (Subscription)
+- [tweak] Store progress serialization and congrats message on 100% profile completeness
 
 v2.9.9 -> May 15, 2019
 --------------------------------------------

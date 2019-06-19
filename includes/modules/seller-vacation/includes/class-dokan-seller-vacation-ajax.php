@@ -5,7 +5,7 @@ class Dokan_Seller_Vacation_Ajax {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class Dokan_Seller_Vacation_Ajax {
     /**
      * Save vacation item via AJAX request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -86,7 +86,7 @@ class Dokan_Seller_Vacation_Ajax {
     /**
      * Delete vacation item via AJAX request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class Dokan_Seller_Vacation_Ajax {
     /**
      * Sort vacation list by date `from` ascending order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param string $a
      * @param string $b
@@ -148,7 +148,7 @@ class Dokan_Seller_Vacation_Ajax {
     /**
      * Send JSON error on AJAX response
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @param \Exception $e
      * @param string $default_message

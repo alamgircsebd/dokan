@@ -869,7 +869,7 @@ add_action( 'dokan_checkout_update_order_meta', 'set_discount_on_sub_orders', 10
  * @param int $order_id
  * @param int $vendor_id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @return void
  */
@@ -900,7 +900,7 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
  *
  * @param int $vendor_id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @return float
  */
@@ -946,7 +946,7 @@ function dokan_get_lot_discount_for_vendor( $vendor_id ) {
  *
  * @param int $vendor_id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.10
  *
  * @return float
  */

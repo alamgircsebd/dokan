@@ -5,7 +5,7 @@ class Dokan_Seller_Vacation_Install {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -17,7 +17,7 @@ class Dokan_Seller_Vacation_Install {
     /**
      * Placeholder for activation function
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
@@ -30,7 +30,7 @@ class Dokan_Seller_Vacation_Install {
     /**
      * Placeholder for deactivation function
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.10
      *
      * @return void
      */
