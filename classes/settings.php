@@ -38,7 +38,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         // add vendor biography
         add_action( 'dokan_settings_form_bottom', array( $this, 'render_biography_form' ), 10, 2 );
-        add_action( 'dokan_store_profile_saved', array( $this, 'save_biography_data' ), 10, 2 );
+        add_action( 'dokan_store_profile_saved', array( $this, 'save_biography_data' ) );
     }
 
     /**
@@ -645,7 +645,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
      *
      * @return void
      */
-    public function save_biography_data( $vendor_id, $store_info ) {
+    public function save_biography_data( $vendor_id ) {
         if ( ! isset( $_POST['vendor_biography'] ) ) {
             return;
         }
@@ -654,6 +654,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             'vendor_biography' => wp_kses_post( $_POST['vendor_biography'] )
         ];
 
+        $store_info         = dokan_get_store_info( $vendor_id );
         $updated_store_info = wp_parse_args( $data, $store_info );
 
         update_user_meta( $vendor_id, 'dokan_profile_settings', $updated_store_info );
