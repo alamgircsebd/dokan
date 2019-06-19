@@ -268,7 +268,7 @@ class Dokan_RMA_Ajax {
         $refund_amount = wc_format_decimal( sanitize_text_field( $data['refund_total_amount'] ), wc_get_price_decimals() );
         $total_amount = wc_format_decimal( array_sum( $refund_max_amount ), wc_get_price_decimals() );
 
-        $coupon = new WC_Coupon( 319 );
+        $coupon = new WC_Coupon();
 
         $coupon->set_code( dokan_rma_generate_coupon_code() );
         $coupon->set_amount( $refund_amount );
