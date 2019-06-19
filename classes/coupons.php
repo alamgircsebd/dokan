@@ -29,6 +29,7 @@ class Dokan_Pro_Coupons {
 
         add_action( 'dokan_coupon_content_area_header', array( $this, 'dokan_coupon_header_render' ), 10 );
         add_action( 'dokan_coupon_content', array( $this, 'dokan_coupon_content_render' ), 10 );
+        add_filter( 'woocommerce_coupon_validate_minimum_amount', array( $this, 'validate_coupon_minimum_amount' ), 10, 2 );
     }
 
     /**
@@ -650,5 +651,41 @@ class Dokan_Pro_Coupons {
             'percent_product' => __( 'Product % Discount', 'dokan' ),
             'booking_person'  => __( 'Booking Person Discount (Amount Off Per Person)', 'dokan' )
         ] );
+    }
+
+    /**
+     * Ensure coupon amount is valid or throw exception.
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param bool $invalid
+     * @param WC_Coupon $coupon
+     * @param float $total
+     *
+     * @return bool
+     */
+    public function validate_coupon_minimum_amount( $valid, $coupon ) {
+
+        if ( ! apply_filters( 'dokan_ensure_vendor_coupon', true ) ) {
+            return $valid;
+        }
+
+        $line_item_total               = 0;
+        $coupon_applicable_product_ids = $coupon->get_product_ids();
+
+        foreach ( WC()->cart->get_cart() as $item ) {
+            $product_id = $item['data']->get_id();
+
+            if ( in_array( $product_id, $coupon_applicable_product_ids ) ) {
+                $line_sub_total  = ! empty( $item['line_subtotal'] ) ? $item['line_subtotal'] : 0;
+                $line_item_total += $line_sub_total;
+            }
+        }
+
+        if ( $coupon->get_minimum_amount() > $line_item_total ) {
+            return ! $valid;
+        }
+
+        return $valid;
     }
 }
