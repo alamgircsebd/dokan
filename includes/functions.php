@@ -47,10 +47,16 @@ if ( !function_exists( 'dokan_get_profile_progressbar' ) ) {
  *
  * @param  string $string
  * @param  int $value
+ * @param  int $progress
  *
  * @return string
  */
-function dokan_progressbar_translated_string( $string = '', $value = 15 ) {
+function dokan_progressbar_translated_string( $string = '', $value = 15, $progress = 0 ) {
+
+    if ( 100 === absint( $progress ) ) {
+        return __( 'Congratulation, your profile is fully completed', 'dokan' );
+    }
+
     switch ( $string ) {
         case 'profile_picture_val':
             return sprintf( __( 'Add Profile Picture to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
