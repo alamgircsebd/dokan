@@ -182,7 +182,9 @@ class Dokan_WC_Bookings_Calendar {
         $column = 0;
 
         foreach ( $all_day_bookings as $booking ) {
-            echo '<li data-tip="' . $this->get_tip( $booking ) . '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: 0; bottom: 0;"><a href="' . $edit_url. '">#' . $booking->id . '</a></li>';
+            echo '<li data-tip="' . esc_attr( $this->get_tip( $booking ) ). '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: 0; bottom: 0; display:list-item; ">
+                    <a href="' . $edit_url. '">' . $this->get_tip( $booking ) . '</a>
+                </li>';
             $column++;
         }
 
@@ -205,7 +207,7 @@ class Dokan_WC_Bookings_Calendar {
                     $column = $start_column;
                 }
 
-                echo '<li data-tip="' . $this->get_tip( $booking ) . '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: ' . ( $start_time * 60 ) / 100 . 'px; height: ' . $height . 'px;"><a href="' . $edit_url . '">#' . $booking->id . '</a></li>';
+                echo '<li data-tip="' . $this->get_tip( $booking ) . '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: ' . ( $start_time * 60 ) / 100 . 'px; height: ' . $height . 'px; top: 0; bottom: 0; display:list-item;  "><a href="' . $edit_url . '">#' . $booking->id . '</a></li>';
 
                 if ( $end_time > $last_end ) {
                     $last_end = $end_time;
@@ -242,7 +244,7 @@ class Dokan_WC_Bookings_Calendar {
             $return .= '<br/>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title;
         }
 
-        return esc_attr( $return );
+        return $return;
     }
 
     /**

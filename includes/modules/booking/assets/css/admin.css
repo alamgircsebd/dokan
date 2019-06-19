@@ -974,6 +974,16 @@ th.column-booking_status {
   z-index: 9999 !important; }
 
 .wc_bookings_radio_custom_label_notice {
-  color: red; }
+  color: red;
+}
+
+.wc_bookings_calendar_form .tablenav {
+  display: flex;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.wc_bookings_calendar_form .tablenav .views {
+  margin-top: 20px;
+}
 
 /*# sourceMappingURL=admin.css.map*/
