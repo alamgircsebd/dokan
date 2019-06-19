@@ -35,6 +35,10 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         add_action( 'dokan_render_settings_content', array( $this, 'load_settings_content' ), 10 );
         add_action( 'dokan_settings_form_bottom', array( $this, 'add_discount_option' ), 10, 2 );
         add_action( 'dokan_store_profile_saved', array( $this, 'save_store_data' ), 10, 2 );
+
+        // add vendor biography
+        add_action( 'dokan_settings_form_bottom', array( $this, 'render_biography_form' ), 10, 2 );
+        add_action( 'dokan_store_profile_saved', array( $this, 'save_biography_data' ), 10, 2 );
     }
 
     /**
@@ -621,4 +625,48 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         return apply_filters( 'dokan_profile_completion_progress_value', $track_val ) ;
     }
 
+    /**
+     * Render biography form
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function render_biography_form( $vendor_id, $store_info ) {
+        $biography = ! empty( $store_info['vendor_biography'] ) ? $store_info['vendor_biography'] : '';
+        ?>
+        <div class="dokan-form-group">
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'Biography', 'dokan-lite' ); ?></label>
+            <div class="dokan-w7 dokan-text-left">
+                <?php
+                    wp_editor( $biography, 'vendor_biography', [
+                        'media_buttons' => false,
+                        'quicktags'     => false
+                    ] );
+                ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Save biography data
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function save_biography_data( $vendor_id, $store_info ) {
+        if ( ! isset( $_POST['vendor_biography'] ) ) {
+            return;
+        }
+
+        $data = [
+            'vendor_biography' => wp_kses_post( $_POST['vendor_biography'] )
+        ];
+
+        $updated_store_info = wp_parse_args( $data, $store_info );
+
+        update_user_meta( $vendor_id, 'dokan_profile_settings', $updated_store_info );
+    }
 }
