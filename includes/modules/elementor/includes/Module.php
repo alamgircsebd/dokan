@@ -191,6 +191,12 @@ class Module extends ModuleBase {
      */
     public static function locate_template_for_store_page( $template, $template_name, $template_path ) {
         if ( dokan_is_store_page() ) {
+            $documents = \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_conditions_manager()->get_documents_for_location( 'single' );
+
+            if ( empty( $documents ) ) {
+                return $template;
+            }
+
             $page_templates_module = dokan_elementor()->elementor()->modules_manager->get_modules( 'page-templates' );
 
             $page_templates_module->set_print_callback( function() {
