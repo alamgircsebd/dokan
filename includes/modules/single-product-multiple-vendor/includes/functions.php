@@ -125,6 +125,11 @@ function dokan_spmv_update_clone_visibilities( $map_id ) {
         return apply_filters( 'dokan_spmv_cloned_product_order', $diff, $a, $b, $show_order );
     } );
 
+    // if we don't have a diff based on admin settings, then show only first created product
+    if ( ! $has_diff && ! empty( $clones ) ) {
+        $has_diff = true;
+    }
+
     // If a group of products has no difference, then we should show them all.
     // If there is a difference, then we'll hide them all first by making visibilty 0
     // and set 1 for the first one from sorted array.
