@@ -8,7 +8,7 @@
     <li class="dokan-wholesale-migration-wrapper">
         <div class="dokan-w8 left-content">
             <p><strong><?php _e( 'Become a Wholesale Customer', 'dokan' ) ?></strong></p>
-            <p><?php _e( 'Vendor can sell products and manage a store with a beautiful dashboard', 'dokan' ) ?></p>
+            <p><?php _e( 'Wholesale customers can purchase product in wholesale from vendor.', 'dokan' ) ?></p>
         </div>
         <div class="dokan-w4 right-content">
             <a href="#" class="btn btn-primary" id="dokan-become-wholesale-customer-btn" data-id="<?php echo get_current_user_id(); ?>"><?php _e( 'Become a wholesale customer', 'dokan' ); ?></a>
