@@ -10,8 +10,8 @@ class Templates {
 
     public function boot() {
         add_filter( 'elementor/api/get_templates/body_args', [ self::class, 'add_http_request_filter' ] );
-
         add_filter( 'option_' . \Elementor\Api::LIBRARY_OPTION_KEY, [ self::class, 'add_template_library' ] );
+        add_action( 'woocommerce_api_dokan-elementor-template-preview', [ self::class, 'template_preview' ] );
     }
 
     /**
@@ -90,7 +90,7 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=01' ),
             ],
             [
                 'id'                => "1000002",
@@ -107,7 +107,7 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=02' ),
             ],
             [
                 'id'                => "1000003",
@@ -124,7 +124,7 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=03' ),
             ],
             [
                 'id'                => "1000004",
@@ -141,12 +141,23 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=04' ),
             ],
         ];
 
         $value['templates'] = array_merge( $value['templates'], $store_templates );
 
         return $value;
+    }
+
+    /**
+     * Template preview
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public static function template_preview() {
+        include DOKAN_ELEMENTOR_VIEWS . '/template-preview.php';
     }
 }
