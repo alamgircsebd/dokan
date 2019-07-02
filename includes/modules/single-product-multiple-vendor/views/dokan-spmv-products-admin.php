@@ -16,7 +16,9 @@
                             <li>
                                 <img src="<?php echo esc_url( $vendor->get_avatar() ); ?>" alt="<?php echo esc_attr( $vendor->get_shop_name() ); ?>">
                                 <a class="shop-name" href="<?php echo esc_url( get_edit_post_link( $product_id, false ) ); ?>" target="_blank">
-                                    <?php echo esc_html( $vendor->get_shop_name() ); ?>
+                                    <span class="product-vendor-name">
+                                        <?php echo esc_html( $vendor->get_name() ); ?>
+                                    </span>
                                     <span class="product-status">
                                         - <?php echo $status->label; ?>
                                     </span>

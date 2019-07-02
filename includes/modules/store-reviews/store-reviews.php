@@ -68,6 +68,7 @@ class Dokan_Store_Reviews {
         add_filter( 'dokan_seller_tab_reviews_list', array( $this, 'replace_ratings_list' ),10 ,2 );
 
         $this->includes();
+        $this->instances();
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -119,7 +120,12 @@ class Dokan_Store_Reviews {
      */
     function includes() {
         require_once DOKAN_SELLER_RATINGS_DIR.'/classes/DSR_View.php';
+        require_once DOKAN_SELLER_RATINGS_DIR.'/classes/DSR_SPMV.php';
         require_once DOKAN_SELLER_RATINGS_DIR . '/functions.php';
+    }
+
+    public function instances() {
+        new DSR_SPMV();
     }
 
      /**

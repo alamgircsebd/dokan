@@ -29,11 +29,19 @@
   left: 5px;
 }
 #dokan-spmv-products-admin ul.dokan-spmv-products-admin-vendors li .shop-name {
+  display: block;
   text-decoration: none;
   line-height: 32px;
   margin-left: 40px;
 }
+#dokan-spmv-products-admin ul.dokan-spmv-products-admin-vendors li .shop-name .product-vendor-name {
+  max-width: 125px;
+  float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 #dokan-spmv-products-admin ul.dokan-spmv-products-admin-vendors li .shop-name .product-status {
+  float: left;
   color: #848484;
   font-size: 0.8em;
   text-transform: lowercase;
