@@ -10,7 +10,7 @@ class StoreTabContents extends StoreName {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -21,7 +21,7 @@ class StoreTabContents extends StoreName {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class StoreTabContents extends StoreName {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class StoreTabContents extends StoreName {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -54,7 +54,7 @@ class StoreTabContents extends StoreName {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -65,7 +65,7 @@ class StoreTabContents extends StoreName {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -88,7 +88,7 @@ class StoreTabContents extends StoreName {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -99,7 +99,7 @@ class StoreTabContents extends StoreName {
     /**
      * Frontend render method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -116,7 +116,7 @@ class StoreTabContents extends StoreName {
     /**
      * Elementor builder content template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

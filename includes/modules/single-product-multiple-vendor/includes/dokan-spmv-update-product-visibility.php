@@ -3,14 +3,14 @@
 /**
  * Update vendor and product geolocation data
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.11
  */
 class Dokan_SPMV_Update_Product_Visibility extends Abstract_Dokan_Background_Processes {
 
     /**
      * Action
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var string
      */
@@ -19,7 +19,7 @@ class Dokan_SPMV_Update_Product_Visibility extends Abstract_Dokan_Background_Pro
     /**
      * Perform updates
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param mixed $item
      *

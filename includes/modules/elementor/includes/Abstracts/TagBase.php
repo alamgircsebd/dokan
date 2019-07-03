@@ -10,7 +10,7 @@ abstract class TagBase extends Tag {
     /**
      * Tag group
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -21,7 +21,7 @@ abstract class TagBase extends Tag {
     /**
      * Tag categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */

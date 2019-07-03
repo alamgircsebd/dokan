@@ -13,7 +13,7 @@ abstract class DokanButton extends Widget_Button {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -24,7 +24,7 @@ abstract class DokanButton extends Widget_Button {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -65,7 +65,7 @@ abstract class DokanButton extends Widget_Button {
     /**
      * Button wrapper class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -76,7 +76,7 @@ abstract class DokanButton extends Widget_Button {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -87,7 +87,7 @@ abstract class DokanButton extends Widget_Button {
     /**
      * Button class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -98,7 +98,7 @@ abstract class DokanButton extends Widget_Button {
     /**
      * Frontend render method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
