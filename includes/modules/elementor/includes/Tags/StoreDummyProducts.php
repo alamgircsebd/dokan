@@ -9,7 +9,7 @@ class StoreDummyProducts extends TagBase {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $data
      */
@@ -20,7 +20,7 @@ class StoreDummyProducts extends TagBase {
     /**
      * Tag name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -31,7 +31,7 @@ class StoreDummyProducts extends TagBase {
     /**
      * Tag title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -42,7 +42,7 @@ class StoreDummyProducts extends TagBase {
     /**
      * Render tag
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

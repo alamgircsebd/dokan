@@ -27,7 +27,7 @@ class Dokan_SPMV_Products {
         add_action( 'wp_trash_post', array( $this, 'trash_product' ) );
         add_action( 'untrashed_post', array( $this, 'untrash_product' ) );
         add_action( 'transition_post_status',  array( $this, 'on_product_status_changes' ), 10, 3 );
-        add_action( 'dokan_product_updated',  array( $this, 'update_product_status' ), 10, 3 );
+        add_action( 'dokan_product_updated',  array( $this, 'after_dokan_product_updated' ), 10, 3 );
 
         if ( 'below_tabs' == $display_position ) {
 
@@ -147,18 +147,18 @@ class Dokan_SPMV_Products {
 
         $product_status = apply_filters( 'dokan_cloned_product_status', dokan_get_new_post_status() );
 
-        $has_multivendor = get_post_meta( $product_id, '_has_multi_vendor', true );
+        $map_id = get_post_meta( $product_id, '_has_multi_vendor', true );
 
-        if ( ! $has_multivendor ) {
-            $has_multivendor = $this->get_next_map_id();
+        if ( ! $map_id ) {
+            $map_id = $this->get_next_map_id();
             $update_product_ids[] = $product_id;
         }
 
         $update_product_ids[] = $clone_product_id;
 
-        if ( $this->set_map_id( $has_multivendor, $update_product_ids ) ){
-            update_post_meta( $product_id, '_has_multi_vendor', $has_multivendor );
-            update_post_meta( $clone_product_id, '_has_multi_vendor', $has_multivendor );
+        if ( $this->set_map_id( $map_id, $update_product_ids ) ){
+            update_post_meta( $product_id, '_has_multi_vendor', $map_id );
+            update_post_meta( $clone_product_id, '_has_multi_vendor', $map_id );
         }
 
         wp_update_post(
@@ -170,9 +170,9 @@ class Dokan_SPMV_Products {
             )
         );
 
-        $this->update_product_visibility( $clone_product_id, $product_status );
+        $this->update_product_status( $clone_product_id, $product_status );
 
-        do_action( 'dokan_spmv_create_clone_product', $clone_product_id, $product_id );
+        do_action( 'dokan_spmv_create_clone_product', $clone_product_id, $product_id, $map_id );
         wp_redirect( dokan_edit_product_url( $clone_product_id ) );
         exit();
     }
@@ -307,7 +307,7 @@ class Dokan_SPMV_Products {
         $post_type = get_post_type( $product_id );
 
         if ( 'product' == $post_type ) {
-            $this->update_product_visibility( $product_id, 'trash' );
+            $this->update_product_status( $product_id, 'trash' );
         }
 
     }
@@ -335,7 +335,7 @@ class Dokan_SPMV_Products {
         if ( 'product' == $post_type ) {
             $product = wc_get_product( $product_id );
             if ( 'publish' == $product->get_status() ) {
-                $this->update_product_visibility( $product_id, 'publish' );
+                $this->update_product_status( $product_id, 'publish' );
             }
         }
     }
@@ -359,27 +359,27 @@ class Dokan_SPMV_Products {
         if ( ! empty( $post->post_type ) && 'product' == $post->post_type ) {
 
             if ( 'pending' == $new_status ) {
-                $this->update_product_visibility( $post->ID, 'pending' );
+                $this->update_product_status( $post->ID, 'pending' );
             }
 
             if ( 'draft' == $new_status  ) {
-                $this->update_product_visibility( $post->ID, 'draft' );
+                $this->update_product_status( $post->ID, 'draft' );
             }
 
             if ( 'publish' == $new_status ) {
-                $this->update_product_visibility( $post->ID, 'publish' );
+                $this->update_product_status( $post->ID, 'publish' );
             }
         }
     }
 
     /**
-     * Udpate product visibility status from seller end
+     * Udpate product status status from seller end
      *
      * @since 1.0.0
      *
      * @return void
      */
-    public function update_product_status( $product_id ) {
+    public function after_dokan_product_updated( $product_id ) {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -391,24 +391,24 @@ class Dokan_SPMV_Products {
         $product = wc_get_product( $product_id );
 
         if ( 'draft' == $product->get_status() ) {
-            $this->update_product_visibility( $product_id, 'draft' );
+            $this->update_product_status( $product_id, 'draft' );
         }
     }
 
     /**
-     * Udpate product visibility in product mapping table
+     * Udpate product status in product mapping table
      *
      * @since 1.0.0
      *
      * @param integer $product_id
-     * @param string $visibility [ 0 -> publish | 1 -> trash | 2 -> pending | 3 -> draft ]
+     * @param string $status [ 0 -> publish | 1 -> trash | 2 -> pending | 3 -> draft ]
      *
      * @return void
      */
-    public function update_product_visibility( $product_id, $visibility ) {
+    public function update_product_status( $product_id, $status ) {
         global $wpdb;
 
-        $is_trash = $this->get_product_map_status_code( $visibility );
+        $is_trash = $this->get_product_map_status_code( $status );
 
         $table = $wpdb->prefix . 'dokan_product_map';
         $wpdb->update(

@@ -34,11 +34,20 @@
             }
 
             .shop-name {
+                display: block;
                 text-decoration: none;
                 line-height: 32px;
                 margin-left: 40px;
 
+                .product-vendor-name {
+                    max-width: 125px;
+                    float: left;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+
                 .product-status {
+                    float: left;
                     color: #848484;
                     font-size: 0.8em;
                     text-transform: lowercase;

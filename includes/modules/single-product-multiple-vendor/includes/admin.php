@@ -43,7 +43,6 @@ class Dokan_SPMV_Admin {
      * @return array
      */
     function add_new_setting_field_admin_panel( $settings_fields ) {
-
         $settings_fields['dokan_spmv'] = array(
             'enable_pricing' => array(
                 'name'  => 'enable_pricing',
@@ -79,6 +78,15 @@ class Dokan_SPMV_Admin {
                     'after_tabs'  => __( 'After Single Product Tabs', 'dokan' ),
                 ),
                 'default' => 'below_tabs',
+            ),
+
+            'show_order' => array(
+                'name'    => 'show_order',
+                'label'   => __( 'Show SPMV products', 'dokan' ),
+                'desc'    => __( 'Select option for shown products under SPMV concept. "Show all products" will show all duplicate products.', 'dokan' ),
+                'type'    => 'select',
+                'options' => wp_list_pluck( dokan_spmv_get_show_order_options(), 'label', 'name' ),
+                'default' => 'show_all',
             ),
         );
 

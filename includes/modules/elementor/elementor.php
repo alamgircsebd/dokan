@@ -3,7 +3,7 @@
 * Plugin Name: Elementor
 * Plugin URI: https://wedevs.com/products/plugins/dokan/
 * Description: Elementor Page Builder widgets for Dokan
-* Version: DOKAN_PRO_SINCE
+* Version: 2.9.11
 * Author: weDevs
 * Author URI: https://wedevs.com/
 * Thumbnail Name: elementor.png
@@ -44,16 +44,16 @@ final class DokanElementor {
     /**
      * Module version
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var string
      */
-    public $version = 'DOKAN_PRO_SINCE';
+    public $version = '2.9.11';
 
     /**
      * Singleton class instance holder
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var object
      */
@@ -62,7 +62,7 @@ final class DokanElementor {
     /**
      * Make a class instance
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return object
      */
@@ -81,7 +81,7 @@ final class DokanElementor {
     /**
      * Exec after first instance has been created
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -93,7 +93,7 @@ final class DokanElementor {
     /**
      * Load module
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -106,7 +106,7 @@ final class DokanElementor {
     /**
      * Module constants
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -123,7 +123,7 @@ final class DokanElementor {
     /**
      * Include module related files
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -134,7 +134,7 @@ final class DokanElementor {
     /**
      * Create module related class instances
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -147,7 +147,7 @@ final class DokanElementor {
     /**
      * Show admin notices
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return 1.0.0
      */
@@ -182,7 +182,7 @@ final class DokanElementor {
     /**
      * Elementor\Plugin instance
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return \Elementor\Plugin
      */
@@ -193,7 +193,7 @@ final class DokanElementor {
     /**
      * Is editing or preview mode running
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return bool
      */
@@ -219,7 +219,7 @@ final class DokanElementor {
     /**
      * Default dynamic store data for widgets
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string $prop
      *
@@ -234,7 +234,7 @@ final class DokanElementor {
     /**
      * Social network name mapping to elementor icon names
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */

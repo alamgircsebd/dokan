@@ -34,9 +34,9 @@ class Dokan_Single_Product_Multi_Vendor {
     }
 
     /**
-     * Initializes the Dokan_Auction() class
+     * Initializes the Dokan_Single_Product_Multi_Vendor() class
      *
-     * Checks for an existing Dokan_Auction() instance
+     * Checks for an existing Dokan_Single_Product_Multi_Vendor() instance
      * and if it doesn't find one, creates it.
      */
     public static function init() {
@@ -80,6 +80,7 @@ class Dokan_Single_Product_Multi_Vendor {
         }
 
         require_once DOKAN_SPMV_INC_DIR . '/products.php';
+        require_once DOKAN_SPMV_INC_DIR . '/product-visibility.php';
     }
 
     /**
@@ -92,7 +93,6 @@ class Dokan_Single_Product_Multi_Vendor {
     public function initiate() {
         if ( is_admin() ) {
             new Dokan_SPMV_Admin();
-            new Dokan_SPMV_Products_Admin();
         }
 
         new Dokan_SPMV_Products();
@@ -112,7 +112,12 @@ class Dokan_Single_Product_Multi_Vendor {
             return;
         }
 
-        //tinysort.min.js
+        if ( is_admin() ) {
+            new Dokan_SPMV_Products_Admin();
+        }
+
+        new Dokan_SPMV_Product_Visibility();
+
         add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
     }
 
@@ -143,6 +148,7 @@ class Dokan_Single_Product_Multi_Vendor {
                 `product_id` bigint(20) DEFAULT NULL,
                 `seller_id` bigint(20) DEFAULT NULL,
                 `is_trash` tinyint(4) NOT NULL DEFAULT '0',
+                `visibility` tinyint(1) DEFAULT '1',
                 PRIMARY KEY (`id`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 

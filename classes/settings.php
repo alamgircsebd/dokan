@@ -629,8 +629,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
             <div class="dokan-w7 dokan-text-left">
                 <?php
                     wp_editor( $biography, 'vendor_biography', [
-                        'media_buttons' => false,
-                        'quicktags'     => false
+                        'quicktags' => false
                     ] );
                 ?>
             </div>

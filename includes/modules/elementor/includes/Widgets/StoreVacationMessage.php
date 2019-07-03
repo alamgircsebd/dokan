@@ -11,7 +11,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -22,7 +22,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -33,7 +33,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -44,7 +44,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -55,7 +55,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -66,7 +66,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -122,7 +122,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -133,7 +133,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Frontend render method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -176,7 +176,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Elementor builder content template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -209,7 +209,7 @@ class StoreVacationMessage extends Widget_Alert {
     /**
      * Render widget plain content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

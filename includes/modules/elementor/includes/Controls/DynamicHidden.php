@@ -9,7 +9,7 @@ class DynamicHidden extends Control_Hidden {
     /**
      * Control type
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var string
      */
@@ -18,7 +18,7 @@ class DynamicHidden extends Control_Hidden {
     /**
      * Get repeater control type.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -29,7 +29,7 @@ class DynamicHidden extends Control_Hidden {
     /**
      * Get default settings for the control
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */

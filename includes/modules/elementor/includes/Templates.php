@@ -10,14 +10,14 @@ class Templates {
 
     public function boot() {
         add_filter( 'elementor/api/get_templates/body_args', [ self::class, 'add_http_request_filter' ] );
-
         add_filter( 'option_' . \Elementor\Api::LIBRARY_OPTION_KEY, [ self::class, 'add_template_library' ] );
+        add_action( 'woocommerce_api_dokan-elementor-template-preview', [ self::class, 'template_preview' ] );
     }
 
     /**
      * Filter elementor https request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $body_args
      */
@@ -30,7 +30,7 @@ class Templates {
     /**
      * Returns dokan templates for related request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param bool   $pre
      * @param array  $r
@@ -61,7 +61,7 @@ class Templates {
     /**
      * Add Dokan templates as remote template source
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $value
      */
@@ -90,7 +90,7 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=01' ),
             ],
             [
                 'id'                => "1000002",
@@ -107,7 +107,7 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=02' ),
             ],
             [
                 'id'                => "1000003",
@@ -124,7 +124,7 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=03' ),
             ],
             [
                 'id'                => "1000004",
@@ -141,12 +141,23 @@ class Templates {
                 'trend_index'       => 1,
                 'favorite'          => false,
                 'has_page_settings' => false,
-                'url'               => 'https://wedevs.com',
+                'url'               => home_url( '/?wc-api=dokan-elementor-template-preview&id=04' ),
             ],
         ];
 
         $value['templates'] = array_merge( $value['templates'], $store_templates );
 
         return $value;
+    }
+
+    /**
+     * Template preview
+     *
+     * @since 2.9.11
+     *
+     * @return void
+     */
+    public static function template_preview() {
+        include DOKAN_ELEMENTOR_VIEWS . '/template-preview.php';
     }
 }

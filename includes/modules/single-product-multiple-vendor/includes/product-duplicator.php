@@ -70,18 +70,21 @@ class Dokan_SPMV_Product_Duplicator {
         }
 
         $product_status  = apply_filters( 'dokan_cloned_product_status', dokan_get_new_post_status() );
-        $has_multivendor = get_post_meta( $product_id, '_has_multi_vendor', true );
 
-        if ( ! $has_multivendor ) {
-            $has_multivendor      = $this->get_next_map_id();
+        // _has_multi_vendor indicates that the map id for the product and it's clones
+        $map_id = get_post_meta( $product_id, '_has_multi_vendor', true );
+
+        if ( ! $map_id ) {
+            // next map_id indicates the group_id for the cloned product groups
+            $map_id      = $this->get_next_map_id();
             $update_product_ids[] = $product_id;
         }
 
         $update_product_ids[] = $cloned_product_id;
 
-        if ( $this->set_map_id( $has_multivendor, $update_product_ids ) ){
-            update_post_meta( $product_id, '_has_multi_vendor', $has_multivendor );
-            update_post_meta( $cloned_product_id, '_has_multi_vendor', $has_multivendor );
+        if ( $this->set_map_id( $map_id, $update_product_ids ) ){
+            update_post_meta( $product_id, '_has_multi_vendor', $map_id );
+            update_post_meta( $cloned_product_id, '_has_multi_vendor', $map_id );
         }
 
         wp_update_post( [
@@ -91,9 +94,9 @@ class Dokan_SPMV_Product_Duplicator {
             'post_author' => $vendor_id
         ] );
 
-        $this->update_product_visibility( $cloned_product_id, $product_status );
+        $this->update_product_status( $cloned_product_id, $product_status );
 
-        do_action( 'dokan_spmv_create_clone_product', $cloned_product_id, $product_id );
+        do_action( 'dokan_spmv_create_clone_product', $cloned_product_id, $product_id, $map_id );
 
         return $cloned_product_id;
     }
@@ -194,7 +197,8 @@ class Dokan_SPMV_Product_Duplicator {
     public function set_map_id( $map_id, $product_ids ) {
         global $wpdb;
 
-        $values = array();
+        $values = [];
+
         foreach ( $product_ids as $product_id ) {
             $seller_id = get_post_field( 'post_author', $product_id );
             $values[] = '(' . $map_id . ',' . $product_id . ',' . $seller_id . ')';
@@ -202,9 +206,10 @@ class Dokan_SPMV_Product_Duplicator {
 
         $values = implode( ',', $values );
 
-        $result = $wpdb->query( "INSERT INTO `{$wpdb->prefix}dokan_product_map`
+        $result = $wpdb->query(
+            "insert into `{$wpdb->prefix}dokan_product_map`
             ( map_id, product_id, seller_id )
-            VALUES $values"
+            values $values"
         );
 
         if ( $result ) {
@@ -215,19 +220,19 @@ class Dokan_SPMV_Product_Duplicator {
     }
 
     /**
-     * Udpate product visibility in product mapping table
+     * Udpate product status in product mapping table
      *
      * @since 2.9.8
      *
      * @param integer $product_id
-     * @param string $visibility [ 0 -> publish | 1 -> trash | 2 -> pending | 3 -> draft ]
+     * @param string $status [ 0 -> publish | 1 -> trash | 2 -> pending | 3 -> draft ]
      *
      * @return void
      */
-    public function update_product_visibility( $product_id, $visibility ) {
+    public function update_product_status( $product_id, $status ) {
         global $wpdb;
 
-        $is_trash = $this->get_product_map_status_code( $visibility );
+        $is_trash = $this->get_product_map_status_code( $status );
 
         $table = $wpdb->prefix . 'dokan_product_map';
         $wpdb->update(

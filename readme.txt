@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.2.1
+Tested up to: 5.2.2
 WC requires at least: 3.0
-WC tested up to: 3.6.4
+WC tested up to: 3.6.5
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,14 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.11 -> July 03, 2019
+---------------------------------------------------------------------
+- [new]   Add elementor page builder widgets for Dokan (Elementor Module)
+- [fix]   Wholesale customer migration button description text (Wholesale Module)
+- [fix]   Limit your zone location by default should not be enabled
+- [fix]   Line break and youtube video does not work in vendor bio
+- [tweak] Single product multiple vendor hide duplicates based on admin settings (SPMV Module)
 
 v2.9.10 -> June 19, 2019
 --------------------------------------------

@@ -1,3 +1,11 @@
+v2.9.11 -> July 03, 2019
+---------------------------------------------------------------------
+- [new]   Add elementor page builder widgets for Dokan (Elementor Module)
+- [fix]   Wholesale customer migration button description text (Wholesale Module)
+- [fix]   Limit your zone location by default should not be enabled
+- [fix]   Line break and youtube video does not work in vendor bio
+- [tweak] Single product multiple vendor hide duplicates based on admin settings (SPMV Module)
+
 v2.9.10 -> June 19, 2019
 --------------------------------------------
 - [new]   Add vendor biography tab in dokan store page

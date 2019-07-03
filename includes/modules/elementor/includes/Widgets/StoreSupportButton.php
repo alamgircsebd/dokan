@@ -10,7 +10,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -21,7 +21,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -54,7 +54,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -85,7 +85,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Button wrapper class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -95,7 +95,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Button class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -106,7 +106,7 @@ class StoreSupportButton extends DokanButton {
     /**
      * Render button
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

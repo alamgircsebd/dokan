@@ -12,7 +12,7 @@ class StoreName extends Widget_Heading {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -23,7 +23,7 @@ class StoreName extends Widget_Heading {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -34,7 +34,7 @@ class StoreName extends Widget_Heading {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -45,7 +45,7 @@ class StoreName extends Widget_Heading {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -56,7 +56,7 @@ class StoreName extends Widget_Heading {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -67,7 +67,7 @@ class StoreName extends Widget_Heading {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -101,7 +101,7 @@ class StoreName extends Widget_Heading {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -112,7 +112,7 @@ class StoreName extends Widget_Heading {
     /**
      * Frontend render method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -129,7 +129,7 @@ class StoreName extends Widget_Heading {
     /**
      * Elementor builder content template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -148,7 +148,7 @@ class StoreName extends Widget_Heading {
     /**
      * Render widget plain content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

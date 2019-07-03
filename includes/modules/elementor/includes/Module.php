@@ -12,14 +12,14 @@ class Module extends ModuleBase {
     /**
      * Widget group
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      */
     const DOKAN_GROUP = 'dokan';
 
     /**
      * Run after first instance
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -40,7 +40,7 @@ class Module extends ModuleBase {
     /**
      * Name of the elementor module
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class Module extends ModuleBase {
     /**
      * Module widgets
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -76,7 +76,7 @@ class Module extends ModuleBase {
     /**
      * Register module documents
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param Elementor\Core\Documents_Manager $documents_manager
      *
@@ -95,7 +95,7 @@ class Module extends ModuleBase {
     /**
      * Register module tags
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -129,7 +129,7 @@ class Module extends ModuleBase {
     /**
      * Register controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -150,7 +150,7 @@ class Module extends ModuleBase {
     /**
      * Add editor templates
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class Module extends ModuleBase {
     /**
      * Register condition for the module
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param \ElementorPro\Modules\ThemeBuilder\Classes\Conditions_Manager $conditions_manager
      *
@@ -181,7 +181,7 @@ class Module extends ModuleBase {
     /**
      * Filter to show the elementor built store template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string $template
      * @param string $template_name
@@ -191,6 +191,12 @@ class Module extends ModuleBase {
      */
     public static function locate_template_for_store_page( $template, $template_name, $template_path ) {
         if ( dokan_is_store_page() ) {
+            $documents = \ElementorPro\Modules\ThemeBuilder\Module::instance()->get_conditions_manager()->get_documents_for_location( 'single' );
+
+            if ( empty( $documents ) ) {
+                return $template;
+            }
+
             $page_templates_module = dokan_elementor()->elementor()->modules_manager->get_modules( 'page-templates' );
 
             $page_templates_module->set_print_callback( function() {
@@ -234,7 +240,7 @@ class Module extends ModuleBase {
     /**
      * Store tab contents
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -258,7 +264,7 @@ class Module extends ModuleBase {
     /**
      * Enqueue scripts in editing or preview mode
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

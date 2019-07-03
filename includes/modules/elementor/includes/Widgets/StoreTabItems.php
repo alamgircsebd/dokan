@@ -10,7 +10,7 @@ class StoreTabItems extends StoreInfo {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -21,7 +21,7 @@ class StoreTabItems extends StoreInfo {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class StoreTabItems extends StoreInfo {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class StoreTabItems extends StoreInfo {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -54,7 +54,7 @@ class StoreTabItems extends StoreInfo {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -91,7 +91,7 @@ class StoreTabItems extends StoreInfo {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -104,7 +104,7 @@ class StoreTabItems extends StoreInfo {
      *
      * Written in PHP and used to generate the final HTML.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -180,7 +180,7 @@ class StoreTabItems extends StoreInfo {
      *
      * Written as a Backbone JavaScript template and used to generate the live preview.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

@@ -14,7 +14,7 @@ class StoreWPWidgets {
     /**
      * Run after first instance
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -57,7 +57,7 @@ class StoreWPWidgets {
     /**
      * Render dummy content for Store Support widget
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array                       $args
      * @param array                       $instance
@@ -97,7 +97,7 @@ class StoreWPWidgets {
     /**
      * Render dummy content for Store Contact Form widget
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array                     $args
      * @param array                     $instance
@@ -135,7 +135,7 @@ class StoreWPWidgets {
     /**
      * Render dummy content for Store Location widget
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array                 $args
      * @param array                 $instance
@@ -171,7 +171,7 @@ class StoreWPWidgets {
     /**
      * Render dummy content for Store Categories widget
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array                      $args
      * @param array                      $instance
@@ -211,7 +211,7 @@ class StoreWPWidgets {
     /**
      * Render dummy content for Store Open Close widget
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array                      $args
      * @param array                      $instance
