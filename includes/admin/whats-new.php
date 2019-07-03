@@ -1,6 +1,32 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.11',
+        'released' => '2019-07-02',
+        'changes'  => array(
+            array(
+                'title'         => 'Elementor Module',
+                'type'          => 'New',
+                'description'   => 'Add elementor page builder widgets for Dokan.'
+            ),
+            array(
+                'title'         => 'Single Product Multi Vendor',
+                'type'          => 'Improvement',
+                'description'   => 'Single product multiple vendor hide duplicates based on admin settings.'
+            ),
+            array(
+                'title'         => 'Zone Wise Vendor Shipping',
+                'type'          => 'Fix',
+                'description'   => 'Limit your zone location by default was enabled, which is incorrect. It should only be enabled when admin limit the zone.'
+            ),
+            array(
+                'title'         => 'Vendor Biography Tab',
+                'type'          => 'Fix',
+                'description'   => 'Line break and youtube video was not working in vendor biography tab. We have fixed the issue in this update.'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.10',
         'released' => '2019-06-19',
         'changes'  => array(

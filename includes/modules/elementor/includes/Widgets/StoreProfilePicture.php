@@ -13,7 +13,7 @@ class StoreProfilePicture extends Widget_Image {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -24,7 +24,7 @@ class StoreProfilePicture extends Widget_Image {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -35,7 +35,7 @@ class StoreProfilePicture extends Widget_Image {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -46,7 +46,7 @@ class StoreProfilePicture extends Widget_Image {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -57,7 +57,7 @@ class StoreProfilePicture extends Widget_Image {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -68,7 +68,7 @@ class StoreProfilePicture extends Widget_Image {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

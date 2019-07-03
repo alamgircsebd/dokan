@@ -16,7 +16,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -27,7 +27,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -38,7 +38,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -49,7 +49,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -60,7 +60,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -71,7 +71,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -153,7 +153,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -166,7 +166,7 @@ class StoreInfo extends Widget_Icon_List {
      *
      * Written in PHP and used to generate the final HTML.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -235,7 +235,7 @@ class StoreInfo extends Widget_Icon_List {
      *
      * Written as a Backbone JavaScript template and used to generate the live preview.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -283,7 +283,7 @@ class StoreInfo extends Widget_Icon_List {
     /**
      * Render widget plain content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

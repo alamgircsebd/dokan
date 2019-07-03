@@ -11,7 +11,7 @@ class StoreData {
     /**
      * Holds the store data for a real store
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var array
      */
@@ -20,7 +20,7 @@ class StoreData {
     /**
      * Default dynamic store data for widgets
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string $prop
      *
@@ -39,7 +39,7 @@ class StoreData {
     /**
      * Data for non-editing purpose
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -53,7 +53,7 @@ class StoreData {
          *
          * Defaults are intentionally skipped from translating
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 2.9.11
          *
          * @param array $data
          */
@@ -138,7 +138,7 @@ class StoreData {
             /**
              * Filter to modify store data
              *
-             * @since DOKAN_PRO_SINCE
+             * @since 2.9.11
              *
              * @param array $this->store_data
              */
@@ -151,7 +151,7 @@ class StoreData {
     /**
      * Data for editing/previewing purpose
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -161,7 +161,7 @@ class StoreData {
          *
          * Defaults are intentionally skipped from translating
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 2.9.11
          *
          * @param array $this->store_data_editing
          */

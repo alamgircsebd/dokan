@@ -5,7 +5,7 @@ class DSR_SPMV {
     /**
      * Product vendors
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var array
      */
@@ -14,7 +14,7 @@ class DSR_SPMV {
     /**
      * Vendor ratings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @var array
      */
@@ -23,7 +23,7 @@ class DSR_SPMV {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -35,7 +35,7 @@ class DSR_SPMV {
     /**
      * Add show order option
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $options
      *
@@ -53,7 +53,7 @@ class DSR_SPMV {
     /**
      * Filter cloned product order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string      $price
      * @param \WC_Product $a
@@ -73,7 +73,7 @@ class DSR_SPMV {
     /**
      * Review rating for a vendor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param \WC_Product $product
      *

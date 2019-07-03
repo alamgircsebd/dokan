@@ -16,7 +16,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -27,7 +27,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -38,7 +38,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -49,7 +49,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -60,7 +60,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -71,7 +71,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -227,7 +227,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Set wrapper classes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -238,7 +238,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Frontend render method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -291,7 +291,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Elementor builder content template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -302,7 +302,7 @@ class StoreSocialProfile extends Widget_Social_Icons {
     /**
      * Render widget plain content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

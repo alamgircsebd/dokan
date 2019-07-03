@@ -782,8 +782,11 @@ var Multiselect = dokan_get_lib('Multiselect');
                     }
 
                     if (resp.data.locations.length > 0) {
-                        self.wantToLimitLocation = true;
                         var locationResp = _.groupBy(resp.data.locations, 'type');
+
+                        if (Object.keys(locationResp).includes('state')) {
+                            self.wantToLimitLocation = true;
+                        }
 
                         Object.keys(locationResp).forEach(function (key) {
                             if ('country' == key) {

@@ -49,7 +49,7 @@ function dokan_spmv_get_product_clones( $product ) {
 /**
  * Get product show order options
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.11
  *
  * @return array
  */
@@ -73,7 +73,7 @@ function dokan_spmv_get_show_order_options() {
 /**
  * Update visibilities for a group of cloned products
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.11
  *
  * @param int $map_id
  *

@@ -17,7 +17,7 @@ class Templates {
     /**
      * Filter elementor https request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $body_args
      */
@@ -30,7 +30,7 @@ class Templates {
     /**
      * Returns dokan templates for related request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param bool   $pre
      * @param array  $r
@@ -61,7 +61,7 @@ class Templates {
     /**
      * Add Dokan templates as remote template source
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $value
      */
@@ -153,7 +153,7 @@ class Templates {
     /**
      * Template preview
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

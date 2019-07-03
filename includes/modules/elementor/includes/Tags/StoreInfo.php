@@ -10,7 +10,7 @@ class StoreInfo extends TagBase {
     /**
      * Tag name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -21,7 +21,7 @@ class StoreInfo extends TagBase {
     /**
      * Tag title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class StoreInfo extends TagBase {
     /**
      * Render Tag
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -95,7 +95,7 @@ class StoreInfo extends TagBase {
         /**
          * Filter to modify tag values
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 2.9.11
          *
          * @param array $store_info
          */

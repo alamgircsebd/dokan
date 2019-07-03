@@ -7,7 +7,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -21,7 +21,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Fires right save admin settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string $option_name
      * @param mixed  $option_value
@@ -60,7 +60,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Fires after cloning a product
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param int $cloned_product_id
      * @param int $product_id
@@ -75,7 +75,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Update visibility on product update
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param int $product_id
      *
@@ -101,7 +101,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Filter WC product query
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -113,7 +113,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Filter the where query
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string    $where
      * @param \WP_Query $wp_query
@@ -133,7 +133,7 @@ class Dokan_SPMV_Product_Visibility {
     /**
      * Filter the join query
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param string    $join
      * @param \WP_Query $wp_query

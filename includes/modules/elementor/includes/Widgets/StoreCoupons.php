@@ -18,7 +18,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Widget name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -29,7 +29,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Widget title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -40,7 +40,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Widget icon class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -51,7 +51,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Widget categories
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -62,7 +62,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Widget keywords
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return array
      */
@@ -73,7 +73,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Register widget controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -445,7 +445,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Frontend render method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -489,7 +489,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Elementor builder content template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -532,7 +532,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Render widget plain content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -541,7 +541,7 @@ class StoreCoupons extends Widget_Base {
     /**
      * Add default inline style for coupons
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */

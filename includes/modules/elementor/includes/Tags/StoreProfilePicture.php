@@ -10,7 +10,7 @@ class StoreProfilePicture extends DataTagBase {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @param array $data
      */
@@ -21,7 +21,7 @@ class StoreProfilePicture extends DataTagBase {
     /**
      * Tag name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class StoreProfilePicture extends DataTagBase {
     /**
      * Tag title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class StoreProfilePicture extends DataTagBase {
     /**
      * Store profile picture
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
@@ -64,7 +64,7 @@ class StoreProfilePicture extends DataTagBase {
     /**
      * Register tag controls
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.11
      *
      * @return void
      */
