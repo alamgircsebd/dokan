@@ -4,7 +4,7 @@ namespace DokanPro\Modules\Subscription;
 
 use DokanPro\Modules\Subscription\SubscriptionPack;
 use DokanPro\Modules\Subscription\Helper;
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * DPS Shortcode Class
  */
 class Shortcode {
+
     use Singleton;
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Exceptions\DokanException;
+
 class Dokan_Seller_Vacation_Ajax {
 
     /**
@@ -28,7 +30,7 @@ class Dokan_Seller_Vacation_Ajax {
             $post_data = wp_unslash( $_POST );
 
             if ( empty( $post_data['data']['item'] ) ) {
-                throw new Dokan_Exception( 'parameter_is_missing', __( 'Item parameter is missing', 'dokan' ), 400 );
+                throw new DokanException( 'parameter_is_missing', __( 'Item parameter is missing', 'dokan' ), 400 );
             }
 
             $vendor_id = get_current_user_id();
@@ -37,7 +39,7 @@ class Dokan_Seller_Vacation_Ajax {
             $item      = $post_data['data']['item'];
 
             if ( empty( $item['from'] ) || empty( $item['to'] ) || empty( $item['message'] ) ) {
-                throw new Dokan_Exception( 'invalid_parameter', __( 'Invalid item parameter', 'dokan' ), 400 );
+                throw new DokanException( 'invalid_parameter', __( 'Invalid item parameter', 'dokan' ), 400 );
             }
 
             $from         = date( 'Y-m-d', strtotime( $item['from'] ) );
@@ -45,7 +47,7 @@ class Dokan_Seller_Vacation_Ajax {
             $current_time = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
 
             if ( ! ( $current_time <= $from && $current_time <= $to ) ) {
-                throw new Dokan_Exception( 'invalid_date_range', __( 'Invalid date range', 'dokan' ), 400 );
+                throw new DokanException( 'invalid_date_range', __( 'Invalid date range', 'dokan' ), 400 );
             }
 
             $message = sanitize_text_field( $item['message'] );
@@ -97,7 +99,7 @@ class Dokan_Seller_Vacation_Ajax {
             $post_data = wp_unslash( $_POST );
 
             if ( ! isset( $post_data['index'] ) ) {
-                throw new Dokan_Exception( 'missing_item_index', __( 'Item index is missing', 'dokan' ) );
+                throw new DokanException( 'missing_item_index', __( 'Item index is missing', 'dokan' ) );
             }
 
             $index = absint( $post_data['index'] );
@@ -108,7 +110,7 @@ class Dokan_Seller_Vacation_Ajax {
             $schedules       = dokan_seller_vacation_get_vacation_schedules( $vendor_settings );
 
             if ( ! isset( $schedules[ $index ] ) ) {
-                throw new Dokan_Exception( 'invalid_item_index', __( 'Invalid item index', 'dokan' ) );
+                throw new DokanException( 'invalid_item_index', __( 'Invalid item index', 'dokan' ) );
             }
 
             unset( $schedules[ $index ] );
@@ -156,7 +158,7 @@ class Dokan_Seller_Vacation_Ajax {
      * @return void
      */
     protected function send_json_error( Exception $e, $default_message ) {
-        if ( $e instanceof Dokan_Exception ) {
+        if ( $e instanceof DokanException ) {
             wp_send_json_error(
                 new WP_Error( $e->get_error_code(), $e->get_message() ),
                 $e->get_status_code()

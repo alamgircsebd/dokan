@@ -1,6 +1,7 @@
 <?php
 
 use DokanPro\Modules\Subscription\Helper;
+use WeDevs\Dokan\Abstracts\DokanRESTController;
 
 /**
 * Subscription API controller
@@ -9,7 +10,7 @@ use DokanPro\Modules\Subscription\Helper;
 *
 * @package dokan
 */
-class Dokan_REST_Subscription_Controller extends Dokan_REST_Controller {
+class Dokan_REST_Subscription_Controller extends DokanRESTController {
 
     /**
      * Endpoint namespace.

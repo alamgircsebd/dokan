@@ -39,7 +39,7 @@ License: GPL2
 // don't call the file directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 /**
  * Dokan_Seller_Vacation class

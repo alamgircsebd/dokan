@@ -87,7 +87,6 @@ function dokan_get_verification_status( $user = '', $field = '' ) {
  * @return void
  */
 function dokan_verification_request_submit_email() {
-
     $email      = Dokan_Email::init();
     $user       = get_current_user_id();
     $store      = dokan_get_store_info($user);
@@ -104,14 +103,14 @@ A new verification request has been made by <?php echo $store_name;  ?>.
 You can approve or reject it by going <a href="<?php echo $admin_url ?>">here</a>
 
 ---
-From <?php echo $email->get_from_name(); ?>
+From <?php echo dokan()->email->get_from_name(); ?>
 <?php echo home_url();?>
 
 <?php
 
     $message = ob_get_clean();
 
-    $email->send($email->admin_email(), $subject, $message);
+    dokan()->email->send(dokan()->email->admin_email(), $subject, $message);
 }
 
 /**

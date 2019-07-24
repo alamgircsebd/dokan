@@ -1293,15 +1293,13 @@ class Dokan_Store_Support {
      * @return void
      */
     public function notify_ticket_author( $comment, $ticket, $to_store = false ) {
-
-        $email              = Dokan_Email::init();
         $store_id           = get_post_meta( $ticket->ID, 'store_id', true );
         $store              = dokan_get_store_info( $store_id );
         $store_name         = $store['store_name'];
         $store_email        = get_userdata( $store_id )->user_email;
         $url                = dokan_get_navigation_url( 'support' ) . $ticket->ID;
         $account_ticket_url = trailingslashit( dokan_get_page_url( 'myaccount', 'woocommerce' ) ) . 'support-tickets/' . $ticket->ID;
-        $subject            = sprintf( __( '[%s][%d] A New Reply on Your Ticket', 'dokan' ), $email->get_from_name(), $ticket->ID );
+        $subject            = sprintf( __( '[%s][%d] A New Reply on Your Ticket', 'dokan' ), dokan()->email->get_from_name(), $ticket->ID );
 
         ob_start();
 
@@ -1313,11 +1311,11 @@ class Dokan_Store_Support {
 
         $message  = ob_get_clean();
         $search   = array('[ticket-title]', '[account-ticket-url]', '[store-name]', '[store-url]', '[site-name]', '[site-url]', '[dashboard-ticket-url]' );
-        $replace  = array( $ticket->post_title, $account_ticket_url, $store_name, dokan_get_store_url( $store_id ), $email->get_from_name(), home_url(), $url );
+        $replace  = array( $ticket->post_title, $account_ticket_url, $store_name, dokan_get_store_url( $store_id ), dokan()->email->get_from_name(), home_url(), $url );
         $message  = str_replace( $search, $replace, $message );
         $to_email = $to_store ? $store_email : get_userdata( $ticket->post_author )->user_email;
 
-        $email->send( $to_email, $subject, $message );
+        dokan()->email->send( $to_email, $subject, $message );
     }
 
     /**
@@ -1481,8 +1479,6 @@ class Dokan_Store_Support {
     }
 
     function send_email_to_seller( $store_id, $topic_id ) {
-
-        $email       = Dokan_Email::init();
         $user        = $store_id;
         $store       = dokan_get_store_info( $user );
         $store_name  = $store['store_name'];
@@ -1495,10 +1491,10 @@ class Dokan_Store_Support {
         $message = ob_get_clean();
 
         $search  = array('[store-name]', '[support-dashboard]', '[site-name]', '[site-url]');
-        $replace = array( $store_name, $url, $email->get_from_name(), home_url() );
+        $replace = array( $store_name, $url, dokan()->email->get_from_name(), home_url() );
         $message = str_replace( $search, $replace, $message );
 
-        $email->send( $store_email, $subject, $message );
+        dokan()->email->send( $store_email, $subject, $message );
 
         $sender = get_userdata( dokan_get_current_user_id() );
 

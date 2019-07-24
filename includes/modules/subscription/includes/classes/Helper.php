@@ -2,15 +2,14 @@
 
 namespace DokanPro\Modules\Subscription;
 
-use Dokan\Traits\Singleton;
 use DokanPro\Modules\Subscription\SubscriptionPack;
-
-defined( 'ABSPATH' ) || exit;
+use WeDevs\Dokan\Traits\Singleton;
 
 /**
  * DPS Helper Class
  */
 class Helper {
+
     use Singleton;
 
     /**

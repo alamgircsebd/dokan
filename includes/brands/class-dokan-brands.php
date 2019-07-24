@@ -2,7 +2,7 @@
 
 namespace DokanPro\Brands;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 class Brands {
 

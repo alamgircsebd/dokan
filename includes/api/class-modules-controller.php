@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTAdminController;
+
 /**
  * REST API Modules controller
  *
@@ -14,7 +16,7 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Dokan_REST_Modules_Controller extends Dokan_REST_Admin_Controller {
+class Dokan_REST_Modules_Controller extends DokanRESTAdminController {
 
     /**
      * Route name

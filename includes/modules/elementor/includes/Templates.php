@@ -2,7 +2,7 @@
 
 namespace DokanPro\Modules\Elementor;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 class Templates {
 

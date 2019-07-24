@@ -143,7 +143,7 @@ class Dokan_Geolocation_Vendor_View {
             return;
         }
 
-        $vendor = new Dokan_Vendor( $seller );
+        $vendor = dokan()->vendor->get( $seller );
 
         $info_window_data = array(
             'title'   => $vendor->get_shop_name(),
@@ -157,8 +157,8 @@ class Dokan_Geolocation_Vendor_View {
          *
          * @since 1.0.0
          *
-         * @param array        $info_window_data
-         * @param Dokan_Vendor $vendor
+         * @param array                       $info_window_data
+         * @param \WeDevs\Dokan\Vendor\Vendor $vendor
          */
         $info = apply_filters( 'dokan_geolocation_info_vendor', $info_window_data, $vendor );
 

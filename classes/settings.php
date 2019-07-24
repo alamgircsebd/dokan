@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Dashboard\Templates\Settings;
+
 /**
  * Dokan Pro Template Settings class
  *
@@ -7,7 +9,7 @@
  *
  * @package dokan
  */
-class Dokan_Pro_Settings extends Dokan_Template_Settings {
+class Dokan_Pro_Settings extends Settings {
 
     /**
      * Load automatically when class initiate

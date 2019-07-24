@@ -2,6 +2,8 @@
 
 namespace DokanPro\Brands;
 
+use WeDevs\Dokan\Walkers\TaxonomyDropdown;
+
 class FormFields {
 
     /**
@@ -40,7 +42,7 @@ class FormFields {
         }
 
         if ( is_array( $selected ) ) {
-            $drop_down_args['walker'] = new \DokanTaxonomyWalker( $post_id );
+            $drop_down_args['walker'] = new TaxonomyDropdown( $post_id );
         }
 
         $drop_down_args     = apply_filters( 'dokan_product_brand_dropdown_args', $drop_down_args, $post_id );

@@ -181,7 +181,7 @@ class Dokan_Store_Category {
      *
      * @since 2.9.2
      *
-     * @param Dokan_Seller_Setup_Wizard $wizard
+     * @param \WeDevs\Dokan\Vendor\SetupWizard $wizard
      *
      * @return void
      */
@@ -222,7 +222,7 @@ class Dokan_Store_Category {
      *
      * @since 2.9.2
      *
-     * @param Dokan_Seller_Setup_Wizard $wizard
+     * @param \WeDevs\Dokan\Vendor\SetupWizard $wizard
      *
      * @return void
      */
@@ -232,12 +232,12 @@ class Dokan_Store_Category {
     }
 
     /**
-     * Add store categories in Dokan_Vendor shop_data
+     * Add store categories in \WeDevs\Dokan\Vendor\Vendor shop_data
      *
      * @since 2.9.2
      *
      * @param array        $shop_info
-     * @param Dokan_Vendor $vendor
+     * @param \WeDevs\Dokan\Vendor\Vendor $vendor
      *
      * @return array
      */
@@ -256,12 +256,12 @@ class Dokan_Store_Category {
     }
 
     /**
-     * Add store categories in Dokan_Vendor to_array data
+     * Add store categories in \WeDevs\Dokan\Vendor\Vendor to_array data
      *
      * @since 2.9.2
      *
      * @param array        $data
-     * @param Dokan_Vendor $vendor
+     * @param \WeDevs\Dokan\Vendor\Vendor $vendor
      *
      * @return array
      */
@@ -320,7 +320,7 @@ class Dokan_Store_Category {
      *
      * @since 2.9.2
      *
-     * @param Dokan_Vendor    $store
+     * @param \WeDevs\Dokan\Vendor\Vendor    $store
      * @param WP_REST_Request $request
      *
      * @return void
@@ -355,7 +355,7 @@ class Dokan_Store_Category {
     }
 
     /**
-     * Add tax_query arg in WP_User_Query used in Dokan_Vendor_Manager::get_vendors
+     * Add tax_query arg in WP_User_Query used in dokan()->vendor->get_vendors()
      *
      * @since 2.9.2
      *

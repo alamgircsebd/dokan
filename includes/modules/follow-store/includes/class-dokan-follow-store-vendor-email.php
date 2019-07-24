@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Vendor\Vendor;
+
 class Dokan_Follow_Store_Vendor_Email extends WC_Email {
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\REST\ProductController;
+
 /**
 * Product Variation controller
 *
@@ -7,7 +9,7 @@
 *
 * @package dokan
 */
-class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Controller {
+class Dokan_REST_Product_Variation_Controller extends ProductController {
 
     /**
      * Endpoint namespace.
@@ -29,15 +31,6 @@ class Dokan_REST_Product_Variation_Controller extends Dokan_REST_Product_Control
      * @var string
      */
     protected $post_type = 'product_variation';
-
-    /**
-     * Load automatically when class initiate
-     *
-     * @since 2.8.0
-     */
-    public function __construct() {
-        parent::__construct();
-    }
 
     /**
      * Register the routes for products.

@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Vendor\Vendor;
+
 /**
  * Dokan product enquiry email
  */
@@ -135,13 +137,13 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
      *
      * @since 1.0.0
      *
-     * @param Dokan_Vendor $vendor
-     * @param WC_Product $product
-     * @param int $ip
-     * @param string $user_agent
-     * @param string $customer_name
-     * @param string $customer_email
-     * @param string $message
+     * @param \WeDevs\Dokan\Vendor\Vendor $vendor
+     * @param WC_Product                  $product
+     * @param int                         $ip
+     * @param string                      $user_agent
+     * @param string                      $customer_name
+     * @param string                      $customer_email
+     * @param string                      $message
      *
      * @return void
      */

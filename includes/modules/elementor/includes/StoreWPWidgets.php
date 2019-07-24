@@ -2,7 +2,8 @@
 
 namespace DokanPro\Modules\Elementor;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
+use WeDevs\Dokan\Walkers\StoreCategory as StoreCategoryWalker;
 
 /**
  * Render Store Widgets in editing or preview mode
@@ -60,9 +61,9 @@ class StoreWPWidgets {
      *
      * @since 2.9.11
      *
-     * @param array                       $args
-     * @param array                       $instance
-     * @param \Dokan_Store_Support_Widget $widget
+     * @param array                                    $args
+     * @param array                                    $instance
+     * @param \WeDevs\Dokan\Widgets\StoreSupportWidget $widget
      *
      * @return void
      */
@@ -100,9 +101,9 @@ class StoreWPWidgets {
      *
      * @since 2.9.11
      *
-     * @param array                     $args
-     * @param array                     $instance
-     * @param \Dokan_Store_Contact_Form $widget
+     * @param array                                  $args
+     * @param array                                  $instance
+     * @param \WeDevs\Dokan\Widgets\StoreContactForm $widget
      *
      * @return void
      */
@@ -138,9 +139,9 @@ class StoreWPWidgets {
      *
      * @since 2.9.11
      *
-     * @param array                 $args
-     * @param array                 $instance
-     * @param \Dokan_Store_Location $widget
+     * @param array                               $args
+     * @param array                               $instance
+     * @param \WeDevs\Dokan\Widgets\StoreLocation $widget
      *
      * @return void
      */
@@ -174,9 +175,9 @@ class StoreWPWidgets {
      *
      * @since 2.9.11
      *
-     * @param array                      $args
-     * @param array                      $instance
-     * @param \Dokan_Store_Category_Menu $widget
+     * @param array                                   $args
+     * @param array                                   $instance
+     * @param \WeDevs\Dokan\Widgets\StoreCategoryMenu $widget
      *
      * @return void
      */
@@ -200,7 +201,7 @@ class StoreWPWidgets {
                 'number'   => 20,
             ] );
 
-            $walker = new \Dokan_Store_Category_Walker( 0 );
+            $walker = new StoreCategoryWalker( 0 );
             echo "<ul>";
             echo call_user_func_array( [ &$walker, 'walk' ], [ $categories, 0, [] ] );
             echo "</ul>";
@@ -214,9 +215,9 @@ class StoreWPWidgets {
      *
      * @since 2.9.11
      *
-     * @param array                      $args
-     * @param array                      $instance
-     * @param \Dokan_Store_Category_Menu $widget
+     * @param array                                   $args
+     * @param array                                   $instance
+     * @param \WeDevs\Dokan\Widgets\StoreCategoryMenu $widget
      *
      * @return void
      */

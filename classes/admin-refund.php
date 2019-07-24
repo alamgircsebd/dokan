@@ -77,7 +77,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                 $order_id = $_POST['order_id'][$key];
                 $refund_amount  = $_POST['refund_amount'][$key];
 
-                // Dokan_Email::init()->refund_request_cancel( $user_id, $refund_amount, $method, $note );
+                // dokan()->email->refund_request_cancel( $user_id, $refund_amount, $method, $note );
                 $this->update_status( $refund_id, $order_id, 2 );
             }
 
@@ -93,7 +93,7 @@ class Dokan_Pro_Admin_Refund extends Dokan_Pro_Refund {
                 $refund_amount  = $_POST['refund_amount'][$key];
                 $method  = $_POST['method'][$key];
 
-                // Dokan_Email::init()->refund_request_approve( $order_id, $refund_amount, $method );
+                // dokan()->email->refund_request_approve( $order_id, $refund_amount, $method );
                 $this->update_status( $refund_id, $order_id, 1 );
             }
 

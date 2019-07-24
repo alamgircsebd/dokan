@@ -1,9 +1,11 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTController;
+
 /**
 * Wholesale related API's
 */
-class Dokan_REST_Wholesale_Controller extends Dokan_REST_Controller {
+class Dokan_REST_Wholesale_Controller extends DokanRESTController {
 
     /**
      * Endpoint namespace

@@ -2,7 +2,7 @@
 
 namespace DokanPro\Modules\Subscription;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 use DokanPro\Modules\Subscription\Helper;
 use DokanPro\Modules\Subscription\SubscriptionPack;
 

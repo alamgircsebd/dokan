@@ -2,7 +2,7 @@
 
 namespace DokanPro\Modules\Elementor\Abstracts;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 abstract class ModuleBase {
 

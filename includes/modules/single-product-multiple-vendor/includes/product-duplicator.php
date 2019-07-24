@@ -1,6 +1,6 @@
 <?php
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 /**
 * Product related functionality

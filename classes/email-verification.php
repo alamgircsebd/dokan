@@ -1,8 +1,7 @@
 <?php
 
 use DokanPro\Modules\Subscription\Helper;
-
-defined( 'ABSPATH' ) || exit;
+use WeDevs\Dokan\Vendor\SetupWizard;
 
 /**
  * Dokan Email Verification class
@@ -174,7 +173,7 @@ Class Dokan_Email_Verification {
             update_user_caches( $user );
         }
 
-        $seller_wizard = new Dokan_Seller_Setup_Wizard();
+        $seller_wizard = new SetupWizard();
         $seller_wizard->setup_wizard();
     }
 

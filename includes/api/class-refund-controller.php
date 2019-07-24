@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTController;
+
 /**
 * Dokan Refund API Controller
 *
@@ -7,7 +9,7 @@
 *
 * @package dokan
 */
-class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
+class Dokan_REST_Refund_Controller extends DokanRESTController {
 
     /**
      * Endpoint namespace.
@@ -514,7 +516,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
                     'perticulars'   => __( 'Paid Via Stripe', 'dokan' ),
                     'debit'         => $vendor_refund,
                     'credit'        => 0,
-                    'status'        => 'wc-completed', // see: Dokan_Vendor->get_balance() method
+                    'status'        => 'wc-completed', // @see \WeDevs\Dokan\Vendor\Vendor::get_balance() method
                     'trn_date'      => current_time( 'mysql' ),
                     'balance_date'  => current_time( 'mysql' ),
                 ),

@@ -1,4 +1,6 @@
 <?php
+
+use WeDevs\Dokan\Walkers\TaxonomyDropdown;
 global $post, $product;
 
 $post_id        = $post->ID;
@@ -235,7 +237,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                         'exclude'          => '',
                                         'selected'         => $term,
                                         'echo'             => 0,
-                                        'walker'           => new DokanTaxonomyWalker( $post_id )
+                                        'walker'           => new TaxonomyDropdown( $post_id )
                                     ) );
 
                                     echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product category', 'dokan' ).'" multiple="multiple" ', $drop_down_category );
@@ -261,7 +263,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                     'exclude'          => '',
                                     'selected'         => $selected,
                                     'echo'             => 0,
-                                    'walker'           => new DokanTaxonomyWalker( $post_id )
+                                    'walker'           => new TaxonomyDropdown( $post_id )
                                 ) );
 
                                 echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product tags', 'dokan' ).'" multiple="multiple" ', $drop_down_tags );

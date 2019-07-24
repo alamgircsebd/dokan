@@ -1,4 +1,6 @@
 <?php
+
+use WeDevs\Dokan\Walkers\TaxonomyDropdown;
 global $post;
 
 $post_id      = NULL;
@@ -61,11 +63,11 @@ $template_args = array(
 </header><!-- .entry-header -->
 
 <div class="product-edit-new-container product-edit-container">
-    <?php if ( Dokan_Template_Products::$errors ) { ?>
+    <?php if ( dokan()->dashboard->templates->products::$errors ) { ?>
         <div class="dokan-alert dokan-alert-danger">
             <a class="dokan-close" data-dismiss="alert">&times;</a>
 
-            <?php foreach ( Dokan_Template_Products::$errors as $error ) { ?>
+            <?php foreach ( dokan()->dashboard->templates->products::$errors as $error ) { ?>
 
                 <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
 
@@ -143,7 +145,7 @@ $template_args = array(
                                 'exclude'          => '',
                                 'selected'         => $term,
                                 'echo'             => 0,
-                                'walker'           => new DokanTaxonomyWalker( $post_id )
+                                'walker'           => new TaxonomyDropdown( $post_id )
                             );
 
                             $drop_down_category = wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
@@ -171,7 +173,7 @@ $template_args = array(
                                 'exclude'          => '',
                                 'selected'         => $selected,
                                 'echo'             => 0,
-                                'walker'           => new DokanTaxonomyWalker( $post_id )
+                                'walker'           => new TaxonomyDropdown( $post_id )
                             ) );
 
                             echo str_replace( '<select', '<select data-placeholder="' . __( 'Select product tags', 'dokan' ) . '" multiple="multiple" ', $drop_down_tags );

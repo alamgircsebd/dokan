@@ -133,10 +133,10 @@ function dokan_report_abuse_create_report( $args ) {
      *
      * @since 2.9.8
      *
-     * @param object            $report
-     * @param \WC_Product       $product
-     * @param \Dokan_Vendor     $vendor
-     * @param null|\WC_Customer $customer
+     * @param object                        $report
+     * @param \WC_Product                   $product
+     * @param \WeDevs\Dokan\Vendor\Vendor   $vendor
+     * @param null|\WC_Customer             $customer
      */
     do_action( 'dokan_report_abuse_created_report', $report, $product, $vendor, $customer );
 

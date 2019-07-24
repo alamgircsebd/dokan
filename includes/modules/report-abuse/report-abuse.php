@@ -39,7 +39,7 @@
 // don't call the file directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-use Dokan\Traits\Singleton;
+use WeDevs\Dokan\Traits\Singleton;
 
 final class DokanReportAbuse {
 

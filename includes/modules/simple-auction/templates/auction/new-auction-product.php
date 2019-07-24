@@ -1,5 +1,8 @@
-<?php do_action( 'dokan_dashboard_wrap_start' ); ?>
+<?php do_action( 'dokan_dashboard_wrap_start' );
 
+use WeDevs\Dokan\Walkers\TaxonomyDropdown;
+
+?>
 <div class="dokan-dashboard-wrap">
     <?php
     do_action( 'dokan_dashboard_content_before' );
@@ -96,7 +99,7 @@
                                             'title_li'         => '',
                                             'class'            => 'product_cat dokan-form-control dokan-select2',
                                             'exclude'          => '',
-                                            'selected'         => Dokan_Template_Products::$product_cat,
+                                            'selected'         => dokan()->dashboard->templates->products::$product_cat,
                                         );
 
                                         wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
@@ -119,7 +122,7 @@
                                             'exclude'          => '',
                                             'selected'         => $term,
                                             'echo'             => 0,
-                                            'walker'           => new DokanTaxonomyWalker()
+                                            'walker'           => new TaxonomyDropdown()
                                         ) );
 
                                         echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product category', 'dokan' ).'" multiple="multiple" ', $drop_down_category );
@@ -142,7 +145,7 @@
                                         'exclude'          => '',
                                         'selected'         => array(),
                                         'echo'             => 0,
-                                        'walker'           => new DokanTaxonomyWalker()
+                                        'walker'           => new TaxonomyDropdown()
                                     ) );
 
                                     echo str_replace( '<select', '<select data-placeholder="'.__( 'Select product tags', 'dokan' ).'" multiple="multiple" ', $drop_down_tags );

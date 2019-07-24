@@ -326,7 +326,7 @@ class Dokan_Pro_Admin_Ajax {
                 $seller = get_userdata( $seller_id );
                 $seller_mail = $seller->user_email;
                 do_action( 'dokan_refund_processed_notification' , $seller_mail, $order_id, 'canceled', $refund_amount, $refund_reason );
-                //Dokan_Email::init()->dokan_refund_seller_mail( $seller_mail, $order_id, 'canceled', $refund_amount, $refund_reason );
+                //dokan()->email->dokan_refund_seller_mail( $seller_mail, $order_id, 'canceled', $refund_amount, $refund_reason );
                 $refund->update_status( $refund_id, $order_id, 2 );
                 delete_post_meta( $order_id, 'dokan_refund_processing_id' );
                 $url = admin_url( 'admin.php?page=dokan-refund&message=cancelled&status=' . $status );
@@ -348,7 +348,7 @@ class Dokan_Pro_Admin_Ajax {
                 $seller = get_userdata( $seller_id );
                 $seller_mail = $seller->user_email;
                 do_action( 'dokan_refund_processed_notification' , $seller_mail, $data['order_id'], 'approved', $data['refund_amount'], $data['refund_reason'] );
-//                Dokan_Email::init()->dokan_refund_seller_mail( $seller_mail, $data['order_id'], 'approved', $data['refund_amount'], $data['refund_reason'] );
+//                dokan()->email->dokan_refund_seller_mail( $seller_mail, $data['order_id'], 'approved', $data['refund_amount'], $data['refund_reason'] );
                 $refund->update_status( $refund_id, $data['order_id'], 1 );
                 delete_post_meta( $data['order_id'], 'dokan_refund_processing_id' );
                 $url = admin_url( 'admin.php?page=dokan-refund&message=approved&status=' . $status );

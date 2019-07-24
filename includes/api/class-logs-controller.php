@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTAdminController;
+
 /**
 * All Logs API controller
 *
@@ -7,7 +9,7 @@
 *
 * @package dokan
 */
-class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
+class Dokan_REST_Logs_Controller extends DokanRESTAdminController {
 
     /**
      * Route name

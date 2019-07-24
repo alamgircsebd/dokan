@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Dashboard\Templates\Dashboard;
+
 /**
  * Dashboard Template Class
  *
@@ -9,7 +11,7 @@
  *
  * @author weDevs <info@wedevs.com>
  */
-class Dokan_Pro_Dashboard extends Dokan_Template_Dashboard {
+class Dokan_Pro_Dashboard extends Dashboard {
 
     /**
      * Constructor for the WeDevs_Dokan class

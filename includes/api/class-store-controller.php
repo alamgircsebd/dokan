@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\REST\StoreController;
+
 /**
 * Store API Controller
 *
@@ -7,7 +9,7 @@
 *
 * @author weDevs <info@wedevs.com>
 */
-class Dokan_Pro_REST_Store_Controller extends Dokan_REST_Store_Controller {
+class Dokan_Pro_REST_Store_Controller extends StoreController {
 
     /**
      * Register all routes releated with stores

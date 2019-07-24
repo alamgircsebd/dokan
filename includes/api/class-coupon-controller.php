@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTController;
+
 /**
  * REST API Coupons controller
  *
@@ -14,7 +16,7 @@ if ( !defined( 'ABSPATH' ) ) {
     exit;
 }
 
-class Dokan_REST_Coupon_Controller extends Dokan_REST_Controller {
+class Dokan_REST_Coupon_Controller extends DokanRESTController {
 
     /**
      * Endpoint namespace.

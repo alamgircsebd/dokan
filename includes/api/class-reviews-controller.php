@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTController;
+
 /**
 * Reviews API controller
 *
@@ -7,7 +9,7 @@
 *
 * @package dokan
 */
-class Dokan_REST_Reviews_Controller extends Dokan_REST_Controller {
+class Dokan_REST_Reviews_Controller extends DokanRESTController {
 
     /**
      * Endpoint namespace.

@@ -1,9 +1,11 @@
 <?php
 
+use WeDevs\Dokan\Abstracts\DokanRESTController;
+
 /**
 * Announcement Controller class
 */
-class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
+class Dokan_REST_Announcement_Controller extends DokanRESTController {
 
     /**
      * Endpoint namespace.
