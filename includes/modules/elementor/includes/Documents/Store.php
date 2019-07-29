@@ -99,10 +99,29 @@ class Store extends Single {
      * Document library type
      *
      * @since 2.9.11
+     * @since DOKAN_PRO_SINCE From elementor pro v2.4.0 it is deprecated
      *
      * @return string
      */
     public function get_remote_library_type() {
         return 'single store';
+    }
+
+    /**
+     * Remote library config
+     *
+     * From elementor pro v2.4.0 `get_remote_library_config` is used
+     * instead of `get_remote_library_type`
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_remote_library_config() {
+        $config = parent::get_remote_library_config();
+
+        $config['category'] = 'single store';
+
+        return $config;
     }
 }
