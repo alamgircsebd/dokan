@@ -106,8 +106,12 @@ class Dokan_SPMV_Product_Visibility {
      * @return void
      */
     public function add_query_filters() {
-        add_filter( 'posts_where_request', [ $this, 'filter_where_request' ], 10, 2 );
-        add_filter( 'posts_join_request', [ $this, 'filter_join_request' ], 10, 2 );
+        $show_order = dokan_get_option( 'show_order', 'dokan_spmv', 'show_all' );
+
+        if ( 'show_all' !== $show_order ) {
+            add_filter( 'posts_where_request', [ $this, 'filter_where_request' ], 10, 2 );
+            add_filter( 'posts_join_request', [ $this, 'filter_join_request' ], 10, 2 );
+        }
     }
 
     /**

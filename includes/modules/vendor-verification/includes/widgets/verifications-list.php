@@ -5,7 +5,7 @@
  * Wordpress 2.8 and above
  * @see http://codex.wordpress.org/Widgets_API#Developing_Widgets
  */
-class Dokan_Verification_list extends WP_Widget {
+class Dokan_Store_Verification_list extends WP_Widget {
 
     private $seller_info;
 
@@ -28,6 +28,11 @@ class Dokan_Verification_list extends WP_Widget {
      * */
     function widget( $args, $instance ) {
         if ( dokan_is_store_page() || is_product() ) {
+            $defaults = [
+                'title' => __( 'ID Verification', 'dokan' ),
+            ];
+
+            $instance = wp_parse_args( $instance, $defaults );
 
             if ( is_product() ) {
                 global $post;
@@ -49,37 +54,17 @@ class Dokan_Verification_list extends WP_Widget {
             if ( ! isset( $store_info['dokan_verification']['verified_info'] ) || empty( $store_info['dokan_verification']['verified_info'] ) ) {
                 return;
             }
-            extract( $args, EXTR_SKIP );
 
-            $title = apply_filters( 'widget_title', $instance['title'] );
-
-            echo $before_widget;
-
-            if ( !empty( $title ) ) {
-                echo $args['before_title'] . $title . $args['after_title'];
-            }
-            if ( !isset( $store_info['dokan_verification']['info'] ) ) {
-                return;
-            }
-
-            if ( $store_info['dokan_verification']['info'] == '' || sizeof( $store_info['dokan_verification']['info'] ) < 0 ) {
-                return;
-            }
-            ?>
-
-            <div id="dokan-verification-list">
-                <ul class="fa-ul">
-                    <?php
-                    foreach ( $store_info['dokan_verification'] as $key => $item ) {
-                        $this->print_item( $key, $item );
-                    }
-                    ?>
-                </ul>
-            </div>
-
-            <?php
-            echo $after_widget;
+            dokan_get_template_part( 'widgets/vendor-verification', '', array(
+                'pro'        => true,
+                'args'       => $args,
+                'instance'   => $instance,
+                'store_info' => $store_info,
+                'widget'     => $this,
+            ) );
         }
+
+        do_action( 'dokan_widget_store_vendor_verification_render', $args, $instance, $this );
     }
 
     /**
@@ -91,7 +76,6 @@ class Dokan_Verification_list extends WP_Widget {
      * @return array The validated and (if necessary) amended settings
      * */
     function update( $new_instance, $old_instance ) {
-
         // update logic goes here
         $updated_instance = $new_instance;
         return $updated_instance;
@@ -117,12 +101,14 @@ class Dokan_Verification_list extends WP_Widget {
         <?php
     }
 
+    public function set_seller_info( $info ) {
+        $this->seller_info = $info;
+    }
+
     /*
      * Prints out list items after checking
      */
-
     function print_item( $key, $item ) {
-
         switch ( $key ) {
             case 'info' :
                 $this->print_info_items( $key, $item );
@@ -137,7 +123,6 @@ class Dokan_Verification_list extends WP_Widget {
     }
 
     function print_social_item( $key, $item ) {
-
         if ( $item === '' || sizeof( $item ) < 0 ) {
             return;
         }
@@ -187,13 +172,12 @@ class Dokan_Verification_list extends WP_Widget {
         $store_address = $this->seller_info['address'];
         return array_diff( $store_address, $verified_address );
     }
-
 }
 
 add_action( 'widgets_init', 'dokan_register_verification_widget' );
 
 function dokan_register_verification_widget() {
-    register_widget( 'Dokan_Verification_list' );
+    register_widget( 'Dokan_Store_Verification_list' );
 }
 
 add_action( 'dokan_sidebar_store_after', 'dokan_show_verification_widget');
@@ -206,6 +190,6 @@ function dokan_show_verification_widget() {
             'before_title'  => '<h3 class="widget-title">',
             'after_title'   => '</h3>',
         );
-        the_widget( 'Dokan_Verification_list', array( 'title' => __( 'Verifications', 'dokan' ) ), $args );
+        the_widget( 'Dokan_Store_Verification_list', array( 'title' => __( 'Verifications', 'dokan' ) ), $args );
     }
 }

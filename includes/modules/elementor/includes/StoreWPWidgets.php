@@ -25,6 +25,7 @@ class StoreWPWidgets {
         add_action( 'dokan_widget_store_location_render', [ $this, 'widget_store_location' ], 10, 3 );
         add_action( 'dokan_widget_store_categories_render', [ $this, 'widget_store_categories' ], 10, 3 );
         add_action( 'dokan_widget_store_open_close_render', [ $this, 'widget_store_open_close' ], 10, 3 );
+        add_action( 'dokan_widget_store_vendor_verification_render', [ $this, 'widget_store_vendor_verification' ], 10, 3 );
     }
 
     /**
@@ -261,6 +262,74 @@ class StoreWPWidgets {
             ] );
 
             echo $args['after_widget'];
+        }
+    }
+
+    /**
+     * Render dummy content for Store Vendor Verification widget
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array                          $args
+     * @param array                          $instance
+     * @param \Dokan_Store_Verification_list $widget
+     *
+     * @return void
+     */
+    public function widget_store_vendor_verification( $args, $instance, $widget ) {
+        if ( ! dokan_is_store_page() ) {
+            $defaults = [
+                'title' => __( 'ID Verification', 'dokan' ),
+            ];
+
+            $instance = wp_parse_args( $instance, $defaults );
+
+            $store_info = [
+                'dokan_verification' => [
+                    'info' => [
+                        'photo_id'          => 0,
+                        'dokan_v_id_type'   => 'passport',
+                        'dokan_v_id_status' => 'approved',
+                        'store_address'     => [
+                            'street_1' => '',
+                            'street_2' => '',
+                            'city'     => '',
+                            'zip'      => '',
+                            'country'  => '',
+                            'state'    => '',
+                            'v_status' => 'approved',
+                        ],
+                    ],
+                    'verified_info' => [
+                        'photo'         => [
+                            'photo_id'        => 0,
+                            'dokan_v_id_type' => 'passport',
+                        ],
+                        'store_address' => [
+                            'street_1'        => '',
+                            'street_2'        => '',
+                            'city'            => '',
+                            'zip'             => '',
+                            'country'         => '',
+                            'state'           => '',
+                        ],
+                    ],
+                ]
+            ];
+
+            $seller_info = [
+                'address' => $store_info['dokan_verification']['verified_info']['store_address'],
+            ];
+
+            $widget->set_seller_info( $seller_info );
+
+            dokan_get_template_part( 'widgets/vendor-verification', '', [
+                'pro'        => true,
+                'args'       => $args,
+                'instance'   => $instance,
+                'store_info' => $store_info,
+                'widget'     => $widget,
+            ] );
         }
     }
 }
