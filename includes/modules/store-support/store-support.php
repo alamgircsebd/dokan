@@ -1545,8 +1545,9 @@ class Dokan_Store_Support {
      *
      * @return void
      */
-    public function register_widgets() {
-        register_widget( 'Dokan_Store_Support_Widget' );
+    public function register_widgets( $widgets ) {
+        $widgets['store_support'] = 'Dokan_Store_Support_Widget';
+        return $widgets;
     }
 
     /**

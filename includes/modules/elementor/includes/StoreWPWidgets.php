@@ -42,7 +42,7 @@ class StoreWPWidgets {
     public static function add_widget_args( $default_widget_args, $widget_wordpress ) {
         $widget_class_name = get_class( $widget_wordpress->get_widget_instance() );
 
-        if ( 0 === strpos( $widget_class_name, 'Dokan_Store_') ) {
+        if ( dokan()->widgets->get_id( $widget_class_name ) ) {
             $widget = $widget_wordpress->get_widget_instance();
 
             $id = str_replace( 'REPLACE_TO_ID', $widget_wordpress->get_id(), $widget->id );
