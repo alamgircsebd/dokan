@@ -148,7 +148,7 @@ class Dokan_Stripe {
                 }
 
                 foreach ( $vendor_names as $vendor_id => $data ) {
-                    $errors->add( 'stipe-not-configured', sprintf(__('<strong>Error!</strong> The <strong>%s</strong> does not allowes the Stipe gateway. You can not purchase this products %s using Stripe Gateway', 'dokan'), $data['name'], $data['products'] ) );
+                    $errors->add( 'stipe-not-configured', sprintf(__('<strong>Error!</strong> You cannot complete your purchase until <strong>%s</strong> has enabled Stripe as a payment gateway. Please remove %s to continue.', 'dokan'), $data['name'], $data['products'] ) );
                 }
             }
         }
@@ -301,7 +301,7 @@ class Dokan_Stripe {
                 if ( empty( $key ) ) {
 
                     echo '<div class="dokan-alert dokan-alert-danger">';
-                        _e( 'Your account is not yet connected with Stripe. Connect with Stripe to receive your commissions.', 'dokan' );
+                        _e( 'Your account is not connected to Stripe. Connect your Stripe account to receive payouts.', 'dokan' );
                     echo '</div>';
 
                     require_once DOKAN_STRIPE_PATH . '/classes/lib/oauth/OAuth2Exception.php';

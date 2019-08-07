@@ -342,7 +342,7 @@ class Dokan_Moip {
                         return;
                     }
 
-                    $errors->add( 'moip-not-configured', sprintf( __( '<strong>Error!</strong> The <strong>%s</strong> does not allowes the Wirecard gateway. You can not purchase this products %s using Wirecard Gateway', 'dokan' ), $data['name'], $data['products'] ) );
+                    $errors->add( 'moip-not-configured', sprintf( __( '<strong>Error!</strong> You cannot complete your purchase until <strong>%s</strong> has enabled Stripe as a payment gateway. Please remove %s to continue.', 'dokan' ), $data['name'], $data['products'] ) );
                 }
             }
         }
