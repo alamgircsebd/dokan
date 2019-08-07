@@ -10,7 +10,8 @@ class Dokan_ShipStation_Settings {
      * @return void
      */
     public function __construct() {
-        add_filter( 'dokan_settings_fields', array( $this, 'add_admin_settings_fields' ), 11 );
+        add_filter( 'dokan_settings_general_site_options', array( $this, 'add_admin_settings_fields' ) );
+        add_filter( 'dokan_admin_settings_rearrange_map', array( $this, 'admin_settings_rearrange_map' ) );
         add_action( 'dokan_dashboard_content_before', array( $this, 'enqueue_scripts' ) );
         add_action( 'dokan_get_dashboard_settings_nav', array( $this, 'add_settings_nav' ) );
         add_filter( 'dokan_dashboard_settings_heading_title', array( $this, 'add_heading_title' ), 10, 2 );
@@ -27,7 +28,7 @@ class Dokan_ShipStation_Settings {
      * @param array $settings_fields
      */
     public function add_admin_settings_fields( $settings_fields ) {
-        $settings_fields['dokan_selling']['enable_shipstation_logging'] = array(
+        $settings_fields['enable_shipstation_logging'] = array(
             'name'  => 'enable_shipstation_logging',
             'label' => __( 'Log ShipStation API Request', 'dokan' ),
             'desc'  => __( 'Log all ShipStation API interactions.', 'dokan' ),
@@ -35,6 +36,21 @@ class Dokan_ShipStation_Settings {
         );
 
         return $settings_fields;
+    }
+
+    /**
+     * Backward compatible settings option map
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $map
+     *
+     * @return array
+     */
+    public function admin_settings_rearrange_map( $map ) {
+        return array_merge( $map, array(
+            'enable_shipstation_logging_dokan_selling' => array( 'enable_shipstation_logging', 'dokan_general' ),
+        ) );
     }
 
     /**

@@ -68,7 +68,7 @@ class Dokan_Geolocation {
      */
     public function __construct() {
         $this->version          = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
-        $this->has_gmap_api_key = dokan_get_option( 'gmap_api_key', 'dokan_general', false );
+        $this->has_gmap_api_key = dokan_get_option( 'gmap_api_key', 'dokan_appearance', false );
 
         $this->define_constants();
         $this->includes();

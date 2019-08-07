@@ -22,6 +22,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
     $callback = dokan_get_navigation_url( 'settings/verification' );
 
     $settings_fields['dokan_verification'] = array(
+        'facebook_app_details' => array(
+            'name'  => 'facebook_app_details',
+            'label' => __( 'Facebook', 'dokan' ),
+            'type'  => 'sub_section',
+        ),
         'facebook_app_label'    => array(
             'name'  => 'fb_app_label',
             'label' => __( 'Facebook App Settings', 'dokan' ),
@@ -43,6 +48,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name'  => 'fb_app_secret',
             'label' => __( 'App Secret', 'dokan' ),
             'type'  => 'text',
+        ),
+        'twitter_app_details' => array(
+            'name'  => 'twitter_app_details',
+            'label' => __( 'Twitter', 'dokan' ),
+            'type'  => 'sub_section',
         ),
         'twitter_app_label'     => array(
             'name'  => 'twitter_app_label',
@@ -66,6 +76,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'label' => __( 'Consumer Secret', 'dokan' ),
             'type'  => 'text',
         ),
+        'google_app_details' => array(
+            'name'  => 'google_app_details',
+            'label' => __( 'Google', 'dokan' ),
+            'type'  => 'sub_section',
+        ),
         'google_app_label'      => array(
             'name'  => 'google_app_label',
             'label' => __( 'Google App Settings', 'dokan' ),
@@ -87,6 +102,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name'  => 'google_app_secret',
             'label' => __( 'Client secret', 'dokan' ),
             'type'  => 'text',
+        ),
+        'linkedin_app_details' => array(
+            'name'  => 'linkedin_app_details',
+            'label' => __( 'Linkedin', 'dokan' ),
+            'type'  => 'sub_section',
         ),
         'linkedin_app_label'    => array(
             'name'  => 'linkedin_app_label',
@@ -122,6 +142,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
     }
 
     $settings_fields['dokan_verification_sms_gateways'] = array(
+        'section_label' => array(
+            'name'  => 'section_label',
+            'label' => __( 'Verification SMS Gateways', 'dokan' ),
+            'type'  => 'sub_section',
+        ),
         'sender_name' => array(
             'name' => 'sender_name',
             'label'=> __( 'Sender Name', 'dokan' ),
@@ -147,6 +172,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'default' => __( 'Unable to send sms. Contact admin', 'wedevs' ),
             'type' => 'text'
         ),
+        'nexmo_details' => array(
+            'name'  => 'nexmo_details',
+            'label' => __( 'Nexmo', 'dokan' ),
+            'type'  => 'sub_section',
+        ),
         'active_gateway' => array(
             'name' => 'active_gateway',
             'label'=> __( 'Active Gateway', 'dokan' ),
@@ -168,6 +198,11 @@ function dokan_verification_admin_settings_fields( $settings_fields ) {
             'name' => 'nexmo_pass',
             'label'=> __( 'API Secret', 'dokan' ),
             'type' => 'text'
+        ),
+        'twilio_details' => array(
+            'name'  => 'twilio_details',
+            'label' => __( 'Twilio', 'dokan' ),
+            'type'  => 'sub_section',
         ),
         'twilio_header' => array(
             'name' => 'twilio_header',

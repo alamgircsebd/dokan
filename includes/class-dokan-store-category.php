@@ -10,7 +10,7 @@ class Dokan_Store_Category {
     public function __construct() {
         $this->register_taxonomy();
 
-        add_filter( 'dokan_settings_fields', array( $this, 'add_admin_settings' ) );
+        add_filter( 'dokan_settings_general_vendor_store_options', array( $this, 'add_admin_settings' ) );
         add_action( 'dokan_after_saving_settings', array( $this, 'set_default_category' ), 10, 2 );
         add_filter( 'dokan_admin_localize_script', array( $this, 'add_localized_data' ) );
 
@@ -75,7 +75,7 @@ class Dokan_Store_Category {
      * @return array
      */
     public function add_admin_settings( $dokan_settings_fields ) {
-        $dokan_settings_fields['dokan_general']['store_category_type'] = array(
+        $dokan_settings_fields['store_category_type'] = array(
             'name'    => 'store_category_type',
             'label'   => __( 'Store Category', 'dokan' ),
             'type'    => 'select',

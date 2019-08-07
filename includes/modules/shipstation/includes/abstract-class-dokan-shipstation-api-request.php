@@ -29,7 +29,7 @@ abstract class Dokan_ShipStation_Api_Request {
      */
     public function log( $message ) {
         if ( is_null ( $this->logging_enabled ) ) {
-            $this->logging_enabled = dokan_get_option( 'enable_shipstation_logging', 'dokan_selling', 'off' );
+            $this->logging_enabled = dokan_get_option( 'enable_shipstation_logging', 'dokan_general', 'off' );
         }
 
         if ( 'off' === $this->logging_enabled ) {
