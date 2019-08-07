@@ -5,6 +5,8 @@
         init: function() {
             $('body').on( 'click', 'a#dokan-become-wholesale-customer-btn', this.makeWholesaleCustomer )
             $("input[name=variation_id]").on( 'change', this.triggerVariationWholesale );
+            $('.dokan-wholesale-options').on( 'change', '.wholesaleCheckbox', this.toggleWholesaleWrapper );
+            $('body').on( 'change', '.dokan-variation-wholesale .wholesaleCheckbox', this.toggleWholesaleVariationWrapper );
         },
 
         triggerVariationWholesale: function(e) {
@@ -60,6 +62,22 @@
                 }
                 jQuery( '.dokan-wholesale-migration-wrapper' ).unblock();
             } );
+        },
+
+        toggleWholesaleWrapper: function() {
+            if ( $( this ).is( ':checked' ) ) {
+                $( '.show_if_wholesale' ).slideDown( 'fast' );
+            } else {
+                $( '.show_if_wholesale' ).slideUp( 'fast' );
+            }
+        },
+
+        toggleWholesaleVariationWrapper: function() {
+            if ( $( this ).is( ':checked' ) ) {
+                $( this ).closest( '.dokan-variation-wholesale' ).find( '.show_if_variation_wholesale' ).slideDown( 'fast' );
+            } else {
+                $( this ).closest( '.dokan-variation-wholesale' ).find( '.show_if_variation_wholesale' ).slideUp( 'fast' );
+            }
         }
     };
 
