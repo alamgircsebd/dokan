@@ -1228,3 +1228,23 @@ if ( function_exists( 'dokan_add_privacy_policy' ) ) {
     // show privacy policy text in product enquiry form
     add_action( 'dokan_product_enquiry_after_form', 'dokan_add_privacy_policy' );
 }
+
+add_filter( 'woocommerce_ajax_admin_get_variations_args', 'dokan_set_variations_args' );
+add_filter( 'woocommerce_variable_children_args', 'dokan_set_variations_args' );
+
+/**
+ * Include pending product status into variation args
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param array $args
+ */
+function dokan_set_variations_args( $args ) {
+    if ( ! is_array( $args['post_status'] ) ) {
+        return $args;
+    }
+
+    $args['post_status'] = array_merge( $args['post_status'], ['pending'] );
+
+    return $args;
+}
