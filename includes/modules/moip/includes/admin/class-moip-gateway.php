@@ -353,7 +353,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             }
 
         } catch( Exception $e ) {
-            throw new Exception( __( 'Something went wrong:', 'dokan' ) . $e->getMessage() );
+            throw new Exception( __( 'Something went wrong: ', 'dokan' ) . $e->getMessage() );
         }
 
         return array(
@@ -386,7 +386,6 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
 
         if ( $dokan_subscription->is_recurring() ) {
             require_once MOIP_INC . '/admin/class-moip-subscription.php';
-            // If reccuring pack
             $subscription_interval = $dokan_subscription->get_recurring_interval();
             $subscription_period   = $dokan_subscription->get_period_type();
             $subscription_length   = $dokan_subscription->get_period_length();
@@ -395,17 +394,27 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'is_enabled'       => $dokan_subscription->is_trial()
             );
 
+            if ( 'week' === $subscription_period ) {
+                throw new Exception( __( 'Wirecard doesn\'t support weekly subscription plan.', 'dokan' ) );
+            }
+
             // if vendor has already used a trial pack, then make trial to a normal recurring pack
             if ( Helper::has_used_trial_pack( get_current_user_id() ) ) {
                 $trial_details['days']       = 0;
                 $trial_details['is_enabled'] = false;
             }
 
-            $moip_subscriptoin = new Dokan_Moip_Subscription();
+            $moip_subscriptoin        = new Dokan_Moip_Subscription();
+            $plan_id                  = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length, $trial_details );
+            $already_has_subscription = get_user_meta( $customer_user_id, 'subscription_code', true );
 
-            $plan_id = $moip_subscriptoin->create_plan( $product_pack, $subscription_interval, strtoupper( $subscription_period ), $subscription_length, $trial_details );
+            if ( empty( $plan_id ) ) {
+                throw new Exception( __( 'Subscription can\'t be created, as plan id is not found', 'dokan' ), 404 );
+            }
 
-            if ( $plan_id ) {
+            if ( $already_has_subscription ) {
+                $subscription_code = $moip_subscriptoin->update_subscription( $already_has_subscription, $plan_id );
+            } else {
                 $subscription_code = $moip_subscriptoin->create_subscription( $order, $plan_id );
             }
 
@@ -423,9 +432,6 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, 'can_post_product', '1' );
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
 
-            // make all the existing product publish if not
-            Helper::make_product_publish( $customer_user_id );
-
             $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
             $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
@@ -437,7 +443,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             }
 
             $order->payment_complete();
-
+            do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
         } else {
             try {
                 // get access token
@@ -452,6 +458,20 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
 
                 if ( empty( $moip_data ) ) {
                     throw new Exception( __( 'Wirecard data is not found', 'dokan' ) );
+                }
+
+                // vendor is purchasing non-recurring subscription, so if there is any recurring pack, cancel it first
+                $already_has_subscription = get_user_meta( $customer_user_id, 'subscription_code', true );
+
+                if ( $already_has_subscription ) {
+                    require_once MOIP_INC . '/admin/class-moip-subscription.php';
+
+                    $moip_subscriptoin      = new Dokan_Moip_Subscription();
+                    $subscription_cancelled = $moip_subscriptoin->cancel_subscription( $customer_user_id, $already_has_subscription );
+
+                    if ( ! $subscription_cancelled ) {
+                        throw new Exception( __( 'Unable to cancel previous subscription.', 'dokan' ) );
+                    }
                 }
 
                 // get all the order items and add to moip_order item
@@ -496,9 +516,6 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, 'can_post_product', '1' );
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
 
-                // make all the existing product publish if not
-                Helper::make_product_publish( $customer_user_id );
-
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
@@ -510,7 +527,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 }
 
                 $order->payment_complete();
-
+                do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
             } catch ( Exception $e ) {
                 $order->add_order_note( sprintf( __( 'Wirecard Payment Error: %s', 'dokan' ), $e->getMessage() ) );
 

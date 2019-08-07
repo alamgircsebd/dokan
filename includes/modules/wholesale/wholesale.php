@@ -168,7 +168,7 @@ class Dokan_Wholesale {
         if ( $post ) {
             $product = wc_get_product( $post->ID );
 
-            if ( $product && $product->is_type( 'variable' ) ) {
+            if ( $product ) {
                 wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
                 wp_localize_script( 'dokan-wholesale-script', 'DokanWholesale', [
                         'currency_symbol'   => get_woocommerce_currency_symbol(),

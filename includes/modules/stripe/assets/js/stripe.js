@@ -1,4 +1,4 @@
-Stripe.setPublishableKey( wc_stripe_connect_params.key );
+Stripe.setPublishableKey( dokan_stripe_connect_params.key );
 
 function stripe_pad( num, size ) {
     var s = num+"";
@@ -27,7 +27,7 @@ jQuery( function() {
 
         jQuery('.stripe_token').remove();
 
-        wc_stripe_connect_params.token_done = false;
+        dokan_stripe_connect_params.token_done = false;
     });
 
     /* Open and close */
@@ -72,13 +72,13 @@ function stripeFormHandler() {
             $form.block({message: null, overlayCSS: {background: '#fff url(' + woocommerce_params.plugin_url + '/assets/images/ajax-loader.gif) no-repeat center', opacity: 0.6}});
 
             if ( jQuery('#billing_first_name').size() == 0 ) {
-                name            = wc_stripe_connect_params.billing_first_name + ' ' + wc_stripe_connect_params.billing_last_name;
-                address_line1   = wc_stripe_connect_params.billing_address_1;
-                address_line2   = wc_stripe_connect_params.billing_address_2;
-                address_state   = wc_stripe_connect_params.billing_state;
-                address_city    = wc_stripe_connect_params.billing_city;
-                address_zip     = wc_stripe_connect_params.billing_postcode;
-                address_country = wc_stripe_connect_params.billing_country;
+                name            = dokan_stripe_connect_params.billing_first_name + ' ' + dokan_stripe_connect_params.billing_last_name;
+                address_line1   = dokan_stripe_connect_params.billing_address_1;
+                address_line2   = dokan_stripe_connect_params.billing_address_2;
+                address_state   = dokan_stripe_connect_params.billing_state;
+                address_city    = dokan_stripe_connect_params.billing_city;
+                address_zip     = dokan_stripe_connect_params.billing_postcode;
+                address_country = dokan_stripe_connect_params.billing_country;
             } else {
                 name            = jQuery('#billing_first_name').val() + ' ' + jQuery('#billing_last_name').val();
                 address_line1   = jQuery('#billing_address_1').val();
@@ -131,7 +131,7 @@ function stripeResponseHandler( status, response ) {
         // token contains id, last4, and card type
         var token = response['id'];
 
-        wc_stripe_connect_params.token_done = true;
+        dokan_stripe_connect_params.token_done = true;
 
         jQuery( '.stripe_token').remove();
 

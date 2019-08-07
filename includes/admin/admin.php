@@ -23,7 +23,10 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'dokan_admin_menu', array( $this, 'load_admin_settings' ), 10, 2 );
         add_action( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
         add_action( 'wp_ajax_create_pages', array( $this, 'create_default_pages' ) );
-        add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10 );
+        add_filter( 'dokan_settings_fields', array( $this, 'load_settings_sections_fields' ), 10, 2 );
+        add_filter( 'dokan_settings_general_vendor_store_options', array( $this, 'add_settings_general_vendor_store_options' ), 9 );
+        add_filter( 'dokan_settings_selling_option_vendor_capability', array( $this, 'add_settings_selling_option_vendor_capability' ), 9 );
+        add_filter( 'dokan_admin_settings_rearrange_map', array( $this, 'admin_settings_rearrange_map' ) );
         add_action( 'dokan_render_admin_toolbar', array( $this, 'render_pro_admin_toolbar' ) );
         add_action( 'init', array( $this, 'dokan_export_all_logs' ), 99 );
         add_action( 'admin_menu', array( $this, 'remove_add_on_menu' ), 80 );
@@ -85,6 +88,138 @@ class Dokan_Pro_Admin_Settings {
     }
 
     /**
+     * Add vendor store options in general settings
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $settings_fields
+     *
+     * @return array
+     */
+    public function add_settings_general_vendor_store_options( $settings_fields ) {
+        $settings_fields['enable_tc_on_reg'] = array(
+            'name'    => 'enable_tc_on_reg',
+            'label'   => __( 'Enable Terms and Condition', 'dokan' ),
+            'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'on'
+        );
+
+        return $settings_fields;
+    }
+
+    /**
+     * Add vendor capability settings in selling option settings
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $settings_fields
+     *
+     * @return array
+     */
+    public function add_settings_selling_option_vendor_capability( $settings_fields ) {
+        $settings_fields['product_status'] = array(
+            'name'    => 'product_status',
+            'label'   => __( 'New Product Status', 'dokan' ),
+            'desc'    => __( 'Product status when a vendor creates a product', 'dokan' ),
+            'type'    => 'select',
+            'default' => 'pending',
+            'options' => array(
+                'publish' => __( 'Published', 'dokan' ),
+                'pending' => __( 'Pending Review', 'dokan' )
+            )
+        );
+
+        $settings_fields['vendor_duplicate_product'] = array(
+            'name'    => 'vendor_duplicate_product',
+            'label'   => __( 'Duplicate product', 'dokan' ),
+            'desc'    => __( 'Allow vendor to duplicate their product', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'on'
+        );
+
+        $settings_fields['edited_product_status'] = array(
+            'name'    => 'edited_product_status',
+            'label'   => __( 'Edited Product Status', 'dokan' ),
+            'desc'    => __( 'Set Product status as pending review when a vendor edits or updates a product', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'off',
+        );
+
+        $settings_fields['product_add_mail'] = array(
+            'name'    => 'product_add_mail',
+            'label'   => __( 'Product Mail Notification', 'dokan' ),
+            'desc'    => __( 'Email notification on new product submission', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'on'
+        );
+
+        $settings_fields['product_category_style'] = array(
+            'name'    => 'product_category_style',
+            'label'   => __( 'Product Category Selection', 'dokan' ),
+            'desc'    => __( 'Select a category type for Products', 'dokan' ),
+            'type'    => 'select',
+            'default' => 'single',
+            'options' => array(
+                'single'   => __( 'Single', 'dokan' ),
+                'multiple' => __( 'Multiple', 'dokan' )
+            )
+        );
+
+        $settings_fields['product_vendors_can_create_tags'] = array(
+            'name'    => 'product_vendors_can_create_tags',
+            'label'   => __( 'Vendors Can Create Tags', 'dokan' ),
+            'desc'    => __( 'Allow vendors to create new product tags from vendor dashboard.', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'off',
+        );
+
+        $settings_fields['discount_edit'] = array(
+            'name'    => 'discount_edit',
+            'label'   => __( 'Discount Editing', 'dokan' ),
+            'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
+            'type'    => 'multicheck',
+            'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
+            'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) )
+        );
+
+        $settings_fields['hide_customer_info'] = array(
+            'name'    => 'hide_customer_info',
+            'label'   => __( 'Hide Customer info', 'dokan' ),
+            'desc'    => __( 'Hide customer information from order details of vendors', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'off'
+        );
+
+        $settings_fields['seller_review_manage'] = array(
+            'name'    => 'seller_review_manage',
+            'label'   => __( 'Vendor Product Review', 'dokan' ),
+            'desc'    => __( 'Vendor can change product review status from vendor dashboard', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'on'
+        );
+
+        return $settings_fields;
+    }
+
+    /**
+     * Backward compatible settings option map
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $map
+     *
+     * @return array
+     */
+    public function admin_settings_rearrange_map( $map ) {
+        return array_merge( $map, array(
+            'seller_review_manage_dokan_general' => array( 'seller_review_manage', 'dokan_selling' ),
+            'store_banner_width_dokan_general'   => array( 'store_banner_width', 'dokan_appearance' ),
+            'store_banner_height_dokan_general'  => array( 'store_banner_height', 'dokan_appearance' ),
+        ) );
+    }
+
+    /**
      * Load all pro settings field
      *
      * @since 2.4
@@ -93,29 +228,8 @@ class Dokan_Pro_Admin_Settings {
      *
      * @return array
      */
-    public function load_settings_sections_fields( $settings_fields ) {
-        $new_settings_fields['dokan_general'] = array(
-            'product_add_mail'           => array(
-                'name'    => 'product_add_mail',
-                'label'   => __( 'Product Mail Notification', 'dokan' ),
-                'desc'    => __( 'Email notification on new product submission', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'on'
-            ),
-            'seller_review_manage'       => array(
-                'name'    => 'seller_review_manage',
-                'label'   => __( 'Vendor Product Review', 'dokan' ),
-                'desc'    => __( 'Vendor can change product review status from vendor dashboard', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'on'
-            ),
-            'enable_tc_on_reg'           => array(
-                'name'    => 'enable_tc_on_reg',
-                'label'   => __( 'Enable Terms and Condition', 'dokan' ),
-                'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'on'
-            ),
+    public function load_settings_sections_fields( $settings_fields , $dokan_settings ) {
+        $appearence_settings = array(
             'store_banner_width' => array(
                 'name'    => 'store_banner_width',
                 'label'   => __( 'Store Banner width', 'dokan' ),
@@ -130,65 +244,11 @@ class Dokan_Pro_Admin_Settings {
             ),
         );
 
-        $new_settings_fields['dokan_selling'] = array(
-            'product_category_style' => array(
-                'name'    => 'product_category_style',
-                'label'   => __( 'Category Selection', 'dokan' ),
-                'desc'    => __( 'What option do you prefer for vendor to select product category? ', 'dokan' ),
-                'type'    => 'select',
-                'default' => 'single',
-                'options' => array(
-                    'single'   => __( 'Single', 'dokan' ),
-                    'multiple' => __( 'Multiple', 'dokan' )
-                )
-            ),
-            'product_vendors_can_create_tags' => array(
-                'name'    => 'product_vendors_can_create_tags',
-                'label'   => __( 'Vendors Can Create Tags', 'dokan' ),
-                'desc'    => __( 'Allow vendors to create new product tags from vendor dashboard.', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'off',
-            ),
-            'product_status'         => array(
-                'name'    => 'product_status',
-                'label'   => __( 'New Product Status', 'dokan' ),
-                'desc'    => __( 'Product status when a vendor creates a product', 'dokan' ),
-                'type'    => 'select',
-                'default' => 'pending',
-                'options' => array(
-                    'publish' => __( 'Published', 'dokan' ),
-                    'pending' => __( 'Pending Review', 'dokan' )
-                )
-            ),
-            'edited_product_status'         => array(
-                'name'    => 'edited_product_status',
-                'label'   => __( 'Edited Product Status', 'dokan' ),
-                'desc'    => __( 'Set Product status as pending review when a vendor edits or updates a product', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'off',
-            ),
-            'vendor_duplicate_product' => array(
-                'name'    => 'vendor_duplicate_product',
-                'label'   => __( 'Duplicate product', 'dokan' ),
-                'desc'    => __( 'Allow vendor to duplicate their product', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'on'
-            ),
-            'discount_edit' => array(
-                'name'    => 'discount_edit',
-                'label'   => __( 'Discount Editing', 'dokan' ),
-                'desc'    => __( 'Vendor can add order and product discount', 'dokan' ),
-                'type'    => 'multicheck',
-                'default' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) ),
-                'options' => array( 'product-discount' => __( 'Allow vendor to add discount on product', 'dokan' ), 'order-discount' => __( 'Allow vendor to add discount on order', 'dokan' ) )
-            ),
-            'hide_customer_info' => array(
-                'name'    => 'hide_customer_info',
-                'label'   => __( 'Hide Customer info', 'dokan' ),
-                'desc'    => __( 'Hide customer information from order details of vendors', 'dokan' ),
-                'type'    => 'checkbox',
-                'default' => 'off'
-            ),
+        $settings_fields = $dokan_settings->add_settings_after(
+            $settings_fields,
+            'dokan_appearance',
+            'store_header_template',
+            $appearence_settings
         );
 
         $new_settings_fields['dokan_withdraw'] = array(
@@ -216,8 +276,8 @@ class Dokan_Pro_Admin_Settings {
             ),
         );
 
-        $settings_fields['dokan_general']  = array_merge( $settings_fields['dokan_general'], $new_settings_fields['dokan_general'] );
-        $settings_fields['dokan_selling']  = array_merge( $settings_fields['dokan_selling'], $new_settings_fields['dokan_selling'] );
+        // $settings_fields['dokan_general']  = array_merge( $settings_fields['dokan_general'], $new_settings_fields['dokan_general'] );
+        // $settings_fields['dokan_selling']  = array_merge( $settings_fields['dokan_selling'], $new_settings_fields['dokan_selling'] );
         $settings_fields['dokan_withdraw'] = array_merge( $settings_fields['dokan_withdraw'], $new_settings_fields['dokan_withdraw'] );
 
         return $settings_fields;

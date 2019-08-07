@@ -71,17 +71,14 @@ interface Moip_Subscription_Interface {
     public function suspend_subscription( $user_id, $subscription_code );
 
     /**
-     * Edit a subscription
+     * Update subscription with new plan
      *
      * @param  string $subcription_code
-     * @param  string $amount
-     * @param  string $day
-     * @param  string $month
-     * @param  string $year
+     * @param  string $plan_id
      *
      * @return boolean
      */
-    public function edit_subscription( $subscription_code, $amount, $day, $month, $year );
+    public function update_subscription( $subscription_code, $plan_id );
 
     /**
      * Get a invoice

@@ -60,7 +60,7 @@ class Dokan_Auction {
         add_action( 'dokan_seller_meta_fields', array( $this, 'add_admin_user_options' ) );
         add_action( 'dokan_process_seller_meta_fields', array( $this, 'save_admin_user_option' ) );
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_auction_dashboad_menu' ), 20, 1 );
-        add_filter( 'dokan_settings_fields', array( $this, 'add_auction_dokan_settings' ) );
+        add_filter( 'dokan_settings_selling_option_vendor_capability', array( $this, 'add_auction_dokan_settings' ) );
         add_filter( 'dokan_query_var_filter', array( $this, 'add_dokan_auction_endpoint' ) );
         add_filter( 'dokan_set_template_path', array( $this, 'load_auction_templates' ), 10, 3 );
         add_action( 'dokan_load_custom_template', array( $this, 'load_dokan_auction_template'), 10, 1 );
@@ -307,7 +307,7 @@ class Dokan_Auction {
      * @param array $settings_fields
      */
     function add_auction_dokan_settings( $settings_fields ) {
-        $settings_fields['dokan_selling']['new_seller_enable_auction'] = array(
+        $settings_fields['new_seller_enable_auction'] = array(
             'name'    => 'new_seller_enable_auction',
             'label'   => __( 'New vendor Enable Auction', 'dokan' ),
             'desc'    => __( 'Make auction status enable for new registred vendor', 'dokan' ),

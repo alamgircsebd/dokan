@@ -17,6 +17,12 @@ class Dokan_Wholesale_Admin {
         add_action( 'dokan-vue-admin-scripts', [ $this, 'admin_enqueue_scripts' ] );
         add_action( 'dokan_admin_menu', [ $this, 'add_submenu' ], 17 );
         add_filter( 'dokan-admin-routes', [ $this, 'admin_routes' ] );
+
+        add_action( 'woocommerce_product_options_general_product_data', [ $this, 'wholesale_metabox' ] );
+        add_action( 'woocommerce_process_product_meta', [ $this, 'save_wholesale_data' ] );
+
+        add_action( 'woocommerce_product_after_variable_attributes', [ $this, 'wholesale_variation_metabox' ], 10, 3 );
+        add_action( 'woocommerce_save_product_variation', [ $this, 'save_wholesale_variation_data' ], 10, 2 );
     }
 
     /**
@@ -126,5 +132,152 @@ class Dokan_Wholesale_Admin {
         return $routes;
     }
 
+    /**
+     * Add wholesale matabox
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function wholesale_metabox() {
+        $product_id = get_the_ID();
+        $product    = wc_get_product( $product_id );
 
+        if ( ! $product instanceof WC_Product ) {
+            return;
+        }
+
+        $wholesale_data   = $product->get_meta( '_dokan_wholesale_meta' );
+        $enable_wholesale = ! empty( $wholesale_data['enable_wholesale'] ) ? $wholesale_data['enable_wholesale'] : 'no';
+        $price            = ! empty( $wholesale_data['price'] ) ? $wholesale_data['price'] : '';
+        $quantity         = ! empty( $wholesale_data['quantity'] ) ? $wholesale_data['quantity'] : '';
+
+        echo '<div class="options_group show_if_simple show_if_external">';
+        woocommerce_wp_checkbox( [
+            'id'          => 'enable_wholesale',
+            'value'       => $enable_wholesale,
+            'label'       => __( 'Wholesale', 'dokan' ),
+            'description' => __( 'Enable wholesale for this product', 'dokan' ),
+        ] );
+
+        woocommerce_wp_text_input( [
+            'id'        => 'wholesale_price',
+            'value'     => $price,
+            'data_type' => 'price',
+            'label'     => __( 'Wholesale Price', 'dokan' ),
+        ] );
+
+        woocommerce_wp_text_input( [
+            'id'        => 'wholesale_quantity',
+            'value'     => $quantity,
+            'data_type' => 'price',
+            'label'     => __( 'Minimum Quantity for Wholesale ', 'dokan' ),
+        ] );
+
+        do_action( 'dokan_wholesale_options', $wholesale_data, $product_id );
+        echo '</div>';
+    }
+
+    /**
+     * Save wholesale matabox data
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $product_id
+     *
+     * @return void
+     */
+    public function save_wholesale_data( $product_id ) {
+        $product = wc_get_product( $product_id );
+
+        if ( ! $product instanceof WC_Product ) {
+            return;
+        }
+
+        $wholesale_data                     = [];
+        $wholesale_data['enable_wholesale'] = ! empty( $_POST['enable_wholesale'] ) ? wc_clean( $_POST['enable_wholesale'] ) : 'no';
+        $wholesale_data['price']            = ! empty( $_POST['wholesale_price'] ) ? floatval( $_POST['wholesale_price'] ) : '';
+        $wholesale_data['quantity']         = ! empty( $_POST['wholesale_quantity'] ) ? absint( $_POST['wholesale_quantity'] ) : '';
+
+        $product->update_meta_data( '_dokan_wholesale_meta', $wholesale_data );
+        $product->save();
+    }
+
+    /**
+     * Add wholesale variation metabox
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param  int $loop
+     * @param  array $variation_data
+     * @param  object variation
+     *
+     * @return void
+     */
+    public function wholesale_variation_metabox( $loop, $variation_data, $variation ) {
+        $product_id = ! empty( $variation->ID ) ? $variation->ID : 0;
+        $product      = wc_get_product( $product_id );
+
+        if ( ! $product instanceof WC_Product ) {
+            return;
+        }
+
+        $wholesale_data   = $product->get_meta( '_dokan_wholesale_meta' );
+        $enable_wholesale = ! empty( $wholesale_data['enable_wholesale'] ) ? $wholesale_data['enable_wholesale'] : 'no';
+        $price            = ! empty( $wholesale_data['price'] ) ? $wholesale_data['price'] : '';
+        $quantity         = ! empty( $wholesale_data['quantity'] ) ? $wholesale_data['quantity'] : '';
+
+        woocommerce_wp_checkbox( [
+            'id'          => "variable_enable_wholesale{$loop}",
+            'label'       => '',
+            'name'        => "variable_enable_wholesale[{$loop}]",
+            'value'       => $enable_wholesale,
+            'description' => __( 'Enable wholesale for this product', 'dokan' ),
+            'style'       => 'margin: 2px 5px !important',
+        ] );
+
+        woocommerce_wp_text_input( [
+            'id'        => "variable_wholesale_price{$loop}",
+            'name'      => "variable_wholesale_price[{$loop}]",
+            'value'     => $price,
+            'data_type' => 'price',
+            'label'     => __( 'Wholesale Price', 'dokan' ),
+        ] );
+
+        woocommerce_wp_text_input( [
+            'id'        => "variable_wholesale_quantity{$loop}",
+            'name'      => "variable_wholesale_quantity[{$loop}]",
+            'value'     => $quantity,
+            'data_type' => 'price',
+            'label'     => __( 'Minimum Quantity for Wholesale ', 'dokan' ),
+        ] );
+
+        do_action( 'dokan_wholesale_variation_options', $wholesale_data, $loop, $product_id );
+    }
+
+    /**
+     * Save whole variation data
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $product_id
+     * @param int $loop
+     *
+     * @return void
+     */
+    public function save_wholesale_variation_data( $product_id, $loop ) {
+        $product = wc_get_product( $product_id );
+
+        if ( ! $product instanceof WC_Product ) {
+            return;
+        }
+
+        $wholesale_data                     = [];
+        $wholesale_data['enable_wholesale'] = ! empty( $_POST['variable_enable_wholesale'][$loop] ) ? wc_clean( $_POST['variable_enable_wholesale'][$loop] ) : 'no';
+        $wholesale_data['price']            = ! empty( $_POST['variable_wholesale_price'][$loop] ) ? floatval( $_POST['variable_wholesale_price'][$loop] ) : '';
+        $wholesale_data['quantity']         = ! empty( $_POST['variable_wholesale_quantity'][$loop] ) ? absint( $_POST['variable_wholesale_quantity'][$loop] ) : '';
+
+        $product->update_meta_data( '_dokan_wholesale_meta', $wholesale_data );
+        $product->save();
+    }
 }
