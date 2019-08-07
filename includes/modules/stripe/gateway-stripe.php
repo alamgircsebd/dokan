@@ -719,7 +719,7 @@ class Dokan_Stripe {
         }
 
         $refund = new Dokan_Pro_Admin_Refund();
-        $refund->update_status( $refund_id, 1 );
+        $refund->update_status( $refund_id, $refund->get_status_code( 'completed' ) );
 
         return wp_send_json_success( __( 'Your refund request has been processed.', 'dokan' ) );
     }
