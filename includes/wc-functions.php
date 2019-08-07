@@ -847,6 +847,148 @@ function dokan_display_quantity_discount() {
 }
 
 add_action( 'woocommerce_cart_totals_before_order_total', 'dokan_display_quantity_discount' );
+add_action( 'woocommerce_review_order_before_order_total', 'dokan_display_quantity_discount' );
+add_filter( 'woocommerce_get_order_item_totals', 'dokan_display_order_discounts', 10, 2 );
+add_action( 'woocommerce_admin_order_totals_after_tax', 'dokan_display_order_discounts_on_wc_admin_order' );
+
+/**
+ * Display order discounts on orders
+ *
+ * @param array $table_rows
+ * @param  WC_Order $order
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_display_order_discounts( $table_rows, $order ) {
+    $discounts = dokan_get_discount_by_order( $order );
+
+    if ( ! empty( $discounts['quantity_discount'] ) ) {
+        $table_rows = dokan_array_after( $table_rows, 'cart_subtotal', [
+            'quantity_discount' => [
+                'label' => __( 'Quantity Discount:', 'dokan' ),
+                'value' => wc_price( $discounts['quantity_discount'] )
+            ]
+        ] );
+    }
+
+    if ( ! empty( $discounts['order_discount'] ) ) {
+        $order_discount = [
+            'label' => __( 'Order Discount:', 'dokan' ),
+            'value' => wc_price( $discounts['order_discount'] )
+        ];
+
+        $table_rows = dokan_array_after( $table_rows, 'cart_subtotal', [
+            'order_discount' => [
+                'label' => __( 'Order Discount:', 'dokan' ),
+                'value' => wc_price( $discounts['order_discount'] )
+            ]
+        ] );
+    }
+
+    return $table_rows;
+}
+
+/**
+ * Display order discounts on wc admin order table
+ *
+ * @since DOKAN_PRO_SINCE
+ * @param int $order_id
+ *
+ * @return void
+ */
+function dokan_display_order_discounts_on_wc_admin_order( $order_id ) {
+    $discounts = dokan_get_discount_by_order( $order_id );
+
+    if ( empty( $discounts['order_discount'] ) && empty( $discounts['quantity_discount'] ) ) {
+        return;
+    }
+
+    $html = '';
+
+    if ( ! empty( $discounts['order_discount'] ) ) {
+        $html  = '<tr>';
+        $html .= '<td class="label dokan-order-discount">' . __( 'Order Discount:', 'dokan' ) . '</td>';
+        $html .= '<td class="dokan-hide" width="1%"></td>';
+        $html .= '<td class="dokan-order-discount">' . wc_price( $discounts['order_discount'] )  . '</td>';
+        $html .= '</tr>';
+    }
+
+    if ( ! empty( $discounts['quantity_discount'] ) ) {
+        $html .= '<tr>';
+        $html .= '<td class="label dokan-quantity-discount">' . __( 'Quantity Discount:', 'dokan' ) . '</td>';
+        $html .= '<td class="dokan-hide" width="1%"></td>';
+        $html .= '<td class="dokan-quantity-discount">' . wc_price( $discounts['quantity_discount'] )  . '</td>';
+        $html .= '</tr>';
+    }
+
+    echo $html;
+}
+
+/**
+ * Get discount by order
+ *
+ * @param WC_Order $order
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array
+ */
+function dokan_get_discount_by_order( $order ) {
+    if ( ! $order instanceof WC_Order ) {
+        $order = wc_get_order( $order );
+    }
+
+    $discounts = [];
+
+    if ( ! $order->get_meta( 'has_sub_order') ) {
+        $order_discount    = $order->get_meta( 'dokan_order_discount' );
+        $quantity_discount = $order->get_meta( 'dokan_quantity_discount' );
+
+        if ( $order_discount ) {
+            $discounts['order_discount'] = $order_discount;
+        }
+
+        if ( $quantity_discount ) {
+            $discounts['quantity_discount'] = $quantity_discount;
+        }
+
+        return apply_filters( 'dokan_get_discount_by_order', $discounts );
+    }
+
+    if ( $order->get_meta( 'has_sub_order') ) {
+        $sub_orders = dokan_get_suborder_ids_by( $order->get_id() );
+    }
+
+    if ( empty( $sub_orders ) ) {
+        return;
+    }
+
+    $order_discount    = 0;
+    $quantity_discount = 0;
+
+    foreach ( $sub_orders as $sub_order ) {
+        $wc_sub_order = wc_get_order( $sub_order->ID );
+
+        if ( ! $wc_sub_order instanceof WC_Order ) {
+            continue;
+        }
+
+        $order_discount    += (float) $wc_sub_order->get_meta( 'dokan_order_discount' );
+        $quantity_discount += (float) $wc_sub_order->get_meta( 'dokan_quantity_discount' );
+    }
+
+    if ( $order_discount ) {
+        $discounts['order_discount'] = $order_discount;
+    }
+
+    if ( $quantity_discount ) {
+        $discounts['quantity_discount'] = $quantity_discount;
+    }
+
+    return apply_filters( 'dokan_get_discount_by_order', $discounts );
+}
 
 /**
  * calculate final total after lot quantity discount
@@ -862,6 +1004,7 @@ function dokan_calculate_totals( $total ) {
 add_filter( 'woocommerce_calculated_total', 'dokan_calculate_totals' );
 
 add_action( 'dokan_checkout_update_order_meta', 'set_discount_on_sub_orders', 10, 2 );
+add_action( 'dokan_create_parent_order', 'set_discount_on_parent_order' );
 
 /**
  * Set discount on sub orders
@@ -874,6 +1017,10 @@ add_action( 'dokan_checkout_update_order_meta', 'set_discount_on_sub_orders', 10
  * @return void
  */
 function set_discount_on_sub_orders( $order_id, $vendor_id ) {
+    if ( is_admin() || defined( 'REST_REQUEST' ) ) {
+        return;
+    }
+
     $order = wc_get_order( $order_id );
 
     if ( ! $order instanceof WC_Order ) {
@@ -891,8 +1038,40 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
     $discount_total = $discount_amount_for_lot + $discount_amount_for_min_order;
     $order_total    = $order_total - $discount_total;
 
+    $order->update_meta_data( 'dokan_quantity_discount', $discount_amount_for_lot );
+    $order->update_meta_data( 'dokan_order_discount', $discount_amount_for_min_order );
     $order->set_total( $order_total );
     $order->save();
+}
+
+/**
+ * Set discount on main order
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param WC_Order $order
+ *
+ * @return void
+ */
+function set_discount_on_parent_order( $order ) {
+    if ( is_admin() || defined( 'REST_REQUEST' ) ) {
+        return;
+    }
+
+    $discount_amount_for_lot       = dokan_discount_for_lot_quantity();
+    $discount_amount_for_min_order = dokan_discount_for_minimum_order();
+
+    if ( ! $discount_amount_for_lot && ! $discount_amount_for_min_order ) {
+        return;
+    }
+
+    if ( ! empty( $discount_amount_for_lot ) ) {
+        $order->update_meta_data( 'dokan_quantity_discount', $discount_amount_for_lot );
+    }
+
+    if ( ! empty( $discount_amount_for_min_order ) ) {
+        $order->update_meta_data( 'dokan_order_discount', $discount_amount_for_min_order );
+    }
 }
 
 /**
