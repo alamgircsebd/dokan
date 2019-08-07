@@ -398,11 +398,6 @@ class Dokan_REST_Wholesale_Controller extends Dokan_REST_Controller {
      * @return object
      */
     public function format_collection_response( $response, $request, $total_items ) {
-        if ( $total_items === 0 ) {
-            return $response;
-        }
-
-        // Store pagation values for headers then unset for count query.
         $per_page = (int) ( ! empty( $request['per_page'] ) ? $request['per_page'] : 20 );
         $page     = (int) ( ! empty( $request['page'] ) ? $request['page'] : 1 );
 
