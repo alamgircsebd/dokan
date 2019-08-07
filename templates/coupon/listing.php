@@ -99,9 +99,9 @@
                             && ( $expiry_date <= PHP_INT_MAX )
                             && ( $expiry_date >= ~PHP_INT_MAX ) ) {
 
-                            echo esc_html( date_i18n( 'F j, Y', $expiry_date ) );
+                            echo esc_html( date_i18n( get_option( 'date_format' ), $expiry_date ) );
                         } else {
-                            echo $expiry_date ? esc_html( date_i18n( 'F j, Y', strtotime( $expiry_date ) ) ) : '&ndash;';
+                            echo $expiry_date ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $expiry_date ) ) ) : '&ndash;';
                         }
                     ?>
                 </td>

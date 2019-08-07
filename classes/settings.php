@@ -625,7 +625,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         $biography = ! empty( $store_info['vendor_biography'] ) ? $store_info['vendor_biography'] : '';
         ?>
         <div class="dokan-form-group">
-            <label class="dokan-w3 dokan-control-label"><?php _e( 'Biography', 'dokan-lite' ); ?></label>
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'Biography', 'dokan' ); ?></label>
             <div class="dokan-w7 dokan-text-left">
                 <?php
                     wp_editor( $biography, 'vendor_biography', [

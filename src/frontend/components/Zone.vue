@@ -69,7 +69,7 @@
 
             <div class="dokan-form-group dokan-clearfix" v-if="wantToLimitLocation && showPostCodeList">
                 <label class="dokan-w4 dokan-control-label dokan-text-right" for="">
-                    {{ __( 'Set your postcode', 'dokan' ) }} <i class="fa fa-question-circle" v-tooltip :title="__( 'Postcodes need to be comma separated', 'dokan' )"></i>
+                    {{ __( 'Set your postcode', 'dokan' ) }} <i class="fa fa-question-circle" v-tooltip :title="postCodeTitle"></i>
                 </label>
                 <div class="dokan-w5 dokan-text-left">
                     <input name="zone_postcode" id="zone_postcode" class="dokan-form-control" v-model="postcode">
@@ -285,7 +285,8 @@ export default {
                 settings: {}
             },
             cost_description: this.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' ),
-            editShippingMethodTitle: this.__( 'Edit Shipping Method', 'dokan' )
+            editShippingMethodTitle: this.__( 'Edit Shipping Method', 'dokan' ),
+            postCodeTitle: this.__( 'Postcodes need to be comma separated', 'dokan' )
         }
     },
 
