@@ -406,7 +406,7 @@ Class Dokan_Email_Verification {
             return true;
         }
 
-        if ( Helper::is_subscription_enabled_on_registration() ) {
+        if ( class_exists( 'Dokan_Product_Subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
             return true;
         }
 
