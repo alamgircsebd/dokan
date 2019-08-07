@@ -623,6 +623,8 @@ class DPS_Admin {
         if( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
             $order_id = get_user_meta( $user_id, 'product_order_id', true );
 
+            do_action( 'dokan_subscription_cancelled_by_admin', $user_id, $order_id );
+
             if ( $order_id ) {
                 Helper::log( 'Subscription cancel check: On assign pack by admin cancel Recurring Subscription of User #' . $user_id . ' on order #' . $order_id );
                 DPS_PayPal_Standard_Subscriptions::cancel_subscription_with_paypal( $order_id , $user_id );
@@ -667,7 +669,7 @@ class DPS_Admin {
             update_user_meta( $user_id, 'dokan_admin_percentage', '' );
         }
 
-        Helper::make_product_publish( $user_id );
+        do_action( 'dokan_vendor_purchased_subscription', $user_id );
     }
 }
 

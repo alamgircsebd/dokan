@@ -3,6 +3,7 @@
 namespace DokanPro\Modules\Subscription;
 
 use Dokan\Traits\Singleton;
+use DokanPro\Modules\Subscription\SubscriptionPack;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -452,7 +453,7 @@ class Helper {
      *
      * @return void
      */
-    public static function update_product_status( $user_id ) {
+    public static function make_product_draft( $user_id ) {
         global $wpdb;
 
         $status = dokan_get_option( 'product_status_after_end', 'dokan_product_subscription', 'draft' );
@@ -567,6 +568,47 @@ class Helper {
         }
 
         update_user_meta( $user_id, 'dokan_used_trial_pack', true );
+    }
+
+    /**
+     * Check wheter vendor is subscribed or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $vendor_id
+     *
+     * @return boolean
+     */
+    public static function vendor_has_subscription( $vendor_id ) {
+        return get_user_meta( $vendor_id, 'product_package_id', true );
+    }
+
+    /**
+     * Check wheter the pack is recurring or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $pack_id
+     *
+     * @return boolean
+     */
+    public static function is_recurring_pack( $pack_id ) {
+        $subscription = new SubscriptionPack( $pack_id );
+
+        return $subscription->is_recurring();
+    }
+
+    /**
+     * Check wheter vendor can publish unlimited products or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $vendor_id
+     *
+     * @return boolean
+     */
+    public static function vendor_can_publish_unlimited_products( $vendor_id ) {
+        return '-1' === self::get_vendor_remaining_products( $vendor_id );
     }
 }
 

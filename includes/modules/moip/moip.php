@@ -243,8 +243,7 @@ class Dokan_Moip {
 
                 $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
                 $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
-                $subscription_length   = get_post_meta( $product_id, '_subscription_length', true );
-                $add_s = ( $subscription_interval != 1 ) ? 's' : '';
+                $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
 
                 update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
                 update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
@@ -284,6 +283,27 @@ class Dokan_Moip {
             delete_user_meta( $user_id, 'can_post_product' );
             delete_user_meta( $user_id, '_customer_recurring_subscription' );
             delete_user_meta( $user_id, 'dokan_seller_percentage' );
+        }
+
+        if ( isset( $response->event ) && $response->event == 'subscription.updated' ) {
+
+            if ( 'ACTIVE' !== $response->resource->status ) {
+                return;
+            }
+
+            global $wpdb;
+
+            $subscription_code = $response->resource->code;
+            $user_id           = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = 'subscription_code' AND `meta_value`='$subscription_code'" );
+
+            $product_id            = $response->resource->plan->code;
+            $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
+            $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
+            $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
+
+            update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+            update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
+            update_user_meta( $user_id, 'can_post_product', '1' );
         }
     }
 

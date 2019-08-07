@@ -134,7 +134,7 @@ abstract class VendorSubscription {
             return '-1';
         }
 
-        $remaining_product = $pack_product_no - $this->get_published_product_count();
+        $remaining_product = absint( $pack_product_no ) - $this->get_published_product_count();
         $remaining_product = $remaining_product < 0 ? 0 : $remaining_product;
 
         return $remaining_product;
@@ -177,5 +177,16 @@ abstract class VendorSubscription {
         }
 
         return false;
+    }
+
+    /**
+     * Check wheter vendor has any unpaid or pending subscription or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public function has_pending_subscription() {
+        return get_user_meta( $this->get_vendor(), 'has_pending_subscription', true );
     }
 }

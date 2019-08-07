@@ -37,11 +37,9 @@ License: GNU General Public License v3.0
  * **********************************************************************
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
-define( 'DOKAN_STRIPE_FILE', __FILE__ );
-define( 'DOKAN_STRIPE_PATH', dirname( __FILE__ ) );
-define( 'DOKAN_STRIPE_TEMPLATE_PATH', dirname( __FILE__ ) . '/templates/' );
+use DokanPro\Modules\Stripe\Helper;
 
 /**
  * Dokan Stripe Main class
@@ -54,6 +52,8 @@ class Dokan_Stripe {
      * Constructor
      */
     public function __construct() {
+        $this->load_constants();
+        $this->load_files();
 
         /** All actions */
         add_action( 'init', array( $this, 'init' ) );
@@ -76,15 +76,62 @@ class Dokan_Stripe {
         add_action( 'init', array( $this, 'handle_stripe_webhook') , 10 );
 
         add_action( 'dokan_store_profile_saved', array( $this, 'save_stripe_progress' ), 8, 2 );
-        // add_filter( 'woocommerce_add_to_cart_validation', array( $this, 'add_to_cart_validation' ), 15, 3 );
-
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'check_vendor_configure_stripe' ), 15, 2 );
 
         // approve refund request automatically such as stripe connect
         add_action( 'dokan_after_refund_request', [ $this, 'process_refund_request' ], 10, 2 );
     }
 
-    function filter_gateways(  $gateways ){
+    /**
+     * Load plugin constants
+     *
+     * @return void
+     */
+    private function load_constants() {
+        $this->define( 'DOKAN_STRIPE_FILE', __FILE__ );
+        $this->define( 'DOKAN_STRIPE_PATH', __DIR__ );
+        $this->define( 'DOKAN_STRIPE_CLASSES', __DIR__ . '/classes/' );
+        $this->define( 'DOKAN_STRIPE_LIBS', __DIR__ . '/libs/' );
+        $this->define( 'DOKAN_STRIPE_ABSTRACT', __DIR__ . '/abstracts/' );
+        $this->define( 'DOKAN_STRIPE_ASSETS', plugin_dir_url( __FILE__ ) . 'assets/' );
+        $this->define( 'DOKAN_STRIPE_TEMPLATE_PATH', __DIR__ . '/templates/' );
+    }
+
+    /**
+     * Define constants
+     *
+     * @param string $name
+     * @param  string $path
+     *
+     * @return void
+     */
+    private function define( $name, $path ) {
+        if ( ! defined( $name ) ) {
+            define( $name, $path );
+        }
+    }
+
+    /**
+     * Load files
+     *
+     * @return void
+     */
+    private function load_files() {
+        require_once DOKAN_STRIPE_ABSTRACT . 'abstract-class-dokan-stripe-gateway.php';
+        require_once DOKAN_STRIPE_CLASSES . 'class-helper.php';
+        require_once DOKAN_STRIPE_CLASSES . 'class-dokan-stripe-transaction.php';
+        require_once DOKAN_STRIPE_CLASSES . 'class-dokan-stripe-connect-wrapper.php';
+        require_once DOKAN_STRIPE_CLASSES . 'class-dokan-stripe-subscription.php';
+    }
+
+    /**
+     * Filter gateways
+     *
+     * @param  array $gateways
+     *
+     * @return array
+     */
+    public function filter_gateways( $gateways ) {
         if ( !empty( WC()->cart->cart_contents ) ) {
             foreach ( WC()->cart->cart_contents as $key => $values ) {
                 if ( dokan_get_prop( $values['data'], 'product_type', 'get_type') == 'product_pack' ) {
@@ -194,49 +241,30 @@ class Dokan_Stripe {
         $client_id  = $settings['testmode'] == 'yes' ? $settings['test_client_id'] : $settings['client_id'];
         $secret_key = $settings['testmode'] == 'yes' ? $settings['test_secret_key'] : $settings['secret_key'];
 
-        require_once DOKAN_STRIPE_PATH . '/classes/lib/oauth/OAuth2Exception.php';
-        require_once DOKAN_STRIPE_PATH . '/classes/lib/oauth/OAuth2Client.php';
-        require_once DOKAN_STRIPE_PATH . '/classes/lib/StripeOAuth.class.php';
+        Helper::get_stripe();
+        Helper::set_app_info();
+        Helper::set_api_version();
+        \Stripe\Stripe::setApiKey( $secret_key );
+        \Stripe\Stripe::setClientId( $client_id );
 
-        $oauth = new StripeOAuth( $client_id, $secret_key );
-        $token = $oauth->getAccessToken( $_GET['code'] );
-        $key   = $oauth->getPublishableKey( $_GET['code'] );
+        if ( Helper::is_test_mode() ) {
+            \Stripe\Stripe::setVerifySslCerts( false );
+        }
 
-        update_user_meta( get_current_user_id(), '_stripe_connect_access_key', $token );
+        try {
+            $resp = \Stripe\OAuth::token( [
+                'grant_type' => 'authorization_code',
+                'code' => $_GET['code'],
+            ] );
+        } catch ( \Stripe\Error\OAuth\OAuthBase $e ) {
+            wp_send_json( 'Something went wrong: ' . $e->getMessage() );
+        }
+
+        update_user_meta( get_current_user_id(), 'dokan_connected_vendor_id', $resp->stripe_user_id );
+        update_user_meta( get_current_user_id(), '_stripe_connect_access_key', $resp->access_token );
 
         wp_redirect( dokan_get_navigation_url( 'settings/payment' ) );
         exit;
-    }
-
-    /**
-     * Add to cart validation error
-     *
-     * Customers shouldn't be able to buy product if the sellers stripe account
-     * is not connected.
-     *
-     * @param bool  $validation
-     * @param int  $product_id
-     *
-     * @return bool
-     */
-    function add_to_cart_validation( $validation, $product_id, $qty ) {
-        $settings = get_option('woocommerce_dokan-stripe-connect_settings');
-
-        // bailout if the gateway is not enabled
-        if ( isset( $settings['enabled'] ) && $settings['enabled'] !== 'yes' ) {
-            return $validation;
-        }
-
-        $seller_id    = get_post_field( 'post_author', $product_id );
-        $access_token = get_user_meta( $seller_id, '_stripe_connect_access_key', true );
-
-        if ( empty( $access_token ) ) {
-            wc_add_notice( __( 'This vendor has not configured his Stripe payment gateway and the product can not be purchased!', 'dokan' ), 'error' );
-
-            return false;
-        }
-
-        return $validation;
     }
 
     /**
@@ -279,9 +307,10 @@ class Dokan_Stripe {
             return;
         }
 
-        $client_id  = $settings['testmode'] == 'yes' ? $settings['test_client_id'] : $settings['client_id'];
-        $secret_key = $settings['testmode'] == 'yes' ? $settings['test_secret_key'] : $settings['secret_key'];
-        $key        = get_user_meta( $store_user->ID, '_stripe_connect_access_key', true );
+        $client_id           = $settings['testmode'] == 'yes' ? $settings['test_client_id'] : $settings['client_id'];
+        $secret_key          = $settings['testmode'] == 'yes' ? $settings['test_secret_key'] : $settings['secret_key'];
+        $key                 = get_user_meta( $store_user->ID, '_stripe_connect_access_key', true );
+        $connected_vendor_id = get_user_meta( $store_user->ID, 'dokan_connected_vendor_id', true );
         ?>
 
         <style type="text/css" media="screen">
@@ -298,18 +327,26 @@ class Dokan_Stripe {
         <div class="dokan-stripe-connect-container">
             <input type="hidden" name="settings[stripe]" value="<?php echo empty( $key ) ? 0 : 1; ?>">
             <?php
-                if ( empty( $key ) ) {
+                if ( empty( $key ) && empty( $connected_vendor_id ) ) {
 
                     echo '<div class="dokan-alert dokan-alert-danger">';
                         _e( 'Your account is not connected to Stripe. Connect your Stripe account to receive payouts.', 'dokan' );
                     echo '</div>';
 
-                    require_once DOKAN_STRIPE_PATH . '/classes/lib/oauth/OAuth2Exception.php';
-                    require_once DOKAN_STRIPE_PATH . '/classes/lib/oauth/OAuth2Client.php';
-                    require_once DOKAN_STRIPE_PATH . '/classes/lib/StripeOAuth.class.php';
+                    Helper::get_stripe();
+                    Helper::set_app_info();
+                    Helper::set_api_version();
+                    \Stripe\Stripe::setApiKey( $secret_key );
+                    \Stripe\Stripe::setClientId( $client_id );
 
-                    $oauth = new StripeOAuth( $client_id, $secret_key );
-                    $url   = $oauth->getAuthorizeUri();
+                    if ( Helper::is_test_mode() ) {
+                        \Stripe\Stripe::setVerifySslCerts( false );
+                    }
+
+                    $url = \Stripe\OAuth::authorizeUrl( [
+                        'scope' => 'read_write',
+                    ] );
+
                     ?>
                     <br/>
                     <a class="clear" href="<?php echo $url; ?>" target="_TOP">
@@ -403,6 +440,7 @@ class Dokan_Stripe {
             }
 
             delete_user_meta( $user_id, '_stripe_connect_access_key');
+            delete_user_meta( $user_id, 'dokan_connected_vendor_id');
             wp_redirect( dokan_get_navigation_url( 'settings/payment' ) );
             exit;
         }
@@ -420,19 +458,23 @@ class Dokan_Stripe {
         if ( isset( $_GET['webhook'] ) && $_GET['webhook'] == 'dokan' ) {
             global $wpdb;
 
-            require_once 'classes/lib/init.php';
-
             $stripe_options = get_option('woocommerce_dokan-stripe-connect_settings');
+            $secret_key     = $stripe_options['testmode'] == 'yes' ? $stripe_options['test_secret_key'] : $stripe_options['secret_key'];
 
-            $secret_key = $stripe_options['testmode'] == 'yes' ? $stripe_options['test_secret_key'] : $stripe_options['secret_key'];
-
+            Helper::get_stripe();
+            Helper::set_app_info();
+            Helper::set_api_version();
             \Stripe\Stripe::setApiKey( $secret_key );
+
+            if ( Helper::is_test_mode() ) {
+                \Stripe\Stripe::setVerifySslCerts( false );
+            }
 
             // retrieve the request's body and parse it as JSON
             $body = @file_get_contents( 'php://input' );
 
             // grab the event information
-            $event_json = json_decode($body);
+            $event_json = json_decode( $body );
 
             // this will be used to retrieve the event from Stripe
             $event_id = $event_json->id;
@@ -446,15 +488,16 @@ class Dokan_Stripe {
 
                     // successful payment, both one time and recurring payments
                     if ( 'invoice.payment_succeeded' == $event->type ) {
-                        $user_id = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = '_stripe_subscription_id' AND `meta_value`='$invoice->subscription'" );
+                        $user_id      = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = '_stripe_subscription_id' AND `meta_value`='$invoice->subscription'" );
                         $period_start = date( 'Y-m-d H:i:s', $invoice->period_start );
-                        $period_end = date( 'Y-m-d H:i:s', $invoice->period_end );
-                        $order_id = get_user_meta( $user_id, 'product_order_id', true );
+                        $period_end   = date( 'Y-m-d H:i:s', $invoice->period_end );
+                        $order_id     = get_user_meta( $user_id, 'product_order_id', true );
 
                         if ( $invoice->paid ) {
                             update_user_meta( $user_id, 'product_pack_startdate', $period_start );
                             update_user_meta( $user_id, 'product_pack_enddate', $period_end );
                             update_user_meta( $user_id, 'can_post_product', '1' );
+                            update_user_meta( $user_id, 'has_pending_subscription', false );
 
                             if ( !empty( $invoice->charge ) ) {
                                 update_post_meta( $order_id, '_stripe_subscription_charge_id', $invoice->charge );
@@ -535,6 +578,23 @@ class Dokan_Stripe {
                         update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', $invoice->current_period_end ) );
                     }
 
+                    // it does happen on subscription plan switching
+                    if ( 'customer.subscription.updated' === $event->type ) {
+                        if ( 'active' !== $invoice->status ) {
+                            return;
+                        }
+
+                        $user_id      = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = '_stripe_subscription_id' AND `meta_value`='$invoice->id'" );
+                        $period_start = date( 'Y-m-d H:i:s', $invoice->current_period_start );
+                        $period_end   = date( 'Y-m-d H:i:s', $invoice->current_period_end );
+                        $order_id     = get_user_meta( $user_id, 'product_order_id', true );
+
+                        update_user_meta( $user_id, 'product_pack_startdate', $period_start );
+                        update_user_meta( $user_id, 'product_pack_enddate', $period_end );
+                        update_user_meta( $user_id, 'can_post_product', '1' );
+                        update_user_meta( $user_id, 'has_pending_subscription', false );
+                    }
+
                 } catch ( Exception $e ) {
                     // something failed, perhaps log a notice or email the site admin
                 }
@@ -592,17 +652,17 @@ class Dokan_Stripe {
             return $user_id;
         }
 
-        $stripe_settings   = get_option('woocommerce_dokan-stripe-connect_settings');
+        $stripe_settings = get_option('woocommerce_dokan-stripe-connect_settings');
 
         if ( ! $stripe_settings ) {
             return $user_id;
         }
 
-        $stripe_key = get_user_meta( $user_id, '_stripe_connect_access_key', true );
-
-        if ( isset($_POST['disconnect_user_stripe'] ) ) {
+        if ( isset( $_POST['disconnect_user_stripe'] ) ) {
+            delete_user_meta( $user_id, 'dokan_connected_vendor_id');
             delete_user_meta( $user_id, '_stripe_connect_access_key');
         }
+
         return $user_id;
     }
 
@@ -618,10 +678,11 @@ class Dokan_Stripe {
         }
 
         $stripe_key = get_user_meta( $user->ID, '_stripe_connect_access_key', true );
+        $connected_vendor_id = get_user_meta( $user->ID, 'dokan_connected_vendor_id', true );
         ?>
         <h3><?php _e('Dokan Stripe Settings','dokan');?></h3>
         <?php
-        if ( !empty( $stripe_key ) ) : ?>
+        if ( ! empty( $stripe_key ) || ! empty( $connected_vendor_id ) ) : ?>
             <?php submit_button( __( 'Disconnect User Stripe Account', 'dokan' ) ,'delete', 'disconnect_user_stripe'); ?>
         <?php else : ?>
             <h4><?php _e("User account not connected to Stripe",'dokan');?></h4>
@@ -673,12 +734,17 @@ class Dokan_Stripe {
             return true;
         }
 
-        require_once 'classes/lib/init.php';
-
         $stripe_options = get_option('woocommerce_dokan-stripe-connect_settings');
         $secret_key     = $stripe_options['testmode'] == 'yes' ? $stripe_options['test_secret_key'] : $stripe_options['secret_key'];
 
+        Helper::get_stripe();
+        Helper::set_app_info();
+        Helper::set_api_version();
         \Stripe\Stripe::setApiKey( $secret_key );
+
+        if ( Helper::is_test_mode() ) {
+            \Stripe\Stripe::setVerifySslCerts( false );
+        }
 
         try {
             $refund = \Stripe\Refund::create( [

@@ -257,6 +257,7 @@ class Dokan_Product_Subscription {
         require_once DPS_PATH . '/includes/classes/Registration.php';
         require_once DPS_PATH . '/includes/Abstracts/VendorSubscription.php';
         require_once DPS_PATH . '/includes/classes/SubscriptionPack.php';
+        require_once DPS_PATH . '/includes/classes/ProductStatusChanger.php';
     }
 
     /**
@@ -705,7 +706,7 @@ class Dokan_Product_Subscription {
             if ( Helper::maybe_cancel_subscription( $user->ID ) ) {
 
                 if ( Helper::check_vendor_has_existing_product( $user->ID ) ) {
-                    Helper::update_product_status( $user->ID );
+                    Helper::make_product_draft( $user->ID );
                 }
 
                 $order_id = get_user_meta( $user->ID, 'product_order_id', true );
@@ -800,7 +801,7 @@ class Dokan_Product_Subscription {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
                 }
 
-                Helper::make_product_publish( $customer_id );
+                do_action( 'dokan_vendor_purchased_subscription', $customer_id );
             }
         }
     }

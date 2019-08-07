@@ -46,63 +46,68 @@ class Shortcode {
         ?>
 
         <div class="dokan-subscription-content">
-            <?php if ( \Dokan_Product_Subscription::can_post_product() ): ?>
+            <?php $subscription = dokan()->vendor->get( $user_id )->subscription; ?>
 
-                <?php $subscription = dokan()->vendor->get( $user_id )->subscription; ?>
+            <?php if ( $subscription && $subscription->has_pending_subscription() ) : ?>
+                <div class="seller_subs_info">
+                    <?php printf(
+                            __( 'The intend <span>%s</span> subscription is inactive due to payment failure. Please <a href="?add-to-cart=%s">Pay Now</a> to active it again.', 'dokan' ),
+                            $subscription->get_package_title(),
+                            $subscription->get_id()
+                        );
+                    ?>
+                </div>
+            <?php elseif ( $subscription && $subscription->can_post_product() ) : ?>
+                <div class="seller_subs_info">
+                    <p>
+                        <?php
+                            if ( $subscription->is_trial() ) {
+                                $trial_title = $subscription->get_trial_range() . ' ' . $subscription->get_trial_period_types();
 
-                <?php if ( $subscription ) : ?>
+                                printf( __( 'Your are using <span>%s (%s trial)</span> package.', 'dokan' ), $subscription->get_package_title(), $trial_title  );
+                            } else {
+                                printf( __( 'Your are using <span>%s</span> package.', 'dokan' ), $subscription->get_package_title() );
+                            }
+                        ?>
+                    </p>
+                    <p>
+                        <?php
+                            $no_of_product = '-1' !== $subscription->get_number_of_products() ? $subscription->get_number_of_products() : __( 'unlimited', 'dokan' );
 
-                        <div class="seller_subs_info">
-                            <p>
-                                <?php
-                                    if ( $subscription->is_trial() ) {
-                                        $trial_title = $subscription->get_trial_range() . ' ' . $subscription->get_trial_period_types();
+                            if ( $subscription->is_recurring() ) {
+                                printf( __( 'You can add <span>%s</span> products', 'dokan' ), $no_of_product );
+                            } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
+                                printf( __( 'You can add <span>%s</span> product(s) for <span> unlimited days</span> days.', 'dokan' ), $no_of_product );
+                            } else {
+                                printf( __( 'You can add <span>%s</span> product(s) for <span>%s</span> days.', 'dokan' ), $no_of_product, $subscription->get_pack_valid_days() );
+                            }
+                        ?>
+                    </p>
+                    <p>
+                        <?php
+                        if ( $subscription->is_trial() ) {
+                            // don't show any text
+                        } elseif ( $subscription->is_recurring() ) {
+                            echo sprintf( __( 'You will be charged in every %d', 'dokan' ), $subscription->get_recurring_interval() ) . ' ' . Helper::recurring_period( $subscription->get_period_type() );
+                        } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
+                            printf( __( 'You have a lifetime package.', 'dokan' ) );
+                        } else {
+                            printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) ) );
+                        } ?>
+                    </p>
 
-                                        printf( __( 'Your are using <span>%s (%s trial)</span> package.', 'dokan' ), $subscription->get_package_title(), $trial_title  );
-                                    } else {
-                                        printf( __( 'Your are using <span>%s</span> package.', 'dokan' ), $subscription->get_package_title() );
-                                    }
-                                ?>
-                            </p>
-                            <p>
-                                <?php
-                                    $no_of_product = '-1' !== $subscription->get_number_of_products() ? $subscription->get_number_of_products() : __( 'unlimited', 'dokan' );
+                    <p>
+                        <form action="" method="post">
+                            <label><?php _e( 'To cancel your subscription click here &rarr;', 'dokan' ); ?></label>
 
-                                    if ( $subscription->is_recurring() ) {
-                                        printf( __( 'You can add <span>%s</span> products', 'dokan' ), $no_of_product );
-                                    } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
-                                        printf( __( 'You can add <span>%s</span> product(s) for <span> unlimited days</span> days.', 'dokan' ), $no_of_product );
-                                    } else {
-                                        printf( __( 'You can add <span>%s</span> product(s) for <span>%s</span> days.', 'dokan' ), $no_of_product, $subscription->get_pack_valid_days() );
-                                    }
-                                ?>
-                            </p>
-                            <p>
-                                <?php
-                                if ( $subscription->is_trial() ) {
-                                    // don't show any text
-                                } elseif ( $subscription->is_recurring() ) {
-                                    echo sprintf( __( 'You will be charged in every %d', 'dokan' ), $subscription->get_recurring_interval() ) . ' ' . Helper::recurring_period( $subscription->get_period_type() );
-                                } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
-                                    printf( __( 'You have a lifetime package.', 'dokan' ) );
-                                } else {
-                                    printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) ) );
-                                } ?>
-                            </p>
-
-                            <p>
-                                <form action="" method="post">
-                                    <label><?php _e( 'To cancel your subscription click here &rarr;', 'dokan' ); ?></label>
-
-                                    <?php wp_nonce_field( 'dps-sub-cancel' ); ?>
-                                    <input type="submit" name="dps_cancel_subscription" class="btn btn-sm btn-danger" value="<?php _e( 'Cancel', 'dokan' ); ?>">
-                                </form>
-                            </p>
-                            <p>
-                                <?php _e( 'Please cancel your running package to switch another subscription', 'dokan' ); ?>
-                            </p>
-                        </div>
-                <?php endif; ?>
+                            <?php wp_nonce_field( 'dps-sub-cancel' ); ?>
+                            <input type="submit" name="dps_cancel_subscription" class="btn btn-sm btn-danger" value="<?php _e( 'Cancel', 'dokan' ); ?>">
+                        </form>
+                    </p>
+                    <p>
+                        <?php _e( 'Please cancel your running package to switch another subscription', 'dokan' ); ?>
+                    </p>
+                </div>
             <?php endif; ?>
 
             <?php if ( $subscription_packs->have_posts() ) {
@@ -190,22 +195,21 @@ class Shortcode {
 
                             <?php else: ?>
 
-                                <?php if ( $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id() ) ): ?>
+                                <?php if ( $sub_pack->is_trial() && Helper::vendor_has_subscription( dokan_get_current_user_id() ) && Helper::has_used_trial_pack( dokan_get_current_user_id() ) ): ?>
+                                    <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Switch Plan', 'dokan' ); ?></a>
+                                <?php elseif ( $sub_pack->is_trial() && Helper::has_used_trial_pack( dokan_get_current_user_id() ) ) : ?>
                                     <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Buy Now', 'dokan' ); ?></a>
-                                <?php elseif ( ! get_user_meta( dokan_get_current_user_id(), 'product_package_id', true ) ) : ?>
+
+                                <?php elseif ( ! Helper::vendor_has_subscription( dokan_get_current_user_id() ) ) : ?>
                                         <?php if ( $sub_pack->is_trial() ) : ?>
                                             <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack trial_pack"><?php _e( 'Start Free Trial', 'dokan' ); ?></a>
                                         <?php else: ?>
                                             <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Buy Now', 'dokan' ); ?></a>
                                         <?php endif; ?>
 
-                                <?php else:
-
-                                    $btn_link = sprintf('<a href="%s" class="dokan-btn dokan-btn-theme buy_product_pack">%s</a>', get_permalink( get_the_ID() ), __( 'View Details', 'dokan' ) ) ;
-
-                                    echo apply_filters( 'dokan_notsubscribed_pack_button_text', $btn_link );
-
-                                endif; ?>
+                                <?php else: ?>
+                                    <a href="<?php echo do_shortcode( '[add_to_cart_url id="' . get_the_ID() . '"]' ); ?>" class="dokan-btn dokan-btn-theme buy_product_pack"><?php _e( 'Switch Plan', 'dokan' ); ?></a>
+                                <?php endif; ?>
                             <?php endif; ?>
                         </div>
                     </div>

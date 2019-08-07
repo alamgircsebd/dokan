@@ -311,6 +311,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
         $response = wp_remote_request( $base_url, $args );
 
         if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
+            delete_user_meta( $user_id, 'subscription_code' );
             return true;
         }
 
@@ -394,50 +395,36 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
     }
 
     /**
-     * Edit a subscription
+     * Update subscription with new plan
+     *
+     * @since DOKAN_PRO_SINCE
      *
      * @param  string $subcription_code
-     * @param  string $amount
-     * @param  string $day
-     * @param  string $month
-     * @param  string $year
+     * @param  string $plan_id
      *
      * @return boolean
      */
-    public function edit_subscription( $subscription_code, $amount, $day, $month, $year ) {
-        if ( empty( $subscription_code ) ) {
-            return false;
-        }
-
-        if ( empty( $amount ) || empty( $day ) || empty( $month ) || empty( $year ) ) {
-            return false;
-        }
-
+    public function update_subscription( $subscription_code, $plan_id ) {
         $base_url = $this->base_url . '/subscriptions/' . $subscription_code;
 
-        $body = array(
-            'plan' => array(
-                'code' => $subscription_code
-            ),
-            'amount' => $amount * 100,
-            'next_invoice_date' => array(
-                'day'   => $day,
-                'month' => $month,
-                'year'  => $year
-            )
-        );
-        $args = array(
+        $body = [
+            'plan' => [
+                'code' => $plan_id
+            ]
+        ];
+
+        $args = [
             'method'      => 'PUT',
             'timeout'     => 45,
             'redirection' => 5,
             'httpversion' => '1.0',
             'blocking'    => true,
-            'headers'     => array(
+            'headers'     => [
                 'Authorization' => 'Basic ' . base64_encode( $this->token . ':' . $this->key ),
                 'Content-Type'  => 'application/json'
-            ),
+            ],
             'body' => json_encode( $body ),
-        );
+        ];
 
         $response = wp_remote_request( $base_url, $args );
 
