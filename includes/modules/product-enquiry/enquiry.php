@@ -64,7 +64,7 @@ class Dokan_Product_Enquiry {
         add_action( 'wp_ajax_nopriv_dokan_product_enquiry', array( $this, 'send_email' ) );
 
         add_filter( 'woocommerce_product_tabs', array( $this, 'register_tab' ), 99 );
-        add_filter( 'dokan_settings_fields', array( $this, 'guest_user_settings' ), 10 );
+        add_filter( 'dokan_settings_selling_option_vendor_capability', array( $this, 'guest_user_settings' ) );
 
         add_filter( 'dokan_email_classes', array( $this, 'add_email_class' ) );
         add_filter( 'dokan_email_list', array( $this, 'add_email_template_file' ) );
@@ -241,7 +241,7 @@ class Dokan_Product_Enquiry {
     * @return void
     **/
     public function guest_user_settings( $settings_fields ) {
-        $settings_fields['dokan_selling']['enable_guest_user_enquiry'] = array(
+        $settings_fields['enable_guest_user_enquiry'] = array(
             'name'    => 'enable_guest_user_enquiry',
             'label'   => __( 'Guest Product Enquiry', 'dokan' ),
             'desc'    => __( 'Enable/Disable product enquiry for guest user', 'dokan' ),

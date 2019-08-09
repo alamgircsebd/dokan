@@ -158,8 +158,8 @@ class Dokan_Pro_Assets {
      */
     public function admin_localize_script( $scripts ) {
         $general_settings                  = get_option( 'dokan_general', [] );
-        $banner_width                      = ! empty( $general_settings['store_banner_width'] ) ? $general_settings['store_banner_width'] : 625;
-        $banner_height                     = ! empty( $general_settings['store_banner_height'] ) ? $general_settings['store_banner_height'] : 300;
+        $banner_width                      = dokan_get_option( 'store_banner_width', 'dokan_appearance', 625 );
+        $banner_height                     = dokan_get_option( 'store_banner_width', 'dokan_appearance', 625 );
         $has_flex_width                    = ! empty( $general_settings['store_banner_flex_width'] ) ? $general_settings['store_banner_flex_width'] : true;
         $has_flex_height                   = ! empty( $general_settings['store_banner_flex_height'] ) ? $general_settings['store_banner_flex_height'] : true;
 

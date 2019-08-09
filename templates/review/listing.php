@@ -10,7 +10,7 @@
 ?>
 <form id="dokan_comments-form" action="" method="post">
     <table id="dokan-comments-table" class="dokan-table dokan-table-striped">
-        <?php if ( dokan_get_option( 'seller_review_manage', 'dokan_general', 'on' ) == 'on' ) : ?>
+        <?php if ( dokan_get_option( 'seller_review_manage', 'dokan_selling', 'on' ) == 'on' ) : ?>
         <thead>
             <tr>
                 <th class="col-check"><input class="dokan-check-all" type="checkbox" ></th>
@@ -37,7 +37,7 @@
         </tbody>
 
     </table>
-<?php if ( current_user_can( 'dokan_manage_reviews' ) && dokan_get_option( 'seller_review_manage', 'dokan_general', 'on' ) == 'on' ) : ?>
+<?php if ( current_user_can( 'dokan_manage_reviews' ) && dokan_get_option( 'seller_review_manage', 'dokan_selling', 'on' ) == 'on' ) : ?>
     <select name="comment_status">
         <?php
             if ( $comment_status == 'hold' ) {

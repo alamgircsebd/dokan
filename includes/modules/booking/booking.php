@@ -124,6 +124,7 @@ class Dokan_WC_Booking {
 
         // insert bookable porduct type
         add_filter( 'dokan_get_product_types', array( $this, 'insert_bookable_product_type' ) );
+        add_filter( 'dokan_get_coupon_types', [ $this, 'add_booking_discount' ] );
     }
 
     /**
@@ -1174,6 +1175,21 @@ class Dokan_WC_Booking {
         );
 
         return $capabilities;
+    }
+
+    /**
+     * Add booking discount type
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $types
+     *
+     * @return array
+     */
+    public function add_booking_discount( $types ) {
+        $types['booking_person'] = __( 'Booking Person Discount (Amount Off Per Person)', 'dokan' );
+
+        return $types;
     }
 }
 

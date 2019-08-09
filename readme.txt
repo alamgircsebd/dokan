@@ -172,6 +172,22 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.9.12 -> August 09, 2019
+---------------------------------------------------------------------
+- [new]   Add stripe 3D secure and strong customer authentication (Stripe Connect Module)
+- [new]   Add subscription pack upgrade downgrade option for vendors (Subscription Module)
+- [new]   Add wholesale options in the admin backend (Wholesale Module)
+- [new]   Add support for vendor verification widget (Elementor Module)
+- [fix]   WordPress backend date format while printing date in coupon and announcement
+- [fix]   Attach product discount in order details
+- [fix]   Coupon discount type changes on coupon edit
+- [fix]   If subscription on registration enabled ignore email verification (Subscription Module)
+- [fix]   Refund calculation is wrong when it's done from the admin backend
+- [fix]   Product variations are not creating from imported CSV
+- [tweak] Always return response headers even if no wholesale customers found (Wholesale Module)
+- [tweak] Return more detailed error message for Wirecard and Stripe
+- [tweak] Dokan admin settings rearrange and refactor
+
 v2.9.11 -> July 03, 2019
 ---------------------------------------------------------------------
 - [new]   Add elementor page builder widgets for Dokan (Elementor Module)

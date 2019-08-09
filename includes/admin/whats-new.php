@@ -1,6 +1,52 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.12',
+        'released' => '2019-08-09',
+        'changes'  => array(
+            array(
+                'title'         => 'Stripe 3D Secure and Authentication',
+                'type'          => 'New',
+                'description'   => 'Add stripe 3D secure and strong customer authentication (Stripe Connect Module).'
+            ),
+            array(
+                'title'         => 'Subscription Upgrade Downgrade',
+                'type'          => 'New',
+                'description'   => 'Add subscription pack upgrade downgrade option for vendors (Subscription Module).'
+            ),
+            array(
+                'title'         => 'Wholesale Options in Backend',
+                'type'          => 'New',
+                'description'   => 'Add wholesale options in the admin backend (Wholesale Module).'
+            ),
+            array(
+                'title'         => 'Elementor Vendor Verification Widget',
+                'type'          => 'New',
+                'description'   => 'Add support for vendor verification widget (Elementor Module).'
+            ),
+            array(
+                'title'         => 'Product Discount',
+                'type'          => 'Fix',
+                'description'   => 'Attach product discount in order details.'
+            ),
+            array(
+                'title'         => 'Coupon Type Changes',
+                'type'          => 'Fix',
+                'description'   => 'Coupon discount type changes on coupon edit. This issue has been fixed in this release.'
+            ),
+            array(
+                'title'         => 'Order Refund from Admin Backend',
+                'type'          => 'Fix',
+                'description'   => 'Refund calculation was wrong when it\'s done from the admin backend. It\'s been fixed in this release.'
+            ),
+            array(
+                'title'         => 'Dokan Admin Settings',
+                'type'          => 'Improvement',
+                'description'   => 'Dokan admin settings rearrange and refactor.'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.11',
         'released' => '2019-07-02',
         'changes'  => array(

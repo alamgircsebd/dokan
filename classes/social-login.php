@@ -254,11 +254,21 @@ Class Dokan_Social_Login {
     public function dokan_social_settings_fields( $settings_fields ) {
 
         $settings_fields['dokan_social_api'] = array(
+            'sectio_title' => array(
+                'name'  => 'sectio_title',
+                'label' => __( 'Social API', 'dokan' ),
+                'type'  => 'sub_section',
+            ),
             'enabled' => array(
                 'name'  => 'enabled',
                 'label' => __( 'Enable Social Login', 'dokan-social-api' ),
                 'type'  => "checkbox",
                 'desc'  => __( 'Enabling this will add Social Icons under registration form to allow users to login or register using Social Profiles', 'dokan-social-api' ),
+            ),
+            'facebook_details' => array(
+                'name'  => 'facebook_details',
+                'label' => __( 'Facebook', 'dokan' ),
+                'type'  => 'sub_section',
             ),
             'facebook_app_label'  => array(
                 'name'  => 'fb_app_label',
@@ -282,6 +292,11 @@ Class Dokan_Social_Login {
                 'label' => __( 'App Secret', 'dokan-social-api' ),
                 'type'  => 'text',
             ),
+            'twitter_details' => array(
+                'name'  => 'twitter_details',
+                'label' => __( 'Twitter', 'dokan' ),
+                'type'  => 'sub_section',
+            ),
             'twitter_app_label'   => array(
                 'name'  => 'twitter_app_label',
                 'label' => __( 'Twitter App Settings', 'dokan-social-api' ),
@@ -304,6 +319,11 @@ Class Dokan_Social_Login {
                 'label' => __( 'Consumer Secret', 'dokan-social-api' ),
                 'type'  => 'text',
             ),
+            'google_details' => array(
+                'name'  => 'google_details',
+                'label' => __( 'Google', 'dokan' ),
+                'type'  => 'sub_section',
+            ),
             'google_app_label'    => array(
                 'name'  => 'google_app_label',
                 'label' => __( 'Google App Settings', 'dokan-social-api' ),
@@ -325,6 +345,11 @@ Class Dokan_Social_Login {
                 'name'  => 'google_app_secret',
                 'label' => __( 'Client secret', 'dokan-social-api' ),
                 'type'  => 'text',
+            ),
+            'linkedin_details' => array(
+                'name'  => 'linkedin_details',
+                'label' => __( 'Linkedin', 'dokan' ),
+                'type'  => 'sub_section',
             ),
             'linkedin_app_label'  => array(
                 'name'  => 'linkedin_app_label',

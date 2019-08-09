@@ -459,7 +459,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         // if paid via automatic payment such as stripe
         $order = wc_get_order( $order_id );
 
-        if ( $order->get_payment_method() === 'dokan-stripe-connect' ) {
+        if ( 'dokan-stripe-connect' === $order->get_payment_method() && ! $order->get_meta( 'paid_with_dokan_3ds' ) ) {
             $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
                 array(
                     'vendor_id'     => $vendor_id,

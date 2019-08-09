@@ -174,7 +174,7 @@ class Dokan_Moip_Withdraw {
                 if ( empty( $vendor_moip_account ) ) {
 
                     echo '<div class="dokan-alert dokan-alert-danger">';
-                        _e( 'Your account is not yet connected with Wirecard. Connect with Wirecard to receive your commissions.', 'dokan' );
+                        _e( 'Your account is not connected to Wirecard. Connect your Wirecard account to receive payouts.', 'dokan' );
                     echo '</div>';
 
                     $token  = $this->settings['testmode'] == 'yes' ? $this->settings['test_token'] : $this->settings['production_token'];

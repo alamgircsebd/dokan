@@ -308,7 +308,7 @@ class Dokan_Seller_Verification {
      * @return void
      */
     public function register_widgets() {
-        register_widget( 'Dokan_Verification_list' );
+        register_widget( 'Dokan_Store_Verification_list' );
     }
 
     public function init_session() {

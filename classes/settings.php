@@ -423,9 +423,9 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
 
         // Set discount data in seller profile
         $data = array(
-            'show_min_order_discount'      => isset( $_POST['setting_show_minimum_order_discount_option'] ) ? 'yes' : 'no',
-            'setting_minimum_order_amount' => isset( $_POST['setting_minimum_order_amount'] ) ? sanitize_text_field( $_POST['setting_minimum_order_amount'] ) : '',
-            'setting_order_percentage'     => isset( $_POST['setting_order_percentage'] ) ? sanitize_text_field( $_POST['setting_order_percentage'] ) : '',
+            'show_min_order_discount'      => isset( $_POST['setting_show_minimum_order_discount_option'] ) ? wc_clean( $_POST['setting_show_minimum_order_discount_option'] ) : '',
+            'setting_minimum_order_amount' => isset( $_POST['setting_minimum_order_amount'] ) ? wc_clean( $_POST['setting_minimum_order_amount'] ) : '',
+            'setting_order_percentage'     => isset( $_POST['setting_order_percentage'] ) ? wc_clean( $_POST['setting_order_percentage'] ) : '',
         );
 
         $settings_data = wp_parse_args( $data, $dokan_settings );
@@ -625,7 +625,7 @@ class Dokan_Pro_Settings extends Dokan_Template_Settings {
         $biography = ! empty( $store_info['vendor_biography'] ) ? $store_info['vendor_biography'] : '';
         ?>
         <div class="dokan-form-group">
-            <label class="dokan-w3 dokan-control-label"><?php _e( 'Biography', 'dokan-lite' ); ?></label>
+            <label class="dokan-w3 dokan-control-label"><?php _e( 'Biography', 'dokan' ); ?></label>
             <div class="dokan-w7 dokan-text-left">
                 <?php
                     wp_editor( $biography, 'vendor_biography', [

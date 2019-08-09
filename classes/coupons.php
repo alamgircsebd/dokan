@@ -484,10 +484,8 @@ class Dokan_Pro_Coupons {
 
             $post                       = get_post( $_GET['post'] );
             $button_name                = __( 'Update Coupon', 'dokan' );
-
             $discount_type              = get_post_meta( $post->ID, 'discount_type', true );
             $amount                     = get_post_meta( $post->ID, 'coupon_amount', true );
-
             $products                   = get_post_meta( $post->ID, 'product_ids', true );
             $exclude_products           = get_post_meta( $post->ID, 'exclude_product_ids', true );
             $product_categories         = get_post_meta( $post->ID, 'product_categories', true );
@@ -609,7 +607,6 @@ class Dokan_Pro_Coupons {
 
         $exclude_products = str_replace( ' ', '', $exclude_products );
         $exclude_products = explode( ',', $exclude_products );
-        $discount_type    = ! empty( $_POST['discount_type'] ) ? $_POST['discount_type'] : '';
 
         if ( empty( $post_id ) && ! current_user_can( 'dokan_add_coupon' ) ) {
             dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to add coupon', 'dokan' ) ) );
@@ -647,9 +644,8 @@ class Dokan_Pro_Coupons {
      */
     public static function get_coupon_types() {
         return apply_filters( 'dokan_get_coupon_types', [
-            'fixed_product'   => __( 'Product Discount', 'dokan' ),
-            'percent_product' => __( 'Product % Discount', 'dokan' ),
-            'booking_person'  => __( 'Booking Person Discount (Amount Off Per Person)', 'dokan' )
+            'fixed_product'   => __( 'Fixed Product Discount', 'dokan' ),
+            'percent_product' => __( 'Percentage Discount', 'dokan' )
         ] );
     }
 

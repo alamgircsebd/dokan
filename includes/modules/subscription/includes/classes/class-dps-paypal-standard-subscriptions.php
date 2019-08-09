@@ -167,6 +167,9 @@ class DPS_PayPal_Standard_Subscriptions {
      * @return [type]              [description]
      */
     public static function paypal_standard_subscription_args( $paypal_args ) {
+        if ( self::has_subscription() ) {
+            throw new Exception( __( 'Sorry, with paypal you can\'t switch subscription plan.', 'dokan' ) );
+        }
 
         $custom      = (array)json_decode( $paypal_args['custom'] );
         $order_id    = $custom['order_id'];
@@ -578,6 +581,23 @@ class DPS_PayPal_Standard_Subscriptions {
         }
     }
 
+    /**
+     * Check whether vendor has subscriptoin or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public static function has_subscription() {
+        $vendor_id = dokan_get_current_user_id();
+        $vendor    = dokan()->vendor->get( $vendor_id )->subscription;
+
+        if ( ! $vendor ) {
+            return false;
+        }
+
+        return $vendor->has_subscription();
+    }
 }
 
 DPS_PayPal_Standard_Subscriptions::init();

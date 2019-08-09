@@ -1137,11 +1137,10 @@ class Dokan_Pro_Ajax {
             }
         }
 
-
         $refund_id = $dokan_refund->insert_refund( $_POST );
 
         if ( ! $refund_id ) {
-            wp_send_json_error( __( 'Something went wrong', 'dokan' ) );
+            wp_send_json_error( __( 'Unable to insert refund', 'dokan' ) );
         }
 
         do_action( 'dokan_after_refund_request', $refund_id, $_POST );

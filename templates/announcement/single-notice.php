@@ -13,7 +13,7 @@
             <h1 class="entry-title"><?php echo $notice_data->post_title; ?></h1>
         </span>
     </header>
-    <span class="dokan-single-announcement-date"><i class="fa fa-calendar"></i> <?php echo date('F j, Y ', strtotime( $notice_data->post_date ) ); ?></span>
+    <span class="dokan-single-announcement-date"><i class="fa fa-calendar"></i> <?php echo date_i18n( get_option( 'date_format' ), strtotime( $notice_data->post_date ) ); ?></span>
 
     <div class="entry-content">
         <?php echo wpautop( $notice_data->post_content ); ?>

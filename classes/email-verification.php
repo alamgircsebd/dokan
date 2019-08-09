@@ -1,5 +1,9 @@
 <?php
 
+use DokanPro\Modules\Subscription\Helper;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Dokan Email Verification class
  *
@@ -8,7 +12,6 @@
  * @package dokan-pro
  *
  */
-
 Class Dokan_Email_Verification {
 
     private $base_url;
@@ -50,8 +53,8 @@ Class Dokan_Email_Verification {
         add_filter( 'dokan_settings_sections', array( $this, 'dokan_email_verification_settings' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'dokan_email_settings_fields' ) );
 
-        if ( 'on' != dokan_get_option( 'enabled', 'dokan_email_verification' ) ) {
-           return;
+        if ( $this->maybe_verification_not_needed() ) {
+            return;
         }
 
         add_action( 'woocommerce_created_customer', array( $this,'send_verification_email'), 5, 3 );
@@ -391,4 +394,22 @@ Class Dokan_Email_Verification {
         return $pages_array;
     }
 
+    /**
+     * Check whether email verification is needed or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public function maybe_verification_not_needed() {
+        if ( 'on' !== dokan_get_option( 'enabled', 'dokan_email_verification' ) ) {
+            return true;
+        }
+
+        if ( class_exists( 'Dokan_Product_Subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
+            return true;
+        }
+
+        return false;
+    }
 }
