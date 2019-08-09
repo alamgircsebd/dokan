@@ -583,7 +583,8 @@ var Multiselect = dokan_get_lib('Multiselect');
                 settings: {}
             },
             cost_description: this.__('Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan'),
-            editShippingMethodTitle: this.__('Edit Shipping Method', 'dokan')
+            editShippingMethodTitle: this.__('Edit Shipping Method', 'dokan'),
+            postCodeTitle: this.__('Postcodes need to be comma separated', 'dokan')
         };
     },
 
@@ -1753,12 +1754,7 @@ var render = function() {
                   _c("i", {
                     directives: [{ name: "tooltip", rawName: "v-tooltip" }],
                     staticClass: "fa fa-question-circle",
-                    attrs: {
-                      title: _vm.__(
-                        "Postcodes need to be comma separated",
-                        "dokan"
-                      )
-                    }
+                    attrs: { title: _vm.postCodeTitle }
                   })
                 ]
               ),
