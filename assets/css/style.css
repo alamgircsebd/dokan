@@ -377,7 +377,7 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 */
-/* 
+/*
     Created on : Feb 6, 2017, 11:07:51 AM
     Author     : rafsun
 */
@@ -399,6 +399,13 @@ and open the template in the editor.
 }
 .dokan-panel .dokan-panel-body .wc-order-data-row .refund-actions {
   float: right;
+}
+.dokan-orders-content .label.dokan-order-discount,
+.dokan-orders-content .label.dokan-quantity-discount {
+  font-size: 100%;
+  padding: 0;
+  color: #444;
+  font-weight: normal;
 }
 .dokan-coupon-content .dashboard-coupons-area .dokan-coupon-header {
   margin-bottom: 20px;
