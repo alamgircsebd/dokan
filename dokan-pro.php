@@ -39,6 +39,15 @@ class Dokan_Pro {
     public $version = '2.9.19';
 
     /**
+     * Databse version key
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @var string
+     */
+    private $db_version_key = 'dokan_pro_version';
+
+    /**
      * Constructor for the Dokan_Pro class
      *
      * Sets up all the appropriate hooks and actions
@@ -690,6 +699,17 @@ class Dokan_Pro {
     public function register_widgets() {
         register_widget( 'Dokan_Best_Seller_Widget' );
         register_widget( 'Dokan_Feature_Seller_Widget' );
+    }
+
+    /**
+     * Get Dokan db version key
+     *
+     * @since DOKAN_LITE_SINCE
+     *
+     * @return string
+     */
+    public function get_db_version_key() {
+        return $this->db_version_key;
     }
 }
 
