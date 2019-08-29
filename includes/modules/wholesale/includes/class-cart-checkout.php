@@ -165,7 +165,8 @@ class Dokan_Wholesale_Cart_Checkout {
 
         if ( isset( $cart_item['wholesale'] ) ) {
             if ( isset( $cart_item['wholesale']['enable_wholesale'] ) && 'yes' == $cart_item['wholesale']['enable_wholesale'] ) {
-                $remaining_qty = absint( $cart_item['wholesale']['quantity'] - $cart_item['quantity'] );
+                $remaining_qty = absint( $cart_item['wholesale']['quantity'] ) - absint( $cart_item['quantity'] );
+
                 if ( $remaining_qty > 0 ) {
                     echo '<br>';
                     echo sprintf( __( 'For wholesale price buy <strong>%d</strong> more units' ), $remaining_qty );
