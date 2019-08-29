@@ -1446,3 +1446,56 @@ function dokan_set_variations_args( $args ) {
 
     return $args;
 }
+
+/**
+ * Set variation product author to product vendor id
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param int $variation_id
+ *
+ * @return void
+ */
+function dokan_override_variation_product_author( $variation_id ) {
+    if ( ! is_admin() ) {
+        return;
+    }
+
+    $variation_product = get_post( $variation_id );
+
+    if ( ! $variation_product ) {
+        return;
+    }
+
+    $product_id = $variation_product->post_parent;
+
+    if ( ! $product_id ) {
+        return;
+    }
+
+    $product = wc_get_product( $product_id );
+
+    if ( ! $product ) {
+        return;
+    }
+
+    $vendor    = dokan_get_vendor_by_product( $product );
+    $vendor_id = $vendor->get_id();
+
+    if ( ! $vendor || ! $vendor_id ) {
+        return;
+    }
+
+    if ( absint( $vendor_id ) === absint( $variation_product->post_author ) ) {
+        return;
+    }
+
+    wp_update_post( array(
+        'ID'          => $variation_id,
+        'post_author' => $vendor_id
+    ) );
+
+    do_action( 'dokan_after_override_variation_product_author', $product, $vendor_id );
+}
+
+add_action( 'woocommerce_save_product_variation', 'dokan_override_variation_product_author' );
