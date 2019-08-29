@@ -11,7 +11,7 @@
  * @return void
  */
 function dokan_geo_get_template( $name, $args = [] ) {
-    dokan_get_template( "$name.php", $args, DOKAN_GEOLOCATION_VIEWS, trailingslashit( DOKAN_GEOLOCATION_VIEWS ) );
+    dokan_get_template( "$name.php", $args, 'dokan/modules/geolocation', trailingslashit( DOKAN_GEOLOCATION_VIEWS ) );
 }
 
 /**
