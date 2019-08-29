@@ -15,6 +15,7 @@
             <li><router-link :to="{ name: 'Announcement' }" active-class="current" exact v-html="sprintf( __( 'All <span class=\'count\'>(%s)</span>', 'dokan' ), counts.all )"></router-link> | </li>
             <li><router-link :to="{ name: 'Announcement', query: { status: 'publish' }}" active-class="current" exact v-html="sprintf( __( 'Published <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.publish )"></router-link> | </li>
             <li><router-link :to="{ name: 'Announcement', query: { status: 'pending' }}" active-class="current" exact v-html="sprintf( __( 'Pending <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.pending )"></router-link> | </li>
+            <li><router-link :to="{ name: 'Announcement', query: { status: 'future' }}" active-class="current" exact v-html="sprintf( __( 'Scheduled <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.future )"></router-link></li>
             <li><router-link :to="{ name: 'Announcement', query: { status: 'draft' }}" active-class="current" exact v-html="sprintf( __( 'Draft <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.draft )"></router-link> | </li>
             <li><router-link :to="{ name: 'Announcement', query: { status: 'trash' }}" active-class="current" exact v-html="sprintf( __( 'Trash <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.trash )"></router-link></li>
         </ul>
@@ -116,7 +117,8 @@
                     'publish' : this.__( 'Published', 'dokan' ),
                     'pending' : this.__( 'Pending', 'dokan' ),
                     'draft' : this.__( 'Draft', 'dokan' ),
-                    'trash' : this.__( 'Trash', 'dokan' )
+                    'trash' : this.__( 'Trash', 'dokan' ),
+                    'future' : this.__( 'Scheduled', 'dokan' ),
                 },
 
                 counts: {
@@ -124,7 +126,8 @@
                     publish: 0,
                     draft: 0,
                     pending: 0,
-                    trash: 0
+                    trash: 0,
+                    future: 0
                 },
                 notFound: this.__( 'No announcement found.', 'dokan' ),
                 totalPages: 1,
@@ -138,7 +141,7 @@
                     'content': { label: this.__( 'Content', 'dokan' ) },
                     'send_to': { label: this.__( 'Sent To', 'dokan' ) },
                     'status': { label: this.__( 'Status', 'dokan' ) },
-                    'created_at': { label: this.__( 'Created Date', 'dokan' ) },
+                    'created_at': { label: this.__( 'Date', 'dokan' ) },
                 },
 
                 actionColumn: 'title',
@@ -218,6 +221,7 @@
                 this.counts.pending = parseInt( xhr.getResponseHeader('X-Status-Pending') );
                 this.counts.draft   = parseInt( xhr.getResponseHeader('X-Status-Draft') );
                 this.counts.trash   = parseInt( xhr.getResponseHeader('X-Status-Trash') );
+                this.counts.future  = parseInt( xhr.getResponseHeader('X-Status-Future') );
             },
 
             updatePagination(xhr) {
@@ -338,8 +342,7 @@
                     });
                 }
 
-            }
-
+            },
         },
 
         created() {
@@ -402,6 +405,11 @@
             .draft {
                 background: #e5e5e5;
                 color: #761919
+            }
+
+            .future {
+                background: #8080805c;
+                color: #000000e0;
             }
         }
     }

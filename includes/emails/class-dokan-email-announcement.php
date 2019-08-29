@@ -27,13 +27,7 @@ class Dokan_Email_Announcement extends WC_Email {
 		$this->template_plain   = 'emails/plain/announcement.php';
         $this->template_base    = DOKAN_PRO_DIR.'/templates/';
 
-		// Triggers for this email
-		// add_action( 'dokan_after_announcement_saved', array( $this, 'trigger' ), 30, 2 );
-
-		// Call parent constructor
 		parent::__construct();
-
-		// Other settings
 		$this->recipient = 'selecetedvendors@the.announcement';
 	}
 
@@ -62,7 +56,7 @@ class Dokan_Email_Announcement extends WC_Email {
             return;
         }
 
-        $seller_info  = get_userdata( $seller_id );
+        $seller_info = get_userdata( $seller_id );
 
         if ( ! $seller_info ) {
             return;
