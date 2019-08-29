@@ -80,6 +80,10 @@ class Dokan_Stripe {
 
         // approve refund request automatically such as stripe connect
         add_action( 'dokan_after_refund_request', [ $this, 'process_refund_request' ], 10, 2 );
+
+        // set guest customer billing data to session
+        add_filter( 'woocommerce_checkout_fields', [ $this, 'trigger_update_checkout_on_change' ] );
+        add_action( 'woocommerce_checkout_update_order_review', [ $this, 'set_email_prop_to_session' ] );
     }
 
     /**
@@ -788,6 +792,46 @@ class Dokan_Stripe {
         $refund->update_status( $refund_id, $refund->get_status_code( 'completed' ) );
 
         return wp_send_json_success( __( 'Your refund request has been processed.', 'dokan' ) );
+    }
+
+    /**
+     * Trigger update checkout on field change
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $fileds
+     *
+     * @return array
+     */
+    public function trigger_update_checkout_on_change( $fields ) {
+        if ( is_user_logged_in() ) {
+            return $fields;
+        }
+
+        $fields['billing']['billing_email']['class'][] = 'update_totals_on_change';
+
+        return $fields;
+    }
+
+    /**
+     * Set guest customer email to session
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param string $post_data
+     *
+     * @return void
+     */
+    public function set_email_prop_to_session( $post_data ) {
+        if ( is_user_logged_in() ) {
+            return;
+        }
+
+        parse_str( $post_data, $data );
+        $billing_email = ! empty( $data['billing_email'] ) ? wc_clean( $data['billing_email'] ) : 'guest@customer.com';
+
+        WC()->session->__unset( 'billing_email' );
+        WC()->session->set( 'billing_email', $billing_email );
     }
 }
 

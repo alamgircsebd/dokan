@@ -1026,7 +1026,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $this->customer_details['state']       = $session->customer['state'];
         $this->customer_details['country']     = $session->customer['country'];
         $this->customer_details['postal_code'] = $session->customer['postcode'];
-        $this->customer_details['email']       = $session->customer['email'];
+        $this->customer_details['email']       = ! is_user_logged_in() ? $session->billing_email : $session->customer['email'];
 
         foreach ( $session->cart as $data ) {
             $product_id = ! empty( $data['product_id'] ) ? $data['product_id'] : 0;
