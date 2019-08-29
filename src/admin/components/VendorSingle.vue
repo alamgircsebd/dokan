@@ -492,7 +492,6 @@ export default {
 
         fetch() {
             const self = this;
-
             dokan.api.get('/stores/' + self.id )
             .done( ( response ) => {
                 Object.assign( self.fakeStore, self.store );
@@ -516,9 +515,14 @@ export default {
                 }
             }
 
-            // set default payment object for v-model
-            if ( 'payment' in response && response.payment.bank && response.payment.bank.length < 1 ) {
-                this.store.payment = this.fakeStore.payment;
+            // set default bank paymet object if it's not found in the API response
+            if ( 'payment' in response && typeof response.payment.bank === 'undefined' ) {
+                this.store.payment.bank = this.fakeStore.payment.bank;
+            }
+
+            // set default paypal paymet object if it's not found in the API response
+            if ( 'payment' in response && typeof response.payment.paypal === 'undefined' ) {
+                this.store.payment.paypal = this.fakeStore.payment.paypal;
             }
 
             if ( 'email' in response ) {
