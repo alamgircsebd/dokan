@@ -29,8 +29,13 @@ $store_shipping_enabled  = get_user_meta( $user_id, '_dps_shipping_enable', true
 $wc_shipping_enabled     = get_option( 'woocommerce_calc_shipping' ) == 'yes' ? true : false;
 $wc_tax_enabled          = get_option( 'woocommerce_calc_taxes' ) == 'yes' ? true : false;
 
-$tax_classes             = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
-$classes_options         = array();
+if ( class_exists( 'WC_Tax' ) ) {
+    $tax_classes = WC_Tax::get_tax_classes();
+} else {
+    $tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
+}
+
+$classes_options         = [];
 $classes_options['']     = __( 'Standard', 'dokan' );
 
 if ( $tax_classes ) {

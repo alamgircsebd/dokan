@@ -270,8 +270,13 @@ function dokan_variable_product_type_options() {
         }
 
     // Get tax classes
-    $tax_classes           = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
-    $tax_class_options     = array();
+    if ( class_exists( 'WC_Tax' ) ) {
+        $tax_classes = WC_Tax::get_tax_classes();
+    } else {
+        $tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
+    }
+
+    $tax_class_options     = [];
     $tax_class_options[''] = __( 'Standard', 'dokan' );
 
     if ( $tax_classes ) {
