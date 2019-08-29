@@ -12,7 +12,7 @@ class ProductStatusChanger {
     /**
      * Boot method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      */
     protected function boot() {
         $this->hooks();
@@ -21,7 +21,7 @@ class ProductStatusChanger {
     /**
      * Init hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      */
     protected function hooks() {
         add_filter( 'dokan_bulk_product_statuses', [ $this, 'product_statuses' ] );
@@ -34,7 +34,7 @@ class ProductStatusChanger {
     /**
      * Add product status filter
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $statuses
      *
@@ -53,7 +53,7 @@ class ProductStatusChanger {
     /**
      * Publish products
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param  string $action
      * @param  array $product_ids
@@ -103,7 +103,7 @@ class ProductStatusChanger {
     /**
      * Product filtering form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param  array $get_data
      *
@@ -137,7 +137,7 @@ class ProductStatusChanger {
     /**
      * Filter best selling products
      *
-     *@since DOKAN_PRO_SINCE
+     *@since 2.9.13
      *
      * @param  array $args
      * @param  array $get_data
@@ -179,7 +179,7 @@ class ProductStatusChanger {
     /**
      * Set default tax query
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $args
      *
@@ -201,7 +201,7 @@ class ProductStatusChanger {
     /**
      * Maybe hide the form fields when vendor has reached the product uploading limit
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */
@@ -216,7 +216,7 @@ class ProductStatusChanger {
     /**
      * Change product status on subscription purchased
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $vendor_id
      *

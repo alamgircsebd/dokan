@@ -5,7 +5,7 @@ Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, stor
 Requires at least: 4.4
 Tested up to: 5.2.2
 WC requires at least: 3.0
-WC tested up to: 3.6.5
+WC tested up to: 3.7.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,22 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.13 -> August 29, 2019
+--------------------------------------------------------------------
+- [new]   Add scheduled announcement option for admin.
+- [new]   Add identity verification and unread message count in live chat (Live Chat Module).
+- [new]   Add admin defined location on Geolocation map to be shown instead of default `Dhaka, Bangladesh` when there is no vendor or product found (Geolocation Module).
+- [fix]   Guest user is unable to checkout with stripe (Stripe Module).
+- [fix]   Add ca-certificate file to allow certificate verification of stripe SSL (Stripe Module).
+- [fix]   If variable product is created by admin for a vendor, vendor shipping method doesn't work.
+- [fix]   Product lot discount is getting applied on sub-orders even though discount is disabled.
+- [fix]   Wholesale price minimum quantity calculation is not correct (Wholesale Module).
+- [fix]   Social login facility is missing in the registration form which is created via vendor-registration shortcode.
+- [fix]   Show error notice when admin tries to process refund from the parent order.
+- [fix]   Allow geolocation template to be override from the child theme (Geolocation Module).
+- [fix]   Use the new WC_Tax class to fetch tax classes when its available.
+- [fix]   Set default bank payment object if it's not found from the API response.
 
 v2.9.12 -> August 09, 2019
 ---------------------------------------------------------------------

@@ -135,7 +135,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Add wholesale matabox
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
@@ -181,7 +181,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Save wholesale matabox data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $product_id
      *
@@ -206,7 +206,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Add wholesale variation metabox
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param  int $loop
      * @param  array $variation_data
@@ -258,7 +258,7 @@ class Dokan_Wholesale_Admin {
     /**
      * Save whole variation data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $product_id
      * @param int $loop

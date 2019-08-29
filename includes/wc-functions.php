@@ -862,7 +862,7 @@ add_action( 'woocommerce_admin_order_totals_after_tax', 'dokan_display_order_dis
  * @param array $table_rows
  * @param  WC_Order $order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @return array
  */
@@ -898,7 +898,7 @@ function dokan_display_order_discounts( $table_rows, $order ) {
 /**
  * Display order discounts on wc admin order table
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  * @param int $order_id
  *
  * @return void
@@ -936,7 +936,7 @@ function dokan_display_order_discounts_on_wc_admin_order( $order_id ) {
  *
  * @param WC_Order $order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @return array
  */
@@ -1062,7 +1062,7 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
 /**
  * Set discount on main order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @param WC_Order $order
  *
@@ -1433,7 +1433,7 @@ add_filter( 'woocommerce_variable_children_args', 'dokan_set_variations_args' );
 /**
  * Include pending product status into variation args
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @param array $args
  */
@@ -1450,7 +1450,7 @@ function dokan_set_variations_args( $args ) {
 /**
  * Set variation product author to product vendor id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @param int $variation_id
  *

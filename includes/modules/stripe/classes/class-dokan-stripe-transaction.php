@@ -6,7 +6,7 @@ use DokanPro\Modules\Stripe\Helper;
 /**
  * The transaction class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  */
 class Transaction {
     /**
@@ -40,7 +40,7 @@ class Transaction {
     /**
      * Amount to transfer
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.13
      *
      * @param  float $amount
      * @param  string $currency
@@ -57,7 +57,7 @@ class Transaction {
     /**
      * The transfer will be made from which account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param string $admin
      *
@@ -72,7 +72,7 @@ class Transaction {
     /**
      * The transfer will be made to which account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param string $vendor
      *
@@ -87,7 +87,7 @@ class Transaction {
     /**
      * Make the transer
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */

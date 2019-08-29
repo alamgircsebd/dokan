@@ -90,7 +90,7 @@ class Dokan_Pro_Admin_Settings {
     /**
      * Add vendor store options in general settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $settings_fields
      *
@@ -111,7 +111,7 @@ class Dokan_Pro_Admin_Settings {
     /**
      * Add vendor capability settings in selling option settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $settings_fields
      *
@@ -205,7 +205,7 @@ class Dokan_Pro_Admin_Settings {
     /**
      * Backward compatible settings option map
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $map
      *

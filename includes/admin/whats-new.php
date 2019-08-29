@@ -1,5 +1,51 @@
 <?php
 $changelog = array(
+     array(
+        'version'  => 'Version 2.9.13',
+        'released' => '2019-08-29',
+        'changes'  => array(
+            array(
+                'title'         => 'Scheduled Announcement',
+                'type'          => 'New',
+                'description'   => 'Add scheduled announcement option for admin.'
+            ),
+            array(
+                'title'         => 'Identity Verification in Live Chat',
+                'type'          => 'New',
+                'description'   => 'Add identity verification and unread message count in live chat (Live Chat Module).'
+            ),
+            array(
+                'title'         => 'Admin Defined Default Geolocation',
+                'type'          => 'New',
+                'description'   => 'Add admin defined location on Geolocation map to be shown instead of default `Dhaka, Bangladesh` when there is no vendor or product found (Geolocation Module).'
+            ),
+            array(
+                'title'         => 'Guest User Checkout',
+                'type'          => 'fix',
+                'description'   => 'Guest user is unable to checkout with stripe (Stripe Module).'
+            ),
+            array(
+                'title'         => 'Stripe Certificate Missing Issue',
+                'type'          => 'Fix',
+                'description'   => 'Add ca-certificate file to allow certificate verification of stripe SSL (Stripe Module).'
+            ),
+            array(
+                'title'         => 'Shipping doesn\'t Work on Variable Product',
+                'type'          => 'Fix',
+                'description'   => 'If variable product is created by admin for a vendor, vendor shipping method doesn\'t work.'
+            ),
+            array(
+                'title'         => 'Payment Fields are Missing in Edit Vendor Page',
+                'type'          => 'Fix',
+                'description'   => 'Set default bank payment object if it\'s not found from the API response.'
+            ),
+            array(
+                'title'         => 'Product Lot Discount on Sub Orders',
+                'type'          => 'Fix',
+                'description'   => 'Product lot discount is getting applied on sub-orders even though discount is disabled.'
+            ),
+        )
+    ),
     array(
         'version'  => 'Version 2.9.12',
         'released' => '2019-08-09',

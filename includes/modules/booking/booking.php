@@ -1180,7 +1180,7 @@ class Dokan_WC_Booking {
     /**
      * Add booking discount type
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $types
      *

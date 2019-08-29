@@ -5,7 +5,7 @@ use DokanPro\Modules\Subscription\Helper;
 /**
  * Dokan Stripe Subscriptoin Class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  */
 class Dokan_Stripe_Subscription {
     /**
@@ -32,7 +32,7 @@ class Dokan_Stripe_Subscription {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      */
     public function __construct() {
         $this->load_stripe_SDK();
@@ -42,7 +42,7 @@ class Dokan_Stripe_Subscription {
     /**
      * Load stripe SDK
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class Dokan_Stripe_Subscription {
     /**
      * All the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
@@ -80,7 +80,7 @@ class Dokan_Stripe_Subscription {
     /**
      * Prepare subscriptoin data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return object
      */
@@ -227,7 +227,7 @@ class Dokan_Stripe_Subscription {
     /**
      * Create subscription
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return Stripe\Subscription
      */
@@ -249,7 +249,7 @@ class Dokan_Stripe_Subscription {
     /**
      * Create customer
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */

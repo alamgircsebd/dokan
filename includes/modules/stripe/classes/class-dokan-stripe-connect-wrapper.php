@@ -6,7 +6,7 @@ use DokanPro\Modules\Stripe\Transaction;
 /**
  * DokanStripe wrapper class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  */
 class DokanStripe {
     public static function transaction() {

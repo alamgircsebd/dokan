@@ -14,7 +14,7 @@ class Dokan_Pro_Refund {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      */
     public function __construct() {
         $this->hooks();
@@ -23,7 +23,7 @@ class Dokan_Pro_Refund {
     /**
      * All the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
