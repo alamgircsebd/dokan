@@ -34,35 +34,39 @@ class Dokan_Announcement {
      *
      * @return void
      */
-    public function trigger_mail( $sellers, $data ) {
-        $announcement_data = $data->get_data();
-        $sender_ids = array();
+    public function trigger_mail( $post_id ) {
+        $data = get_post( $post_id );
 
-        if ( 'publish' !== $announcement_data['status'] ) {
+        if ( ! $data ) {
             return;
         }
 
-        $sender_type = get_post_meta( $announcement_data['id'], '_announcement_type', true );
+        if ( 'publish' !== $data->post_status ) {
+            return;
+        }
 
-        if ( 'all_seller' == $sender_type ) {
+        $sender_type = get_post_meta( $post_id, '_announcement_type', true );
+        $vendor_ids  = [];
+
+        if ( 'all_seller' === $sender_type ) {
             $users   = new WP_User_Query( array( 'role' => 'seller' ) );
-            $sellers = $users->get_results();
+            $vendors = $users->get_results();
 
-            if ( $sellers ) {
-                foreach ( $sellers as $user ) {
-                    $sender_ids[] = $user->ID;
+            if ( $vendors ) {
+                foreach ( $vendors as $vendor ) {
+                    array_push( $vendor_ids, $vendor->ID );
                 }
             }
         } else {
-            $sender_ids = wp_list_pluck( $announcement_data['sender_ids'], 'id' );
+            $vendor_ids = get_post_meta( $post_id, '_announcement_selected_user', true );
         }
 
-        $payload = array();
+        $payload = [];
 
-        foreach ( $sender_ids as $sender_id ) {
+        foreach ( $vendor_ids as $vendor_id ) {
             $payload = array(
-                'post_id'    => $announcement_data['id'],
-                'sender_id' => $sender_id
+                'post_id'   => $post_id,
+                'sender_id' => $vendor_id
             );
 
             $this->processor->push_to_queue( $payload );

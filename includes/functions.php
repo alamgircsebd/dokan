@@ -472,18 +472,38 @@ if ( ! function_exists( 'dokan_get_seller_status_count' ) ) {
 /**
  * Send announcement email
  *
- * @param $sellers
- *
- * @param $data
- *
  * @since 2.8.2
+ *
+ * @param $announcement_id
+ *
+ * @return void
  */
-function dokan_send_announcement_email( $sellers, $data ) {
+function dokan_send_announcement_email( $announcement_id ) {
     $announcement = new Dokan_Announcement();
-    $announcement->trigger_mail( $sellers, $data );
+    $announcement->trigger_mail( $announcement_id );
 }
 
-add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email', 10, 2 );
+add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email' );
+
+/**
+ * Send email for scheduled announcement
+ *
+ * @since 2.9.13
+ *
+ * @param WP_Post $post
+ *
+ * @return void
+ */
+function dokan_send_scheduled_announcement_email( $post ) {
+    if ( 'dokan_announcement' !== $post->post_type ) {
+        return;
+    }
+
+    $announcement = new Dokan_Announcement();
+    $announcement->trigger_mail( $post->ID );
+}
+
+add_action( 'future_to_publish', 'dokan_send_scheduled_announcement_email' );
 
 /**
  * Set store categories

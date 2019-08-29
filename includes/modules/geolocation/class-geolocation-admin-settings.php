@@ -112,7 +112,14 @@ class Dokan_Geolocation_Admin_Settings {
                 'min'     => 1,
                 'max'     => 18,
                 'default' => 11,
-            )
+            ),
+
+            'location' => array(
+                'name'    => 'location',
+                'label'   => __( 'Default Location', 'dokan' ),
+                'desc'    => __( 'In case the searched store is not found, the default location will be set on the map.', 'dokan' ),
+                'type'    => 'gmap',
+            ),
         );
 
         return $settings_fields;

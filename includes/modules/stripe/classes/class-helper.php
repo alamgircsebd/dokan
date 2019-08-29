@@ -4,13 +4,13 @@ namespace DokanPro\Modules\Stripe;
 /**
  * Stripe Helper class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  */
 class Helper {
     /**
      * Get the stripe SDK
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return string | false on failure
      */
@@ -23,7 +23,7 @@ class Helper {
     /**
      * Check wheter the 3d secure is enabled or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */
@@ -40,7 +40,7 @@ class Helper {
     /**
      * Check wheter the gateway in test mode or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */
@@ -57,7 +57,7 @@ class Helper {
     /**
      * Check wheter subscription module is enabled or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */
@@ -68,7 +68,7 @@ class Helper {
     /**
      * Set stripe app info
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
@@ -84,7 +84,7 @@ class Helper {
     /**
      * Set stripe API version
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */

@@ -1,12 +1,16 @@
 <?php
 global $post;
 
-$tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
-$classes_options = array();
+if ( class_exists( 'WC_Tax' ) ) {
+    $tax_classes = WC_Tax::get_tax_classes();
+} else {
+    $tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
+}
+
+$classes_options     = [];
 $classes_options[''] = __( 'Standard', 'dokan' );
 
 if ( $tax_classes ) {
-
     foreach ( $tax_classes as $class ) {
         $classes_options[ sanitize_title( $class ) ] = esc_html( $class );
     }

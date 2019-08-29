@@ -319,7 +319,8 @@ class Dokan_Live_Chat_Start {
 
             window.talkSession = new Talk.Session( {
                 appId: "<?php echo esc_attr( $this->app_id ); ?>",
-                me: customer
+                me: customer,
+                signature: "<?php echo hash_hmac( 'sha256', strval( $seller->ID ), $this->app_secret ); ?>"
             } );
 
             // inbox
@@ -370,13 +371,19 @@ class Dokan_Live_Chat_Start {
         <script type="text/javascript">
         Talk.ready.then( function() {
             var unreadMessage = document.createElement( 'span' );
+            var unreadCount   = 0;
 
             // if there is a new message update the message count in seller dashboard
             window.talkSession.unreads.on( 'change', function ( conversationId ) {
-                var unreadCount = conversationId.length;
 
-                if ( unreadCount > 0) {
+                if ( conversationId.length > 0) {
+                    unreadCount++;
+
                     var inboxMenu = document.querySelector( '.dokan-dashboard-menu .inbox a' );
+
+                    if ( ! inboxMenu ) {
+                        return;
+                    }
 
                     inboxMenu.appendChild( unreadMessage );
                     unreadMessage.innerText = unreadCount;
@@ -729,7 +736,8 @@ class Dokan_Live_Chat_Start {
 
             window.talkSession = new Talk.Session( {
                 appId: "<?php echo esc_attr( $this->app_id ); ?>",
-                me: customer
+                me: customer,
+                signature: "<?php echo hash_hmac( 'sha256', strval( $customer->ID ), $this->app_secret ); ?>"
             } );
 
             var seller = new Talk.User( {

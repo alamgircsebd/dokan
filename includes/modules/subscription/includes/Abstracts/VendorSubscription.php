@@ -182,7 +182,7 @@ abstract class VendorSubscription {
     /**
      * Check wheter vendor has any unpaid or pending subscription or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */

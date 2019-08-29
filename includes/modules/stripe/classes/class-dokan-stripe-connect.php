@@ -9,7 +9,7 @@ class Dokan_Stripe_Connect extends Dokan_Stripe_Gateway {
     /**
      * Consturctor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      */
     public function __construct() {
         parent::__construct();
@@ -18,7 +18,7 @@ class Dokan_Stripe_Connect extends Dokan_Stripe_Gateway {
     /**
      * Process payment
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $order_id
      *

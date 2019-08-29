@@ -11,7 +11,7 @@
  * @return void
  */
 function dokan_geo_get_template( $name, $args = [] ) {
-    dokan_get_template( "$name.php", $args, DOKAN_GEOLOCATION_VIEWS, trailingslashit( DOKAN_GEOLOCATION_VIEWS ) );
+    dokan_get_template( "$name.php", $args, 'dokan/modules/geolocation', trailingslashit( DOKAN_GEOLOCATION_VIEWS ) );
 }
 
 /**
@@ -22,10 +22,13 @@ function dokan_geo_get_template( $name, $args = [] ) {
  * @return array
  */
 function dokan_geo_get_default_location() {
-    $location = array(
-        'latitude'  => 23.709921,
-        'longitude' => 90.40714300000002,
-    );
+    $location = dokan_get_option( 'location', 'dokan_geolocation' );
+
+    if ( empty( $location['latitude'] ) || empty( $location['longitude'] ) ) {
+        $location              = [];
+        $location['latitude']  = 23.709921;
+        $location['longitude'] = 90.40714300000002;
+    }
 
     /**
      * Filter default latitude and longitude use by Geolocation module

@@ -295,10 +295,15 @@ function dokan_report_abuse_get_reports( $args = [] ) {
     $reports = [];
 
     foreach ( $results as $i => $result ) {
+        $product = wc_get_product( $result->product_id );
+
+        if ( ! $product ) {
+            continue;
+        }
+
         $reports[ $i ]['id']     = absint( $result->id );
         $reports[ $i ]['reason'] = $result->reason;
 
-        $product = wc_get_product( $result->product_id );
         $reports[ $i ]['product'] = [
             'id'        => $product->get_id(),
             'title'     => $product->get_title(),

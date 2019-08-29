@@ -134,9 +134,8 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      * @return void
      */
     public function get_announcements( $request ) {
-        $status = ( empty( $request['status'] ) || $request['status'] == 'all' ) ? array( 'publish', 'pending', 'draft' ) : $request['status'];
-
-        $limit = $request['per_page'];
+        $status = ( empty( $request['status'] ) || $request['status'] == 'all' ) ? array( 'publish', 'pending', 'draft', 'future' ) : $request['status'];
+        $limit  = $request['per_page'];
         $offset = ( $request['page'] - 1 ) * $request['page'];
 
         $args = array(
@@ -157,13 +156,14 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
         }
 
         $response = rest_ensure_response( $data );
-        $count = wp_count_posts( 'dokan_announcement' );
+        $count    = wp_count_posts( 'dokan_announcement' );
 
-        $response->header( 'X-Status-All', ( $count->pending + $count->publish + $count->draft ) );
+        $response->header( 'X-Status-All', ( $count->pending + $count->publish + $count->draft + $count->future + $count->trash ) );
         $response->header( 'X-Status-Pending', $count->pending );
         $response->header( 'X-Status-Publish', $count->publish );
         $response->header( 'X-Status-Draft', $count->draft );
         $response->header( 'X-Status-Trash', $count->trash );
+        $response->header( 'X-Status-Future', $count->future );
 
         $response = $this->format_collection_response( $response, $request, $query->found_posts );
         return $response;
@@ -202,14 +202,16 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
-        $status = !empty( $request['status'] ) ? $request['status'] : 'pending';
+        $status    = ! empty( $request['status'] ) ? $request['status'] : 'pending';
+        $post_date = ! empty( $request['post_date'] ) ? $request['post_date'] : '';
 
         $data = array(
             'post_title'   => sanitize_text_field( $request['title'] ),
             'post_content' => $request['content'],
             'post_status'  => $status,
             'post_type'    => 'dokan_announcement',
-            'post_author'  => get_current_user_id()
+            'post_author'  => get_current_user_id(),
+            'post_date'    => $post_date
         );
 
         $post_id = wp_insert_post( $data );
@@ -242,8 +244,8 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
 
+        do_action( 'dokan_after_announcement_saved', $post_id, $assigned_sellers );
         $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
-        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $data );
 
         return rest_ensure_response( $data );
     }
@@ -264,7 +266,8 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             return new WP_Error( 'no_title', __( 'Announcement title must be required', 'dokan-lite' ), array( 'status' => 404 ) );
         }
 
-        $status = ! empty( $request['status'] ) ? $request['status'] : '';
+        $status        = ! empty( $request['status'] ) ? $request['status'] : '';
+        $post_date     = ! empty( $request['post_date'] ) ? $request['post_date']: '';
 
         $data = array(
             'ID'           => $request['id'],
@@ -274,6 +277,15 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
 
         if ( $status ) {
             $data['post_status'] = $status;
+            $data['post_date']   = $post_date;
+        }
+
+        // if announcement is 'schedueld', but want to publish it now
+        // and set post_date_gmt to `0000-00-00 00:00:00`
+        $post_date_gmt = ! empty( $request['post_date_gmt'] ) ? $request['post_date_gmt'] : '';
+
+        if ( $post_date_gmt ) {
+            $data['post_date_gmt'] = $post_date_gmt;
         }
 
         $post_id = wp_update_post( $data );
@@ -302,9 +314,8 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             $announcement->process_seller_announcement_data( $assigned_sellers, $post_id );
         }
 
+        do_action( 'dokan_after_announcement_saved', $post_id, $assigned_sellers );
         $data = $this->prepare_response_for_object( $this->get_object( $post_id ), $request );
-
-        do_action( 'dokan_after_announcement_saved', $assigned_sellers, $data );
 
         return rest_ensure_response( $data );
     }
@@ -505,7 +516,6 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
      * @return data
      */
     public function prepare_response_for_object( $object, $request ) {
-        $methods = dokan_withdraw_get_methods();
         $data = array(
             'id'           => $object->ID,
             'title'        => $object->post_title,
@@ -515,7 +525,6 @@ class Dokan_REST_Announcement_Controller extends Dokan_REST_Controller {
             'sender_type'  => get_post_meta( $object->ID, '_announcement_type', true ),
             'sender_ids'   => array()
         );
-
 
         $sender_ids = get_post_meta( $object->ID, '_announcement_selected_user', true );
 

@@ -270,8 +270,13 @@ function dokan_variable_product_type_options() {
         }
 
     // Get tax classes
-    $tax_classes           = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
-    $tax_class_options     = array();
+    if ( class_exists( 'WC_Tax' ) ) {
+        $tax_classes = WC_Tax::get_tax_classes();
+    } else {
+        $tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
+    }
+
+    $tax_class_options     = [];
     $tax_class_options[''] = __( 'Standard', 'dokan' );
 
     if ( $tax_classes ) {
@@ -857,7 +862,7 @@ add_action( 'woocommerce_admin_order_totals_after_tax', 'dokan_display_order_dis
  * @param array $table_rows
  * @param  WC_Order $order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @return array
  */
@@ -893,7 +898,7 @@ function dokan_display_order_discounts( $table_rows, $order ) {
 /**
  * Display order discounts on wc admin order table
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  * @param int $order_id
  *
  * @return void
@@ -931,7 +936,7 @@ function dokan_display_order_discounts_on_wc_admin_order( $order_id ) {
  *
  * @param WC_Order $order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @return array
  */
@@ -1003,8 +1008,8 @@ function dokan_calculate_totals( $total ) {
 
 add_filter( 'woocommerce_calculated_total', 'dokan_calculate_totals' );
 
-add_action( 'dokan_checkout_update_order_meta', 'set_discount_on_sub_orders', 10, 2 );
-add_action( 'dokan_create_parent_order', 'set_discount_on_parent_order' );
+add_action( 'dokan_checkout_update_order_meta', 'set_discount_on_sub_orders', 5, 2 );
+add_action( 'dokan_create_parent_order', 'set_discount_on_parent_order', 5, 2 );
 
 /**
  * Set discount on sub orders
@@ -1021,6 +1026,10 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
         return;
     }
 
+    $is_enable_op_discount       = dokan_get_option( 'discount_edit', 'dokan_selling' );
+    $is_product_discount_enabled = isset( $is_enable_op_discount['product-discount'] ) && $is_enable_op_discount['product-discount'] == 'product-discount';
+    $is_order_discount_enabled   = isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount['order-discount'] == 'order-discount';
+
     $order = wc_get_order( $order_id );
 
     if ( ! $order instanceof WC_Order ) {
@@ -1028,8 +1037,8 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
     }
 
     $order_total                   = $order->get_total();
-    $discount_amount_for_lot       = dokan_get_lot_discount_for_vendor( $vendor_id );
-    $discount_amount_for_min_order = dokan_get_minimum_order_discount_for_vendor( $vendor_id );
+    $discount_amount_for_lot       = $is_product_discount_enabled ? dokan_get_lot_discount_for_vendor( $vendor_id ) : 0;
+    $discount_amount_for_min_order = $is_order_discount_enabled ? dokan_get_minimum_order_discount_for_vendor( $vendor_id ) : 0;
 
     if ( ! $discount_amount_for_lot && ! $discount_amount_for_min_order ) {
         return;
@@ -1038,8 +1047,14 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
     $discount_total = $discount_amount_for_lot + $discount_amount_for_min_order;
     $order_total    = $order_total - $discount_total;
 
-    $order->update_meta_data( 'dokan_quantity_discount', $discount_amount_for_lot );
-    $order->update_meta_data( 'dokan_order_discount', $discount_amount_for_min_order );
+    if ( ! empty( $discount_amount_for_lot ) ) {
+        $order->update_meta_data( 'dokan_quantity_discount', $discount_amount_for_lot );
+    }
+
+    if ( ! empty( $discount_amount_for_min_order ) ) {
+        $order->update_meta_data( 'dokan_order_discount', $discount_amount_for_min_order );
+    }
+
     $order->set_total( $order_total );
     $order->save();
 }
@@ -1047,7 +1062,7 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
 /**
  * Set discount on main order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @param WC_Order $order
  *
@@ -1058,8 +1073,12 @@ function set_discount_on_parent_order( $order ) {
         return;
     }
 
-    $discount_amount_for_lot       = dokan_discount_for_lot_quantity();
-    $discount_amount_for_min_order = dokan_discount_for_minimum_order();
+    $is_enable_op_discount       = dokan_get_option( 'discount_edit', 'dokan_selling' );
+    $is_product_discount_enabled = isset( $is_enable_op_discount['product-discount'] ) && $is_enable_op_discount['product-discount'] == 'product-discount';
+    $is_order_discount_enabled   = isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount['order-discount'] == 'order-discount';
+
+    $discount_amount_for_lot       = $is_product_discount_enabled ? dokan_discount_for_lot_quantity() : 0;
+    $discount_amount_for_min_order = $is_order_discount_enabled ? dokan_discount_for_minimum_order() : 0;
 
     if ( ! $discount_amount_for_lot && ! $discount_amount_for_min_order ) {
         return;
@@ -1414,7 +1433,7 @@ add_filter( 'woocommerce_variable_children_args', 'dokan_set_variations_args' );
 /**
  * Include pending product status into variation args
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @param array $args
  */
@@ -1427,3 +1446,56 @@ function dokan_set_variations_args( $args ) {
 
     return $args;
 }
+
+/**
+ * Set variation product author to product vendor id
+ *
+ * @since 2.9.13
+ *
+ * @param int $variation_id
+ *
+ * @return void
+ */
+function dokan_override_variation_product_author( $variation_id ) {
+    if ( ! is_admin() ) {
+        return;
+    }
+
+    $variation_product = get_post( $variation_id );
+
+    if ( ! $variation_product ) {
+        return;
+    }
+
+    $product_id = $variation_product->post_parent;
+
+    if ( ! $product_id ) {
+        return;
+    }
+
+    $product = wc_get_product( $product_id );
+
+    if ( ! $product ) {
+        return;
+    }
+
+    $vendor    = dokan_get_vendor_by_product( $product );
+    $vendor_id = $vendor->get_id();
+
+    if ( ! $vendor || ! $vendor_id ) {
+        return;
+    }
+
+    if ( absint( $vendor_id ) === absint( $variation_product->post_author ) ) {
+        return;
+    }
+
+    wp_update_post( array(
+        'ID'          => $variation_id,
+        'post_author' => $vendor_id
+    ) );
+
+    do_action( 'dokan_after_override_variation_product_author', $product, $vendor_id );
+}
+
+add_action( 'woocommerce_save_product_variation', 'dokan_override_variation_product_author' );

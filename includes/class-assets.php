@@ -167,6 +167,7 @@ class Dokan_Pro_Assets {
         $scripts['countries']              = WC()->countries->get_allowed_countries();
         $scripts['urls']['proAssetsUrl']   = DOKAN_PRO_PLUGIN_ASSEST;
         $scripts['store_banner_dimension'] = [ 'width' => $banner_width, 'height' => $banner_height, 'flex-width'  => $has_flex_width, 'flex-height' => $has_flex_height ];
+        $scripts['current_time']           = current_time( 'mysql' );
 
         return $scripts;
     }

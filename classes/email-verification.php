@@ -397,7 +397,7 @@ Class Dokan_Email_Verification {
     /**
      * Check whether email verification is needed or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return bool
      */

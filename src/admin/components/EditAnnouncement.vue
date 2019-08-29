@@ -41,6 +41,49 @@
                                 <input type="submit" class="button button-primary publish-btn" :value="publishBtnLabel" @click.prevent="updateAnnouncement( 'publish' )">
                                 <div class="clear"></div>
                             </div>
+
+                            <div class="sub-action">
+                                <span id="timestamp">
+                                    <span class="dashicons dashicons dashicons-calendar"></span>
+                                    <template v-if="onSchedule">
+                                        Schedule for: <strong>{{ scheduleTime.humanTime }}</strong>
+                                    </template>
+
+                                    <template v-else>
+                                        Publish: <strong>immediately</strong>
+                                    </template>
+                                    <a v-show="!onScheduleEdit" href="#" @click.prevent="onScheduleEdit=true">Edit</a>
+                                </span>
+                                <fieldset v-show="onScheduleEdit" id="timestampdiv">
+                                    <label>
+                                        <select v-model="scheduleTime.month">
+                                            <option v-for="month in months">
+                                                {{ month }}
+                                            </option>
+                                        </select>
+                                    </label>
+
+                                    <label>
+                                        <input v-model="scheduleTime.day" id="jj" type="text" size="2" maxlength="2" autocomplete="off">,
+                                    </label>
+
+                                    <label>
+                                        <input v-model="scheduleTime.year" id="aa" type="text" size="4" maxlength="4" autocomplete="off"> @
+                                    </label>
+
+                                    <label>
+                                        <input v-model="scheduleTime.hour" id="hh" type="text" size="2" maxlength="2" autocomplete="off"> :
+                                    </label>
+
+                                    <label>
+                                        <input v-model="scheduleTime.min" id="mm" type="text" size="2" maxlength="2" autocomplete="off">
+                                    </label>
+                                </fieldset>
+                                <p v-show="onScheduleEdit">
+                                    <button @click.prevent="saveSchedule">{{ __( 'Ok', 'dokan' ) }}</button>
+                                    <button @click.prevent="cancelSchedule">{{ __( 'Cancel', 'dokan' ) }}</button>
+                                </p>
+                            </div>
                         </postbox>
                     </div>
 
@@ -83,6 +126,7 @@
     let TextEditor  = dokan_get_lib('TextEditor');
     let Postbox     = dokan_get_lib('Postbox');
     let Multiselect = dokan_get_lib('Multiselect');
+    let moment      = dokan_get_lib('moment');
 
     export default {
         name: 'EditAnnouncement',
@@ -104,6 +148,31 @@
                 publishBtnLabel : this. __( 'Send', 'dokan' ),
                 message: '',
                 vendors: [],
+                onSchedule: false,
+                onScheduleEdit: false,
+                months: [
+                    '01-Jan',
+                    '02-Feb',
+                    '03-Mar',
+                    '04-Apr',
+                    '05-May',
+                    '06-Jun',
+                    '07-Jul',
+                    '08-Aug',
+                    '09-Sep',
+                    '10-Oct',
+                    '11-Nov',
+                    '12-Dec',
+                ],
+                scheduleTime: {
+                    year: moment(dokan.current_time).format('YYYY'),
+                    month: `${moment(dokan.current_time).format('MM')}-${moment(dokan.current_time).format('MMM')}`,
+                    day: moment(dokan.current_time).format('DD'),
+                    hour: moment(dokan.current_time).format('HH'),
+                    min: moment(dokan.current_time).format('mm'),
+                    postDate: '',
+                    humanTime: ''
+                }
             }
         },
 
@@ -131,6 +200,23 @@
             fetchAnnouncement() {
                 dokan.api.get('/announcement/' + this.$route.params.id  )
                 .done( response => {
+                    if ( 'future' === response.status ) {
+                        this.onSchedule = true;
+                        this.publishBtnLabel = this.__( 'Schedule', 'dokan' );
+
+                        let date = moment(response.created_at);
+                        this.scheduleTime.year = date.format('YYYY');
+                        this.scheduleTime.month = `${date.format('MM')}-${date.format('MMM')}`;
+                        this.scheduleTime.day = moment(dokan.current_time).format('DD'),
+                        this.scheduleTime.hour = date.format('HH');
+                        this.scheduleTime.min = date.format('mm');
+
+                        let {year, month, day, hour, min} = {...this.scheduleTime };
+
+                        this.scheduleTime.humanTime = `${date.format('MMM')} ${day}, ${year} @ ${hour}:${min}`;
+                        this.scheduleTime.postDate = `${year}-${month.substr(0,2)}-${day} ${hour}:${min}`;
+                    }
+
                     this.announcement = response;
                 })
                 .error( response => {
@@ -145,6 +231,15 @@
 
                 jsonData.sender_ids = _.pluck( jsonData.sender_ids, 'id' );
                 jsonData.status = status;
+                jsonData.post_date = this.scheduleTime.postDate;
+
+                // if announcement is 'schedueld', but want to publish it now
+                // change post status to `future` so that wp_insert_post can make it `publish`
+                // and set post_date_gmt to `0000-00-00 00:00:00`
+                if ( ! jsonData.post_date ) {
+                    jsonData.status = 'future';
+                    jsonData.post_date_gmt = '0000-00-00 00:00:00';
+                }
 
                 dokan.api.put('/announcement/' + this.$route.params.id, jsonData )
                 .done( response => {
@@ -168,13 +263,30 @@
                     this.isSaved = true;
                     this.message = response.responseJSON.message;
                 });
+            },
+
+            saveSchedule() {
+                this.onSchedule = true;
+                this.onScheduleEdit = false;
+                this.publishBtnLabel = this.__( 'Schedule', 'dokan' );
+
+                let {year, month, day, hour, min} = {...this.scheduleTime};
+
+                this.scheduleTime.postDate = `${year}-${month.substr(0,2)}-${day} ${hour}:${min}`;
+                this.scheduleTime.humanTime = `${day} ${month.substr(3)}, ${year} @ ${hour}:${min}`;
+            },
+
+            cancelSchedule() {
+                this.onSchedule = false;
+                this.onScheduleEdit = false;
+                this.publishBtnLabel = this.__( 'Send', 'dokan' );
+                this.scheduleTime.postDate = '';
             }
         },
 
         created() {
             this.fetchAnnouncement();
-        }
-
+        },
     };
 </script>
 

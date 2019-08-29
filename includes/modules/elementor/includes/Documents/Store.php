@@ -99,7 +99,7 @@ class Store extends Single {
      * Document library type
      *
      * @since 2.9.11
-     * @since DOKAN_PRO_SINCE From elementor pro v2.4.0 it is deprecated
+     * @since 2.9.13 From elementor pro v2.4.0 it is deprecated
      *
      * @return string
      */
@@ -113,7 +113,7 @@ class Store extends Single {
      * From elementor pro v2.4.0 `get_remote_library_config` is used
      * instead of `get_remote_library_type`
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return array
      */

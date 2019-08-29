@@ -14,7 +14,7 @@ class Dokan_Pro_Refund {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      */
     public function __construct() {
         $this->hooks();
@@ -23,7 +23,7 @@ class Dokan_Pro_Refund {
     /**
      * All the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
@@ -45,14 +45,26 @@ class Dokan_Pro_Refund {
         }
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
-            wp_send_json_error( __( 'You don\'t have permission to create refund.', 'dokan' ) );
+            return wp_send_json_error( [
+                'error' => __( 'You don\'t have permission to create refund.', 'dokan' )
+            ] );
         }
 
         $order_id  = ! empty( $_POST['order_id'] ) ? $_POST['order_id'] : 0;
+        $order     = wc_get_order( $order_id );
+
+        if ( $order->get_meta( 'has_sub_order' ) ) {
+            return wp_send_json_error( [
+                'error' => __( 'Please try to process refund from the sub orders.', 'dokan' )
+            ] );
+        }
+
         $seller_id = dokan_get_seller_id_by_order( $order_id );
 
         if ( ! $seller_id ) {
-            return wp_send_json_error( __( 'Vendor not found', 'dokan' ) );
+            return wp_send_json_error( [
+                'error' => __( 'Vendor not found.', 'dokan' )
+            ] );
         }
 
         // pass seller_id and status to `insert_refund` method with the $_POST variable
@@ -63,7 +75,9 @@ class Dokan_Pro_Refund {
         $refund_id   = $this->insert_refund( $posted_data );
 
         if ( ! $refund_id ) {
-            wp_send_json_error( __( 'Unable to insert refund', 'dokan' ) );
+            wp_send_json_error( [
+                'error' => __( 'Unable to insert refund.', 'dokan' )
+            ] );
         }
 
         if ( ! class_exists( 'Dokan_REST_Refund_Controller' ) ) {
@@ -79,10 +93,11 @@ class Dokan_Pro_Refund {
         $approve_refund = $refund_api->approve_refund_request( $refund_data );
 
         if ( ! $approve_refund ) {
-            wp_send_json_error( __( 'Unable to approve refund request', 'dokan' ) );
+            return wp_send_json_error( [
+                'error' => __( 'Unable to approve refund request', 'dokan' )
+            ] );
         }
 
-        $order = wc_get_order( $order_id );
         $order->add_order_note( __( 'Refund has been made by admin.', 'dokan' ) );
         $order->save();
 

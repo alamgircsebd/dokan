@@ -102,7 +102,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Load Stripe SDK
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */
@@ -121,7 +121,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Show checkout modal
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.13
      *
      * @return boolean
      */
@@ -460,7 +460,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
     * Renders the Stripe elements form
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 2.9.13
     *
     * @return void
     */
@@ -600,7 +600,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Get the payment intent id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return string
      */
@@ -640,7 +640,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Get charge id from the payment intent
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.13
      *
      * @return string | WP_Error on failure
      */
@@ -1008,7 +1008,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Create payment intent
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return object PaymentIntent
      */
@@ -1026,7 +1026,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $this->customer_details['state']       = $session->customer['state'];
         $this->customer_details['country']     = $session->customer['country'];
         $this->customer_details['postal_code'] = $session->customer['postcode'];
-        $this->customer_details['email']       = $session->customer['email'];
+        $this->customer_details['email']       = ! is_user_logged_in() ? $session->billing_email : $session->customer['email'];
 
         foreach ( $session->cart as $data ) {
             $product_id = ! empty( $data['product_id'] ) ? $data['product_id'] : 0;
@@ -1061,7 +1061,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Set payment intent data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param string $fragment
      */
@@ -1315,7 +1315,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Check wheter non-connected sellers can sale product or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */
