@@ -552,7 +552,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
                     'amount'         => $refund_amount,
                     'reason'         => $refund_reason,
                     'order_id'       => $parent_order_id,
-                    'line_items'     => '{}',
+                    'line_items'     => [],
                     'refund_payment' => $api_refund,
                     'restock_items'  => false,
                 )
