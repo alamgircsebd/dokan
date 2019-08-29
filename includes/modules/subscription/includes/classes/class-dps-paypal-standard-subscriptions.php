@@ -584,7 +584,7 @@ class DPS_PayPal_Standard_Subscriptions {
     /**
      * Check whether vendor has subscriptoin or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return boolean
      */

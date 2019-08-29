@@ -525,7 +525,7 @@ Class Dokan_Social_Login {
     /**
      * Enqueue social style on vendor registration page created via [dokan-vendor-registration] shortcode
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @return void
      */

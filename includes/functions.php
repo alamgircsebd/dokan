@@ -488,7 +488,7 @@ add_action( 'dokan_after_announcement_saved', 'dokan_send_announcement_email' );
 /**
  * Send email for scheduled announcement
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.13
  *
  * @param WP_Post $post
  *

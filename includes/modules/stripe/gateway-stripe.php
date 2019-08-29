@@ -797,7 +797,7 @@ class Dokan_Stripe {
     /**
      * Trigger update checkout on field change
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array $fileds
      *
@@ -816,7 +816,7 @@ class Dokan_Stripe {
     /**
      * Set guest customer email to session
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param string $post_data
      *

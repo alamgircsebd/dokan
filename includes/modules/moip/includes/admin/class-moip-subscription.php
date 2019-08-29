@@ -397,7 +397,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
     /**
      * Update subscription with new plan
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param  string $subcription_code
      * @param  string $plan_id

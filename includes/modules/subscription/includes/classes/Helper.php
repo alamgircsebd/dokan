@@ -573,7 +573,7 @@ class Helper {
     /**
      * Check wheter vendor is subscribed or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $vendor_id
      *
@@ -586,7 +586,7 @@ class Helper {
     /**
      * Check wheter the pack is recurring or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $pack_id
      *
@@ -601,7 +601,7 @@ class Helper {
     /**
      * Check wheter vendor can publish unlimited products or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param int $vendor_id
      *

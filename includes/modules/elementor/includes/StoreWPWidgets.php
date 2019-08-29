@@ -268,7 +268,7 @@ class StoreWPWidgets {
     /**
      * Render dummy content for Store Vendor Verification widget
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.13
      *
      * @param array                          $args
      * @param array                          $instance
