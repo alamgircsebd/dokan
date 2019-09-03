@@ -173,15 +173,6 @@ function dokan_get_seller_coupon( $seller_id, $show_on_store = false ) {
 }
 
 /**
- * check array is index or associative
- *
- * @return bool
- */
-function isAssoc($arr) {
-    return array_keys($arr) !== range(0, count($arr) - 1);
-}
-
-/**
 * Get refund localize data
 *
 * @since 2.6
@@ -656,3 +647,21 @@ function dokan_save_admin_additional_commission( $vendor_id, $data ) {
 }
 
 add_action( 'dokan_before_update_vendor', 'dokan_save_admin_additional_commission', 10, 2 );
+
+/**
+ * Include Dokan Pro template
+ *
+ * Modules should have their own get
+ * template function, like `dokan_geo_get_template`
+ * used in Geolocation module.
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @param string $name
+ * @param array  $args
+ *
+ * @return void
+ */
+function dokan_pro_get_template( $name, $args = [] ) {
+    dokan_get_template( "$name.php", $args, 'dokan', trailingslashit( DOKAN_PRO_TEMPLATE_DIR ) );
+}

@@ -436,7 +436,7 @@ class Dokan_Update {
                 <?php _e( 'We recommend you to enter those details to get regular <strong>plugin update and support</strong>.', 'dokan' ); ?>
             </p>
 
-            <h3><?php _e( 'Dokan Pro', 'dokan-wc-booking' ); ?></h3>
+            <h3><?php _e( 'Dokan Pro', 'dokan' ); ?></h3>
             <hr>
             <div class="dokan-pro-license-wrap">
                 <?php
