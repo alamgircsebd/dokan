@@ -1,4 +1,0 @@
-====== Changelog ======
-v1.0.0 ~~> Date: Month 01, 2018
------------------------------
-- Initial Release
