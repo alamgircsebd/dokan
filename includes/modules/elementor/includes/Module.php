@@ -255,6 +255,10 @@ class Module extends ModuleBase {
             $tab = 'reviews';
         }
 
+        if ( get_query_var( 'biography' ) ) {
+            $tab = 'vendor-biography';
+        }
+
         $template = DOKAN_ELEMENTOR_VIEWS . '/store-tab-contents/' . $tab . '.php';
         $template = apply_filters( 'dokan_elementor_store_tab_content_template', $template );
 
