@@ -31,43 +31,31 @@ class Dokan_REST_Modules_Controller extends DokanRESTAdminController {
      * @return void
      */
     public function register_routes() {
-
-        register_rest_route( $this->namespace, '/' . $this->base, array(
-            array(
+        register_rest_route( $this->namespace, '/' . $this->base, [
+            [
                 'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( $this, 'get_modules' ),
-                'permission_callback' => array( $this, 'check_permission' ),
-                'args'                =>  array(
-                    'status' => array(
-                        'description' => __( 'Module Status', 'dokan' ),
-                        'required'    => false,
-                        'type'        => 'string',
-                        'default'     => 'all',
-                        'enum'        => array(
-                            'all', 'active', 'inactive'
-                        )
-                    ),
-                ),
-            ),
-        ) );
+                'callback'            => [ $this, 'get_items' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+            ],
+        ] );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/activate', array(
-            array(
+        register_rest_route( $this->namespace, '/' . $this->base . '/activate', [
+            [
                 'methods'             => WP_REST_Server::EDITABLE,
-                'callback'            => array( $this, 'activate_modules' ),
-                'permission_callback' => array( $this, 'check_permission' ),
-                'args'                =>  $this->activation_request_args(),
-            )
-        ) );
+                'callback'            => [ $this, 'activate_modules' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+                'args'                =>  $this->module_toggle_request_args(),
+            ]
+        ] );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/deactivate', array(
-            array(
+        register_rest_route( $this->namespace, '/' . $this->base . '/deactivate', [
+            [
                 'methods'             => WP_REST_Server::EDITABLE,
-                'callback'            => array( $this, 'deactivate_modules' ),
-                'permission_callback' => array( $this, 'check_permission' ),
-                'args'                =>  $this->activation_request_args(),
-            )
-        ) );
+                'callback'            => [ $this, 'deactivate_modules' ],
+                'permission_callback' => [ $this, 'check_permission' ],
+                'args'                =>  $this->module_toggle_request_args(),
+            ]
+        ] );
     }
 
     /**
@@ -75,93 +63,82 @@ class Dokan_REST_Modules_Controller extends DokanRESTAdminController {
      *
      * @return array
      */
-    public function activation_request_args() {
-        return array(
-            'module' => array(
-                'description' => __( 'Basename of the module as array', 'dokan' ),
-                'required'    => true,
-                'type'        => 'array',
-                'items'       => array(
+    public function module_toggle_request_args() {
+        return [
+            'module' => [
+                'description'       => __( 'Basename of the module as array', 'dokan' ),
+                'required'          => true,
+                'type'              => 'array',
+                'validate_callback' => [ $this, 'validate_modules' ],
+                'items'             => [
                     'type' => 'string'
-                )
-            ),
-        );
+                ]
+            ],
+        ];
     }
 
     /**
-     * Fetch all modules
+     * Validate module ids
      *
-     * @param WP_REST_Request $request
+     * @since DOKAN_PRO_SINCE
      *
-     * @return \WP_REST_Response
+     * @param array $modules
+     *
+     * @return bool|\WP_Error
      */
-    public function get_modules( $request ) {
-        $modules      = dokan_pro_get_modules();
-        $actives      = dokan_pro_get_active_modules();
-        $result       = array();
-        $active_count = 0;
-        $status       = $request['status'];
-
-        foreach ( $modules as $key => $module ) {
-            $is_active = in_array( $key, $actives );
-            $item      = array_merge( $module, array( 'slug' => $key, 'id'=> $key, 'active' => $is_active ) );
-
-            if ( $is_active ) {
-                $active_count++;
-            }
-
-            switch ($status) {
-                case 'active':
-                    if ( $is_active ) {
-                        $result[] = $item;
-                    }
-                    break;
-
-                case 'inactive':
-                    if ( ! $is_active ) {
-                        $result[] = $item;
-                    }
-                    break;
-
-                default:
-                    $result[] = $item;
-                    break;
-            }
+    public function validate_modules( $modules ) {
+        if ( ! is_array( $modules ) ) {
+            return new WP_Error( 'dokan_pro_rest_error', __( 'module parameter must be an array of id of Dokan Pro modules.', 'dokan' ) );
         }
 
-        if (  ! empty( $request['orderby'] ) ) {
-            if ( 'asc' == $request['order'] ) {
-                usort( $result, 'dokan_module_short_by_name_asc' );
-            } else {
-                usort( $result, 'dokan_module_short_by_name_desc' );
-            }
+        if ( empty( $modules ) ) {
+            return new WP_Error( 'dokan_pro_rest_error', 'module parameter is empty', 'dokan' );
         }
 
-        $response = rest_ensure_response( $result );
+        $available_modules = dokan_pro()->module->get_available_modules();
 
-        $response->header( 'X-WP-Total', count( $modules ) );
-        $response->header( 'X-WP-Active', $active_count );
-
-        return $response;
-    }
-
-    /**
-     * Check if module file exists
-     *
-     * Blindly passing an invalid file causes warning
-     *
-     * @param  string $module
-     *
-     * @return boolean|WP_Error
-     */
-    private function module_file_exists( $module ) {
-        $module_root = DOKAN_PRO_INC . '/modules';
-
-        if ( ! file_exists( $module_root . '/' . $module ) ) {
-            return new WP_Error( 'not-exists', __( 'Module doesn\'t exists.', 'dokan' ) );
+        foreach ( $modules as $module ) {
+            if ( ! in_array( $module, $available_modules ) ) {
+                return new WP_Error( 'dokan_pro_rest_error', sprintf( __( '%s module is not available in your system.', 'dokan' ), $module ) );
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Get all modules
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return \WP_REST_Response
+     */
+    public function get_items( $request ) {
+        $data             = [];
+        $modules          = dokan_pro()->module->get_all_modules();
+        $activate_modules = dokan_pro()->module->get_active_modules();
+
+        foreach ( $modules as $module ) {
+            $data[] = [
+                'id'           => $module['id'],
+                'name'         => $module['name'],
+                'description'  => $module['description'],
+                'thumbnail'    => $module['thumbnail'],
+                'plan'         => $module['plan'],
+                'active'       => in_array( $module['id'], $activate_modules ),
+                'available'    => file_exists( $module['module_file'] )
+            ];
+        }
+
+        $response = rest_ensure_response( $data );
+
+        $dokan_pro_current_plan = dokan_pro()->get_plan();
+        $dokan_pro_plans        = json_encode( dokan_pro()->get_dokan_pro_plans() );
+
+        $response->header( 'X-DokanPro-Current-Plan', $dokan_pro_current_plan );
+        $response->header( 'X-DokanPro-Plans', $dokan_pro_plans );
+
+        return $response;
     }
 
     /**
@@ -173,26 +150,10 @@ class Dokan_REST_Modules_Controller extends DokanRESTAdminController {
      */
     public function activate_modules( $request ) {
         $modules        = $request['module'];
-        $activate_count = 0;
+        dokan_pro()->module->activate_modules( $modules );
+        dokan_pro()->module->set_modules( [] );
 
-        foreach ( $modules as $module ) {
-            $file_exists = $this->module_file_exists( $module );
-
-            if ( true != $file_exists ) {
-                continue;
-            }
-
-            $activated = dokan_pro_activate_module( $module );
-
-            if ( true === $activated ) {
-                $activate_count++;
-            }
-        }
-
-        return rest_ensure_response( array(
-            'success'   => true,
-            'activated' => $activate_count
-        ) );
+        return $this->get_items( $request );
     }
 
     /**
@@ -204,25 +165,9 @@ class Dokan_REST_Modules_Controller extends DokanRESTAdminController {
      */
     public function deactivate_modules( $request ) {
         $modules        = $request['module'];
-        $deactivate_count = 0;
+        dokan_pro()->module->deactivate_modules( $modules );
+        dokan_pro()->module->set_modules( [] );
 
-        foreach ( $modules as $module ) {
-            $file_exists = $this->module_file_exists( $module );
-
-            if ( true != $file_exists ) {
-                continue;
-            }
-
-            $deactivated = dokan_pro_deactivate_module( $module );
-
-            if ( true === $deactivated ) {
-                $deactivate_count++;
-            }
-        }
-
-        return rest_ensure_response( array(
-            'success'     => true,
-            'deactivated' => $deactivate_count
-        ) );
+        return $this->get_items( $request );
     }
 }

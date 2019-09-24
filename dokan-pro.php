@@ -105,7 +105,9 @@ class Dokan_Pro {
         define( 'DOKAN_PRO_INC', DOKAN_PRO_DIR . '/includes' );
         define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/admin' );
         define( 'DOKAN_PRO_CLASS', DOKAN_PRO_DIR . '/classes' );
-        define( 'DOKAN_PRO_PLUGIN_ASSEST', plugins_url( 'assets', __FILE__ ) );
+        define( 'DOKAN_PRO_PLUGIN_ASSEST', plugins_url( 'assets', DOKAN_PRO_FILE ) );
+        define( 'DOKAN_PRO_MODULE_DIR', DOKAN_PRO_DIR . '/modules' );
+        define( 'DOKAN_PRO_MODULE_URL', plugins_url( 'modules', DOKAN_PRO_FILE ) );
     }
 
     /**
@@ -171,6 +173,8 @@ class Dokan_Pro {
         $this->includes();
         $this->load_actions();
         $this->load_filters();
+
+        $this->container['module'] = new \WeDevs\DokanPro\Module();
     }
 
     /**
@@ -221,6 +225,38 @@ class Dokan_Pro {
     }
 
     /**
+     * List of Dokan Pro plans
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_dokan_pro_plans() {
+        return [
+            [
+                'name'        => 'starter',
+                'title'       => __( 'Starter', 'dokan' ),
+                'price_index' => 1,
+            ],
+            [
+                'name'        => 'professional',
+                'title'       => __( 'Professional', 'dokan' ),
+                'price_index' => 2,
+            ],
+            [
+                'name'        => 'business',
+                'title'       => __( 'Business', 'dokan' ),
+                'price_index' => 3,
+            ],
+            [
+                'name'        => 'enterprise',
+                'title'       => __( 'Enterprise', 'dokan' ),
+                'price_index' => 4,
+            ],
+        ];
+    }
+
+    /**
      * Load all includes file for pro
      *
      * @since 2.4
@@ -257,21 +293,6 @@ class Dokan_Pro {
 
         require_once DOKAN_PRO_INC . '/class-assets.php';
         require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
-
-        if ( !function_exists( 'dokan_pro_get_active_modules' ) ) {
-            require_once DOKAN_PRO_DIR . '/includes/modules.php';
-        }
-        // load all the active modules
-        $modules = dokan_pro_get_active_modules();
-
-        if ( $modules ) {
-            foreach ( $modules as $module_file ) {
-                $module_path = DOKAN_PRO_DIR . '/includes/modules/' . $module_file;
-                if ( file_exists( $module_path ) ) {
-                    include_once $module_path;
-                }
-            }
-        }
 
         if ( ! class_exists( 'Hybridauth' ) ) {
             require_once DOKAN_PRO_INC . '/lib/hybridauth/autoload.php';

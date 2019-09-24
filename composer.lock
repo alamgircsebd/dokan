@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4d15d9606420607705e3e6b961ea933",
+    "content-hash": "4bfae368ce041c1dd8836d35613ff926",
     "packages": [
         {
             "name": "wikimedia/composer-merge-plugin",
