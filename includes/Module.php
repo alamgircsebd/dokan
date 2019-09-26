@@ -34,14 +34,16 @@ class Module {
     private $dokan_pro_modules = [];
 
     /**
-     * Class container
+     * Update db option containing active module ids
      *
      * @since DOKAN_PRO_SINCE
      *
-     * @return void
+     * @param array $value
+     *
+     * @return bool
      */
-    public function __construct() {
-        $this->load_active_modules();
+    protected function update_db_option( $value ) {
+        return update_option( self::ACTIVE_MODULES_DB_KEY, $value );
     }
 
     /**
@@ -51,7 +53,13 @@ class Module {
      *
      * @return void
      */
-    protected function load_active_modules() {
+    public function load_active_modules() {
+        static $modules_activated = false;
+
+        if ( $modules_activated ) {
+            return;
+        }
+
         $active_modules    = $this->get_active_modules();
         $dokan_pro_modules = $this->get_all_modules();
 
@@ -65,19 +73,8 @@ class Module {
                 $this->container[ $module_id ] = new $module_class();
             }
         }
-    }
 
-    /**
-     * Update db option containing active module ids
-     *
-     * @since DOKAN_PRO_SINCE
-     *
-     * @param array $value
-     *
-     * @return bool
-     */
-    protected function update_db_option( $value ) {
-        return update_option( self::ACTIVE_MODULES_DB_KEY, $value );
+        $modules_activated = true;
     }
 
     /**

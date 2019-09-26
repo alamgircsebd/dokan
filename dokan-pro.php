@@ -23,7 +23,6 @@
  * @author weDevs <info@wedevs.com>
  */
 class Dokan_Pro {
-
     /**
      * Plan type
      *
@@ -57,6 +56,22 @@ class Dokan_Pro {
     private $container = [];
 
     /**
+     * Initializes the WeDevs_Dokan() class
+     *
+     * Checks for an existing WeDevs_WeDevs_Dokan() instance
+     * and if it doesn't find one, creates it.
+     */
+    public static function init() {
+        static $instance = false;
+
+        if ( ! $instance ) {
+            $instance = new Dokan_Pro();
+        }
+
+        return $instance;
+    }
+
+    /**
      * Constructor for the Dokan_Pro class
      *
      * Sets up all the appropriate hooks and actions
@@ -69,8 +84,10 @@ class Dokan_Pro {
 
         $this->define_constants();
 
-        add_action( 'plugins_loaded', [ $this, 'check_dokan_lite_exist' ], 10 );
-        add_action( 'dokan_loaded', [ $this, 'init_plugin' ], 10 );
+        add_action( 'plugins_loaded', [ $this, 'check_dokan_lite_exist' ] );
+        add_action( 'dokan_loaded', [ $this, 'init_plugin' ] );
+
+        register_activation_hook( __FILE__, [ $this, 'activate' ] );
     }
 
     /**
@@ -111,6 +128,25 @@ class Dokan_Pro {
     }
 
     /**
+     * Get Dokan db version key
+     *
+     * @since DOKAN_LITE_SINCE
+     *
+     * @return string
+     */
+    public function get_db_version_key() {
+        return $this->db_version_key;
+    }
+
+    /**
+     * Placeholder for activation function
+     */
+    public function activate() {
+        $installer = new \WeDevs\DokanPro\Install\Installer();
+        $installer->do_install();
+    }
+
+    /**
      * Check is dokan lite active or not
      *
      * @since 2.8.0
@@ -118,10 +154,33 @@ class Dokan_Pro {
      * @return void
      */
     public function check_dokan_lite_exist() {
-        if ( ! class_exists( 'WeDevs_Dokan' ) && current_user_can( 'manage_options' ) ) {
-            add_action( 'admin_notices', [ $this, 'missing_dokan_lite_notice' ] );
-            add_action( 'wp_ajax_dokan_pro_install_dokan_lite', [ $this, 'install_dokan_lite' ] );
+        if ( ! class_exists( 'WeDevs_Dokan' ) ) {
+            if ( ! current_user_can( 'manage_options' ) ) {
+                return;
+            }
+
+            add_action( 'admin_notices', array( $this, 'activation_notice' ) );
+            add_action( 'wp_ajax_dokan_pro_install_dokan_lite', array( $this, 'install_dokan_lite' ) );
         }
+    }
+
+    /**
+     * Load all things
+     *
+     * @since 2.7.3
+     *
+     * @return void
+     */
+    public function init_plugin() {
+        $this->includes();
+        $this->load_actions();
+        $this->load_filters();
+
+        $modules = new \WeDevs\DokanPro\Module();
+
+        $modules->load_active_modules();
+
+        $this->container['module'] = $modules;
     }
 
     /**
@@ -131,8 +190,11 @@ class Dokan_Pro {
      *
      * @return void
      * */
-    public function missing_dokan_lite_notice() {
-        include DOKAN_PRO_TEMPLATE_DIR . '/missing_dokan_lite_notice.php';
+    public function activation_notice() {
+        $plugin_file      = basename( dirname( __FILE__ ) ) . '/dokan-pro.php';
+        $core_plugin_file = 'dokan-lite/dokan.php';
+
+        include_once DOKAN_PRO_TEMPLATE_DIR . '/dokan-lite-activation-notice.php';
     }
 
     /**
@@ -143,7 +205,7 @@ class Dokan_Pro {
      * @return void
      * */
     public function install_dokan_lite() {
-        if ( !isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-pro-installer-nonce' ) ) {
+        if ( ! isset( $_REQUEST['_wpnonce'] ) || ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dokan-pro-installer-nonce' ) ) {
             wp_send_json_error( __( 'Error: Nonce verification failed', 'dokan' ) );
         }
 
@@ -158,102 +220,6 @@ class Dokan_Pro {
         activate_plugin( 'dokan-lite/dokan.php' );
 
         wp_send_json_success();
-    }
-
-    /**
-     * Load all things
-     *
-     * @since 2.7.3
-     *
-     * @return void
-     */
-    public function init_plugin() {
-        spl_autoload_register( [ $this, 'dokan_pro_autoload' ] );
-
-        $this->includes();
-        $this->load_actions();
-        $this->load_filters();
-
-        $this->container['module'] = new \WeDevs\DokanPro\Module();
-    }
-
-    /**
-     * Initializes the WeDevs_Dokan() class
-     *
-     * Checks for an existing WeDevs_WeDevs_Dokan() instance
-     * and if it doesn't find one, creates it.
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro();
-        }
-
-        return $instance;
-    }
-
-    /**
-     * Placeholder for activation function
-     *
-     * Nothing being called here yet.
-     */
-    public static function activate() {
-        require_once DOKAN_PRO_DIR . '/includes/installer.php';
-        $installer = new Dokan_Pro_Installer();
-        $installer->do_install();
-    }
-
-    /**
-     * Initialize plugin for localization
-     *
-     * @uses load_plugin_textdomain()
-     */
-    public function localization_setup() {
-        load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-    }
-
-    /**
-     * Get plan id
-     *
-     * @since 2.8.4
-     *
-     * @return void
-     */
-    public function get_plan() {
-        return $this->plan;
-    }
-
-    /**
-     * List of Dokan Pro plans
-     *
-     * @since DOKAN_PRO_SINCE
-     *
-     * @return array
-     */
-    public function get_dokan_pro_plans() {
-        return [
-            [
-                'name'        => 'starter',
-                'title'       => __( 'Starter', 'dokan' ),
-                'price_index' => 1,
-            ],
-            [
-                'name'        => 'professional',
-                'title'       => __( 'Professional', 'dokan' ),
-                'price_index' => 2,
-            ],
-            [
-                'name'        => 'business',
-                'title'       => __( 'Business', 'dokan' ),
-                'price_index' => 3,
-            ],
-            [
-                'name'        => 'enterprise',
-                'title'       => __( 'Enterprise', 'dokan' ),
-                'price_index' => 4,
-            ],
-        ];
     }
 
     /**
@@ -293,10 +259,6 @@ class Dokan_Pro {
 
         require_once DOKAN_PRO_INC . '/class-assets.php';
         require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
-
-        if ( ! class_exists( 'Hybridauth' ) ) {
-            require_once DOKAN_PRO_INC . '/lib/hybridauth/autoload.php';
-        }
 
         require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
         require_once DOKAN_PRO_INC . '/class-store-lists-filter.php';
@@ -349,7 +311,7 @@ class Dokan_Pro {
      *
      * @since 2.4
      *
-     * @return void [description]
+     * @return void
      */
     public function load_actions() {
          // init the classes
@@ -393,34 +355,22 @@ class Dokan_Pro {
     }
 
     /**
-     * Get plugin path
+     * Initialize plugin for localization
      *
-     * @since 2.5.2
-     *
-     * @return void
-     * */
-    public function plugin_path() {
-        return untrailingslashit( plugin_dir_path( __FILE__ ) );
+     * @uses load_plugin_textdomain()
+     */
+    public function localization_setup() {
+        load_plugin_textdomain( 'dokan', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
     }
 
     /**
-     * Required all class files inside Pro
+     * Instantiate all classes
      *
      * @since 2.4
      *
-     * @param  string $class
-     *
      * @return void
      */
-    public function dokan_pro_autoload( $class ) {
-        if ( stripos( $class, 'Dokan_Pro_' ) !== false ) {
-            $class_name = str_replace( [ 'Dokan_Pro_', '_' ], [ '', '-' ], $class );
-            $file_path  = DOKAN_PRO_CLASS . '/' . strtolower( $class_name ) . '.php';
-
-            if ( file_exists( $file_path ) ) {
-                require_once $file_path;
-            }
-        }
+    public function init_classes() {
     }
 
     /**
@@ -436,6 +386,33 @@ class Dokan_Pro {
         // Register all js
         wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', [ 'jquery' ], '2.6.1' );
         wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
+    }
+
+    /**
+     * Register widgets
+     *
+     * @since 2.8
+     *
+     * @return void
+     */
+    public function register_widgets() {
+        register_widget( 'Dokan_Best_Seller_Widget' );
+        register_widget( 'Dokan_Feature_Seller_Widget' );
+    }
+
+    /**
+     * Dokan Account Migration Button render
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    public function dokan_account_migration_button() {
+        $user = wp_get_current_user();
+
+        if ( dokan_is_user_customer( $user->ID ) ) {
+            dokan_get_template_part( 'global/account-migration-btn', '', [ 'pro' => true ] );
+        }
     }
 
     /**
@@ -477,6 +454,7 @@ class Dokan_Pro {
         }
     }
 
+
     /**
      * Admin scripts
      *
@@ -514,6 +492,43 @@ class Dokan_Pro {
     }
 
     /**
+     * Initialize pro rest api class
+     *
+     * @param array $class_map
+     *
+     * @return array
+     */
+    public function rest_api_class_map( $class_map ) {
+        $classes = [
+            DOKAN_PRO_DIR . '/includes/api/class-store-category-controller.php'    => 'Dokan_REST_Store_Category_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-refund-controller.php'            => 'Dokan_REST_Refund_Controller',
+            DOKAN_PRO_DIR . '/includes/api/class-logs-controller.php'              => 'Dokan_REST_Logs_Controller',
+        ];
+
+        return array_merge( $class_map, $classes );
+    }
+
+    /**
+     * Set plugin in pro mode
+     *
+     * @since 2.6
+     *
+     * @param boolean $is_pro
+     *
+     * @return boolean
+     */
+    public function set_as_pro( $is_pro ) {
+        return true;
+    }
+
+    /**
      * Load Pro rewrite query vars
      *
      * @since 2.4
@@ -532,21 +547,6 @@ class Dokan_Pro {
         $query_vars[] = 'dokan-registration';
 
         return $query_vars;
-    }
-
-    /**
-     * Dokan Account Migration Button render
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    public function dokan_account_migration_button() {
-        $user = wp_get_current_user();
-
-        if ( dokan_is_user_customer( $user->ID ) ) {
-            dokan_get_template_part( 'global/account-migration-btn', '', [ 'pro' => true ] );
-        }
     }
 
     /**
@@ -592,19 +592,6 @@ class Dokan_Pro {
     }
 
     /**
-     * Set plugin in pro mode
-     *
-     * @since 2.6
-     *
-     * @param boolean $is_pro
-     *
-     * @return boolean
-     */
-    public function set_as_pro( $is_pro ) {
-        return true;
-    }
-
-    /**
      * Add Dokan Email classes in WC Email
      *
      * @since 2.6.6
@@ -622,24 +609,6 @@ class Dokan_Pro {
         $wc_emails['Dokan_Email_Vendor_Disable']  = include( DOKAN_PRO_INC . '/emails/class-dokan-email-vendor-disable.php' );
 
         return $wc_emails;
-    }
-
-    /**
-     * Register Dokan Email actions for WC
-     *
-     * @since 2.6.6
-     *
-     * @param array $actions
-     *
-     * @return $actions
-     */
-    public function register_email_actions( $actions ) {
-        $actions[] = 'dokan_edited_product_pending_notification';
-        $actions[] = 'dokan_after_announcement_saved';
-        $actions[] = 'dokan_refund_request_notification';
-        $actions[] = 'dokan_refund_processed_notification';
-
-        return $actions;
     }
 
     /**
@@ -663,50 +632,75 @@ class Dokan_Pro {
     }
 
     /**
-     * Initialize pro rest api class
+     * Register Dokan Email actions for WC
      *
-     * @param array $class_map
+     * @since 2.6.6
      *
-     * @return array
+     * @param array $actions
+     *
+     * @return $actions
      */
-    public function rest_api_class_map( $class_map ) {
-        $classes = [
-            DOKAN_PRO_DIR . '/includes/api/class-store-category-controller.php'    => 'Dokan_REST_Store_Category_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-refund-controller.php'            => 'Dokan_REST_Refund_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-logs-controller.php'              => 'Dokan_REST_Logs_Controller',
-        ];
+    public function register_email_actions( $actions ) {
+        $actions[] = 'dokan_edited_product_pending_notification';
+        $actions[] = 'dokan_after_announcement_saved';
+        $actions[] = 'dokan_refund_request_notification';
+        $actions[] = 'dokan_refund_processed_notification';
 
-        return array_merge( $class_map, $classes );
+        return $actions;
     }
 
     /**
-     * Register widgets
+     * Get plan id
      *
-     * @since 2.8
+     * @since 2.8.4
      *
      * @return void
      */
-    public function register_widgets() {
-        register_widget( 'Dokan_Best_Seller_Widget' );
-        register_widget( 'Dokan_Feature_Seller_Widget' );
+    public function get_plan() {
+        return $this->plan;
     }
 
     /**
-     * Get Dokan db version key
+     * List of Dokan Pro plans
      *
-     * @since DOKAN_LITE_SINCE
+     * @since DOKAN_PRO_SINCE
      *
-     * @return string
+     * @return array
      */
-    public function get_db_version_key() {
-        return $this->db_version_key;
+    public function get_dokan_pro_plans() {
+        return [
+            [
+                'name'        => 'starter',
+                'title'       => __( 'Starter', 'dokan' ),
+                'price_index' => 1,
+            ],
+            [
+                'name'        => 'professional',
+                'title'       => __( 'Professional', 'dokan' ),
+                'price_index' => 2,
+            ],
+            [
+                'name'        => 'business',
+                'title'       => __( 'Business', 'dokan' ),
+                'price_index' => 3,
+            ],
+            [
+                'name'        => 'enterprise',
+                'title'       => __( 'Enterprise', 'dokan' ),
+                'price_index' => 4,
+            ],
+        ];
+    }
+
+    /**
+     * Get plugin path
+     *
+     * @since 2.5.2
+     *
+     * @return void
+     * */
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
 }
 
@@ -722,5 +716,3 @@ function dokan_pro() {
 }
 
 dokan_pro();
-
-register_activation_hook( __FILE__, [ 'Dokan_Pro', 'activate' ] );
