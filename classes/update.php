@@ -66,11 +66,25 @@ class Dokan_Update {
             return;
         }
 
-        if ( $_SERVER['HTTP_HOST'] == 'localhost'
-            || substr( $_SERVER['REMOTE_ADDR'], 0, 3 ) == '10.'
-            || substr( $_SERVER['REMOTE_ADDR'], 0, 7 ) == '192.168' ) {
+        if ( $_SERVER['HTTP_HOST'] === 'localhost'
+            || substr( $_SERVER['REMOTE_ADDR'], 0, 3 ) === '10.'
+            || substr( $_SERVER['REMOTE_ADDR'], 0, 7 ) === '192.168' ) {
 
             return true;
+        }
+
+        $live_sites = [
+            'HTTP_CLIENT_IP',
+            'HTTP_X_REAL_IP',
+            'HTTP_X_FORWARDED_FOR',
+            'HTTP_X_FORWARDED',
+            'HTTP_X_CLUSTER_CLIENT_IP',
+        ];
+
+        foreach ( $live_sites as $ip ) {
+            if ( ! empty( $_SERVER[$ip] ) ) {
+                return false;
+            }
         }
 
         if ( in_array( $_SERVER['REMOTE_ADDR'], array( '127.0.0.1', '::1' ) ) ) {
