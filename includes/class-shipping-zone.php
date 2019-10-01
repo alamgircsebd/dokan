@@ -354,18 +354,30 @@ class Dokan_Shipping_Zone {
             $zone_ids_with_postcode_rules = array_map( 'absint', wp_list_pluck( $postcode_locations, 'zone_id' ) );
             $matches                      = wc_postcode_location_matcher( $postcode, $postcode_locations, 'zone_id', 'location_code', $country );
             $do_not_match                 = array_unique( array_diff( $zone_ids_with_postcode_rules, array_keys( $matches ) ) );
+
             if ( ! empty( $do_not_match ) ) {
                 $criteria[] = 'AND zones.zone_id NOT IN (' . implode( ',', $do_not_match ) . ')';
             }
         }
 
         // Get matching zones.
-        $zone_id = $wpdb->get_var(
+        $zone_id = $wpdb->get_results(
             "SELECT zones.zone_id FROM {$wpdb->prefix}woocommerce_shipping_zones as zones
             LEFT OUTER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
             WHERE " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
-            . ' ORDER BY zone_order ASC, zone_id ASC LIMIT 1'
+            . ' ORDER BY zone_order ASC, zone_id ASC'
         );
+
+        // if multiple zone_id is found, then get spcecefic zone_id by postcode
+        if ( count( $zone_id ) > 1 ) {
+            $vendor_zone_id = self::get_zone_id_by_postcode( $postcode );
+
+            if ( $vendor_zone_id ) {
+                $zone_id = $vendor_zone_id;
+            }
+        } else {
+            $zone_id = $zone_id[0]->zone_id;
+        }
 
         // if zone id is not found in vendor's available zone id, assume it falls under `Locations not covered by your other zones`.
         if ( ! in_array( $zone_id, self::get_vendor_all_zone_ids( $package ) ) ) {
@@ -419,5 +431,23 @@ class Dokan_Shipping_Zone {
         }, $results );
 
         return $zone_ids;
+    }
+
+    /**
+     * Get zone id by postcode
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param  int $postcode
+     *
+     * @return int
+     */
+    public static function get_zone_id_by_postcode( $postcode ) {
+        global $wpdb;
+
+        $table_name = "{$wpdb->prefix}dokan_shipping_zone_locations";
+        $zone_id    = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$table_name} WHERE location_code=%d AND location_type=%s", $postcode, 'postcode' ) );
+
+        return $zone_id;
     }
 }

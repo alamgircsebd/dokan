@@ -920,7 +920,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 }
 
                 $transfer = DokanStripe::transaction( $this->secret_key )
-                    ->amount( $vendor_earning * 100 )
+                    ->amount( $vendor_earning * 100, $currency )
                     ->from( $this->get_charge_id_from_intent() )
                     ->to( $connected_vendor_id )
                     ->create();

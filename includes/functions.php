@@ -612,6 +612,19 @@ function dokan_is_refund_allowed_to_approve( $order_id ) {
 }
 
 /**
+ * Nomalize shipping postcode that contains '-' or space
+ *
+ * @since  DOKAN_PRO_SINCE
+ *
+ * @param  string $code
+ *
+ * @return string
+ */
+function dokan_normalize_shipping_postcode( $code ) {
+    return str_replace( [ ' ', '-' ], '', $code );
+}
+
+/**
  * Dokan add combine commission
  *
  * @since  DOKAN_PRO_SINCE
