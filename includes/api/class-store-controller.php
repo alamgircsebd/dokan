@@ -233,8 +233,9 @@ class Dokan_Pro_REST_Store_Controller extends Dokan_REST_Store_Controller {
                 'earning' => dokan_get_seller_earnings( $store_id, false )
             ),
             'others'   => array(
-                'commission_rate' => $vendor->get_percentage(),
-                'commission_type' => dokan_get_commission_type( $store_id ),
+                'commission_rate' => dokan()->commission->get_vendor_wise_rate( $store_id ),
+                'additional_fee'  => dokan()->commission->get_vendor_wise_additional_fee( $store_id ),
+                'commission_type' => dokan()->commission->get_vendor_wise_type( $store_id ),
                 'balance'         => $vendor->get_balance(false),
                 'reviews'         => $reviews->{'approved'}
             )

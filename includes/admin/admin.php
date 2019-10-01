@@ -35,6 +35,11 @@ class Dokan_Pro_Admin_Settings {
         add_action( 'wp_ajax_dokan-whats-new-notice', array( $this, 'dismiss_new_notice' ) );
         add_action( 'wp_ajax_dokan-dismiss-christmas-offer-notice', array( $this, 'dismiss_christmas_offer' ) );
         add_action( 'admin_init', array( $this, 'handle_seller_bulk_action' ), 10 );
+        add_filter( 'dokan_commission_types', [ $this, 'add_combine_commission_type' ] );
+
+        //save user meta
+        add_action( 'dokan_seller_meta_fields_after_admin_commission', [ $this, 'add_additional_fee' ] );
+        add_action( 'dokan_process_seller_meta_fields', [ $this, 'save_meta_fields' ] );
     }
 
     /**
@@ -276,11 +281,78 @@ class Dokan_Pro_Admin_Settings {
             ),
         );
 
-        // $settings_fields['dokan_general']  = array_merge( $settings_fields['dokan_general'], $new_settings_fields['dokan_general'] );
-        // $settings_fields['dokan_selling']  = array_merge( $settings_fields['dokan_selling'], $new_settings_fields['dokan_selling'] );
         $settings_fields['dokan_withdraw'] = array_merge( $settings_fields['dokan_withdraw'], $new_settings_fields['dokan_withdraw'] );
 
-        return $settings_fields;
+        return $dokan_settings->add_settings_after(
+            $settings_fields,
+            'dokan_selling',
+            'commission_type',
+            $this->get_additional_fee()
+        );
+    }
+
+    /**
+     * Get additional fee settings fields
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_additional_fee() {
+        return [
+            'additional_fee' => [
+                'name'    => 'additional_fee',
+                'label'   => __( 'Admin Commission', 'dokan' ),
+                'type'    => 'combine',
+                'fields'  => [
+                    'percent_fee' => [
+                        'name'    => 'admin_percentage',
+                        'label'   => __( 'Percent Fee', 'dokan' ),
+                        'default' => '10',
+                        'type'    => 'text',
+                        'min'     => '0',
+                        'step'    => 'any',
+                        'desc'    => __( 'Amount you will get from sales in percentage (10%)', 'dokan' ),
+                    ],
+                    'fixed_fee' => [
+                        'name'    => 'additional_fee',
+                        'label'   => __( 'Fixed Fee', 'dokan' ),
+                        'default' => '10',
+                        'type'    => 'text',
+                        'min'     => '0',
+                        'step'    => 'any',
+                        'desc'    => __( 'Amount you will get from sales in flat rate(+5)', 'dokan' ),
+                    ]
+                ],
+                'min'     => '0',
+                'step'    => 'any',
+                'desc'    => __( 'Amount you will get from sales in both percentage and fixed fee', 'dokan' ),
+                'condition' => [
+                    'type' => 'show',
+                    'logic' => [
+                        'commission_type' => [ 'combine' ]
+                    ]
+                ],
+            ]
+        ];
+    }
+
+    /**
+     * Load Report Scripts
+     *
+     * @since 2.4
+     *
+     * @return void
+     */
+    function common_scripts() {
+        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
+        wp_enqueue_style( 'jquery-ui' );
+        wp_enqueue_style( 'dokan-select2-css' );
+
+        wp_enqueue_script( 'jquery-ui-datepicker' );
+        wp_enqueue_script( 'dokan-flot' );
+        wp_enqueue_script( 'dokan-chart' );
+        wp_enqueue_script( 'dokan-select2-js' );
     }
 
     /**
@@ -760,6 +832,55 @@ class Dokan_Pro_Admin_Settings {
         $redirect_url = add_query_arg( array( 'page' => 'dokan-sellers'), admin_url( 'admin.php' ) );
         wp_redirect( $redirect_url );
         exit();
+    }
+
+    /**
+     * Add combine commission type
+     *
+     * @since DOKAN_LITE_SINCE
+     *
+     * @param array $types
+     *
+     * @return array
+     */
+    public function add_combine_commission_type( $types ) {
+        $types['combine'] = __( 'Combine', 'dokan' );
+
+        return $types;
+    }
+
+    public function save_meta_fields( $user_id ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
+            return;
+        }
+
+        $post_data = wp_unslash( $_POST );
+        $additional_fee  = isset( $post_data['dokan_admin_additional_fee'] ) && $post_data['dokan_admin_additional_fee'] != '' ? floatval( $post_data['dokan_admin_additional_fee'] ) : '';
+
+        update_user_meta( $user_id, 'dokan_admin_additional_fee', $additional_fee );
+    }
+
+    public function add_additional_fee( $user ) {
+        $admin_additional_fee = get_user_meta( $user->ID, 'dokan_admin_additional_fee', true );
+        ?>
+        <span class="additional-fee dokan-hide">
+            <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+            <input type="number" min="0" class="small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+        </span>
+
+        <script type="text/javascript">
+            $('#dokan_admin_percentage_type').on('change', function() {
+                if ( 'combine' === $(this).val() ) {
+                    $('span.additional-fee').removeClass('dokan-hide');
+                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                } else {
+                    $('span.additional-fee').addClass('dokan-hide');
+                    $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                }
+            }).trigger('change');
+        </script>
+
+        <?php
     }
 }
 

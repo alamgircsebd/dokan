@@ -252,29 +252,65 @@ class Dokan_Pro_Products {
      */
     function add_per_product_commission_options() {
 
-        if ( !current_user_can( 'manage_woocommerce' ) ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
+
         woocommerce_wp_select( array(
             'id'            => '_per_product_admin_commission_type',
             'label'         => __( 'Admin Commission type', 'dokan' ),
-            'options'       => array(
-                'percentage'  => __( 'Percentage', 'dokan' ),
-                'flat'        => __( 'Flat', 'dokan' ),
-            ),
+            'options'       => dokan_commission_types(),
             'wrapper_class' => 'per-product-commission-type show_if_simple show_if_variable show_if_booking',
             'description'   => __( 'Set the commission type admin will get from this product', 'dokan' ),
             'data_type'     => 'price'
         ) );
-        woocommerce_wp_text_input(
-            array(
-                'id'            => '_per_product_admin_commission',
-                'label'         => __( 'Admin Commission', 'dokan' ),
-                'wrapper_class' => 'per-product-commission show_if_simple show_if_variable show_if_booking',
-                'description'   => __( 'Override the default commission admin will get from this product', 'dokan' ),
-                'data_type'     => 'price'
-            )
-        );
+
+        $product          = wc_get_product( get_the_ID() );
+        $admin_commission = $product->get_meta( '_per_product_admin_commission' );
+        $additional_fee   = $product->get_meta( '_per_product_admin_additional_fee' );
+        ?>
+
+        <div class="commission show_if_simple show_if_variable show_if_booking">
+            <p class="form-field dimensions_field">
+                <label for="admin_commission"><?php  _e( 'Admin Commission', 'dokan' ); ?></label>
+                <span class="wrapper">
+                    <input id="admin_commission" class="input-text wc_input_decimal" type="text" name="_per_product_admin_commission" value="<?php echo wc_format_localized_price( $admin_commission ); ?>">
+                    <span class="additional_fee dokan-hide">
+                        <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+                        <input class="input-text wc_input_decimal" type="text" name="_per_product_admin_additional_fee" value="<?php echo wc_format_localized_price( $additional_fee ); ?>">
+                    </span>
+                    <span class="combine-commission-description"></span>
+                </span>
+            </p>
+        </div>
+
+        <style type="text/css">
+            .dokan-hide {
+                display: none;
+            }
+            .commission .wrapper input {
+                width: 60px;
+                float: none;
+            }
+            span.combine-commission-description {
+                margin-left: 5px;
+                font-size: 13px;
+                font-style: italic;
+            }
+        </style>
+
+        <script type="text/javascript">
+            $('#_per_product_admin_commission_type').on('change', function() {
+                if ( 'combine' === $(this).val() ) {
+                    $('.additional_fee').removeClass('dokan-hide');
+                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                } else {
+                    $('.additional_fee').addClass('dokan-hide');
+                    $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                }
+            }).trigger('change');
+        </script>
+        <?php
     }
 
     /**
@@ -288,16 +324,23 @@ class Dokan_Pro_Products {
      */
     public static function save_per_product_commission_options( $post_id ) {
 
-        if ( !current_user_can( 'manage_woocommerce' ) ) {
+        if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
+
         if ( isset( $_POST['_per_product_admin_commission_type'] ) ) {
             $value = empty( $_POST['_per_product_admin_commission_type'] ) ? 'percentage' : $_POST['_per_product_admin_commission_type'];
             update_post_meta( $post_id, '_per_product_admin_commission_type', $value );
         }
+
         if ( isset( $_POST['_per_product_admin_commission'] ) ) {
             $value = '' === $_POST['_per_product_admin_commission'] ? '' : (float) $_POST['_per_product_admin_commission'];
             update_post_meta( $post_id, '_per_product_admin_commission', $value );
+        }
+
+        if ( isset( $_POST['_per_product_admin_additional_fee'] ) ) {
+            $value = '' === $_POST['_per_product_admin_additional_fee'] ? '' : (float) $_POST['_per_product_admin_additional_fee'];
+            update_post_meta( $post_id, '_per_product_admin_additional_fee', $value );
         }
     }
 

@@ -474,7 +474,9 @@ class Dokan_Pro {
             'ajaxurl'      => admin_url( 'admin-ajax.php' ),
             'nonce'        => wp_create_nonce( 'dokan-admin-nonce' ),
             'activating'   => __( 'Activating', 'dokan' ),
-            'deactivating' => __( 'Deactivating', 'dokan' )
+            'deactivating' => __( 'Deactivating', 'dokan' ),
+            'combine_commission_desc' => __( 'Amount you will get from sales in both percentage and fixed fee', 'dokan' ),
+            'default_commission_desc' => __( 'It will override the default commission admin gets from each sales', 'dokan' )
         ) );
 
         wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );

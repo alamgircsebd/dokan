@@ -220,8 +220,8 @@
 
                         <ul class="counts">
                             <li class="commision">
-                                <span class="count">{{ getEearningRate }}</span>
-                                <span class="subhead">{{ __( 'Commission Rate', 'dokan' ) }}</span>
+                                <span class="count" v-html="getEearningRate"></span>
+                                <span class="subhead">{{ __( 'Admin Commission', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
                                 <span class="count">
@@ -460,10 +460,12 @@ export default {
         },
 
         getEearningRate() {
-            if ( this.stats.others.commission_type == 'percentage' ) {
-                return this.stats.others.commission_rate + '%';
-            } else {
+            if ( this.stats.others.commission_type === 'flat' ) {
                 return accounting.formatMoney( this.stats.others.commission_rate );
+            } else if ( this.stats.others.commission_type === 'percentage' ) {
+                return `${this.stats.others.commission_rate}%`;
+            } else {
+                return `${(this.stats.others.commission_rate)}% &nbsp; + ${accounting.formatMoney( this.stats.others.additional_fee )}`;
             }
         },
 
@@ -652,14 +654,7 @@ export default {
         },
 
         updateCommissonRate() {
-            let admin_commission = this.store.admin_commission;
-
-            if ( this.store.admin_commission_type === 'percentage' ) {
-                this.stats.others.commission_rate = 100 - admin_commission;
-            } else {
-                this.stats.others.commission_rate = admin_commission;
-            }
-
+            this.stats.others.commission_rate = this.store.admin_commission;
             this.stats.others.commission_type = this.store.admin_commission_type;
         }
     }

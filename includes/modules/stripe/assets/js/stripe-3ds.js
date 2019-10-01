@@ -62,7 +62,9 @@ jQuery( function( $ ) {
                 action: 'dokan_send_token',
                 token: token.id,
                 nonce: dokan.nonce,
-                product_id: subscriptionProductId
+                product_id: subscriptionProductId,
+                name:  $( '#dokan-payment-customer-name' ).val(),
+                email: $( '#dokan-payment-customer-email' ).val(),
             }
         } )
         .done( function( response ) {

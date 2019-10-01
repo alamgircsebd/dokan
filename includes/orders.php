@@ -108,7 +108,7 @@ function dokan_sync_order_table( $order_id ) {
     }
 
     $order          = wc_get_order( $order_id );
-    $seller_id      = dokan_get_seller_id_by_order_id( $order_id );
+    $seller_id      = dokan_get_seller_id_by_order( $order_id );
     $order_total    = $order->get_total();
 
     if ( $order->get_total_refunded() ) {
@@ -116,7 +116,7 @@ function dokan_sync_order_table( $order_id ) {
     }
 
     $order_status       = dokan_get_prop( $order, 'status' );
-    $admin_commission   = dokan_get_admin_commission_by( $order, $seller_id );
+    $admin_commission   = dokan()->commission->get_earning_by_order( $order, 'admin' );
     $net_amount         = $order_total - $admin_commission;
     $net_amount         = apply_filters( 'dokan_sync_order_net_amount', $net_amount, $order );
 

@@ -84,7 +84,18 @@ class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
         $statuses = wc_get_order_statuses();
 
         foreach ( $results as $result ) {
-            $order       = wc_get_order( $result->order_id );
+            $order                   = wc_get_order( $result->order_id );
+            $is_subscription_product = false;
+
+            foreach ( $order->get_items() as $item ) {
+                $product = $item->get_product();
+
+                if ( 'product_pack' === $product->get_type() ) {
+                    $is_subscription_product = true;
+                    break;
+                }
+            }
+
             $order_total = $order->get_total();
             $has_refund  = $order->get_total_refunded() ? true : false;
 
@@ -94,8 +105,8 @@ class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
                 'vendor_name'          => dokan()->vendor->get( $result->seller_id )->get_shop_name(),
                 'previous_order_total' => $order_total,
                 'order_total'          => $result->order_total,
-                'vendor_earning'       => $result->net_amount,
-                'commission'           => $result->order_total - $result->net_amount,
+                'vendor_earning'       => $is_subscription_product ? 0 : $result->net_amount,
+                'commission'           => $is_subscription_product ? $result->order_total :  $result->order_total - $result->net_amount,
                 'status'               => $statuses[ $result->order_status ],
                 'date'                 => $result->post_date,
                 'has_refund'           => $has_refund,
