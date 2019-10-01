@@ -325,7 +325,7 @@ class StoreWPWidgets {
 
             dokan_get_template_part( 'widgets/vendor-verification', '', [
                 'pro'        => true,
-                'args'       => $args,
+                'data'       => $args,
                 'instance'   => $instance,
                 'store_info' => $store_info,
                 'widget'     => $widget,
