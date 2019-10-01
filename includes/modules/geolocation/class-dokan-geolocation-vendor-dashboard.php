@@ -20,6 +20,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
         add_action( 'dokan_new_product_added', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_update_auction_product', array( $this, 'update_product_settings' ) );
+        add_action( 'woocommerce_process_product_meta', array( $this, 'update_product_settings' ) );
     }
 
     /**
