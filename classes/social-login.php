@@ -213,7 +213,12 @@ Class Dokan_Social_Login {
             $user_profile = $adapter->getUserProfile();
 
             if ( ! $user_profile ) {
-                wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
+                wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'error' );
+                wp_redirect( $this->callback );
+            }
+
+            if ( empty( $user_profile->email ) ) {
+                wc_add_notice( __( 'User email is not found. Try again.', 'dokan' ), 'error' );
                 wp_redirect( $this->callback );
             }
 
