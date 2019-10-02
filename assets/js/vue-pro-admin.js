@@ -2069,6 +2069,15 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var Switches = dokan_get_lib('Switches');
 var Multiselect = dokan_get_lib('Multiselect');
@@ -2092,8 +2101,8 @@ var Multiselect = dokan_get_lib('Multiselect');
             enabled: false,
             trusted: false,
             featured: false,
-            commissionTypes: ['Flat', 'Percentage'],
-            selectedCommissionType: '',
+            commissionTypes: [this.__('Flat', 'dokan'), this.__('Percentage', 'dokan'), this.__('Combine', 'dokan')],
+            selectedCommissionType: this.__('Flat', 'dokan'),
             getBankFields: dokan.hooks.applyFilters('getVendorBankFields', []),
             getPyamentFields: dokan.hooks.applyFilters('AfterPyamentFields', [])
         };
@@ -2153,7 +2162,7 @@ var Multiselect = dokan_get_lib('Multiselect');
         },
         saveCommissionType: function saveCommissionType(value) {
             if (!value) {
-                return;
+                this.vendorInfo.admin_commission_type = 'flat';
             }
 
             this.vendorInfo.admin_commission_type = value.toLowerCase();
@@ -2172,13 +2181,8 @@ var Multiselect = dokan_get_lib('Multiselect');
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_admin_components_VendorAccountFields_vue__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_admin_components_VendorPaymentFields_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_admin_components_VendorAddressFields_vue__ = __webpack_require__(13);
-//
-//
-//
-//
-//
-//
-//
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 //
 //
 //
@@ -2598,42 +2602,13 @@ var VclTwitch = ContentLoading.VclTwitch;
 
             return categories;
         },
-
-
-        storeCategories: {
-            get: function get() {
-                var self = this;
-
-                if (!self.isCategoryMultiple) {
-                    if (self.store.categories.length) {
-                        return self.store.categories[0].id;
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return self.store.categories.map(function (category) {
-                        return category.id;
-                    });
-                }
-            },
-            set: function set(categories) {
-                var self = this;
-
-                if ($.isArray(categories)) {
-                    self.store.categories = categories.map(function (category_id) {
-                        return self.categoriesFlattened[category_id];
-                    });
-                } else {
-                    self.store.categories = [self.categoriesFlattened[categories]];
-                }
-            }
-        },
-
         getEearningRate: function getEearningRate() {
-            if (this.stats.others.commission_type == 'percentage') {
+            if (this.stats.others.commission_type === 'flat') {
+                return accounting.formatMoney(this.stats.others.commission_rate);
+            } else if (this.stats.others.commission_type === 'percentage') {
                 return this.stats.others.commission_rate + '%';
             } else {
-                return accounting.formatMoney(this.stats.others.commission_rate);
+                return this.stats.others.commission_rate + '% &nbsp; + ' + accounting.formatMoney(this.stats.others.additional_fee);
             }
         },
         saveBtn: function saveBtn() {
@@ -2667,7 +2642,7 @@ var VclTwitch = ContentLoading.VclTwitch;
                 self.transformer(response);
             });
 
-            dokan.api.get('/store-categories').done(function (response, status, xhr) {
+            dokan.api.get('/store-categories?per_page=50').done(function (response, status, xhr) {
                 self.categories = response;
                 self.isCategoryMultiple = 'multiple' === xhr.getResponseHeader('X-WP-Store-Category-Type');
             });
@@ -2815,15 +2790,85 @@ var VclTwitch = ContentLoading.VclTwitch;
             return dokan.urls.proAssetsUrl + '/images/store-pic.png';
         },
         updateCommissonRate: function updateCommissonRate() {
-            var admin_commission = this.store.admin_commission;
-
-            if (this.store.admin_commission_type === 'percentage') {
-                this.stats.others.commission_rate = 100 - admin_commission;
-            } else {
-                this.stats.others.commission_rate = admin_commission;
-            }
-
+            this.stats.others.commission_rate = this.store.admin_commission;
             this.stats.others.commission_type = this.store.admin_commission_type;
+        },
+        setStoreCategories: function setStoreCategories() {
+            var self = this;
+            var storeCategories = $('#store-categories');
+
+            storeCategories.selectWoo({
+                multiple: self.isCategoryMultiple ? true : false,
+                ajax: {
+                    delay: 800,
+                    url: dokan.rest.root + 'dokan/v1/store-categories?per_page=50',
+                    dataType: 'json',
+                    headers: {
+                        "X-WP-Nonce": dokan.rest.nonce
+                    },
+                    data: function data(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults: function processResults(data) {
+                        return {
+                            results: data.map(function (cat) {
+                                return {
+                                    id: cat.id,
+                                    text: cat.name,
+                                    slug: cat.slug
+                                };
+                            })
+                        };
+                        cache: true;
+                    }
+                }
+            });
+
+            self.store.categories.forEach(function (category) {
+                var option = new Option(category.name, category.id, true, true);
+                storeCategories.append(option).trigger('change');
+            });
+
+            $('#store-categories').on('select2:select', function (e) {
+                if (self.isCategoryMultiple) {
+                    self.store.categories.push({
+                        id: e.params.data.id,
+                        name: e.params.data.text,
+                        slug: e.params.data.slug
+                    });
+                } else {
+                    self.store.categories[0] = {
+                        id: e.params.data.id,
+                        name: e.params.data.text,
+                        slug: e.params.data.slug
+                    };
+                }
+            });
+        },
+        editCategory: function editCategory() {
+            var _this4 = this;
+
+            return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                        switch (_context.prev = _context.next) {
+                            case 0:
+                                _this4.editingCategories = true;
+                                _context.next = 3;
+                                return _this4.$nextTick();
+
+                            case 3:
+                                _this4.setStoreCategories();
+
+                            case 4:
+                            case 'end':
+                                return _context.stop();
+                        }
+                    }
+                }, _callee, _this4);
+            }))();
         }
     }
 });
@@ -7311,8 +7356,7 @@ var render = function() {
                               options: _vm.commissionTypes,
                               multiselect: false,
                               searchable: false,
-                              showLabels: false,
-                              placeholder: _vm.__("Please Select One", "dokan")
+                              showLabels: false
                             },
                             on: { input: _vm.saveCommissionType },
                             model: {
@@ -7328,37 +7372,119 @@ var render = function() {
                       )
                     ]),
                     _vm._v(" "),
-                    _c("div", { staticClass: "column" }, [
-                      _c("label", [
-                        _vm._v(_vm._s(_vm.__("Admin Commission", "dokan")))
-                      ]),
-                      _vm._v(" "),
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.vendorInfo.admin_commission,
-                            expression: "vendorInfo.admin_commission"
-                          }
-                        ],
-                        staticClass: "dokan-form-input",
-                        attrs: { type: "number", placeholder: "10" },
-                        domProps: { value: _vm.vendorInfo.admin_commission },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.vendorInfo,
-                              "admin_commission",
-                              $event.target.value
+                    "Combine" === _vm.selectedCommissionType
+                      ? _c(
+                          "div",
+                          { staticClass: "column combine-commission" },
+                          [
+                            _c("label", [
+                              _vm._v(
+                                _vm._s(_vm.__("Admin Commission", "dokan"))
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              { staticClass: "combine-commission-field" },
+                              [
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.vendorInfo.admin_commission,
+                                      expression: "vendorInfo.admin_commission"
+                                    }
+                                  ],
+                                  staticClass: "dokan-form-input percent_fee",
+                                  attrs: { type: "number" },
+                                  domProps: {
+                                    value: _vm.vendorInfo.admin_commission
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.vendorInfo,
+                                        "admin_commission",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(
+                                  "\n                        " +
+                                    _vm._s("%    +") +
+                                    "\n                        "
+                                ),
+                                _c("input", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value:
+                                        _vm.vendorInfo.admin_additional_fee,
+                                      expression:
+                                        "vendorInfo.admin_additional_fee"
+                                    }
+                                  ],
+                                  staticClass: "dokan-form-input fixed_fee",
+                                  attrs: { type: "number" },
+                                  domProps: {
+                                    value: _vm.vendorInfo.admin_additional_fee
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.vendorInfo,
+                                        "admin_additional_fee",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                })
+                              ]
                             )
-                          }
-                        }
-                      })
-                    ])
+                          ]
+                        )
+                      : _c("div", { staticClass: "column" }, [
+                          _c("label", [
+                            _vm._v(_vm._s(_vm.__("Admin Commission", "dokan")))
+                          ]),
+                          _vm._v(" "),
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.vendorInfo.admin_commission,
+                                expression: "vendorInfo.admin_commission"
+                              }
+                            ],
+                            staticClass: "dokan-form-input",
+                            attrs: { type: "number" },
+                            domProps: {
+                              value: _vm.vendorInfo.admin_commission
+                            },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  _vm.vendorInfo,
+                                  "admin_commission",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ])
                   ]
                 : _vm._e(),
               _vm._v(" "),
@@ -8563,7 +8689,7 @@ var render = function() {
                                         on: {
                                           click: function($event) {
                                             $event.preventDefault()
-                                            _vm.editingCategories = true
+                                            return _vm.editCategory($event)
                                           }
                                         }
                                       })
@@ -8584,7 +8710,7 @@ var render = function() {
                                         on: {
                                           click: function($event) {
                                             $event.preventDefault()
-                                            _vm.editingCategories = true
+                                            return _vm.editCategory($event)
                                           }
                                         }
                                       })
@@ -8615,174 +8741,17 @@ var render = function() {
                                       "fieldset",
                                       { attrs: { disabled: _vm.isUpdating } },
                                       [
-                                        _c(
-                                          "ul",
-                                          {
-                                            staticClass: "category-select-list"
-                                          },
-                                          _vm._l(_vm.categories, function(
-                                            category
-                                          ) {
-                                            return _c(
-                                              "li",
-                                              { key: category.id },
-                                              [
-                                                _c("label", [
-                                                  (_vm.isCategoryMultiple
-                                                    ? "checkbox"
-                                                    : "radio") === "checkbox"
-                                                    ? _c("input", {
-                                                        directives: [
-                                                          {
-                                                            name: "model",
-                                                            rawName: "v-model",
-                                                            value:
-                                                              _vm.storeCategories,
-                                                            expression:
-                                                              "storeCategories"
-                                                          }
-                                                        ],
-                                                        attrs: {
-                                                          type: "checkbox"
-                                                        },
-                                                        domProps: {
-                                                          value: category.id,
-                                                          checked: Array.isArray(
-                                                            _vm.storeCategories
-                                                          )
-                                                            ? _vm._i(
-                                                                _vm.storeCategories,
-                                                                category.id
-                                                              ) > -1
-                                                            : _vm.storeCategories
-                                                        },
-                                                        on: {
-                                                          change: function(
-                                                            $event
-                                                          ) {
-                                                            var $$a =
-                                                                _vm.storeCategories,
-                                                              $$el =
-                                                                $event.target,
-                                                              $$c = $$el.checked
-                                                                ? true
-                                                                : false
-                                                            if (
-                                                              Array.isArray($$a)
-                                                            ) {
-                                                              var $$v =
-                                                                  category.id,
-                                                                $$i = _vm._i(
-                                                                  $$a,
-                                                                  $$v
-                                                                )
-                                                              if (
-                                                                $$el.checked
-                                                              ) {
-                                                                $$i < 0 &&
-                                                                  (_vm.storeCategories = $$a.concat(
-                                                                    [$$v]
-                                                                  ))
-                                                              } else {
-                                                                $$i > -1 &&
-                                                                  (_vm.storeCategories = $$a
-                                                                    .slice(
-                                                                      0,
-                                                                      $$i
-                                                                    )
-                                                                    .concat(
-                                                                      $$a.slice(
-                                                                        $$i + 1
-                                                                      )
-                                                                    ))
-                                                              }
-                                                            } else {
-                                                              _vm.storeCategories = $$c
-                                                            }
-                                                          }
-                                                        }
-                                                      })
-                                                    : (_vm.isCategoryMultiple
-                                                        ? "checkbox"
-                                                        : "radio") === "radio"
-                                                      ? _c("input", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                _vm.storeCategories,
-                                                              expression:
-                                                                "storeCategories"
-                                                            }
-                                                          ],
-                                                          attrs: {
-                                                            type: "radio"
-                                                          },
-                                                          domProps: {
-                                                            value: category.id,
-                                                            checked: _vm._q(
-                                                              _vm.storeCategories,
-                                                              category.id
-                                                            )
-                                                          },
-                                                          on: {
-                                                            change: function(
-                                                              $event
-                                                            ) {
-                                                              _vm.storeCategories =
-                                                                category.id
-                                                            }
-                                                          }
-                                                        })
-                                                      : _c("input", {
-                                                          directives: [
-                                                            {
-                                                              name: "model",
-                                                              rawName:
-                                                                "v-model",
-                                                              value:
-                                                                _vm.storeCategories,
-                                                              expression:
-                                                                "storeCategories"
-                                                            }
-                                                          ],
-                                                          attrs: {
-                                                            type: _vm.isCategoryMultiple
-                                                              ? "checkbox"
-                                                              : "radio"
-                                                          },
-                                                          domProps: {
-                                                            value: category.id,
-                                                            value:
-                                                              _vm.storeCategories
-                                                          },
-                                                          on: {
-                                                            input: function(
-                                                              $event
-                                                            ) {
-                                                              if (
-                                                                $event.target
-                                                                  .composing
-                                                              ) {
-                                                                return
-                                                              }
-                                                              _vm.storeCategories =
-                                                                $event.target.value
-                                                            }
-                                                          }
-                                                        }),
-                                                  _vm._v(
-                                                    " " +
-                                                      _vm._s(category.name) +
-                                                      "\n                                            "
-                                                  )
-                                                ])
-                                              ]
+                                        _c("select", {
+                                          staticStyle: { width: "100%" },
+                                          attrs: {
+                                            multiple: "multiple",
+                                            id: "store-categories",
+                                            "data-placeholder": _vm.__(
+                                              "Select Category",
+                                              "dokan"
                                             )
-                                          })
-                                        ),
+                                          }
+                                        }),
                                         _vm._v(" "),
                                         _c("p", [
                                           _c("button", {
@@ -9153,12 +9122,13 @@ var render = function() {
                       _vm._v(" "),
                       _c("ul", { staticClass: "counts" }, [
                         _c("li", { staticClass: "commision" }, [
-                          _c("span", { staticClass: "count" }, [
-                            _vm._v(_vm._s(_vm.getEearningRate))
-                          ]),
+                          _c("span", {
+                            staticClass: "count",
+                            domProps: { innerHTML: _vm._s(_vm.getEearningRate) }
+                          }),
                           _vm._v(" "),
                           _c("span", { staticClass: "subhead" }, [
-                            _vm._v(_vm._s(_vm.__("Commission Rate", "dokan")))
+                            _vm._v(_vm._s(_vm.__("Admin Commission", "dokan")))
                           ])
                         ]),
                         _vm._v(" "),

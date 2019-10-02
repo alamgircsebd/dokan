@@ -1321,7 +1321,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Maybe create subscription
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.14
      *
      * @param  int $customer_id
      * @param  string $product_pack_id
@@ -1369,7 +1369,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Create subscription
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.14
      *
      * @param  string $stripe_customer
      * @param  string $product_pack_id
@@ -1391,7 +1391,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     /**
      * Get coupon code for subscription
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.14
      *
      * @param  WC_Order $order
      *

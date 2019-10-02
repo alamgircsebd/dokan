@@ -550,7 +550,7 @@ class Dokan_Auction {
     /**
      * Maybe exclude auction product from the vendor store page
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.14
      *
      * @param  array $tax_query
      *
