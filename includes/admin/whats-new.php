@@ -1,6 +1,52 @@
 <?php
 $changelog = array(
-     array(
+    array(
+        'version'  => 'Version 2.9.14',
+        'released' => '2019-10-02',
+        'changes'  => array(
+            array(
+                'title'         => 'Add Combine Commission (Percentage + Fixed)',
+                'type'          => 'New',
+                'description'   => 'Admin can now charge commission in both percentage and fixed fee.'
+            ),
+            array(
+                'title'         => 'Elementor Biography Tab',
+                'type'          => 'New',
+                'description'   => 'Add support for vendor biography in Elementor builder (Elementor).'
+            ),
+            array(
+                'title'         => 'Admin is only able to add 10 categories for a store in admin backend',
+                'type'          => 'Fix',
+                'description'   => 'Admin is only able to add 10 categories for a store in admin backend. Which is fixed now.'
+            ),
+            array(
+                'title'         => 'Vendor verification widget doesn\'t Show Up',
+                'type'          => 'Fix',
+                'description'   => 'Vendor verification widget doesn\'t show up in the store page'
+            ),
+            array(
+                'title'         => 'Vacation Mode is Not Making the Product Offline',
+                'type'          => 'Fix',
+                'description'   => ' Vacation mode is not making the product offline (Seller Vacation).'
+            ),
+            array(
+                'title'         => 'Product is Not Visible in the Shop Page',
+                'type'          => 'Fix',
+                'description'   => 'Assigning a new product to a vendor from admin backend doesn\'t show up in the shop page.'
+            ),
+            array(
+                'title'         => 'Stripe Subscription With Coupon',
+                'type'          => 'Fix',
+                'description'   => 'Apply coupon on stripe subscription if there is any (Stripe Connect).'
+            ),
+            array(
+                'title'         => 'Store Support Messages',
+                'type'          => 'Fix',
+                'description'   => 'There are only 5 store support messages is appearing. (Store Support)'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.13',
         'released' => '2019-08-29',
         'changes'  => array(

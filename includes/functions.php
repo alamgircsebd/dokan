@@ -614,7 +614,7 @@ function dokan_is_refund_allowed_to_approve( $order_id ) {
 /**
  * Nomalize shipping postcode that contains '-' or space
  *
- * @since  DOKAN_PRO_SINCE
+ * @since  2.9.14
  *
  * @param  string $code
  *
@@ -627,7 +627,7 @@ function dokan_normalize_shipping_postcode( $code ) {
 /**
  * Dokan add combine commission
  *
- * @since  DOKAN_PRO_SINCE
+ * @since  2.9.14
  *
  * @param  float $earning  [earning for a vendor or admin]
  * @param  float $commission_rate
@@ -669,7 +669,7 @@ add_filter( 'dokan_prepare_for_calculation', 'dokan_add_combine_commission', 10,
 /**
  * Dokan save admin additional_fee
  *
- * @since DOKAN_PRO_SINCE
+ * @since 2.9.14
  *
  * @param int $vendor_id
  * @param array $data

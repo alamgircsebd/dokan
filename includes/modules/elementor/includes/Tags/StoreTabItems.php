@@ -98,7 +98,7 @@ class StoreTabItems extends TagBase {
     /**
      * Store tab items for Elementor Builder
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.14
      *
      * @return array
      */

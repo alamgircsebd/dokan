@@ -436,7 +436,7 @@ class Dokan_Shipping_Zone {
     /**
      * Get zone id by postcode
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.14
      *
      * @param  int $postcode
      *

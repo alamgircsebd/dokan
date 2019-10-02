@@ -285,7 +285,7 @@ class Dokan_Stripe_Subscription {
     /**
      * Get coupon id for a subscription
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.14
      *
      * @return Stripe\Coupon::id |null on failure
      */

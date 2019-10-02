@@ -294,7 +294,7 @@ class Dokan_Pro_Admin_Settings {
     /**
      * Get additional fee settings fields
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.14
      *
      * @return array
      */
