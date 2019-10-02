@@ -57,7 +57,7 @@ class Dokan_Store_Verification_list extends WP_Widget {
 
             dokan_get_template_part( 'widgets/vendor-verification', '', array(
                 'pro'        => true,
-                'args'       => $args,
+                'data'       => $args,
                 'instance'   => $instance,
                 'store_info' => $store_info,
                 'widget'     => $this,

@@ -75,8 +75,8 @@ class Dokan_Auction {
 
         // send bid email to admin and vendor
         add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
-
         add_filter( 'dokan_localized_args', array( $this, 'set_localized_args' ) );
+        add_filter( 'dokan_store_tax_query', [ $this, 'maybe_exclude_auction_product' ] );
     }
 
     /**
@@ -545,6 +545,30 @@ class Dokan_Auction {
         ];
 
         return array_merge( $args, $auction_args );
+    }
+
+    /**
+     * Maybe exclude auction product from the vendor store page
+     *
+     * @since  2.9.14
+     *
+     * @param  array $tax_query
+     *
+     * @return array
+     */
+    public function maybe_exclude_auction_product( $tax_query ) {
+        $show_finished_auctions = get_option( 'simple_auctions_finished_enabled' );
+
+        if ( 'no' === $show_finished_auctions ) {
+            $tax_query[] = [
+                'taxonomy' => 'product_type',
+                'field'    => 'slug',
+                'terms'    => 'auction',
+                'operator' => 'NOT IN'
+            ];
+        }
+
+        return $tax_query;
     }
 
 } // Dokan_Auction

@@ -490,11 +490,19 @@ class Dokan_Stripe {
                     $event = \Stripe\Event::retrieve( $event_id );
                     $invoice = $event->data->object;
 
-                    // successful payment, both one time and recurring payments
+                    // successful payment recurring payments
                     if ( 'invoice.payment_succeeded' == $event->type ) {
-                        $user_id      = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = '_stripe_subscription_id' AND `meta_value`='$invoice->subscription'" );
-                        $period_start = date( 'Y-m-d H:i:s', $invoice->period_start );
-                        $period_end   = date( 'Y-m-d H:i:s', $invoice->period_end );
+                        $subscription_id = ! empty( $invoice->subscription ) ? $invoice->subscription : null;
+
+                        if ( ! $subscription_id ) {
+                            return;
+                        }
+
+                        $user_id      = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = '_stripe_subscription_id' AND `meta_value`='$subscription_id'" );
+                        $subscription = \Stripe\Subscription::retrieve( $subscription_id );
+
+                        $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start );
+                        $period_end   = date( 'Y-m-d H:i:s', $subscription->current_period_end );
                         $order_id     = get_user_meta( $user_id, 'product_order_id', true );
 
                         if ( $invoice->paid ) {

@@ -76,7 +76,7 @@
                                         class="store-categoy-names"
                                         href="#edit-categories"
                                         v-html="isCategoryMultiple ? __( 'Add Categories', 'dokan' ) : __( 'Add Category', 'dokan' )"
-                                        @click.prevent="editingCategories = true"
+                                        @click.prevent="editCategory"
                                     />
                                 </template>
                                 <template v-else>
@@ -84,26 +84,19 @@
                                         class="store-categoy-names"
                                         href="#edit-categories"
                                         v-html="store.categories.map( category => category.name ).join( ', ' )"
-                                        @click.prevent="editingCategories = true"
+                                        @click.prevent="editCategory"
                                     />
                                 </template>
                             </template>
                             <template v-else>
                                 <div class="store-categories-editing">
                                     <h4>{{ isCategoryMultiple ? __( 'Set Store Categories', 'dokan' ) : __( 'Set Store Category', 'dokan' ) }}</h4>
-                                    <!-- NOTE: This fieldset should wrap this full component if we implement whole editing in this same page -->
                                     <fieldset :disabled="isUpdating">
-                                        <ul class="category-select-list">
-                                            <li v-for="category in categories" :key="category.id">
-                                                <label>
-                                                    <input
-                                                        :type="isCategoryMultiple ? 'checkbox' : 'radio'"
-                                                        :value="category.id"
-                                                        v-model="storeCategories"
-                                                    > {{ category.name }}
-                                                </label>
-                                            </li>
-                                        </ul>
+                                        <select multiple="multiple"
+                                            id="store-categories"
+                                            style="width: 100%"
+                                            :data-placeholder="__( 'Select Category', 'dokan' )">
+                                        </select>
                                         <p>
                                             <button
                                                 class="button button-primary button-small"
@@ -220,8 +213,8 @@
 
                         <ul class="counts">
                             <li class="commision">
-                                <span class="count">{{ getEearningRate }}</span>
-                                <span class="subhead">{{ __( 'Commission Rate', 'dokan' ) }}</span>
+                                <span class="count" v-html="getEearningRate"></span>
+                                <span class="subhead">{{ __( 'Admin Commission', 'dokan' ) }}</span>
                             </li>
                             <li class="balance">
                                 <span class="count">
@@ -427,43 +420,13 @@ export default {
             return categories;
         },
 
-        storeCategories: {
-            get() {
-                const self = this;
-
-                if ( ! self.isCategoryMultiple ) {
-                    if ( self.store.categories.length ) {
-                        return self.store.categories[0].id;
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return self.store.categories.map( ( category ) => {
-                        return category.id;
-                    } );
-                }
-            },
-
-            set( categories ) {
-                const self = this;
-
-                if ( $.isArray( categories ) ) {
-                    self.store.categories = categories.map( ( category_id ) => {
-                        return self.categoriesFlattened[ category_id ];
-                    } );
-                } else {
-                    self.store.categories = [
-                        self.categoriesFlattened[ categories ]
-                    ]
-                }
-            }
-        },
-
         getEearningRate() {
-            if ( this.stats.others.commission_type == 'percentage' ) {
-                return this.stats.others.commission_rate + '%';
-            } else {
+            if ( this.stats.others.commission_type === 'flat' ) {
                 return accounting.formatMoney( this.stats.others.commission_rate );
+            } else if ( this.stats.others.commission_type === 'percentage' ) {
+                return `${this.stats.others.commission_rate}%`;
+            } else {
+                return `${(this.stats.others.commission_rate)}% &nbsp; + ${accounting.formatMoney( this.stats.others.additional_fee )}`;
             }
         },
 
@@ -499,7 +462,7 @@ export default {
                 self.transformer(response);
             } );
 
-            dokan.api.get( '/store-categories' )
+            dokan.api.get( '/store-categories?per_page=50' )
                 .done( ( response, status, xhr ) => {
                     self.categories = response;
                     self.isCategoryMultiple = ( 'multiple' === xhr.getResponseHeader( 'X-WP-Store-Category-Type' ) );
@@ -652,15 +615,69 @@ export default {
         },
 
         updateCommissonRate() {
-            let admin_commission = this.store.admin_commission;
-
-            if ( this.store.admin_commission_type === 'percentage' ) {
-                this.stats.others.commission_rate = 100 - admin_commission;
-            } else {
-                this.stats.others.commission_rate = admin_commission;
-            }
-
+            this.stats.others.commission_rate = this.store.admin_commission;
             this.stats.others.commission_type = this.store.admin_commission_type;
+        },
+
+        setStoreCategories() {
+            let self = this;
+            let storeCategories = $( '#store-categories' );
+
+            storeCategories.selectWoo( {
+                multiple: self.isCategoryMultiple ? true : false,
+                ajax: {
+                    delay: 800,
+                    url: `${dokan.rest.root}dokan/v1/store-categories?per_page=50`,
+                    dataType: 'json',
+                    headers: {
+                        "X-WP-Nonce" : dokan.rest.nonce
+                    },
+                    data(params) {
+                        return {
+                            search: params.term
+                        };
+                    },
+                    processResults(data) {
+                        return {
+                            results: data.map( (cat) => {
+                                return {
+                                    id: cat.id,
+                                    text: cat.name,
+                                    slug: cat.slug
+                                };
+                            })
+                        }
+                        cache: true
+                    }
+                }
+            } );
+
+            self.store.categories.forEach( ( category ) => {
+                let option = new Option( category.name, category.id, true, true );
+                storeCategories.append( option ).trigger( 'change' );
+            });
+
+            $( '#store-categories' ).on( 'select2:select', (e) => {
+                if ( self.isCategoryMultiple ) {
+                    self.store.categories.push( {
+                        id: e.params.data.id,
+                        name: e.params.data.text,
+                        slug: e.params.data.slug
+                    } );
+                } else {
+                    self.store.categories[0] = {
+                        id: e.params.data.id,
+                        name: e.params.data.text,
+                        slug: e.params.data.slug
+                    }
+                }
+            } );
+        },
+
+        async editCategory() {
+            this.editingCategories = true;
+            await this.$nextTick();
+            this.setStoreCategories();
         }
     }
 };
@@ -1033,12 +1050,6 @@ export default {
                     font-size: 15px;
                     font-weight: 700;
                     margin-bottom: 5px;
-                }
-
-                ul {
-                    padding: 0;
-                    margin: 0;
-                    list-style-type: none;
                 }
 
                 .button-link {

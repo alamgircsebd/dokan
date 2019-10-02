@@ -792,6 +792,7 @@ class Dokan_Product_Subscription {
                 update_user_meta( $customer_id, '_customer_recurring_subscription', '' );
 
                 $admin_commission      = get_post_meta( $product_id, '_subscription_product_admin_commission', true );
+                $admin_additional_fee  = get_post_meta( $product_id, '_subscription_product_admin_additional_fee', true );
                 $admin_commission_type = get_post_meta( $product_id, '_subscription_product_admin_commission_type', true );
 
                 if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
@@ -799,6 +800,12 @@ class Dokan_Product_Subscription {
                     update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
+                }
+
+                if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                } else {
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
                 }
 
                 do_action( 'dokan_vendor_purchased_subscription', $customer_id );

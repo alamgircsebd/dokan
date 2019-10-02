@@ -396,6 +396,7 @@ if ( class_exists( 'WooCommerce' ) ) {
             $destination_country  = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
             $destination_state    = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
             $destination_postcode = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
+            $destination_postcode = dokan_normalize_shipping_postcode( $destination_postcode );
 
             if ( empty( $seller_id ) ) {
                 return false;
@@ -452,13 +453,18 @@ if ( class_exists( 'WooCommerce' ) ) {
 
                     // If the postcode is non-numeric, make it numeric.
                     if ( ! is_numeric( $min ) || ! is_numeric( $max ) ) {
-                        $min = str_pad( wc_make_numeric_postcode( $min ), strlen( $compare ), '0' );
-                        $max = str_pad( wc_make_numeric_postcode( $max ), strlen( $compare ), '0' );
+                        $destination_postcode = wc_make_numeric_postcode( $destination_postcode );
+                        $min = str_pad( wc_make_numeric_postcode( $min ), strlen( $destination_postcode ), '0' );
+                        $max = str_pad( wc_make_numeric_postcode( $max ), strlen( $destination_postcode ), '0' );
                     }
 
-                    $postcode_array = range( $min, $max );
+                    if ( $destination_postcode >= $min && $destination_postcode <= $max ) {
+                        $is_available = true;
+
+                        return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
+                    }
                 } else {
-                    $postcode_array = array_map( 'trim', $postcode_array );
+                    $postcode_array = array_map( 'dokan_normalize_shipping_postcode', $postcode_array );
                 }
 
                 if ( in_array( $destination_postcode, $postcode_array ) ) {
@@ -583,5 +589,4 @@ if ( class_exists( 'WooCommerce' ) ) {
         }
 
     }
-
 }

@@ -80,13 +80,6 @@ jQuery( function( $ ) {
         },
 
         /**
-         * Notice dismiss
-         */
-        // notice_dismiss: function() {
-        //     $( this ).closest( 'div.notice' ).remove();
-        // },
-
-        /**
          * Run actions when variations is loaded
          *
          * @param {Object} event
@@ -167,76 +160,74 @@ jQuery( function( $ ) {
             }
 
             // variable product price error checking
-            function dokan_show_variable_product_earning_suggestion() {
-                var selectedCategoryWrapper = $('select#product_cat').find('option:selected');
+            function dokan_show_variable_product_earning_suggestion( callback ) {
+                let selectedCategoryWrapper = $('select#product_cat').find('option:selected');
 
                 if ( selectedCategoryWrapper.data( 'commission' ) != '' ) {
-                    var vendor_percentage = selectedCategoryWrapper.data( 'commission' );
-                    var commission_type = selectedCategoryWrapper.data( 'commission_type' );
+                    var commission = selectedCategoryWrapper.data( 'commission' );
+                    var product_id = selectedCategoryWrapper.data( 'product-id' );
                 } else {
-                    var commission_type = $('span.vendor-earning').attr( 'data-commission_type' );
-                    var vendor_percentage = $('span.vendor-earning').attr( 'data-commission' );
+                    var commission = $('span.vendor-earning').data( 'commission' );
+                    var product_id = $('span.vendor-earning').data( 'product-id' );
                 }
 
-                if ( commission_type == 'percentage' ) {
-                    if ( $('input.dokan-product-sales-price-variable' ).val() == '' ) {
-                        $( 'input.dokan-product-regular-price-variable').each( function( i, elm ) {
-                            var $element = $(elm);
+                if ( $('input.dokan-product-sales-price-variable' ).val() == '' ) {
 
-                            $element.closest('.content-half-part').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( ( ( $(this).closest( elm ).val() * vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
-                                .toString()
-                                .replace( '.', dokan.mon_decimal_point )
-                            )
+                    $( 'input.dokan-product-regular-price-variable' ).each( function( i, elm ) {
+                        var $element = $( elm );
+                        var earning_suggestion = $element.closest( '.content-half-part' ).find( 'span.vendor-price' );
+                        var sale_price =  $(this).closest( elm ).val();
 
+                        earning_suggestion.html( 'Calculating' );
+
+                        $.get( dokan.ajaxurl, {
+                            action: 'get_vendor_earning',
+                            product_id: product_id,
+                            product_price: sale_price,
+                            _wpnonce: dokan.nonce
+                        } )
+                        .done( ( response ) => {
+                            earning_suggestion.html( response );
                             dokan_disable_variable_saving_button( $element );
-                        } );
-                    } else {
-                        $( 'input.dokan-product-sales-price-variable').each( function( i, elm ) {
-                            var $element = $( elm );
 
-                            $element.closest('.variable_pricing').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( ( ( $(this).closest( elm ).val() * vendor_percentage ) / 100 ), dokan.rounding_precision, '' ) )
-                                .toString()
-                                .replace( '.', dokan.mon_decimal_point )
-                            )
-
-                            dokan_disable_variable_saving_button( $element );
+                            if ( typeof callback === 'function' ) {
+                                callback();
+                            }
                         } );
-                    }
+                    } );
                 } else {
-                    if ( $('input.dokan-product-sales-price-variable' ).val() == '' ) {
-                        $( 'input.dokan-product-regular-price-variable').each( function( i, elm ) {
-                            var $element = $(elm);
+                    $( 'input.dokan-product-sales-price-variable' ).each( function( i, elm ) {
+                        var $element = $( elm );
+                        var earning_suggestion = $element.closest( '.variable_pricing' ).find( 'span.vendor-price' );
+                        var sale_price =  $(this).closest( elm ).val();
 
-                            $element.closest('.variable_pricing').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( (  $(this).closest( elm ).val() - vendor_percentage ), dokan.rounding_precision, '' ) )
-                                .toString()
-                                .replace( '.', dokan.mon_decimal_point )
-                            );
+                        earning_suggestion.html( 'Calculating' );
 
+                        $.get( dokan.ajaxurl, {
+                            action: 'get_vendor_earning',
+                            product_id: product_id,
+                            product_price: sale_price ? sale_price : 0,
+                            _wpnonce: dokan.nonce
+                        } )
+                        .done( ( response ) => {
+                            earning_suggestion.html( response );
                             dokan_disable_variable_saving_button( $element );
 
+                            if ( typeof callback === 'function' ) {
+                                callback();
+                            }
                         } );
-                    } else {
-                        $( 'input.dokan-product-sales-price-variable' ).each( function( i, elm ) {
-                            var $element = $( elm );
 
-                            $element.closest('.variable_pricing').find('span.vendor-price').html(
-                                parseFloat( accounting.formatNumber( (  $(this).closest( elm ).val() - vendor_percentage ), dokan.rounding_precision, '' ) )
-                                .toString()
-                                .replace( '.', dokan.mon_decimal_point )
-                            );
-
-                            dokan_disable_variable_saving_button( $element );
-                        } );
-                    }
+                        dokan_disable_variable_saving_button( $element );
+                    } );
                 }
             }
 
-            $( "input.dokan-product-regular-price-variable, input.dokan-product-sales-price-variable" ).on( 'keyup', function () {
-                dokan_show_variable_product_earning_suggestion()
-            } ).trigger( 'keyup' );
+
+            $( "input.dokan-product-regular-price-variable, input.dokan-product-sales-price-variable" ).on( 'keyup', _.debounce( () => {
+                dokan_show_variable_product_earning_suggestion();
+            }, 750 ) );
+
 
             // Datepicker fields
             $( '.sale_price_dates_fields', wrapper ).each( function() {

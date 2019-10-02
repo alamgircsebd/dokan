@@ -1,5 +1,5 @@
 <?php
-extract( $args, EXTR_SKIP );
+extract( $data, EXTR_SKIP );
 
 $title = apply_filters( 'widget_title', $instance['title'] );
 

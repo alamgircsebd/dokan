@@ -399,6 +399,7 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         global $wpdb;
 
         $order_id               = absint( $data->order_id );
+        $order                  = wc_get_order( $order_id );
         $vendor_id              = dokan_get_seller_id_by_order( $order_id );
         $refund_amount          = wc_format_decimal( sanitize_text_field( wp_unslash( $data->refund_amount ) ), wc_get_price_decimals() );
         $refund_reason          = sanitize_text_field( $data->refund_reason );
@@ -409,8 +410,12 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
         $restock_refunded_items = 'true' === $data->restock_items;
         $refund                 = false;
 
-        $vendor_refund          = $fee_refund = 0;
+        $vendor_refund          = 0;
+        $tax_refund             = 0;
+        $shipping_refund        = 0;
+
         $shipping_fee_recipient = dokan_get_option( 'shipping_fee_recipient', 'dokan_general', 'seller' );
+        $tax_fee_recipient      = dokan_get_option( 'tax_fee_recipient', 'dokan_general', 'seller' );
 
         // Prepare line items which we are refunding.
         $line_items = array();
@@ -428,37 +433,78 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             $line_items[ $item_id ]['qty'] = max( $qty, 0 );
         }
 
-        $order = new WC_Order();
+        // If `_dokan_admin_fee` is found means, the commission has been calculated for this order without the `Dokan_Commission` class.
+        // So we'll calculate refund without using the `Dokan_Commission` class to keep backward compatability.
+        if ( get_post_meta( $order_id, '_dokan_admin_fee', true ) ) {
+            foreach ( $line_item_totals as $item_id => $total ) {
 
-        foreach ( $line_item_totals as $item_id => $total ) {
+                $item = $order->get_item( $item_id );
 
-            $item = $order->get_item( $item_id );
+                if ( 'line_item' == $item['type'] ) {
+                    $percentage_type    = dokan_get_commission_type( $vendor_id, $item['product_id'] );
+                    $vendor_percentage  = dokan_get_seller_percentage( $vendor_id, $item['product_id'] );
+                    $vendor_refund      += $percentage_type == 'percentage' ? (float) ( $total * $vendor_percentage ) / 100 : (float) ( $total * ( ( $item['subtotal'] - $vendor_percentage ) / $item['subtotal'] ) );
+                } else {
+                    $fee_refund += $total;
+                }
 
-            if ( 'line_item' == $item['type'] ) {
-                $percentage_type    = dokan_get_commission_type( $vendor_id, $item['product_id'] );
-                $vendor_percentage  = dokan_get_seller_percentage( $vendor_id, $item['product_id'] );
-                $vendor_refund      += $percentage_type == 'percentage' ? (float) ( $total * $vendor_percentage ) / 100 : (float) ( $total * ( ( $item['subtotal'] - $vendor_percentage ) / $item['subtotal'] ) );
-            } else {
-                $fee_refund += $total;
+                $line_items[$item_id]['refund_total'] = wc_format_decimal( $total );
             }
+        } else {
+            // Set `order_id` so that `Dokan_Commission::prepare_for_calculation()` method can access the intended WC_Order.
+            dokan()->commission->set_order_id( $order_id );
 
-            $line_items[ $item_id ]['refund_total'] = wc_format_decimal( $total );
+            foreach ( $line_item_totals as $item_id => $requested_refund ) {
+                $item                                 = $order->get_item( $item_id );
+                $line_items[$item_id]['refund_total'] = wc_format_decimal( $requested_refund );
+
+                if ( 'line_item' === $item->get_type() ) {
+                    $existing_refunds = $order->get_total_refunded_for_item( $item_id );
+
+                    // If quantity of line_item is more than one, set `line_item_quantity` to increase commission by quantity for flat commission type.
+                    if ( $item->get_quantity() > 1 ) {
+                        dokan()->commission->set_order_qunatity( $item->get_quantity() );
+                    }
+
+                    // On order refund, set `_dokan_item_total` to `item->get_total()` so that `flat commission rate && additional_fee` can be splited properly among all the line_items.
+                    update_post_meta( $order_id, '_dokan_item_total', $item->get_total() );
+
+                    $vendor_earning  = dokan()->commission->get_earning_by_product( $item['product_id'], 'seller', $item->get_total() - $existing_refunds );
+                    $line_item_total = $item->get_total() - $existing_refunds;
+
+                    if ( ! $line_item_total ) {
+                        continue;
+                    }
+
+                    $vendor_percentage = ( $vendor_earning * 100 ) / $line_item_total;
+
+                    if ( $requested_refund ) {
+                        $vendor_refund += ( $requested_refund * $vendor_percentage ) / 100;
+                    }
+                }
+
+                if ( 'shipping' === $item->get_type() ) {
+                    $shipping_refund += $requested_refund;
+                }
+            }
         }
 
         foreach ( $line_item_tax_totals as $item_id => $tax_totals ) {
             foreach ( $tax_totals as $total_tax ) {
-                $fee_refund += $total_tax;
+                $tax_refund += $total_tax;
                 $line_items[ $item_id ]['refund_tax'] = wc_format_decimal( $total_tax );
             }
         }
 
         if ( 'seller' == $shipping_fee_recipient ) {
-            $vendor_refund += $fee_refund;
+            $vendor_refund += $shipping_refund;
+        }
+
+        if ( 'seller' === $tax_fee_recipient ) {
+            $vendor_refund += $tax_refund;
         }
 
         // if paid via automatic payment such as stripe
-        $order = wc_get_order( $order_id );
-
         if ( 'dokan-stripe-connect' === $order->get_payment_method() && ! $order->get_meta( 'paid_with_dokan_3ds' ) ) {
             $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
                 array(
@@ -537,11 +583,10 @@ class Dokan_REST_Refund_Controller extends Dokan_REST_Controller {
             $wpdb->update( $wpdb->prefix . 'dokan_orders',
                 array( 'order_total' => $new_total_amount, 'net_amount' => $new_net_amount ),
                 array( 'order_id' => $order_id ),
-                array( '%d', '%d' ),
+                array( '%f', '%f' ),
                 array( '%d' )
             );
         }
-
 
         if ( dokan_is_sub_order( $order_id ) ) {
             $parent_order_id = wp_get_post_parent_id( $order_id );

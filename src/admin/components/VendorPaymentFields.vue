@@ -61,13 +61,22 @@
                     <div class="column">
                         <div class="column">
                             <label>{{ __( 'Admin Commission Type', 'dokan' ) }}</label>
-                            <Multiselect @input="saveCommissionType" v-model="selectedCommissionType" :options="commissionTypes" :multiselect="false" :searchable="false" :showLabels="false" :placeholder="__( 'Please Select One', 'dokan' )" />
+                            <Multiselect @input="saveCommissionType" v-model="selectedCommissionType" :options="commissionTypes" :multiselect="false" :searchable="false" :showLabels="false" />
                         </div>
                     </div>
 
-                    <div class="column">
+                    <div class="column combine-commission" v-if="'Combine' === selectedCommissionType">
                         <label>{{ __( 'Admin Commission', 'dokan' )  }}</label>
-                        <input type="number" class="dokan-form-input" placeholder="10" v-model="vendorInfo.admin_commission">
+                        <div class="combine-commission-field">
+                            <input type="number" class="dokan-form-input percent_fee" v-model="vendorInfo.admin_commission">
+                            {{ '% &nbsp;&nbsp; +' }}
+                            <input type="number" class="dokan-form-input fixed_fee" v-model="vendorInfo.admin_additional_fee">
+                        </div>
+                    </div>
+
+                    <div class="column" v-else>
+                        <label>{{ __( 'Admin Commission', 'dokan' )  }}</label>
+                        <input type="number" class="dokan-form-input" v-model="vendorInfo.admin_commission">
                     </div>
                 </template>
 
@@ -128,10 +137,11 @@ export default {
             trusted: false,
             featured: false,
             commissionTypes: [
-                'Flat',
-                'Percentage'
+                this.__( 'Flat', 'dokan' ),
+                this.__( 'Percentage', 'dokan' ),
+                this.__( 'Combine', 'dokan' )
             ],
-            selectedCommissionType: '',
+            selectedCommissionType: this.__( 'Flat', 'dokan' ),
             getBankFields: dokan.hooks.applyFilters( 'getVendorBankFields', [] ),
             getPyamentFields: dokan.hooks.applyFilters( 'AfterPyamentFields', [] ),
         }
@@ -193,7 +203,7 @@ export default {
 
         saveCommissionType( value ) {
             if ( ! value ) {
-                return;
+                this.vendorInfo.admin_commission_type = 'flat';
             }
 
             this.vendorInfo.admin_commission_type = value.toLowerCase();
@@ -228,6 +238,12 @@ export default {
     .dokan-form-select {
         margin-top: 5px;
         margin-bottom: 5px;
+    }
+
+    .combine-commission-field {
+        .dokan-form-input.percent_fee, .dokan-form-input.fixed_fee {
+            width: 40%;
+        }
     }
 }
 </style>

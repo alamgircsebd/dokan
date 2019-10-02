@@ -617,7 +617,7 @@ class Dokan_Pro_Coupons {
                 'pro'                        => true,
                 'post_id'                    => $post_id,
                 'post_title'                 => $post_title,
-                'discount_type'              => $discount_type,
+                'discount_type'              => isset( $discount_type ) ? $discount_type : '',
                 'description'                => $description,
                 'amount'                     => $amount,
                 'products'                   => $products,

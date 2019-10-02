@@ -725,7 +725,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             // if vendor already has used a trial pack, create a new plan without trial period
             if ( Helper::has_used_trial_pack( get_current_user_id() ) ) {
                 $trial_period_days = 0;
-                $product_pack_id   = $product_pack_id . '-' . random_int( 1, 99999 );
+                $product_pack_id   = $product_pack_id . '-' . $order_id;
             }
 
             try {
@@ -747,32 +747,15 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 ) );
             }
 
-            $already_has_subscription = get_user_meta( $customer_user_id, '_stripe_subscription_id', true );
+            $subscription = $this->maybe_create_subscription( $customer_id, $customer_user_id, $product_pack_id, $stripe_plan, $order );
 
-            if ( $already_has_subscription ) {
-                $subscription = \Stripe\Subscription::retrieve( $already_has_subscription );
+            if ( empty( $subscription->id ) ) {
+                $error = [
+                    'code'    => 'subscription_not_created',
+                    'message' => __( 'Unable to create subscription', 'dokan' )
+                ];
 
-                if ( empty( $subscription->id ) ) {
-                    throw new Exception( __( 'Unable to find previous subscriptoin id', 'dokan' ), 404 );
-                }
-
-                $upgrade = \Stripe\Subscription::update( $already_has_subscription, [
-                    'cancel_at_period_end' => false,
-                    'items' =>[
-                        [
-                            'id'   => $subscription->items->data[0]->id,
-                            'plan' => $stripe_plan->id
-                        ]
-                    ],
-                ] );
-            }
-
-            if ( ! $already_has_subscription ) {
-                $customer     = \Stripe\Customer::retrieve( $customer_id );
-                $subscription = $customer->subscriptions->create( [
-                    'plan'            => $product_pack_id,
-                    'trial_from_plan' => true
-                ] );
+                return wp_send_json_error( $error, 422 );
             }
 
             $transaction_id                = $subscription->id;
@@ -789,9 +772,14 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
 
             $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
+            $admin_additional_fee  = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_additional_fee', true );
             $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
-            if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+            if ( ! empty( $admin_commission ) && ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
+                update_user_meta( $customer_user_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+            } else if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                 update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
                 update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
             } else {
@@ -832,9 +820,14 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
 
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
+                $admin_additional_fee  = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_additional_fee', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
-                if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+                if ( ! empty( $admin_commission ) && ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
+                    update_user_meta( $customer_user_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+                } else if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                     update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
                     update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
@@ -927,7 +920,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 }
 
                 $transfer = DokanStripe::transaction( $this->secret_key )
-                    ->amount( $vendor_earning * 100 )
+                    ->amount( $vendor_earning * 100, $currency )
                     ->from( $this->get_charge_id_from_intent() )
                     ->to( $connected_vendor_id )
                     ->create();
@@ -1323,5 +1316,101 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $settings = get_option('woocommerce_dokan-stripe-connect_settings');
 
         return ! empty( $settings['allow_non_connected_sellers'] ) && 'yes' === $settings['allow_non_connected_sellers'];
+    }
+
+    /**
+     * Maybe create subscription
+     *
+     * @since  2.9.14
+     *
+     * @param  int $customer_id
+     * @param  string $product_pack_id
+     * @param  Stripe\Plan $stripe_plan
+     * @param  WC_Order $order
+     *
+     * @return Stripe\Subscription
+     */
+    public function maybe_create_subscription( $stripe_customer, $vendor_id, $product_pack_id, $stripe_plan, $order ) {
+        $already_has_subscription = get_user_meta( $vendor_id, '_stripe_subscription_id', true );
+
+        if ( $already_has_subscription ) {
+            try {
+                $subscription = \Stripe\Subscription::retrieve( $already_has_subscription );
+            } catch( Exception $e ) {
+                return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+            }
+
+            // if subscription status is incomplete, cancel it first as incomplete subscription can't be updated
+            if ( 'incomplete' === $subscription->status ) {
+                $subscription->cancel();
+                return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+            }
+
+            if ( 'canceled' === $subscription->status ) {
+                return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+            }
+
+            $upgrade = \Stripe\Subscription::update( $already_has_subscription, [
+                'cancel_at_period_end' => false,
+                'items' =>[
+                    [
+                        'id'   => $subscription->items->data[0]->id,
+                        'plan' => $stripe_plan->id
+                    ]
+                ],
+            ] );
+
+            return $upgrade;
+        }
+
+        return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+    }
+
+    /**
+     * Create subscription
+     *
+     * @since  2.9.14
+     *
+     * @param  string $stripe_customer
+     * @param  string $product_pack_id
+     * @param  WC_Order $order
+     *
+     * @return Stripe\Subscription
+     */
+    public function create_subscription( $stripe_customer, $product_pack_id, $order ) {
+        $customer     = \Stripe\Customer::retrieve( $stripe_customer );
+        $subscription = $customer->subscriptions->create( [
+            'plan'            => $product_pack_id,
+            'coupon'          => $this->get_coupon( $order ),
+            'trial_from_plan' => true,
+        ] );
+
+        return $subscription;
+    }
+
+    /**
+     * Get coupon code for subscription
+     *
+     * @since  2.9.14
+     *
+     * @param  WC_Order $order
+     *
+     * @return Stripe\Coupon::id |null on failure
+     */
+    public function get_coupon( $order ) {
+        $discount = $order->get_total_discount();
+
+        if ( ! $discount ) {
+            return;
+        }
+
+        $coupon   = \Stripe\Coupon::create( [
+            'duration'   => 'once',
+            'id'         => $discount .'_OFF_' . $order->get_id(),
+            'amount_off' => 100 * $discount,
+            'currency'   => $this->currency
+        ] );
+
+        return $coupon->id;
     }
 }

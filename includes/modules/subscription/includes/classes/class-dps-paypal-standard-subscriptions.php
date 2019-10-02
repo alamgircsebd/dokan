@@ -360,6 +360,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 Helper::make_product_publish( $customer_id );
 
                 $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
+                $admin_additional_fee  = get_post_meta( $product['product_id'], '_subscription_product_admin_additional_fee', true );
                 $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
                 if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
@@ -367,6 +368,12 @@ class DPS_PayPal_Standard_Subscriptions {
                     update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
+                }
+
+                if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                } else {
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
                 }
 
                 $order->add_order_note( __( 'IPN subscription sign up completed.', 'dokan' ) );
@@ -396,6 +403,7 @@ class DPS_PayPal_Standard_Subscriptions {
                     Helper::make_product_publish( $customer_id );
 
                     $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
+                    $admin_additional_fee  = get_post_meta( $product['product_id'], '_subscription_product_admin_additional_fee', true );
                     $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
                     if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
@@ -403,6 +411,12 @@ class DPS_PayPal_Standard_Subscriptions {
                         update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                     } else {
                         update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
+                    }
+
+                    if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                        update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                    } else {
+                        update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
                     }
 
                     if ( dokan_get_prop( $order, 'status' ) != 'completed' ) {

@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.2.2
+Tested up to: 5.2.3
 WC requires at least: 3.0
 WC tested up to: 3.7.0
 Stable tag: trunk
@@ -171,6 +171,26 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.14 -> October 02, 2019
+--------------------------------------------------------------------
+- [new]  Add combine commission (Percentage + Fixed).
+- [fix]  Add support for vendor biography in Elementor builder (Elementor).
+- [fix]  Admin is only able to add 10 categories for a store in admin backend.
+- [fix]  Vendor verification widget doesn't show up in the store page.
+- [fix]  There was a typo in store banner height.
+- [fix]  Stripe 3DS was only accepting US currency and ignoring others.
+- [fix]  Exclude auction product from the vendor store page if auction product is ended.
+- [fix]  Vacation mode is not making the product offline (Seller Vacation).
+- [fix]  Assigning a new product to a vendor from admin backend doesn't show up in the shop page.
+- [fix]  Plugin updater menu doesn't shop up even in the live server.
+- [fix]  Vendor shipping method is not working for long zip code like (111123-2039) for brazil.
+- [fix]  Remove vendor earning from all logs if it's subscription product. (Subscription)
+- [fix]  Vendor email address is not showing up in stripe dashboard for subscription. (Stripe Connect).
+- [fix]  Subscription renew issue with stripe (Stripe Connect).
+- [fix]  Geolocation default latitude longitude doesn't change (Geolocation).
+- [fix]  Apply coupon on stripe subscription if there is any (Stripe Connect).
+- [fix]  Store support doesn't show full conversation (Store Support).
 
 v2.9.13 -> August 29, 2019
 --------------------------------------------------------------------

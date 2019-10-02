@@ -788,7 +788,7 @@ function dokan_discount_for_minimum_order() {
     //make unique seller array
     $allsellerids      = [];
     $unique_seller_ids = [];
-        // error_log( print_r( dokan_get_prop( $cart_data['data'], 'id' ) , true ) );
+
     foreach ( WC()->cart->get_cart() as $cart_data ) {
         $seller_id = get_post_field( 'post_author', dokan_get_prop( $cart_data['data'], 'id' ) );
         array_push( $allsellerids, $seller_id );
@@ -1030,6 +1030,13 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
     $is_product_discount_enabled = isset( $is_enable_op_discount['product-discount'] ) && $is_enable_op_discount['product-discount'] == 'product-discount';
     $is_order_discount_enabled   = isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount['order-discount'] == 'order-discount';
 
+    if ( ! $is_product_discount_enabled && ! $is_order_discount_enabled ) {
+        return;
+    }
+
+    $vendor_info                          = dokan_get_store_info( $vendor_id );
+    $is_order_discount_enabled_for_vendor = isset( $vendor_info['show_min_order_discount'] ) && 'yes' === $vendor_info['show_min_order_discount'];
+
     $order = wc_get_order( $order_id );
 
     if ( ! $order instanceof WC_Order ) {
@@ -1038,7 +1045,7 @@ function set_discount_on_sub_orders( $order_id, $vendor_id ) {
 
     $order_total                   = $order->get_total();
     $discount_amount_for_lot       = $is_product_discount_enabled ? dokan_get_lot_discount_for_vendor( $vendor_id ) : 0;
-    $discount_amount_for_min_order = $is_order_discount_enabled ? dokan_get_minimum_order_discount_for_vendor( $vendor_id ) : 0;
+    $discount_amount_for_min_order = $is_order_discount_enabled && $is_order_discount_enabled_for_vendor ? dokan_get_minimum_order_discount_for_vendor( $vendor_id ) : 0;
 
     if ( ! $discount_amount_for_lot && ! $discount_amount_for_min_order ) {
         return;
@@ -1149,12 +1156,15 @@ function dokan_get_lot_discount_for_vendor( $vendor_id ) {
  * @return float
  */
 function dokan_get_minimum_order_discount_for_vendor( $vendor_id ) {
-    $is_enable_op_discount     = dokan_get_option( 'discount_edit', 'dokan_selling' );
-    $is_order_discount_enabled = isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount['order-discount'] == 'order-discount';
-    $discount_total            = 0;
-    $line_total                = 0;
+    $is_enable_op_discount                = dokan_get_option( 'discount_edit', 'dokan_selling' );
+    $is_order_discount_enabled            = isset( $is_enable_op_discount['order-discount'] ) && $is_enable_op_discount['order-discount'] == 'order-discount';
+    $vendor_info                          = dokan_get_store_info( $vendor_id );
+    $is_order_discount_enabled_for_vendor = isset( $vendor_info['show_min_order_discount'] ) && 'yes' === $vendor_info['show_min_order_discount'];
 
-    if ( ! $is_order_discount_enabled ) {
+    $discount_total = 0;
+    $line_total     = 0;
+
+    if ( ! $is_order_discount_enabled && ! $is_order_discount_enabled_for_vendor ) {
         return $discount_total;
     }
 
@@ -1169,8 +1179,6 @@ function dokan_get_minimum_order_discount_for_vendor( $vendor_id ) {
         $line_total += $item['line_total'];
     }
 
-    $vendor_info                   = dokan_get_store_info( $vendor_id );
-    $is_min_order_discount         = isset( $vendor_info['show_min_order_discount'] ) ? $vendor_info['show_min_order_discount'] : 'no';
     $min_order_discount            = isset( $vendor_info['setting_minimum_order_amount'] ) ? (float) $vendor_info['setting_minimum_order_amount'] : 0;
     $min_order_discount_percentage = isset( $vendor_info['setting_order_percentage'] ) ? (float) $vendor_info['setting_order_percentage'] : 0;
 
@@ -1229,17 +1237,47 @@ function dokan_add_category_commission_field() {
     ?>
     <div class="form-field term-display-type-wrap">
         <label for="per_category_admin_commission_type"><?php _e( 'Commission type', 'dokan' ); ?></label>
-        <select name="per_category_admin_commission_type">
-            <option value="percentage"><?php _e( 'Percentage', 'dokan' ) ?></option>
-            <option value="flat"><?php _e( 'Flat', 'dokan' ) ?></option>
+        <select id="per_category_admin_commission_type" name="per_category_admin_commission_type">
+            <?php foreach ( dokan_commission_types() as $key => $value ) : ?>
+                <option value="<?php echo wc_clean( $key ); ?>"><?php echo $value ?></option>
+            <?php endforeach; ?>
         </select>
         <p class="description"><?php _e( 'This is the commission type for admin fee', 'dokan' ); ?></p>
     </div>
     <div class="form-field term-display-type-wrap">
         <label for="per_category_admin_commission"><?php _e( 'Admin Commission from this category', 'dokan' ); ?></label>
-        <input type="number" min="0" name="per_category_admin_commission" step="any">
-        <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
+        <input type="number" class="commission-filed" min="0" name="per_category_admin_commission">
+        <span class="additional-fee dokan-hide">
+            <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+            <input type="number" min="0" class="commission-filed" name="per_category_admin_additional_fee">
+        </span>
+        <p class="combine-commission-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
     </div>
+
+    <style type="text/css">
+        .dokan-hide {
+            display: none;
+        }
+        .commission-filed {
+            width: 60px !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // admin additional fee
+        $('#per_category_admin_commission_type').on('change', function() {
+            if ( 'combine' === $(this).val() ) {
+                $('span.additional-fee').removeClass('dokan-hide');
+                $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+            } else {
+                $('span.additional-fee').addClass('dokan-hide');
+                $('.combine-commission-description').text( dokan_admin.combine_default_desc );
+            }
+        }).trigger('change');
+
+    </script>
+
+
     <?php
 }
 
@@ -1252,9 +1290,10 @@ function dokan_add_category_commission_field() {
  *
  * @return void
  */
-function dokan_edit_category_commission_field( $term ){
-    $commission      = get_term_meta( $term->term_id, 'per_category_admin_commission', true );
-    $commission_type = get_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
+function dokan_edit_category_commission_field( $term ) {
+    $commission           = get_term_meta( $term->term_id, 'per_category_admin_commission', true );
+    $commission_type      = get_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
+    $admin_additional_fee = get_term_meta( $term->term_id, 'per_category_admin_additional_fee', true );
 
     if ( dokan_get_option( 'product_category_style', 'dokan_selling' ) !== 'single' ) {
         return;
@@ -1265,8 +1304,11 @@ function dokan_edit_category_commission_field( $term ){
         <th scope="row" valign="top"><label><?php _e( 'Admin Commission type', 'dokan' ); ?></label></th>
         <td>
             <select id="per_category_admin_commission_type" name="per_category_admin_commission_type" class="postform">
-                <option value="percentage" <?php selected( $commission_type, 'percentage' ) ?> ><?php _e( 'Percentage', 'dokan' ) ?></option>
-                <option value="flat" <?php selected( $commission_type, 'flat' ) ?>><?php _e( 'Flat', 'dokan' ) ?></option>
+                <?php foreach ( dokan_commission_types() as $key => $value ) : ?>
+                    <option value="<?php echo wc_clean( $key ); ?>" <?php selected( $commission_type, $key );  ?>>
+                        <?php echo $value ?>
+                    </option>
+                <?php endforeach; ?>
             </select>
             <p class="description"><?php _e( 'This is the commission type for admin fee', 'dokan' ); ?></p>
         </td>
@@ -1274,10 +1316,38 @@ function dokan_edit_category_commission_field( $term ){
     <tr class="form-field">
         <th scope="row" valign="top"><label><?php _e( 'Admin commission', 'dokan' ); ?></label></th>
         <td>
-            <input type="number" min="0" name="per_category_admin_commission" value="<?php echo $commission ?>" step="any">
-            <p class="description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
+            <input type="number" min="0" class="commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
+            <span class="additional-fee dokan-hide">
+                <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+                <input type="number" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+            </span>
+
+            <p class="combine-commssion-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ) ?></p>
         </td>
     </tr>
+
+    <style type="text/css">
+        .dokan-hide {
+            display: none;
+        }
+        .commission-filed {
+            width: 60px !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        // admin additional fee
+        $('#per_category_admin_commission_type').on('change', function() {
+            if ( 'combine' === $(this).val() ) {
+                $('span.additional-fee').removeClass('dokan-hide');
+                $('.combine-commssion-description').text( dokan_admin.combine_commission_desc );
+            } else {
+                $('span.additional-fee').addClass('dokan-hide');
+                $('.combine-commssion-description').text( dokan_admin.default_commission_desc );
+            }
+        }).trigger('change');
+
+    </script>
     <?php
 }
 
@@ -1300,6 +1370,10 @@ function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy 
 
     if ( isset( $_POST['per_category_admin_commission'] ) && 'product_cat' === $taxonomy ) {
         update_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
+    }
+
+    if ( isset( $_POST['per_category_admin_additional_fee'] ) && 'product_cat' === $taxonomy ) {
+        update_term_meta( $term_id, 'per_category_admin_additional_fee', esc_attr( $_POST['per_category_admin_additional_fee'] ) );
     }
 }
 
