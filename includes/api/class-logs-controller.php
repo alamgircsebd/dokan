@@ -90,7 +90,7 @@ class Dokan_REST_Logs_Controller extends Dokan_REST_Admin_Controller {
             foreach ( $order->get_items() as $item ) {
                 $product = $item->get_product();
 
-                if ( 'product_pack' === $product->get_type() ) {
+                if ( $product && 'product_pack' === $product->get_type() ) {
                     $is_subscription_product = true;
                     break;
                 }
