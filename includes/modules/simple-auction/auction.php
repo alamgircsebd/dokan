@@ -76,7 +76,7 @@ class Dokan_Auction {
         // send bid email to admin and vendor
         add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
         add_filter( 'dokan_localized_args', array( $this, 'set_localized_args' ) );
-        add_filter( 'dokan_store_tax_query', [ $this, 'maybe_exclude_auction_product' ] );
+        add_filter( 'pre_get_posts', [ $this, 'maybe_exclude_auction_product' ] );
     }
 
     /**
@@ -556,19 +556,49 @@ class Dokan_Auction {
      *
      * @return array
      */
-    public function maybe_exclude_auction_product( $tax_query ) {
-        $show_finished_auctions = get_option( 'simple_auctions_finished_enabled' );
+    public function maybe_exclude_auction_product( $query ) {
+        if ( ! is_admin() && $query->is_main_query() && dokan_is_store_page() ) {
+            $query->set( 'post__not_in', apply_filters( 'dokan_exclude_auction_product', $this->get_ended_auction_products() ) );
+        }
+    }
 
-        if ( 'no' === $show_finished_auctions ) {
-            $tax_query[] = [
-                'taxonomy' => 'product_type',
-                'field'    => 'slug',
-                'terms'    => 'auction',
-                'operator' => 'NOT IN'
-            ];
+    /**
+     * Get ended auction product ids
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_ended_auction_products() {
+        if ( 'no' !== get_option( 'simple_auctions_finished_enabled' ) ) {
+            return [];
         }
 
-        return $tax_query;
+        $query_args = [
+            'post_type'          => 'product',
+            'post_status'        => 'publish',
+            'posts_per_page'     => -1,
+            'no_found_rows'      => true,
+            'auction_arhive'     => true,
+            'show_past_auctions' => true,
+            'fields'             => 'ids',
+            'tax_query' => [
+                'taxonomy' => 'product_type',
+                'field'    => 'slug',
+                'terms'    => 'auction'
+            ],
+            'meta_query' => [
+                [
+                    'key'     => '_auction_closed',
+                    'value'   => 1,
+                    'compare' => '='
+                ]
+            ]
+        ];
+
+        $query = new WP_Query( $query_args );
+
+        return apply_filters( 'dokan_get_ended_auction_products', $query->get_posts() );
     }
 
 } // Dokan_Auction
