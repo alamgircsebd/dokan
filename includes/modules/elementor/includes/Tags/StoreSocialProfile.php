@@ -54,14 +54,18 @@ class StoreSocialProfile extends TagBase {
             $store       = dokan()->vendor->get( get_query_var( 'author' ) );
             $social_info = $store->get_social_profiles();
 
-            foreach ( $network_map as $dokan_name => $elementor_name ) {
+            foreach ( $network_map as $dokan_name => $elementor_names ) {
                 if ( ! empty( $social_info[ $dokan_name ] ) ) {
-                    $links[ $elementor_name ] = $social_info[ $dokan_name ];
+                    foreach ( $elementor_names as $elementor_name ) {
+                        $links[ $elementor_name ] = $social_info[ $dokan_name ];
+                    }
                 }
             }
         } else {
-            foreach ( $network_map as $dokan_name => $elementor_name ) {
-                $links[ $elementor_name ] = '#';
+            foreach ( $network_map as $dokan_name => $elementor_names ) {
+                foreach ( $elementor_names as $elementor_name ) {
+                    $links[ $elementor_name ] = '#';
+                }
             }
         }
 

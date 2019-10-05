@@ -5,7 +5,6 @@ namespace DokanPro\Modules\Elementor\Widgets;
 use DokanPro\Modules\Elementor\Controls\DynamicHidden;
 use DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Controls_Manager;
-use Elementor\Group_Control_Box_Shadow;
 use Elementor\Icons_Manager;
 use Elementor\Repeater;
 use Elementor\Widget_Social_Icons;
@@ -282,7 +281,11 @@ class StoreSocialProfile extends Widget_Social_Icons {
                     }
 
                     if ( ! isset( $store_social_links[ $item['social_icon']['value'] ] ) ) {
-                        continue;
+                        if ( ! empty( $item['social'] ) && isset( $store_social_links[ $item['social'] ] ) ) {
+                            $item['social_icon']['value'] = $item['social'];
+                        } else {
+                            continue;
+                        }
                     }
                 }
 
@@ -313,7 +316,9 @@ class StoreSocialProfile extends Widget_Social_Icons {
 
                 $link_key = 'link_' . $index;
 
-                $this->add_render_attribute( $link_key, 'href', $store_social_links[ $item['social_icon']['value'] ] );
+                $link = dokan_is_store_page() ? $store_social_links[ $item['social_icon']['value'] ] : '#';
+
+                $this->add_render_attribute( $link_key, 'href', $link );
 
                 $this->add_render_attribute( $link_key, 'class', [
                     'elementor-icon',
@@ -337,17 +342,6 @@ class StoreSocialProfile extends Widget_Social_Icons {
             <?php } ?>
         </div>
         <?php
-    }
-
-    /**
-     * Elementor builder content template
-     *
-     * @since 2.9.11
-     *
-     * @return void
-     */
-    protected function _content_template() {
-        parent::_content_template();
     }
 
     /**
