@@ -128,7 +128,7 @@ class Dokan_SPMV_Product_Visibility {
         global $wpdb;
 
         if ( 'product' === $wp_query->get( 'post_type' ) ) {
-            $where .= " AND {$wpdb->prefix}dokan_product_map.visibility = 1";
+            $where .= " AND ( {$wpdb->prefix}dokan_product_map.visibility = 1 OR {$wpdb->prefix}dokan_product_map.visibility IS NULL )";
         }
 
         return $where;
@@ -149,7 +149,7 @@ class Dokan_SPMV_Product_Visibility {
 
         if ( 'product' === $wp_query->get( 'post_type' ) ) {
             $table = "{$wpdb->prefix}dokan_product_map";
-            $join .= " inner join {$table} on {$wpdb->posts}.ID = {$table}.product_id";
+            $join .= " left join {$table} on {$wpdb->posts}.ID = {$table}.product_id";
         }
 
         return $join;

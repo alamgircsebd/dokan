@@ -5,7 +5,7 @@ namespace DokanPro\Modules\Elementor\Widgets;
 use DokanPro\Modules\Elementor\Controls\DynamicHidden;
 use DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Controls_Manager;
-use Elementor\Group_Control_Box_Shadow;
+use Elementor\Icons_Manager;
 use Elementor\Repeater;
 use Elementor\Widget_Social_Icons;
 
@@ -78,88 +78,126 @@ class StoreSocialProfile extends Widget_Social_Icons {
     protected function _register_controls() {
         parent::_register_controls();
 
+
         $repeater = new Repeater();
 
         $repeater->add_control(
-            'social',
+            'social_icon',
             [
-                'label'       => __( 'Icon', 'dokan' ),
-                'type'        => Controls_Manager::ICON,
+                'label' => __( 'Icon', 'dokan' ),
+                'type' => Controls_Manager::ICONS,
+                'fa4compatibility' => 'social',
                 'label_block' => true,
-                'default'     => 'fa fa-wordpress',
-                'include'     => [
-                    'fa fa-android',
-                    'fa fa-apple',
-                    'fa fa-behance',
-                    'fa fa-bitbucket',
-                    'fa fa-codepen',
-                    'fa fa-delicious',
-                    'fa fa-deviantart',
-                    'fa fa-digg',
-                    'fa fa-dribbble',
-                    'fa fa-envelope',
-                    'fa fa-facebook',
-                    'fa fa-flickr',
-                    'fa fa-foursquare',
-                    'fa fa-free-code-camp',
-                    'fa fa-github',
-                    'fa fa-gitlab',
-                    'fa fa-google-plus',
-                    'fa fa-houzz',
-                    'fa fa-instagram',
-                    'fa fa-jsfiddle',
-                    'fa fa-linkedin',
-                    'fa fa-medium',
-                    'fa fa-meetup',
-                    'fa fa-mixcloud',
-                    'fa fa-odnoklassniki',
-                    'fa fa-pinterest',
-                    'fa fa-product-hunt',
-                    'fa fa-reddit',
-                    'fa fa-rss',
-                    'fa fa-shopping-cart',
-                    'fa fa-skype',
-                    'fa fa-slideshare',
-                    'fa fa-snapchat',
-                    'fa fa-soundcloud',
-                    'fa fa-spotify',
-                    'fa fa-stack-overflow',
-                    'fa fa-steam',
-                    'fa fa-stumbleupon',
-                    'fa fa-telegram',
-                    'fa fa-thumb-tack',
-                    'fa fa-tripadvisor',
-                    'fa fa-tumblr',
-                    'fa fa-twitch',
-                    'fa fa-twitter',
-                    'fa fa-vimeo',
-                    'fa fa-vk',
-                    'fa fa-weibo',
-                    'fa fa-weixin',
-                    'fa fa-whatsapp',
-                    'fa fa-wordpress',
-                    'fa fa-xing',
-                    'fa fa-yelp',
-                    'fa fa-youtube',
-                    'fa fa-500px',
+                'default' => [
+                    'value' => 'fab fa-wordpress',
+                    'library' => 'fa-brands',
+                ],
+                'recommended' => [
+                    'fa-brands' => [
+                        'android',
+                        'apple',
+                        'behance',
+                        'bitbucket',
+                        'codepen',
+                        'delicious',
+                        'deviantart',
+                        'digg',
+                        'dribbble',
+                        'elementor',
+                        'facebook',
+                        'flickr',
+                        'foursquare',
+                        'free-code-camp',
+                        'github',
+                        'gitlab',
+                        'globe',
+                        'google-plus',
+                        'houzz',
+                        'instagram',
+                        'jsfiddle',
+                        'linkedin',
+                        'medium',
+                        'meetup',
+                        'mixcloud',
+                        'odnoklassniki',
+                        'pinterest',
+                        'product-hunt',
+                        'reddit',
+                        'shopping-cart',
+                        'skype',
+                        'slideshare',
+                        'snapchat',
+                        'soundcloud',
+                        'spotify',
+                        'stack-overflow',
+                        'steam',
+                        'stumbleupon',
+                        'telegram',
+                        'thumb-tack',
+                        'tripadvisor',
+                        'tumblr',
+                        'twitch',
+                        'twitter',
+                        'viber',
+                        'vimeo',
+                        'vk',
+                        'weibo',
+                        'weixin',
+                        'whatsapp',
+                        'wordpress',
+                        'xing',
+                        'yelp',
+                        'youtube',
+                        '500px',
+                    ],
+                    'fa-solid' => [
+                        'envelope',
+                        'link',
+                        'rss',
+                    ],
                 ],
             ]
         );
 
         $repeater->add_control(
-            'link',
+            'item_icon_color',
             [
-                'label'       => __( 'Link', 'dokan' ),
-                'type'        => Controls_Manager::URL,
-                'dynamic'     => [
-                    'default' => '',
-                    'active'  => true,
+                'label' => __( 'Color', 'dokan' ),
+                'type' => Controls_Manager::SELECT,
+                'default' => 'default',
+                'options' => [
+                    'default' => __( 'Official Color', 'dokan' ),
+                    'custom' => __( 'Custom', 'dokan' ),
                 ],
-                'label_block' => true,
-                'default'     => [
-                    'is_external' => 'true',
+            ]
+        );
+
+        $repeater->add_control(
+            'item_icon_primary_color',
+            [
+                'label' => __( 'Primary Color', 'dokan' ),
+                'type' => Controls_Manager::COLOR,
+                'condition' => [
+                    'item_icon_color' => 'custom',
                 ],
-                'placeholder' => __( 'https://your-link.com', 'dokan' ),
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}}' => 'background-color: {{VALUE}};',
+                ],
+            ]
+        );
+
+        $repeater->add_control(
+            'item_icon_secondary_color',
+            [
+                'label' => __( 'Secondary Color', 'dokan' ),
+                'type' => Controls_Manager::COLOR,
+                'condition' => [
+                    'item_icon_color' => 'custom',
+                ],
+                'selectors' => [
+                    '{{WRAPPER}} {{CURRENT_ITEM}} i' => 'color: {{VALUE}};',
+                    '{{WRAPPER}} {{CURRENT_ITEM}} svg' => 'fill: {{VALUE}};',
+                ],
             ]
         );
 
@@ -167,43 +205,6 @@ class StoreSocialProfile extends Widget_Social_Icons {
             'social_icon_list',
             [
                 'fields'  => $repeater->get_controls(),
-                'default' => [
-                    [
-                        'social' => 'fa fa-facebook',
-                    ],
-                    [
-                        'social' => 'fa fa-google-plus',
-                    ],
-                    [
-                        'social' => 'fa fa-twitter',
-                    ],
-                    [
-                        'social' => 'fa fa-pinterest',
-                    ],
-                    [
-                        'social' => 'fa fa-linkedin',
-                    ],
-                    [
-                        'social' => 'fa fa-youtube',
-                    ],
-                    [
-                        'social' => 'fa fa-instagram',
-                    ],
-                    [
-                        'social' => 'fa fa-flickr',
-                    ],
-                ],
-            ]
-        );
-
-        $this->add_group_control(
-            Group_Control_Box_Shadow::get_type(),
-            [
-                'name'     => 'box_shadow',
-                'selector' => '{{WRAPPER}} .elementor-social-icon',
-            ],
-            [
-                'position' => [ 'of' => 'icon_spacing' ]
             ]
         );
 
@@ -252,51 +253,95 @@ class StoreSocialProfile extends Widget_Social_Icons {
             return;
         }
 
+        $fallback_defaults = [
+            'fa fa-facebook',
+            'fa fa-twitter',
+            'fa fa-google-plus',
+        ];
+
         $class_animation = '';
 
         if ( ! empty( $settings['hover_animation'] ) ) {
             $class_animation = ' elementor-animation-' . $settings['hover_animation'];
         }
+
+        $migration_allowed = Icons_Manager::is_migration_allowed();
+
         ?>
         <div class="elementor-social-icons-wrapper">
             <?php
             foreach ( $settings['social_icon_list'] as $index => $item ) {
-                if ( dokan_is_store_page() && empty( $store_social_links[ $item['social'] ] ) ) {
-                    continue;
+                if ( dokan_is_store_page() ) {
+                    if ( empty( $item['social_icon']['value'] ) ) {
+                        continue;
+                    }
+
+                    if ( is_array( $item['social_icon']['value'] ) ) {
+                        continue;
+                    }
+
+                    if ( ! isset( $store_social_links[ $item['social_icon']['value'] ] ) ) {
+                        if ( ! empty( $item['social'] ) && isset( $store_social_links[ $item['social'] ] ) ) {
+                            $item['social_icon']['value'] = $item['social'];
+                        } else {
+                            continue;
+                        }
+                    }
                 }
 
-                $social = str_replace( 'fa fa-', '', $item['social'] );
+                $migrated = isset( $item['__fa4_migrated']['social_icon'] );
+                $is_new = empty( $item['social'] ) && $migration_allowed;
+                $social = '';
+
+                // add old default
+                if ( empty( $item['social'] ) && ! $migration_allowed ) {
+                    $item['social'] = isset( $fallback_defaults[ $index ] ) ? $fallback_defaults[ $index ] : 'fa fa-wordpress';
+                }
+
+                if ( ! empty( $item['social'] ) ) {
+                    $social = str_replace( 'fa fa-', '', $item['social'] );
+                }
+
+                if ( ( $is_new || $migrated ) && 'svg' !== $item['social_icon']['library'] ) {
+                    $social = explode( ' ', $item['social_icon']['value'], 2 );
+                    if ( empty( $social[1] ) ) {
+                        $social = '';
+                    } else {
+                        $social = str_replace( 'fa-', '', $social[1] );
+                    }
+                }
+                if ( 'svg' === $item['social_icon']['library'] ) {
+                    $social = '';
+                }
 
                 $link_key = 'link_' . $index;
 
-                $this->add_render_attribute( $link_key, 'href', $store_social_links[ $item['social'] ] );
+                $link = dokan_is_store_page() ? $store_social_links[ $item['social_icon']['value'] ] : '#';
 
-                if ( $item['link']['is_external'] ) {
-                    $this->add_render_attribute( $link_key, 'target', '_blank' );
-                }
+                $this->add_render_attribute( $link_key, 'href', $link );
 
-                if ( $item['link']['nofollow'] ) {
-                    $this->add_render_attribute( $link_key, 'rel', 'nofollow' );
-                }
+                $this->add_render_attribute( $link_key, 'class', [
+                    'elementor-icon',
+                    'elementor-social-icon',
+                    'elementor-social-icon-' . $social . $class_animation,
+                    'elementor-repeater-item-' . $item['_id'],
+                ] );
+
+                $this->add_render_attribute( $link_key, 'target', '_blank' );
+                $this->add_render_attribute( $link_key, 'rel', 'nofollow' );
                 ?>
-                <a class="elementor-icon elementor-social-icon elementor-social-icon-<?php echo $social . $class_animation; ?>" <?php echo $this->get_render_attribute_string( $link_key ); ?>>
+                <a <?php echo $this->get_render_attribute_string( $link_key ); ?>>
                     <span class="elementor-screen-only"><?php echo ucwords( $social ); ?></span>
-                    <i class="<?php echo $item['social']; ?>"></i>
+                    <?php
+                    if ( $is_new || $migrated ) {
+                        Icons_Manager::render_icon( $item['social_icon'] );
+                    } else { ?>
+                        <i class="<?php echo esc_attr( $item['social'] ); ?>"></i>
+                    <?php } ?>
                 </a>
             <?php } ?>
         </div>
         <?php
-    }
-
-    /**
-     * Elementor builder content template
-     *
-     * @since 2.9.11
-     *
-     * @return void
-     */
-    protected function _content_template() {
-        parent::_content_template();
     }
 
     /**
