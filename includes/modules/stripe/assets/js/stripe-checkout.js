@@ -23,7 +23,6 @@ jQuery( function($) {
         StripeCheckout.open({
             key:         dokan_stripe_connect_params.key,
             locale:      dokan_stripe_connect_params.locale,
-            bitcoin:     dokan_stripe_connect_params.bitcoin == 'true',
             image:       dokan_stripe_connect_params.image,
             name:        dokan_stripe_connect_params.name,
             description: dokan_stripe_connect_params.description,
