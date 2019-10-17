@@ -11,11 +11,13 @@ if ( isset( $_POST ) && ! empty( $_POST['save_addon'] ) || ! empty( $_GET['edit'
 	$button_title = __( 'Update', 'woocommerce-product-addons' );
 }
 ?>
-<div class="wrap woocommerce">
-	<div><?php esc_html_e( 'Set up add-ons that apply to all products or specific product categories.', 'woocommerce-product-addons' ); ?></div><br />
+<div class="woocommerce dokan-pa-create-addons">
+    <a class="back-to-addon-lists-btn" href="<?php echo dokan_get_navigation_url( 'settings/product-addon' ); ?>">&larr; Back to addon lists</a>
+
+    <div><?php esc_html_e( 'Set up add-ons that apply to all products or specific product categories.', 'woocommerce-product-addons' ); ?></div><br />
 
 	<form method="POST" action="">
-		<table class="form-table global-addons-form meta-box-sortables">
+		<table class="form-table global-addons-form meta-box-sortables dokan-table">
 			<tr>
 				<th>
 					<label for="addon-reference"><?php esc_html_e( 'Name', 'woocommerce-product-addons' ); ?></label>
@@ -39,7 +41,7 @@ if ( isset( $_POST ) && ! empty( $_POST['save_addon'] ) || ! empty( $_GET['edit'
 					<label for="addon-objects"><?php esc_html_e( 'Product Categories', 'woocommerce-product-addons' ); ?></label>
 				</th>
 				<td>
-					<select id="addon-objects" name="addon-objects[]" multiple="multiple" style="width:50%;" data-placeholder="<?php esc_attr_e( 'Choose categories&hellip;', 'woocommerce-product-addons' ); ?>" class="wc-enhanced-select wc-pao-enhanced-select">
+					<select id="addon-objects" name="addon-objects[]" multiple="multiple" style="width:50%;" data-placeholder="<?php esc_attr_e( 'Choose categories&hellip;', 'woocommerce-product-addons' ); ?>" class="dokan-select2 wc-enhanced-select wc-pao-enhanced-select">
 						<option value="all" <?php selected( in_array( 'all', $objects ), true ); ?>><?php esc_html_e( 'All Products', 'woocommerce-product-addons' ); ?></option>
 						<optgroup label="<?php esc_attr_e( 'Product categories', 'woocommerce-product-addons' ); ?>">
 							<?php
@@ -71,11 +73,13 @@ if ( isset( $_POST ) && ! empty( $_POST['save_addon'] ) || ! empty( $_GET['edit'
 				</td>
 			</tr>
 		</table>
-		<p class="submit">
+		<p class="submit dokan-right">
 			<input type="hidden" name="edit_id" value="<?php echo ( ! empty( $edit_id ) ? esc_attr( $edit_id ) : '' ); ?>" />
 			<input type="hidden" name="save_addon" value="true" />
-			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php echo esc_attr( $button_title ); ?>">
+            <?php wp_nonce_field( 'dokan_pa_save_addons', 'dokan_pa_save_addons_nonce' ); ?>
+			<input type="submit" name="submit" id="submit" class="dokan-btn dokan-btn-theme" value="<?php echo esc_attr( $button_title ); ?>">
 		</p>
+        <div class="dokan-clearfix"></div>
 	</form>
 </div>
 

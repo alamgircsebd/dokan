@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				foreach ( $global_addons as $global_addon ) {
 					?>
 					<tr>
-						<td><a href="<?php echo add_query_arg( 'edit', $global_addon['id'], admin_url( 'edit.php?post_type=product&page=addons' ) ); ?>"><?php echo $global_addon['name']; ?></a>
+						<td><a href="<?php echo esc_url( add_query_arg( 'edit', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ) ); ?>"><?php echo $global_addon['name']; ?></a>
 							<div class="row-actions">
                                 <span class="edit"><a href="<?php echo esc_url( add_query_arg( 'edit', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ) ); ?>"><?php esc_html_e( 'Edit', 'woocommerce-product-addons' ); ?></a> | </span>
                                 <span class="delete"><a class="delete" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'delete', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ), 'delete_addon' ) ); ?>"><?php esc_html_e( 'Delete', 'woocommerce-product-addons' ); ?></a></span>

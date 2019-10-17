@@ -47,12 +47,12 @@ if ( 'heading' === $addon_type ) {
 	<div class="wc-pao-addon-header">
 		<div class="wc-pao-col1">
 			<span class="wc-pao-addon-sort-handle dashicons dashicons-menu"></span>
-			<h2 class="wc-pao-addon-name"><?php echo esc_html( $addon_title ); ?></h2>
+			<h3 class="wc-pao-addon-name"><?php echo esc_html( $addon_title ); ?></h3>
 			<small class="wc-pao-addon-type"><?php echo esc_html( $addon_type_formatted ); ?></small>
 		</div>
 
 		<div class="wc-pao-col2">
-			<button type="button" class="wc-pao-remove-addon button"><?php esc_html_e( 'Remove', 'woocommerce-product-addons' ); ?></button>
+			<button type="button" class="wc-pao-remove-addon dokan-btn dokan-btn-theme dokan-btn-sm"><?php esc_html_e( 'Remove', 'woocommerce-product-addons' ); ?></button>
 			<span class="wc-pao-addon-toggle" title="<?php esc_attr_e( 'Click to toggle', 'woocommerce-product-addons' ); ?>" aria-hidden="true"></span>
 			<input type="hidden" name="product_addon_position[<?php echo esc_attr( $loop ); ?>]" class="wc-pao-addon-position" value="<?php echo esc_attr( $loop ); ?>" />
 		</div>
@@ -181,7 +181,7 @@ if ( 'heading' === $addon_type ) {
 				</div>
 
 				<div class="wc-pao-addon-content-footer">
-					<button type="button" class="wc-pao-add-option button"><?php esc_html_e( 'Add Option', 'woocommerce-product-addons' ); ?></button>
+					<button type="button" class="wc-pao-add-option dokan-btn dokan-btn-sm dokan-btn-theme"><?php esc_html_e( 'Add Option', 'woocommerce-product-addons' ); ?></button>
 				</div>
 			</div>
 		</div>

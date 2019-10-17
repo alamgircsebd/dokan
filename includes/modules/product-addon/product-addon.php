@@ -106,7 +106,7 @@ class Dokan_Product_Addon {
     }
 
     /**
-     * includes all necessary class a functions file
+     * Includes all necessary class a functions file
      *
      * @since 1.0.0
      *
@@ -114,6 +114,7 @@ class Dokan_Product_Addon {
      */
     public function includes() {
         require_once DOKAN_PRODUCT_ADDON_INC_DIR . '/class-frontend.php';
+        require_once DOKAN_PRODUCT_ADDON_INC_DIR . '/class-vendor-product.php';
 
         // Load all helper functions
         require_once DOKAN_PRODUCT_ADDON_INC_DIR . '/functions.php';
@@ -126,6 +127,7 @@ class Dokan_Product_Addon {
      */
     public function initiate() {
         Dokan_Product_Addon_Frontend::init();
+        Dokan_Product_Addon_Vendor_Product::init();
     }
 
      /**
@@ -150,30 +152,45 @@ class Dokan_Product_Addon {
         global $wp;
 
         if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'product-addon' ) {
-            wp_enqueue_style( 'dokan-pa-style', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/css/main.css', false , DOKAN_PLUGIN_VERSION, 'all' );
-            wp_enqueue_script( 'dokan-pa-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
-            wp_enqueue_script( 'dokan-pa-addons-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/addons.js', array( 'jquery', 'dokan-pa-script' ), DOKAN_PLUGIN_VERSION, true );
-            $params = array(
-                'ajax_url' => admin_url( 'admin-ajax.php' ),
-                'nonce'    => array(
-                    'get_addon_options' => wp_create_nonce( 'wc-pao-get-addon-options' ),
-                    'get_addon_field'   => wp_create_nonce( 'wc-pao-get-addon-field' ),
-                ),
-                'i18n'     => array(
-                    'required_fields'       => __( 'All fields must have a title and/or option name. Please review the settings highlighted in red border.', 'woocommerce-product-addons' ),
-                    'limit_price_range'         => __( 'Limit price range', 'woocommerce-product-addons' ),
-                    'limit_quantity_range'      => __( 'Limit quantity range', 'woocommerce-product-addons' ),
-                    'limit_character_length'    => __( 'Limit character length', 'woocommerce-product-addons' ),
-                    'restrictions'              => __( 'Restrictions', 'woocommerce-product-addons' ),
-                    'confirm_remove_addon'      => __( 'Are you sure you want remove this add-on field?', 'woocommerce-product-addons' ),
-                    'confirm_remove_option'     => __( 'Are you sure you want delete this option?', 'woocommerce-product-addons' ),
-                    'add_image_swatch'          => __( 'Add Image Swatch', 'woocommerce-product-addons' ),
-                    'add_image'                 => __( 'Add Image', 'woocommerce-product-addons' ),
-                ),
-            );
-
-            wp_localize_script( 'jquery', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
+            $this->enqueue_scripts();
         }
+
+        if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
+            $this->enqueue_scripts();
+        }
+    }
+
+    /**
+     * Enqueue scripts
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function enqueue_scripts() {
+        wp_enqueue_style( 'dokan-pa-style', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/css/main.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        wp_enqueue_script( 'dokan-pa-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
+        wp_enqueue_script( 'dokan-pa-addons-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/addons.js', array( 'jquery', 'dokan-pa-script' ), DOKAN_PLUGIN_VERSION, true );
+        $params = array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce'    => array(
+                'get_addon_options' => wp_create_nonce( 'wc-pao-get-addon-options' ),
+                'get_addon_field'   => wp_create_nonce( 'wc-pao-get-addon-field' ),
+            ),
+            'i18n'     => array(
+                'required_fields'       => __( 'All fields must have a title and/or option name. Please review the settings highlighted in red border.', 'woocommerce-product-addons' ),
+                'limit_price_range'         => __( 'Limit price range', 'woocommerce-product-addons' ),
+                'limit_quantity_range'      => __( 'Limit quantity range', 'woocommerce-product-addons' ),
+                'limit_character_length'    => __( 'Limit character length', 'woocommerce-product-addons' ),
+                'restrictions'              => __( 'Restrictions', 'woocommerce-product-addons' ),
+                'confirm_remove_addon'      => __( 'Are you sure you want remove this add-on field?', 'woocommerce-product-addons' ),
+                'confirm_remove_option'     => __( 'Are you sure you want delete this option?', 'woocommerce-product-addons' ),
+                'add_image_swatch'          => __( 'Add Image Swatch', 'woocommerce-product-addons' ),
+                'add_image'                 => __( 'Add Image', 'woocommerce-product-addons' ),
+            ),
+        );
+
+        wp_localize_script( 'jquery', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
     }
 
 }

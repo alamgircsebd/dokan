@@ -15,6 +15,8 @@ class Dokan_Product_Addon_Frontend {
         add_filter( 'dokan_dashboard_settings_heading_title', [ $this, 'load_settings_header' ], 11, 2 );
         add_filter( 'dokan_dashboard_settings_helper_text', [ $this, 'load_helper' ], 10, 2 );
         add_action( 'dokan_render_settings_content', [ $this, 'render_settings_content' ], 10 );
+        add_action( 'pre_get_posts', [ $this, 'render_vendor_global_addons' ], 99 );
+        add_action( 'template_redirect', [ $this, 'handle_addon_formdata' ], 10 );
     }
 
     /**
@@ -43,7 +45,7 @@ class Dokan_Product_Addon_Frontend {
     public function add_settings_menu( $settings_tab ) {
         $settings_tab['product-addon'] = [
             'title' => __( 'Addons', 'dokan'),
-            'icon'  => '<i class="fa fa-user"></i>',
+            'icon'  => '<i class="fa fa-puzzle-piece" aria-hidden="true"></i>',
             'url'   => dokan_get_navigation_url( 'settings/product-addon' ),
             'pos'   => 40
         ];
@@ -91,25 +93,14 @@ class Dokan_Product_Addon_Frontend {
     public function render_settings_content( $query_vars ) {
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'product-addon' ) {
             if ( ! empty( $_GET['add'] ) || ! empty( $_GET['edit'] ) ) {
-                if ( $_POST ) {
-                    // $edit_id = $this->save_global_addons();
 
-                    if ( $edit_id ) {
-                        echo '<div class="updated"><p>' . esc_html__( 'Add-on saved successfully', 'woocommerce-product-addons' ) . '</p></div>';
-                    }
-
-                    $reference      = wc_clean( $_POST['addon-reference'] );
-                    $priority       = absint( $_POST['addon-priority'] );
-                    $objects        = ! empty( $_POST['addon-objects'] ) ? array_map( 'absint', $_POST['addon-objects'] ) : array();
-                    $product_addons = array_filter( (array) $this->get_posted_product_addons() );
-                }
                 if ( ! empty( $_GET['edit'] ) ) {
 
                     $edit_id      = absint( $_GET['edit'] );
                     $global_addon = get_post( $edit_id );
 
                     if ( ! $global_addon ) {
-                        echo '<div class="error">' . esc_html__( 'Error: Add-on not found', 'woocommerce-product-addons' ) . '</div>';
+                        echo '<div class="dokan-alert dokan-alert-danger">' . esc_html__( 'Error: Add-on not found', 'woocommerce-product-addons' ) . '</div>';
                         return;
                     }
 
@@ -133,7 +124,6 @@ class Dokan_Product_Addon_Frontend {
                         $objects[] = 0;
                     }
                 } else {
-
                     $global_addons_count = wp_count_posts( 'global_product_addon' );
                     $reference           = __( 'Add-ons Group', 'woocommerce-product-addons' ) . ' #' . ( $global_addons_count->publish + 1 );
                     $priority            = 10;
@@ -141,17 +131,128 @@ class Dokan_Product_Addon_Frontend {
                     $product_addons      = array();
                 }
 
-                include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin-add.php' );
-            } else {
-
-                if ( ! empty( $_GET['delete'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'delete_addon' ) ) {
-                    wp_delete_post( absint( $_GET['delete'] ), true );
-                    echo '<div class="updated"><p>' . esc_html__( 'Add-on deleted successfully', 'woocommerce-product-addons' ) . '</p></div>';
+                if ( ! empty( $_GET['saved'] ) && $_GET['saved'] ) {
+                    echo '<div class="dokan-alert dokan-alert-success"><p>' . esc_html__( 'Add-on saved successfully', 'woocommerce-product-addons' ) . '</p></div>';
                 }
 
+                include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin-add.php' );
+            } else {
+                if ( ! empty( $_GET['deleted'] ) && $_GET['deleted'] ) {
+                    echo '<div class="dokan-alert dokan-alert-danger"><p>' . esc_html__( 'Add-on deleted successfully', 'woocommerce-product-addons' ) . '</p></div>';
+                }
                 include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin.php' );
             }
         }
     }
+
+    /**
+     * Render vendor global addons using query filter
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function render_vendor_global_addons( $query ) {
+        global $wp, $post;
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'product-addon' ) {
+            if ( ! is_admin() && ! empty( $query->query['post_type'] ) && $query->query['post_type'] === 'global_product_addon' ) {
+                // set post author for global addons
+                $query->set( 'author', get_current_user_id() );
+                return;
+            }
+        }
+
+        if ( ! is_admin() && ! empty( $query->query['post_type'] ) && $query->query['post_type'] === 'global_product_addon' ) {
+            // set post author for global addons
+            $query->set( 'author', get_current_user_id() );
+            return;
+        }
+
+    }
+
+    /**
+     * Handle redirect issue with handling form data request
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function handle_addon_formdata() {
+        global $wp;
+
+        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'product-addon' ) {
+            if ( ! empty( $_GET['delete'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'delete_addon' ) ) {
+                wp_delete_post( absint( $_GET['delete'] ), true );
+                wp_redirect( add_query_arg( 'deleted', 1, dokan_get_navigation_url( 'settings/product-addon' ) ) );
+                exit();
+            }
+
+            if ( isset( $_POST['save_addon'] ) && $_POST['save_addon'] ) {
+                if ( wp_verify_nonce( $_POST['dokan_pa_save_addons_nonce'], 'dokan_pa_save_addons' ) ) {
+                    $edit_id = $this->save_global_addons();
+                    wp_redirect( add_query_arg( [ 'saved' => 1, 'edit' => $edit_id ], dokan_get_navigation_url( 'settings/product-addon' ) ) );
+                    exit();
+                }
+            }
+        }
+    }
+
+    /**
+     * Save global addons
+     *
+     * @return bool success or failure
+     */
+    public function save_global_addons() {
+        $edit_id        = ! empty( $_POST['edit_id'] ) ? absint( $_POST['edit_id'] ) : '';
+        $reference      = wc_clean( $_POST['addon-reference'] );
+        $priority       = absint( $_POST['addon-priority'] );
+        $objects        = ! empty( $_POST['addon-objects'] ) ? array_map( 'absint', $_POST['addon-objects'] ) : array();
+        $product_addons = dokan_pa_get_posted_product_addons( $_POST );
+
+        if ( ! $reference ) {
+            $global_addons_count = wp_count_posts( 'global_product_addon' );
+            $reference           = __( 'Add-ons Group', 'woocommerce-product-addons' ) . ' #' . ( $global_addons_count->publish + 1 );
+        }
+
+        if ( ! $priority && 0 !== $priority ) {
+            $priority = 10;
+        }
+
+        if ( $edit_id ) {
+
+            $edit_post               = array();
+            $edit_post['ID']         = $edit_id;
+            $edit_post['post_title'] = $reference;
+
+            wp_update_post( $edit_post );
+            wp_set_post_terms( $edit_id, $objects, 'product_cat', false );
+            do_action( 'woocommerce_product_addons_global_edit_addons', $edit_post, $objects );
+            do_action( 'dokan_pa_global_edit_addons', $edit_post, $objects );
+
+        } else {
+
+            $edit_id = wp_insert_post( apply_filters( 'dokan_pa_global_insert_post_args', array(
+                'post_title'    => $reference,
+                'post_status'   => 'publish',
+                'post_type'     => 'global_product_addon',
+                'tax_input'     => array(
+                    'product_cat' => $objects,
+                ),
+            ), $reference, $objects ) );
+        }
+
+        if ( in_array( 0, $objects ) ) {
+            update_post_meta( $edit_id, '_all_products', 1 );
+        } else {
+            update_post_meta( $edit_id, '_all_products', 0 );
+        }
+
+        update_post_meta( $edit_id, '_priority', $priority );
+        update_post_meta( $edit_id, '_product_addons', $product_addons );
+
+        return $edit_id;
+    }
+
 
 }

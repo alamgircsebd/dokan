@@ -1,3 +1,25 @@
+.dokan-pa-create-addons .back-to-addon-lists-btn {
+    position: absolute;
+    top: 10px;
+    right: 0px;
+}
+
+.dokan-pa-create-addons .global-addons-form tr th {
+    width: 20%;
+    border: none;
+}
+
+.dokan-pa-create-addons .global-addons-form tr td {
+    border: none;
+}
+
+.dokan-pa-create-addons .global-addons-form tr td p.description {
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 5px;
+    color: #909090;
+}
+
 .dokan-pa-all-addons a.dokan-pa-create-btn {
     position: absolute;
     top: 0px;
@@ -21,6 +43,7 @@
 
 #product_addons_data {
 	min-height: auto;
+    border: 1px solid #eee;
 }
 
 .wc-pao-doc-link {
@@ -29,9 +52,10 @@
 
 .wc-pao-field-header {
 	display: flex;
-	padding: 10px;
+	padding: 15px;
 	border-bottom: 1px solid #eee;
 	justify-content: space-between;
+    background: #fff;
 }
 
 .woocommerce_options_panel .wc-pao-field-header p {
@@ -56,7 +80,9 @@
 
 .wc-pao-actions {
 	display: flex;
-	padding: 20px;
+	padding: 15px;
+    background: #fff;
+    border-top: 1px solid #eee;
 }
 
 .wc-pao-add-field {
@@ -123,7 +149,7 @@ a.wc-pao-expand-all:active, a.wc-pao-expand-all:focus {
 }
 
 .wc-pao-addons.wc-pao-has-addons {
-	padding: 20px;
+	padding: 15px;
 }
 
 .wc-pao-addon {
@@ -157,7 +183,7 @@ a.wc-pao-expand-all:active, a.wc-pao-expand-all:focus {
 .wc-pao-addon-header {
 	cursor: move;
 	border-bottom: 1px solid #e5e5e5;
-	padding: 15px;
+	padding: 8px 10px;
 	/* height: 30px; */
 	display: flex;
 	justify-content: space-between;
@@ -559,16 +585,16 @@ a.wc-pao-expand-all:active, a.wc-pao-expand-all:focus {
     font-size: 15px;
 }
 
-.post-type-product .wc-pao-actions {
+.wc-pao-actions {
 	border-bottom: 1px solid #eee;
 }
 
-.post-type-product .wc-pao-product-global-addon {
+.wc-pao-product-global-addon {
 	padding: 20px;
 }
 
-.post-type-product .wc-pao-product-global-addon label,
-.post-type-product .wc-pao-product-global-addon input {
+.wc-pao-product-global-addon label,
+.wc-pao-product-global-addon input {
 	float: none;
 	margin: 0 !important;
 	width: auto;
