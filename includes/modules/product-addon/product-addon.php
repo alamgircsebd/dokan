@@ -47,6 +47,24 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class Dokan_Product_Addon {
 
     /**
+     * The plugins which are dependent for this plugin
+     *
+     * @since 1.0.0
+     *
+     * @var array
+     */
+    private $depends_on = array();
+
+    /**
+     * Displa dependency error if not present
+     *
+     * @since 1.0.0
+     *
+     * @var array
+     */
+    private $dependency_error = array();
+
+    /**
      * Constructor for the Dokan_Product_Addon class
      *
      * Sets up all the appropriate hooks and actions
@@ -56,6 +74,17 @@ class Dokan_Product_Addon {
      * @uses add_action()
      */
     public function __construct() {
+
+        $this->depends_on['WC_Product_Addons'] = array(
+            'name'   => 'WC_Product_Addons',
+            'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %sWooCommerce Product addons plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>' ),
+        );
+
+        if ( ! $this->check_if_has_dependency() ) {
+            add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
+            return;
+        }
+
         $this->define();
 
         $this->includes();
@@ -161,6 +190,40 @@ class Dokan_Product_Addon {
     }
 
     /**
+     * Print error notice if dependency not active
+     *
+     * @since 1.0.0
+     */
+    function dependency_notice(){
+        $errors = '';
+        $error = '';
+        foreach ( $this->dependency_error as $error ) {
+            $errors .= '<p>' . $error . '</p>';
+        }
+        $message = '<div class="error">' . $errors . '</div>';
+
+        echo $message;
+    }
+
+    /**
+     * Check whether is their has any dependency or not
+     *
+     * @return boolean
+     */
+    function check_if_has_dependency() {
+        $res = true;
+
+        foreach ( $this->depends_on as $class ) {
+            if ( ! class_exists( $class['name'] ) ) {
+                $this->dependency_error[] = $class['notice'];
+                $res = false;
+            }
+        }
+
+        return $res;
+    }
+
+    /**
      * Enqueue scripts
      *
      * @since 1.0.0
@@ -195,4 +258,9 @@ class Dokan_Product_Addon {
 
 }
 
-$dokan_product_addon = Dokan_Product_Addon::init();
+add_action( 'plugins_loaded', 'dokan_pa_load', 30 );
+
+function dokan_pa_load() {
+    $dokan_product_addon = Dokan_Product_Addon::init();
+}
+
