@@ -30,14 +30,14 @@ if ( 'show' === $opt_show_image_swatch ) {
 	</div>
 
 	<div class="wc-pao-addon-content-label <?php echo esc_attr( $opt_label_column ); ?>">
-		<input type="text" name="product_addon_option_label[<?php echo $loop; ?>][]" value="<?php echo esc_attr( $opt_label ); ?>" placeholder="<?php esc_html_e( 'Enter an option', 'woocommerce-product-addons' ); ?>" />
+		<input type="text" name="product_addon_option_label[<?php echo $loop; ?>][]" value="<?php echo esc_attr( $opt_label ); ?>" placeholder="<?php esc_html_e( 'Enter an option', 'dokan' ); ?>" />
 	</div>
 
 	<div class="wc-pao-addon-content-price-type">
 		<select name="product_addon_option_price_type[<?php echo $loop; ?>][]" class="wc-pao-addon-option-price-type">
-			<option <?php selected( 'flat_fee', $opt_price_type ); ?> value="flat_fee"><?php esc_html_e( 'Flat Fee', 'woocommerce-product-addons' ); ?></option>
-			<option <?php selected( 'quantity_based', $opt_price_type ); ?> value="quantity_based"><?php esc_html_e( 'Quantity Based', 'woocommerce-product-addons' ); ?></option>
-			<option <?php selected( 'percentage_based', $opt_price_type ); ?> value="percentage_based"><?php esc_html_e( 'Percentage Based', 'woocommerce-product-addons' ); ?></option>
+			<option <?php selected( 'flat_fee', $opt_price_type ); ?> value="flat_fee"><?php esc_html_e( 'Flat Fee', 'dokan' ); ?></option>
+			<option <?php selected( 'quantity_based', $opt_price_type ); ?> value="quantity_based"><?php esc_html_e( 'Quantity Based', 'dokan' ); ?></option>
+			<option <?php selected( 'percentage_based', $opt_price_type ); ?> value="percentage_based"><?php esc_html_e( 'Percentage Based', 'dokan' ); ?></option>
 		</select>
 	</div>
 

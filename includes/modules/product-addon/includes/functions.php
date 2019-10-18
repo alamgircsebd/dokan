@@ -3,29 +3,29 @@
 function dokan_pa_convert_type_name( $type = '' ) {
     switch ( $type ) {
         case 'checkboxes':
-            $name = __( 'Checkbox', 'woocommerce-product-addons' );
+            $name = __( 'Checkbox', 'dokan' );
             break;
         case 'custom_price':
-            $name = __( 'Price', 'woocommerce-product-addons' );
+            $name = __( 'Price', 'dokan' );
             break;
         case 'input_multiplier':
-            $name = __( 'Quantity', 'woocommerce-product-addons' );
+            $name = __( 'Quantity', 'dokan' );
             break;
         case 'custom_text':
-            $name = __( 'Short Text', 'woocommerce-product-addons' );
+            $name = __( 'Short Text', 'dokan' );
             break;
         case 'custom_textarea':
-            $name = __( 'Long Text', 'woocommerce-product-addons' );
+            $name = __( 'Long Text', 'dokan' );
             break;
         case 'file_upload':
-            $name = __( 'File Upload', 'woocommerce-product-addons' );
+            $name = __( 'File Upload', 'dokan' );
             break;
         case 'select':
-            $name = __( 'Dropdown', 'woocommerce-product-addons' );
+            $name = __( 'Dropdown', 'dokan' );
             break;
         case 'multiple_choice':
         default:
-            $name = __( 'Multiple Choice', 'woocommerce-product-addons' );
+            $name = __( 'Multiple Choice', 'dokan' );
             break;
     }
 

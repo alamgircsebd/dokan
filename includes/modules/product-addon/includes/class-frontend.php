@@ -100,7 +100,7 @@ class Dokan_Product_Addon_Frontend {
                     $global_addon = get_post( $edit_id );
 
                     if ( ! $global_addon ) {
-                        echo '<div class="dokan-alert dokan-alert-danger">' . esc_html__( 'Error: Add-on not found', 'woocommerce-product-addons' ) . '</div>';
+                        echo '<div class="dokan-alert dokan-alert-danger">' . esc_html__( 'Error: Add-on not found', 'dokan' ) . '</div>';
                         return;
                     }
 
@@ -125,20 +125,20 @@ class Dokan_Product_Addon_Frontend {
                     }
                 } else {
                     $global_addons_count = wp_count_posts( 'global_product_addon' );
-                    $reference           = __( 'Add-ons Group', 'woocommerce-product-addons' ) . ' #' . ( $global_addons_count->publish + 1 );
+                    $reference           = __( 'Add-ons Group', 'dokan' ) . ' #' . ( $global_addons_count->publish + 1 );
                     $priority            = 10;
                     $objects             = array( 0 );
                     $product_addons      = array();
                 }
 
                 if ( ! empty( $_GET['saved'] ) && $_GET['saved'] ) {
-                    echo '<div class="dokan-alert dokan-alert-success"><p>' . esc_html__( 'Add-on saved successfully', 'woocommerce-product-addons' ) . '</p></div>';
+                    echo '<div class="dokan-alert dokan-alert-success"><p>' . esc_html__( 'Add-on saved successfully', 'dokan' ) . '</p></div>';
                 }
 
                 include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin-add.php' );
             } else {
                 if ( ! empty( $_GET['deleted'] ) && $_GET['deleted'] ) {
-                    echo '<div class="dokan-alert dokan-alert-danger"><p>' . esc_html__( 'Add-on deleted successfully', 'woocommerce-product-addons' ) . '</p></div>';
+                    echo '<div class="dokan-alert dokan-alert-danger"><p>' . esc_html__( 'Add-on deleted successfully', 'dokan' ) . '</p></div>';
                 }
                 include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin.php' );
             }
@@ -212,7 +212,7 @@ class Dokan_Product_Addon_Frontend {
 
         if ( ! $reference ) {
             $global_addons_count = wp_count_posts( 'global_product_addon' );
-            $reference           = __( 'Add-ons Group', 'woocommerce-product-addons' ) . ' #' . ( $global_addons_count->publish + 1 );
+            $reference           = __( 'Add-ons Group', 'dokan' ) . ' #' . ( $global_addons_count->publish + 1 );
         }
 
         if ( ! $priority && 0 !== $priority ) {
