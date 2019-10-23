@@ -4,15 +4,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="woocommerce dokan-pa-all-addons">
-	<a class="dokan-btn dokan-btn-theme dokan-pa-create-btn" href="<?php echo add_query_arg( 'add', true, dokan_get_navigation_url( 'settings/product-addon' ) ); ?>" class="add-new-h2"><?php esc_html_e( 'Create New addon', 'woocommerce-product-addons' ); ?></a>
+	<a class="dokan-btn dokan-btn-theme dokan-pa-create-btn" href="<?php echo add_query_arg( 'add', true, dokan_get_navigation_url( 'settings/product-addon' ) ); ?>" class="add-new-h2"><?php esc_html_e( 'Create New addon', 'dokan' ); ?></a>
 
 	<table id="global-addons-table" class="dokan-table" cellspacing="0">
 		<thead>
 			<tr>
-				<th scope="col"><?php esc_html_e( 'Name', 'woocommerce-product-addons' ); ?></th>
-				<th><?php esc_html_e( 'Priority', 'woocommerce-product-addons' ); ?></th>
-				<th><?php esc_html_e( 'Product Categories', 'woocommerce-product-addons' ); ?></th>
-				<th><?php esc_html_e( 'Number of Fields', 'woocommerce-product-addons' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Name', 'dokan' ); ?></th>
+				<th><?php esc_html_e( 'Priority', 'dokan' ); ?></th>
+				<th><?php esc_html_e( 'Product Categories', 'dokan' ); ?></th>
+				<th><?php esc_html_e( 'Number of Fields', 'dokan' ); ?></th>
 			</tr>
 		</thead>
 		<tbody id="the-list">
@@ -23,10 +23,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 				foreach ( $global_addons as $global_addon ) {
 					?>
 					<tr>
-						<td><a href="<?php echo add_query_arg( 'edit', $global_addon['id'], admin_url( 'edit.php?post_type=product&page=addons' ) ); ?>"><?php echo $global_addon['name']; ?></a>
+						<td><a href="<?php echo esc_url( add_query_arg( 'edit', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ) ); ?>"><?php echo $global_addon['name']; ?></a>
 							<div class="row-actions">
-                                <span class="edit"><a href="<?php echo esc_url( add_query_arg( 'edit', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ) ); ?>"><?php esc_html_e( 'Edit', 'woocommerce-product-addons' ); ?></a> | </span>
-                                <span class="delete"><a class="delete" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'delete', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ), 'delete_addon' ) ); ?>"><?php esc_html_e( 'Delete', 'woocommerce-product-addons' ); ?></a></span>
+                                <span class="edit"><a href="<?php echo esc_url( add_query_arg( 'edit', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ) ); ?>"><?php esc_html_e( 'Edit', 'dokan' ); ?></a> | </span>
+                                <span class="delete"><a class="delete" href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'delete', $global_addon['id'], dokan_get_navigation_url( 'settings/product-addon' ) ), 'delete_addon' ) ); ?>"><?php esc_html_e( 'Delete', 'dokan' ); ?></a></span>
                             </div>
 						</td>
 						<td><?php echo $global_addon['priority']; ?></td>
@@ -36,9 +36,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$restrict_to_categories = $global_addon['restrict_to_categories'];
 
 						if ( $all_products ) {
-							esc_html_e( 'All Products', 'woocommerce-product-addons' );
+							esc_html_e( 'All Products', 'dokan' );
 						} elseif ( 0 === count( $restrict_to_categories ) ) {
-							esc_html_e( 'No Products Assigned', 'woocommerce-product-addons' );
+							esc_html_e( 'No Products Assigned', 'dokan' );
 						} else {
 							$objects = array_keys( $restrict_to_categories );
 							$term_names = array_values( $restrict_to_categories );
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			} else {
 				?>
 				<tr>
-					<td colspan="5"><?php esc_html_e( 'No add-ons found.', 'woocommerce-product-addons' ); ?> <a href="<?php echo add_query_arg( 'add', true, admin_url( 'edit.php?post_type=product&page=addons' ) ); ?>"><?php esc_html_e( 'Create add-ons.', 'woocommerce-product-addons' ); ?></a></td>
+					<td colspan="5"><?php esc_html_e( 'No add-ons found.', 'dokan' ); ?> <a href="<?php echo add_query_arg( 'add', true, admin_url( 'edit.php?post_type=product&page=addons' ) ); ?>"><?php esc_html_e( 'Create add-ons.', 'dokan' ); ?></a></td>
 				</tr>
 				<?php
 			}
