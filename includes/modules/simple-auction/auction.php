@@ -590,8 +590,7 @@ class Dokan_Auction {
             'meta_query' => [
                 [
                     'key'     => '_auction_closed',
-                    'value'   => 1,
-                    'compare' => '='
+                    'compare' => 'EXISTS'
                 ]
             ]
         ];
