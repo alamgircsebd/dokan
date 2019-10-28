@@ -28,7 +28,6 @@ class Module {
         }
 
         require_once dirname( __FILE__ ) . '/classes/class-dokan-paypal-ap-gateway.php';
-        require_once dirname( __FILE__ ) . '/lib/vendor/autoload.php';
     }
 
     public function register_gateway( $gateways ) {

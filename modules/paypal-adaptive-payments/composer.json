@@ -1,5 +1,4 @@
 {
-    "name": "Dokan/PaypalAdaptivePayment",
     "require": {
         "paypal/adaptivepayments-sdk-php":"v3.9.2"
     }
