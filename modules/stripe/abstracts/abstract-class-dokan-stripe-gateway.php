@@ -107,7 +107,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @return void
      */
     protected function load_stripe_SDK() {
-        Stripe_Helper::get_stripe();
         Stripe_Helper::set_app_info();
         Stripe_Helper::set_api_version();
 
@@ -1240,7 +1239,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             return;
         }
 
-        Stripe_Helper::get_stripe();
         Stripe_Helper::set_app_info();
         Stripe_Helper::set_api_version();
 

@@ -208,7 +208,6 @@ class Module {
         $client_id  = $settings['testmode'] == 'yes' ? $settings['test_client_id'] : $settings['client_id'];
         $secret_key = $settings['testmode'] == 'yes' ? $settings['test_secret_key'] : $settings['secret_key'];
 
-        Helper::get_stripe();
         Helper::set_app_info();
         Helper::set_api_version();
         \Stripe\Stripe::setApiKey( $secret_key );
@@ -300,7 +299,6 @@ class Module {
                         _e( 'Your account is not connected to Stripe. Connect your Stripe account to receive payouts.', 'dokan' );
                     echo '</div>';
 
-                    Helper::get_stripe();
                     Helper::set_app_info();
                     Helper::set_api_version();
                     \Stripe\Stripe::setApiKey( $secret_key );
@@ -428,7 +426,6 @@ class Module {
             $stripe_options = get_option('woocommerce_dokan-stripe-connect_settings');
             $secret_key     = $stripe_options['testmode'] == 'yes' ? $stripe_options['test_secret_key'] : $stripe_options['secret_key'];
 
-            Helper::get_stripe();
             Helper::set_app_info();
             Helper::set_api_version();
             \Stripe\Stripe::setApiKey( $secret_key );
@@ -704,7 +701,6 @@ class Module {
         $stripe_options = get_option('woocommerce_dokan-stripe-connect_settings');
         $secret_key     = $stripe_options['testmode'] == 'yes' ? $stripe_options['test_secret_key'] : $stripe_options['secret_key'];
 
-        Helper::get_stripe();
         Helper::set_app_info();
         Helper::set_api_version();
         \Stripe\Stripe::setApiKey( $secret_key );
