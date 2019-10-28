@@ -184,7 +184,13 @@ class Dokan_Product_Addon {
             $this->enqueue_scripts();
         }
 
+        // Vendor product edit page when product already publish
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
+            $this->enqueue_scripts();
+        }
+
+        // Vendor product edit page when product is pending review
+        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
             $this->enqueue_scripts();
         }
     }
