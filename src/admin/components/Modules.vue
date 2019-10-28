@@ -14,10 +14,6 @@
             </div>
 
             <div class="search-form">
-               <!--  <div class="view-shorting">
-
-                </div>
- -->
                 <div class="view-switch">
                     <a href="#" class="view-grid" :class="{ 'current' : currentView == 'grid' }" id="view-switch-grid" @click.prevent="changeView( 'grid' )"><span class="screen-reader-text">Grid View</span></a>
                     <a href="#" class="view-list" :class="{ 'current' : currentView == 'list' }" id="view-switch-list" @click.prevent="changeView( 'list' )"><span class="screen-reader-text">List View</span></a>
@@ -62,7 +58,7 @@
                     </template>
 
                     <template slot="active" slot-scope="data">
-                        <switches :enabled="data.row.active" :value="data.row.slug" @input="onSwitch"></switches>
+                        <switches :enabled="data.row.active" :value="data.row.id" @input="onSwitch"></switches>
                     </template>
 
                 </list-table>
@@ -80,8 +76,8 @@
 
                                 <div class="action-links">
                                     <ul class="plugin-action-buttons">
-                                        <li :data-module="module.slug">
-                                            <switches :enabled="module.active" :value="module.slug" @input="onSwitch"></switches>
+                                        <li :data-module="module.id">
+                                            <switches :enabled="module.active" :value="module.id" @input="onSwitch"></switches>
                                         </li>
                                     </ul>
                                 </div>
@@ -248,7 +244,7 @@
             },
 
             onSwitch( status, moduleSlug ) {
-                var moduleData = _.findWhere( this.modules, { slug: moduleSlug } );
+                var moduleData = _.findWhere( this.modules, { id: moduleSlug } );
 
                 if ( status ) {
                     // Need to activate

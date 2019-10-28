@@ -164,7 +164,7 @@ class Dokan_REST_Modules_Controller extends DokanRESTAdminController {
      * @return WP_REST_Response
      */
     public function deactivate_modules( $request ) {
-        $modules        = $request['module'];
+        $modules = $request['module'];
         dokan_pro()->module->deactivate_modules( $modules );
         dokan_pro()->module->set_modules( [] );
 

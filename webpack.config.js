@@ -48,7 +48,7 @@ Object.keys(rootEntryPoints).forEach(function (output) {
 });
 
 Object.keys(moduleEntryPoints).forEach(function (dokanModule) {
-    var modulePath = `includes/modules/${dokanModule}`;
+    var modulePath = `modules/${dokanModule}`;
 
     Object.keys(moduleEntryPoints[dokanModule]).forEach(function (moduleOutput) {
         entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/src/${moduleEntryPoints[dokanModule][moduleOutput]}`;

@@ -665,3 +665,19 @@ add_action( 'dokan_before_update_vendor', 'dokan_save_admin_additional_commissio
 function dokan_pro_get_template( $name, $args = [] ) {
     dokan_get_template( "$name.php", $args, 'dokan', trailingslashit( DOKAN_PRO_TEMPLATE_DIR ) );
 }
+
+/**
+ * Dokan register deactivation hook description]
+ *
+ * @param string $file     full file path
+ * @param array|string $function callback function
+ *
+ * @return void
+ */
+function dokan_register_deactivation_hook( $file, $function ) {
+    if ( file_exists( $file ) ) {
+        require_once $file;
+        $base_name = plugin_basename( $file );
+        add_action( "dokan_deactivate_{$base_name}", $function );
+    }
+}

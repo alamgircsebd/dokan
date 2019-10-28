@@ -110,7 +110,7 @@ module.exports = function(grunt) {
             js: 'assets/js',
             devLessSrc: 'assets/src/less',
             devJsSrc: 'assets/src/js',
-            modulesPath: 'includes/modules'
+            modulesPath: 'modules'
         },
 
         // Compile all .less files.

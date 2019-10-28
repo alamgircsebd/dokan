@@ -392,11 +392,7 @@ Class Dokan_Email_Verification {
             return true;
         }
 
-        if (
-            $this->is_vendor()
-            && class_exists( 'Dokan_Product_Subscription' )
-            && Helper::is_subscription_enabled_on_registration()
-            ) {
+        if ( dokan_pro()->module->is_active( 'product_subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
             return true;
         }
 

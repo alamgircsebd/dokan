@@ -2458,10 +2458,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
-//
-//
-//
-//
 
 var TextEditor = dokan_get_lib('TextEditor');
 var Postbox = dokan_get_lib('Postbox');
@@ -5944,9 +5940,9 @@ var render = function() {
               [
                 _c("router-link", { attrs: { to: menu.route } }, [
                   _vm._v(
-                    "\n                           " +
+                    "\n                        " +
                       _vm._s(menu.title) +
-                      "\n                       "
+                      "\n                    "
                   )
                 ])
               ],
@@ -6097,7 +6093,7 @@ var render = function() {
                             _c("switches", {
                               attrs: {
                                 enabled: data.row.active,
-                                value: data.row.slug
+                                value: data.row.id
                               },
                               on: { input: _vm.onSwitch }
                             })
@@ -6140,14 +6136,12 @@ var render = function() {
                                     [
                                       _c(
                                         "li",
-                                        {
-                                          attrs: { "data-module": module.slug }
-                                        },
+                                        { attrs: { "data-module": module.id } },
                                         [
                                           _c("switches", {
                                             attrs: {
                                               enabled: module.active,
-                                              value: module.slug
+                                              value: module.id
                                             },
                                             on: { input: _vm.onSwitch }
                                           })
