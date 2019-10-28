@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\ReportAbuse;
+namespace WeDevs\DokanPro\Modules\ReportAbuse;
 
 class Ajax {
 

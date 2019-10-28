@@ -61,13 +61,13 @@ final class Module {
      * @return void
      */
     private function instances() {
-        new \DokanPro\ReportAbuse\AdminSettings();
-        new \DokanPro\ReportAbuse\Ajax();
-        new \DokanPro\ReportAbuse\SingleProduct();
-        new \DokanPro\ReportAbuse\EmailLoader();
-        new \DokanPro\ReportAbuse\Admin();
-        new \DokanPro\ReportAbuse\Rest();
-        new \DokanPro\ReportAbuse\AdminSingleProduct();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\AdminSettings();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\Ajax();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\SingleProduct();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\EmailLoader();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\Admin();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\Rest();
+        new \WeDevs\DokanPro\Modules\ReportAbuse\AdminSingleProduct();
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\ReportAbuse;
+namespace WeDevs\DokanPro\Modules\ReportAbuse;
 
 class Rest {
 
@@ -23,7 +23,7 @@ class Rest {
      * @param array $class_map
      */
     public function add_rest_controller( $class_map ) {
-        $class_map[ DOKAN_REPORT_ABUSE_INCLUDES . '/RestController.php' ] = "\\DokanPro\\ReportAbuse\\RestController";
+        $class_map[ DOKAN_REPORT_ABUSE_INCLUDES . '/RestController.php' ] = "\\WeDevs\\DokanPro\\Modules\\ReportAbuse\\RestController";
 
         return $class_map;
     }

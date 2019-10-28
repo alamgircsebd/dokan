@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\ReportAbuse;
+namespace WeDevs\DokanPro\Modules\ReportAbuse;
 
 use WP_REST_Controller;
 use WP_REST_Server;
