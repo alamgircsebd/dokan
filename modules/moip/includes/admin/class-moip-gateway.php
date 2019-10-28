@@ -4,8 +4,6 @@
  */
 if ( ! defined( 'WPINC' ) ) exit;
 
-require_once MOIP_LIB . '/vendor/autoload.php';
-
 use Moip\Moip;
 use Moip\Auth\OAuth;
 use Moip\Auth\Connect;

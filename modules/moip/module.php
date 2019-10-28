@@ -33,7 +33,6 @@ class Module {
     public function define_constants() {
         define( 'MOIP_INC', dirname( __FILE__ ) . '/includes' );
         define( 'MOIP_ASSETS', plugin_dir_url( __FILE__ ) . 'assets' );
-        define( 'MOIP_LIB', MOIP_INC . '/libs' );
         define( 'MOIP_TEMPLATE', dirname( __FILE__ ) . '/templates' );
     }
 

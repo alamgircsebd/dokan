@@ -4,12 +4,10 @@
  */
 if ( ! defined( 'WPINC' ) ) exit;
 
-require_once MOIP_LIB . '/vendor/autoload.php';
-
-use  Moip\Moip ;
-use  Moip\Auth\Connect ;
-use  Moip\Auth\BasicAuth;
-use  Moip\Auth\OAuth;
+use Moip\Moip ;
+use Moip\Auth\Connect ;
+use Moip\Auth\BasicAuth;
+use Moip\Auth\OAuth;
 
 /**
  * Dokan Moip Withdraw Class
