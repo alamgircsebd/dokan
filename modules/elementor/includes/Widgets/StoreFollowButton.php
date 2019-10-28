@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Widgets;
+namespace WeDevs\DokanPro\Modules\Elementor\Widgets;
 
-use DokanPro\Modules\Elementor\Abstracts\DokanButton;
+use WeDevs\DokanPro\Modules\Elementor\Abstracts\DokanButton;
 use Elementor\Controls_Manager;
 
 class StoreFollowButton extends DokanButton {

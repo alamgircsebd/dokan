@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Tags;
+namespace WeDevs\DokanPro\Modules\Elementor\Tags;
 
-use DokanPro\Modules\Elementor\Abstracts\DataTagBase;
+use WeDevs\DokanPro\Modules\Elementor\Abstracts\DataTagBase;
 use Elementor\Controls_Manager;
 
 class StoreProfilePicture extends DataTagBase {

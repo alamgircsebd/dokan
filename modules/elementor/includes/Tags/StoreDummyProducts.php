@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Tags;
+namespace WeDevs\DokanPro\Modules\Elementor\Tags;
 
-use DokanPro\Modules\Elementor\Abstracts\TagBase;
+use WeDevs\DokanPro\Modules\Elementor\Abstracts\TagBase;
 
 class StoreDummyProducts extends TagBase {
 

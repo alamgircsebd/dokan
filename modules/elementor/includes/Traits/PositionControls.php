@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Traits;
+namespace WeDevs\DokanPro\Modules\Elementor\Traits;
 
 use Elementor\Controls_Manager;
 

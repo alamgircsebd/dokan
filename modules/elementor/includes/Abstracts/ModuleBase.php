@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Abstracts;
+namespace WeDevs\DokanPro\Modules\Elementor\Abstracts;
 
 use WeDevs\Dokan\Traits\Singleton;
 
@@ -50,7 +50,7 @@ abstract class ModuleBase {
         $widget_manager = dokan_elementor()->elementor()->widgets_manager;
 
         foreach ( $this->get_widgets() as $widget ) {
-            $class_name = "\\DokanPro\\Modules\\Elementor\\Widgets\\{$widget}";
+            $class_name = "\\WeDevs\\DokanPro\\Modules\\Elementor\\Widgets\\{$widget}";
 
             if ( class_exists( $class_name ) ) {
                 $widget_manager->register_widget_type( new $class_name() );

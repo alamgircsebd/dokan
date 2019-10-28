@@ -1,9 +1,9 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Widgets;
+namespace WeDevs\DokanPro\Modules\Elementor\Widgets;
 
-use DokanPro\Modules\Elementor\Controls\DynamicHidden;
-use DokanPro\Modules\Elementor\Widgets\StoreInfo;
+use WeDevs\DokanPro\Modules\Elementor\Controls\DynamicHidden;
+use WeDevs\DokanPro\Modules\Elementor\Widgets\StoreInfo;
 
 class StoreTabItems extends StoreInfo {
 

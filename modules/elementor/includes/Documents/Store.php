@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Documents;
+namespace WeDevs\DokanPro\Modules\Elementor\Documents;
 
 use ElementorPro\Modules\ThemeBuilder\Documents\Single;
 

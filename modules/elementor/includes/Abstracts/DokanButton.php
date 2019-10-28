@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Abstracts;
+namespace WeDevs\DokanPro\Modules\Elementor\Abstracts;
 
-use DokanPro\Modules\Elementor\Traits\PositionControls;
+use WeDevs\DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Controls_Manager;
 use Elementor\Widget_Button;
 

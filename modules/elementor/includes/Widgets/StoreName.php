@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Widgets;
+namespace WeDevs\DokanPro\Modules\Elementor\Widgets;
 
-use DokanPro\Modules\Elementor\Traits\PositionControls;
+use WeDevs\DokanPro\Modules\Elementor\Traits\PositionControls;
 use Elementor\Widget_Heading;
 
 class StoreName extends Widget_Heading {

@@ -1,13 +1,13 @@
 <?php
 
-namespace DokanPro\Modules\Elementor;
+namespace WeDevs\DokanPro\Modules\Elementor;
 
-use DokanPro\Modules\Elementor\Abstracts\ModuleBase;
-use DokanPro\Modules\Elementor\Conditions\Store as StoreCondition;
-use DokanPro\Modules\Elementor\Documents\Store as StoreDocument;
+use WeDevs\DokanPro\Modules\Elementor\Abstracts\ModuleBase;
+use WeDevs\DokanPro\Modules\Elementor\Conditions\Store as StoreCondition;
+use WeDevs\DokanPro\Modules\Elementor\Documents\Store as StoreDocument;
 use Elementor\Controls_Manager;
 
-class Module extends ModuleBase {
+class Bootstrap extends ModuleBase {
 
     /**
      * Widget group
@@ -122,7 +122,7 @@ class Module extends ModuleBase {
         ] );
 
         foreach ( $tags as $tag ) {
-            $module->register_tag( "\\DokanPro\\Modules\\Elementor\\Tags\\{$tag}" );
+            $module->register_tag( "\\WeDevs\\DokanPro\\Modules\\Elementor\\Tags\\{$tag}" );
         }
     }
 
@@ -142,7 +142,7 @@ class Module extends ModuleBase {
         $controls_manager = dokan_elementor()->elementor()->controls_manager;
 
         foreach ( $controls as $control ) {
-            $control_class = "\\DokanPro\\Modules\\Elementor\\Controls\\{$control}";
+            $control_class = "\\WeDevs\\DokanPro\\Modules\\Elementor\\Controls\\{$control}";
             $controls_manager->register_control( $control_class::CONTROL_TYPE, new $control_class() );
         }
     }

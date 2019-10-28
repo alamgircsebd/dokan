@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Abstracts;
+namespace WeDevs\DokanPro\Modules\Elementor\Abstracts;
 
-use DokanPro\Modules\Elementor\Module;
+use WeDevs\DokanPro\Modules\Elementor\Bootstrap;
 use Elementor\Core\DynamicTags\Data_Tag;
 
 abstract class DataTagBase extends Data_Tag {
@@ -15,7 +15,7 @@ abstract class DataTagBase extends Data_Tag {
      * @return string
      */
     public function get_group() {
-        return Module::DOKAN_GROUP;
+        return Bootstrap::DOKAN_GROUP;
     }
 
     /**

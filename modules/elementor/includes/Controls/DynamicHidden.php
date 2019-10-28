@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Controls;
+namespace WeDevs\DokanPro\Modules\Elementor\Controls;
 
 use Elementor\Control_Hidden;
 

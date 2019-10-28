@@ -172,6 +172,8 @@ class Dokan_Pro {
      * @return void
      */
     public function init_plugin() {
+        spl_autoload_register( array( $this, 'dokan_pro_autoload' ) );
+
         $this->includes();
         $this->load_actions();
         $this->load_filters();
@@ -706,6 +708,26 @@ class Dokan_Pro {
      * */
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
+    }
+
+    /**
+     * Required all class files inside Pro
+     *
+     * @since 2.4
+     *
+     * @param  string $class
+     *
+     * @return void
+     */
+    public function dokan_pro_autoload( $class ) {
+        if ( stripos( $class, 'Dokan_Pro_' ) !== false ) {
+            $class_name = str_replace( array( 'Dokan_Pro_', '_' ), array( '', '-' ), $class );
+            $file_path  = DOKAN_PRO_CLASS . '/' . strtolower( $class_name ) . '.php';
+
+            if ( file_exists( $file_path ) ) {
+                require_once $file_path;
+            }
+        }
     }
 }
 

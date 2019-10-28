@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Tags;
+namespace WeDevs\DokanPro\Modules\Elementor\Tags;
 
-use DokanPro\Modules\Elementor\Abstracts\TagBase;
+use WeDevs\DokanPro\Modules\Elementor\Abstracts\TagBase;
 
 class StoreLiveChatButton extends TagBase {
 
@@ -50,7 +50,7 @@ class StoreLiveChatButton extends TagBase {
         $online_indicator = '';
 
         if ( dokan_is_store_page() && class_exists( 'Dokan_Live_Chat_Start' ) ) {
-            $live_chat = dokan_pro()->module->live_chat;
+            $live_chat = \Dokan_Live_Chat_Start::init();
 
             if ( $live_chat->dokan_is_seller_online() ) {
                 $online_indicator = '<i class="fa fa-circle" aria-hidden="true"></i>';

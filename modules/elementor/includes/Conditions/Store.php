@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Conditions;
+namespace WeDevs\DokanPro\Modules\Elementor\Conditions;
 
 use ElementorPro\Modules\ThemeBuilder\Conditions\Condition_Base;
 

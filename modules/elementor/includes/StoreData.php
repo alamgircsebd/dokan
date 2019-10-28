@@ -1,6 +1,6 @@
 <?php
 
-namespace DokanPro\Modules\Elementor;
+namespace WeDevs\DokanPro\Modules\Elementor;
 
 use WeDevs\Dokan\Traits\Singleton;
 

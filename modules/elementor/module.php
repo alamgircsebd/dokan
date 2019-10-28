@@ -20,9 +20,9 @@ final class Module {
      *
      * @return void
      */
-    public function boot() {
-        // add_action( 'admin_notices', [ $this, 'admin_notices' ] );
-        // add_action( 'elementor_pro/init', [ $this, 'init' ] );
+    public function __construct() {
+        add_action( 'admin_notices', [ $this, 'admin_notices' ] );
+        add_action( 'elementor_pro/init', [ $this, 'init' ] );
     }
 
     /**
@@ -34,7 +34,6 @@ final class Module {
      */
     public function init() {
         $this->define_constants();
-        $this->includes();
         $this->instances();
     }
 
@@ -56,17 +55,6 @@ final class Module {
     }
 
     /**
-     * Include module related files
-     *
-     * @since 2.9.11
-     *
-     * @return void
-     */
-    private function includes() {
-        require_once DOKAN_ELEMENTOR_PATH . '/vendor/autoload.php';
-    }
-
-    /**
      * Create module related class instances
      *
      * @since 2.9.11
@@ -74,9 +62,9 @@ final class Module {
      * @return void
      */
     private function instances() {
-        \DokanPro\Modules\Elementor\Templates::instance();
-        \DokanPro\Modules\Elementor\StoreWPWidgets::instance();
-        \DokanPro\Modules\Elementor\Module::instance();
+        \WeDevs\DokanPro\Modules\Elementor\Templates::instance();
+        \WeDevs\DokanPro\Modules\Elementor\StoreWPWidgets::instance();
+        \WeDevs\DokanPro\Modules\Elementor\Bootstrap::instance();
     }
 
     /**
@@ -161,7 +149,7 @@ final class Module {
      * @return mixed
      */
     public function get_store_data( $prop = null ) {
-        $store_data = \DokanPro\Modules\Elementor\StoreData::instance();
+        $store_data = \WeDevs\DokanPro\Modules\Elementor\StoreData::instance();
 
         return $store_data->get_data( $prop );
     }
@@ -187,13 +175,4 @@ final class Module {
 
         return apply_filters( 'dokan_elementor_social_network_map', $map );
     }
-}
-
-/**
- * Load Dokan Plugin when all plugins loaded
- *
- * @return \DokanElementor
- */
-function dokan_elementor() {
-    return dokan_pro()->module->elementor;
 }

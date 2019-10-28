@@ -1,8 +1,8 @@
 <?php
 
-namespace DokanPro\Modules\Elementor\Widgets;
+namespace WeDevs\DokanPro\Modules\Elementor\Widgets;
 
-use DokanPro\Modules\Elementor\Controls\DynamicHidden;
+use WeDevs\DokanPro\Modules\Elementor\Controls\DynamicHidden;
 use Elementor\Controls_Manager;
 use Elementor\Widget_Alert;
 
