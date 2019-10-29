@@ -1,4 +1,14 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
+use WC_Countries;
+use Dokan_Shipping_Zone;
+use WC_Tax;
+use WC_Meta_Box_Product_Data;
+use WC_Product_Variable;
+use Dokan_Pro_Refund;
+
 /**
  * Dokan Pro Ajax class
  *
@@ -6,7 +16,7 @@
  *
  * @package dokan
  */
-class Dokan_Pro_Ajax {
+class Ajax {
 
     /**
      * Loading automatically when class initiate
@@ -16,7 +26,7 @@ class Dokan_Pro_Ajax {
      * @uses action hook
      * @uses filter hook
      */
-    function __construct() {
+    public function __construct() {
 
         // Shipping ajax hanlding
         add_action( 'wp_ajax_dps_select_state_by_country', array( $this, 'load_state_by_country' ) );
@@ -77,24 +87,6 @@ class Dokan_Pro_Ajax {
         add_action( 'wp_ajax_dokan-delete-shipping-method', array( $this, 'delete_shipping_method' ) );
         add_action( 'wp_ajax_dokan-save-shipping-settings', array( $this, 'save_shipping_settings' ) );
         add_action( 'wp_ajax_dokan-get-shipping-settings', array( $this, 'get_shipping_settings' ) );
-    }
-
-    /**
-     * Singleton object
-     *
-     * @staticvar boolean $instance
-     *
-     * @return \self
-     */
-    public static function init() {
-
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Ajax();
-        }
-
-        return $instance;
     }
 
     /**
@@ -1158,7 +1150,7 @@ class Dokan_Pro_Ajax {
      *
      * @return type
      */
-    function toggle_seller_status() {
+    public function toggle_seller_status() {
         if ( ! current_user_can( 'manage_options' ) ) {
             return;
         }
@@ -1214,8 +1206,7 @@ class Dokan_Pro_Ajax {
      *
      * @return html Set of states
      */
-    function load_state_by_country() {
-
+    public function load_state_by_country() {
         $country_id  = $_POST['country_id'];
         $country_obj = new WC_Countries();
         $states      = $country_obj->states;
@@ -1284,7 +1275,7 @@ class Dokan_Pro_Ajax {
      *
      * @return josn
      */
-    function remove_announcement() {
+    public function remove_announcement() {
         global $wpdb;
 
         check_ajax_referer( 'dokan_reviews' );
@@ -1325,7 +1316,7 @@ class Dokan_Pro_Ajax {
      *
      * @return json
      */
-    function get_state_by_shipping_country() {
+    public function get_state_by_shipping_country() {
         global $post;
         $dps_state_rates   = get_user_meta( $_POST['author_id'], '_dps_state_rates', true );
         $country_obj = new WC_Countries();
@@ -1366,7 +1357,7 @@ class Dokan_Pro_Ajax {
      *
      * @return json
      */
-    function get_calculated_shipping_cost() {
+    public function get_calculated_shipping_cost() {
         global $post;
 
         $_overwrite_shipping      = get_post_meta( $_POST['product_id'], '_overwrite_shipping', true );
@@ -1425,7 +1416,7 @@ class Dokan_Pro_Ajax {
      *
      * @return void
      */
-    function save_attributes() {
+    public function save_attributes() {
         // Get post data
         parse_str( $_POST['data'], $data );
         $post_id = absint( $_POST['post_id'] );
@@ -1542,7 +1533,7 @@ class Dokan_Pro_Ajax {
      *
      * @return void
      */
-    function save_attributes_options() {
+    public function save_attributes_options() {
         // Get post data
         parse_str( $_POST['formdata'], $data );
         $post_id = absint( $data['product_id'] );
@@ -1674,7 +1665,7 @@ class Dokan_Pro_Ajax {
      *
      * @return json
      */
-    function save_variations_options() {
+    public function save_variations_options() {
         global $woocommerce, $wpdb;
 
         parse_str( $_POST['formdata'], $postdata );
@@ -1941,7 +1932,7 @@ class Dokan_Pro_Ajax {
      *
      * @return josn success
      */
-    function add_new_variations_options() {
+    public function add_new_variations_options() {
 
         $post_id = intval( $_POST['post_id'] );
         $menu_order = intval( $_POST['menu_order'] );
@@ -1969,7 +1960,7 @@ class Dokan_Pro_Ajax {
      *
      * @return json
      */
-    function remove_single_variation_item() {
+    public function remove_single_variation_item() {
 
         $variation_id = (int)$_POST['variation_id'];
 
@@ -1982,7 +1973,7 @@ class Dokan_Pro_Ajax {
         wp_send_json_success();
     }
 
-    function add_attr_predefined_attribute() {
+    public function add_attr_predefined_attribute() {
         check_ajax_referer( 'dokan_reviews' );
 
         global $wc_product_attributes;
@@ -2031,7 +2022,7 @@ class Dokan_Pro_Ajax {
      *
      * @return void
      */
-    function add_new_attribute() {
+    public function add_new_attribute() {
         check_ajax_referer( 'dokan_reviews' );
 
         if ( ! current_user_can( 'dokandar' ) ) {
@@ -2067,7 +2058,7 @@ class Dokan_Pro_Ajax {
      *
      * @return json success|$content (array)
      */
-    function add_predefined_attribute() {
+    public function add_predefined_attribute() {
         $attr_name               = $_POST['name'];
         $single                  = ( isset( $_POST['from'] ) && $_POST['from'] == 'popup' ) ? 'single-':'';
         $remove_btn              = ( isset( $_POST['from'] ) && $_POST['from'] == 'popup' ) ? 'single_':'';
@@ -2253,7 +2244,7 @@ class Dokan_Pro_Ajax {
      *
      * @return void
      */
-    function link_all_variations() {
+    public function link_all_variations() {
         if ( ! defined( 'WC_MAX_LINKED_VARIATIONS' ) ) {
             define( 'WC_MAX_LINKED_VARIATIONS', 49 );
         }
@@ -2361,7 +2352,7 @@ class Dokan_Pro_Ajax {
      *
      * @return void
      */
-    function dokan_pre_define_attribute() {
+    public function dokan_pre_define_attribute() {
 
         $attribute = $_POST;
         $attribute_taxonomy_name = wc_attribute_taxonomy_name( $attribute['name'] );
@@ -2434,5 +2425,4 @@ class Dokan_Pro_Ajax {
         $response = ob_get_clean();
         return wp_send_json_success( $response );
     }
-
 }

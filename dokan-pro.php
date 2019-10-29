@@ -378,6 +378,10 @@ class Dokan_Pro {
         }
 
         new Dokan_Pro_Assets();
+
+        if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+            new \WeDevs\DokanPro\Ajax();
+        }
     }
 
     /**
