@@ -1,5 +1,5 @@
 <?php
-$dokan_Seller_Verification = Dokan_Seller_Verification::init();
+$dokan_Seller_Verification = dokan_pro()->module->vendor_verification;
 
 $current_user   = get_current_user_id();
 $seller_profile = dokan_get_store_info( $current_user );

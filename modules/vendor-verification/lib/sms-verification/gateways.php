@@ -113,7 +113,7 @@ class WeDevs_dokan_SMS_Gateways {
         if ( $status['success'] == true ) {
             $this->set_last_sent( $status );
         }
-        
+
         if ( !isset( $status['success'] ) ) {
             $response = array(
                 'success' => false,
@@ -125,7 +125,7 @@ class WeDevs_dokan_SMS_Gateways {
         return $status;
     }
 
-   
+
 
     /**
      * Sends SMS via Twillo api
@@ -168,7 +168,7 @@ class WeDevs_dokan_SMS_Gateways {
         return $response;
     }
 
-    
+
     /**
     * Sends SMS via Nexmo api
     *
