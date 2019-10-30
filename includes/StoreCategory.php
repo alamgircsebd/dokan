@@ -1,6 +1,10 @@
 <?php
 
-class Dokan_Store_Category {
+namespace WeDevs\DokanPro;
+
+use WP_Tax_Query;
+
+class StoreCategory {
 
     /**
      * Class constructor
