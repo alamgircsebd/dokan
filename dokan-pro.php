@@ -259,9 +259,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/social-login.php';
         require_once DOKAN_PRO_CLASS . '/email-verification.php';
 
-        require_once DOKAN_PRO_INC . '/class-assets.php';
         require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
-
         require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
         require_once DOKAN_PRO_INC . '/class-store-lists-filter.php';
     }
@@ -377,7 +375,7 @@ class Dokan_Pro {
             new Dokan_Pro_Admin_Settings();
         }
 
-        new Dokan_Pro_Assets();
+        new \WeDevs\DokanPro\Assets();
 
         if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
             new \WeDevs\DokanPro\Ajax();

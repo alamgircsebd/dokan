@@ -1,12 +1,13 @@
 <?php
 
+namespace WeDevs\DokanPro;
+
 /**
  * Scripts and Styles Class
  */
-class Dokan_Pro_Assets {
+class Assets {
 
-    function __construct() {
-
+    public function __construct() {
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'register' ], 5 );
             add_action( 'dokan-vue-admin-scripts', [ $this, 'enqueue_admin_scripts' ] );
