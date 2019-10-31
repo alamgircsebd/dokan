@@ -1,4 +1,7 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
 /**
  * Dokan SEO class
  *
@@ -7,7 +10,7 @@
  *
  * @since 2.3
  */
-class Dokan_Pro_Store_Seo {
+class StoreSeo {
 
     public $feedback    = false;
     private $store_info = false;
@@ -24,28 +27,11 @@ class Dokan_Pro_Store_Seo {
     }
 
     /**
-     * * Singleton object
-     *
-     * @staticvar boolean $instance
-     *
-     * @return \self
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Store_Seo();
-        }
-
-        return $instance;
-    }
-
-    /**
      * Init hooks and filters
      *
      * @return void
      */
-    function init_hooks() {
+    public function init_hooks() {
         add_action( 'init', array( $this, 'register_sitemap' ) );
         add_action( 'wp_ajax_dokan_seo_form_handler', array( $this, 'dokan_seo_form_handler' ) );
         add_action( 'template_redirect', array( $this, 'output_meta_tags' ) );
@@ -57,7 +43,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return void
      */
-    function output_meta_tags() {
+    public function output_meta_tags() {
         if ( !dokan_is_store_page() ) {
             return;
         }
@@ -104,7 +90,7 @@ class Dokan_Pro_Store_Seo {
    /**
     * Register dokan_sellers sitemap on yoast SEO
     */
-    function register_sitemap() {
+    public function register_sitemap() {
         global $wpseo_sitemaps;
 
         if ( is_a( $wpseo_sitemaps, 'WPSEO_Sitemaps' ) ) {
@@ -115,7 +101,7 @@ class Dokan_Pro_Store_Seo {
     /**
      * Add dokan_sellers sitemap url to sitemap_index list
      */
-    function add_sellers_sitemap() {
+    public function add_sellers_sitemap() {
 
         if ( WPSEO_VERSION < 3.2 ) {
             $base_url = wpseo_xml_sitemaps_base_url( 'dokan_sellers-sitemap.xml' );
@@ -137,7 +123,7 @@ class Dokan_Pro_Store_Seo {
     /**
      * Generate output for dokan_sellers sitemap
      */
-    function sitemap_output(){
+    public function sitemap_output(){
         global $wpseo_sitemaps;
 
         $seller_q = new WP_User_Query( array(
@@ -186,7 +172,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return void
      */
-    function print_tags() {
+    public function print_tags() {
         //get values of title,desc and keywords
         $meta_values = $this->store_info;
 
@@ -210,7 +196,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @since 2.3
      */
-    function print_social_tags() {
+    public function print_social_tags() {
         $meta_values = $this->store_info;
 
         if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
@@ -267,7 +253,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string $meta
      */
-    function replace_meta( $val_default, $meta, $type = '' ) {
+    public function replace_meta( $val_default, $meta, $type = '' ) {
 
         $meta_values = $this->store_info;
 
@@ -294,7 +280,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string title
      */
-    function replace_title( $title ) {
+    public function replace_title( $title ) {
         return $this->replace_meta( $title, 'title', 'meta' );
     }
 
@@ -307,7 +293,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string $keywords
      */
-    function replace_keywords( $keywords ) {
+    public function replace_keywords( $keywords ) {
         return $this->replace_meta( $keywords, 'keywords', 'meta' );
     }
 
@@ -320,7 +306,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string $desc
      */
-    function replace_desc( $desc ) {
+    public function replace_desc( $desc ) {
         return $this->replace_meta( $desc, 'desc', 'meta' );
     }
 
@@ -333,7 +319,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string $title
      */
-    function replace_og_title( $title ) {
+    public function replace_og_title( $title ) {
         return $this->replace_meta( $title, 'title', 'og' );
     }
 
@@ -346,7 +332,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string $desc
      */
-    function replace_og_desc( $desc ) {
+    public function replace_og_desc( $desc ) {
         return $this->replace_meta( $desc, 'desc', 'og' );
     }
 
@@ -359,7 +345,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string $img
      */
-    function replace_og_img( $img ) {
+    public function replace_og_img( $img ) {
         $img_default = $img;
 
         $meta_values = $this->store_info;
@@ -384,7 +370,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return void
      */
-    function print_og_img() {
+    public function print_og_img() {
         $meta_values = $this->store_info;
 
         if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
@@ -407,7 +393,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string
      */
-    function replace_twitter_title( $val_default ) {
+    public function replace_twitter_title( $val_default ) {
         return $this->replace_meta( $val_default, 'title', 'twitter' );
     }
 
@@ -420,7 +406,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string
      */
-    function replace_twitter_desc( $val_default ) {
+    public function replace_twitter_desc( $val_default ) {
         return $this->replace_meta( $val_default, 'desc', 'twitter' );
     }
 
@@ -433,7 +419,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string
      */
-    function replace_twitter_img( $img ) {
+    public function replace_twitter_img( $img ) {
         $img_default = $img;
 
         $meta_values = $this->store_info;
@@ -458,7 +444,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return void
      */
-    function print_twitter_img() {
+    public function print_twitter_img() {
         $meta_values = $this->store_info;
 
         if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
@@ -479,7 +465,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return void
      */
-    function frontend_meta_form() {
+    public function frontend_meta_form() {
         $current_user   = dokan_get_current_user_id();
         $seller_profile = dokan_get_store_info( $current_user );
         $seo_meta       = isset( $seller_profile['store_seo'] ) ? $seller_profile['store_seo'] : array();
@@ -515,7 +501,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return string|empty
      */
-    function print_saved_meta( $val ) {
+    public function print_saved_meta( $val ) {
         if ( $val == false ) {
             return '';
         } else {
@@ -530,7 +516,7 @@ class Dokan_Pro_Store_Seo {
      *
      * @return json
      */
-    function dokan_seo_form_handler() {
+    public function dokan_seo_form_handler() {
         parse_str( $_POST['data'], $postdata );
 
         if ( !wp_verify_nonce( $postdata['dokan_store_seo_form_nonce'], 'dokan_store_seo_form_action' ) ) {
@@ -566,12 +552,10 @@ class Dokan_Pro_Store_Seo {
         wp_send_json_success( __( 'Your changes has been updated!', 'dokan' ) );
     }
 
-    function replace_og_url(){
+    public function replace_og_url(){
         $seller = get_userdata( get_query_var( 'author' ) );
         $og_url = dokan_get_store_url( $seller->ID );
         return $og_url;
     }
 
 }
-
-$seo = Dokan_Pro_Store_Seo::init();

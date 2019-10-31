@@ -32,7 +32,7 @@
 
         <div class="dokan-w5 dokan-text-left">
             <select id="discount_type" name="discount_type" class="dokan-form-control">
-                <?php foreach ( Dokan_Pro_Coupons::get_coupon_types() as $key => $value ) : ?>
+                <?php foreach ( \WeDevs\DokanPro\Coupons::get_coupon_types() as $key => $value ) : ?>
                     <option <?php selected( $discount_type, $key ); ?> value="<?php echo esc_attr( $key ) ?>"><?php printf( __( '%s', 'dokan' ), $value ) ?></option>
                 <?php endforeach; ?>
             </select>

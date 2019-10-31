@@ -1,6 +1,8 @@
 <?php
 
-use WeDevs\Dokan\Dashboard\Templates\Dashboard;
+namespace WeDevs\DokanPro;
+
+use WeDevs\Dokan\Dashboard\Templates\Dashboard as DokanDashboard;
 
 /**
  * Dashboard Template Class
@@ -11,7 +13,7 @@ use WeDevs\Dokan\Dashboard\Templates\Dashboard;
  *
  * @author weDevs <info@wedevs.com>
  */
-class Dokan_Pro_Dashboard extends Dashboard {
+class Dashboard extends DokanDashboard {
 
     /**
      * Constructor for the WeDevs_Dokan class
@@ -29,24 +31,6 @@ class Dokan_Pro_Dashboard extends Dashboard {
         add_action( 'dokan_dashboard_before_widgets', array( $this, 'show_profile_progressbar' ), 10 );
         add_action( 'dokan_dashboard_left_widgets', array( $this, 'get_review_widget' ), 16 );
         add_action( 'dokan_dashboard_right_widgets', array( $this, 'get_announcement_widget' ), 12 );
-    }
-
-    /**
-     * Singleton object
-     *
-     * @staticvar boolean $instance
-     *
-     * @return \self
-     */
-    public static function init() {
-
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Dashboard();
-        }
-
-        return $instance;
     }
 
     /**
@@ -96,7 +80,7 @@ class Dokan_Pro_Dashboard extends Dashboard {
             return;
         }
 
-        $template_notice = Dokan_Pro_Notice::init();
+        $template_notice = dokan_pro()->notice;
         $query           = $template_notice->get_announcement_by_users( apply_filters( 'dokan_announcement_list_number', 3 ) );
 
         $args = array(
@@ -110,7 +94,7 @@ class Dokan_Pro_Dashboard extends Dashboard {
 
         $template_notice->add_query_filter();
 
-        $all_seller_posts = new WP_Query( $args );
+        $all_seller_posts = new \WP_Query( $args );
 
         $template_notice->remove_query_filter();
 

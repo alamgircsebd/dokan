@@ -1,4 +1,7 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
 /**
  * Dokan Update class
  *
@@ -6,7 +9,7 @@
  *
  * @package Dokan
  */
-class Dokan_Update {
+class Update {
 
     /**
      * The license product ID
@@ -269,7 +272,7 @@ class Dokan_Update {
 
         if ( version_compare( $plugin_version, $remote_info->latest, '<' ) ) {
 
-            $obj              = new stdClass();
+            $obj              = new \stdClass();
             $obj->slug        = self::slug;
             $obj->new_version = $remote_info->latest;
             $obj->url         = self::base_url;
@@ -303,7 +306,7 @@ class Dokan_Update {
 
             $remote_info = $this->get_info();
 
-            $obj              = new stdClass();
+            $obj              = new \stdClass();
             $obj->slug        = self::slug;
             $obj->new_version = $remote_info->latest;
 

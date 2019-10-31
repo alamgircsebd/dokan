@@ -1,10 +1,16 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
+use Dokan_WC_Shipping;
+use WC_Countries;
+
 /**
  * Dokan Shipping Class
  *
  * @author weDevs
  */
-class Dokan_Pro_Shipping {
+class Shipping {
 
     /**
      * Load automatically when class inistantiate
@@ -23,23 +29,6 @@ class Dokan_Pro_Shipping {
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
-    }
-
-    /**
-     * Inistantiate the Dokan_Pro_Shipping class
-     *
-     * @since 2.4
-     *
-     * @return object
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Shipping();
-        }
-
-        return $instance;
     }
 
     /**

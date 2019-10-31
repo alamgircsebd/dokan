@@ -107,6 +107,14 @@ class Dokan_Pro {
         trigger_error( sprintf( 'Undefined property: %s', self::class . '::$' . $prop ) );
     }
 
+    public function __isset( $prop ) {
+        if ( array_key_exists( $prop, $this->container ) ) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Define all pro module constant
      *
@@ -120,7 +128,7 @@ class Dokan_Pro {
         define( 'DOKAN_PRO_DIR', dirname( DOKAN_PRO_FILE ) );
         define( 'DOKAN_PRO_TEMPLATE_DIR', DOKAN_PRO_DIR . '/templates' );
         define( 'DOKAN_PRO_INC', DOKAN_PRO_DIR . '/includes' );
-        define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/admin' );
+        define( 'DOKAN_PRO_ADMIN_DIR', DOKAN_PRO_INC . '/Admin' );
         define( 'DOKAN_PRO_CLASS', DOKAN_PRO_DIR . '/classes' );
         define( 'DOKAN_PRO_PLUGIN_ASSEST', plugins_url( 'assets', DOKAN_PRO_FILE ) );
         define( 'DOKAN_PRO_MODULE_DIR', DOKAN_PRO_DIR . '/modules' );
@@ -233,21 +241,15 @@ class Dokan_Pro {
      */
     public function includes() {
         if ( is_admin() ) {
-            require_once DOKAN_PRO_ADMIN_DIR . '/admin.php';
-            require_once DOKAN_PRO_ADMIN_DIR . '/ajax.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
-            require_once DOKAN_PRO_ADMIN_DIR . '/promotion.php';
         }
 
-        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
-        require_once DOKAN_PRO_INC . '/class-shipping-zone.php';
         require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
         require_once DOKAN_PRO_INC . '/shipping-gateway/vendor-shipping.php';
-        require_once DOKAN_PRO_CLASS . '/update.php';
         require_once DOKAN_PRO_INC . '/functions.php';
         require_once DOKAN_PRO_INC . '/orders.php';
-        require_once DOKAN_PRO_INC . '/reports.php';
+        require_once DOKAN_PRO_INC . '/functions-reports.php';
         require_once DOKAN_PRO_INC . '/wc-functions.php';
 
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
@@ -373,7 +375,31 @@ class Dokan_Pro {
         new \WeDevs\DokanPro\StoreCategory();
 
         if ( is_admin() ) {
-            new Dokan_Pro_Admin_Settings();
+            new \WeDevs\DokanPro\Admin\Admin();
+            new \WeDevs\DokanPro\Admin\Ajax();
+            new \WeDevs\DokanPro\Admin\Promotion();
+        }
+
+        new \WeDevs\DokanPro\Admin\Announcement();
+        new \WeDevs\DokanPro\Shipping();
+        new \WeDevs\DokanPro\Update( $this->get_plan() );
+        new \WeDevs\DokanPro\EmailVerification();
+        new \WeDevs\DokanPro\SocialLogin();
+
+        $this->container['store']       = new \WeDevs\DokanPro\Store();
+        $this->container['store_seo']   = new \WeDevs\DokanPro\StoreSeo();
+        $this->container['store_share'] = new \WeDevs\DokanPro\StoreShare();
+        $this->container['products']    = new \WeDevs\DokanPro\Products();
+        $this->container['review']      = new \WeDevs\DokanPro\Review();
+        $this->container['notice']      = new \WeDevs\DokanPro\Notice();
+
+        if ( is_user_logged_in() ) {
+            new \WeDevs\DokanPro\Dashboard();
+            new \WeDevs\DokanPro\Coupons();
+            new WeDevs\DokanPro\Reports();
+            new WeDevs\DokanPro\Withdraws();
+            new WeDevs\DokanPro\Settings();
+            // Dokan_Pro_Refund::init();
         }
 
         new \WeDevs\DokanPro\Assets();

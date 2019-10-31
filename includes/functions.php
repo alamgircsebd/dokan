@@ -439,7 +439,7 @@ add_shortcode( 'dokan-customer-migration', 'dokan_render_customer_migration_temp
  * @return void
  */
 function dokan_send_announcement_email( $announcement_id ) {
-    $announcement = new Dokan_Announcement();
+    $announcement = new \WeDevs\DokanPro\Admin\Announcement();
     $announcement->trigger_mail( $announcement_id );
 }
 
@@ -459,7 +459,7 @@ function dokan_send_scheduled_announcement_email( $post ) {
         return;
     }
 
-    $announcement = new Dokan_Announcement();
+    $announcement = new \WeDevs\DokanPro\Admin\Announcement();
     $announcement->trigger_mail( $post->ID );
 }
 

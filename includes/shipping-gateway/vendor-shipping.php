@@ -3,6 +3,8 @@
  * Table Rate Shipping Method Extender Class
  */
 
+use WeDevs\DokanPro\ShippingZone as DokanProShippingZone;
+
 if ( ! defined( 'ABSPATH' ) )
     exit;
 
@@ -226,14 +228,14 @@ if ( class_exists( 'WooCommerce' ) ) {
          */
         function calculate_shipping( $package = array() ) {
             $rates = array();
-            $zone = Dokan_Shipping_Zone::get_zone_matching_package( $package );
+            $zone = DokanProShippingZone::get_zone_matching_package( $package );
             $seller_id = $package['seller_id'];
 
             if ( empty( $seller_id ) ) {
                 return;
             }
 
-            $shipping_methods = Dokan_Shipping_Zone::get_shipping_methods( $zone->get_id(), $seller_id );
+            $shipping_methods = DokanProShippingZone::get_shipping_methods( $zone->get_id(), $seller_id );
 
             if ( empty( $shipping_methods ) ) {
                 return;
@@ -401,8 +403,8 @@ if ( class_exists( 'WooCommerce' ) ) {
                 return false;
             }
 
-            $zone      = Dokan_Shipping_Zone::get_zone_matching_package( $package );
-            $locations = Dokan_Shipping_Zone::get_locations( $zone->get_id(), $seller_id );
+            $zone      = DokanProShippingZone::get_zone_matching_package( $package );
+            $locations = DokanProShippingZone::get_locations( $zone->get_id(), $seller_id );
 
             if ( empty( $locations ) ) {
                 return true;

@@ -1,5 +1,7 @@
 <?php
 
+namespace WeDevs\DokanPro;
+
 use DokanPro\Modules\Subscription\Helper;
 use WeDevs\Dokan\Vendor\SetupWizard;
 
@@ -11,7 +13,8 @@ use WeDevs\Dokan\Vendor\SetupWizard;
  * @package dokan-pro
  *
  */
-Class Dokan_Email_Verification {
+Class EmailVerification {
+
     /**
      * WP_User holder
      *
@@ -36,23 +39,6 @@ Class Dokan_Email_Verification {
     public function __construct() {
         $this->base_url = dokan_get_page_url( 'myaccount', 'woocommerce' );
         $this->init_hooks();
-    }
-
-    /**
-     * Instantiate the class
-     *
-     * @since 2.6
-     *
-     * @return object
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Email_Verification();
-        }
-
-        return $instance;
     }
 
     /**
@@ -280,7 +266,7 @@ Class Dokan_Email_Verification {
             require_once WC_ABSPATH . '/includes/emails/class-wc-email-customer-new-account.php';
         }
 
-        $email = new WC_Email_Customer_New_Account;
+        $email = new \WC_Email_Customer_New_Account;
 
         $email->trigger( $user_id );
 

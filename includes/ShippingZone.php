@@ -1,11 +1,13 @@
 <?php
 
+namespace WeDevs\DokanPro;
+
 /**
 * Dokan Shipping Zone Class
 *
 * @package dokan
 */
-class Dokan_Shipping_Zone {
+class ShippingZone {
 
     /**
      * Get All Zone

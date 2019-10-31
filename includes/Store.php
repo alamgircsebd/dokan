@@ -1,4 +1,7 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
 /**
  * Dokan Notice Class
  *
@@ -6,7 +9,7 @@
  *
  * @author weDevs  <info@wedevs.com>
  */
-class Dokan_Pro_Store {
+class Store {
 
     /**
      * Load automatically when class initiate
@@ -29,22 +32,6 @@ class Dokan_Pro_Store {
         add_action( 'dokan_query_var_filter', array( $this, 'load_biography_query_var' ), 10, 2 );
         add_filter( 'dokan_store_tabs', array( $this, 'add_vendor_biography_tab' ), 10, 2 );
         add_filter( 'template_include', array( $this, 'load_vendor_biography_template' ), 99 );
-    }
-
-    /**
-     * Initializes the Dokan_Pro_Store() class
-     *
-     * Checks for an existing Dokan_Pro_Store() instance
-     * and if it doesn't find one, creates it.
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Store();
-        }
-
-        return $instance;
     }
 
     /**
@@ -130,20 +117,20 @@ class Dokan_Pro_Store {
         }
         // WC 3.0 compatibility
         if ( class_exists( 'WC_DateTime' ) ) {
-            $current_time = new WC_DateTime();
+            $current_time = new \WC_DateTime();
             $current_time = $current_time->getTimestamp();
         } else {
             $current_time = current_time( 'timestamp' );
         }
 
         foreach ( $seller_coupons as $coupon ) {
-            $wc_coupon = new WC_Coupon( $coupon->ID );
+            $wc_coupon = new \WC_Coupon( $coupon->ID );
 
             $expiry_date = dokan_get_prop( $wc_coupon, 'expiry_date', 'get_date_expires' );
             $coup_exists = dokan_get_prop( $wc_coupon, 'exists', 'is_valid' );
 
             if ( class_exists( 'WC_DateTime' ) && $expiry_date ) {
-                $expiry_date = new WC_DateTime( $expiry_date );
+                $expiry_date = new \WC_DateTime( $expiry_date );
                 $expiry_date = $expiry_date->getTimestamp();
             }
 

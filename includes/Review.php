@@ -1,10 +1,8 @@
 <?php
-/**
- * Show users all comments and process all bulk action
- *
- * @author Asaquzzaman
- */
-class Dokan_Pro_Reviews {
+
+namespace WeDevs\DokanPro;
+
+class Review {
 
     private $limit = 15;
     private $pending;
@@ -35,23 +33,6 @@ class Dokan_Pro_Reviews {
 
         add_action( 'wp_ajax_dokan_comment_status', array( $this, 'ajax_comment_status' ) );
         add_action( 'wp_ajax_dokan_update_comment', array( $this, 'ajax_update_comment' ) );
-    }
-
-    /**
-     * Inistantiate the Dokan_Pro_Coupons class
-     *
-     * @since 2.4
-     *
-     * @return object
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Reviews();
-        }
-
-        return $instance;
     }
 
     /**
@@ -147,7 +128,7 @@ class Dokan_Pro_Reviews {
      *
      * @return void
      */
-    function get_count( $post_type ) {
+    public function get_count( $post_type ) {
         global $wpdb;
 
         $counts = dokan_count_comments( $post_type, dokan_get_current_user_id() );
@@ -165,7 +146,7 @@ class Dokan_Pro_Reviews {
      *
      * @return josn
      */
-    function ajax_comment_status() {
+    public function ajax_comment_status() {
         if ( ! wp_verify_nonce( $_POST['nonce'], 'dokan_reviews' ) && !is_user_logged_in() ) {
             wp_send_json_error();
         }
@@ -217,7 +198,7 @@ class Dokan_Pro_Reviews {
      *
      * @return void
      */
-    function reviews_view() {
+    public function reviews_view() {
 
         global $wpdb, $current_user;
 
@@ -279,7 +260,7 @@ class Dokan_Pro_Reviews {
      *
      * @return void
      */
-    function show_comment_table( $post_type, $counts ) {
+    public function show_comment_table( $post_type, $counts ) {
         $comment_status = isset( $_GET['comment_status'] ) ? $_GET['comment_status'] : 'all';
 
         dokan_get_template_part( 'review/listing', '', array(
@@ -312,7 +293,7 @@ class Dokan_Pro_Reviews {
      *
      * @return string
      */
-    function pagination( $post_type ) {
+    public function pagination( $post_type ) {
         global $wpdb, $current_user;
 
         $status = $this->page_status();
@@ -365,7 +346,7 @@ class Dokan_Pro_Reviews {
      *
      * @return string
      */
-    function review_pagination( $id, $post_type, $limit, $status ) {
+    public function review_pagination( $id, $post_type, $limit, $status ) {
         global $wpdb;
 
         $total = $wpdb->get_var(
@@ -436,7 +417,7 @@ class Dokan_Pro_Reviews {
      *
      * @return string
      */
-    function get_comment_status( $status ) {
+    public function get_comment_status( $status ) {
         switch ( $status ) {
         case '1':
             return 'approved';
@@ -461,7 +442,7 @@ class Dokan_Pro_Reviews {
      *
      * @return string
      */
-    function dokan_render_listing_table_body( $post_type ) {
+    public function dokan_render_listing_table_body( $post_type ) {
         $status   = $this->page_status();
         $limit    = $this->limit;
         $comments = $this->comment_query( dokan_get_current_user_id(), $post_type, $limit, $status );
@@ -485,7 +466,7 @@ class Dokan_Pro_Reviews {
      *
      * @return object
      */
-    function comment_query( $id, $post_type, $limit, $status, $offset = false ) {
+    public function comment_query( $id, $post_type, $limit, $status, $offset = false ) {
         global $wpdb;
 
         $page_number = $offset ? $offset : get_query_var( 'paged' );
@@ -548,7 +529,7 @@ class Dokan_Pro_Reviews {
      *
      * @return josn
      */
-    function ajax_update_comment() {
+    public function ajax_update_comment() {
         if ( ! $this->quick_edit ) {
             wp_send_json_error( __( 'You can not edit reviews!', 'dokan' ) );
         }
@@ -581,7 +562,7 @@ class Dokan_Pro_Reviews {
      *
      * @since 2.4
      */
-    function handle_status() {
+    public function handle_status() {
         if ( !isset( $_POST['comt_stat_sub'] ) ) {
             return;
         }
@@ -622,7 +603,7 @@ class Dokan_Pro_Reviews {
      *
      * @return void
      */
-    function review_comments_menu( $post_type, $counts ) {
+    public function review_comments_menu( $post_type, $counts ) {
         $url          = dokan_get_navigation_url( 'reviews' );
         $pending      = isset( $counts->moderated ) ? $counts->moderated : 0;
         $spam         = isset( $counts->spam ) ? $counts->spam : 0;
@@ -651,7 +632,7 @@ class Dokan_Pro_Reviews {
      *
      * @return object
      */
-    function count_status( $post_type, $status ) {
+    public function count_status( $post_type, $status ) {
         global $wpdb, $current_user;
 
         return $totalcomments = $wpdb->get_var(
@@ -665,7 +646,7 @@ class Dokan_Pro_Reviews {
         );
     }
 
-    function render_store_tab_comment_list( $comments, $store_id ) {
+    public function render_store_tab_comment_list( $comments, $store_id ) {
 
         ob_start();
         if ( count( $comments ) == 0 ) {
@@ -719,5 +700,4 @@ class Dokan_Pro_Reviews {
 
         return apply_filters( 'dokan_seller_tab_reviews_list', $review_list, $store_id );
     }
-
 }

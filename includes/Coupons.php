@@ -1,10 +1,16 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
+use WP_Error;
+use WP_Query;
+
 /**
  * Dokan Coupons Class
  *
  * @author weDevs
  */
-class Dokan_Pro_Coupons {
+class Coupons {
 
     private $perpage = 10;
     private $total_query_result;
@@ -20,7 +26,6 @@ class Dokan_Pro_Coupons {
      * @uses actions|filter hooks
      */
     public function __construct() {
-
         $this->is_edit_page =  isset( $_GET['view'] ) && $_GET['view'] == 'add_coupons';
 
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_coupon_menu' ) );
@@ -30,23 +35,6 @@ class Dokan_Pro_Coupons {
         add_action( 'dokan_coupon_content_area_header', array( $this, 'dokan_coupon_header_render' ), 10 );
         add_action( 'dokan_coupon_content', array( $this, 'dokan_coupon_content_render' ), 10 );
         add_filter( 'woocommerce_coupon_validate_minimum_amount', array( $this, 'validate_coupon_minimum_amount' ), 10, 2 );
-    }
-
-    /**
-     * Inistantiate the Dokan_Pro_Coupons class
-     *
-     * @since 2.4
-     *
-     * @return object
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Coupons();
-        }
-
-        return $instance;
     }
 
     /**

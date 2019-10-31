@@ -225,8 +225,7 @@ class Dokan_REST_Announcement_Controller extends DokanRESTController {
         update_post_meta( $post_id, '_announcement_type', $request['sender_type'] );
         update_post_meta( $post_id, '_announcement_selected_user', $request['sender_ids'] );
 
-        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
-        $announcement = new Dokan_Announcement();
+        $announcement = new \WeDevs\DokanPro\Admin\Announcement();
 
         $assigned_sellers = !empty( $request['sender_ids'] ) ? $request['sender_ids'] : array();
 
@@ -295,8 +294,7 @@ class Dokan_REST_Announcement_Controller extends DokanRESTController {
         update_post_meta( $post_id, '_announcement_type', $request['sender_type'] );
         update_post_meta( $post_id, '_announcement_selected_user', $request['sender_ids'] );
 
-        require_once DOKAN_PRO_ADMIN_DIR . '/announcement.php';
-        $announcement = new Dokan_Announcement();
+        $announcement = new \WeDevs\DokanPro\Admin\Announcement();
 
         $assigned_sellers = !empty( $request['sender_ids'] ) ? $request['sender_ids'] : array();
 

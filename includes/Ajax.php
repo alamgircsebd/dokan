@@ -2,12 +2,12 @@
 
 namespace WeDevs\DokanPro;
 
+use Dokan_Pro_Refund;
 use WC_Countries;
-use Dokan_Shipping_Zone;
-use WC_Tax;
 use WC_Meta_Box_Product_Data;
 use WC_Product_Variable;
-use Dokan_Pro_Refund;
+use WC_Tax;
+use WeDevs\DokanPro\ShippingZone as DokanProShippingZone;
 
 /**
  * Dokan Pro Ajax class
@@ -102,9 +102,9 @@ class Ajax {
         }
 
         if ( isset( $_POST['zoneID'] ) ) {
-            $zones = Dokan_Shipping_Zone::get_zone( $_POST['zoneID'] );
+            $zones = DokanProShippingZone::get_zone( $_POST['zoneID'] );
         } else {
-            $zones = Dokan_Shipping_Zone::get_zones();
+            $zones = DokanProShippingZone::get_zones();
         }
 
         wp_send_json_success( $zones );
@@ -126,7 +126,7 @@ class Ajax {
             wp_send_json_error( __( 'Zone not found', 'dokan' ) );
         }
 
-        $methods = Dokan_Shipping_Zone::get_shipping_methods( $_POST['zoneID'] );
+        $methods = DokanProShippingZone::get_shipping_methods( $_POST['zoneID'] );
 
         wp_send_json_success( $methods );
     }
@@ -162,7 +162,7 @@ class Ajax {
             wp_send_json_error( __( 'Shipping title must be required', 'dokan' ) );
         }
 
-        $result = Dokan_Shipping_Zone::update_shipping_method( $args );
+        $result = DokanProShippingZone::update_shipping_method( $args );
 
         wp_send_json_success( $args );
     }
@@ -197,7 +197,7 @@ class Ajax {
             'checked'     => ( $_POST['checked'] == 'true' ) ? 1 : 0
         );
 
-        $result = Dokan_Shipping_Zone::toggle_shipping_method( $data );
+        $result = DokanProShippingZone::toggle_shipping_method( $data );
 
         if ( is_wp_error( $result ) ) {
             wp_send_json_error( $result->get_error_message() );
@@ -234,7 +234,7 @@ class Ajax {
             'method_id' => $_POST['method']
         );
 
-        $result = Dokan_Shipping_Zone::add_shipping_methods( $data );
+        $result = DokanProShippingZone::add_shipping_methods( $data );
 
         if ( is_wp_error( $result ) ) {
             wp_send_json_error( $result->get_error_message() , 'dokan' );
@@ -270,7 +270,7 @@ class Ajax {
             'instance_id' => $_POST['instance_id']
         );
 
-        $result = Dokan_Shipping_Zone::delete_shipping_methods( $data );
+        $result = DokanProShippingZone::delete_shipping_methods( $data );
 
         if ( is_wp_error( $result ) ) {
             wp_send_json_error( $result->get_error_message() , 'dokan' );
@@ -402,7 +402,7 @@ class Ajax {
             $location = array_merge( $location, $postcode_array );
         }
 
-        $result = Dokan_Shipping_Zone::save_location( $location, $zone_id );
+        $result = DokanProShippingZone::save_location( $location, $zone_id );
 
         wp_send_json_success( __( 'Zone settings save successfully', 'dokan' ) );
     }

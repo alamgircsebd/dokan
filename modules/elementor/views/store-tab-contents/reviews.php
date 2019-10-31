@@ -1,6 +1,6 @@
 <?php
 $store_user             = get_userdata( get_query_var( 'author' ) );
-$dokan_template_reviews = Dokan_Pro_Reviews::init();
+$dokan_template_reviews = dokan_pro()->review;
 $id                     = $store_user->ID;
 $post_type              = 'product';
 $limit                  = 20;

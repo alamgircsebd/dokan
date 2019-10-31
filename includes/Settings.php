@@ -1,6 +1,8 @@
 <?php
 
-use WeDevs\Dokan\Dashboard\Templates\Settings;
+namespace WeDevs\DokanPro;
+
+use WeDevs\Dokan\Dashboard\Templates\Settings as DokanSettings;
 
 /**
  * Dokan Pro Template Settings class
@@ -9,7 +11,7 @@ use WeDevs\Dokan\Dashboard\Templates\Settings;
  *
  * @package dokan
  */
-class Dokan_Pro_Settings extends Settings {
+class Settings extends DokanSettings {
 
     /**
      * Load automatically when class initiate
@@ -44,24 +46,6 @@ class Dokan_Pro_Settings extends Settings {
     }
 
     /**
-     * Singleton object
-     *
-     * @staticvar boolean $instance
-     *
-     * @return \self
-     */
-    public static function init() {
-
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Settings();
-        }
-
-        return $instance;
-    }
-
-    /**
      * filter_nav_active
      *
      * @since 1.0.0
@@ -69,7 +53,6 @@ class Dokan_Pro_Settings extends Settings {
      * @return void
      */
     public function filter_nav_active( $active_menu, $request, $active ) {
-
         if ( 'settings/regular-shipping' == $active_menu ) {
             return 'settings/shipping';
         }
@@ -88,7 +71,6 @@ class Dokan_Pro_Settings extends Settings {
      * @return array
      */
     public function load_settings_menu( $sub_settins ) {
-
         $dokan_shipping_option = get_option( 'woocommerce_dokan_product_shipping_settings' );
         $enable_shipping       = ( isset( $dokan_shipping_option['enabled'] ) ) ? $dokan_shipping_option['enabled'] : 'yes';
         $disable_woo_shipping  = get_option( 'woocommerce_ship_to_countries' );
@@ -135,7 +117,6 @@ class Dokan_Pro_Settings extends Settings {
      * @return void
      */
     public function load_settings_template( $template, $query_vars ) {
-
         if ( $query_vars == 'social' ) {
             dokan_get_template_part( 'settings/store' );
             return;
@@ -280,7 +261,6 @@ class Dokan_Pro_Settings extends Settings {
      * @return void
      */
     public function load_settings_content( $query_vars ) {
-
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'social' ) {
              if ( ! current_user_can( 'dokan_view_store_social_menu' ) ) {
                 dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );

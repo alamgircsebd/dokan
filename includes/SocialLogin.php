@@ -1,20 +1,13 @@
 <?php
 
-/**
- * Dokan Social login class
- *
- * @since 2.6.6
- *
- * @package dokan-pro
- *
- */
+namespace WeDevs\DokanPro;
 
 use Hybridauth\Exception\Exception;
 use Hybridauth\Hybridauth;
 use Hybridauth\HttpClient;
 use Hybridauth\Storage\Session;
 
-Class Dokan_Social_Login {
+Class SocialLogin {
 
     private $callback;
     private $config;
@@ -29,23 +22,6 @@ Class Dokan_Social_Login {
     public function __construct() {
         $this->callback = dokan_get_page_url( 'myaccount', 'woocommerce' );
         $this->init_hooks();
-    }
-
-    /**
-     * Instantiate the class
-     *
-     * @since 2.6
-     *
-     * @return object
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( ! $instance ) {
-            $instance = new Dokan_Social_Login();
-        }
-
-        return $instance;
     }
 
     /**
@@ -259,7 +235,6 @@ Class Dokan_Social_Login {
      * @return array
      */
     public function dokan_social_settings_fields( $settings_fields ) {
-
         $settings_fields['dokan_social_api'] = array(
             'sectio_title' => array(
                 'name'  => 'sectio_title',
@@ -394,7 +369,7 @@ Class Dokan_Social_Login {
      *
      * @return array new $vars
      */
-    function register_support_queryvar( $vars ) {
+    public function register_support_queryvar( $vars ) {
         $vars[] = 'social-register';
         $vars[] = 'dokan-registration';
 
@@ -410,7 +385,7 @@ Class Dokan_Social_Login {
      *
      * @return array $query_vars
      */
-    function load_template_from_plugin( $query_vars ) {
+    public function load_template_from_plugin( $query_vars ) {
 
         if ( isset( $query_vars['dokan-registration'] ) ) {
             $template = DOKAN_PRO_DIR . '/templates/global/social-register.php';

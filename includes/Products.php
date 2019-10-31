@@ -1,5 +1,7 @@
 <?php
 
+namespace WeDevs\DokanPro;
+
 /**
  * Dokan Pro Product Class
  *
@@ -7,7 +9,7 @@
  *
  * @package dokan
  */
-class Dokan_Pro_Products {
+class Products {
 
     /**
      * Holds the inline edit options
@@ -52,23 +54,6 @@ class Dokan_Pro_Products {
         add_filter( 'woocommerce_duplicate_product_exclude_meta', array( $this, 'remove_unwanted_meta' ) );
 
         add_filter( 'dokan_localized_args', array( $this, 'dokan_pro_localized_args' ) );
-    }
-
-    /**
-     * Inistantiate the Dokan_Pro_Products class
-     *
-     * @since 2.4
-     *
-     * @return object
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Products();
-        }
-
-        return $instance;
     }
 
     /**
@@ -223,9 +208,9 @@ class Dokan_Pro_Products {
      *
      * @return array
      */
-    function get_tax_class_option() {
+    public function get_tax_class_option() {
         if ( class_exists( 'WC_Tax' ) ) {
-            $tax_classes = WC_Tax::get_tax_classes();
+            $tax_classes = \WC_Tax::get_tax_classes();
         } else {
             $tax_classes = array_filter( array_map( 'trim', explode( "\n", get_option( 'woocommerce_tax_classes' ) ) ) );
         }
@@ -250,7 +235,7 @@ class Dokan_Pro_Products {
      *
      * @return void
      */
-    function add_per_product_commission_options() {
+    public function add_per_product_commission_options() {
 
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
@@ -579,7 +564,7 @@ class Dokan_Pro_Products {
                 return;
             }
 
-            $wo_dup = new WC_Admin_Duplicate_Product();
+            $wo_dup = new \WC_Admin_Duplicate_Product();
 
             // Compatibility for WC 3.0+
             if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
@@ -667,7 +652,7 @@ class Dokan_Pro_Products {
      *
      * @return $product_types
      */
-    function set_default_product_types( $product_types ) {
+    public function set_default_product_types( $product_types ) {
 
         $product_types = array(
             'simple' => __( 'Simple', 'dokan' ),
@@ -690,7 +675,7 @@ class Dokan_Pro_Products {
      *
      * @param string $status
      */
-    function updated_product_email( $product_id ) {
+    public function updated_product_email( $product_id ) {
 
         if ( dokan_get_option( 'edited_product_status', 'dokan_selling', 'off' ) != 'on' ) {
             return;

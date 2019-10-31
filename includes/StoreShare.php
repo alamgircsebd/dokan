@@ -1,5 +1,7 @@
 <?php
 
+namespace WeDevs\DokanPro;
+
 /**
  * Dokan Store Social Share class
  *
@@ -9,8 +11,8 @@
  * @since 2.6.6
  */
 
-class Dokan_Pro_Store_Share {
-    
+class StoreShare {
+
     private $share_text;
     /**
      * Loads automatically when class initiate
@@ -24,23 +26,6 @@ class Dokan_Pro_Store_Share {
     }
 
     /**
-     * Singleton object
-     *
-     * @staticvar boolean $instance
-     *
-     * @return object self
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Store_Share();
-        }
-
-        return $instance;
-    }
-
-    /**
      * Init hooks and filters
      *
      * @return void
@@ -48,13 +33,13 @@ class Dokan_Pro_Store_Share {
     function init_hooks() {
         //register scripts
         add_action( 'dokan_register_scripts', array( $this, 'register_scripts' ), 30 );
-        //render 
+        //render
         add_action( 'dokan_enqueue_scripts', array( $this, 'enqueue_scripts' ), 30 );
 //        add_action( 'woocommerce_after_main_content', array( $this, 'render_html' ), 30 );
         add_action( 'dokan_after_store_tabs', array( $this, 'render_share_button' ), 1 );
         add_action( 'wp_footer', array( $this, 'render_script' ), 30 );
     }
-    
+
     /**
     * Register all scripts
     *
@@ -69,7 +54,7 @@ class Dokan_Pro_Store_Share {
         // register scripts
         wp_register_script( 'dokan-social-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/jssocials.min.js', array( 'jquery', 'dokan-script' ), null, true );
     }
-    
+
     /**
     * Enqueue all scripts
     *
@@ -83,17 +68,17 @@ class Dokan_Pro_Store_Share {
             wp_enqueue_script( 'dokan-popup' );
             wp_enqueue_style( 'dokan-social-theme-minimal' );
         }
-        
+
         if ( is_account_page() ) {
             wp_enqueue_style( 'dokan-social-style' );
             wp_enqueue_style( 'dokan-social-theme-flat' );
         }
     }
-    
+
     /**
      * Render Share Buttons HTML
-     * 
-     * @return string 
+     *
+     * @return string
      */
     function render_html() {
         ob_start();
@@ -101,16 +86,16 @@ class Dokan_Pro_Store_Share {
         <div class="dokan-share-wrap">
             <?php echo $this->share_text; ?>
             <div class="dokan-share">
-                
+
             </div>
         </div>
         <?php
         return ob_get_clean();
     }
-    
+
     /**
      * Render Share pop up button
-     * 
+     *
      * @return void
      */
     function render_share_button(){
@@ -120,10 +105,10 @@ class Dokan_Pro_Store_Share {
         </li>
         <?php
     }
-    
+
     /**
      * Render JS
-     * 
+     *
      * @return void
      */
     function render_script(){
@@ -133,14 +118,14 @@ class Dokan_Pro_Store_Share {
         ?>
         <script>
             (function($){
-                
+
                 var Dokan_share = {
-                    
+
                     init : function(){
                         this.init_share();
                         $('.dokan-share-btn').click( this.showPopup );
                     },
-                    
+
                     init_share : function(){
                         $(".dokan-share").jsSocials({
                         showCount: false,
@@ -148,7 +133,7 @@ class Dokan_Pro_Store_Share {
                            shares: ["facebook", "twitter", "googleplus", "linkedin", "pinterest", "email"]
                         });
                     },
-                    
+
                     showPopup : function(){
                         var content = <?php echo json_encode( $this->render_html() ) ?>;
                         $.magnificPopup.open({
@@ -157,7 +142,7 @@ class Dokan_Pro_Store_Share {
                                 type: 'inline'
                            }
                         });
-                        
+
                         Dokan_share.init_share();
                     }
                 }
@@ -170,5 +155,3 @@ class Dokan_Pro_Store_Share {
     }
 
 }
-
-$dokan_social = Dokan_Pro_Store_Share::init();

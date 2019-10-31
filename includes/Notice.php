@@ -1,4 +1,9 @@
 <?php
+
+namespace WeDevs\DokanPro;
+
+use WP_Query;
+
 /**
  * Dokan Notice Class
  *
@@ -6,7 +11,7 @@
  *
  * @author weDevs  <info@wedevs.com>
  */
-class Dokan_Pro_Notice {
+class Notice {
 
     private $perpage = 10;
     private $total_query_result;
@@ -25,22 +30,6 @@ class Dokan_Pro_Notice {
         add_action( 'dokan_announcement_content_area_header', array( $this, 'load_header_template' ) );
         add_action( 'dokan_announcement_content', array( $this, 'load_announcement_content' ), 10 );
         add_action( 'dokan_single_announcement_content', array( $this, 'load_single_announcement_content' ), 10 );
-    }
-
-    /**
-     * Initializes the Dokan_Pro_Notice() class
-     *
-     * Checks for an existing Dokan_Pro_Notice() instance
-     * and if it doesn't find one, creates it.
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Notice();
-        }
-
-        return $instance;
     }
 
     /**

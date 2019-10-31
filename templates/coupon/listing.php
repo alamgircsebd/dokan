@@ -50,7 +50,7 @@
                 <td data-title="<?php _e('Coupon type', 'dokan'); ?>">
                     <?php
                     $discount_type = get_post_meta( $post->ID, 'discount_type', true );
-                    $types         = Dokan_Pro_Coupons::get_coupon_types();
+                    $types         = \WeDevs\DokanPro\Coupons::get_coupon_types();
 
                     printf( __( '%s', 'dokan' ), $types[$discount_type] );
                     ?>

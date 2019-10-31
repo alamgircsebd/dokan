@@ -170,7 +170,7 @@ class Dokan_REST_Reviews_Controller extends DokanRESTController {
      */
     public function get_reviews( $request ) {
         $store_id = dokan_get_current_user_id();
-        $review_class = new Dokan_Pro_Reviews();
+        $review_class = dokan_pro()->review;
 
         if ( empty( $store_id ) ) {
             return new WP_Error( 'no_store_found', __( 'No seller found', 'dokan' ), array( 'status' => 404 ) );
@@ -294,7 +294,7 @@ class Dokan_REST_Reviews_Controller extends DokanRESTController {
      */
     public function update_review_status( $request ) {
         $store_id = dokan_get_current_user_id();
-        $review_class = new Dokan_Pro_Reviews();
+        $review_class = dokan_pro()->review;
 
         if ( empty( $store_id ) ) {
             return new WP_Error( 'no_store_found', __( 'No seller found', 'dokan' ), array( 'status' => 404 ) );

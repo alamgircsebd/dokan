@@ -1,5 +1,7 @@
 <?php
 
+namespace WeDevs\DokanPro;
+
 /**
  * Withdraw Fnctionality class
  *
@@ -7,7 +9,7 @@
  *
  * @author weDevs <info@wedevs.com>
  */
-class Dokan_Pro_Withdraws {
+class Withdraws {
 
 	/**
      * Constructor for the Dokan_Pro_Withdraws class
@@ -20,24 +22,6 @@ class Dokan_Pro_Withdraws {
 	function __construct() {
 		add_filter( 'dokan_withdraw_methods', array( $this, 'load_withdraw_method' ), 10 );
 	}
-
-    /**
-     * Singleton object
-     *
-     * @staticvar boolean $instance
-     *
-     * @return \self
-     */
-    public static function init() {
-
-        static $instance = false;
-
-        if ( !$instance ) {
-            $instance = new Dokan_Pro_Withdraws();
-        }
-
-        return $instance;
-    }
 
 	/**
 	 * Load withdraw method

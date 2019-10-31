@@ -403,7 +403,7 @@ $template_args = array(
                         $dps_shipping_type_price = get_user_meta( $user_id, '_dps_shipping_type_price', true );
                         $dps_additional_qty      = get_user_meta( $user_id, '_dps_additional_qty', true );
                         $dps_pt                  = get_user_meta( $user_id, '_dps_pt', true );
-                        $classes_options         = Dokan_Pro_Products::init()->get_tax_class_option();
+                        $classes_options         = dokan_pro()->products->get_tax_class_option();
                         $porduct_shipping_pt     = ( $_processing_time ) ? $_processing_time : $dps_pt;
 
                         dokan_get_template_part( 'booking/html-shipping-tax', '', array(
