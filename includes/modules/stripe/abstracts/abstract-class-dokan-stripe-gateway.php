@@ -1059,7 +1059,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @param string $fragment
      */
     public function set_payment_intent_data( $fragment ) {
-        if ( ! Stripe_Helper::is_3d_secure_enabled() ) {
+        if ( ! Stripe_Helper::is_active() || ! Stripe_Helper::is_3d_secure_enabled() ) {
             return $fragment;
         }
 
