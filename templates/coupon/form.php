@@ -93,6 +93,7 @@
         <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
             <select name="product_drop_down[]" class="dokan-select2 dokan-coupon-product-select dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
+                <option value="select_all"><?php esc_html_e( 'Select All', 'dokan' ); ?></option>
                 <?php
                 foreach ( $all_products as $key => $object ) {
                     if ( in_array( $object->ID, $products_id ) ) {
@@ -219,7 +220,7 @@
             e.preventDefault();
             var self = $(this),
             select = self.closest('div').find('select.dokan-coupon-product-select');
-            select.find('> option').prop( 'selected', 'selected' );
+            select.find('option:first').prop( 'selected', 'selected' );
             select.trigger('change');
         });
 

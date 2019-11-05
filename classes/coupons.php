@@ -305,7 +305,13 @@ class Dokan_Pro_Coupons {
         $show_on_store      = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
         $minimum_amount     = sanitize_text_field( $_POST['minium_ammount'] );
 
-        if ( isset( $_POST['product_drop_down'] ) ) {
+        if ( isset( $_POST['product_drop_down'][0] ) && 'select_all' === $_POST['product_drop_down'][0] ) {
+            $product_ids = array_map( function( $product ) {
+                return intval( $product->ID );
+            }, $this->coupon_products_list() );
+
+            $product_ids = implode( ',', $product_ids );
+        } else if ( isset( $_POST['product_drop_down'] ) ) {
             $product_ids = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_drop_down'] ) ) );
         } else {
             $product_ids = '';
