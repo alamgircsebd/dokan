@@ -111,7 +111,7 @@ extract( $variation_data );
             </div>
 
             <div class="dokan-clearfix"></div>
-            <div class="variable_pricing">
+            <div class="variable_pricing show_if_variable">
                 <div class="content-half-part">
                     <label><?php echo __( 'Regular price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
                     <span class="vendor-earning">( <?php _e( ' You Earn : ', 'dokan' ) ?><?php echo get_woocommerce_currency_symbol() ?><span class="vendor-price"><?php echo esc_html( dokan()->commission->get_earning_by_product( $variation->ID ) ); ?></span> )</span>
@@ -151,6 +151,19 @@ extract( $variation_data );
                     do_action( 'dokan_variation_options_pricing', $loop, $variation_data, $variation );
                 ?>
             </div>
+
+            <?php
+                /**
+                 * dokan_variation_options_pricing action.
+                 *
+                 * @since 2.6
+                 *
+                 * @param int     $loop
+                 * @param array   $variation_data
+                 * @param WP_Post $variation
+                 */
+                do_action( 'dokan_product_after_variation_pricing', $loop, $variation_data, $variation );
+            ?>
 
             <?php if ( 'yes' == get_option( 'woocommerce_manage_stock' ) ) : ?>
 

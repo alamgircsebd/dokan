@@ -165,7 +165,9 @@ class Dokan_Product_Addon_Frontend {
 
         if ( ! is_admin() && ! empty( $query->query['post_type'] ) && $query->query['post_type'] === 'global_product_addon' ) {
             // set post author for global addons
-            $query->set( 'author', $post->post_author );
+            if ( ! empty( $post->post_author ) ) {
+                $query->set( 'author', $post->post_author );
+            }
             return;
         }
 
