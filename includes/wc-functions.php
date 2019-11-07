@@ -1316,10 +1316,10 @@ function dokan_edit_category_commission_field( $term ) {
     <tr class="form-field">
         <th scope="row" valign="top"><label><?php _e( 'Admin commission', 'dokan' ); ?></label></th>
         <td>
-            <input type="number" min="0" class="commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
+            <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
             <span class="additional-fee dokan-hide">
                 <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-                <input type="number" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+                <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
             </span>
 
             <p class="combine-commssion-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ) ?></p>
