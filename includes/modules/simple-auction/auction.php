@@ -74,7 +74,8 @@ class Dokan_Auction {
         add_filter( 'dokan_email_actions', array( $this, 'register_auction_email_action') );
 
         // send bid email to admin and vendor
-        add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
+        add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 15, 2 );
+        add_filter( 'woocommerce_email_recipient_auction_finished', array( $this, 'send_bid_email' ), 15, 2 );
         add_filter( 'dokan_localized_args', array( $this, 'set_localized_args' ) );
         add_filter( 'pre_get_posts', [ $this, 'maybe_exclude_auction_product' ] );
     }
@@ -505,20 +506,18 @@ class Dokan_Auction {
      * @return string
      */
     public function send_bid_email( $recipient, $object ) {
-        if ( ! $object ) {
-            return;
-        }
-
-        $product_id = $object->get_id();
-
-        if ( empty( $product_id ) ) {
+        if ( ! is_object( $object ) ) {
             return $recipient;
         }
 
-        $vendor_id    = get_post_field( 'post_author', $product_id );
-        $vendor_email = dokan()->vendor->get( $vendor_id )->get_email();
+        $product_id = $object->get_id();
+        $vendor     = dokan_get_vendor_by_product( $product_id );
 
-        return $recipient . ',' . $vendor_email;
+        if ( ! $vendor instanceof Dokan_Vendor || $vendor->get_id() === 0 ) {
+            return $recipient;
+        }
+
+        return $recipient . ',' . $vendor->get_email();
     }
 
     /**
