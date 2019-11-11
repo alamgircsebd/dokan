@@ -1246,10 +1246,10 @@ function dokan_add_category_commission_field() {
     </div>
     <div class="form-field term-display-type-wrap">
         <label for="per_category_admin_commission"><?php _e( 'Admin Commission from this category', 'dokan' ); ?></label>
-        <input type="number" class="commission-filed" min="0" name="per_category_admin_commission">
+        <input type="number" class="commission-filed" step="any" min="0" name="per_category_admin_commission">
         <span class="additional-fee dokan-hide">
             <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-            <input type="number" min="0" class="commission-filed" name="per_category_admin_additional_fee">
+            <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee">
         </span>
         <p class="combine-commission-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
     </div>
@@ -1319,7 +1319,7 @@ function dokan_edit_category_commission_field( $term ) {
             <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
             <span class="additional-fee dokan-hide">
                 <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-                <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+                <input type="number" required="required" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
             </span>
 
             <p class="combine-commssion-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ) ?></p>
@@ -1341,9 +1341,11 @@ function dokan_edit_category_commission_field( $term ) {
             if ( 'combine' === $(this).val() ) {
                 $('span.additional-fee').removeClass('dokan-hide');
                 $('.combine-commssion-description').text( dokan_admin.combine_commission_desc );
+                $('input[name=per_category_admin_commission]').attr('required', true);
             } else {
                 $('span.additional-fee').addClass('dokan-hide');
                 $('.combine-commssion-description').text( dokan_admin.default_commission_desc );
+                $('input[name=per_category_admin_commission]').removeAttr('required');
             }
         }).trigger('change');
 
@@ -1363,20 +1365,32 @@ function dokan_edit_category_commission_field( $term ) {
  * @return void
  */
 function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy = '' ){
+    $post_data        = wp_unslash( $_POST );
+    $commission_type  = '';
+    $admin_commission = '';
+    $additional_fee   = '';
 
-    if ( isset( $_POST['per_category_admin_commission_type'] ) && 'product_cat' === $taxonomy ) {
-        update_term_meta( $term_id, 'per_category_admin_commission_type', esc_attr( $_POST['per_category_admin_commission_type'] ) );
+    if ( isset( $post_data['per_category_admin_commission_type'] ) && 'product_cat' === $taxonomy ) {
+        $commission_type = $post_data['per_category_admin_commission_type'];
+        update_term_meta( $term_id, 'per_category_admin_commission_type', wc_clean( $commission_type ) );
     }
 
-    if ( isset( $_POST['per_category_admin_commission'] ) && 'product_cat' === $taxonomy ) {
-        update_term_meta( $term_id, 'per_category_admin_commission', esc_attr( $_POST['per_category_admin_commission'] ) );
+    if ( isset( $post_data['per_category_admin_commission'] ) ) {
+        $admin_commission = $post_data['per_category_admin_commission'];
     }
 
-    if ( isset( $_POST['per_category_admin_additional_fee'] ) && 'product_cat' === $taxonomy ) {
-        update_term_meta( $term_id, 'per_category_admin_additional_fee', esc_attr( $_POST['per_category_admin_additional_fee'] ) );
+    if ( isset( $post_data['per_category_admin_additional_fee'] ) ) {
+        $additional_fee = $post_data['per_category_admin_additional_fee'];
+    }
+
+    if ( 'combine' === $commission_type && ( '' === $admin_commission || '' === $additional_fee ) ) {
+        update_term_meta( $term_id, 'per_category_admin_commission', '' );
+        update_term_meta( $term_id, 'per_category_admin_additional_fee', '' );
+    } else {
+        update_term_meta( $term_id, 'per_category_admin_commission', wc_clean( $admin_commission ) );
+        update_term_meta( $term_id, 'per_category_admin_additional_fee', wc_clean( $additional_fee ) );
     }
 }
-
 
 add_filter( 'woocommerce_cart_shipping_packages', 'dokan_custom_split_shipping_packages' );
 
