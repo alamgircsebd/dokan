@@ -257,7 +257,7 @@ Class Dokan_Email_Verification {
     }
 
     /**
-     * Send verification eamil again
+     * Send verification email again
      *
      * @return void
      */
@@ -293,7 +293,7 @@ Class Dokan_Email_Verification {
     }
 
     /**
-     * Show the resend eamil notification message
+     * Show the resend email notification message
      *
      * @return string
      */
@@ -311,7 +311,7 @@ Class Dokan_Email_Verification {
             return;
         }
 
-        wc_add_notice( __( 'A new verification email has been sent to your eamil. Please verify to login.' ) );
+        wc_add_notice( __( 'A new verification email has been sent to your email. Please verify to login.' ) );
     }
 
     /**

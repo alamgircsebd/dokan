@@ -340,7 +340,7 @@ class Dokan_Product_Enquiry {
     }
 
     /**
-     * Add eamil aciton
+     * Add email aciton
      *
      * @param array $actions
      *
