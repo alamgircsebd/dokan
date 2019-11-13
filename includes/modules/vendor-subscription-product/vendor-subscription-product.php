@@ -1,8 +1,8 @@
 <?php
 /*
-Plugin Name: Product Addon
+Plugin Name: Vendor Subscription Product
 Plugin URI: http://wedevs.com/
-Description: WooCommerce Product Addon support
+Description: WooCommerce Subscription integration for Dokan
 Version: 1.0.0
 Thumbnail Name: ajax-live-search.png
 Author: weDevs
@@ -40,11 +40,11 @@ License: GPL2
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Dokan_Product_Addon class
+ * Dokan_VSP class
  *
- * @class Dokan_Product_Addon The class that holds the entire Dokan_Product_Addon plugin
+ * @class Dokan_VSP The class that holds the entire Dokan_VSP plugin
  */
-class Dokan_Product_Addon {
+class Dokan_VSP {
 
     /**
      * The plugins which are dependent for this plugin
@@ -65,7 +65,7 @@ class Dokan_Product_Addon {
     private $dependency_error = array();
 
     /**
-     * Constructor for the Dokan_Product_Addon class
+     * Constructor for the Dokan_VSP class
      *
      * Sets up all the appropriate hooks and actions
      * within our plugin.
@@ -74,9 +74,9 @@ class Dokan_Product_Addon {
      * @uses add_action()
      */
     public function __construct() {
-        $this->depends_on['WC_Product_Addons'] = array(
-            'name'   => 'WC_Product_Addons',
-            'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %sWooCommerce Product addons plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>' ),
+        $this->depends_on['WC_Subscriptions'] = array(
+            'name'   => 'WC_Subscriptions',
+            'notice' => sprintf( __( '<b>Dokan Vendor Subscription Product Addon </b> requires %sWooCommerce Subscriptions plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-subscriptions/">', '</a>' ),
         );
 
         if ( ! $this->check_if_has_dependency() ) {
@@ -94,16 +94,16 @@ class Dokan_Product_Addon {
     }
 
     /**
-     * Initializes the Dokan_Product_Addon() class
+     * Initializes the Dokan_VSP() class
      *
-     * Checks for an existing Dokan_Product_Addon() instance
+     * Checks for an existing Dokan_VSP() instance
      * and if it doesn't find one, creates it.
      */
     public static function init() {
         static $instance = false;
 
         if ( ! $instance ) {
-            $instance = new Dokan_Product_Addon();
+            $instance = new Dokan_VSP();
         }
 
         return $instance;
@@ -117,9 +117,9 @@ class Dokan_Product_Addon {
      * @return void
      */
     public function define() {
-        define( 'DOKAN_PRODUCT_ADDON_DIR', dirname( __FILE__ ) );
-        define( 'DOKAN_PRODUCT_ADDON_INC_DIR', DOKAN_PRODUCT_ADDON_DIR . '/includes' );
-        define( 'DOKAN_PRODUCT_ADDON_ASSETS_DIR', plugins_url( 'assets', __FILE__ ) );
+        define( 'DOKAN_VSP_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_VSP_DIR_INC_DIR', DOKAN_VSP_DIR . '/includes' );
+        define( 'DOKAN_VSP_DIR_ASSETS_DIR', plugins_url( 'assets', __FILE__ ) );
     }
 
     /**
@@ -141,11 +141,12 @@ class Dokan_Product_Addon {
      * @return void
      */
     public function includes() {
-        require_once DOKAN_PRODUCT_ADDON_INC_DIR . '/class-frontend.php';
-        require_once DOKAN_PRODUCT_ADDON_INC_DIR . '/class-vendor-product.php';
-
         // Load all helper functions
-        require_once DOKAN_PRODUCT_ADDON_INC_DIR . '/functions.php';
+        require_once DOKAN_VSP_DIR_INC_DIR . '/functions.php';
+
+        // Load classes
+        require_once DOKAN_VSP_DIR_INC_DIR . '/class-vendor-product.php';
+        require_once DOKAN_VSP_DIR_INC_DIR . '/class-user-subscription.php';
     }
 
     /**
@@ -154,8 +155,8 @@ class Dokan_Product_Addon {
      * @return void
      */
     public function initiate() {
-        Dokan_Product_Addon_Frontend::init();
-        Dokan_Product_Addon_Vendor_Product::init();
+        new Dokan_VSP_Product();
+        new Dokan_VSP_User_Subscription();
     }
 
      /**
@@ -167,6 +168,7 @@ class Dokan_Product_Addon {
      */
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
+        add_filter( 'dokan_set_template_path', [ $this, 'load_subcription_product_templates' ], 10, 3 );
     }
 
     /**
@@ -179,10 +181,6 @@ class Dokan_Product_Addon {
     public function load_scripts() {
         global $wp;
 
-        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'product-addon' ) {
-            $this->enqueue_scripts();
-        }
-
         // Vendor product edit page when product already publish
         if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
             $this->enqueue_scripts();
@@ -190,6 +188,10 @@ class Dokan_Product_Addon {
 
         // Vendor product edit page when product is pending review
         if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
+            $this->enqueue_scripts();
+        }
+
+        if ( isset( $wp->query_vars['user-subscription'] ) && ! empty( $_GET['subscription_id'] ) ) {
             $this->enqueue_scripts();
         }
     }
@@ -236,36 +238,47 @@ class Dokan_Product_Addon {
      * @return void
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dokan-pa-style', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/css/main.css', false , DOKAN_PLUGIN_VERSION, 'all' );
-        wp_enqueue_script( 'dokan-pa-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
-        wp_enqueue_script( 'dokan-pa-addons-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/addons.js', array( 'jquery', 'dokan-pa-script' ), DOKAN_PLUGIN_VERSION, true );
-        $params = array(
-            'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce'    => array(
-                'get_addon_options' => wp_create_nonce( 'wc-pao-get-addon-options' ),
-                'get_addon_field'   => wp_create_nonce( 'wc-pao-get-addon-field' ),
-            ),
-            'i18n'     => array(
-                'required_fields'       => __( 'All fields must have a title and/or option name. Please review the settings highlighted in red border.', 'dokan' ),
-                'limit_price_range'         => __( 'Limit price range', 'dokan' ),
-                'limit_quantity_range'      => __( 'Limit quantity range', 'dokan' ),
-                'limit_character_length'    => __( 'Limit character length', 'dokan' ),
-                'restrictions'              => __( 'Restrictions', 'dokan' ),
-                'confirm_remove_addon'      => __( 'Are you sure you want remove this add-on field?', 'dokan' ),
-                'confirm_remove_option'     => __( 'Are you sure you want delete this option?', 'dokan' ),
-                'add_image_swatch'          => __( 'Add Image Swatch', 'dokan' ),
-                'add_image'                 => __( 'Add Image', 'dokan' ),
-            ),
-        );
+        wp_enqueue_style( 'dokan-vsp-style', DOKAN_VSP_DIR_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        wp_enqueue_script( 'dokan-vsp-script', DOKAN_VSP_DIR_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
 
-        wp_localize_script( 'jquery', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
+        $billing_period_strings = WC_Subscriptions_Synchroniser::get_billing_period_ranges();
+
+        $params = [
+            'productType'               => WC_Subscriptions::$name,
+            'trialPeriodSingular'       => wcs_get_available_time_periods(),
+            'trialPeriodPlurals'        => wcs_get_available_time_periods( 'plural' ),
+            'subscriptionLengths'       => wcs_get_subscription_ranges(),
+            'subscriptionLengths'       => wcs_get_subscription_ranges(),
+            'syncOptions'                           => [
+                'week'  => $billing_period_strings['week'],
+                'month' => $billing_period_strings['month'],
+            ]
+        ];
+
+        wp_localize_script( 'jquery', 'dokanVPS', apply_filters( 'wc_vps_params', $params ) );
+    }
+
+    /**
+     * Set subscription html templates directory
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function load_subcription_product_templates( $template_path, $template, $args ) {
+        if ( isset( $args['is_subscription_product'] ) && $args['is_subscription_product'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
+
     }
 
 }
 
-add_action( 'plugins_loaded', 'dokan_pa_load', 30 );
+add_action( 'plugins_loaded', 'dokan_vsp', 30 );
 
-function dokan_pa_load() {
-    $dokan_product_addon = Dokan_Product_Addon::init();
+function dokan_vsp() {
+    $dokan_vsp = Dokan_VSP::init();
 }
 
