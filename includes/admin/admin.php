@@ -879,21 +879,22 @@ class Dokan_Pro_Admin_Settings {
         </span>
 
         <script type="text/javascript">
-            $('#dokan_admin_percentage_type').on('change', function() {
-                if ( 'combine' === $(this).val() ) {
-                    $('span.additional-fee').removeClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-                    $('input[name=dokan_admin_percentage]').attr('required', true);
-                    $('input[name=dokan_admin_additional_fee]').attr('required', true);
-                } else {
-                    $('span.additional-fee').addClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.default_commission_desc );
-                    $('input[name=dokan_admin_percentage]').removeAttr('required');
-                    $('input[name=dokan_admin_additional_fee]').removeAttr('required');
-                }
-            }).trigger('change');
+            ;(function($) {
+                $('#dokan_admin_percentage_type').on('change', function() {
+                    if ( 'combine' === $(this).val() ) {
+                        $('span.additional-fee').removeClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                        $('input[name=dokan_admin_percentage]').attr('required', true);
+                        $('input[name=dokan_admin_additional_fee]').attr('required', true);
+                    } else {
+                        $('span.additional-fee').addClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                        $('input[name=dokan_admin_percentage]').removeAttr('required');
+                        $('input[name=dokan_admin_additional_fee]').removeAttr('required');
+                    }
+                }).trigger('change');
+            })(jQuery);
         </script>
-
         <?php
     }
 

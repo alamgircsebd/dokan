@@ -1265,19 +1265,18 @@ function dokan_add_category_commission_field() {
 
     <script type="text/javascript">
         // admin additional fee
-        $('#per_category_admin_commission_type').on('change', function() {
-            if ( 'combine' === $(this).val() ) {
-                $('span.additional-fee').removeClass('dokan-hide');
-                $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-            } else {
-                $('span.additional-fee').addClass('dokan-hide');
-                $('.combine-commission-description').text( dokan_admin.combine_default_desc );
-            }
-        }).trigger('change');
-
+        ;(function($) {
+            $('#per_category_admin_commission_type').on('change', function() {
+                if ( 'combine' === $(this).val() ) {
+                    $('span.additional-fee').removeClass('dokan-hide');
+                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                } else {
+                    $('span.additional-fee').addClass('dokan-hide');
+                    $('.combine-commission-description').text( dokan_admin.combine_default_desc );
+                }
+            }).trigger('change');
+        })(jQuery);
     </script>
-
-
     <?php
 }
 
@@ -1337,18 +1336,19 @@ function dokan_edit_category_commission_field( $term ) {
 
     <script type="text/javascript">
         // admin additional fee
-        $('#per_category_admin_commission_type').on('change', function() {
-            if ( 'combine' === $(this).val() ) {
-                $('span.additional-fee').removeClass('dokan-hide');
-                $('.combine-commssion-description').text( dokan_admin.combine_commission_desc );
-                $('input[name=per_category_admin_commission]').attr('required', true);
-            } else {
-                $('span.additional-fee').addClass('dokan-hide');
-                $('.combine-commssion-description').text( dokan_admin.default_commission_desc );
-                $('input[name=per_category_admin_commission]').removeAttr('required');
-            }
-        }).trigger('change');
-
+        ;(function($) {
+            $('#per_category_admin_commission_type').on('change', function() {
+                if ( 'combine' === $(this).val() ) {
+                    $('span.additional-fee').removeClass('dokan-hide');
+                    $('.combine-commssion-description').text( dokan_admin.combine_commission_desc );
+                    $('input[name=per_category_admin_commission]').attr('required', true);
+                } else {
+                    $('span.additional-fee').addClass('dokan-hide');
+                    $('.combine-commssion-description').text( dokan_admin.default_commission_desc );
+                    $('input[name=per_category_admin_commission]').removeAttr('required');
+                }
+            }).trigger('change');
+        })(jQuery);
     </script>
     <?php
 }

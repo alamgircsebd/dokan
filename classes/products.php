@@ -300,19 +300,21 @@ class Dokan_Pro_Products {
         </style>
 
         <script type="text/javascript">
-            $('#_per_product_admin_commission_type').on('change', function() {
-                if ( 'combine' === $(this).val() ) {
-                    $('.additional_fee').removeClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-                    $('input[name=_per_product_admin_commission]').attr('required', true);
-                    $('input[name=_per_product_admin_additional_fee]').attr('required', true);
-                } else {
-                    $('.additional_fee').addClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.default_commission_desc );
-                    $('input[name=_per_product_admin_commission]').removeAttr('required');
-                    $('input[name=_per_product_admin_additional_fee]').removeAttr('required');
-                }
-            }).trigger('change');
+            ;(function($) {
+                $('#_per_product_admin_commission_type').on('change', function() {
+                    if ( 'combine' === $(this).val() ) {
+                        $('.additional_fee').removeClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                        $('input[name=_per_product_admin_commission]').attr('required', true);
+                        $('input[name=_per_product_admin_additional_fee]').attr('required', true);
+                    } else {
+                        $('.additional_fee').addClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                        $('input[name=_per_product_admin_commission]').removeAttr('required');
+                        $('input[name=_per_product_admin_additional_fee]').removeAttr('required');
+                    }
+                }).trigger('change');
+            })(jQuery);
         </script>
         <?php
     }
