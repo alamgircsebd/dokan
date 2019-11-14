@@ -98,6 +98,10 @@
                     var titleProps = {
                         style: {
                             borderBottom: '1px solid #eee',
+                            textAlign: 'left',
+                            padding: '14px',
+                            fontSize: '13px',
+                            color: 'rgb(109, 109, 109)',
                         },
                     };
 
@@ -105,6 +109,7 @@
                         style: {
                             borderBottom: '1px solid #eee',
                             textAlign: 'right',
+                            padding: '14px',
                         },
                     };
 
@@ -143,7 +148,11 @@
                     {},
                     el(
                         'td',
-                        {},
+                        {
+                            style: {
+                                padding: '14px 14px 6px',
+                            }
+                        },
                         el(
                             TextControl,
                             {
@@ -186,7 +195,15 @@
                 },
                 el(
                     'table',
-                    {},
+                    {
+                        style: {
+                            borderSpacing: 0,
+                            width: '100%',
+                            borderCollapse: 'separate',
+                            margin: '0 0 10px',
+                            backgroundColor: '#fbfbfb',
+                        }
+                    },
                     el(
                         'tbody',
                         {},
