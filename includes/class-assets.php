@@ -17,10 +17,21 @@ class Dokan_Pro_Assets {
         }
     }
 
+    /**
+     * Enqueue admin scripts
+     *
+     * @return void
+     */
     public function enqueue_admin_scripts() {
+        global $wp_version;
+
         wp_enqueue_style( 'dokan-pro-vue-admin' );
         wp_enqueue_style( 'woocommerce_select2', WC()->plugin_url() . '/assets/css/select2.css', [], WC_VERSION );
         wp_enqueue_script( 'dokan-pro-vue-admin' );
+
+        if ( version_compare( $wp_version, '5.3', '<' ) ) {
+            wp_enqueue_style( 'dokan-pro-wp-version-before-5-3' );
+        }
     }
 
     /**
@@ -140,6 +151,10 @@ class Dokan_Pro_Assets {
             ],
             'dokan-pro-vue-frontend-shipping' => [
                 'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping.css',
+                'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-frontend-shipping.css' ),
+            ],
+            'dokan-pro-wp-version-before-5-3' => [
+                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/wp-version-before-5-3.css',
                 'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-frontend-shipping.css' ),
             ],
         ];

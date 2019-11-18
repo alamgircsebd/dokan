@@ -892,8 +892,6 @@ export default {
     }
 
     .dokan-input {
-        padding: 10px;
-        border-radius: 5px;
         height: 38px;
     }
     .dokan-postbox {
