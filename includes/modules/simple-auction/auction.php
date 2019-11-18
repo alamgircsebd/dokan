@@ -74,9 +74,10 @@ class Dokan_Auction {
         add_filter( 'dokan_email_actions', array( $this, 'register_auction_email_action') );
 
         // send bid email to admin and vendor
-        add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 99, 2 );
+        add_filter( 'woocommerce_email_recipient_bid_note', array( $this, 'send_bid_email' ), 15, 2 );
+        add_filter( 'woocommerce_email_recipient_auction_finished', array( $this, 'send_bid_email' ), 15, 2 );
         add_filter( 'dokan_localized_args', array( $this, 'set_localized_args' ) );
-        add_filter( 'dokan_store_tax_query', [ $this, 'maybe_exclude_auction_product' ] );
+        add_filter( 'pre_get_posts', [ $this, 'maybe_exclude_auction_product' ] );
     }
 
     /**
@@ -505,20 +506,18 @@ class Dokan_Auction {
      * @return string
      */
     public function send_bid_email( $recipient, $object ) {
-        if ( ! $object ) {
-            return;
-        }
-
-        $product_id = $object->get_id();
-
-        if ( empty( $product_id ) ) {
+        if ( ! is_object( $object ) ) {
             return $recipient;
         }
 
-        $vendor_id    = get_post_field( 'post_author', $product_id );
-        $vendor_email = dokan()->vendor->get( $vendor_id )->get_email();
+        $product_id = $object->get_id();
+        $vendor     = dokan_get_vendor_by_product( $product_id );
 
-        return $recipient . ',' . $vendor_email;
+        if ( ! $vendor instanceof Dokan_Vendor || $vendor->get_id() === 0 ) {
+            return $recipient;
+        }
+
+        return $recipient . ',' . $vendor->get_email();
     }
 
     /**
@@ -556,19 +555,48 @@ class Dokan_Auction {
      *
      * @return array
      */
-    public function maybe_exclude_auction_product( $tax_query ) {
-        $show_finished_auctions = get_option( 'simple_auctions_finished_enabled' );
+    public function maybe_exclude_auction_product( $query ) {
+        if ( ! is_admin() && $query->is_main_query() && dokan_is_store_page() ) {
+            $query->set( 'post__not_in', apply_filters( 'dokan_exclude_auction_product', $this->get_ended_auction_products() ) );
+        }
+    }
 
-        if ( 'no' === $show_finished_auctions ) {
-            $tax_query[] = [
-                'taxonomy' => 'product_type',
-                'field'    => 'slug',
-                'terms'    => 'auction',
-                'operator' => 'NOT IN'
-            ];
+    /**
+     * Get ended auction product ids
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function get_ended_auction_products() {
+        if ( 'no' !== get_option( 'simple_auctions_finished_enabled' ) ) {
+            return [];
         }
 
-        return $tax_query;
+        $query_args = [
+            'post_type'          => 'product',
+            'post_status'        => 'publish',
+            'posts_per_page'     => -1,
+            'no_found_rows'      => true,
+            'auction_arhive'     => true,
+            'show_past_auctions' => true,
+            'fields'             => 'ids',
+            'tax_query' => [
+                'taxonomy' => 'product_type',
+                'field'    => 'slug',
+                'terms'    => 'auction'
+            ],
+            'meta_query' => [
+                [
+                    'key'     => '_auction_closed',
+                    'compare' => 'EXISTS'
+                ]
+            ]
+        ];
+
+        $query = new WP_Query( $query_args );
+
+        return apply_filters( 'dokan_get_ended_auction_products', $query->get_posts() );
     }
 
 } // Dokan_Auction
