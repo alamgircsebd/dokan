@@ -1314,16 +1314,16 @@ class Dokan_Product_Importer {
      * @return object
      */
     public function change_product_status( $object, $item ) {
-        $can_publish = get_user_meta( get_current_user_id(), 'dokan_publishing', true );
+        $can_publish    = get_user_meta( get_current_user_id(), 'dokan_publishing', true );
         $product_status = dokan_get_option( 'product_status', 'dokan_selling' );
 
         // if uploading pending product make it pending
-        if ( $object->get_status() == 'draft' ) {
+        if ( 'variation' !== $object->get_type() && 'draft' === $object->get_status() ) {
             $object->set_status( 'pending' );
         }
 
         // if new product status set to pending then make product status to pending
-        if ( $product_status == 'pending' && $can_publish != 'yes' ) {
+        if ( 'variation' !== $object->get_type() && 'pending' === $product_status && 'yes' !== $can_publish ) {
             $object->set_status( 'pending' );
         }
 
