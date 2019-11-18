@@ -624,10 +624,9 @@ function dokan_add_combine_commission( $earning, $commission_rate, $commission_t
             $additional_fee = ( $additional_fee / $item_total ) * $product_price;
         }
 
-        // if earning + additional fee > product price, then vendor will get 100 percent of the product price
         $earning       = ( (float) $product_price * $commission_rate ) / 100;
         $total_earning = $earning + $additional_fee;
-        $earning       = $total_earning > $product_price ? (float) $product_price : (float) $product_price - $total_earning;
+        $earning       = (float) $product_price - $total_earning;
     }
 
     return $earning;

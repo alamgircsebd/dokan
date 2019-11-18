@@ -115,7 +115,7 @@ $count_warranty_product = 0;
         <?php endif ?>
 
         <div class="warranty-form-row">
-            <label for=""><?php _e( 'Tell details about yout problem', 'dokan' ) ?></label>
+            <label for=""><?php _e( 'Tell details about your problem', 'dokan' ) ?></label>
             <textarea name="details" id="warranty_request_details" rows="6"></textarea>
         </div>
 

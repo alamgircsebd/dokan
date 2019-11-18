@@ -40,6 +40,7 @@ class Dokan_Pro_Admin_Settings {
         //save user meta
         add_action( 'dokan_seller_meta_fields_after_admin_commission', [ $this, 'add_additional_fee' ] );
         add_action( 'dokan_process_seller_meta_fields', [ $this, 'save_meta_fields' ] );
+        add_action( 'user_profile_update_errors', [ $this, 'make_combine_commission_fields_mandatory' ], 10, 3 );
     }
 
     /**
@@ -319,6 +320,7 @@ class Dokan_Pro_Admin_Settings {
                         'min'     => '0',
                         'step'    => 'any',
                         'desc'    => __( 'Amount you will get from sales in percentage (10%)', 'dokan' ),
+                        'required' => 'yes'
                     ],
                     'fixed_fee' => [
                         'name'    => 'additional_fee',
@@ -328,6 +330,7 @@ class Dokan_Pro_Admin_Settings {
                         'min'     => '0',
                         'step'    => 'any',
                         'desc'    => __( 'Amount you will get from sales in flat rate(+5)', 'dokan' ),
+                        'required' => 'yes'
                     ]
                 ],
                 'min'     => '0',
@@ -848,6 +851,13 @@ class Dokan_Pro_Admin_Settings {
         return $types;
     }
 
+    /**
+     * Save meta fields
+     *
+     * @param  int $user_id
+     *
+     * @return void
+     */
     public function save_meta_fields( $user_id ) {
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
@@ -868,18 +878,52 @@ class Dokan_Pro_Admin_Settings {
         </span>
 
         <script type="text/javascript">
-            $('#dokan_admin_percentage_type').on('change', function() {
-                if ( 'combine' === $(this).val() ) {
-                    $('span.additional-fee').removeClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-                } else {
-                    $('span.additional-fee').addClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.default_commission_desc );
-                }
-            }).trigger('change');
+            ;(function($) {
+                $('#dokan_admin_percentage_type').on('change', function() {
+                    if ( 'combine' === $(this).val() ) {
+                        $('span.additional-fee').removeClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                        $('input[name=dokan_admin_percentage]').attr('required', true);
+                        $('input[name=dokan_admin_additional_fee]').attr('required', true);
+                    } else {
+                        $('span.additional-fee').addClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                        $('input[name=dokan_admin_percentage]').removeAttr('required');
+                        $('input[name=dokan_admin_additional_fee]').removeAttr('required');
+                    }
+                }).trigger('change');
+            })(jQuery);
         </script>
-
         <?php
+    }
+
+    /**
+     * Make combine commission fields mandatory
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param  WC_Error
+     *
+     * @return void
+     */
+    public function make_combine_commission_fields_mandatory( &$errors, $update, &$user ) {
+        $post = wp_unslash( $_POST );
+
+        if ( empty( $post['dokan_admin_percentage_type'] ) || 'combine' !== $post['dokan_admin_percentage_type'] ) {
+            return;
+        }
+
+        if ( isset( $post['dokan_admin_percentage'] ) && '' === $post['dokan_admin_percentage'] ) {
+            update_user_meta( $user->ID, 'dokan_admin_percentage', '' );
+            update_user_meta( $user->ID, 'dokan_admin_additional_fee', '' );
+            $errors->add( 'required', sprintf( '<strong>%1$s:</strong> %2$s', __( 'Error', 'dokan' ), __( 'Admin percentage commission is required.', 'dokan' ) ) );
+        }
+
+        if ( isset( $post['dokan_admin_additional_fee'] ) && '' === $post['dokan_admin_additional_fee'] ) {
+            update_user_meta( $user->ID, 'dokan_admin_percentage', '' );
+            update_user_meta( $user->ID, 'dokan_admin_additional_fee', '' );
+            $errors->add( 'required', sprintf( '<strong>%1$s:</strong> %2$s', __( 'Error', 'dokan' ), __( 'Admin flat commission is required.', 'dokan' ) ) );
+        }
     }
 }
 
