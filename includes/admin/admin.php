@@ -66,7 +66,6 @@ class Dokan_Pro_Admin_Settings {
         }
 
         if ( current_user_can( $capability ) ) {
-            $submenu[ $slug ][] = array( __( 'Vendors', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/vendors' );
             $submenu[ $slug ][] = array( __( 'Announcements', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/announcement' );
             $submenu[ $slug ][] = array( $refund_text, $capability, 'admin.php?page=' . $slug . '#/refund?status=pending' );
             $submenu[ $slug ][] = array( __( 'Reports', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/reports' );
@@ -363,13 +362,6 @@ class Dokan_Pro_Admin_Settings {
      * @return array
      */
     public function vue_admin_routes( $routes ) {
-
-        $routes[] = array(
-            'path'      => '/vendors',
-            'name'      => 'Vendors',
-            'component' => 'Vendors'
-        );
-
         $routes[] = array(
             'path'      => '/vendors/:id',
             'name'      => 'VendorSingle',

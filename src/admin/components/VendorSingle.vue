@@ -295,15 +295,14 @@
 </template>
 
 <script>
-import UploadImage from 'admin/components/UploadImage.vue';
-import VendorSocialFields from 'admin/components/VendorSocialFields.vue';
-import VendorAccountFields from 'admin/components/VendorAccountFields.vue';
-import VendorPaymentFields from 'admin/components/VendorPaymentFields.vue';
-import VendorAddressFields from 'admin/components/VendorAddressFields.vue';
-
-let ContentLoading = dokan_get_lib('ContentLoading');
-let Modal          = dokan_get_lib('Modal');
-let Currency       = dokan_get_lib('Currency');
+let ContentLoading      = dokan_get_lib('ContentLoading');
+let Modal               = dokan_get_lib('Modal');
+let Currency            = dokan_get_lib('Currency');
+let UploadImage         = dokan_get_lib('UploadImage');
+let VendorAccountFields = dokan_get_lib('VendorAccountFields');
+let VendorPaymentFields = dokan_get_lib('VendorPaymentFields');
+let VendorSocialFields  = dokan_get_lib('VendorSocialFields');
+let VendorAddressFields = dokan_get_lib('VendorAddressFields');
 
 let VclFacebook = ContentLoading.VclFacebook;
 let VclTwitch   = ContentLoading.VclTwitch;
@@ -421,12 +420,16 @@ export default {
         },
 
         getEearningRate() {
-            if ( this.stats.others.commission_type === 'flat' ) {
-                return accounting.formatMoney( this.stats.others.commission_rate );
-            } else if ( this.stats.others.commission_type === 'percentage' ) {
-                return `${this.stats.others.commission_rate}%`;
+            let commissionRate = this.stats.others.commission_rate ? this.stats.others.commission_rate : 0;
+            let additionalFee  = this.stats.others.additional_fee ? this.stats.others.additional_fee : 0;
+            let commissionType = this.stats.others.commission_type;
+
+            if ( commissionType === 'flat' ) {
+                return accounting.formatMoney( commissionRate );
+            } else if ( commissionType === 'percentage' ) {
+                return `${commissionRate}%`;
             } else {
-                return `${(this.stats.others.commission_rate)}% &nbsp; + ${accounting.formatMoney( this.stats.others.additional_fee )}`;
+                return `${(commissionRate)}% &nbsp; + ${accounting.formatMoney( additionalFee )}`;
             }
         },
 
@@ -479,12 +482,12 @@ export default {
             }
 
             // set default bank paymet object if it's not found in the API response
-            if ( 'payment' in response && typeof response.payment.bank === 'undefined' ) {
+            if ( response.payment && typeof response.payment.bank === 'undefined' || typeof response.payment.bank.ac_number === 'undefined' ) {
                 this.store.payment.bank = this.fakeStore.payment.bank;
             }
 
             // set default paypal paymet object if it's not found in the API response
-            if ( 'payment' in response && typeof response.payment.paypal === 'undefined' ) {
+            if ( response.payment && typeof response.payment.paypal === 'undefined' || typeof response.payment.paypal.email === 'undefined' ) {
                 this.store.payment.paypal = this.fakeStore.payment.paypal;
             }
 
@@ -672,6 +675,16 @@ export default {
                     }
                 }
             } );
+
+            $( '#store-categories' ).on( 'select2:unselect', (e) => {
+                let catId = e.params.data.id;
+                self.store.categories.forEach( (cat, index) => {
+                    if ( parseInt( cat.id ) === parseInt( catId ) ) {
+                        $( `#store-categories option[value=${catId}]` ).remove();
+                        self.store.categories.splice( index, 1 );
+                    }
+                });
+            });
         },
 
         async editCategory() {

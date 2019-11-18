@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.14';
+    public $version = '2.9.15';
 
     /**
      * Constructor for the Dokan_Pro class

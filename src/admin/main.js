@@ -1,4 +1,4 @@
-import Vendors from 'admin/components/Vendors.vue'
+import VendorPro from 'admin/components/VendorPro.vue'
 import VendorSingle from 'admin/components/VendorSingle.vue'
 import StoreCategoriesIndex from 'admin/components/StoreCategoriesIndex.vue'
 import StoreCategoriesShow from 'admin/components/StoreCategoriesShow.vue'
@@ -10,7 +10,6 @@ import Refund from 'admin/components/Refund.vue'
 import Tools from 'admin/components/Tools.vue'
 import Reports from 'admin/components/Reports.vue'
 
-dokan_add_route(Vendors)
 dokan_add_route(VendorSingle)
 dokan_add_route(StoreCategoriesIndex)
 dokan_add_route(StoreCategoriesShow)
@@ -21,3 +20,5 @@ dokan_add_route(EditAnnouncement)
 dokan_add_route(Refund)
 dokan_add_route(Tools)
 dokan_add_route(Reports)
+
+dokan.addFilterComponent('getDokanVendorHeaderArea', 'dokanVendor', VendorPro );
