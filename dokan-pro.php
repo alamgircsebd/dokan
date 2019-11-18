@@ -271,6 +271,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/email-verification.php';
 
         require_once DOKAN_PRO_INC . '/class-assets.php';
+        require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
 
         if ( !function_exists( 'dokan_pro_get_active_modules' ) ) {
             require_once dirname( __FILE__ ) . '/includes/modules.php';
@@ -356,6 +357,10 @@ class Dokan_Pro {
         add_action( 'dokan_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
         add_action( 'dokan_enqueue_admin_scripts', array( $this, 'admin_enqueue_scripts' ) );
         add_action( 'dokan_enqueue_admin_dashboard_script', array( $this, 'admin_dashboad_enqueue_scripts' ) );
+
+        if ( function_exists( 'register_block_type' ) ) {
+            new Dokan_Pro_Block_Editor_Block_Types();
+        }
     }
 
     /**
