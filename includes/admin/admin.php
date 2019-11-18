@@ -101,13 +101,20 @@ class Dokan_Pro_Admin_Settings {
      * @return array
      */
     public function add_settings_general_vendor_store_options( $settings_fields ) {
-        $settings_fields['enable_tc_on_reg'] = array(
+        $settings_fields['enable_tc_on_reg'] = [
             'name'    => 'enable_tc_on_reg',
             'label'   => __( 'Enable Terms and Condition', 'dokan' ),
             'desc'    => __( 'Enable Terms and Condition check on registration form', 'dokan' ),
             'type'    => 'checkbox',
             'default' => 'on'
-        );
+        ];
+        $settings_fields['enable_single_seller_mode'] = [
+            'name'    => 'enable_single_seller_mode',
+            'label'   => __( 'Enable Single Seller Mode', 'dokan' ),
+            'desc'    => __( 'Enable single seller mode', 'dokan' ),
+            'type'    => 'checkbox',
+            'default' => 'off'
+        ];
 
         return $settings_fields;
     }

@@ -1573,3 +1573,92 @@ function dokan_override_variation_product_author( $variation_id ) {
 }
 
 add_action( 'woocommerce_save_product_variation', 'dokan_override_variation_product_author' );
+
+/**
+ * Dokan enabble single seller mode
+ *
+ * @since  DOKAN_PRO_SINCE
+ *
+ * @param  bool $valid
+ * @param  int $product_id
+ *
+ * @return bool
+ */
+function dokan_validate_cart_for_single_seller_mode( $valid, $product_id ) {
+    $is_single_seller_mode = apply_filters( 'dokan_signle_seller_mode', dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) );
+
+    if ( ! dokan_validate_boolean( $is_single_seller_mode ) ) {
+        return $valid;
+    }
+
+    $products              = WC()->cart->get_cart();
+    $products[$product_id] = ['product_id' => $product_id];
+
+    if ( ! $products ) {
+        return $valid;
+    }
+
+    $vendors = [];
+
+    foreach ( $products as $key => $data ) {
+        $product_id = isset( $data['product_id'] ) ? $data['product_id'] : 0;
+        $vendor     = dokan_get_vendor_by_product( $product_id );
+        $vendor_id  = $vendor && $vendor->get_id() ? $vendor->get_id() : 0;
+
+        if ( ! $vendor_id ) {
+            continue;
+        }
+
+        if ( ! in_array( $vendor_id, $vendors ) ) {
+            array_push( $vendors, $vendor_id );
+        }
+    }
+
+    if ( count( $vendors ) > 1 ) {
+        wc_add_notice( __( 'Sorry, you can\'t add more than one vendor\'s product in the cart.', 'dokan' ), 'error' );
+        $valid = false;
+    }
+
+    return $valid;
+}
+
+add_filter( 'woocommerce_add_to_cart_validation', 'dokan_validate_cart_for_single_seller_mode', 10, 2 );
+
+/**
+ * Dokan rest validate single seller mode
+ *
+ * @since  DOKAN_PRO_SINCE
+ *
+ * @param  WC_Order $order
+ * @param  WP_REST_Request
+ * @param  bool $creating
+ *
+ * @return WC_Order|WP_REST_Response on failure
+ */
+function dokan_rest_validate_single_seller_mode( $order, $request, $creating ) {
+    if ( ! $creating ) {
+        return $order;
+    }
+
+    $is_single_seller_mode = apply_filters( 'dokan_signle_seller_mode', dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) );
+
+    if ( ! dokan_validate_boolean( $is_single_seller_mode ) ) {
+        return $order;
+    }
+
+    if ( $order->get_meta( 'has_sub_order' ) ) {
+        return rest_ensure_response(
+            new WP_Error(
+                'dokan_single_seller_mode',
+                __( 'Sorry, you can\'t purchase from multiple vendors at once.', 'dokan' ),
+                [
+                    'status' => 403
+                ]
+            )
+        );
+    }
+
+    return $order;
+}
+
+add_filter( 'woocommerce_rest_pre_insert_shop_order_object', 'dokan_rest_validate_single_seller_mode', 15, 3 );
