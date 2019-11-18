@@ -716,13 +716,3 @@ function dokan_rma_generate_coupon_code() {
 
     return $code;
 }
-
-
-
-
-
-
-
-
-
-
