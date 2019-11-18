@@ -38,6 +38,11 @@ trait Dokan_RMA_Common {
 
         foreach ( $product_ids as $key => $product_id ) {
             $product = wc_get_product( $product_id );
+
+            if ( ! $product ) {
+                continue;
+            }
+
             $items[] = [
                 'id'        => $product->get_id(),
                 'title'     => $product->get_title(),
