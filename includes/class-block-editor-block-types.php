@@ -40,6 +40,12 @@ class Dokan_Pro_Block_Editor_Block_Types {
      * @return void
      */
     public function register_scripts() {
+        $screen = get_current_screen();
+
+        if ( 'page' !== $screen->post_type ) {
+            return;
+        }
+
         $version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
 
         wp_register_script(
