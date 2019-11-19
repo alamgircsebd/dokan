@@ -100,7 +100,7 @@ class Helper {
      *
      * @return boolean
      */
-    public function is_active() {
+    public static function is_active() {
         $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
 
         if ( empty( $settings['enabled'] ) || 'yes' !== $settings['enabled'] ) {

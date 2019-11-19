@@ -1318,7 +1318,7 @@ function dokan_edit_category_commission_field( $term ) {
             <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
             <span class="additional-fee dokan-hide">
                 <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-                <input type="number" required="required" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+                <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
             </span>
 
             <p class="combine-commssion-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ) ?></p>
@@ -1342,10 +1342,12 @@ function dokan_edit_category_commission_field( $term ) {
                     $('span.additional-fee').removeClass('dokan-hide');
                     $('.combine-commssion-description').text( dokan_admin.combine_commission_desc );
                     $('input[name=per_category_admin_commission]').attr('required', true);
+                    $('input[name=per_category_admin_additional_fee]').attr('required', true);
                 } else {
                     $('span.additional-fee').addClass('dokan-hide');
                     $('.combine-commssion-description').text( dokan_admin.default_commission_desc );
                     $('input[name=per_category_admin_commission]').removeAttr('required');
+                    $('input[name=per_category_admin_additional_fee]').removeAttr('required');
                 }
             }).trigger('change');
         })(jQuery);
