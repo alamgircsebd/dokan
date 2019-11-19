@@ -21,12 +21,21 @@ class Dokan_WC_Bookings_Calendar {
         if ( $view == 'day' ) {
             $day = isset( $_REQUEST['calendar_day'] ) ? wc_clean( $_REQUEST['calendar_day'] ) : date( 'Y-m-d' );
 
-            $this->bookings = WC_Booking_Data_Store::get_bookings_in_date_range(
-                strtotime( 'midnight', strtotime( $day ) ),
-                strtotime( 'midnight +1 day -1 min', strtotime( $day ) ),
-                $product_filter,
-                false
-            );
+            if ( version_compare( WC_BOOKINGS_VERSION, '1.15.0', '>=' ) ) {
+                $this->bookings = WC_Booking_Data_Store::get_bookings_in_date_range(
+                    strtotime( 'midnight', strtotime( $day ) ),
+                    strtotime( 'midnight +1 day -1 min', strtotime( $day ) ),
+                    $product_filter,
+                    false
+                );
+            } else {
+                $this->bookings = WC_Bookings_Controller::get_bookings_in_date_range(
+                    strtotime( 'midnight', strtotime( $day ) ),
+                    strtotime( 'midnight +1 day -1 min', strtotime( $day ) ),
+                    $product_filter,
+                    false
+                );
+            }
         } else {
             $month = isset( $_REQUEST['calendar_month'] ) ? absint( $_REQUEST['calendar_month'] ) : date( 'n' );
             $year  = isset( $_REQUEST['calendar_year'] ) ? absint( $_REQUEST['calendar_year'] ) : date( 'Y' );
@@ -64,12 +73,21 @@ class Dokan_WC_Bookings_Calendar {
             $start_timestamp = strtotime( "-{$day_offset} day", strtotime( "$year-$month-01" ) );
             $end_timestamp   = strtotime( "+{$end_day_offset} day midnight -1 min", strtotime( "$year-$month-$last_day" ) );
 
-            $this->bookings  = WC_Booking_Data_Store::get_bookings_in_date_range(
-                $start_timestamp,
-                $end_timestamp,
-                $product_filter,
-                false
-            );
+            if ( version_compare( WC_BOOKINGS_VERSION, '1.15.0', '>=' ) ) {
+                $this->bookings = WC_Booking_Data_Store::get_bookings_in_date_range(
+                    $start_timestamp,
+                    $end_timestamp,
+                    $product_filter,
+                    false
+                );
+            } else {
+                $this->bookings = WC_Bookings_Controller::get_bookings_in_date_range(
+                    $start_timestamp,
+                    $end_timestamp,
+                    $product_filter,
+                    false
+                );
+            }
         }
 
         include DOKAN_WC_BOOKING_DIR.( '/templates/booking/calendar/html-calendar-' . $view . '.php' );
