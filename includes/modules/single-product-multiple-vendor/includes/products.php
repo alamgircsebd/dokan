@@ -449,7 +449,12 @@ class Dokan_SPMV_Products {
 
                     <?php foreach ( $lists as $key => $list ): ?>
                         <?php
-                            $product_obj    = wc_get_product( $list->product_id );
+                            $product_obj = wc_get_product( $list->product_id );
+
+                            if ( ! $product_obj ) {
+                                continue;
+                            }
+
                             $post_author_id = get_post_field( 'post_author', $product_obj->get_id() );
                             $seller_info    = dokan_get_store_info( $post_author_id );
                             $rating_count   = $product_obj->get_rating_count();

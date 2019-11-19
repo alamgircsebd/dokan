@@ -160,7 +160,7 @@ class Dokan_Store_Reviews {
             'labels'            => $labels,
             'supports'          => array( 'title', 'author', 'editor' ),
             'hierarchical'      => false,
-            'public'            => false,
+            'public'            => true,
             'publicly_queryable' => true,
             'show_in_menu'      => false,
             'show_in_rest'      => true,

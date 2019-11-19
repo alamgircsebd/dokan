@@ -438,37 +438,6 @@ if ( !function_exists( 'dokan_render_customer_migration_template' ) ) {
 
 add_shortcode( 'dokan-customer-migration', 'dokan_render_customer_migration_template' );
 
-if ( ! function_exists( 'dokan_get_seller_status_count' ) ) {
-    /**
-     * Get Seller status counts, used in admin area
-     *
-     * @since 2.6.6
-     *
-     * @global WPDB $wpdb
-     * @return array
-     */
-    function dokan_get_seller_status_count() {
-        $active_users = new WP_User_Query( array(
-            'role'       => 'seller',
-            'meta_key'   => 'dokan_enable_selling',
-            'meta_value' => 'yes',
-            'fields'     => 'ID'
-        ) );
-
-        $all_users      = new WP_User_Query( array( 'role' => 'seller', 'fields' => 'ID' ) );
-        $active_count   = $active_users->get_total();
-        $inactive_count = $all_users->get_total() - $active_count;
-
-        $counts =  array(
-            'total'    => $active_count + $inactive_count,
-            'active'   => $active_count,
-            'inactive' => $inactive_count,
-        );
-
-        return $counts;
-    }
-}
-
 /**
  * Send announcement email
  *
@@ -655,10 +624,9 @@ function dokan_add_combine_commission( $earning, $commission_rate, $commission_t
             $additional_fee = ( $additional_fee / $item_total ) * $product_price;
         }
 
-        // if earning + additional fee > product price, then vendor will get 100 percent of the product price
         $earning       = ( (float) $product_price * $commission_rate ) / 100;
         $total_earning = $earning + $additional_fee;
-        $earning       = $total_earning > $product_price ? (float) $product_price : (float) $product_price - $total_earning;
+        $earning       = (float) $product_price - $total_earning;
     }
 
     return $earning;

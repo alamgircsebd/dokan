@@ -158,7 +158,9 @@ module.exports = function(grunt) {
                     '<%= dirs.js %>/dokan-pro.js': [
                         '<%= dirs.devJsSrc %>/*.js',
                         '!<%= dirs.devJsSrc %>/admin.js',
+                        '!<%= dirs.devJsSrc %>/dokan-blocks-editor-script.js',
                     ],
+                    '<%= dirs.js %>/dokan-blocks-editor-script.js': '<%= dirs.devJsSrc %>/dokan-blocks-editor-script.js'
                 },
             },
 

@@ -28,13 +28,14 @@ class Helper {
      * @return boolean
      */
     public static function is_3d_secure_enabled() {
-        $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+        $settings   = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+        $is_enabled = true;
 
         if ( empty( $settings['enable_3d_secure'] ) || 'yes' !== $settings['enable_3d_secure'] ) {
-            return false;
+            $is_enabled = false;
         }
 
-        return true;
+        return apply_filters( 'dokan_is_3d_secure_enabled', $is_enabled );
     }
 
     /**
@@ -90,5 +91,22 @@ class Helper {
      */
     public static function set_api_version() {
         \Stripe\Stripe::setApiVersion( '2019-05-16' );
+    }
+
+    /**
+     * Is stripe active
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public static function is_active() {
+        $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+
+        if ( empty( $settings['enabled'] ) || 'yes' !== $settings['enabled'] ) {
+            return false;
+        }
+
+        return true;
     }
 }

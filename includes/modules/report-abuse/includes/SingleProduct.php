@@ -44,6 +44,7 @@ class SingleProduct {
         if ( is_product() ) {
             $product = wc_get_product();
 
+            wp_enqueue_style( 'dokan-magnific-popup' );
             wp_enqueue_script( 'dokan-report-abuse', DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse.js', [ 'jquery', 'dokan-login-form-popup' ], DOKAN_PRO_PLUGIN_VERSION, true );
 
             $options = get_option( 'dokan_report_abuse', [] );

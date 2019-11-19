@@ -104,9 +104,8 @@ global $post;
                             $product_query->the_post();
 
                             $tr_class = ($post->post_status == 'pending' ) ? ' class="danger"' : '';
-                            $product = dokan_wc_get_product( $post->ID );
-
-                            $edit_url = dokan_get_navigation_url( 'booking' ).'edit/?product_id=' . $post->ID;
+                            $product  = dokan_wc_get_product( $post->ID );
+                            $edit_url = dokan_edit_product_url( $product );
                             ?>
                             <tr<?php echo $tr_class; ?>>
                             <td>
@@ -132,7 +131,7 @@ global $post;
                                     <?php
                                     }
                                     ?>
-                                   
+
                                     <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                 </div>
                             </td>

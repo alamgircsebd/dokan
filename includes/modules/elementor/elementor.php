@@ -240,14 +240,52 @@ final class DokanElementor {
      */
     public function get_social_networks_map() {
         $map = [
-            'fb'        => 'fa fa-facebook',
-            'gplus'     => 'fa fa-google-plus',
-            'twitter'   => 'fa fa-twitter',
-            'pinterest' => 'fa fa-pinterest',
-            'linkedin'  => 'fa fa-linkedin',
-            'youtube'   => 'fa fa-youtube',
-            'instagram' => 'fa fa-instagram',
-            'flickr'    => 'fa fa-flickr',
+            'fb'        => [
+                'fa fa-facebook',
+                'fab fa-facebook-square',
+                'fab fa-facebook',
+                'fab fa-facebook-f',
+                'fab fa-facebook-messenger',
+            ],
+            'gplus'     => [
+                'fa fa-google-plus',
+                'fab fa-google-plus-square',
+                'fab fa-google-plus-g',
+                'fab fa-google',
+                'fab fa-google-wallet',
+                'fab fa-google-plus',
+                'fab fa-google-drive',
+                'fab fa-google-play',
+            ],
+            'twitter'   => [
+                'fa fa-twitter',
+                'fab fa-twitter-square',
+                'fab fa-twitter',
+            ],
+            'pinterest' => [
+                'fa fa-pinterest',
+                'fab fa-pinterest',
+                'fab fa-pinterest-square',
+                'fab fa-pinterest-p',
+            ],
+            'linkedin'  => [
+                'fa fa-linkedin',
+                'fab fa-linkedin',
+                'fab fa-linkedin-in',
+            ],
+            'youtube'   => [
+                'fa fa-youtube',
+                'fab fa-youtube',
+                'fab fa-youtube-square',
+            ],
+            'instagram' => [
+                'fa fa-instagram',
+                'fab fa-instagram',
+            ],
+            'flickr'    => [
+                'fa fa-flickr',
+                'fab fa-flickr',
+            ],
         ];
 
         return apply_filters( 'dokan_elementor_social_network_map', $map );

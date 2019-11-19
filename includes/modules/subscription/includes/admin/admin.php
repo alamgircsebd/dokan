@@ -149,15 +149,17 @@ class DPS_Admin {
         </style>
 
         <script type="text/javascript">
-            $('#_subscription_product_admin_commission_type').on('change', function() {
-                if ( 'combine' === $(this).val() ) {
-                    $('.subscription_additional_fee').removeClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
-                } else {
-                    $('.subscription_additional_fee').addClass('dokan-hide');
-                    $('.combine-commission-description').text( dokan_admin.default_commission_desc );
-                }
-            }).trigger('change');
+            ;(function($) {
+                $('#_subscription_product_admin_commission_type').on('change', function() {
+                    if ( 'combine' === $(this).val() ) {
+                        $('.subscription_additional_fee').removeClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                    } else {
+                        $('.subscription_additional_fee').addClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                    }
+                }).trigger('change');
+            })(jQuery);
         </script>
 
         <?php

@@ -89,9 +89,9 @@ class Dokan_Geolocation_Vendor_Query {
 
         $this->user_query = $user_query;
 
-        $this->latitude  = get_query_var( 'latitude' );
-        $this->longitude = get_query_var( 'longitude' );
-        $this->distance  = get_query_var( 'distance', 0 );
+        $this->latitude  = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
+        $this->longitude = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
+        $this->distance  = isset( $_GET['distance'] ) ? $_GET['distance'] : 0;
 
         $this->filter_query_fields();
         $this->filter_query_from();

@@ -35,6 +35,11 @@
                     <td class="order-number">
                         <?php
                             $order = wc_get_order( $request['order_id'] );
+
+                            if ( ! $order ) {
+                                continue;
+                            }
+
                             echo sprintf( '<a href="%s">#%s</a> on <a href="%s">Order #%s</a>', esc_url( wc_get_account_endpoint_url( 'view-rma-requests' ) ) . $request['id'], $request['id'], $order->get_view_order_url(), $order->get_order_number() );
                         ?>
                     </td>

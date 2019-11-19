@@ -41,18 +41,20 @@ class Dokan_Pro_Reports {
         }
 
         if ( isset( $_GET['dokan_statement_export_all'] ) ) {
-            $start_date = date( 'Y-m-01', current_time('timestamp') );
-            $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+            $start_date = date( 'Y-m-01', current_time( 'timestamp' ) );
+            $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
             if ( isset( $_GET['start_date'] ) ) {
-                $start_date = $_GET['start_date'];
+                $start_date = date( 'Y-m-d', strtotime( $_GET['start_date'] ) );
             }
 
             if ( isset( $_GET['end_date'] ) ) {
-                $end_date = $_GET['end_date'];
+                $end_date = date( 'Y-m-d', strtotime( $_GET['end_date'] ) );
             }
 
-            $filename = "Statement-".date( 'Y-m-d',time() );
+            $date_format = get_option( 'date_format', 'Y-m-d' );
+            $filename    = "Statement-" . date( 'Y-m-d' );
+
             header( "Content-Type: application/csv; charset=" . get_option( 'blog_charset' ) );
             header( "Content-Disposition: attachment; filename=$filename.csv" );
             $currency = get_woocommerce_currency_symbol();
@@ -67,27 +69,26 @@ class Dokan_Pro_Reports {
             );
 
             foreach ( (array)$headers as $label ) {
-                echo $label .', ';
+                echo '"' . $label . '"' .', ';
             }
 
             echo "\r\n";
 
-            //calculate opening balance
             global $wpdb;
-            $vendor = dokan()->vendor->get( dokan_get_current_user_id() );
+            $vendor          = dokan()->vendor->get( dokan_get_current_user_id() );
             $opening_balance = $vendor->get_balance( false, date( 'Y-m-d', strtotime( $start_date . ' -1 days' ) ) );
-            $status = implode( "', '", dokan_withdraw_get_active_order_status() );
+            $status          = implode( "', '", dokan_withdraw_get_active_order_status() );
 
-            $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE( trn_date ) >= %s AND DATE(trn_date) <= %s AND ( ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ) ORDER BY trn_date";
+            $sql        = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE( trn_date ) >= %s AND DATE(trn_date) <= %s AND ( ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ) ORDER BY trn_date";
             $statements = $wpdb->get_results( $wpdb->prepare( $sql, $vendor->id, $start_date, $end_date ) );
 
-            echo $start_date . ', ';
-            echo '--' . ', ';
-            echo '#' .'--' . ', ';
-            echo 'Opening Balance' . ', ';
-            echo '--' . ', ';
-            echo '--' . ', ';
-            echo $opening_balance . ', ';
+            echo '"' . date( $date_format, strtotime( $start_date ) ) . '"' . ', ';
+            echo '"' . '--' . '"' . ', ';
+            echo '"' . '--' . '"' . ', ';
+            echo '"' . __( 'Opening Balance', 'dokan' ) . '"' . ', ';
+            echo '"' . '--' . '"' . ', ';
+            echo '"' . '--' . '"' . ', ';
+            echo '"' . $opening_balance . '"' . ', ';
             echo "\r\n";
 
             $balance = $opening_balance;
@@ -109,13 +110,13 @@ class Dokan_Pro_Reports {
                         break;
                 }
 
-                echo date( 'Y-m-d', strtotime( $statement->trn_date ) ) . ', ';
-                echo date( 'Y-m-d', strtotime( $statement->balance_date ) ) . ', ';
-                echo '#' . $statement->trn_id . ', ';
-                echo $type . ', ';
-                echo $statement->debit . ', ';
-                echo $statement->credit . ', ';
-                echo $balance . ', ';
+                echo '"' . date( $date_format, strtotime( $statement->trn_date ) ) . '"' . ', ';
+                echo '"' . date( $date_format, strtotime( $statement->balance_date ) ) . '"' . ', ';
+                echo '"' . '#' . $statement->trn_id . '"' . ', ';
+                echo '"' . $type . '"' . ', ';
+                echo '"' . $statement->debit . '"' . ', ';
+                echo '"' . $statement->credit . '"' . ', ';
+                echo '"' . $balance . '"' . ', ';
 
                 echo "\r\n";
             }

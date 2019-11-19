@@ -106,7 +106,7 @@ class Dokan_Seller_Verification {
         $this->config = $this->get_provider_config();
 
         add_action( 'init', array( $this, 'init_session' ) );
-        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ), 99 );
+        add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ) );
 
         // widget
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
@@ -335,8 +335,11 @@ class Dokan_Seller_Verification {
             $seller_profile = dokan_get_store_info( $vendor_id );
             $provider_dc    = sanitize_text_field( $_GET['dokan_auth_dc'] );
 
-            $seller_profile['dokan_verification'][$provider_dc] = '';
+            $hybridauth = new Hybridauth( $this->config );
+            $adapter    = $hybridauth->getAdapter( $provider_dc );
+            $adapter->disconnect();
 
+            $seller_profile['dokan_verification'][$provider_dc] = '';
             update_user_meta( $vendor_id, 'dokan_profile_settings', $seller_profile );
             return;
         }
@@ -379,14 +382,15 @@ class Dokan_Seller_Verification {
 
             if ( ! $user_profile ) {
                 wc_add_notice( __( 'Something went wrong! please try again', 'dokan' ), 'success' );
-                wp_redirect( $this->callback );
+                wp_redirect( $this->base_url );
             }
 
             $seller_profile = dokan_get_store_info( $vendor_id );
             $seller_profile['dokan_verification'][$provider] = (array) $user_profile;
 
             update_user_meta( $vendor_id, 'dokan_profile_settings', $seller_profile );
-
+            wp_redirect( $this->base_url );
+            exit;
         } catch ( Exception $e ) {
             $this->e_msg = $e->getMessage();
         }
