@@ -614,7 +614,7 @@ export default {
         },
 
         getDefaultPic() {
-            return dokan.urls.proAssetsUrl + '/images/store-pic.png';
+            return dokan.urls.assetsUrl + '/images/store-pic.png';
         },
 
         updateCommissonRate() {
