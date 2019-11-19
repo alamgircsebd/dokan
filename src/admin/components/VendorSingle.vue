@@ -619,6 +619,7 @@ export default {
 
         updateCommissonRate() {
             this.stats.others.commission_rate = this.store.admin_commission;
+            this.stats.others.additional_fee = this.store.admin_additional_fee;
             this.stats.others.commission_type = this.store.admin_commission_type;
         },
 
