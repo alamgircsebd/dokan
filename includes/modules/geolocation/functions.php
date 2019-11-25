@@ -104,13 +104,13 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
 
     $s             = get_query_var( 's', '' );
     $seller_s      = $search_query = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
-    $latitude      = get_query_var( 'latitude', null );
-    $longitude     = get_query_var( 'longitude', null );
-    $address       = get_query_var( 'address', '' );
+    $latitude      = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
+    $longitude     = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
+    $address       = isset( $_GET['address'] ) ? $_GET['address'] : '';
     $distance_min  = dokan_get_option( 'distance_min', 'dokan_geolocation', 0 );
     $distance_max  = dokan_get_option( 'distance_max', 'dokan_geolocation', 10 );
     $distance_unit = dokan_get_option( 'distance_unit', 'dokan_geolocation', 'km' );
-    $distance      = get_query_var( 'distance', $distance_max );
+    $distance      = isset( $_GET['distance'] ) ? $_GET['distance'] : $distance_max;
 
     /**
      * wc_product_dropdown_categories argument filter

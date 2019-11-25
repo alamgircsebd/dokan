@@ -370,7 +370,7 @@ class Dokan_Shipping_Zone {
 
         // if multiple zone_id is found, then get spcecefic zone_id by postcode
         if ( count( $zone_id ) > 1 ) {
-            $vendor_zone_id = self::get_zone_id_by_postcode( $postcode );
+            $vendor_zone_id = self::get_zone_id_by_postcode( $postcode, $vendor_id );
 
             if ( $vendor_zone_id ) {
                 $zone_id = $vendor_zone_id;
@@ -439,14 +439,15 @@ class Dokan_Shipping_Zone {
      * @since  2.9.14
      *
      * @param  int $postcode
+     * @param  int $vendor_id
      *
      * @return int
      */
-    public static function get_zone_id_by_postcode( $postcode ) {
+    public static function get_zone_id_by_postcode( $postcode, $vendor_id ) {
         global $wpdb;
 
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_locations";
-        $zone_id    = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$table_name} WHERE location_code=%d AND location_type=%s", $postcode, 'postcode' ) );
+        $zone_id    = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$table_name} WHERE location_code=%d AND location_type=%s AND seller_id=%d", $postcode, 'postcode', $vendor_id ) );
 
         return $zone_id;
     }

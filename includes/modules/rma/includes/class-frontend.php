@@ -122,8 +122,13 @@ class Dokan_RMA_Frontend {
             $warranty_index = $item_data['dokan_warranty_index'];
         }
 
-        $product_id = ( version_compare( WC_VERSION, '3.0', '<' ) && isset( $_product->variation_id ) ) ? $_product->variation_id : $_product->get_id();
-        $warranty   = $this->get_settings( $product_id );
+        $product_id = $_product->get_id();
+
+        if ( $_product->get_parent_id() ) {
+            $product_id = $_product->get_parent_id();
+        }
+
+        $warranty = $this->get_settings( $product_id );
 
         if ( $warranty ) {
             if ( $warranty['type'] == 'addon_warranty' && $warranty_index !== false ) {

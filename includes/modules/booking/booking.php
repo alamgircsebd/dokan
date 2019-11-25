@@ -335,6 +335,7 @@ class Dokan_WC_Booking {
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_booking_page' ), 11, 1 );
         add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin' ) );
         add_filter( 'dokan_query_var_filter', array( $this, 'register_booking_queryvar' ) );
+        add_filter( 'dokan_get_edit_product_url', array( $this, 'booking_edit_product_url' ), 10, 2 );
         add_filter( 'dokan_add_new_product_redirect', array( $this, 'set_redirect_url' ), 10, 2 );
         add_filter( 'dokan_product_listing_exclude_type', array( $this, 'exclude_booking_type_from_product_listing' ) );
 
@@ -1190,6 +1191,31 @@ class Dokan_WC_Booking {
         $types['booking_person'] = __( 'Booking Person Discount (Amount Off Per Person)', 'dokan' );
 
         return $types;
+    }
+
+    /**
+     * Get booking product edit url
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param  string $url
+     * @param  WC_Product
+     *
+     * @return string
+     */
+    public function booking_edit_product_url( $url, $product ) {
+        if ( 'booking' !== $product->get_type() ) {
+            return $url;
+        }
+
+        $url = add_query_arg(
+            [
+                'product_id' => $product->get_id()
+            ],
+            dokan_get_navigation_url( 'booking' ) . 'edit/'
+        );
+
+        return $url;
     }
 }
 

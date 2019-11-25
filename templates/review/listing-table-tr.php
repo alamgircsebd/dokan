@@ -32,7 +32,7 @@
 
         <div class="dokan-comments-content"><?php echo $comment->comment_content; ?></div>
 
-        <?php if ( current_user_can( 'dokan_manage_reviews' ) && dokan_get_option( 'seller_review_manage', 'dokan_general', 'on' ) == 'on' ): ?>
+        <?php if ( current_user_can( 'dokan_manage_reviews' ) && dokan_get_option( 'seller_review_manage', 'dokan_selling', 'on' ) == 'on' ): ?>
             <ul class="dokan-cmt-row-actions">
                 <?php
                 if ( $page_status == '0' ) {

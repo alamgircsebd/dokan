@@ -3,7 +3,7 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.9.14
+  Version: 2.9.15
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.14';
+    public $version = '2.9.15';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -271,6 +271,7 @@ class Dokan_Pro {
         require_once DOKAN_PRO_CLASS . '/email-verification.php';
 
         require_once DOKAN_PRO_INC . '/class-assets.php';
+        require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
 
         if ( !function_exists( 'dokan_pro_get_active_modules' ) ) {
             require_once dirname( __FILE__ ) . '/includes/modules.php';
@@ -356,6 +357,10 @@ class Dokan_Pro {
         add_action( 'dokan_enqueue_scripts', array( $this, 'enqueue_scripts' ), 11 );
         add_action( 'dokan_enqueue_admin_scripts', array( $this, 'admin_enqueue_scripts' ) );
         add_action( 'dokan_enqueue_admin_dashboard_script', array( $this, 'admin_dashboad_enqueue_scripts' ) );
+
+        if ( function_exists( 'register_block_type' ) ) {
+            new Dokan_Pro_Block_Editor_Block_Types();
+        }
     }
 
     /**

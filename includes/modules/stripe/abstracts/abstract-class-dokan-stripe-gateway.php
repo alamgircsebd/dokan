@@ -83,7 +83,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $this->publishable_key  = $this->testmode == 'no' ? $this->settings['publishable_key'] : $this->settings['test_publishable_key'];
         $this->saved_cards      = $this->settings['saved_cards'] === "yes" ? true : false;
         $this->checkout_locale  = $this->get_option( 'stripe_checkout_locale' );
-        $this->accept_bitcoin   = ( 'USD' === strtoupper( get_woocommerce_currency() ) && 'yes' === $this->get_option( 'stripe_bitcoin' ) ) ? true : false;
         $this->currency         = strtolower( get_woocommerce_currency() );
         $this->checkout_image   = $this->get_option( 'stripe_checkout_image' );
         $this->checkout_label   = $this->get_option( 'stripe_checkout_label' );
@@ -267,14 +266,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                     'es'   => __( 'Spanish', 'dokan' ),
                     'sv'   => __( 'Swedish', 'dokan' ),
                 ),
-            ),
-            'stripe_bitcoin' => array(
-                'title'       => __( 'Bitcoin Currency', 'dokan' ),
-                'label'       => __( 'Enable Bitcoin Currency in Stripe Checkout', 'dokan' ),
-                'type'        => 'checkbox',
-                'description' => __( 'If enabled, an option to accept bitcoin will show on the checkout modal. Note: Stripe Checkout needs to be enabled and store currency must be set to USD.', 'dokan' ),
-                'default'     => 'no',
-                'desc_tip'    => true,
             ),
             'stripe_checkout_image' => array(
                 'title'       => __( 'Checkout Image', 'dokan' ),
@@ -551,7 +542,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             'description'          => get_bloginfo ( 'description' ),
             'label'                => sprintf( __( '%s', 'dokan') , $this->checkout_label ),
             'locale'               => $this->checkout_locale,
-            'bitcoin'              => $this->accept_bitcoin ? 'true' : 'false',
             'image'                => $this->checkout_image,
             'i18n_terms'           => __( 'Please accept the terms and conditions first', 'dokan' ),
             'i18n_required_fields' => __( 'Please fill in required checkout fields first', 'dokan' ),
@@ -1059,7 +1049,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @param string $fragment
      */
     public function set_payment_intent_data( $fragment ) {
-        if ( ! Stripe_Helper::is_3d_secure_enabled() ) {
+        if ( ! Stripe_Helper::is_active() || ! Stripe_Helper::is_3d_secure_enabled() ) {
             return $fragment;
         }
 

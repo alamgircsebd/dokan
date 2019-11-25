@@ -42,24 +42,7 @@ class Dokan_Geolocation_Product_Query {
      * @return void
      */
     public function __construct() {
-        add_filter( 'query_vars', array( $this, 'add_query_vars' ) );
         add_action( 'woocommerce_product_query', array( $this, 'add_query_filters' ) );
-    }
-
-    /**
-     * Add module related query vars
-     *
-     * @since 1.0.0
-     *
-     * @param array $vars
-     */
-    public function add_query_vars( $vars ) {
-        $vars[] = 'latitude';
-        $vars[] = 'longitude';
-        $vars[] = 'distance';
-        $vars[] = 'address';
-
-        return $vars;
     }
 
     /**
@@ -70,9 +53,9 @@ class Dokan_Geolocation_Product_Query {
      * @param \WP_Query $query
      */
     public function add_query_filters( $query ) {
-        $this->latitude  = get_query_var( 'latitude' );
-        $this->longitude = get_query_var( 'longitude' );
-        $this->distance  = get_query_var( 'distance', 0 );
+        $this->latitude  = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
+        $this->longitude = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
+        $this->distance  = isset( $_GET['distance'] ) ? $_GET['distance'] : 0;
 
         add_filter( 'posts_fields_request', array( $this, 'posts_fields_request' ) );
         add_filter( 'posts_join_request', array( $this, 'posts_join_request' ) );

@@ -61,6 +61,46 @@ $text_align = is_rtl() ? 'right' : 'left';
         <?php endforeach; ?>
 
         <tr>
+            <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Subtotal', 'dokan' ); ?>:
+            </th>
+
+            <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
+                <?php echo $order->get_subtotal_to_display(); ?>
+            </td>
+        </tr>
+
+        <?php if ( $order->get_discount_total() ) : ?>
+        <tr>
+            <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Discount', 'dokan' ); ?>:
+            </th>
+
+            <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
+                <?php echo '-' . $order->get_discount_to_display(); ?>
+            </td>
+        </tr>
+        <?php endif; ?>
+
+        <tr>
+            <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Shipping', 'dokan' ); ?>:
+            </th>
+
+            <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
+                <?php echo $order->get_shipping_to_display(); ?>
+            </td>
+        </tr>
+
+        <?php if ( $order->get_total_tax() ) : ?>
+        <tr>
+            <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Tax', 'dokan' ); ?>:
+            </th>
+
+            <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
+                <?php echo wc_price( $order->get_total_tax() ); ?>
+            </td>
+        </tr>
+        <?php endif; ?>
+
+        <tr>
             <th class="td" scope="row" colspan="2" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px"><?php esc_attr_e( 'Payment Method', 'dokan' ); ?>:
             </th>
 
@@ -74,7 +114,7 @@ $text_align = is_rtl() ? 'right' : 'left';
             </th>
 
             <td class="td" style="text-align: left;color: #636363;border: 1px solid #e5e5e5;vertical-align: middle;padding: 12px">
-                <?php echo wc_price( array_sum( $total_price ) ); ?>
+                <?php echo $order->get_formatted_order_total(); ?>
             </td>
         </tr>
 

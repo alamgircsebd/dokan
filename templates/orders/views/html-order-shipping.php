@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="view">
 			<?php echo ! empty( $item['name'] ) ? esc_html( $item['name'] ) : __( 'Shipping', 'dokan' ); ?>
 		</div>
+
 		<div class="edit" style="display: none;">
 			<input style="width:60px" type="text" placeholder="<?php _e( 'Shipping Name', 'dokan' ); ?>" name="shipping_method_title[<?php echo $item_id; ?>]" value="<?php echo ( isset( $item['name'] ) ) ? esc_attr( $item['name'] ) : ''; ?>" />
 			<select name="shipping_method[<?php echo $item_id; ?>]">
@@ -68,9 +69,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="edit" style="display: none;">
 			<input style="width:60px" type="text" name="shipping_cost[<?php echo $item_id; ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" value="<?php echo ( isset( $item['cost'] ) ) ? esc_attr( wc_format_localized_price( $item['cost'] ) ) : ''; ?>" class="line_total wc_input_price" />
 		</div>
+
+		<?php if ( 'seller' === dokan()->commission->get_shipping_fee_recipient( $order->get_id() ) ) : ?>
 		<div class="refund" style="display: none;">
 			<input style="width:60px" type="text" name="refund_line_total[<?php echo absint( $item_id ); ?>]" placeholder="<?php echo wc_format_localized_price( 0 ); ?>" class="refund_line_total wc_input_price" />
 		</div>
+		<?php endif; ?>
 	</td>
 
 	<?php

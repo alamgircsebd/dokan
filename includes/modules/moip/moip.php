@@ -395,7 +395,7 @@ class Dokan_Moip {
         add_filter( 'woocommerce_payment_gateways', array( $this, 'register_gateway' ) );
 
         // prevent non moip vendor to add product
-        add_filter( 'dokan_can_add_product', array( $this, 'can_seller_add_product' ) );
+        // add_filter( 'dokan_can_add_product', array( $this, 'can_seller_add_product' ) );
 
         // hide withdraw page
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'remove_withdraw_page' ) );
@@ -435,7 +435,7 @@ class Dokan_Moip {
         $vendor_moip_account = get_user_meta( $user_id, 'vendor_moip_account', true );
 
         if ( empty( $vendor_moip_account ) && count( $available_gateways ) < 2 ) {
-            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Wirecard account isn\'t active yet. Please connect to Wirecard first!', 'dokan' ), dokan_get_navigation_url('settings/payment'), __( 'Connect to Moip', 'dokan' ) );
+            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Wirecard account isn\'t active yet. Please connect to Wirecard first!', 'dokan' ), dokan_get_navigation_url('settings/payment'), __( 'Connect to Wirecard', 'dokan' ) );
         }
 
         return $errors;

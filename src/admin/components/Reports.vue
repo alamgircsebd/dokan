@@ -611,13 +611,8 @@ export default {
         },
 
         goToPage(page) {
-            this.$router.push({
-                name: 'Reports',
-                query: {
-                    tab: 'logs',
-                    page: page
-                }
-            });
+            this.filter.query.page = page;
+            this.setRoute( this.filter.query );
         },
 
         editOrderUrl(id) {
@@ -719,7 +714,6 @@ export default {
         },
 
         searchByOrder( payload ) {
-
             if ( ! payload ) {
                 delete this.filter.query.order_id;
                 this.setRoute( this.filter.query );
@@ -735,6 +729,9 @@ export default {
                 return;
             }
 
+            // on search by order id, reset the entire query
+            this.filter.query = {};
+            this.filter.query.tab = 'logs';
             this.filter.query.order_id = order_id
 
             this.setRoute( this.filter.query );
@@ -774,6 +771,16 @@ export default {
             } );
 
             $( '#filter-vendors').on( 'select2:select', (e) => {
+                // on search by vendor, reset the page query
+                if ( this.filter.query.page ) {
+                    delete this.filter.query.page;
+                }
+
+                // on search by vendor, reset the order_id query
+                if ( this.filter.query.order_id ) {
+                    delete this.filter.query.order_id;
+                }
+
                 this.filter.query.vendor_id = e.params.data.id;
                 this.setRoute( this.filter.query );
             } );
@@ -784,6 +791,11 @@ export default {
 
             $( '#filter-status' ).on('select2:select', (e) => {
                 let status = e.params.data.text.toLowerCase();
+
+                // on order status change, reset the page query
+                if ( this.filter.query.page ) {
+                    delete this.filter.query.page;
+                }
 
                 if ( e.params.data.id == 0 ) {
                     delete this.filter.query.order_status;
@@ -880,8 +892,6 @@ export default {
     }
 
     .dokan-input {
-        padding: 10px;
-        border-radius: 5px;
         height: 38px;
     }
     .dokan-postbox {
