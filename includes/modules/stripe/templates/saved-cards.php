@@ -8,20 +8,21 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach ( $cards as $card ) : ?>
-
-
-        <tr>
-            <td><?php printf( __( 'Card ending in %s', 'dokan' ), $card['active_card'] ); ?></td>
-            <td><?php printf( __( 'Expires %s/%s', 'dokan' ), $card['exp_month'], $card['exp_year'] ); ?></td>
-            <td>
-                <form action="" method="POST">
-                    <?php wp_nonce_field ( 'stripe_del_card' ); ?>
-                    <input type="hidden" name="stripe_delete_card" value="<?php echo esc_attr( $card['customer_id'] ); ?>">
-                    <input type="submit" class="button" value="<?php _e( 'Delete card', 'dokan' ); ?>">
-                </form>
-            </td>
-        </tr>
-        <?php endforeach; ?>
+        <?php foreach ( $cards as $card ) {
+            if ( ! isset( $card['active_card'], $card['exp_month'], $card['exp_year'], $card['customer_id'] ) ) {
+                return;
+            } ?>
+            <tr>
+                <td><?php printf( __( 'Card ending in %s', 'dokan' ), $card['active_card'] ); ?></td>
+                <td><?php printf( __( 'Expires %s/%s', 'dokan' ), $card['exp_month'], $card['exp_year'] ); ?></td>
+                <td>
+                    <form action="" method="POST">
+                        <?php wp_nonce_field ( 'stripe_del_card' ); ?>
+                        <input type="hidden" name="stripe_delete_card" value="<?php echo esc_attr( $card['customer_id'] ); ?>">
+                        <input type="submit" class="button" value="<?php _e( 'Delete card', 'dokan' ); ?>">
+                    </form>
+                </td>
+            </tr>
+        <?php } ?>
     </tbody>
 </table>
