@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 105);
+/******/ 	return __webpack_require__(__webpack_require__.s = 110);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -72,13 +72,13 @@ module.exports = jQuery;
 
 /***/ }),
 
-/***/ 105:
+/***/ 110:
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-__webpack_require__(106);
+__webpack_require__(111);
 
 $('.dokan-report-abuse-admin-single-product-delete-item').on('click', function (e) {
     e.preventDefault();
@@ -120,7 +120,7 @@ $('.dokan-report-abuse-admin-single-product-delete-item').on('click', function (
 
 /***/ }),
 
-/***/ 106:
+/***/ 111:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

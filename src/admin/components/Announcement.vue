@@ -180,7 +180,6 @@
         },
 
         computed: {
-
             currentStatus() {
                 return this.$route.query.status || 'all';
             },

@@ -28,6 +28,10 @@ var moduleEntryPoints = {
         'subscription': 'main.js',
     },
 
+    'store-reviews': {
+        'admin': 'main.js',
+    },
+
     'wholesale': {
         'admin': 'main.js'
     },
