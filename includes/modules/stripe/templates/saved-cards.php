@@ -10,7 +10,7 @@
     <tbody>
         <?php foreach ( $cards as $card ) {
             if ( ! isset( $card['active_card'], $card['exp_month'], $card['exp_year'], $card['customer_id'] ) ) {
-                return;
+                continue;
             } ?>
             <tr>
                 <td><?php printf( __( 'Card ending in %s', 'dokan' ), $card['active_card'] ); ?></td>
