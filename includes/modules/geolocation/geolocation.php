@@ -195,7 +195,7 @@ class Dokan_Geolocation {
      * @return void
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dokan-geolocation', DOKAN_GEOLOCATION_ASSETS . '/css/geolocation.css', array(), $this->version );
+        wp_enqueue_style( 'dokan-geolocation', DOKAN_GEOLOCATION_ASSETS . '/css/geolocation.css', array( 'dokan-magnific-popup' ), $this->version );
         wp_enqueue_script( 'dokan-geolocation', DOKAN_GEOLOCATION_ASSETS . '/js/geolocation.js', array( 'jquery', 'google-maps' ), $this->version, true );
     }
 
