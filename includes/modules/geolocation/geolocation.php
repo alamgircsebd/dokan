@@ -196,7 +196,16 @@ class Dokan_Geolocation {
      */
     public function enqueue_scripts() {
         wp_enqueue_style( 'dokan-geolocation', DOKAN_GEOLOCATION_ASSETS . '/css/geolocation.css', array( 'dokan-magnific-popup' ), $this->version );
-        wp_enqueue_script( 'dokan-geolocation', DOKAN_GEOLOCATION_ASSETS . '/js/geolocation.js', array( 'jquery', 'google-maps' ), $this->version, true );
+
+        $js = DOKAN_GEOLOCATION_ASSETS . '/js/geolocation-vendor-dashboard-product-google-maps.js';
+
+        $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+        if ( 'mapbox' === $source ) {
+            $js = DOKAN_GEOLOCATION_ASSETS . '/js/geolocation-vendor-dashboard-product-mapbox.js';
+        }
+
+        wp_enqueue_script( 'dokan-geolocation', $js, array( 'jquery', 'dokan-maps' ), $this->version, true );
     }
 
     /**
