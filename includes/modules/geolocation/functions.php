@@ -64,7 +64,7 @@ function dokan_geo_enqueue_locations_map() {
      *
      * @param string $marker_image_path
      */
-    $image = apply_filters( 'dokan_geolocation_marker_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/marker.png' );
+    $image = apply_filters( 'dokan_geolocation_marker_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/marker-32x32.png' );
 
     /**
      * Filter to modify the map marker clusterer images
@@ -73,9 +73,9 @@ function dokan_geo_enqueue_locations_map() {
      *
      * @param string
      */
-    $clusterer = apply_filters( 'dokan_geolocation_marker_clusterer_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/clusterer.png' );
+    $clusterer = apply_filters( 'dokan_geolocation_marker_clusterer_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/clusterer-40x40.png' );
 
-    wp_localize_script( 'dokan-geo-locations-map', 'DokanGeo', array(
+    $dokan_geo = array(
         'marker' => array(
             'image'     => $image,
             'clusterer' => $clusterer,
@@ -83,7 +83,15 @@ function dokan_geo_enqueue_locations_map() {
         'info_window_template' => $info_window_template,
         'default_geolocation'  => dokan_geo_get_default_location(),
         'map_zoom'             => dokan_get_option( 'map_zoom', 'dokan_geolocation', 11 ),
-    ) );
+    );
+
+    $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+    if ( 'mapbox' === $source ) {
+        $dokan_geo['mapbox_access_token'] = dokan_get_option( 'mapbox_access_token', 'dokan_appearance', null );
+    }
+
+    wp_localize_script( 'dokan-geo-locations-map', 'DokanGeo', $dokan_geo );
 }
 
 /**
@@ -159,6 +167,16 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         ) );
 
         $args['store_category'] = ! empty( $_GET['store_category'] ) ? sanitize_text_field( $_GET['store_category'] ) : null;
+    }
+
+    $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+    if ( 'mapbox' === $source ) {
+        $mapbox_access_token = dokan_get_option( 'mapbox_access_token', 'dokan_appearance', null );
+
+        if ( $mapbox_access_token ) {
+            $args['mapbox_access_token'] = $mapbox_access_token;
+        }
     }
 
     dokan_geo_get_template( 'filters', $args );

@@ -89,4 +89,7 @@
     <input type="hidden" name="longitude" value="<?php echo esc_attr( $longitude ); ?>">
     <input type="hidden" name="wc_shop_page" value="<?php echo esc_attr( $wc_shop_page ); ?>">
     <input type="hidden" name="dokan_store_listing_page" value="<?php echo esc_attr( $store_listing_page ); ?>">
+    <?php if ( isset( $mapbox_access_token ) ): ?>
+        <input type="hidden" name="dokan_mapbox_access_token" value="<?php echo esc_attr( $mapbox_access_token ); ?>">
+    <?php endif; ?>
 </form>
