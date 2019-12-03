@@ -153,7 +153,7 @@ class Dokan_Product_Addon_Frontend {
      * @return void
      */
     public function render_vendor_global_addons( $query ) {
-        global $wp, $post;
+        global $wp, $post, $product;
 
         if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'product-addon' ) {
             if ( ! is_admin() && ! empty( $query->query['post_type'] ) && $query->query['post_type'] === 'global_product_addon' ) {
@@ -165,10 +165,19 @@ class Dokan_Product_Addon_Frontend {
 
         if ( ! is_admin() && ! empty( $query->query['post_type'] ) && $query->query['post_type'] === 'global_product_addon' ) {
             // set post author for global addons
+            if ( isset( $_POST['add-to-cart'] ) ) {
+                $product_id = $_POST['add-to-cart'];
+                $post_author = get_post_field( 'post_author', $product_id );
+                $query->set( 'author', $post_author );
+                return;
+            }
+
             if ( ! empty( $post->post_author ) ) {
                 $query->set( 'author', $post->post_author );
             }
+
             return;
+
         }
 
     }

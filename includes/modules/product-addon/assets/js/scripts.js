@@ -211,7 +211,8 @@ jQuery( function( $ ) {
 
 							parent.find( '.wc-pao-addon-content-option-rows' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-content-non-option-rows' ).removeClass( 'show' ).addClass( 'hide' );
-
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
 							if ( 'images' === parent.find( '.wc-pao-addon-display-select' ).val() ) {
 								parent.find( '.wc-pao-addon-content-image' ).removeClass( 'hide' ).addClass( 'show' );
 								parent.find( '.wc-pao-addon-content-label' ).removeClass( 'full' );
@@ -226,6 +227,8 @@ jQuery( function( $ ) {
 							parent.find( '.wc-pao-addon-content-label' ).addClass( 'full' );
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'show' ).addClass( 'hide' );
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
 							break;
 						case 'custom_price':
 							restrictionName = wc_pao_params.i18n.limit_price_range;
@@ -238,11 +241,15 @@ jQuery( function( $ ) {
 							parent.find( '.wc-pao-addon-restrictions-select' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'hide' ).addClass( 'show' );
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 							break;
 						case 'input_multiplier':
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'hide' ).addClass( 'show' );
 							restrictionName = wc_pao_params.i18n.limit_quantity_range;
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 							break;
 						case 'custom_text':
 							restrictionName = wc_pao_params.i18n.limit_character_length;
@@ -254,27 +261,35 @@ jQuery( function( $ ) {
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-min-max' ).removeClass( 'hide' ).addClass( 'show' );
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 
 							if ( 'email' === parent.find( '.wc-pao-addon-restrictions-select' ).val() ) {
-								parent.find( '.wc-pao-addon-min-max' ).removeClass( 'show' ).addClass( 'hide' );	
+								parent.find( '.wc-pao-addon-min-max' ).removeClass( 'show' ).addClass( 'hide' );
 							}
-							break;		
+							break;
 						case 'custom_textarea':
 							restrictionName = wc_pao_params.i18n.limit_character_length;
 							parent.find( '.wc-pao-addon-min-max' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'hide' ).addClass( 'show' );
-							break;
+							$( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
+                            break;
 						case 'file_upload':
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'show' ).addClass( 'hide' );
-							break;
+							$( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
+                            break;
 						case 'heading':
 							parent.find( '.wc-pao-addon-required-setting' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-main-settings-2 .wc-pao-col1' ).addClass( 'full' );
 							parent.find( '.wc-pao-addon-main-settings-2 .wc-pao-col2' ).removeClass( 'show' ).addClass( 'hide' );
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 							break;
 						default:
 							parent.find( '.wc-pao-addon-main-settings-1 .wc-pao-col2-1' ).removeClass( 'show' ).addClass( 'hide' );
@@ -285,7 +300,9 @@ jQuery( function( $ ) {
 							parent.find( '.wc-pao-addon-content-non-option-rows' ).removeClass( 'hide' ).addClass( 'show' );
 							restrictionName = wc_pao_params.i18n.restrictions;
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'show' ).addClass( 'hide' );
-							break;					
+                            $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
+							break;
 					}
 
 					parent.find( '.wc-pao-addon-restriction-name' ).html( restrictionName );
@@ -330,6 +347,7 @@ jQuery( function( $ ) {
 						$( html ).appendTo( parent );
 
 						$( 'select.wc-pao-addon-type-select' ).change();
+                        $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
 					} );
 
 					return false;
@@ -348,7 +366,8 @@ jQuery( function( $ ) {
 						$( '.wc-pao-addons' ).append( html );
 
 						$( 'select.wc-pao-addon-type-select' ).change();
-
+                        $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
+                        $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
 						wc_pao_admin.refresh();
 						wc_pao_admin.runOptionSortable();
 					} );
@@ -365,7 +384,7 @@ jQuery( function( $ ) {
 						$( addon ).find( 'input' ).val( '' );
 						$( addon ).remove();
 					}
-					
+
 					$( '.wc-pao-addons .wc-pao-addon' ).each( function( index, el ) {
 						var this_index = index;
 
@@ -411,7 +430,7 @@ jQuery( function( $ ) {
 						element.removeClass( 'open' ).addClass( 'closed' );
 					} else {
 						element.removeClass( 'closed' ).addClass( 'open' );
-					}				
+					}
 				} )
 				.on( 'click', '.wc-pao-addon-description-enable', function() {
 					if ( $( this ).is( ':checked' ) ) {
@@ -456,7 +475,7 @@ jQuery( function( $ ) {
 						var selection = mediaFrame.state().get( 'selection' );
 
 						selection.map( function( attachment ) {
-		
+
 							attachment = attachment.toJSON();
 
 							if ( attachment.id ) {
@@ -472,11 +491,11 @@ jQuery( function( $ ) {
 					} );
 
 					// Open the modal frame.
-					mediaFrame.open();				
+					mediaFrame.open();
 				} )
 				.on( 'click', '.wc-pao-addon-image-swatch', function( e ) {
 					e.preventDefault();
-					
+
 					var parent = $( this ).parent();
 
 					parent.find( '.wc-pao-addon-option-image-id' ).val( '' );
@@ -500,7 +519,7 @@ jQuery( function( $ ) {
 						parent.find( '.wc-pao-addon-min-max' ).removeClass( 'show' ).addClass( 'hide' );
 					} else {
 						parent.find( '.wc-pao-addon-min-max' ).removeClass( 'hide' ).addClass( 'show' );
-					}				
+					}
 				} )
 				.on( 'click', '.wc-pao-addon-adjust-price', function() {
 					if ( $( this ).is( ':checked' ) ) {

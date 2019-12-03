@@ -30,7 +30,7 @@ if ( 'show' === $opt_show_image_swatch ) {
 	</div>
 
 	<div class="wc-pao-addon-content-label <?php echo esc_attr( $opt_label_column ); ?>">
-		<input type="text" name="product_addon_option_label[<?php echo $loop; ?>][]" value="<?php echo esc_attr( $opt_label ); ?>" placeholder="<?php esc_html_e( 'Enter an option', 'dokan' ); ?>" />
+		<input type="text" name="product_addon_option_label[<?php echo $loop; ?>][]" value="<?php echo esc_attr( $opt_label ); ?>" placeholder="<?php esc_html_e( 'Enter an option', 'dokan' ); ?>" required/>
 	</div>
 
 	<div class="wc-pao-addon-content-price-type">
