@@ -9,24 +9,32 @@
         </tr>
     </thead>
     <tbody>
-        <?php foreach( $rows as $row ): ?>
+        <?php if ( ! empty( $rows ) ): ?>
+            <?php foreach( $rows as $row ): ?>
+                <tr>
+                    <?php
+                    foreach ( $row as $key => $column) {
+                        switch ( $results['columnHeaders'][$key]->getName() ) {
+                            case 'ga:avgTimeOnPage':
+                                $column = round( $column, 2 );
+                                break;
+                            case 'ga:entranceRate':
+                                $column = round( $column, 2 ) . '%';
+                                break;
+                            case 'ga:exitRate':
+                                $column = round( $column, 2 ) . '%';
+                                break;
+                        }
+                        echo '<td>' . $column . '</td>';
+                    } ?>
+                </tr>
+            <?php endforeach; ?>
+        <?php else: ?>
             <tr>
-                <?php
-                foreach ( $row as $key => $column) {
-                    switch ( $results['columnHeaders'][$key]->getName() ) {
-                        case 'ga:avgTimeOnPage':
-                            $column = round( $column, 2 );
-                            break;
-                        case 'ga:entranceRate':
-                            $column = round( $column, 2 ) . '%';
-                            break;
-                        case 'ga:exitRate':
-                            $column = round( $column, 2 ) . '%';
-                            break;
-                    }
-                    echo '<td>' . $column . '</td>';
-                } ?>
+                <td colspan="6" style="text-align: center;">
+                    <?php echo __( 'No data found', 'dokan' ); ?>
+                </td>
             </tr>
-        <?php endforeach; ?>
+        <?php endif; ?>
     </tbody>
 </table>
