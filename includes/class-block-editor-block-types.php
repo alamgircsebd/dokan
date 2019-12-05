@@ -5,7 +5,7 @@ class Dokan_Pro_Block_Editor_Block_Types {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.16
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class Dokan_Pro_Block_Editor_Block_Types {
     /**
      * Add Dokan Block category
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.16
      *
      * @param array $categories
      */
@@ -35,7 +35,7 @@ class Dokan_Pro_Block_Editor_Block_Types {
     /**
      * Register block scripts
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.16
      *
      * @return void
      */
@@ -60,7 +60,7 @@ class Dokan_Pro_Block_Editor_Block_Types {
     /**
      * Register block types
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.16
      *
      * @return void
      */
@@ -74,7 +74,7 @@ class Dokan_Pro_Block_Editor_Block_Types {
     /**
      * Render shortcode block content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.16
      *
      * @param array  $attributes
      * @param string $content

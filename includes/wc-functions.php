@@ -1593,7 +1593,7 @@ add_action( 'woocommerce_save_product_variation', 'dokan_override_variation_prod
 /**
  * Dokan enabble single seller mode
  *
- * @since  DOKAN_PRO_SINCE
+ * @since  2.9.16
  *
  * @param  bool $valid
  * @param  int $product_id
@@ -1643,7 +1643,7 @@ add_filter( 'woocommerce_add_to_cart_validation', 'dokan_validate_cart_for_singl
 /**
  * Dokan rest validate single seller mode
  *
- * @since  DOKAN_PRO_SINCE
+ * @since  2.9.16
  *
  * @param  WC_Order $order
  * @param  WP_REST_Request

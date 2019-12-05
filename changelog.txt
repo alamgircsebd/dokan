@@ -1,3 +1,10 @@
+v2.9.16 -> December 05, 2019
+----------------------------------
+- [Feature] WooCommerce product addon integration with dokan (Product Addon)
+- [Enhencement] Extend vendor review system (admin should have permission to view and edit) (Store Review)
+- [fix] Single product multiple vendor is still showing multiple product on the category page (SPMV)
+- [fix] Stripe throws warning for the expired saved cards (Stripe Connect)
+
 v2.9.15 -> November 19, 2019
 ------------------------------------------------------------------
 - [new]  Add Dokan Shortcode gutenberg blocks.
