@@ -76,7 +76,7 @@ class Dokan_RMA_Product {
     /**
      * Refund policy tab
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.16
      *
      * @param  array $tabs
      *
@@ -110,7 +110,7 @@ class Dokan_RMA_Product {
     /**
      * Get refund policy tab template
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.16
      *
      * @param  string $title
      * @param  array $data

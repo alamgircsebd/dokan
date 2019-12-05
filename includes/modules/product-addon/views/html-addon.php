@@ -111,9 +111,9 @@ if ( 'heading' === $addon_type ) {
 			<div class="wc-pao-col1">
 				<div class="wc-pao-addon-title">
 					<label for="wc-pao-addon-content-name-<?php echo esc_attr( $loop ); ?>">
-						<?php esc_html_e( 'Title', 'dokan' ); ?>
+						<?php esc_html_e( 'Title', 'dokan' ); ?>  <?php esc_html_e( '(Required)', 'dokan' ); ?>
 					</label>
-					<input type="text" class="wc-pao-addon-content-name" id="wc-pao-addon-content-name-<?php echo esc_attr( $loop ); ?>" name="product_addon_name[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( $addon_title ); ?>" />
+					<input type="text" class="wc-pao-addon-content-name" id="wc-pao-addon-content-name-<?php echo esc_attr( $loop ); ?>" name="product_addon_name[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( $addon_title ); ?>" required/>
 				</div>
 			</div>
 

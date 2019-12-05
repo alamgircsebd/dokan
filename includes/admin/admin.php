@@ -900,7 +900,7 @@ class Dokan_Pro_Admin_Settings {
     /**
      * Make combine commission fields mandatory
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.16
      *
      * @param  WC_Error
      *

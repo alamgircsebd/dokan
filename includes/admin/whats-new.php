@@ -1,6 +1,27 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.16',
+        'released' => '2019-12-05',
+        'changes'  => array(
+            array(
+                'title'         => 'Product Addon',
+                'type'          => 'New',
+                'description'   => 'We have integrated WooCommerce product addon with dokan. (Product Addon)'
+            ),
+            array(
+                'title'         => 'Store Review Edit',
+                'type'          => 'Improvement',
+                'description'   => 'Admin will be able to view and edit store review from now on. (Store Review)'
+            ),
+            array(
+                'title'         => 'Single Product Multivendor Product Listing Issue',
+                'type'          => 'fix',
+                'description'   => 'Single product multiple vendor was showing multiple product on the category page. This issue has been fixed in this release. (SPMV)'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.15',
         'released' => '2019-11-19',
         'changes'  => array(

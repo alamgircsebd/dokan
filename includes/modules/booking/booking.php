@@ -1196,7 +1196,7 @@ class Dokan_WC_Booking {
     /**
      * Get booking product edit url
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.16
      *
      * @param  string $url
      * @param  WC_Product

@@ -742,6 +742,7 @@ export default {
         },
 
         async prepareLogsFilter() {
+            let self = this;
             await this.$nextTick();
 
             $( '#filter-vendors' ).selectWoo( {
@@ -762,7 +763,7 @@ export default {
                             results: data.map((store) => {
                                 return {
                                     id: store.id,
-                                    text: store.store_name
+                                    text: store.store_name ? store.store_name : sprintf( '(%1$s) #%2$d', self.__( 'no name', 'dokan' ), store.id )
                                 };
                             })
                         };

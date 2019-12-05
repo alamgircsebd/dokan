@@ -376,7 +376,7 @@ class Dokan_Shipping_Zone {
                 $zone_id = $vendor_zone_id;
             }
         } else {
-            $zone_id = $zone_id[0]->zone_id;
+            $zone_id = ! empty( $zone_id[0]->zone_id ) ? $zone_id[0]->zone_id : 0;
         }
 
         // if zone id is not found in vendor's available zone id, assume it falls under `Locations not covered by your other zones`.
