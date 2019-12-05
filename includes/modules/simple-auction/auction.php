@@ -564,7 +564,7 @@ class Dokan_Auction {
     /**
      * Get ended auction product ids
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 2.9.16
      *
      * @return array
      */

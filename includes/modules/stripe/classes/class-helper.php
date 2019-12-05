@@ -96,7 +96,7 @@ class Helper {
     /**
      * Is stripe active
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  2.9.16
      *
      * @return boolean
      */

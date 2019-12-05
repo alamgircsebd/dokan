@@ -3812,14 +3812,16 @@ var Search = dokan_get_lib('Search');
             var _this5 = this;
 
             return _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+                var self;
                 return regeneratorRuntime.wrap(function _callee$(_context) {
                     while (1) {
                         switch (_context.prev = _context.next) {
                             case 0:
-                                _context.next = 2;
+                                self = _this5;
+                                _context.next = 3;
                                 return _this5.$nextTick();
 
-                            case 2:
+                            case 3:
 
                                 $('#filter-vendors').selectWoo({
                                     ajax: {
@@ -3839,7 +3841,7 @@ var Search = dokan_get_lib('Search');
                                                 results: data.map(function (store) {
                                                     return {
                                                         id: store.id,
-                                                        text: store.store_name
+                                                        text: store.store_name ? store.store_name : sprintf('(%1$s) #%2$d', self.__('no name', 'dokan'), store.id)
                                                     };
                                                 })
                                             };
@@ -3883,7 +3885,7 @@ var Search = dokan_get_lib('Search');
                                     _this5.setRoute(_this5.filter.query);
                                 });
 
-                            case 6:
+                            case 7:
                             case 'end':
                                 return _context.stop();
                         }
