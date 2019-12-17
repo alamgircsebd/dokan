@@ -156,8 +156,7 @@
 
                                             <?php if ( 'yes' == dokan_get_option( 'rma_enable_refund_request', 'dokan_rma', 'no' ) && 'refund' == $request['type'] && 'completed' == $request['status'] ): ?>
                                                 <?php
-                                                    $refund                     = new Dokan_Pro_Refund;
-                                                    $has_already_refund_request = $refund->has_pending_refund_request( $request['order_id'] );
+                                                    $has_already_refund_request = dokan_pro()->refund->has_pending_request( $request['order_id'] );
                                                 ?>
                                                 <?php if ( $has_already_refund_request ): ?>
                                                     <a href="#" class="dokan-btn dokan-btn-default" disabled><?php _e( 'Send Refund', 'dokan' ) ?></a>

@@ -372,6 +372,8 @@ class Dokan_Pro {
      * @return void
      */
     public function init_classes() {
+        new WeDevs\DokanPro\Refund\Hooks();
+
         new \WeDevs\DokanPro\StoreCategory();
 
         if ( is_admin() ) {
@@ -392,6 +394,7 @@ class Dokan_Pro {
         $this->container['products']    = new \WeDevs\DokanPro\Products();
         $this->container['review']      = new \WeDevs\DokanPro\Review();
         $this->container['notice']      = new \WeDevs\DokanPro\Notice();
+        $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
 
         if ( is_user_logged_in() ) {
             new \WeDevs\DokanPro\Dashboard();
@@ -399,7 +402,6 @@ class Dokan_Pro {
             new WeDevs\DokanPro\Reports();
             new WeDevs\DokanPro\Withdraws();
             new WeDevs\DokanPro\Settings();
-            // Dokan_Pro_Refund::init();
         }
 
         new \WeDevs\DokanPro\Assets();
@@ -535,20 +537,7 @@ class Dokan_Pro {
      * @return array
      */
     public function rest_api_class_map( $class_map ) {
-        $classes = [
-            DOKAN_PRO_DIR . '/includes/api/class-store-category-controller.php'    => 'Dokan_REST_Store_Category_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-refund-controller.php'            => 'Dokan_REST_Refund_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-logs-controller.php'              => 'Dokan_REST_Logs_Controller',
-        ];
-
-        return array_merge( $class_map, $classes );
+        return \WeDevs\DokanPro\REST\Manager::register_rest_routes( $class_map );
     }
 
     /**

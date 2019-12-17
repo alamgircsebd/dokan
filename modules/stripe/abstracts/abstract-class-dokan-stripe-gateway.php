@@ -1167,9 +1167,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      */
     public function process_seller_withdraws( $all_withdraws ){
         $IP =  dokan_get_client_ip();
-        $withdraw = new Dokan_Withdraw();
         foreach ( $all_withdraws as $withdraw_data ) {
-
             $data = array(
                 'date'    => current_time( 'mysql' ),
                 'status'  => 1,
@@ -1179,7 +1177,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             );
 
             $data = array_merge( $data, $withdraw_data );
-            $withdraw->insert_withdraw( $data );
+            dokan()->withdraw->insert_withdraw( $data );
         }
     }
 

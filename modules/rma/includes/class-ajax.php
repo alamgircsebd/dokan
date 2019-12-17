@@ -184,11 +184,9 @@ class Dokan_RMA_Ajax {
         $refund_amount = wc_format_decimal( sanitize_text_field( $data['refund_total_amount'] ), wc_get_price_decimals() );
         $max_refund    = wc_format_decimal( $total_amount - $order->get_total_refunded(), wc_get_price_decimals() );
 
-        $refund = new Dokan_Pro_Refund;
-
         if ( ! $refund_amount || $max_refund < $refund_amount || 0 > $refund_amount ) {
             wp_send_json_error( __( 'Invalid refund amount', 'dokan' ) );
-        } else if ( $refund->has_pending_refund_request( $data['refund_order_id'] ) ) {
+        } else if ( dokan_pro()->refund->has_pending_request( $data['refund_order_id'] ) ) {
             wp_send_json_error( __( 'You have already a processing refund request for this order.', 'dokan' ) );
         } else {
 
@@ -209,9 +207,11 @@ class Dokan_RMA_Ajax {
                 'status'                 => 0
             ];
 
-            $refund = new Dokan_Pro_Refund;
-
-            $refund->insert_refund( $postdata );
+            try {
+                $refund = \WeDevs\DokanPro\Refund\Ajax::create_refund_request( $postdata );
+            } catch ( Exception $e ) {
+                \WeDevs\DokanPro\Refund\Ajax::wc_ajax_request_error_handler( $e );
+            }
 
             do_action( 'dokan_refund_request_notification',  $data['refund_order_id'] );
 

@@ -17,13 +17,13 @@ class ShippingZone {
      * @return void
      */
     public static function get_zones() {
-        $data_store = WC_Data_Store::load( 'shipping-zone' );
+        $data_store = \WC_Data_Store::load( 'shipping-zone' );
         $raw_zones  = $data_store->get_zones();
         $zones      = array();
         $seller_id  = dokan_get_current_user_id();
 
         foreach ( $raw_zones as $raw_zone ) {
-            $zone             = new WC_Shipping_Zone( $raw_zone );
+            $zone             = new \WC_Shipping_Zone( $raw_zone );
             $enabled_methods  = $zone->get_shipping_methods( true );
             $methods_id = wp_list_pluck( $enabled_methods, 'id' );
 
@@ -36,7 +36,7 @@ class ShippingZone {
         }
 
         // Everywhere zone if has method called vendor shipping
-        $overall_zone    = new WC_Shipping_Zone(0);
+        $overall_zone    = new \WC_Shipping_Zone(0);
         $enabled_methods = $overall_zone->get_shipping_methods( true );
         $methods_id      = wp_list_pluck( $enabled_methods, 'id' );
 
@@ -61,7 +61,7 @@ class ShippingZone {
         $zone = array();
         $seller_id = dokan_get_current_user_id();
 
-        $zone_obj = WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
+        $zone_obj = \WC_Shipping_Zones::get_zone_by( 'zone_id', $zone_id );
         $zone['data']                    = $zone_obj->get_data();
         $zone['formatted_zone_location'] = $zone_obj->get_formatted_location();
         $zone['shipping_methods']        = self::get_shipping_methods( $zone_id, $seller_id );
@@ -83,7 +83,7 @@ class ShippingZone {
         $table_name = "{$wpdb->prefix}dokan_shipping_zone_methods";
 
         if ( empty( $data['method_id'] ) ) {
-            return new WP_Error( 'no-method-id', __( 'No shipping method found for adding', 'dokan' ) );
+            return new \WP_Error( 'no-method-id', __( 'No shipping method found for adding', 'dokan' ) );
         }
 
         $result = $wpdb->insert(
@@ -101,7 +101,7 @@ class ShippingZone {
         );
 
         if ( ! $result ) {
-            return new WP_Error( 'method-not-added', __( 'Shipping method not added successfully', 'dokan' ) );
+            return new \WP_Error( 'method-not-added', __( 'Shipping method not added successfully', 'dokan' ) );
         }
 
         return $wpdb->insert_id;
@@ -122,7 +122,7 @@ class ShippingZone {
         $result = $wpdb->query( $wpdb->prepare( "DELETE FROM {$table_name} WHERE zone_id=%d AND seller_id=%d AND instance_id=%d", $data['zone_id'], dokan_get_current_user_id(), $data['instance_id'] ) );
 
         if ( ! $result ) {
-            return new WP_Error( 'method-not-deleted', __( 'Shipping method not deleted', 'dokan' ) );
+            return new \WP_Error( 'method-not-deleted', __( 'Shipping method not deleted', 'dokan' ) );
         }
 
         return $result;
@@ -205,7 +205,7 @@ class ShippingZone {
         $updated    = $wpdb->update( $table_name, array( 'is_enabled' => $data['checked']  ), array( 'instance_id' => $data['instance_id' ], 'zone_id' => $data['zone_id'], 'seller_id' => dokan_get_current_user_id() ), array( '%d' ) );
 
         if ( ! $updated ) {
-            return new WP_Error( 'method-not-toggled', __( 'Method enable or disable not working', 'dokan' ) );
+            return new \WP_Error( 'method-not-toggled', __( 'Method enable or disable not working', 'dokan' ) );
         }
 
         return true;
@@ -315,7 +315,7 @@ class ShippingZone {
         $country          = strtoupper( wc_clean( $package['destination']['country'] ) );
         $state            = strtoupper( wc_clean( $package['destination']['state'] ) );
         $postcode         = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
-        $cache_key        = WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'dokan_shipping_zone_' . md5( sprintf( '%s+%s+%s', $country, $state, $postcode ) );
+        $cache_key        = \WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'dokan_shipping_zone_' . md5( sprintf( '%s+%s+%s', $country, $state, $postcode ) );
         $matching_zone_id = wp_cache_get( $cache_key, 'shipping_zones' );
 
         if ( false === $matching_zone_id ) {
@@ -323,7 +323,7 @@ class ShippingZone {
             wp_cache_set( $cache_key, $matching_zone_id, 'shipping_zones' );
         }
 
-        return new WC_Shipping_Zone( $matching_zone_id ? $matching_zone_id : 0 );
+        return new \WC_Shipping_Zone( $matching_zone_id ? $matching_zone_id : 0 );
     }
 
     /**

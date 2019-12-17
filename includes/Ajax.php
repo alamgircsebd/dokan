@@ -2,7 +2,6 @@
 
 namespace WeDevs\DokanPro;
 
-use Dokan_Pro_Refund;
 use WC_Countries;
 use WC_Meta_Box_Product_Data;
 use WC_Product_Variable;
@@ -71,10 +70,6 @@ class Ajax {
         add_action( 'wp_ajax_nopriv_dokan_add_new_attribute', array( $this, 'add_new_attribute') );
         add_action( 'wp_ajax_dokan_load_order_items', array( $this, 'load_order_items') );
         add_action( 'wp_ajax_nopriv_dokan_load_order_items', array( $this, 'load_order_items') );
-
-        // Refund request
-        add_action( 'wp_ajax_dokan_refund_request', array( $this, 'dokan_refund_request') );
-        add_action( 'wp_ajax_nopriv_dokan_refund_request', array( $this, 'dokan_refund_request') );
 
         add_action( 'wp_ajax_dokan_toggle_seller', array( $this, 'toggle_seller_status' ) );
 
@@ -1069,80 +1064,6 @@ class Ajax {
         }
 
         die();
-    }
-
-    /**
-     * insert refund request via ajax
-     *
-     * @since 2.4.11
-     *
-     */
-    public function dokan_refund_request() {
-        check_ajax_referer( 'order-item', 'security' );
-
-        $order_id  = ! empty( $_POST['order_id'] ) ? $_POST['order_id'] : 0;
-        $seller_id = dokan_get_seller_id_by_order( $order_id );
-
-        if ( ! $seller_id ) {
-            return wp_send_json_error( __( 'Vendor not found', 'dokan' ) );
-        }
-
-        // pass seller_id and status to `insert_refund` method with the $_POST variable
-        $_POST['status']    = 0;
-        $_POST['seller_id'] = $seller_id;
-
-        $order = wc_get_order( $order_id );
-
-        if ( ! $order ) {
-            return wp_send_json_error( __( 'Order not found', 'dokan' ) );
-        }
-
-        if ( is_wp_error( $order ) ) {
-            return wp_send_json_error( $order->get_error_message() );
-        }
-
-        $dokan_refund = new Dokan_Pro_Refund;
-
-        if ( $dokan_refund->has_pending_refund_request( $order_id ) ) {
-            return wp_send_json_error( __( 'You have already a processing refund request for this order.', 'dokan' ) );
-        }
-
-        $requested_refund_amount = ! empty( $_POST['refund_amount'] ) ? $_POST['refund_amount'] : 0;
-        $requested_refund_amount = wc_format_decimal( sanitize_text_field( $requested_refund_amount ), wc_get_price_decimals() );
-
-        if ( ! $requested_refund_amount || 0 > $requested_refund_amount ) {
-            return wp_send_json_error( __( 'Refund amount is not provided', 'dokan' ) );
-        }
-
-        // Validate order wise refund
-        $max_allowed_refund = wc_format_decimal( $order->get_total() - $order->get_total_refunded(), wc_get_price_decimals() );
-
-        if ( $max_allowed_refund < $requested_refund_amount ) {
-            return wp_send_json_error( __( 'Invalid refund amount', 'dokan' ) );
-        }
-
-        // Validate lite item wise refund
-        $posted_line_items = json_decode( wp_unslash( $_POST['line_item_totals'] ) );
-
-        foreach ( $posted_line_items as $item_id => $requested_refund ) {
-            $order_item       = $order->get_item( $item_id );
-            $max_allowed_item_refund = wc_format_decimal( $order_item->get_total() - $order->get_total_refunded_for_item( $item_id ), wc_get_price_decimals() );
-
-            if ( $max_allowed_item_refund < $requested_refund ) {
-                return wp_send_json_error( __( 'Invalid refund amount for item', 'dokan' ) );
-            }
-        }
-
-        $refund_id = $dokan_refund->insert_refund( $_POST );
-
-        if ( ! $refund_id ) {
-            wp_send_json_error( __( 'Unable to insert refund', 'dokan' ) );
-        }
-
-        do_action( 'dokan_after_refund_request', $refund_id, $_POST );
-        do_action( 'dokan_refund_request_notification', $order_id );
-
-        wp_send_json_success( __( 'Refund request sent successfully', 'dokan' ) );
     }
 
     /**
