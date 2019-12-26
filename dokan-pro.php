@@ -255,11 +255,6 @@ class Dokan_Pro {
         require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
         require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
 
-        require_once DOKAN_PRO_CLASS . '/store-seo.php';
-        require_once DOKAN_PRO_CLASS . '/store-share.php';
-        require_once DOKAN_PRO_CLASS . '/social-login.php';
-        require_once DOKAN_PRO_CLASS . '/email-verification.php';
-
         require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
         require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
         require_once DOKAN_PRO_INC . '/class-store-lists-filter.php';
@@ -512,7 +507,7 @@ class Dokan_Pro {
             'deactivating'            => __( 'Deactivating', 'dokan' ),
             'combine_commission_desc' => __( 'Amount you will get from sales in both percentage and fixed fee', 'dokan' ),
             'default_commission_desc' => __( 'It will override the default commission admin gets from each sales', 'dokan' ),
-        ) );
+        ] );
 
         wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );
         wp_localize_script( 'dokan_pro_admin', 'dokan_admin', $dokan_admin );
