@@ -4,7 +4,7 @@ Plugin Name: Product Addon
 Plugin URI: http://wedevs.com/
 Description: WooCommerce Product Addon support
 Version: 1.0.0
-Thumbnail Name: ajax-live-search.png
+Thumbnail Name: product-addon.png
 Author: weDevs
 Author URI: http://wedevs.com/
 License: GPL2

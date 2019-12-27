@@ -124,9 +124,10 @@ class Dokan_Store_Support {
         add_action( 'dokan_settings_form_bottom', array( $this, 'add_support_btn_title_input' ), 13, 2 );
         add_action( 'dokan_store_profile_saved', array( $this, 'save_supoort_btn_title' ), 13 );
 
-        add_filter( 'woocommerce_locate_template', array( $this, 'customer_topic_list' ),15 );
-
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
+
+        add_action( 'init', array( $this, 'register_support_tickets_endpoint' ) );
+        add_action( 'woocommerce_account_support-tickets_endpoint', array( $this, 'support_tickets_content' ) );
     }
 
     /**
@@ -619,10 +620,6 @@ class Dokan_Store_Support {
             } else {
                 dokan_get_template_part( 'store-support/support', '', array( 'is_store_support' => true ) );
             }
-        }
-
-        if ( isset( $query_vars['support-tickets'] ) ) {
-            dokan_get_template_part( 'store-support/support-tickets', '', array( 'is_store_support' => true ) );
         }
     }
 
@@ -1376,23 +1373,6 @@ class Dokan_Store_Support {
     }
 
     /**
-     * Link My Support Topics for customers under My Account
-     *
-     * @global object $wp
-     *
-     * @param object $file
-     *
-     * @return object
-     */
-    function customer_topic_list( $file ) {
-        global $wp;
-        if ( isset($wp->query_vars['support-tickets']) && basename( $file ) == 'my-account.php' ) {
-            return DOKAN_STORE_SUPPORT_DIR . '/templates/store-support/support-tickets.php';
-        }
-        return $file;
-    }
-
-    /**
      * Return counts for all topic status count
      *
      * @since 1.0
@@ -1573,10 +1553,30 @@ class Dokan_Store_Support {
         register_widget( 'Dokan_Store_Support_Widget' );
     }
 
+    /**
+     * Register store support endpoint on my-account page
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function register_support_tickets_endpoint() {
+        add_rewrite_endpoint( 'support-tickets', EP_PAGES );
+    }
+
+    /**
+     * Load support tickets content
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function support_tickets_content() {
+        dokan_get_template_part( 'store-support/support-tickets', '', array( 'is_store_support' => true ) );
+    }
+
 }
 
-// Dokan_Store_Support
 Dokan_Store_Support::init();
 
 dokan_register_activation_hook( __FILE__, array( 'Dokan_Store_Support', 'activate' ) );
-
