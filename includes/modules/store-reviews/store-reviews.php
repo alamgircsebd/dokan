@@ -180,20 +180,20 @@ class Dokan_Store_Reviews {
             'not_found_in_trash' => __( 'Not found in Trash', 'dokan' ),
         );
         $args   = array(
-            'label'             => __( 'Store Reviews', 'dokan' ),
-            'description'       => __( 'Store Reviews by customer', 'dokan' ),
-            'labels'            => $labels,
-            'supports'          => array( 'title', 'author', 'editor' ),
-            'hierarchical'      => false,
-            'public'            => true,
+            'label'              => __( 'Store Reviews', 'dokan' ),
+            'description'        => __( 'Store Reviews by customer', 'dokan' ),
+            'labels'             => $labels,
+            'supports'           => array( 'title', 'author', 'editor' ),
+            'hierarchical'       => false,
+            'public'             => true,
             'publicly_queryable' => true,
-            'show_in_menu'      => true ,
-            'show_in_rest'      => true,
-            'menu_position'     => 5,
-            'show_in_admin_bar' => false,
-            'rewrite'           => array( 'slug' => '' ),
-            'can_export'        => true,
-            'has_archive'       => true,
+            'show_in_menu'       => false ,
+            'show_in_rest'       => true,
+            'menu_position'      => 5,
+            'show_in_admin_bar'  => false,
+            'rewrite'            => array( 'slug' => '' ),
+            'can_export'         => true,
+            'has_archive'        => true,
         );
         register_post_type( 'dokan_store_reviews', $args );
     }

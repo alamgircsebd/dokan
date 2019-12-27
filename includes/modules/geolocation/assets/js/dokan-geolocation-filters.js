@@ -225,7 +225,14 @@
             }
         } );
 
-        self.form.find( '[name="product_cat"]' ).on( 'change', function () {
+        // On category page, category is already selected. So, we are setting the product_cat query.
+        var product_cats = self.form.find( '[name="product_cat"]' );
+
+        if ( product_cats.val() ) {
+            self.queries['product_cat'] = product_cats.val();
+        }
+
+        product_cats.on( 'change', function () {
             var category = $(this).val();
 
             self.set_param( 'product_cat', category );
