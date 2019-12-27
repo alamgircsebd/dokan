@@ -1,6 +1,8 @@
 <?php
 
-class Dokan_Pro_Block_Editor_Block_Types {
+namespace WeDevs\DokanPro;
+
+class BlockEditorBlockTypes {
 
     /**
      * Class constructor

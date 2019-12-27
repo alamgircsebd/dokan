@@ -1,16 +1,17 @@
 <?php
 
-namespace WeDevs\DokanPro;
+namespace WeDevs\DokanPro\Shipping;
 
-use Dokan_WC_Shipping;
 use WC_Countries;
+use WeDevs\DokanPro\Shipping\Methods\ProductShipping;
+use WeDevs\DokanPro\Shipping\Methods\VendorShipping;
 
 /**
  * Dokan Shipping Class
  *
  * @author weDevs
  */
-class Shipping {
+class Hooks {
 
     /**
      * Load automatically when class inistantiate
@@ -20,26 +21,10 @@ class Shipping {
      * @uses actions|filter hooks
      */
     public function __construct() {
-        if ( defined( 'WCML_VERSION' ) ) {
-            require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
-        }
-
-        add_action( 'init', array( $this, 'include_shipping' ), 5 );
         add_action( 'woocommerce_shipping_methods', array( $this, 'register_shipping' ) );
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
-    }
-
-    /**
-     * Include main shipping integration
-     *
-     * @since 2.0
-     *
-     * @return void
-     */
-    function include_shipping() {
-        require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
     }
 
     /**
@@ -51,9 +36,9 @@ class Shipping {
      *
      * @return array
      */
-    function register_shipping( $methods ) {
-        $methods['dokan_product_shipping'] = 'Dokan_WC_Shipping';
-        $methods['dokan_vendor_shipping'] = 'Dokan_Vendor_Shipping';
+    public function register_shipping( $methods ) {
+        $methods['dokan_product_shipping'] = ProductShipping::class;
+        $methods['dokan_vendor_shipping']  = VendorShipping::class;
 
         return $methods;
     }
@@ -67,7 +52,7 @@ class Shipping {
      *
      * @return void
      */
-    function validate_country( $posted ) {
+    public function validate_country( $posted ) {
         $shipping_method = WC()->session->get( 'chosen_shipping_methods' );
 
         // per product shipping was not chosen
@@ -103,7 +88,7 @@ class Shipping {
         $errors = array();
 
         foreach ( $products as $key => $product ) {
-            $dokan_regular_shipping = new Dokan_WC_Shipping();
+            $dokan_regular_shipping = new ProductShipping();
 
             foreach ( $product as $product_obj ) {
                 $seller_id = get_post_field( 'post_author', $product_obj['product_id'] );
@@ -112,11 +97,11 @@ class Shipping {
                     continue;
                 }
 
-                if ( ! Dokan_WC_Shipping::is_shipping_enabled_for_seller( $seller_id ) ) {
+                if ( ! ProductShipping::is_shipping_enabled_for_seller( $seller_id ) ) {
                     continue;
                 }
 
-                if ( Dokan_WC_Shipping::is_product_disable_shipping( $product_obj['product_id'] ) ) {
+                if ( ProductShipping::is_product_disable_shipping( $product_obj['product_id'] ) ) {
                     continue;
                 }
 
@@ -147,7 +132,6 @@ class Shipping {
                 if ( ! $has_found ) {
                     $errors[] = sprintf( '<a href="%s">%s</a>', get_permalink( $product_obj['product_id'] ), get_the_title( $product_obj['product_id'] ) );
                 }
-
             }
         }
 
@@ -169,8 +153,7 @@ class Shipping {
      *
      *  @return void
      */
-    function handle_shipping() {
-
+    public function handle_shipping() {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -180,7 +163,6 @@ class Shipping {
         }
 
         if ( isset( $_POST['dokan_update_shipping_options'] ) && wp_verify_nonce( $_POST['dokan_shipping_form_field_nonce'], 'dokan_shipping_form_field' ) ) {
-
             if ( ! current_user_can( 'dokan_view_store_shipping_menu' ) ) {
                 wp_die( __( 'You have no access to save this shipping options', 'dokan' ) );
             }
@@ -283,7 +265,7 @@ class Shipping {
      *
      * @return array
      */
-    function register_product_tab( $tabs ) {
+    public function register_product_tab( $tabs ) {
         global $post;
 
         if( get_post_meta( $post->ID, '_disable_shipping', true ) == 'yes' ) {
@@ -314,7 +296,7 @@ class Shipping {
      *
      * @return void
      */
-    function shipping_tab() {
+    public function shipping_tab() {
         global $post;
 
         $_overwrite_shipping     = get_post_meta( $post->ID, '_overwrite_shipping', true );

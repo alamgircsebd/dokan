@@ -1408,11 +1408,9 @@ function dokan_custom_split_shipping_packages( $packages ) {
     $seller_pack = array();
     $packages = array();
 
-
     foreach ( $cart_content as $key => $item ) {
-
         // If individual seller product shipping is disable then out from here
-        if ( Dokan_WC_Shipping::is_product_disable_shipping( $item['product_id'] ) ) {
+        if ( \WeDevs\DokanPro\Shipping\Methods\ProductShipping::is_product_disable_shipping( $item['product_id'] ) ) {
             continue;
         }
 

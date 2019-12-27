@@ -14,19 +14,17 @@ class Manager {
      * @return array
      */
     public static function register_rest_routes( $class_map ) {
-        $pro_class_map = [
-            DOKAN_PRO_DIR . '/includes/api/class-store-category-controller.php'    => 'Dokan_REST_Store_Category_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-coupon-controller.php'            => 'Dokan_REST_Coupon_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-reports-controller.php'           => 'Dokan_REST_Reports_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-reviews-controller.php'           => 'Dokan_REST_Reviews_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-product-variation-controller.php' => 'Dokan_REST_Product_Variation_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-store-controller.php'             => 'Dokan_Pro_REST_Store_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-modules-controller.php'           => 'Dokan_REST_Modules_Controller',
-            DOKAN_PRO_DIR . '/includes/api/class-announcement-controller.php'      => 'Dokan_REST_Announcement_Controller',
-            DOKAN_PRO_INC . '/REST/RefundController.php'                           => 'WeDevs\DokanPro\REST\RefundController',
-            DOKAN_PRO_DIR . '/includes/api/class-logs-controller.php'              => 'Dokan_REST_Logs_Controller',
-        ];
+        $class_map[ DOKAN_PRO_INC . '/REST/StoreCategoryController.php' ]    = StoreCategoryController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/CouponController.php' ]           = CouponController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/ReportsController.php' ]          = ReportsController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/ReviewsController.php' ]          = ReviewsController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/ProductVariationController.php' ] = ProductVariationController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/StoreController.php' ]            = StoreController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/ModulesController.php' ]          = ModulesController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/AnnouncementController.php' ]     = AnnouncementController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/LogsController.php' ]             = LogsController::class;
+        $class_map[ DOKAN_PRO_INC . '/REST/RefundController.php' ]           = RefundController::class;
 
-        return array_merge( $class_map, $pro_class_map );
+        return $class_map;
     }
 }

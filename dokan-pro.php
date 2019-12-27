@@ -245,61 +245,10 @@ class Dokan_Pro {
             require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
         }
 
-        require_once DOKAN_PRO_INC . '/shipping-gateway/shipping.php';
-        require_once DOKAN_PRO_INC . '/shipping-gateway/vendor-shipping.php';
         require_once DOKAN_PRO_INC . '/functions.php';
-        require_once DOKAN_PRO_INC . '/orders.php';
+        require_once DOKAN_PRO_INC . '/function-orders.php';
         require_once DOKAN_PRO_INC . '/functions-reports.php';
-        require_once DOKAN_PRO_INC . '/wc-functions.php';
-
-        require_once DOKAN_PRO_INC . '/widgets/best-seller.php';
-        require_once DOKAN_PRO_INC . '/widgets/feature-seller.php';
-
-        require_once DOKAN_PRO_INC . '/class-block-editor-block-types.php';
-        require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
-        require_once DOKAN_PRO_INC . '/class-store-lists-filter.php';
-    }
-
-    /**
-     * Instantiate all classes
-     *
-     * @since 2.4
-     *
-     * @return void
-     */
-    public function init_classes() {
-        new Dokan_Store_Category();
-        Dokan_Store_lists_Filter_Pro::instance();
-
-        if ( is_admin() ) {
-            Dokan_Pro_Admin_Ajax::init();
-            new Dokan_Pro_Admin_Settings();
-            new Dokan_Pro_Promotion();
-        }
-
-        new Dokan_Announcement();
-
-        Dokan_Pro_Ajax::init();
-        Dokan_Pro_Shipping::init();
-        new Dokan_Shipping_Zone();
-        new Dokan_Update( $this->plan );
-        Dokan_Email_Verification::init();
-        Dokan_Social_Login::init();
-
-        if ( is_user_logged_in() ) {
-            Dokan_Pro_Dashboard::init();
-            Dokan_Pro_Products::init();
-            Dokan_Pro_Coupons::init();
-            Dokan_Pro_Reviews::init();
-            Dokan_Pro_Reports::init();
-            Dokan_Pro_Withdraws::init();
-            Dokan_Pro_Settings::init();
-            Dokan_Pro_Notice::init();
-            Dokan_Pro_Refund::init();
-        }
-
-        Dokan_Pro_Store::init();
-        new Dokan_Pro_Assets();
+        require_once DOKAN_PRO_INC . '/functions-wc.php';
     }
 
     /**
@@ -316,8 +265,6 @@ class Dokan_Pro {
         add_action( 'init', [ $this, 'init_classes' ], 10 );
         add_action( 'init', [ $this, 'register_scripts' ], 10 );
 
-        add_action( 'widgets_init', [ $this, 'register_widgets' ] );
-
         add_action( 'woocommerce_after_my_account', [ $this, 'dokan_account_migration_button' ] );
 
         add_action( 'dokan_enqueue_scripts', [ $this, 'enqueue_scripts' ], 11 );
@@ -325,7 +272,7 @@ class Dokan_Pro {
         add_action( 'dokan_enqueue_admin_dashboard_script', [ $this, 'admin_dashboad_enqueue_scripts' ] );
 
         if ( function_exists( 'register_block_type' ) ) {
-            new Dokan_Pro_Block_Editor_Block_Types();
+            new \WeDevs\DokanPro\BlockEditorBlockTypes();
         }
     }
 
@@ -343,6 +290,7 @@ class Dokan_Pro {
         add_filter( 'woocommerce_locate_template', [ $this, 'account_migration_template' ] );
         add_filter( 'woocommerce_locate_template', [ $this, 'dokan_registration_template' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_pro_templates' ], 10, 3 );
+        add_filter( 'dokan_widgets', [ $this, 'register_widgets' ] );
 
         //Dokan Email filters for WC Email
         add_filter( 'woocommerce_email_classes', [ $this, 'load_dokan_emails' ], 36 );
@@ -368,6 +316,8 @@ class Dokan_Pro {
      */
     public function init_classes() {
         new WeDevs\DokanPro\Refund\Hooks();
+        new WeDevs\DokanPro\Brands\Hooks();
+        new \WeDevs\DokanPro\Shipping\Hooks();
 
         new \WeDevs\DokanPro\StoreCategory();
 
@@ -378,7 +328,6 @@ class Dokan_Pro {
         }
 
         new \WeDevs\DokanPro\Admin\Announcement();
-        new \WeDevs\DokanPro\Shipping();
         new \WeDevs\DokanPro\Update( $this->get_plan() );
         new \WeDevs\DokanPro\EmailVerification();
         new \WeDevs\DokanPro\SocialLogin();
@@ -390,6 +339,7 @@ class Dokan_Pro {
         $this->container['review']      = new \WeDevs\DokanPro\Review();
         $this->container['notice']      = new \WeDevs\DokanPro\Notice();
         $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
+        $this->container['brands']      = new \WeDevs\DokanPro\Brands\Manager();
 
         if ( is_user_logged_in() ) {
             new \WeDevs\DokanPro\Dashboard();
@@ -428,9 +378,11 @@ class Dokan_Pro {
      *
      * @return void
      */
-    public function register_widgets() {
-        register_widget( 'Dokan_Best_Seller_Widget' );
-        register_widget( 'Dokan_Feature_Seller_Widget' );
+    public function register_widgets( $widgets ) {
+        $widgets['best_seller'] = \WeDevs\DokanPro\Widgets\BestSeller::class;
+        $widgets['feature_seller'] = \WeDevs\DokanPro\Widgets\FeatureSeller::class;
+
+        return $widgets;
     }
 
     /**
@@ -621,12 +573,12 @@ class Dokan_Pro {
      * @return $wc_emails
      */
     public function load_dokan_emails( $wc_emails ) {
-        $wc_emails['Dokan_Email_Announcement']    = include( DOKAN_PRO_INC . '/emails/class-dokan-email-announcement.php' );
-        $wc_emails['Dokan_Email_Updated_Product'] = include( DOKAN_PRO_INC . '/emails/class-dokan-email-updated-product.php' );
-        $wc_emails['Dokan_Email_Refund_Request']  = include( DOKAN_PRO_INC . '/emails/class-dokan-refund-request.php' );
-        $wc_emails['Dokan_Email_Refund_Vendor']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-refund-vendor.php' );
-        $wc_emails['Dokan_Email_Vendor_Enable']   = include( DOKAN_PRO_INC . '/emails/class-dokan-email-vendor-enable.php' );
-        $wc_emails['Dokan_Email_Vendor_Disable']  = include( DOKAN_PRO_INC . '/emails/class-dokan-email-vendor-disable.php' );
+        $wc_emails['Dokan_Email_Announcement']    = new \WeDevs\DokanPro\Emails\Announcement();
+        $wc_emails['Dokan_Email_Updated_Product'] = new \WeDevs\DokanPro\Emails\UpdatedProduct();
+        $wc_emails['Dokan_Email_Refund_Request']  = new \WeDevs\DokanPro\Emails\RefundRequest();
+        $wc_emails['Dokan_Email_Refund_Vendor']   = new \WeDevs\DokanPro\Emails\RefundVendor();
+        $wc_emails['Dokan_Email_Vendor_Enable']   = new \WeDevs\DokanPro\Emails\VendorEnable();
+        $wc_emails['Dokan_Email_Vendor_Disable']  = new \WeDevs\DokanPro\Emails\VendorEnable();
 
         return $wc_emails;
     }

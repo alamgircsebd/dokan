@@ -1,6 +1,6 @@
 <?php
 
-namespace WeDevs\DokanPro;
+namespace WeDevs\DokanPro\Shipping;
 
 /**
 * Dokan Shipping Zone Class
