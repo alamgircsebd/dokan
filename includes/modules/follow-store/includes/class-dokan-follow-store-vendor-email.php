@@ -149,7 +149,7 @@ class Dokan_Follow_Store_Vendor_Email extends WC_Email {
      * @return string|null
      */
     public function get_email_recipient() {
-        if ( $this->vendor instanceof Dokan_Vendor && is_email( $this->vendor->get_email() ) ) {
+        if ( method_exists( $this->vendor, 'get_email' ) && is_email( $this->vendor->get_email() ) ) {
             return $this->vendor->get_email();
         }
 
