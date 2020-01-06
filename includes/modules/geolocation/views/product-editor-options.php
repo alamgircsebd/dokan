@@ -47,7 +47,22 @@
                 <?php endif; ?>
             </div>
 
-            <div id="dokan-geolocation-product-location-map"></div>
+            <?php
+                $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+                if ( 'mapbox' === $source ) {
+                    $access_token = dokan_get_option( 'mapbox_access_token', 'dokan_appearance', null );
+                    ?>
+                        <div id="dokan-geolocation-product-location-map" class="dokan-maps-mapbox"></div>
+                        <input type="hidden" name="_dokan_geolocation_mapbox_access_token" value="<?php echo $access_token; ?>">
+                    <?php
+                } else {
+                    ?>
+                        <div id="dokan-geolocation-product-location-map"></div>
+                    <?php
+                }
+
+            ?>
         </div>
     </div>
 

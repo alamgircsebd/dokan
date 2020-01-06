@@ -61,3 +61,31 @@
         }
     }
 }
+
+#dokan-geolocation-product-location-map {
+
+    &.dokan-maps-mapbox {
+        width: 100%;
+
+        .dokan-mapboxgl-ctrl.mapboxgl-ctrl-group > button {
+            width: auto;
+            padding: 1px 8px;
+
+            i {
+                margin-right: 5px;
+            }
+        }
+
+        .mapboxgl-ctrl-top-left .mapboxgl-ctrl-geocoder {
+            display: none;
+        }
+
+        .mapboxgl-ctrl-top-left.show-geocoder .mapboxgl-ctrl-geocoder {
+            display: block;
+        }
+
+        .mapboxgl-ctrl-top-left.show-geocoder .dokan-mapboxgl-ctrl {
+            display: none;
+        }
+    }
+}
