@@ -61,3 +61,22 @@
 .dokan-geolocation-row #dokan-seller-listing-wrap ul.dokan-seller-wrap {
   margin: 0;
 }
+#dokan-geolocation-product-location-map.dokan-maps-mapbox {
+  width: 100%;
+}
+#dokan-geolocation-product-location-map.dokan-maps-mapbox .dokan-mapboxgl-ctrl.mapboxgl-ctrl-group > button {
+  width: auto;
+  padding: 1px 8px;
+}
+#dokan-geolocation-product-location-map.dokan-maps-mapbox .dokan-mapboxgl-ctrl.mapboxgl-ctrl-group > button i {
+  margin-right: 5px;
+}
+#dokan-geolocation-product-location-map.dokan-maps-mapbox .mapboxgl-ctrl-top-left .mapboxgl-ctrl-geocoder {
+  display: none;
+}
+#dokan-geolocation-product-location-map.dokan-maps-mapbox .mapboxgl-ctrl-top-left.show-geocoder .mapboxgl-ctrl-geocoder {
+  display: block;
+}
+#dokan-geolocation-product-location-map.dokan-maps-mapbox .mapboxgl-ctrl-top-left.show-geocoder .dokan-mapboxgl-ctrl {
+  display: none;
+}
