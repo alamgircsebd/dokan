@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			} else {
 				?>
 				<tr>
-					<td colspan="5"><?php esc_html_e( 'No add-ons found.', 'dokan' ); ?> <a href="<?php echo add_query_arg( 'add', true, admin_url( 'edit.php?post_type=product&page=addons' ) ); ?>"><?php esc_html_e( 'Create add-ons.', 'dokan' ); ?></a></td>
+					<td colspan="5"><?php esc_html_e( 'No add-ons found.', 'dokan' ); ?> <a href="<?php echo add_query_arg( 'add', true, dokan_get_navigation_url( 'settings/product-addon' ) ); ?>"><?php esc_html_e( 'Create add-ons.', 'dokan' ); ?></a></td>
 				</tr>
 				<?php
 			}
