@@ -59,7 +59,9 @@
                 locations.latitude += latitude;
             } );
 
-            self.map.setCenter( [ locations.longitude / self.items.length, locations.latitude / self.items.length ] );
+            if ( locations.longitude && locations.latitude ) {
+                self.map.setCenter( [ locations.longitude / self.items.length, locations.latitude / self.items.length ] );
+            }
 
             self.map.on( 'load', function () {
                 self.loadImages( 'image', DokanGeo.marker.image );
