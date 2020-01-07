@@ -639,5 +639,5 @@ function dokan() {
     return WeDevs_Dokan::init();
 }
 
-// Lets Go....
+// Lets Go....and funs
 dokan();
