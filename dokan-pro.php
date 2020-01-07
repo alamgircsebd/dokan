@@ -3,7 +3,7 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.9.16
+  Version: 2.9.17
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.16';
+    public $version = '2.9.17';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -293,6 +293,7 @@ class Dokan_Pro {
         }
 
         require_once DOKAN_PRO_INC . '/brands/class-dokan-brands.php';
+        require_once DOKAN_PRO_INC . '/class-store-lists-filter.php';
     }
 
     /**
@@ -304,6 +305,7 @@ class Dokan_Pro {
      */
     public function inistantiate() {
         new Dokan_Store_Category();
+        Dokan_Store_lists_Filter_Pro::instance();
 
         if ( is_admin() ) {
             Dokan_Pro_Admin_Ajax::init();
@@ -438,8 +440,13 @@ class Dokan_Pro {
      * @return void
      * */
     public function enqueue_scripts() {
-
-        if ( ( dokan_is_seller_dashboard() || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) || dokan_is_store_page() || dokan_is_store_review_page() || is_account_page() || apply_filters( 'dokan_forced_load_scripts', false ) ) {
+        if (
+            ( dokan_is_seller_dashboard() || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) )
+            || dokan_is_store_page()
+            || dokan_is_store_review_page()
+            || is_account_page()
+            || apply_filters( 'dokan_forced_load_scripts', true )
+            ) {
             // wp_enqueue_style( 'dokan-pro-style' );
             wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
 

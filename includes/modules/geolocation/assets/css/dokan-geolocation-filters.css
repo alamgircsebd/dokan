@@ -201,3 +201,24 @@
   text-decoration: none;
   cursor: pointer;
 }
+#dokan-store-listing-filter-wrap {
+  position: relative;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: -30px;
+  margin-bottom: 10px;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-geo-filters-column {
+  width: 49%;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-geo-filters-column .store-search-input,
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-geo-filters-column input {
+  padding: 10px 15px;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .range-slider-container {
+  width: 100%;
+}

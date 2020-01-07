@@ -111,6 +111,10 @@ class Dokan_Store_Reviews {
             wp_enqueue_script( 'dsr-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery', 'dokan-popup' ), false, true );
             wp_enqueue_script( 'dokan-rateyo', plugins_url( 'assets/js/rateyo.min.js', __FILE__ ) );
         }
+
+        if ( dokan_is_store_listing() ) {
+            wp_enqueue_style( 'dsr-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
+        }
     }
 
     /**

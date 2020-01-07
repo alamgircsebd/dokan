@@ -51,7 +51,7 @@ class Dokan_Geolocation_Scripts {
             wp_register_script( 'dokan-geo-locations-map', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-locations-map-google-maps.js', array( 'jquery', 'dokan-geo-google-maps-markerclusterer' ), DOKAN_PRO_PLUGIN_VERSION, true );
         }
 
-
+        wp_register_script( 'dokan-geo-filters-store-lists', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-store-lists-filters.js', array( 'jquery', 'google-maps' ), DOKAN_GEOLOCATION_VERSION, true );
         wp_register_script( 'dokan-geo-filters', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-filters.js', array( 'jquery', 'underscore', 'dokan-maps' ), DOKAN_PRO_PLUGIN_VERSION, true );
     }
 

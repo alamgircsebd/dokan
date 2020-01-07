@@ -1,0 +1,147 @@
+@media (max-width: 992px) {
+    #dokan-store-listing-filter-form-wrap {
+        .store-lists-other-filter-wrap {
+            font-size: 13px;
+
+            .store-lists-category {
+                .category-input {
+                    width: 195px;
+                }
+            }
+
+            .item {
+                .switch {
+                    input {
+                        &:checked + .slider {
+                            &:before {
+                                transform: translateX(23px);
+                            }
+                        }
+                    }
+
+                    .slider {
+                        width: 45px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media ( max-width: 767px ) {
+    #dokan-store-listing-filter-form-wrap {
+        .store-lists-other-filter-wrap {
+            font-size: 14px;
+            flex-direction: column;
+
+            .store-lists-category {
+                .category-input {
+                    width: 100%;
+                }
+
+                .category-box {
+                    position: relative;
+                    width: 100%;
+                    top: 10px;
+                }
+            }
+
+            .item {
+                &:not(.store-lists-category) {
+                    label {
+                        width: 265px;
+                        margin-top: 15px;
+                    }
+
+                    .stars {
+                        margin-top: 15px;
+                    }
+                }
+
+                .switch {
+                    input {
+                        &:checked + .slider {
+                            &:before {
+                                transform: translateX(28px);
+                            }
+                        }
+                    }
+
+                    .slider {
+                        width: 50px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 430px) {
+    #dokan-store-listing-filter-form-wrap {
+
+        .store-lists-other-filter-wrap {
+            .store-lists-category {
+                .category-input {
+                    .dokan-icon {
+                        left: 90%;
+                    }
+                }
+            }
+        }
+
+        .apply-filter {
+            margin-top: 30px;
+        }
+    }
+}
+
+@media ( max-width: 375px ) {
+    #dokan-store-listing-filter-form-wrap {
+        .store-lists-other-filter-wrap {
+            .item {
+                &:not(.store-lists-category) {
+                    label {
+                        width: 231px;
+                        margin-top: 15px;
+                    }
+
+                    .stars {
+                        margin-top: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media ( max-width: 360px ) {
+    #dokan-store-listing-filter-form-wrap {
+        .store-lists-other-filter-wrap {
+            .item {
+                &:not(.store-lists-category) {
+                    label {
+                        margin-top: 15px;
+                        width: 218px;
+                    }
+                    .stars {
+                        margin-top: 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media ( max-width: 320px ) {
+    #dokan-store-listing-filter-form-wrap {
+        .store-lists-other-filter-wrap {
+            .item {
+                &:not(.store-lists-category) {
+                    label {
+                        width: 181px;
+                    }
+                }
+            }
+        }
+    }
+}

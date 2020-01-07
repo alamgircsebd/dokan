@@ -2,10 +2,59 @@
     padding: 30px;
 }
 #dokan-seller-rating{
-    padding: 10px 0px;   
+    padding: 10px 0px;
 }
 .dokan-seller-rating-intro-text{
     font-size: 16px;
     margin-top: 10px;
     font-style: italic;
+}
+
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings {
+    display: flex;
+}
+
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings .stars {
+    margin-left: 8px;
+    margin-top: 2px;
+}
+
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings .stars a {
+    padding: 0 9px;
+    font-size: 16px;
+    color: #fa9a00 !important;
+}
+
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings .stars .up {
+    position: relative;
+    top: -2px;
+    padding-left: 5px;
+}
+
+#dokan-seller-listing-wrap.list-view .star-ratings {
+    color: #000;
+}
+
+@media ( max-width: 767px ) {
+    #dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings.item label {
+        width: 204px !important;
+    }
+}
+
+@media ( max-width: 375px ) {
+    #dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings.item label {
+        width: 165px !important;
+    }
+}
+
+@media ( max-width: 360px ) {
+    #dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings.item label {
+        width: 150px !important;
+    }
+}
+
+@media ( max-width: 320px ) {
+    #dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .store-ratings.item label {
+        width: 110px !important;
+    }
 }
