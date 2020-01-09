@@ -33,6 +33,12 @@ class Dokan_Stripe_Connect extends Dokan_Stripe_Gateway {
         $all_withdraws = [];
 
         if ( Helper::is_3d_secure_enabled() ) {
+            $error = ! empty( $_POST['dokan_payment_error'] ) ? wc_clean( $_POST['dokan_payment_error'] ) : '';
+
+            if ( $error ) {
+                return wc_add_notice( $error, 'error' );
+            }
+
             if ( $this->is_subscription_order( $order ) ) {
                 $this->process_subscription_payment( $order_id, $order, $customer_id, $stripe_token );
 

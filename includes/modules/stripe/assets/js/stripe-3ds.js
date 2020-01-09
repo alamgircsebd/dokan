@@ -73,7 +73,7 @@ jQuery( function( $ ) {
                 && response.data.code
                 && 'subscription_not_created' === response.data.code
                 ) {
-                return console.log( response.data.code.message )
+                return console.log(response.data.message);
             }
 
             if ( typeof response !== 'undefined'
@@ -130,8 +130,7 @@ jQuery( function( $ ) {
 
         if ( response.error && response.error.message ) {
             form.unblock();
-            console.log( response.error.message );
-            return;
+            form.append( `<input type="hidden" name="dokan_payment_error" value="${response.error.message}">` );
         }
 
         form.unbind( 'checkout_place_order_dokan-stripe-connect' );

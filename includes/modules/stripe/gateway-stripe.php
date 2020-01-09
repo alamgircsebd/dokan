@@ -773,7 +773,7 @@ class Dokan_Stripe {
             return wp_send_json_error( __( 'Refund ID is not found', 'dokan' ) );
         }
 
-        $order->add_order_note( sprintf( __( 'Refund Processed Via Stripe ( Refund ID: %s )', 'dokan' ), $refund->id ) );
+        $order->add_order_note( sprintf( __( 'Refund Processed Via %s ( Refund ID: %s )', 'dokan' ), $stripe_options['title'], $refund->id ) );
 
         if ( ! class_exists( 'Dokan_REST_Refund_Controller' ) ) {
             require_once DOKAN_PRO_INC . '/api/class-refund-controller.php';
