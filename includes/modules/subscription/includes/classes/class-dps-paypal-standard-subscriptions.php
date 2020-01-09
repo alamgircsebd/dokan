@@ -30,6 +30,10 @@ class DPS_PayPal_Standard_Subscriptions {
      * @since 1.0
      */
     public static function init() {
+        if ( ! self::get_wc_paypal_settings() ) {
+            return;
+        }
+
         self::set_api_credentials();
         self::subscription_paypal_credential_verify();
 

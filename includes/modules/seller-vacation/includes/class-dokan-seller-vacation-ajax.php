@@ -42,7 +42,7 @@ class Dokan_Seller_Vacation_Ajax {
 
             $from         = date( 'Y-m-d', strtotime( $item['from'] ) );
             $to           = date( 'Y-m-d', strtotime( $item['to'] ) );
-            $current_time = date( 'Y-m-d', current_time( 'mysql' ) );
+            $current_time = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
 
             if ( ! ( $current_time <= $from && $current_time <= $to ) ) {
                 throw new Dokan_Exception( 'invalid_date_range', __( 'Invalid date range', 'dokan' ), 400 );
