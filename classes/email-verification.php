@@ -13,7 +13,18 @@ defined( 'ABSPATH' ) || exit;
  *
  */
 Class Dokan_Email_Verification {
+    /**
+     * WP_User holder
+     *
+     * @var WP_User
+     */
+    private $user;
 
+    /**
+     * My account page url holder
+     *
+     * @var string
+     */
     private $base_url;
 
     /**
@@ -49,15 +60,14 @@ Class Dokan_Email_Verification {
      * call actions and hooks
      */
     public function init_hooks() {
-        //add settings menu page
         add_filter( 'dokan_settings_sections', array( $this, 'dokan_email_verification_settings' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'dokan_email_settings_fields' ) );
+        add_action( 'woocommerce_created_customer', array( $this,'send_verification_email'), 5, 3 );
 
         if ( $this->maybe_verification_not_needed() ) {
             return;
         }
 
-        add_action( 'woocommerce_created_customer', array( $this,'send_verification_email'), 5, 3 );
         add_action( 'woocommerce_registration_redirect', array( $this, 'check_verification' ), 99 );
         add_action( 'woocommerce_login_redirect', array( $this, 'check_verification' ), 99, 2 );
         add_action( 'init', array( $this,'validate_email_link' ), 100 );
@@ -80,10 +90,9 @@ Class Dokan_Email_Verification {
      * @return void
      */
     function send_verification_email( $customer_id, $new_customer_data, $password_generated ) {
-        $user            = get_user_by( 'id', $customer_id );
-        $code            = sha1( $customer_id . $user->user_email . time() );
+        $this->user = get_user_by( 'id', $customer_id );
+        $code       = sha1( $customer_id . $this->user->user_email . time() );
 
-        // update user meta
         add_user_meta( $customer_id, '_dokan_email_verification_key', $code, true );
         add_user_meta( $customer_id, '_dokan_email_pending_verification', true, true);
     }
@@ -147,9 +156,6 @@ Class Dokan_Email_Verification {
         delete_user_meta( $user_id, '_dokan_email_pending_verification' );
         delete_user_meta( $user_id, '_dokan_email_verification_key' );
 
-        // $notice = dokan_get_option( 'activation_notice', 'dokan_email_verification' );
-
-        // wc_add_notice( sprintf( __( '%s', 'dokan' ), $notice ) );
         do_action( 'woocommerce_set_cart_cookies', true );
 
         $user = get_user_by( 'id', $user_id );
@@ -237,11 +243,6 @@ Class Dokan_Email_Verification {
      * @return void
      */
     public function verify_vendor( $user_id ) {
-
-        if ( ! isset( $_POST['verify_vendor'] ) ) {
-            return;
-        }
-
         if ( empty( $_POST['verify_vendor'] ) ) {
             return;
         }
@@ -262,11 +263,6 @@ Class Dokan_Email_Verification {
      * @return void
      */
     public function send_verification_email_again() {
-
-        if ( ! isset( $_GET['dokan_email_verification_again'] ) ) {
-            return;
-        }
-
         if ( empty( $_GET['dokan_email_verification_again'] ) ) {
             return;
         }
@@ -359,16 +355,7 @@ Class Dokan_Email_Verification {
                 'type'  => 'text',
                 'desc'  => __( 'This notice will be shown when a user tries to login without email verification.', 'dokan' ),
                 'default' => __( 'Please check your email and complete email verification to login.', 'dokan' ),
-            ),
-            // 'activation_notice' => array(
-            //     'name'  => 'activation_notice',
-            //     'label' => __( 'Activation Notice', 'dokan' ),
-            //     'type'  => "text",
-            //     'desc'  => __( 'This notice will be shown when a user succesfully completes email verification.', 'dokan' ),
-            //     'default' => __( 'Email verification is complete, you will be loggedin automatically in a few seconds.', 'dokan' ),
-            // ),
-
-
+            )
         );
 
         return $settings_fields;
@@ -406,10 +393,25 @@ Class Dokan_Email_Verification {
             return true;
         }
 
-        if ( class_exists( 'Dokan_Product_Subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
+        if (
+            $this->is_vendor()
+            && class_exists( 'Dokan_Product_Subscription' )
+            && Helper::is_subscription_enabled_on_registration()
+            ) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Check if the user is vendor
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    protected function is_vendor() {
+        return in_array( 'seller', $this->user->roles );
     }
 }
