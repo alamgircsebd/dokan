@@ -57,22 +57,22 @@ function dokan_get_reports_charts() {
  */
 function dokan_seller_sales_statement() {
     $start_date = date( 'Y-m-01', current_time('timestamp') );
-    $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
+    $end_date   = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
     if ( isset( $_GET['dokan_report_filter'] ) ) {
         $start_date = $_GET['start_date'];
-        $end_date = $_GET['end_date'];
+        $end_date   = $_GET['end_date'];
     }
     ?>
 
     <form method="get" class="dokan-form-inline report-filter dokan-clearfix" action="">
         <div class="dokan-form-group">
-            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $start_date ) ); ?>" />
+            <label for="from"><?php _e( 'From:', 'dokan' ); ?></label> <input type="text" class="datepicker" name="start_date" id="from" readonly="readonly" value="<?php echo esc_attr( wp_unslash( $start_date ) ); ?>" />
         </div>
 
         <div class="dokan-form-group">
             <label for="to"><?php _e( 'To:', 'dokan' ); ?></label>
-            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ); ?>" />
+            <input type="text" name="end_date" id="to" class="datepicker" readonly="readonly" value="<?php echo esc_attr( wp_unslash( $end_date ) ); ?>" />
 
             <input type="hidden" name="chart" value="sales_statement">
             <input type="submit" name="dokan_report_filter" class="dokan-btn dokan-btn-success dokan-btn-sm dokan-theme" value="<?php _e( 'Show', 'dokan' ); ?>" />
