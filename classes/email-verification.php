@@ -412,6 +412,6 @@ Class Dokan_Email_Verification {
      * @return boolean
      */
     protected function is_vendor() {
-        return in_array( 'seller', $this->user->roles );
+        return ! empty( $this->user->roles ) && in_array( 'seller', $this->user->roles );
     }
 }
