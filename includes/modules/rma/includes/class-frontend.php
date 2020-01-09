@@ -210,6 +210,10 @@ class Dokan_RMA_Frontend {
         $_product   = $cart_item['data'];
         $product_id = $_product->get_id();
 
+        if ( $_product->get_parent_id() ) {
+            $product_id = $_product->get_parent_id();
+        }
+
         $warranty       = $this->get_settings( $product_id );
         $warranty_label = $warranty['label'];
 
