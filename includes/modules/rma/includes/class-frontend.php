@@ -15,10 +15,10 @@ class Dokan_RMA_Frontend {
     public function __construct() {
         add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'show_product_warranty' ] );
         add_filter( 'woocommerce_add_cart_item_data', [ $this, 'add_cart_item_data' ], 10, 2 );
-        add_filter( 'woocommerce_add_cart_item', [ $this, 'add_cart_item' ], 10, 1 );
+        add_filter( 'woocommerce_add_cart_item', [ $this, 'add_cart_item' ], 15, 1 );
         add_filter( 'woocommerce_add_to_cart_validation', [ $this, 'add_cart_validation' ], 10, 2 );
 
-        add_filter( 'woocommerce_get_cart_item_from_session', [ $this, 'get_cart_item_from_session' ], 10, 2 );
+        add_filter( 'woocommerce_get_cart_item_from_session', [ $this, 'get_cart_item_from_session' ], 15, 2 );
         add_filter( 'woocommerce_get_item_data', [ $this, 'get_item_data' ], 10, 2 );
         add_action( 'woocommerce_add_to_cart', [ $this, 'add_warranty_index' ], 10, 6 );
 
