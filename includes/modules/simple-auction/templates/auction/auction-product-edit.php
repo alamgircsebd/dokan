@@ -36,6 +36,10 @@ $_auction_relist_not_paid_time = get_post_meta( $post_id, '_auction_relist_not_p
 $_auction_relist_duration      = get_post_meta( $post_id, '_auction_relist_duration', true );
 $_visibility                   = ( version_compare( WC_VERSION, '2.7', '>' ) ) ? $product->get_catalog_visibility() : get_post_meta( $post_id, '_visibility', true );
 $visibility_options            = dokan_get_product_visibility_options();
+
+if ( ! empty( $_GET['errors'] ) ) {
+    Dokan_Template_Auction::$errors = array_map( 'sanitize_text_field', wp_unslash( $_GET['errors'] ) );
+}
 ?>
 
 <?php do_action( 'dokan_dashboard_wrap_start' ); ?>
@@ -86,6 +90,16 @@ do_action( 'dokan_edit_auction_product_content_before' );
                 <?php } ?>
             </div>
         <?php } ?>
+
+        <?php if ( Dokan_Template_Auction::$errors ) : ?>
+            <div class="dokan-alert dokan-alert-danger">
+                <a class="dokan-close" data-dismiss="alert">&times;</a>
+
+                <?php foreach ( Dokan_Template_Auction::$errors as $error) : ?>
+                    <strong><?php _e( 'Error!', 'dokan' ); ?></strong> <?php echo $error ?>.<br>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
 
         <form class="dokan-form-container dokan-auction-product-form" role="form" method="post">
             <?php wp_nonce_field( 'dokan_edit_auction_product', 'dokan_edit_auction_product_nonce' ); ?>
