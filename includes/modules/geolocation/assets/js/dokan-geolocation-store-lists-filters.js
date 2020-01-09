@@ -9,13 +9,26 @@
 
             this.slider = $( '.store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-range-slider' );
             this.sliderValue = this.slider.prev( '.dokan-range-slider-value' ).find( 'span' );
-
             this.slider.on( 'input', this.setSliderValue );
             this.slider.on( 'change', this.setDistance );
+
+            $( '.store-lists-other-filter-wrap .dokan-geolocation-location-filters .location-address input' ).on( 'change', this.buildAddressQuery );
 
             self.bindAddressInput();
 
             $(' #dokan-store-listing-filter-wrap .dokan-geolocation-filters-loading' ).remove();
+        },
+
+        buildAddressQuery: function( event ) {
+            const self = geoLocationStoreLists;
+
+            self.setParam( 'address', event.target.value );
+
+            if ( ! event.target.value ) {
+                self.setParam( 'distance', '' );
+                self.setParam( 'longitude', '' );
+                self.setParam( 'latitude', '' );
+            }
         },
 
         bindAddressInput: function() {
