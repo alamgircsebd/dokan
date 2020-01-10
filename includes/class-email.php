@@ -17,14 +17,7 @@ class Dokan_Email {
         add_filter( 'woocommerce_template_directory', array( $this, 'set_email_template_directory' ), 15, 2 );
         add_filter( 'woocommerce_email_actions' , array( $this, 'register_email_actions' ) );
     }
-
-    /**
-     * Test functions
-     */
-    public function dokan_test_functions_just(){
-        return true;
-    }
-
+    
     /**
      * Initializes the Dokan_Email() class
      *
