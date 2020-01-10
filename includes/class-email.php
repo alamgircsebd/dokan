@@ -19,6 +19,13 @@ class Dokan_Email {
     }
 
     /**
+     * Test functions
+     */
+    public function dokan_test_functions_just(){
+        return true;
+    }
+
+    /**
      * Initializes the Dokan_Email() class
      *
      * Checks for an existing Dokan_Email() instance
