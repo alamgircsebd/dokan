@@ -48,8 +48,6 @@ class Dokan_Geolocation_Vendor_View {
 
         $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
 
-        dokan_geo_get_template( 'map', [ 'layout' => 'top' ] );
-
         switch ( self::$map_location ) {
             case 'right':
                 echo '<div class="dokan-geolocation-row dokan-geolocation-map-right"><div class="dokan-geolocation-col-7">';
