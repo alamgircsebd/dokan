@@ -222,3 +222,8 @@
 #dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .range-slider-container {
   width: 100%;
 }
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .range-slider-container .dokan-range-slider {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: fill-available;
+}
