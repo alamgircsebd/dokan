@@ -40,6 +40,8 @@
                     storeListsPro.setParams( Object.keys( param ), Object.values( param ) );
                 });
             }
+
+            this.makeStyleAdjustment();
         },
 
         /**
@@ -199,6 +201,23 @@
                 categoryHolder.text( ' ' ).append( string.substr( 0, 15 ) + '...' );
             } else {
                 categoryHolder.text( ' ' ).append( string );
+            }
+        },
+
+        /**
+         * If only 2 elments found, make them stay closer ( open now and featured )
+         *
+         * Push apply button a little down
+         *
+         * @return void
+         */
+        makeStyleAdjustment() {
+            const element = $('.store-lists-other-filter-wrap');
+
+            if ( element && element.children() && element.children().length === 2 ) {
+                if ( element.children().first() && element.children().first().hasClass( 'featured' ) ) {
+                    $( '#dokan-store-listing-filter-form-wrap .apply-filter' ).css( 'margin-top', '15px' );
+                }
             }
         }
     };
