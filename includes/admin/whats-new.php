@@ -1,6 +1,62 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.17',
+        'released' => '2020-01-13',
+        'changes'  => array(
+            array(
+                'title'       => 'Mapbox Support',
+                'type'        => 'New',
+                'description' => 'Mapbox support for geolocation. (Geolocation)'
+            ),
+            array(
+                'title'       => 'Store List Filtering',
+                'type'        => 'New',
+                'description' => 'Add store filtering option in store listing page.'
+            ),
+            array(
+                'title'       => 'Auction Stock Management',
+                'type'        => 'New',
+                'description' => 'Add stock management for auction product. (Auction)'
+            ),
+            array(
+                'title'       => 'RMA Support for Bookable Product',
+                'type'        => 'New',
+                'description' => 'Add RMA support for bookable product. (RMA)'
+            ),
+            array(
+                'title'       => 'Shipping Issues',
+                'type'        => 'Fix',
+                'description' => 'Various shipping zone issue'
+            ),
+            array(
+                'title'       => 'Linkedin API Issue',
+                'type'        => 'Fix',
+                'description' => 'Update linkedin API to version 2.0 (Social Login)'
+            ),
+            array(
+                'title'       => 'Store Support',
+                'type'        => 'Fix',
+                'description' => 'Make support-tickets template overridable and remove depricated warning. (Store Support)'
+            ),
+            array(
+                'title'       => 'Verification Email Issue',
+                'type'        => 'Fix',
+                'description' => 'If subscription on registration option is enabled the verification email is not working for customer.'
+            ),
+            array(
+                'title'       => 'Non Connected Vendor',
+                'type'        => 'Fix',
+                'description' => 'If a vendor is not connected to stripe, don\'t deduct his withdraw balance. (Stripe Connect)'
+            ),
+            array(
+                'title'       => 'Non Connected Vendor',
+                'type'        => 'Fix',
+                'description' => 'Update Stripe SDK to make it compatible with PHP v7.4'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.16',
         'released' => '2019-12-05',
         'changes'  => array(
