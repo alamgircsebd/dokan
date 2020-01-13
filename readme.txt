@@ -172,6 +172,64 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v2.9.17 -> January 13, 2020
+----------------------------------
+- [new] Mapbox support for geolocation (Geolocation)
+- [new] Add store filtering option in store listing page
+- [new] Add stock management for auction product (Auction)
+- [new] Add RMA support for bookable product (RMA)
+- [fix] Same region shipping zones conflicts
+- [fix] If vendor disable a zone, remove it from the search result
+- [fix] Update linkedin API to version 2.0 (Social Login)
+- [fix] Selected category get deselected in the geolocation category filter (Geolocation)
+- [fix] Remove store reviews menu from WordPress backend (Store Review)
+- [fix] Typo in filter hook definition
+- [fix] Add product addon module thumbnail (Product Addon)
+- [fix] Make support-tickets template overridable and remove deprecated warning (Store Support)
+- [fix] Set default vacation message and vacation date issue (Seller Vacation)
+- [fix] Check if PyaPal payment gateway is enabled before using it (Subscription)
+- [fix] Warranty add on price is not being applied to the variable product (RMA)
+- [fix] The vendor report statement does not work if the date format is not y/m/d
+- [fix] If subscription on registration option is enabled the verification email is not working for customer
+- [fix] If a vendor is not connected to stripe, don’t deduct his withdraw balance (Stripe Connect)
+- [fix] Update Stripe SDK to make it compatible with PHP v7.4 (Stripe Connect)
+
+v2.9.16 -> December 05, 2019
+----------------------------------
+- [Feature] WooCommerce product addon integration with dokan (Product Addon)
+- [Enhencement] Extend vendor review system (admin should have permission to view and edit) (Store Review)
+- [fix] Single product multiple vendor is still showing multiple product on the category page (SPMV)
+- [fix] Stripe throws warning for the expired saved cards (Stripe Connect)
+
+v2.9.15 -> November 19, 2019
+------------------------------------------------------------------
+- [new]  Add Dokan Shortcode gutenberg blocks.
+- [new]  Add single seller mode option.
+- [new]  Show warranty policy tab in single product page. (RMA)
+- [fix]  Select all product while creating coupon doesn't work when there are thousands of products.
+- [fix]  After changing the date format from the wordpress settings, the exported csv reports is blank.
+- [fix]  Add shipping, tax and discount data in staff order email. (Vendor Staff)
+- [fix]  When store-listing page is set to home page, geolocaion search redirect to wrong page. (Geolocation)
+- [fix]  When a product is get deleted by admin, an error notice is shown on RMA request. (RMA)
+- [fix]  Remove bitcoin settings options, as it's no longer supported by stripe. (Stripe Connect)
+- [fix]  If stripe connect payment gateway is disabled, don't execute it's code. (Stripe Connect)
+- [fix]  Vendor verifiation with social media account is not working correctly. (Vendor Verification)
+- [fix]  Same day bookings overlap in calendar view in vendor dashboard. (Bookings)
+- [fix]  Hide ended and won auction products in vendor store page if admin wants to. (Auctions)
+- [fix]  An warning is thrown on single product multivendor tab. (SPMV)
+- [fix]  Send auction finished email to admin and vendor. (SPMV)
+- [fix]  When a vendor wants to sell orther vendor's bookable product it redirects to wrong page. (SPMV)
+- [fix]  Variable product Import issue when 'pending review after edit' is enabled. (SPMV)
+- [fix]  Remove coupon category option for vendor as it's confusing to them. (SPMV)
+- [fix]  Existing category commission edit does not take float number.
+- [fix]  Make both (flat and percentage) field required for combine commission.
+- [fix]  Typo in rma, email verification and product enquiry template.
+- [fix]  Report abuse popup is not working on single product page. (Report Abuse)
+- [fix]  When a paginated link is visited on dokan backend all logs, other filtering query gets deleted.
+- [fix]  Vendor can change product review status from vendor dashboard doesn't work as expected. (Store Review)
+- [fix]  Warranty add-on price is not being applied on variable products. (RMA)
+- [improvement]  Dokan_Shipping_Zone::get_zone_id_by_postcode() method so that it returns correct shipping zone.
+
 v2.9.14 -> October 02, 2019
 --------------------------------------------------------------------
 - [new]  Add combine commission (Percentage + Fixed).
