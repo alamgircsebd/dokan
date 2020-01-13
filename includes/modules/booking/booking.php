@@ -125,6 +125,9 @@ class Dokan_WC_Booking {
         // insert bookable porduct type
         add_filter( 'dokan_get_product_types', array( $this, 'insert_bookable_product_type' ) );
         add_filter( 'dokan_get_coupon_types', [ $this, 'add_booking_discount' ] );
+
+        // Load rma scripts in booking product edit page
+        add_filter( 'dokan_load_rma_scripts', '__return_true' );
     }
 
     /**

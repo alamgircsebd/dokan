@@ -776,7 +776,7 @@ var VclTwitch = ContentLoading.VclTwitch;
             return false;
         },
         hasPaymentEmail: function hasPaymentEmail(method) {
-            if (this.store.payment.hasOwnProperty(method) && this.store.payment[method].email !== false) {
+            if (this.store.payment.hasOwnProperty(method) && this.store.payment[method].email !== '') {
                 return true;
             }
 

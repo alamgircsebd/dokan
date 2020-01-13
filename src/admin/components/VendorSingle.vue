@@ -523,7 +523,7 @@ export default {
         },
 
         hasPaymentEmail(method) {
-            if ( this.store.payment.hasOwnProperty(method) && this.store.payment[method].email !== false ) {
+            if ( this.store.payment.hasOwnProperty(method) && this.store.payment[method].email !== '' ) {
                 return true;
             }
 

@@ -44,3 +44,23 @@
 .dokan-single-store .dokan-store-tabs ul li.dokan-store-follow-store-button-container {
   margin: 3px 5px 0 0;
 }
+#dokan-seller-listing-wrap .dokan-btn-theme.dokan-follow-store-button {
+  background: #fff !important;
+  border-color: #e4e4e4 !important;
+  color: #000 !important;
+  border-radius: 3px;
+}
+#dokan-seller-listing-wrap .dokan-btn-theme.dokan-follow-store-button i {
+  color: #059cda !important;
+  padding-right: 3px;
+}
+#dokan-seller-listing-wrap .dokan-btn-theme.dokan-follow-store-button:hover {
+  background: #fdfdfd !important;
+  border-color: #d0cfcf !important;
+}
+#dokan-seller-listing-wrap .dokan-btn-theme.dokan-follow-store-button:focus {
+  outline: none;
+}
+#dokan-seller-listing-wrap .dokan-btn-theme.dokan-follow-store-button.dokan-follow-store-button-working:after {
+  color: #000 !important;
+}

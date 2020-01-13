@@ -31,6 +31,7 @@ class Dokan_Geolocation_Vendor_View {
         add_action( 'dokan_before_seller_listing_loop', array( self::class, 'before_seller_listing_loop' ) );
         add_action( 'dokan_after_seller_listing_loop', array( self::class, 'after_seller_listing_loop' ) );
         add_action( 'dokan_seller_listing_footer_content', array( self::class, 'seller_listing_footer_content' ) );
+        add_action( 'dokan_store_lists_filter_form', array( self::class, 'load_store_lists_filter' ) );
 
         add_filter( 'dokan_show_seller_search', '__return_false' );
     }
@@ -75,6 +76,33 @@ class Dokan_Geolocation_Vendor_View {
                 dokan_geo_get_template( 'map', [ 'layout' => 'top' ] );
                 break;
         }
+    }
+
+
+    /**
+     * Include locations map template in store listing page
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public static function before_store_lists_filter_left() {
+        $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
+
+        dokan_geo_enqueue_locations_map();
+        dokan_geo_get_template( 'loading', [ 'show_filters' => $show_filters ] );
+        dokan_geo_get_template( 'map', [ 'layout' => 'top' ] );
+    }
+
+    /**
+     * Include location filter form in store listing page
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public static function before_store_lists_filter_category() {
+        dokan_geo_store_lists_filter_form();
     }
 
     /**
@@ -143,5 +171,24 @@ class Dokan_Geolocation_Vendor_View {
         );
 
         dokan_geo_get_template( 'item-geolocation-data', $args );
+    }
+
+    /**
+     * Load store lists filter
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public static function load_store_lists_filter() {
+        $show_filters = dokan_get_option( 'show_filters_before_locations_map', 'dokan_geolocation', 'on' );
+
+        remove_action( 'dokan_before_seller_listing_loop', array( self::class, 'before_seller_listing_loop' ) );
+        add_action( 'dokan_before_store_lists_filter_left', array( self::class, 'before_store_lists_filter_left' ) );
+
+        if ( 'on' === $show_filters ) {
+            add_filter( 'dokan_load_store_lists_filter_search_bar', '__return_false' );
+            add_action( 'dokan_before_store_lists_filter_category', array( self::class, 'before_store_lists_filter_category' ) );
+        }
     }
 }

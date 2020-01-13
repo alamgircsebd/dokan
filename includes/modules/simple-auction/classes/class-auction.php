@@ -23,6 +23,17 @@ class Dokan_Template_Auction {
         add_action( 'template_redirect', array( $this, 'handle_auction_product_delete' ) );
         add_action( 'dokan_auction_after_general_options', array( $this, 'load_attribute_options' ), 12 );
         add_action( 'dokan_auction_after_general_options', array( $this, 'load_shipping_options' ), 13 );
+
+        // Remove `load_inventory_template` hook and add inventory template only auction product
+        add_action( 'init', function() {
+            $product_id = ! empty( $_GET['product_id'] ) ? wp_unslash( $_GET['product_id'] ) : 0;
+            $product    = wc_get_product( $product_id );
+
+            if ( $product && 'auction' === $product->get_type() ) {
+                remove_action( 'dokan_product_edit_after_main', array( 'Dokan_Template_Products', 'load_inventory_template' ), 5 );
+                add_action( 'dokan_product_edit_after_main', array( $this, 'load_inventory_template' ), 5, 2 );
+            }
+        } );
     }
 
     /**
@@ -416,9 +427,35 @@ class Dokan_Template_Auction {
             $product_shipping_class = ( isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
             wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
+            // Save Porudct SKU
+            $sku     = get_post_meta( $post_id, '_sku', true );
+            $new_sku = (string) wc_clean( $_POST['_sku'] );
+
+            if ( '' == $new_sku ) {
+                update_post_meta( $post_id, '_sku', '' );
+            } elseif ( $new_sku !== $sku ) {
+                if ( ! empty( $new_sku ) ) {
+                    $unique_sku = wc_product_has_unique_sku( $post_id, $new_sku );
+
+                    if ( ! $unique_sku ) {
+                        self::$errors[] = __( 'Product SKU must be unique', 'dokan-lite' );
+                    } else {
+                        update_post_meta( $post_id, '_sku', $new_sku );
+                    }
+                } else {
+                    update_post_meta( $post_id, '_sku', '' );
+                }
+            }
+
             do_action( 'dokan_update_auction_product', $post_id );
 
             $edit_url = add_query_arg( array('product_id' => $post_id, 'action' => 'edit' ), dokan_get_navigation_url('auction') );
+
+            if ( self::$errors ) {
+                wp_redirect( add_query_arg( array( 'errors' => array_map( 'urlencode', self::$errors ) ), $edit_url ) );
+                exit;
+            }
+
             wp_redirect( add_query_arg( array( 'message' => 'success' ), $edit_url ) );
             exit;
         }
@@ -469,6 +506,22 @@ class Dokan_Template_Auction {
 
     }
 
+    /**
+     * Load inventory template
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param WP_Post $post
+     * @param int $post_id
+     *
+     * @return void
+     */
+    public function load_inventory_template( $post, $post_id ) {
+        dokan_get_template_part( 'auction/inventory', '', [
+            'post_id'    => $post_id,
+            'is_auction' => true,
+        ] );
+    }
 }
 
 Dokan_Template_Auction::init();

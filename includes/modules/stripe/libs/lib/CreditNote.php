@@ -8,27 +8,27 @@ namespace Stripe;
  * @property string $id
  * @property string $object
  * @property int $amount
- * @property string $customer_balance_transaction
  * @property int $created
  * @property string $currency
  * @property string $customer
+ * @property string|null $customer_balance_transaction
  * @property string $invoice
  * @property bool $livemode
- * @property string $memo
- * @property StripeObject $metadata
+ * @property string|null $memo
+ * @property \Stripe\StripeObject $metadata
  * @property string $number
  * @property string $pdf
- * @property string $reason
- * @property string $refund
+ * @property string|null $reason
+ * @property string|null $refund
  * @property string $status
  * @property string $type
+ * @property int|null $voided_at
  *
  * @package Stripe
  */
 class CreditNote extends ApiResource
 {
-
-    const OBJECT_NAME = "credit_note";
+    const OBJECT_NAME = 'credit_note';
 
     use ApiOperations\All;
     use ApiOperations\Create;
@@ -61,6 +61,25 @@ class CreditNote extends ApiResource
     /**
      * @param array|null $params
      * @param array|string|null $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return CreditNote The previewed credit note.
+     */
+    public static function preview($params = null, $opts = null)
+    {
+        $url = static::classUrl() . '/preview';
+        list($response, $opts) = static::_staticRequest('get', $url, $params, $opts);
+        $obj = Util\Util::convertToStripeObject($response->json, $opts);
+        $obj->setLastResponse($response);
+        return $obj;
+    }
+
+    /**
+     * @param array|null $params
+     * @param array|string|null $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
      * @return CreditNote The voided credit note.
      */

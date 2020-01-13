@@ -153,7 +153,7 @@ class Dokan_Geolocation_Vendor_Query {
     private function filter_query_orderby() {
         if ( $this->latitude && $this->longitude && $this->distance ) {
             $distance = absint( $this->distance );
-            $this->user_query->query_orderby = "having geo_distance < {$distance} " . $this->user_query->query_orderby;
+            $this->user_query->query_orderby = "having ( geo_distance < {$distance} or geo_distance is null ) " . $this->user_query->query_orderby;
         }
     }
 }

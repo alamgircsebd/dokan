@@ -361,22 +361,19 @@ class Dokan_Shipping_Zone {
         }
 
         // Get matching zones.
-        $zone_id = $wpdb->get_results(
+        $zone_ids = $wpdb->get_results(
             "SELECT zones.zone_id FROM {$wpdb->prefix}woocommerce_shipping_zones as zones
             LEFT OUTER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
-            WHERE " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
-            . ' ORDER BY zone_order ASC, zone_id ASC'
+            LEFT JOIN {$wpdb->prefix}dokan_shipping_zone_methods as do_s_zone_loc ON zones.zone_id = do_s_zone_loc.zone_id
+            WHERE do_s_zone_loc.is_enabled = '1' AND do_s_zone_loc.seller_id = {$vendor_id} AND " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
+            . ' ORDER BY zone_order ASC'
         );
 
-        // if multiple zone_id is found, then get spcecefic zone_id by postcode
-        if ( count( $zone_id ) > 1 ) {
-            $vendor_zone_id = self::get_zone_id_by_postcode( $postcode, $vendor_id );
+        $zone_id             = ! empty( $zone_ids[0]->zone_id ) ? $zone_ids[0]->zone_id : 0;
+        $zone_id_by_postcode = self::get_zone_id_by_postcode( $postcode, $vendor_id );
 
-            if ( $vendor_zone_id ) {
-                $zone_id = $vendor_zone_id;
-            }
-        } else {
-            $zone_id = ! empty( $zone_id[0]->zone_id ) ? $zone_id[0]->zone_id : 0;
+        if ( $zone_id_by_postcode && $zone_id_by_postcode !== $zone_id ) {
+            $zone_id = $zone_id_by_postcode;
         }
 
         // if zone id is not found in vendor's available zone id, assume it falls under `Locations not covered by your other zones`.

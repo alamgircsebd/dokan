@@ -165,16 +165,16 @@ class Dokan_Pro_Refund {
         $table_name = $wpdb->prefix . 'dokan_refund';
 
         $postdata = array(
-            'order_id'        => (int)$data['order_id'],
-            'seller_id'       => (int)$data['seller_id'],
-            'refund_amount'   => floatval( $data['refund_amount'] ),
+            'order_id'        => (int) $data['order_id'],
+            'seller_id'       => (int) $data['seller_id'],
+            'refund_amount'   => wc_format_decimal( sanitize_text_field( $data['refund_amount'] ), wc_get_price_decimals() ),
             'refund_reason'   => $data['refund_reason'],
             'item_qtys'       => $data['line_item_qtys'],
             'item_totals'     => $data['line_item_totals'],
             'item_tax_totals' => $data['line_item_tax_totals'],
             'restock_items'   => $data['restock_refunded_items'],
             'date'            => current_time( 'mysql' ),
-            'status'          => (int)$data['status'],
+            'status'          => (int) $data['status'],
             'method'          => $data['api_refund'],
         );
 

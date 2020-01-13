@@ -342,7 +342,7 @@ export default {
                     action: 'dokan-save-zone-settings',
                     country: self.wantToLimitLocation ? self.country : [],
                     state: self.wantToLimitLocation ? self.state: [],
-                    postcode: self.wantToLimitLocation ? self.postcode : '',
+                    postcode: self.wantToLimitLocation && self.postcode.length ? self.postcode.split( ' ' ).join( '' ) : '',
                     zoneID: self.$route.params.zoneID,
                     nonce: dokan.nonce
                 };

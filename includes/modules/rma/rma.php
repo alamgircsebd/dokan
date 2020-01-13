@@ -212,11 +212,11 @@ class Dokan_RMA {
         global $wp;
 
         if ( ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'rma' )
-            || ( get_query_var( 'edit' ) && is_singular( 'product' ) ) ) {
+            || dokan_is_product_edit_page()
+            || apply_filters( 'dokan_load_rma_scripts', false ) ) {
             wp_enqueue_script( 'dokan-rma-script', DOKAN_RMA_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
             wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
         }
-
 
         if ( is_account_page() && ( isset( $wp->query_vars[ 'request-warranty' ] ) || isset( $wp->query_vars['view-rma-requests'] ) ) ) {
             wp_enqueue_style( 'dokan-rma-style', DOKAN_RMA_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );

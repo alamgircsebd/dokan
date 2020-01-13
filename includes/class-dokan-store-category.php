@@ -13,6 +13,7 @@ class Dokan_Store_Category {
         add_filter( 'dokan_settings_general_vendor_store_options', array( $this, 'add_admin_settings' ) );
         add_action( 'dokan_after_saving_settings', array( $this, 'set_default_category' ), 10, 2 );
         add_filter( 'dokan_admin_localize_script', array( $this, 'add_localized_data' ) );
+        add_filter( 'dokan_localized_args', array( $this, 'set_localized_data') );
 
         if ( dokan_is_store_categories_feature_on() ) {
             add_action( 'dokan_settings_after_store_name', array( $this, 'add_store_category_option' ) );
@@ -25,7 +26,7 @@ class Dokan_Store_Category {
             add_action( 'dokan_vendor_to_array', array( $this, 'add_store_categories_vendor_to_array' ), 10, 2 );
             add_action( 'dokan_rest_prepare_store_item_for_response', array( $this, 'rest_prepare_store_item_for_response' ), 10, 2 );
             add_action( 'dokan_rest_stores_update_store', array( $this, 'rest_stores_update_store_category' ), 10, 2 );
-            add_action( 'dokan_seller_search_form', array( $this, 'add_category_dropdown_in_seller_search_form' ) );
+            // add_action( 'dokan_seller_search_form', array( $this, 'add_category_dropdown_in_seller_search_form' ) );
             add_action( 'dokan_seller_listing_search_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
             add_action( 'dokan_seller_listing_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
             add_action( 'dokan_rest_get_stores_args', array( $this, 'add_store_category_query_arg' ), 10, 2 );
@@ -119,6 +120,21 @@ class Dokan_Store_Category {
      */
     public function add_localized_data( $data ) {
         $data['store_category_type'] = dokan_get_option( 'store_category_type', 'dokan_general', 'none' );
+        return $data;
+    }
+
+    /**
+     * Set localized data
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function set_localized_data( $data ) {
+        $data['all_categories'] = __( 'All Categories', 'dokan' );
+
         return $data;
     }
 

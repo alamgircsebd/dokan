@@ -17,7 +17,7 @@ class Helper {
     public static function get_stripe() {
         $file = DOKAN_STRIPE_LIBS . 'stripe-init.php';
 
-        return ! file_exists( $file ) ? false : require_once $file;
+        return ! class_exists( 'Stripe\Stripe' ) && file_exists( $file ) ? require_once $file : false;
     }
 
     /**

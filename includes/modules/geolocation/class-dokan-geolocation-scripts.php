@@ -29,8 +29,8 @@ class Dokan_Geolocation_Scripts {
      * @return void
      */
     public function register_styles() {
-        wp_register_style( 'dokan-geo-locations-map', DOKAN_GEOLOCATION_ASSETS . '/css/dokan-geolocation-locations-map.css', array(), DOKAN_GEOLOCATION_VERSION );
-        wp_register_style( 'dokan-geo-filters', DOKAN_GEOLOCATION_ASSETS . '/css/dokan-geolocation-filters.css', array(), DOKAN_GEOLOCATION_VERSION );
+        wp_register_style( 'dokan-geo-locations-map', DOKAN_GEOLOCATION_ASSETS . '/css/dokan-geolocation-locations-map.css', array(), DOKAN_PRO_PLUGIN_VERSION );
+        wp_register_style( 'dokan-geo-filters', DOKAN_GEOLOCATION_ASSETS . '/css/dokan-geolocation-filters.css', array(), DOKAN_PRO_PLUGIN_VERSION );
     }
 
     /**
@@ -41,10 +41,18 @@ class Dokan_Geolocation_Scripts {
      * @return void
      */
     public function register_scripts() {
-        wp_register_script( 'dokan-geo-google-maps-markerclusterer', DOKAN_GEOLOCATION_ASSETS . '/js/markerclusterer.js', array( 'google-maps' ), DOKAN_GEOLOCATION_VERSION, true );
-        wp_register_script( 'dokan-geo-locations-map', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-locations-map.js', array( 'jquery', 'dokan-geo-google-maps-markerclusterer' ), DOKAN_GEOLOCATION_VERSION, true );
+        $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
 
-        wp_register_script( 'dokan-geo-filters', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-filters.js', array( 'jquery', 'google-maps' ), DOKAN_GEOLOCATION_VERSION, true );
+        if ( 'mapbox' === $source ) {
+            wp_register_script( 'dokan-geo-locations-suggestions', DOKAN_GEOLOCATION_ASSETS . '/js/suggestions.js', array(), DOKAN_PRO_PLUGIN_VERSION, true );
+            wp_register_script( 'dokan-geo-locations-map', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-locations-map-mapbox.js', array( 'jquery', 'dokan-geo-locations-suggestions' ), DOKAN_PRO_PLUGIN_VERSION, true );
+        } else {
+            wp_register_script( 'dokan-geo-google-maps-markerclusterer', DOKAN_GEOLOCATION_ASSETS . '/js/markerclusterer.js', array( 'dokan-maps' ), DOKAN_PRO_PLUGIN_VERSION, true );
+            wp_register_script( 'dokan-geo-locations-map', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-locations-map-google-maps.js', array( 'jquery', 'dokan-geo-google-maps-markerclusterer' ), DOKAN_PRO_PLUGIN_VERSION, true );
+        }
+
+        wp_register_script( 'dokan-geo-filters-store-lists', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-store-lists-filters.js', array( 'jquery', 'google-maps' ), DOKAN_GEOLOCATION_VERSION, true );
+        wp_register_script( 'dokan-geo-filters', DOKAN_GEOLOCATION_ASSETS . '/js/dokan-geolocation-filters.js', array( 'jquery', 'underscore', 'dokan-maps' ), DOKAN_PRO_PLUGIN_VERSION, true );
     }
 
     /**

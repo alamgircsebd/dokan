@@ -680,7 +680,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
 
             if ( $dokan_subscription->is_recurring() ) {
                 update_user_meta( get_current_user_id(), 'product_order_id', $order_id );
-                $order->add_order_note( sprintf( __( 'Order payment completed via stripe with 3d secure', 'dokan' ) ) );
+                $order->add_order_note( sprintf( __( 'Order payment is completed via stripe with 3d secure', 'dokan' ) ) );
 
                 return $order->payment_complete();
             }
@@ -777,7 +777,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             }
 
             $order->payment_complete();
-            $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), $this->method_title, $transaction_id ) );
+            $order->add_order_note( sprintf( __( 'Order %s payment is completed via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), $this->method_title, $transaction_id ) );
 
             do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
         } else {
@@ -827,9 +827,9 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 $order->payment_complete();
 
                 if ( Stripe_Helper::is_3d_secure_enabled() ) {
-                    $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), $this->get_charge_id_from_intent() ) );
+                    $order->add_order_note( sprintf( __( 'Order %s payment is completed via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), $this->get_charge_id_from_intent() ) );
                 } else {
-                    $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
+                    $order->add_order_note( sprintf( __( 'Order %s payment is completed via Dokan Stripe on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
                 }
 
                 do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
@@ -890,14 +890,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 continue;
             }
 
-            $withdraw_data = array(
-                'user_id'  => $seller_id,
-                'amount'   => $vendor_earning,
-                'order_id' => $tmp_order_id,
-            );
-
-            $all_withdraws[] = $withdraw_data;
-
             if ( Stripe_Helper::is_3d_secure_enabled() ) {
                 $connected_vendor_id = get_user_meta( $seller_id, 'dokan_connected_vendor_id', true );
 
@@ -906,6 +898,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 }
 
                 if ( ! $connected_vendor_id && $this->allow_non_connected_sellers() ) {
+                    $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
                     continue;
                 }
 
@@ -921,9 +914,24 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
 
                 if ( $order_id !== $tmp_order_id ) {
                     $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );
-                    $tmp_order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $tmp_order->get_order_number(), $this->get_charge_id_from_intent() ) );
+                    $tmp_order->add_order_note(
+                        sprintf(
+                            __( 'Order %s payment is completed via %s with 3d secure on (Charge ID: %s)', 'dokan' ),
+                            $tmp_order->get_order_number(),
+                            $this->title,
+                            $this->get_charge_id_from_intent()
+                        )
+                    );
                 }
 
+                // Only process withdraw request once vendor get paid.
+                $withdraw_data = array(
+                    'user_id'  => $seller_id,
+                    'amount'   => $vendor_earning,
+                    'order_id' => $tmp_order_id,
+                );
+
+                $all_withdraws[] = $withdraw_data;
                 continue;
             }
 
@@ -955,14 +963,32 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                     'customer'    => $customer_id
                 ] );
 
-                $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe', 'dokan' ) ) );
+                $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
             }
 
             $charge_ids[ $seller_id ] = $charge->id;
             update_post_meta( $tmp_order_id, $this->stripe_meta_key . $seller_id, $charge->id );
 
-            if ( $order_id !== $tmp_order_id ) {
-                $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed via Dokan Stripe on Charge ID: %s', 'dokan' ), $tmp_order->get_order_number(), $charge->id ) );
+            if ( $order_id !== $tmp_order_id && $token ) {
+                $tmp_order->add_order_note(
+                    sprintf(
+                        __( 'Order %s payment completed via %s on Charge ID: %s', 'dokan' ),
+                        $tmp_order->get_order_number(),
+                        $this->title,
+                        $charge->id
+                    )
+                );
+            }
+
+            // Only process withdraw request once vendor get paid.
+            if ( ! is_null( $token ) ) {
+                $withdraw_data = array(
+                    'user_id'  => $seller_id,
+                    'amount'   => $vendor_earning,
+                    'order_id' => $tmp_order_id,
+                );
+
+                $all_withdraws[] = $withdraw_data;
             }
         }
 
@@ -970,11 +996,26 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             $this->insert_into_vendor_balance( $all_withdraws );
             $this->process_seller_withdraws( $all_withdraws );
 
-            $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), $this->get_charge_id_from_intent() ) );
+            $order->add_order_note(
+                sprintf(
+                    __( 'Order %s payment is completed via %s with 3d secure on (Charge ID: %s)', 'dokan' ),
+                    $order->get_order_number(),
+                    $this->title,
+                    $this->get_charge_id_from_intent()
+                )
+            );
+
             return $order->payment_complete();
         }
 
-        $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
+        $order->add_order_note(
+            sprintf(
+                __( 'Order %s payment is completed via %s on (Charge ID: %s)', 'dokan' ),
+                $order->get_order_number(),
+                $this->title,
+                implode( ', ', $charge_ids )
+            )
+        );
         $order->payment_complete();
 
         $this->insert_into_vendor_balance( $all_withdraws );
@@ -1158,7 +1199,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 'date'    => current_time( 'mysql' ),
                 'status'  => 1,
                 'method'  => 'dokan-stripe-connect',
-                'notes'   => sprintf( __( 'Order %d payment Auto paid via Dokan Stripe', 'dokan' ), $withdraw_data['order_id'] ),
+                'notes'   => sprintf( __( 'Order %d payment Auto paid via %s', 'dokan' ), $withdraw_data['order_id'], $this->title ),
                 'ip'      => $IP
             );
 

@@ -168,3 +168,62 @@
   width: 90px;
   font-size: 12px;
 }
+.dokan-geolocation-location-filters .suggestions {
+  background-color: #FFFFFF;
+  font-size: 14px;
+  left: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  text-align: left;
+  width: 100%;
+  top: 100%;
+  z-index: 1;
+}
+.dokan-geolocation-location-filters .suggestions > li > a {
+  clear: both;
+  cursor: default;
+  display: block;
+  padding: 5px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-decoration: none;
+  border: 0;
+  color: rgba(0, 0, 0, 0.75);
+  font-weight: normal;
+}
+.dokan-geolocation-location-filters .suggestions > li.active > a,
+.dokan-geolocation-location-filters .suggestions > li > a:hover {
+  background-color: #f2624d;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+}
+#dokan-store-listing-filter-wrap {
+  position: relative;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-top: -30px;
+  margin-bottom: 10px;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-geo-filters-column {
+  width: 49%;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-geo-filters-column .store-search-input,
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .dokan-geo-filters-column input {
+  padding: 10px 15px;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .range-slider-container {
+  width: 100%;
+}
+#dokan-store-listing-filter-form-wrap .store-lists-other-filter-wrap .dokan-geolocation-location-filters .range-slider-container .dokan-range-slider {
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: fill-available;
+}

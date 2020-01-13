@@ -169,7 +169,7 @@ class Dokan_Seller_Vacation {
                 echo esc_html( $message );
             } else {
                 dokan_seller_vacation_get_template( 'vacation-message', array(
-                    'message' => $message,
+                    'message' => ! empty( $message ) ? $message : __( 'I\'m on vacation.', 'dokan' ),
                 ) );
             }
         }
