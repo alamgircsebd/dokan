@@ -1,6 +1,17 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.18',
+        'released' => '2020-01-15',
+        'changes'  => array(
+            array(
+                'title'       => 'JS Loading issue',
+                'type'        => 'Fix',
+                'description' => 'Dokan Pro core js loading issue in some pages'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.17',
         'released' => '2020-01-13',
         'changes'  => array(

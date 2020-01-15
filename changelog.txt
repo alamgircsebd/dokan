@@ -1,3 +1,7 @@
+v2.9.18 -> January 15, 2020
+----------------------------------
+- [fix] JS loading issue
+
 v2.9.17 -> January 13, 2020
 ----------------------------------
 - [new] Mapbox support for geolocation (Geolocation)
