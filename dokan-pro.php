@@ -3,7 +3,7 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 2.9.17
+  Version: 2.9.18
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '2.9.17';
+    public $version = '2.9.18';
 
     /**
      * Constructor for the Dokan_Pro class
@@ -445,7 +445,8 @@ class Dokan_Pro {
             || dokan_is_store_page()
             || dokan_is_store_review_page()
             || is_account_page()
-            || apply_filters( 'dokan_forced_load_scripts', true )
+            || dokan_is_store_listing()
+            || apply_filters( 'dokan_forced_load_scripts', false )
             ) {
             // wp_enqueue_style( 'dokan-pro-style' );
             wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
@@ -457,7 +458,7 @@ class Dokan_Pro {
             //localize script for refund and dashboard image options
             $dokan_refund = dokan_get_refund_localize_data();
             wp_localize_script( 'dokan-script', 'dokan_refund', $dokan_refund );
-            wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro.js', array( 'jquery', 'dokan-script' ), null, true );
+            wp_enqueue_script( 'dokan-pro-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-pro.js', array( 'jquery', 'dokan-script' ), DOKAN_PRO_PLUGIN_VERSION, true );
         }
 
         // Load in Single product pages only
