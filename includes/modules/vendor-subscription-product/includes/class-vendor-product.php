@@ -146,9 +146,6 @@ class Dokan_VSP_Product {
                 $_POST['_subscription_trial_length'] = $max_trial_length;
             }
 
-            error_log( print_r( $_POST['_subscription_trial_length'], true ) );
-            error_log( print_r( $max_trial_length, true ) );
-
             update_post_meta( $post_id, '_subscription_trial_length', $_POST['_subscription_trial_length'] );
 
             $_POST['_subscription_sign_up_fee']       = wc_format_decimal( $_POST['_subscription_sign_up_fee'] );

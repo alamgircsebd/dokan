@@ -3,7 +3,7 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.3.0
+Tested up to: 5.3.2
 WC requires at least: 3.0
 WC tested up to: 3.8.1
 Stable tag: trunk
@@ -171,6 +171,10 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.18 -> January 15, 2020
+----------------------------------
+- [fix] JS loading issue
 
 v2.9.17 -> January 13, 2020
 ----------------------------------
