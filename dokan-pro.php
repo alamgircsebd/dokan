@@ -445,7 +445,8 @@ class Dokan_Pro {
             || dokan_is_store_page()
             || dokan_is_store_review_page()
             || is_account_page()
-            || apply_filters( 'dokan_forced_load_scripts', true )
+            || dokan_is_store_listing()
+            || apply_filters( 'dokan_forced_load_scripts', false )
             ) {
             // wp_enqueue_style( 'dokan-pro-style' );
             wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
