@@ -123,6 +123,7 @@ class Dokan_Product_Importer {
         add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'change_product_status' ), 20, 2 );
 
         add_action( 'wp_footer', array( $this, 'bind_global_ajaxurl' ), 10 );
+        add_action( 'woocommerce_product_export_product_query_args', array( $this, 'export_vendor_product_query_args' ), 10 );
     }
 
     function handle_step_submission() {
@@ -1347,6 +1348,21 @@ class Dokan_Product_Importer {
                 </script>
             <?php
         }
+    }
+
+    /**
+     * Add author parmas when vendor export product
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function export_vendor_product_query_args( $args ) {
+        if ( ! is_admin() && dokan_is_user_seller( dokan_get_current_user_id() ) ) {
+            $args['author'] = dokan_get_current_user_id();
+        }
+
+        return $args;
     }
 }
 
