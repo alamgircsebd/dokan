@@ -22,7 +22,9 @@ class Templates {
      * @param array $body_args
      */
     public static function add_http_request_filter( $body_args ) {
-        add_filter( 'pre_http_request', [ self::class, 'pre_http_request' ], 10, 3 );
+        if ( isset( $body_args['id'] ) && preg_match( '/100000(\d+)/', $body_args['id'] ) ) {
+            add_filter( 'pre_http_request', [ self::class, 'pre_http_request' ], 10, 3 );
+        }
 
         return $body_args;
     }
@@ -40,18 +42,20 @@ class Templates {
      */
     public static function pre_http_request( $pre, $r, $url ) {
         // @see elementor/includes/api.php $api_get_template_content_url
-        if ( preg_match( '/https\:\/\/my\.elementor\.com\/api\/v1\/templates\/100000(\d+)/', $url, $matches ) ) {
-            $json_file = DOKAN_ELEMENTOR_PATH . '/template-library/' . $matches[1] . '.json';
+        if ( preg_match( '/https:\/\/my.elementor.com\/api\/connect\/v1\/library\/get_template_content/' , $url ) && ! empty( $r['body']['id'] ) ) {
+            if ( preg_match( '/100000(\d+)/', $r['body']['id'], $matches ) ) {
+                $json_file = DOKAN_ELEMENTOR_PATH . '/template-library/' . $matches[1] . '.json';
 
-            if ( file_exists( $json_file ) ) {
-                $content = json_decode( file_get_contents( $json_file ), true );
+                if ( file_exists( $json_file ) ) {
+                    $content = json_decode( file_get_contents( $json_file ), true );
 
-                return [
-                    'response' => [
-                        'code' => 200,
-                    ],
-                    'body' => json_encode( $content )
-                ];
+                    return [
+                        'response' => [
+                            'code' => 200,
+                        ],
+                        'body' => json_encode( $content )
+                    ];
+                }
             }
         }
 
