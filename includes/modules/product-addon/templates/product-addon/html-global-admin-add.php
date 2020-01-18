@@ -68,7 +68,10 @@ if ( isset( $_POST ) && ! empty( $_POST['save_addon'] ) || ! empty( $_GET['edit'
 				<td id="poststuff" class="postbox" colspan="2">
 					<?php
 					$exists = false;
-					include( dirname( __FILE__ ) . '/html-addon-panel.php' );
+                    dokan_get_template_part( 'product-addon/html-addon-panel', '', array(
+                        'is_product_addon' => true,
+                        'exists'             => $exists,
+                    ) );
 					?>
 				</td>
 			</tr>

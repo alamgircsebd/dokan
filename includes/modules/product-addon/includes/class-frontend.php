@@ -135,12 +135,23 @@ class Dokan_Product_Addon_Frontend {
                     echo '<div class="dokan-alert dokan-alert-success"><p>' . esc_html__( 'Add-on saved successfully', 'dokan' ) . '</p></div>';
                 }
 
-                include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin-add.php' );
+                dokan_get_template_part( 'product-addon/html-global-admin-add', '', array(
+                    'is_product_addon'    => true,
+                    'global_addons_count' => ! empty( $global_addons_count ) ? $global_addons_count : [],
+                    'global_addon'        => ! empty( $global_addon ) ? $global_addon : [],
+                    'reference'           => $reference,
+                    'priority'            => $priority,
+                    'objects'             => $objects,
+                    'product_addons'      => $product_addons
+                ) );
             } else {
                 if ( ! empty( $_GET['deleted'] ) && $_GET['deleted'] ) {
                     echo '<div class="dokan-alert dokan-alert-danger"><p>' . esc_html__( 'Add-on deleted successfully', 'dokan' ) . '</p></div>';
                 }
-                include( DOKAN_PRODUCT_ADDON_DIR . '/views/html-global-admin.php' );
+
+                dokan_get_template_part( 'product-addon/html-global-admin', '', array(
+                    'is_product_addon' => true,
+                ) );
             }
         }
     }

@@ -167,6 +167,7 @@ class Dokan_Product_Addon {
      */
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
+        add_filter( 'dokan_set_template_path', array( $this, 'load_product_addon_templates' ), 10, 3 );
     }
 
     /**
@@ -259,6 +260,21 @@ class Dokan_Product_Addon {
         );
 
         wp_localize_script( 'jquery', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
+    }
+
+    /**
+    * Load dokan pro templates
+    *
+    * @since 1.5.1
+    *
+    * @return void
+    **/
+    public function load_product_addon_templates( $template_path, $template, $args ) {
+        if ( isset( $args['is_product_addon'] ) && $args['is_product_addon'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
     }
 
 }
