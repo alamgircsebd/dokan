@@ -19,9 +19,8 @@ defined( 'ABSPATH' ) || exit;
 ?>
 
 <div class="featured item">
-    <label class="switch tips" for="featured">
+    <label for="featured">
         <?php esc_html_e( 'Featured', 'dokan' ); ?>:
-        <input type="checkbox" class="toogle-checkbox" id="featured" name="featured">
-        <span class="slider round"></span>
     </label>
+    <input type="checkbox" class="dokan-toogle-checkbox" id="featured" name="featured">
 </div>

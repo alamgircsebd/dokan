@@ -8,22 +8,6 @@
                     width: 195px;
                 }
             }
-
-            .item {
-                .switch {
-                    input {
-                        &:checked + .slider {
-                            &:before {
-                                transform: translateX(23px);
-                            }
-                        }
-                    }
-
-                    .slider {
-                        width: 45px;
-                    }
-                }
-            }
         }
     }
 }
@@ -40,36 +24,16 @@
                 }
 
                 .category-box {
-                    position: relative;
                     width: 100%;
-                    top: 10px;
                 }
             }
 
             .item {
+                justify-content: space-between;
+                width: 100%;
+
                 &:not(.store-lists-category) {
-                    label {
-                        width: 265px;
-                        margin-top: 15px;
-                    }
-
-                    .stars {
-                        margin-top: 15px;
-                    }
-                }
-
-                .switch {
-                    input {
-                        &:checked + .slider {
-                            &:before {
-                                transform: translateX(28px);
-                            }
-                        }
-                    }
-
-                    .slider {
-                        width: 50px;
-                    }
+                    margin-top: 20px;
                 }
             }
         }
@@ -95,53 +59,10 @@
     }
 }
 
-@media ( max-width: 375px ) {
-    #dokan-store-listing-filter-form-wrap {
-        .store-lists-other-filter-wrap {
-            .item {
-                &:not(.store-lists-category) {
-                    label {
-                        width: 231px;
-                        margin-top: 15px;
-                    }
-
-                    .stars {
-                        margin-top: 15px;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media ( max-width: 360px ) {
-    #dokan-store-listing-filter-form-wrap {
-        .store-lists-other-filter-wrap {
-            .item {
-                &:not(.store-lists-category) {
-                    label {
-                        margin-top: 15px;
-                        width: 218px;
-                    }
-                    .stars {
-                        margin-top: 15px;
-                    }
-                }
-            }
-        }
-    }
-}
-
 @media ( max-width: 320px ) {
-    #dokan-store-listing-filter-form-wrap {
-        .store-lists-other-filter-wrap {
-            .item {
-                &:not(.store-lists-category) {
-                    label {
-                        width: 181px;
-                    }
-                }
-            }
+    #dokan-store-listing-filter-wrap {
+        #dokan-store-list-filter-button, .sort-by.item {
+            font-size: 12px;
         }
     }
 }
