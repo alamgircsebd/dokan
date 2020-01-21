@@ -471,9 +471,18 @@ if ( class_exists( 'WooCommerce' ) ) {
                     $is_available = true;
                 }
 
-                // if postcode is set as wilecard range (e.g 1000*)
-                if ( strstr( $postcode_array[0], '*' ) ) {
-                    $is_available = true;
+                // if postcode is set as wildcard range (e.g W1*)
+                $wildcard_postcodes = array_map( 'wc_clean', wc_get_wildcard_postcodes( $destination_postcode, $destination_country ) );
+
+                foreach ( $postcode_array as $postcode ) {
+                    if ( false === strpos( $postcode, '*' ) ) {
+                        continue;
+                    }
+
+                    if ( in_array( $postcode, $wildcard_postcodes ) ) {
+                        $is_available = true;
+                        break;
+                    }
                 }
             }
 
