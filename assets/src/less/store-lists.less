@@ -4,6 +4,7 @@
         justify-content: space-between;
         margin-top: 25px;
         flex-wrap: wrap;
+        align-items: center;
 
         .store-lists-category {
             position: relative;
@@ -16,19 +17,19 @@
                 color: #8c8a8a;
                 cursor: pointer;
                 position: relative;
-                top: -5px;
 
                 span {
                     display: inline-block;
                 }
 
                 .category-label {
-                    color: #000000;
+                    color: #444;
+                    font-weight: bold;
                 }
 
                 .dokan-icon {
                     position: absolute;
-                    top: 13px;
+                    top: 10px;
                     left: 87%;
                     font-size: 17px;
                     color: #000000b0;
@@ -40,21 +41,22 @@
                 background: #ffffff;
                 z-index: 500;
                 width: 400px;
-                box-shadow: 1px 1px 20px 0px #E9E9E9;
+                box-shadow: 1px 1px 20px 0px #bbbbbb;
                 top: 58px;
+                padding: 20px 10px;
 
                 &:before {
                     content: "\f142";
-                    position: relative;
-                    top: -13px;
-                    right: 0;
-                    -webkit-font-smoothing: antialiased;
-                    font-family: 'dashicons';
-                    vertical-align: top;
-                    font-size: 30px;
-                    color: #ffffff;
+                    height: 0 !important;
+                    top: -3px;
+                    left: 50%;
+                    position: absolute;
+                    transform: translate(-50%,-50%);
+                    font-family: dashicons;
+                    font-size: 40px;
+                    color: #fff;
                     font-weight: bold;
-                    left: 42%;
+                    line-height: 0 !important;
                 }
 
                 ul {
@@ -66,8 +68,9 @@
                     list-style: none;
                     flex-wrap: wrap;
                     -webkit-flex-wrap: wrap;
-                    padding: 0px 20px 10px 20px;
-                    justify-content: space-between;
+                    justify-content: space-around;
+                    margin: 0;
+                    padding: 0;
 
                     li {
                         list-style: none;
@@ -79,73 +82,48 @@
                     }
                 }
             }
-
-            &~ .item {
-                margin-top: 5px;
-            }
-        }
-
-        .featured,
-        .open-now {
-            &.item {
-                width: 136px;
-            }
         }
 
         .item {
+            display: flex;
+            align-items: center;
 
-            .switch {
+            label {
+                color: #444;
+                font-weight: bold;
+            }
+
+            .dokan-toogle-checkbox {
                 position: relative;
+                width: 50px;
+                height: 22px;
+                -webkit-appearance: none;
+                appearance: none;
+                outline: none;
+                border-radius: 30px;
+                background-color: #cccccc;
+                cursor: pointer;
                 display: inline-block;
-                height: 18px;
+                margin-left: 10px;
 
-                input {
-                   display: none;
-                   &:checked + .slider {
-                        background-color: #64b450;
-                        &:before {
-                            -webkit-transform: translateX(28px);
-                            -ms-transform: translateX(28px);
-                            transform: translateX(28px);
-                        }
-                   }
-                   &:focus + .slider {
-                        box-shadow: 0 0 1px #2196F3;
-                   }
+                &:checked {
+                    background-color: #64b450;
                 }
 
-                .slider {
+                &:before {
+                    content: '';
                     position: absolute;
-                    cursor: pointer;
-                    top: 0;
-                    left: 110%;
-                    right: 0;
-                    bottom: 0;
-                    background-color: #ccc;
-                    -webkit-transition: .4s;
-                    transition: .4s;
-                    width: 50px;
-                    height: 22px;
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    top: 3px;
+                    left: 4px;
+                    background-color: white;
+                    transition: 0.5s;
+                }
 
-                    &:before {
-                        position: absolute;
-                        content: "";
-                        height: 14px;
-                        width: 14px;
-                        left: 4px;
-                        bottom: 2px;
-                        background-color: white;
-                        -webkit-transition: .4s;
-                        transition: .4s;
-                        top: 4px;
-                    }
-
-                    &.round {
-                        border-radius: 34px;
-                        &:before {
-                            border-radius: 50%;
-                        }
-                    }
+                &:checked:before {
+                    left: 30px;
                 }
             }
         }

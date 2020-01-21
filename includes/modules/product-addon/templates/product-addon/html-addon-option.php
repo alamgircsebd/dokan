@@ -45,7 +45,7 @@ if ( 'show' === $opt_show_image_swatch ) {
 		<input type="text" name="product_addon_option_price[<?php echo $loop; ?>][]" value="<?php echo esc_attr( wc_format_localized_price( $opt_price ) ); ?>" placeholder="0<?php echo esc_attr( $opt_decimal_separator ); ?>00" class="wc_input_price" />
 	</div>
 
-	<?php do_action( 'woocommerce_product_addons_panel_option_row', isset( $post ) ? $post : null, $product_addons, $loop, $option ); ?>
+	<?php do_action( 'woocommerce_product_addons_panel_option_row', isset( $post ) ? $post : null, $addon, $loop, $option ); ?>
 
 	<div class="wc-pao-addon-content-remove">
 		<button type="button" class="wc-pao-remove-option dokan-btn dokan-btn-theme dokan-btn-sm">x</button>

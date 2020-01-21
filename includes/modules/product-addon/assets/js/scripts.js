@@ -151,6 +151,16 @@ jQuery( function( $ ) {
 			return shouldReturn;
 		},
 
+		hideBookingForNonBookableProduct: function() {
+			var is_booking_product = $( '.dokan-booking-wrapper' ).length;
+
+			if ( ! is_booking_product ) {
+				console.log('hide')
+				$( '.show_if_booking.hide_initial_booking_addon_options' ).hide();
+			}
+
+		},
+
 		init: function() {
 			$( '.post-type-product' ).on( 'click', '#publishing-action input[name="save"]', function() {
 				return wc_pao_admin.validateSettings( 'product' );
@@ -370,6 +380,7 @@ jQuery( function( $ ) {
                         $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
 						wc_pao_admin.refresh();
 						wc_pao_admin.runOptionSortable();
+						wc_pao_admin.hideBookingForNonBookableProduct();
 					} );
 
 					return false;
@@ -553,6 +564,7 @@ jQuery( function( $ ) {
 
 			wc_pao_admin.runFieldSortable();
 			wc_pao_admin.runOptionSortable();
+			wc_pao_admin.hideBookingForNonBookableProduct();
 
 			// Show / hide expand/close
 			var total_add_ons = $( '.wc-pao-addons .wc-pao-addon' ).length;

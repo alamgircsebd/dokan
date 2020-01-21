@@ -2,7 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-global $post;
+
+$post                            = null;
 $addon_title                     = ! empty( $addon['name'] ) ? $addon['name'] : '';
 $title_format                    = ! empty( $addon['title_format'] ) ? $addon['title_format'] : '';
 $addon_type                      = ! empty( $addon['type'] ) ? $addon['type'] : 'multiple_choice';
