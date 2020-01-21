@@ -111,7 +111,7 @@ class Dokan_WC_Booking {
         //booking modification
         add_action( 'woocommerce_new_booking', array( $this, 'add_seller_id_meta' ) );
         add_action( 'shutdown', array( $this, 'add_seller_manage_cap' ) );
-        add_action( 'wp_ajax_dokan-wc-booking-confirm', array( $this, 'mark_booking_confirmed' ) );
+        add_action( 'template_redirect', array( $this, 'mark_booking_confirmed' ) );
 
         // booking person type delete
         add_action( 'wp_ajax_woocommerce_remove_bookable_person', array( $this, 'dokan_remove_bookable_person' ) );
@@ -806,13 +806,23 @@ class Dokan_WC_Booking {
      *
      */
     function mark_booking_confirmed() {
+        if ( !isset( $_GET['action'] ) ) {
+            return;
+        }
 
-        if ( !current_user_can( 'manage_bookings' ) ) {
+        if ( 'dokan-wc-booking-confirm' != $_GET['action'] ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'manage_bookings' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'dokan' ) );
         }
-        if ( !check_admin_referer( 'wc-booking-confirm' ) ) {
+
+
+        if ( ! check_admin_referer( 'wc-booking-confirm' ) ) {
             wp_die( __( 'You have taken too long. Please go back and retry.', 'dokan' ) );
         }
+
         $booking_id = isset( $_GET['booking_id'] ) && (int) $_GET['booking_id'] ? (int) $_GET['booking_id'] : '';
         if ( !$booking_id ) {
             die;
