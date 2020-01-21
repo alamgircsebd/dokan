@@ -727,7 +727,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 ) );
 
                 $stripe_plan = \Stripe\Plan::create( array(
-                    'amount'            => $order_total * 100,
+                    'amount'            => $this->get_stripe_amount( $order_total ),
                     'interval'          => $subscription_period,
                     'interval_count'    => $subscription_interval,
                     'currency'          => $currency,
@@ -796,7 +796,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                     }
 
                 } else {
-                    $charge = \Stripe\Charge::create( array( 'customer' => $customer_id, 'amount' => $order_total * 100, 'currency' => $currency, 'description' => $order_desc ) );
+                    $charge = \Stripe\Charge::create( array( 'customer' => $customer_id, 'amount' => $this->get_stripe_amount( $order_total ), 'currency' => $currency, 'description' => $order_desc ) );
                     $charge_ids[ $customer_user_id ] = $charge->id;
                 }
 
@@ -903,7 +903,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 }
 
                 $transfer = DokanStripe::transaction( $this->secret_key )
-                    ->amount( $vendor_earning * 100, $currency )
+                    ->amount( $this->get_stripe_amount( $vendor_earning ), $currency )
                     ->from( $this->get_charge_id_from_intent() )
                     ->to( $connected_vendor_id )
                     ->create();
@@ -947,9 +947,9 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
 
             if ( $token ) {
                 $charge = \Stripe\Charge::create( array(
-                    'amount'          => $order_total * 100,
+                    'amount'          => $this->get_stripe_amount( $order_total ),
                     'currency'        => $currency,
-                    'application_fee' => $application_fee * 100,
+                    'application_fee' => $this->get_stripe_amount( $application_fee ),
                     'description'     => $order_desc,
                     'card'            => ! empty( $token->id ) ? $token->id : $stripe_token
                     ), $access_token );
@@ -957,7 +957,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 $order_desc   = sprintf( __( '%s - Order %s, suborder of %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $tmp_order_id, $order->get_order_number() );
 
                 $charge = \Stripe\Charge::create( [
-                    'amount'      => $order_total * 100,
+                    'amount'      => $this->get_stripe_amount( $order_total ),
                     'currency'    => $currency,
                     'description' => $order_desc,
                     'customer'    => $customer_id
@@ -1071,7 +1071,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         }
 
         $intent = \Stripe\PaymentIntent::create( [
-            'amount'               => $order_total * 100,
+            'amount'               => $this->get_stripe_amount( $order_total ),
             'currency'             => $this->currency,
             'confirmation_method'  => 'automatic',
             'payment_method_types' => ['card'],
@@ -1438,7 +1438,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $coupon   = \Stripe\Coupon::create( [
             'duration'   => 'once',
             'id'         => $discount .'_OFF_' . $order->get_id(),
-            'amount_off' => 100 * $discount,
+            'amount_off' => $this->get_stripe_amount( $discount ),
             'currency'   => $this->currency
         ] );
 

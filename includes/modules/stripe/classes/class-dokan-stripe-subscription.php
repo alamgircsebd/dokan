@@ -140,7 +140,7 @@ class Dokan_Stripe_Subscription {
                     ] );
 
                     $stripe_plan = \Stripe\Plan::create( [
-                        'amount'            => $product_pack->get_price() * 100,
+                        'amount'            => Stripe_Helper::get_stripe_amount( $product_pack->get_price() ),
                         'interval'          => $subscription_period,
                         'interval_count'    => $subscription_interval,
                         'currency'          => strtolower( get_woocommerce_currency() ),
@@ -299,7 +299,7 @@ class Dokan_Stripe_Subscription {
         $coupon = \Stripe\Coupon::create( [
             'duration'   => 'once',
             'id'         => $discount .'_OFF_' . random_int( 1, 999999 ),
-            'amount_off' => 100 * $discount,
+            'amount_off' => Stripe_Helper::get_stripe_amount( $discount ),
             'currency'   => strtolower( get_woocommerce_currency() )
         ] );
 

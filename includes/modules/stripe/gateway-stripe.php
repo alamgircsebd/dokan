@@ -761,7 +761,7 @@ class Dokan_Stripe {
         try {
             $refund = \Stripe\Refund::create( [
                 'charge'                 => $vendor_charge_id,
-                'amount'                 => $data['refund_amount'] * 100, // in cents
+                'amount'                 => Helper::get_stripe_amount( $data['refund_amount'] ),
                 'reason'                 => __( 'requested_by_customer', 'dokan' ),
                 'refund_application_fee' => true
             ], $vendor_token );

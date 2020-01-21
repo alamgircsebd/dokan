@@ -109,4 +109,39 @@ class Helper {
 
         return true;
     }
+
+    /**
+     * Get Stripe amount to pay
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return float
+     */
+    public static function get_stripe_amount( $total ) {
+        switch ( get_woocommerce_currency() ) {
+            /* Zero decimal currencies*/
+            case 'BIF' :
+            case 'CLP' :
+            case 'DJF' :
+            case 'GNF' :
+            case 'JPY' :
+            case 'KMF' :
+            case 'KRW' :
+            case 'MGA' :
+            case 'PYG' :
+            case 'RWF' :
+            case 'VND' :
+            case 'VUV' :
+            case 'XAF' :
+            case 'XOF' :
+            case 'XPF' :
+            $total = absint( $total );
+            break;
+            default :
+            $total = $total * 100; /* In cents*/
+            break;
+        }
+
+        return $total;
+    }
 }
