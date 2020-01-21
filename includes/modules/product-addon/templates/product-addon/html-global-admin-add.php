@@ -70,7 +70,8 @@ if ( isset( $_POST ) && ! empty( $_POST['save_addon'] ) || ! empty( $_GET['edit'
 					$exists = false;
                     dokan_get_template_part( 'product-addon/html-addon-panel', '', array(
                         'is_product_addon' => true,
-                        'exists'             => $exists,
+                        'exists'           => $exists,
+                        'product_addons'   => $product_addons
                     ) );
 					?>
 				</td>

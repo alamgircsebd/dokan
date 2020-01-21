@@ -184,8 +184,16 @@ class Dokan_Product_Addon {
             $this->enqueue_scripts();
         }
 
+        if ( isset( $wp->query_vars['booking'] ) && $wp->query_vars['booking'] == 'edit' ) {
+            $this->enqueue_scripts();
+        }
+
+        if ( isset( $wp->query_vars['auction'] ) ) {
+            $this->enqueue_scripts();
+        }
+
         // Vendor product edit page when product already publish
-        if ( get_query_var( 'edit' ) && is_singular( 'product' ) ) {
+        if ( dokan_is_product_edit_page() ) {
             $this->enqueue_scripts();
         }
 
