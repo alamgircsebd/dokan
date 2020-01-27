@@ -553,7 +553,7 @@ class Dokan_Pro_Products {
             return;
         }
 
-        if ( ! dokan_is_user_seller( get_current_user_id() ) ) {
+        if ( ! dokan_is_user_seller( dokan_get_current_user_id() ) ) {
             return;
         }
 
@@ -591,7 +591,13 @@ class Dokan_Pro_Products {
                 $clone_product_id =  $wo_dup->duplicate_product( $post );
             }
 
-            $product_status = dokan_get_new_post_status();
+            // If vendor is disabled, make product status pending
+            if ( ! dokan_is_seller_enabled( dokan_get_current_user_id() ) ) {
+                $product_status = 'pending';
+            } else {
+                $product_status = dokan_get_new_post_status();
+            }
+
             wp_update_post( array( 'ID' => intval( $clone_product_id ), 'post_status' => $product_status ) );
 
             $redirect = apply_filters( 'dokan_redirect_after_product_duplicating', dokan_get_navigation_url( 'products' ), $product_id, $clone_product_id );
