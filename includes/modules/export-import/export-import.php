@@ -120,6 +120,7 @@ class Dokan_Product_Importer {
         add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
         add_action( 'dokan_after_add_product_btn', array( $this, 'render_import_export_button' ) );
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
+        add_filter( 'woocommerce_product_import_process_item_data', array( $this, 'process_item_data' ) );
         add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'change_product_status' ), 20, 2 );
 
         add_action( 'wp_footer', array( $this, 'bind_global_ajaxurl' ), 10 );
@@ -1305,6 +1306,37 @@ class Dokan_Product_Importer {
     }
 
     /**
+     * Process item data wihle importing from csv.
+     *
+     * If imported product_id is matched with another vendor's product_id then unset imported product_id and product_sku
+     * So that a new product can be created without overriding another vendor's product.
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param  array $data
+     *
+     * @return array
+     */
+    public function process_item_data( $data ) {
+        if ( empty( $data['id'] ) ) {
+            return $data;
+        }
+
+        $vendor = dokan_get_vendor_by_product( $data['id'] );
+
+        if ( ! $vendor ) {
+            return $data;
+        }
+
+        if ( absint( dokan_get_current_user_id() ) !== absint( $vendor->get_id() ) ) {
+            unset( $data['id'] );
+            unset( $data['sku'] );
+        }
+
+        return $data;
+    }
+
+    /**
      * Change imported product status
      *
      * @param  object $object
@@ -1315,7 +1347,7 @@ class Dokan_Product_Importer {
      * @return object
      */
     public function change_product_status( $object, $item ) {
-        $can_publish    = get_user_meta( get_current_user_id(), 'dokan_publishing', true );
+        $can_publish    = get_user_meta( dokan_get_current_user_id(), 'dokan_publishing', true );
         $product_status = dokan_get_option( 'product_status', 'dokan_selling' );
 
         // if uploading pending product make it pending
