@@ -142,7 +142,8 @@ class Dokan_Product_Addon_Frontend {
                     'reference'           => $reference,
                     'priority'            => $priority,
                     'objects'             => $objects,
-                    'product_addons'      => $product_addons
+                    'product_addons'      => $product_addons,
+                    'edit_id'             => $edit_id,
                 ) );
             } else {
                 if ( ! empty( $_GET['deleted'] ) && $_GET['deleted'] ) {
