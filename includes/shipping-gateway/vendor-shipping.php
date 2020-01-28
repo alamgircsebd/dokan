@@ -396,7 +396,6 @@ if ( class_exists( 'WooCommerce' ) ) {
             $destination_country  = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
             $destination_state    = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
             $destination_postcode = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
-            $destination_postcode = dokan_normalize_shipping_postcode( $destination_postcode );
 
             if ( empty( $seller_id ) ) {
                 return false;
@@ -463,8 +462,6 @@ if ( class_exists( 'WooCommerce' ) ) {
 
                         return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
                     }
-                } else {
-                    $postcode_array = array_map( 'dokan_normalize_shipping_postcode', $postcode_array );
                 }
 
                 if ( in_array( $destination_postcode, $postcode_array ) ) {
