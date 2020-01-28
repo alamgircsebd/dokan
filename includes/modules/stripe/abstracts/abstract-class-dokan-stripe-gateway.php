@@ -95,7 +95,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         add_action( 'admin_notices', array( &$this, 'checks' ) );
         add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-        add_filter( 'woocommerce_update_order_review_fragments', [ $this, 'set_payment_intent_data' ] );
+        add_action( 'woocommerce_checkout_order_review', [ $this, 'set_payment_intent_data' ] );
     }
 
     /**
@@ -1094,8 +1094,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             return $fragment;
         }
 
-        $this->create_payment_intent();
-        ob_start(); ?>
+        $this->create_payment_intent(); ?>
 
         <div class="dokan-stripe-intent">
             <input type="hidden" name="dokan_payment_customer_name" id="dokan-payment-customer-name" value="<?php echo esc_attr( $this->customer_details['name'] ); ?>">
@@ -1110,10 +1109,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             <input type="hidden" name="dokan_payment_client_secret" id="dokan-payment-client-secret" value="<?php echo esc_attr( $this->client_secret ); ?>">
             <input type="hidden" name="dokan_subscription_product_id" id="dokan-subscription-product-id" value="<?php echo esc_attr( $this->subscription_product_id ); ?>">
         </div>
-
-        <?php $fragment['.dokan-stripe-intent'] = ob_get_clean();
-
-        return $fragment;
+        <?php
     }
 
     /**
@@ -1191,10 +1187,10 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @return void
      */
     public function process_seller_withdraws( $all_withdraws ){
-        $IP =  dokan_get_client_ip();
+        $IP       = dokan_get_client_ip();
         $withdraw = new Dokan_Withdraw();
-        foreach ( $all_withdraws as $withdraw_data ) {
 
+        foreach ( $all_withdraws as $withdraw_data ) {
             $data = array(
                 'date'    => current_time( 'mysql' ),
                 'status'  => 1,
