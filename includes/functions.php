@@ -2179,7 +2179,37 @@ function dokan_wc_email_recipient_add_seller( $email, $order ) {
     return apply_filters( 'dokan_email_recipient_new_order', $email );
 }
 
-add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
+//add_filter( 'woocommerce_email_recipient_new_order', 'dokan_wc_email_recipient_add_seller', 10, 2 );
+
+/**
+ * Dokan get vendor order details by order_id
+ *
+ * @param  int $order
+ *
+ * @param  int $vendor_id
+ *
+ * @return array
+ */
+function dokan_get_vendor_order_details( $order_id, $vendor_id ) {
+    $order      = wc_get_order( $order_id );
+    $info       = array();
+    $order_info = array();
+
+    foreach ( $order->get_items( 'line_item' ) as $item ) {
+        $product_id  = $item['product_id'];
+        $author_id   = get_post_field( 'post_author', $product_id );
+
+        if ( $vendor_id == $author_id ) {
+            $info['product']  = $item['name'];
+            $info['quantity'] = $item['quantity'];
+            $info['total']    = $item['total'];
+
+            array_push( $order_info, $info );
+        }
+    }
+
+    return $order_info;
+}
 
 /**
  * Send email to seller and admin when there is no product in stock or low stock
