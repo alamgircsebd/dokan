@@ -73,7 +73,7 @@ class Dokan_RMA_Frontend {
                         if ( $amount == 0 ) {
                             $amount = __( 'Free', 'dokan' );
                         } else {
-                            $amount = wc_price( $amount );
+                            $amount = wc_price( wc_get_price_to_display( $product, [ 'price' => $amount ] ) );
                         }
                         echo '<option value="'. $x .'">'. $value .' '. $duration . ' &mdash; '. $amount .'</option>';
                     }
@@ -229,7 +229,7 @@ class Dokan_RMA_Frontend {
                     $value         = $addon['length'] . ' ' . $duration_unit;
 
                     if ( $addon['price'] > 0 ) {
-                        $value .= ' (' . wc_price( $addon['price'] ) . ')';
+                        $value .= ' (' . wc_price( wc_get_price_to_display( $_product, [ 'price' => $addon['price'] ] ) ) . ')';
                     }
 
                     $other_data[] = array(

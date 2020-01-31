@@ -231,7 +231,7 @@ Class Dokan_Social_Login {
             }
 
         } catch ( Exception $e ) {
-            echo $e->getMessage();
+            wc_add_notice( $e->getMessage(), 'error' );
         }
     }
 
