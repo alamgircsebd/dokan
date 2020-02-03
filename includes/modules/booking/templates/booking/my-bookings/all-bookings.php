@@ -178,7 +178,7 @@ if ( $bookings ) {
 
                     if ( in_array( $the_booking->get_status(), array( 'pending-confirmation' ) ) ) {
                         $actions['confirm'] = array(
-                            'url' 		=> wp_nonce_url( admin_url( 'admin-ajax.php?action=dokan-wc-booking-confirm&booking_id=' . $the_booking->id ), 'wc-booking-confirm' ),
+                            'url'       => wp_nonce_url( add_query_arg( array( 'action' => 'dokan-wc-booking-confirm', 'booking_id' => $the_booking->id ), dokan_get_navigation_url( 'booking/my-bookings' ) ), 'wc-booking-confirm' ),
                             'name' 		=> __( 'Confirm', 'dokan' ),
                             'action' 	=> "confirm"
                             );

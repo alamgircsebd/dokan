@@ -391,8 +391,9 @@ class Dokan_Store_Category {
             $store_category_query = new WP_Tax_Query( $wp_user_query->query_vars['store_category_query'] );
             $clauses = $store_category_query->get_sql( $wpdb->users, 'ID' );
 
-            $wp_user_query->query_from .= $clauses['join'];
-            $wp_user_query->query_where .= $clauses['where'];
+            $wp_user_query->query_fields = 'DISTINCT ' . $wp_user_query->query_fields;
+            $wp_user_query->query_from   .= $clauses['join'];
+            $wp_user_query->query_where  .= $clauses['where'];
         }
     }
 }

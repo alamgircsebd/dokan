@@ -20,7 +20,11 @@ $has_addons = ( ! empty( $product_addons ) && 0 < count( $product_addons ) ) ? '
 		$loop = 0;
 
 		foreach ( $product_addons as $addon ) {
-			include( dirname( __FILE__ ) . '/html-addon.php' );
+            dokan_get_template_part( 'product-addon/html-addon', '', array(
+                'is_product_addon' => true,
+                'loop'             => $loop,
+                'addon'            => $addon,
+            ) );
 
 			$loop++;
 		}

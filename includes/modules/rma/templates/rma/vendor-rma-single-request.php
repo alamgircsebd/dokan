@@ -113,7 +113,7 @@
                                         <hr>
                                         <div class="details-row">
                                             <p class="details-label"><?php _e( 'Reason', 'dokan' ) ?></p>
-                                            <p class="details-value"><?php echo dokan_rma_refund_reasons( $request['reasons'] ); ?></p>
+                                            <p class="details-value"><?php echo ! empty( $request['reasons'] ) ? dokan_rma_refund_reasons( $request['reasons'] ) : ''; ?></p>
                                         </div>
                                         <div class="details-row">
                                             <p class="details-label"><?php _e( 'Reason Details', 'dokan' ) ?></p>

@@ -397,8 +397,12 @@ class Dokan_Pro_Ajax {
             $postcode_array = array();
 
             foreach ( $postcodes as $postcode ) {
+                if ( false !== strpos( $postcode, '...' ) ) {
+                    $postcode = implode( '...', array_map( 'trim', explode( '...', $postcode ) ) );
+                }
+
                 $postcode_array[] = array(
-                    'code' => $postcode,
+                    'code' => trim( $postcode ),
                     'type' => 'postcode'
                 );
             }

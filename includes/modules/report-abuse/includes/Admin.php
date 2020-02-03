@@ -33,7 +33,9 @@ class Admin {
         $title = esc_html__( 'Abuse Reports', 'dokan' );
         $slug  = 'dokan';
 
-        $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/abuse-reports' ];
+        if ( current_user_can( dokana_admin_menu_capability() ) ) {
+            $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/abuse-reports' ];
+        }
     }
 
     /**

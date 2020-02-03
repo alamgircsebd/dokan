@@ -2,7 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-global $post;
+
+$post                            = null;
 $addon_title                     = ! empty( $addon['name'] ) ? $addon['name'] : '';
 $title_format                    = ! empty( $addon['title_format'] ) ? $addon['title_format'] : '';
 $addon_type                      = ! empty( $addon['type'] ) ? $addon['type'] : 'multiple_choice';
@@ -174,7 +175,12 @@ if ( 'heading' === $addon_type ) {
 					<?php
 					if ( ! empty( $addon['options'] ) ) {
 						foreach ( $addon['options'] as $option ) {
-							include( dirname( __FILE__ ) . '/html-addon-option.php' );
+                            dokan_get_template_part( 'product-addon/html-addon-option', '', array(
+                                'is_product_addon' => true,
+                                'option'           => $option,
+                                'loop'             => $loop,
+                                'addon'            => $addon
+                            ) );
 						}
 					}
 					?>

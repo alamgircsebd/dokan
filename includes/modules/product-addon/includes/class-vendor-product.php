@@ -41,7 +41,11 @@ class Dokan_Product_Addon_Vendor_Product {
      * @return void
      */
     public function add_addons_section( $post, $post_id ) {
-        include_once DOKAN_PRODUCT_ADDON_DIR . '/views/html-product-addons.php';
+        dokan_get_template_part( 'product-addon/html-product-addons', '', array(
+            'is_product_addon' => true,
+            'post'             => $post,
+            'post_id'          => $post_id
+        ) );
     }
 
     /**

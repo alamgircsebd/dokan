@@ -1823,7 +1823,7 @@ jQuery( function( $ ) {
             $( '#dokan-store-listing-filter-form-wrap .store-lists-category .category-box ul li' ).on( 'click', this.selectCategory );
             $( '#dokan-store-listing-filter-form-wrap .featured.item #featured' ).on( 'change', this.toggleFeatured );
             $( '#dokan-store-listing-filter-form-wrap .open-now.item #open-now' ).on( 'change', this.toggleIsOpen );
-            $( '#dokan-store-listing-filter-form-wrap .store-ratings.item a' ).on( 'click', this.setRatings );
+            $( '#dokan-store-listing-filter-form-wrap .store-ratings.item i' ).on( 'click', this.setRatings );
 
             const params = dokan.storeLists.getParams();
 
@@ -1921,7 +1921,7 @@ jQuery( function( $ ) {
 
             parent.addClass( 'selected' );
 
-            [ ...parent.find( 'a' ) ].forEach( function( item ) {
+            [ ...parent.find( 'i' ) ].forEach( function( item ) {
                 if ( currentItem.is( item ) ) {
 
                     if ( $( item ).hasClass( 'active' ) ) {
@@ -1938,7 +1938,7 @@ jQuery( function( $ ) {
 
             const rating = dokan.storeLists.query.rating;
 
-            if ( rating !== currentItem.data( 'rating' ) ) {
+            if ( rating != currentItem.data( 'rating' ) ) {
                 dokan.storeLists.query.rating = currentItem.data( 'rating' );
             } else {
                 delete dokan.storeLists.query.rating;

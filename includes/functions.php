@@ -317,7 +317,7 @@ if ( !function_exists( 'dokan_render_customer_migration_template' ) ) {
     function dokan_render_customer_migration_template( $atts ) {
 
         ob_start();
-        dokan_get_template( 'global/update-account.php', '', DOKAN_PRO_DIR . '/templates/', DOKAN_PRO_DIR . '/templates/' );
+        dokan_get_template_part( 'global/update-account', '', array( 'pro' => true ) );
         ?>
             <script>
             // Dokan Register

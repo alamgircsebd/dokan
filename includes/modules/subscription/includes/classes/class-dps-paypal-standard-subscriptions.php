@@ -263,17 +263,23 @@ class DPS_PayPal_Standard_Subscriptions {
                 $paypal_args['t3'] = $converted_periods['billing_period'];
             }
 
-            if ( $subscription_installments === 1 ) {
-                // Non-recurring payments
-                $paypal_args['src'] = 0;
-            } else {
+            /**
+             * If number of subscription installments is 0 (unlimted) or greater than 1. Set `src` to 1 else make it 0.
+             *
+             * @see https://developer.paypal.com/docs/classic/paypal-payments-standard/integration-guide/Appx-websitestandard-htmlvariables/?mark=srt#recurring-payment-variables
+             */
+            if ( 0 === $subscription_installments ) {
+                // Recurring for unlimted period
                 $paypal_args['src'] = 1;
-
-                if ( $subscription_installments < 2 || $subscription_installments > 52 ) {
-                    throw new Exception( __( 'Billing cycle can\'t be less than 2 or greater than 52 for PayPal', 'dokan' ) );
-                }
-
+            } else if ( 1 === $subscription_installments ) {
+                // One time subscription
+                $paypal_args['src'] = 0;
+            } else if ( $subscription_installments > 1 && $subscription_installments <= 52 ) {
+                // Recurring for certain time (number of subscription installments)
+                $paypal_args['src'] = 1;
                 $paypal_args['srt'] = $subscription_installments;
+            } else {
+                throw new Exception( __( 'Invalid subscription length', 'dokan' ) );
             }
         }
 

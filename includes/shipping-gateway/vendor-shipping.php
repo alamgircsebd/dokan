@@ -396,7 +396,6 @@ if ( class_exists( 'WooCommerce' ) ) {
             $destination_country  = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
             $destination_state    = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
             $destination_postcode = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
-            $destination_postcode = dokan_normalize_shipping_postcode( $destination_postcode );
 
             if ( empty( $seller_id ) ) {
                 return false;
@@ -463,17 +462,24 @@ if ( class_exists( 'WooCommerce' ) ) {
 
                         return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
                     }
-                } else {
-                    $postcode_array = array_map( 'dokan_normalize_shipping_postcode', $postcode_array );
                 }
 
                 if ( in_array( $destination_postcode, $postcode_array ) ) {
                     $is_available = true;
                 }
 
-                // if postcode is set as wilecard range (e.g 1000*)
-                if ( strstr( $postcode_array[0], '*' ) ) {
-                    $is_available = true;
+                // if postcode is set as wildcard range (e.g W1*)
+                $wildcard_postcodes = array_map( 'wc_clean', wc_get_wildcard_postcodes( $destination_postcode, $destination_country ) );
+
+                foreach ( $postcode_array as $postcode ) {
+                    if ( false === strpos( $postcode, '*' ) ) {
+                        continue;
+                    }
+
+                    if ( in_array( $postcode, $wildcard_postcodes ) ) {
+                        $is_available = true;
+                        break;
+                    }
                 }
             }
 

@@ -678,6 +678,10 @@ var VclTwitch = ContentLoading.VclTwitch;
             var additionalFee = this.stats.others.additional_fee ? this.stats.others.additional_fee : 0;
             var commissionType = this.stats.others.commission_type;
 
+            if ('' === this.store.admin_commission) {
+                return this.__('Not Set', 'dokan');
+            }
+
             if (commissionType === 'flat') {
                 return accounting.formatMoney(commissionRate);
             } else if (commissionType === 'percentage') {
@@ -749,6 +753,10 @@ var VclTwitch = ContentLoading.VclTwitch;
 
             if ('shop_url' in response) {
                 this.store.user_nicename = this.getStoreName(response.shop_url);
+            }
+
+            if (!response.admin_commission_type) {
+                this.store.admin_commission_type = 'flat';
             }
         },
 

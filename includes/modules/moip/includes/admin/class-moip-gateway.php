@@ -718,7 +718,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @return void
      */
     public function process_seller_withdraws( $all_withdraws ) {
-        $IP       =  dokan_get_client_ip();
+        $IP       = dokan_get_client_ip();
         $withdraw = new Dokan_Withdraw();
 
         foreach ( $all_withdraws as $withdraw_data ) {

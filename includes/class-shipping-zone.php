@@ -370,7 +370,11 @@ class Dokan_Shipping_Zone {
         );
 
         $zone_id             = ! empty( $zone_ids[0]->zone_id ) ? $zone_ids[0]->zone_id : 0;
-        $zone_id_by_postcode = self::get_zone_id_by_postcode( $postcode, $vendor_id );
+        $zone_id_by_postcode = 0;
+
+        if ( ! empty( $postcode ) ) {
+            $zone_id_by_postcode = self::get_zone_id_by_postcode( $postcode );
+        }
 
         if ( $zone_id_by_postcode && $zone_id_by_postcode !== $zone_id ) {
             $zone_id = $zone_id_by_postcode;
@@ -378,10 +382,10 @@ class Dokan_Shipping_Zone {
 
         // if zone id is not found in vendor's available zone id, assume it falls under `Locations not covered by your other zones`.
         if ( ! in_array( $zone_id, self::get_vendor_all_zone_ids( $package ) ) ) {
-            return 0;
+            $zone_id = 0;
         }
 
-        return $zone_id;
+        return apply_filters( 'dokan_get_zone_id_from_package', $zone_id, $package );
     }
 
     /**
@@ -427,7 +431,7 @@ class Dokan_Shipping_Zone {
             return (int) $zone->zone_id;
         }, $results );
 
-        return $zone_ids;
+        return apply_filters( 'dokan_get_vendor_all_zone_ids', $zone_ids, $package );
     }
 
     /**
@@ -436,16 +440,38 @@ class Dokan_Shipping_Zone {
      * @since  2.9.14
      *
      * @param  int $postcode
-     * @param  int $vendor_id
+     * @param  int $vendor_id Deprecated
      *
-     * @return int
+     * @return int|false on failure
      */
-    public static function get_zone_id_by_postcode( $postcode, $vendor_id ) {
+    public static function get_zone_id_by_postcode( $postcode, $vendor_id = false ) {
         global $wpdb;
 
-        $table_name = "{$wpdb->prefix}dokan_shipping_zone_locations";
-        $zone_id    = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$table_name} WHERE location_code=%d AND location_type=%s AND seller_id=%d", $postcode, 'postcode', $vendor_id ) );
+        if ( $vendor_id ) {
+            /**
+             * We had to deprecate `vendor_id` cause, we may have multiple vendor on the cart, whith different postcode.
+             * Suppose Vendor_One ships porduct to zip code 10001 and Vendor_Two ships to 10002. If customer inserts 10002 and Vendor_Two's
+             * Product is in the bottom on the cart then shipping won't be available for Vendor_Two as Vendor_One's shipping is false. So we will have to show Vendor_Two's available shipping anyway.
+             */
+            wc_deprecated_argument( 'vendor_id', 'DOKAN_PRO_SINCE', __CLASS__ . '::get_zone_id_by_postcode() doesn\'t require $vendor_id anymore.' );
+        }
 
-        return $zone_id;
+        $wc_shipping_zones    = "{$wpdb->prefix}woocommerce_shipping_zones";
+        $dokan_shipping_zones = "{$wpdb->prefix}dokan_shipping_zone_locations";
+        $vendor_zone_id       = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$dokan_shipping_zones} WHERE location_code=%d AND location_type=%s", $postcode, 'postcode' ) );
+
+        /**
+         * We are making sure that `vendor_zone_id` is exsits in woocommerce_zone_ids to avoid `Uncaught Exception: Invalid data store`.
+         *
+         * @since DOKAN_PRO_SINCE
+         */
+        $wc_zone_ids = $wpdb->get_results( "select zone_id from {$wc_shipping_zones}" );
+        $wc_zone_ids = array_map( function( $zone ) {
+            return intval( $zone->zone_id );
+        }, $wc_zone_ids );
+
+        $zone_id = in_array( $vendor_zone_id, $wc_zone_ids ) ? $vendor_zone_id : '';
+
+        return apply_filters( 'dokan_get_zone_id_by_postcode', $zone_id, $postcode );
     }
 }

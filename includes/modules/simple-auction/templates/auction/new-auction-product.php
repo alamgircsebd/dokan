@@ -186,7 +186,7 @@
                                     <div class="dokan-form-group dokan-auction-proxy-bid">
                                         <div class="checkbox">
                                             <label for="_auction_proxy">
-                                                <input type="checkbox" name="_auction_proxy" id="_auction_proxy" value="yes">
+                                                <input type="checkbox" name="_auction_proxy" id="_auction_proxy" value="yes" <?php checked( 'yes' === get_option( 'simple_auctions_proxy_auction_on' ) ); ?>>
                                                 <?php _e( 'Enable proxy bidding for this auction product', 'dokan' );?>
                                             </label>
                                         </div>
