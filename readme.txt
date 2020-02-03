@@ -5,7 +5,7 @@ Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, stor
 Requires at least: 4.4
 Tested up to: 5.3.2
 WC requires at least: 3.0
-WC tested up to: 3.8.1
+WC tested up to: 3.9.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,26 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v2.9.19 -> February 03, 2020
+----------------------------------
+
+- [fix] Attach vendor id while exporting product variations (Import Export)
+- [fix] Elementor get template filte (Elementor)
+- [fix] Add template overwriting support in product addon module (Product Addon)
+- [fix] Wrong order total in stripe payment for Yen
+- [fix] Geolocation module has api key checking function (Geolocation)
+- [fix] Wildcard shipping for multiple vendor
+- [fix] Report abouse menu permisssion issues
+- [fix] Add distinct clause to store category query to remove duplicate items
+- [fix] Make product status pending while duplicating product as a inactive vendor
+- [fix] Enabling proxy bidding by default option is not taking effect on the frontend (Auction)
+- [fix] If product_id is matched with another vendor's product_id while importing product via csv, create a new product instead of overriding another vendors's product (Import Export)
+- [fix] Product addon templeting issues (Product Addon)
+- [fix] Add inclusive tax support for RMA (RMA)
+- [fix] Set default commission type when commission type is not selected in backend vendor profile
+- [Improvement] Store listing filter styles so that it works almost any theme
+- [Improvement] Subscription installment count issue for paypal (Subscription)
 
 v2.9.18 -> January 15, 2020
 ----------------------------------

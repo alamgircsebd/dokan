@@ -1,6 +1,42 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 2.9.19',
+        'released' => '2020-02-03',
+        'changes'  => array(
+            array(
+                'title'       => 'Product Variation Exporting Issue',
+                'type'        => 'Fix',
+                'description' => 'Attach vendor id while exporting product variations (Import Export)'
+            ),
+            array(
+                'title'       => 'Product Addon Template Override',
+                'type'        => 'Fix',
+                'description' => 'Add template overwriting support in product addon module (Product Addon)'
+            ),
+            array(
+                'title'       => 'Proxy Bidding Option',
+                'type'        => 'Fix',
+                'description' => 'Enabling proxy bidding by default option is not taking effect on the frontend (Auction)'
+            ),
+            array(
+                'title'       => 'Inclusive Tax Support for RMA',
+                'type'        => 'Fix',
+                'description' => 'Add inclusive tax support for RMA (RMA)'
+            ),
+            array(
+                'title'       => 'Store Listing Page Style',
+                'type'        => 'Improvement',
+                'description' => 'Store listing filter styles so that it works almost any theme'
+            ),
+            array(
+                'title'       => 'Store Listing Page Style',
+                'type'        => 'Improvement',
+                'description' => 'Subscription installment count issue for paypal (Subscription)'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.18',
         'released' => '2020-01-15',
         'changes'  => array(
