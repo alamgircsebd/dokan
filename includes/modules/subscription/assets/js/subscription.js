@@ -60,70 +60,15 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 86);
+/******/ 	return __webpack_require__(__webpack_require__.s = 67);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ 1:
+/***/ 67:
 /***/ (function(module, exports) {
 
-module.exports = jQuery;
-
-/***/ }),
-
-/***/ 86:
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function($) {
-
-__webpack_require__(87);
-
-$('.dokan-report-abuse-admin-single-product-delete-item').on('click', function (e) {
-    e.preventDefault();
-
-    var button = $(this);
-    var id = button.data('id');
-    var tr = button.parents('tr');
-    var fieldset = button.parents('fieldset');
-
-    if (!confirm('Are you sure you want to delete this report')) {
-        return;
-    }
-
-    fieldset.prop('disabled', true);
-
-    button.html('<i class="fa fa-refresh fa-spin"></i> ' + dokanReportAbuse.i18n.deleting + '...');
-
-    $.ajax({
-        url: dokanReportAbuse.rest.root + 'dokan/v1/abuse-reports/' + id,
-        method: 'post',
-        beforeSend: function beforeSend(xhr) {
-            xhr.setRequestHeader('X-WP-Nonce', dokanReportAbuse.rest.nonce);
-            xhr.setRequestHeader('X-HTTP-Method-Override', 'DELETE');
-        }
-    }).done(function (response) {
-        tr.remove();
-        alert(dokanReportAbuse.i18n.deletedSuccessfully);
-    }).fail(function (jqXHR) {
-        button.html('<i class="fa fa-trash"></i> ' + dokanReportAbuse.i18n.delete);
-
-        if (jqXHR.responseJSON && jqXHR.responseJSON.message) {
-            alert(jqXHR.responseJSON.message);
-        }
-    }).always(function () {
-        fieldset.prop('disabled', false);
-    });
-});
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ }),
-
-/***/ 87:
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
+throw new Error("Module build failed: Error: ENOENT: no such file or directory, open '/Users/ediamin/www/dokan/wp-content/plugins/dokan-plugin/includes/modules/subscription/src/main.js'");
 
 /***/ })
 

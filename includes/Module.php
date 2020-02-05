@@ -192,6 +192,15 @@ class Module {
                     'module_class' => 'WeDevs\DokanPro\Modules\PayPalAP\Module',
                     'plan'         => [ 'professional', 'business', 'enterprise', ]
                 ],
+                'product_addon' => [
+                    'id'           => 'product_addon',
+                    'name'         => __( 'Product Addon', 'dokan' ),
+                    'description'  => __( 'WooCommerce Product Addon support', 'dokan' ),
+                    'thumbnail'    => $thumbnail_dir . '/product-addon.png',
+                    'module_file'  => DOKAN_PRO_MODULE_DIR . '/product-addon/module.php',
+                    'module_class' => 'WeDevs\DokanPro\Modules\ProductAddon\Module',
+                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                ],
                 'product_enquiry' => [
                     'id'           => 'product_enquiry',
                     'name'         => __( 'Product Enquiry', 'dokan' ),
@@ -308,6 +317,15 @@ class Module {
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-staff/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\VendorStaff\Module',
                     'plan'         => [ 'professional', 'business', 'enterprise', ]
+                ],
+                'vsp'         => [
+                    'id'           => 'vsp',
+                    'name'         => __( 'Vendor Subscription Product', 'dokan' ),
+                    'description'  => __( 'WooCommerce Subscription integration for Dokan', 'dokan' ),
+                    'thumbnail'    => $thumbnail_dir . '/ajax-live-search.png',
+                    'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-subscription-product/module.php',
+                    'module_class' => 'WeDevs\DokanPro\Modules\VSP\Module',
+                    'plan'         => [ 'enterprise', ]
                 ],
                 'vendor_verification' => [
                     'id'           => 'vendor_verification',

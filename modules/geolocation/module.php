@@ -20,7 +20,7 @@ class Module {
      *
      * @var bool
      */
-    public $has_gmap_api_key = false;
+    public $has_map_api_key = false;
 
     /**
      * Class constructor
@@ -30,8 +30,13 @@ class Module {
      * @return void
      */
     public function __construct() {
-        $this->version          = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
-        $this->has_gmap_api_key = dokan_get_option( 'gmap_api_key', 'dokan_appearance', false );
+        $this->version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
+
+        $dokan_appearance = get_option( 'dokan_appearance', array() );
+
+        if ( ! empty( $dokan_appearance['gmap_api_key'] ) || ! empty( $dokan_appearance['mapbox_access_token'] ) ) {
+            $this->has_map_api_key = true;
+        }
 
         $this->define_constants();
         $this->includes();
@@ -64,7 +69,7 @@ class Module {
      * @return void
      */
     private function hooks() {
-        if ( $this->has_gmap_api_key ) {
+        if ( $this->has_map_api_key ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
             add_action( 'widgets_init', array( $this, 'register_widget' ) );
         } else {
@@ -83,7 +88,7 @@ class Module {
         require_once DOKAN_GEOLOCATION_PATH . '/functions.php';
         require_once DOKAN_GEOLOCATION_PATH . '/class-geolocation-admin-settings.php';
 
-        if ( $this->has_gmap_api_key ) {
+        if ( $this->has_map_api_key ) {
             require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-scripts.php';
             require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-shortcode.php';
             require_once DOKAN_GEOLOCATION_PATH . '/class-dokan-geolocation-widget-filters.php';
@@ -108,7 +113,7 @@ class Module {
     private function instances() {
         new \Dokan_Geolocation_Admin_Settings();
 
-        if ( $this->has_gmap_api_key ) {
+        if ( $this->has_map_api_key ) {
             new \Dokan_Geolocation_Scripts();
             new \Dokan_Geolocation_Shortcode();
             new \Dokan_Geolocation_Vendor_Dashboard();
