@@ -99,6 +99,7 @@ class Vendor {
             'store_name'            => $this->get_shop_name(),
             'first_name'            => $this->get_first_name(),
             'last_name'             => $this->get_last_name(),
+            'user_email'            => $this->get_email(),
             'email'                 => $this->get_email(),
             'social'                => $this->get_social_profiles(),
             'phone'                 => $this->get_phone(),
@@ -391,7 +392,7 @@ class Vendor {
         $default  = array( 'lat' => 0, 'long' => 0 );
         $location = $this->get_info_part( 'location' );
 
-        if ( $location ) {
+        if ( $location AND "NULL" != $location ) {
             list( $default['lat'], $default['long'] ) = explode( ',', $location );
         }
 
