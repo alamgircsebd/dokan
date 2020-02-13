@@ -2414,7 +2414,7 @@ jQuery(function($) {
                     }
                 }
 
-                if ( key[0] === 'store_category[]' && key[0].includes( '[' ) ) {
+                if ( key[0] === 'store_category' && key[0].includes( '[' ) ) {
                     const trimedValue = value[0].split( ' ' ).join( '-' );
                     const cateItem = $( `[data-slug=${trimedValue}]` );
 
