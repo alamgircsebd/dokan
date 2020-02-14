@@ -11,7 +11,7 @@ class Dokan_shortcodes_button {
      * Constructor for shortcode class
      */
     public function __construct() {
-
+        error_log( print_r( 'Loaded shortcode button', true ) );
         add_filter( 'mce_external_plugins',  array( $this, 'enqueue_plugin_scripts' ) );
         add_filter( 'mce_buttons',  array( $this, 'register_buttons_editor' ) );
 

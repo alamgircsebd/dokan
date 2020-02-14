@@ -669,17 +669,6 @@ class Admin {
     }
 
     /**
-    * Modules Page
-    *
-    * @since 1.0.0
-    *
-    * @return void
-    **/
-    public function modules_page() {
-        include dirname( __FILE__ ) . '/modules.php';
-    }
-
-    /**
      * Show update notice
      *
      * @since 1.0
