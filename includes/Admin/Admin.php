@@ -468,7 +468,7 @@ class Admin {
      * @return void
      */
     function whats_new_page() {
-        include dirname( __FILE__ ) . '/whats-new.php';
+        include dirname( __FILE__ ) . '/Views/whats-new.php';
     }
 
     /**

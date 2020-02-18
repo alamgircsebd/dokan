@@ -241,7 +241,7 @@ class Dokan_Pro {
      */
     public function includes() {
         if ( is_admin() ) {
-            require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
+            // require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
@@ -325,6 +325,7 @@ class Dokan_Pro {
             new \WeDevs\DokanPro\Admin\Pointers();
             new \WeDevs\DokanPro\Admin\Ajax();
             new \WeDevs\DokanPro\Admin\Promotion();
+            new \WeDevs\DokanPro\Admin\ShortcodesButton();
         }
 
         new \WeDevs\DokanPro\Admin\Announcement();
