@@ -241,8 +241,7 @@ class Dokan_Pro {
      */
     public function includes() {
         if ( is_admin() ) {
-            require_once DOKAN_PRO_ADMIN_DIR . '/admin-pointers.php';
-            require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
+            // require_once DOKAN_PRO_ADMIN_DIR . '/shortcode-button.php';
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
@@ -323,8 +322,10 @@ class Dokan_Pro {
 
         if ( is_admin() ) {
             new \WeDevs\DokanPro\Admin\Admin();
+            new \WeDevs\DokanPro\Admin\Pointers();
             new \WeDevs\DokanPro\Admin\Ajax();
             new \WeDevs\DokanPro\Admin\Promotion();
+            new \WeDevs\DokanPro\Admin\ShortcodesButton();
         }
 
         new \WeDevs\DokanPro\Admin\Announcement();
@@ -340,6 +341,8 @@ class Dokan_Pro {
         $this->container['notice']      = new \WeDevs\DokanPro\Notice();
         $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
         $this->container['brands']      = new \WeDevs\DokanPro\Brands\Manager();
+
+        $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );
 
         if ( is_user_logged_in() ) {
             new \WeDevs\DokanPro\Dashboard();

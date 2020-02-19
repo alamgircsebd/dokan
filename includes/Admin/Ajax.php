@@ -17,9 +17,6 @@ class Ajax {
     public function __construct() {
         add_action( 'wp_ajax_regen_sync_table', array( $this, 'regen_sync_order_table' ) );
         add_action( 'wp_ajax_check_duplicate_suborders', array( $this, 'check_duplicate_suborders' ) );
-        add_action( 'wp_ajax_print_duplicate_suborders', array( $this, 'print_duplicate_suborders' ) );
-        add_action( 'wp_ajax_dokan_duplicate_order_delete', array( $this, 'dokan_duplicate_order_delete' ) );
-        add_action( 'wp_ajax_dokan_duplicate_orders_bulk_delete', array( $this, 'dokan_duplicate_orders_bulk_delete' ) );
         add_action( 'wp_ajax_dokan-toggle-module', array( $this, 'toggle_module' ), 10 );
     }
 
@@ -173,93 +170,9 @@ class Ajax {
     }
 
     /**
-     * Print Duplicate Suborder table
-     *
-     * @since 2.4.4
-     *
-     * @return json success|error|data
-     *
-     */
-    public function print_duplicate_suborders() {
-        if(session_id() == ''){
-            session_start();
-        }
-        $duplicate_orders = isset( $_SESSION['dokan_duplicate_order_ids'] ) ? $_SESSION['dokan_duplicate_order_ids'] : array();
-
-        ob_start();
-
-        require_once DOKAN_PRO_INC.'/admin/duplicate-order-list.php';
-
-        $html = ob_get_clean();
-
-        wp_send_json_success( array(
-            'html'  => $html,
-        ) );
-    }
-
-    /**
-     * Delete Duplicate orders
-     *
-     * @since 2.4.4
-     *
-     * @return json success|error|data
-     */
-    public function dokan_duplicate_order_delete() {
-
-        parse_str( $_POST['formData'], $data );
-        if ( ! wp_verify_nonce( $data['dokan_duplicate_orders_bulk_action_nonce'], 'dokan_duplicate_orders_bulk_action' ) ) {
-            wp_send_json_error();
-        }
-
-        $duplicate_order_id = (int) $_POST['order_id'];
-
-        if ( !$duplicate_order_id ) {
-            wp_send_json_error();
-        }
-
-        if ( wp_delete_post( $duplicate_order_id ) ) {
-            wp_send_json_success( array(
-                'status' => 'deleted',
-            ) );
-        }
-    }
-
-    /**
-     * Delete orders in Bulk
-     *
-     * @since 2.4.4
-     *
-     * @return json success|error|data
-     */
-    public function dokan_duplicate_orders_bulk_delete() {
-
-        parse_str( $_POST['formData'], $data );
-        if ( !wp_verify_nonce( $data['dokan_duplicate_orders_bulk_action_nonce'], 'dokan_duplicate_orders_bulk_action' ) ) {
-            wp_send_json_error();
-        }
-
-        if ( isset( $data['id'] ) ) {
-            foreach ( $data['id'] as $order_id ) {
-                wp_delete_post( $order_id );
-                $deleted_orders[] = (int) $order_id;
-            }
-            wp_send_json_success( array(
-                'status'  => 1,
-                'deleted' => json_encode($deleted_orders),
-                'msg'     => 'Selected Orders Deleted Successfully'
-            ) );
-        } else {
-            wp_send_json_success( array(
-                'status' => 0,
-                'msg'    => 'Select Orders to Delete'
-            ) );
-        }
-    }
-
-    /**
     * Toggle module
     *
-    * @since 1.0.0
+    * @since 2.9.0
     *
     * @return void
     **/

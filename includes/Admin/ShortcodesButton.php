@@ -1,17 +1,18 @@
 <?php
 
+namespace WeDevs\DokanPro\Admin;
+
 /**
  * Dokan tinyMce Shortcode Button class
  *
  * @since 2.4.12
  */
-class Dokan_shortcodes_button {
+class ShortcodesButton {
 
     /**
      * Constructor for shortcode class
      */
     public function __construct() {
-
         add_filter( 'mce_external_plugins',  array( $this, 'enqueue_plugin_scripts' ) );
         add_filter( 'mce_buttons',  array( $this, 'register_buttons_editor' ) );
 
@@ -120,5 +121,3 @@ class Dokan_shortcodes_button {
     }
 
 }
-
-Dokan_shortcodes_button::init();
