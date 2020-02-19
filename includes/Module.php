@@ -27,12 +27,21 @@ class Module {
     private $active_modules = [];
 
     /**
-     * [$dokan_pro_modules description]
+     * Contains all module informations
+     *
+     *  @since DOKAN_PRO_SINCE
      *
      * @var array
      */
     private $dokan_pro_modules = [];
 
+    /**
+     * Tells us if modules activated or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @var bool
+     */
     private static $modules_activated = false;
 
     /**
@@ -136,7 +145,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/import-export.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/export-import/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ExIm\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'follow_store' => [
                     'id'           => 'follow_store',
@@ -154,7 +163,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/geolocation.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/geolocation/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Geolocation\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'live_chat' => [
                     'id'           => 'live_chat',
@@ -163,7 +172,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/live-chat.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/live-chat/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\LiveChat\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'live_search' => [
                     'id'           => 'live_search',
@@ -208,7 +217,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/product-enquiry.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/product-enquiry/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ProductEnquiry\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'report_abuse' => [
                     'id'           => 'report_abuse',
@@ -235,7 +244,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/seller-vacation.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/seller-vacation/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\SellerVacation\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'shipstation' => [
                     'id'           => 'shipstation',
@@ -244,7 +253,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/shipstation.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/shipstation/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ShipStation\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'auction' => [
                     'id'           => 'auction',
@@ -253,7 +262,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/auction.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/simple-auction/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Auction\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
                 'spmv' => [
                     'id'           => 'spmv',
@@ -300,15 +309,15 @@ class Module {
                     'module_class' => 'WeDevs\DokanPro\Modules\ProductSubscription\Module',
                     'plan'         => [ 'professional', 'business', 'enterprise', ]
                 ],
-                'vendor_analytics' => [
-                    'id'           => 'vendor_analytics',
-                    'name'         => __( 'Vendor Analytics', 'dokan' ),
-                    'description'  => __( 'A plugin for store and product analytics for vendor.', 'dokan' ),
-                    'thumbnail'    => $thumbnail_dir . '/analytics.png',
-                    'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-analytics/module.php',
-                    'module_class' => 'WeDevs\DokanPro\Modules\VendorAnalytics\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
-                ],
+                // 'vendor_analytics' => [
+                //     'id'           => 'vendor_analytics',
+                //     'name'         => __( 'Vendor Analytics', 'dokan' ),
+                //     'description'  => __( 'A plugin for store and product analytics for vendor.', 'dokan' ),
+                //     'thumbnail'    => $thumbnail_dir . '/analytics.png',
+                //     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-analytics/module.php',
+                //     'module_class' => 'WeDevs\DokanPro\Modules\VendorAnalytics\Module',
+                //     'plan'         => []
+                // ],
                 'vendor_staff' => [
                     'id'           => 'vendor_staff',
                     'name'         => __( 'Vendor Staff Manager', 'dokan' ),
@@ -316,17 +325,17 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/vendor-staff.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-staff/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\VendorStaff\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
-                'vsp'         => [
-                    'id'           => 'vsp',
-                    'name'         => __( 'Vendor Subscription Product', 'dokan' ),
-                    'description'  => __( 'WooCommerce Subscription integration for Dokan', 'dokan' ),
-                    'thumbnail'    => $thumbnail_dir . '/ajax-live-search.png',
-                    'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-subscription-product/module.php',
-                    'module_class' => 'WeDevs\DokanPro\Modules\VSP\Module',
-                    'plan'         => [ 'enterprise', ]
-                ],
+                // 'vsp'         => [
+                //     'id'           => 'vsp',
+                //     'name'         => __( 'Vendor Subscription Product', 'dokan' ),
+                //     'description'  => __( 'WooCommerce Subscription integration for Dokan', 'dokan' ),
+                //     'thumbnail'    => $thumbnail_dir . '/ajax-live-search.png',
+                //     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-subscription-product/module.php',
+                //     'module_class' => 'WeDevs\DokanPro\Modules\VSP\Module',
+                //     'plan'         => [ 'enterprise', ]
+                // ],
                 'vendor_verification' => [
                     'id'           => 'vendor_verification',
                     'name'         => __( 'Vendor Verification', 'dokan' ),
@@ -343,7 +352,7 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/wholesale.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/wholesale/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Wholesale\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ]
                 ],
             ] );
         }
