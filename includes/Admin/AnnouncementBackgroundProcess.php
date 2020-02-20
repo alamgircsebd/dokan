@@ -1,14 +1,10 @@
 <?php
 
+namespace WeDevs\DokanPro\Admin;
+
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WP_Async_Request', false ) ) {
-    include_once dirname( WC_PLUGIN_FILE ) . '/includes/libraries/wp-async-request.php';
-}
-
-if ( ! class_exists( 'WP_Background_Process', false ) ) {
-    include_once dirname( WC_PLUGIN_FILE ) . '/includes/libraries/wp-background-process.php';
-}
+use WeDevs\Dokan\Abstracts\DokanBackgroundProcesses;
 
 if ( ! class_exists( 'Emogrifier', false ) ) {
     include_once dirname( WC_PLUGIN_FILE ) . '/includes/libraries/class-emogrifier.php';
@@ -18,16 +14,7 @@ if ( ! class_exists( 'WC_Email', false ) ) {
     include_once dirname( WC_PLUGIN_FILE ) . '/includes/emails/class-wc-email.php';
 }
 
-class Dokan_Announcement_Background_Process extends WP_Background_Process {
-
-    /**
-     * The constructor
-     *
-     * @param License_Expiration_Emails $object
-     */
-    public function __construct() {
-        parent::__construct();
-    }
+class AnnouncementBackgroundProcess extends DokanBackgroundProcesses {
 
     /**
      * @var string
@@ -46,7 +33,7 @@ class Dokan_Announcement_Background_Process extends WP_Background_Process {
      *
      * @return mixed
      */
-    protected function task( $payload ) {
+    public function task( $payload ) {
         $seller_id = $payload['sender_id'];
         $post_id   = $payload['post_id'];
 
@@ -66,8 +53,7 @@ class Dokan_Announcement_Background_Process extends WP_Background_Process {
      * Override if applicable, but ensure that the below actions are
      * performed, or, call parent::complete().
      */
-    protected function complete() {
-        parent::complete();
+    public function complete() {
         dokan_log( 'Sending process completed' );
     }
 

@@ -2,9 +2,7 @@
 
 namespace WeDevs\DokanPro\Admin;
 
-if ( ! class_exists( 'Dokan_Announcement_Background_Process', false ) ) {
-    include_once DOKAN_PRO_ADMIN_DIR . '/announcement-background-process.php';
-}
+use WeDevs\DokanPro\Admin\AnnouncementBackgroundProcess;
 
 /**
  *  Dokan Announcement class for Admin
@@ -25,7 +23,7 @@ class Announcement {
      *  Load automatically all actions
      */
     public function __construct() {
-        $this->processor = new \Dokan_Announcement_Background_Process();
+        $this->processor = new AnnouncementBackgroundProcess();
 
         add_action( 'init', array( $this, 'post_types' ), 20 );
     }

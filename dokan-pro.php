@@ -245,6 +245,7 @@ class Dokan_Pro {
         }
 
         require_once DOKAN_PRO_INC . '/functions.php';
+        require_once DOKAN_PRO_INC . '/Coupons/functions.php';
         require_once DOKAN_PRO_INC . '/function-orders.php';
         require_once DOKAN_PRO_INC . '/functions-reports.php';
         require_once DOKAN_PRO_INC . '/functions-wc.php';
@@ -315,6 +316,7 @@ class Dokan_Pro {
      */
     public function init_classes() {
         new WeDevs\DokanPro\Refund\Hooks();
+        new WeDevs\DokanPro\Coupons\Hooks();
         new WeDevs\DokanPro\Brands\Hooks();
         new \WeDevs\DokanPro\Shipping\Hooks();
 
@@ -341,12 +343,13 @@ class Dokan_Pro {
         $this->container['notice']      = new \WeDevs\DokanPro\Notice();
         $this->container['refund']      = new \WeDevs\DokanPro\Refund\Manager();
         $this->container['brands']      = new \WeDevs\DokanPro\Brands\Manager();
+        $this->container['coupon']      = new WeDevs\DokanPro\Coupons\Manager();
 
         $this->container = apply_filters( 'dokan_pro_get_class_container', $this->container );
 
         if ( is_user_logged_in() ) {
             new \WeDevs\DokanPro\Dashboard();
-            new \WeDevs\DokanPro\Coupons();
+            // new \WeDevs\DokanPro\Coupons();
             new WeDevs\DokanPro\Reports();
             new WeDevs\DokanPro\Withdraws();
             new WeDevs\DokanPro\Settings();
