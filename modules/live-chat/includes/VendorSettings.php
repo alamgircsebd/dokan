@@ -1,48 +1,34 @@
 <?php
+
+namespace WeDevs\DokanPro\Modules\LiveChat;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
- * Dokan_Live_Chat_Seller_Settings Class
+ * Vendor Settings Class
+ *
+ * @since 1.0.0
  */
-class Dokan_Live_Chat_Seller_Settings {
-
+class VendorSettings {
     /**
-     * Hold class instance
+     * Constructor method
      *
-     * @var object
-     */
-    public static $instance;
-
-    /**
-     * Constructor method for this class
+     * @return void
      */
     public function __construct() {
         $this->init_hooks();
     }
 
     /**
-     * Return single instance of this class
-     *
-     * @since 1.0
-     *
-     * @return object;
-     */
-    public static function init() {
-        if ( ! self::$instance ) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
-    }
-
-    /**
      * Initialize all the hooks
      *
-     * @since 1.0
+     * @since 1.0.0
      *
      * @return void
      */
     public function init_hooks() {
-        add_action( 'dokan_settings_form_bottom', array( $this, 'dokan_live_chat_seller_settings' ), 15, 2 );
-        add_action( 'dokan_store_profile_saved', array( $this, 'dokan_live_chat_save_seller_settings' ), 15 );
+        add_action( 'dokan_settings_form_bottom', [ $this, 'dokan_live_chat_seller_settings' ], 15, 2 );
+        add_action( 'dokan_store_profile_saved', [ $this, 'dokan_live_chat_save_seller_settings' ], 15 );
     }
 
     /**
@@ -52,12 +38,12 @@ class Dokan_Live_Chat_Seller_Settings {
      *
      * @param  object $profile
      *
-     * @since 1.0
+     * @since 1.0.0
      *
-     * @return object
+     * @return void
      */
     public function dokan_live_chat_seller_settings( $user_id, $profile ) {
-        if ( dokan_get_option( 'enable', 'dokan_live_chat' ) !== 'on' ) {
+        if ( ! AdminSettings::is_enabled() ) {
             return;
         }
 
@@ -89,11 +75,9 @@ class Dokan_Live_Chat_Seller_Settings {
             return;
         }
 
-        $store_info = dokan_get_store_info( $user_id );
+        $store_info              = dokan_get_store_info( $user_id );
         $store_info['live_chat'] = wc_clean( $_POST['live_chat'] );
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_info );
     }
 }
-
-Dokan_Live_Chat_Seller_Settings::init();

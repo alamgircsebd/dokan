@@ -2,19 +2,24 @@
 
 namespace WeDevs\DokanPro\Modules\LiveChat;
 
-class Module {
+use WP_Error;
 
-    public static $instance;
-    public static $version;
+class Module {
+    /**
+     * Class instance holder
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @var array
+     */
+    public $controller = [];
 
     /**
      * Constructor method for this class
      */
     public function __construct() {
-        self::$version = '1.1';
-
         $this->define_constants();
-        $this->include_files();
+        $this->init_classes();
 
         add_action( 'dokan_activated_module_live_chat', array( self::class, 'activate' ) );
         add_action( 'dokan_deactivated_module_live_chat', array( self::class, 'deactivate' ) );
@@ -27,50 +32,47 @@ class Module {
      *
      * @return string
      */
-    public function define_constants() {
+    private function define_constants() {
         define( 'DOKAN_LIVE_CHAT', dirname( __FILE__ ) );
         define( 'DOKAN_LIVE_CHAT_INC', DOKAN_LIVE_CHAT . '/includes' );
         define( 'DOKAN_LIVE_CHAT_ASSETS', plugins_url( 'assets', __FILE__ ) );
+        define( 'DOKAN_LIVE_CHAT_TEMPLATE', __DIR__ . '/templates' );
     }
 
     /**
-     * Includes necessary classes
+     * Init classes
      *
-     * @since 1.0
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
-    public function include_files() {
-        if ( $this->request( 'admin' ) ) {
-            require_once DOKAN_LIVE_CHAT_INC . '/admin/class-settings.php';
-        }
-
-        if ( $this->request( 'public_or_ajax' ) ) {
-            require_once DOKAN_LIVE_CHAT_INC . '/public/class-settings.php';
-            require_once DOKAN_LIVE_CHAT_INC . '/public/class-live-chat-start.php';
-            require_once DOKAN_LIVE_CHAT_INC . '/public/class-seller-inbox.php';
-            require_once DOKAN_LIVE_CHAT_INC . '/public/class-customer-inbox.php';
-        }
+    private function init_classes() {
+        $this->controller['vendor_inbox']    = new VendorInbox();
+        $this->controller['customer_inbox']  = new CustomerInbox();
+        $this->controller['admin_settings']  = new AdminSettings();
+        $this->controller['vendor_settings'] = new VendorSettings();
+        $this->controller['chat']            = new Chat();
     }
 
     /**
-     * Know the request type
+     * Magic getter to bypass referencing objects
      *
-     * @param  string $type
+     * @since 2.6.10
      *
-     * @since 1.0
+     * @param $prop
      *
-     * @return boolean
+     * @return Class Instance
      */
-    public function request( $type ) {
-        switch ( $type ) {
-            case 'admin':
-                return is_admin();
-            case 'public':
-                return ! is_admin() && ! wp_doing_ajax();
-            case 'public_or_ajax':
-                return ! is_admin() || wp_doing_ajax();
+    public function __get( $prop ) {
+        if ( empty( $this->controller[ $prop ] ) ) {
+            return new WP_Error(
+                "{$prop}_not_found",
+                sprintf( __( 'The %s is not found', 'dokan' ), $prop ),
+                404
+            );
         }
+
+        return $this->controller[ $prop ];
     }
 
     /**
@@ -97,20 +99,5 @@ class Module {
     public static function deactivate() {
         $role = get_role( 'seller' );
         $role->remove_cap( 'dokan_view_inbox_menu' );
-    }
-
-    /**
-     * Return single instance of this class
-     *
-     * @since 1.0
-     *
-     * @return object;
-     */
-    public static function init() {
-        if ( ! isset( self::$instance ) ) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
     }
 }

@@ -1,31 +1,19 @@
 <?php
+
+namespace WeDevs\DokanPro\Modules\LiveChat;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Dokan_Live_Chat_Settings Class
  */
-class Dokan_Live_Chat_Settings {
-
-    public static $instance;
+class AdminSettings {
 
     /**
      * Constructor method for this class
      */
     public function __construct() {
         $this->init_hooks();
-    }
-
-    /**
-     * Return single instance of this class
-     *
-     * @since 1.0
-     *
-     * @return object;
-     */
-    public static function init() {
-        if ( ! isset( self::$instance ) ) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
     }
 
     /**
@@ -111,6 +99,71 @@ class Dokan_Live_Chat_Settings {
         return $settings;
     }
 
-}
+    /**
+     * Check if live chat is enabled
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public static function is_enabled() {
+        if ( self::get_app_id() && self::get_app_secret() ) {
+            return dokan_validate_boolean( dokan_get_option( 'enable', 'dokan_live_chat' ) );
+        }
+    }
 
-Dokan_Live_Chat_Settings::init();
+    /**
+     * Get the App ID
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return string
+     */
+    public static function get_app_id() {
+        return dokan_get_option( 'app_id', 'dokan_live_chat' );
+    }
+
+    /**
+     * Get the App Secret
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return string
+     */
+    public static function get_app_secret() {
+        return dokan_get_option( 'app_secret', 'dokan_live_chat' );
+    }
+
+    /**
+     * Check whether chat button should be displaied on store page or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public static function show_chat_on_store_page() {
+        return dokan_validate_boolean( dokan_get_option( 'chat_button_seller_page', 'dokan_live_chat' ) );
+    }
+
+    /**
+     * Check whether chat button should be displaied on inside product tab or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public static function show_chat_on_product_tab() {
+        return 'inside_tab' === dokan_get_option( 'chat_button_product_page', 'dokan_live_chat' );
+    }
+
+    /**
+     * Check whether chat button should be displaied on above product tab or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return boolean
+     */
+    public static function show_chat_above_product_tab() {
+        return 'above_tab' === dokan_get_option( 'chat_button_product_page', 'dokan_live_chat' );
+    }
+}

@@ -1,22 +1,19 @@
 <?php
+
+namespace WeDevs\DokanPro\Modules\LiveChat;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Dokan Live Chat Start Class
  */
-class Dokan_Live_Chat_Start {
-
-    /**
-     * Hold class instance
-     *
-     * @var object
-     */
-    public static $instance;
-
+class Chat {
     /**
      * API endpoint url
      *
      * @var string
      */
-    protected $api_endpoint;
+    CONST API_END_POINT = 'https://api.talkjs.com/';
 
     /**
      * Hold the app_id
@@ -43,26 +40,14 @@ class Dokan_Live_Chat_Start {
      * Constructor method for this class
      */
     public function __construct() {
-        $this->app_id       = dokan_get_option( 'app_id', 'dokan_live_chat' );
-        $this->app_secret   = dokan_get_option( 'app_secret', 'dokan_live_chat' );
-        $this->enabled      = dokan_get_option( 'enable', 'dokan_live_chat' );
-        $this->api_endpoint = 'https://api.talkjs.com/';
+        $this->set_app_data();
         $this->init_hooks();
     }
 
-    /**
-     * Return single instance of the class
-     *
-     * @since 1.0
-     *
-     * @return object;
-     */
-    public static function init() {
-        if ( ! isset( self::$instance ) ) {
-            self::$instance = new self();
-        }
-
-        return self::$instance;
+    private function set_app_data() {
+        $this->enabled    = AdminSettings::is_enabled();
+        $this->app_id     = AdminSettings::get_app_id();
+        $this->app_secret = AdminSettings::get_app_secret();
     }
 
     /**
@@ -134,13 +119,13 @@ class Dokan_Live_Chat_Start {
         }
     }
 
-	/**
+    /**
      * Check if it's dokan seller settings page
      *
-	 * @return bool
+     * @return bool
      *
      * @since 1.0
-	 */
+     */
     public function dokan_is_seller_settings_page() {
         global $wp;
 
@@ -179,7 +164,7 @@ class Dokan_Live_Chat_Start {
             return false;
         }
 
-        $url = $this->api_endpoint . 'v1/' . $this->app_id . '/users/' . $user_id . '/sessions' ;
+        $url = self::API_END_POINT . 'v1/' . $this->app_id . '/users/' . $user_id . '/sessions' ;
 
         $response = wp_remote_get( $url, array(
             'sslverify' => false,
@@ -242,12 +227,12 @@ class Dokan_Live_Chat_Start {
      * @return void
      */
     public function init_chat_sessions() {
-
-        if ( empty( $this->app_id ) ) {
+        if ( ! $this->enabled ) {
             return;
         }
 
         global $wp_query;
+
         $seller = wp_get_current_user();
 
         // if user is not logged in;
@@ -426,7 +411,7 @@ class Dokan_Live_Chat_Start {
             return;
         }
 
-        if ( dokan_get_option( 'chat_button_seller_page', 'dokan_live_chat' ) !== 'on'  ) {
+        if ( ! AdminSettings::show_chat_on_store_page() ) {
             return;
         }
 
@@ -498,7 +483,7 @@ class Dokan_Live_Chat_Start {
             return;
         }
 
-        if ( dokan_get_option( 'chat_button_product_page', 'dokan_live_chat' ) !== 'above_tab'  ) {
+        if ( ! AdminSettings::show_chat_above_product_tab()  ) {
             return;
         }
 
@@ -533,7 +518,7 @@ class Dokan_Live_Chat_Start {
             return;
         }
 
-        if ( dokan_get_option( 'chat_button_product_page', 'dokan_live_chat' ) !== 'inside_tab'  ) {
+        if ( ! AdminSettings::show_chat_on_product_tab() ) {
             return;
         }
 
@@ -621,6 +606,7 @@ class Dokan_Live_Chat_Start {
         if ( ! wp_verify_nonce( $postdata['dokan-chat-login-nonce'], 'dokan-chat-login-action' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
+
         $info                  = array();
         $info['user_login']    = $postdata['login-name'];
         $info['user_password'] = $postdata['login-password'];
@@ -787,5 +773,3 @@ class Dokan_Live_Chat_Start {
     }
 
 }
-
-Dokan_Live_Chat_Start::init();

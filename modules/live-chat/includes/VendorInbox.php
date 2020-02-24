@@ -1,11 +1,15 @@
 <?php
 
+namespace WeDevs\DokanPro\Modules\LiveChat;
+
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Dokan seller inbox class
  *
  * @since 1.1
  */
-class Dokan_Seller_Inbox extends Dokan_Live_Chat_Start {
+class VendorInbox extends Chat {
     /**
      * Constructor method of this class
      *
@@ -24,10 +28,10 @@ class Dokan_Seller_Inbox extends Dokan_Live_Chat_Start {
      * @return void
      */
     public function init_hooks() {
-        // add inbox menu
         add_filter( 'dokan_get_dashboard_nav', array( $this, 'dokan_add_inbox_menu' ), 22, 1 );
         add_filter( 'dokan_query_var_filter', array( $this, 'dokan_add_endpoint' ) );
         add_action( 'dokan_load_custom_template', array( $this, 'dokan_load_inbox_template' ), 22 );
+        add_action( 'dokan_set_template_path', [ $this, 'set_template_path' ], 10, 3 );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'flush_rewrite_rules' ) );
     }
 
@@ -41,11 +45,7 @@ class Dokan_Seller_Inbox extends Dokan_Live_Chat_Start {
      * @return array
      */
     public function dokan_add_inbox_menu( $urls ) {
-        if ( $this->enabled !== 'on' ) {
-            return $urls;
-        }
-
-        if ( empty( $this->app_id ) || empty( $this->app_secret ) ) {
+        if ( ! $this->enabled ) {
             return $urls;
         }
 
@@ -78,6 +78,25 @@ class Dokan_Seller_Inbox extends Dokan_Live_Chat_Start {
     }
 
     /**
+     * Set template path
+     *
+     * @since DOKAN_PRO_SINEC
+     *
+     * @param string $template_path
+     * @param string $template
+     * @param array $args
+     *
+     * @return string
+     */
+    public function set_template_path( $template_path, $template, $args ) {
+        if ( ! empty( $args['is_live_chat'] ) ) {
+            return DOKAN_LIVE_CHAT_TEMPLATE;
+        }
+
+        return $template_path;
+    }
+
+    /**
      * Dokan Load inbox template
      *
      * @param  array $query_vars
@@ -91,15 +110,11 @@ class Dokan_Seller_Inbox extends Dokan_Live_Chat_Start {
             return;
         }
 
-        if ( $this->enabled !== 'on' ) {
+        if ( ! $this->enabled ) {
             return;
         }
 
-        if ( empty( $this->app_id ) || empty( $this->app_secret ) ) {
-            return;
-        }
-
-        require_once DOKAN_LIVE_CHAT . '/templates/inbox.php';
+        dokan_get_template_part( 'inbox', '', [ 'is_live_chat' => true ] );
     }
 
     /**
@@ -115,23 +130,4 @@ class Dokan_Seller_Inbox extends Dokan_Live_Chat_Start {
             delete_transient( 'dokan-live-chat' );
         }
     }
-
-    /**
-     * Initialize this class
-     *
-     * @since 1.1
-     *
-     * @return instance
-     */
-    public static function init() {
-        static $instance = false;
-
-        if ( ! $instance ) {
-            return $instance = new Dokan_Seller_Inbox();
-        }
-
-        return $instance;
-    }
 }
-
-Dokan_Seller_Inbox::init();
