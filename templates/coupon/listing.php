@@ -21,49 +21,48 @@
     </thead>
 
     <?php
-        foreach( $coupons as $key => $post ) {
+        foreach( $coupons->coupons as $key => $coupon ) {
             ?>
             <tr>
-                <td class="coupon-code" data-title="<?php _e('Code', 'dokan'); ?>">
-                    <?php $edit_url =  wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'edit', 'view' => 'add_coupons'), dokan_get_navigation_url( 'coupons' ) ), '_coupon_nonce', 'coupon_nonce_url' ); ?>
+                <td class="coupon-code" data-title="<?php _e( 'Code', 'dokan' ); ?>">
+                    <?php $edit_url =  wp_nonce_url( add_query_arg( array( 'post' => $coupon->get_id(), 'action' => 'edit', 'view' => 'add_coupons' ), dokan_get_navigation_url( 'coupons' ) ), '_coupon_nonce', 'coupon_nonce_url' ); ?>
                     <div class="code">
                         <?php if ( current_user_can( 'dokan_edit_coupon' ) ): ?>
-                            <a href="<?php echo $edit_url; ?>"><span><?php echo esc_attr( $post->post_title ); ?></span></a>
+                            <a href="<?php echo $edit_url; ?>"><span><?php echo esc_attr( $coupon->get_code() ); ?></span></a>
                         <?php else: ?>
-                            <a href=""><span><?php echo esc_attr( $post->post_title ); ?></span></a>
+                            <a href=""><span><?php echo esc_attr( $coupon->get_code() ); ?></span></a>
                         <?php endif ?>
                     </div>
 
                     <div class="row-actions">
-                        <?php $del_url = wp_nonce_url( add_query_arg( array('post' => $post->ID, 'action' => 'delete'), dokan_get_navigation_url( 'coupons' ) ) ,'_coupon_del_nonce', 'coupon_del_nonce'); ?>
+                        <?php $del_url = wp_nonce_url( add_query_arg( array( 'post' => $coupon->get_id(), 'action' => 'delete' ), dokan_get_navigation_url( 'coupons' ) ) ,'_coupon_del_nonce', 'coupon_del_nonce' ); ?>
 
                         <?php if ( current_user_can( 'dokan_edit_coupon' ) ): ?>
                             <span class="edit"><a href="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a> | </span>
                         <?php endif; ?>
 
                         <?php if ( current_user_can( 'dokan_delete_coupon' ) ): ?>
-                            <span class="delete"><a  href="<?php echo $del_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e('delete', 'dokan'); ?></a></span>
+                            <span class="delete"><a  href="<?php echo $del_url; ?>"  onclick="return confirm('<?php esc_attr_e( 'Are you sure want to delete', 'dokan' ); ?>');"><?php _e( 'delete', 'dokan' ); ?></a></span>
                         <?php endif ?>
                     </div>
                 </td>
 
-                <td data-title="<?php _e('Coupon type', 'dokan'); ?>">
+                <td data-title="<?php _e( 'Coupon type', 'dokan' ); ?>">
                     <?php
-                    $discount_type = get_post_meta( $post->ID, 'discount_type', true );
-                    $types         = \WeDevs\DokanPro\Coupons::get_coupon_types();
+                    $discount_type = $coupon->get_discount_type();
+                    $types         = dokan_get_coupon_types();
 
                     printf( __( '%s', 'dokan' ), $types[$discount_type] );
                     ?>
                 </td>
 
-                <td data-title="<?php _e('Coupon amount', 'dokan'); ?>">
-                    <?php echo esc_attr( get_post_meta( $post->ID, 'coupon_amount', true ) ); ?>
+                <td data-title="<?php _e( 'Coupon amount', 'dokan' ); ?>">
+                    <?php echo esc_attr( $coupon->get_amount() ); ?>
                 </td>
 
-                <td data-title="<?php _e('Product IDs', 'dokan'); ?>">
+                <td data-title="<?php _e( 'Product IDs', 'dokan' ); ?>">
                     <?php
-                        $product_ids = get_post_meta( $post->ID, 'product_ids', true );
-                        $product_ids = $product_ids ? array_map( 'absint', explode( ',', $product_ids ) ) : array();
+                        $product_ids = ! empty( $coupon->get_product_ids() ) ? $coupon->get_product_ids() : array();
 
                         if ( sizeof( $product_ids ) > 0 ) {
                             if ( count( $product_ids ) > 12 ) {
@@ -78,11 +77,11 @@
                     ?>
                 </td>
 
-                <td data-title="<?php _e('Usage / Limit', 'dokan'); ?>">
+                <td data-title="<?php _e( 'Usage / Limit', 'dokan' ); ?>">
                     <?php
 
-                        $usage_count = absint( get_post_meta( $post->ID, 'usage_count', true ) );
-                        $usage_limit = esc_html( get_post_meta($post->ID, 'usage_limit', true) );
+                        $usage_count = absint( $coupon->get_usage_count() );
+                        $usage_limit = esc_html( $coupon->get_usage_limit() );
 
                         if ( $usage_limit )
                             printf( __( '%s / %s', 'dokan' ), $usage_count, $usage_limit );
@@ -91,9 +90,9 @@
                      ?>
                 </td>
 
-                <td data-title="<?php _e('Expiry date', 'dokan'); ?>">
+                <td data-title="<?php _e( 'Expiry date', 'dokan' ); ?>">
                     <?php
-                        $expiry_date = get_post_meta( $post->ID, 'date_expires', true );
+                        $expiry_date = $coupon->get_date_expires();
 
                         if ( $expiry_date && ( (string) (int) $expiry_date === $expiry_date )
                             && ( $expiry_date <= PHP_INT_MAX )
@@ -111,3 +110,28 @@
         }
     ?>
 </table>
+
+<?php
+    $pagenum      = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+    $num_of_pages = ceil( $coupons->total / $coupons->per_page );
+    $base_url     = dokan_get_navigation_url( 'coupons' );
+
+    $page_links = paginate_links( array(
+        'base'      => $base_url. '%_%',
+        'format'    => '?pagenum=%#%',
+        'add_args'  => false,
+        'prev_text' => __( '&laquo;', 'aag' ),
+        'next_text' => __( '&raquo;', 'aag' ),
+        'total'     => $num_of_pages,
+        'current'   => $pagenum,
+        'type'      => 'array'
+    ) );
+
+    if ( $page_links ) {
+        echo "<ul class='pagination'>\n\t<li>";
+        echo join("</li>\n\t<li>", $page_links);
+        echo "</li>\n</ul>\n";
+        echo '</div>';
+    }
+
+?>

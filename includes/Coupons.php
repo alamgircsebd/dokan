@@ -28,13 +28,13 @@ class Coupons {
     public function __construct() {
         $this->is_edit_page =  isset( $_GET['view'] ) && $_GET['view'] == 'add_coupons';
 
-        add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_coupon_menu' ) );
-        add_action( 'dokan_load_custom_template', array( $this, 'load_coupon_template' ) );
+        // add_filter( 'dokan_get_dashboard_nav', array( $this, 'add_coupon_menu' ) );
+        // add_action( 'dokan_load_custom_template', array( $this, 'load_coupon_template' ) );
         add_action( 'template_redirect', array( $this, 'handle_coupons' ) );
 
-        add_action( 'dokan_coupon_content_area_header', array( $this, 'dokan_coupon_header_render' ), 10 );
-        add_action( 'dokan_coupon_content', array( $this, 'dokan_coupon_content_render' ), 10 );
-        add_filter( 'woocommerce_coupon_validate_minimum_amount', array( $this, 'validate_coupon_minimum_amount' ), 10, 2 );
+        // add_action( 'dokan_coupon_content_area_header', array( $this, 'dokan_coupon_header_render' ), 10 );
+        // add_action( 'dokan_coupon_content', array( $this, 'dokan_coupon_content_render' ), 10 );
+        // add_filter( 'woocommerce_coupon_validate_minimum_amount', array( $this, 'validate_coupon_minimum_amount' ), 10, 2 );
     }
 
     /**
@@ -158,7 +158,7 @@ class Coupons {
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
-        wp_delete_post( $_GET['post'], true );
+        dokan_pro()->coupon->delete( $_GET['post'], true );
         wp_redirect( add_query_arg( array('message' => 'delete_succefully'), dokan_get_navigation_url( 'coupons' ) ) );
     }
 
@@ -244,7 +244,7 @@ class Coupons {
      * @return void
      */
     function coupons_create() {
-        if ( !isset( $_POST['coupon_creation'] ) ) {
+        if ( ! isset( $_POST['coupon_creation'] ) ) {
             return;
         }
 
@@ -399,6 +399,7 @@ class Coupons {
         $coupon_query = new WP_Query( $args );
         $all_coupons  = $coupon_query->get_posts();
 
+
         if ( $all_coupons ) {
             $this->total_query_result = $coupon_query->found_posts;
             $this->message();
@@ -475,7 +476,6 @@ class Coupons {
         $button_name = __( 'Create Coupon', 'dokan' );
 
         if ( isset( $_GET['post'] ) && $_GET['action'] == 'edit' ) {
-
             $post                       = get_post( $_GET['post'] );
             $button_name                = __( 'Update Coupon', 'dokan' );
             $discount_type              = get_post_meta( $post->ID, 'discount_type', true );
