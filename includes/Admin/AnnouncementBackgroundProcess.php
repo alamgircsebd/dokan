@@ -5,6 +5,7 @@ namespace WeDevs\DokanPro\Admin;
 defined( 'ABSPATH' ) || exit;
 
 use WeDevs\Dokan\Abstracts\DokanBackgroundProcesses;
+use WeDevs\DokanPro\Emails\Announcement;
 
 if ( ! class_exists( 'Emogrifier', false ) ) {
     include_once dirname( WC_PLUGIN_FILE ) . '/includes/libraries/class-emogrifier.php';
@@ -37,7 +38,7 @@ class AnnouncementBackgroundProcess extends DokanBackgroundProcesses {
         $seller_id = $payload['sender_id'];
         $post_id   = $payload['post_id'];
 
-        $announcement_email = include( DOKAN_PRO_INC . '/emails/class-dokan-email-announcement.php' );
+        $announcement_email = new Announcement();
 
         if ( ! empty( $seller_id ) ) {
             $announcement_email->trigger( $seller_id, $post_id );
