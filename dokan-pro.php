@@ -349,7 +349,6 @@ class Dokan_Pro {
 
         if ( is_user_logged_in() ) {
             new \WeDevs\DokanPro\Dashboard();
-            // new \WeDevs\DokanPro\Coupons();
             new WeDevs\DokanPro\Reports();
             new WeDevs\DokanPro\Withdraws();
             new WeDevs\DokanPro\Settings();
