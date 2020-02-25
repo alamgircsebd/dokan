@@ -176,10 +176,15 @@
             },
 
             filteredModules() {
-                var self=this;
+                var self = this;
 
-                var data =  this.modules.filter( function( module ){
-                    return module.name.toLowerCase().indexOf( self.search.toLowerCase() ) >= 0;
+                var data =  this.modules.filter( ( module ) => {
+                    // return module.name.toLowerCase().indexOf( self.search.toLowerCase() ) >= 0;
+                    return module.available && module.name.toLowerCase().indexOf( self.search.toLowerCase() ) >= 0;
+                } ).sort( ( a, b ) => {
+                    return a.name.localeCompare( b.name );
+                } ).sort( ( a, b ) => {
+                    return ( a.available === b.available ) ? 1 : b.available ? 1 : -1;
                 } );
 
                 return data;
