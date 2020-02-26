@@ -69,7 +69,7 @@
                             <div class="plugin-card-top">
                                 <div class="name column-name">
                                     <h3>
-                                        <span class="plugin-name">{{ module.name }}</span>
+                                        <a href="#" class="plugin-name" @click.prevent="openInfoModal( module )">{{ module.name }}</a>
                                         <img class="plugin-icon" :src="module.thumbnail" :alt="module.name" />
                                     </h3>
                                 </div>
@@ -84,6 +84,10 @@
 
                                 <div class="desc column-description">
                                     <p v-html="module.description"></p>
+                                </div>
+
+                                <div class="card-footer">
+                                    <a href="#" @click.prevent="openInfoModal( module )">{{ __( 'Documentation', 'dokan' ) }}</a>
                                 </div>
                             </div>
                         </div>
@@ -100,14 +104,39 @@
                 <loading></loading>
             </div>
         </div>
-    </div>
 
+        <Modal v-if="showInfoModal" :title="moduleDocTitle" width="800px" @close="closeInfoModal">
+            <div slot="body">
+                <div v-if="isFetchingDoc">
+                    <p class="text-center">{{ __( 'Fetching module documentation', 'dokan' ) }}...</p>
+                </div>
+                <div v-else v-html="moduleDoc" />
+            </div>
+
+            <template slot="footer">
+                <div v-if="moduleInModal && moduleInModal.doc_link" class="footer-left">
+                    <a
+                        :href="moduleInModal.doc_link"
+                        class="button button-primary"
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        v-text="__( 'View full documentation', 'dokan' )"
+                    />
+                </div>
+                <button
+                    class="button"
+                    @click="closeInfoModal"
+                >{{ __( 'Close', 'dokan' ) }}</button>
+            </template>
+        </Modal>
+    </div>
 </template>
 
 <script>
     let ListTable = dokan_get_lib('ListTable');
     let Loading = dokan_get_lib('Loading');
     let Switches  = dokan_get_lib('Switches');
+    let Modal = dokan_get_lib( 'Modal' );
 
     export default {
 
@@ -118,6 +147,12 @@
                 search: '',
                 isLoaded: false,
                 currentView: '',
+                showInfoModal: false,
+                moduleDocs: {},
+                isFetchingDoc: false,
+                moduleDocTitle: null,
+                moduleDoc: null,
+                moduleInModal: null,
                 modules : [],
                 count: {},
                 column: {
@@ -166,7 +201,8 @@
         components: {
             Loading,
             Switches,
-            ListTable
+            ListTable,
+            Modal,
         },
 
         computed: {
@@ -317,7 +353,40 @@
                }
 
                return className;
-           },
+            },
+
+            openInfoModal( module ) {
+                if ( ! module.doc_id ) {
+                    return;
+                }
+
+                this.showInfoModal = true;
+                this.moduleInModal = module;
+
+                this.moduleDocTitle = this.__( 'Module', 'dokan' ) + ': ' + module.name;
+
+                if ( ! this.moduleDocs[ module.doc_id ] ) {
+                    this.isFetchingDoc = true;
+
+                    $.ajax( {
+                        url: `https://wedevs.com/account/wp-json/wp/v2/docs/${module.doc_id}`,
+                        method: 'get',
+                        dataType: 'json',
+                    } ).done( ( response ) => {
+                        this.moduleDocs[ module.doc_id ] = response.content.rendered;
+                        this.moduleDoc = this.moduleDocs[ module.doc_id ];
+                    } ).always( () => {
+                        this.isFetchingDoc = false;
+                    } );
+                } else {
+                    this.moduleDoc = this.moduleDocs[ module.doc_id ];
+                }
+            },
+
+            closeInfoModal() {
+                this.showInfoModal = false;
+                this.moduleInModal = null;
+            },
         },
 
         created() {
@@ -328,7 +397,7 @@
             }
 
             this.fetchModuels();
-        }
+        },
     };
 
 </script>
@@ -356,12 +425,20 @@
 
         .dokan-modules {
             .plugin-card {
+                position: relative;
+
                 .plugin-action-buttons {
                     .switch {
                         input:checked + .slider {
                             background-color: #0068A0;
                         }
                     }
+                }
+
+                .card-footer {
+                    position: absolute;
+                    bottom: 18px;
+                    right: 20px;
                 }
             }
         }
@@ -450,6 +527,32 @@
                 padding: 0px;
                 margin: -2px 8px 1px 2px;
             }
+        }
+    }
+
+    .dokan-modal-content {
+        top: 50px;
+        left: calc(50% - 320px);
+        transform: none;
+    }
+
+    .dokan-modal {
+
+        .modal-body {
+            max-height: 400px;
+
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+
+            .text-center {
+                text-align: center;
+            }
+        }
+
+        .footer-left {
+            float: left;
         }
     }
 }
