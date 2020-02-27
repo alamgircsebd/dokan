@@ -59,6 +59,13 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     protected $customer_details = [];
 
     /**
+     * Payment intent error holder
+     *
+     * @var string
+     */
+    protected $error = '';
+
+    /**
      * Constructor method
      */
     public function __construct() {
@@ -616,6 +623,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $this->intent_id      = $payment_intent->id;
         $this->customer_id    = $payment_intent->customer;
         $this->payment_method = $payment_intent->payment_method;
+        $this->error          = ! empty( $payment_intent->last_payment_error->message ) ? $payment_intent->last_payment_error->message : '';
 
         if ( $this->saved_cards ) {
             update_user_meta( get_current_user_id(), 'dokan_stripe_card', [
@@ -792,7 +800,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 if ( Stripe_Helper::is_3d_secure_enabled() ) {
 
                     if ( 'succeeded' !== $this->get_payment_intent_status() ) {
-                        throw new Exception( __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
+                        throw new Exception( $this->error ? $this->error : __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
                     }
 
                 } else {
@@ -898,11 +906,11 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 }
 
                 if ( ! $connected_vendor_id && $this->allow_non_connected_sellers() ) {
-                    $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
+                    $tmp_order->add_order_note( sprintf( __( 'Vendor payment will be transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
                     continue;
                 }
 
-                $transfer = DokanStripe::transaction( $this->secret_key )
+                $transfer = DokanStripe::transaction()
                     ->amount( $this->get_stripe_amount( $vendor_earning ), $currency )
                     ->from( $this->get_charge_id_from_intent() )
                     ->to( $connected_vendor_id )
@@ -910,6 +918,10 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
 
                 if ( ! $transfer ) {
                     throw new Exception( __( 'Unable to transfer fund to vendor account', 'dokan' ) );
+                }
+
+                if ( 'succeeded' !== $this->get_payment_intent_status() ) {
+                    throw new Exception( $this->error ? $this->error : __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
                 }
 
                 if ( $order_id !== $tmp_order_id ) {
@@ -993,6 +1005,11 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         }
 
         if ( Stripe_Helper::is_3d_secure_enabled() ) {
+
+            if ( 'succeeded' !== $this->get_payment_intent_status() ) {
+                throw new Exception( $this->error ? $this->error : __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
+            }
+
             $this->insert_into_vendor_balance( $all_withdraws );
             $this->process_seller_withdraws( $all_withdraws );
 

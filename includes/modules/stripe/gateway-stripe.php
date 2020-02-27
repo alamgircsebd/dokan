@@ -735,11 +735,22 @@ class Dokan_Stripe {
             return wp_send_json( __( 'No refund data to be processed', 'dokan' ) );
         }
 
-        $order_id         = $data['order_id'];
-        $order            = wc_get_order( $order_id );
-        $vendor_id        = dokan_get_seller_id_by_order( $order_id );
-        $vendor_token     = get_user_meta( $vendor_id, '_stripe_connect_access_key', true );
-        $vendor_charge_id = $order->get_meta( "_dokan_stripe_charge_id_{$vendor_id}" );
+        $order_id          = $data['order_id'];
+        $order             = wc_get_order( $order_id );
+        $vendor_id         = dokan_get_seller_id_by_order( $order_id );
+        $vendor_token      = get_user_meta( $vendor_id, '_stripe_connect_access_key', true );
+        $vendor_charge_id  = $order->get_meta( "_dokan_stripe_charge_id_{$vendor_id}" );
+
+        /**
+         * If admin has earning from an order, only then refund application fee
+         *
+         * @since DOKAN_PRO_SINCE
+         *
+         * @see https://stripe.com/docs/api/refunds/create#create_refund-refund_application_fee
+         *
+         * @var string
+         */
+        $refund_application_fee = dokan()->commission->get_earning_by_order( $order, 'admin' ) ? true : false;
 
         // if vendor charge id is not found, meaning it's a not purcahsed with sitripe so return early
         if ( ! $vendor_charge_id ) {
@@ -763,7 +774,7 @@ class Dokan_Stripe {
                 'charge'                 => $vendor_charge_id,
                 'amount'                 => Helper::get_stripe_amount( $data['refund_amount'] ),
                 'reason'                 => __( 'requested_by_customer', 'dokan' ),
-                'refund_application_fee' => true
+                'refund_application_fee' => $refund_application_fee
             ], $vendor_token );
         } catch( Exception $e ) {
             return wp_send_json_error( $e->getMessage() );
