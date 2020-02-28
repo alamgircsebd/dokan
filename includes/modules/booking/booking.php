@@ -80,7 +80,8 @@ class Dokan_WC_Booking {
             return;
         }
 
-        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ) );
+        add_filter( 'dokan_get_all_cap_labels', array( $this, 'add_caps_labels' ) );
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -1189,6 +1190,21 @@ class Dokan_WC_Booking {
         );
 
         return $capabilities;
+    }
+
+    /**
+     * Add caps labels
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param string $caps
+     *
+     * @return array
+     */
+    public function add_caps_labels( $caps ) {
+        $caps['booking'] = __( 'Booking', 'dokan' );
+
+        return $caps;
     }
 
     /**
