@@ -4,6 +4,7 @@ namespace WeDevs\DokanPro\REST;
 
 use WP_Error;
 use WP_Query;
+use WP_User_Query;
 use WP_REST_Response;
 use WP_REST_Server;
 use WeDevs\Dokan\Abstracts\DokanRESTController;

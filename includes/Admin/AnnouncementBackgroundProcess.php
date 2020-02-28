@@ -7,10 +7,6 @@ defined( 'ABSPATH' ) || exit;
 use WeDevs\Dokan\Abstracts\DokanBackgroundProcesses;
 use WeDevs\DokanPro\Emails\Announcement;
 
-if ( ! class_exists( 'Emogrifier', false ) ) {
-    include_once dirname( WC_PLUGIN_FILE ) . '/includes/libraries/class-emogrifier.php';
-}
-
 if ( ! class_exists( 'WC_Email', false ) ) {
     include_once dirname( WC_PLUGIN_FILE ) . '/includes/emails/class-wc-email.php';
 }

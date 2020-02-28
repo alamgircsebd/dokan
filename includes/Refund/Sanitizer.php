@@ -79,6 +79,7 @@ class Sanitizer {
      * @return array
      */
     public static function sanitize_item_qtys( $item_qtys ) {
+        $item_qtys = $item_qtys ?? [];
         $item_qtys = is_array( $item_qtys ) ? $item_qtys : json_decode( $item_qtys, true );
 
         $sanitized_qtys = [];
@@ -102,6 +103,7 @@ class Sanitizer {
      * @return array
      */
     public static function sanitize_item_totals( $item_totals ) {
+        $item_totals = $item_totals ?? [];
         $item_totals = is_array( $item_totals ) ? $item_totals : json_decode( $item_totals, true );
 
         $sanitize_totals = [];

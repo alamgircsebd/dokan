@@ -15,11 +15,8 @@ use WeDevs\DokanPro\Admin\AnnouncementBackgroundProcess;
  */
 class Announcement {
 
-    /**
-     * Hold the announment backgroud class
-     *
-     * @var Object
-     */
+    private $post_type = 'dokan_announcement';
+
     protected $processor;
 
     /**
@@ -27,6 +24,8 @@ class Announcement {
      */
     public function __construct() {
         $this->processor = new AnnouncementBackgroundProcess();
+
+        add_action( 'init', array( $this, 'post_types' ), 20 );
     }
 
     /**
@@ -75,6 +74,44 @@ class Announcement {
         }
 
         $this->processor->save()->dispatch();
+    }
+
+    /**
+     * Register Announcement post type
+     *
+     * @since 2.1
+     *
+     * @return void
+     */
+    public function post_types() {
+        register_post_type( $this->post_type, array(
+            'label'           => __( 'Announcement', 'dokan' ),
+            'description'     => '',
+            'public'          => false,
+            'show_ui'         => true,
+            'show_in_menu'    => false,
+            'capability_type' => 'post',
+            'hierarchical'    => false,
+            'rewrite'         => array('slug' => ''),
+            'query_var'       => false,
+            'supports'        => array( 'title', 'editor' ),
+            'labels'          => array(
+                'name'               => __( 'Announcement', 'dokan' ),
+                'singular_name'      => __( 'Announcement', 'dokan' ),
+                'menu_name'          => __( 'Dokan Announcement', 'dokan' ),
+                'add_new'            => __( 'Add Announcement', 'dokan' ),
+                'add_new_item'       => __( 'Add New Announcement', 'dokan' ),
+                'edit'               => __( 'Edit', 'dokan' ),
+                'edit_item'          => __( 'Edit Announcement', 'dokan' ),
+                'new_item'           => __( 'New Announcement', 'dokan' ),
+                'view'               => __( 'View Announcement', 'dokan' ),
+                'view_item'          => __( 'View Announcement', 'dokan' ),
+                'search_items'       => __( 'Search Announcement', 'dokan' ),
+                'not_found'          => __( 'No Announcement Found', 'dokan' ),
+                'not_found_in_trash' => __( 'No Announcement found in trash', 'dokan' ),
+                'parent'             => __( 'Parent Announcement', 'dokan' )
+            ),
+        ) );
     }
 
     /**

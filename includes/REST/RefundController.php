@@ -535,7 +535,7 @@ class RefundController extends WP_REST_Controller {
      */
     public function prepare_item_for_response( $refund, $request ) {
         $vendor = dokan()->vendor->get( $refund->get_seller_id() );
-
+        error_log( print_r( $refund->get_item_qtys(), true ) );
         $data = [
             'id'            => Sanitizer::sanitize_id( $refund->get_id() ),
             'order_id'      => Sanitizer::sanitize_order_id( $refund->get_order_id() ),
