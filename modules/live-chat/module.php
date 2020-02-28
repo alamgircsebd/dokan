@@ -3,16 +3,11 @@
 namespace WeDevs\DokanPro\Modules\LiveChat;
 
 use WP_Error;
+use WeDevs\Dokan\Traits\ChainableContainer;
 
 class Module {
-    /**
-     * Class instance holder
-     *
-     * @since DOKAN_PRO_SINCE
-     *
-     * @var array
-     */
-    public $controller = [];
+
+    use ChainableContainer;
 
     /**
      * Constructor method for this class
@@ -47,32 +42,11 @@ class Module {
      * @return void
      */
     private function init_classes() {
-        $this->controller['vendor_inbox']    = new VendorInbox();
-        $this->controller['customer_inbox']  = new CustomerInbox();
-        $this->controller['admin_settings']  = new AdminSettings();
-        $this->controller['vendor_settings'] = new VendorSettings();
-        $this->controller['chat']            = new Chat();
-    }
-
-    /**
-     * Magic getter to bypass referencing objects
-     *
-     * @since 2.6.10
-     *
-     * @param $prop
-     *
-     * @return Class Instance
-     */
-    public function __get( $prop ) {
-        if ( empty( $this->controller[ $prop ] ) ) {
-            return new WP_Error(
-                "{$prop}_not_found",
-                sprintf( __( 'The %s is not found', 'dokan' ), $prop ),
-                404
-            );
-        }
-
-        return $this->controller[ $prop ];
+        $this->container['vendor_inbox']    = new VendorInbox();
+        $this->container['customer_inbox']  = new CustomerInbox();
+        $this->container['admin_settings']  = new AdminSettings();
+        $this->container['vendor_settings'] = new VendorSettings();
+        $this->container['chat']            = new Chat();
     }
 
     /**

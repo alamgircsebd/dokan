@@ -118,7 +118,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/booking.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/booking/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Booking\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 93500,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-bookings/',
                 ],
                 'color_scheme_customizer' => [
                     'id'           => 'color_scheme_customizer',
@@ -127,7 +129,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/color-scheme-customizer.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/color-scheme-customizer/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ColorSchemeCustomizer\Module',
-                    'plan'         => [ 'starter', 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'starter', 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 102550,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/color-scheme/',
                 ],
                 'elementor' => [
                     'id'           => 'elementor',
@@ -136,7 +140,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/elementor.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/elementor/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Elementor\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 181872,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/elementor-dokan/',
                 ],
                 'export_import' => [
                     'id'           => 'export_import',
@@ -145,7 +151,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/import-export.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/export-import/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ExIm\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 93320,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-and-use-dokan-exportimport-add/',
                 ],
                 'follow_store' => [
                     'id'           => 'follow_store',
@@ -154,7 +162,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/follow-store.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/follow-store/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\FollowStore\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 152781,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/follow-store/',
                 ],
                 'geolocation' => [
                     'id'           => 'geolocation',
@@ -163,7 +173,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/geolocation.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/geolocation/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Geolocation\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 138048,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-geolocation/',
                 ],
                 'live_chat' => [
                     'id'           => 'live_chat',
@@ -172,7 +184,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/live-chat.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/live-chat/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\LiveChat\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 126767,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-live-chat/',
                 ],
                 'live_search' => [
                     'id'           => 'live_search',
@@ -181,7 +195,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/ajax-live-search.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/live-search/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\LiveSearch\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 93303,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-configure-use-dokan-live-search/',
                 ],
                 'moip' => [
                     'id'           => 'moip',
@@ -190,7 +206,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/wirecard-connect.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/moip/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Moip\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 138385,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-moip-connect/',
                 ],
                 'dokan_paypal_ap' => [
                     'id'           => 'dokan_paypal_ap',
@@ -199,7 +217,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/paypal-adaptive.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/paypal-adaptive-payments/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\PayPalAP\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    // 'doc_id'       => 0,
+                    // 'doc_link'     => '',
                 ],
                 'product_addon' => [
                     'id'           => 'product_addon',
@@ -208,7 +228,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/product-addon.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/product-addon/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ProductAddon\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 247645,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/product-addon/',
                 ],
                 'product_enquiry' => [
                     'id'           => 'product_enquiry',
@@ -217,7 +239,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/product-enquiry.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/product-enquiry/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ProductEnquiry\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 93453,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-configure-use-dokan-product-enquiry/',
                 ],
                 'report_abuse' => [
                     'id'           => 'report_abuse',
@@ -226,7 +250,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/report-abuse.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/report-abuse/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ReportAbuse\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 176173,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-report-abuse/',
                 ],
                 'rma' => [
                     'id'           => 'rma',
@@ -235,7 +261,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/rma.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/rma/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\RMA\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 157608,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/vendor-rma/',
                 ],
                 'seller_vacation' => [
                     'id'           => 'seller_vacation',
@@ -244,7 +272,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/seller-vacation.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/seller-vacation/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\SellerVacation\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 2880,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-vendor-vacation/',
                 ],
                 'shipstation' => [
                     'id'           => 'shipstation',
@@ -253,7 +283,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/shipstation.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/shipstation/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ShipStation\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 152770,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/shipstation-dokan-wedevs/',
                 ],
                 'auction' => [
                     'id'           => 'auction',
@@ -262,7 +294,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/auction.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/simple-auction/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Auction\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 93366,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/woocommerce-auctions-frontend-multivendor-marketplace/',
                 ],
                 'spmv' => [
                     'id'           => 'spmv',
@@ -271,7 +305,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/single-product-multivendor.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/single-product-multiple-vendor/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\SPMV\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 106646,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/single-product-multiple-vendor/',
                 ],
                 'store_reviews' => [
                     'id'           => 'store_reviews',
@@ -280,7 +316,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/vendor-review.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/store-reviews/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\StoreReviews\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 93511,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/vendor-review/',
                 ],
                 'store_support' => [
                     'id'           => 'store_support',
@@ -289,7 +327,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/store-support.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/store-support/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\StoreSupport\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 93425,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-and-use-store-support/',
                 ],
                 'stripe' => [
                     'id'           => 'stripe',
@@ -298,7 +338,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/stripe.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/stripe/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Stripe\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 93416,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-and-configure-dokan-stripe-connect/',
                 ],
                 'product_subscription' => [
                     'id'           => 'product_subscription',
@@ -307,7 +349,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/subscription.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/subscription/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\ProductSubscription\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 93321,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-use-dokan-subscription/',
                 ],
                 // 'vendor_analytics' => [
                 //     'id'           => 'vendor_analytics',
@@ -325,7 +369,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/vendor-staff.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-staff/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\VendorStaff\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 111397,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-vendor-staff-manager/',
                 ],
                 // 'vsp'         => [
                 //     'id'           => 'vsp',
@@ -343,7 +389,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/vendor-verification.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-verification/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\VendorVerification\Module',
-                    'plan'         => [ 'professional', 'business', 'enterprise', ]
+                    'plan'         => [ 'professional', 'business', 'enterprise', ],
+                    'doc_id'       => 93421,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-seller-verification-admin-settings/',
                 ],
                 'wholesale' => [
                     'id'           => 'wholesale',
@@ -352,7 +400,9 @@ class Module {
                     'thumbnail'    => $thumbnail_dir . '/wholesale.png',
                     'module_file'  => DOKAN_PRO_MODULE_DIR . '/wholesale/module.php',
                     'module_class' => 'WeDevs\DokanPro\Modules\Wholesale\Module',
-                    'plan'         => [ 'business', 'enterprise', ]
+                    'plan'         => [ 'business', 'enterprise', ],
+                    'doc_id'       => 157825,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-wholesale/',
                 ],
             ] );
         }

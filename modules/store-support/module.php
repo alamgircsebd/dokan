@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro\Modules\StoreSupport;
 
+use WP_Query;
+
 class Module {
 
     private $post_type = 'dokan_store_support';
@@ -69,9 +71,9 @@ class Module {
         add_action( 'dokan_settings_form_bottom', array( $this, 'add_support_btn_title_input' ), 13, 2 );
         add_action( 'dokan_store_profile_saved', array( $this, 'save_supoort_btn_title' ), 13 );
 
-        add_filter( 'woocommerce_locate_template', array( $this, 'customer_topic_list' ),15 );
-
         add_filter( 'dokan_widgets', array( $this, 'register_widgets' ) );
+        add_action( 'init', array( $this, 'register_support_tickets_endpoint' ) );
+        add_action( 'woocommerce_account_support-tickets_endpoint', array( $this, 'support_tickets_content' ) );
     }
 
     /**
@@ -1318,23 +1320,6 @@ class Module {
     }
 
     /**
-     * Link My Support Topics for customers under My Account
-     *
-     * @global object $wp
-     *
-     * @param object $file
-     *
-     * @return object
-     */
-    public function customer_topic_list( $file ) {
-        global $wp;
-        if ( isset($wp->query_vars['support-tickets']) && basename( $file ) == 'my-account.php' ) {
-            return DOKAN_STORE_SUPPORT_DIR . '/templates/store-support/support-tickets.php';
-        }
-        return $file;
-    }
-
-    /**
      * Return counts for all topic status count
      *
      * @since 1.0
@@ -1512,5 +1497,27 @@ class Module {
     public function register_widgets( $widgets ) {
         $widgets['store_support'] = 'Dokan_Store_Support_Widget';
         return $widgets;
+    }
+
+    /**
+     * Register store support endpoint on my-account page
+     *
+     * @since 2.9.17
+     *
+     * @return void
+     */
+    public function register_support_tickets_endpoint() {
+        add_rewrite_endpoint( 'support-tickets', EP_PAGES );
+    }
+
+    /**
+     * Load support tickets content
+     *
+     * @since 2.9.17
+     *
+     * @return void
+     */
+    public function support_tickets_content() {
+        dokan_get_template_part( 'store-support/support-tickets', '', array( 'is_store_support' => true ) );
     }
 }

@@ -119,7 +119,7 @@ class StoreLiveChatButton extends DokanButton {
             parent::render();
         }
 
-        if ( ! class_exists( 'Dokan_Live_Chat_Start' ) ) {
+        if ( ! class_exists( \WeDevs\DokanPro\Modules\LiveChat\Chat::class ) ) {
             return;
         }
 

@@ -49,10 +49,8 @@ class StoreLiveChatButton extends TagBase {
     public function render() {
         $online_indicator = '';
 
-        if ( dokan_is_store_page() && class_exists( 'Dokan_Live_Chat_Start' ) ) {
-            $live_chat = \Dokan_Live_Chat_Start::init();
-
-            if ( $live_chat->dokan_is_seller_online() ) {
+        if ( dokan_is_store_page() && class_exists( \WeDevs\DokanPro\Modules\LiveChat\Chat::class ) ) {
+            if ( dokan_pro()->module->live_chat->chat->dokan_is_seller_online() ) {
                 $online_indicator = '<i class="fa fa-circle" aria-hidden="true"></i>';
             }
         }
