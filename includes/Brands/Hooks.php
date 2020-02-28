@@ -31,5 +31,45 @@ class Hooks {
         add_action( 'dokan_product_edit_after_product_tags', [ FormFields::class, 'product_edit_form_field' ], 10, 2 );
         add_action( 'dokan_new_product_added', [ FormFields::class, 'set_product_brands' ], 10, 2 );
         add_action( 'dokan_product_updated', [ FormFields::class, 'set_product_brands' ], 10, 2 );
+        add_action( 'dokan_product_duplicate_after_save', [ $this, 'set_duplicate_product_brands' ], 10, 2 );
+        add_action( 'dokan_spmv_create_clone_product', [ $this, 'set_spmv_duplicate_product_brands' ], 10, 3 );
+    }
+
+    /**
+     * Set brand for duplicate products
+     *
+     * @param Object $duplicate
+     * @param Object $product
+     */
+    public function set_duplicate_product_brands( $clone_product, $product ) {
+        $brands_ids = [];
+        $brands     = wp_get_object_terms( $product->get_id(), dokan()->brands->get_taxonomy() );
+
+        if ( count( $brands ) > 0 ) {
+            foreach ( $brands as $brand ) {
+                $brands_ids[] = $brand->term_id;
+            }
+
+            wp_set_object_terms( $clone_product->get_id(), $brands_ids, dokan()->brands->get_taxonomy() );
+        }
+    }
+
+    /**
+     * Set brand for Single Product MultiVendor duplicate products
+     *
+     * @param Object $duplicate
+     * @param Object $product
+     */
+    public function set_spmv_duplicate_product_brands( $clone_product_id, $product_id, $map_id ) {
+        $brands_ids = [];
+        $brands     = wp_get_object_terms( $product_id, dokan()->brands->get_taxonomy() );
+
+        if ( count( $brands ) > 0 ) {
+            foreach ( $brands as $brand ) {
+                $brands_ids[] = $brand->term_id;
+            }
+
+            wp_set_object_terms( $clone_product_id, $brands_ids, dokan()->brands->get_taxonomy() );
+        }
     }
 }

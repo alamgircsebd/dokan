@@ -173,6 +173,7 @@ class Dokan_SPMV_Products {
         $this->update_product_status( $clone_product_id, $product_status );
 
         do_action( 'dokan_spmv_create_clone_product', $clone_product_id, $product_id, $map_id );
+
         wp_redirect( dokan_edit_product_url( $clone_product_id ) );
         exit();
     }
