@@ -33,7 +33,7 @@
 
                 <template v-else>
                     <tr>
-                        <td colspan="3">{{ __( 'No shipping zone found for configuration. Please contact with admin for manage your store shipping', 'dokan' ) }}</td>
+                        <td colspan="3">{{ __( 'No shipping zone found for configuration. Please contact the admin to manage your store\'s shipping', 'dokan' ) }}</td>
                     </tr>
                 </template>
             </tbody>

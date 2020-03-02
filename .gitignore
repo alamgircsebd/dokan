@@ -10,5 +10,7 @@ plugin-deploy.sh
 secret.json
 debug.log
 package-lock.json
-dist
+dist/*
+!dist/zip.js
+!dist/version-replace.js
 /vendor/
