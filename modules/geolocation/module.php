@@ -34,7 +34,9 @@ class Module {
 
         $dokan_appearance = get_option( 'dokan_appearance', array() );
 
-        if ( ! empty( $dokan_appearance['gmap_api_key'] ) || ! empty( $dokan_appearance['mapbox_access_token'] ) ) {
+        if( 'google_maps' == $dokan_appearance['map_api_source'] && ! empty( $dokan_appearance['gmap_api_key'] ) ) {
+            $this->has_map_api_key = true;
+        } else if( 'mapbox' == $dokan_appearance['map_api_source'] && ! empty( $dokan_appearance['mapbox_access_token'] ) ) {
             $this->has_map_api_key = true;
         }
 

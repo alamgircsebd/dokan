@@ -243,9 +243,9 @@ Class SocialLogin {
             ),
             'enabled' => array(
                 'name'  => 'enabled',
-                'label' => __( 'Enable Social Login', 'dokan-social-api' ),
+                'label' => __( 'Enable Social Login', 'dokan' ),
                 'type'  => "checkbox",
-                'desc'  => __( 'Enabling this will add Social Icons under registration form to allow users to login or register using Social Profiles', 'dokan-social-api' ),
+                'desc'  => __( 'Enabling this will add Social Icons under registration form to allow users to login or register using Social Profiles', 'dokan' ),
             ),
             'facebook_details' => array(
                 'name'  => 'facebook_details',
@@ -254,24 +254,24 @@ Class SocialLogin {
             ),
             'facebook_app_label'  => array(
                 'name'  => 'fb_app_label',
-                'label' => __( 'Facebook App Settings', 'dokan-social-api' ),
+                'label' => __( 'Facebook App Settings', 'dokan' ),
                 'type'  => "html",
-                'desc'  => '<a target="_blank" href="https://developers.facebook.com/apps/">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill App ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-facebook/" target="_blank">Get Help</a>',
+                'desc'  => '<a target="_blank" href="https://developers.facebook.com/apps/">' . __( 'Create an App', 'dokan' ) . '</a> if you don\'t have one and fill App ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-facebook/" target="_blank">Get Help</a>',
             ),
             'facebook_app_url'    => array(
                 'name'  => 'fb_app_url',
-                'label' => __( 'Site URL', 'dokan-social-api' ),
+                'label' => __( 'Site URL', 'dokan' ),
                 'type'  => 'html',
                 'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'facebook_app_id'     => array(
                 'name'  => 'fb_app_id',
-                'label' => __( 'App ID', 'dokan-social-api' ),
+                'label' => __( 'App ID', 'dokan' ),
                 'type'  => 'text',
             ),
             'facebook_app_secret' => array(
                 'name'  => 'fb_app_secret',
-                'label' => __( 'App Secret', 'dokan-social-api' ),
+                'label' => __( 'App Secret', 'dokan' ),
                 'type'  => 'text',
             ),
             'twitter_details' => array(
@@ -281,24 +281,24 @@ Class SocialLogin {
             ),
             'twitter_app_label'   => array(
                 'name'  => 'twitter_app_label',
-                'label' => __( 'Twitter App Settings', 'dokan-social-api' ),
+                'label' => __( 'Twitter App Settings', 'dokan' ),
                 'type'  => 'html',
-                'desc'  => '<a target="_blank" href="https://apps.twitter.com/">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Consumer key and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-twitter/" target="_blank">Get Help</a>',
+                'desc'  => '<a target="_blank" href="https://apps.twitter.com/">' . __( 'Create an App', 'dokan' ) . '</a> if you don\'t have one and fill Consumer key and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-twitter/" target="_blank">Get Help</a>',
             ),
             'twitter_app_url'     => array(
                 'name'  => 'twitter_app_url',
-                'label' => __( 'Callback URL', 'dokan-social-api' ),
+                'label' => __( 'Callback URL', 'dokan' ),
                 'type'  => 'html',
                 'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'twitter_app_id'      => array(
                 'name'  => 'twitter_app_id',
-                'label' => __( 'Consumer Key', 'dokan-social-api' ),
+                'label' => __( 'Consumer Key', 'dokan' ),
                 'type'  => 'text',
             ),
             'twitter_app_secret'  => array(
                 'name'  => 'twitter_app_secret',
-                'label' => __( 'Consumer Secret', 'dokan-social-api' ),
+                'label' => __( 'Consumer Secret', 'dokan' ),
                 'type'  => 'text',
             ),
             'google_details' => array(
@@ -308,24 +308,24 @@ Class SocialLogin {
             ),
             'google_app_label'    => array(
                 'name'  => 'google_app_label',
-                'label' => __( 'Google App Settings', 'dokan-social-api' ),
+                'label' => __( 'Google App Settings', 'dokan' ),
                 'type'  => 'html',
-                'desc'  => '<a target="_blank" href="https://console.developers.google.com/project">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Client ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-google/" target="_blank">Get Help</a>',
+                'desc'  => '<a target="_blank" href="https://console.developers.google.com/project">' . __( 'Create an App', 'dokan' ) . '</a> if you don\'t have one and fill Client ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-google/" target="_blank">Get Help</a>',
             ),
             'google_app_url'      => array(
                 'name'  => 'google_app_url',
-                'label' => __( 'Redirect URL', 'dokan-social-api' ),
+                'label' => __( 'Redirect URL', 'dokan' ),
                 'type'  => 'html',
                 'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'google_app_id'       => array(
                 'name'  => 'google_app_id',
-                'label' => __( 'Client ID', 'dokan-social-api' ),
+                'label' => __( 'Client ID', 'dokan' ),
                 'type'  => 'text',
             ),
             'google_app_secret'   => array(
                 'name'  => 'google_app_secret',
-                'label' => __( 'Client secret', 'dokan-social-api' ),
+                'label' => __( 'Client secret', 'dokan' ),
                 'type'  => 'text',
             ),
             'linkedin_details' => array(
@@ -335,24 +335,24 @@ Class SocialLogin {
             ),
             'linkedin_app_label'  => array(
                 'name'  => 'linkedin_app_label',
-                'label' => __( 'Linkedin App Settings', 'dokan-social-api' ),
+                'label' => __( 'Linkedin App Settings', 'dokan' ),
                 'type'  => 'html',
-                'desc'  => '<a target="_blank" href="https://www.linkedin.com/developer/apps">' . __( 'Create an App', 'dokan-social-api' ) . '</a> if you don\'t have one and fill Client ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-linkedin/" target="_blank">Get Help</a>',
+                'desc'  => '<a target="_blank" href="https://www.linkedin.com/developer/apps">' . __( 'Create an App', 'dokan' ) . '</a> if you don\'t have one and fill Client ID and Secret below. <a href="https://wedevs.com/docs/dokan/settings/dokan-social-login/configuring-linkedin/" target="_blank">Get Help</a>',
             ),
             'linkedin_app_url'    => array(
                 'name'  => 'linkedin_app_url',
-                'label' => __( 'Redirect URL', 'dokan-social-api' ),
+                'label' => __( 'Redirect URL', 'dokan' ),
                 'type'  => 'html',
                 'desc'  => "<input class='regular-text' type='text' disabled value='{$this->callback}'>",
             ),
             'linkedin_app_id'     => array(
                 'name'  => 'linkedin_app_id',
-                'label' => __( 'Client ID', 'dokan-social-api' ),
+                'label' => __( 'Client ID', 'dokan' ),
                 'type'  => 'text',
             ),
             'linkedin_app_secret' => array(
                 'name'  => 'linkedin_app_secret',
-                'label' => __( 'Client Secret', 'dokan-social-api' ),
+                'label' => __( 'Client Secret', 'dokan' ),
                 'type'  => 'text',
             ),
         );

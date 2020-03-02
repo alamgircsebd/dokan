@@ -59,6 +59,13 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     protected $customer_details = [];
 
     /**
+     * Payment intent error holder
+     *
+     * @var string
+     */
+    protected $error = '';
+
+    /**
      * Constructor method
      */
     public function __construct() {
@@ -83,7 +90,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $this->publishable_key  = $this->testmode == 'no' ? $this->settings['publishable_key'] : $this->settings['test_publishable_key'];
         $this->saved_cards      = $this->settings['saved_cards'] === "yes" ? true : false;
         $this->checkout_locale  = $this->get_option( 'stripe_checkout_locale' );
-        $this->accept_bitcoin   = ( 'USD' === strtoupper( get_woocommerce_currency() ) && 'yes' === $this->get_option( 'stripe_bitcoin' ) ) ? true : false;
         $this->currency         = strtolower( get_woocommerce_currency() );
         $this->checkout_image   = $this->get_option( 'stripe_checkout_image' );
         $this->checkout_label   = $this->get_option( 'stripe_checkout_label' );
@@ -96,7 +102,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         add_action( 'admin_notices', array( &$this, 'checks' ) );
         add_action( 'woocommerce_update_options_payment_gateways', array( &$this, 'process_admin_options' ) );
         add_action( 'woocommerce_update_options_payment_gateways_' . $this->id, array( $this, 'process_admin_options' ) );
-        add_filter( 'woocommerce_update_order_review_fragments', [ $this, 'set_payment_intent_data' ] );
+        add_action( 'woocommerce_checkout_order_review', [ $this, 'set_payment_intent_data' ] );
     }
 
     /**
@@ -107,6 +113,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @return void
      */
     protected function load_stripe_SDK() {
+        Stripe_Helper::get_stripe();
         Stripe_Helper::set_app_info();
         Stripe_Helper::set_api_version();
 
@@ -267,14 +274,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                     'sv'   => __( 'Swedish', 'dokan' ),
                 ),
             ),
-            'stripe_bitcoin' => array(
-                'title'       => __( 'Bitcoin Currency', 'dokan' ),
-                'label'       => __( 'Enable Bitcoin Currency in Stripe Checkout', 'dokan' ),
-                'type'        => 'checkbox',
-                'description' => __( 'If enabled, an option to accept bitcoin will show on the checkout modal. Note: Stripe Checkout needs to be enabled and store currency must be set to USD.', 'dokan' ),
-                'default'     => 'no',
-                'desc_tip'    => true,
-            ),
             'stripe_checkout_image' => array(
                 'title'       => __( 'Checkout Image', 'dokan' ),
                 'description' => __( 'Optionally enter the URL to a 128x128px image of your brand or product. e.g. <code>https://yoursite.com/wp-content/uploads/2013/09/yourimage.jpg</code>', 'dokan' ),
@@ -371,39 +370,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
     }
 
     /**
-     * Get Stripe amount to pay
-     * @return float
-     */
-    public function get_stripe_amount( $total ) {
-
-        switch ( get_woocommerce_currency() ) {
-            /* Zero decimal currencies*/
-            case 'BIF' :
-            case 'CLP' :
-            case 'DJF' :
-            case 'GNF' :
-            case 'JPY' :
-            case 'KMF' :
-            case 'KRW' :
-            case 'MGA' :
-            case 'PYG' :
-            case 'RWF' :
-            case 'VND' :
-            case 'VUV' :
-            case 'XAF' :
-            case 'XOF' :
-            case 'XPF' :
-            $total = absint( $total );
-            break;
-            default :
-            $total = $total * 100; /* In cents*/
-            break;
-        }
-
-        return $total;
-    }
-
-    /**
      * Payment form on checkout page
      */
     public function payment_fields() {
@@ -440,7 +406,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             <?php endif; ?>
 
             <div class="stripe_new_card" <?php if ( $checked === 0 ) : ?> style="display:none;"<?php endif; ?>
-                data-amount="<?php echo esc_attr( $this->get_stripe_amount( WC()->cart->total ) ); ?>"
+                data-amount="<?php echo esc_attr( Stripe_Helper::get_stripe_amount( WC()->cart->total ) ); ?>"
                 data-currency="<?php echo esc_attr( strtolower( get_woocommerce_currency() ) ); ?>"
                 >
                 <?php
@@ -550,7 +516,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             'description'          => get_bloginfo ( 'description' ),
             'label'                => sprintf( __( '%s', 'dokan') , $this->checkout_label ),
             'locale'               => $this->checkout_locale,
-            'bitcoin'              => $this->accept_bitcoin ? 'true' : 'false',
             'image'                => $this->checkout_image,
             'i18n_terms'           => __( 'Please accept the terms and conditions first', 'dokan' ),
             'i18n_required_fields' => __( 'Please fill in required checkout fields first', 'dokan' ),
@@ -625,6 +590,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $this->intent_id      = $payment_intent->id;
         $this->customer_id    = $payment_intent->customer;
         $this->payment_method = $payment_intent->payment_method;
+        $this->error          = ! empty( $payment_intent->last_payment_error->message ) ? $payment_intent->last_payment_error->message : '';
 
         if ( $this->saved_cards ) {
             update_user_meta( get_current_user_id(), 'dokan_stripe_card', [
@@ -689,7 +655,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
 
             if ( $dokan_subscription->is_recurring() ) {
                 update_user_meta( get_current_user_id(), 'product_order_id', $order_id );
-                $order->add_order_note( sprintf( __( 'Order payment completed via stripe with 3d secure', 'dokan' ) ) );
+                $order->add_order_note( sprintf( __( 'Order payment is completed via stripe with 3d secure', 'dokan' ) ) );
 
                 return $order->payment_complete();
             }
@@ -724,7 +690,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             // if vendor already has used a trial pack, create a new plan without trial period
             if ( Helper::has_used_trial_pack( get_current_user_id() ) ) {
                 $trial_period_days = 0;
-                $product_pack_id   = $product_pack_id . '-' . random_int( 1, 99999 );
+                $product_pack_id   = $product_pack_id . '-' . $order_id;
             }
 
             try {
@@ -736,7 +702,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 ) );
 
                 $stripe_plan = \Stripe\Plan::create( array(
-                    'amount'            => $order_total * 100,
+                    'amount'            => Stripe_Helper::get_stripe_amount( $order_total ),
                     'interval'          => $subscription_period,
                     'interval_count'    => $subscription_interval,
                     'currency'          => $currency,
@@ -746,32 +712,15 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 ) );
             }
 
-            $already_has_subscription = get_user_meta( $customer_user_id, '_stripe_subscription_id', true );
+            $subscription = $this->maybe_create_subscription( $customer_id, $customer_user_id, $product_pack_id, $stripe_plan, $order );
 
-            if ( $already_has_subscription ) {
-                $subscription = \Stripe\Subscription::retrieve( $already_has_subscription );
+            if ( empty( $subscription->id ) ) {
+                $error = [
+                    'code'    => 'subscription_not_created',
+                    'message' => __( 'Unable to create subscription', 'dokan' )
+                ];
 
-                if ( empty( $subscription->id ) ) {
-                    throw new Exception( __( 'Unable to find previous subscriptoin id', 'dokan' ), 404 );
-                }
-
-                $upgrade = \Stripe\Subscription::update( $already_has_subscription, [
-                    'cancel_at_period_end' => false,
-                    'items' =>[
-                        [
-                            'id'   => $subscription->items->data[0]->id,
-                            'plan' => $stripe_plan->id
-                        ]
-                    ],
-                ] );
-            }
-
-            if ( ! $already_has_subscription ) {
-                $customer     = \Stripe\Customer::retrieve( $customer_id );
-                $subscription = $customer->subscriptions->create( [
-                    'plan'            => $product_pack_id,
-                    'trial_from_plan' => true
-                ] );
+                return wp_send_json_error( $error, 422 );
             }
 
             $transaction_id                = $subscription->id;
@@ -788,9 +737,14 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
 
             $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
+            $admin_additional_fee  = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_additional_fee', true );
             $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
-            if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+            if ( ! empty( $admin_commission ) && ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
+                update_user_meta( $customer_user_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+            } else if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                 update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
                 update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
             } else {
@@ -798,7 +752,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             }
 
             $order->payment_complete();
-            $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), $this->method_title, $transaction_id ) );
+            $order->add_order_note( sprintf( __( 'Order %s payment is completed via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), $this->method_title, $transaction_id ) );
 
             do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
         } else {
@@ -813,11 +767,11 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 if ( Stripe_Helper::is_3d_secure_enabled() ) {
 
                     if ( 'succeeded' !== $this->get_payment_intent_status() ) {
-                        throw new Exception( __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
+                        throw new Exception( $this->error ? $this->error : __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
                     }
 
                 } else {
-                    $charge = \Stripe\Charge::create( array( 'customer' => $customer_id, 'amount' => $order_total * 100, 'currency' => $currency, 'description' => $order_desc ) );
+                    $charge = \Stripe\Charge::create( array( 'customer' => $customer_id, 'amount' => Stripe_Helper::get_stripe_amount( $order_total ), 'currency' => $currency, 'description' => $order_desc ) );
                     $charge_ids[ $customer_user_id ] = $charge->id;
                 }
 
@@ -831,9 +785,14 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
 
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
+                $admin_additional_fee  = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_additional_fee', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
 
-                if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+                if ( ! empty( $admin_commission ) && ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
+                    update_user_meta( $customer_user_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+                } else if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
                     update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
                     update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
@@ -843,9 +802,9 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 $order->payment_complete();
 
                 if ( Stripe_Helper::is_3d_secure_enabled() ) {
-                    $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), $this->get_charge_id_from_intent() ) );
+                    $order->add_order_note( sprintf( __( 'Order %s payment is completed via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), $this->get_charge_id_from_intent() ) );
                 } else {
-                    $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
+                    $order->add_order_note( sprintf( __( 'Order %s payment is completed via Dokan Stripe on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
                 }
 
                 do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
@@ -906,14 +865,6 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 continue;
             }
 
-            $withdraw_data = array(
-                'user_id'  => $seller_id,
-                'amount'   => $vendor_earning,
-                'order_id' => $tmp_order_id,
-            );
-
-            $all_withdraws[] = $withdraw_data;
-
             if ( Stripe_Helper::is_3d_secure_enabled() ) {
                 $connected_vendor_id = get_user_meta( $seller_id, 'dokan_connected_vendor_id', true );
 
@@ -922,11 +873,12 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 }
 
                 if ( ! $connected_vendor_id && $this->allow_non_connected_sellers() ) {
+                    $tmp_order->add_order_note( sprintf( __( 'Vendor payment will be transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
                     continue;
                 }
 
-                $transfer = DokanStripe::transaction( $this->secret_key )
-                    ->amount( $vendor_earning * 100 )
+                $transfer = DokanStripe::transaction()
+                    ->amount( Stripe_Helper::get_stripe_amount( $vendor_earning ), $currency )
                     ->from( $this->get_charge_id_from_intent() )
                     ->to( $connected_vendor_id )
                     ->create();
@@ -935,11 +887,30 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                     throw new Exception( __( 'Unable to transfer fund to vendor account', 'dokan' ) );
                 }
 
-                if ( $order_id !== $tmp_order_id ) {
-                    $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );
-                    $tmp_order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $tmp_order->get_order_number(), $this->get_charge_id_from_intent() ) );
+                if ( 'succeeded' !== $this->get_payment_intent_status() ) {
+                    throw new Exception( $this->error ? $this->error : __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
                 }
 
+                if ( $order_id !== $tmp_order_id ) {
+                    $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );
+                    $tmp_order->add_order_note(
+                        sprintf(
+                            __( 'Order %s payment is completed via %s with 3d secure on (Charge ID: %s)', 'dokan' ),
+                            $tmp_order->get_order_number(),
+                            $this->title,
+                            $this->get_charge_id_from_intent()
+                        )
+                    );
+                }
+
+                // Only process withdraw request once vendor get paid.
+                $withdraw_data = array(
+                    'user_id'  => $seller_id,
+                    'amount'   => $vendor_earning,
+                    'order_id' => $tmp_order_id,
+                );
+
+                $all_withdraws[] = $withdraw_data;
                 continue;
             }
 
@@ -955,9 +926,9 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
 
             if ( $token ) {
                 $charge = \Stripe\Charge::create( array(
-                    'amount'          => $order_total * 100,
+                    'amount'          => Stripe_Helper::get_stripe_amount( $order_total ),
                     'currency'        => $currency,
-                    'application_fee' => $application_fee * 100,
+                    'application_fee' => Stripe_Helper::get_stripe_amount( $application_fee ),
                     'description'     => $order_desc,
                     'card'            => ! empty( $token->id ) ? $token->id : $stripe_token
                     ), $access_token );
@@ -965,32 +936,70 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
                 $order_desc   = sprintf( __( '%s - Order %s, suborder of %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $tmp_order_id, $order->get_order_number() );
 
                 $charge = \Stripe\Charge::create( [
-                    'amount'      => $order_total * 100,
+                    'amount'      => Stripe_Helper::get_stripe_amount( $order_total ),
                     'currency'    => $currency,
                     'description' => $order_desc,
                     'customer'    => $customer_id
                 ] );
 
-                $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe', 'dokan' ) ) );
+                $tmp_order->add_order_note( sprintf( __( 'Vendor payment transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
             }
 
             $charge_ids[ $seller_id ] = $charge->id;
             update_post_meta( $tmp_order_id, $this->stripe_meta_key . $seller_id, $charge->id );
 
-            if ( $order_id !== $tmp_order_id ) {
-                $tmp_order->add_order_note( sprintf( __( 'Order %s payment completed via Dokan Stripe on Charge ID: %s', 'dokan' ), $tmp_order->get_order_number(), $charge->id ) );
+            if ( $order_id !== $tmp_order_id && $token ) {
+                $tmp_order->add_order_note(
+                    sprintf(
+                        __( 'Order %s payment completed via %s on Charge ID: %s', 'dokan' ),
+                        $tmp_order->get_order_number(),
+                        $this->title,
+                        $charge->id
+                    )
+                );
+            }
+
+            // Only process withdraw request once vendor get paid.
+            if ( ! is_null( $token ) ) {
+                $withdraw_data = array(
+                    'user_id'  => $seller_id,
+                    'amount'   => $vendor_earning,
+                    'order_id' => $tmp_order_id,
+                );
+
+                $all_withdraws[] = $withdraw_data;
             }
         }
 
         if ( Stripe_Helper::is_3d_secure_enabled() ) {
+
+            if ( 'succeeded' !== $this->get_payment_intent_status() ) {
+                throw new Exception( $this->error ? $this->error : __( 'Payment intent is not successful. Please try agin with a different card.', 'dokan' ) );
+            }
+
             $this->insert_into_vendor_balance( $all_withdraws );
             $this->process_seller_withdraws( $all_withdraws );
 
-            $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe with 3d secure on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), $this->get_charge_id_from_intent() ) );
+            $order->add_order_note(
+                sprintf(
+                    __( 'Order %s payment is completed via %s with 3d secure on (Charge ID: %s)', 'dokan' ),
+                    $order->get_order_number(),
+                    $this->title,
+                    $this->get_charge_id_from_intent()
+                )
+            );
+
             return $order->payment_complete();
         }
 
-        $order->add_order_note( sprintf( __( 'Order %s payment <a href="#">completed</a> via Dokan Stripe on (Charge ID: %s)', 'dokan' ), $order->get_order_number(), implode( ', ', $charge_ids ) ) );
+        $order->add_order_note(
+            sprintf(
+                __( 'Order %s payment is completed via %s on (Charge ID: %s)', 'dokan' ),
+                $order->get_order_number(),
+                $this->title,
+                implode( ', ', $charge_ids )
+            )
+        );
         $order->payment_complete();
 
         $this->insert_into_vendor_balance( $all_withdraws );
@@ -1046,7 +1055,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         }
 
         $intent = \Stripe\PaymentIntent::create( [
-            'amount'               => $order_total * 100,
+            'amount'               => Stripe_Helper::get_stripe_amount( $order_total ),
             'currency'             => $this->currency,
             'confirmation_method'  => 'automatic',
             'payment_method_types' => ['card'],
@@ -1065,12 +1074,11 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @param string $fragment
      */
     public function set_payment_intent_data( $fragment ) {
-        if ( ! Stripe_Helper::is_3d_secure_enabled() ) {
+        if ( ! Stripe_Helper::is_active() || ! Stripe_Helper::is_3d_secure_enabled() ) {
             return $fragment;
         }
 
-        $this->create_payment_intent();
-        ob_start(); ?>
+        $this->create_payment_intent(); ?>
 
         <div class="dokan-stripe-intent">
             <input type="hidden" name="dokan_payment_customer_name" id="dokan-payment-customer-name" value="<?php echo esc_attr( $this->customer_details['name'] ); ?>">
@@ -1085,10 +1093,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             <input type="hidden" name="dokan_payment_client_secret" id="dokan-payment-client-secret" value="<?php echo esc_attr( $this->client_secret ); ?>">
             <input type="hidden" name="dokan_subscription_product_id" id="dokan-subscription-product-id" value="<?php echo esc_attr( $this->subscription_product_id ); ?>">
         </div>
-
-        <?php $fragment['.dokan-stripe-intent'] = ob_get_clean();
-
-        return $fragment;
+        <?php
     }
 
     /**
@@ -1166,18 +1171,20 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
      * @return void
      */
     public function process_seller_withdraws( $all_withdraws ){
-        $IP =  dokan_get_client_ip();
+        $IP       = dokan_get_client_ip();
+        $withdraw = new Dokan_Withdraw();
+
         foreach ( $all_withdraws as $withdraw_data ) {
             $data = array(
                 'date'    => current_time( 'mysql' ),
                 'status'  => 1,
                 'method'  => 'dokan-stripe-connect',
-                'notes'   => sprintf( __( 'Order %d payment Auto paid via Dokan Stripe', 'dokan' ), $withdraw_data['order_id'] ),
+                'notes'   => sprintf( __( 'Order %d payment Auto paid via %s', 'dokan' ), $withdraw_data['order_id'], $this->title ),
                 'ip'      => $IP
             );
 
             $data = array_merge( $data, $withdraw_data );
-            dokan()->withdraw->insert_withdraw( $data );
+            $withdraw->insert_withdraw( $data );
         }
     }
 
@@ -1237,6 +1244,7 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
             return;
         }
 
+        Stripe_Helper::get_stripe();
         Stripe_Helper::set_app_info();
         Stripe_Helper::set_api_version();
 
@@ -1319,5 +1327,101 @@ abstract class Dokan_Stripe_Gateway extends WC_Payment_Gateway {
         $settings = get_option('woocommerce_dokan-stripe-connect_settings');
 
         return ! empty( $settings['allow_non_connected_sellers'] ) && 'yes' === $settings['allow_non_connected_sellers'];
+    }
+
+    /**
+     * Maybe create subscription
+     *
+     * @since  2.9.14
+     *
+     * @param  int $customer_id
+     * @param  string $product_pack_id
+     * @param  Stripe\Plan $stripe_plan
+     * @param  WC_Order $order
+     *
+     * @return Stripe\Subscription
+     */
+    public function maybe_create_subscription( $stripe_customer, $vendor_id, $product_pack_id, $stripe_plan, $order ) {
+        $already_has_subscription = get_user_meta( $vendor_id, '_stripe_subscription_id', true );
+
+        if ( $already_has_subscription ) {
+            try {
+                $subscription = \Stripe\Subscription::retrieve( $already_has_subscription );
+            } catch( Exception $e ) {
+                return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+            }
+
+            // if subscription status is incomplete, cancel it first as incomplete subscription can't be updated
+            if ( 'incomplete' === $subscription->status ) {
+                $subscription->cancel();
+                return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+            }
+
+            if ( 'canceled' === $subscription->status ) {
+                return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+            }
+
+            $upgrade = \Stripe\Subscription::update( $already_has_subscription, [
+                'cancel_at_period_end' => false,
+                'items' =>[
+                    [
+                        'id'   => $subscription->items->data[0]->id,
+                        'plan' => $stripe_plan->id
+                    ]
+                ],
+            ] );
+
+            return $upgrade;
+        }
+
+        return $this->create_subscription( $stripe_customer, $product_pack_id, $order );
+    }
+
+    /**
+     * Create subscription
+     *
+     * @since  2.9.14
+     *
+     * @param  string $stripe_customer
+     * @param  string $product_pack_id
+     * @param  WC_Order $order
+     *
+     * @return Stripe\Subscription
+     */
+    public function create_subscription( $stripe_customer, $product_pack_id, $order ) {
+        $customer     = \Stripe\Customer::retrieve( $stripe_customer );
+        $subscription = $customer->subscriptions->create( [
+            'plan'            => $product_pack_id,
+            'coupon'          => $this->get_coupon( $order ),
+            'trial_from_plan' => true,
+        ] );
+
+        return $subscription;
+    }
+
+    /**
+     * Get coupon code for subscription
+     *
+     * @since  2.9.14
+     *
+     * @param  WC_Order $order
+     *
+     * @return Stripe\Coupon::id |null on failure
+     */
+    public function get_coupon( $order ) {
+        $discount = $order->get_total_discount();
+
+        if ( ! $discount ) {
+            return;
+        }
+
+        $coupon   = \Stripe\Coupon::create( [
+            'duration'   => 'once',
+            'id'         => $discount .'_OFF_' . $order->get_id(),
+            'amount_off' => Stripe_Helper::get_stripe_amount( $discount ),
+            'currency'   => $this->currency
+        ] );
+
+        return $coupon->id;
     }
 }

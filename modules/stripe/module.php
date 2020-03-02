@@ -687,6 +687,17 @@ class Module {
         $vendor_token     = get_user_meta( $seller_id, '_stripe_connect_access_key', true );
         $vendor_charge_id = $order->get_meta( "_dokan_stripe_charge_id_{$seller_id}" );
 
+        /**
+         * If admin has earning from an order, only then refund application fee
+         *
+         * @since DOKAN_PRO_SINCE
+         *
+         * @see https://stripe.com/docs/api/refunds/create#create_refund-refund_application_fee
+         *
+         * @var string
+         */
+        $refund_application_fee = dokan()->commission->get_earning_by_order( $order, 'admin' ) ? true : false;
+
         // if vendor charge id is not found, meaning it's a not purcahsed with sitripe so return early
         if ( ! $vendor_charge_id ) {
             return true;
@@ -706,9 +717,9 @@ class Module {
         try {
             $stripe_refund = \Stripe\Refund::create( [
                 'charge'                 => $vendor_charge_id,
-                'amount'                 => $refund->get_refund_amount() * 100, // in cents
-                'reason'                 => 'requested_by_customer',
-                'refund_application_fee' => true
+                'amount'                 => Helper::get_stripe_amount( $refund->get_refund_amount() ),
+                'reason'                 => __( 'requested_by_customer', 'dokan' ),
+                'refund_application_fee' => $refund_application_fee
             ], $vendor_token );
 
             if ( ! $stripe_refund->id ) {
