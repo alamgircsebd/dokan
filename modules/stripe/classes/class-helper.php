@@ -8,18 +8,6 @@ namespace DokanPro\Modules\Stripe;
  * @since 2.9.13
  */
 class Helper {
-    /**
-     * Get the stripe SDK
-     *
-     * @since 2.9.13
-     *
-     * @return string | false on failure
-     */
-    public static function get_stripe() {
-        $file = DOKAN_STRIPE_LIBS . 'stripe-init.php';
-
-        return ! class_exists( 'Stripe\Stripe' ) && file_exists( $file ) ? require_once $file : false;
-    }
 
     /**
      * Check wheter the 3d secure is enabled or not
