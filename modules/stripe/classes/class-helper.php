@@ -1,4 +1,5 @@
 <?php
+
 namespace DokanPro\Modules\Stripe;
 
 /**
@@ -8,6 +9,19 @@ namespace DokanPro\Modules\Stripe;
  */
 class Helper {
     /**
+     * Get the stripe SDK
+     *
+     * @since 2.9.13
+     *
+     * @return string | false on failure
+     */
+    public static function get_stripe() {
+        $file = DOKAN_STRIPE_LIBS . 'stripe-init.php';
+
+        return ! class_exists( 'Stripe\Stripe' ) && file_exists( $file ) ? require_once $file : false;
+    }
+
+    /**
      * Check wheter the 3d secure is enabled or not
      *
      * @since 2.9.13
@@ -15,13 +29,14 @@ class Helper {
      * @return boolean
      */
     public static function is_3d_secure_enabled() {
-        $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+        $settings   = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+        $is_enabled = true;
 
         if ( empty( $settings['enable_3d_secure'] ) || 'yes' !== $settings['enable_3d_secure'] ) {
-            return false;
+            $is_enabled = false;
         }
 
-        return true;
+        return apply_filters( 'dokan_is_3d_secure_enabled', $is_enabled );
     }
 
     /**
@@ -49,7 +64,7 @@ class Helper {
      * @return boolean
      */
     public static function has_subscription_module() {
-        return dokan_pro()->module->is_active( 'product_subscription' );
+        return class_exists( 'Dokan_Product_Subscription' );
     }
 
     /**
@@ -77,5 +92,57 @@ class Helper {
      */
     public static function set_api_version() {
         \Stripe\Stripe::setApiVersion( '2019-05-16' );
+    }
+
+    /**
+     * Is stripe active
+     *
+     * @since  2.9.16
+     *
+     * @return boolean
+     */
+    public static function is_active() {
+        $settings = get_option( 'woocommerce_dokan-stripe-connect_settings' );
+
+        if ( empty( $settings['enabled'] ) || 'yes' !== $settings['enabled'] ) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get Stripe amount to pay
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return float
+     */
+    public static function get_stripe_amount( $total ) {
+        switch ( get_woocommerce_currency() ) {
+            /* Zero decimal currencies*/
+            case 'BIF' :
+            case 'CLP' :
+            case 'DJF' :
+            case 'GNF' :
+            case 'JPY' :
+            case 'KMF' :
+            case 'KRW' :
+            case 'MGA' :
+            case 'PYG' :
+            case 'RWF' :
+            case 'VND' :
+            case 'VUV' :
+            case 'XAF' :
+            case 'XOF' :
+            case 'XPF' :
+            $total = absint( $total );
+            break;
+            default :
+            $total = $total * 100; /* In cents*/
+            break;
+        }
+
+        return $total;
     }
 }
