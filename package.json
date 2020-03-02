@@ -1,13 +1,15 @@
 {
   "name": "dokan-pro",
-  "version": "2.9.19",
+  "version": "3.0.0",
   "description": "A WordPress marketplace plugin",
   "author": "weDevs",
   "license": "GPL",
   "private": true,
   "scripts": {
     "dev": "WEBPACK_ENV=development webpack --progress --colors --watch --hide-modules",
-    "build": "WEBPACK_ENV=production webpack"
+    "build": "WEBPACK_ENV=production webpack",
+    "zip": "node dist/zip",
+    "version": "node dist/version-replace"
   },
   "devDependencies": {
     "assets-webpack-plugin": "^3.8.4",
@@ -43,6 +45,7 @@
     "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "replace-in-file": "^5.0.2",
     "style-loader": "^0.20.3",
     "uglifyjs-webpack-plugin": "^1.2.7",
     "url-loader": "^1.1.2",

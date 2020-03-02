@@ -23,6 +23,6 @@ $wp_query->rewind_posts();
 
 <?php else: ?>
 
-    <p class="dokan-info"><?php esc_html_e( 'No products were found of this vendor!', 'dokan' ); ?></p>
+    <p class="dokan-info"><?php esc_html_e( 'No products were found on this vendor!', 'dokan' ); ?></p>
 
 <?php endif; ?>

@@ -1343,7 +1343,7 @@ var render = function() {
                     _vm._v(
                       _vm._s(
                         _vm.__(
-                          "No shipping zone found for configuration. Please contact with admin for manage your store shipping",
+                          "No shipping zone found for configuration. Please contact the admin to manage your store's shipping",
                           "dokan"
                         )
                       )
