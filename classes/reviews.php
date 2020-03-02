@@ -316,11 +316,12 @@ class Dokan_Pro_Reviews {
         global $wpdb, $current_user;
 
         $status = $this->page_status();
+        $user_id = dokan_get_current_user_id();
 
         $total = $wpdb->get_var(
             "SELECT COUNT(*)
             FROM $wpdb->comments, $wpdb->posts
-            WHERE   $wpdb->posts.post_author='dokan_get_current_user_id()' AND
+            WHERE   $wpdb->posts.post_author='$user_id' AND
             $wpdb->posts.post_status='publish' AND
             $wpdb->comments.comment_post_ID=$wpdb->posts.ID AND
             $wpdb->comments.comment_approved='$status' AND
@@ -488,9 +489,9 @@ class Dokan_Pro_Reviews {
     function comment_query( $id, $post_type, $limit, $status, $offset = false ) {
         global $wpdb;
 
-        $page_number = $offset ? $offset : get_query_var( 'paged' );
-        $pagenum     = max( 1, $page_number );
-        $offset      = ( $pagenum - 1 ) * $limit;
+        $perpage = $this->limit;
+        $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+        $offset  = ( $pagenum - 1 ) * $perpage;
 
         $comments = $wpdb->get_results(
             "SELECT c.comment_content, c.comment_ID, c.comment_author,

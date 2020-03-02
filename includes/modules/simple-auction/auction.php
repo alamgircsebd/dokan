@@ -50,7 +50,8 @@ class Dokan_Auction {
         $this->includes();
 
         // Hooking all caps
-        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ), 10 );
+        add_filter( 'dokan_get_all_cap', array( $this, 'add_capabilities' ) );
+        add_filter( 'dokan_get_all_cap_labels', array( $this, 'add_caps_labels' ) );
 
         // insert auction porduct type
         add_filter( 'dokan_get_product_types', array( $this, 'insert_auction_product_type' ) );
@@ -176,6 +177,21 @@ class Dokan_Auction {
         );
 
         return $capabilities;
+    }
+
+    /**
+     * Add caps labels
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param string $caps
+     *
+     * @return array
+     */
+    public function add_caps_labels( $caps ) {
+        $caps['auction'] = __( 'Auction', 'dokan' );
+
+        return $caps;
     }
 
     /**
