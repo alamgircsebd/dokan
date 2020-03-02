@@ -54,7 +54,6 @@ class Dokan_Stripe_Subscription {
      * @return void
      */
     public function load_stripe_SDK() {
-        StripeHelper::get_stripe();
         StripeHelper::set_app_info();
         StripeHelper::set_api_version();
 
