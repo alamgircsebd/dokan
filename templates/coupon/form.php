@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dashboard Coupon Form Template
  *
@@ -31,7 +32,7 @@
 
         <div class="dokan-w5 dokan-text-left">
             <select id="discount_type" name="discount_type" class="dokan-form-control">
-                <?php foreach ( Dokan_Pro_Coupons::get_coupon_types() as $key => $value ) : ?>
+                <?php foreach ( \WeDevs\DokanPro\Coupons::get_coupon_types() as $key => $value ) : ?>
                     <option <?php selected( $discount_type, $key ); ?> value="<?php echo esc_attr( $key ) ?>"><?php printf( __( '%s', 'dokan' ), $value ) ?></option>
                 <?php endforeach; ?>
             </select>
@@ -132,62 +133,6 @@
         </div>
     </div>
 
-<!-- Enable product categoryes only when admin coupon is allowed -->
-
-<!--     <div class="dokan-form-group">
-        <label for="product_cat" class="dokan-w3 dokan-control-label"><?php _e( 'Product categories', 'dokan' ); ?></label>
-        <div class="dokan-w5 dokan-text-left">
-            <?php
-            // $product_categories = ! empty( $product_categories ) ? $product_categories : array();
-            // $term = array();
-            // include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
-            // $drop_down_category = wp_dropdown_categories( array(
-            //     'show_option_none' => __( '', 'dokan' ),
-            //     'hierarchical'     => 1,
-            //     'hide_empty'       => 0,
-            //     'name'             => 'product_categories[]',
-            //     'id'               => 'product_categories',
-            //     'taxonomy'         => 'product_cat',
-            //     'title_li'         => '',
-            //     'class'            => 'product_categories dokan-form-control dokan-select2',
-            //     'exclude'          => '',
-            //     'selected'         => $product_categories,
-            //     'echo'             => 0,
-            //     'walker'           => new DokanTaxonomyWalker()
-            // ) );
-
-            // echo str_replace( '<select', '<select data-placeholder="'.__( 'Any category', 'dokan' ).'" multiple="multiple" ', $drop_down_category );
-            ?>
-        </div>
-    </div>
- -->
-<!--     <div class="dokan-form-group">
-        <label for="product_cat" class="dokan-w3 dokan-control-label"><?php _e( 'Exclude product categories', 'dokan' ); ?></label>
-        <div class="dokan-w5 dokan-text-left">
-            <?php
-            // $exclude_product_categories = ! empty( $exclude_product_categories ) ? $exclude_product_categories : array();
-            // $term = array();
-            // include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
-            // $drop_down_category = wp_dropdown_categories( array(
-            //     'show_option_none' => __( '', 'dokan' ),
-            //     'hierarchical'     => 1,
-            //     'hide_empty'       => 0,
-            //     'name'             => 'exclude_product_categories[]',
-            //     'id'               => 'exclude_product_categories',
-            //     'taxonomy'         => 'product_cat',
-            //     'title_li'         => '',
-            //     'class'            => 'exclude_product_categories dokan-form-control dokan-select2',
-            //     'exclude'          => '',
-            //     'selected'         => $exclude_product_categories,
-            //     'echo'             => 0,
-            //     'walker'           => new DokanTaxonomyWalker()
-            // ) );
-
-            // echo str_replace( '<select', '<select data-placeholder="'.__( 'No categories', 'dokan' ).'" multiple="multiple" ', $drop_down_category );
-            ?>
-        </div>
-    </div>
- -->
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="checkboxes"><?php _e( 'Show on store', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">

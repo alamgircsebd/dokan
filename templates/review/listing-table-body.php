@@ -16,7 +16,7 @@ if ( count( $comments ) == 0 ) {
 } else {
 
     foreach ( $comments as $comment ) {
-        Dokan_Pro_Reviews::init()->render_row( $comment, $post_type );
+        dokan_pro()->review->render_row( $comment, $post_type );
     }
 
 }

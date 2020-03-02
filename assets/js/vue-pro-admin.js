@@ -1526,10 +1526,6 @@ var ListTable = dokan_get_lib('ListTable');
 //
 //
 //
-//
-//
-//
-//
 
 var ListTable = dokan_get_lib('ListTable');
 var Loading = dokan_get_lib('Loading');
@@ -1662,7 +1658,7 @@ var Switches = dokan_get_lib('Switches');
         onSwitch: function onSwitch(status, moduleSlug) {
             var _this2 = this;
 
-            var moduleData = _.findWhere(this.modules, { slug: moduleSlug });
+            var moduleData = _.findWhere(this.modules, { id: moduleSlug });
 
             if (status) {
                 // Need to activate
@@ -2724,7 +2720,7 @@ var Search = dokan_get_lib('Search');
 
             counts: {
                 pending: 0,
-                approved: 0,
+                completed: 0,
                 cancelled: 0
             },
             totalPages: 1,
@@ -2742,7 +2738,7 @@ var Search = dokan_get_lib('Search');
 
             actionColumn: 'order_id',
             actions: [{
-                key: 'approved',
+                key: 'completed',
                 label: this.__('Approve Refund', 'dokan')
             }, {
                 key: 'cancelled',
@@ -2766,7 +2762,7 @@ var Search = dokan_get_lib('Search');
         bulkActions: function bulkActions() {
             if ('pending' == this.$route.query.status) {
                 return [{
-                    key: 'approved',
+                    key: 'completed',
                     label: this.__('Approve Refund', 'dokan')
                 }, {
                     key: 'cancelled',
@@ -2798,7 +2794,7 @@ var Search = dokan_get_lib('Search');
 
             this.loading = true;
 
-            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
+            dokan.api.get('/refunds?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
                 _this.requests = response.filter(function (refund) {
                     return refund.order_id.includes(payload) || refund.vendor.store_name.includes(payload);
                 });
@@ -2810,7 +2806,7 @@ var Search = dokan_get_lib('Search');
         },
         updatedCounts: function updatedCounts(xhr) {
             this.counts.pending = parseInt(xhr.getResponseHeader('X-Status-Pending'));
-            this.counts.approved = parseInt(xhr.getResponseHeader('X-Status-Completed'));
+            this.counts.completed = parseInt(xhr.getResponseHeader('X-Status-Completed'));
             this.counts.cancelled = parseInt(xhr.getResponseHeader('X-Status-Cancelled'));
         },
         updatePagination: function updatePagination(xhr) {
@@ -2822,7 +2818,7 @@ var Search = dokan_get_lib('Search');
 
             this.loading = true;
 
-            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
+            dokan.api.get('/refunds?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus).done(function (response, status, xhr) {
                 _this2.requests = response;
                 _this2.loading = false;
 
@@ -2858,31 +2854,28 @@ var Search = dokan_get_lib('Search');
                 }
             });
         },
-        onActionClick: function onActionClick(action, row) {
-            console.log(action, row);
-        },
+        onActionClick: function onActionClick(action, row) {},
         rowAction: function rowAction(action, data) {
             var _this3 = this;
 
             this.loading = true;
             var jsonData = {};
             jsonData.id = data.row.id;
-            jsonData.order_id = data.row.order_id;
 
-            if ('approved' === action) {
-                jsonData.status = 'approved';
-                dokan.api.put('/refund/' + data.row.id, jsonData).done(function (response, status, xhr) {
+            if ('completed' === action) {
+                jsonData.status = 'completed';
+                dokan.api.put('/refunds/' + data.row.id + '/approve', jsonData).done(function (response, status, xhr) {
                     _this3.fetchRefunds();
                     _this3.loading = false;
                 });
             } else if ('cancelled' === action) {
                 jsonData.status = 'cancelled';
-                dokan.api.put('/refund/' + data.row.id, jsonData).done(function (response, status, xhr) {
+                dokan.api.put('/refunds/' + data.row.id + '/cancel', jsonData).done(function (response, status, xhr) {
                     _this3.fetchRefunds();
                     _this3.loading = false;
                 });
             } else if ('delete' === action) {
-                dokan.api.delete('/refund/' + data.row.id).done(function (response, status, xhr) {
+                dokan.api.delete('/refunds/' + data.row.id).done(function (response, status, xhr) {
                     _this3.fetchRefunds();
                     _this3.loading = false;
                 });
@@ -2895,9 +2888,7 @@ var Search = dokan_get_lib('Search');
             var jsonData = {};
             jsonData[action] = items;
 
-            console.log(jsonData);
-
-            dokan.api.put('/refund/batch', jsonData).done(function (response, status, xhr) {
+            dokan.api.put('/refunds/batch', jsonData).done(function (response, status, xhr) {
                 _this4.fetchRefunds();
                 _this4.loading = false;
             });
@@ -5944,9 +5935,9 @@ var render = function() {
               [
                 _c("router-link", { attrs: { to: menu.route } }, [
                   _vm._v(
-                    "\n                           " +
+                    "\n                        " +
                       _vm._s(menu.title) +
-                      "\n                       "
+                      "\n                    "
                   )
                 ])
               ],
@@ -6097,7 +6088,7 @@ var render = function() {
                             _c("switches", {
                               attrs: {
                                 enabled: data.row.active,
-                                value: data.row.slug
+                                value: data.row.id
                               },
                               on: { input: _vm.onSwitch }
                             })
@@ -6140,14 +6131,12 @@ var render = function() {
                                     [
                                       _c(
                                         "li",
-                                        {
-                                          attrs: { "data-module": module.slug }
-                                        },
+                                        { attrs: { "data-module": module.id } },
                                         [
                                           _c("switches", {
                                             attrs: {
                                               enabled: module.active,
-                                              value: module.slug
+                                              value: module.id
                                             },
                                             on: { input: _vm.onSwitch }
                                           })
@@ -8370,7 +8359,7 @@ var render = function() {
           [
             _c("router-link", {
               attrs: {
-                to: { name: "Refund", query: { status: "approved" } },
+                to: { name: "Refund", query: { status: "completed" } },
                 "active-class": "current",
                 exact: ""
               },
@@ -8381,7 +8370,7 @@ var render = function() {
                       "Approved <span class='count'>(%s)</span>",
                       "dokan-lite"
                     ),
-                    _vm.counts.approved
+                    _vm.counts.completed
                   )
                 )
               }
@@ -8495,7 +8484,7 @@ var render = function() {
               return [
                 _vm._l(_vm.actions, function(action, index) {
                   return [
-                    action.key == "approved" && _vm.currentStatus == "pending"
+                    action.key == "completed" && _vm.currentStatus == "pending"
                       ? _c(
                           "span",
                           { class: action.key },
