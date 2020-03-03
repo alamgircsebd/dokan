@@ -10,6 +10,8 @@ plugin-deploy.sh
 secret.json
 debug.log
 package-lock.json
+assets/css
+assets/js
 dist/*
 env.json
 !dist/zip.js
