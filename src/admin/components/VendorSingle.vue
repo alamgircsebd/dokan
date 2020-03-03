@@ -340,7 +340,7 @@ export default {
                 store_name: '',
                 user_pass: '',
                 store_url: '',
-                user_email: '',
+                email: '',
                 user_nicename: '',
                 phone: '',
                 banner: '',
@@ -493,10 +493,6 @@ export default {
             // set default paypal paymet object if it's not found in the API response
             if ( response.payment && typeof response.payment.paypal === 'undefined' || typeof response.payment.paypal.email === 'undefined' ) {
                 this.store.payment.paypal = this.fakeStore.payment.paypal;
-            }
-
-            if ( 'email' in response ) {
-                this.store.user_email = response.email;
             }
 
             if ( 'shop_url' in response ) {
