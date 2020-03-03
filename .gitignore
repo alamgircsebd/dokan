@@ -11,6 +11,8 @@ secret.json
 debug.log
 package-lock.json
 dist/*
+env.json
 !dist/zip.js
 !dist/version-replace.js
+!dist/zip-upload.js
 /vendor/

@@ -9,6 +9,7 @@
     "dev": "WEBPACK_ENV=development webpack --progress --colors --watch --hide-modules",
     "build": "WEBPACK_ENV=production webpack",
     "zip": "node dist/zip",
+    "zip-upload": "node dist/zip-upload",
     "version": "node dist/version-replace"
   },
   "devDependencies": {
