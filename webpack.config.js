@@ -4,7 +4,6 @@ const package = require('./package.json');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
 
 const config = require( './config.json' );
 
@@ -16,11 +15,8 @@ var exportPath = path.resolve(__dirname, './assets/js');
 var entryPoints = {};
 
 var rootEntryPoints = {
-    // 'vue-pro-frontend': './src/frontend/main.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
-    // 'vue-pro-admin': './includes/modules/subscription/src/main.js',
-    // style: './less/style.less',
 };
 
 var moduleEntryPoints = {
@@ -71,26 +67,6 @@ const extractCss = new ExtractTextPlugin({
 });
 
 plugins.push( extractCss );
-
-// Extract all 3rd party modules into a separate 'vendor' chunk
-// plugins.push(new webpack.optimize.CommonsChunkPlugin({
-//     name: 'vendor',
-//     minChunks: ({ resource }) => /node_modules/.test(resource),
-// }));
-
-// plugins.push(new BrowserSyncPlugin( {
-//     proxy: {
-//         target: config.proxyURL
-//     },
-//     files: [
-//         '**/*.php'
-//     ],
-//     cors: true,
-//     reloadDelay: 0
-// } ));
-
-// Generate a 'manifest' chunk to be inlined in the HTML template
-// plugins.push(new webpack.optimize.CommonsChunkPlugin('manifest'));
 
 // Compress extracted CSS. We are using this plugin so that possible
 // duplicated CSS from different components can be deduped.
