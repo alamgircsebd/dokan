@@ -145,10 +145,6 @@ class Assets {
                 'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin.css',
                 'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-admin.css' ),
             ],
-            'dokan-pro-vue-frontend' => [
-                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend.css',
-                'version' => time() //filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-frontend.css' ),
-            ],
             'dokan-pro-vue-frontend-shipping' => [
                 'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping.css',
                 'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-frontend-shipping.css' ),

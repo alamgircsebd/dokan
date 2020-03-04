@@ -1,15 +1,15 @@
 <?php
-use Dokan\Traits\Singleton;
+
+namespace WeDevs\DokanPro;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Dokan Store Lists Filter Pro Class
+ * Store Lists Filter Pro Class
  *
  * @since DOKAN_PRO_SINCE
  */
-class Dokan_Store_lists_Filter_Pro {
-    use Singleton;
+class StoreListsFilter {
 
     /**
      * WP_User_Query holder
@@ -26,13 +26,13 @@ class Dokan_Store_lists_Filter_Pro {
     private $orderby;
 
     /**
-     * Boot method
+     * Constructor method
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since DOKAN_PRO_SINCE
      *
      * @return void
      */
-    public function boot() {
+    public function __construct() {
         $this->hooks();
     }
 

@@ -51,7 +51,7 @@ defined( 'ABSPATH' ) || exit; ?>
          *
          * @since DOKAN_PRO_SINCE
          *
-         * @hooked Dokan_Store_lists_Filter_Pro::featured_store() - 10
+         * @hooked \StoreListsFilter::featured_store() - 10
          */
         do_action( 'dokan_after_store_lists_filter_category', $stores );
     ?>

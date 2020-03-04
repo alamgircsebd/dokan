@@ -225,7 +225,14 @@
             }
         } );
 
-        self.form.find( '[name="product_cat"]' ).on( 'change', function () {
+        // On category page, category is already selected. So, we are setting the product_cat query.
+        var product_cats = self.form.find( '[name="product_cat"]' );
+
+        if ( product_cats.val() ) {
+            self.queries['product_cat'] = product_cats.val();
+        }
+
+        product_cats.on( 'change', function () {
             var category = $(this).val();
 
             self.set_param( 'product_cat', category );
@@ -306,7 +313,40 @@
         } );
     };
 
+    GeolocationFilter.prototype.navigatorGetCurrentPosition = function ( callback ) {
+        var self = this;
+
+        // Locate button functions
+        var locate_btn = self.form.find( '.locate-icon' ),
+            loader = locate_btn.next();
+
+        if ( navigator.geolocation ) {
+            locate_btn.removeClass( 'dokan-hide' ).on( 'click', function () {
+                locate_btn.addClass( 'dokan-hide' );
+                loader.removeClass( 'dokan-hide' );
+
+                navigator.geolocation.getCurrentPosition( function( position ) {
+                    locate_btn.removeClass( 'dokan-hide' );
+                    loader.addClass( 'dokan-hide' );
+
+                    self.latitude = position.coords.latitude;
+                    self.longitude = position.coords.longitude;
+
+                    callback();
+                });
+            });
+        }
+    };
+
     GeolocationFilter.prototype.bind_address_input = function () {
+        if ( window.google && google.maps ) {
+            this.bind_google_map();
+        } else if ( $( '[name="dokan_mapbox_access_token"]' ).val() ) {
+            this.bind_mapbox();
+        }
+    };
+
+    GeolocationFilter.prototype.bind_google_map = function() {
         var self = this;
 
         self.geocoder = new google.maps.Geocoder;
@@ -325,40 +365,104 @@
             self.set_address( place.formatted_address );
         } );
 
-        // Locate button functions
-        var locate_btn = self.form.find( '.locate-icon' ),
-            loader = locate_btn.next();
+        self.navigatorGetCurrentPosition( function () {
+            self.geocoder.geocode( {
+                location: {
+                    lat: self.latitude,
+                    lng: self.longitude,
+                }
+            }, function ( results, status ) {
+                var address = '';
 
-        if ( navigator.geolocation ) {
-            locate_btn.removeClass( 'dokan-hide' ).on( 'click', function () {
-                locate_btn.addClass( 'dokan-hide' );
-                loader.removeClass( 'dokan-hide' );
+                if ( 'OK' === status ) {
+                    address = results[0].formatted_address;
+                }
 
-                navigator.geolocation.getCurrentPosition( function( position ) {
-                    locate_btn.removeClass( 'dokan-hide' );
-                    loader.addClass( 'dokan-hide' );
+                self.set_address( address );
+                address_input.val( address );
+            } );
+        } );
+    };
 
-                    self.latitude = position.coords.latitude,
-                    self.longitude = position.coords.longitude,
+    GeolocationFilter.prototype.bind_mapbox = function() {
+        var self = this;
 
-                    self.geocoder.geocode( {
-                        location: {
-                            lat: self.latitude,
-                            lng: self.longitude,
-                        }
-                    }, function ( results, status ) {
-                        var address = '';
+        var address_input = self.form.find( '.location-address input' );
+        var input = address_input.get( 0 );
 
-                        if ( 'OK' === status ) {
-                            address = results[0].formatted_address;
-                        }
+        var suggestions = new Suggestions( input, [], {
+            minLength: 3,
+            limit: 3,
+            hideOnBlur: false,
+        } );
 
-                        self.set_address( address );
-                        address_input.val( address );
-                    } );
-                });
-            });
+        suggestions.getItemValue = function( item ) {
+            return item.place_name;
+        };
+
+        address_input.on( 'change', function () {
+            if ( suggestions.selected ) {
+                var location = suggestions.selected;
+
+                self.latitude = location.geometry.coordinates[1];
+                self.longitude = location.geometry.coordinates[0];
+
+                self.set_address( location.place_name );
+            }
+        } );
+
+        var address_search = _.debounce( function ( search, text ) {
+            if ( search.cancel ) {
+                search.cancel();
+            }
+
+            self.mapboxGetPlaces( text, function ( features ) {
+                suggestions.update( features );
+            } );
+        }, 250 );
+
+        address_input.on( 'input', function () {
+            var input_text = $( this ).val();
+            address_search( address_search, input_text );
+        } );
+
+        self.navigatorGetCurrentPosition( function () {
+            self.mapboxGetPlaces( {
+                lng: self.longitude,
+                lat: self.latitude,
+            }, function ( features ) {
+                if ( features && features.length ) {
+                    var address = features[0].place_name;
+
+                    self.set_address( address );
+                    address_input.val( address );
+                }
+            } );
+        } );
+    };
+
+    GeolocationFilter.prototype.mapboxGetPlaces = function ( search, callback ) {
+        if ( ! search ) {
+            return;
         }
+
+        var url_origin = 'https://api.mapbox.com';
+        var access_token = $( '[name="dokan_mapbox_access_token"]' ).val();
+
+        if ( search.lng && search.lat ) {
+            search = search.lng + '%2C' + search.lat;
+        }
+
+        var url = url_origin + '/geocoding/v5/mapbox.places/' + search + '.json?access_token=' + access_token + '&cachebuster=' + +new Date() + '&autocomplete=true';
+
+        $.ajax( {
+            url: url,
+            method: 'get',
+        } ).done( function ( response ) {
+            if ( response.features && typeof callback === 'function' ) {
+                callback( response.features );
+            }
+        } );
     };
 
     GeolocationFilter.prototype.set_search_term = function ( s ) {

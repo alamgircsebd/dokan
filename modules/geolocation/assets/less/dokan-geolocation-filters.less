@@ -14,22 +14,22 @@
     }
 
     .dokan-geo-filters-column {
-        margin-bottom: 15px;
+        margin-bottom: 15px !important;
 
         .dokan-hide {
-            display: none;
+            display: none !important;
         }
     }
 
     input,
     select {
-        width: 100%;
-        border: 1px solid #ccc;
-        border-radius: 3px;
+        width: 100% !important;
+        border: 1px solid #ccc !important;
+        border-radius: 3px !important;
         padding: 9px 8px;
-        font-size: 14px;
-        line-height: 1.5;
-        height: 44px;
+        font-size: 14px !important;
+        line-height: 1.5 !important;
+        height: 44px !important;
     }
 
     button.dokan-btn {
@@ -149,34 +149,34 @@
 
         .locate-icon,
         .locate-loader {
-            position: absolute;
-            top: 50%;
-            right: 10px;
-            width: 20px;
-            height: 20px;
-            margin-top: -10px;
-            cursor: pointer;
-            background-size: contain;
+            position: absolute !important;
+            top: 50% !important;
+            right: 10px !important;
+            width: 20px !important;
+            height: 20px !important;
+            margin-top: -10px !important;
+            cursor: pointer !important;
+            background-size: contain !important
         }
     }
 
     .range-slider-container {
-        margin-bottom: 15px;
+        margin-bottom: 15px !important;
     }
 
     input[type="range"].dokan-range-slider {
-        -webkit-appearance: none;
-        width: ~"calc(100% - 90px)";
-        height: 4px;
-        padding: 0;
-        margin-top: 7px;
-        border-radius: 2px;
-        background: #f1f1f1;
-        border-color: #ccc;
-        outline: none;
-        opacity: 1;
-        -webkit-transition: .2s;
-        transition: opacity .2s;
+        -webkit-appearance: none !important;
+        width: ~"calc(100% - 90px)" !important;
+        height: 4px !important;
+        padding: 0 !important;
+        margin-top: 7px !important;
+        border-radius: 2px !important;
+        background: #f1f1f1 !important;
+        border-color: #ccc !important;
+        outline: none !important;
+        opacity: 1 !important;
+        -webkit-transition: .2s !important;
+        transition: opacity .2s !important;
     }
 
     input[type="range"].dokan-range-slider::-webkit-slider-thumb {
@@ -202,5 +202,82 @@
     .dokan-range-slider-value {
         width: 90px;
         font-size: 12px;
+    }
+
+    .suggestions {
+        background-color: #FFFFFF;
+        font-size: 14px;
+        left: 0;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        text-align: left;
+        width: 100%;
+        top: 100%;
+        z-index: 1;
+    }
+
+    .suggestions>li>a {
+        clear: both;
+        cursor: default;
+        display: block;
+        padding: 5px 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-decoration: none;
+        border: 0;
+        color: rgba(0, 0, 0, 0.75);
+        font-weight: normal;
+    }
+
+    .suggestions>li.active>a,
+    .suggestions>li>a:hover {
+        background-color: #f2624d;
+        color: #fff;
+        text-decoration: none;
+        cursor: pointer;
+    }
+}
+
+#dokan-store-listing-filter-wrap {
+    position: relative;
+}
+
+#dokan-store-listing-filter-form-wrap {
+
+    .store-lists-other-filter-wrap {
+
+        .dokan-geolocation-location-filters {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-top: -30px;
+            margin-bottom: 10px;
+
+            .dokan-geo-filters-column {
+                width: 49%;
+
+                .store-search-input, input {
+                    padding: 10px 15px;
+                }
+            }
+
+            .range-slider-container {
+                width: 100%;
+
+                .dokan-range-slider-value {
+                    width: 100px !important;
+                    font-size: 14px !important;
+                }
+
+                .dokan-range-slider {
+                    width: calc(100% - 100px ) !important
+                }
+            }
+        }
     }
 }

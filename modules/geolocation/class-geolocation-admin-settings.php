@@ -119,6 +119,12 @@ class Dokan_Geolocation_Admin_Settings {
                 'label'   => __( 'Default Location', 'dokan' ),
                 'desc'    => __( 'In case the searched store is not found, the default location will be set on the map.', 'dokan' ),
                 'type'    => 'gmap',
+                'default' => [
+                    'latitude'  => 23.709921,
+                    'longitude' => 90.40714300000002,
+                    'address'   => __( 'Dhaka', 'dokan' ),
+                    'zoom'      => 10
+                ]
             ),
         );
 

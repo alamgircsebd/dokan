@@ -64,7 +64,7 @@ function dokan_geo_enqueue_locations_map() {
      *
      * @param string $marker_image_path
      */
-    $image = apply_filters( 'dokan_geolocation_marker_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/marker.png' );
+    $image = apply_filters( 'dokan_geolocation_marker_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/marker-32x32.png' );
 
     /**
      * Filter to modify the map marker clusterer images
@@ -73,9 +73,9 @@ function dokan_geo_enqueue_locations_map() {
      *
      * @param string
      */
-    $clusterer = apply_filters( 'dokan_geolocation_marker_clusterer_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/clusterer.png' );
+    $clusterer = apply_filters( 'dokan_geolocation_marker_clusterer_image_path', DOKAN_GEOLOCATION_ASSETS . '/images/clusterer-40x40.png' );
 
-    wp_localize_script( 'dokan-geo-locations-map', 'DokanGeo', array(
+    $dokan_geo = array(
         'marker' => array(
             'image'     => $image,
             'clusterer' => $clusterer,
@@ -83,7 +83,15 @@ function dokan_geo_enqueue_locations_map() {
         'info_window_template' => $info_window_template,
         'default_geolocation'  => dokan_geo_get_default_location(),
         'map_zoom'             => dokan_get_option( 'map_zoom', 'dokan_geolocation', 11 ),
-    ) );
+    );
+
+    $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+    if ( 'mapbox' === $source ) {
+        $dokan_geo['mapbox_access_token'] = dokan_get_option( 'mapbox_access_token', 'dokan_appearance', null );
+    }
+
+    wp_localize_script( 'dokan-geo-locations-map', 'DokanGeo', $dokan_geo );
 }
 
 /**
@@ -104,13 +112,13 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
 
     $s             = get_query_var( 's', '' );
     $seller_s      = $search_query = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
-    $latitude      = get_query_var( 'latitude', null );
-    $longitude     = get_query_var( 'longitude', null );
-    $address       = get_query_var( 'address', '' );
+    $latitude      = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
+    $longitude     = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
+    $address       = isset( $_GET['address'] ) ? $_GET['address'] : '';
     $distance_min  = dokan_get_option( 'distance_min', 'dokan_geolocation', 0 );
     $distance_max  = dokan_get_option( 'distance_max', 'dokan_geolocation', 10 );
     $distance_unit = dokan_get_option( 'distance_unit', 'dokan_geolocation', 'km' );
-    $distance      = get_query_var( 'distance', $distance_max );
+    $distance      = isset( $_GET['distance'] ) ? $_GET['distance'] : $distance_max;
 
     /**
      * wc_product_dropdown_categories argument filter
@@ -161,6 +169,16 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
         $args['store_category'] = ! empty( $_GET['store_category'] ) ? sanitize_text_field( $_GET['store_category'] ) : null;
     }
 
+    $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+    if ( 'mapbox' === $source ) {
+        $mapbox_access_token = dokan_get_option( 'mapbox_access_token', 'dokan_appearance', null );
+
+        if ( $mapbox_access_token ) {
+            $args['mapbox_access_token'] = $mapbox_access_token;
+        }
+    }
+
     dokan_geo_get_template( 'filters', $args );
 }
 
@@ -209,4 +227,54 @@ function dokan_geo_remove_seller_listing_footer_content_hook() {
  */
 function dokan_geo_float_val( $val ) {
     return floatval( preg_replace( '/[^-0-9\.]/', '', $val ) );
+}
+
+/**
+ * Dokan Geolocation Store Lists Filter Form
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return void
+ */
+function dokan_geo_store_lists_filter_form() {
+    dokan()->scripts->load_gmap_script();
+
+    wp_enqueue_style( 'dokan-geo-filters' );
+    wp_enqueue_script( 'dokan-geo-filters-store-lists' );
+
+    $latitude      = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
+    $longitude     = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
+    $address       = isset( $_GET['address'] ) ? $_GET['address'] : '';
+    $distance_min  = dokan_get_option( 'distance_min', 'dokan_geolocation', 0 );
+    $distance_max  = dokan_get_option( 'distance_max', 'dokan_geolocation', 10 );
+    $distance_unit = dokan_get_option( 'distance_unit', 'dokan_geolocation', 'km' );
+    $distance      = isset( $_GET['distance'] ) ? $_GET['distance'] : $distance_max;
+
+    $args = [
+        'latitude'  => $latitude,
+        'longitude' => $longitude,
+        'address'   => $address,
+        'distance'  => absint( $distance ),
+        'placeholders' => [
+            'location'       => dokan_get_option( 'placeholder_location', 'dokan_geolocation', __( 'Location', 'dokan' ) ),
+            'search_vendors' => dokan_get_option( 'placeholder_search_vendors', 'dokan_geolocation', __( 'Search Vendors', 'dokan' ) ),
+        ],
+        'slider' => [
+            'min'  => $distance_min,
+            'max'  => $distance_max,
+            'unit' => ( 'km' === $distance_unit ) ? 'km' : 'miles',
+        ],
+    ];
+
+    $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
+
+    if ( 'mapbox' === $source ) {
+        $mapbox_access_token = dokan_get_option( 'mapbox_access_token', 'dokan_appearance', null );
+
+        if ( $mapbox_access_token ) {
+            $args['mapbox_access_token'] = $mapbox_access_token;
+        }
+    }
+
+    dokan_geo_get_template( 'store-lists-filters', $args );
 }
