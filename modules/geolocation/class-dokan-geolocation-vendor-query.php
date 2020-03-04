@@ -89,9 +89,9 @@ class Dokan_Geolocation_Vendor_Query {
 
         $this->user_query = $user_query;
 
-        $this->latitude  = get_query_var( 'latitude' );
-        $this->longitude = get_query_var( 'longitude' );
-        $this->distance  = get_query_var( 'distance', 0 );
+        $this->latitude  = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
+        $this->longitude = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
+        $this->distance  = isset( $_GET['distance'] ) ? $_GET['distance'] : 0;
 
         $this->filter_query_fields();
         $this->filter_query_from();
@@ -153,7 +153,7 @@ class Dokan_Geolocation_Vendor_Query {
     private function filter_query_orderby() {
         if ( $this->latitude && $this->longitude && $this->distance ) {
             $distance = absint( $this->distance );
-            $this->user_query->query_orderby = "having geo_distance < {$distance} " . $this->user_query->query_orderby;
+            $this->user_query->query_orderby = "having ( geo_distance < {$distance} or geo_distance is null ) " . $this->user_query->query_orderby;
         }
     }
 }

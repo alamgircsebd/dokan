@@ -321,6 +321,7 @@ class Dokan_Pro {
         new \WeDevs\DokanPro\Shipping\Hooks();
 
         new \WeDevs\DokanPro\StoreCategory();
+        new \WeDevs\DokanPro\StoreListsFilter();
 
         if ( is_admin() ) {
             new \WeDevs\DokanPro\Admin\Admin();

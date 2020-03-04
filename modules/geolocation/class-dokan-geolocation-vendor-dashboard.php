@@ -20,6 +20,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
         add_action( 'dokan_new_product_added', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_product_updated', array( $this, 'update_product_settings' ) );
         add_action( 'dokan_update_auction_product', array( $this, 'update_product_settings' ) );
+        add_action( 'woocommerce_process_product_meta', array( $this, 'update_product_settings' ) );
     }
 
     /**
@@ -161,13 +162,10 @@ class Dokan_Geolocation_Vendor_Dashboard {
         $dokan_geo_longitude = get_user_meta( $store_id, 'dokan_geo_longitude', true );
         $dokan_geo_public    = get_user_meta( $store_id, 'dokan_geo_public', true );
         $dokan_geo_address   = get_user_meta( $store_id, 'dokan_geo_address', true );
-        $dokan_geoloca_use   = get_post_meta( $post_id, '_dokan_geolocation_use_store_settings', true );
 
         $use_store_settings = 'yes';
 
         if ( isset( $_POST['_dokan_geolocation_use_store_settings'] ) && 'yes' !== $_POST['_dokan_geolocation_use_store_settings'] ) {
-            $use_store_settings = 'no';
-        } else if ( 'no' == $dokan_geoloca_use || empty( $dokan_geoloca_use ) ) {
             $use_store_settings = 'no';
         }
 
@@ -176,12 +174,7 @@ class Dokan_Geolocation_Vendor_Dashboard {
         if ( 'yes' !== $use_store_settings ) {
             $dokan_geo_latitude  = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_latitude'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_latitude'] : null;
             $dokan_geo_longitude = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_longitude'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_longitude'] : null;
-
-            if ( isset( $_POST['_dokan_geolocation_product_dokan_geo_address'] ) ) {
-                $dokan_geo_address = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_address'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_address'] : null;
-            } else {
-                $dokan_geo_address = get_post_meta( $post_id, 'dokan_geo_address', true  );
-            }
+            $dokan_geo_address   = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_address'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_address'] : null;
         }
 
         update_post_meta( $post_id, 'dokan_geo_latitude', $dokan_geo_latitude );
