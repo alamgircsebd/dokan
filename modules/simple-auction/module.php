@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro\Modules\Auction;
 
+use WP_User;
+
 /**
  * Dokan_Auction class
  *
