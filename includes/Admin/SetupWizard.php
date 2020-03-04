@@ -437,6 +437,7 @@ class SetupWizard {
                 <tr>
                     <td colspan="2">
                         <ul class="wc-wizard-payment-gateways wc-wizard-services">
+<<<<<<< HEAD
                             <li class="wc-wizard-service-item">
                                 <div class="wc-wizard-service-name">
                                     <p><?php esc_html_e( 'PayPal', 'dokan-lite' ); ?></p>
@@ -477,6 +478,25 @@ class SetupWizard {
                                     <label for="withdraw_methods[skrill]" class="switch-label"></label>
                                 </div>
                             </li>
+=======
+                            <?php foreach ( dokan_withdraw_register_methods() as $key => $method ): ?>
+                                <li class="wc-wizard-service-item <?php echo ( in_array( $key, array_values( $withdraw_methods ) ) ) ? 'checked="checked"' : ''; ?>">
+                                    <div class="wc-wizard-service-name">
+                                        <p><?php echo $method['title']; ?></p>
+                                    </div>
+                                    <div class="wc-wizard-service-description">
+                                        <?php printf(
+                                            esc_html__( 'Enable %s for your vendor as a withdraw method', 'dokan-lite' ),
+                                            $method['title']
+                                        ); ?>
+                                    </div>
+                                    <div class="dokan-wizard-service-enable">
+                                        <input type="checkbox" name="withdraw_methods[<?php esc_attr_e( $key ); ?>]" id="withdraw_methods[<?php esc_attr_e( $key ); ?>]" class="switch-input" value="<?php esc_attr_e( $key ); ?>" <?php echo ( in_array( $key, array_values( $withdraw_methods ) ) ) ? 'checked="checked"' : ''; ?>>
+                                        <label for="withdraw_methods[<?php esc_attr_e( $key ); ?>]" class="switch-label"></label>
+                                    </div>
+                                </li>
+                            <?php endforeach ?>
+>>>>>>> b10ec84f705156c2ce17d56c0d26e78c45e3b299
 
                             <?php } ?>
 
