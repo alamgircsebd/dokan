@@ -5,8 +5,6 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 
-const config = require( './config.json' );
-
 // Naming and path settings
 var appName = 'app';
 
@@ -15,27 +13,56 @@ var exportPath = path.resolve(__dirname, './assets/js');
 var entryPoints = {};
 
 var rootEntryPoints = {
+    'dokan-pro': './assets/src/js/dokan-pro.js',
+    'dokan-pro-admin': './assets/src/js/dokan-pro-admin.js',
+    'dokan-blocks-editor-script': './assets/src/js/dokan-blocks-editor-script.js',
+    'dokan-tinymce-button': './assets/src/js/dokan-tinymce-button.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
 };
 
 var moduleEntryPoints = {
+    'geolocation': {
+        'geolocation': 'geolocation.js',
+        'dokan-geolocation-locations-map': 'locations-map.js',
+        'dokan-geolocation-locations-map-google-maps': 'locations-map-google-maps.js',
+        'dokan-geolocation-locations-map-mapbox': 'locations-map-mapbox.js',
+        'dokan-geolocation-filters': 'filters.js',
+        'dokan-geolocation-store-lists-filters': 'store-lists-filters.js',
+        'geolocation-vendor-dashboard-product-google-maps': 'vendor-dashboard-product-google-maps.js',
+        'geolocation-vendor-dashboard-product-mapbox': 'vendor-dashboard-product-mapbox.js',
+    },
+
+    'follow-store': {
+        'follow-store': 'follow-store.js',
+    },
+
     'subscription': {
-        'subscription': 'main.js',
+        'style': 'style.js',
+        'script': 'script.js',
+        'admin-script': 'admin-script.js',
+        'subscription': 'admin/main.js',
     },
 
     'store-reviews': {
-        'admin': 'main.js',
+        'admin': 'admin/main.js',
+        'script': 'script.js',
+        'style': 'style.js',
     },
 
     'wholesale': {
-        'admin': 'main.js'
+        'admin': 'admin/main.js',
+        'scripts': 'scripts.js'
     },
 
     'report-abuse': {
-        'dokan-report-abuse': 'js/frontend/main.js',
-        'dokan-report-abuse-admin': 'js/admin/main.js',
-        'dokan-report-abuse-admin-single-product': 'js/admin/single-product.js'
+        'dokan-report-abuse': 'frontend/main.js',
+        'dokan-report-abuse-admin': 'admin/main.js',
+        'dokan-report-abuse-admin-single-product': 'admin/single-product.js'
+    },
+
+    'single-product-multiple-vendor': {
+        'dokan-spmv-products-admin': 'dokan-spmv-products-admin.js',
     }
 };
 
@@ -47,7 +74,7 @@ Object.keys(moduleEntryPoints).forEach(function (dokanModule) {
     var modulePath = `modules/${dokanModule}`;
 
     Object.keys(moduleEntryPoints[dokanModule]).forEach(function (moduleOutput) {
-        entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/src/${moduleEntryPoints[dokanModule][moduleOutput]}`;
+        entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/assets/src/js/${moduleEntryPoints[dokanModule][moduleOutput]}`;
     });
 });
 
@@ -140,6 +167,13 @@ module.exports = {
                 options: {
                     extractCSS: true
                 }
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                loader: 'file-loader',
+                options: {
+                    name: '../images/dist/[name].[ext]',
+                },
             },
             {
                 test: /\.less$/,

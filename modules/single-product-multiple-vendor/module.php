@@ -89,19 +89,6 @@ class Module {
         }
 
         new \Dokan_SPMV_Product_Visibility();
-
-        add_action( 'wp_enqueue_scripts', array( $this, 'load_scripts' ) );
-    }
-
-    /**
-     * Load scripts
-     *
-     * @since 1.0.0
-     *
-     * @return void
-     */
-    public function load_scripts() {
-        wp_enqueue_script( 'dokan-spvm-tinysort', DOKAN_SPMV_ASSETS_DIR. '/js/tinysort.min.js', array( 'jquery' ) );
     }
 
     /**

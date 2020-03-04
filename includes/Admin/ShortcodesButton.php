@@ -98,7 +98,7 @@ class ShortcodesButton {
         $screen = get_current_screen();
 
         if ( 'page' == $screen->post_type || 'product' == $screen->post_type ) {
-            $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tmc-button.js";
+            $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tinymce-button.js";
         }
 
         return $plugin_array;

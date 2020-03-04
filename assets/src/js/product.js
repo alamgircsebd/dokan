@@ -4,7 +4,7 @@
     var Dokan_Editor = {
 
         init: function() {
-            product_type = 'simple';
+            var product_type = 'simple';
 
             // post status change
             $('.dokan-toggle-sidebar').on('click', 'a.dokan-toggle-edit', this.sidebarToggle.showStatus );

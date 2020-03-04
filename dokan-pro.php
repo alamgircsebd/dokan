@@ -269,7 +269,6 @@ class Dokan_Pro {
 
         add_action( 'dokan_enqueue_scripts', [ $this, 'enqueue_scripts' ], 11 );
         add_action( 'dokan_enqueue_admin_scripts', [ $this, 'admin_enqueue_scripts' ] );
-        add_action( 'dokan_enqueue_admin_dashboard_script', [ $this, 'admin_dashboad_enqueue_scripts' ] );
 
         if ( function_exists( 'register_block_type' ) ) {
             new \WeDevs\DokanPro\BlockEditorBlockTypes();
@@ -423,7 +422,7 @@ class Dokan_Pro {
             || apply_filters( 'dokan_forced_load_scripts', false )
             ) {
             // wp_enqueue_style( 'dokan-pro-style' );
-            wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/style.css', false, time(), 'all' );
+            wp_enqueue_style( 'dokan-pro-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/dokan-pro.css', false, time(), 'all' );
 
             // Load accounting scripts
             wp_enqueue_script( 'serializejson' );
@@ -469,17 +468,6 @@ class Dokan_Pro {
 
         wp_localize_script( 'dokan_slider_admin', 'dokan_refund', $dokan_refund );
         wp_localize_script( 'dokan_pro_admin', 'dokan_admin', $dokan_admin );
-    }
-
-    /**
-     * Load admin dashboard scripts
-     *
-     * @since 2.6
-     *
-     * @return void
-     * */
-    public function admin_dashboad_enqueue_scripts() {
-        wp_enqueue_style( 'dokan-pro-admin-dash', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
     }
 
     /**

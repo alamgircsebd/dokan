@@ -356,7 +356,6 @@ class Admin {
      * @return void
      */
     function common_scripts() {
-        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
         wp_enqueue_style( 'jquery-ui' );
         wp_enqueue_style( 'dokan-select2-css' );
 
@@ -449,17 +448,6 @@ class Admin {
         );
 
         return $routes;
-    }
-
-    /**
-    * Modules Scripts
-    *
-    * @since 1.0.0
-    *
-    * @return void
-    **/
-    function modules_scripts() {
-        wp_enqueue_style( 'dokan-admin-report', DOKAN_PRO_PLUGIN_ASSEST . '/css/admin.css' );
     }
 
     /**
