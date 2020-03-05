@@ -32,4 +32,5 @@ env.json
 !dist/zip.js
 !dist/version-replace.js
 !dist/zip-upload.js
+!dist/clean.js
 /vendor/

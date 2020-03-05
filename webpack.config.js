@@ -22,6 +22,10 @@ const rootEntryPoints = {
 };
 
 const moduleEntryPoints = {
+    'follow-store': {
+        'follow-store': 'follow-store.js',
+    },
+
     'geolocation': {
         'geolocation': 'geolocation.js',
         'dokan-geolocation-locations-map': 'locations-map.js',
@@ -33,8 +37,20 @@ const moduleEntryPoints = {
         'geolocation-vendor-dashboard-product-mapbox': 'vendor-dashboard-product-mapbox.js',
     },
 
-    'follow-store': {
-        'follow-store': 'follow-store.js',
+    'report-abuse': {
+        'dokan-report-abuse': 'frontend/main.js',
+        'dokan-report-abuse-admin': 'admin/main.js',
+        'dokan-report-abuse-admin-single-product': 'admin/single-product.js'
+    },
+
+    'single-product-multiple-vendor': {
+        'dokan-spmv-products-admin': 'dokan-spmv-products-admin.js',
+    },
+
+    'store-reviews': {
+        'admin': 'admin/main.js',
+        'script': 'script.js',
+        'style': 'style.js',
     },
 
     'subscription': {
@@ -44,26 +60,10 @@ const moduleEntryPoints = {
         'subscription': 'admin/main.js',
     },
 
-    'store-reviews': {
-        'admin': 'admin/main.js',
-        'script': 'script.js',
-        'style': 'style.js',
-    },
-
     'wholesale': {
         'admin': 'admin/main.js',
         'scripts': 'scripts.js'
     },
-
-    'report-abuse': {
-        'dokan-report-abuse': 'frontend/main.js',
-        'dokan-report-abuse-admin': 'admin/main.js',
-        'dokan-report-abuse-admin-single-product': 'admin/single-product.js'
-    },
-
-    'single-product-multiple-vendor': {
-        'dokan-spmv-products-admin': 'dokan-spmv-products-admin.js',
-    }
 };
 
 Object.keys(rootEntryPoints).forEach(function (output) {
