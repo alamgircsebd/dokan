@@ -1550,6 +1550,8 @@ var ListTable = dokan_get_lib('ListTable');
 //
 //
 //
+//
+//
 
 var ListTable = dokan_get_lib('ListTable');
 var Loading = dokan_get_lib('Loading');
@@ -6191,13 +6193,7 @@ var render = function() {
                                           "a",
                                           {
                                             staticClass: "plugin-name",
-                                            attrs: { href: "#" },
-                                            on: {
-                                              click: function($event) {
-                                                $event.preventDefault()
-                                                _vm.openInfoModal(module)
-                                              }
-                                            }
+                                            attrs: { href: module.doc_link }
                                           },
                                           [_vm._v(_vm._s(module.name))]
                                         ),
@@ -6254,12 +6250,9 @@ var render = function() {
                                     _c(
                                       "a",
                                       {
-                                        attrs: { href: "#" },
-                                        on: {
-                                          click: function($event) {
-                                            $event.preventDefault()
-                                            _vm.openInfoModal(module)
-                                          }
+                                        attrs: {
+                                          href: module.doc_link,
+                                          target: "_blank"
                                         }
                                       },
                                       [
