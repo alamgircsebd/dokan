@@ -597,7 +597,7 @@ var VclTwitch = ContentLoading.VclTwitch;
                 store_name: '',
                 user_pass: '',
                 store_url: '',
-                user_email: '',
+                email: '',
                 user_nicename: '',
                 phone: '',
                 banner: '',
@@ -747,10 +747,6 @@ var VclTwitch = ContentLoading.VclTwitch;
                 this.store.payment.paypal = this.fakeStore.payment.paypal;
             }
 
-            if ('email' in response) {
-                this.store.user_email = response.email;
-            }
-
             if ('shop_url' in response) {
                 this.store.user_nicename = this.getStoreName(response.shop_url);
             }
@@ -777,7 +773,7 @@ var VclTwitch = ContentLoading.VclTwitch;
             });
         },
         isSocialActive: function isSocialActive(profile) {
-            if (this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== false) {
+            if (this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== '') {
                 return true;
             }
 
@@ -1420,6 +1416,34 @@ var ListTable = dokan_get_lib('ListTable');
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function($) {//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1530,6 +1554,7 @@ var ListTable = dokan_get_lib('ListTable');
 var ListTable = dokan_get_lib('ListTable');
 var Loading = dokan_get_lib('Loading');
 var Switches = dokan_get_lib('Switches');
+var Modal = dokan_get_lib('Modal');
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 
@@ -1540,6 +1565,12 @@ var Switches = dokan_get_lib('Switches');
             search: '',
             isLoaded: false,
             currentView: '',
+            showInfoModal: false,
+            moduleDocs: {},
+            isFetchingDoc: false,
+            moduleDocTitle: null,
+            moduleDoc: null,
+            moduleInModal: null,
             modules: [],
             count: {},
             column: {
@@ -1585,7 +1616,8 @@ var Switches = dokan_get_lib('Switches');
     components: {
         Loading: Loading,
         Switches: Switches,
-        ListTable: ListTable
+        ListTable: ListTable,
+        Modal: Modal
     },
 
     computed: {
@@ -1596,7 +1628,12 @@ var Switches = dokan_get_lib('Switches');
             var self = this;
 
             var data = this.modules.filter(function (module) {
-                return module.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0;
+                // return module.name.toLowerCase().indexOf( self.search.toLowerCase() ) >= 0;
+                return module.available && module.name.toLowerCase().indexOf(self.search.toLowerCase()) >= 0;
+            }).sort(function (a, b) {
+                return a.name.localeCompare(b.name);
+            }).sort(function (a, b) {
+                return a.available === b.available ? 1 : b.available ? 1 : -1;
             });
 
             return data;
@@ -1721,6 +1758,39 @@ var Switches = dokan_get_lib('Switches');
             }
 
             return className;
+        },
+        openInfoModal: function openInfoModal(module) {
+            var _this4 = this;
+
+            if (!module.doc_id) {
+                return;
+            }
+
+            this.showInfoModal = true;
+            this.moduleInModal = module;
+
+            this.moduleDocTitle = this.__('Module', 'dokan') + ': ' + module.name;
+
+            if (!this.moduleDocs[module.doc_id]) {
+                this.isFetchingDoc = true;
+
+                $.ajax({
+                    url: 'https://wedevs.com/account/wp-json/wp/v2/docs/' + module.doc_id,
+                    method: 'get',
+                    dataType: 'json'
+                }).done(function (response) {
+                    _this4.moduleDocs[module.doc_id] = response.content.rendered;
+                    _this4.moduleDoc = _this4.moduleDocs[module.doc_id];
+                }).always(function () {
+                    _this4.isFetchingDoc = false;
+                });
+            } else {
+                this.moduleDoc = this.moduleDocs[module.doc_id];
+            }
+        },
+        closeInfoModal: function closeInfoModal() {
+            this.showInfoModal = false;
+            this.moduleInModal = null;
         }
     },
 
@@ -1734,6 +1804,7 @@ var Switches = dokan_get_lib('Switches');
         this.fetchModuels();
     }
 });
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
 
 /***/ }),
 /* 11 */
@@ -5921,276 +5992,374 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "dokan-modules-wrap" }, [
-    _c("h1", [_vm._v(_vm._s(_vm.__("Modules", "dokan")))]),
-    _vm._v(" "),
-    _c("div", { staticClass: "wp-filter module-filter" }, [
-      _c("div", { staticClass: "filter-items" }, [
-        _c(
-          "ul",
-          _vm._l(_vm.filterMenu, function(menu, index) {
-            return _c(
-              "li",
-              { key: index, class: [_vm.filterMenuClass(menu.route)] },
-              [
-                _c("router-link", { attrs: { to: menu.route } }, [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(menu.title) +
-                      "\n                    "
-                  )
-                ])
-              ],
-              1
-            )
-          })
-        )
-      ]),
+  return _c(
+    "div",
+    { staticClass: "dokan-modules-wrap" },
+    [
+      _c("h1", [_vm._v(_vm._s(_vm.__("Modules", "dokan")))]),
       _vm._v(" "),
-      _c("div", { staticClass: "search-form" }, [
-        _c("div", { staticClass: "view-switch" }, [
+      _c("div", { staticClass: "wp-filter module-filter" }, [
+        _c("div", { staticClass: "filter-items" }, [
           _c(
-            "a",
-            {
-              staticClass: "view-grid",
-              class: { current: _vm.currentView == "grid" },
-              attrs: { href: "#", id: "view-switch-grid" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.changeView("grid")
-                }
-              }
-            },
-            [
-              _c("span", { staticClass: "screen-reader-text" }, [
-                _vm._v("Grid View")
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              staticClass: "view-list",
-              class: { current: _vm.currentView == "list" },
-              attrs: { href: "#", id: "view-switch-list" },
-              on: {
-                click: function($event) {
-                  $event.preventDefault()
-                  _vm.changeView("list")
-                }
-              }
-            },
-            [
-              _c("span", { staticClass: "screen-reader-text" }, [
-                _vm._v("List View")
-              ])
-            ]
+            "ul",
+            _vm._l(_vm.filterMenu, function(menu, index) {
+              return _c(
+                "li",
+                { key: index, class: [_vm.filterMenuClass(menu.route)] },
+                [
+                  _c("router-link", { attrs: { to: menu.route } }, [
+                    _vm._v(
+                      "\n                        " +
+                        _vm._s(menu.title) +
+                        "\n                    "
+                    )
+                  ])
+                ],
+                1
+              )
+            })
           )
         ]),
         _vm._v(" "),
-        _c(
-          "label",
-          {
-            staticClass: "screen-reader-text",
-            attrs: { for: "media-search-input" }
-          },
-          [_vm._v("Search Media")]
-        ),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
+        _c("div", { staticClass: "search-form" }, [
+          _c("div", { staticClass: "view-switch" }, [
+            _c(
+              "a",
+              {
+                staticClass: "view-grid",
+                class: { current: _vm.currentView == "grid" },
+                attrs: { href: "#", id: "view-switch-grid" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.changeView("grid")
+                  }
+                }
+              },
+              [
+                _c("span", { staticClass: "screen-reader-text" }, [
+                  _vm._v("Grid View")
+                ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "view-list",
+                class: { current: _vm.currentView == "list" },
+                attrs: { href: "#", id: "view-switch-list" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    _vm.changeView("list")
+                  }
+                }
+              },
+              [
+                _c("span", { staticClass: "screen-reader-text" }, [
+                  _vm._v("List View")
+                ])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "label",
             {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.search,
-              expression: "search"
-            }
-          ],
-          staticClass: "search",
-          attrs: {
-            type: "search",
-            placeholder: "Search Module...",
-            id: "media-search-input"
-          },
-          domProps: { value: _vm.search },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
+              staticClass: "screen-reader-text",
+              attrs: { for: "media-search-input" }
+            },
+            [_vm._v("Search Media")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.search,
+                expression: "search"
               }
-              _vm.search = $event.target.value
+            ],
+            staticClass: "search",
+            attrs: {
+              type: "search",
+              placeholder: "Search Module...",
+              id: "media-search-input"
+            },
+            domProps: { value: _vm.search },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.search = $event.target.value
+              }
             }
-          }
-        })
-      ])
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "module-content" },
-      [
-        _vm.isLoaded
-          ? [
-              _vm.currentView == "list"
-                ? _c("list-table", {
-                    attrs: {
-                      columns: _vm.column,
-                      loading: false,
-                      rows: _vm.filteredModules,
-                      actions: [],
-                      "show-cb": true,
-                      "not-found": "No module found.",
-                      "bulk-actions": [
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "module-content" },
+        [
+          _vm.isLoaded
+            ? [
+                _vm.currentView == "list"
+                  ? _c("list-table", {
+                      attrs: {
+                        columns: _vm.column,
+                        loading: false,
+                        rows: _vm.filteredModules,
+                        actions: [],
+                        "show-cb": true,
+                        "not-found": "No module found.",
+                        "bulk-actions": [
+                          {
+                            key: "activate",
+                            label: "Activate"
+                          },
+                          {
+                            key: "deactivate",
+                            label: "Deactivate"
+                          }
+                        ],
+                        "sort-by": _vm.sortBy,
+                        "sort-order": _vm.sortOrder,
+                        "action-column": "name"
+                      },
+                      on: {
+                        sort: _vm.sortCallback,
+                        "bulk:click": _vm.onBulkAction
+                      },
+                      scopedSlots: _vm._u([
                         {
-                          key: "activate",
-                          label: "Activate"
+                          key: "name",
+                          fn: function(data) {
+                            return [
+                              _c("img", {
+                                attrs: {
+                                  src: data.row.thumbnail,
+                                  alt: data.row.name,
+                                  width: "50"
+                                }
+                              }),
+                              _vm._v(" "),
+                              _c("strong", [
+                                _c("a", { attrs: { href: "#" } }, [
+                                  _vm._v(_vm._s(data.row.name))
+                                ])
+                              ])
+                            ]
+                          }
                         },
                         {
-                          key: "deactivate",
-                          label: "Deactivate"
+                          key: "active",
+                          fn: function(data) {
+                            return [
+                              _c("switches", {
+                                attrs: {
+                                  enabled: data.row.active,
+                                  value: data.row.id
+                                },
+                                on: { input: _vm.onSwitch }
+                              })
+                            ]
+                          }
                         }
-                      ],
-                      "sort-by": _vm.sortBy,
-                      "sort-order": _vm.sortOrder,
-                      "action-column": "name"
-                    },
-                    on: {
-                      sort: _vm.sortCallback,
-                      "bulk:click": _vm.onBulkAction
-                    },
-                    scopedSlots: _vm._u([
-                      {
-                        key: "name",
-                        fn: function(data) {
-                          return [
-                            _c("img", {
-                              attrs: {
-                                src: data.row.thumbnail,
-                                alt: data.row.name,
-                                width: "50"
-                              }
-                            }),
-                            _vm._v(" "),
-                            _c("strong", [
-                              _c("a", { attrs: { href: "#" } }, [
-                                _vm._v(_vm._s(data.row.name))
-                              ])
-                            ])
-                          ]
-                        }
-                      },
-                      {
-                        key: "active",
-                        fn: function(data) {
-                          return [
-                            _c("switches", {
-                              attrs: {
-                                enabled: data.row.active,
-                                value: data.row.id
-                              },
-                              on: { input: _vm.onSwitch }
-                            })
-                          ]
-                        }
-                      }
-                    ])
-                  })
-                : _vm._e(),
-              _vm._v(" "),
-              _vm.currentView == "grid"
-                ? _c(
-                    "div",
-                    { staticClass: "wp-list-table widefat dokan-modules" },
-                    [
-                      _vm.filteredModules.length > 0
-                        ? _vm._l(_vm.filteredModules, function(module) {
-                            return _c("div", { staticClass: "plugin-card" }, [
-                              _c("div", { staticClass: "plugin-card-top" }, [
-                                _c("div", { staticClass: "name column-name" }, [
-                                  _c("h3", [
-                                    _c("span", { staticClass: "plugin-name" }, [
-                                      _vm._v(_vm._s(module.name))
-                                    ]),
-                                    _vm._v(" "),
-                                    _c("img", {
-                                      staticClass: "plugin-icon",
-                                      attrs: {
-                                        src: module.thumbnail,
-                                        alt: module.name
-                                      }
-                                    })
-                                  ])
-                                ]),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "action-links" }, [
+                      ])
+                    })
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.currentView == "grid"
+                  ? _c(
+                      "div",
+                      { staticClass: "wp-list-table widefat dokan-modules" },
+                      [
+                        _vm.filteredModules.length > 0
+                          ? _vm._l(_vm.filteredModules, function(module) {
+                              return _c("div", { staticClass: "plugin-card" }, [
+                                _c("div", { staticClass: "plugin-card-top" }, [
                                   _c(
-                                    "ul",
-                                    { staticClass: "plugin-action-buttons" },
+                                    "div",
+                                    { staticClass: "name column-name" },
                                     [
-                                      _c(
-                                        "li",
-                                        { attrs: { "data-module": module.id } },
-                                        [
-                                          _c("switches", {
-                                            attrs: {
-                                              enabled: module.active,
-                                              value: module.id
-                                            },
-                                            on: { input: _vm.onSwitch }
-                                          })
-                                        ],
-                                        1
-                                      )
+                                      _c("h3", [
+                                        _c(
+                                          "a",
+                                          {
+                                            staticClass: "plugin-name",
+                                            attrs: { href: "#" },
+                                            on: {
+                                              click: function($event) {
+                                                $event.preventDefault()
+                                                _vm.openInfoModal(module)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v(_vm._s(module.name))]
+                                        ),
+                                        _vm._v(" "),
+                                        _c("img", {
+                                          staticClass: "plugin-icon",
+                                          attrs: {
+                                            src: module.thumbnail,
+                                            alt: module.name
+                                          }
+                                        })
+                                      ])
                                     ]
-                                  )
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "div",
-                                  { staticClass: "desc column-description" },
-                                  [
-                                    _c("p", {
-                                      domProps: {
-                                        innerHTML: _vm._s(module.description)
-                                      }
-                                    })
-                                  ]
-                                )
-                              ])
-                            ])
-                          })
-                        : [
-                            _c(
-                              "div",
-                              {
-                                staticClass: "notice notice-info",
-                                attrs: { id: "message" }
-                              },
-                              [
-                                _c("p", [
-                                  _c("strong", [
-                                    _vm._v(
-                                      _vm._s(
-                                        _vm.__("No modules found.", "dokan")
-                                      )
+                                  ),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "action-links" }, [
+                                    _c(
+                                      "ul",
+                                      { staticClass: "plugin-action-buttons" },
+                                      [
+                                        _c(
+                                          "li",
+                                          {
+                                            attrs: { "data-module": module.id }
+                                          },
+                                          [
+                                            _c("switches", {
+                                              attrs: {
+                                                enabled: module.active,
+                                                value: module.id
+                                              },
+                                              on: { input: _vm.onSwitch }
+                                            })
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "div",
+                                    { staticClass: "desc column-description" },
+                                    [
+                                      _c("p", {
+                                        domProps: {
+                                          innerHTML: _vm._s(module.description)
+                                        }
+                                      })
+                                    ]
+                                  ),
+                                  _vm._v(" "),
+                                  _c("div", { staticClass: "card-footer" }, [
+                                    _c(
+                                      "a",
+                                      {
+                                        attrs: { href: "#" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            _vm.openInfoModal(module)
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _vm._v(
+                                          _vm._s(
+                                            _vm.__("Documentation", "dokan")
+                                          )
+                                        )
+                                      ]
                                     )
                                   ])
                                 ])
-                              ]
-                            )
-                          ]
-                    ],
-                    2
-                  )
-                : _vm._e()
-            ]
-          : _c("div", { staticClass: "loading" }, [_c("loading")], 1)
-      ],
-      2
-    )
-  ])
+                              ])
+                            })
+                          : [
+                              _c(
+                                "div",
+                                {
+                                  staticClass: "notice notice-info",
+                                  attrs: { id: "message" }
+                                },
+                                [
+                                  _c("p", [
+                                    _c("strong", [
+                                      _vm._v(
+                                        _vm._s(
+                                          _vm.__("No modules found.", "dokan")
+                                        )
+                                      )
+                                    ])
+                                  ])
+                                ]
+                              )
+                            ]
+                      ],
+                      2
+                    )
+                  : _vm._e()
+              ]
+            : _c("div", { staticClass: "loading" }, [_c("loading")], 1)
+        ],
+        2
+      ),
+      _vm._v(" "),
+      _vm.showInfoModal
+        ? _c(
+            "Modal",
+            {
+              attrs: { title: _vm.moduleDocTitle, width: "800px" },
+              on: { close: _vm.closeInfoModal }
+            },
+            [
+              _c("div", { attrs: { slot: "body" }, slot: "body" }, [
+                _vm.isFetchingDoc
+                  ? _c("div", [
+                      _c("p", { staticClass: "text-center" }, [
+                        _vm._v(
+                          _vm._s(
+                            _vm.__("Fetching module documentation", "dokan")
+                          ) + "..."
+                        )
+                      ])
+                    ])
+                  : _c("div", {
+                      domProps: { innerHTML: _vm._s(_vm.moduleDoc) }
+                    })
+              ]),
+              _vm._v(" "),
+              _c("template", { slot: "footer" }, [
+                _vm.moduleInModal && _vm.moduleInModal.doc_link
+                  ? _c("div", { staticClass: "footer-left" }, [
+                      _c("a", {
+                        staticClass: "button button-primary",
+                        attrs: {
+                          href: _vm.moduleInModal.doc_link,
+                          target: "_blank",
+                          rel: "noreferrer noopener"
+                        },
+                        domProps: {
+                          textContent: _vm._s(
+                            _vm.__("View full documentation", "dokan")
+                          )
+                        }
+                      })
+                    ])
+                  : _vm._e(),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  { staticClass: "button", on: { click: _vm.closeInfoModal } },
+                  [_vm._v(_vm._s(_vm.__("Close", "dokan")))]
+                )
+              ])
+            ],
+            2
+          )
+        : _vm._e()
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
