@@ -1,14 +1,8 @@
-const webpack = require('webpack');
-const path = require('path');
-const package = require('./package.json');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const TerserJSPlugin = require('terser-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
-
-// Naming and path settings
-const exportPath = path.resolve( __dirname, './assets/js' );
+const path = require( 'path' );
+const TerserJSPlugin = require( 'terser-webpack-plugin' );
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
+const VueLoaderPlugin = require( 'vue-loader/lib/plugin' );
 
 const entryPoints = {};
 
@@ -26,8 +20,8 @@ const moduleEntryPoints = {
         'follow-store': 'follow-store.js',
     },
 
-    'geolocation': {
-        'geolocation': 'geolocation.js',
+    geolocation: {
+        geolocation: 'geolocation.js',
         'dokan-geolocation-locations-map': 'locations-map.js',
         'dokan-geolocation-locations-map-google-maps': 'locations-map-google-maps.js',
         'dokan-geolocation-locations-map-mapbox': 'locations-map-mapbox.js',
@@ -40,7 +34,7 @@ const moduleEntryPoints = {
     'report-abuse': {
         'dokan-report-abuse': 'frontend/main.js',
         'dokan-report-abuse-admin': 'admin/main.js',
-        'dokan-report-abuse-admin-single-product': 'admin/single-product.js'
+        'dokan-report-abuse-admin-single-product': 'admin/single-product.js',
     },
 
     'single-product-multiple-vendor': {
@@ -48,47 +42,48 @@ const moduleEntryPoints = {
     },
 
     'store-reviews': {
-        'admin': 'admin/main.js',
-        'script': 'script.js',
-        'style': 'style.js',
+        admin: 'admin/main.js',
+        script: 'script.js',
+        style: 'style.js',
     },
 
-    'subscription': {
-        'style': 'style.js',
-        'script': 'script.js',
+    subscription: {
+        style: 'style.js',
+        script: 'script.js',
         'admin-script': 'admin-script.js',
-        'subscription': 'admin/main.js',
+        subscription: 'admin/main.js',
     },
 
-    'wholesale': {
-        'admin': 'admin/main.js',
-        'scripts': 'scripts.js'
+    wholesale: {
+        admin: 'admin/main.js',
+        scripts: 'scripts.js',
     },
 };
 
-Object.keys(rootEntryPoints).forEach(function (output) {
-    entryPoints[ output ] = rootEntryPoints[output];
-});
+Object.keys( rootEntryPoints ).forEach( function( output ) {
+    entryPoints[ output ] = rootEntryPoints[ output ];
+} );
 
-Object.keys(moduleEntryPoints).forEach(function (dokanModule) {
-    const modulePath = `modules/${dokanModule}`;
+Object.keys( moduleEntryPoints ).forEach( function( dokanModule ) {
+    const modulePath = `modules/${ dokanModule }`;
 
-    Object.keys(moduleEntryPoints[dokanModule]).forEach(function (moduleOutput) {
-        entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/assets/src/js/${moduleEntryPoints[dokanModule][moduleOutput]}`;
-    });
-});
+    Object.keys( moduleEntryPoints[ dokanModule ] ).forEach( function(
+        moduleOutput
+    ) {
+        entryPoints[
+            `../../${ modulePath }/assets/js/${ moduleOutput }`
+        ] = `./${ modulePath }/assets/src/js/${ moduleEntryPoints[ dokanModule ][ moduleOutput ] }`;
+    } );
+} );
 
-// extract css into its own file
 const plugins = [
     new MiniCssExtractPlugin( {
         moduleFilename: ( { name } ) => {
             if ( name.match( /\/modules\// ) ) {
-                return `${name.replace( '/js/', '/css/') }.css`;
-            } else {
-                return '../css/[name].css';
+                return `${ name.replace( '/js/', '/css/' ) }.css`;
             }
+            return '../css/[name].css';
         },
-
     } ),
 
     new VueLoaderPlugin(),
@@ -98,28 +93,25 @@ module.exports = {
     mode: process.env.NODE_ENV,
     entry: entryPoints,
     output: {
-        path: exportPath,
-        filename: '[name].js'
+        path: path.resolve( __dirname, './assets/js' ),
+        filename: '[name].js',
     },
 
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve('./src/'),
-            'frontend': path.resolve('./src/frontend/'),
-            'admin': path.resolve('./src/admin/'),
+            vue$: 'vue/dist/vue.esm.js',
+            '@': path.resolve( './src/' ),
+            frontend: path.resolve( './src/frontend/' ),
+            admin: path.resolve( './src/admin/' ),
         },
     },
 
     externals: {
-        jquery: 'jQuery'
+        jquery: 'jQuery',
     },
 
     optimization: {
-        minimizer: [
-            new TerserJSPlugin(),
-            new OptimizeCSSAssetsPlugin(),
-        ],
+        minimizer: [ new TerserJSPlugin(), new OptimizeCSSAssetsPlugin() ],
     },
 
     plugins,
@@ -144,10 +136,7 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    'css-loader'
-                ]
+                use: [ MiniCssExtractPlugin.loader, 'css-loader' ],
             },
             {
                 test: /\.(png|jpe?g|gif)$/i,
@@ -156,6 +145,6 @@ module.exports = {
                     name: '../images/dist/[name].[ext]',
                 },
             },
-        ]
+        ],
     },
-}
+};
