@@ -523,7 +523,7 @@ class Hooks {
         if ( isset( $_POST['product_drop_down'][0] ) && 'select_all' === $_POST['product_drop_down'][0] ) {
             $product_ids = array_map( function( $product ) {
                 return intval( $product->ID );
-            }, $this->coupon_products_list() );
+            }, dokan_get_coupon_products_list() );
 
             $product_ids = implode( ',', $product_ids );
         } else if ( isset( $_POST['product_drop_down'] ) ) {
