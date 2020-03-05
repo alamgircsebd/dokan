@@ -33,4 +33,5 @@ env.json
 !dist/version-replace.js
 !dist/zip-upload.js
 !dist/clean.js
+!dist/makepot.js
 /vendor/

@@ -11,7 +11,8 @@
     "zip": "node dist/zip",
     "zip-upload": "node dist/zip-upload",
     "version": "node dist/version-replace",
-    "clean": "node dist/clean"
+    "clean": "node dist/clean",
+    "makepot": "node dist/makepot"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
