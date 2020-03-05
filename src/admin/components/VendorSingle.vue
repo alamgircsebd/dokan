@@ -519,7 +519,7 @@ export default {
         },
 
         isSocialActive(profile) {
-            if (this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== false ) {
+            if ( this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== '' ) {
                 return true;
             }
 
