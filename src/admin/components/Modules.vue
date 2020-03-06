@@ -69,7 +69,8 @@
                             <div class="plugin-card-top">
                                 <div class="name column-name">
                                     <h3>
-                                        <a href="#" class="plugin-name" @click.prevent="openInfoModal( module )">{{ module.name }}</a>
+                                        <!-- <a href="#" class="plugin-name" @click.prevent="openInfoModal( module )">{{ module.name }}</a> -->
+                                        <a :href="module.doc_link" class="plugin-name">{{ module.name }}</a>
                                         <img class="plugin-icon" :src="module.thumbnail" :alt="module.name" />
                                     </h3>
                                 </div>
@@ -87,7 +88,8 @@
                                 </div>
 
                                 <div class="card-footer">
-                                    <a href="#" @click.prevent="openInfoModal( module )">{{ __( 'Documentation', 'dokan' ) }}</a>
+                                    <!-- <a href="#" @click.prevent="openInfoModal( module )">{{ __( 'Documentation', 'dokan' ) }}</a> -->
+                                    <a :href="module.doc_link" target="_blank">{{ __( 'Documentation', 'dokan' ) }}</a>
                                 </div>
                             </div>
                         </div>
