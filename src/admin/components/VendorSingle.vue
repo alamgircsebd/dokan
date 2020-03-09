@@ -295,6 +295,8 @@
 </template>
 
 <script>
+import $ from 'jquery';
+
 let ContentLoading      = dokan_get_lib('ContentLoading');
 let Modal               = dokan_get_lib('Modal');
 let Currency            = dokan_get_lib('Currency');
