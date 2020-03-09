@@ -1,0 +1,11 @@
+import '../less/dokan-pro.less';
+import './announcement';
+import './coupon';
+import './inline-editable-table';
+import './product-variation';
+import './product';
+import './reviews';
+import './reviews.min';
+import './shipping';
+import './store-lists';
+import './store-seo';

@@ -94,13 +94,10 @@
                     <?php
                         $expiry_date = $coupon->get_date_expires();
 
-                        if ( $expiry_date && ( (string) (int) $expiry_date === $expiry_date )
-                            && ( $expiry_date <= PHP_INT_MAX )
-                            && ( $expiry_date >= ~PHP_INT_MAX ) ) {
-
-                            echo esc_html( date_i18n( get_option( 'date_format' ), $expiry_date ) );
+                        if ( $expiry_date ) {
+                            echo esc_html( $expiry_date->date_i18n( 'F j, Y' ) );
                         } else {
-                            echo $expiry_date ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $expiry_date ) ) ) : '&ndash;';
+                            echo '&ndash;';
                         }
                     ?>
                 </td>

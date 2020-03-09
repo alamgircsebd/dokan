@@ -47,12 +47,12 @@ class StoreShare {
     **/
     function register_scripts() {
         // register styles
-        wp_register_style( 'dokan-social-style', DOKAN_PRO_PLUGIN_ASSEST . '/css/jssocials.css', false, time(), 'all' );
-        wp_register_style( 'dokan-social-theme-minimal', DOKAN_PRO_PLUGIN_ASSEST . '/css/jssocials-theme-minima.css', false, time(), 'all' );
-        wp_register_style( 'dokan-social-theme-flat', DOKAN_PRO_PLUGIN_ASSEST . '/css/jssocials-theme-flat.css', false, time(), 'all' );
+        wp_register_style( 'dokan-social-style', DOKAN_PRO_PLUGIN_ASSEST . '/vendor/jssocials/jssocials.css', false, time(), 'all' );
+        wp_register_style( 'dokan-social-theme-minimal', DOKAN_PRO_PLUGIN_ASSEST . '/vendor/jssocials/jssocials-theme-minima.css', false, time(), 'all' );
+        wp_register_style( 'dokan-social-theme-flat', DOKAN_PRO_PLUGIN_ASSEST . '/vendor/jssocials/jssocials-theme-flat.css', false, time(), 'all' );
 
         // register scripts
-        wp_register_script( 'dokan-social-script', DOKAN_PRO_PLUGIN_ASSEST . '/js/jssocials.min.js', array( 'jquery', 'dokan-script' ), null, true );
+        wp_register_script( 'dokan-social-script', DOKAN_PRO_PLUGIN_ASSEST . '/vendor/jssocials/jssocials.min.js', array( 'jquery', 'dokan-script' ), null, true );
     }
 
     /**

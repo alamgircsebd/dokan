@@ -7,7 +7,11 @@ namespace WeDevs\DokanPro;
  */
 class Assets {
 
+    private $script_version;
+
     public function __construct() {
+        $this->script_version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
+
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'register' ], 5 );
             add_action( 'dokan-vue-admin-scripts', [ $this, 'enqueue_admin_scripts' ] );
@@ -112,20 +116,18 @@ class Assets {
      * @return array
      */
     public function get_scripts() {
-        $prefix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
-
         $scripts = [
             'dokan-pro-vue-admin' => [
                 'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-admin.js',
                 'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap', 'selectWoo' ],
-                'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-admin.js' ),
+                'version'   => $this->script_version,
                 'in_footer' => true
             ],
 
             'dokan-pro-vue-frontend-shipping' => [
                 'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend-shipping.js',
                 'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
-                'version'   => filemtime( DOKAN_PRO_DIR . '/assets/js/vue-pro-frontend-shipping.js' ),
+                'version'   => $this->script_version,
                 'in_footer' => true
             ],
         ];
@@ -143,15 +145,15 @@ class Assets {
         $styles = [
             'dokan-pro-vue-admin' => [
                 'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin.css',
-                'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-admin.css' ),
+                'version' => $this->script_version,
             ],
             'dokan-pro-vue-frontend-shipping' => [
                 'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping.css',
-                'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-frontend-shipping.css' ),
+                'version' => $this->script_version,
             ],
             'dokan-pro-wp-version-before-5-3' => [
                 'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/wp-version-before-5-3.css',
-                'version' => filemtime( DOKAN_PRO_DIR . '/assets/css/vue-pro-frontend-shipping.css' ),
+                'version' => $this->script_version,
             ],
         ];
 

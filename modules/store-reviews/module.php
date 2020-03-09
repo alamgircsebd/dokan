@@ -47,10 +47,7 @@ class Module {
         if ( dokan_is_store_page() ) {
             wp_enqueue_style( 'dokan-magnific-popup' );
             wp_enqueue_style( 'dsr-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
-            wp_enqueue_style( 'dokan-rateyo-styles', plugins_url( 'assets/css/rateyo.min.css', __FILE__ ) );
-
             wp_enqueue_script( 'dsr-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery', 'dokan-popup' ), false, true );
-            wp_enqueue_script( 'dokan-rateyo', plugins_url( 'assets/js/rateyo.min.js', __FILE__ ) );
         }
     }
 
