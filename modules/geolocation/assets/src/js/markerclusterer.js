@@ -1320,6 +1320,4 @@ Object.keys = Object.keys || function(o) {
     return result;
 };
 
-if (typeof module == 'object') {
-  module.exports = MarkerClusterer;
-}
+export default MarkerClusterer;

@@ -5,7 +5,7 @@
  * @package dokan
  */
 
-$store_user   = dokan()->vendor->get( get_query_var( 'author' ) );
+$store_user = get_userdata( get_query_var( 'author' ) );
 $store_info   = dokan_get_store_info( $store_user->ID );
 $map_location = $store_user->get_location();
 

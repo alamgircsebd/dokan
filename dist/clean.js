@@ -5,6 +5,7 @@ const chalk = require( 'chalk' );
 const deleteDirs = [
     'assets/css',
     'assets/js',
+    'dist/*.zip',
     'modules/follow-store/assets/css',
     'modules/follow-store/assets/js',
     'modules/geolocation/assets/css',
