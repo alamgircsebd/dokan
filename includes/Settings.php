@@ -398,19 +398,7 @@ class Settings extends DokanSettings {
         if ( ! $store_id ) {
             return;
         }
-
-        // Stripe save confirmation for profile completion
-        if ( isset( $_POST['settings']['stripe'] ) && $_POST['settings']['stripe']  ) {
-            $dokan_settings['payment']['stripe'] = $_POST['settings']['stripe'];
-        }
-
-        // Moip save confirmation for profile completion
-        if ( isset( $_POST['settings']['moip'] ) && $_POST['settings']['moip']  ) {
-            $dokan_settings['payment']['moip'] = wc_clean( $_POST['settings']['moip'] );
-        }
-
-        update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
-  
+        
         $dokan_settings                       = get_user_meta( $store_id, 'dokan_profile_settings', true );
         $profile_completeness                 = $this->calculate_profile_completeness_value( $dokan_settings );
         $dokan_settings['profile_completion'] = $profile_completeness;
