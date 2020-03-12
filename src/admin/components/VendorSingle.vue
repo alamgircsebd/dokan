@@ -306,16 +306,10 @@ let VendorPaymentFields = dokan_get_lib('VendorPaymentFields');
 let VendorSocialFields  = dokan_get_lib('VendorSocialFields');
 let VendorAddressFields = dokan_get_lib('VendorAddressFields');
 
-let VclFacebook = ContentLoading.VclFacebook;
-let VclTwitch   = ContentLoading.VclTwitch;
-
 export default {
-
     name: 'VendorSingle',
 
     components: {
-        VclFacebook,
-        VclTwitch,
         Modal,
         Currency,
         UploadImage,

@@ -30,6 +30,7 @@ class Module {
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+        add_filter( 'dokan_rest_api_class_map', array( $this, 'rest_api_class_map' ) );
 
     }
 
@@ -57,6 +58,9 @@ class Module {
      * @return void
      */
     public function includes() {
+        if ( is_admin() ) {
+            require_once DOKAN_SELLER_RATINGS_DIR.'/classes/admin.php';
+        }
         require_once DOKAN_SELLER_RATINGS_DIR.'/classes/DSR_View.php';
         require_once DOKAN_SELLER_RATINGS_DIR.'/classes/DSR_SPMV.php';
         require_once DOKAN_SELLER_RATINGS_DIR . '/functions.php';
@@ -64,6 +68,19 @@ class Module {
 
     public function instances() {
         new \DSR_SPMV();
+    }
+
+    /**
+     * REST API classes Mapping
+     *
+     * @since 2.9.5
+     *
+     * @return void
+     */
+    public function rest_api_class_map( $class_map ) {
+        $class_map[ DOKAN_SELLER_RATINGS_DIR.'/classes/api/class-store-reviews-controller.php'] = 'Dokan_REST_Store_Review_Controller';
+
+        return $class_map;
     }
 
      /**
