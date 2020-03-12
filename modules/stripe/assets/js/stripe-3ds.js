@@ -20,7 +20,7 @@ jQuery( function( $ ) {
         }
     });
 
-    $( 'form.checkout' ).on( 'checkout_place_order_dokan-stripe-connect', function( event ) {
+    $( 'form.checkout' ).one( 'checkout_place_order_dokan-stripe-connect', function( event ) {
         return stripeFormHandler();
     });
 
