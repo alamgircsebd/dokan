@@ -37,18 +37,17 @@ class Module {
             'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %sWooCommerce Product addons plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>' ),
         );
 
-        if ( ! $this->check_if_has_dependency() ) {
-            add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
-            return;
-        }
+        add_action( 'plugins_loaded', function () {
+            if ( ! $this->check_if_has_dependency() ) {
+                add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
+                return;
+            }
 
-        $this->define();
-
-        $this->includes();
-
-        $this->initiate();
-
-        $this->hooks();
+            $this->define();
+            $this->includes();
+            $this->initiate();
+            $this->hooks();
+        } );
     }
 
     /**
