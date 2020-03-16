@@ -73,7 +73,7 @@
                 self.itemArray.push( currentItem );
                 self.itemSlugs.push( currentItemSlug );
             } else {
-                itemToRemove = self.itemSlugs.indexOf( currentItemSlug );
+                let itemToRemove = self.itemSlugs.indexOf( currentItemSlug );
                 self.itemArray.splice( itemToRemove, 1 );
                 self.itemSlugs.splice( itemToRemove, 1 );
             }
