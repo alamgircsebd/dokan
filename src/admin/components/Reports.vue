@@ -231,6 +231,8 @@ let ListTable   = dokan_get_lib('ListTable');
 let debounce    = dokan_get_lib('debounce');
 let Search      = dokan_get_lib('Search');
 
+import $ from 'jquery';
+
 export default {
     name: 'Reports',
 

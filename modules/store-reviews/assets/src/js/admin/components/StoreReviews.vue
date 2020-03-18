@@ -119,6 +119,7 @@
 
 <script>
     import StarRating from 'vue-star-rating'
+    import $ from 'jquery';
 
     let ListTable = dokan_get_lib('ListTable');
     let Modal = dokan_get_lib('Modal');
