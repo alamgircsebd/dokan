@@ -287,6 +287,8 @@ class Dokan_Pro {
         add_filter( 'dokan_is_pro_exists', [ $this, 'set_as_pro' ], 99 );
         add_filter( 'dokan_query_var_filter', [ $this, 'load_query_var' ], 10 );
         add_filter( 'woocommerce_locate_template', [ $this, 'dokan_registration_template' ] );
+        add_action( 'init', array( $this,  'account_migration_endpoint' ) );
+        add_action( 'woocommerce_account_account-migration_endpoint', array( $this, 'account_migration' ) );
         add_filter( 'dokan_set_template_path', [ $this, 'load_pro_templates' ], 10, 3 );
         add_filter( 'dokan_widgets', [ $this, 'register_widgets' ] );
 
@@ -294,30 +296,6 @@ class Dokan_Pro {
         add_filter( 'woocommerce_email_classes', [ $this, 'load_dokan_emails' ], 36 );
         add_filter( 'dokan_email_list', [ $this, 'set_email_template_directory' ], 15 );
         add_filter( 'dokan_email_actions', [ $this, 'register_email_actions' ] );
-        add_action( 'init', array( $this,  'account_migration_endpoint' ) );
-        add_action( 'woocommerce_account_account-migration_endpoint', array( $this, 'account_migration' ) );
-    }
-
-    /**
-     * Register account migration endpoint on my-account page
-     *
-     * @since DOKAN_PRO_SINCE
-     *
-     * @return void
-     */
-    public function account_migration_endpoint() {
-        add_rewrite_endpoint( 'account-migration', EP_PAGES );
-    }
-
-    /**
-     * Load account migration template
-     *
-     * @since DOKAN_PRO_SINCE
-     *
-     * @return void
-     */
-    public function account_migration() {
-        dokan_get_template_part( 'global/update-account', '', [ 'pro' => true ] );
     }
 
     /**
@@ -532,25 +510,31 @@ class Dokan_Pro {
         $query_vars[] = 'reviews';
         $query_vars[] = 'announcement';
         $query_vars[] = 'single-announcement';
-        $query_vars[] = 'account-migration';
         $query_vars[] = 'dokan-registration';
 
         return $query_vars;
     }
 
     /**
-     * Account migration template on my account
+     * Register account migration endpoint on my-account page
      *
-     * @param string  $file path of the template
+     * @since DOKAN_PRO_SINCE
      *
-     * @return string
+     * @return void
      */
-    public function account_migration_template( $file ) {
-        if ( get_query_var( 'account-migration' ) && dokan_is_user_customer( get_current_user_id() ) && basename( $file ) == 'my-account.php' ) {
-            $file = dokan_locate_template( 'global/update-account.php', '', DOKAN_PRO_DIR . '/templates/', true );
-        }
+    public function account_migration_endpoint() {
+        add_rewrite_endpoint( 'account-migration', EP_PAGES );
+    }
 
-        return $file;
+    /**
+     * Load account migration template
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function account_migration() {
+        dokan_get_template_part( 'global/update-account', '', [ 'pro' => true ] );
     }
 
     /**
