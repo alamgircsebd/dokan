@@ -286,7 +286,6 @@ class Dokan_Pro {
         add_filter( 'dokan_rest_api_class_map', [ $this, 'rest_api_class_map' ] );
         add_filter( 'dokan_is_pro_exists', [ $this, 'set_as_pro' ], 99 );
         add_filter( 'dokan_query_var_filter', [ $this, 'load_query_var' ], 10 );
-        add_filter( 'woocommerce_locate_template', [ $this, 'account_migration_template' ] );
         add_filter( 'woocommerce_locate_template', [ $this, 'dokan_registration_template' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_pro_templates' ], 10, 3 );
         add_filter( 'dokan_widgets', [ $this, 'register_widgets' ] );
@@ -295,6 +294,30 @@ class Dokan_Pro {
         add_filter( 'woocommerce_email_classes', [ $this, 'load_dokan_emails' ], 36 );
         add_filter( 'dokan_email_list', [ $this, 'set_email_template_directory' ], 15 );
         add_filter( 'dokan_email_actions', [ $this, 'register_email_actions' ] );
+        add_action( 'init', array( $this,  'account_migration_endpoint' ) );
+        add_action( 'woocommerce_account_account-migration_endpoint', array( $this, 'account_migration' ) );
+    }
+
+    /**
+     * Register account migration endpoint on my-account page
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function account_migration_endpoint() {
+        add_rewrite_endpoint( 'account-migration', EP_PAGES );
+    }
+
+    /**
+     * Load account migration template
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function account_migration() {
+        dokan_get_template_part( 'global/update-account', '', [ 'pro' => true ] );
     }
 
     /**
