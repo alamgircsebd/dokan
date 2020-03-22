@@ -287,8 +287,8 @@ class Dokan_Pro {
         add_filter( 'dokan_is_pro_exists', [ $this, 'set_as_pro' ], 99 );
         add_filter( 'dokan_query_var_filter', [ $this, 'load_query_var' ], 10 );
         add_filter( 'woocommerce_locate_template', [ $this, 'dokan_registration_template' ] );
-        add_action( 'init', array( $this,  'account_migration_endpoint' ) );
-        add_action( 'woocommerce_account_account-migration_endpoint', array( $this, 'account_migration' ) );
+        add_action( 'init', [ $this, 'account_migration_endpoint' ] );
+        add_action( 'woocommerce_account_account-migration_endpoint', [ $this, 'account_migration' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_pro_templates' ], 10, 3 );
         add_filter( 'dokan_widgets', [ $this, 'register_widgets' ] );
 
