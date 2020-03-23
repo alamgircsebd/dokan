@@ -48,7 +48,13 @@ class Module {
         if ( dokan_is_store_page() ) {
             wp_enqueue_style( 'dokan-magnific-popup' );
             wp_enqueue_style( 'dsr-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
+
             wp_enqueue_script( 'dsr-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery', 'dokan-popup' ), false, true );
+            wp_enqueue_style( 'dsr-scripts', plugins_url( 'assets/css/script.css', __FILE__ ), false );
+        }
+
+        if ( dokan_is_store_listing() ) {
+            wp_enqueue_style( 'dsr-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
         }
     }
 
