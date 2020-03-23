@@ -11,6 +11,7 @@ const rootEntryPoints = {
     'dokan-pro-admin': './assets/src/js/dokan-pro-admin.js',
     'dokan-blocks-editor-script': './assets/src/js/dokan-blocks-editor-script.js',
     'dokan-tinymce-button': './assets/src/js/dokan-tinymce-button.js',
+    'dokan-single-product-shipping': './assets/src/js/dokan-single-product-shipping.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
 };
