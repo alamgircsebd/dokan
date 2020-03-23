@@ -129,6 +129,7 @@ class Dokan_Product_Addon_Frontend {
                     $priority            = 10;
                     $objects             = array( 0 );
                     $product_addons      = array();
+                    $edit_id             = 0;
                 }
 
                 if ( ! empty( $_GET['saved'] ) && $_GET['saved'] ) {
