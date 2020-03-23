@@ -27,6 +27,7 @@ class Module {
 
         add_action( 'dokan_product_listing_status_filter', array( $this, 'add_vacation_product_listing_filter'), 10, 2 );
         add_action( 'dokan_store_profile_frame_after', array( $this, 'show_vacation_message' ), 10, 2 );
+        add_action( 'template_redirect', array( $this, 'remove_product_from_cart_for_closed_store' ) );
     }
 
     /**
@@ -182,5 +183,35 @@ class Module {
             return $args;
         }
         return $args;
+    }
+
+    /**
+     * Remove product from cart for closed store
+     * @param  null
+     * @return void 
+     */    
+    public function remove_product_from_cart_for_closed_store() {
+        if ( is_cart() || is_checkout() ) {
+
+            foreach( WC()->cart->cart_contents as $item ) {
+                $product_id = ( isset( $item['variation_id'] ) && $item['variation_id'] != 0 ) ? $item['variation_id'] : $item['product_id'];
+
+                if ( empty( $product_id ) ) {
+                    continue;
+                }
+
+                $vendor_id  = get_post_field( 'post_author', $product_id );
+
+                if ( empty( $vendor_id ) ) {
+                    continue;
+                }
+
+                if ( dokan_seller_vacation_is_seller_on_vacation( $vendor_id ) ) {
+                    $product_cart_id = isset( $item['key'] ) ? $item['key'] : WC()->cart->generate_cart_id( $product_id );
+                    WC()->cart->remove_cart_item( $product_cart_id );
+                }
+            }
+
+        }
     }
 }
