@@ -374,7 +374,7 @@ class Dokan_Pro {
 
         // Register all js
         wp_register_script( 'serializejson', WC()->plugin_url() . '/assets/js/jquery-serializejson/jquery.serializejson' . $suffix . '.js', [ 'jquery' ], '2.6.1' );
-        wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/single-product-shipping.js', __FILE__ ), false, null, true );
+        wp_register_script( 'dokan-product-shipping', plugins_url( 'assets/js/dokan-single-product-shipping.js', __FILE__ ), false, null, true );
     }
 
     /**
