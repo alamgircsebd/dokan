@@ -567,7 +567,7 @@ class Settings extends DokanSettings {
         }
 
         // Calculate Payment method val for moip
-        if ( isset( $dokan_settings['payment'] ) && isset( $dokan_settings['payment']['moip'] ) ) {
+        if ( isset( $dokan_settings['payment']['moip'] ) ) {
 
             if ( $dokan_settings['payment']['moip'] ) {
                 $profile_val         = $profile_val + $payment_method_val;
