@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 dokan.reportAbuse = {
     button: null,
     form_html: '',
