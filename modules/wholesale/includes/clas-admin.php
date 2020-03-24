@@ -106,12 +106,14 @@ class Dokan_Wholesale_Admin {
      *
      * @return void
      */
-    function add_submenu( $capability ) {
-        global $submenu;
-        $slug = 'dokan';
+    public function add_submenu( $capability ) {
+        if ( current_user_can( $capability ) ) {
+            global $submenu;
 
-        if ( current_user_can( 'manage_options' ) ) {
-            $submenu[ $slug ][] = array( __( 'Wholesale Customer', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/wholesale-customer' );
+            $title = esc_html__( 'Wholesale Customer', 'dokan' );
+            $slug  = 'dokan';
+
+            $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/wholesale-customer' ];
         }
     }
 
