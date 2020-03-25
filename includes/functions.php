@@ -111,36 +111,13 @@ function dokan_progressbar_translated_string( $string = '', $value = 15, $progre
  * Get refund counts, used in admin area
  *
  *  @since 2.4.11
+ *  @since 3.0.0 Move the logic to Refund manager class
  *
  * @global WPDB $wpdb
  * @return array
  */
-function dokan_get_refund_count() {
-    global $wpdb;
-
-    $cache_key = 'dokan_refund_count';
-    $counts = wp_cache_get( $cache_key );
-
-    if ( false === $counts ) {
-
-        $counts = array( 'pending' => 0, 'completed' => 0, 'cancelled' => 0 );
-        $sql = "SELECT COUNT(id) as count, status FROM {$wpdb->prefix}dokan_refund GROUP BY status";
-        $result = $wpdb->get_results( $sql );
-
-        if ( $result ) {
-            foreach ($result as $row) {
-                if ( $row->status == '0' ) {
-                    $counts['pending'] = (int) $row->count;
-                } elseif ( $row->status == '1' ) {
-                    $counts['completed'] = (int) $row->count;
-                } elseif ( $row->status == '2' ) {
-                    $counts['cancelled'] = (int) $row->count;
-                }
-            }
-        }
-    }
-
-    return $counts;
+function dokan_get_refund_count( $seller_id = null ) {
+    return dokan_pro()->refund->get_status_counts( $seller_id );
 }
 
 
@@ -170,15 +147,6 @@ function dokan_get_seller_coupon( $seller_id, $show_on_store = false ) {
     $coupons = get_posts( $args );
 
     return $coupons;
-}
-
-/**
- * check array is index or associative
- *
- * @return bool
- */
-function isAssoc($arr) {
-    return array_keys($arr) !== range(0, count($arr) - 1);
 }
 
 /**
@@ -448,7 +416,7 @@ add_shortcode( 'dokan-customer-migration', 'dokan_render_customer_migration_temp
  * @return void
  */
 function dokan_send_announcement_email( $announcement_id ) {
-    $announcement = new Dokan_Announcement();
+    $announcement = new \WeDevs\DokanPro\Admin\Announcement();
     $announcement->trigger_mail( $announcement_id );
 }
 
@@ -468,7 +436,7 @@ function dokan_send_scheduled_announcement_email( $post ) {
         return;
     }
 
-    $announcement = new Dokan_Announcement();
+    $announcement = new \WeDevs\DokanPro\Admin\Announcement();
     $announcement->trigger_mail( $post->ID );
 }
 
@@ -656,3 +624,37 @@ function dokan_save_admin_additional_commission( $vendor_id, $data ) {
 }
 
 add_action( 'dokan_before_update_vendor', 'dokan_save_admin_additional_commission', 10, 2 );
+
+/**
+ * Include Dokan Pro template
+ *
+ * Modules should have their own get
+ * template function, like `dokan_geo_get_template`
+ * used in Geolocation module.
+ *
+ * @since 3.0.0
+ *
+ * @param string $name
+ * @param array  $args
+ *
+ * @return void
+ */
+function dokan_pro_get_template( $name, $args = [] ) {
+    dokan_get_template( "$name.php", $args, 'dokan', trailingslashit( DOKAN_PRO_TEMPLATE_DIR ) );
+}
+
+/**
+ * Dokan register deactivation hook description]
+ *
+ * @param string $file     full file path
+ * @param array|string $function callback function
+ *
+ * @return void
+ */
+function dokan_register_deactivation_hook( $file, $function ) {
+    if ( file_exists( $file ) ) {
+        require_once $file;
+        $base_name = plugin_basename( $file );
+        add_action( "dokan_deactivate_{$base_name}", $function );
+    }
+}

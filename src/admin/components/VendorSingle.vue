@@ -295,6 +295,8 @@
 </template>
 
 <script>
+import $ from 'jquery';
+
 let ContentLoading      = dokan_get_lib('ContentLoading');
 let Modal               = dokan_get_lib('Modal');
 let Currency            = dokan_get_lib('Currency');
@@ -304,18 +306,15 @@ let VendorPaymentFields = dokan_get_lib('VendorPaymentFields');
 let VendorSocialFields  = dokan_get_lib('VendorSocialFields');
 let VendorAddressFields = dokan_get_lib('VendorAddressFields');
 
-let VclFacebook = ContentLoading.VclFacebook;
-let VclTwitch   = ContentLoading.VclTwitch;
+let VclTwitch = ContentLoading.VclTwitch;
 
 export default {
-
     name: 'VendorSingle',
 
     components: {
-        VclFacebook,
-        VclTwitch,
         Modal,
         Currency,
+        VclTwitch,
         UploadImage,
         VendorPaymentFields,
         VendorSocialFields,
@@ -340,7 +339,7 @@ export default {
                 store_name: '',
                 user_pass: '',
                 store_url: '',
-                user_email: '',
+                email: '',
                 user_nicename: '',
                 phone: '',
                 banner: '',
@@ -495,10 +494,6 @@ export default {
                 this.store.payment.paypal = this.fakeStore.payment.paypal;
             }
 
-            if ( 'email' in response ) {
-                this.store.user_email = response.email;
-            }
-
             if ( 'shop_url' in response ) {
                 this.store.user_nicename = this.getStoreName(response.shop_url);
             }
@@ -523,7 +518,7 @@ export default {
         },
 
         isSocialActive(profile) {
-            if (this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== false ) {
+            if ( this.store.social.hasOwnProperty(profile) && this.store.social[profile] !== '' ) {
                 return true;
             }
 

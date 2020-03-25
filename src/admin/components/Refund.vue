@@ -11,7 +11,7 @@
 
         <ul class="subsubsub">
             <li><router-link :to="{ name: 'Refund', query: { status: 'pending' }}" active-class="current" exact v-html="sprintf( __( 'Pending <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.pending )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Refund', query: { status: 'approved' }}" active-class="current" exact v-html="sprintf( __( 'Approved <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.approved )"></router-link> | </li>
+            <li><router-link :to="{ name: 'Refund', query: { status: 'completed' }}" active-class="current" exact v-html="sprintf( __( 'Approved <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.completed )"></router-link> | </li>
             <li><router-link :to="{ name: 'Refund', query: { status: 'cancelled' }}" active-class="current" exact v-html="sprintf( __( 'Cancelled <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.cancelled )"></router-link></li>
         </ul>
 
@@ -54,7 +54,7 @@
 
             <template slot="row-actions" slot-scope="data">
                 <template v-for="(action, index) in actions">
-                    <span :class="action.key" v-if="action.key == 'approved' && currentStatus == 'pending'">
+                    <span :class="action.key" v-if="action.key == 'completed' && currentStatus == 'pending'">
                         <a href="#" @click.prevent="rowAction( action.key, data )">{{ action.label }}</a>
                         <template v-if="index !== ( actions.length - 1)"> | </template>
                     </span>
@@ -94,7 +94,7 @@ export default {
 
             counts: {
                 pending: 0,
-                approved: 0,
+                completed: 0,
                 cancelled: 0
             },
             totalPages: 1,
@@ -113,7 +113,7 @@ export default {
             actionColumn: 'order_id',
             actions: [
                 {
-                    key: 'approved',
+                    key: 'completed',
                     label: this.__( 'Approve Refund', 'dokan' )
                 },
                 {
@@ -143,7 +143,7 @@ export default {
             if ( 'pending' == this.$route.query.status ) {
                 return [
                     {
-                        key: 'approved',
+                        key: 'completed',
                         label: this.__( 'Approve Refund', 'dokan' )
                     },
                     {
@@ -178,7 +178,7 @@ export default {
         doSearch(payload) {
             this.loading = true;
 
-            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
+            dokan.api.get('/refunds?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
             .done((response, status, xhr) => {
                 this.requests = response.filter((refund) => {
                     return refund.order_id.includes(payload) || refund.vendor.store_name.includes(payload);
@@ -192,7 +192,7 @@ export default {
 
         updatedCounts( xhr ) {
             this.counts.pending = parseInt( xhr.getResponseHeader('X-Status-Pending') );
-            this.counts.approved   = parseInt( xhr.getResponseHeader('X-Status-Completed') );
+            this.counts.completed   = parseInt( xhr.getResponseHeader('X-Status-Completed') );
             this.counts.cancelled   = parseInt( xhr.getResponseHeader('X-Status-Cancelled') );
         },
 
@@ -204,7 +204,7 @@ export default {
         fetchRefunds() {
             this.loading = true;
 
-            dokan.api.get('/refund?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
+            dokan.api.get('/refunds?per_page=' + this.perPage + '&page=' + this.currentPage + '&status=' + this.currentStatus)
             .done((response, status, xhr) => {
                 this.requests = response;
                 this.loading = false;
@@ -237,31 +237,29 @@ export default {
         },
 
         onActionClick(action, row) {
-            console.log( action, row );
         },
 
         rowAction( action, data ) {
             this.loading      = true;
             let jsonData      = {};
             jsonData.id       = data.row.id;
-            jsonData.order_id = data.row.order_id;
 
-            if ( 'approved' === action ) {
-                jsonData.status   = 'approved';
-                dokan.api.put('/refund/' + data.row.id, jsonData )
+            if ( 'completed' === action ) {
+                jsonData.status   = 'completed';
+                dokan.api.put('/refunds/' + data.row.id + '/approve', jsonData )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
                 });
             } else if( 'cancelled' === action )  {
                 jsonData.status   = 'cancelled';
-                dokan.api.put('/refund/' + data.row.id, jsonData )
+                dokan.api.put('/refunds/' + data.row.id + '/cancel', jsonData )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
                 });
             } else if ( 'delete' === action ) {
-                dokan.api.delete('/refund/' + data.row.id )
+                dokan.api.delete('/refunds/' + data.row.id )
                 .done( ( response, status, xhr ) => {
                     this.fetchRefunds();
                     this.loading = false;
@@ -274,9 +272,7 @@ export default {
             let jsonData      = {};
             jsonData[action]   = items;
 
-            console.log( jsonData );
-
-            dokan.api.put('/refund/batch', jsonData )
+            dokan.api.put('/refunds/batch', jsonData )
             .done( ( response, status, xhr ) => {
                 this.fetchRefunds();
                 this.loading = false;

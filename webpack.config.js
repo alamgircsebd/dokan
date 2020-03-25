@@ -1,149 +1,119 @@
-const webpack = require('webpack');
-const path = require('path');
-const package = require('./package.json');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-const BrowserSyncPlugin = require( 'browser-sync-webpack-plugin' );
+const path = require( 'path' );
+const TerserJSPlugin = require( 'terser-webpack-plugin' );
+const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
+const OptimizeCSSAssetsPlugin = require( 'optimize-css-assets-webpack-plugin' );
+const VueLoaderPlugin = require( 'vue-loader/lib/plugin' );
 
-const config = require( './config.json' );
+const entryPoints = {};
 
-// Naming and path settings
-var appName = 'app';
-
-var exportPath = path.resolve(__dirname, './assets/js');
-
-var entryPoints = {};
-
-var rootEntryPoints = {
-    // 'vue-pro-frontend': './src/frontend/main.js',
+const rootEntryPoints = {
+    'dokan-pro': './assets/src/js/dokan-pro.js',
+    'dokan-pro-admin': './assets/src/js/dokan-pro-admin.js',
+    'dokan-blocks-editor-script': './assets/src/js/dokan-blocks-editor-script.js',
+    'dokan-tinymce-button': './assets/src/js/dokan-tinymce-button.js',
+    'dokan-single-product-shipping': './assets/src/js/dokan-single-product-shipping.js',
     'vue-pro-frontend-shipping': './src/frontend/shipping.js',
     'vue-pro-admin': './src/admin/main.js',
-    // 'vue-pro-admin': './includes/modules/subscription/src/main.js',
-    // style: './less/style.less',
 };
 
-var moduleEntryPoints = {
-    'subscription': {
-        'subscription': 'main.js',
+const moduleEntryPoints = {
+    'follow-store': {
+        'follow-store': 'follow-store.js',
     },
 
-    'store-reviews': {
-        'admin': 'main.js',
-    },
-
-    'wholesale': {
-        'admin': 'main.js'
+    geolocation: {
+        geolocation: 'geolocation.js',
+        'dokan-geolocation-locations-map': 'locations-map.js',
+        'dokan-geolocation-locations-map-google-maps': 'locations-map-google-maps.js',
+        'dokan-geolocation-locations-map-mapbox': 'locations-map-mapbox.js',
+        'dokan-geolocation-filters': 'filters.js',
+        'dokan-geolocation-store-lists-filters': 'store-lists-filters.js',
+        'geolocation-vendor-dashboard-product-google-maps': 'vendor-dashboard-product-google-maps.js',
+        'geolocation-vendor-dashboard-product-mapbox': 'vendor-dashboard-product-mapbox.js',
     },
 
     'report-abuse': {
-        'dokan-report-abuse': 'js/frontend/main.js',
-        'dokan-report-abuse-admin': 'js/admin/main.js',
-        'dokan-report-abuse-admin-single-product': 'js/admin/single-product.js'
-    }
+        'dokan-report-abuse': 'frontend/main.js',
+        'dokan-report-abuse-admin': 'admin/main.js',
+        'dokan-report-abuse-admin-single-product': 'admin/single-product.js',
+    },
+
+    'single-product-multiple-vendor': {
+        'dokan-spmv-products-admin': 'dokan-spmv-products-admin.js',
+    },
+
+    'store-reviews': {
+        admin: 'admin/main.js',
+        script: 'script.js',
+        style: 'style.js',
+    },
+
+    subscription: {
+        style: 'style.js',
+        script: 'script.js',
+        'admin-script': 'admin-script.js',
+        subscription: 'admin/main.js',
+    },
+
+    wholesale: {
+        admin: 'admin/main.js',
+        scripts: 'scripts.js',
+    },
 };
 
-Object.keys(rootEntryPoints).forEach(function (output) {
-    entryPoints[ output ] = rootEntryPoints[output];
-});
+Object.keys( rootEntryPoints ).forEach( function( output ) {
+    entryPoints[ output ] = rootEntryPoints[ output ];
+} );
 
-Object.keys(moduleEntryPoints).forEach(function (dokanModule) {
-    var modulePath = `includes/modules/${dokanModule}`;
+Object.keys( moduleEntryPoints ).forEach( function( dokanModule ) {
+    const modulePath = `modules/${ dokanModule }`;
 
-    Object.keys(moduleEntryPoints[dokanModule]).forEach(function (moduleOutput) {
-        entryPoints[ `../../${modulePath}/assets/js/${moduleOutput}` ] = `./${modulePath}/src/${moduleEntryPoints[dokanModule][moduleOutput]}`;
-    });
-});
+    Object.keys( moduleEntryPoints[ dokanModule ] ).forEach( function(
+        moduleOutput
+    ) {
+        entryPoints[
+            `../../${ modulePath }/assets/js/${ moduleOutput }`
+        ] = `./${ modulePath }/assets/src/js/${ moduleEntryPoints[ dokanModule ][ moduleOutput ] }`;
+    } );
+} );
 
-// Enviroment flag
-var plugins = [];
-var env = process.env.WEBPACK_ENV;
+const plugins = [
+    new MiniCssExtractPlugin( {
+        moduleFilename: ( { name } ) => {
+            if ( name.match( /\/modules\// ) ) {
+                return `${ name.replace( '/js/', '/css/' ) }.css`;
+            }
+            return '../css/[name].css';
+        },
+    } ),
 
-function isProduction() {
-    return process.env.WEBPACK_ENV === 'production';
-}
-
-// extract css into its own file
-const extractCss = new ExtractTextPlugin({
-    filename(getPath) {
-        return getPath('../css/[name].css').replace('assets/js', 'assets/css');
-    }
-});
-
-plugins.push( extractCss );
-
-// Extract all 3rd party modules into a separate 'vendor' chunk
-// plugins.push(new webpack.optimize.CommonsChunkPlugin({
-//     name: 'vendor',
-//     minChunks: ({ resource }) => /node_modules/.test(resource),
-// }));
-
-// plugins.push(new BrowserSyncPlugin( {
-//     proxy: {
-//         target: config.proxyURL
-//     },
-//     files: [
-//         '**/*.php'
-//     ],
-//     cors: true,
-//     reloadDelay: 0
-// } ));
-
-// Generate a 'manifest' chunk to be inlined in the HTML template
-// plugins.push(new webpack.optimize.CommonsChunkPlugin('manifest'));
-
-// Compress extracted CSS. We are using this plugin so that possible
-// duplicated CSS from different components can be deduped.
-plugins.push(new OptimizeCSSPlugin({
-    cssProcessorOptions: {
-        safe: true,
-        map: {
-            inline: false
-        }
-    }
-}));
-
-// Differ settings based on production flag
-if ( isProduction() ) {
-
-    plugins.push(new UglifyJsPlugin({
-        sourceMap: true,
-    }));
-
-    plugins.push(new webpack.DefinePlugin({
-        'process.env': env
-    }));
-
-    appName = '[name].min.js';
-} else {
-    appName = '[name].js';
-}
-
-plugins.push(new webpack.ProvidePlugin({
-    $: 'jquery'
-}));
+    new VueLoaderPlugin(),
+];
 
 module.exports = {
+    mode: process.env.NODE_ENV,
     entry: entryPoints,
     output: {
-        path: exportPath,
-        filename: appName
+        path: path.resolve( __dirname, './assets/js' ),
+        filename: '[name].js',
     },
 
     resolve: {
         alias: {
-            'vue$': 'vue/dist/vue.esm.js',
-            '@': path.resolve('./src/'),
-            'frontend': path.resolve('./src/frontend/'),
-            'admin': path.resolve('./src/admin/'),
+            vue$: 'vue/dist/vue.esm.js',
+            '@': path.resolve( './src/' ),
+            frontend: path.resolve( './src/frontend/' ),
+            admin: path.resolve( './src/admin/' ),
         },
-        modules: [
-            path.resolve('./node_modules'),
-            path.resolve(path.join(__dirname, 'assets/src/')),
-        ]
     },
+
     externals: {
-        jquery: 'jQuery'
+        jquery: 'jQuery',
+        $: 'jquery',
+    },
+
+    optimization: {
+        minimizer: [ new TerserJSPlugin(), new OptimizeCSSAssetsPlugin() ],
     },
 
     plugins,
@@ -152,33 +122,31 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                exclude: /(node_modules|bower_components)/,
                 loader: 'babel-loader',
-                query: {
-                    presets: ['es2015']
-                }
             },
             {
                 test: /\.vue$/,
                 loader: 'vue-loader',
-                options: {
-                    extractCSS: true
-                }
             },
             {
                 test: /\.less$/,
-                use: extractCss.extract({
-                    use: [{
-                        loader: "css-loader"
-                    }, {
-                        loader: "less-loader"
-                    }]
-                })
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'less-loader',
+                ],
             },
             {
                 test: /\.css$/,
-                use: [ 'style-loader', 'css-loader' ]
-            }
-        ]
+                use: [ MiniCssExtractPlugin.loader, 'css-loader' ],
+            },
+            {
+                test: /\.(png|jpe?g|gif)$/i,
+                loader: 'file-loader',
+                options: {
+                    name: '../images/dist/[name].[ext]',
+                },
+            },
+        ],
     },
-}
+};

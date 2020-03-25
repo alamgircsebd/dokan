@@ -1,0 +1,39 @@
+{
+    "name": "wedevs/dokan-pro",
+    "description": "An e-commerce marketplace plugin for WordPress.",
+    "type": "wordpress-plugin",
+    "license": "GPL2",
+    "authors": [
+        {
+            "name": "weDevs",
+            "email": "info@wedevs.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.6.0",
+        "wikimedia/composer-merge-plugin": "^1.3@dev",
+        "hybridauth/hybridauth": "^3.0@dev"
+    },
+    "require-dev": {},
+    "scripts": {},
+    "autoload" : {
+      "psr-4": {
+          "WeDevs\\DokanPro\\": "includes/"
+      }
+    },
+    "extra": {
+      "merge-plugin": {
+        "include": [
+          "modules/*/composer.json"
+        ],
+        "recurse": true,
+        "replace": false,
+        "ignore-duplicates": false,
+        "merge-dev": true,
+        "merge-extra": false,
+        "merge-extra-deep": false,
+        "merge-scripts": false
+      }
+    }
+}

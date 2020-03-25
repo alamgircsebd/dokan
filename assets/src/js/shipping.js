@@ -24,7 +24,7 @@
         $('.dps-main-wrapper').on('click', 'a.dps-shipping-add', function(e) {
             e.preventDefault();
 
-            html = $('#dps-shipping-hidden-lcoation-content');
+            var html = $('#dps-shipping-hidden-lcoation-content');
             var row = $(html).first().clone().appendTo($('.dokan-shipping-location-wrapper')).show();
             $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content').first().find('a.dps-shipping-remove').show();
 
@@ -79,7 +79,7 @@
         $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('change');
         $('.dokan-shipping-location-wrapper .dps_state_selection').trigger('keyup');
 
-        $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content');
+        var $wrap = $('.dokan-shipping-location-wrapper').find('.dps-shipping-location-content');
 
         if( $wrap.length == 1) {
             $wrap.first().find('a.dps-shipping-remove').hide();
