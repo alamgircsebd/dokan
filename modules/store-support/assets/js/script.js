@@ -2,17 +2,13 @@
 //dokan store support form submit
 (function($){
 
-    var wrapper = $( '.dokan-store-tabs' );
-
-    var support_btn = $( '.dokan-store-support-btn' );
+    var wrapper            = $( '.dokan-store-tabs' );
+    var support_btn        = $( '.dokan-store-support-btn' );
     var custom_support_btn = support_btn.html();
-    //console.log(custom_support_btn);
+
     var Dokan_Store_Support = {
 
         init : function() {
-            if ( !support_btn.length ) {
-               // return;
-            }
             $('.dokan-store-support-btn').click( this.popUp.show );
             $('body').on( 'submit', '#dokan-support-login', this.popUp.submitLogin );
             $('body').on( 'submit', '#dokan-support-form', this.popUp.submitSupportMsg );

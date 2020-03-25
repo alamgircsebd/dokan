@@ -155,7 +155,6 @@ jQuery( function( $ ) {
 			var is_booking_product = $( '.dokan-booking-wrapper' ).length;
 
 			if ( ! is_booking_product ) {
-				console.log('hide')
 				$( '.show_if_booking.hide_initial_booking_addon_options' ).hide();
 			}
 

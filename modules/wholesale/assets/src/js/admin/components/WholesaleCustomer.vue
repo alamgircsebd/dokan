@@ -232,7 +232,6 @@ export default {
                 order: this.sortOrder
             })
             .done((response, status, xhr) => {
-                // console.log(response, status, xhr);
                 self.customers = response;
                 self.loading = false;
 

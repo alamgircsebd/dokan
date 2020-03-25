@@ -42,7 +42,6 @@
 
             submitLogin : function(e){
                 e.preventDefault();
-                console.log('yes');
                 var self = $(this);
                 var s_data = {
                     action : 'dokan_live_chat_login',
