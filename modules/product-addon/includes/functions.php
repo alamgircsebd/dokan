@@ -83,7 +83,7 @@ function dokan_pa_get_posted_product_addons( $postdata = [] ) {
                     $image      = sanitize_text_field( stripslashes( $option_image[ $ii ] ) );
                     $price_type = sanitize_text_field( stripslashes( $option_price_type[ $ii ] ) );
 
-                    if( ! empty( $label ) ) {
+                    if( ! empty( $label ) && ! empty( $price ) && ! empty( $price_type ) ) {
                         $addon_options[] = array(
                             'label'      => $label,
                             'price'      => $price,
