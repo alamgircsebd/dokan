@@ -82,7 +82,7 @@ class Dokan_Geolocation_Vendor_View {
     /**
      * Include locations map template in store listing page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -97,7 +97,7 @@ class Dokan_Geolocation_Vendor_View {
     /**
      * Include location filter form in store listing page
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @return void
      */
@@ -176,7 +176,7 @@ class Dokan_Geolocation_Vendor_View {
     /**
      * Load store lists filter
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @return void
      */

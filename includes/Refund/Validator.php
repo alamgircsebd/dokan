@@ -9,7 +9,7 @@ class Validator {
     /**
      * Validate id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $id
      *
@@ -30,7 +30,7 @@ class Validator {
     /**
      * Validate order_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $id
      *
@@ -49,7 +49,7 @@ class Validator {
     /**
      * Validate refund_amount
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string                                          $id
      * @param \WeDevs\DokanPro\Refund\Request\WP_REST_Request $request
@@ -77,7 +77,7 @@ class Validator {
     /**
      * Validate item_qtys
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array                                           $item_qtys
      * @param \WeDevs\DokanPro\Refund\Request\WP_REST_Request $request
@@ -118,7 +118,7 @@ class Validator {
     /**
      * Validate item_totals
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array                                           $item_totals
      * @param \WeDevs\DokanPro\Refund\Request\WP_REST_Request $request

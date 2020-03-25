@@ -40,7 +40,7 @@ class Dokan_Pro {
     /**
      * Databse version key
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var string
      */
@@ -49,7 +49,7 @@ class Dokan_Pro {
     /**
      * Holds various class instances
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var array
      */
@@ -93,7 +93,7 @@ class Dokan_Pro {
     /**
      * Magic getter to bypass referencing objects
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param $prop
      *
@@ -518,7 +518,7 @@ class Dokan_Pro {
     /**
      * Register account migration endpoint on my-account page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -529,7 +529,7 @@ class Dokan_Pro {
     /**
      * Load account migration template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -636,7 +636,7 @@ class Dokan_Pro {
     /**
      * List of Dokan Pro plans
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */

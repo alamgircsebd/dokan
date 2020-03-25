@@ -14,7 +14,7 @@ class Ajax {
     /**
      * Create refund request Ajax hook
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $data
      *
@@ -66,7 +66,7 @@ class Ajax {
      * Insert refund request via ajax
      *
      * @since 2.4.11
-     * @since DOKAN_PRO_SINCE Refactor with new refund api
+     * @since 3.0.0 Refactor with new refund api
      *
      * @return void
      */
@@ -98,7 +98,7 @@ class Ajax {
      * Intercept wc ajax request from wp-admin product edit page
      *
      * @since 2.4.11
-     * @since DOKAN_PRO_SINCE Refactor with new refund api
+     * @since 3.0.0 Refactor with new refund api
      *
      * @return void
      */
@@ -115,7 +115,7 @@ class Ajax {
     /**
      * Exception handler for WC error response
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \Exception $e
      *

@@ -213,7 +213,7 @@ class Module {
     /**
      * Define module constants
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */

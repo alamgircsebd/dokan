@@ -12,7 +12,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package Dokan/Templates
- * @version DOKAN_PRO_SINCE
+ * @version 3.0.0
  */
 
 defined( 'ABSPATH' ) || exit; ?>
@@ -49,7 +49,7 @@ defined( 'ABSPATH' ) || exit; ?>
         /**
          * Hooks: dokan_after_store_lists_filter_category
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @hooked \StoreListsFilter::featured_store() - 10
          */

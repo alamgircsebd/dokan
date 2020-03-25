@@ -12,7 +12,7 @@ class Upgrades {
      * where `require` is the the last version found in \WeDevs\Dokan\Upgrade\Upgrades
      * class.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var array
      */
@@ -21,7 +21,7 @@ class Upgrades {
     /**
      * Get DB installed version number
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -32,7 +32,7 @@ class Upgrades {
     /**
      * Detects if upgrade is required
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param bool $is_required
      *
@@ -52,7 +52,7 @@ class Upgrades {
     /**
      * Update Dokan Pro version number in DB
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -67,7 +67,7 @@ class Upgrades {
     /**
      * Get upgrades
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $upgrades
      *

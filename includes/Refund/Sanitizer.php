@@ -7,7 +7,7 @@ class Sanitizer {
     /**
      * Sanitize amount
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $amount
      *
@@ -20,7 +20,7 @@ class Sanitizer {
     /**
      * Sanitize id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $id
      *
@@ -33,7 +33,7 @@ class Sanitizer {
     /**
      * Sanitize order_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $order_id
      *
@@ -46,7 +46,7 @@ class Sanitizer {
     /**
      * Sanitize refund_amount
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $refund_amount
      *
@@ -59,7 +59,7 @@ class Sanitizer {
     /**
      * Sanitize refund_reason
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $refund_reason
      *
@@ -72,7 +72,7 @@ class Sanitizer {
     /**
      * Sanitize item_qtys
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string|array $item_qtys
      *
@@ -96,7 +96,7 @@ class Sanitizer {
     /**
      * Sanitize item_totals
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string|array $item_totals
      *
@@ -120,7 +120,7 @@ class Sanitizer {
     /**
      * Sanitize item_tax_totals
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string|array $item_tax_totals
      *
@@ -133,7 +133,7 @@ class Sanitizer {
     /**
      * Sanitize restock_items
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $restock_items
      *
@@ -146,7 +146,7 @@ class Sanitizer {
     /**
      * Sanitize date
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $date
      *
@@ -159,7 +159,7 @@ class Sanitizer {
     /**
      * Sanitize status
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $status
      *

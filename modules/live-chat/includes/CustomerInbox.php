@@ -52,7 +52,7 @@ class CustomerInbox extends Chat {
     /**
      * Add endpoint
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -63,7 +63,7 @@ class CustomerInbox extends Chat {
     /**
      * Render content
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */

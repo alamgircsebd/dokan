@@ -388,7 +388,7 @@ Class EmailVerification {
     /**
      * Check if the user is vendor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return boolean
      */
