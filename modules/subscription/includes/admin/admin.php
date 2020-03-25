@@ -454,12 +454,13 @@ class DPS_Admin {
             return;
         }
 
-        global $submenu;
+        if ( current_user_can( $capability ) ) {
+            global $submenu;
 
-        $slug = 'dokan';
+            $title = esc_html__( 'Subscriptions', 'dokan' );
+            $slug  = 'dokan';
 
-        if ( current_user_can( 'manage_options' ) ) {
-            $submenu[ $slug ][] = array( __( 'Subscriptions', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/subscriptions' );
+            $submenu[ $slug ][] = [ $title , $capability, 'admin.php?page=' . $slug . '#/subscriptions' ];
         }
     }
 

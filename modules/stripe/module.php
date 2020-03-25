@@ -666,6 +666,8 @@ class Module {
             return;
         }
 
+        $dokan_settings = get_user_meta( $store_id, 'dokan_profile_settings', true );
+
         if ( isset( $_POST['settings']['stripe'] ) ) {
             $dokan_settings['payment']['stripe'] = $_POST['settings']['stripe'];
         }

@@ -42,12 +42,12 @@ class DSR_Admin {
      * @return void
      */
     public function load_store_review_menu( $capability ) {
-        global $submenu;
-
-        $title = esc_html__( 'Store Reviews', 'dokan' );
-        $slug  = 'dokan';
-
         if ( current_user_can( $capability ) ) {
+            global $submenu;
+
+            $title = esc_html__( 'Store Reviews', 'dokan' );
+            $slug  = 'dokan';
+
             $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/store-reviews' ];
         }
     }
