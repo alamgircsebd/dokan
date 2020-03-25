@@ -144,7 +144,7 @@ class Dokan_Product_Addon_Frontend {
                     'priority'            => $priority,
                     'objects'             => $objects,
                     'product_addons'      => $product_addons,
-                    'edit_id'             => $edit_id,
+                    'edit_id'             => ! empty( $_GET['edit'] ) ? absint( $_GET['edit'] ) : '',
                 ) );
             } else {
                 if ( ! empty( $_GET['deleted'] ) && $_GET['deleted'] ) {
