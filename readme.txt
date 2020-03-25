@@ -172,6 +172,12 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v3.0.1 -> March 25, 2020
+----------------------------------
+
+- [fix] Fix some missing assets file for some modules
+
+
 v3.0.0 -> March 25, 2020
 ----------------------------------
 
