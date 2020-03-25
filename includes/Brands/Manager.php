@@ -34,7 +34,7 @@ class Manager {
     /**
      * Set is_active property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param bool $is_active
      *
@@ -47,7 +47,7 @@ class Manager {
     /**
      * Set is_premium_active property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param bool $is_premium_active
      *
@@ -60,7 +60,7 @@ class Manager {
     /**
      * Set settings property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $settings
      *

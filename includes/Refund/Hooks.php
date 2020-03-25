@@ -9,7 +9,7 @@ class Hooks {
     /**
      * Hooks related to Dokan Pro Refund
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -22,7 +22,7 @@ class Hooks {
     /**
      * After refund approval hook
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WeDevs\DokanPro\Refund\Refund $refund
      *

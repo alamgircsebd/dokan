@@ -102,7 +102,7 @@ class AdminSettings {
     /**
      * Check if live chat is enabled
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return boolean
      */
@@ -115,7 +115,7 @@ class AdminSettings {
     /**
      * Get the App ID
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -126,7 +126,7 @@ class AdminSettings {
     /**
      * Get the App Secret
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -137,7 +137,7 @@ class AdminSettings {
     /**
      * Check whether chat button should be displaied on store page or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return boolean
      */
@@ -148,7 +148,7 @@ class AdminSettings {
     /**
      * Check whether chat button should be displaied on inside product tab or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return boolean
      */
@@ -159,7 +159,7 @@ class AdminSettings {
     /**
      * Check whether chat button should be displaied on above product tab or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return boolean
      */

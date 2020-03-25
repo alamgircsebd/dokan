@@ -692,7 +692,7 @@ class Module {
         /**
          * If admin has earning from an order, only then refund application fee
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @see https://stripe.com/docs/api/refunds/create#create_refund-refund_application_fee
          *

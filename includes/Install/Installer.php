@@ -63,7 +63,7 @@ class Installer {
      * activate all pro modules.
      *
      * @since 2.8.0
-     * @since DOKAN_PRO_SINCE Using module manager to activate all modules
+     * @since 3.0.0 Using module manager to activate all modules
      *
      * @return void
      * */

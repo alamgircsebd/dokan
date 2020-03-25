@@ -111,7 +111,7 @@ function dokan_progressbar_translated_string( $string = '', $value = 15, $progre
  * Get refund counts, used in admin area
  *
  *  @since 2.4.11
- *  @since DOKAN_PRO_SINCE Move the logic to Refund manager class
+ *  @since 3.0.0 Move the logic to Refund manager class
  *
  * @global WPDB $wpdb
  * @return array
@@ -632,7 +632,7 @@ add_action( 'dokan_before_update_vendor', 'dokan_save_admin_additional_commissio
  * template function, like `dokan_geo_get_template`
  * used in Geolocation module.
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.0
  *
  * @param string $name
  * @param array  $args

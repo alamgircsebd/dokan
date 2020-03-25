@@ -7,7 +7,7 @@ class Hooks {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      */
     public function __construct() {
         add_filter( 'dokan_upgrade_is_upgrade_required', [ Upgrades::class, 'is_upgrade_required' ], 2 );

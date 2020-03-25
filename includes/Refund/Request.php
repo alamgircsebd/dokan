@@ -17,7 +17,7 @@ class Request implements ArrayAccess {
     /**
      * The refund model
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var null|\WeDevs\DokanPro\Refund\Refund
      */
@@ -26,7 +26,7 @@ class Request implements ArrayAccess {
     /**
      * Required params
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var null|array
      */
@@ -35,7 +35,7 @@ class Request implements ArrayAccess {
     /**
      * Errors during request process
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var null|array
      */
@@ -44,7 +44,7 @@ class Request implements ArrayAccess {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $data
      */
@@ -55,7 +55,7 @@ class Request implements ArrayAccess {
     /**
      * ArrayAccess method override
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $offset
      *
@@ -69,7 +69,7 @@ class Request implements ArrayAccess {
     /**
      * ArrayAccess offset method override
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $offset
      * @param mixed  $value
@@ -83,7 +83,7 @@ class Request implements ArrayAccess {
     /**
      * ArrayAccess method override
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $offset
      *
@@ -96,7 +96,7 @@ class Request implements ArrayAccess {
     /**
      * ArrayAccess method override
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $offset
      *
@@ -109,7 +109,7 @@ class Request implements ArrayAccess {
     /**
      * Get refund model
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -120,7 +120,7 @@ class Request implements ArrayAccess {
     /**
      * Get model data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -131,7 +131,7 @@ class Request implements ArrayAccess {
     /**
      * Set model param/data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $param
      * @param mixed  $value
@@ -146,7 +146,7 @@ class Request implements ArrayAccess {
     /**
      * Get a model param value
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $param
      *
@@ -165,7 +165,7 @@ class Request implements ArrayAccess {
     /**
      * Add error
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_Error $error
      *
@@ -182,7 +182,7 @@ class Request implements ArrayAccess {
     /**
      * Set required fields/params
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $required
      *
@@ -195,7 +195,7 @@ class Request implements ArrayAccess {
     /**
      * Checks if Request has any error
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return bool
      */
@@ -206,7 +206,7 @@ class Request implements ArrayAccess {
     /**
      * Get request error
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WP_Error
      */
@@ -217,7 +217,7 @@ class Request implements ArrayAccess {
     /**
      * Validate a request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -263,7 +263,7 @@ class Request implements ArrayAccess {
     /**
      * Sanitize a request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */

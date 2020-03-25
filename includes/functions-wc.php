@@ -1599,7 +1599,7 @@ add_action( 'woocommerce_save_product_variation', 'dokan_override_variation_prod
  * @return bool
  */
 function dokan_validate_cart_for_single_seller_mode( $valid, $product_id ) {
-    $is_single_seller_mode = apply_filters_deprecated( 'dokan_signle_seller_mode', [ dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) ], 'DOKAN_PRO_SINCE', 'dokan_single_seller_mode' );
+    $is_single_seller_mode = apply_filters_deprecated( 'dokan_signle_seller_mode', [ dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) ], '3.0.0', 'dokan_single_seller_mode' );
     $is_single_seller_mode = apply_filters( 'dokan_single_seller_mode', $is_single_seller_mode );
 
     if ( ! dokan_validate_boolean( $is_single_seller_mode ) ) {
@@ -1655,7 +1655,7 @@ function dokan_rest_validate_single_seller_mode( $order, $request, $creating ) {
         return $order;
     }
 
-    $is_single_seller_mode = apply_filters_deprecated( 'dokan_signle_seller_mode', [ dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) ], 'DOKAN_PRO_SINCE', 'dokan_single_seller_mode' );
+    $is_single_seller_mode = apply_filters_deprecated( 'dokan_signle_seller_mode', [ dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) ], '3.0.0', 'dokan_single_seller_mode' );
     $is_single_seller_mode = apply_filters( 'dokan_single_seller_mode', $is_single_seller_mode );
 
     if ( ! dokan_validate_boolean( $is_single_seller_mode ) ) {

@@ -102,7 +102,7 @@ class Helper {
     /**
      * Get Stripe amount to pay
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return float
      */
