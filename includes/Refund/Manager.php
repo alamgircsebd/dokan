@@ -9,7 +9,7 @@ class Manager {
     /**
      * Get a collection of Dokan refunds
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $args
      *
@@ -33,7 +33,7 @@ class Manager {
     /**
      * Get a single refund object
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $id
      *
@@ -70,7 +70,7 @@ class Manager {
     /**
      * Create a refund
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $args
      *
@@ -107,7 +107,7 @@ class Manager {
     /**
      * Get refund statuses
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -122,7 +122,7 @@ class Manager {
     /**
      * Get status code by status name
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param  string
      *
@@ -136,7 +136,7 @@ class Manager {
     /**
      * Get status codes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -147,7 +147,7 @@ class Manager {
     /**
      * Get status names
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -164,7 +164,7 @@ class Manager {
     /**
      * Get status code name for a code number
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $status_code
      *
@@ -178,7 +178,7 @@ class Manager {
     /**
      * Refund status counts for a seller
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $seller_id
      *
@@ -214,7 +214,7 @@ class Manager {
     /**
      * Find if an order has any pending request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $order_id
      *
@@ -233,7 +233,7 @@ class Manager {
     /**
      * Checks if an order is eligible to approve
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $order_id
      *

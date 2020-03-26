@@ -10,7 +10,7 @@ class Refund extends DokanModel {
     /**
      * The model data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var array
      */
@@ -19,7 +19,7 @@ class Refund extends DokanModel {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $data
      */
@@ -47,7 +47,7 @@ class Refund extends DokanModel {
     /**
      * Set model data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $data
      *
@@ -73,7 +73,7 @@ class Refund extends DokanModel {
     /**
      * Set `id` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $set_id
      *
@@ -87,7 +87,7 @@ class Refund extends DokanModel {
     /**
      * Set `order_id` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $set_order_id
      *
@@ -101,7 +101,7 @@ class Refund extends DokanModel {
     /**
      * Set `seller_id` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param int $set_seller_id
      *
@@ -115,7 +115,7 @@ class Refund extends DokanModel {
     /**
      * Set `refund_amount` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $set_refund_amount
      *
@@ -129,7 +129,7 @@ class Refund extends DokanModel {
     /**
      * Set `refund_reason` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $set_refund_reason
      *
@@ -143,7 +143,7 @@ class Refund extends DokanModel {
     /**
      * Set `item_qtys` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $set_item_qtys
      *
@@ -157,7 +157,7 @@ class Refund extends DokanModel {
     /**
      * Set `item_totals` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $set_item_totals
      *
@@ -171,7 +171,7 @@ class Refund extends DokanModel {
     /**
      * Set `item_tax_totals` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $set_item_tax_totals
      *
@@ -185,7 +185,7 @@ class Refund extends DokanModel {
     /**
      * Set `restock_items` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $set_restock_items
      *
@@ -199,7 +199,7 @@ class Refund extends DokanModel {
     /**
      * Set `date` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $set_date
      *
@@ -213,7 +213,7 @@ class Refund extends DokanModel {
     /**
      * Set `status` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $set_status
      *
@@ -227,7 +227,7 @@ class Refund extends DokanModel {
     /**
      * Set `method` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $set_method
      *
@@ -241,7 +241,7 @@ class Refund extends DokanModel {
     /**
      * Get `id` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return int
      */
@@ -252,7 +252,7 @@ class Refund extends DokanModel {
     /**
      * Get `order_id` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return int
      */
@@ -263,7 +263,7 @@ class Refund extends DokanModel {
     /**
      * Get `seller_id` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return int
      */
@@ -274,7 +274,7 @@ class Refund extends DokanModel {
     /**
      * Get `refund_amount` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -285,7 +285,7 @@ class Refund extends DokanModel {
     /**
      * Get `refund_reason` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -296,7 +296,7 @@ class Refund extends DokanModel {
     /**
      * Get `item_qtys` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -307,7 +307,7 @@ class Refund extends DokanModel {
     /**
      * Get `item_totals` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -318,7 +318,7 @@ class Refund extends DokanModel {
     /**
      * Get `item_tax_totals` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -329,7 +329,7 @@ class Refund extends DokanModel {
     /**
      * Get `restock_items` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -340,7 +340,7 @@ class Refund extends DokanModel {
     /**
      * Get `date` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -351,7 +351,7 @@ class Refund extends DokanModel {
     /**
      * Get `status` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -362,7 +362,7 @@ class Refund extends DokanModel {
     /**
      * Get `status_name` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -374,7 +374,7 @@ class Refund extends DokanModel {
     /**
      * Get `method` property
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
@@ -385,7 +385,7 @@ class Refund extends DokanModel {
     /**
      * Prepare model for DB insertion
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -402,7 +402,7 @@ class Refund extends DokanModel {
     /**
      * Save a model
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -417,7 +417,7 @@ class Refund extends DokanModel {
     /**
      * Create a model
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -443,7 +443,7 @@ class Refund extends DokanModel {
         /**
          * Fires after created a refund request
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @param \WeDevs\DokanPro\Refund\Refund $refund
          */
@@ -455,7 +455,7 @@ class Refund extends DokanModel {
     /**
      * Update a model
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -492,7 +492,7 @@ class Refund extends DokanModel {
         /**
          * Action based on refund status
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @param \WeDevs\Dokan\Refund\Refund $this
          */
@@ -501,7 +501,7 @@ class Refund extends DokanModel {
         /**
          * Fires after update a refund
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @param \WeDevs\Dokan\Refund\Refund $this
          */
@@ -513,7 +513,7 @@ class Refund extends DokanModel {
     /**
      * Delete a model
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -533,7 +533,7 @@ class Refund extends DokanModel {
         /**
          * Fires after delete a refund
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @param array $data
          */
@@ -545,7 +545,7 @@ class Refund extends DokanModel {
     /**
      * Approve a refund
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -779,7 +779,7 @@ class Refund extends DokanModel {
         /**
          * Fires after approve a refund request
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @param \WeDevs\DokanPro\Refund\Refund $refund
          */
@@ -791,7 +791,7 @@ class Refund extends DokanModel {
     /**
      * Cancel a refund request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\DokanPro\Refund\Refund
      */
@@ -807,7 +807,7 @@ class Refund extends DokanModel {
         /**
          * Fires after cancel a refund request
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          *
          * @param \WeDevs\DokanPro\Refund\Refund $refund
          */

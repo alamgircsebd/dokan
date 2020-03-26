@@ -70,7 +70,7 @@ class ModulesController extends DokanRESTAdminController {
     /**
      * Validate module ids
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $modules
      *

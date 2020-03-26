@@ -13,7 +13,7 @@ class DSR_Admin {
      * @since 1.0.0
      */
     public function __construct() {
-        add_action( 'dokan_admin_menu', array( $this, 'load_store_review_menu' ), 10, 2 );
+        add_action( 'dokan_admin_menu', array( $this, 'load_store_review_menu' ) );
         add_filter( 'dokan-admin-routes', array( $this, 'vue_admin_routes' ) );
         add_action( 'dokan-vue-admin-scripts', array( $this, 'vue_admin_enqueue_scripts' ) );
     }
@@ -26,7 +26,7 @@ class DSR_Admin {
      */
     public static function init() {
         static $instance = false;
-        
+
         if ( !$instance ) {
             $instance = new DSR_Admin();
         }
@@ -41,10 +41,15 @@ class DSR_Admin {
      *
      * @return void
      */
-    public function load_store_review_menu( $capability, $menu_position ) {
-        global $submenu;
-        
-        $submenu['dokan'][] = [ __( 'Store Reviews', 'dokan' ), $capability, 'admin.php?page=dokan#/store-reviews' ];
+    public function load_store_review_menu( $capability ) {
+        if ( current_user_can( $capability ) ) {
+            global $submenu;
+
+            $title = esc_html__( 'Store Reviews', 'dokan' );
+            $slug  = 'dokan';
+
+            $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/store-reviews' ];
+        }
     }
 
     /**

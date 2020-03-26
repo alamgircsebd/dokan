@@ -66,7 +66,6 @@ jQuery(function($) {
                 prev_li.find('label').replaceWith(response.data);
                 prev_li.find('a.dokan-edit-status').removeClass('dokan-hide');
             } else {
-                console.log( response );
                 alert( response.data );
             }
         });

@@ -188,7 +188,6 @@ global $post;
                      };
 
                      $.post( dokan.ajaxurl, data, function( response ) {
-                        console.log(response);
                         if ( response.error ) {
                             alert( response.error );
                         } else if( response.success ) {

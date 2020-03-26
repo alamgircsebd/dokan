@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Store Lists Filter Pro Class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.0
  */
 class StoreListsFilter {
 
@@ -28,7 +28,7 @@ class StoreListsFilter {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -39,7 +39,7 @@ class StoreListsFilter {
     /**
      * Init hooks
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @return void
      */
@@ -55,7 +55,7 @@ class StoreListsFilter {
     /**
      * Category area template
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @param  array $stores
      *
@@ -72,7 +72,7 @@ class StoreListsFilter {
     /**
      * Featured store template
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @param  array $stores
      * @return void
@@ -92,7 +92,7 @@ class StoreListsFilter {
     /**
      * Get store categories
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @return array | null on failure
      */
@@ -135,7 +135,7 @@ class StoreListsFilter {
     /**
      * Add sort by options
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @param array
      */
@@ -149,7 +149,7 @@ class StoreListsFilter {
     /**
      * Get filtered stores
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @param  WP_User_Query $query
      *
@@ -205,7 +205,7 @@ class StoreListsFilter {
     /**
      * Filter user query
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @param  WP_User_Query $query
      * @param  string $orderby
@@ -223,7 +223,7 @@ class StoreListsFilter {
     /**
      * Filter query from clause
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @return void
      */
@@ -264,7 +264,7 @@ class StoreListsFilter {
     /**
      * Filter orderby query
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.0
      *
      * @return void
      */

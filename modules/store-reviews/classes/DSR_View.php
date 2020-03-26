@@ -14,6 +14,7 @@ class DSR_View {
 
         add_action( 'wp_ajax_dokan_store_rating_ajax_handler', array( $this, 'ajax_handler' ) );
         add_action( 'wp_ajax_nopriv_dokan_store_rating_ajax_handler', array( $this, 'ajax_handler' ) );
+        add_action( 'dokan_after_store_lists_filter_category', array( $this, 'after_store_lists_filter_category' ), 15 );
     }
 
     /**
@@ -349,6 +350,17 @@ class DSR_View {
         }
 
         return false;
+    }
+
+    /**
+     * Include store lists filter category template
+     *
+     * @since 2.9.9
+     *
+     * @return void
+     */
+    public function after_store_lists_filter_category() {
+        include_once DOKAN_SELLER_RATINGS_DIR . '/templates/store-ratings.php';
     }
 }
 

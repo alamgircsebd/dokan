@@ -5,7 +5,7 @@ Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, stor
 Requires at least: 4.4
 Tested up to: 5.3.2
 WC requires at least: 3.0
-WC tested up to: 3.9.1
+WC tested up to: 4.0.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,36 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v3.0.1 -> March 25, 2020
+----------------------------------
+
+- [fix] Fix some missing assets file for some modules
+
+
+v3.0.0 -> March 25, 2020
+----------------------------------
+
+- [fix] Outdated template warning on vendor migration page
+- [fix] Undefined variable warning while adding a new product addon (Porduct Addons)
+- [fix] When vendor access the backend, he can see the dokan menu due to store review permission issue (Store Review)
+- [fix] Remove required fields attributes on product edit page ( Product Addons)
+- [fix] Store progressbar is not updating when vendor save stripe or wirecard payment method (Stipre & Wirecard)
+- [fix] Customer can place order from sellers who are on vacation (Seller Vacation)
+- [fix] Prevent duplicate order creation on stripe 3ds checkout (Stripe)
+- [fix] Exporting Google Map MarkerClusterer (Geolocation)
+- [fix] Active and inactve social profile in vendor single page
+- [fix] Various typos on different pages
+- [fix] Make vendor staff permissions label translatable (Vendor Staff)
+- [fix] Product review pagination is not working correctly (Vendor Staff)
+- [fix] MAP on the store listing page is not showing if Google API key field is empty but Mapbox (Geolocation)
+- [fix] Modifying the product from the Admin backend reverts the product location to `same as store` (Geolocation)
+- [fix] If admin has earning from an order, only then refund application fee (Stripe)
+- [feat] Brand support for single product multivendor and normal clone products (SPMV)
+- [improvement] Add documentation link for modules in admin module page
+- [improvement] Make store support template overridable (Store Support)
+- [improvement] Plugin build process and add script to upload built zips on BitBucket
+- [improvement] Overall code structure and performance
 
 v2.9.19 -> February 03, 2020
 ----------------------------------

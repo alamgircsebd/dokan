@@ -398,7 +398,7 @@ class Settings extends DokanSettings {
         if ( ! $store_id ) {
             return;
         }
-
+        
         $dokan_settings                       = get_user_meta( $store_id, 'dokan_profile_settings', true );
         $profile_completeness                 = $this->calculate_profile_completeness_value( $dokan_settings );
         $dokan_settings['profile_completion'] = $profile_completeness;
@@ -425,6 +425,7 @@ class Settings extends DokanSettings {
      * @return array
      */
     function calculate_profile_completeness_value( $dokan_settings ) {
+
         $profile_val = 0;
         $next_add    = '';
         $track_val   = [];
@@ -561,6 +562,16 @@ class Settings extends DokanSettings {
             if ( $dokan_settings['payment']['stripe'] ) {
                 $profile_val         = $profile_val + $payment_method_val;
                 $track_val['stripe'] = $payment_method_val;
+                $payment_method_val  = 0;
+            }
+        }
+
+        // Calculate Payment method val for moip
+        if ( isset( $dokan_settings['payment']['moip'] ) ) {
+
+            if ( $dokan_settings['payment']['moip'] ) {
+                $profile_val         = $profile_val + $payment_method_val;
+                $track_val['moip']   = $payment_method_val;
                 $payment_method_val  = 0;
             }
         }

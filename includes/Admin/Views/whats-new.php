@@ -1,6 +1,67 @@
 <?php
 $changelog = array(
-     array(
+    array(
+        'version'  => 'Version 3.0.0',
+        'released' => '2020-03-25',
+        'changes'  => array(
+            array(
+                'title'       => 'Brand Support for Single Product Multivendor',
+                'type'        => 'New',
+                'description' => 'Brand support for single product multivendor and normal clone products (SPMV)'
+            ),
+            array(
+                'title'       => 'Outdated Template Warning on Vendor Migration Page',
+                'type'        => 'Fix',
+                'description' => 'There was a warning regarding outdated template in vendor migration page, which has been resolved'
+            ),
+            array(
+                'title'       => 'Store Progressbar Issue',
+                'type'        => 'Fix',
+                'description' => 'Store progressbar was\'t updating when vendor save stripe or wirecard payment method (Stipre & Wirecard)'
+            ),
+            array(
+                'title'       => 'Seller Vacation Issue',
+                'type'        => 'Fix',
+                'description' => 'Customer was able to place order from sellers who are on vacation (Seller Vacation)'
+            ),
+            array(
+                'title'       => 'Vendor Staff Permissions Label',
+                'type'        => 'Fix',
+                'description' => 'Make vendor staff permissions label translatable (Vendor Staff)'
+            ),
+            array(
+                'title'       => 'Product Review Pagination',
+                'type'        => 'Fix',
+                'description' => 'Product review pagination is not working correctly'
+            ),
+            array(
+                'title'       => 'Geolocation Map Issue',
+                'type'        => 'Fix',
+                'description' => 'MAP on the store listing page is not showing if Google API key field is empty but Mapbox (Geolocation)'
+            ),
+            array(
+                'title'       => 'Geolocation Product Update Issue',
+                'type'        => 'Fix',
+                'description' => 'Modifying the product from the Admin backend reverts the product location to `same as store` (Geolocation)'
+            ),
+            array(
+                'title'       => 'Stripe Refund Issue',
+                'type'        => 'Fix',
+                'description' => 'If admin has earning from an order, only then refund application fee (Stripe)'
+            ),
+            array(
+                'title'       => 'Module Documention',
+                'type'        => 'Improvement',
+                'description' => 'Added documentation link for modules in admin module page'
+            ),
+            array(
+                'title'       => 'Code Structure and Performance Improvement',
+                'type'        => 'Improvement',
+                'description' => 'We have revamped our code structure and make performance improvement'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 2.9.13',
         'released' => '2019-08-29',
         'changes'  => array(

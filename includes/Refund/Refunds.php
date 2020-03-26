@@ -35,7 +35,7 @@ class Refunds {
     /**
      * Class constructor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $args
      *
@@ -55,7 +55,7 @@ class Refunds {
     /**
      * Get refunds
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -66,7 +66,7 @@ class Refunds {
     /**
      * Query refunds
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return \WeDevs\Dokan\Refund\Refunds
      */
@@ -160,7 +160,7 @@ class Refunds {
     /**
      * Get total number of refunds
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return int
      */
@@ -177,7 +177,7 @@ class Refunds {
     /**
      * Get maximum number of pages
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return int
      */

@@ -455,7 +455,7 @@ class ShippingZone {
              * Suppose Vendor_One ships porduct to zip code 10001 and Vendor_Two ships to 10002. If customer inserts 10002 and Vendor_Two's
              * Product is in the bottom on the cart then shipping won't be available for Vendor_Two as Vendor_One's shipping is false. So we will have to show Vendor_Two's available shipping anyway.
              */
-            wc_deprecated_argument( 'vendor_id', 'DOKAN_PRO_SINCE', __CLASS__ . '::get_zone_id_by_postcode() doesn\'t require $vendor_id anymore.' );
+            wc_deprecated_argument( 'vendor_id', '3.0.0', __CLASS__ . '::get_zone_id_by_postcode() doesn\'t require $vendor_id anymore.' );
         }
 
         $wc_shipping_zones    = "{$wpdb->prefix}woocommerce_shipping_zones";
@@ -465,7 +465,7 @@ class ShippingZone {
         /**
          * We are making sure that `vendor_zone_id` is exsits in woocommerce_zone_ids to avoid `Uncaught Exception: Invalid data store`.
          *
-         * @since DOKAN_PRO_SINCE
+         * @since 3.0.0
          */
         $wc_zone_ids = $wpdb->get_results( "select zone_id from {$wc_shipping_zones}" );
         $wc_zone_ids = array_map( function( $zone ) {

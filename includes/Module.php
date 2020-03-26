@@ -11,7 +11,7 @@ class Module {
     /**
      * The wp option key which contains active module ids
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var string
      */
@@ -20,7 +20,7 @@ class Module {
     /**
      * Active module ids
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var array
      */
@@ -29,7 +29,7 @@ class Module {
     /**
      * Contains all module informations
      *
-     *  @since DOKAN_PRO_SINCE
+     *  @since 3.0.0
      *
      * @var array
      */
@@ -38,7 +38,7 @@ class Module {
     /**
      * Tells us if modules activated or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var bool
      */
@@ -47,7 +47,7 @@ class Module {
     /**
      * Update db option containing active module ids
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $value
      *
@@ -60,7 +60,7 @@ class Module {
     /**
      * Load active modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $newly_activated_modules Useful after module activation
      *
@@ -87,7 +87,7 @@ class Module {
                     /**
                      * Module activation hook
                      *
-                     * @since DOKAN_PRO_SINCE
+                     * @since 3.0.0
                      *
                      * @param object $module Module class instance
                      */
@@ -102,7 +102,7 @@ class Module {
     /**
      * List of Dokan Pro modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -413,7 +413,7 @@ class Module {
     /**
      * Set Dokan Pro modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $modules
      *
@@ -426,7 +426,7 @@ class Module {
     /**
      * Get a list of module ids
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -444,7 +444,7 @@ class Module {
     /**
      * Get Dokan Pro active modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -481,7 +481,7 @@ class Module {
     /**
      * Get a list of available modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -501,7 +501,7 @@ class Module {
     /**
      * Backward compatible module naming map
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -538,7 +538,7 @@ class Module {
     /**
      * Activate Dokan Pro modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $modules
      *
@@ -561,7 +561,7 @@ class Module {
     /**
      * Deactivate Dokan Pro modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $modules
      *
@@ -585,7 +585,7 @@ class Module {
                 /**
                  * Module deactivation hook
                  *
-                 * @since DOKAN_PRO_SINCE
+                 * @since 3.0.0
                  *
                  * @param object $module deactivated module class instance
                  */
@@ -599,7 +599,7 @@ class Module {
     /**
      * Checks if a module is active or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $module_id
      *

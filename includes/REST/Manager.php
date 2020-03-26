@@ -7,7 +7,7 @@ class Manager {
     /**
      * Register Dokan Pro REST Controllers
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param array $class_map
      *

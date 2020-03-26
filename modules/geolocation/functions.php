@@ -232,7 +232,7 @@ function dokan_geo_float_val( $val ) {
 /**
  * Dokan Geolocation Store Lists Filter Form
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.0
  *
  * @return void
  */

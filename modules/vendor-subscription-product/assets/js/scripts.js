@@ -101,7 +101,6 @@
             $.post( dokan.ajaxurl, self.serialize(), function(response) {
                 li.unblock();
 
-                console.log( response );
                 if ( response.success ) {
                     var prev_li = li.prev();
 

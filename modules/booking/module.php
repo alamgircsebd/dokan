@@ -1129,7 +1129,7 @@ class Module {
     /**
      * Add caps labels
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param string $caps
      *

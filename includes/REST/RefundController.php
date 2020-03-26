@@ -19,7 +19,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * API namespace
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var string
      */
@@ -28,7 +28,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * API base
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @var string
      */
@@ -37,7 +37,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Register REST routes
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return void
      */
@@ -118,7 +118,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Get refunds permission callback
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -131,7 +131,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Update refund permission callback
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -144,7 +144,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Delete refund permission callback
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -157,7 +157,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Batch refunds permission callback
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -170,7 +170,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Get refunds
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -232,7 +232,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Approve a refund request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -262,7 +262,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Cancel a refund request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -292,7 +292,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Delete a refund
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Request $request
      *
@@ -397,7 +397,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Refund REST request item schema
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -487,7 +487,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Schema for batch processing
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return array
      */
@@ -526,7 +526,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Prepare refund for response
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WeDevs\DokanPro\Refund\Refund $refund
      * @param \WP_REST_Request               $request
@@ -535,7 +535,7 @@ class RefundController extends WP_REST_Controller {
      */
     public function prepare_item_for_response( $refund, $request ) {
         $vendor = dokan()->vendor->get( $refund->get_seller_id() );
-        error_log( print_r( $refund->get_item_qtys(), true ) );
+
         $data = [
             'id'            => Sanitizer::sanitize_id( $refund->get_id() ),
             'order_id'      => Sanitizer::sanitize_order_id( $refund->get_order_id() ),
@@ -560,7 +560,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Format collection response
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WP_REST_Response $response
      * @param \WP_REST_Request  $request
@@ -608,7 +608,7 @@ class RefundController extends WP_REST_Controller {
     /**
      * Prepare links for the request.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @param \WeDevs\DokanPro\Refund\Refund         $object  Object data.
      * @param \WP_REST_Request                       $request Request object.

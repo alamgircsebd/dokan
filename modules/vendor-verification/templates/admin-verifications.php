@@ -93,7 +93,7 @@ $states      = $country_obj->states;
         if ( isset( $seller_profile['dokan_verification']['info']['phone_status'] ) && $seller_profile['dokan_verification']['info']['phone_status'] === $status ) {
             $seller_v['phone'] = $seller_profile['dokan_verification']['info']['phone_no'];
             $seller_v['phone_status'] = $seller_profile['dokan_verification']['info']['phone_status'];
-        } 
+        }
         else {
             $seller_v['phone'] =  isset( $seller_profile['dokan_verification']['info']['phone_no'] ) ? $seller_profile['dokan_verification']['info']['phone_no'] : '';
             $seller_v['phone_status'] = isset( $seller_profile['dokan_verification']['info']['phone_status'] ) ? $seller_profile['dokan_verification']['info']['phone_status'] : '';
@@ -355,12 +355,11 @@ $states      = $country_obj->states;
                             type : self.data('type'),
                             seller_id : self.data( 'seller_id' )
                         };
-                        console.log(data);
+
                         $.post(url, data, function( resp ) {
 
                             if( resp.success ) {
                                 self.closest( 'tr' ).removeClass('custom-spinner');
-                                console.log(resp.data);
                                 location.reload();
                             } else {
                                 self.closest( 'tr' ).removeClass('custom-spinner');

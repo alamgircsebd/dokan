@@ -155,7 +155,6 @@ jQuery( function( $ ) {
 			var is_booking_product = $( '.dokan-booking-wrapper' ).length;
 
 			if ( ! is_booking_product ) {
-				console.log('hide')
 				$( '.show_if_booking.hide_initial_booking_addon_options' ).hide();
 			}
 
@@ -222,7 +221,7 @@ jQuery( function( $ ) {
 							parent.find( '.wc-pao-addon-content-option-rows' ).removeClass( 'hide' ).addClass( 'show' );
 							parent.find( '.wc-pao-addon-content-non-option-rows' ).removeClass( 'show' ).addClass( 'hide' );
                             $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
-                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 							if ( 'images' === parent.find( '.wc-pao-addon-display-select' ).val() ) {
 								parent.find( '.wc-pao-addon-content-image' ).removeClass( 'hide' ).addClass( 'show' );
 								parent.find( '.wc-pao-addon-content-label' ).removeClass( 'full' );
@@ -238,7 +237,7 @@ jQuery( function( $ ) {
 							parent.find( '.wc-pao-addon-adjust-price-container' ).removeClass( 'show' ).addClass( 'hide' );
 							parent.find( '.wc-pao-addon-restrictions-container' ).removeClass( 'show' ).addClass( 'hide' );
                             $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
-                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
+                            $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 							break;
 						case 'custom_price':
 							restrictionName = wc_pao_params.i18n.limit_price_range;
@@ -357,7 +356,7 @@ jQuery( function( $ ) {
 						$( html ).appendTo( parent );
 
 						$( 'select.wc-pao-addon-type-select' ).change();
-                        $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
+                        $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 					} );
 
 					return false;
@@ -377,7 +376,7 @@ jQuery( function( $ ) {
 
 						$( 'select.wc-pao-addon-type-select' ).change();
                         $( 'input.wc-pao-addon-content-name' ).attr( 'required', true );
-                        $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', true );
+                        $( '.wc-pao-addon-content-label input[type="text"]' ).attr( 'required', false );
 						wc_pao_admin.refresh();
 						wc_pao_admin.runOptionSortable();
 						wc_pao_admin.hideBookingForNonBookableProduct();

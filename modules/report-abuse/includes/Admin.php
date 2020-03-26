@@ -12,7 +12,7 @@ class Admin {
      * @return void
      */
     public function __construct() {
-        add_action( 'dokan_admin_menu', [ self::class, 'add_admin_menu' ], 10, 2 );
+        add_action( 'dokan_admin_menu', [ self::class, 'add_admin_menu' ] );
         add_filter( 'dokan-admin-routes', [ self::class, 'add_admin_route' ] );
         add_action( 'dokan-vue-admin-scripts', [ self::class, 'enqueue_admin_script' ] );
     }
@@ -23,17 +23,18 @@ class Admin {
      * @since 2.9.8
      *
      * @param string $capability
-     * @param int    $menu_position
      *
      * @return void
      */
-    public static function add_admin_menu( $capability, $menu_position ) {
-        global $submenu;
+    public static function add_admin_menu( $capability ) {
+        if ( current_user_can( $capability ) ) {
+            global $submenu;
 
-        $title = esc_html__( 'Abuse Reports', 'dokan' );
-        $slug  = 'dokan';
+            $title = esc_html__( 'Abuse Reports', 'dokan' );
+            $slug  = 'dokan';
 
-        $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/abuse-reports' ];
+            $submenu[ $slug ][] = [ $title, $capability, 'admin.php?page=' . $slug . '#/abuse-reports' ];
+        }
     }
 
     /**

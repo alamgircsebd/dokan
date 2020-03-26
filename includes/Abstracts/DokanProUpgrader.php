@@ -9,7 +9,7 @@ class DokanProUpgrader extends DokanUpgrader {
     /**
      * Get db versioning key
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.0
      *
      * @return string
      */
