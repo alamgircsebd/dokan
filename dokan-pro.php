@@ -88,6 +88,8 @@ class Dokan_Pro {
         add_action( 'dokan_loaded', [ $this, 'init_plugin' ] );
 
         register_activation_hook( __FILE__, [ $this, 'activate' ] );
+
+        new WeDevs\DokanPro\Brands\Hooks();
     }
 
     /**
@@ -317,7 +319,6 @@ class Dokan_Pro {
     public function init_classes() {
         new WeDevs\DokanPro\Refund\Hooks();
         new WeDevs\DokanPro\Coupons\Hooks();
-        new WeDevs\DokanPro\Brands\Hooks();
         new \WeDevs\DokanPro\Shipping\Hooks();
 
         new \WeDevs\DokanPro\StoreCategory();
