@@ -375,7 +375,9 @@ class ShippingZone {
         $zone_id_by_postcode = 0;
 
         if ( ! empty( $postcode ) ) {
-            $zone_id_by_postcode = self::get_zone_id_by_postcode( $postcode );
+            // Get the raw postcode as it was saved to database.
+            $raw_postcode        = wc_clean( $package['destination']['postcode'] );
+            $zone_id_by_postcode = self::get_zone_id_by_postcode( $raw_postcode );
         }
 
         if ( $zone_id_by_postcode && $zone_id_by_postcode !== $zone_id ) {
@@ -460,7 +462,7 @@ class ShippingZone {
 
         $wc_shipping_zones    = "{$wpdb->prefix}woocommerce_shipping_zones";
         $dokan_shipping_zones = "{$wpdb->prefix}dokan_shipping_zone_locations";
-        $vendor_zone_id       = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$dokan_shipping_zones} WHERE location_code=%d AND location_type=%s", $postcode, 'postcode' ) );
+        $vendor_zone_id       = $wpdb->get_var( $wpdb->prepare( "SELECT zone_id FROM {$dokan_shipping_zones} WHERE location_code=%s AND location_type=%s", $postcode, 'postcode' ) );
 
         /**
          * We are making sure that `vendor_zone_id` is exsits in woocommerce_zone_ids to avoid `Uncaught Exception: Invalid data store`.
