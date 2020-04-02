@@ -37,7 +37,6 @@ class StoreTabItems extends TagBase {
      * @return void
      */
     protected function get_value() {
-        $store_id = 0;
 
         if ( dokan_is_store_page() ) {
             $store = dokan()->vendor->get( get_query_var( 'author' ) );
@@ -45,9 +44,11 @@ class StoreTabItems extends TagBase {
             if ( $store->id ) {
                 $store_id = $store->id;
             }
-        }
 
-        $store_tab_items = dokan_get_store_tabs( $store_id );
+            $store_tab_items = dokan_get_store_tabs( $store_id );
+        } else {
+            $store_tab_items = $this->get_store_tab_items();
+        }
 
         $tab_items = [];
 
@@ -84,5 +85,33 @@ class StoreTabItems extends TagBase {
 
     protected function render() {
         echo json_encode( $this->get_value() );
+    }
+
+    /**
+     * Store tab items for Elementor Builder
+     *
+     * @since 2.9.14
+     *
+     * @return array
+     */
+    protected function get_store_tab_items() {
+        return [
+            'products' => [
+                'title' => __( 'Products', 'dokan' ),
+                'url'   => '#',
+            ],
+            'terms_and_conditions' => [
+                'title' => __( 'Terms and Conditions', 'dokan' ),
+                'url'   => '#',
+            ],
+            'reviews' => [
+                'title' => __( 'Reviews', 'dokan' ),
+                'url'   => '#'
+            ],
+            'vendor_biography' => [
+                'title' => apply_filters( 'dokan_vendor_biography_title', __( 'Vendor Biography', 'dokan' ) ),
+                'url'   => '#',
+            ],
+        ];
     }
 }
