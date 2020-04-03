@@ -9,17 +9,17 @@
 *
 * @return WP_Screen|null Current screen object or null when screen not defined.
 */
-if ( ! function_exists( 'get_current_screen ') && ! ( is_admin() ) ) :
-    function get_current_screen() {
-        global $current_screen;
+// if ( ! function_exists( 'get_current_screen ') && ! ( is_admin() ) ) :
+//     function get_current_screen() {
+//         global $current_screen;
 
-        if ( ! isset( $current_screen ) ) {
-            return null;
-        }
+//         if ( ! isset( $current_screen ) ) {
+//             return null;
+//         }
 
-        return $current_screen;
-    }
-endif;
+//         return $current_screen;
+//     }
+// endif;
 
 /**
 * Get vendors subscripton by orders

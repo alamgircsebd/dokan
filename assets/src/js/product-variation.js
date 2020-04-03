@@ -454,7 +454,7 @@ jQuery( function( $ ) {
                 data.action          = 'dokan_save_variations';
                 data.security        = dokan.save_variations_nonce;
                 data.product_id      = $( '#dokan-edit-product-id' ).val();
-                data['product-type'] = $( '#product_type' ).val();
+                data['product_type'] = $( '#product_type' ).val();
 
                 $.ajax({
                     url: dokan.ajaxurl,

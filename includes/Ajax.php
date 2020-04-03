@@ -1811,8 +1811,8 @@ class Ajax {
                 foreach ( $delete_attribute_keys as $key ) {
                     delete_post_meta( $variation_id, $key );
                 }
-
                 do_action( 'woocommerce_save_product_variation', $variation_id, $i );
+                do_action( 'dokan_save_product_variation', $variation_id, $i );
             }
         }
 
@@ -2182,7 +2182,7 @@ class Ajax {
 
         $variations = array();
 
-        $_product = wc_get_product( $post_id, array( 'product_type' => 'variable' ) );
+        $_product = wc_get_product( $post_id );
 
         // Put variation attributes into an array
         foreach ( $_product->get_attributes() as $attribute ) {
