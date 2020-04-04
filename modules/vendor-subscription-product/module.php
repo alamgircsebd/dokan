@@ -183,10 +183,10 @@ class Module {
         wp_enqueue_style( 'dokan-vsp-style', DOKAN_VSP_DIR_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
         wp_enqueue_script( 'dokan-vsp-script', DOKAN_VSP_DIR_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
 
-        $billing_period_strings = WC_Subscriptions_Synchroniser::get_billing_period_ranges();
+        $billing_period_strings = \WC_Subscriptions_Synchroniser::get_billing_period_ranges();
 
         $params = [
-            'productType'               => WC_Subscriptions::$name,
+            'productType'               => \WC_Subscriptions::$name,
             'trialPeriodSingular'       => wcs_get_available_time_periods(),
             'trialPeriodPlurals'        => wcs_get_available_time_periods( 'plural' ),
             'subscriptionLengths'       => wcs_get_subscription_ranges(),

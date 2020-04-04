@@ -187,10 +187,9 @@ class Dokan_VSP_Product {
             }
 
             update_post_meta( $post_id, WC_Subscriptions_Synchroniser::$post_meta_key, $_POST[ WC_Subscriptions_Synchroniser::$post_meta_key ] );
+        } elseif ( $_POST['product_type'] == 'variable-subscription' ) {
+            dokan_save_variations( $post_id );
         }
-        // } elseif ( $_POST['product_type'] == 'variable-subscription' ) {
-        //     dokan_save_variations( $post_id );
-        // }
     }
 
     /**
@@ -201,6 +200,10 @@ class Dokan_VSP_Product {
      * @return void
      */
     public function save_variation_metadata( $variation_id, $index ) {
+        if ( ! dokan_is_user_seller( dokan_get_current_user_id() ) ) {
+            return;
+        }
+
         if ( isset( $_POST['variable_subscription_sign_up_fee'][ $index ] ) ) {
             $subscription_sign_up_fee = wc_format_decimal( $_POST['variable_subscription_sign_up_fee'][ $index ] );
             update_post_meta( $variation_id, '_subscription_sign_up_fee', $subscription_sign_up_fee );

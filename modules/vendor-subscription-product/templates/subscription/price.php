@@ -1,8 +1,8 @@
 <?php
 global $wp_locale;
-$chosen_price    = get_post_meta( $post_id, '_subscription_price', true );
-$chosen_interval = get_post_meta( $post_id, '_subscription_period_interval', true );
-$chosen_length   = get_post_meta( $post_id, '_subscription_length', true );
+$chosen_price        = get_post_meta( $post_id, '_subscription_price', true );
+$chosen_interval     = get_post_meta( $post_id, '_subscription_period_interval', true );
+$chosen_length       = get_post_meta( $post_id, '_subscription_length', true );
 $chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $post_id );
 $chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $post_id );
 
