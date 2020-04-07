@@ -71,6 +71,62 @@ jQuery(function($) {
         });
     });
 
+    const booking_time = $('.bookings .dokan-booking-time');
+
+    [...booking_time].forEach((row) => {
+        let booking_time_range = $(row).data('booking-time');
+        dokan_set_booking_day_view(booking_time_range);
+    });
+
+    /**
+     * Set the booking day view in calender
+     */
+    function dokan_set_booking_day_view(range) {
+        if ( ! range ) {
+            return;
+        }
+
+        const hours      = range.split(' ');
+        const start_time = hours[0];
+        const end_time   = hours[1];
+
+        if ( ! start_time || ! end_time ) {
+            return;
+        }
+
+        const start_time_in_number = parseInt( start_time.slice(0,2) );
+        const end_time_in_number   = parseInt( end_time.slice(0,2) );
+
+        let diff = Math.abs( start_time_in_number - end_time_in_number );
+
+        if ( start_time.includes('am')
+            && end_time.includes('am')
+            || start_time.includes('pm')
+            && end_time.includes('pm')
+            ) {
+            diff = diff;
+        } else if ( end_time_in_number < start_time_in_number ) {
+            diff += 12;
+        }
+
+        let calendar_days = $('.calendar_days .hours label');
+        let has_next      = false;
+        let index         = 1;
+
+        [...calendar_days].forEach((row) => {
+            let hour_row = $(row);
+            let time     = hour_row.text().trim();
+
+            if ( start_time === time || has_next ) {
+                if ( index === 1 ) {
+                    hour_row.parent().addClass('dokan-has-booking dokan-booking-' + time).append( $('.bookings .dokan-booking-' + time) );
+                } else {
+                    hour_row.parent().addClass('dokan-has-booking has-next');
+                }
+
+                has_next = ( diff - index ) >= 1 ? true : false;
+                index++;
+            }
+        });
+    }
 });
-
-
