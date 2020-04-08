@@ -15,10 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 echo "= " . $email_heading . " =\n\n";
 echo sprintf( __( 'You have received an order from %s.', 'dokan-lite' ), $order->get_formatted_billing_full_name() ) . "\n\n";
 echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
-/**
- * @hooked WC_Emails::customer_details() Shows customer details
- * @hooked WC_Emails::email_address() Shows email address
- */
-do_action( 'woocommerce_email_customer_details', $order, $sent_to_admin, $plain_text, $email );
+
+echo "\n" . esc_html( wc_strtoupper( esc_html__( 'Billing address', 'dokan-lite' ) ) ) . "\n\n";
+echo preg_replace( '#<br\s*/?>#i', "\n", $order->get_formatted_billing_address() ) . "\n"; // WPCS: XSS ok.
+
+if ( $order->get_billing_phone() ) {
+	echo $order->get_billing_phone() . "\n"; // WPCS: XSS ok.
+}
+
+if ( ! wc_ship_to_billing_address_only() && $order->needs_shipping_address() ) {
+	$shipping = $order->get_formatted_shipping_address();
+
+	if ( $shipping ) {
+		echo "\n" . esc_html( wc_strtoupper( esc_html__( 'Shipping address', 'dokan-lite' ) ) ) . "\n\n";
+		echo preg_replace( '#<br\s*/?>#i', "\n", $shipping ) . "\n"; // WPCS: XSS ok.
+	}
+}
+
 echo "\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=\n\n";
 echo apply_filters( 'woocommerce_email_footer_text', get_option( 'woocommerce_email_footer_text' ) );
