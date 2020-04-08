@@ -19,14 +19,23 @@ class Dokan_WC_Bookings_Calendar {
         $view           = isset( $_REQUEST['view'] ) && $_REQUEST['view'] == 'day' ? 'day' : 'month';
 
         if ( $view == 'day' ) {
-            $day            = isset( $_REQUEST['calendar_day'] ) ? wc_clean( $_REQUEST['calendar_day'] ) : date( 'Y-m-d' );
+            $day = isset( $_REQUEST['calendar_day'] ) ? wc_clean( $_REQUEST['calendar_day'] ) : date( 'Y-m-d' );
 
-            $this->bookings = WC_Bookings_Controller::get_bookings_in_date_range(
-                strtotime( 'midnight', strtotime( $day ) ),
-                strtotime( 'midnight +1 day -1 min', strtotime( $day ) ),
-                $product_filter,
-                false
-            );
+            if ( version_compare( WC_BOOKINGS_VERSION, '1.15.0', '>=' ) ) {
+                $this->bookings = WC_Booking_Data_Store::get_bookings_in_date_range(
+                    strtotime( 'midnight', strtotime( $day ) ),
+                    strtotime( 'midnight +1 day -1 min', strtotime( $day ) ),
+                    $product_filter,
+                    false
+                );
+            } else {
+                $this->bookings = WC_Bookings_Controller::get_bookings_in_date_range(
+                    strtotime( 'midnight', strtotime( $day ) ),
+                    strtotime( 'midnight +1 day -1 min', strtotime( $day ) ),
+                    $product_filter,
+                    false
+                );
+            }
         } else {
             $month = isset( $_REQUEST['calendar_month'] ) ? absint( $_REQUEST['calendar_month'] ) : date( 'n' );
             $year  = isset( $_REQUEST['calendar_year'] ) ? absint( $_REQUEST['calendar_year'] ) : date( 'Y' );
@@ -64,12 +73,21 @@ class Dokan_WC_Bookings_Calendar {
             $start_timestamp = strtotime( "-{$day_offset} day", strtotime( "$year-$month-01" ) );
             $end_timestamp   = strtotime( "+{$end_day_offset} day midnight -1 min", strtotime( "$year-$month-$last_day" ) );
 
-            $this->bookings  = WC_Bookings_Controller::get_bookings_in_date_range(
-                $start_timestamp,
-                $end_timestamp,
-                $product_filter,
-                false
-            );
+            if ( version_compare( WC_BOOKINGS_VERSION, '1.15.0', '>=' ) ) {
+                $this->bookings = WC_Booking_Data_Store::get_bookings_in_date_range(
+                    $start_timestamp,
+                    $end_timestamp,
+                    $product_filter,
+                    false
+                );
+            } else {
+                $this->bookings = WC_Bookings_Controller::get_bookings_in_date_range(
+                    $start_timestamp,
+                    $end_timestamp,
+                    $product_filter,
+                    false
+                );
+            }
         }
 
         include DOKAN_WC_BOOKING_DIR.( '/templates/booking/calendar/html-calendar-' . $view . '.php' );
@@ -193,25 +211,15 @@ class Dokan_WC_Bookings_Calendar {
 
         foreach ( $bookings_by_time as $bookings ) {
             foreach ( $bookings as $booking ) {
-                $start_time = $booking->get_start_date( '', 'Gi' );
-                $end_time   = $booking->get_end_date( '', 'Gi' );
-                $height     = ( $end_time - $start_time ) / 1.66666667;
+                $short_start_time = $this->get_short_time( $booking->get_start() );
+                $short_end_time   = $this->get_short_time( $booking->get_end() );
+                $booking_time     = sprintf( __( '%1$s %2$s', 'dokan' ), $short_start_time, $short_end_time );
 
-                if ( $height < 30 ) {
-                    $height = 30;
-                }
+                $element = "<li class='dokan-booking-time dokan-booking-{$short_start_time}' data-booking-time='{$booking_time}'>";
+                $element .= "<a href='{$edit_url}'>{$this->get_tip( $booking )}</a>";
+                $element .= "</li>";
 
-                if ( $last_end > $start_time ) {
-                    $column++;
-                } else {
-                    $column = $start_column;
-                }
-
-                echo '<li data-tip="' . $this->get_tip( $booking ) . '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: ' . ( $start_time * 60 ) / 100 . 'px; height: ' . $height . 'px; top: 0; bottom: 0; display:list-item;  "><a href="' . $edit_url . '">#' . $booking->id . '</a></li>';
-
-                if ( $end_time > $last_end ) {
-                    $last_end = $end_time;
-                }
+                echo $element;
             }
         }
     }
@@ -271,7 +279,8 @@ class Dokan_WC_Bookings_Calendar {
         foreach ( $products as $product ) {
             $filters[ $product->ID ] = $product->post_title;
 
-            $resources = wc_booking_get_product_resources( $product->ID );
+            $booking   = new WC_Product_Booking( $product );
+            $resources = $booking->get_resources();
 
             foreach ( $resources as $resource ) {
                 $filters[ $resource->ID ] = '&nbsp;&nbsp;&nbsp;' . $resource->post_title;
@@ -302,5 +311,29 @@ class Dokan_WC_Bookings_Calendar {
         }
 
         return $filters;
+    }
+
+    /**
+     * Get formatted time from timestamp with shortened time format.
+     * Shortened format removes minutes when time is on the hour and removes
+     * space between time and AM/PM.
+     *
+     * @param int $timestamp Timestamp to format.
+     * @return string
+     *
+     * @since 1.15.0
+     */
+    public function get_short_time( $timestamp ) {
+        $time_format = 'g:i a';
+        // Remove spaces so AM/PM will be directly next to time.
+        $time_format = str_replace( ' ', '', $time_format );
+
+        // Hide minutes if on the hour.
+        if ( '00' === date( 'i', $timestamp ) ) {
+            // Remove minutes from time format.
+            $time_format = str_replace( ':i', '', $time_format );
+        }
+
+        return date( $time_format, $timestamp );
     }
 }

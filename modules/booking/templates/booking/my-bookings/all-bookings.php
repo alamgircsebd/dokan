@@ -1,22 +1,20 @@
 <?php
 global $woocommerce;
 
-$seller_id    = dokan_get_current_user_id();
-$counts       = Dokan_WC_Booking::get_booking_status_counts_by( $seller_id );
+$seller_id = dokan_get_current_user_id();
+$counts    = dokan_pro()->module->booking::get_booking_status_counts_by( $seller_id );
+$paged     = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
+$limit     = 10;
+$offset    = ( $paged - 1 ) * $limit;
 
-$paged        = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
-$limit        = 10;
-$offset       = ( $paged - 1 ) * $limit;
-
-
-$args = array(
-    'post_type' => 'wc_booking',
+$args = [
+    'post_type'      => 'wc_booking',
     'paged'          => $paged,
     'posts_per_page' => $limit,
     'offset'         => $offset,
     'meta_key'       => '_booking_seller_id',
     'meta_value'     => $seller_id,
-    );
+];
 
 //set filters
 $booking_date        = isset( $_GET['month'] ) ? sanitize_key( $_GET['month'] ) : NULL;
