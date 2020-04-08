@@ -39,9 +39,15 @@ class Templates {
      * @return bool|array
      */
     public static function pre_http_request( $pre, $r, $url ) {
-        // @see elementor/includes/api.php $api_get_template_content_url
-        if ( preg_match( '/https\:\/\/my\.elementor\.com\/api\/v1\/templates\/100000(\d+)/', $url, $matches ) ) {
-            $json_file = DOKAN_ELEMENTOR_PATH . '/template-library/' . $matches[1] . '.json';
+        $all_templates = array( '1' => '1000001', '2' => '1000002', '3' => '1000003', '4' => '1000004' );
+        
+        if( $r['body']['id'] ) {
+            $get_template_id = $r['body']['id'];
+        }
+
+        if ( $get_template_id && array_search ( $get_template_id, $all_templates) ) {
+            $template_id = array_search ( $get_template_id, $all_templates);
+            $json_file   = DOKAN_ELEMENTOR_PATH . '/template-library/' . $template_id . '.json';
 
             if ( file_exists( $json_file ) ) {
                 $content = json_decode( file_get_contents( $json_file ), true );
