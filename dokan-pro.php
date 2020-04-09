@@ -580,7 +580,7 @@ class Dokan_Pro {
         $wc_emails['Dokan_Email_Refund_Request']  = new \WeDevs\DokanPro\Emails\RefundRequest();
         $wc_emails['Dokan_Email_Refund_Vendor']   = new \WeDevs\DokanPro\Emails\RefundVendor();
         $wc_emails['Dokan_Email_Vendor_Enable']   = new \WeDevs\DokanPro\Emails\VendorEnable();
-        $wc_emails['Dokan_Email_Vendor_Disable']  = new \WeDevs\DokanPro\Emails\VendorEnable();
+        $wc_emails['Dokan_Email_Vendor_Disable']  = new \WeDevs\DokanPro\Emails\VendorDisable();
 
         return $wc_emails;
     }
@@ -615,10 +615,12 @@ class Dokan_Pro {
      * @return $actions
      */
     public function register_email_actions( $actions ) {
-        $actions[] = 'dokan_edited_product_pending_notification';
+        $actions[] = 'dokan_vendor_enabled';
+        $actions[] = 'dokan_vendor_disabled';
         $actions[] = 'dokan_after_announcement_saved';
         $actions[] = 'dokan_refund_request_notification';
         $actions[] = 'dokan_refund_processed_notification';
+        $actions[] = 'dokan_edited_product_pending_notification';
 
         return $actions;
     }
