@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro;
 
+use WPSEO_Sitemaps_Router;
+
 /**
  * Dokan SEO class
  *
