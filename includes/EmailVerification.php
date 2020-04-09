@@ -374,12 +374,12 @@ Class EmailVerification {
      * @return bool
      */
     public function maybe_verification_not_needed() {
-        if ( ! class_exists( \WeDevs\DokanPro\Modules\Subscription\Helper::class ) ) {
-            return;
-        }
-
         if ( 'on' !== dokan_get_option( 'enabled', 'dokan_email_verification' ) ) {
             return true;
+        }
+
+        if ( ! dokan_pro()->module->is_active( 'product_subscription' ) ) {
+            return;
         }
 
         if ( dokan_pro()->module->is_active( 'product_subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
