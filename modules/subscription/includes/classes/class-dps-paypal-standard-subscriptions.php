@@ -30,6 +30,10 @@ class DPS_PayPal_Standard_Subscriptions {
      * @since 1.0
      */
     public static function init() {
+        if ( ! self::get_wc_paypal_settings() ) {
+            return;
+        }
+
         self::set_api_credentials();
         self::subscription_paypal_credential_verify();
 
@@ -259,17 +263,23 @@ class DPS_PayPal_Standard_Subscriptions {
                 $paypal_args['t3'] = $converted_periods['billing_period'];
             }
 
-            if ( $subscription_installments === 1 ) {
-                // Non-recurring payments
-                $paypal_args['src'] = 0;
-            } else {
+            /**
+             * If number of subscription installments is 0 (unlimted) or greater than 1. Set `src` to 1 else make it 0.
+             *
+             * @see https://developer.paypal.com/docs/paypal-payments-standard/integration-guide/Appx-websitestandard-htmlvariables/?mark=srt#recurring-payment-variables
+             */
+            if ( 0 === $subscription_installments ) {
+                // Recurring for unlimted period
                 $paypal_args['src'] = 1;
-
-                if ( $subscription_installments < 2 || $subscription_installments > 52 ) {
-                    throw new Exception( __( 'Billing cycle can\'t be less than 2 or greater than 52 for PayPal', 'dokan' ) );
-                }
-
+            } else if ( 1 === $subscription_installments ) {
+                // One time subscription
+                $paypal_args['src'] = 0;
+            } else if ( $subscription_installments > 1 && $subscription_installments <= 52 ) {
+                // Recurring for certain time (number of subscription installments)
+                $paypal_args['src'] = 1;
                 $paypal_args['srt'] = $subscription_installments;
+            } else {
+                throw new Exception( __( 'Invalid subscription length', 'dokan' ) );
             }
         }
 
@@ -360,6 +370,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 Helper::make_product_publish( $customer_id );
 
                 $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
+                $admin_additional_fee  = get_post_meta( $product['product_id'], '_subscription_product_admin_additional_fee', true );
                 $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
                 if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
@@ -367,6 +378,12 @@ class DPS_PayPal_Standard_Subscriptions {
                     update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                 } else {
                     update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
+                }
+
+                if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                } else {
+                    update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
                 }
 
                 $order->add_order_note( __( 'IPN subscription sign up completed.', 'dokan' ) );
@@ -396,6 +413,7 @@ class DPS_PayPal_Standard_Subscriptions {
                     Helper::make_product_publish( $customer_id );
 
                     $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
+                    $admin_additional_fee  = get_post_meta( $product['product_id'], '_subscription_product_admin_additional_fee', true );
                     $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
 
                     if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
@@ -403,6 +421,12 @@ class DPS_PayPal_Standard_Subscriptions {
                         update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
                     } else {
                         update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
+                    }
+
+                    if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+                        update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+                    } else {
+                        update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
                     }
 
                     if ( dokan_get_prop( $order, 'status' ) != 'completed' ) {
