@@ -90,7 +90,7 @@ function dokan_progressbar_translated_string( $string = '', $value = 15, $progre
             return sprintf( __( 'Add facebook to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
 
         case 'gplus':
-            return sprintf( __( 'Add Google Plus to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
+            return sprintf( __( 'Add Google to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
 
         case 'twitter':
             return sprintf( __( 'Add Twitter to gain %s%% progress', 'dokan' ), number_format_i18n( $value ) );
