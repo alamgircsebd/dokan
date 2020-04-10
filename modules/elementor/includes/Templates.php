@@ -39,15 +39,17 @@ class Templates {
      * @return bool|array
      */
     public static function pre_http_request( $pre, $r, $url ) {
-        $get_template_id = '1';
-        $all_templates   = [ '1000001' => '1', '1000002' => '2', '1000003' => '3', '1000004' => '4' ];
+        $templates   = [
+            '1000001' => '1',
+            '1000002' => '2',
+            '1000003' => '3',
+            '1000004' => '4'
+        ];
 
-        if( ! empty( $r['body']['id'] ) ) {
-            $get_template_id = ! empty( $all_templates[ $r['body']['id'] ] ) ?  $all_templates[ $r['body']['id'] ] : 1;
-        }
+        $template_id = ! empty( $r['body']['id'] ) ? $r['body']['id'] : 0;
 
-        if ( in_array ( $get_template_id, $all_templates ) ) {
-            $json_file = DOKAN_ELEMENTOR_PATH . '/template-library/' . $get_template_id . '.json';
+        if ( array_key_exists( $template_id, $templates ) ) {
+            $json_file = DOKAN_ELEMENTOR_PATH . '/template-library/' . $templates[ $template_id ] . '.json';
 
             if ( file_exists( $json_file ) ) {
                 $content = json_decode( file_get_contents( $json_file ), true );
