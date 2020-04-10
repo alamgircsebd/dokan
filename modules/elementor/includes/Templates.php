@@ -47,7 +47,7 @@ class Templates {
         }
 
         if ( in_array ( $get_template_id, $all_templates ) ) {
-            $json_file   = DOKAN_ELEMENTOR_PATH . '/template-library/' . $get_template_id . '.json';
+            $json_file = DOKAN_ELEMENTOR_PATH . '/template-library/' . $get_template_id . '.json';
 
             if ( file_exists( $json_file ) ) {
                 $content = json_decode( file_get_contents( $json_file ), true );
