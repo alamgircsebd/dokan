@@ -476,7 +476,7 @@ class DPS_Admin {
             )
         );
 
-        if ( Dokan_Product_Subscription::is_dokan_plugin() ) {
+        if ( dokan_pro()->module->product_subscription->is_dokan_plugin() ) {
             unset( $settings_fields['dokan_product_subscription'][0] );
         }
 
