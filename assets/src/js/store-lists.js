@@ -78,7 +78,7 @@
                 self.itemSlugs.splice( itemToRemove, 1 );
             }
 
-            dokan.storeLists.query.store_category = self.itemSlugs;
+            dokan.storeLists.query.store_categories = self.itemSlugs;
             const itemString = self.itemArray.join( ', ' );
 
             self.setCategoryHolder( itemString );

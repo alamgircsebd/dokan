@@ -127,8 +127,8 @@ class Dokan_SPMV_Product_Visibility {
     public function filter_where_request( $where, $wp_query ) {
         global $wpdb;
 
-        if ( 'product' === $wp_query->get( 'post_type' ) ) {
-            $where .= " AND {$wpdb->prefix}dokan_product_map.visibility = 1";
+        if ( 'product' === $wp_query->get( 'post_type' ) || 'product_cat' === $wp_query->get( 'taxonomy' ) ) {
+            $where .= " AND ( {$wpdb->prefix}dokan_product_map.visibility = 1 OR {$wpdb->prefix}dokan_product_map.visibility IS NULL )";
         }
 
         return $where;
@@ -147,9 +147,9 @@ class Dokan_SPMV_Product_Visibility {
     public function filter_join_request( $join, $wp_query ) {
         global $wpdb;
 
-        if ( 'product' === $wp_query->get( 'post_type' ) ) {
+        if ( 'product' === $wp_query->get( 'post_type' ) || 'product_cat' === $wp_query->get( 'taxonomy' ) ) {
             $table = "{$wpdb->prefix}dokan_product_map";
-            $join .= " inner join {$table} on {$wpdb->posts}.ID = {$table}.product_id";
+            $join .= " left join {$table} on {$wpdb->posts}.ID = {$table}.product_id";
         }
 
         return $join;

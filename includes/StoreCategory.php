@@ -368,11 +368,11 @@ class StoreCategory {
      * @return array
      */
     public function add_store_category_query_arg( $args, $request ) {
-        if ( ! empty( $request['store_category'] ) ) {
+        if ( ! empty( $request['store_categories'] ) ) {
             $args['store_category_query'][] = array(
                 'taxonomy' => 'store_category',
                 'field'    => 'slug',
-                'terms'    => $request['store_category'],
+                'terms'    => $request['store_categories'],
             );
         }
 

@@ -166,7 +166,7 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
             'hide_empty' => false,
         ) );
 
-        $args['store_category'] = ! empty( $_GET['store_category'] ) ? sanitize_text_field( $_GET['store_category'] ) : null;
+        $args['store_category'] = ! empty( $_GET['store_categories'] ) ? sanitize_text_field( $_GET['store_categories'] ) : null;
     }
 
     $source = dokan_get_option( 'map_api_source', 'dokan_appearance', 'google_maps' );
