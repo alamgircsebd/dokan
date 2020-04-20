@@ -822,7 +822,7 @@ class Module {
                 wp_list_comments( array(
                         'max_depth'         => 0,
                         'page'              => 1,
-                        'per_page'          => 5, //Allow comment pagination
+                        'per_page'          => 100, //Allow comment pagination
                         'reverse_top_level' => true, //Show the latest comments at the top of the list
                         'format'            => 'html5',
                         'callback'          => array( $this, 'support_comment_format' ),
