@@ -87,6 +87,8 @@
                             printf( __( '%s / %s', 'dokan' ), $usage_count, $usage_limit );
                         else
                             printf( __( '%s / &infin;', 'dokan' ), $usage_count );
+
+                        do_action( 'dokan_coupon_list_after_usages_limit', $coupon );
                      ?>
                 </td>
 

@@ -136,6 +136,10 @@ class Module {
         if ( isset( $wp->query_vars['user-subscription'] ) && ! empty( $_GET['subscription_id'] ) ) {
             $this->enqueue_scripts();
         }
+
+        if ( isset( $wp->query_vars['coupons'] ) && ! empty( $_GET['post'] ) ) {
+            $this->enqueue_scripts();
+        }
     }
 
     /**

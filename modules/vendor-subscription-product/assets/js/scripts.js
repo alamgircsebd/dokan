@@ -112,6 +112,18 @@
                 }
             });
         });
+
+        $('select#discount_type').on('change', function() {
+            var value = $(this).val();
+
+            if ( 'recurring_fee' === value || 'recurring_percent' === value ) {
+                $('.dokan-subscription-active-recurring-payment').removeClass('dokan-hide');
+            } else {
+                $('.dokan-subscription-active-recurring-payment').addClass('dokan-hide');
+            }
+        });
+
+        $('select#discount_type').trigger('change');
     });
 
     function dokan_show_and_hide_panels() {
@@ -278,7 +290,6 @@
             }
         } );
     }
-
 
     function setSyncOptions(periodField) {
 

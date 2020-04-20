@@ -145,6 +145,8 @@
         </div>
     </div>
 
+    <?php do_action( 'dokan_coupon_form_fields_end', $post_id ); ?>
+
     <div class="dokan-form-group">
         <div class="dokan-w5 ajax_prev dokan-text-left" style="margin-left:23%">
             <input type="submit" id="" name="coupon_creation" value="<?php echo $button_name; ?>" class="dokan-btn dokan-btn-danger dokan-btn-theme">
