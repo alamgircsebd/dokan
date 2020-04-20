@@ -123,7 +123,7 @@ class Validator {
      * @param array                                           $item_totals
      * @param \WeDevs\DokanPro\Refund\Request\WP_REST_Request $request
      *
-     * @return bool
+     * @return bool|WP_Error
      */
     public static function validate_item_totals( $item_totals, $request ) {
         $item_totals = Sanitizer::sanitize_item_totals( $item_totals );
@@ -140,12 +140,7 @@ class Validator {
                 return new WP_Error( 'dokan_pro_refund_error_item_totals', sprintf( __( 'Invalid line item id %d', 'dokan' ), $item_id ) );
             }
 
-            $order_line_item = $order_line_items[ $item_id ];
-
-            if ( $item_total <= 0 ) {
-                return new WP_Error( 'dokan_pro_refund_error_item_totals', sprintf( __( 'Invalid line item total for item id %d', 'dokan' ), $item_id ) );
-            }
-
+            $order_line_item       = $order_line_items[ $item_id ];
             $order_line_item_total = $order_line_item->get_total();
 
             if ( $item_total > $order_line_item_total ) {
