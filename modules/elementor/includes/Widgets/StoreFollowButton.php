@@ -120,7 +120,7 @@ class StoreFollowButton extends DokanButton {
             return;
         }
 
-        if ( ! class_exists( 'Dokan_Follow_Store' ) ) {
+        if ( ! class_exists( \WeDevs\DokanPro\Modules\FollowStore\Module::class ) ) {
             return;
         }
 
