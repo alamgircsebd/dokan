@@ -132,8 +132,9 @@ class Validator {
             return true;
         }
 
+        // We'll set `$order_line_items` with line_item, shipping and fees except tax.
         $order            = wc_get_order( $request['order_id'] );
-        $order_line_items = $order->get_items();
+        $order_line_items = array_replace( $order->get_items( 'line_item' ), $order->get_items( 'shipping' ), $order->get_items( 'fee' ) );
 
         foreach ( $item_totals as $item_id => $item_total ) {
             if ( ! isset( $order_line_items[ $item_id ] ) ) {
