@@ -18,7 +18,7 @@
             category = form.find( '[name="dokan_seller_category"]' );
 
         form.on( 'dokan_seller_search_populate_data', function ( e, data ) {
-            data.store_category = category.val();
+            data.store_categories = category.val();
         } );
 
         category.on( 'change', function () {
