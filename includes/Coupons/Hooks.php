@@ -165,7 +165,7 @@ class Hooks {
         $pagenum = isset( $_GET['pagenum'] ) ? absint( $_GET['pagenum'] ) : 1;
         $all_coupons  = dokan_pro()->coupon->all( [ 'paged' => $pagenum ] );
 
-        if ( $all_coupons ) {
+        if ( ! empty( $all_coupons->coupons ) ) {
             $this->get_messages();
             dokan_get_template_part( 'coupon/listing', '', array( 'pro' => true, 'coupons' => $all_coupons ) );
         } else {

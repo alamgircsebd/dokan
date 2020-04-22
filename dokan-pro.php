@@ -3,7 +3,7 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 3.0.1
+  Version: 3.0.2
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
@@ -35,7 +35,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '3.0.1';
+    public $version = '3.0.2';
 
     /**
      * Databse version key
@@ -88,6 +88,8 @@ class Dokan_Pro {
         add_action( 'dokan_loaded', [ $this, 'init_plugin' ] );
 
         register_activation_hook( __FILE__, [ $this, 'activate' ] );
+
+        new WeDevs\DokanPro\Brands\Hooks();
     }
 
     /**
@@ -317,7 +319,6 @@ class Dokan_Pro {
     public function init_classes() {
         new WeDevs\DokanPro\Refund\Hooks();
         new WeDevs\DokanPro\Coupons\Hooks();
-        new WeDevs\DokanPro\Brands\Hooks();
         new \WeDevs\DokanPro\Shipping\Hooks();
 
         new \WeDevs\DokanPro\StoreCategory();
@@ -579,7 +580,7 @@ class Dokan_Pro {
         $wc_emails['Dokan_Email_Refund_Request']  = new \WeDevs\DokanPro\Emails\RefundRequest();
         $wc_emails['Dokan_Email_Refund_Vendor']   = new \WeDevs\DokanPro\Emails\RefundVendor();
         $wc_emails['Dokan_Email_Vendor_Enable']   = new \WeDevs\DokanPro\Emails\VendorEnable();
-        $wc_emails['Dokan_Email_Vendor_Disable']  = new \WeDevs\DokanPro\Emails\VendorEnable();
+        $wc_emails['Dokan_Email_Vendor_Disable']  = new \WeDevs\DokanPro\Emails\VendorDisable();
 
         return $wc_emails;
     }
@@ -614,10 +615,12 @@ class Dokan_Pro {
      * @return $actions
      */
     public function register_email_actions( $actions ) {
-        $actions[] = 'dokan_edited_product_pending_notification';
+        $actions[] = 'dokan_vendor_enabled';
+        $actions[] = 'dokan_vendor_disabled';
         $actions[] = 'dokan_after_announcement_saved';
         $actions[] = 'dokan_refund_request_notification';
         $actions[] = 'dokan_refund_processed_notification';
+        $actions[] = 'dokan_edited_product_pending_notification';
 
         return $actions;
     }

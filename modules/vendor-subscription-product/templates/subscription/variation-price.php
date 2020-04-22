@@ -1,17 +1,18 @@
 <?php
 global $wp_locale;
+$variation_product   = wc_get_product( $variation );
 $chosen_price        = get_post_meta( $variation->ID, '_subscription_price', true );
 $chosen_interval     = get_post_meta( $variation->ID, '_subscription_period_interval', true );
 $chosen_length       = get_post_meta( $variation->ID, '_subscription_length', true );
-$chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $variation->ID );
-$chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $variation->ID );
+$chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $variation_product );
+$chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $variation_product );
 
 // Set month as the default billing period
 if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', true ) ) {
      $chosen_period = 'month';
 }
 ?>
-<div class="dokan-form-group dokan-clearfix">
+<div class="dokan-form-group dokan-clearfix show_if_variable-subscription">
     <div class="subscription-price">
         <div class="content-half-part">
             <label for="variable_subscription_price" class="form-label"><?php esc_html_e( 'Subscription price', 'dokan-lite' ); ?>(<?php echo get_woocommerce_currency_symbol() ?>) <span class="vendor-earning">( <?php _e( ' You Earn : ', 'dokan' ) ?><?php echo get_woocommerce_currency_symbol() ?><span class="vendor-price"><?php echo esc_html( dokan()->commission->get_earning_by_product( $variation->ID ) ); ?></span> )</span></label>
@@ -49,18 +50,18 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
     <div class="dokan-form-group subscription-sign-up-fee dokan-clearfix">
         <div class="dokan-form-group content-half-part">
             <label class="form-label" for="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]"><?php printf( esc_html__( 'Sign-up fee (%s)', 'dokan' ), esc_html( get_woocommerce_currency_symbol() ) ); ?></label>
-            <input type="text" class="dokan-form-control wc_input_subscription_intial_price wc_input_subscription_initial_price" name="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( wc_format_localized_price( WC_Subscriptions_Product::get_sign_up_fee( $variation ) ) ); ?>" placeholder="<?php echo esc_attr_x( 'e.g. 9.90', 'example price', 'dokan' ); ?>">
+            <input type="text" class="dokan-form-control wc_input_subscription_intial_price wc_input_subscription_initial_price" name="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( wc_format_localized_price( get_post_meta( $variation->ID, '_subscription_sign_up_fee', true ) ) ); ?>" placeholder="<?php echo esc_attr_x( 'e.g. 9.90', 'example price', 'dokan' ); ?>">
         </div>
         <div class="content-half-part">
             <label class="form-label" for="variable_subscription_trial_length[<?php echo esc_attr( $loop ); ?>]"><?php esc_html_e( 'Free trial', 'dokan' ); ?></label>
             <div class="dokan-form-group dokan-clearfix">
                 <div class="content-half-part">
-                    <input type="text" class="dokan-form-control wc_input_subscription_trial_length" name="variable_subscription_trial_length[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( WC_Subscriptions_Product::get_trial_length( $variation ) ); ?>">
+                    <input type="text" class="dokan-form-control wc_input_subscription_trial_length" name="variable_subscription_trial_length[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( $chosen_trial_length ); ?>">
                 </div>
                 <div class="content-half-part">
                     <select name="variable_subscription_trial_period[<?php echo esc_attr( $loop ); ?>]" class="dokan-form-control wc_input_subscription_trial_period">
                         <?php foreach ( wcs_get_available_time_periods() as $key => $value ) : ?>
-                            <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, WC_Subscriptions_Product::get_trial_period( $variation ) ); ?>><?php echo esc_html( $value ); ?></option>
+                            <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $key, $chosen_trial_period ); ?>><?php echo esc_html( $value ); ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>

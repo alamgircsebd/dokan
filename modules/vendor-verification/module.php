@@ -57,6 +57,9 @@ class Module {
         add_action( 'init', array( $this, 'init_session' ) );
         add_action( 'template_redirect', array( $this, 'monitor_autheticate_requests' ), 99 );
 
+        // Overriding templating system for vendor-verification
+        add_filter( 'dokan_set_template_path', [ $this, 'load_verification_templates' ], 30, 3 );
+
         // widget
         add_action( 'widgets_init', array( $this, 'register_widgets' ) );
 
@@ -92,6 +95,17 @@ class Module {
 
         // Custom dir for vendor uploaded file
         add_filter( 'upload_dir', array( $this, 'dokan_customize_upload_dir' ), 10 );
+    }
+
+    /**
+    * Get plugin path
+    *
+    * @since 1.5.1
+    *
+    * @return void
+    **/
+    public function plugin_path() {
+        return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
 
     public function get_provider_config() {
@@ -177,10 +191,13 @@ class Module {
     function load_verification_content( $query_vars ) {
         if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'verification' ) {
             if (  current_user_can( 'dokan_view_store_verification_menu' ) ) {
-                require_once DOKAN_VERFICATION_DIR . '/templates/verification-new.php';
+                dokan_get_template_part( 'vendor-verification/verification-new', '', array(
+                    'is_vendor_verification'   => true,
+                ) );
             } else {
                 dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this verification page', 'dokan' ) ) );
             }
+
             return;
         }
     }
@@ -348,6 +365,24 @@ class Module {
     }
 
     /**
+    * Load rma templates. so that it can overide from theme
+    *
+    * Just create `rma` folder inside dokan folder then
+    * override your necessary template.
+    *
+    * @since 1.0.0
+    *
+    * @return void
+    **/
+    public function load_verification_templates( $template_path, $template, $args ) {
+        if ( isset( $args['is_vendor_verification'] ) && $args['is_vendor_verification'] ) {
+            return $this->plugin_path() . '/templates';
+        }
+
+        return $template_path;
+    }
+
+    /**
      * Enqueue admin scripts
      *
      * Allows plugin assets to be loaded.
@@ -402,7 +437,10 @@ class Module {
     function dokan_verification_set_templates( $path, $part ) {
 
         if ( $part == 'verification' ) {
-            return DOKAN_VERFICATION_DIR . '/templates/verification.php';
+            dokan_get_template_part( 'vendor-verification/verification', '', array(
+                'is_vendor_verification' => true,
+            ) );
+            // return DOKAN_VERFICATION_DIR . '/templates/verification.php';
         }
 
         return $path;

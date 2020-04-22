@@ -378,6 +378,10 @@ Class EmailVerification {
             return true;
         }
 
+        if ( ! class_exists( \WeDevs\DokanPro\Modules\Subscription\Helper::class ) ) {
+            return false;
+        }
+
         if ( dokan_pro()->module->is_active( 'product_subscription' ) && Helper::is_subscription_enabled_on_registration() ) {
             return true;
         }

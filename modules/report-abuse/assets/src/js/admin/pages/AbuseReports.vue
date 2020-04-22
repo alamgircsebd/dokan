@@ -123,6 +123,7 @@
 </template>
 
 <script>
+    import $ from 'jquery';
     import AbuseReasonsDropdown from '../../components/AbuseReasonsDropdown.vue';
     const ListTable = dokan_get_lib('ListTable');
     const Modal = dokan_get_lib('Modal');

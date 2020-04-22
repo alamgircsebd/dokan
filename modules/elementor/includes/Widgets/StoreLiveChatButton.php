@@ -143,7 +143,7 @@ class StoreLiveChatButton extends DokanButton {
 
         if ( ! is_user_logged_in() ) {
             parent::render();
-            return $live_chat->login_to_chat();
+            return $live_chat->chat->login_to_chat();
         }
 
         parent::render();

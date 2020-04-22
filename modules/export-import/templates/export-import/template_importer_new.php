@@ -71,7 +71,7 @@ $parser = new Dokan_WXR_Parser();
     							if( empty( $_FILES['import'] ) ) {
     								echo __( "Please select a xml file", 'dokan' );
     							}else {
-    								Dokan_Product_Importer::init()->import( $_FILES['import']['tmp_name'] );
+    								dokan_pro()->module->export_import->import( $_FILES['import']['tmp_name'] );
     							}
     						}
 

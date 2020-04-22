@@ -52,7 +52,7 @@ class Helper {
      * @return boolean
      */
     public static function has_subscription_module() {
-        return class_exists( 'Dokan_Product_Subscription' );
+        return !! dokan_pro()->module->product_subscription;
     }
 
     /**

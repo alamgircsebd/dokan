@@ -260,7 +260,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             $fields['cpf_field'] = '<p class="form-row form-row-wide">
                 <label for="billing_cpf" class="">' . esc_html__( 'CPF Number', 'dokan' ) . '&nbsp;<span class="optional"><span style="color:red">*</span></span></label>
 
-                <input type="number" style="padding: 10px; font-size:16px" class="input-text" name="billing_cpf" id="billing_cpf" placeholder="' . esc_html__( 'CPF Number', 'dokan' ) . '">
+                <input type="text" style="padding: 10px; font-size:16px" class="input-text" name="billing_cpf" id="billing_cpf" placeholder="' . esc_html__( 'CPF Number', 'dokan' ) . '">
             </p>';
         }
 

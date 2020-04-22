@@ -109,24 +109,60 @@ class DPS_Admin {
         woocommerce_wp_select( array(
             'id'            => '_subscription_product_admin_commission_type',
             'label'         => __( 'Admin Commission type', 'dokan' ),
-            'options'       => array(
-                'percentage'  => __( 'Percentage', 'dokan' ),
-                'flat'        => __( 'Flat', 'dokan' ),
-            ),
+            'options'       => dokan_commission_types(),
             'description'   => __( 'Set the commission type admin will get under this subscription', 'dokan' ),
             'data_type'     => 'price'
         ) );
 
-        woocommerce_wp_text_input(
-            array(
-                'id'            => '_subscription_product_admin_commission',
-                'label'         => __( 'Admin Commission', 'dokan' ),
-                'placeholder'   => '',
-                'description'   => __( 'Amount you will get from sales, Leave empty ( not "0" ) if you don\'t apply any ovverride', 'dokan' ),
-                'data_type'     => 'price'
-            )
-        );
+        $product          = wc_get_product( get_the_ID() );
+        $admin_commission = $product->get_meta( '_subscription_product_admin_commission' );
+        $additional_fee   = $product->get_meta( '_subscription_product_admin_additional_fee' );
+        ?>
 
+        <div class="commission show_if_product_pack">
+            <p class="form-field dimensions_field">
+                <label for="admin_commission"><?php  _e( 'Admin Commission', 'dokan' ); ?></label>
+                <span class="wrapper">
+                    <input id="admin_commission" class="input-text wc_input_decimal" type="text" name="_subscription_product_admin_commission" value="<?php echo wc_format_localized_price( $admin_commission ); ?>">
+                    <span class="subscription_additional_fee">
+                        <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+                        <input class="input-text wc_input_decimal" type="text" name="_subscription_product_admin_additional_fee" value="<?php echo wc_format_localized_price( $additional_fee ); ?>">
+                    </span>
+                    <span class="combine-commission-description"></span>
+                </span>
+            </p>
+        </div>
+
+        <style type="text/css">
+            .dokan-hide {
+                display: none;
+            }
+            .commission .wrapper input {
+                width: 60px;
+                float: none;
+            }
+            span.combine-commission-description {
+                margin-left: 5px;
+                font-size: 13px;
+                font-style: italic;
+            }
+        </style>
+
+        <script type="text/javascript">
+            ;(function($) {
+                $('#_subscription_product_admin_commission_type').on('change', function() {
+                    if ( 'combine' === $(this).val() ) {
+                        $('.subscription_additional_fee').removeClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
+                    } else {
+                        $('.subscription_additional_fee').addClass('dokan-hide');
+                        $('.combine-commission-description').text( dokan_admin.default_commission_desc );
+                    }
+                }).trigger('change');
+            })(jQuery);
+        </script>
+
+        <?php
         // vendor allowed product types
         echo '<p class="form-field dokan_subscription_allowed_product_types">';
         echo '<label for="dokan_subscription_allowed_product_types">' . __( 'Allowed Product Types', 'dokan' ) .'</label>';
@@ -267,6 +303,7 @@ class DPS_Admin {
         }
 
         update_post_meta( $post_id, '_subscription_product_admin_commission', $_POST['_subscription_product_admin_commission'] );
+        update_post_meta( $post_id, '_subscription_product_admin_additional_fee', $_POST['_subscription_product_admin_additional_fee'] );
 
         if ( ! empty( $_POST['dokan_subscription_allowed_product_types'] ) ) {
             update_post_meta( $post_id, 'dokan_subscription_allowed_product_types', wc_clean( $_POST['dokan_subscription_allowed_product_types'] ) );
@@ -454,13 +491,12 @@ class DPS_Admin {
             return;
         }
 
-        if ( current_user_can( $capability ) ) {
-            global $submenu;
+        global $submenu;
 
-            $title = esc_html__( 'Subscriptions', 'dokan' );
-            $slug  = 'dokan';
+        $slug = 'dokan';
 
-            $submenu[ $slug ][] = [ $title , $capability, 'admin.php?page=' . $slug . '#/subscriptions' ];
+        if ( current_user_can( 'manage_options' ) ) {
+            $submenu[ $slug ][] = array( __( 'Subscriptions', 'dokan' ), $capability, 'admin.php?page=' . $slug . '#/subscriptions' );
         }
     }
 
@@ -605,7 +641,7 @@ class DPS_Admin {
 
         $pack_id = intval( $_POST['_dokan_user_assigned_sub_pack'] );
 
-        if ( !$pack_id || empty( $pack_id ) ) {
+        if ( ! $pack_id || empty( $pack_id ) ) {
             return;
         }
 
@@ -647,6 +683,7 @@ class DPS_Admin {
 
         $pack_validity           = get_post_meta( $pack_id, '_pack_validity', true );
         $admin_commission        = get_post_meta( $pack_id, '_subscription_product_admin_commission', true );
+        $admin_additional_fee    = get_post_meta( $pack_id, '_subscription_product_admin_additional_fee', true );
         $admin_commission_type   = get_post_meta( $pack_id, '_subscription_product_admin_commission_type', true );
 
         update_user_meta( $user_id, 'product_package_id', $pack_id );
@@ -668,6 +705,12 @@ class DPS_Admin {
             update_user_meta( $user_id, 'dokan_admin_percentage_type', $admin_commission_type );
         } else {
             update_user_meta( $user_id, 'dokan_admin_percentage', '' );
+        }
+
+        if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
+            update_user_meta( $user_id, 'dokan_admin_additional_fee', $admin_additional_fee );
+        } else {
+            update_user_meta( $user_id, 'dokan_admin_additional_fee', '' );
         }
 
         do_action( 'dokan_vendor_purchased_subscription', $user_id );

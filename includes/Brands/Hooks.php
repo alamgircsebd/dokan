@@ -9,13 +9,24 @@ class Hooks {
     }
 
     /**
-     * Initiate functionalities
+     * Load brand after Dokan Pro init classes
      *
      * @since 2.9.7
      *
      * @return void
      */
     public function init() {
+        add_action( 'init', [ $this, 'load_dokan_brands' ] );
+    }
+
+    /**
+     * Load functionalities
+     *
+     * @since 3.0.2
+     *
+     * @return void
+     */
+    public function load_dokan_brands() {
         dokan_pro()->brands->set_is_active( true );
 
         if ( class_exists( 'YITH_WCBR_Premium' ) ) {
@@ -43,14 +54,14 @@ class Hooks {
      */
     public function set_duplicate_product_brands( $clone_product, $product ) {
         $brands_ids = [];
-        $brands     = wp_get_object_terms( $product->get_id(), dokan()->brands->get_taxonomy() );
+        $brands     = wp_get_object_terms( $product->get_id(), dokan_pro()->brands->get_taxonomy() );
 
         if ( count( $brands ) > 0 ) {
             foreach ( $brands as $brand ) {
                 $brands_ids[] = $brand->term_id;
             }
 
-            wp_set_object_terms( $clone_product->get_id(), $brands_ids, dokan()->brands->get_taxonomy() );
+            wp_set_object_terms( $clone_product->get_id(), $brands_ids, dokan_pro()->brands->get_taxonomy() );
         }
     }
 
@@ -62,14 +73,14 @@ class Hooks {
      */
     public function set_spmv_duplicate_product_brands( $clone_product_id, $product_id, $map_id ) {
         $brands_ids = [];
-        $brands     = wp_get_object_terms( $product_id, dokan()->brands->get_taxonomy() );
+        $brands     = wp_get_object_terms( $product_id, dokan_pro()->brands->get_taxonomy() );
 
         if ( count( $brands ) > 0 ) {
             foreach ( $brands as $brand ) {
                 $brands_ids[] = $brand->term_id;
             }
 
-            wp_set_object_terms( $clone_product_id, $brands_ids, dokan()->brands->get_taxonomy() );
+            wp_set_object_terms( $clone_product_id, $brands_ids, dokan_pro()->brands->get_taxonomy() );
         }
     }
 }

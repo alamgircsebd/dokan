@@ -51,21 +51,21 @@ if ( !defined( 'ABSPATH' ) ) {
                         <label for="woocommerce-importer-update-existing"><?php esc_html_e( 'Existing products that match by ID or SKU will be updated. Products that do not exist will be skipped.', 'dokan' ); ?></label>
                     </td>
                 </tr>
-<!-- 				<tr class="woocommerce-importer-advanced hidden">
-                        <th>
-                                <label for="woocommerce-importer-file-url"><?php _e( '<em>or</em> enter the path to a CSV file on your server:', 'dokan' ); ?></label>
-                        </th>
-                        <td>
-                                <label for="woocommerce-importer-file-url" class="woocommerce-importer-file-url-field-wrapper">
-                                        <code><?php echo esc_html( ABSPATH ) . ' '; ?></code><input type="text" id="woocommerce-importer-file-url" name="file_url" />
-                                </label>
-                        </td>
+ 				<tr class="woocommerce-importer-advanced">
+                    <th>
+                        <label for="woocommerce-importer-file-url"><?php _e( '<em>or</em> enter the path to a CSV file on your server:', 'dokan' ); ?></label>
+                    </th>
+                    <td>
+                        <label for="woocommerce-importer-file-url" class="woocommerce-importer-file-url-field-wrapper">
+                            <code><?php echo esc_html( ABSPATH ) . ' '; ?></code><input type="text" id="woocommerce-importer-file-url" name="file_url" />
+                        </label>
+                    </td>
                 </tr>
-                <tr class="woocommerce-importer-advanced hidden">
-                        <th><label><?php _e( 'CSV Delimiter', 'dokan' ); ?></label><br/></th>
-                        <td><input type="text" name="delimiter" placeholder="," size="2" /></td>
+                <tr class="woocommerce-importer-advanced">
+                    <th><label><?php _e( 'CSV Delimiter', 'dokan' ); ?></label><br/></th>
+                    <td><input type="text" name="delimiter" placeholder="," size="2" /></td>
                 </tr>
- -->            </tbody>
+            </tbody>
         </table>
     </section>
     <script type="text/javascript">
@@ -84,7 +84,15 @@ if ( !defined( 'ABSPATH' ) ) {
             } );
     </script>
     <div class="wc-actions">
-            <!--<a href="#" class="woocommerce-importer-toggle-advanced-options" data-hidetext="<?php esc_html_e( 'Hide advanced options', 'dokan' ); ?>" data-showtext="<?php esc_html_e( 'Hide advanced options', 'dokan' ); ?>"><?php esc_html_e( 'Show advanced options', 'dokan' ); ?></a>-->
+        <a
+            href="#"
+            style="text-decoration: underline"
+            class="woocommerce-importer-toggle-advanced-options"
+            data-hidetext="<?php esc_html_e( 'Hide advanced options', 'dokan' ); ?>"
+            data-showtext="<?php esc_html_e( 'Hide advanced options', 'dokan' ); ?>
+        ">
+            <?php esc_html_e( 'Show advanced options', 'dokan' ); ?>
+        </a>
         <input type="submit" class="button button-primary button-next" value="<?php esc_attr_e( 'Continue', 'dokan' ); ?>" name="save_step" />
         <?php wp_nonce_field( 'woocommerce-csv-importer' ); ?>
     </div>

@@ -373,15 +373,17 @@ class Module {
                     'doc_id'       => 111397,
                     'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-vendor-staff-manager/',
                 ],
-                // 'vsp'         => [
-                //     'id'           => 'vsp',
-                //     'name'         => __( 'Vendor Subscription Product', 'dokan' ),
-                //     'description'  => __( 'WooCommerce Subscription integration for Dokan', 'dokan' ),
-                //     'thumbnail'    => $thumbnail_dir . '/ajax-live-search.png',
-                //     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-subscription-product/module.php',
-                //     'module_class' => 'WeDevs\DokanPro\Modules\VSP\Module',
-                //     'plan'         => [ 'enterprise', ]
-                // ],
+                'vsp'         => [
+                    'id'           => 'vsp',
+                    'name'         => __( 'Vendor Subscription Product', 'dokan' ),
+                    'description'  => __( 'WooCommerce Subscription integration for Dokan', 'dokan' ),
+                    'thumbnail'    => $thumbnail_dir . '/vendor-subscription-product.png',
+                    'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-subscription-product/module.php',
+                    'module_class' => 'WeDevs\DokanPro\Modules\VSP\Module',
+                    'plan'         => [ 'business', 'enterprise' ],
+                    'doc_id'       => 294770,
+                    'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-vendor-subscription-product/',
+                ],
                 'vendor_verification' => [
                     'id'           => 'vendor_verification',
                     'name'         => __( 'Vendor Verification', 'dokan' ),

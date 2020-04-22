@@ -51,6 +51,11 @@ class Dokan_VSP_Product {
         add_action( 'woocommerce_save_product_variation', [ $this, 'save_variation_metadata' ], 10, 2 );
         add_filter( 'woocommerce_checkout_update_order_meta', [ $this, 'sync_parent_order_with_dokan' ], 30 );
         add_filter( 'wcs_new_order_created', [ $this, 'sync_renewal_order_with_dokan' ], 15, 3 );
+        add_filter( 'dokan_get_coupon_types', [ $this, 'add_coupon_types' ], 15 );
+        add_action( 'dokan_coupon_form_fields_end', [ $this, 'add_subscription_coupon_field' ], 10 );
+        add_action( 'dokan_after_coupon_create', [ $this, 'save_subscription_coupon_field' ], 10 );
+        add_action( 'dokan_coupon_list_after_usages_limit', [ $this, 'show_active_usages' ], 10 );
+
     }
 
     /**
@@ -187,10 +192,9 @@ class Dokan_VSP_Product {
             }
 
             update_post_meta( $post_id, WC_Subscriptions_Synchroniser::$post_meta_key, $_POST[ WC_Subscriptions_Synchroniser::$post_meta_key ] );
+        } elseif ( $_POST['product_type'] == 'variable-subscription' ) {
+            dokan_save_variations( $post_id );
         }
-        // } elseif ( $_POST['product_type'] == 'variable-subscription' ) {
-        //     dokan_save_variations( $post_id );
-        // }
     }
 
     /**
@@ -201,6 +205,10 @@ class Dokan_VSP_Product {
      * @return void
      */
     public function save_variation_metadata( $variation_id, $index ) {
+        if ( ! dokan_is_user_seller( dokan_get_current_user_id() ) ) {
+            return;
+        }
+
         if ( isset( $_POST['variable_subscription_sign_up_fee'][ $index ] ) ) {
             $subscription_sign_up_fee = wc_format_decimal( $_POST['variable_subscription_sign_up_fee'][ $index ] );
             update_post_meta( $variation_id, '_subscription_sign_up_fee', $subscription_sign_up_fee );
@@ -361,6 +369,89 @@ class Dokan_VSP_Product {
         }
 
         return $new_order;
+    }
+
+    /**
+     * Add coupon types
+     *
+     * @since 3.0.2
+     *
+     * @return void
+     */
+    public function add_coupon_types( $discount_types ) {
+        return array_merge(
+            $discount_types,
+            array(
+                'sign_up_fee'         => __( 'Sign Up Fee Discount', 'woocommerce-subscriptions' ),
+                'sign_up_fee_percent' => __( 'Sign Up Fee % Discount', 'woocommerce-subscriptions' ),
+                'recurring_fee'       => __( 'Recurring Product Discount', 'woocommerce-subscriptions' ),
+                'recurring_percent'   => __( 'Recurring Product % Discount', 'woocommerce-subscriptions' ),
+            )
+        );
+    }
+
+    /**
+     * Add subcription based coupon fields
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function add_subscription_coupon_field( $post_id ) {
+        $limited = false;
+        if ( ! empty( $post_id ) ) {
+            $coupon = new WC_Coupon( $post_id );
+            $limited = $coupon->get_meta( '_wcs_number_payments' );
+        }
+        ?>
+        <div class="dokan-form-group dokan-subscription-active-recurring-payment dokan-hide">
+            <label class="dokan-w3 dokan-control-label" for="active_limit"><?php _e( 'Active for x payments', 'dokan' ); ?></label>
+            <div class="dokan-w5 dokan-text-left">
+                <input id="active_limit" value="<?php echo $limited ? $limited : ''; ?>" name="wcs_number_payments" placeholder="<?php esc_attr_e( 'Unlimited payments', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
+            </div>
+        </div>
+        <?php
+    }
+
+    /**
+     * Save subcription coupon fields
+     *
+     * @since 3.0.2
+     *
+     * @return void
+     */
+    public function save_subscription_coupon_field( $post_id ) {
+        if ( ! dokan_is_user_seller( dokan_get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( ! empty( $_POST['wcs_number_payments'] ) ) {
+            $coupon = new WC_Coupon( $post_id );
+            $coupon->add_meta_data( '_wcs_number_payments', wc_clean( $_POST['wcs_number_payments'] ), true );
+            $coupon->save();
+        }
+    }
+
+    /**
+     * Show coupon usages limit in listing
+     *
+     * @since 3.0.2
+     *
+     * @return void
+     */
+    public function show_active_usages( $coupon ) {
+        $limit = $coupon->get_meta( '_wcs_number_payments' );
+
+        if ( $limit ) {
+            echo '<br>' . esc_html( sprintf(
+                /* translators: %d refers to the number of payments the coupon can be used for. */
+                _n( 'Active for %d payment', 'Active for %d payments', $limit, 'dokan' ),
+                number_format_i18n( $limit )
+            ) );
+        } else {
+            echo '<br>';
+            esc_html_e( 'Active for unlimited payments', 'dokan' );
+        }
     }
 
 }
