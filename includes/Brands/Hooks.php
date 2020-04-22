@@ -22,7 +22,7 @@ class Hooks {
     /**
      * Load functionalities
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.2
      *
      * @return void
      */

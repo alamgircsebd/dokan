@@ -172,6 +172,30 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v3.0.2 -> April 22, 2020
+----------------------------------
+
+- [new] Vendor Subscription Product Module (WooCommerce Subscriptions Integration)
+- [fix] JS error in backend report abuse page (Report Abuse)
+- [fix] Use proper hook to load Brands functionalities
+- [fix] Retrieve the raw postcode as it was saved to database to get the correct zipcode
+- [fix] Live chat showing fatal error when using with elementor (Elementor)
+- [fix] Vendor biography tab not showing in store page which is designed with elementor (Elementor)
+- [fix] Fatal error and calendar issue in frontend booking page (Booking)
+- [fix] Vendor disable email does not work and the vendor enables email is send twice
+- [fix] Change cpf input field to text as cpf could be alphanumeric (Wirecard)
+- [fix] Elementor store templates is not inserting on stroe page (Elementor)
+- [fix] When import XML file then showing fatal error issue fixed (Export Import)
+- [fix] Conflict with Yoast SEO sitemap file
+- [fix] Remove google plus account as it's no longer supported
+- [fix] Follow button is not showing on elementor store template (Elementor)
+- [fix] Add missing subscription code while creating subscription product (Subscription)
+- [fix] Add missing vendor verification widget code (Subscription)
+- [fix] When store listing page set as frontpage, category search does not work
+- [fix] Add missing vendor verification widget code (Subscription)
+- [fix] Unable to refund order from both backend and frontend if item total is not set
+
+
 v3.0.1 -> March 25, 2020
 ----------------------------------
 
