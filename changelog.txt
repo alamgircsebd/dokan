@@ -19,7 +19,7 @@ v3.0.2 -> April 22, 2020
 - [fix] Add missing vendor verification widget code (Subscription)
 - [fix] When store listing page set as frontpage, category search does not work
 - [fix] Add missing vendor verification widget code (Subscription)
-- [fix] Unable to refund order from both backend and frontend if item total is not set
+- [fix] Unable to refund order from both   and frontend if item total is not set
 
 
 v3.0.1 -> March 25, 2020
