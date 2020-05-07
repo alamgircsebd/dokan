@@ -33,12 +33,16 @@
                 <strong><a :href="subscriptionUrl(data.row.subscription_id)">{{ data.row.subscription_title ? data.row.subscription_title : __( '(no name)', 'dokan' ) }}</a></strong>
             </template>
 
+            <template slot="end_date" slot-scope="data">
+                {{ subscriptionEndDate(data.row) }}
+            </template>
+
             <template slot="status" slot-scope="data">
-                {{ data.row.status == 1 ? __( 'Active', 'dokan' ) : __( 'Inactive', 'dokan' ) }}
+                {{ subscriptionStatus(data.row) }}
             </template>
 
             <template slot="action" slot-scope="data">
-                <button class="button button-primary" @click="cancelSubscription(data.row.id)">{{ __( 'Cancel', 'dokan') }}</button>
+                <span @click="toggleSubscription(data.row)" class="action-btn dashicons dashicons-edit"></span>
             </template>
         </list-table>
     </div>
@@ -67,7 +71,6 @@ export default {
             perPage: 10,
             totalPages: 1,
             loading: false,
-
             columns: {
                 'user_name': {
                     label: this.__( 'User Name', 'dokan' ),
@@ -93,7 +96,11 @@ export default {
                 {
                     key: 'cancel',
                     label: this.__( 'Cancel Subscription', 'dokan' )
-                }
+                },
+                {
+                    key: 'activate',
+                    label: this.__( 'Activate Subscription', 'dokan' )
+                },
             ],
             vendors: []
         }
@@ -143,11 +150,92 @@ export default {
     },
 
     methods: {
+        toggleSubscription(subscription) {
+            const hasActiveCancelledSubscription = subscription.status && subscription.has_active_cancelled_sub;
 
-        cancelSubscription(id) {
-            if ( confirm( this.__( 'Are you sure to cancel the subscription?', 'dokan' ) ) ) {
-                this.deleteSubscripton(id);
+            if ( hasActiveCancelledSubscription ) {
+                this.$swal({
+                    title: this.__( 'Cancel Subscription', 'dokan' ),
+                    type: 'warning',
+                    html: `Subscriptoin will be cancelled at ${subscription.end_date} automatically`,
+                    showCancelButton: subscription.is_recurring,
+                    confirmButtonText: this.__( 'Cancel now', 'dokan' ),
+                    cancelButtonText: this.__( 'Don\'t cancel subscription', 'dokan' ),
+                })
+                .then( async (response) => {
+                    if ( response.dismiss && 'overlay' === response.dismiss ) {
+                        return;
+                    }
+
+                    this.loading = true;
+                    let action = '';
+                    let cancelImmediately = false;
+
+                    if ( response.value ) {
+                        action = 'cancel'
+                        cancelImmediately = true;
+                    }
+
+                    if ( response.dismiss && 'cancel' === response.dismiss ) {
+                        action = 'activate'
+                    }
+
+                    const updated = await this.updateSubscriptonStatus( subscription.id, action, cancelImmediately );
+
+                    if ( updated ) {
+                        this.loading = false;
+                        const message = 'cancel' === action ? this.__( 'cancelled', 'dokan' ) : this.__( 're-activated', 'dokan' );
+                        this.$swal.fire({
+                            title: this.__( `Subscription has been ${message}`, 'dokan' ),
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+
+                    location.reload()
+                })
+            } else {
+                this.$swal({
+                    title: this.__( 'Cancel Subscription', 'dokan' ),
+                    type: 'warning',
+                    showCancelButton: true,
+                    cancelButtonText: this.__( 'Don\'t cancel', 'dokan' ),
+                    confirmButtonText: this.__( 'Cancel subscription', 'dokan' ),
+                    input: 'radio',
+                    inputOptions: {
+                        immediately: this.__( `Immediately <span class="date">${subscription.current_date}</span>`, 'dokan' ),
+                        end_of_current_period: this.__( `End of the current period <span class="date">${subscription.end_date}</span>`, 'dokan' ),
+                    }
+                })
+                .then( async (response) => {
+                    if ( response.dismiss || ! response.value ) {
+                        return;
+                    }
+
+                    this.loading = true;
+                    let action = 'cancel'
+                    let cancelImmediately = 'immediately' === response.value;
+
+                    const updated = await this.updateSubscriptonStatus( subscription.id, action, cancelImmediately );
+
+                    if ( updated ) {
+                        this.loading = false;
+                        this.$swal.fire({
+                            title: this.__( 'Subscription has been cancelled', 'dokan' ),
+                            type: 'success',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    }
+
+                    location.reload()
+                })
             }
+        },
+
+        buttonTitle(subscription) {
+            return subscription.status && subscription.has_active_cancelled_sub ? this.__( 'Reactivate', 'dokan') : this.__( 'Cancel', 'dokan' )
         },
 
         updatedCounts(xhr) {
@@ -159,14 +247,22 @@ export default {
             this.totalItems = parseInt( xhr.getResponseHeader('X-WP-Total') );
         },
 
-        deleteSubscripton(id) {
+        updateSubscriptonStatus(id, status, immediately) {
             let self = this;
+            let data = {
+                action: status,
+                immediately: immediately
+            }
 
-            self.loading = true;
-
-            dokan.api.delete('/subscription/' + id )
-            .done((response, status, xhr) => {
-                location.reload();
+            return new Promise((resolve, reject) => {
+                dokan.api.put('/subscription/' + id, data )
+                    .done((response, status, xhr) => {
+                        if ( 'success' === status ) {
+                            resolve(true);
+                        } else {
+                            reject( new Error( 'Something went wrong' ) );
+                        }
+                    });
             });
         },
 
@@ -204,16 +300,22 @@ export default {
         },
 
         onBulkAction(action, items) {
-            if ( ! confirm( this.__( 'Are you sure to cancel the subscription?', 'dokan' ) ) ) {
+            const message = 'activate' === action
+                ? this.__( 'Want to activate the subscription again?', 'dokan' )
+                : this.__( 'Are you sure to cancel the subscription?', 'dokan' );
+
+            if ( ! confirm( message ) ) {
                 return;
             }
 
-            let jsonData = {};
-            jsonData[action] = items;
+            let data = {
+                action: action,
+                user_ids: items
+            }
 
             this.loading = true;
 
-            dokan.api.delete('/subscription/batch', jsonData)
+            dokan.api.put('/subscription/batch', data)
             .done(response => {
                 location.reload();
             });
@@ -222,9 +324,57 @@ export default {
         subscriptionUrl(id) {
             return dokan.urls.adminRoot + 'post.php?post=' + id + '&action=edit';
         },
+
+        subscriptionStatus(subscription) {
+            if ( subscription.status && subscription.has_active_cancelled_sub ) {
+                return this.sprintf( this.__( 'Active (Cancels %s)', 'dokan' ), subscription.end_date );
+            }
+
+            if ( subscription.status ) {
+                return this.__( 'Active', 'dokan' );
+            }
+
+            return this.__( 'Inactive', 'dokan' );
+        },
+
+        subscriptionEndDate(subscription) {
+            return subscription.is_recurring ? this.__( 'Recurring', 'dokan' ) : subscription.end_date;
+        },
     }
 };
 </script>
 
-<style>
+<style lang="less">
+    .subscription-list {
+        table {
+            th.column.status {
+                width: 20% !important;
+            }
+
+            .action-btn {
+                cursor: pointer;
+            }
+        }
+    }
+
+    .swal2-radio {
+        flex-direction: column;
+
+        label {
+            padding-bottom: 8px;
+        }
+    }
+    .swal2-actions button:focus {
+        display: none;
+        outline: none;
+    }
+    .swal2-content {
+        .swal2-label {
+            font-weight: normal;
+            span.date {
+                color: #919191;
+                font-weight: lighter;
+            }
+        }
+    }
 </style>

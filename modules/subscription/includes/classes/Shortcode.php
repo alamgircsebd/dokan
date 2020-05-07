@@ -47,7 +47,9 @@ class Shortcode {
         ?>
 
         <div class="dokan-subscription-content">
-            <?php $subscription = dokan()->vendor->get( $user_id )->subscription; ?>
+            <?php
+                $subscription = dokan()->vendor->get( $user_id )->subscription;
+            ?>
 
             <?php if ( $subscription && $subscription->has_pending_subscription() ) : ?>
                 <div class="seller_subs_info">
@@ -86,28 +88,47 @@ class Shortcode {
                     </p>
                     <p>
                         <?php
-                        if ( $subscription->is_trial() ) {
-                            // don't show any text
-                        } elseif ( $subscription->is_recurring() ) {
-                            echo sprintf( __( 'You will be charged in every %d', 'dokan' ), $subscription->get_recurring_interval() ) . ' ' . Helper::recurring_period( $subscription->get_period_type() );
-                        } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
-                            printf( __( 'You have a lifetime package.', 'dokan' ) );
-                        } else {
-                            printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) ) );
-                        } ?>
+                            if ( $subscription->has_active_cancelled_subscrption() ) {
+                                $date   = date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) );
+                                $notice = sprintf( __( 'Your subscription has been cancelled! However it\'s is still active till %s', 'dokan' ), $date );
+                                printf( "<span>{$notice}</span>" );
+                            } else {
+                                if ( $subscription->is_trial() ) {
+                                    // don't show any text
+                                } elseif ( $subscription->is_recurring() ) {
+                                    echo sprintf( __( 'You will be charged in every %d', 'dokan' ), $subscription->get_recurring_interval() ) . ' ' . Helper::recurring_period( $subscription->get_period_type() );
+                                } elseif ( $subscription->get_pack_end_date() === 'unlimited' ) {
+                                    printf( __( 'You have a lifetime package.', 'dokan' ) );
+                                } else {
+                                    printf( __( 'Your package will expire on <span>%s</span>', 'dokan' ), date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) ) );
+                                }
+                            }
+                        ?>
                     </p>
 
-                    <p>
-                        <form action="" method="post">
-                            <label><?php _e( 'To cancel your subscription click here &rarr;', 'dokan' ); ?></label>
+                    <?php
+                        if ( ! ( ! $subscription->is_recurring() && $subscription->has_active_cancelled_subscrption() ) ) {
+                            ?>
+                            <p>
+                                <form action="" method="post">
+                                    <?php
+                                        $maybe_reactivate = $subscription->is_recurring() && $subscription->has_active_cancelled_subscrption();
+                                        $notice           = $maybe_reactivate ? __( 'activate', 'dokan' ) : __( 'cancel', 'dokan' );
+                                        $nonce            = $maybe_reactivate ? 'dps-sub-activate' : 'dps-sub-cancel';
+                                        $input_name       = $maybe_reactivate ? 'dps_activate_subscription' : 'dps_cancel_subscription';
+                                        $btn_class        = $maybe_reactivate ? 'btn-success' : 'btn-danger';
+                                        $again            = $maybe_reactivate ? __( 'again', 'dokan' ) : '';
+                                    ?>
 
-                            <?php wp_nonce_field( 'dps-sub-cancel' ); ?>
-                            <input type="submit" name="dps_cancel_subscription" class="btn btn-sm btn-danger" value="<?php _e( 'Cancel', 'dokan' ); ?>">
-                        </form>
-                    </p>
-                    <p>
-                        <?php _e( 'Please cancel your running package to switch another subscription', 'dokan' ); ?>
-                    </p>
+                                    <label><?php _e( "To {$notice} your subscription {$again} click here &rarr;", "dokan" ); ?></label>
+
+                                    <?php wp_nonce_field( $nonce ); ?>
+                                    <input type="submit" name="<?php echo esc_attr( $input_name ); ?>" class="<?php echo esc_attr( "btn btn-sm {$btn_class}" ); ?>" value="<?php echo esc_attr( ucfirst( $notice ) ); ?>">
+                                </form>
+                            </p>
+                            <?php
+                        }
+                    ?>
                 </div>
             <?php endif; ?>
 
@@ -116,7 +137,24 @@ class Shortcode {
 
                 <?php if ( isset( $_GET['msg'] ) && 'dps_sub_cancelled' === $_GET['msg'] ) : ?>
                     <div class="dokan-message">
-                        <p><?php _e( 'Your subscription has been cancelled!', 'dokan' ); ?></p>
+                        <?php
+                            if ( $subscription && $subscription->has_active_cancelled_subscrption() ) {
+                                $date   = date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_end_date() ) );
+                                $notice = sprintf( __( 'Your subscription has been cancelled! However the it\'s is still active till %s', 'dokan' ), $date );
+                            } else {
+                                $notice = __( 'Your subscription has been cancelled!', 'dokan' );
+                            }
+                        ?>
+
+                        <p><?php printf( $notice ); ?></p>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ( isset( $_GET['msg'] ) && 'dps_sub_activated' === $_GET['msg'] ) : ?>
+                    <div class="dokan-message">
+                        <?php
+                            esc_html_e( 'Your subscription has been re-activated!', 'dokan' );
+                        ?>
                     </div>
                 <?php endif; ?>
 

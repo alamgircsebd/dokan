@@ -416,14 +416,14 @@ class Helper {
 
         do_action( 'dokan_subscription_cancelled', $customer_id, get_user_meta( $customer_id, 'product_package_id', true ) );
 
-        delete_user_meta( $customer_id, 'product_package_id' );
         delete_user_meta( $customer_id, 'product_order_id' );
+        delete_user_meta( $customer_id, 'product_pack_enddate' );
+        delete_user_meta( $customer_id, 'product_package_id' );
         delete_user_meta( $customer_id, 'product_no_with_pack' );
         delete_user_meta( $customer_id, 'product_pack_startdate' );
-        delete_user_meta( $customer_id, 'product_pack_enddate' );
         delete_user_meta( $customer_id, 'can_post_product' );
-        delete_user_meta( $customer_id, '_customer_recurring_subscription' );
         delete_user_meta( $customer_id, 'dokan_admin_percentage' );
+        delete_user_meta( $customer_id, 'dokan_has_active_cancelled_subscrption' );
     }
 
     /**

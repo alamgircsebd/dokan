@@ -257,7 +257,7 @@
 
                             <div class="payment-methods">
                                 <span :title="__( 'PayPal Payment', 'dokan' )" :class="['flaticon-money', hasPaymentEmail('paypal') ? 'active' : '']"></span>
-                                <span :title="__( 'Stripe Connect', 'dokan' )" class="flaticon-stripe-logo"></span>
+                                <span :title="__( 'Stripe Connect', 'dokan' )" :class="['flaticon-stripe-logo', hasStripe ? 'active': '']"></span>
                                 <span :title="__( 'Bank Payment', 'dokan' )" :class="['flaticon-bank-building', hasBank ? 'active': '' ]"></span>
                                 <span :title="__( 'Skrill', 'dokan' )" :class="['flaticon-skrill-pay-logo', hasPaymentEmail('skrill') ? 'active' : '']"></span>
                             </div>
@@ -399,6 +399,10 @@ export default {
             }
 
             return false;
+        },
+
+        hasStripe() {
+            return this.store.payment && this.store.payment.stripe;
         },
 
         categoriesFlattened() {

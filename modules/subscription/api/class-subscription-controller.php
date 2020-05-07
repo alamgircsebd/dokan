@@ -45,8 +45,8 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
 
         register_rest_route( $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)/', [
             [
-                'methods'             => WP_REST_Server::DELETABLE,
-                'callback'            => [ $this, 'cancel_subscription' ],
+                'methods'             => WP_REST_Server::EDITABLE,
+                'callback'            => [ $this, 'update_subscription' ],
                 'permission_callback' => [ $this, 'check_permission' ],
                 'args'                => $this->get_collection_params(),
             ],
@@ -54,8 +54,8 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
 
         register_rest_route( $this->namespace, '/' . $this->base . '/batch', [
             [
-                'methods'  => WP_REST_Server::DELETABLE,
-                'callback' => [ $this, 'batch_cancel' ],
+                'methods'  => WP_REST_Server::EDITABLE,
+                'callback' => [ $this, 'batch_update' ],
                 'permission_callback' => [ $this, 'check_permission' ],
             ],
         ] );
@@ -141,35 +141,50 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
     }
 
     /**
-     * Cancel vendor subscription
+     * Update subscription
      *
-     * @param  array $request
+     * @param \WP_REST_Request $request
      *
-     * @return object
+     * @return \WP_REST_Response
      */
-    public function cancel_subscription( $request ) {
-        $user_id = (int) $request->get_param( 'id' );
-        $user    = new WP_User( $user_id );
-        $status  = get_terms( 'shop_order_status' );
+    public function update_subscription( $request ) {
+        $user_id            = (int) $request->get_param( 'id' );
+        $action             = $request->get_param( 'action' );
+        $status             = get_terms( 'shop_order_status' );
+        $cancel_immediately = dokan_validate_boolean( $request->get_param( 'immediately' ) );
 
         if ( is_wp_error( $status ) ) {
             register_taxonomy( 'shop_order_status', array( 'shop_order' ), array( 'rewrite' => false ) );
         }
 
         $order_id = get_user_meta( $user_id, 'product_order_id', true );
+        $vendor   = dokan()->vendor->get( $user_id )->subscription;
+        $user     = new \WP_User( $user_id );
 
-        if ( ! $order_id ) {
-            return new WP_Error( 'no_subscription', __( 'No subscription is found to be deleted.', 'dokan' ), [ 'status' => 200 ] );
+        if ( ! $order_id || ! $vendor ) {
+            return new WP_Error( 'no_subscription', __( 'No subscription is found to be updated.', 'dokan' ), [ 'status' => 200 ] );
         }
 
-        if ( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
-            Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+        if ( 'activate' === $action ) {
+            if ( $vendor->has_recurring_pack() && $vendor->has_active_cancelled_subscrption() ) {
+                Helper::log( 'Subscription re-activattion check: Admin has re-activate Subscription of User #' . $user_id . ' on order #' . $order_id );
+                do_action( 'dps_activate_recurring_subscription', $order_id, $user_id );
+            }
 
-            do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id );
-        } else {
-            Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+            if ( ! $vendor->has_recurring_pack() ) {
+                Helper::log( 'Subscription re-activattion check: Admin has re-activate Subscription of User #' . $user_id . ' on order #' . $order_id );
+                do_action( 'dps_activate_non_recurring_subscription', $order_id, $user_id );
+            }
+        }
 
-            Helper::delete_subscription_pack( $user_id, $order_id );
+        if ( 'cancel' === $action ) {
+            if ( $vendor->has_recurring_pack() ) {
+                Helper::log( 'Subscription cancellation check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+                do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id, $cancel_immediately );
+            } elseif ( ! $vendor->has_recurring_pack() ) {
+                Helper::log( 'Subscription cancellation check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+                do_action( 'dps_cancel_non_recurring_subscription', $order_id, $user_id, $cancel_immediately );
+            }
         }
 
         $response = $this->prepare_item_for_response( $user, $request );
@@ -178,15 +193,19 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
         return $response;
     }
 
-    public function batch_cancel( $request ) {
-        $params = $request->get_params();
-
-        if ( ! empty( $params['cancel'] ) ) {
-            $user_ids = $params['cancel'];
-        }
+    /**
+     * Batch update subscription
+     *
+     * @param \WP_REST_Request $request
+     *
+     * @return \WP_REST_Response
+     */
+    public function batch_update( $request ) {
+        $action   = ! empty( $request['action'] ) ? $request['action'] : '';
+        $user_ids = ! empty( $request['user_ids'] ) ? $request['user_ids'] : '';
 
         if ( ! $user_ids ) {
-            return new WP_Error( 'no_subscription', __( 'No subscription is found to be deleted.', 'dokan' ), [ 'status' => 200 ] );
+            return new WP_Error( 'no_subscription', __( 'No subscription is found to be updated.', 'dokan' ), [ 'status' => 200 ] );
         }
 
         $status = get_terms( 'shop_order_status' );
@@ -199,17 +218,27 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
             $order_id = get_user_meta( $user_id, 'product_order_id', true );
 
             if ( ! $order_id ) {
-                return new WP_Error( 'no_subscription', __( 'No subscription is found to be deleted.', 'dokan' ), [ 'status' => 200 ] );
+                return new WP_Error( 'no_subscription', __( 'No subscription is found to be updated.', 'dokan' ), [ 'status' => 200 ] );
             }
 
-            if ( get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
-                Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+            $vendor = dokan()->vendor->get( $user_id )->subscription;
 
-                do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id );
-            } else {
-                Helper::log( 'Subscription cancel check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+            if ( 'activate' === $action ) {
+                if ( $vendor->has_recurring_pack() && $vendor->has_active_cancelled_subscrption() ) {
+                    Helper::log( 'Subscription activation check: Admin has activated Subscription of User #' . $user_id . ' on order #' . $order_id );
+                    do_action( 'dps_activate_recurring_subscription', $order_id, $user_id );
+                }
+            }
 
-                Helper::delete_subscription_pack( $user_id, $order_id );
+            if ( 'cancel' === $action ) {
+                if ( $vendor->has_recurring_pack() && ! $vendor->has_active_cancelled_subscrption() ) {
+                    $cancel_immediately = false;
+                    Helper::log( 'Subscription cancellation check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+                    do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id, $cancel_immediately );
+                } elseif ( ! $vendor->has_recurring_pack() ) {
+                    Helper::log( 'Subscription cancellation check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
+                    do_action( 'dps_cancel_non_recurring_subscription', $order_id, $user_id );
+                }
             }
         }
 
@@ -236,14 +265,17 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
         $end_date = $subscription->get_pack_end_date();
 
         $data = [
-            'id'                 => $user->ID,
-            'user_link'          => get_edit_user_link( $user->ID ),
-            'user_name'          => $user->data->user_nicename,
-            'subscription_id'    => $subscription->get_id(),
-            'subscription_title' => $subscription->get_package_title(),
-            'start_date'         => date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_start_date() ) ),
-            'end_date'           => 'unlimited' === $end_date ? __( 'Unlimited', 'dokan' ) : date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ),
-            'status'             => $subscription->has_subscription()
+            'id'                       => $user->ID,
+            'user_link'                => get_edit_user_link( $user->ID ),
+            'user_name'                => $user->data->user_nicename,
+            'subscription_id'          => $subscription->get_id(),
+            'subscription_title'       => $subscription->get_package_title(),
+            'start_date'               => date_i18n( get_option( 'date_format' ), strtotime( $subscription->get_pack_start_date() ) ),
+            'end_date'                 => 'unlimited' === $end_date ? __( 'Unlimited', 'dokan' ) : date_i18n( get_option( 'date_format' ), strtotime( $end_date ) ),
+            'current_date'             => date_i18n( get_option( 'date_format' ) ),
+            'status'                   => $subscription->has_subscription(),
+            'is_recurring'             => $subscription->has_recurring_pack(),
+            'has_active_cancelled_sub' => $subscription->has_active_cancelled_subscrption(),
         ];
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';
