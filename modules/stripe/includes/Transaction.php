@@ -1,14 +1,18 @@
 <?php
-namespace DokanPro\Modules\Stripe;
 
-use DokanPro\Modules\Stripe\Helper;
+namespace WeDevs\DokanPro\Modules\Stripe;
+
+use WeDevs\Dokan\Exceptions\DokanException;
+
+defined( 'ABSPATH' ) || exit;
 
 /**
- * The transaction class
+ * The transaction class helps transfer fund from admin to vendor's account
  *
  * @since 2.9.13
  */
 class Transaction {
+
     /**
      * Charge id holder
      *
@@ -40,14 +44,13 @@ class Transaction {
     /**
      * Amount to transfer
      *
-     * @since  2.9.13
+     * @since 2.9.13
      *
-     * @param  float $amount
-     * @param  string $currency
+     * @param float $amount
      *
      * @return this
      */
-    public function amount( $amount, $currency = 'usd' ) {
+    public function amount( $amount, $currency = null ) {
         $this->amount   = $amount;
         $this->currency = $currency;
 
@@ -76,38 +79,31 @@ class Transaction {
      *
      * @param string $vendor
      *
-     * @return this
+     * @return bool
      */
     public function to( $vendor ) {
         $this->vendor = $vendor;
 
-        return $this;
-    }
-
-    /**
-     * Make the transer
-     *
-     * @since 2.9.13
-     *
-     * @return boolean
-     */
-    public function create() {
         return $this->transfer();
     }
 
     /**
-     * Transer the fund
+     * Transer the fund to vendor
      *
-     * @return boolean
+     * @since 2.9.13
+     *
+     * @return void
      */
     public function transfer() {
-        $transfer = \Stripe\Transfer::create( [
-            'amount'             => $this->amount,
-            'currency'           => $this->currency,
-            'destination'        => $this->vendor,
-            'source_transaction' => $this->admin
-        ] );
-
-        return is_wp_error( $transfer ) ? false : true;
+        try {
+            $transfer = \Stripe\Transfer::create( [
+                'amount'             => $this->amount,
+                'destination'        => $this->vendor,
+                'source_transaction' => $this->admin,
+                'currency'           => $this->currency ? strtolower( $this->currency ) : strtolower( get_woocommerce_currency() ),
+            ] );
+        } catch ( Exception $e ) {
+            throw new DokanException( 'dokan_unable_to_transfer', $e->getMessage() );
+        }
     }
 }

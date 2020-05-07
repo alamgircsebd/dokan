@@ -84,9 +84,9 @@ class Module {
         add_filter( 'woocommerce_add_to_cart_validation', [ __CLASS__, 'maybe_empty_cart' ], 10, 3 );
         add_action( 'woocommerce_order_status_changed', array( $this, 'process_order_pack_product' ), 10, 3 );
 
-        add_filter( 'template_redirect', array( $this, 'user_subscription_cancel' ) );
-
+        add_action( 'template_redirect', array( $this, 'maybe_cancel_or_activate_subscription' ) );
         add_action( 'dps_cancel_recurring_subscription', array( $this, 'cancel_recurring_subscription' ), 10, 2 );
+        add_action( 'dps_cancel_non_recurring_subscription', array( $this, 'cancel_non_recurring_subscription' ), 10, 3 );
 
         add_filter( 'dokan_query_var_filter', [ __CLASS__, 'add_subscription_endpoint' ] );
 
@@ -215,10 +215,11 @@ class Module {
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
+        wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', [], date( 'Ymd' ) );
         wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), time(), true );
         wp_localize_script( 'dps-custom-js', 'dokanSubscription', array(
-            'cancel_string' => __( 'Do you really want to cancel the subscription?', 'dokan' ),
+            'cancel_string'   => __( 'Do you really want to cancel the subscription?', 'dokan' ),
+            'activate_string' => __( 'Want to activate the subscription again?', 'dokan' ),
         ) );
     }
 
@@ -807,40 +808,49 @@ class Module {
         return $needs_processing;
     }
 
-    /**
-     * Handle subscription cancel request from the user
-     *
-     * @return void
-     */
-    function user_subscription_cancel() {
-        if ( isset( $_POST['dps_cancel_subscription'] ) ) {
+    public function maybe_cancel_or_activate_subscription() {
+        $posted_data     = wp_unslash( $_POST );
+        $cancel_action   = ! empty( $posted_data['dps_cancel_subscription'] ) ? 'cancel' : '';
+        $activate_action = ! empty( $posted_data['dps_activate_subscription'] ) ? 'activate' : '';
+        $nonce           = $cancel_action ? 'dps-sub-cancel' : 'dps-sub-activate';
 
-            if ( ! wp_verify_nonce( $_REQUEST['_wpnonce'], 'dps-sub-cancel' ) ) {
-                wp_die( __( 'Nonce failure', 'dokan' ) );
-            }
+        if ( ! $cancel_action && ! $activate_action ) {
+            return;
+        }
 
-            $user_id  = get_current_user_id();
-            $order_id = get_user_meta( $user_id, 'product_order_id', true );
+        if ( ! wp_verify_nonce( $posted_data['_wpnonce'], $nonce ) ) {
+            wp_die( __( 'Nonce failure', 'dokan' ) );
+        }
 
-            if ( self::is_dokan_plugin() ) {
-                $page_url = dokan_get_navigation_url( 'subscription' );
-            } else {
-                $page_url = get_permalink( dokan_get_option( 'subscription_pack', 'dokan_product_subscription' ) );
-            }
+        $user_id  = get_current_user_id();
+        $order_id = get_user_meta( $user_id, 'product_order_id', true );
+
+        if ( self::is_dokan_plugin() ) {
+            $page_url = dokan_get_navigation_url( 'subscription' );
+        } else {
+            $page_url = get_permalink( dokan_get_option( 'subscription_pack', 'dokan_product_subscription' ) );
+        }
+
+        if ( $cancel_action ) {
+            $cancel_immediately = false;
 
             if ( $order_id && get_user_meta( $user_id, '_customer_recurring_subscription', true ) == 'active' ) {
                 Helper::log( 'Subscription cancel check: User #' . $user_id . ' has canceled his Subscription of order #' . $order_id );
-
-                do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id );
-
+                do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id, $cancel_immediately );
                 wp_redirect( add_query_arg( array( 'msg' => 'dps_sub_cancelled' ), $page_url ) );
-                exit();
+                exit;
             } else {
                 Helper::log( 'Subscription cancel check: User #' . $user_id . ' has canceled his Subscription of order #' . $order_id );
-                Helper::delete_subscription_pack( $user_id, $order_id );
+                do_action( 'dps_cancel_non_recurring_subscription', $order_id, $user_id, $cancel_immediately );
                 wp_redirect( add_query_arg( array( 'msg' => 'dps_sub_cancelled' ), $page_url ) );
-                exit();
+                exit;
             }
+        }
+
+        if ( $activate_action ) {
+            Helper::log( 'Subscription activation check: User #' . $user_id . ' has reactivate his Subscription of order #' . $order_id );
+            do_action( 'dps_activate_recurring_subscription', $order_id, $user_id );
+            wp_redirect( add_query_arg( array( 'msg' => 'dps_sub_activated' ), $page_url ) );
         }
     }
 
@@ -861,6 +871,31 @@ class Module {
         if ( 'paypal' == $order->get_payment_method() ) {
             \DPS_PayPal_Standard_Subscriptions::cancel_subscription_with_paypal( $order_id, $user_id );
         }
+    }
+
+    /**
+     * Cancel non recurring subscription
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $order_id
+     * @param int $vendor_id
+     *
+     * @return void
+     */
+    public function cancel_non_recurring_subscription( $order_id, $vendor_id, $cancel_immediately ) {
+        if ( $cancel_immediately || 'unlimited' === Helper::get_pack_end_date( $vendor_id ) ) {
+            return Helper::delete_subscription_pack( $vendor_id, $order_id );
+        }
+
+        $subscription = dokan()->vendor->get( $vendor_id )->subscription;
+
+        if ( ! $subscription ) {
+            dokan_log( sprintf( __( 'Unable to find subscription to be cancelled for vendor id# %s', 'dokan' ), $vendor_id ) );
+            return;
+        }
+
+        $subscription->set_active_cancelled_subscription();
     }
 
     /**
@@ -895,7 +930,7 @@ class Module {
     }
 
     /**
-     * Exclude subscriptoin product from product listing page
+     * Exclude subscription product from product listing page
      *
      * @param  array $terms
      *

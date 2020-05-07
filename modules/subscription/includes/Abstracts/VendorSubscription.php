@@ -141,30 +141,6 @@ abstract class VendorSubscription {
     }
 
     /**
-     * Check if vendor can renew a package
-     *
-     * @param integer $pack_id
-     *
-     * @return boolean
-     */
-    public function can_renew_package( $pack_id ) {
-        $date            = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
-        $validation_date = date( 'Y-m-d', strtotime( $this->get_pack_end_date() ) );
-
-        $datetime1 = new DateTime( $date );
-        $datetime2 = new DateTime( $validation_date );
-
-        $interval = $datetime1->diff( $datetime2 );
-        $interval = $interval->format( '%r%d' );
-
-        if ( (int) $interval <= 3 && (int) $interval >= 0 && ( $this->get_id() == $product_id ) ) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Vendor has recurring subscription pack
      *
      * @return boolean
@@ -188,5 +164,24 @@ abstract class VendorSubscription {
      */
     public function has_pending_subscription() {
         return get_user_meta( $this->get_vendor(), 'has_pending_subscription', true );
+    }
+
+    /**
+     * Check whter the vendor has active cancelled subscription or not
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public function has_active_cancelled_subscrption() {
+        return (bool) get_user_meta( $this->get_vendor(), 'dokan_has_active_cancelled_subscrption', true );
+    }
+
+    public function set_active_cancelled_subscription() {
+        update_user_meta( $this->get_vendor(), 'dokan_has_active_cancelled_subscrption', true );
+    }
+
+    public function reset_active_cancelled_subscription() {
+        update_user_meta( $this->get_vendor(), 'dokan_has_active_cancelled_subscrption', false );
     }
 }
