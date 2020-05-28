@@ -126,7 +126,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Get source object by source id.
      *
-     * @since 4.0.3
+     * @since DOKAN_PRO_SINCE
+     *
      * @param string $source_id The source ID to get source object for.
      */
     public function get_source_object( $source_id = '' ) {
@@ -146,7 +147,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Checks if payment is via saved payment source.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @return bool
      */
     public function is_using_saved_payment_method() {
@@ -158,9 +160,11 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Checks whether a source exists.
      *
-     * @since 4.2.0
-     * @param  object $prepared_source The source that should be verified.
-     * @throws WC_Stripe_Exception     An exception if the source ID is missing.
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param object $prepared_source The source that should be verified.
+     *
+     * @throws \DokanException
      */
     public function validate_source( $prepared_source ) {
         if ( empty( $prepared_source->source ) ) {
@@ -169,15 +173,27 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
                 __( 'Payment processing failed. Please retry.', 'dokan' )
             );
         }
+
+        if ( ! empty( $prepared_source->source_object->status ) && 'consumed' === $prepared_source->source_object->status ) {
+            throw new DokanException(
+                'wrong',
+                sprintf(
+                    __( 'Payment processing failed. Please try again with a different card. If it\'s a saved card, <a href="%s" target="_blank">remove it first</a> and try again.', 'dokan' ),
+                    wc_get_account_endpoint_url( 'payment-methods' )
+                )
+            );
+        }
     }
 
     /**
      * Save source to order.
      *
-     * @since 3.1.0
-     * @version 4.0.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param WC_Order $order For to which the source applies.
      * @param stdClass $source Source information.
+     *
+     * @return void
      */
     public function save_source_to_order( $order, $source ) {
         if ( $source->customer ) {
@@ -197,19 +213,24 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Validates that the order meets the minimum order amount
      * set by Stripe.
      *
-     * @since 4.0.0
-     * @version 4.0.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param object $order
+     *
+     * @return void
      */
     public function validate_minimum_order_amount( $order ) {
         if ( $order->get_total() * 100 < $this->get_minimum_amount() ) {
-            /* translators: 1) dollar amount */
             throw new Exception( 'Did not meet minimum amount', sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'dokan' ), wc_price( $this->get_minimum_amount() / 100 ) ) );
         }
     }
 
     /**
      * Checks Stripe minimum order value authorized per currency
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return int
      */
     public function get_minimum_amount() {
         // Check order amount
@@ -252,9 +273,11 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Locks an order for payment intent processing for 5 minutes.
      *
-     * @since 4.2
+     * @since DOKAN_PRO_SINCE
+     *
      * @param WC_Order $order  The order that is being paid.
      * @param stdClass $intent The intent that is being processed.
+     *
      * @return bool            A flag that indicates whether the order is already locked.
      */
     public function lock_order_payment( $order, $intent = null ) {
@@ -276,8 +299,11 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Unlocks an order for processing by payment intents.
      *
-     * @since 4.2
+     * @since DOKAN_PRO_SINCE
+     *
      * @param WC_Order $order The order that is being unlocked.
+     *
+     * @return void
      */
     public function unlock_order_payment( $order ) {
         $order_id = $order->get_id();
@@ -286,6 +312,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
 
     /**
      * Store extra meta data for an order from a Stripe Response.
+     *
+     * @since DOKAN_PRO_SINCE
      */
     public function process_response( $response, $order ) {
 
@@ -343,8 +371,10 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Retrieves the payment intent, associated with an order.
      *
-     * @since 4.2
+     * @since DOKAN_PRO_SINCE
+     *
      * @param WC_Order $order The order to retrieve an intent for.
+     *
      * @return obect|bool     Either the intent object or `false`.
      */
     public function get_intent_from_order( $order ) {
@@ -394,7 +424,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if request is invalid and that
      * they are worth retrying.
      *
-     * @since 4.0.5
+     * @since DOKAN_PRO_SINCE
+     *
      * @param array $error
      */
     public function is_retryable_error( $error ) {
@@ -411,7 +442,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of same idempotency key
      * error due to retries with different parameters.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param array $error
      */
     public function is_same_idempotency_error( $error ) {
@@ -426,7 +458,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such customer.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param array $error
      */
     public function is_no_such_customer_error( $error ) {
@@ -441,7 +474,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such token.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param array $error
      */
     public function is_no_such_token_error( $error ) {
@@ -456,7 +490,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such source.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param array $error
      */
     public function is_no_such_source_error( $error ) {
@@ -471,7 +506,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * Checks to see if error is of invalid request
      * error and it is no such source linked to customer.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param array $error
      */
     public function is_no_linked_source_error( $error ) {
@@ -485,7 +521,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Customer param wrong? The user may have been deleted on stripe's end. Remove customer_id. Can be retried without.
      *
-     * @since 4.2.0
+     * @since DOKAN_PRO_SINCE
+     *
      * @param object   $error The error that was returned from Stripe's API.
      * @param WC_Order $order The order those payment is being processed.
      * @return bool           A flag that indicates that the customer does not exist and should be removed.
@@ -504,6 +541,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
 
     /**
      * Insert withdraw data into vendor balnace table
+     *
+     * @since DOKAN_PRO_SINCE
      *
      * @param  array $all_withdraw
      *
@@ -547,7 +586,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Automatically process withdrwal for sellers per order
      *
-     * @since 1.3.2
+     * @since DOKAN_PRO_SINCE
      *
      * @param array $all_withdraws
      *
@@ -572,6 +611,8 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
 
     /**
      * Get order details
+     *
+     * @since DOKAN_PRO_SINCE
      *
      * @param  int  $order_id
      * @param  int  $seller_id
@@ -611,8 +652,10 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Checks if source is of legacy type card.
      *
-     * @since 4.0.8
+     * @since DOKAN_PRO_SINCE
+     *
      * @param string $source_id
+     *
      * @return bool
      */
     public function is_type_legacy_card( $source_id ) {
@@ -622,7 +665,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     /**
      * Displays the save to account checkbox.
      *
-     * @since 4.1.0
+     * @since DOKAN_PRO_SINCE
      */
     public function save_payment_method_checkbox() {
         printf(
