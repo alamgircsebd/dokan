@@ -3,6 +3,7 @@
 namespace WeDevs\DokanPro\Coupons;
 
 use WP_Error;
+use Exception;
 
 /**
 * Hooks Class
@@ -85,7 +86,7 @@ class Hooks {
         }
 
         if ( $coupon->get_minimum_amount() > $line_item_total ) {
-            return ! $valid;
+            throw new Exception( sprintf( __( 'The minimun spend for this coupon is %s', 'dokan' ), wc_price( $coupon->get_minimum_amount() ) ), 108 );
         }
 
         return $valid;
