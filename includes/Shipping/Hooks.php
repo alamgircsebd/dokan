@@ -25,6 +25,7 @@ class Hooks {
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
+        add_filter( 'woocommerce_package_rates', array( $this, 'calculate_shipping_tax' ), 10, 2 );
     }
 
     /**
@@ -346,5 +347,58 @@ class Hooks {
             <?php echo wpautop( $refund_policy ); ?>
         <?php } ?>
         <?php
+    }
+
+    /**
+     * WooCommerce calculate taxes cart wise (cart as a whole), not vendor wise.
+     * So if there is any tax for non-taxable product, lets remove that tax
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @see https://github.com/weDevsOfficial/dokan/issues/820
+     * @see https://github.com/woocommerce/woocommerce/issues/20600
+     *
+     * @param \WC_Shipping_Rate $package_rates
+     * @param array $packages
+     *
+     * @return array
+     */
+    public function calculate_shipping_tax( $package_rates, $package ) {
+        if ( ! isset( $package['contents'] ) ) {
+            return $package_rates;
+        }
+
+        foreach ( $package['contents'] as $pack ) {
+            if ( ! isset( $pack['data'] ) || ! is_callable( [ $pack['data'], 'get_tax_status' ] ) ) {
+                return $package_rates;
+            }
+
+            if ( 'none' !== $pack['data']->get_tax_status() ) {
+                continue;
+            }
+
+            // so it's a non taxable shipping, lets remove the taxes
+            foreach( $package_rates as $shipping_rate ) {
+                $rfc = new \ReflectionClass( $shipping_rate );
+
+                if ( ! $rfc->hasProperty( 'data' ) ) {
+                    return $package_rates;
+                }
+
+                $data = $rfc->getProperty( 'data' );
+                $data->setAccessible( true );
+                $data->setValue(
+                    $shipping_rate,
+                    array_merge(
+                        $data->getValue( $shipping_rate ),
+                        [
+                            'taxes' => []
+                        ]
+                    )
+                );
+            }
+        }
+
+        return $package_rates;
     }
 }
