@@ -337,10 +337,13 @@ class DSR_View {
 
         $args = array(
             'post_type'           => 'shop_order',
-            'author'              => $seller_id,
             'meta_key'            => '_customer_user',
             'meta_value'          => $customer_id,
-            'post_status'         => 'wc-completed'
+            'post_status'         => 'wc-completed',
+            'meta_query'          => array(
+                'key'   => '_dokan_vendor_id',
+                'value' => $seller_id
+            )
         );
 
         $query = new WP_Query( $args );
