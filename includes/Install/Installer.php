@@ -70,6 +70,10 @@ class Installer {
     public function maybe_activate_modules() {
         global $wpdb;
 
+        if ( ! class_exists( 'WeDevs_Dokan' ) ) {
+            return;
+        }
+
         $modules = ! empty( dokan_pro()->module ) ? dokan_pro()->module : new \WeDevs\DokanPro\Module();
 
         $has_installed = $wpdb->get_var( $wpdb->prepare(
