@@ -3,6 +3,8 @@
 namespace WeDevs\DokanPro;
 
 use WPSEO_Sitemaps_Router;
+use WP_User_Query;
+use WPSEO_Sitemap_Timezone;
 
 /**
  * Dokan SEO class
@@ -34,7 +36,7 @@ class StoreSeo {
      * @return void
      */
     public function init_hooks() {
-        add_action( 'init', array( $this, 'register_sitemap' ) );
+        add_action( 'init', array( $this, 'register_sitemap' ), 35 );
         add_action( 'wp_ajax_dokan_seo_form_handler', array( $this, 'dokan_seo_form_handler' ) );
         add_action( 'template_redirect', array( $this, 'output_meta_tags' ) );
         add_filter( 'wpseo_sitemap_index', array( $this, 'add_sellers_sitemap' ), 100 );
