@@ -81,7 +81,9 @@ class Dokan_Geolocation_Widget_Filters extends WP_Widget {
      * @return void
      */
     public function widget( $args, $instance ) {
-        extract( $args, EXTR_SKIP );
+        if ( is_array( $args ) ) {
+            extract( $args, EXTR_SKIP );
+        }
 
         echo $before_widget;
 
