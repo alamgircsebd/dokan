@@ -173,7 +173,7 @@ class Commission {
         // Specially on order table `re-generation`.
         $this->set_order_id( $order->get_id() );
         $earning = $this->get_earning_from_order_table( $order->get_id(), $context );
-
+        
         if ( ! is_null( $earning ) ) {
             return $earning;
         }
@@ -198,6 +198,7 @@ class Commission {
             }
         }
 
+       
         if ( $context === $this->get_shipping_fee_recipient( $order->get_id() ) ) {
             $earning += $order->get_total_shipping() - $order->get_total_shipping_refunded();
         }

@@ -121,7 +121,7 @@ $hide_customer_info = dokan_get_option( 'hide_customer_info', 'dokan_selling', '
 
             <div class="dokan-left dokan-order-billing-address">
                 <div class="dokan-panel dokan-panel-default">
-                    <div class="dokan-panel-heading"><strong><?php esc_html_e( 'Billing Address', 'dokan-lite' ); ?></strong></div>
+                    <div class="dokan-panel-heading"><strong><?php esc_html_e( 'Billing Address::', 'dokan-lite' ); ?></strong></div>
                     <div class="dokan-panel-body">
                         <?php
                             if ( $order->get_formatted_billing_address() ) {
