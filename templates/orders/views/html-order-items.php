@@ -95,7 +95,7 @@ if ( wc_tax_enabled() ) {
                     '_product'     => $_product
                 ) );
 
-                do_action( 'woocommerce_order_item_' . $item['type'] . '_html', $item_id, $item );
+                do_action( 'woocommerce_order_item_' . $item['type'] . '_html', $item_id, $item, $order );
             }
         ?>
         </tbody>
