@@ -38,15 +38,18 @@ trait Dokan_RMA_Common {
 
         foreach ( $product_ids as $key => $product_id ) {
             $product = wc_get_product( $product_id );
-            $items[] = [
-                'id'        => $product->get_id(),
-                'title'     => $product->get_title(),
-                'thumbnail' => wp_get_attachment_url( $product->get_image_id() ),
-                'quantity'  => $quantites[$key],
-                'url'       => $product->get_permalink(),
-                'price'     => $product->get_price(),
-                'item_id'   => $item_id[$key]
-            ];
+
+            if ( $product ) {
+                $items[] = [
+                    'id'        => $product->get_id(),
+                    'title'     => $product->get_title(),
+                    'thumbnail' => wp_get_attachment_url( $product->get_image_id() ),
+                    'quantity'  => $quantites[$key],
+                    'url'       => $product->get_permalink(),
+                    'price'     => $product->get_price(),
+                    'item_id'   => $item_id[$key]
+                ];
+            }
         }
 
         $vendor = dokan()->vendor->get( $request['vendor_id'] );
