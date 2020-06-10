@@ -217,7 +217,7 @@ if ( wc_tax_enabled() ) {
         </tr>
 
         <?php 
-        if ( class_exists( 'WC_Subscriptions' ) && ! dokan_pro()->module->is_active( 'vsp' ) ) {
+        if ( class_exists( 'WC_Subscriptions' ) ) {
             require_once(ABSPATH . 'wp-admin/includes/screen.php');
         }
 
