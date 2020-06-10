@@ -658,24 +658,3 @@ function dokan_register_deactivation_hook( $file, $function ) {
         add_action( "dokan_deactivate_{$base_name}", $function );
     }
 }
-
-/**
-* Get the current screen object
-*
-* @since 3.1.0
-*
-* @global WP_Screen $current_screen
-*
-* @return WP_Screen|null Current screen object or null when screen not defined.
-*/
-if ( ! function_exists( 'get_current_screen' ) && ! ( is_admin() ) ) :
-    function get_current_screen() {
-        global $current_screen;
-
-        if ( ! isset( $current_screen ) ) {
-            return null;
-        }
-
-        return $current_screen;
-    }
-endif;

@@ -216,7 +216,13 @@ if ( wc_tax_enabled() ) {
             <td width="1%"></td>
         </tr>
 
-        <?php do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_get_prop( $order, 'id' ) ); ?>
+        <?php 
+        if ( class_exists( 'WC_Subscriptions' ) && ! dokan_pro()->module->is_active( 'vsp' ) ) {
+            require_once(ABSPATH . 'wp-admin/includes/screen.php');
+        }
+
+        do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_get_prop( $order, 'id' ) ); 
+        ?>
 
     </table>
     <div class="clear"></div>
