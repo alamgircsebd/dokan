@@ -209,6 +209,10 @@ class Dokan_VSP_Product {
             return;
         }
 
+        if ( 'subscription' != $_POST['product_type'] || 'variable-subscription' != $_POST['product_type'] ) {
+            return;
+        }
+
         if ( isset( $_POST['variable_subscription_sign_up_fee'][ $index ] ) ) {
             $subscription_sign_up_fee = wc_format_decimal( $_POST['variable_subscription_sign_up_fee'][ $index ] );
             update_post_meta( $variation_id, '_subscription_sign_up_fee', $subscription_sign_up_fee );
