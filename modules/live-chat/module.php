@@ -42,11 +42,11 @@ class Module {
      * @return void
      */
     private function init_classes() {
-        $this->container['vendor_inbox']    = new VendorInbox();
-        $this->container['customer_inbox']  = new CustomerInbox();
         $this->container['admin_settings']  = new AdminSettings();
         $this->container['vendor_settings'] = new VendorSettings();
         $this->container['chat']            = new Chat();
+        $this->container['customer_inbox']  = new CustomerInbox();
+        $this->container['vendor_inbox']    = new VendorInbox();
     }
 
     /**
