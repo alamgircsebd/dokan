@@ -167,14 +167,20 @@ class Dokan_Geolocation_Vendor_Dashboard {
 
         if ( isset( $_POST['_dokan_geolocation_use_store_settings'] ) && 'yes' !== $_POST['_dokan_geolocation_use_store_settings'] ) {
             $use_store_settings = 'no';
+        } else if ( ! isset( $_POST['_dokan_geolocation_use_store_settings'] ) ) {
+            $use_store_settings = get_post_meta( $post_id, '_dokan_geolocation_use_store_settings', true  );
         }
 
         update_post_meta( $post_id, '_dokan_geolocation_use_store_settings', $use_store_settings );
 
         if ( 'yes' !== $use_store_settings ) {
-            $dokan_geo_latitude  = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_latitude'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_latitude'] : null;
-            $dokan_geo_longitude = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_longitude'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_longitude'] : null;
-            $dokan_geo_address   = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_address'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_address'] : null;
+            $dokan_geo_latitude_post   = get_post_meta( $post_id, 'dokan_geo_latitude', true  );
+            $dokan_geo_longitude_post  = get_post_meta( $post_id, 'dokan_geo_longitude', true  );
+            $dokan_geo_address_post    = get_post_meta( $post_id, 'dokan_geo_address', true  );
+
+            $dokan_geo_latitude  = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_latitude'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_latitude'] : $dokan_geo_latitude_post;
+            $dokan_geo_longitude = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_longitude'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_longitude'] : $dokan_geo_longitude_post;
+            $dokan_geo_address   = ! empty( $_POST['_dokan_geolocation_product_dokan_geo_address'] ) ? $_POST['_dokan_geolocation_product_dokan_geo_address'] : $dokan_geo_address_post;
         }
 
         update_post_meta( $post_id, 'dokan_geo_latitude', $dokan_geo_latitude );
