@@ -13,7 +13,7 @@ class WebhookHandler {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -25,7 +25,7 @@ class WebhookHandler {
     /**
      * Init all the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -37,7 +37,7 @@ class WebhookHandler {
     /**
      * Register webhook and remove old `webhook=dokan` endpoint from stripe
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -73,7 +73,7 @@ class WebhookHandler {
     /**
      * Get all the webhook events
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return array
      */
@@ -134,7 +134,7 @@ class WebhookHandler {
     /**
      * Handle events which are comming from stripe
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

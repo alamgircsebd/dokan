@@ -21,7 +21,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order
      *
@@ -35,7 +35,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Pay for the order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return array
      */
@@ -92,7 +92,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Process intent status
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \PaymentIntent $intent
      * @param string $prepared_source
@@ -137,7 +137,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Create a new PaymentIntent
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order $order
      * @param object $prepared_source The source that is used for the payment
@@ -181,7 +181,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Saves intent to order.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order $order For to which the source applies.
      * @param \Stripe\Paymentintent $intent Payment intent information.
@@ -199,7 +199,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Updates an existing intent with updated amount, source, and customer.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param object   $intent          The existing intent object.
      * @param WC_Order $order           The order.
@@ -243,7 +243,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     /**
      * Confirms an intent if it is the `requires_confirmation` state.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param object   $intent          The intent to confirm.
      * @param object   $prepared_source The source that is being charged.

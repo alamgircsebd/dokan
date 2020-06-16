@@ -11,7 +11,7 @@ class Chat {
     /**
      * Hold provider class instance
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @var null
      */

@@ -13,7 +13,7 @@ class RegisterWithdrawMethods {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -29,7 +29,7 @@ class RegisterWithdrawMethods {
     /**
      * Init all the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -42,7 +42,7 @@ class RegisterWithdrawMethods {
     /**
      * Register methods
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $methods
      *
@@ -60,7 +60,7 @@ class RegisterWithdrawMethods {
     /**
      * This enables dokan vendors to connect their stripe account to the site stripe gateway account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $store_settings
      *
@@ -118,7 +118,7 @@ class RegisterWithdrawMethods {
     /**
      * Connect vendor to stripe
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -149,7 +149,7 @@ class RegisterWithdrawMethods {
     /**
      * Delete vendor stripe account
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

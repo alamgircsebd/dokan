@@ -9,7 +9,7 @@ class RegisterGateways {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class RegisterGateways {
     /**
      * Init all the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -31,7 +31,7 @@ class RegisterGateways {
     /**
      * Register payment gateway
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $gateways
      *

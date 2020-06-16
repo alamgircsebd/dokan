@@ -876,7 +876,7 @@ class Module {
     /**
      * Cancel non recurring subscription
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param int $order_id
      * @param int $vendor_id

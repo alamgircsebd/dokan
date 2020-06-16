@@ -12,7 +12,7 @@ class InvoiceEmail extends WC_Email {
     /**
     * Constructor method
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return void
     */
@@ -32,7 +32,7 @@ class InvoiceEmail extends WC_Email {
     /**
     * Get email subject
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return string
     */
@@ -43,7 +43,7 @@ class InvoiceEmail extends WC_Email {
     /**
     * Get email heading
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return string
     */
@@ -54,7 +54,7 @@ class InvoiceEmail extends WC_Email {
     /**
     * Trigger the this email.
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return void
     */
@@ -80,7 +80,7 @@ class InvoiceEmail extends WC_Email {
     /**
      * Get recipient email
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return string
      */
@@ -91,7 +91,7 @@ class InvoiceEmail extends WC_Email {
     /**
     * Get content html
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return string
     */
@@ -113,7 +113,7 @@ class InvoiceEmail extends WC_Email {
     /**
     * Initialize settings form fields
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return void
     */

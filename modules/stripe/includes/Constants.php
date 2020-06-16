@@ -9,7 +9,7 @@ class Constants {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -20,7 +20,7 @@ class Constants {
     /**
      * Load plugin constants
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class Constants {
     /**
      * Define constants
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $name
      * @param  string $path

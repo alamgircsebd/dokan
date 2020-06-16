@@ -354,7 +354,7 @@ class Hooks {
      * WooCommerce calculate taxes cart wise (cart as a whole), not vendor wise.
      * So if there is any tax for non-taxable product, lets remove that tax
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @see https://github.com/weDevsOfficial/dokan/issues/820
      * @see https://github.com/woocommerce/woocommerce/issues/20600
@@ -412,7 +412,7 @@ class Hooks {
      *
      * We'll remove package only if all the products of a vendor are non-shippable
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $packages
      *

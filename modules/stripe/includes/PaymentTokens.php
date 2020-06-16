@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
  * Handles and process WC payment tokens API.
  * Seen in checkout page and my account->add payment method page.
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.3
  */
 class PaymentTokens {
 
@@ -33,7 +33,7 @@ class PaymentTokens {
     /**
      * Checks if customer has saved payment methods.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param int $customer_id
      *
@@ -52,7 +52,7 @@ class PaymentTokens {
     /**
      * Gets saved tokens from API if they don't already exist in WooCommerce.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $tokens
      * @param int $customer_id
@@ -120,7 +120,7 @@ class PaymentTokens {
     /**
      * Delete token from Stripe.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $token_id
      * @param string $token
@@ -137,7 +137,7 @@ class PaymentTokens {
     /**
      * Set as default in Stripe.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $token_id
      *

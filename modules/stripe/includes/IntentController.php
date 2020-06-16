@@ -14,7 +14,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      */
     public function __construct() {
         Helper::bootstrap_stripe();
@@ -24,7 +24,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -36,7 +36,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Loads the order from the current request.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      * @throws WC_Stripe_Exception An exception if there is no order ID or the order does not exist.
      *
      * @return WC_Order
@@ -64,7 +64,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Handles successful PaymentIntent authentications.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -104,7 +104,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Handles exceptions during intent verification.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param DokanException $e
      * @param string $redirect_url An URL to use if a redirect is needed.
@@ -126,7 +126,7 @@ class IntentController extends StripePaymentGateway {
      * Executed between the "Checkout" and "Thank you" pages, this
      * method updates orders based on the status of associated PaymentIntents.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param WC_Order $order The order which is in a transitional state
      *
@@ -172,7 +172,7 @@ class IntentController extends StripePaymentGateway {
      * Called after an intent verification succeeds, this allows
      * specific APNs or children of this class to modify its behavior.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param WC_Order $order The order whose verification succeeded.
      * @param stdClass $intent The Payment Intent object.
@@ -195,7 +195,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Checks if the payment intent associated with an order failed and records the event.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      * @param \WC_Order $order  The order which should be checked.
      * @param object   $intent The intent, associated with the order.
      *
@@ -218,7 +218,7 @@ class IntentController extends StripePaymentGateway {
     /**
      * Process vendor payment
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order $order
      *
