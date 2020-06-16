@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Stripe Helper class
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.3
  */
 class Helper {
 
@@ -21,7 +21,7 @@ class Helper {
     /**
      * Check wheter the 3d secure is enabled or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return boolean
      */
@@ -38,7 +38,7 @@ class Helper {
     /**
      * Check wheter we are paying with 3ds or non_3ds payment method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return string
      */
@@ -49,7 +49,7 @@ class Helper {
     /**
      * Check wheter the gateway in test mode or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return boolean
      */
@@ -66,7 +66,7 @@ class Helper {
     /**
      * Check wheter subscription module is enabled or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return boolean
      */
@@ -77,7 +77,7 @@ class Helper {
     /**
      * Set stripe app info
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -93,7 +93,7 @@ class Helper {
     /**
      * Set stripe API version
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -138,7 +138,7 @@ class Helper {
     /**
      * Check if this gateway is enabled and ready to use
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return bool
      */
@@ -157,7 +157,7 @@ class Helper {
     /**
      * Check wheter it's enabled or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return bool
      */
@@ -170,7 +170,7 @@ class Helper {
     /**
      * Bootstrap stripe
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -189,7 +189,7 @@ class Helper {
     /**
      * Get secret key
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return string
      */
@@ -205,7 +205,7 @@ class Helper {
     /**
      * Get client id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return string
      */
@@ -221,7 +221,7 @@ class Helper {
     /**
      * Check wheter non-connected sellers can sale product or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return boolean
      */
@@ -234,7 +234,7 @@ class Helper {
     /**
      * Show checkout modal
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.0.3
      *
      * @return boolean
      */
@@ -247,7 +247,7 @@ class Helper {
     /**
      * Get gateway id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return string
      */
@@ -258,7 +258,7 @@ class Helper {
     /**
      * Get gateway title
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return string
      */
@@ -278,7 +278,7 @@ class Helper {
     /**
      * Get vendor id by subscriptoin id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $subscription_id
      *
@@ -301,7 +301,7 @@ class Helper {
     /**
      * Get list of supported webhook events
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return array
      */
@@ -321,7 +321,7 @@ class Helper {
     /**
      * Get Stripe amount to pay
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return float
      */
@@ -356,7 +356,7 @@ class Helper {
     /**
      * Checks to see if error is no such subscription error.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $error_message
      */

@@ -22,7 +22,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order
      *
@@ -36,7 +36,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
     /**
      * Pay for the order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return array
      */

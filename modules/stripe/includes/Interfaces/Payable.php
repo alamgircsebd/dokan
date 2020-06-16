@@ -7,7 +7,7 @@ interface Payable {
     /**
      * Make the payment
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return array
      */

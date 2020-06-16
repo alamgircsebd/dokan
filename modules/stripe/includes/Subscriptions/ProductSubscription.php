@@ -109,7 +109,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Setup subscription data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return \Stripe\Subscriptoin
      */
@@ -186,7 +186,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Process recurring, non-recurring and (stripe 3ds non-recurring subscriptions)
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order $order
      * @param \Stripe\Intent $intent
@@ -340,11 +340,11 @@ class ProductSubscription extends StripePaymentGateway {
     /**
     * Cancel stripe subscription
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @param int $order_id
     * @param int $vendor_id
-    * @param bool $immediately Force subscription to be cancelled immediately. [since DOKAN_PRO_SINCE]
+    * @param bool $immediately Force subscription to be cancelled immediately. [since 3.0.3]
     *
     * @return void
     **/
@@ -387,7 +387,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
     * Cancel stripe subscription
     *
-    * @since DOKAN_PRO_SINCE
+    * @since 3.0.3
     *
     * @return void
     **/
@@ -422,7 +422,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Setup commissions
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param Object $product_pack
      * @param int $vendor_id
@@ -449,7 +449,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Cancel the subscription immediately
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $subscription_id
      * @param Object Vendor_subscription
@@ -473,7 +473,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Load email class
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $emails
      *
@@ -488,7 +488,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Load email actions
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $actions
      *
@@ -504,7 +504,7 @@ class ProductSubscription extends StripePaymentGateway {
      * Remove subscription forcefully. In case webhook is disabled or didn't work for some reason
      * Cancel the subscription in vendor's end. subscription is already removed in stripe's end.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

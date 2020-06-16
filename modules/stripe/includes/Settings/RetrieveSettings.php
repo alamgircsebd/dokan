@@ -20,7 +20,7 @@ class RetrieveSettings {
     /**
      * Boot method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $gateway
      *

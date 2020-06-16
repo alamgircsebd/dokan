@@ -7,7 +7,7 @@ class VendorProfile {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -18,7 +18,7 @@ class VendorProfile {
     /**
      * Init hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -33,7 +33,7 @@ class VendorProfile {
     /**
      * Add stripe menu in vendor profile
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WP_User $user
      *
@@ -61,7 +61,7 @@ class VendorProfile {
     /**
      * Update vendor profile
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param  int $vendor_id
      *
@@ -87,7 +87,7 @@ class VendorProfile {
     /**
      * Attach whether vendor has stripe or not to payment object
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param $array $data
      *

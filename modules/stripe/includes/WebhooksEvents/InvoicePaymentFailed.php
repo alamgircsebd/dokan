@@ -19,7 +19,7 @@ class InvoicePaymentFailed implements WebhookHandleable {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \Stripe\Event $event
      *
@@ -32,7 +32,7 @@ class InvoicePaymentFailed implements WebhookHandleable {
     /**
      * Hanle the event
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

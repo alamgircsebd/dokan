@@ -20,7 +20,7 @@ class StoreProgress {
     /**
      * Init all the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

@@ -341,7 +341,7 @@ class Customer {
     /**
      * Get sources from a customer object
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return array
      */

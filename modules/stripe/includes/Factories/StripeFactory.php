@@ -26,7 +26,7 @@ class StripeFactory {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \WC_Order
      *
@@ -48,7 +48,7 @@ class StripeFactory {
     /**
      * With method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $with
      *
@@ -80,7 +80,7 @@ class StripeFactory {
     /**
      * Get supported payment methods
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

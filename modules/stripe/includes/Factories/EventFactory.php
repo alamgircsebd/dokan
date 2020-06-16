@@ -12,7 +12,7 @@ class EventFactory {
     /**
      * Create required event class instance
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \Stripe\Event $event
      *

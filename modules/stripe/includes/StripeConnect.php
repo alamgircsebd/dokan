@@ -18,7 +18,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return vois
      */
@@ -55,7 +55,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Initialise Gateway Settings Form Fields
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -66,7 +66,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Init all the hooks
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -81,7 +81,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Checks if gateway should be available to use
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return bool
      */
@@ -96,7 +96,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Adds a notice for customer when they update their billing address.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param int    $user_id      The ID of the current user.
      * @param string $load_address The address to load.
@@ -114,7 +114,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Setup subcription data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -167,7 +167,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Enqueue assets
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -239,7 +239,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Payment form on checkout page
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -307,7 +307,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Renders the Stripe elements form
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */
@@ -353,7 +353,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Process payment for the order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param int $oder_id
      *
@@ -382,7 +382,7 @@ class StripeConnect extends StripePaymentGateway {
      * WooCommerce and a payment/setup intent secret into a hash, which contains both
      * the secret, and a proper URL, which will confirm whether the intent succeeded.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param array $result   The result from `process_payment`.
      * @param int   $order_id The ID of the order which is being paid for.

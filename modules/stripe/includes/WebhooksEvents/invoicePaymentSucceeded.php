@@ -11,7 +11,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * It does happen on subscription plan switching
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.3
  */
 class InvoicePaymentSucceeded implements WebhookHandleable {
 
@@ -25,7 +25,7 @@ class InvoicePaymentSucceeded implements WebhookHandleable {
     /**
      * Constructor method
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param \Stripe\Event $event
      *
@@ -38,7 +38,7 @@ class InvoicePaymentSucceeded implements WebhookHandleable {
     /**
      * Hanle the event
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return void
      */

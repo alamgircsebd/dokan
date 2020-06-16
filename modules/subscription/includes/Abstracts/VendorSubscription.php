@@ -169,7 +169,7 @@ abstract class VendorSubscription {
     /**
      * Check whter the vendor has active cancelled subscription or not
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @return bool
      */

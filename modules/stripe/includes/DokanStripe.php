@@ -14,7 +14,7 @@ class DokanStripe {
     /**
      * Call the defined static methods
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.3
      *
      * @param string $name
      * @param array $args
