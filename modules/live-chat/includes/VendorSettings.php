@@ -47,7 +47,10 @@ class VendorSettings {
             return;
         }
 
-        $enable_chat = isset( $profile['live_chat'] ) ? $profile['live_chat'] : 'no';
+        $is_messenger = 'messenger' === AdminSettings::get_provider();
+        $enable_chat  = isset( $profile['live_chat'] ) ? $profile['live_chat'] : 'no';
+        $fb_page_id   = ! empty( $profile['fb_page_id'] ) ? $profile['fb_page_id'] : '';
+
         ?>
         <div class="dokan-form-group">
             <label class="dokan-w3 dokan-control-label"><?php _e( 'Enable Live Chat' , 'dokan' ) ?></label>
@@ -61,6 +64,24 @@ class VendorSettings {
             </div>
         </div>
         <?php
+
+        if ( $is_messenger ) {
+            ?>
+            <div class="dokan-form-group dokan-live-chat-settings">
+                <label for="fb_page_id" class="dokan-w3 dokan-control-label"><?php esc_html_e( 'Facebook Page ID' , 'dokan' ) ?></label>
+                <div class="dokan-w5 dokan-text-left">
+                    <input type="text" id="fb_page_id" name="fb_page_id" value=<?php echo esc_attr( $fb_page_id ); ?>>
+                    <a
+                        href="<?php echo esc_url( 'https://www.facebook.com/pages/create/' ); ?>"
+                        style="font-style: italic;text-decoration: underline !important;color: gray;padding-left: 10px;"
+                        target="_blank"
+                        class="get-fb-page-id">
+                        <?php esc_html_e( 'Get Facebook page id', 'dokan' ); ?>
+                    </a>
+                </div>
+            </div>
+            <?php
+        }
     }
 
     /**
@@ -75,8 +96,12 @@ class VendorSettings {
             return;
         }
 
-        $store_info              = dokan_get_store_info( $user_id );
-        $store_info['live_chat'] = wc_clean( $_POST['live_chat'] );
+        $store_info               = dokan_get_store_info( $user_id );
+        $store_info['live_chat']  = wc_clean( $_POST['live_chat'] );
+
+        if ( ! empty( $_POST['fb_page_id'] ) ) {
+            $store_info['fb_page_id'] = wc_clean( $_POST['fb_page_id'] );
+        }
 
         update_user_meta( $user_id, 'dokan_profile_settings', $store_info );
     }

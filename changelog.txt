@@ -1,3 +1,25 @@
+v3.0.3 -> Jun 16, 2020
+----------------------------------
+
+- [new] Add Facebook Messenger to Dokan live chat (Live Chat)
+- [improvement] Stripe Connect Module rearrange and refactor (Stripe Connect)
+- [improvement] Vendor Subscription Module rearrange and refactor (Vendor Subscription)
+- [fix] The minimum amount for discount coupon not working from vendor dashboard
+- [fix] Store review not working if verified owner option is checked (Store Reviews)
+- [fix] Dokan Sellers Sitemap XML file showing 404
+- [fix] Shipping is showing for both vendors even if one of them sales digital product with no shipping
+- [fix] Check if Dokan lite exists to avoid fatal error on Dokan pro installation is fixed
+- [fix] Currency positioning for subscription product
+- [fix] Shipping tax calculates wrong for sub orders
+- [fix] Error When request a Refund and WooCommerce Product Addon plugin active (Refund with WooCommerce Product Addon)
+- [fix] Error on RMA module if product not found (Return and Warranty Request)
+- [fix] When multiple refund then commission value showing minus
+- [fix] Remove get_current_screen function from vendor subscription product module (Vendor Subscription Product)
+- [fix] Vendor dashboard product export showing fatal error (Vendor Product Importer and Exporter)
+- [fix] Undefined index issue fixed on Geolocation module (Geolocation)
+- [fix] Throw exception if source is not valid
+
+
 v3.0.2 -> April 22, 2020
 ----------------------------------
 
@@ -19,7 +41,7 @@ v3.0.2 -> April 22, 2020
 - [fix] Add missing vendor verification widget code (Subscription)
 - [fix] When store listing page set as frontpage, category search does not work
 - [fix] Add missing vendor verification widget code (Subscription)
-- [fix] Unable to refund order from both backend and frontend if item total is not set
+- [fix] Unable to refund order from both   and frontend if item total is not set
 
 
 v3.0.1 -> March 25, 2020

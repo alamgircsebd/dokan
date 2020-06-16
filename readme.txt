@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.3.2
+Tested up to: 5.4.2
 WC requires at least: 3.0
-WC tested up to: 4.0.1
+WC tested up to: 4.2.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,27 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v3.0.3 -> Jun 16, 2020
+----------------------------------
+
+- [new] Add Facebook Messenger to Dokan live chat (Live Chat)
+- [improvement] Stripe Connect Module rearrange and refactor (Stripe Connect)
+- [improvement] Vendor Subscription Module rearrange and refactor (Vendor Subscription)
+- [fix] The minimum amount for discount coupon not working from vendor dashboard
+- [fix] Store review not working if verified owner option is checked (Store Reviews)
+- [fix] Dokan Sellers Sitemap XML file showing 404
+- [fix] Shipping is showing for both vendors even if one of them sales digital product with no shipping
+- [fix] Check if Dokan lite exists to avoid fatal error on Dokan pro installation is fixed
+- [fix] Currency positioning for subscription product
+- [fix] Shipping tax calculates wrong for sub orders
+- [fix] Error When request a Refund and WooCommerce Product Addon plugin active (Refund with WooCommerce Product Addon)
+- [fix] Error on RMA module if product not found (Return and Warranty Request)
+- [fix] When multiple refund then commission value showing minus
+- [fix] Remove get_current_screen function from vendor subscription product module (Vendor Subscription Product)
+- [fix] Vendor dashboard product export showing fatal error (Vendor Product Importer and Exporter)
+- [fix] Undefined index issue fixed on Geolocation module (Geolocation)
+- [fix] Throw exception if source is not valid
 
 v3.0.2 -> April 22, 2020
 ----------------------------------

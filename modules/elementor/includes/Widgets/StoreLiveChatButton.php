@@ -129,8 +129,6 @@ class StoreLiveChatButton extends DokanButton {
             return;
         }
 
-        $live_chat = dokan_pro()->module->live_chat;
-
         $store = dokan()->vendor->get( $id )->get_shop_info();
 
         if ( ! isset( $store['live_chat'] ) || $store['live_chat'] !== 'yes' ) {
@@ -141,12 +139,24 @@ class StoreLiveChatButton extends DokanButton {
             return;
         }
 
-        if ( ! is_user_logged_in() ) {
+        $chatter = dokan_pro()->module->live_chat->chat->provider;
+
+        if ( is_null( $chatter ) ) {
+            return;
+        }
+
+        if ( ! is_user_logged_in() && 'talkjs' === $chatter->get_name() ) {
             parent::render();
-            return $live_chat->chat->login_to_chat();
+            return $chatter->login_to_chat();
         }
 
         parent::render();
-        echo do_shortcode( '[dokan-live-chat]' );
+
+        if ( 'talkjs' === $chatter->get_name() ) {
+            echo do_shortcode( '[dokan-live-chat]' );
+        } else {
+            $page_id = ! empty( $store['fb_page_id'] ) ? $store['fb_page_id'] : '';
+            echo do_shortcode( sprintf( '[dokan-live-chat-messenger page_id="%s"]', $page_id ) );
+        }
     }
 }

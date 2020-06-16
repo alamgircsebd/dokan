@@ -1,6 +1,103 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.0.3',
+        'released' => '2020-06-11',
+        'changes'  => array(
+            array(
+                'title'       => 'Add Facebook Messenger to Dokan live chat (Live Chat)',
+                'type'        => 'New',
+                'description' => 'The Facebook Messenger is new Dokan live chat for vendor single page and product page like as TalkJS'
+            ),
+            array(
+                'title'       => 'Stripe Connect Module Revamped (Stripe Connect)',
+                'type'        => 'Improvement',
+                'description' => 'Full Stripe Connect Module revamped our codes structure and make performance improvement'
+            ),
+            array(
+                'title'       => 'Vendor Subscription Module Revamped (Vendor Subscription)',
+                'type'        => 'Improvement',
+                'description' => 'Full Vendor Subscription Module revamped our codes structure and make performance improvement'
+            ),
+            array(
+                'title'       => 'Minimum Amount for Discount Coupon',
+                'type'        => 'Fix',
+                'description' => 'The minimum amount for discount coupon not working on checkout which amount added by vendor'
+            ),
+            array(
+                'title'       => 'Store Review Not Working for Verified Owner',
+                'type'        => 'Fix',
+                'description' => 'Store review not working if verified owner option is checked (Store Reviews)'
+            ),
+            array(
+                'title'       => 'Sellers Sitemap XML',
+                'type'        => 'Fix',
+                'description' => 'Dokan Sellers Sitemap XML file showing 404 when visit it from SEO XML file'
+            ),
+            array(
+                'title'       => 'Shipping Tax Calculates',
+                'type'        => 'Fix',
+                'description' => 'Shipping tax calculates wrong for sub orders'
+            ),
+            array(
+                'title'       => 'Vendor Subscription Product Error with get_current_screen Function',
+                'type'        => 'Fix',
+                'description' => 'Remove get_current_screen function from vendor subscription product module (Vendor Subscription Product)'
+            ),
+            array(
+                'title'       => 'Vendor Subscription Product Variation Product Price Not Saving',
+                'type'        => 'Fix',
+                'description' => 'Variation product price not saving when vendor subscription product module enable issue fixed (Vendor Subscription Product)'
+            ),
+        )
+    ),
+    array(
+        'version'  => 'Version 3.0.2',
+        'released' => '2020-04-22',
+        'changes'  => array(
+            array(
+                'title'       => 'Vendor Subscription Product Module',
+                'type'        => 'New',
+                'description' => 'The new Vendor Subscription Product module is a WooCommerce Subscription integration(VSP)'
+            ),
+            array(
+                'title'       => 'JS error in backend report abuse page (Report Abuse)',
+                'type'        => 'Fix',
+                'description' => 'There was a warning JS error in backend report abuse page, which has been resolved'
+            ),
+            array(
+                'title'       => 'Live chat with elementor issue',
+                'type'        => 'Fix',
+                'description' => 'Live chat showing fatal error when using with elementor (Elementor)'
+            ),
+            array(
+                'title'       => 'Fatal Error on Booking',
+                'type'        => 'Fix',
+                'description' => 'Fatal error and calendar issue in frontend booking page (Booking)'
+            ),
+            array(
+                'title'       => 'Vendor Biography Tab Not Showing',
+                'type'        => 'Fix',
+                'description' => 'Vendor biography tab not showing in store page which is designed with elementor'
+            ),
+            array(
+                'title'       => 'Vendor email issues',
+                'type'        => 'Fix',
+                'description' => 'Vendor disable email does not work and the vendor enables email is send twice'
+            ),
+            array(
+                'title'       => 'Category Search Issue on Frontpage',
+                'type'        => 'Fix',
+                'description' => 'When store listing page set as frontpage, category search does not work'
+            ),
+            array(
+                'title'       => 'Unable to create refund from both backend and frontend',
+                'type'        => 'Fix',
+                'description' => 'Unable to refund order from both backend and frontend if item total is not set'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 3.0.0',
         'released' => '2020-03-25',
         'changes'  => array(

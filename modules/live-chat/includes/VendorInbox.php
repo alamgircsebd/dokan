@@ -9,15 +9,18 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 1.1
  */
-class VendorInbox extends Chat {
+class VendorInbox {
     /**
      * Constructor method of this class
      *
      * @since 1.1
      */
     public function __construct() {
+        if ( ! AdminSettings::is_enabled() || 'talkjs' !== AdminSettings::get_provider() ) {
+            return;
+        }
+
         $this->init_hooks();
-        parent::__construct();
     }
 
     /**
@@ -45,10 +48,6 @@ class VendorInbox extends Chat {
      * @return array
      */
     public function dokan_add_inbox_menu( $urls ) {
-        if ( ! $this->enabled ) {
-            return $urls;
-        }
-
         if ( dokan_is_seller_enabled( get_current_user_id() ) ) {
             $urls['inbox'] = array(
                 'title' => __( 'Inbox', 'dokan' ),
@@ -107,10 +106,6 @@ class VendorInbox extends Chat {
      */
     public function dokan_load_inbox_template( $query_vars ) {
         if ( ! isset( $query_vars['inbox'] ) ) {
-            return;
-        }
-
-        if ( ! $this->enabled ) {
             return;
         }
 

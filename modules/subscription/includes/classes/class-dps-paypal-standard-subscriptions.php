@@ -311,7 +311,7 @@ class DPS_PayPal_Standard_Subscriptions {
     public static function process_paypal_ipn_request( $transaction_details ) {
         global $wpdb;
 
-        $transaction_details = stripslashes_deep( $transaction_details );
+        // $transaction_details = stripslashes_deep( $transaction_details );
 
         Helper::log( 'Transaction details check: ' .print_r( $transaction_details, true ) );
 

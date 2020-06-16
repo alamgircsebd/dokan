@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Customer inbox class
  */
-class CustomerInbox extends Chat {
+class CustomerInbox {
 
     /**
      * Constructor of this class
@@ -15,8 +15,11 @@ class CustomerInbox extends Chat {
      * @since 1.1
      */
     public function __construct() {
+        if ( ! AdminSettings::is_enabled() || 'talkjs' !== AdminSettings::get_provider() ) {
+            return;
+        }
+
         $this->init_hooks();
-        parent::__construct();
     }
 
     /**
@@ -42,9 +45,7 @@ class CustomerInbox extends Chat {
      * @return array
      */
     public function add_customer_inbox( $menus ) {
-        if ( $this->enabled ) {
-            $menus['customer-inbox'] = __( 'Inbox', 'dokan' );
-        }
+        $menus['customer-inbox'] = __( 'Inbox', 'dokan' );
 
         return $menus;
     }

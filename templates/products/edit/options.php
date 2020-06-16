@@ -30,7 +30,7 @@
         <label class="dokan-w4 dokan-control-label" for="_sold_individually"><?php _e( 'Sold Individually', 'dokan' ); ?></label>
         <div class="dokan-w7 dokan-text-left">
             <input name="_sold_individually" id="_sold_individually" value="yes" type="checkbox" <?php checked( $_sold_individually, 'yes' ); ?>>
-            <?php _e( 'Allow only one quantity of this product to be bought in a single order', 'dokan' ) ?>
+            <?php _e( 'Allow oooooo only one quantity of this product to be bought in a single order', 'dokan' ) ?>
         </div>
     </div>
 

@@ -88,16 +88,13 @@ class Registration {
 
                         <span class="dps-amount">
                             <i>
-                                <?php _e( 'Price :', 'dokan' ) ?>
-                                <?php if ( get_post_meta( get_the_ID(), '_regular_price', true ) == '0' ): ?>
-                                    <?php _e( 'Free', 'dokan' ); ?>
-                                <?php else: ?>
-                                    <?php if ( get_post_meta( get_the_ID(), '_sale_price', true ) ): ?>
-                                        <strike><?php echo get_woocommerce_currency_symbol() . get_post_meta( get_the_ID(), '_regular_price', true ); ?></strike> <?php echo get_woocommerce_currency_symbol() . get_post_meta( get_the_ID(), '_sale_price', true ); ?>
-                                    <?php else: ?>
-                                        <?php echo get_woocommerce_currency_symbol() . get_post_meta( get_the_ID(), '_regular_price', true ); ?>
-                                    <?php endif ?>
-                                <?php endif; ?>
+                                <?php
+                                    if ( $sub_pack->get_price() <= 0 ) {
+                                        esc_html_e( 'Free', 'dokan' );
+                                    } else {
+                                        echo wc_price( $sub_pack->get_price() );
+                                    }
+                                ?>
                             </i>
                         </span>
 

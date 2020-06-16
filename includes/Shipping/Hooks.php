@@ -25,6 +25,8 @@ class Hooks {
         add_action( 'woocommerce_product_tabs', array( $this, 'register_product_tab' ) );
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'validate_country' ) );
         add_action( 'template_redirect', array( $this, 'handle_shipping' ) );
+        add_filter( 'woocommerce_package_rates', array( $this, 'calculate_shipping_tax' ), 10, 2 );
+        add_filter( 'woocommerce_shipping_packages', array( $this, 'filter_packages' ) );
     }
 
     /**
@@ -347,4 +349,101 @@ class Hooks {
         <?php } ?>
         <?php
     }
+
+    /**
+     * WooCommerce calculate taxes cart wise (cart as a whole), not vendor wise.
+     * So if there is any tax for non-taxable product, lets remove that tax
+     *
+     * @since 3.0.3
+     *
+     * @see https://github.com/weDevsOfficial/dokan/issues/820
+     * @see https://github.com/woocommerce/woocommerce/issues/20600
+     *
+     * @param \WC_Shipping_Rate $package_rates
+     * @param array $packages
+     *
+     * @return array
+     */
+    public function calculate_shipping_tax( $package_rates, $package ) {
+        if ( ! isset( $package['contents'] ) ) {
+            return $package_rates;
+        }
+
+        foreach ( $package['contents'] as $pack ) {
+            if ( ! isset( $pack['data'] ) || ! is_callable( [ $pack['data'], 'get_tax_status' ] ) ) {
+                return $package_rates;
+            }
+
+            if ( 'none' !== $pack['data']->get_tax_status() ) {
+                continue;
+            }
+
+            // so it's a non taxable shipping, lets remove the taxes
+            foreach( $package_rates as $shipping_rate ) {
+                $rfc = new \ReflectionClass( $shipping_rate );
+
+                if ( ! $rfc->hasProperty( 'data' ) ) {
+                    return $package_rates;
+                }
+
+                $data = $rfc->getProperty( 'data' );
+                $data->setAccessible( true );
+                $data->setValue(
+                    $shipping_rate,
+                    array_merge(
+                        $data->getValue( $shipping_rate ),
+                        [
+                            'taxes' => []
+                        ]
+                    )
+                );
+            }
+        }
+
+        return $package_rates;
+    }
+
+    /**
+     * Filter pakcages, remove shipping data from cart if no shipping is required.
+     *
+     * Vendor A sales digital product with no shipping, but Vendor B sales physical product with shipping.
+     * When Vendor A’s product is added in the cart, there is no shipping as expected.
+     * But on adding Vendor B’s product, shipping is shown for both products.
+     *
+     * We'll remove package only if all the products of a vendor are non-shippable
+     *
+     * @since 3.0.3
+     *
+     * @param array $packages
+     *
+     * @return array
+     */
+    public function filter_packages( $packages ) {
+        $package_to_keep   = [];
+        $package_to_remove = [];
+
+        foreach ( $packages as $key => $package ) {
+            if ( empty( $package['contents'] ) ) {
+                return $package;
+            }
+
+            foreach ( $package['contents'] as $content ) {
+                $product = ! empty( $content['product_id' ] ) ? wc_get_product( $content['product_id'] ) : '';
+                if ( $product && $product->needs_shipping() ) {
+                    array_push( $package_to_keep, $key );
+                }
+
+                if ( $product && ! $product->needs_shipping() && ! in_array( $key, $package_to_keep ) ) {
+                    array_push( $package_to_remove, $key );
+                }
+            }
+        }
+
+        foreach ( $package_to_remove as $package ) {
+            unset( $packages[ $package ] );
+        }
+
+        return apply_filters( 'dokan_shipping_packages', $packages, $package_to_keep );
+    }
+
 }

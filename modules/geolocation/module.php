@@ -34,9 +34,9 @@ class Module {
 
         $dokan_appearance = get_option( 'dokan_appearance', array() );
 
-        if( 'google_maps' == $dokan_appearance['map_api_source'] && ! empty( $dokan_appearance['gmap_api_key'] ) ) {
+        if ( ! empty( $dokan_appearance['gmap_api_key'] ) && 'google_maps' === $dokan_appearance['map_api_source'] ) {
             $this->has_map_api_key = true;
-        } else if( 'mapbox' == $dokan_appearance['map_api_source'] && ! empty( $dokan_appearance['mapbox_access_token'] ) ) {
+        } else if ( ! empty( $dokan_appearance['mapbox_access_token'] ) && 'mapbox' === $dokan_appearance['map_api_source'] ) {
             $this->has_map_api_key = true;
         }
 

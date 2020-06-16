@@ -144,6 +144,10 @@ class Validator {
             $order_line_item       = $order_line_items[ $item_id ];
             $order_line_item_total = $order_line_item->get_total();
 
+            if ( $order->get_total_refunded_for_item( $item_id ) ) {
+                $item_total = $item_total + $order->get_total_refunded_for_item( $item_id );
+            }
+
             if ( $item_total > $order_line_item_total ) {
                 return new WP_Error( 'dokan_pro_refund_error_item_totals', sprintf( __( 'Line item total must not exceed %s for item id %d', 'dokan' ), $order_line_item_total, $item_id ) );
             }

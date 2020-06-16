@@ -95,7 +95,7 @@ if ( wc_tax_enabled() ) {
                     '_product'     => $_product
                 ) );
 
-                do_action( 'woocommerce_order_item_' . $item['type'] . '_html', $item_id, $item );
+                do_action( 'woocommerce_order_item_' . $item['type'] . '_html', $item_id, $item, $order );
             }
         ?>
         </tbody>
@@ -216,7 +216,13 @@ if ( wc_tax_enabled() ) {
             <td width="1%"></td>
         </tr>
 
-        <?php do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_get_prop( $order, 'id' ) ); ?>
+        <?php 
+        if ( class_exists( 'WC_Subscriptions' ) ) {
+            require_once(ABSPATH . 'wp-admin/includes/screen.php');
+        }
+
+        do_action( 'woocommerce_admin_order_totals_after_refunded', dokan_get_prop( $order, 'id' ) ); 
+        ?>
 
     </table>
     <div class="clear"></div>
