@@ -1,6 +1,57 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.0.3',
+        'released' => '2020-06-11',
+        'changes'  => array(
+            array(
+                'title'       => 'Add Facebook Messenger to Dokan live chat (Live Chat)',
+                'type'        => 'New',
+                'description' => 'The Facebook Messenger is new Dokan live chat for vendor single page and product page like as TalkJS'
+            ),
+            array(
+                'title'       => 'Stripe Connect Module Revamped (Stripe Connect)',
+                'type'        => 'Improvement',
+                'description' => 'Full Stripe Connect Module revamped our codes structure and make performance improvement'
+            ),
+            array(
+                'title'       => 'Vendor Subscription Module Revamped (Vendor Subscription)',
+                'type'        => 'Improvement',
+                'description' => 'Full Vendor Subscription Module revamped our codes structure and make performance improvement'
+            ),
+            array(
+                'title'       => 'Minimum Amount for Discount Coupon',
+                'type'        => 'Fix',
+                'description' => 'The minimum amount for discount coupon not working on checkout which amount added by vendor'
+            ),
+            array(
+                'title'       => 'Store Review Not Working for Verified Owner',
+                'type'        => 'Fix',
+                'description' => 'Store review not working if verified owner option is checked (Store Reviews)'
+            ),
+            array(
+                'title'       => 'Sellers Sitemap XML',
+                'type'        => 'Fix',
+                'description' => 'Dokan Sellers Sitemap XML file showing 404 when visit it from SEO XML file'
+            ),
+            array(
+                'title'       => 'Shipping Tax Calculates',
+                'type'        => 'Fix',
+                'description' => 'Shipping tax calculates wrong for sub orders'
+            ),
+            array(
+                'title'       => 'Vendor Subscription Product Error with get_current_screen Function',
+                'type'        => 'Fix',
+                'description' => 'Remove get_current_screen function from vendor subscription product module (Vendor Subscription Product)'
+            ),
+            array(
+                'title'       => 'Vendor Subscription Product Variation Product Price Not Saving',
+                'type'        => 'Fix',
+                'description' => 'Variation product price not saving when vendor subscription product module enable issue fixed (Vendor Subscription Product)'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 3.0.2',
         'released' => '2020-04-22',
         'changes'  => array(
