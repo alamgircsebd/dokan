@@ -18,6 +18,8 @@ class RegisterWithdrawMethods {
      * @return void
      */
     public function __construct() {
+        add_action( 'admin_notices', [ $this, 'admin_notices' ] );
+        
         if ( ! Helper::is_ready() ) {
             return;
         }
@@ -37,6 +39,32 @@ class RegisterWithdrawMethods {
         add_filter( 'dokan_withdraw_methods', [ $this, 'register_methods' ] );
         add_filter( 'template_redirect', [ $this, 'connect_vendor_to_stripe' ] );
         add_filter( 'template_redirect', [ $this, 'delete_stripe_account' ] );
+    }
+    
+    /**
+     * Show admin notices
+     *
+     * @since 3.0.4
+     *
+     * @return 1.0.0
+     */
+    public function admin_notices() {
+        if ( ! Helper::is_enabled() || ! Helper::get_secret_key() || ! Helper::get_client_id() ) {
+            $notice = sprintf(
+                    __( 'Please insert Live %s credential to use Live Mode', 'dokan' ),
+                    '<strong>Stripe</strong>'
+                );
+            printf( '<div class="error"><p>' . $notice . '</p></div>' );
+        }
+
+        if ( ! is_ssl() ) {
+           $notice = sprintf(
+                    __( '%s requires %s', 'dokan' ),
+                    '<strong>Dokan Stripe Connect</strong>',
+                    '<strong>SSL</strong>'
+                ); 
+            printf( '<div class="error"><p>' . $notice . '</p></div>' );
+        }
     }
 
     /**

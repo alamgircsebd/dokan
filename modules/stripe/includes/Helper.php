@@ -147,7 +147,7 @@ class Helper {
             return false;
         }
 
-        if ( ! is_ssl() && ! self::is_test_mode() ) {
+        if ( ! is_ssl() ) {
             return false;
         }
 
