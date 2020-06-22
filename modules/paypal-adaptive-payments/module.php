@@ -45,6 +45,10 @@ class Module {
             return $gateways;
         }
 
+        if ( empty( WC()->cart->cart_contents ) ) {
+            return $gateways;
+        }
+
         foreach ( WC()->cart->cart_contents as $key => $values ) {
 
             if ( $values['data']->get_type() == 'product_pack' ) {
