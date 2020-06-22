@@ -55,12 +55,18 @@
     <h3><?php _e( 'Additional Details', 'dokan' ) ?></h3>
     <hr>
 
-    <p>
-        <div class="details-label"><strong><?php _e( 'Reason : ', 'dokan' ) ?></strong></div>
-        <div class="details">
-            <?php echo dokan_rma_refund_reasons( $request['reasons'] ); ?>
-        </div>
-    </p>
+    <?php if ( ! empty( $request['reasons'] ) ): ?>
+        <p>
+            <div class="details-label"><strong><?php _e( 'Reason : ', 'dokan' ) ?></strong></div>
+            <div class="details">
+                <ul>
+                    <?php foreach ( dokan_rma_refund_reasons( $request['reasons'] ) as $reason ): ?>
+                        <li><?php echo $reason; ?></li>
+                    <?php endforeach ?>
+                </ul>
+            </div>
+        </p>
+    <?php endif ?>
     <p>
         <div class="details-label"><strong><?php _e( 'Reason Details : ', 'dokan' ) ?></strong></div>
         <div class="details">
