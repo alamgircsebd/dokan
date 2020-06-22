@@ -292,7 +292,7 @@ Class EmailVerification {
             return;
         }
 
-        wc_add_notice( __( 'A new verification email has been sent to your email. Please verify to login.' ) );
+        wc_add_notice( __( 'A new verification email has been sent to your email. Please verify to login.', 'dokan' ) );
     }
 
     /**
