@@ -394,7 +394,7 @@ class Ajax {
 
         if ( $post_id > 0 ) {
             $order      = dokan()->order->get( $post_id );
-            $comment_id = $order->add_order_note( $note, $is_customer_note, true );
+            $comment_id = $order->add_order_note( $note, $is_customer_note );
 
             echo '<li rel="' . esc_attr( $comment_id ) . '" class="note ';
             if ( $is_customer_note ) {
