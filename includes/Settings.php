@@ -447,6 +447,11 @@ class Settings extends DokanSettings {
            ],
         ];
 
+        if ( function_exists( 'dokan_has_map_api_key' ) && ! dokan_has_map_api_key() ) {
+            unset( $progress_values['map_val'] );
+            $progress_values['payment_method_val'] = 30;
+        }
+
         $progress_values = apply_filters( 'dokan_profile_completion_values', $progress_values );
 
         extract( $progress_values );
@@ -510,7 +515,7 @@ class Settings extends DokanSettings {
             $profile_val           = $profile_val + $map_val;
             $track_val['location'] = $map_val;
         } else {
-            if ( strlen( $next_add ) == 0 ) {
+            if ( strlen( $next_add ) == 0 && function_exists( 'dokan_has_map_api_key' ) && dokan_has_map_api_key() ) {
                 $next_add = 'map_val';
             }
         }
