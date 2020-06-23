@@ -115,11 +115,7 @@
                                             <div class="details-row">
                                                 <p class="details-label"><?php _e( 'Reason', 'dokan' ) ?></p>
                                                 <p class="details-value">
-                                                    <ul>
-                                                        <?php foreach ( dokan_rma_refund_reasons( $request['reasons'] ) as $reason ): ?>
-                                                            <li><?php echo $reason; ?></li>
-                                                        <?php endforeach ?>
-                                                    </ul>
+                                                    <?php echo dokan_rma_refund_reasons( $request['reasons'] ); ?>
                                                 </p>
                                             </div>
                                         <?php endif ?>
