@@ -55,7 +55,7 @@
     <h3><?php _e( 'Additional Details', 'dokan' ) ?></h3>
     <hr>
 
-    <?php if ( ! empty( $request['reasons'] ) ): ?>
+    <?php if ( ! empty( $request['reasons'] ) && ! empty( dokan_rma_refund_reasons( $request['reasons'] ) ) ): ?>
         <p>
             <div class="details-label"><strong><?php _e( 'Reason : ', 'dokan' ) ?></strong></div>
             <div class="details">
