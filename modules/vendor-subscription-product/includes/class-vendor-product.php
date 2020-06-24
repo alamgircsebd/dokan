@@ -209,7 +209,9 @@ class Dokan_VSP_Product {
             return;
         }
 
-        if ( 'subscription' != $_POST['product_type'] || 'variable-subscription' != $_POST['product_type'] ) {
+        $subscription_product_type = array( 'subscription', 'variable-subscription' );
+
+        if ( ! in_array( $_POST['product_type'], $subscription_product_type ) ) {
             return;
         }
 

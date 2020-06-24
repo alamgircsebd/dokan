@@ -111,10 +111,14 @@
                                     <div class="additional-details">
                                         <strong><?php _e( 'Additional Details', 'dokan' ); ?></strong>
                                         <hr>
-                                        <div class="details-row">
-                                            <p class="details-label"><?php _e( 'Reason', 'dokan' ) ?></p>
-                                            <p class="details-value"><?php echo dokan_rma_refund_reasons( $request['reasons'] ); ?></p>
-                                        </div>
+                                        <?php if ( ! empty( $request['reasons'] ) && ! empty( dokan_rma_refund_reasons( $request['reasons'] ) ) ): ?>
+                                            <div class="details-row">
+                                                <p class="details-label"><?php _e( 'Reason', 'dokan' ) ?></p>
+                                                <p class="details-value">
+                                                    <?php echo dokan_rma_refund_reasons( $request['reasons'] ); ?>
+                                                </p>
+                                            </div>
+                                        <?php endif ?>
                                         <div class="details-row">
                                             <p class="details-label"><?php _e( 'Reason Details', 'dokan' ) ?></p>
                                             <p class="details-value">

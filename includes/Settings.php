@@ -150,7 +150,7 @@ class Settings extends DokanSettings {
 
         if ( $query_vars == 'shipping' ) {
             $settings_url = dokan_get_navigation_url( 'settings/shipping' ) . '#/settings';
-            $header = sprintf( '%s <span style="position:absolute; right:0px;"><a href="%s" class="dokan-btn dokan-btn-default"><i class="fa fa-gear"></i></a></span>', __( 'Shipping Settings', 'dokan' ), $settings_url ) ;
+            $header = sprintf( '%s <span style="position:absolute; right:0px;"><a href="%s" class="dokan-btn dokan-btn-default"><i class="fa fa-gear"></i> %s</a></span>', __( 'Shipping Settings', 'dokan' ), $settings_url, __( 'Click here to add Shipping Policies', 'dokan' ) );
         }
 
         if ( $query_vars == 'seo' ) {
@@ -447,6 +447,11 @@ class Settings extends DokanSettings {
            ],
         ];
 
+        if ( function_exists( 'dokan_has_map_api_key' ) && ! dokan_has_map_api_key() ) {
+            unset( $progress_values['map_val'] );
+            $progress_values['payment_method_val'] = 30;
+        }
+
         $progress_values = apply_filters( 'dokan_profile_completion_values', $progress_values );
 
         extract( $progress_values );
@@ -510,7 +515,7 @@ class Settings extends DokanSettings {
             $profile_val           = $profile_val + $map_val;
             $track_val['location'] = $map_val;
         } else {
-            if ( strlen( $next_add ) == 0 ) {
+            if ( strlen( $next_add ) == 0 && function_exists( 'dokan_has_map_api_key' ) && dokan_has_map_api_key() ) {
                 $next_add = 'map_val';
             }
         }

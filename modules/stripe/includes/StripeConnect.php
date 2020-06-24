@@ -237,6 +237,33 @@ class StripeConnect extends StripePaymentGateway {
     }
 
     /**
+     * Admin Panel Options
+     * - Options for bits like 'title' and availability on a country-by-country basis
+     */
+    public function admin_options() {
+        ?>
+        <h3><?php _e( 'Stripe Connect', 'dokan' ); ?></h3>
+        <p><?php _e( 'Stripe works by adding credit card fields on the checkout and then sending the details to Stripe for verification.', 'dokan' ); ?></p>
+        <?php
+            echo '<p>' . sprintf( __( 'Recurring subscription requires webhooks to be configured. Go to <a href="%s">webhook</a> and set your webhook url <code>%s</code>. Otherwise recurring payment not working automatically', 'dokan' ), 'https://dashboard.stripe.com/account/webhooks', add_query_arg( array( 'webhook' => 'dokan' ), home_url('/') ) ) . '</p>';
+         ?>
+        <?php if ( in_array( get_option( 'woocommerce_currency' ), array( 'AED','AFN','ALL','AMD','ANG','AOA','ARS','AUD','AWG','AZN','BAM','BBD','BDT','BGN','BIF','BMD','BND','BOB','BRL','BSD','BWP','BZD','CAD','CDF','CHF','CLP','CNY','COP','CRC','CVE','CZK','DJF','DKK','DOP','DZD','EEK','EGP','ETB','EUR','FJD','FKP','GBP','GEL','GIP','GMD','GNF','GTQ','GYD','HKD','HNL','HRK','HTG','HUF','IDR','ILS','INR','ISK','JMD','JPY','KES','KGS','KHR','KMF','KRW','KYD','KZT','LAK','LBP','LKR','LRD','LSL','LTL','LVL','MAD','MDL','MGA','MKD','MNT','MOP','MRO','MUR','MVR','MWK','MXN','MYR','MZN','NAD','NGN','NIO','NOK','NPR','NZD','PAB','PEN','PGK','PHP','PKR','PLN','PYG','QAR','RON','RSD','RUB','RWF','SAR','SBD','SCR','SEK','SGD','SHP','SLL','SOS','SRD','STD','SVC','SZL','THB','TJS','TOP','TRY','TTD','TWD','TZS','UAH','UGX','USD','UYU','UZS','VEF','VND','VUV','WST','XAF','XCD','XOF','XPF','YER','ZAR','ZMW' ) ) ) { ?>
+        <table class="form-table">
+            <?php $this->generate_settings_html(); ?>
+        </table><!--/.form-table-->
+
+        <?php } else { ?>
+
+        <div class="inline error">
+            <p>
+                <strong><?php _e( 'Gateway Disabled', 'dokan' ); ?></strong>
+                <?php echo __( 'Choose a currency supported by Stripe as your store currency to enable Stripe Connect.', 'dokan' ); ?>
+            </p>
+        </div>
+        <?php }
+    }
+
+    /**
      * Payment form on checkout page
      *
      * @since 3.0.3
