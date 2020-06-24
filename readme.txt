@@ -5,7 +5,7 @@ Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, stor
 Requires at least: 4.4
 Tested up to: 5.4.2
 WC requires at least: 3.0
-WC tested up to: 4.2.0
+WC tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,15 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v3.0.4 -> Jun 24, 2020
+----------------------------------
+
+- [fix] Stripe Module add 2 requires options must need to add stripe credential and SSL
+- [fix] Stripe Module added 2 notices for stripe credential and another for SSL activation
+- [fix] Geolocation auto set same as store when product update from admin
+- [fix] Add text Shipping Policies link after gear icon on vendor shipping setting page
+- [fix] Text domain missing on email verification notice
 
 v3.0.3 -> Jun 16, 2020
 ----------------------------------
