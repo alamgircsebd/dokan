@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 3.0.3\n"
+"Project-Id-Version: Dokan Pro 3.0.4\n"
 "Report-Msgid-Bugs-To: https://wedevs.com/account/tickets/\n"
-"POT-Creation-Date: 2020-06-16 06:29:22+00:00\n"
+"POT-Creation-Date: 2020-06-24 07:32:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -592,6 +592,7 @@ msgid "Enable vendors to provide support to customers from store page."
 msgstr ""
 
 #: includes/Module.php:336 modules/stripe/includes/Helper.php:268
+#: modules/stripe/includes/StripeConnect.php:245
 #: src/admin/components/VendorSingle.vue:260
 msgid "Stripe Connect"
 msgstr ""
@@ -1604,6 +1605,10 @@ msgstr ""
 msgid "Shipping Settings"
 msgstr ""
 
+#: includes/Settings.php:153
+msgid "Click here to add Shipping Policies"
+msgstr ""
+
 #: includes/Settings.php:220
 msgid ""
 "Social profiles help you to gain more trust. Consider adding your social "
@@ -1668,7 +1673,7 @@ msgstr ""
 msgid "Shipping options saved successfully"
 msgstr ""
 
-#: includes/Settings.php:621
+#: includes/Settings.php:626
 msgid "Biography"
 msgstr ""
 
@@ -2387,7 +2392,7 @@ msgstr ""
 #: modules/booking/templates/booking/product-list.php:38
 #: modules/rma/templates/rma/customer-rma-requests.php:25
 #: modules/rma/templates/rma/vendor-rma-requests.php:55
-#: modules/rma/templates/rma/vendor-rma-single-request.php:136
+#: modules/rma/templates/rma/vendor-rma-single-request.php:140
 #: modules/simple-auction/templates/auction/auction-products-listing.php:42
 #: modules/store-support/module.php:640 modules/store-support/module.php:953
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:211
@@ -4313,7 +4318,7 @@ msgstr ""
 
 #: modules/booking/templates/booking/my-bookings/booking-details.php:82
 #: modules/product-addon/templates/product-addon/html-global-admin-add.php:11
-#: modules/rma/templates/rma/vendor-rma-single-request.php:155
+#: modules/rma/templates/rma/vendor-rma-single-request.php:159
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:259
 #: src/admin/components/StoreCategoriesShow.vue:45
 #: templates/global/dokan-registration.php:95
@@ -7038,7 +7043,7 @@ msgid "Your account is connected with Wirecard."
 msgstr ""
 
 #: modules/moip/includes/public/class-withdraw-methods.php:211
-#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:109
+#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:137
 msgid "Disconnect"
 msgstr ""
 
@@ -7087,6 +7092,7 @@ msgid "PayPal Adaptive works by sending payment to multiple user email"
 msgstr ""
 
 #: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:100
+#: modules/stripe/includes/StripeConnect.php:259
 msgid "Gateway Disabled"
 msgstr ""
 
@@ -7312,7 +7318,7 @@ msgstr ""
 msgid "Payment for order %s refunded/reversed"
 msgstr ""
 
-#: modules/paypal-adaptive-payments/module.php:97
+#: modules/paypal-adaptive-payments/module.php:101
 msgid "You can not add more than one vendors product in the cart"
 msgstr ""
 
@@ -7774,7 +7780,7 @@ msgstr ""
 #: modules/report-abuse/views/report-abuse-admin-email-html.php:18
 #: modules/report-abuse/views/report-abuse-admin-single-product.php:5
 #: modules/report-abuse/views/report-abuse-admin-single-product.php:54
-#: modules/rma/templates/rma/vendor-rma-single-request.php:115
+#: modules/rma/templates/rma/vendor-rma-single-request.php:116
 msgid "Reason"
 msgstr ""
 
@@ -8402,7 +8408,7 @@ msgid "Hello,"
 msgstr ""
 
 #: modules/rma/templates/rma/conversations.php:12
-#: modules/rma/templates/rma/vendor-rma-single-request.php:193
+#: modules/rma/templates/rma/vendor-rma-single-request.php:197
 msgid "Conversations"
 msgstr ""
 
@@ -8459,16 +8465,16 @@ msgstr ""
 msgid "Additional Details"
 msgstr ""
 
-#: modules/rma/templates/rma/customer-rma-single-request.php:59
+#: modules/rma/templates/rma/customer-rma-single-request.php:60
 msgid "Reason : "
 msgstr ""
 
-#: modules/rma/templates/rma/customer-rma-single-request.php:65
+#: modules/rma/templates/rma/customer-rma-single-request.php:67
 msgid "Reason Details : "
 msgstr ""
 
-#: modules/rma/templates/rma/customer-rma-single-request.php:68
-#: modules/rma/templates/rma/vendor-rma-single-request.php:122
+#: modules/rma/templates/rma/customer-rma-single-request.php:70
+#: modules/rma/templates/rma/vendor-rma-single-request.php:126
 msgid "No details found"
 msgstr ""
 
@@ -8618,12 +8624,12 @@ msgstr ""
 
 #: modules/rma/templates/rma/tmpl-send-coupon-popup.php:4
 #: modules/rma/templates/rma/tmpl-send-coupon-popup.php:9
-#: modules/rma/templates/rma/vendor-rma-single-request.php:169
+#: modules/rma/templates/rma/vendor-rma-single-request.php:173
 msgid "Send Coupon"
 msgstr ""
 
 #: modules/rma/templates/rma/vendor-rma-requests.php:56
-#: modules/rma/templates/rma/vendor-rma-single-request.php:140
+#: modules/rma/templates/rma/vendor-rma-single-request.php:144
 msgid "Last Updated"
 msgstr ""
 
@@ -8662,20 +8668,20 @@ msgstr ""
 msgid "Request Type :"
 msgstr ""
 
-#: modules/rma/templates/rma/vendor-rma-single-request.php:119
+#: modules/rma/templates/rma/vendor-rma-single-request.php:123
 msgid "Reason Details"
 msgstr ""
 
-#: modules/rma/templates/rma/vendor-rma-single-request.php:144
+#: modules/rma/templates/rma/vendor-rma-single-request.php:148
 msgid "Change Status"
 msgstr ""
 
-#: modules/rma/templates/rma/vendor-rma-single-request.php:162
-#: modules/rma/templates/rma/vendor-rma-single-request.php:164
+#: modules/rma/templates/rma/vendor-rma-single-request.php:166
+#: modules/rma/templates/rma/vendor-rma-single-request.php:168
 msgid "Send Refund"
 msgstr ""
 
-#: modules/rma/templates/rma/vendor-rma-single-request.php:175
+#: modules/rma/templates/rma/vendor-rma-single-request.php:179
 msgid "Already send refund request. Wait for admin approval"
 msgstr ""
 
@@ -10356,7 +10362,26 @@ msgstr ""
 msgid "Invalid email address, please correct and try again."
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:282
+#: modules/stripe/includes/StripeConnect.php:246
+msgid ""
+"Stripe works by adding credit card fields on the checkout and then sending "
+"the details to Stripe for verification."
+msgstr ""
+
+#: modules/stripe/includes/StripeConnect.php:248
+msgid ""
+"Recurring subscription requires webhooks to be configured. Go to <a "
+"href=\"%s\">webhook</a> and set your webhook url <code>%s</code>. Otherwise "
+"recurring payment not working automatically"
+msgstr ""
+
+#: modules/stripe/includes/StripeConnect.php:260
+msgid ""
+"Choose a currency supported by Stripe as your store currency to enable "
+"Stripe Connect."
+msgstr ""
+
+#: modules/stripe/includes/StripeConnect.php:309
 msgid ""
 "TEST MODE ENABLED. In test mode, you can use the card number "
 "4242424242424242 with any CVC and a valid expiration date or check the <a "
@@ -10364,7 +10389,7 @@ msgid ""
 "card numbers."
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:321
+#: modules/stripe/includes/StripeConnect.php:348
 msgid "Credit or debit card"
 msgstr ""
 
@@ -10429,17 +10454,25 @@ msgstr ""
 msgid "Order %s status is now on-hold due to dispute via %s on (Charge IDs: %s)"
 msgstr ""
 
-#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:53
+#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:54
+msgid "Please insert Live %s credential to use Live Mode"
+msgstr ""
+
+#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:62
+msgid "%s requires %s"
+msgstr ""
+
+#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:81
 msgid "Stripe"
 msgstr ""
 
-#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:91
+#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:119
 msgid ""
 "Your account is not connected to Stripe. Connect your Stripe account to "
 "receive payouts."
 msgstr ""
 
-#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:108
+#: modules/stripe/includes/WithdrawMethods/RegisterWithdrawMethods.php:136
 msgid "Your account is connected with Stripe"
 msgstr ""
 
@@ -11449,38 +11482,38 @@ msgstr ""
 msgid "Variable subscription"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:389
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:391
 msgid "Sign Up Fee Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:390
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:392
 msgid "Sign Up Fee % Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:391
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:393
 msgid "Recurring Product Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:392
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:394
 msgid "Recurring Product % Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:412
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:414
 msgid "Active for x payments"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:414
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:416
 msgid "Unlimited payments"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:452
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:454
 #. translators: %d refers to the number of payments the coupon can be used for.
 msgid "Active for %d payment"
 msgid_plural "Active for %d payments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:457
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:459
 msgid "Active for unlimited payments"
 msgstr ""
 
