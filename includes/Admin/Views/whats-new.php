@@ -1,6 +1,32 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.0.4',
+        'released' => '2020-06-19',
+        'changes'  => array(
+            array(
+                'title'       => 'Stripe Module add 2 Requires Options (Stripe Connect)',
+                'type'        => 'Fix',
+                'description' => 'Stripe Module add 2 requires options must need to add stripe credential and SSL'
+            ),
+            array(
+                'title'       => 'Stripe Module Added 2 Notices (Stripe Connect)',
+                'type'        => 'Fix',
+                'description' => 'Stripe Module added 2 notices for add stripe credentials and another for SSL activation'
+            ),
+            array(
+                'title'       => 'Geolocation Auto Set Same as Store (Geolocation)',
+                'type'        => 'Fix',
+                'description' => 'Geolocation auto set same as store when product update from admin'
+            ),
+            array(
+                'title'       => 'Add Text Shipping Policies Link on Shipping Setting Page',
+                'type'        => 'Fix',
+                'description' => 'Add text Shipping Policies link after gear icon on vendor shipping setting page'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 3.0.3',
         'released' => '2020-06-11',
         'changes'  => array(
