@@ -208,51 +208,6 @@ class Dokan_Vendor_Analytics_Reports {
      *
      * @return array
      */
-    public function get_analytics_option() {
-        $options = array(
-            'client_id'     => null,
-            'client_secret' => null,
-        );
-
-        if ( class_exists( 'GADWP_Manager' ) ) {
-            $options                  = json_decode( get_option( 'gadwp_options' ), true );
-            $options['profile_id']    = 'ga:' . $options['tableid_jail'];
-            $options['client_id']     = '65556128672.apps.googleusercontent.com';
-            $options['client_secret'] = 'Kc7888wgbc_JbeCmApbFjnYpwE';
-
-            if ( empty( $options['token'] ) ) {
-                $options['token'] = json_encode( array( 'access_token' => '' ) );
-            }
-
-        } elseif ( class_exists( 'WP_Analytify' ) ) {
-            $options               = get_option( 'wp-analytify-profile' );
-            $options['token']      = get_option( 'pa_google_token' );
-            $options['profile_id'] = 'ga:' . $options['profile_for_dashboard'];
-            $analytify_advance     = get_option( 'wp-analytify-advanced' );
-
-            $options['client_id'] = ANALYTIFY_CLIENTID;
-            $options['client_secret'] = ANALYTIFY_CLIENTSECRET;
-
-            if ( ! empty( $analytify_advance['user_advanced_keys'] )
-                && 'off' !== $analytify_advance['user_advanced_keys']
-                && ! empty( $analytify_advance['client_id'] )
-                && ! empty( $analytify_advance['client_secret'] )
-            ) {
-                $options['client_id'] = $analytify_advance['client_id'];
-                $options['client_secret'] = $analytify_advance['client_secret'];
-            }
-        }
-
-        return $options;
-    }
-
-    /**
-     * Listing product argument filter
-     *
-     * @since 1.0.0
-     *
-     * @return array
-     */
     public function get_vendor_product_ids( $vendor_id ) {
         $products = new WP_Query( array(
             'post_type' => 'product',
