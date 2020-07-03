@@ -563,3 +563,114 @@ function dokan_vendor_analytics_token() {
 
     return $token;
 }
+
+/**
+ * Get a tokenized instance of Google_Client
+ *
+ * If token is expired, it'll refresh first.
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return \Dokan_Client|\WP_Error
+ */
+function dokan_vendor_analytics_get_tokenized_client() {
+    try {
+        $client = dokan_vendor_analytics_client();
+        $token  = dokan_vendor_analytics_token();
+
+        if ( empty( json_decode( $token, true ) ) ) {
+            throw new Exception( __( 'Token is empty', 'dokan' ) );
+        }
+
+        $client->setAccessToken( $token );
+
+        if ( $client->isAccessTokenExpired() ) {
+            $refresh_token = $client->getRefreshToken();
+
+            $response = wp_remote_post( dokan_vendor_analytics_get_refresh_token_url(), array(
+                'timeout' => 30,
+                'body'    => array(
+                    'refresh_token' => $refresh_token,
+                )
+            ) );
+
+            if ( is_wp_error( $response ) ) {
+                throw new Exception( $response->get_error_message() );
+            }
+
+            $token = wp_remote_retrieve_body( $response );
+
+            if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+                throw new Exception( $token );
+            }
+
+            $client->setAccessToken( $token );
+
+            $api_data          = get_option( 'dokan_vendor_analytics_google_api_data', array() );
+            $api_data['token'] = $token;
+
+            update_option( 'dokan_vendor_analytics_google_api_data', $api_data, false );
+        }
+
+        return $client;
+    } catch ( Exception $e ) {
+        return new WP_Error(
+            'dokan_vendor_analytics_get_tokenized_client_error',
+            $e->getMessage()
+        );
+    }
+}
+
+/**
+ * Get analytics profiles from Google API
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return array|\WP_Error
+ */
+function dokan_vendor_analytics_api_get_profiles() {
+    try {
+        $client = dokan_vendor_analytics_get_tokenized_client();
+
+        if ( is_wp_error( $client ) ) {
+            throw new Exception( $client->get_error_message() );
+        }
+
+        $service = new Dokan_Service_Analytics( $client );
+
+        $profiles      = [];
+        $profile_items = $service->management_accountSummaries->listManagementAccountSummaries()->getItems();
+
+        if ( ! empty( $profile_items ) ) {
+            foreach ( $profile_items as $item ) {
+                foreach ( $item['webProperties'] as $web_properties ) {
+                    $group = array(
+                        'group_label'  => $web_properties->getName(),
+                        'group_values' => array(),
+                    );
+
+                    foreach ( $web_properties->getProfiles() as $profile ) {
+                        $group['group_values'][] = array(
+                            'label' => $profile->name . ' (' . $web_properties->id . ')',
+                            'value' => 'ga:' . $profile->id,
+                        );
+                    }
+
+                    $profiles[] = $group;
+                }
+            }
+        }
+
+        $api_data             = get_option( 'dokan_vendor_analytics_google_api_data', array() );
+        $api_data['profiles'] = $profiles;
+
+        update_option( 'dokan_vendor_analytics_google_api_data', $api_data, false );
+
+        return $profiles;
+    } catch ( Exception $e ) {
+        return new WP_Error(
+            'dokan_vendor_analytics_get_tokenized_client_error',
+            $e->getMessage()
+        );
+    }
+}
