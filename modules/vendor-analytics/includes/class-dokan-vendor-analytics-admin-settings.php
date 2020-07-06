@@ -1,5 +1,7 @@
 <?php
 
+use WeDevs\Dokan\Exceptions\DokanException;
+
 class Dokan_Vendor_Analytics_Admin_Settings {
 
     /**
@@ -13,6 +15,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         add_action( 'woocommerce_api_dokan_vendor_analytics', array( $this, 'save_token' ) );
         add_filter( 'dokan_settings_sections', array( $this, 'add_settings_section' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'add_settings_fields' ) );
+        add_filter( 'dokan_settings_refresh_option_dokan_vendor_analytics_profile', array( $this, 'refresh_admin_settings_option_profile' ) );
     }
 
     /**
@@ -102,35 +105,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
             );
         } else {
             if ( empty( $profiles ) ) {
-                $client = dokan_vendor_analytics_client();
-                $client->setAccessToken( $token_raw );
-
-                $service = new Dokan_Service_Analytics( $client );
-                $profile_items = $service->management_accountSummaries->listManagementAccountSummaries()->getItems();
-
-                if ( ! empty( $profile_items ) ) {
-                    foreach ( $profile_items as $item ) {
-                        foreach ( $item['webProperties'] as $web_properties ) {
-                            $group = array(
-                                'group_label' => $web_properties->getName(),
-                                'group_values' => array(),
-                            );
-
-                            foreach ( $web_properties->getProfiles() as $profile ) {
-                                $group['group_values'][] = array(
-                                    'label' => $profile->name . ' (' . $web_properties->id . ')',
-                                    'value' => 'ga:' . $profile->id,
-                                );
-                            }
-
-                            $profiles[] = $group;
-                        }
-                    }
-
-                    $api_data['profiles'] = $profiles;
-
-                    update_option( 'dokan_vendor_analytics_google_api_data', $api_data, false );
-                }
+                $profiles = dokan_vendor_analytics_api_get_profiles();
             }
 
             $analytics_fields = array(
@@ -141,6 +116,12 @@ class Dokan_Vendor_Analytics_Admin_Settings {
                     'placeholder' => __( 'Select your profile', 'dokan' ),
                     'grouped'     => true,
                     'options'     => $profiles,
+                    'refresh_options' => array(
+                        'messages' => array(
+                            'refreshing' => __( 'Refreshing profiles', 'dokan' ),
+                            'refreshed'  => __( 'Profiles refreshed!', 'dokan' ),
+                        ),
+                    ),
                 ),
             );
         }
@@ -148,5 +129,25 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         $settings_fields['dokan_vendor_analytics'] = $analytics_fields;
 
         return $settings_fields;
+    }
+
+    /**
+     * Refresh profiles in admin settings
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return array
+     */
+    public function refresh_admin_settings_option_profile() {
+        $profiles = dokan_vendor_analytics_api_get_profiles();
+
+        if ( is_wp_error( $profiles ) ) {
+            throw new DokanException(
+                $profiles->get_error_code(),
+                $profiles->get_error_message()
+            );
+        }
+
+        return $profiles;
     }
 }
