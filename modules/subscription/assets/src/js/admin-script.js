@@ -17,7 +17,7 @@
 		$('._no_of_product_field').hide();
 		$('._pack_validity_field').hide();
 		$('._enable_recurring_payment_field').hide();
-		$('.subscription_pricing').hide();
+		$('.dokan_subscription_pricing').hide();
 	    $('._sale_price_field').show();
 	    $('.dokan_subscription_trial_period').hide();
 
@@ -26,16 +26,18 @@
 			$('._pack_validity_field').show();
 			$('._enable_recurring_payment_field').show();
 			$('._sale_price_field').hide();
+
+            if ( $('#dokan_subscription_enable_trial').is(':checked') ) {
+    			$('.dokan_subscription_trial_period').show();
+    		}
+
+    		if ( $( '#_enable_recurring_payment' ).is( ":checked" ) ) {
+    			$('.dokan_subscription_pricing').show();
+    			$('._pack_validity_field').hide();
+    		}
+
 		}
 
-		if ( $('#dokan_subscription_enable_trial').is(':checked') ) {
-			$('.dokan_subscription_trial_period').show();
-		}
-
-		if( $( '#_enable_recurring_payment' ).is( ":checked" ) ) {
-			$('.subscription_pricing').show();
-			$('._pack_validity_field').hide();
-		}
 	});
 
 	$('.woocommerce_options_panel').on('change', '#dokan_subscription_enable_trial', function() {
@@ -48,11 +50,11 @@
 
 	$('.woocommerce_options_panel').on('change', '#_enable_recurring_payment', function() {
 
-		$('.subscription_pricing').hide();
+		$('.dokan_subscription_pricing').hide();
 		$('._pack_validity_field').show();
 
 		if ( $(this).is(':checked') ) {
-			$('.subscription_pricing').fadeIn();
+			$('.dokan_subscription_pricing').fadeIn();
 			$('._pack_validity_field').hide();
 		}
 	});

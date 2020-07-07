@@ -215,7 +215,7 @@ class DPS_Admin {
         if ( !$subscription_period = get_post_meta( $post->ID, '_subscription_period', true ) )
             $subscription_period = 'month';
 
-        echo '<div class="options_group subscription_pricin subscription_pricing">';
+        echo '<div class="options_group show_if_product_pack dokan_subscription_pricing">';
         // Subscription Period Interval
         echo '<div class="dokan-billing-cycle-wrap">';
         woocommerce_wp_select( array(
