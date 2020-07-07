@@ -16,6 +16,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         add_filter( 'dokan_settings_sections', array( $this, 'add_settings_section' ) );
         add_filter( 'dokan_settings_fields', array( $this, 'add_settings_fields' ) );
         add_filter( 'dokan_settings_refresh_option_dokan_vendor_analytics_profile', array( $this, 'refresh_admin_settings_option_profile' ) );
+        add_action( 'wp_head', array( $this, 'add_tracking_code' ), 0 );
     }
 
     /**
@@ -118,10 +119,22 @@ class Dokan_Vendor_Analytics_Admin_Settings {
                     'options'     => $profiles,
                     'refresh_options' => array(
                         'messages' => array(
-                            'refreshing' => __( 'Refreshing profiles', 'dokan' ),
-                            'refreshed'  => __( 'Profiles refreshed!', 'dokan' ),
+                            'refreshing' => __( 'Refreshing profile list', 'dokan' ),
+                            'refreshed'  => __( 'Profile list updated!', 'dokan' ),
                         ),
                     ),
+                ),
+                'add_tracking_code' => array(
+                    'name'    => 'add_tracking_code',
+                    'label'   => __( 'Add Tracking Code', 'dokan' ),
+                    'desc'    => __( 'This is an optional settings that will add Analytics Global Site Tag in you site header. If you use any SEO plugin or add your tracking code by other means, then choose `no` in the settings.', 'dokan' ),
+                    'type'    => 'radio',
+                    'default' => 'no',
+                    'options' => array(
+                        'yes' => __( 'Yes', 'dokan' ),
+                        'no'  => __( 'No', 'dokan' ),
+                    ),
+
                 ),
             );
         }
@@ -149,5 +162,36 @@ class Dokan_Vendor_Analytics_Admin_Settings {
         }
 
         return $profiles;
+    }
+
+    /**
+     * Add Google tracking code inside head tag
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function add_tracking_code() {
+        $add_tracking_code = dokan_get_option( 'add_tracking_code', 'dokan_vendor_analytics', 'no' );
+
+        if ( 'yes' !== $add_tracking_code ) {
+            return;
+        }
+
+        $profile = dokan_get_option( 'profile', 'dokan_vendor_analytics', '' );
+
+        if ( empty( $profile ) || ! is_string( $profile ) ) {
+            return;
+        }
+
+        $api_data  = get_option( 'dokan_vendor_analytics_google_api_data', array() );
+
+        if ( empty( $api_data['profiles_map'] ) || ! isset( $api_data['profiles_map'][ $profile ] ) ) {
+            return;
+        }
+
+        dokan_vendor_analytics_get_template( 'tracking-code', array(
+            'web_properties_id' => $api_data['profiles_map'][ $profile ],
+        ) );
     }
 }
