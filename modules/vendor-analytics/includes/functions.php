@@ -639,6 +639,7 @@ function dokan_vendor_analytics_api_get_profiles() {
         $service = new Dokan_Service_Analytics( $client );
 
         $profiles      = [];
+        $profiles_map  = [];
         $profile_items = $service->management_accountSummaries->listManagementAccountSummaries()->getItems();
 
         if ( ! empty( $profile_items ) ) {
@@ -654,6 +655,8 @@ function dokan_vendor_analytics_api_get_profiles() {
                             'label' => $profile->name . ' (' . $web_properties->id . ')',
                             'value' => 'ga:' . $profile->id,
                         );
+
+                        $profiles_map[ 'ga:' . $profile->id ] = $web_properties->id;
                     }
 
                     $profiles[] = $group;
@@ -661,8 +664,9 @@ function dokan_vendor_analytics_api_get_profiles() {
             }
         }
 
-        $api_data             = get_option( 'dokan_vendor_analytics_google_api_data', array() );
-        $api_data['profiles'] = $profiles;
+        $api_data                 = get_option( 'dokan_vendor_analytics_google_api_data', array() );
+        $api_data['profiles']     = $profiles;
+        $api_data['profiles_map'] = $profiles_map;
 
         update_option( 'dokan_vendor_analytics_google_api_data', $api_data, false );
 
