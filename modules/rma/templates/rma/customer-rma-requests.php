@@ -30,28 +30,31 @@
     <?php
     if ( ! empty( $requests ) ) {
         foreach ( $requests as $request ) {
-            ?>
-                <tr class="order">
-                    <td class="order-number">
-                        <?php
-                            $order = wc_get_order( $request['order_id'] );
-                            echo sprintf( '<a href="%s">#%s</a> on <a href="%s">Order #%s</a>', esc_url( wc_get_account_endpoint_url( 'view-rma-requests' ) ) . $request['id'], $request['id'], $order->get_view_order_url(), $order->get_order_number() );
-                        ?>
-                    </td>
-                    <td class="rma-vendor">
-                        <a href="<?php echo $request['vendor']['store_url']; ?>"><?php echo $request['vendor']['store_name']; ?></a>
-                    </td>
-                    <td class="rma-type">
-                        <?php echo dokan_warranty_request_type( $request['type'] ); ?>
-                    </td>
-                    <td class="rma-status" style="text-align:left; white-space:nowrap;">
-                        <?php echo dokan_warranty_request_status( $request['status'] ); ?>
-                    </td>
-                    <td>
-                        <a href="<?php echo esc_url( wc_get_account_endpoint_url( 'view-rma-requests' ) ) . $request['id']; ?>" class="woocommerce-button button view"><?php _e( 'View', 'dokan' ) ?></a>
-                    </td>
-                </tr>
-            <?php
+            $order = wc_get_order( $request['order_id'] );
+            if ( $order ):
+                ?>
+                    <tr class="order">
+                        <td class="order-number">
+                            <?php
+                                
+                                echo sprintf( '<a href="%s">#%s</a> on <a href="%s">Order #%s</a>', esc_url( wc_get_account_endpoint_url( 'view-rma-requests' ) ) . $request['id'], $request['id'], $order->get_view_order_url(), $order->get_order_number() );
+                            ?>
+                        </td>
+                        <td class="rma-vendor">
+                            <a href="<?php echo $request['vendor']['store_url']; ?>"><?php echo $request['vendor']['store_name']; ?></a>
+                        </td>
+                        <td class="rma-type">
+                            <?php echo dokan_warranty_request_type( $request['type'] ); ?>
+                        </td>
+                        <td class="rma-status" style="text-align:left; white-space:nowrap;">
+                            <?php echo dokan_warranty_request_status( $request['status'] ); ?>
+                        </td>
+                        <td>
+                            <a href="<?php echo esc_url( wc_get_account_endpoint_url( 'view-rma-requests' ) ) . $request['id']; ?>" class="woocommerce-button button view"><?php _e( 'View', 'dokan' ) ?></a>
+                        </td>
+                    </tr>
+                <?php
+            endif;
         }
     } else {
         ?>
