@@ -317,6 +317,11 @@ class Dokan_RMA_Order {
             $name = $value = $expiry = false;
 
             $order = wc_get_order( $order_id );
+            
+            if ( empty( $order ) ) {
+                return;
+            }
+
             $order_date = $order->get_date_completed() ? $order->get_date_completed()->date( 'Y-m-d H:i:s' ) : false;
 
             if ( empty( $warranty['label'] ) ) {
