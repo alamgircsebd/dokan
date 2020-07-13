@@ -97,6 +97,16 @@ class LogsController extends DokanRESTAdminController {
             $order_total = $order->get_total();
             $has_refund  = $order->get_total_refunded() ? true : false;
 
+            /**
+             * Payment gateway fee minus from admin commission earning
+             */
+            $processing_fee = dokan()->commission->get_processing_fee( $order );
+            $commission     = $is_subscription_product ? $result->order_total : $result->order_total - $result->net_amount;
+
+            if ( $processing_fee && $processing_fee > 0 ) {
+                $commission = $is_subscription_product ? $result->order_total : ( $result->order_total - $result->net_amount ) - $processing_fee;
+            }
+
             $logs[] = [
                 'order_id'             => $result->order_id,
                 'vendor_id'            => $result->seller_id,
@@ -104,7 +114,7 @@ class LogsController extends DokanRESTAdminController {
                 'previous_order_total' => $order_total,
                 'order_total'          => $result->order_total,
                 'vendor_earning'       => $is_subscription_product ? 0 : $result->net_amount,
-                'commission'           => $is_subscription_product ? $result->order_total :  $result->order_total - $result->net_amount,
+                'commission'           => $commission,
                 'status'               => $statuses[ $result->order_status ],
                 'date'                 => $result->post_date,
                 'has_refund'           => $has_refund,
