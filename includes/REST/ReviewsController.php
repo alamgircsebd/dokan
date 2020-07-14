@@ -428,43 +428,43 @@ class ReviewsController extends DokanRESTController {
             'type'       => 'object',
             'properties' => array(
                 'id' => array(
-                    'description' => __( 'Unique identifier for the resource.', 'woocommerce' ),
+                    'description' => __( 'Unique identifier for the resource.', 'dokan' ),
                     'type'        => 'integer',
                     'context'     => array( 'view', 'edit' ),
                     'readonly'    => true,
                 ),
                 'review' => array(
-                    'description' => __( 'The content of the review.', 'woocommerce' ),
+                    'description' => __( 'The content of the review.', 'dokan' ),
                     'type'        => 'string',
                     'context'     => array( 'view', 'edit' ),
                 ),
                 'date_created' => array(
-                    'description' => __( "The date the review was created, in the site's timezone.", 'woocommerce' ),
+                    'description' => __( "The date the review was created, in the site's timezone.", 'dokan' ),
                     'type'        => 'date-time',
                     'context'     => array( 'view', 'edit' ),
                 ),
                 'date_created_gmt' => array(
-                    'description' => __( "The date the review was created, as GMT.", 'woocommerce' ),
+                    'description' => __( "The date the review was created, as GMT.", 'dokan' ),
                     'type'        => 'date-time',
                     'context'     => array( 'view', 'edit' ),
                 ),
                 'rating' => array(
-                    'description' => __( 'Review rating (0 to 5).', 'woocommerce' ),
+                    'description' => __( 'Review rating (0 to 5).', 'dokan' ),
                     'type'        => 'integer',
                     'context'     => array( 'view', 'edit' ),
                 ),
                 'name' => array(
-                    'description' => __( 'Reviewer name.', 'woocommerce' ),
+                    'description' => __( 'Reviewer name.', 'dokan' ),
                     'type'        => 'string',
                     'context'     => array( 'view', 'edit' ),
                 ),
                 'email' => array(
-                    'description' => __( 'Reviewer email.', 'woocommerce' ),
+                    'description' => __( 'Reviewer email.', 'dokan' ),
                     'type'        => 'string',
                     'context'     => array( 'view', 'edit' ),
                 ),
                 'verified' => array(
-                    'description' => __( 'Shows if the reviewer bought the product or not.', 'woocommerce' ),
+                    'description' => __( 'Shows if the reviewer bought the product or not.', 'dokan' ),
                     'type'        => 'boolean',
                     'context'     => array( 'view', 'edit' ),
                     'readonly'    => true,

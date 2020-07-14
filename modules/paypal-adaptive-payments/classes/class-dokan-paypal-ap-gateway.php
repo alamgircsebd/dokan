@@ -252,11 +252,11 @@ class WC_Dokan_Paypal_Ap_Gateway extends WC_Payment_Gateway {
                 'desc_tip'    => true,
             ),
             'debug' => array(
-                'title'       => __( 'Debug Log', 'woocommerce' ),
+                'title'       => __( 'Debug Log', 'dokan' ),
                 'type'        => 'checkbox',
-                'label'       => __( 'Enable logging', 'woocommerce' ),
+                'label'       => __( 'Enable logging', 'dokan' ),
                 'default'     => 'no',
-                'description' => sprintf( __( 'Log PayPal events, such as IPN requests, inside <code>woocommerce/logs/paypal-%s.txt</code>', 'woocommerce' ), sanitize_file_name( wp_hash( 'paypal' ) ) ),
+                'description' => sprintf( __( 'Log PayPal events, such as IPN requests, inside <code>woocommerce/logs/paypal-%s.txt</code>', 'dokan' ), sanitize_file_name( wp_hash( 'paypal' ) ) ),
             )
         );
     }

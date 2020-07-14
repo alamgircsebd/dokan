@@ -237,6 +237,7 @@ class Hooks {
             exit();
         }
 
+        $discount_type              = isset( $discount_type ) ? $discount_type : '';
         $amount                     = isset( $amount ) ? $amount : '';
         $products                   = isset( $products ) ? $products : '';
         $exclude_products           = isset( $exclude_products ) ? $exclude_products : '';
@@ -346,9 +347,9 @@ class Hooks {
                 'pro'                        => true,
                 'post_id'                    => $post_id,
                 'post_title'                 => $post_title,
-                'discount_type'              => isset( $discount_type ) ? $discount_type : '',
+                'discount_type'              => $discount_type,
                 'description'                => $description,
-                'amount'                     => $amount,
+                'amount'                     => strpos( $discount_type, 'percent' ) !== false ? wc_format_localized_decimal( $amount ) : wc_format_localized_price( $amount ),
                 'products'                   => $products,
                 'exclude_products'           => $exclude_products,
                 'product_categories'         => $product_categories,
@@ -513,7 +514,7 @@ class Hooks {
 
         $customer_email     = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $_POST['email_restrictions'] ) ) ) );
         $type               = sanitize_text_field( $_POST['discount_type'] );
-        $amount             = sanitize_text_field( $_POST['amount'] );
+        $amount             = wc_format_decimal( sanitize_text_field( $_POST['amount'] ) );
         $usage_limit        = empty( $_POST['usage_limit'] ) ? '' : absint( $_POST['usage_limit'] );
         $expiry_date        = strtotime( sanitize_text_field( $_POST['expire'] ) );
         $apply_before_tax   = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
