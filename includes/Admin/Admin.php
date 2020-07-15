@@ -845,9 +845,9 @@ class Admin {
         }
 
         $post_data = wp_unslash( $_POST );
-        $additional_fee  = isset( $post_data['dokan_admin_additional_fee'] ) && $post_data['dokan_admin_additional_fee'] != '' ? floatval( $post_data['dokan_admin_additional_fee'] ) : '';
+        $additional_fee  = isset( $post_data['dokan_admin_additional_fee'] ) && $post_data['dokan_admin_additional_fee'] != '' ? $post_data['dokan_admin_additional_fee'] : '';
 
-        update_user_meta( $user_id, 'dokan_admin_additional_fee', $additional_fee );
+        update_user_meta( $user_id, 'dokan_admin_additional_fee', wc_format_decimal( $additional_fee ) );
     }
 
     /**
@@ -862,7 +862,7 @@ class Admin {
         ?>
         <span class="additional-fee dokan-hide">
             <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-            <input type="number" min="0" class="small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+            <input type="text" class="wc_input_price small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( wc_format_localized_price( $admin_additional_fee ) ); ?>">
         </span>
 
         <script type="text/javascript">
