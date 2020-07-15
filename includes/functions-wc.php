@@ -1246,10 +1246,10 @@ function dokan_add_category_commission_field() {
     </div>
     <div class="form-field term-display-type-wrap">
         <label for="per_category_admin_commission"><?php _e( 'Admin Commission from this category', 'dokan' ); ?></label>
-        <input type="number" class="commission-filed" step="any" min="0" name="per_category_admin_commission">
+        <input type="text" class="wc_input_price commission-filed" name="per_category_admin_commission">
         <span class="additional-fee dokan-hide">
             <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-            <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee">
+            <input type="text" class="wc_input_price commission-filed" name="per_category_admin_additional_fee">
         </span>
         <p class="combine-commission-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ); ?></p>
     </div>
@@ -1267,13 +1267,23 @@ function dokan_add_category_commission_field() {
         // admin additional fee
         ;(function($) {
             $('#per_category_admin_commission_type').on('change', function() {
-                if ( 'combine' === $(this).val() ) {
+                var self = $(this),
+                    val = self.val();
+
+                if ( 'combine' === val ) {
                     $('span.additional-fee').removeClass('dokan-hide');
                     $('.combine-commission-description').text( dokan_admin.combine_commission_desc );
                 } else {
                     $('span.additional-fee').addClass('dokan-hide');
                     $('.combine-commission-description').text( dokan_admin.combine_default_desc );
                 }
+
+                if ( 'flat' === val ) {
+                    $('input[name="per_category_admin_commission"]').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
+                } else {
+                    $('input[name="per_category_admin_commission"]').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
+                }
+
             }).trigger('change');
         })(jQuery);
     </script>
@@ -1290,14 +1300,14 @@ function dokan_add_category_commission_field() {
  * @return void
  */
 function dokan_edit_category_commission_field( $term ) {
-    $commission           = get_term_meta( $term->term_id, 'per_category_admin_commission', true );
-    $commission_type      = get_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
-    $admin_additional_fee = get_term_meta( $term->term_id, 'per_category_admin_additional_fee', true );
-
     if ( dokan_get_option( 'product_category_style', 'dokan_selling' ) !== 'single' ) {
         return;
     }
 
+    $commission_type      = get_term_meta( $term->term_id, 'per_category_admin_commission_type', true );
+    $admin_additional_fee = get_term_meta( $term->term_id, 'per_category_admin_additional_fee', true );
+    $commission           = get_term_meta( $term->term_id, 'per_category_admin_commission', true );
+    $commission           = 'flat' === $commission_type ? wc_format_localized_price( $commission ) : wc_format_localized_decimal( $commission );
     ?>
     <tr class="form-field">
         <th scope="row" valign="top"><label><?php _e( 'Admin Commission type', 'dokan' ); ?></label></th>
@@ -1315,10 +1325,10 @@ function dokan_edit_category_commission_field( $term ) {
     <tr class="form-field">
         <th scope="row" valign="top"><label><?php _e( 'Admin commission', 'dokan' ); ?></label></th>
         <td>
-            <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
+            <input type="text" class="wc_input_price commission-filed" name="per_category_admin_commission" value="<?php echo esc_attr( $commission ); ?>">
             <span class="additional-fee dokan-hide">
                 <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-                <input type="number" step="any" min="0" class="commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+                <input type="text" class="wc_input_price commission-filed" name="per_category_admin_additional_fee" value="<?php echo esc_attr( wc_format_localized_price( $admin_additional_fee ) ); ?>">
             </span>
 
             <p class="combine-commssion-description"><?php _e( 'If set, it will override global admin commission rate for this category', 'dokan' ) ?></p>
@@ -1338,7 +1348,10 @@ function dokan_edit_category_commission_field( $term ) {
         // admin additional fee
         ;(function($) {
             $('#per_category_admin_commission_type').on('change', function() {
-                if ( 'combine' === $(this).val() ) {
+                var self = $(this),
+                    val = self.val();
+
+                if ( 'combine' === val ) {
                     $('span.additional-fee').removeClass('dokan-hide');
                     $('.combine-commssion-description').text( dokan_admin.combine_commission_desc );
                     $('input[name=per_category_admin_commission]').attr('required', true);
@@ -1349,6 +1362,13 @@ function dokan_edit_category_commission_field( $term ) {
                     $('input[name=per_category_admin_commission]').removeAttr('required');
                     $('input[name=per_category_admin_additional_fee]').removeAttr('required');
                 }
+
+                if ( 'flat' === val ) {
+                    $('input[name="per_category_admin_commission"]').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
+                } else {
+                    $('input[name="per_category_admin_commission"]').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
+                }
+
             }).trigger('change');
         })(jQuery);
     </script>
@@ -1378,11 +1398,11 @@ function dokan_save_category_commission_field( $term_id, $tt_id = '', $taxonomy 
     }
 
     if ( isset( $post_data['per_category_admin_commission'] ) ) {
-        $admin_commission = $post_data['per_category_admin_commission'];
+        $admin_commission = wc_format_decimal( $post_data['per_category_admin_commission'] );
     }
 
     if ( isset( $post_data['per_category_admin_additional_fee'] ) ) {
-        $additional_fee = $post_data['per_category_admin_additional_fee'];
+        $additional_fee = wc_format_decimal( $post_data['per_category_admin_additional_fee'] );
     }
 
     if ( 'combine' === $commission_type && ( '' === $admin_commission || '' === $additional_fee ) ) {
