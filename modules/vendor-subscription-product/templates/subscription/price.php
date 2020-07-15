@@ -13,7 +13,7 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
 ?>
 
 <div class="dokan-clearfix dokan-price-container dokan-subscription-product-price show_if_subscription"> <!--  -->
-    <div class="dokan-form-group subscription-price">
+    <div class="dokan-form-group subscription-price dokan-clearfix">
         <label for="_subscription_price" class="form-label"><?php esc_html_e( 'Subscription price', 'dokan-lite' ); ?>
             <span
                 class="vendor-earning subscription-product"
@@ -29,7 +29,7 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
 
         <div class="dokan-input-group">
             <span class="dokan-input-group-addon"><?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
-            <?php dokan_post_input_box( $post_id, '_subscription_price', array( 'class' => 'dokan-form-control dokan-product-subscription-price', 'placeholder' => __( '0.00', 'dokan-lite' ) ), 'number' ); ?>
+            <?php dokan_post_input_box( $post_id, '_subscription_price', array( 'class' => 'dokan-form-control dokan-product-subscription-price', 'placeholder' => __( '0.00', 'dokan-lite' ) ), 'price' ); ?>
         </div>
 
         <div class="dokan-input-group">
@@ -67,7 +67,7 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
         <label for="_subscription_sign_up_fee" class="form-label"><?php esc_html_e( 'Sign up Fee', 'dokan-lite' ); ?>
         <div class="dokan-input-group">
             <span class="dokan-input-group-addon"><?php echo esc_html( get_woocommerce_currency_symbol() ); ?></span>
-            <?php dokan_post_input_box( $post_id, '_subscription_sign_up_fee', array( 'class' => 'dokan-form-control dokan-product-subscription-price', 'placeholder' => __( '0.00', 'dokan' ) ), 'number' ); ?>
+            <?php dokan_post_input_box( $post_id, '_subscription_sign_up_fee', array( 'class' => 'dokan-form-control dokan-product-subscription-price', 'placeholder' => __( '0.00', 'dokan' ) ), 'price' ); ?>
         </div>
     </div>
 
