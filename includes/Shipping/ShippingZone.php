@@ -315,7 +315,7 @@ class ShippingZone {
         $country          = strtoupper( wc_clean( $package['destination']['country'] ) );
         $state            = strtoupper( wc_clean( $package['destination']['state'] ) );
         $postcode         = wc_normalize_postcode( wc_clean( $package['destination']['postcode'] ) );
-        $cache_key        = \WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'dokan_shipping_zone_' . md5( sprintf( '%s+%s+%s', $country, $state, $postcode ) );
+        $cache_key        = \WC_Cache_Helper::get_cache_prefix( 'shipping_zones' ) . 'dokan_shipping_zone_' . md5( sprintf( '%s+%s+%s+%d', $country, $state, $postcode, $package['seller_id'] ) );
         $matching_zone_id = wp_cache_get( $cache_key, 'shipping_zones' );
 
         if ( false === $matching_zone_id ) {
@@ -344,10 +344,15 @@ class ShippingZone {
 
         // Work out criteria for our zone search.
         $criteria   = array();
-        $criteria[] = $wpdb->prepare( "( ( location_type = 'country' AND location_code = %s )", $country );
-        $criteria[] = $wpdb->prepare( "OR ( location_type = 'state' AND location_code = %s )", $country . ':' . $state );
-        $criteria[] = $wpdb->prepare( "OR ( location_type = 'continent' AND location_code = %s )", $continent );
-        $criteria[] = 'OR ( location_type IS NULL ) )';
+        $criteria[] = $wpdb->prepare( "( ( locations.location_type = 'country' AND locations.location_code = %s )", $country );
+        $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'state' AND locations.location_code = %s )", $country . ':' . $state );
+        $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'continent' AND locations.location_code = %s )", $continent );
+
+        if ( ! empty( $postcode ) ) {
+            $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'postcode' AND locations.location_code = %s )", $postcode );
+        }
+
+        $criteria[] = 'OR ( locations.location_type IS NULL ) )';
 
         // Postcode range and wildcard matching.
         $postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}dokan_shipping_zone_locations WHERE location_type = 'postcode' AND seller_id = {$vendor_id};" );
@@ -358,38 +363,77 @@ class ShippingZone {
             $do_not_match                 = array_unique( array_diff( $zone_ids_with_postcode_rules, array_keys( $matches ) ) );
 
             if ( ! empty( $do_not_match ) ) {
-                $criteria[] = 'AND zones.zone_id NOT IN (' . implode( ',', $do_not_match ) . ')';
+                $criteria[] = 'AND locations.zone_id NOT IN (' . implode( ',', $do_not_match ) . ')';
             }
         }
 
-        // Get matching zones.
-        $zone_ids = $wpdb->get_results(
-            "SELECT zones.zone_id FROM {$wpdb->prefix}woocommerce_shipping_zones as zones
-            LEFT OUTER JOIN {$wpdb->prefix}woocommerce_shipping_zone_locations as locations ON zones.zone_id = locations.zone_id AND location_type != 'postcode'
-            LEFT JOIN {$wpdb->prefix}dokan_shipping_zone_methods as do_s_zone_loc ON zones.zone_id = do_s_zone_loc.zone_id
-            WHERE do_s_zone_loc.is_enabled = '1' AND do_s_zone_loc.seller_id = {$vendor_id} AND " . implode( ' ', $criteria ) // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
-            . ' ORDER BY zone_order ASC'
+        $criteria = implode( ' ', $criteria );
+
+        $shipping_zones = $wpdb->get_results(
+            "SELECT locations.zone_id, locations.location_code, locations.location_type
+            FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations
+            LEFT JOIN {$wpdb->prefix}dokan_shipping_zone_methods as methods ON locations.zone_id = methods.zone_id
+            LEFT JOIN {$wpdb->prefix}woocommerce_shipping_zones as wc_zones ON locations.zone_id = wc_zones.zone_id
+            WHERE
+                methods.is_enabled = 1
+                AND methods.settings IS NOT NULL
+                AND wc_zones.zone_id IS NOT NULL
+                AND locations.seller_id = {$vendor_id}
+                AND {$criteria}
+            GROUP BY locations.id
+            ORDER BY wc_zones.zone_order ASC"
         );
 
-        $zone_id             = ! empty( $zone_ids[0]->zone_id ) ? $zone_ids[0]->zone_id : 0;
-        $zone_id_by_postcode = 0;
+        $zones_properties       = [];
+        $zone_id_from_package   = 0;
+        $customer_country_state = $country . ':' . $state;
 
-        if ( ! empty( $postcode ) ) {
-            // Get the raw postcode as it was saved to database.
-            $raw_postcode        = wc_clean( $package['destination']['postcode'] );
-            $zone_id_by_postcode = self::get_zone_id_by_postcode( $raw_postcode );
+        if ( ! empty( $shipping_zones ) ) {
+            foreach ( $shipping_zones as $zone ) {
+                $zones_properties[ $zone->zone_id ][ $zone->location_type ] = $zone->location_code;
+            }
+
+            foreach( $zones_properties as $zone_id => $zone ) {
+                if ( $postcode && isset( $zone['postcode'] ) && $state && $country ) {
+                    // case 1: User provided postcode, state and country.
+                    if (
+                        $postcode === $zone['postcode']
+                        && isset( $zone['state'] )
+                        && $customer_country_state === $zone['state']
+                        && isset( $zone['country'] )
+                        && $country === $zone['country']
+                    ) {
+                        $zone_id_from_package = absint( $zone_id );
+                        break;
+                    }
+
+                    continue;
+                } else if ( $state && $country ) {
+                    // case 2: User provided state and country. Missing postcode.
+                    if (
+                        isset( $zone['state'] )
+                        && $customer_country_state === $zone['state']
+                        && isset( $zone['country'] )
+                        && $country === $zone['country']
+                    ) {
+                        $zone_id_from_package = absint( $zone_id );
+                        break;
+                    }
+
+                    continue;
+                } else if ( $country ) {
+                    // case 3: User provided only country. Missing postcode and postcode
+                    if ( isset( $zone['country'] ) && $country === $zone['country'] ) {
+                        $zone_id_from_package = absint( $zone_id );
+                        break;
+                    }
+
+                    continue;
+                }
+            }
         }
 
-        if ( $zone_id_by_postcode && $zone_id_by_postcode !== $zone_id ) {
-            $zone_id = $zone_id_by_postcode;
-        }
-
-        // if zone id is not found in vendor's available zone id, assume it falls under `Locations not covered by your other zones`.
-        if ( ! in_array( $zone_id, self::get_vendor_all_zone_ids( $package ) ) ) {
-            $zone_id = 0;
-        }
-
-        return apply_filters( 'dokan_get_zone_id_from_package', $zone_id, $package );
+        return apply_filters( 'dokan_get_zone_id_from_package', $zone_id_from_package, $package );
     }
 
     /**
