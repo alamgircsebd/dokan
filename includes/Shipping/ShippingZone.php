@@ -394,10 +394,11 @@ class ShippingZone {
             }
 
             foreach( $zones_properties as $zone_id => $zone ) {
-                if ( $postcode && isset( $zone['postcode'] ) && $state && $country ) {
+
+                if ( $postcode && ! empty( $zone['postcode'] ) && $state && $country ) {
                     // case 1: User provided postcode, state and country.
                     if (
-                        $postcode === $zone['postcode']
+                        $postcode == $zone['postcode']
                         && isset( $zone['state'] )
                         && $customer_country_state === $zone['state']
                         && isset( $zone['country'] )
@@ -408,7 +409,7 @@ class ShippingZone {
                     }
 
                     continue;
-                } else if ( $state && $country ) {
+                } else if ( empty( $postcode ) && $state && $country ) {
                     // case 2: User provided state and country. Missing postcode.
                     if (
                         isset( $zone['state'] )
@@ -421,7 +422,7 @@ class ShippingZone {
                     }
 
                     continue;
-                } else if ( $country ) {
+                } else if ( empty( $postcode ) && empty( $state ) && $country ) {
                     // case 3: User provided only country. Missing postcode and postcode
                     if ( isset( $zone['country'] ) && $country === $zone['country'] ) {
                         $zone_id_from_package = absint( $zone_id );
