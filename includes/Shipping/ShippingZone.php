@@ -409,7 +409,7 @@ class ShippingZone {
                     }
 
                     continue;
-                } else if ( empty( $postcode ) && $state && $country ) {
+                } else if ( empty( $postcode ) && $state && $country && !empty( $zone['state'] ) ) {
                     // case 2: User provided state and country. Missing postcode.
                     if (
                         isset( $zone['state'] )

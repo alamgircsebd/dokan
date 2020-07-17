@@ -340,7 +340,7 @@ export default {
             var self = this,
                 data = {
                     action: 'dokan-save-zone-settings',
-                    country: self.wantToLimitLocation ? self.country : [],
+                    country: self.country,
                     state: self.wantToLimitLocation ? self.state: [],
                     postcode: self.wantToLimitLocation ? self.postcode : '',
                     zoneID: self.$route.params.zoneID,
