@@ -520,7 +520,7 @@ class Hooks {
         $apply_before_tax   = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
         $exclude_sale_items = isset( $_POST['exclude_sale_items'] ) ? 'yes' : 'no';
         $show_on_store      = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
-        $minimum_amount     = sanitize_text_field( $_POST['minium_ammount'] );
+        $minimum_amount     = wc_format_decimal( sanitize_text_field( $_POST['minium_ammount'] ) );
 
         if ( isset( $_POST['product_drop_down'][0] ) && 'select_all' === $_POST['product_drop_down'][0] ) {
             $product_ids = array_map( function( $product ) {

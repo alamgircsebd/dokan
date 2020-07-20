@@ -321,7 +321,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                         <div class="dokan-form-group">
                                             <div class="dokan-input-group">
                                                 <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                                <input class="dokan-form-control" name="_auction_start_price" id="_auction_start_price" type="number" placeholder="9.99" value="<?php echo $_auction_start_price; ?>" step="any" min="0" style="width: 97%;">
+                                                <input class="wc_input_price dokan-form-control" name="_auction_start_price" id="_auction_start_price" type="text" placeholder="<?php echo wc_format_localized_price('9.99'); ?>" value="<?php echo wc_format_localized_price( $_auction_start_price ); ?>" style="width: 97%;">
                                             </div>
                                         </div>
                                     </div>
@@ -333,7 +333,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                         <div class="dokan-form-group">
                                             <div class="dokan-input-group">
                                                 <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                                <input class="dokan-form-control" name="_auction_bid_increment" id="_auction_bid_increment" type="number" placeholder="9.99" value="<?php echo $_auction_bid_increment; ?>" step="any" min="0">
+                                                <input class="wc_input_price dokan-form-control" name="_auction_bid_increment" id="_auction_bid_increment" type="text" placeholder="<?php echo wc_format_localized_price('9.99') ?>" value="<?php echo wc_format_localized_price( $_auction_bid_increment ); ?>">
                                             </div>
                                         </div>
                                     </div>
@@ -347,7 +347,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                         <div class="dokan-form-group">
                                             <div class="dokan-input-group">
                                                 <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                                <input class="dokan-form-control" name="_auction_reserved_price" id="_auction_reserved_price" type="number" placeholder="9.99" value="<?php echo $_auction_reserved_price; ?>" step="any" min="0" style="width: 97%;">
+                                                <input class="wc_input_price dokan-form-control" name="_auction_reserved_price" id="_auction_reserved_price" type="text" placeholder="<?php echo wc_format_localized_price('9.99'); ?>" value="<?php echo wc_format_localized_price( $_auction_reserved_price ); ?>" style="width: 97%;">
                                             </div>
                                         </div>
                                     </div>
@@ -358,7 +358,7 @@ do_action( 'dokan_edit_auction_product_content_before' );
                                     <div class="dokan-form-group">
                                         <div class="dokan-input-group">
                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                            <input class="dokan-form-control" name="_regular_price" id="_regular_price" type="number" placeholder="9.99" value="<?php echo $_regular_price; ?>" step="any" min="0">
+                                            <input class="wc_input_price dokan-form-control" name="_regular_price" id="_regular_price" type="text" placeholder="<?php echo wc_format_localized_price('9.99') ?>" value="<?php echo wc_format_localized_price( $_regular_price ); ?>">
                                         </div>
                                     </div>
                                 </div>
