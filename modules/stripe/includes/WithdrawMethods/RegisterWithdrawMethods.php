@@ -125,7 +125,7 @@ class RegisterWithdrawMethods {
 
                     ?>
                     <br/>
-                    <a class="clear" href="<?php echo $url; ?>" target="_TOP">
+                    <a class="dokan-stripe-connect-link" href="<?php echo $url; ?>" target="_TOP">
                         <img src="<?php echo esc_url( DOKAN_STRIPE_ASSETS . 'images/blue.png' ); ?>" width="190" height="33" data-hires="true">
                     </a>
                     <?php

@@ -129,7 +129,7 @@ class Helper {
         foreach ( $order->get_items() as $item ) {
             $product = $item->get_product();
 
-            if ( 'product_pack' === $product->get_type() ) {
+            if ( 'product_pack' === $product->get_type() || 'subscription' === $product->get_type() || 'variable-subscription' === $order->get_type() ) {
                 return $product;
             }
         }
@@ -351,6 +351,63 @@ class Helper {
         }
 
         return $total;
+    }
+
+    /**
+     * Format gateway balance fee
+     *
+     * @param $balance_transaction
+     * @return string|void
+     */
+    public function format_gateway_balance_fee( $balance_transaction ) {
+        if ( ! is_object( $balance_transaction ) ) {
+            return;
+        }
+
+        $fee = $balance_transaction->fee;
+        foreach ( $balance_transaction->fee_details as $fee_details ) {
+            if ( $fee_details->type == 'stripe_fee' ) {
+                $fee = $fee_details->amount;
+                break;
+            }
+        }
+
+        if ( ! in_array( strtolower( $balance_transaction->currency ), self::no_decimal_currencies() ) ) {
+            $fee = number_format( $fee / 100, 2, '.', '' );
+        }
+
+        if ( $balance_transaction->exchange_rate ) {
+            return round ($fee / $balance_transaction->exchange_rate, 2);
+        }
+
+        return $fee;
+
+    }
+
+    /**
+     * Get no decimal currencies
+     *
+     * @return array
+     */
+    public function no_decimal_currencies() {
+        return array(
+            'bif',
+            'clp',
+            'djf',
+            'gnf',
+            'jpy',
+            'kmf',
+            'krw',
+            'mga',
+            'pyg',
+            'rwf',
+            'ugx',
+            'vnd',
+            'vuv',
+            'xaf',
+            'xof',
+            'xpf',
+        );
     }
 
     /**

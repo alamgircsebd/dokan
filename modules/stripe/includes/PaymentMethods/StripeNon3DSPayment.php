@@ -4,6 +4,7 @@ namespace WeDevs\DokanPro\Modules\Stripe\PaymentMethods;
 
 use Stripe\Token;
 use Stripe\Charge;
+use Stripe\BalanceTransaction;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
 use WeDevs\Dokan\Exceptions\DokanException;
 use WeDevs\DokanPro\Modules\Stripe\Customer;
@@ -136,9 +137,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
 
             if ( ! empty( $access_token ) ) {
                 // if it's guest user, try to create a token
-                $token = ! is_user_logged_in()
-                    ? Token::create( [ 'customer' => $prepared_source->customer ], $access_token )
-                    : true;
+                $token = Token::create( [ 'customer' => $prepared_source->customer ], $access_token );
             } else if ( Helper::allow_non_connected_sellers() ) {
                 $token = false;
             } else {
@@ -203,6 +202,19 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
         $order->payment_complete();
         $this->insert_into_vendor_balance( $all_withdraws );
         $this->process_seller_withdraws( $all_withdraws );
+
+        // update gateway fee
+        if ( ! empty( $access_token ) && ! empty( $charge->balance_transaction  ) ) {
+            $balance_transaction = BalanceTransaction::retrieve( [ 'id' => $charge->balance_transaction ], $access_token );
+
+            if ( $balance_transaction ) {
+                $fee = Helper::format_gateway_balance_fee( $balance_transaction );
+
+                update_post_meta( $tmp_order_id, 'dokan_gateway_stripe_fee', $fee );
+
+                $tmp_order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $fee ) );
+            }
+        }
 
         foreach ( $charge_ids as $seller_id => $charge_id ) {
             $meta_key = $this->stripe_meta_key . $seller_id;

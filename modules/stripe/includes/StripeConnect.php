@@ -28,7 +28,7 @@ class StripeConnect extends StripePaymentGateway {
         $this->method_description = __( 'Have your customers pay with credit card.', 'dokan' );
         $this->icon               = DOKAN_STRIPE_ASSETS . 'images/cards.png';
         $this->has_fields         = true;
-        $this->supports           = [ 'products', 'refund', 'subscription', 'tokenization' ];
+        $this->supports           = [ 'products', 'refund', 'subscriptions', 'tokenization' ];
 
         $this->init_form_fields();
         $this->init_settings();
@@ -178,15 +178,15 @@ class StripeConnect extends StripePaymentGateway {
 
         wp_enqueue_style( 'dokan_stripe', DOKAN_STRIPE_ASSETS . 'css/stripe.css' );
 
-        if ( ! Helper::is_3d_secure_enabled() && $this->checkout_modal ) {
+        if ( ! Helper::is_3d_secure_enabled() && $this->checkout_modal && ! is_add_payment_method_page() ) {
             wp_enqueue_script( 'stripe', 'https://checkout.stripe.com/v2/checkout.js', '', '2.0', true );
             wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-checkout.js', dirname( __FILE__ ) ), [ 'stripe' ], false, true );
-        } else if ( ! Helper::is_3d_secure_enabled() ) {
+        } else if ( ! Helper::is_3d_secure_enabled() && ! is_add_payment_method_page() ) {
             wp_enqueue_script( 'stripe', 'https://js.stripe.com/v1/', '', '1.0', true );
             wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe.js', dirname( __FILE__ ) ), [ 'jquery','stripe' ], false, false );
         }
 
-        if ( Helper::is_3d_secure_enabled() ) {
+        if ( Helper::is_3d_secure_enabled() || is_add_payment_method_page() ) {
             wp_enqueue_script( 'stripe', 'https://js.stripe.com/v3/', [], '', true );
             wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-3ds.js', dirname( __FILE__ ) ), [ 'jquery', 'stripe' ], false, true );
         }
@@ -219,6 +219,10 @@ class StripeConnect extends StripePaymentGateway {
                 $order_key = urldecode( $_GET['key'] );
                 $order_id  = wc_get_order_id_by_order_key( $order_key );
                 $order     = wc_get_order( $order_id );
+            }
+
+            if ( empty( $order ) ) {
+                return;
             }
 
             if ( dokan_get_prop( $order, 'id') == $order_id && dokan_get_prop( $order, 'order_key') == $order_key ) {
@@ -343,7 +347,7 @@ class StripeConnect extends StripePaymentGateway {
         <fieldset id="wc-<?php echo esc_attr( $this->id ); ?>-cc-form" class="wc-credit-card-form wc-payment-form" style="background:transparent;">
             <?php do_action( 'woocommerce_credit_card_form_start', $this->id ); ?>
 
-            <?php if ( Helper::is_3d_secure_enabled() ) : ?>
+            <?php if ( Helper::is_3d_secure_enabled() || is_add_payment_method_page() ) : ?>
                 <label for="dokan-stripe-card-element">
                     <?php esc_html_e( 'Credit or debit card', 'dokan' ); ?>
                 </label>
