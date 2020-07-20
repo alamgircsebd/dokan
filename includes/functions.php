@@ -617,9 +617,9 @@ function dokan_save_admin_additional_commission( $vendor_id, $data ) {
         return;
     }
 
-    if ( isset( $data['admin_additional_fee'] ) && is_numeric( $data['admin_additional_fee'] ) ) {
+    if ( isset( $data['admin_additional_fee'] ) ) {
         $vendor = dokan()->vendor->get( $vendor_id );
-        $vendor->update_meta( 'dokan_admin_additional_fee', wc_clean( $data['admin_additional_fee'] ) );
+        $vendor->update_meta( 'dokan_admin_additional_fee', wc_format_decimal( $data['admin_additional_fee'] ) );
     }
 }
 

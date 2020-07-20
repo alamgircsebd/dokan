@@ -432,11 +432,11 @@ export default {
             }
 
             if ( commissionType === 'flat' ) {
-                return accounting.formatMoney( commissionRate );
+                return accounting.formatMoney( commissionRate, dokan.currency.symbol, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format );
             } else if ( commissionType === 'percentage' ) {
                 return `${commissionRate}%`;
             } else {
-                return `${(commissionRate)}% &nbsp; + ${accounting.formatMoney( additionalFee )}`;
+                return `${(commissionRate)}% &nbsp; + ${accounting.formatMoney( additionalFee, dokan.currency.symbol, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format )}`;
             }
         },
 
@@ -505,6 +505,9 @@ export default {
             if ( ! response.admin_commission_type ) {
                 this.store.admin_commission_type = 'flat';
             }
+
+            this.store.admin_additional_fee = accounting.formatNumber( this.store.admin_additional_fee, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format );
+            this.store.admin_commission = this.store.admin_commission_type == 'flat' ? accounting.formatNumber( this.store.admin_commission, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format ) : this.store.admin_commission;
         },
 
         // get sotre name from url
