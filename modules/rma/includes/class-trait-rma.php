@@ -117,7 +117,7 @@ trait Dokan_RMA_Common {
                 if ( ! empty( $request['warranty_addon_price'] ) ) {
                     foreach ( $request['warranty_addon_price'] as $key => $price ) {
                         $addon_settings[] = [
-                            'price'    => $price,
+                            'price'    => wc_format_decimal( $price ),
                             'length'   => !empty( $request['warranty_addon_length'][$key] ) ? $request['warranty_addon_length'][$key] : '',
                             'duration' => !empty( $request['warranty_addon_duration'][$key] ) ? $request['warranty_addon_duration'][$key] : '',
                         ];

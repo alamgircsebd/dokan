@@ -24,7 +24,7 @@
                         <i class="fa fa-question-circle"></i>
                     </span>
                 </label>
-                <input type="number" id="dokan-wholesale-price" class="dokan-form-control" min="0" step="any" name="wholesale[price]" value="<?php echo $wholesale_price; ?>">
+                <input type="text" id="dokan-wholesale-price" class="wc_input_price dokan-form-control" name="wholesale[price]" value="<?php echo wc_format_localized_price( $wholesale_price ); ?>">
             </div>
 
             <div class="dokan-form-group content-half-part">

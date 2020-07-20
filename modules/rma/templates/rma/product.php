@@ -120,7 +120,7 @@
                                     <td>
                                         <div class="dokan-input-group">
                                             <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                            <input type="number" min="0" step="any" name="warranty_addon_price[]" class="dokan-form-control" id="warranty_addon_price[]" value="<?php echo $addon_setting['price']; ?>">
+                                            <input type="text" name="warranty_addon_price[]" class="wc_input_price dokan-form-control" id="warranty_addon_price[]" value="<?php echo wc_format_localized_price( $addon_setting['price'] ); ?>">
                                         </div>
                                     </td>
 
@@ -144,7 +144,7 @@
                                 <td>
                                     <div class="dokan-input-group">
                                         <span class="dokan-input-group-addon"><?php echo get_woocommerce_currency_symbol(); ?></span>
-                                        <input type="number" min="0" step="any" name="warranty_addon_price[]" class="dokan-form-control" id="warranty_addon_price[]">
+                                        <input type="text" name="warranty_addon_price[]" class="wc_input_price dokan-form-control" id="warranty_addon_price[]">
                                     </div>
                                 </td>
 

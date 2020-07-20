@@ -82,7 +82,13 @@ class Dokan_Wholesale_Vendor {
             return;
         }
 
-        update_post_meta( $post_id, '_dokan_wholesale_meta', $_POST['wholesale'] );
+        $wholesale_data = [
+            'enable_wholesale' => ! empty( $_POST['wholesale']['enable_wholesale'] ) ? sanitize_text_field( $_POST['wholesale']['enable_wholesale'] ) : 'no',
+            'price'            => ! empty( $_POST['wholesale']['price'] ) ? wc_format_decimal( $_POST['wholesale']['price'] ) : '',
+            'quantity'         => ! empty( $_POST['wholesale']['quantity'] ) ? sanitize_text_field( $_POST['wholesale']['quantity'] ) : 0
+        ];
+
+        update_post_meta( $post_id, '_dokan_wholesale_meta', $wholesale_data );
     }
 
     /**
@@ -109,7 +115,7 @@ class Dokan_Wholesale_Vendor {
         foreach ( $_POST['variable_wholesale_price'] as $loop => $price ) {
             $data[$loop] = [
                 'enable_wholesale' => ! empty( $_POST['variable_wholesale_enable'][$loop] ) ? sanitize_text_field( $_POST['variable_wholesale_enable'][$loop] ) : 'no',
-                'price'            => $price,
+                'price'            => wc_format_decimal( $price ),
                 'quantity'         => ! empty( $_POST['variable_wholesale_quantity'][$loop] ) ? sanitize_text_field( $_POST['variable_wholesale_quantity'][$loop] ) : 0
             ];
         }
