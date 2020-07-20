@@ -346,16 +346,15 @@ class ShippingZone {
         $criteria   = array();
         $criteria[] = $wpdb->prepare( "( ( locations.location_type = 'country' AND locations.location_code = %s )", $country );
         $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'state' AND locations.location_code = %s )", $country . ':' . $state );
-        $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'continent' AND locations.location_code = %s )", $continent );
-
-        if ( ! empty( $postcode ) ) {
-            $criteria[] = $wpdb->prepare( "OR ( locations.location_type = 'postcode' AND locations.location_code = %s )", $postcode );
-        }
-
         $criteria[] = 'OR ( locations.location_type IS NULL ) )';
 
         // Postcode range and wildcard matching.
-        $postcode_locations = $wpdb->get_results( "SELECT zone_id, location_code FROM {$wpdb->prefix}dokan_shipping_zone_locations WHERE location_type = 'postcode' AND seller_id = {$vendor_id};" );
+        $postcode_locations = $wpdb->get_results(
+            "SELECT zone_id, location_code
+            FROM {$wpdb->prefix}dokan_shipping_zone_locations
+            WHERE location_type = 'postcode'
+                AND seller_id = {$vendor_id}"
+        );
 
         if ( $postcode_locations ) {
             $zone_ids_with_postcode_rules = array_map( 'absint', wp_list_pluck( $postcode_locations, 'zone_id' ) );
@@ -369,8 +368,8 @@ class ShippingZone {
 
         $criteria = implode( ' ', $criteria );
 
-        $shipping_zones = $wpdb->get_results(
-            "SELECT locations.zone_id, locations.location_code, locations.location_type
+        $shipping_zone_ids = $wpdb->get_col(
+            "SELECT locations.zone_id
             FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations
             LEFT JOIN {$wpdb->prefix}dokan_shipping_zone_methods as methods ON locations.zone_id = methods.zone_id
             LEFT JOIN {$wpdb->prefix}woocommerce_shipping_zones as wc_zones ON locations.zone_id = wc_zones.zone_id
@@ -380,56 +379,93 @@ class ShippingZone {
                 AND wc_zones.zone_id IS NOT NULL
                 AND locations.seller_id = {$vendor_id}
                 AND {$criteria}
-            GROUP BY locations.id
+            GROUP BY locations.zone_id
             ORDER BY wc_zones.zone_order ASC"
         );
 
-        $zones_properties       = [];
+        $shipping_zones         = [];
         $zone_id_from_package   = 0;
         $customer_country_state = $country . ':' . $state;
 
-        if ( ! empty( $shipping_zones ) ) {
-            foreach ( $shipping_zones as $zone ) {
-                $zones_properties[ $zone->zone_id ][ $zone->location_type ] = $zone->location_code;
-            }
+        if ( ! empty( $shipping_zone_ids ) ) {
+            $zone_locations = $wpdb->get_results(
+                "SELECT locations.zone_id, locations.location_code, locations.location_type
+                FROM wp_dokan_shipping_zone_locations as locations
+                LEFT JOIN wp_woocommerce_shipping_zones as wc_zones ON locations.zone_id = wc_zones.zone_id
+                WHERE seller_id={$vendor_id} AND locations.zone_id IN (" . implode( ', ', $shipping_zone_ids ) . ")
+                ORDER BY wc_zones.zone_order ASC",
+                ARRAY_A
+            );
 
-            foreach( $zones_properties as $zone_id => $zone ) {
+            if ( ! empty( $zone_locations ) ) {
+                foreach( $zone_locations as $location ) {
+                    $zone_id = $location['zone_id'];
 
-                if ( $postcode && ! empty( $zone['postcode'] ) && $state && $country ) {
-                    // case 1: User provided postcode, state and country.
-                    if (
-                        $postcode == $zone['postcode']
-                        && isset( $zone['state'] )
-                        && $customer_country_state === $zone['state']
-                        && isset( $zone['country'] )
-                        && $country === $zone['country']
-                    ) {
-                        $zone_id_from_package = absint( $zone_id );
-                        break;
+                    if ( ! isset( $shipping_zones[ $zone_id ] ) ) {
+                        $shipping_zones[ $zone_id ] = [
+                            'zone_id'   => $zone_id,
+                            'continent' => [],
+                            'country'   => [],
+                            'state'     => [],
+                            'postcode'  => [],
+                        ];
                     }
 
-                    continue;
-                } else if ( empty( $postcode ) && $state && $country && !empty( $zone['state'] ) ) {
-                    // case 2: User provided state and country. Missing postcode.
-                    if (
-                        isset( $zone['state'] )
-                        && $customer_country_state === $zone['state']
-                        && isset( $zone['country'] )
-                        && $country === $zone['country']
-                    ) {
-                        $zone_id_from_package = absint( $zone_id );
-                        break;
+                    if ( 'postcode' === $location['location_type'] ) {
+                        $shipping_zones[ $zone_id ]['postcode'][] = (object) [
+                            'zone_id'       => $zone_id,
+                            'location_code' => $location['location_code'],
+                        ];
+                    } else {
+                        $shipping_zones[ $zone_id ][ $location['location_type'] ][] = $location['location_code'];
+                    }
+                }
+
+                // Use cases similar to Truth Table
+                $use_cases = [
+                    // Country, State, Postcode
+                    [ 1, 1, 1],
+                    [ 1, 1, 0],
+                    [ 1, 0, 1],
+                    [ 1, 0, 0],
+                    [ 0, 1, 1],
+                    [ 0, 1, 0],
+                    [ 0, 0, 1],
+                    [ 0, 0, 0],
+                ];
+
+                foreach( $shipping_zones as $shipping_zone ) {
+                    foreach( $use_cases as $use_case ) {
+                        if ( $use_case[0] ) {
+                            $check_country = in_array( $country, $shipping_zone['country'] );
+                        } else {
+                            $check_country = empty( $shipping_zone['country'] );
+                        }
+
+                        if ( $use_case[1] ) {
+                            $check_state = in_array( $customer_country_state, $shipping_zone['state'] );
+                        } else {
+                            $check_state = empty( $shipping_zone['state'] );
+                        }
+
+                        if ( $use_case[2] ) {
+                            $matches = wc_postcode_location_matcher( $postcode, $shipping_zone['postcode'], 'zone_id', 'location_code', $country );
+                            reset( $matches );
+                            $matched_zone_id = key( $matches );
+                            $check_postcode  = absint( $matched_zone_id ) === absint( $shipping_zone['zone_id'] );
+                        } else {
+                            $check_postcode = empty( $shipping_zone['postcode'] );
+                        }
+
+                        if ( $check_postcode && $check_state && $check_country ) {
+                            $zone_id_from_package = $shipping_zone['zone_id'];
+                            break;
+                        }
                     }
 
-                    continue;
-                } else if ( empty( $postcode ) && empty( $state ) && $country ) {
-                    // case 3: User provided only country. Missing postcode and postcode
-                    if ( isset( $zone['country'] ) && $country === $zone['country'] ) {
-                        $zone_id_from_package = absint( $zone_id );
+                    if ( $zone_id_from_package ) {
                         break;
                     }
-
-                    continue;
                 }
             }
         }
