@@ -123,7 +123,7 @@ class Module {
      */
     function order_needs_processing( $needs_processing, $product ) {
 
-        if ( $product->get_type() == 'subscription' || $product->get_type() == 'variable-subscription' ) {
+        if ( $product->get_type() == 'subscription' || $product->get_type() == 'variable-subscription' || $product->get_type() == 'subscription_variation' ) {
             $needs_processing = false;
         }
 
