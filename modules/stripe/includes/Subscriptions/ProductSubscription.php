@@ -37,13 +37,6 @@ class ProductSubscription extends StripePaymentGateway {
     protected $plan_id;
 
     /**
-     * Vendor id holder
-     *
-     * @var int
-     */
-    protected $vendor_id;
-
-    /**
      * Stripe Customer id holder
      *
      * @var string
@@ -56,7 +49,6 @@ class ProductSubscription extends StripePaymentGateway {
      * @since 2.9.13
      */
     public function __construct() {
-        $this->vendor_id = get_current_user_id();
         StripeHelper::bootstrap_stripe();
         $this->hooks();
     }
@@ -118,7 +110,7 @@ class ProductSubscription extends StripePaymentGateway {
         $product_pack       = $dokan_subscription->get_product();
         $product_pack_name  = $product_pack->get_title() . ' #' . $product_pack->get_id();
         $product_pack_id    = $product_pack->get_slug() . '-' . $product_pack->get_id();
-        $vendor_id          = $this->vendor_id ? $this->vendor_id : get_current_user_id();
+        $vendor_id          = get_current_user_id();
 
         if ( $dokan_subscription->is_recurring() ) {
             $subscription_interval = $dokan_subscription->get_recurring_interval();
@@ -197,7 +189,7 @@ class ProductSubscription extends StripePaymentGateway {
     public function process_subscription( $order, $intent, $is_recurring = false ) {
         $product_pack       = StripeHelper::get_subscription_product_by_order( $order );
         $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
-        $vendor_id          = $this->vendor_id ? $this->vendor_id : get_current_user_id();
+        $vendor_id          = get_current_user_id();
 
         if ( is_object( $intent ) ) {
             $this->stripe_customer = $intent->customer;
@@ -294,7 +286,7 @@ class ProductSubscription extends StripePaymentGateway {
      */
     protected function create_subscription() {
         // Lets carge the vendor while creating new subscription
-        $prepared_source = $this->prepare_source( $this->vendor_id );
+        $prepared_source = $this->prepare_source( get_current_user_id() );
         $this->validate_source( $prepared_source );
         $this->stripe_customer = $prepared_source->customer;
 
