@@ -569,7 +569,7 @@ function dokan_vendor_analytics_token() {
  *
  * If token is expired, it'll refresh first.
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.5
  *
  * @return \Dokan_Client|\WP_Error
  */
@@ -624,7 +624,7 @@ function dokan_vendor_analytics_get_tokenized_client() {
 /**
  * Get analytics profiles from Google API
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.5
  *
  * @return array|\WP_Error
  */
