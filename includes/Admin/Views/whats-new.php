@@ -2,7 +2,7 @@
 $changelog = array(
     array(
         'version'  => 'Version 3.0.5',
-        'released' => '2020-07-22',
+        'released' => '2020-07-23',
         'changes'  => array(
             array(
                 'title'       => 'Decimal and Thousand Separator with Comma',

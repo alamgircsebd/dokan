@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 3.0.4\n"
+"Project-Id-Version: Dokan Pro 3.0.5\n"
 "Report-Msgid-Bugs-To: https://wedevs.com/account/tickets/\n"
-"POT-Creation-Date: 2020-06-24 07:32:59+00:00\n"
+"POT-Creation-Date: 2020-07-22 18:44:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "0"
 msgstr ""
 
-#: includes/widgets/BestSeller.php:80 includes/widgets/FeatureSeller.php:84
+#: includes/Widgets/BestSeller.php:80 includes/Widgets/FeatureSeller.php:84
 msgid "3"
 msgstr ""
 
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Deactivating"
 msgstr ""
 
-#: dokan-pro.php:467 includes/admin/Admin.php:340
+#: dokan-pro.php:467 includes/Admin/Admin.php:340
 msgid "Amount you will get from sales in both percentage and fixed fee"
 msgstr ""
 
@@ -67,15 +67,578 @@ msgstr ""
 msgid "Enterprise"
 msgstr ""
 
+#: includes/Admin/Admin.php:62
+msgid "Refunds"
+msgstr ""
+
+#: includes/Admin/Admin.php:68
+msgid "Refunds %s"
+msgstr ""
+
+#: includes/Admin/Admin.php:72
+msgid "Announcements"
+msgstr ""
+
+#: includes/Admin/Admin.php:74 includes/Admin/Admin.php:593
+#: includes/Reports.php:155 src/admin/components/Reports.vue:5
+#: templates/report/header.php:11
+msgid "Reports"
+msgstr ""
+
+#: includes/Admin/Admin.php:77
+msgid "Whats New"
+msgstr ""
+
+#: includes/Admin/Admin.php:81 src/admin/components/Modules.vue:3
+msgid "Modules"
+msgstr ""
+
+#: includes/Admin/Admin.php:82 modules/export-import/module.php:209
+#: modules/export-import/module.php:216
+#: modules/export-import/templates/export-import/template_importer.php:16
+#: modules/export-import/templates/export-import/template_importer_new.php:38
+msgid "Tools"
+msgstr ""
+
+#: includes/Admin/Admin.php:109
+msgid "Enable Terms and Condition"
+msgstr ""
+
+#: includes/Admin/Admin.php:110
+msgid "Enable Terms and Condition check on registration form"
+msgstr ""
+
+#: includes/Admin/Admin.php:116
+msgid "Enable Single Seller Mode"
+msgstr ""
+
+#: includes/Admin/Admin.php:117
+msgid "Enable single seller mode"
+msgstr ""
+
+#: includes/Admin/Admin.php:137
+msgid "New Product Status"
+msgstr ""
+
+#: includes/Admin/Admin.php:138
+msgid "Product status when a vendor creates a product"
+msgstr ""
+
+#: includes/Admin/Admin.php:142
+#: modules/booking/templates/booking/product-list.php:222
+#: modules/export-import/includes/export/class-wc-product-csv-exporter.php:85
+#: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:377
+#: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:497
+#: modules/simple-auction/templates/auction/auction-products-listing.php:198
+#: modules/subscription/includes/admin/admin.php:470
+#: src/admin/components/Announcement.vue:117
+msgid "Published"
+msgstr ""
+
+#: includes/Admin/Admin.php:143
+#: modules/subscription/includes/admin/admin.php:471
+#: templates/products/edit/product-list-table-inline-edit-form.php:40
+msgid "Pending Review"
+msgstr ""
+
+#: includes/Admin/Admin.php:149
+msgid "Duplicate product"
+msgstr ""
+
+#: includes/Admin/Admin.php:150
+msgid "Allow vendor to duplicate their product"
+msgstr ""
+
+#: includes/Admin/Admin.php:157
+msgid "Edited Product Status"
+msgstr ""
+
+#: includes/Admin/Admin.php:158
+msgid ""
+"Set Product status as pending review when a vendor edits or updates a "
+"product"
+msgstr ""
+
+#: includes/Admin/Admin.php:165
+msgid "Product Mail Notification"
+msgstr ""
+
+#: includes/Admin/Admin.php:166
+msgid "Email notification on new product submission"
+msgstr ""
+
+#: includes/Admin/Admin.php:173
+msgid "Product Category Selection"
+msgstr ""
+
+#: includes/Admin/Admin.php:174
+msgid "Select a category type for Products"
+msgstr ""
+
+#: includes/Admin/Admin.php:178 includes/Brands/AdminSettings.php:26
+#: includes/StoreCategory.php:89
+msgid "Single"
+msgstr ""
+
+#: includes/Admin/Admin.php:179 includes/Brands/AdminSettings.php:27
+#: includes/StoreCategory.php:90
+msgid "Multiple"
+msgstr ""
+
+#: includes/Admin/Admin.php:185
+msgid "Vendors Can Create Tags"
+msgstr ""
+
+#: includes/Admin/Admin.php:186
+msgid "Allow vendors to create new product tags from vendor dashboard."
+msgstr ""
+
+#: includes/Admin/Admin.php:193
+msgid "Discount Editing"
+msgstr ""
+
+#: includes/Admin/Admin.php:194
+msgid "Vendor can add order and product discount"
+msgstr ""
+
+#: includes/Admin/Admin.php:196 includes/Admin/Admin.php:197
+msgid "Allow vendor to add discount on product"
+msgstr ""
+
+#: includes/Admin/Admin.php:196 includes/Admin/Admin.php:197
+msgid "Allow vendor to add discount on order"
+msgstr ""
+
+#: includes/Admin/Admin.php:202
+msgid "Hide Customer info"
+msgstr ""
+
+#: includes/Admin/Admin.php:203
+msgid "Hide customer information from order details of vendors"
+msgstr ""
+
+#: includes/Admin/Admin.php:210
+msgid "Vendor Product Review"
+msgstr ""
+
+#: includes/Admin/Admin.php:211
+msgid "Vendor can change product review status from vendor dashboard"
+msgstr ""
+
+#: includes/Admin/Admin.php:249
+msgid "Store Banner width"
+msgstr ""
+
+#: includes/Admin/Admin.php:255
+msgid "Store Banner height"
+msgstr ""
+
+#: includes/Admin/Admin.php:271
+msgid "Order Status for Withdraw"
+msgstr ""
+
+#: includes/Admin/Admin.php:272
+msgid "Order status for which vendor can make a withdraw request."
+msgstr ""
+
+#: includes/Admin/Admin.php:274 includes/Admin/Admin.php:275
+#: modules/rma/includes/functions.php:293
+#: modules/vendor-subscription-product/includes/functions.php:138
+msgid "Completed"
+msgstr ""
+
+#: includes/Admin/Admin.php:274 includes/Admin/Admin.php:275
+#: modules/rma/includes/functions.php:292
+#: modules/vendor-subscription-product/includes/functions.php:163
+msgid "Processing"
+msgstr ""
+
+#: includes/Admin/Admin.php:274 includes/Admin/Admin.php:275
+#: modules/vendor-subscription-product/includes/functions.php:158
+msgid "On-hold"
+msgstr ""
+
+#: includes/Admin/Admin.php:279
+msgid "Withdraw Threshold"
+msgstr ""
+
+#: includes/Admin/Admin.php:280
+msgid ""
+"Days, ( Make order matured to make a withdraw request) <br> Value \"0\" "
+"will inactive this option"
+msgstr ""
+
+#: includes/Admin/Admin.php:286
+msgid "Hide Withdraw Option"
+msgstr ""
+
+#: includes/Admin/Admin.php:287
+msgid "Hide withdraw option (when vendor is getting commission automatically) "
+msgstr ""
+
+#: includes/Admin/Admin.php:314 includes/Products.php:260
+#: modules/subscription/includes/admin/admin.php:126
+#: src/admin/components/VendorSingle.vue:217
+msgid "Admin Commission"
+msgstr ""
+
+#: includes/Admin/Admin.php:319
+msgid "Percent Fee"
+msgstr ""
+
+#: includes/Admin/Admin.php:322
+msgid "Amount you will get from sales in percentage (10%)"
+msgstr ""
+
+#: includes/Admin/Admin.php:329
+msgid "Fixed Fee"
+msgstr ""
+
+#: includes/Admin/Admin.php:332
+msgid "Amount you will get from sales in flat rate(+5)"
+msgstr ""
+
+#: includes/Admin/Admin.php:474 includes/Admin/Admin.php:478
+#: includes/Admin/Ajax.php:30 includes/Admin/Ajax.php:94
+#: includes/Admin/Ajax.php:98
+msgid "You don't have enough permission"
+msgstr ""
+
+#: includes/Admin/Admin.php:484
+msgid "Dashboard"
+msgstr ""
+
+#: includes/Admin/Admin.php:490
+msgid "Store List"
+msgstr ""
+
+#: includes/Admin/Admin.php:496
+msgid "My Orders"
+msgstr ""
+
+#: includes/Admin/Admin.php:543
+msgid "All the default pages has been created!"
+msgstr ""
+
+#: includes/Admin/Admin.php:586
+#: modules/follow-store/includes/class-dokan-follow-store-my-account.php:42
+msgid "Vendors"
+msgstr ""
+
+#: includes/Admin/Admin.php:600
+msgid "Settings"
+msgstr ""
+
+#: includes/Admin/Admin.php:632 includes/Reports.php:102
+#: includes/functions-reports.php:126
+#: modules/booking/templates/booking/my-bookings/all-bookings.php:77
+msgid "Order"
+msgstr ""
+
+#: includes/Admin/Admin.php:633 modules/geolocation/views/filters.php:26
+#: modules/geolocation/views/widget-form.php:11
+#: modules/moip/includes/admin/class-moip-gateway.php:98
+#: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:176
+#: modules/report-abuse/assets/src/js/admin/pages/AbuseReports.vue:154
+#: modules/rma/templates/rma/customer-rma-requests.php:23
+#: modules/rma/templates/rma/request-warranty.php:33
+#: modules/single-product-multiple-vendor/includes/products-admin.php:29
+#: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:157
+#: src/admin/components/Refund.vue:106
+msgid "Vendor"
+msgstr ""
+
+#: includes/Admin/Admin.php:634 templates/orders/views/html-order-items.php:200
+msgid "Order Total"
+msgstr ""
+
+#: includes/Admin/Admin.php:635
+msgid "Vendor Earning"
+msgstr ""
+
+#: includes/Admin/Admin.php:636
+#: modules/booking/templates/booking/product-list.php:38
+#: modules/rma/templates/rma/customer-rma-requests.php:25
+#: modules/rma/templates/rma/vendor-rma-requests.php:55
+#: modules/rma/templates/rma/vendor-rma-single-request.php:140
+#: modules/simple-auction/templates/auction/auction-products-listing.php:42
+#: modules/store-support/module.php:640 modules/store-support/module.php:953
+#: modules/vendor-subscription-product/templates/subscription/subscription-details.php:211
+#: modules/vendor-subscription-product/templates/subscription/subscrptions.php:96
+#: src/admin/components/Announcement.vue:143
+#: src/admin/components/VendorPro.vue:51 src/frontend/components/Zone.vue:91
+#: templates/products/edit/product-list-table-inline-edit-form.php:36
+msgid "Status"
+msgstr ""
+
+#: includes/Admin/Admin.php:637
+msgid "Commission"
+msgstr ""
+
+#: includes/Admin/Admin.php:734
+msgid ""
+"<p>Christmas Offer! <strong>Save 30%%</strong> Upgrading Your Dokan "
+"Package. <strong>Coupon: “XMAS30”</strong>. Offer Ends in 31st Dec, 12.00 "
+"PM! <a target=\"_blank\" href=\"%s\">Grab The Deal</a></p>"
+msgstr ""
+
+#: includes/Admin/Admin.php:777
+msgid "You have no permission to do that"
+msgstr ""
+
+#: includes/Admin/Admin.php:783 includes/Admin/Ajax.php:181
 #: includes/Ajax.php:86 includes/Ajax.php:107 includes/Ajax.php:128
-#: includes/Ajax.php:164 includes/Ajax.php:204 includes/Ajax.php:240
-#: includes/Ajax.php:276 includes/Ajax.php:308 includes/Ajax.php:335
-#: includes/Products.php:876 includes/admin/Admin.php:781
-#: includes/admin/Ajax.php:181 modules/rma/includes/class-ajax.php:32
+#: includes/Ajax.php:164 includes/Ajax.php:204 includes/Ajax.php:241
+#: includes/Ajax.php:277 includes/Ajax.php:309 includes/Ajax.php:336
+#: includes/Products.php:876 modules/rma/includes/class-ajax.php:32
 #: modules/rma/includes/class-ajax.php:54
 #: modules/rma/includes/class-ajax.php:148
 #: modules/rma/includes/class-ajax.php:235
 msgid "Invalid nonce"
+msgstr ""
+
+#: includes/Admin/Admin.php:830
+msgid "Combine"
+msgstr ""
+
+#: includes/Admin/Admin.php:907 includes/Admin/Admin.php:913
+msgid "Error"
+msgstr ""
+
+#: includes/Admin/Admin.php:907
+msgid "Admin percentage commission is required."
+msgstr ""
+
+#: includes/Admin/Admin.php:913
+msgid "Admin flat commission is required."
+msgstr ""
+
+#: includes/Admin/Ajax.php:72
+msgid "%d orders sync completed out of %d"
+msgstr ""
+
+#: includes/Admin/Ajax.php:75 includes/Admin/Ajax.php:162
+msgid "Go to Dashboard &rarr;"
+msgstr ""
+
+#: includes/Admin/Ajax.php:79
+msgid "All orders has been synchronized. %s"
+msgstr ""
+
+#: includes/Admin/Ajax.php:148
+msgid "%d orders checked out of %d"
+msgstr ""
+
+#: includes/Admin/Ajax.php:157
+msgid "All orders are checked and we found some duplicate orders"
+msgstr ""
+
+#: includes/Admin/Ajax.php:167
+msgid "All orders are checked and no duplicate was found. %s"
+msgstr ""
+
+#: includes/Admin/Ajax.php:188
+msgid "Invalid module provided"
+msgstr ""
+
+#: includes/Admin/Ajax.php:192
+msgid "Invalid request type"
+msgstr ""
+
+#: includes/Admin/Ajax.php:207
+msgid "Activated"
+msgstr ""
+
+#: includes/Admin/Ajax.php:210
+msgid "Deactivated"
+msgstr ""
+
+#: includes/Admin/Announcement.php:88 includes/Admin/Announcement.php:99
+#: includes/Admin/Announcement.php:100 src/admin/components/Announcement.vue:4
+#: templates/announcement/header.php:12
+msgid "Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:101 includes/Emails/Announcement.php:14
+msgid "Dokan Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:102 src/admin/components/Announcement.vue:5
+#: src/admin/components/EditAnnouncement.vue:4
+msgid "Add Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:103
+#: src/admin/components/NewAnnouncement.vue:3
+msgid "Add New Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:104 modules/booking/module.php:587
+#: modules/booking/templates/booking/product-list.php:119
+#: modules/booking/templates/booking/resources/resources.php:111
+#: modules/product-addon/templates/product-addon/html-global-admin.php:28
+#: modules/simple-auction/templates/auction/auction-products-listing.php:104
+#: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:165
+#: modules/vendor-staff/templates/vendor-staff/staffs.php:102
+#: src/admin/components/Announcement.vue:151
+#: src/admin/components/StoreCategoriesIndex.vue:172
+#: src/frontend/components/Main.vue:18 templates/coupon/listing.php:41
+#: templates/products/edit/sidebar.php:26
+#: templates/products/edit/sidebar.php:69
+#: templates/products/product-edit.php:161
+msgid "Edit"
+msgstr ""
+
+#: includes/Admin/Announcement.php:105
+#: src/admin/components/EditAnnouncement.vue:3
+msgid "Edit Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:106
+msgid "New Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:107 includes/Admin/Announcement.php:108
+msgid "View Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:109
+msgid "Search Announcement"
+msgstr ""
+
+#: includes/Admin/Announcement.php:110
+msgid "No Announcement Found"
+msgstr ""
+
+#: includes/Admin/Announcement.php:111
+msgid "No Announcement found in trash"
+msgstr ""
+
+#: includes/Admin/Announcement.php:112
+msgid "Parent Announcement"
+msgstr ""
+
+#: includes/Admin/Pointers.php:90
+msgid "All Vendors"
+msgstr ""
+
+#: includes/Admin/Pointers.php:91
+msgid ""
+"You can see all registered vendors of your marketplace with their details "
+"and status."
+msgstr ""
+
+#: includes/Admin/Pointers.php:97 includes/Admin/Pointers.php:114
+#: includes/Admin/Pointers.php:131 includes/Admin/Pointers.php:148
+msgid "Next"
+msgstr ""
+
+#: includes/Admin/Pointers.php:107
+msgid "Active Vendors"
+msgstr ""
+
+#: includes/Admin/Pointers.php:108
+msgid "All vendors who are actively selling are filtered within this list."
+msgstr ""
+
+#: includes/Admin/Pointers.php:124
+msgid "Pending Vendors"
+msgstr ""
+
+#: includes/Admin/Pointers.php:125
+msgid ""
+"This is a list of pending vendors who have registered in the marketplace "
+"but not active yet. Make them active to enable selling."
+msgstr ""
+
+#: includes/Admin/Pointers.php:141
+msgid "Toggle Status"
+msgstr ""
+
+#: includes/Admin/Pointers.php:142
+msgid ""
+"You can toggle vendor status simply by making them active or inactive from "
+"here."
+msgstr ""
+
+#: includes/Admin/Pointers.php:153 modules/geolocation/functions.php:149
+#: modules/geolocation/functions.php:260
+msgid "Search Vendors"
+msgstr ""
+
+#: includes/Admin/Pointers.php:154
+msgid "You can search vendors using Username, Shopname or Email."
+msgstr ""
+
+#: includes/Admin/Promotion.php:45
+msgid "Want your vendors to better manage their store?"
+msgstr ""
+
+#: includes/Admin/Promotion.php:46
+msgid ""
+"Attract your vendors With Better Store Management. Start with the Vendor "
+"Staff Manager module to let them manage their own store with an unlimited "
+"number of staffs."
+msgstr ""
+
+#: includes/Admin/Promotion.php:53
+msgid ""
+"Why would vendors from other marketplaces want to start their business in "
+"your platform?"
+msgstr ""
+
+#: includes/Admin/Promotion.php:54
+msgid ""
+"Because they wouldn’t need to start from scratch and create/import their "
+"products within minutes using the Export/Import module."
+msgstr ""
+
+#: includes/Admin/Promotion.php:61
+msgid "77% of customers won’t make a purchase if there’s no live chat feature"
+msgstr ""
+
+#: includes/Admin/Promotion.php:62
+msgid ""
+"Let Your Customers Communicate With Vendors In Real time with the live chat "
+"module. Attain more customers than ever before."
+msgstr ""
+
+#: includes/Admin/Promotion.php:69
+msgid "Avoid embarrassing situations"
+msgstr ""
+
+#: includes/Admin/Promotion.php:70
+msgid ""
+"Let your customers know when a vendor store Is open or the vendor is on "
+"vacation with the Vendor Vacation module."
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:33
+msgid "Vendor Dasboard"
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:37
+msgid "Vendor Registration Form"
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:41
+msgid "Stores List"
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:45
+msgid "Best Selling Product"
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:49
+msgid "Top Rated Products"
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:53
+msgid "Dokan My Orders"
+msgstr ""
+
+#: includes/Admin/ShortcodesButton.php:57
+msgid "Customer Migration Form"
 msgstr ""
 
 #: includes/Ajax.php:111
@@ -83,7 +646,7 @@ msgid "Zone not found"
 msgstr ""
 
 #: includes/Ajax.php:134 includes/Ajax.php:170 includes/Ajax.php:210
-#: includes/Ajax.php:246 includes/Ajax.php:341
+#: includes/Ajax.php:247 includes/Ajax.php:342
 msgid "Shipping zone not found"
 msgstr ""
 
@@ -91,7 +654,7 @@ msgstr ""
 msgid "Shipping title must be required"
 msgstr ""
 
-#: includes/Ajax.php:176 includes/Ajax.php:250
+#: includes/Ajax.php:176 includes/Ajax.php:251
 msgid "Shipping method not found"
 msgstr ""
 
@@ -107,23 +670,23 @@ msgstr ""
 msgid "Please select a shipping method"
 msgstr ""
 
-#: includes/Ajax.php:228
+#: includes/Ajax.php:229
 msgid "Shipping method added successfully"
 msgstr ""
 
-#: includes/Ajax.php:264
+#: includes/Ajax.php:265
 msgid "Shipping method deleted"
 msgstr ""
 
-#: includes/Ajax.php:296
+#: includes/Ajax.php:297
 msgid "Settings save successfully"
 msgstr ""
 
-#: includes/Ajax.php:392
+#: includes/Ajax.php:393
 msgid "Zone settings save successfully"
 msgstr ""
 
-#: includes/Ajax.php:428 includes/Ajax.php:1657 includes/Products.php:219
+#: includes/Ajax.php:429 includes/Ajax.php:1658 includes/Products.php:219
 #: includes/functions-wc.php:280
 #: modules/simple-auction/templates/auction/auction-shipping.php:39
 #: templates/orders/views/html-order-items.php:21
@@ -131,45 +694,45 @@ msgstr ""
 msgid "Standard"
 msgstr ""
 
-#: includes/Ajax.php:438 includes/Ajax.php:1667 includes/Products.php:858
+#: includes/Ajax.php:439 includes/Ajax.php:1668 includes/Products.php:858
 #: includes/woo-views/variation-admin-html.php:68
 #: templates/products/edit/inventory.php:57
 msgid "Do not allow"
 msgstr ""
 
-#: includes/Ajax.php:439 includes/Ajax.php:1668
+#: includes/Ajax.php:440 includes/Ajax.php:1669
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: includes/Ajax.php:440 includes/Ajax.php:1669 includes/Products.php:860
+#: includes/Ajax.php:441 includes/Ajax.php:1670 includes/Products.php:860
 #: includes/woo-views/variation-admin-html.php:70
 #: templates/products/edit/inventory.php:59
 msgid "Allow"
 msgstr ""
 
-#: includes/Ajax.php:445 includes/Ajax.php:1674
+#: includes/Ajax.php:446 includes/Ajax.php:1675
 #: includes/woo-views/variation-admin-html.php:78
 #: modules/booking/templates/booking/product-list.php:154
 #: modules/simple-auction/templates/auction/auction-products-listing.php:129
 msgid "In stock"
 msgstr ""
 
-#: includes/Ajax.php:446 includes/Ajax.php:1675
+#: includes/Ajax.php:447 includes/Ajax.php:1676
 #: includes/woo-views/variation-admin-html.php:79
 #: modules/booking/templates/booking/product-list.php:156
 #: modules/simple-auction/templates/auction/auction-products-listing.php:131
 msgid "Out of stock"
 msgstr ""
 
-#: includes/Ajax.php:1130 includes/Ajax.php:1156 includes/Ajax.php:1240
+#: includes/Ajax.php:1131 includes/Ajax.php:1157 includes/Ajax.php:1241
 #: templates/settings/shipping.php:203 templates/settings/shipping.php:233
 msgid "State"
 msgstr ""
 
-#: includes/Ajax.php:1136 includes/Ajax.php:1160
+#: includes/Ajax.php:1137 includes/Ajax.php:1161
 #: modules/rma/templates/rma/product.php:111
 #: modules/rma/templates/rma/settings.php:118
-#: src/frontend/components/Zone.vue:170
+#: src/frontend/components/Zone.vue:168
 #: templates/orders/views/html-order-items.php:58
 #: templates/settings/shipping.php:181 templates/settings/shipping.php:211
 #: templates/settings/shipping.php:237 templates/settings/shipping.php:285
@@ -177,39 +740,39 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: includes/Ajax.php:1210
+#: includes/Ajax.php:1211
 msgid "No Announcement found"
 msgstr ""
 
-#: includes/Ajax.php:1242
+#: includes/Ajax.php:1243
 msgid "--Select State--"
 msgstr ""
 
-#: includes/Ajax.php:1246
+#: includes/Ajax.php:1247
 msgid "Other States"
 msgstr ""
 
-#: includes/Ajax.php:1310
+#: includes/Ajax.php:1311
 msgid "Please select a State from the dropdown"
 msgstr ""
 
-#: includes/Ajax.php:1312 includes/Ajax.php:1315
+#: includes/Ajax.php:1313 includes/Ajax.php:1316
 msgid "Shipping Cost : "
 msgstr ""
 
-#: includes/Ajax.php:1318
+#: includes/Ajax.php:1319
 msgid "Please select a country from the dropdown"
 msgstr ""
 
-#: includes/Ajax.php:1562
+#: includes/Ajax.php:1563
 msgid "Clear All"
 msgstr ""
 
-#: includes/Ajax.php:1562 templates/coupon/form.php:112
+#: includes/Ajax.php:1563 templates/coupon/form.php:112
 msgid "Clear"
 msgstr ""
 
-#: includes/Ajax.php:1855 includes/woo-views/variation-admin-html.php:6
+#: includes/Ajax.php:1856 includes/woo-views/variation-admin-html.php:6
 #: modules/booking/module.php:588
 #: modules/booking/templates/booking/persons/html-booking-person.php:9
 #: modules/booking/templates/booking/resources/html-booking-resource.php:9
@@ -226,7 +789,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: includes/Ajax.php:1866
+#: includes/Ajax.php:1867
 #: modules/simple-auction/templates/auction/product-attribute.php:24
 #: templates/orders/views/html-product-attribute.php:66
 #: templates/products/edit/attributes.php:72
@@ -235,14 +798,14 @@ msgstr ""
 msgid "Visible on the product page"
 msgstr ""
 
-#: includes/Ajax.php:1873 templates/orders/views/html-product-attribute.php:72
+#: includes/Ajax.php:1874 templates/orders/views/html-product-attribute.php:72
 #: templates/products/edit/attributes.php:85
 #: templates/products/edit/html-product-attribute.php:28
 #: templates/products/edit/templates-js.php:27
 msgid "Used for variations"
 msgstr ""
 
-#: includes/Ajax.php:1884 includes/Ajax.php:1895
+#: includes/Ajax.php:1885 includes/Ajax.php:1896
 #: templates/products/edit/attributes.php:99
 #: templates/products/edit/attributes.php:113
 #: templates/products/edit/templates-js.php:36
@@ -253,6 +816,22 @@ msgstr ""
 #: includes/BlockEditorBlockTypes.php:31
 #: modules/elementor/includes/Bootstrap.php:121
 msgid "Dokan"
+msgstr ""
+
+#: includes/Brands/AdminSettings.php:21
+msgid "Brands Selection Mode"
+msgstr ""
+
+#: includes/Brands/AdminSettings.php:22
+msgid "Enable single or multiple brand selection mode for vendors."
+msgstr ""
+
+#: includes/Brands/FormFields.php:35 includes/Brands/FormFields.php:49
+msgid "Select product brand"
+msgstr ""
+
+#: includes/Brands/FormFields.php:47
+msgid "Select product brands"
 msgstr ""
 
 #: includes/Coupons/Hooks.php:50
@@ -289,16 +868,16 @@ msgstr ""
 msgid "Update Coupon"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:341
+#: includes/Coupons/Hooks.php:342
 msgid "You have no permission to add coupon"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:343 includes/Coupons/Hooks.php:419
+#: includes/Coupons/Hooks.php:344 includes/Coupons/Hooks.php:420
 msgid "You have no permission to edit this coupon"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:407 includes/Coupons/Hooks.php:463
-#: includes/Coupons/Hooks.php:483 includes/StoreSeo.php:527
+#: includes/Coupons/Hooks.php:408 includes/Coupons/Hooks.php:464
+#: includes/Coupons/Hooks.php:484 includes/StoreSeo.php:527
 #: modules/live-chat/includes/Talkjs.php:609
 #: modules/shipstation/includes/class-dokan-shipstation-settings.php:189
 #: modules/store-support/module.php:384 modules/store-support/module.php:418
@@ -310,27 +889,27 @@ msgstr ""
 msgid "Are you cheating?"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:415
+#: includes/Coupons/Hooks.php:416
 msgid "You have no permission to add this coupon"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:424
+#: includes/Coupons/Hooks.php:425
 msgid "Please enter the coupon title"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:428
+#: includes/Coupons/Hooks.php:429
 msgid "Please enter the amount"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:432
+#: includes/Coupons/Hooks.php:433
 msgid "Please specify any products"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:459
+#: includes/Coupons/Hooks.php:460
 msgid "You have not permission to delete this coupon"
 msgstr ""
 
-#: includes/Coupons/Hooks.php:593
+#: includes/Coupons/Hooks.php:594
 msgid "Coupon title already exists"
 msgstr ""
 
@@ -415,233 +994,474 @@ msgid ""
 msgstr ""
 
 #: includes/EmailVerification.php:357
-#: modules/subscription/includes/admin/admin.php:396
+#: modules/subscription/includes/admin/admin.php:407
 msgid "- select -"
 msgstr ""
 
-#: includes/Module.php:116
+#: includes/Emails/Announcement.php:15
+msgid "These emails are sent to a vendor(s) who is are selected in a annoucement "
+msgstr ""
+
+#: includes/Emails/Announcement.php:29
+msgid "A new announcement is made at - {site_name}"
+msgstr ""
+
+#: includes/Emails/Announcement.php:37
+msgid "New Announcement - {title}"
+msgstr ""
+
+#: includes/Emails/Announcement.php:119 includes/Emails/RefundRequest.php:123
+#: includes/Emails/RefundVendor.php:130 includes/Emails/UpdatedProduct.php:132
+#: includes/Emails/VendorDisable.php:116 includes/Emails/VendorEnable.php:116
+#: includes/Shipping/Methods/ProductShipping.php:68
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:178
+#: modules/follow-store/includes/class-dokan-follow-store-email.php:56
+#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:70
+#: modules/moip/includes/admin/class-moip-gateway.php:75
+#: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:123
+#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:87
+#: modules/report-abuse/includes/AdminEmail.php:58
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:139
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:146
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:164
+#: modules/stripe/includes/Settings/StripeConnect.php:7
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:123
+#: modules/subscription/includes/emails/subscription-cancelled.php:147
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:164
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/Emails/Announcement.php:121 includes/Emails/RefundRequest.php:125
+#: includes/Emails/RefundVendor.php:132 includes/Emails/UpdatedProduct.php:134
+#: includes/Emails/VendorDisable.php:118 includes/Emails/VendorEnable.php:118
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:180
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:141
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:148
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:166
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:125
+#: modules/subscription/includes/emails/subscription-cancelled.php:149
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:166
+msgid "Enable this email notification"
+msgstr ""
+
+#: includes/Emails/Announcement.php:126 includes/Emails/RefundRequest.php:137
+#: includes/Emails/RefundVendor.php:136 includes/Emails/UpdatedProduct.php:146
+#: includes/Emails/VendorDisable.php:123 includes/Emails/VendorEnable.php:123
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:185
+#: modules/follow-store/includes/class-dokan-follow-store-email.php:63
+#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:77
+#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:94
+#: modules/report-abuse/includes/AdminEmail.php:65
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:153
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:152
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:178
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:129
+#: modules/subscription/includes/emails/subscription-cancelled.php:161
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:170
+#: src/admin/components/VendorSingle.vue:23
+msgid "Subject"
+msgstr ""
+
+#: includes/Emails/Announcement.php:130 includes/Emails/Announcement.php:139
+#: includes/Emails/RefundRequest.php:141 includes/Emails/RefundRequest.php:150
+#: includes/Emails/RefundVendor.php:140 includes/Emails/RefundVendor.php:149
+#: includes/Emails/UpdatedProduct.php:150
+#: includes/Emails/UpdatedProduct.php:159 includes/Emails/VendorDisable.php:127
+#: includes/Emails/VendorDisable.php:136 includes/Emails/VendorEnable.php:127
+#: includes/Emails/VendorEnable.php:136
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:189
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:198
+#: modules/follow-store/includes/class-dokan-follow-store-email.php:66
+#: modules/follow-store/includes/class-dokan-follow-store-email.php:75
+#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:80
+#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:89
+#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:97
+#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:106
+#: modules/report-abuse/includes/AdminEmail.php:68
+#: modules/report-abuse/includes/AdminEmail.php:77
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:157
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:156
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:165
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:182
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:191
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:132
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:139
+#: modules/subscription/includes/emails/subscription-cancelled.php:165
+#: modules/subscription/includes/emails/subscription-cancelled.php:174
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:174
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:183
+#. translators: %s: list of placeholders
+msgid "Available placeholders: %s"
+msgstr ""
+
+#: includes/Emails/Announcement.php:135 includes/Emails/RefundRequest.php:146
+#: includes/Emails/RefundVendor.php:145 includes/Emails/UpdatedProduct.php:155
+#: includes/Emails/VendorDisable.php:132 includes/Emails/VendorEnable.php:132
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:194
+#: modules/follow-store/includes/class-dokan-follow-store-email.php:72
+#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:86
+#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:103
+#: modules/report-abuse/includes/AdminEmail.php:74
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:162
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:161
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:187
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:136
+#: modules/subscription/includes/emails/subscription-cancelled.php:170
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:179
+msgid "Email heading"
+msgstr ""
+
+#: includes/Emails/Announcement.php:144 includes/Emails/RefundRequest.php:155
+#: includes/Emails/RefundVendor.php:154 includes/Emails/UpdatedProduct.php:164
+#: includes/Emails/VendorDisable.php:141 includes/Emails/VendorEnable.php:141
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:203
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:171
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:170
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:196
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:143
+#: modules/subscription/includes/emails/subscription-cancelled.php:179
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:188
+msgid "Email type"
+msgstr ""
+
+#: includes/Emails/Announcement.php:146 includes/Emails/RefundRequest.php:157
+#: includes/Emails/RefundVendor.php:156 includes/Emails/UpdatedProduct.php:166
+#: includes/Emails/VendorDisable.php:143 includes/Emails/VendorEnable.php:143
+#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:205
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:173
+#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:172
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:198
+#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:145
+#: modules/subscription/includes/emails/subscription-cancelled.php:181
+#: modules/vendor-staff/includes/class-staff-new-order-email.php:190
+msgid "Choose which format of email to send."
+msgstr ""
+
+#: includes/Emails/RefundRequest.php:14
+msgid "Dokan New Refund Request"
+msgstr ""
+
+#: includes/Emails/RefundRequest.php:15
+msgid ""
+"These emails are sent to chosen recipient(s) when a vendor send request for "
+"refund"
+msgstr ""
+
+#: includes/Emails/RefundRequest.php:35
+msgid "[{site_name}] A New refund request is made by {seller_name}"
+msgstr ""
+
+#: includes/Emails/RefundRequest.php:43
+msgid "New Refund Request from - {seller_name}"
+msgstr ""
+
+#: includes/Emails/RefundRequest.php:129 includes/Emails/UpdatedProduct.php:138
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:145
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:170
+#: modules/subscription/includes/emails/subscription-cancelled.php:153
+msgid "Recipient(s)"
+msgstr ""
+
+#: includes/Emails/RefundRequest.php:131 includes/Emails/UpdatedProduct.php:140
+#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:147
+#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:172
+#: modules/subscription/includes/emails/subscription-cancelled.php:155
+msgid "Enter recipients (comma separated) for this email. Defaults to %s."
+msgstr ""
+
+#: includes/Emails/RefundVendor.php:14
+msgid "Dokan Refund Processed"
+msgstr ""
+
+#: includes/Emails/RefundVendor.php:15
+msgid "These emails are sent to vendor when a vendor refund request is processed"
+msgstr ""
+
+#: includes/Emails/RefundVendor.php:37
+msgid "[{site_name}] Your refund request was {status}"
+msgstr ""
+
+#: includes/Emails/RefundVendor.php:47
+msgid "Refund request for {order_id} is {status}"
+msgstr ""
+
+#: includes/Emails/UpdatedProduct.php:14
+msgid "Dokan Updated Pending Product"
+msgstr ""
+
+#: includes/Emails/UpdatedProduct.php:15
+msgid ""
+"Pending Product emails are sent to chosen recipient(s) when a published "
+"product is updated by vendors."
+msgstr ""
+
+#: includes/Emails/UpdatedProduct.php:36
+msgid ""
+"[{site_title}] A product update is pending from ({seller_name}) - "
+"{product_title}"
+msgstr ""
+
+#: includes/Emails/UpdatedProduct.php:45
+msgid "{product_title} updated by Vendor {seller_name}"
+msgstr ""
+
+#: includes/Emails/VendorDisable.php:14
+msgid "Dokan Vendor Disable"
+msgstr ""
+
+#: includes/Emails/VendorDisable.php:15
+msgid "This email is set to a vendor when his account is deactivated by admin"
+msgstr ""
+
+#: includes/Emails/VendorDisable.php:34
+msgid "[{site_name}] Your account is deactivated"
+msgstr ""
+
+#: includes/Emails/VendorDisable.php:42
+msgid "Your vendor account is deactivated"
+msgstr ""
+
+#: includes/Emails/VendorEnable.php:14
+msgid "Dokan Vendor Enable"
+msgstr ""
+
+#: includes/Emails/VendorEnable.php:15
+msgid "This email is set to a vendor when he enabled from admin settings"
+msgstr ""
+
+#: includes/Emails/VendorEnable.php:34
+msgid "[{site_name}] Your account is activated"
+msgstr ""
+
+#: includes/Emails/VendorEnable.php:42
+#: templates/emails/plain/vendor-enabled.php:26
+#: templates/emails/vendor-enabled.php:21
+msgid "Your vendor account is activated"
+msgstr ""
+
+#: includes/Module.php:120
 msgid "WooCommerce Booking Integration"
 msgstr ""
 
-#: includes/Module.php:117
+#: includes/Module.php:121
 msgid "Integrates WooCommerce Booking with Dokan."
 msgstr ""
 
-#: includes/Module.php:127
+#: includes/Module.php:131
 msgid "Color Scheme Customizer"
 msgstr ""
 
-#: includes/Module.php:128
+#: includes/Module.php:132
 msgid "A Dokan plugin Add-on to Customize Colors of Dokan Dashboard"
 msgstr ""
 
-#: includes/Module.php:138
+#: includes/Module.php:142
 msgid "Elementor"
 msgstr ""
 
-#: includes/Module.php:139
+#: includes/Module.php:143
 msgid "Elementor Page Builder widgets for Dokan"
 msgstr ""
 
-#: includes/Module.php:149
+#: includes/Module.php:153
 msgid "Vendor Product Importer and Exporter"
 msgstr ""
 
-#: includes/Module.php:150
+#: includes/Module.php:154
 msgid "This is simple product import and export plugin for vendor"
 msgstr ""
 
-#: includes/Module.php:160
+#: includes/Module.php:164
 msgid "Follow Store"
 msgstr ""
 
-#: includes/Module.php:161
+#: includes/Module.php:165
 msgid "Send emails to customers when their favorite store updates."
 msgstr ""
 
-#: includes/Module.php:171
+#: includes/Module.php:175
 #: modules/geolocation/class-geolocation-admin-settings.php:34
 #: modules/geolocation/views/product-editor-options.php:3
 msgid "Geolocation"
 msgstr ""
 
-#: includes/Module.php:172
+#: includes/Module.php:176
 msgid "Search Products and Vendors by geolocation."
 msgstr ""
 
-#: includes/Module.php:182 modules/live-chat/includes/AdminSettings.php:43
+#: includes/Module.php:186 modules/live-chat/includes/AdminSettings.php:43
 msgid "Live Chat"
 msgstr ""
 
-#: includes/Module.php:183
+#: includes/Module.php:187
 msgid "Live Chat Between Vendor & Customer."
 msgstr ""
 
-#: includes/Module.php:193
+#: includes/Module.php:197
 #: modules/live-search/classes/class-dokan-live-search.php:79
 msgid "Live Search"
 msgstr ""
 
-#: includes/Module.php:194
+#: includes/Module.php:198
 msgid "Live product search for WooCommerce store."
 msgstr ""
 
-#: includes/Module.php:204
+#: includes/Module.php:208
 #: modules/moip/includes/public/class-withdraw-methods.php:132
 msgid "Wirecard"
 msgstr ""
 
-#: includes/Module.php:205
+#: includes/Module.php:209
 msgid "Wirecard payment gateway for Dokan."
 msgstr ""
 
-#: includes/Module.php:215
+#: includes/Module.php:219
 msgid "PayPal Adaptive Payment"
 msgstr ""
 
-#: includes/Module.php:216
+#: includes/Module.php:220
 msgid "Allows to send split payments to vendor via PayPal Adaptive Payment gateway."
 msgstr ""
 
-#: includes/Module.php:226
+#: includes/Module.php:230
 msgid "Product Addon"
 msgstr ""
 
-#: includes/Module.php:227
+#: includes/Module.php:231
 msgid "WooCommerce Product Addon support"
 msgstr ""
 
-#: includes/Module.php:237 modules/product-enquiry/module.php:175
+#: includes/Module.php:241 modules/product-enquiry/module.php:175
 #: modules/product-enquiry/module.php:214
 msgid "Product Enquiry"
 msgstr ""
 
-#: includes/Module.php:238
+#: includes/Module.php:242
 msgid "Enquiry for a specific product to a seller."
 msgstr ""
 
-#: includes/Module.php:248 modules/report-abuse/includes/SingleProduct.php:27
+#: includes/Module.php:252 modules/report-abuse/includes/SingleProduct.php:27
 #: modules/report-abuse/views/report-form-popup.php:3
 #: modules/report-abuse/views/report-form.php:36
 msgid "Report Abuse"
 msgstr ""
 
-#: includes/Module.php:249
+#: includes/Module.php:253
 msgid "Let customers report fraudulent or fake products."
 msgstr ""
 
-#: includes/Module.php:259
+#: includes/Module.php:263
 msgid "Return and Warranty Request"
 msgstr ""
 
-#: includes/Module.php:260
+#: includes/Module.php:264
 msgid "Manage return and warranty from vendor end."
 msgstr ""
 
-#: includes/Module.php:270
+#: includes/Module.php:274
 msgid "Seller Vacation"
 msgstr ""
 
-#: includes/Module.php:271
+#: includes/Module.php:275
 msgid "Using this plugin seller can go to vacation by closing their stores."
 msgstr ""
 
-#: includes/Module.php:281
+#: includes/Module.php:285
 msgid "ShipStation Integration"
 msgstr ""
 
-#: includes/Module.php:282
+#: includes/Module.php:286
 msgid ""
 "Adds ShipStation label printing support to Dokan. Requires server "
 "DomDocument support."
 msgstr ""
 
-#: includes/Module.php:292
+#: includes/Module.php:296
 msgid "Auction Integration"
 msgstr ""
 
-#: includes/Module.php:293
+#: includes/Module.php:297
 msgid "A plugin that combined WooCommerce simple auction and Dokan plugin."
 msgstr ""
 
-#: includes/Module.php:303
+#: includes/Module.php:307
 msgid "Single Product Multiple Vendor"
 msgstr ""
 
-#: includes/Module.php:304
+#: includes/Module.php:308
 msgid "A module that offers multiple vendor to sell a single product."
 msgstr ""
 
-#: includes/Module.php:314 modules/store-reviews/classes/admin.php:48
+#: includes/Module.php:318 modules/store-reviews/classes/admin.php:48
 #: modules/store-reviews/module.php:101 modules/store-reviews/module.php:103
 #: modules/store-reviews/module.php:104 modules/store-reviews/module.php:119
 msgid "Store Reviews"
 msgstr ""
 
-#: includes/Module.php:315
+#: includes/Module.php:319
 msgid "A plugin that allows customers to rate the sellers."
 msgstr ""
 
-#: includes/Module.php:325 modules/store-support/module.php:171
+#: includes/Module.php:329 modules/store-support/module.php:171
 #: modules/store-support/module.php:1502
 msgid "Store Support"
 msgstr ""
 
-#: includes/Module.php:326
+#: includes/Module.php:330
 msgid "Enable vendors to provide support to customers from store page."
 msgstr ""
 
-#: includes/Module.php:336 modules/stripe/includes/Helper.php:268
-#: modules/stripe/includes/StripeConnect.php:245
+#: includes/Module.php:340 modules/stripe/includes/Helper.php:268
+#: modules/stripe/includes/StripeConnect.php:249
 #: src/admin/components/VendorSingle.vue:260
 msgid "Stripe Connect"
 msgstr ""
 
-#: includes/Module.php:337
+#: includes/Module.php:341
 msgid ""
 "Accept credit card payments and allow your sellers to get automatic split "
 "payment in Dokan via Stripe."
 msgstr ""
 
-#: includes/Module.php:347
+#: includes/Module.php:351
 msgid "Vendor Subscription"
 msgstr ""
 
-#: includes/Module.php:348
+#: includes/Module.php:352
 msgid "Product subscription pack add-on for Dokan vendors."
 msgstr ""
 
-#: includes/Module.php:367
+#: includes/Module.php:371
 msgid "Vendor Staff Manager"
 msgstr ""
 
-#: includes/Module.php:368
+#: includes/Module.php:372
 msgid "A plugin for manage store via vendor staffs."
 msgstr ""
 
-#: includes/Module.php:378
+#: includes/Module.php:382
 msgid "Vendor Subscription Product"
 msgstr ""
 
-#: includes/Module.php:379
+#: includes/Module.php:383
 msgid "WooCommerce Subscription integration for Dokan"
 msgstr ""
 
-#: includes/Module.php:389
+#: includes/Module.php:393
 msgid "Vendor Verification"
 msgstr ""
 
-#: includes/Module.php:390
+#: includes/Module.php:394
 msgid "Dokan add-on to verify sellers."
 msgstr ""
 
-#: includes/Module.php:400 modules/wholesale/includes/clas-admin.php:38
+#: includes/Module.php:404 modules/wholesale/includes/clas-admin.php:38
 #: modules/wholesale/includes/clas-admin.php:161
 #: modules/wholesale/includes/class-cart-checkout.php:223
 msgid "Wholesale"
 msgstr ""
 
-#: includes/Module.php:401
+#: includes/Module.php:405
 msgid "Offer any customer to buy product as a wholesale price from any vendors."
 msgstr ""
 
@@ -663,19 +1483,13 @@ msgstr ""
 msgid "Next &raquo;"
 msgstr ""
 
-#: includes/Products.php:246 includes/functions-wc.php:1303
+#: includes/Products.php:246 includes/functions-wc.php:1313
 #: modules/subscription/includes/admin/admin.php:111
 msgid "Admin Commission type"
 msgstr ""
 
 #: includes/Products.php:249
 msgid "Set the commission type admin will get from this product"
-msgstr ""
-
-#: includes/Products.php:260 includes/admin/Admin.php:314
-#: modules/subscription/includes/admin/admin.php:124
-#: src/admin/components/VendorSingle.vue:217
-msgid "Admin Commission"
 msgstr ""
 
 #: includes/Products.php:503
@@ -721,7 +1535,7 @@ msgstr ""
 #: modules/booking/templates/booking/html-other-options.php:18
 #: modules/booking/templates/booking/new-product.php:690
 #: modules/simple-auction/templates/auction/auction-product-edit.php:435
-#: modules/subscription/includes/admin/admin.php:461
+#: modules/subscription/includes/admin/admin.php:472
 #: src/admin/components/Announcement.vue:119
 #: templates/products/edit/sidebar.php:32
 msgid "Draft"
@@ -1513,12 +2327,6 @@ msgstr ""
 msgid "Balance"
 msgstr ""
 
-#: includes/Reports.php:102 includes/admin/Admin.php:630
-#: includes/functions-reports.php:126
-#: modules/booking/templates/booking/my-bookings/all-bookings.php:77
-msgid "Order"
-msgstr ""
-
 #: includes/Reports.php:106 includes/functions-reports.php:131
 msgid "Withdraw"
 msgstr ""
@@ -1527,12 +2335,6 @@ msgstr ""
 #: modules/rma/includes/functions.php:315
 #: templates/orders/views/html-order-refund.php:20
 msgid "Refund"
-msgstr ""
-
-#: includes/Reports.php:155 includes/admin/Admin.php:74
-#: includes/admin/Admin.php:591 src/admin/components/Reports.vue:5
-#: templates/report/header.php:11
-msgid "Reports"
 msgstr ""
 
 #: includes/Reports.php:177 includes/Review.php:88
@@ -1658,9 +2460,9 @@ msgstr ""
 #: modules/booking/templates/booking/booking.php:94
 #: modules/booking/templates/booking/booking.php:102
 #: modules/rma/includes/class-vendor.php:250
-#: modules/simple-auction/module.php:403
+#: modules/simple-auction/module.php:402
 #: modules/simple-auction/templates/auction/template-auction.php:6
-#: modules/store-support/module.php:566 modules/vendor-analytics/module.php:166
+#: modules/store-support/module.php:566 modules/vendor-analytics/module.php:165
 #: modules/vendor-staff/module.php:273
 msgid "You have no permission to view this page"
 msgstr ""
@@ -1715,34 +2517,13 @@ msgstr ""
 msgid "Enable vendors to set shipping cost per product and per country"
 msgstr ""
 
-#: includes/Shipping/Methods/ProductShipping.php:68
-#: includes/emails/Announcement.php:119 includes/emails/RefundRequest.php:123
-#: includes/emails/RefundVendor.php:130 includes/emails/UpdatedProduct.php:132
-#: includes/emails/VendorDisable.php:116 includes/emails/VendorEnable.php:116
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:178
-#: modules/follow-store/includes/class-dokan-follow-store-email.php:56
-#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:70
-#: modules/moip/includes/admin/class-moip-gateway.php:75
-#: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:123
-#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:87
-#: modules/report-abuse/includes/AdminEmail.php:58
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:139
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:146
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:164
-#: modules/stripe/includes/Settings/StripeConnect.php:7
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:123
-#: modules/subscription/includes/emails/subscription-cancelled.php:147
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:164
-msgid "Enable/Disable"
-msgstr ""
-
 #: includes/Shipping/Methods/ProductShipping.php:70
 #: templates/settings/shipping.php:39
 msgid "Enable Shipping"
 msgstr ""
 
 #: includes/Shipping/Methods/ProductShipping.php:74
-#: src/frontend/components/Zone.vue:90 src/frontend/components/Zone.vue:222
+#: src/frontend/components/Zone.vue:90 src/frontend/components/Zone.vue:220
 msgid "Method Title"
 msgstr ""
 
@@ -1761,7 +2542,7 @@ msgstr ""
 #: includes/Shipping/Methods/ProductShipping.php:81
 #: modules/booking/templates/booking/html-shipping-tax.php:119
 #: modules/simple-auction/templates/auction/auction-shipping.php:145
-#: src/frontend/components/Zone.vue:177
+#: src/frontend/components/Zone.vue:175
 #: templates/products/edit/inventory.php:68
 #: templates/products/product-shipping-content.php:120
 msgid "Tax Status"
@@ -1771,7 +2552,7 @@ msgstr ""
 #: includes/Shipping/Methods/VendorShipping.php:203
 #: modules/booking/templates/booking/html-shipping-tax.php:122
 #: modules/simple-auction/templates/auction/auction-shipping.php:148
-#: src/frontend/components/Zone.vue:180
+#: src/frontend/components/Zone.vue:178
 #: templates/products/edit/inventory.php:71
 #: templates/products/product-shipping-content.php:123
 msgid "Taxable"
@@ -1809,35 +2590,36 @@ msgstr ""
 msgid "No shipping method found for adding"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:104
+#: includes/Shipping/ShippingZone.php:108
 msgid "Shipping method not added successfully"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:125
+#: includes/Shipping/ShippingZone.php:129
 msgid "Shipping method not deleted"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:149
+#: includes/Shipping/ShippingZone.php:153 src/frontend/components/Zone.vue:286
+#: src/frontend/components/Zone.vue:561
 msgid "Lets you charge a rate for shipping"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:208
+#: includes/Shipping/ShippingZone.php:212
 msgid "Method enable or disable not working"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:297 src/frontend/components/Zone.vue:146
+#: includes/Shipping/ShippingZone.php:301 src/frontend/components/Zone.vue:294
 msgid "Flat Rate"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:299 src/frontend/components/Zone.vue:147
+#: includes/Shipping/ShippingZone.php:303 src/frontend/components/Zone.vue:295
 msgid "Local Pickup"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:301 src/frontend/components/Zone.vue:148
+#: includes/Shipping/ShippingZone.php:305 src/frontend/components/Zone.vue:296
 msgid "Free Shipping"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:303
+#: includes/Shipping/ShippingZone.php:307
 msgid "Custom Shipping"
 msgstr ""
 
@@ -1982,18 +2764,8 @@ msgstr ""
 msgid "Store Category"
 msgstr ""
 
-#: includes/StoreCategory.php:88 src/frontend/components/Zone.vue:179
+#: includes/StoreCategory.php:88 src/frontend/components/Zone.vue:177
 msgid "None"
-msgstr ""
-
-#: includes/StoreCategory.php:89 includes/admin/Admin.php:178
-#: includes/brands/AdminSettings.php:26
-msgid "Single"
-msgstr ""
-
-#: includes/StoreCategory.php:90 includes/admin/Admin.php:179
-#: includes/brands/AdminSettings.php:27
-msgid "Multiple"
 msgstr ""
 
 #: includes/StoreCategory.php:140 templates/store-lists/category-area.php:30
@@ -2119,783 +2891,35 @@ msgstr ""
 msgid "Delete License"
 msgstr ""
 
+#: includes/Widgets/BestSeller.php:79
+msgid "Best Vendor"
+msgstr ""
+
+#: includes/Widgets/BestSeller.php:87 includes/Widgets/FeatureSeller.php:91
+#: modules/live-search/classes/class-dokan-live-search.php:83
+#: modules/store-support/support-widget.php:108
+#: modules/vendor-verification/includes/widgets/verifications-list.php:98
+msgid "Title:"
+msgstr ""
+
+#: includes/Widgets/BestSeller.php:91
+msgid "No. of Vendor:"
+msgstr ""
+
+#: includes/Widgets/FeatureSeller.php:83
+msgid "Featured Vendor"
+msgstr ""
+
+#: includes/Widgets/FeatureSeller.php:95
+msgid "No of Vendor:"
+msgstr ""
+
 #: includes/Withdraws.php:37 src/admin/components/VendorSingle.vue:262
 msgid "Skrill"
 msgstr ""
 
 #: includes/Withdraws.php:63 src/admin/components/VendorPro.vue:38
 msgid "E-mail"
-msgstr ""
-
-#: includes/admin/Admin.php:62
-msgid "Refunds"
-msgstr ""
-
-#: includes/admin/Admin.php:68
-msgid "Refunds %s"
-msgstr ""
-
-#: includes/admin/Admin.php:72
-msgid "Announcements"
-msgstr ""
-
-#: includes/admin/Admin.php:77
-msgid "Whats New"
-msgstr ""
-
-#: includes/admin/Admin.php:81 src/admin/components/Modules.vue:3
-msgid "Modules"
-msgstr ""
-
-#: includes/admin/Admin.php:82 modules/export-import/module.php:209
-#: modules/export-import/module.php:216
-#: modules/export-import/templates/export-import/template_importer.php:16
-#: modules/export-import/templates/export-import/template_importer_new.php:38
-msgid "Tools"
-msgstr ""
-
-#: includes/admin/Admin.php:109
-msgid "Enable Terms and Condition"
-msgstr ""
-
-#: includes/admin/Admin.php:110
-msgid "Enable Terms and Condition check on registration form"
-msgstr ""
-
-#: includes/admin/Admin.php:116
-msgid "Enable Single Seller Mode"
-msgstr ""
-
-#: includes/admin/Admin.php:117
-msgid "Enable single seller mode"
-msgstr ""
-
-#: includes/admin/Admin.php:137
-msgid "New Product Status"
-msgstr ""
-
-#: includes/admin/Admin.php:138
-msgid "Product status when a vendor creates a product"
-msgstr ""
-
-#: includes/admin/Admin.php:142
-#: modules/booking/templates/booking/product-list.php:222
-#: modules/export-import/includes/export/class-wc-product-csv-exporter.php:85
-#: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:377
-#: modules/export-import/includes/importers/class-wc-product-csv-importer-controller.php:497
-#: modules/simple-auction/templates/auction/auction-products-listing.php:198
-#: modules/subscription/includes/admin/admin.php:459
-#: src/admin/components/Announcement.vue:117
-msgid "Published"
-msgstr ""
-
-#: includes/admin/Admin.php:143
-#: modules/subscription/includes/admin/admin.php:460
-#: templates/products/edit/product-list-table-inline-edit-form.php:40
-msgid "Pending Review"
-msgstr ""
-
-#: includes/admin/Admin.php:149
-msgid "Duplicate product"
-msgstr ""
-
-#: includes/admin/Admin.php:150
-msgid "Allow vendor to duplicate their product"
-msgstr ""
-
-#: includes/admin/Admin.php:157
-msgid "Edited Product Status"
-msgstr ""
-
-#: includes/admin/Admin.php:158
-msgid ""
-"Set Product status as pending review when a vendor edits or updates a "
-"product"
-msgstr ""
-
-#: includes/admin/Admin.php:165
-msgid "Product Mail Notification"
-msgstr ""
-
-#: includes/admin/Admin.php:166
-msgid "Email notification on new product submission"
-msgstr ""
-
-#: includes/admin/Admin.php:173
-msgid "Product Category Selection"
-msgstr ""
-
-#: includes/admin/Admin.php:174
-msgid "Select a category type for Products"
-msgstr ""
-
-#: includes/admin/Admin.php:185
-msgid "Vendors Can Create Tags"
-msgstr ""
-
-#: includes/admin/Admin.php:186
-msgid "Allow vendors to create new product tags from vendor dashboard."
-msgstr ""
-
-#: includes/admin/Admin.php:193
-msgid "Discount Editing"
-msgstr ""
-
-#: includes/admin/Admin.php:194
-msgid "Vendor can add order and product discount"
-msgstr ""
-
-#: includes/admin/Admin.php:196 includes/admin/Admin.php:197
-msgid "Allow vendor to add discount on product"
-msgstr ""
-
-#: includes/admin/Admin.php:196 includes/admin/Admin.php:197
-msgid "Allow vendor to add discount on order"
-msgstr ""
-
-#: includes/admin/Admin.php:202
-msgid "Hide Customer info"
-msgstr ""
-
-#: includes/admin/Admin.php:203
-msgid "Hide customer information from order details of vendors"
-msgstr ""
-
-#: includes/admin/Admin.php:210
-msgid "Vendor Product Review"
-msgstr ""
-
-#: includes/admin/Admin.php:211
-msgid "Vendor can change product review status from vendor dashboard"
-msgstr ""
-
-#: includes/admin/Admin.php:249
-msgid "Store Banner width"
-msgstr ""
-
-#: includes/admin/Admin.php:255
-msgid "Store Banner height"
-msgstr ""
-
-#: includes/admin/Admin.php:271
-msgid "Order Status for Withdraw"
-msgstr ""
-
-#: includes/admin/Admin.php:272
-msgid "Order status for which vendor can make a withdraw request."
-msgstr ""
-
-#: includes/admin/Admin.php:274 includes/admin/Admin.php:275
-#: modules/rma/includes/functions.php:293
-#: modules/vendor-subscription-product/includes/functions.php:138
-msgid "Completed"
-msgstr ""
-
-#: includes/admin/Admin.php:274 includes/admin/Admin.php:275
-#: modules/rma/includes/functions.php:292
-#: modules/vendor-subscription-product/includes/functions.php:163
-msgid "Processing"
-msgstr ""
-
-#: includes/admin/Admin.php:274 includes/admin/Admin.php:275
-#: modules/vendor-subscription-product/includes/functions.php:158
-msgid "On-hold"
-msgstr ""
-
-#: includes/admin/Admin.php:279
-msgid "Withdraw Threshold"
-msgstr ""
-
-#: includes/admin/Admin.php:280
-msgid ""
-"Days, ( Make order matured to make a withdraw request) <br> Value \"0\" "
-"will inactive this option"
-msgstr ""
-
-#: includes/admin/Admin.php:286
-msgid "Hide Withdraw Option"
-msgstr ""
-
-#: includes/admin/Admin.php:287
-msgid "Hide withdraw option (when vendor is getting commission automatically) "
-msgstr ""
-
-#: includes/admin/Admin.php:319
-msgid "Percent Fee"
-msgstr ""
-
-#: includes/admin/Admin.php:324
-msgid "Amount you will get from sales in percentage (10%)"
-msgstr ""
-
-#: includes/admin/Admin.php:329
-msgid "Fixed Fee"
-msgstr ""
-
-#: includes/admin/Admin.php:334
-msgid "Amount you will get from sales in flat rate(+5)"
-msgstr ""
-
-#: includes/admin/Admin.php:472 includes/admin/Admin.php:476
-#: includes/admin/Ajax.php:30 includes/admin/Ajax.php:94
-#: includes/admin/Ajax.php:98
-msgid "You don't have enough permission"
-msgstr ""
-
-#: includes/admin/Admin.php:482
-msgid "Dashboard"
-msgstr ""
-
-#: includes/admin/Admin.php:488
-msgid "Store List"
-msgstr ""
-
-#: includes/admin/Admin.php:494
-msgid "My Orders"
-msgstr ""
-
-#: includes/admin/Admin.php:541
-msgid "All the default pages has been created!"
-msgstr ""
-
-#: includes/admin/Admin.php:584
-#: modules/follow-store/includes/class-dokan-follow-store-my-account.php:42
-msgid "Vendors"
-msgstr ""
-
-#: includes/admin/Admin.php:598
-msgid "Settings"
-msgstr ""
-
-#: includes/admin/Admin.php:631 modules/geolocation/views/filters.php:26
-#: modules/geolocation/views/widget-form.php:11
-#: modules/moip/includes/admin/class-moip-gateway.php:98
-#: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:176
-#: modules/report-abuse/assets/src/js/admin/pages/AbuseReports.vue:154
-#: modules/rma/templates/rma/customer-rma-requests.php:23
-#: modules/rma/templates/rma/request-warranty.php:33
-#: modules/single-product-multiple-vendor/includes/products-admin.php:29
-#: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:157
-#: src/admin/components/Refund.vue:106
-msgid "Vendor"
-msgstr ""
-
-#: includes/admin/Admin.php:632 templates/orders/views/html-order-items.php:200
-msgid "Order Total"
-msgstr ""
-
-#: includes/admin/Admin.php:633
-msgid "Vendor Earning"
-msgstr ""
-
-#: includes/admin/Admin.php:634
-#: modules/booking/templates/booking/product-list.php:38
-#: modules/rma/templates/rma/customer-rma-requests.php:25
-#: modules/rma/templates/rma/vendor-rma-requests.php:55
-#: modules/rma/templates/rma/vendor-rma-single-request.php:140
-#: modules/simple-auction/templates/auction/auction-products-listing.php:42
-#: modules/store-support/module.php:640 modules/store-support/module.php:953
-#: modules/vendor-subscription-product/templates/subscription/subscription-details.php:211
-#: modules/vendor-subscription-product/templates/subscription/subscrptions.php:96
-#: src/admin/components/Announcement.vue:143
-#: src/admin/components/VendorPro.vue:51 src/frontend/components/Zone.vue:91
-#: templates/products/edit/product-list-table-inline-edit-form.php:36
-msgid "Status"
-msgstr ""
-
-#: includes/admin/Admin.php:635
-msgid "Commission"
-msgstr ""
-
-#: includes/admin/Admin.php:732
-msgid ""
-"<p>Christmas Offer! <strong>Save 30%%</strong> Upgrading Your Dokan "
-"Package. <strong>Coupon: “XMAS30”</strong>. Offer Ends in 31st Dec, 12.00 "
-"PM! <a target=\"_blank\" href=\"%s\">Grab The Deal</a></p>"
-msgstr ""
-
-#: includes/admin/Admin.php:775
-msgid "You have no permission to do that"
-msgstr ""
-
-#: includes/admin/Admin.php:828
-msgid "Combine"
-msgstr ""
-
-#: includes/admin/Admin.php:905 includes/admin/Admin.php:911
-msgid "Error"
-msgstr ""
-
-#: includes/admin/Admin.php:905
-msgid "Admin percentage commission is required."
-msgstr ""
-
-#: includes/admin/Admin.php:911
-msgid "Admin flat commission is required."
-msgstr ""
-
-#: includes/admin/Ajax.php:72
-msgid "%d orders sync completed out of %d"
-msgstr ""
-
-#: includes/admin/Ajax.php:75 includes/admin/Ajax.php:162
-msgid "Go to Dashboard &rarr;"
-msgstr ""
-
-#: includes/admin/Ajax.php:79
-msgid "All orders has been synchronized. %s"
-msgstr ""
-
-#: includes/admin/Ajax.php:148
-msgid "%d orders checked out of %d"
-msgstr ""
-
-#: includes/admin/Ajax.php:157
-msgid "All orders are checked and we found some duplicate orders"
-msgstr ""
-
-#: includes/admin/Ajax.php:167
-msgid "All orders are checked and no duplicate was found. %s"
-msgstr ""
-
-#: includes/admin/Ajax.php:188
-msgid "Invalid module provided"
-msgstr ""
-
-#: includes/admin/Ajax.php:192
-msgid "Invalid request type"
-msgstr ""
-
-#: includes/admin/Ajax.php:207
-msgid "Activated"
-msgstr ""
-
-#: includes/admin/Ajax.php:210
-msgid "Deactivated"
-msgstr ""
-
-#: includes/admin/Announcement.php:88 includes/admin/Announcement.php:99
-#: includes/admin/Announcement.php:100 src/admin/components/Announcement.vue:4
-#: templates/announcement/header.php:12
-msgid "Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:101 includes/emails/Announcement.php:14
-msgid "Dokan Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:102 src/admin/components/Announcement.vue:5
-#: src/admin/components/EditAnnouncement.vue:4
-msgid "Add Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:103
-#: src/admin/components/NewAnnouncement.vue:3
-msgid "Add New Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:104 modules/booking/module.php:587
-#: modules/booking/templates/booking/product-list.php:119
-#: modules/booking/templates/booking/resources/resources.php:111
-#: modules/product-addon/templates/product-addon/html-global-admin.php:28
-#: modules/simple-auction/templates/auction/auction-products-listing.php:104
-#: modules/store-reviews/assets/src/js/admin/components/StoreReviews.vue:165
-#: modules/vendor-staff/templates/vendor-staff/staffs.php:102
-#: src/admin/components/Announcement.vue:151
-#: src/admin/components/StoreCategoriesIndex.vue:172
-#: src/frontend/components/Main.vue:18 templates/coupon/listing.php:41
-#: templates/products/edit/sidebar.php:26
-#: templates/products/edit/sidebar.php:69
-#: templates/products/product-edit.php:161
-msgid "Edit"
-msgstr ""
-
-#: includes/admin/Announcement.php:105
-#: src/admin/components/EditAnnouncement.vue:3
-msgid "Edit Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:106
-msgid "New Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:107 includes/admin/Announcement.php:108
-msgid "View Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:109
-msgid "Search Announcement"
-msgstr ""
-
-#: includes/admin/Announcement.php:110
-msgid "No Announcement Found"
-msgstr ""
-
-#: includes/admin/Announcement.php:111
-msgid "No Announcement found in trash"
-msgstr ""
-
-#: includes/admin/Announcement.php:112
-msgid "Parent Announcement"
-msgstr ""
-
-#: includes/admin/Pointers.php:90
-msgid "All Vendors"
-msgstr ""
-
-#: includes/admin/Pointers.php:91
-msgid ""
-"You can see all registered vendors of your marketplace with their details "
-"and status."
-msgstr ""
-
-#: includes/admin/Pointers.php:97 includes/admin/Pointers.php:114
-#: includes/admin/Pointers.php:131 includes/admin/Pointers.php:148
-msgid "Next"
-msgstr ""
-
-#: includes/admin/Pointers.php:107
-msgid "Active Vendors"
-msgstr ""
-
-#: includes/admin/Pointers.php:108
-msgid "All vendors who are actively selling are filtered within this list."
-msgstr ""
-
-#: includes/admin/Pointers.php:124
-msgid "Pending Vendors"
-msgstr ""
-
-#: includes/admin/Pointers.php:125
-msgid ""
-"This is a list of pending vendors who have registered in the marketplace "
-"but not active yet. Make them active to enable selling."
-msgstr ""
-
-#: includes/admin/Pointers.php:141
-msgid "Toggle Status"
-msgstr ""
-
-#: includes/admin/Pointers.php:142
-msgid ""
-"You can toggle vendor status simply by making them active or inactive from "
-"here."
-msgstr ""
-
-#: includes/admin/Pointers.php:153 modules/geolocation/functions.php:149
-#: modules/geolocation/functions.php:260
-msgid "Search Vendors"
-msgstr ""
-
-#: includes/admin/Pointers.php:154
-msgid "You can search vendors using Username, Shopname or Email."
-msgstr ""
-
-#: includes/admin/Promotion.php:45
-msgid "Want your vendors to better manage their store?"
-msgstr ""
-
-#: includes/admin/Promotion.php:46
-msgid ""
-"Attract your vendors With Better Store Management. Start with the Vendor "
-"Staff Manager module to let them manage their own store with an unlimited "
-"number of staffs."
-msgstr ""
-
-#: includes/admin/Promotion.php:53
-msgid ""
-"Why would vendors from other marketplaces want to start their business in "
-"your platform?"
-msgstr ""
-
-#: includes/admin/Promotion.php:54
-msgid ""
-"Because they wouldn’t need to start from scratch and create/import their "
-"products within minutes using the Export/Import module."
-msgstr ""
-
-#: includes/admin/Promotion.php:61
-msgid "77% of customers won’t make a purchase if there’s no live chat feature"
-msgstr ""
-
-#: includes/admin/Promotion.php:62
-msgid ""
-"Let Your Customers Communicate With Vendors In Real time with the live chat "
-"module. Attain more customers than ever before."
-msgstr ""
-
-#: includes/admin/Promotion.php:69
-msgid "Avoid embarrassing situations"
-msgstr ""
-
-#: includes/admin/Promotion.php:70
-msgid ""
-"Let your customers know when a vendor store Is open or the vendor is on "
-"vacation with the Vendor Vacation module."
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:33
-msgid "Vendor Dasboard"
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:37
-msgid "Vendor Registration Form"
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:41
-msgid "Stores List"
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:45
-msgid "Best Selling Product"
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:49
-msgid "Top Rated Products"
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:53
-msgid "Dokan My Orders"
-msgstr ""
-
-#: includes/admin/ShortcodesButton.php:57
-msgid "Customer Migration Form"
-msgstr ""
-
-#: includes/brands/AdminSettings.php:21
-msgid "Brands Selection Mode"
-msgstr ""
-
-#: includes/brands/AdminSettings.php:22
-msgid "Enable single or multiple brand selection mode for vendors."
-msgstr ""
-
-#: includes/brands/FormFields.php:35 includes/brands/FormFields.php:49
-msgid "Select product brand"
-msgstr ""
-
-#: includes/brands/FormFields.php:47
-msgid "Select product brands"
-msgstr ""
-
-#: includes/emails/Announcement.php:15
-msgid "These emails are sent to a vendor(s) who is are selected in a annoucement "
-msgstr ""
-
-#: includes/emails/Announcement.php:29
-msgid "A new announcement is made at - {site_name}"
-msgstr ""
-
-#: includes/emails/Announcement.php:37
-msgid "New Announcement - {title}"
-msgstr ""
-
-#: includes/emails/Announcement.php:121 includes/emails/RefundRequest.php:125
-#: includes/emails/RefundVendor.php:132 includes/emails/UpdatedProduct.php:134
-#: includes/emails/VendorDisable.php:118 includes/emails/VendorEnable.php:118
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:180
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:141
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:148
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:166
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:125
-#: modules/subscription/includes/emails/subscription-cancelled.php:149
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:166
-msgid "Enable this email notification"
-msgstr ""
-
-#: includes/emails/Announcement.php:126 includes/emails/RefundRequest.php:137
-#: includes/emails/RefundVendor.php:136 includes/emails/UpdatedProduct.php:146
-#: includes/emails/VendorDisable.php:123 includes/emails/VendorEnable.php:123
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:185
-#: modules/follow-store/includes/class-dokan-follow-store-email.php:63
-#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:77
-#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:94
-#: modules/report-abuse/includes/AdminEmail.php:65
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:153
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:152
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:178
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:129
-#: modules/subscription/includes/emails/subscription-cancelled.php:161
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:170
-#: src/admin/components/VendorSingle.vue:23
-msgid "Subject"
-msgstr ""
-
-#: includes/emails/Announcement.php:130 includes/emails/Announcement.php:139
-#: includes/emails/RefundRequest.php:141 includes/emails/RefundRequest.php:150
-#: includes/emails/RefundVendor.php:140 includes/emails/RefundVendor.php:149
-#: includes/emails/UpdatedProduct.php:150
-#: includes/emails/UpdatedProduct.php:159 includes/emails/VendorDisable.php:127
-#: includes/emails/VendorDisable.php:136 includes/emails/VendorEnable.php:127
-#: includes/emails/VendorEnable.php:136
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:189
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:198
-#: modules/follow-store/includes/class-dokan-follow-store-email.php:66
-#: modules/follow-store/includes/class-dokan-follow-store-email.php:75
-#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:80
-#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:89
-#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:97
-#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:106
-#: modules/report-abuse/includes/AdminEmail.php:68
-#: modules/report-abuse/includes/AdminEmail.php:77
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:157
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:156
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:165
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:182
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:191
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:132
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:139
-#: modules/subscription/includes/emails/subscription-cancelled.php:165
-#: modules/subscription/includes/emails/subscription-cancelled.php:174
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:174
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:183
-#. translators: %s: list of placeholders
-msgid "Available placeholders: %s"
-msgstr ""
-
-#: includes/emails/Announcement.php:135 includes/emails/RefundRequest.php:146
-#: includes/emails/RefundVendor.php:145 includes/emails/UpdatedProduct.php:155
-#: includes/emails/VendorDisable.php:132 includes/emails/VendorEnable.php:132
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:194
-#: modules/follow-store/includes/class-dokan-follow-store-email.php:72
-#: modules/follow-store/includes/class-dokan-follow-store-vendor-email.php:86
-#: modules/product-enquiry/includes/dokan-product-enquiry-email.php:103
-#: modules/report-abuse/includes/AdminEmail.php:74
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:162
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:161
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:187
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:136
-#: modules/subscription/includes/emails/subscription-cancelled.php:170
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:179
-msgid "Email heading"
-msgstr ""
-
-#: includes/emails/Announcement.php:144 includes/emails/RefundRequest.php:155
-#: includes/emails/RefundVendor.php:154 includes/emails/UpdatedProduct.php:164
-#: includes/emails/VendorDisable.php:141 includes/emails/VendorEnable.php:141
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:203
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:171
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:170
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:196
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:143
-#: modules/subscription/includes/emails/subscription-cancelled.php:179
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:188
-msgid "Email type"
-msgstr ""
-
-#: includes/emails/Announcement.php:146 includes/emails/RefundRequest.php:157
-#: includes/emails/RefundVendor.php:156 includes/emails/UpdatedProduct.php:166
-#: includes/emails/VendorDisable.php:143 includes/emails/VendorEnable.php:143
-#: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:205
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:173
-#: modules/rma/includes/emails/class-dokan-rma-send-warranty-request.php:172
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:198
-#: modules/stripe/includes/Subscriptions/InvoiceEmail.php:145
-#: modules/subscription/includes/emails/subscription-cancelled.php:181
-#: modules/vendor-staff/includes/class-staff-new-order-email.php:190
-msgid "Choose which format of email to send."
-msgstr ""
-
-#: includes/emails/RefundRequest.php:14
-msgid "Dokan New Refund Request"
-msgstr ""
-
-#: includes/emails/RefundRequest.php:15
-msgid ""
-"These emails are sent to chosen recipient(s) when a vendor send request for "
-"refund"
-msgstr ""
-
-#: includes/emails/RefundRequest.php:35
-msgid "[{site_name}] A New refund request is made by {seller_name}"
-msgstr ""
-
-#: includes/emails/RefundRequest.php:43
-msgid "New Refund Request from - {seller_name}"
-msgstr ""
-
-#: includes/emails/RefundRequest.php:129 includes/emails/UpdatedProduct.php:138
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:145
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:170
-#: modules/subscription/includes/emails/subscription-cancelled.php:153
-msgid "Recipient(s)"
-msgstr ""
-
-#: includes/emails/RefundRequest.php:131 includes/emails/UpdatedProduct.php:140
-#: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:147
-#: modules/simple-auction/includes/emails/class-dokan-auction-email.php:172
-#: modules/subscription/includes/emails/subscription-cancelled.php:155
-msgid "Enter recipients (comma separated) for this email. Defaults to %s."
-msgstr ""
-
-#: includes/emails/RefundVendor.php:14
-msgid "Dokan Refund Processed"
-msgstr ""
-
-#: includes/emails/RefundVendor.php:15
-msgid "These emails are sent to vendor when a vendor refund request is processed"
-msgstr ""
-
-#: includes/emails/RefundVendor.php:37
-msgid "[{site_name}] Your refund request was {status}"
-msgstr ""
-
-#: includes/emails/RefundVendor.php:47
-msgid "Refund request for {order_id} is {status}"
-msgstr ""
-
-#: includes/emails/UpdatedProduct.php:14
-msgid "Dokan Updated Pending Product"
-msgstr ""
-
-#: includes/emails/UpdatedProduct.php:15
-msgid ""
-"Pending Product emails are sent to chosen recipient(s) when a published "
-"product is updated by vendors."
-msgstr ""
-
-#: includes/emails/UpdatedProduct.php:36
-msgid ""
-"[{site_title}] A product update is pending from ({seller_name}) - "
-"{product_title}"
-msgstr ""
-
-#: includes/emails/UpdatedProduct.php:45
-msgid "{product_title} updated by Vendor {seller_name}"
-msgstr ""
-
-#: includes/emails/VendorDisable.php:14
-msgid "Dokan Vendor Disable"
-msgstr ""
-
-#: includes/emails/VendorDisable.php:15
-msgid "This email is set to a vendor when his account is deactivated by admin"
-msgstr ""
-
-#: includes/emails/VendorDisable.php:34
-msgid "[{site_name}] Your account is deactivated"
-msgstr ""
-
-#: includes/emails/VendorDisable.php:42
-msgid "Your vendor account is deactivated"
-msgstr ""
-
-#: includes/emails/VendorEnable.php:14
-msgid "Dokan Vendor Enable"
-msgstr ""
-
-#: includes/emails/VendorEnable.php:15
-msgid "This email is set to a vendor when he enabled from admin settings"
-msgstr ""
-
-#: includes/emails/VendorEnable.php:34
-msgid "[{site_name}] Your account is activated"
-msgstr ""
-
-#: includes/emails/VendorEnable.php:42
-#: templates/emails/plain/vendor-enabled.php:26
-#: templates/emails/vendor-enabled.php:21
-msgid "Your vendor account is activated"
 msgstr ""
 
 #: includes/functions-reports.php:11 includes/functions-reports.php:859
@@ -3124,7 +3148,7 @@ msgstr ""
 msgid "Commission type"
 msgstr ""
 
-#: includes/functions-wc.php:1245 includes/functions-wc.php:1312
+#: includes/functions-wc.php:1245 includes/functions-wc.php:1322
 msgid "This is the commission type for admin fee"
 msgstr ""
 
@@ -3132,23 +3156,23 @@ msgstr ""
 msgid "Admin Commission from this category"
 msgstr ""
 
-#: includes/functions-wc.php:1254 includes/functions-wc.php:1324
+#: includes/functions-wc.php:1254 includes/functions-wc.php:1334
 msgid "If set, it will override global admin commission rate for this category"
 msgstr ""
 
-#: includes/functions-wc.php:1316
+#: includes/functions-wc.php:1326
 msgid "Admin commission"
 msgstr ""
 
-#: includes/functions-wc.php:1469
+#: includes/functions-wc.php:1489
 msgid "Shipping: "
 msgstr ""
 
-#: includes/functions-wc.php:1633
+#: includes/functions-wc.php:1653
 msgid "Sorry, you can't add more than one vendor's product in the cart."
 msgstr ""
 
-#: includes/functions-wc.php:1669
+#: includes/functions-wc.php:1689
 msgid "Sorry, you can't purchase from multiple vendors at once."
 msgstr ""
 
@@ -3231,29 +3255,6 @@ msgstr ""
 
 #: includes/functions.php:166
 msgid "Remove this item meta?"
-msgstr ""
-
-#: includes/widgets/BestSeller.php:79
-msgid "Best Vendor"
-msgstr ""
-
-#: includes/widgets/BestSeller.php:87 includes/widgets/FeatureSeller.php:91
-#: modules/live-search/classes/class-dokan-live-search.php:83
-#: modules/store-support/support-widget.php:108
-#: modules/vendor-verification/includes/widgets/verifications-list.php:98
-msgid "Title:"
-msgstr ""
-
-#: includes/widgets/BestSeller.php:91
-msgid "No. of Vendor:"
-msgstr ""
-
-#: includes/widgets/FeatureSeller.php:83
-msgid "Featured Vendor"
-msgstr ""
-
-#: includes/widgets/FeatureSeller.php:95
-msgid "No of Vendor:"
 msgstr ""
 
 #: includes/woo-views/html-product-variation-download.php:2
@@ -3976,6 +3977,7 @@ msgstr ""
 #: modules/booking/templates/booking/html-booking-availability-fields.php:146
 #: modules/rma/includes/class-admin.php:60
 #: modules/rma/includes/class-admin.php:71
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:135
 #: modules/wholesale/includes/clas-admin.php:82
 msgid "No"
 msgstr ""
@@ -3984,6 +3986,7 @@ msgstr ""
 #: modules/geolocation/class-geolocation-admin-settings.php:67
 #: modules/rma/includes/class-admin.php:59
 #: modules/rma/includes/class-admin.php:70
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:134
 #: modules/wholesale/includes/clas-admin.php:81
 msgid "Yes"
 msgstr ""
@@ -4084,7 +4087,7 @@ msgstr ""
 #: modules/booking/templates/booking/html-other-options.php:13
 #: modules/booking/templates/booking/new-product.php:685
 #: modules/simple-auction/templates/auction/auction-product-edit.php:431
-#: modules/subscription/includes/admin/admin.php:454
+#: modules/subscription/includes/admin/admin.php:465
 msgid "Product Status"
 msgstr ""
 
@@ -4275,7 +4278,7 @@ msgstr ""
 
 #: modules/booking/templates/booking/my-bookings/all-bookings.php:173
 #: modules/booking/templates/booking/product-list.php:136
-#: modules/rma/templates/rma/customer-rma-requests.php:51
+#: modules/rma/templates/rma/customer-rma-requests.php:53
 #: modules/rma/templates/rma/vendor-rma-requests.php:106
 #: modules/simple-auction/templates/auction/auction-products-listing.php:111
 msgid "View"
@@ -4438,7 +4441,7 @@ msgstr ""
 #: modules/booking/templates/booking/resources/edit-resource.php:33
 #: modules/simple-auction/templates/auction/auction-product-edit.php:84
 #: src/admin/components/Tools.vue:87 src/admin/components/Tools.vue:127
-#: src/admin/components/Tools.vue:168 src/admin/components/VendorSingle.vue:552
+#: src/admin/components/Tools.vue:168 src/admin/components/VendorSingle.vue:555
 #: templates/products/product-edit.php:132
 msgid "Success!"
 msgstr ""
@@ -4468,7 +4471,7 @@ msgstr ""
 #: modules/store-support/module.php:638 modules/store-support/module.php:952
 #: modules/stripe/includes/Settings/StripeConnect.php:14
 #: src/admin/components/Announcement.vue:140
-#: src/frontend/components/Zone.vue:165 templates/coupon/form.php:19
+#: src/frontend/components/Zone.vue:163 templates/coupon/form.php:19
 #: templates/products/edit/product-list-table-inline-edit-form.php:10
 msgid "Title"
 msgstr ""
@@ -4800,7 +4803,7 @@ msgstr ""
 #: src/admin/components/StoreCategoriesIndex.vue:35
 #: src/admin/components/StoreCategoriesIndex.vue:154
 #: src/admin/components/StoreCategoriesShow.vue:35
-#: src/frontend/components/Zone.vue:92 src/frontend/components/Zone.vue:185
+#: src/frontend/components/Zone.vue:92 src/frontend/components/Zone.vue:183
 #: templates/coupon/form.php:24
 msgid "Description"
 msgstr ""
@@ -5433,7 +5436,7 @@ msgstr ""
 msgid "Dokan Seller Vacation module is not active"
 msgstr ""
 
-#: modules/elementor/includes/Tags/StoreVacationMessage.php:63
+#: modules/elementor/includes/Tags/StoreVacationMessage.php:67
 msgid "Store vacation message set in vendor dashboard will show here."
 msgstr ""
 
@@ -6938,14 +6941,14 @@ msgstr ""
 
 #: modules/moip/includes/admin/class-moip-gateway.php:371
 #: modules/moip/includes/admin/class-moip-gateway.php:547
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:61
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:108
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:62
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:109
 msgid "%s - Order %s"
 msgstr ""
 
 #: modules/moip/includes/admin/class-moip-gateway.php:374
 #: modules/moip/includes/admin/class-moip-gateway.php:567
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:114
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:115
 msgid "No orders found to process!"
 msgstr ""
 
@@ -6986,12 +6989,12 @@ msgid "Wirecard Payment Error: %s"
 msgstr ""
 
 #: modules/moip/includes/admin/class-moip-gateway.php:591
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:123
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:124
 msgid "Something went wrong and the order can not be processed!"
 msgstr ""
 
 #: modules/moip/includes/admin/class-moip-gateway.php:640
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:131
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:132
 msgid "Order %s payment completed"
 msgstr ""
 
@@ -7047,7 +7050,7 @@ msgstr ""
 msgid "Disconnect"
 msgstr ""
 
-#: modules/moip/module.php:340 modules/stripe/includes/Validation.php:80
+#: modules/moip/module.php:340 modules/stripe/includes/Validation.php:130
 msgid ""
 "<strong>Error!</strong> You cannot complete your purchase until "
 "<strong>%s</strong> has enabled Stripe as a payment gateway. Please remove "
@@ -7092,7 +7095,7 @@ msgid "PayPal Adaptive works by sending payment to multiple user email"
 msgstr ""
 
 #: modules/paypal-adaptive-payments/classes/class-dokan-paypal-ap-gateway.php:100
-#: modules/stripe/includes/StripeConnect.php:259
+#: modules/stripe/includes/StripeConnect.php:263
 msgid "Gateway Disabled"
 msgstr ""
 
@@ -8428,7 +8431,7 @@ msgstr ""
 msgid "All Requests"
 msgstr ""
 
-#: modules/rma/templates/rma/customer-rma-requests.php:59
+#: modules/rma/templates/rma/customer-rma-requests.php:62
 #: modules/rma/templates/rma/vendor-rma-requests.php:113
 msgid "No request found"
 msgstr ""
@@ -9016,8 +9019,8 @@ msgstr ""
 msgid "Delete auction product"
 msgstr ""
 
-#: modules/simple-auction/module.php:168 modules/simple-auction/module.php:259
-#: modules/simple-auction/module.php:325
+#: modules/simple-auction/module.php:168 modules/simple-auction/module.php:258
+#: modules/simple-auction/module.php:324
 msgid "Auction"
 msgstr ""
 
@@ -9025,56 +9028,56 @@ msgstr ""
 msgid "Auction Product"
 msgstr ""
 
-#: modules/simple-auction/module.php:264
+#: modules/simple-auction/module.php:263
 msgid "Disable Auction"
 msgstr ""
 
-#: modules/simple-auction/module.php:267
+#: modules/simple-auction/module.php:266
 msgid "Disable auction capability for this vendor"
 msgstr ""
 
-#: modules/simple-auction/module.php:305
+#: modules/simple-auction/module.php:304
 msgid "New vendor Enable Auction"
 msgstr ""
 
-#: modules/simple-auction/module.php:306
+#: modules/simple-auction/module.php:305
 msgid "Make auction status enable for new registred vendor"
 msgstr ""
 
-#: modules/simple-auction/module.php:394
+#: modules/simple-auction/module.php:393
 msgid "You have no permission to view this auction page"
 msgstr ""
 
-#: modules/simple-auction/module.php:529
+#: modules/simple-auction/module.php:528
 msgid "Now"
 msgstr ""
 
-#: modules/simple-auction/module.php:530
+#: modules/simple-auction/module.php:529
 #: src/admin/components/VendorSingle.vue:103
 msgid "Done"
 msgstr ""
 
-#: modules/simple-auction/module.php:531
+#: modules/simple-auction/module.php:530
 msgid "Time"
 msgstr ""
 
-#: modules/simple-auction/module.php:532
+#: modules/simple-auction/module.php:531
 msgid "Hour"
 msgstr ""
 
-#: modules/simple-auction/module.php:533
+#: modules/simple-auction/module.php:532
 msgid "Minute"
 msgstr ""
 
-#: modules/simple-auction/module.php:534
+#: modules/simple-auction/module.php:533
 msgid "Second"
 msgstr ""
 
-#: modules/simple-auction/module.php:535
+#: modules/simple-auction/module.php:534
 msgid "Time Zone"
 msgstr ""
 
-#: modules/simple-auction/module.php:536
+#: modules/simple-auction/module.php:535
 msgid "Choose Time"
 msgstr ""
 
@@ -10108,35 +10111,39 @@ msgstr ""
 msgid "%1$s - Order %2$s"
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:71
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:174
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:72
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:173
 msgid "Order %s payment completed via %s on Charge ID: %s"
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:85
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:86
 msgid "Stripe Payment Error: %s"
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:87
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:88
 msgid "Error: "
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:145
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:144
 msgid "Unable to process with Stripe gateway"
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:157
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:156
 msgid "%s - Order %s, suborder of %s"
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:165
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:164
 msgid ""
 "Vendor payment transferred to admin account since the vendor had not "
 "connected to Stripe."
 msgstr ""
 
-#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:196
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:195
 msgid "Order %s payment is completed via %s on (Charge ID: %s)"
+msgstr ""
+
+#: modules/stripe/includes/PaymentMethods/StripeNon3DSPayment.php:215
+msgid "Payment gateway processing fee %s"
 msgstr ""
 
 #: modules/stripe/includes/Refund.php:71
@@ -10362,26 +10369,26 @@ msgstr ""
 msgid "Invalid email address, please correct and try again."
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:246
+#: modules/stripe/includes/StripeConnect.php:250
 msgid ""
 "Stripe works by adding credit card fields on the checkout and then sending "
 "the details to Stripe for verification."
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:248
+#: modules/stripe/includes/StripeConnect.php:252
 msgid ""
 "Recurring subscription requires webhooks to be configured. Go to <a "
 "href=\"%s\">webhook</a> and set your webhook url <code>%s</code>. Otherwise "
 "recurring payment not working automatically"
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:260
+#: modules/stripe/includes/StripeConnect.php:264
 msgid ""
 "Choose a currency supported by Stripe as your store currency to enable "
 "Stripe Connect."
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:309
+#: modules/stripe/includes/StripeConnect.php:313
 msgid ""
 "TEST MODE ENABLED. In test mode, you can use the card number "
 "4242424242424242 with any CVC and a valid expiration date or check the <a "
@@ -10389,7 +10396,7 @@ msgid ""
 "card numbers."
 msgstr ""
 
-#: modules/stripe/includes/StripeConnect.php:348
+#: modules/stripe/includes/StripeConnect.php:352
 msgid "Credit or debit card"
 msgstr ""
 
@@ -10415,21 +10422,40 @@ msgstr ""
 msgid "HTML"
 msgstr ""
 
-#: modules/stripe/includes/Subscriptions/ProductSubscription.php:162
+#: modules/stripe/includes/Subscriptions/ProductSubscription.php:154
 msgid "Unable to create subscription"
 msgstr ""
 
-#: modules/stripe/includes/Subscriptions/ProductSubscription.php:213
+#: modules/stripe/includes/Subscriptions/ProductSubscription.php:205
 msgid "Order %s payment is completed via %s on (Charge IDs: %s)"
 msgstr ""
 
-#: modules/stripe/includes/Subscriptions/ProductSubscription.php:382
-#: modules/stripe/includes/Subscriptions/ProductSubscription.php:468
+#: modules/stripe/includes/Subscriptions/ProductSubscription.php:374
+#: modules/stripe/includes/Subscriptions/ProductSubscription.php:460
 msgid "Unable to cancel subscription with stripe. More details: %s"
 msgstr ""
 
-#: modules/stripe/includes/Subscriptions/ProductSubscription.php:418
+#: modules/stripe/includes/Subscriptions/ProductSubscription.php:410
 msgid "Unable to re-activate subscription with stripe. More details: %s"
+msgstr ""
+
+#: modules/stripe/includes/Validation.php:56
+msgid ""
+"A subscription has been removed from your cart. Due to payment gateway "
+"restrictions, different subscription products can not be purchased at the "
+"same time."
+msgstr ""
+
+#: modules/stripe/includes/Validation.php:62
+msgid ""
+"Products has been removed from your cart. Products and subscriptions can "
+"not be purchased at the same time."
+msgstr ""
+
+#: modules/stripe/includes/Validation.php:68
+msgid ""
+"A subscription has been removed from your cart. Products and subscriptions "
+"can not be purchased at the same time."
 msgstr ""
 
 #: modules/stripe/includes/VendorProfile.php:51
@@ -10562,7 +10588,7 @@ msgid "Recurring"
 msgstr ""
 
 #: modules/subscription/includes/admin/admin.php:64
-#: modules/subscription/includes/admin/admin.php:550
+#: modules/subscription/includes/admin/admin.php:561
 msgid "Dokan Subscription"
 msgstr ""
 
@@ -10590,79 +10616,79 @@ msgstr ""
 msgid "Set the commission type admin will get under this subscription"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:168
+#: modules/subscription/includes/admin/admin.php:179
 msgid "Allowed Product Types"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:169
+#: modules/subscription/includes/admin/admin.php:180
 msgid "Any product types"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:172
+#: modules/subscription/includes/admin/admin.php:183
 msgid "Select product type for this package. Leave empty to allow any product type."
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:178
-#: modules/subscription/includes/admin/admin.php:582
+#: modules/subscription/includes/admin/admin.php:189
+#: modules/subscription/includes/admin/admin.php:593
 msgid "Allowed categories"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:179
+#: modules/subscription/includes/admin/admin.php:190
 msgid "Any categories"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:193
+#: modules/subscription/includes/admin/admin.php:204
 msgid ""
 "Select specific product category for this package. Leave empty to select "
 "all categories."
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:200
+#: modules/subscription/includes/admin/admin.php:211
 msgid "Restrict Gallery Image Upload"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:201
+#: modules/subscription/includes/admin/admin.php:212
 msgid "Please check this if you want to restrict gallery image uploading."
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:208
+#: modules/subscription/includes/admin/admin.php:219
 msgid "Recurring Payment"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:209
+#: modules/subscription/includes/admin/admin.php:220
 msgid "Please check this if you want to enable recurring payment system"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:224
+#: modules/subscription/includes/admin/admin.php:235
 msgid "Billing cycle"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:244
+#: modules/subscription/includes/admin/admin.php:255
 msgid "Billing cycle stop"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:252
+#: modules/subscription/includes/admin/admin.php:263
 msgid "Enable Trial"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:253
+#: modules/subscription/includes/admin/admin.php:264
 msgid "Please check this if you want to allow trial subscirption."
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:258
+#: modules/subscription/includes/admin/admin.php:269
 msgid "Trial Period"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:262
+#: modules/subscription/includes/admin/admin.php:273
 msgid "Define the trial period"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:381
+#: modules/subscription/includes/admin/admin.php:392
 #: modules/subscription/module.php:140 modules/subscription/module.php:145
 msgid "Product Subscription"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:421
+#: modules/subscription/includes/admin/admin.php:432
 #: modules/subscription/module.php:355 modules/subscription/module.php:362
 #: modules/vendor-subscription-product/includes/class-user-subscription.php:101
 #: modules/vendor-subscription-product/templates/subscription/subscription-details.php:56
@@ -10670,108 +10696,108 @@ msgstr ""
 msgid "Subscription"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:427
+#: modules/subscription/includes/admin/admin.php:438
 msgid "Enable Product Subscription"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:428
+#: modules/subscription/includes/admin/admin.php:439
 msgid "Enable product subscription for vendor"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:433
+#: modules/subscription/includes/admin/admin.php:444
 msgid "Enable Subscription in registration form"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:434
+#: modules/subscription/includes/admin/admin.php:445
 msgid "Enable Subscription pack in registration form for new vendor"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:440
+#: modules/subscription/includes/admin/admin.php:451
 msgid "Enable Email Notification"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:441
+#: modules/subscription/includes/admin/admin.php:452
 msgid "Enable notification by email for vendor during end of the package expiration"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:446
+#: modules/subscription/includes/admin/admin.php:457
 msgid "No. of Days"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:447
+#: modules/subscription/includes/admin/admin.php:458
 msgid "Before an email will be sent to the vendor"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:455
+#: modules/subscription/includes/admin/admin.php:466
 msgid "Product status when vendor pack validity will expire"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:466
+#: modules/subscription/includes/admin/admin.php:477
 msgid "Email Subject"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:467
+#: modules/subscription/includes/admin/admin.php:478
 msgid "Enter Subject text for email notification"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:469
+#: modules/subscription/includes/admin/admin.php:480
 msgid "Subscription Email"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:473
+#: modules/subscription/includes/admin/admin.php:484
 msgid "Email body"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:474
+#: modules/subscription/includes/admin/admin.php:485
 msgid "Enter body text for email notification"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:499
+#: modules/subscription/includes/admin/admin.php:510
 msgid "Subscriptions"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:556
+#: modules/subscription/includes/admin/admin.php:567
 msgid "Currently Activated Pack"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:560
+#: modules/subscription/includes/admin/admin.php:571
 msgid "Start Date :"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:564
+#: modules/subscription/includes/admin/admin.php:575
 msgid "End Date :"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:567
+#: modules/subscription/includes/admin/admin.php:578
 msgid "Lifetime package."
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:577
+#: modules/subscription/includes/admin/admin.php:588
 msgid ""
 "<i>This user already has recurring pack assigned. Are you sure to assign a "
 "new normal pack to the user? If you do so, the existing recurring plan will "
 "be replaced with the new one<i>"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:586
+#: modules/subscription/includes/admin/admin.php:597
 msgid "Select categories&hellip;"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:602
+#: modules/subscription/includes/admin/admin.php:613
 msgid ""
 "You can override allowed categories for this user. If empty then the "
 "predefined category for this pack will be selected"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:607
+#: modules/subscription/includes/admin/admin.php:618
 msgid "Assign Subscription Pack"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:610
+#: modules/subscription/includes/admin/admin.php:621
 msgid "-- Select a pack --"
 msgstr ""
 
-#: modules/subscription/includes/admin/admin.php:615
+#: modules/subscription/includes/admin/admin.php:626
 msgid "You can only assign non-recurring packs"
 msgstr ""
 
@@ -11136,33 +11162,52 @@ msgstr ""
 msgid "There is no analytics found for your store."
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:39
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:43
 msgid "%s param not found in token"
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:68
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:72
 msgid "Vendor Analytics"
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:98
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:102
 msgid "Authenticate"
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:100
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:104
 msgid "Log in with Google Analytics Account"
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:139
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:115
 msgid "Analytics Profile"
 msgstr ""
 
-#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:141
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:117
 msgid "Select your profile"
+msgstr ""
+
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:122
+msgid "Refreshing profile list"
+msgstr ""
+
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:123
+msgid "Profile list updated!"
+msgstr ""
+
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:129
+msgid "Add Tracking Code"
+msgstr ""
+
+#: modules/vendor-analytics/includes/class-dokan-vendor-analytics-admin-settings.php:130
+msgid ""
+"This is an optional settings that will add Analytics Global Site Tag in you "
+"site header. If you use any SEO plugin or add your tracking code by other "
+"means, then choose `no` in the settings."
 msgstr ""
 
 #: modules/vendor-analytics/includes/functions.php:24
 #: modules/vendor-analytics/includes/functions.php:134
-#: modules/vendor-analytics/module.php:185
+#: modules/vendor-analytics/module.php:184
 #: modules/vendor-analytics/templates/vendor-analytics/header.php:11
 msgid "Analytics"
 msgstr ""
@@ -11283,6 +11328,10 @@ msgstr ""
 
 #: modules/vendor-analytics/includes/functions.php:430
 msgid "Social Media"
+msgstr ""
+
+#: modules/vendor-analytics/includes/functions.php:582
+msgid "Token is empty"
 msgstr ""
 
 #: modules/vendor-analytics/tools/tools.php:183
@@ -11482,38 +11531,38 @@ msgstr ""
 msgid "Variable subscription"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:391
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:393
 msgid "Sign Up Fee Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:392
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:394
 msgid "Sign Up Fee % Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:393
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:395
 msgid "Recurring Product Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:394
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:396
 msgid "Recurring Product % Discount"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:414
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:416
 msgid "Active for x payments"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:416
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:418
 msgid "Unlimited payments"
 msgstr ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:454
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:456
 #. translators: %d refers to the number of payments the coupon can be used for.
 msgid "Active for %d payment"
 msgid_plural "Active for %d payments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: modules/vendor-subscription-product/includes/class-vendor-product.php:459
+#: modules/vendor-subscription-product/includes/class-vendor-product.php:461
 msgid "Active for unlimited payments"
 msgstr ""
 
@@ -11602,13 +11651,13 @@ msgstr ""
 
 #: modules/vendor-subscription-product/templates/subscription/price.php:111
 #: modules/vendor-subscription-product/templates/subscription/price.php:119
-#: modules/vendor-subscription-product/templates/subscription/variation-price.php:96
-#: modules/vendor-subscription-product/templates/subscription/variation-price.php:104
+#: modules/vendor-subscription-product/templates/subscription/variation-price.php:97
+#: modules/vendor-subscription-product/templates/subscription/variation-price.php:105
 msgid "Synchronise renewals"
 msgstr ""
 
 #: modules/vendor-subscription-product/templates/subscription/price.php:122
-#: modules/vendor-subscription-product/templates/subscription/variation-price.php:106
+#: modules/vendor-subscription-product/templates/subscription/variation-price.php:107
 msgid "Day"
 msgstr ""
 
@@ -11758,11 +11807,11 @@ msgstr ""
 msgid "No subscription found"
 msgstr ""
 
-#: modules/vendor-subscription-product/templates/subscription/variation-price.php:52
+#: modules/vendor-subscription-product/templates/subscription/variation-price.php:53
 msgid "Sign-up fee (%s)"
 msgstr ""
 
-#: modules/vendor-subscription-product/templates/subscription/variation-price.php:56
+#: modules/vendor-subscription-product/templates/subscription/variation-price.php:57
 msgid "Free trial"
 msgstr ""
 
@@ -12715,15 +12764,15 @@ msgstr ""
 msgid "Saving..."
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:554
+#: src/admin/components/VendorSingle.vue:557
 msgid "Email has been sent successfully."
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:595
+#: src/admin/components/VendorSingle.vue:598
 msgid "Vendor Updated"
 msgstr ""
 
-#: src/admin/components/VendorSingle.vue:596
+#: src/admin/components/VendorSingle.vue:599
 msgid "Vendor Updated Successfully!"
 msgstr ""
 
@@ -12741,7 +12790,7 @@ msgid "No method found"
 msgstr ""
 
 #: src/frontend/components/Main.vue:28 src/frontend/components/Zone.vue:125
-#: src/frontend/components/Zone.vue:138 src/frontend/components/Zone.vue:154
+#: src/frontend/components/Zone.vue:138 src/frontend/components/Zone.vue:152
 msgid "Add Shipping Method"
 msgstr ""
 
@@ -12764,7 +12813,7 @@ msgstr ""
 msgid "Write your terms, conditions and instructions about refund"
 msgstr ""
 
-#: src/frontend/components/Settings.vue:55 src/frontend/components/Zone.vue:234
+#: src/frontend/components/Settings.vue:55 src/frontend/components/Zone.vue:232
 #: templates/settings/shipping.php:323
 msgid "Save Settings"
 msgstr ""
@@ -12803,43 +12852,43 @@ msgstr ""
 msgid "Select a Method"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:166 src/frontend/components/Zone.vue:223
+#: src/frontend/components/Zone.vue:164 src/frontend/components/Zone.vue:221
 msgid "Enter method title"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:192
+#: src/frontend/components/Zone.vue:190
 msgid "Shipping Class Cost"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:193
+#: src/frontend/components/Zone.vue:191
 msgid "These costs can optionally be added based on the product shipping class"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:197
+#: src/frontend/components/Zone.vue:195
 msgid "shipping class cost"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:204
+#: src/frontend/components/Zone.vue:202
 msgid "No shipping class cost"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:210
+#: src/frontend/components/Zone.vue:208
 msgid "Calculation type"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:212
+#: src/frontend/components/Zone.vue:210
 msgid "Per class: Charge shipping for each shipping class individually"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:213
+#: src/frontend/components/Zone.vue:211
 msgid "Per order: Charge shipping for the most expensive shipping class"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:227
+#: src/frontend/components/Zone.vue:225
 msgid "Minimum order amount for free shipping"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:287
+#: src/frontend/components/Zone.vue:290
 msgid ""
 "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use "
 "<code>[qty]</code> for the number of items, <code>[cost]</code> for the "
@@ -12847,11 +12896,11 @@ msgid ""
 "max_fee='']</code> for percentage based fees."
 msgstr ""
 
-#: src/frontend/components/Zone.vue:288
+#: src/frontend/components/Zone.vue:291
 msgid "Edit Shipping Method"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:289
+#: src/frontend/components/Zone.vue:292
 msgid "Postcodes need to be comma separated"
 msgstr ""
 
@@ -13955,7 +14004,7 @@ msgctxt "table heading"
 msgid "Total"
 msgstr ""
 
-#: modules/vendor-subscription-product/templates/subscription/variation-price.php:53
+#: modules/vendor-subscription-product/templates/subscription/variation-price.php:54
 msgctxt "example price"
 msgid "e.g. 9.90"
 msgstr ""

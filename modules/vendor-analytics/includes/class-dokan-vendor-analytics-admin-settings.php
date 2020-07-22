@@ -147,7 +147,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
     /**
      * Refresh profiles in admin settings
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.5
      *
      * @return array
      */
@@ -167,7 +167,7 @@ class Dokan_Vendor_Analytics_Admin_Settings {
     /**
      * Add Google tracking code inside head tag
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.5
      *
      * @return void
      */
