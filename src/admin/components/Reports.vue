@@ -210,6 +210,18 @@
                     <currency :amount="data.row.commission"></currency>
                 </template>
 
+                <template slot="dokan_gateway_fee" slot-scope="data">
+                    <currency :amount="data.row.dokan_gateway_fee"></currency>
+                </template>
+
+                <template slot="shipping_total" slot-scope="data">
+                    <currency :amount="data.row.shipping_total"></currency>
+                </template>
+
+                <template slot="tax_total" slot-scope="data">
+                    <currency :amount="data.row.tax_total"></currency>
+                </template>
+
                 <template slot="date" slot-scope="data">
                     {{ moment(data.row.date).format('MMM D, YYYY') }}
                 </template>
@@ -331,6 +343,15 @@ export default {
                 },
                 'commission': {
                     label: this.__( 'Commission', 'dokan' )
+                },
+                'dokan_gateway_fee': {
+                    label: this.__( 'Gateway Fee', 'dokan' ),
+                },
+                'shipping_total': {
+                    label: this.__( 'Shipping', 'dokan' ),
+                },
+                'tax_total': {
+                    label: this.__( 'Tax', 'dokan' ),
                 },
                 'status': {
                     label: this.__( 'Status', 'dokan' )
@@ -644,7 +665,7 @@ export default {
                 for (let index in array[i]) {
                     if (line != '') line += ',';
 
-                    if ( 'commission' == index || 'previous_order_total' == index || 'vendor_earning' == index ) {
+                    if ( 'commission' == index || 'previous_order_total' == index || 'vendor_earning' == index || 'dokan_gateway_fee' == index || 'shipping_total' == index || 'tax_total' == index ) {
                         line += '"' + accounting.formatMoney(
                             array[i][index],
                             '',

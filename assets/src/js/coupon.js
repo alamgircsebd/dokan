@@ -16,6 +16,10 @@
         init: function() {
             var self = this;
             this.couponsValidation(self);
+
+            $( 'select#discount_type' )
+                .on( 'change', this.type_options )
+                .change();
         },
 
         couponsValidation: function(self) {
@@ -25,7 +29,19 @@
                 errorPlacement: validatorError,
                 success: validatorSuccess
             });
+        },
+
+        type_options: function() {
+            // Get value
+            var select_val = $( this ).val();
+
+            if ( select_val.indexOf('percent') >= 0 ) {
+                $( '#coupon_amount' ).removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
+            } else {
+                $( '#coupon_amount' ).removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
+            }
         }
+
     };
 
     Dokan_Coupons.init();

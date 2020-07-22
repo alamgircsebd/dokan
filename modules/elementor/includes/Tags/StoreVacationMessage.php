@@ -52,6 +52,10 @@ class StoreVacationMessage extends TagBase {
             return;
         }
 
+        if ( ! class_exists( \WeDevs\DokanPro\Modules\SellerVacation\Module::class ) ) {
+            return;
+        }
+
         if ( dokan_is_store_page() ) {
             $seller_vacation = dokan_pro()->module->seller_vacation;
             $store           = dokan()->vendor->get( get_query_var( 'author' ) );

@@ -94,8 +94,26 @@ class LogsController extends DokanRESTAdminController {
                 }
             }
 
-            $order_total = $order->get_total();
-            $has_refund  = $order->get_total_refunded() ? true : false;
+            $order_total    = $order->get_total();
+            $has_refund     = $order->get_total_refunded() ? true : false;
+            $total_shipping = $order->get_total_shipping() ? $order->get_total_shipping() : 0;
+
+            $tax_totals = 0;
+            if ( $order->get_tax_totals() ) :     
+                foreach ( $order->get_tax_totals() as $tax ) :
+                    $tax_totals = $tax_totals + $tax->amount;
+                endforeach;
+            endif;
+
+            /**
+             * Payment gateway fee minus from admin commission earning
+             */
+            $processing_fee = dokan()->commission->get_processing_fee( $order );
+            $commission     = $is_subscription_product ? $result->order_total : $result->order_total - $result->net_amount;
+
+            if ( $processing_fee && $processing_fee > 0 ) {
+                $commission = $is_subscription_product ? $result->order_total : ( $result->order_total - $result->net_amount ) - $processing_fee;
+            }
 
             $logs[] = [
                 'order_id'             => $result->order_id,
@@ -104,7 +122,10 @@ class LogsController extends DokanRESTAdminController {
                 'previous_order_total' => $order_total,
                 'order_total'          => $result->order_total,
                 'vendor_earning'       => $is_subscription_product ? 0 : $result->net_amount,
-                'commission'           => $is_subscription_product ? $result->order_total :  $result->order_total - $result->net_amount,
+                'commission'           => $commission,
+                'dokan_gateway_fee'    => $processing_fee ? $processing_fee : 0,
+                'shipping_total'       => $total_shipping,
+                'tax_total'            => $tax_totals,
                 'status'               => $statuses[ $result->order_status ],
                 'date'                 => $result->post_date,
                 'has_refund'           => $has_refund,

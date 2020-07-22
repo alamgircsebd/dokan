@@ -1,6 +1,62 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.0.5',
+        'released' => '2020-07-23',
+        'changes'  => array(
+            array(
+                'title'       => 'Decimal and Thousand Separator with Comma',
+                'type'        => 'New',
+                'description' => 'Now allowing decimal and thousand separator with comma sign in every where'
+            ),
+            array(
+                'title'       => 'New 3 Columns Added on All Logs (Vendor Subscription Module)',
+                'type'        => 'New',
+                'description' => 'Gateway Fee, Total Shipping and Total Tax 3 new columns added on all logs'
+            ),
+            array(
+                'title'       => 'Gallery Image Restriction (Vendor Subscription Module)',
+                'type'        => 'New',
+                'description' => 'Gallery image restriction count for vendor subscription module'
+            ),
+            array(
+                'title'       => 'Token Issue with Dokan Stripe Module',
+                'type'        => 'Fix',
+                'description' => 'Stripe token issue come when try to payment with stripe for logged and guest use '
+            ),
+            array(
+                'title'       => 'Shipping Issue with Same Country Multiple Zones (Shipping)',
+                'type'        => 'Fix',
+                'description' => 'Full Shipping system revamped our codes structure and make performance improvement where allowing same country multiple zones'
+            ),
+            array(
+                'title'       => 'Vendor Subscriptions Product not Allow with Dokan Stripe (Vendor Subscriptions Product)',
+                'type'        => 'Fix',
+                'description' => 'When try to payment with stripe on Vendor Subscription Product then it not worked'
+            ),
+            array(
+                'title'       => 'After Payment Completed Order Status Not Change (Vendor Subscriptions Product)',
+                'type'        => 'Fix',
+                'description' => 'Vendor Subscription Products after payment completed order status not changed'
+            ),
+            array(
+                'title'       => 'Gateway Fee Subtract from Admin Commission',
+                'type'        => 'Fix',
+                'description' => 'Now gateway fee subtract from admin commission value and make it separate column on all logs'
+            ),
+            array(
+                'title'       => 'Products Addon Fields Not Worked for Vendor Staff (Products Addon)',
+                'type'        => 'Fix',
+                'description' => 'Products Addon fields manage by vendor staff and fields showing on product page'
+            ),
+            array(
+                'title'       => 'Add New Card Not Worked on My Account Page',
+                'type'        => 'Fix',
+                'description' => 'When try to add new card number in my account page on payment methods tab then it not worked'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 3.0.4',
         'released' => '2020-06-19',
         'changes'  => array(

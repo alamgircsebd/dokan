@@ -28,8 +28,8 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
          */
         public function __construct() {
             $this->id             = 'dokan_staff_new_order';
-            $this->title          = __( 'Dokan Staff New Order', 'woocommerce' );
-            $this->description    = __( 'New order emails are sent to chosen recipient(s) when a new order is received.', 'woocommerce' );
+            $this->title          = __( 'Dokan Staff New Order', 'dokan' );
+            $this->description    = __( 'New order emails are sent to chosen recipient(s) when a new order is received.', 'dokan' );
             $this->template_html  = 'emails/staff-new-order.php';
             $this->template_plain = 'emails/plain/staff-new-order.php';
             $this->template_base  = DOKAN_VENDOR_staff_DIR.'/templates/';
@@ -62,7 +62,7 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
          * @return string
          */
         public function get_default_subject() {
-            return __( '[{site_title}] New customer order ({order_number}) - {order_date}', 'woocommerce' );
+            return __( '[{site_title}] New customer order ({order_number}) - {order_date}', 'dokan' );
         }
 
         /**
@@ -72,7 +72,7 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
          * @return string
          */
         public function get_default_heading() {
-            return __( 'New customer order', 'woocommerce' );
+            return __( 'New customer order', 'dokan' );
         }
 
         /**
@@ -161,33 +161,33 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
         public function init_form_fields() {
             $this->form_fields = array(
                 'enabled'    => array(
-                    'title'   => __( 'Enable/Disable', 'woocommerce' ),
+                    'title'   => __( 'Enable/Disable', 'dokan' ),
                     'type'    => 'checkbox',
-                    'label'   => __( 'Enable this email notification', 'woocommerce' ),
+                    'label'   => __( 'Enable this email notification', 'dokan' ),
                     'default' => 'yes',
                 ),
                 'subject'    => array(
-                    'title'       => __( 'Subject', 'woocommerce' ),
+                    'title'       => __( 'Subject', 'dokan' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     /* translators: %s: list of placeholders */
-                    'description' => sprintf( __( 'Available placeholders: %s', 'woocommerce' ), '<code>{site_title}, {order_date}, {order_number}</code>' ),
+                    'description' => sprintf( __( 'Available placeholders: %s', 'dokan' ), '<code>{site_title}, {order_date}, {order_number}</code>' ),
                     'placeholder' => $this->get_default_subject(),
                     'default'     => '',
                 ),
                 'heading'    => array(
-                    'title'       => __( 'Email heading', 'woocommerce' ),
+                    'title'       => __( 'Email heading', 'dokan' ),
                     'type'        => 'text',
                     'desc_tip'    => true,
                     /* translators: %s: list of placeholders */
-                    'description' => sprintf( __( 'Available placeholders: %s', 'woocommerce' ), '<code>{site_title}, {order_date}, {order_number}</code>' ),
+                    'description' => sprintf( __( 'Available placeholders: %s', 'dokan' ), '<code>{site_title}, {order_date}, {order_number}</code>' ),
                     'placeholder' => $this->get_default_heading(),
                     'default'     => '',
                 ),
                 'email_type' => array(
-                    'title'       => __( 'Email type', 'woocommerce' ),
+                    'title'       => __( 'Email type', 'dokan' ),
                     'type'        => 'select',
-                    'description' => __( 'Choose which format of email to send.', 'woocommerce' ),
+                    'description' => __( 'Choose which format of email to send.', 'dokan' ),
                     'default'     => 'html',
                     'class'       => 'email_type wc-enhanced-select',
                     'options'     => $this->get_email_type_options(),

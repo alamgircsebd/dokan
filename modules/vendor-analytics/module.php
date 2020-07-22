@@ -65,7 +65,6 @@ class Module {
      * @return void
      */
     public function initiate() {
-        new \Dokan_Vendor_Analytics_Reports();
         new \Dokan_Vendor_Analytics_Admin_Settings();
     }
 

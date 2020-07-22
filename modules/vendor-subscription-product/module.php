@@ -111,6 +111,23 @@ class Module {
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_subcription_product_templates' ], 10, 3 );
+        add_filter( 'woocommerce_order_item_needs_processing', array( $this, 'order_needs_processing' ), 10, 2 );
+    }
+
+    /**
+     * Tell WC that we don't need any processing
+     *
+     * @param  bool $needs_processing
+     * @param  array $product
+     * @return bool
+     */
+    function order_needs_processing( $needs_processing, $product ) {
+
+        if ( $product->get_type() == 'subscription' || $product->get_type() == 'variable-subscription' || $product->get_type() == 'subscription_variation' ) {
+            $needs_processing = false;
+        }
+
+        return $needs_processing;
     }
 
     /**

@@ -57,7 +57,7 @@
                 </td>
 
                 <td data-title="<?php _e( 'Coupon amount', 'dokan' ); ?>">
-                    <?php echo esc_attr( $coupon->get_amount() ); ?>
+                    <?php echo esc_attr( wc_format_localized_price( $coupon->get_amount() ) ); ?>
                 </td>
 
                 <td data-title="<?php _e( 'Product IDs', 'dokan' ); ?>">

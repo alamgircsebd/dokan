@@ -75,6 +75,10 @@ class Module {
         $dokan_pro_modules = $this->get_all_modules();
 
         foreach ( $active_modules as $module_id ) {
+            if ( ! isset( $dokan_pro_modules[ $module_id ] ) ) {
+                continue;
+            }
+
             $module = $dokan_pro_modules[ $module_id ];
 
             if ( ! isset( $this->container[ $module_id ] ) && file_exists( $module['module_file'] ) ) {
@@ -360,7 +364,7 @@ class Module {
                 //     'thumbnail'    => $thumbnail_dir . '/analytics.png',
                 //     'module_file'  => DOKAN_PRO_MODULE_DIR . '/vendor-analytics/module.php',
                 //     'module_class' => 'WeDevs\DokanPro\Modules\VendorAnalytics\Module',
-                //     'plan'         => []
+                //     'plan'         => [],
                 // ],
                 'vendor_staff' => [
                     'id'           => 'vendor_staff',

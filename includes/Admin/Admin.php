@@ -319,20 +319,20 @@ class Admin {
                         'label'   => __( 'Percent Fee', 'dokan' ),
                         'default' => '10',
                         'type'    => 'text',
-                        'min'     => '0',
-                        'step'    => 'any',
                         'desc'    => __( 'Amount you will get from sales in percentage (10%)', 'dokan' ),
-                        'required' => 'yes'
+                        'required' => 'yes',
+                        'sanitize_callback'          => 'wc_format_decimal',
+                        'response_sanitize_callback' => 'wc_format_decimal',
                     ],
                     'fixed_fee' => [
                         'name'    => 'additional_fee',
                         'label'   => __( 'Fixed Fee', 'dokan' ),
                         'default' => '10',
                         'type'    => 'text',
-                        'min'     => '0',
-                        'step'    => 'any',
                         'desc'    => __( 'Amount you will get from sales in flat rate(+5)', 'dokan' ),
-                        'required' => 'yes'
+                        'required' => 'yes',
+                        'sanitize_callback'          => 'wc_format_decimal',
+                        'response_sanitize_callback' => 'wc_format_localized_price',
                     ]
                 ],
                 'min'     => '0',
@@ -344,6 +344,8 @@ class Admin {
                         'commission_type' => [ 'combine' ]
                     ]
                 ],
+                'sanitize_callback'          => 'wc_format_decimal',
+                'response_sanitize_callback' => 'wc_format_localized_price',
             ]
         ];
     }
@@ -843,9 +845,9 @@ class Admin {
         }
 
         $post_data = wp_unslash( $_POST );
-        $additional_fee  = isset( $post_data['dokan_admin_additional_fee'] ) && $post_data['dokan_admin_additional_fee'] != '' ? floatval( $post_data['dokan_admin_additional_fee'] ) : '';
+        $additional_fee  = isset( $post_data['dokan_admin_additional_fee'] ) && $post_data['dokan_admin_additional_fee'] != '' ? $post_data['dokan_admin_additional_fee'] : '';
 
-        update_user_meta( $user_id, 'dokan_admin_additional_fee', $additional_fee );
+        update_user_meta( $user_id, 'dokan_admin_additional_fee', wc_format_decimal( $additional_fee ) );
     }
 
     /**
@@ -860,7 +862,7 @@ class Admin {
         ?>
         <span class="additional-fee dokan-hide">
             <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
-            <input type="number" min="0" class="small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( $admin_additional_fee ); ?>">
+            <input type="text" class="wc_input_price small-text" name="dokan_admin_additional_fee" value="<?php echo esc_attr( wc_format_localized_price( $admin_additional_fee ) ); ?>">
         </span>
 
         <script type="text/javascript">

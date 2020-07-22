@@ -10,7 +10,7 @@
     <div class="dokan-form-group dokan-clearfix show_if_variation_wholesale <?php echo 'yes' !== $enable_wholesale ? esc_attr( 'dokan-hide' ) : ''; ?>">
         <div class="content-half-part">
             <label><?php echo __( 'Wholesale price', 'dokan' ) . ' (' . get_woocommerce_currency_symbol() . ')'; ?></label>
-            <input type="text" size="5" name="variable_wholesale_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( $price ); ?>" class="dokan-form-control" placeholder="<?php esc_attr_e( 'Variation wholesale price', 'dokan' ); ?>" />
+            <input type="text" size="5" name="variable_wholesale_price[<?php echo $loop; ?>]" value="<?php echo esc_attr( wc_format_localized_price( $price ) ); ?>" class="wc_input_price dokan-form-control" placeholder="<?php esc_attr_e( 'Variation wholesale price', 'dokan' ); ?>" />
         </div>
         <div class="content-half-part">
             <label><?php echo __( 'Wholesale Quantity', 'dokan' ); ?></label>

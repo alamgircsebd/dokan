@@ -222,7 +222,6 @@ class Module {
             wp_enqueue_script( 'jquery-ui-datepicker' );
             wp_enqueue_script( 'dokan-auctiondasd-timepicker', plugins_url( 'assets/js/jquery-ui-timepicker.js', __FILE__ ), array( 'jquery' ), false, true );
             wp_enqueue_media();
-            wp_enqueue_script( 'dokan-script' );
         }
     }
 

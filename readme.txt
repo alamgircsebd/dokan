@@ -5,7 +5,7 @@ Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, stor
 Requires at least: 4.4
 Tested up to: 5.4.2
 WC requires at least: 3.0
-WC tested up to: 4.2.2
+WC tested up to: 4.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,28 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v3.0.5 -> July 23, 2020
+----------------------------------
+
+- [feat] Decimal and Thousand Separator with Comma
+- [feat] Gateway Fee, Total Shipping and Total Tax 3 new columns added on all logs
+- [feat] Gallery image restriction count for vendor subscription module
+- [fix] Stripe token issue fixed
+- [fix] Shipping Issue with Same Country Multiple Zones
+- [fix] Vendor product subscriptions not working with stripe connect
+- [fix] Dokan Stripe conflicting with other payment methods when only enable it
+- [fix] Add cart validation when try to add multiple subscriptions products
+- [fix] When subscriptions product payment complete then active status update
+- [fix] Subscription module image gallery restriction added for product edit
+- [fix] Vendor subscription conflict with WooCommerce subscription in admin edit product page
+- [fix] Fix loading active modules
+- [fix] Now gateway fee subtract from admin commission value and make it separate column on all logs
+- [fix] When try to add new card number in my account page on payment methods tab then it not worked
+- [fix] Coupon and auction module pricing issues
+- [fix] Gateway fee minus from admin commission earning
+- [fix] Fatal error showing on refund request when RMA enable
+- [fix] Fatal error when place an order note by vendor staff
 
 v3.0.4 -> Jun 24, 2020
 ----------------------------------

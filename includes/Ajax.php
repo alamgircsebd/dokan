@@ -216,7 +216,8 @@ class Ajax {
 
         $data = array(
             'zone_id'   => $zone_id,
-            'method_id' => $_POST['method']
+            'method_id' => $_POST['method'],
+            'settings'  => $_POST['settings']
         );
 
         $result = ShippingZone::add_shipping_methods( $data );

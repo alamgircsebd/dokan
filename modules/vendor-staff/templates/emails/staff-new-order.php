@@ -27,7 +27,7 @@ $text_align = is_rtl() ? 'right' : 'left';
   */
  do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 
- <p><?php printf( __( 'You have received an order from %s.', 'woocommerce' ), $order->get_formatted_billing_full_name() ); ?></p>
+ <p><?php printf( __( 'You have received an order from %s.', 'dokan' ), $order->get_formatted_billing_full_name() ); ?></p>
 
  <?php
 
@@ -37,9 +37,9 @@ $text_align = is_rtl() ? 'right' : 'left';
     <table class="td" cellspacing="0" cellpadding="6" style="width: 100%; font-family: 'Helvetica Neue', Helvetica, Roboto, Arial, sans-serif;" border="1">
         <thead>
             <tr>
-                <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
-                <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
-                <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
+                <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Product', 'dokan' ); ?></th>
+                <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Quantity', 'dokan' ); ?></th>
+                <th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Price', 'dokan' ); ?></th>
             </tr>
         </thead>
 

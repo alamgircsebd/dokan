@@ -2,6 +2,10 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe;
 
+use WC_Subscriptions;
+use WC_Subscriptions_Cart;
+use WC_Subscriptions_Product;
+
 defined( 'ABSPATH' ) || exit;
 
 class Validation {
@@ -26,6 +30,52 @@ class Validation {
      */
     private function hooks() {
         add_action( 'woocommerce_after_checkout_validation', [ $this, 'check_vendor_configure_stripe' ], 15, 2 );
+        add_filter( 'woocommerce_add_to_cart_validation', [ $this, 'cart_validation_with_multiple_products' ], 10, 2 );
+    }
+
+    /**
+     * Cart validation with multiple subscription products
+     *
+     * @param $valid
+     * @param $product_id
+     *
+     * @return mixed
+     */
+    public function cart_validation_with_multiple_products( $valid, $product_id ) {
+        if ( ! class_exists( 'WC_Subscriptions' ) ) {
+            return $valid;
+        }
+        
+        $is_subscription            = WC_Subscriptions_Product::is_subscription( $product_id );
+        $cart_contains_subscription = WC_Subscriptions_Cart::cart_contains_subscription();
+
+        if ( $is_subscription && $cart_contains_subscription ) {
+
+            WC_Subscriptions_Cart::remove_subscriptions_from_cart();
+
+            wc_add_notice( __( 'A subscription has been removed from your cart. Due to payment gateway restrictions, different subscription products can not be purchased at the same time.', 'dokan' ), 'notice' );
+
+        } elseif ( $is_subscription && ! $cart_contains_subscription && ! WC()->cart->is_empty() ) {
+
+            WC()->cart->empty_cart();
+
+            wc_add_notice( __( 'Products has been removed from your cart. Products and subscriptions can not be purchased at the same time.', 'dokan' ), 'notice' );
+
+        } elseif ( $cart_contains_subscription ) {
+
+            WC_Subscriptions_Cart::remove_subscriptions_from_cart();
+
+            wc_add_notice( __( 'A subscription has been removed from your cart. Products and subscriptions can not be purchased at the same time.', 'dokan' ), 'notice' );
+
+            // Redirect to cart page to remove subscription & notify shopper
+            if ( WC_Subscriptions::is_woocommerce_pre( '3.0.8' ) ) {
+                add_filter( 'add_to_cart_fragments', 'WC_Subscriptions::redirect_ajax_add_to_cart' );
+            } else {
+                add_filter( 'woocommerce_add_to_cart_fragments', 'WC_Subscriptions::redirect_ajax_add_to_cart' );
+            }
+        }
+
+        return $valid;
     }
 
     /**

@@ -42,7 +42,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="amount"><?php _e( 'Amount', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="amount" required value="<?php echo esc_attr( $amount ); ?>" name="amount" placeholder="<?php _e( 'Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="coupon_amount" required value="<?php echo esc_attr( $amount ); ?>" name="amount" placeholder="<?php _e( 'Amount', 'dokan' ); ?>" class="wc_input_price dokan-form-control input-md" type="text">
         </div>
     </div>
 
@@ -86,7 +86,7 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="minium_ammount"><?php _e( 'Minimum Amount', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <input id="minium_ammount" value="<?php echo $minimum_amount; ?>" name="minium_ammount" placeholder="<?php esc_attr_e( 'Minimum Amount', 'dokan' ); ?>" class="dokan-form-control input-md" type="text">
+            <input id="minium_ammount" value="<?php echo $minimum_amount; ?>" name="minium_ammount" placeholder="<?php esc_attr_e( 'Minimum Amount', 'dokan' ); ?>" class="wc_input_price dokan-form-control input-md" type="text">
         </div>
     </div>
 

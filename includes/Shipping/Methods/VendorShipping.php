@@ -386,95 +386,13 @@ class VendorShipping extends WC_Shipping_Method {
     public function is_available( $package ) {
         $seller_id = $package['seller_id'];
 
-        $destination_country  = isset( $package['destination']['country'] ) ? $package['destination']['country'] : '';
-        $destination_state    = isset( $package['destination']['state'] ) ? $package['destination']['state'] : '';
-        $destination_postcode = isset( $package['destination']['postcode'] ) ? $package['destination']['postcode'] : '';
-
         if ( empty( $seller_id ) ) {
             return false;
         }
 
-        $zone      = ShippingZone::get_zone_matching_package( $package );
-        $locations = ShippingZone::get_locations( $zone->get_id(), $seller_id );
+        $shipping_zone = ShippingZone::get_zone_matching_package( $package );
 
-        if ( empty( $locations ) ) {
-            return true;
-        }
-
-        $location_group = array();
-
-        foreach ( $locations as $location ) {
-            $location_group[$location['type']][] = $location;
-        }
-
-        $is_available = false;
-
-        if ( isset( $location_group['country'] ) ) {
-            $country_array = wp_list_pluck( $location_group['country'], 'code' );
-
-            if ( ! in_array( $destination_country, $country_array ) ) {
-                return false;
-            }
-
-            $is_available = true;
-        }
-
-        if ( isset( $location_group['state'] ) ) {
-            $states       = wp_list_pluck( $location_group['state'], 'code' );
-            $state_array  = array_map( array( $this, 'split_state_code' ), $states );
-            $is_available = false;
-
-            if ( in_array( $destination_state, $state_array ) ) {
-                $is_available = true;
-            }
-        }
-
-        if ( isset( $location_group['postcode'] ) ) {
-            $is_available   = false;
-            $postcode_array = wp_list_pluck( $location_group['postcode'], 'code' );
-
-            // if postcode is set as ranges (e.g. 10001...10010)
-            if ( strstr( $postcode_array[0], '...' ) ) {
-                $range = array_map( 'trim', explode( '...', $postcode_array[0] ) );
-
-                if ( 2 !== count( $range ) ) {
-                    return $is_available;
-                }
-
-                list( $min, $max ) = $range;
-
-                // If the postcode is non-numeric, make it numeric.
-                if ( ! is_numeric( $min ) || ! is_numeric( $max ) ) {
-                    $destination_postcode = wc_make_numeric_postcode( $destination_postcode );
-                    $min = str_pad( wc_make_numeric_postcode( $min ), strlen( $destination_postcode ), '0' );
-                    $max = str_pad( wc_make_numeric_postcode( $max ), strlen( $destination_postcode ), '0' );
-                }
-
-                if ( $destination_postcode >= $min && $destination_postcode <= $max ) {
-                    $is_available = true;
-
-                    return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
-                }
-            }
-
-            if ( in_array( $destination_postcode, $postcode_array ) ) {
-                $is_available = true;
-            }
-
-            // if postcode is set as wildcard range (e.g W1*)
-            $wildcard_postcodes = array_map( 'wc_clean', wc_get_wildcard_postcodes( $destination_postcode, $destination_country ) );
-
-            foreach ( $postcode_array as $postcode ) {
-                if ( false === strpos( $postcode, '*' ) ) {
-                    continue;
-                }
-
-                if ( in_array( $postcode, $wildcard_postcodes ) ) {
-                    $is_available = true;
-                    break;
-                }
-            }
-        }
+        $is_available = ( $shipping_zone instanceof \WC_Shipping_Zone ) && $shipping_zone->get_id();
 
         return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
     }

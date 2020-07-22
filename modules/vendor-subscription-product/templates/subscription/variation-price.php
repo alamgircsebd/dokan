@@ -18,7 +18,7 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
             <label for="variable_subscription_price" class="form-label"><?php esc_html_e( 'Subscription price', 'dokan-lite' ); ?>(<?php echo get_woocommerce_currency_symbol() ?>) <span class="vendor-earning">( <?php _e( ' You Earn : ', 'dokan' ) ?><?php echo get_woocommerce_currency_symbol() ?><span class="vendor-price"><?php echo esc_html( dokan()->commission->get_earning_by_product( $variation->ID ) ); ?></span> )</span></label>
 
             <div class="dokan-input-group">
-                <input type="text" name="variable_subscription_price[<?php echo $loop; ?>]" value="<?php if ( isset( $chosen_price ) ) echo esc_attr( $chosen_price ); ?>" class="dokan-form-control dokan-product-regular-price-variable" placeholder="<?php esc_attr_e( 'Variation price (required)', 'dokan' ); ?>" />
+                <input type="text" name="variable_subscription_price[<?php echo $loop; ?>]" value="<?php if ( isset( $chosen_price ) ) echo esc_attr( $chosen_price ); ?>" class="wc_input_price dokan-form-control dokan-product-regular-price-variable" placeholder="<?php esc_attr_e( 'Variation price (required)', 'dokan' ); ?>" />
             </div>
             <div class="dokan-input-group">
                 <select id="variable_subscription_period_interval[<?php echo $loop; ?>]" name="variable_subscription_period_interval[<?php echo $loop; ?>]" class="dokan-form-control">
@@ -45,12 +45,13 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
                 </select>
             </div>
         </div>
+        <div class="dokan-clearfix"></div>
     </div>
 
     <div class="dokan-form-group subscription-sign-up-fee dokan-clearfix">
         <div class="dokan-form-group content-half-part">
             <label class="form-label" for="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]"><?php printf( esc_html__( 'Sign-up fee (%s)', 'dokan' ), esc_html( get_woocommerce_currency_symbol() ) ); ?></label>
-            <input type="text" class="dokan-form-control wc_input_subscription_intial_price wc_input_subscription_initial_price" name="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( wc_format_localized_price( get_post_meta( $variation->ID, '_subscription_sign_up_fee', true ) ) ); ?>" placeholder="<?php echo esc_attr_x( 'e.g. 9.90', 'example price', 'dokan' ); ?>">
+            <input type="text" class="dokan-form-control wc_input_subscription_intial_price wc_input_subscription_initial_price wc_input_price" name="variable_subscription_sign_up_fee[<?php echo esc_attr( $loop ); ?>]" value="<?php echo esc_attr( wc_format_localized_price( get_post_meta( $variation->ID, '_subscription_sign_up_fee', true ) ) ); ?>" placeholder="<?php echo esc_attr_x( 'e.g. 9.90', 'example price', 'dokan' ); ?>">
         </div>
         <div class="content-half-part">
             <label class="form-label" for="variable_subscription_trial_length[<?php echo esc_attr( $loop ); ?>]"><?php esc_html_e( 'Free trial', 'dokan' ); ?></label>
