@@ -97,7 +97,13 @@ class LogsController extends DokanRESTAdminController {
             $order_total    = $order->get_total();
             $has_refund     = $order->get_total_refunded() ? true : false;
             $total_shipping = $order->get_total_shipping() ? $order->get_total_shipping() : 0;
-            $tax_totals     = $order->get_tax_totals() ? $order->get_tax_totals() : 0;
+
+            $tax_totals = 0;
+            if ( $order->get_tax_totals() ) :     
+                foreach ( $order->get_tax_totals() as $tax ) :
+                    $tax_totals = $tax_totals + $tax->amount;
+                endforeach;
+            endif;
 
             /**
              * Payment gateway fee minus from admin commission earning
