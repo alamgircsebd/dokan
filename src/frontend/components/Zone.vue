@@ -143,9 +143,7 @@
                 <p>{{ __( 'Choose the shipping method you wish to add. Only shipping methods which support zones are listed.', 'dokan' ) }}</p>
                 <select class="dokan-form-control" v-model="shipping_method" model="shipping_method" id="shipping_method">
                     <option value="">&dash; {{ __( 'Select a Method', 'dokan' ) }} &dash;</option>
-                    <option value="flat_rate">{{ __( 'Flat Rate', 'dokan' ) }}</option>
-                    <option value="local_pickup">{{ __( 'Local Pickup', 'dokan' ) }}</option>
-                    <option value="free_shipping">{{ __( 'Free Shipping', 'dokan' ) }}</option>
+                    <option v-for="(availableMethod, key) in availableMethods" :value="key">{{ availableMethod }}</option>
                     <!-- <option value="custom">Custom Shipping</option> -->
                 </select>
             </template>
@@ -282,11 +280,21 @@ export default {
             editShippingMethodData: {
                 method_id: '',
                 instance_id: '0',
-                settings: {}
+                settings: {
+                    title: '',
+                    cost: '0',
+                    description: this.__( 'Lets you charge a rate for shipping', 'dokan' ),
+                    tax_status: 'none'
+                }
             },
             cost_description: this.__( 'Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use <code>[qty]</code> for the number of items, <code>[cost]</code> for the total cost of items, and <code>[fee percent=\'10\' min_fee=\'20\' max_fee=\'\']</code> for percentage based fees.', 'dokan' ),
             editShippingMethodTitle: this.__( 'Edit Shipping Method', 'dokan' ),
-            postCodeTitle: this.__( 'Postcodes need to be comma separated', 'dokan' )
+            postCodeTitle: this.__( 'Postcodes need to be comma separated', 'dokan' ),
+            availableMethods: {
+                flat_rate: this.__( 'Flat Rate', 'dokan' ),
+                local_pickup: this.__( 'Local Pickup', 'dokan' ),
+                free_shipping: this.__( 'Free Shipping', 'dokan' )
+            }
         }
     },
 
@@ -546,6 +554,13 @@ export default {
                     nonce: dokan.nonce,
                     method: self.shipping_method
                 };
+
+            data.settings = {
+                title: self.shipping_method != '' ? this.availableMethods[self.shipping_method] : '',
+                cost: '0',
+                description: this.__( 'Lets you charge a rate for shipping', 'dokan' ),
+                tax_status: 'none'
+            };
 
             jQuery.post( dokan.ajaxurl, data, function(resp) {
                 if ( resp.success ) {

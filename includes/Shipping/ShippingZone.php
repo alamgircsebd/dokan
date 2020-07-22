@@ -89,14 +89,18 @@ class ShippingZone {
         $result = $wpdb->insert(
             $table_name,
             array(
-                'method_id' => $data['method_id'],
-                'zone_id'   => $data['zone_id'],
-                'seller_id' => dokan_get_current_user_id()
+                'method_id'  => $data['method_id'],
+                'zone_id'    => $data['zone_id'],
+                'seller_id'  => dokan_get_current_user_id(),
+                'is_enabled' => 1,
+                'settings'   => maybe_serialize( $data['settings'] )
             ),
             array(
                 '%s',
                 '%d',
-                '%d'
+                '%d',
+                '%d',
+                '%s'
             )
         );
 
