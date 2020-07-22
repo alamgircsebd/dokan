@@ -45,7 +45,7 @@ class Dokan_Live_Search_Widget extends WP_Widget {
         ?>
         <form role="search" method="get" class="ajaxsearchform" action="<?php echo esc_url( home_url( '/'  ) ); ?>">
             <div class="input-group">
-                <input type="text" class="form-control dokan-ajax-search-textfield" value="<?php echo get_search_query(); ?>" name="s" placeholder="<?php echo __( 'Just type ...', 'dokan' ); ?>" />
+                <input type="text" autocomplete="off" class="form-control dokan-ajax-search-textfield" value="<?php echo get_search_query(); ?>" name="s" placeholder="<?php echo __( 'Just type ...', 'dokan' ); ?>" />
                 <span class="input-group-addon">
                     <?php wp_dropdown_categories( array(
                         'taxonomy' => 'product_cat',
