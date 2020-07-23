@@ -172,6 +172,11 @@ A. You just delete the free version and install and activate the pro version. No
 
 == Changelog ==
 
+v3.0.6 -> July 23, 2020
+----------------------------------
+
+- [fix] Shipping Issue with some different postcode with same zone
+
 v3.0.5 -> July 23, 2020
 ----------------------------------
 
