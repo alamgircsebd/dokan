@@ -394,8 +394,8 @@ class ShippingZone {
         if ( ! empty( $shipping_zone_ids ) ) {
             $zone_locations = $wpdb->get_results(
                 "SELECT locations.zone_id, locations.location_code, locations.location_type
-                FROM wp_dokan_shipping_zone_locations as locations
-                LEFT JOIN wp_woocommerce_shipping_zones as wc_zones ON locations.zone_id = wc_zones.zone_id
+                FROM {$wpdb->prefix}dokan_shipping_zone_locations as locations
+                LEFT JOIN {$wpdb->prefix}woocommerce_shipping_zones as wc_zones ON locations.zone_id = wc_zones.zone_id
                 WHERE seller_id={$vendor_id} AND locations.zone_id IN (" . implode( ', ', $shipping_zone_ids ) . ")
                 ORDER BY wc_zones.zone_order ASC",
                 ARRAY_A
