@@ -391,8 +391,15 @@ class VendorShipping extends WC_Shipping_Method {
         }
 
         $shipping_zone = ShippingZone::get_zone_matching_package( $package );
+        $is_available  = ( $shipping_zone instanceof \WC_Shipping_Zone ) && $shipping_zone->get_id();
 
-        $is_available = ( $shipping_zone instanceof \WC_Shipping_Zone ) && $shipping_zone->get_id();
+        if ( ! $is_available ) {
+            $shipping_methods = ShippingZone::get_shipping_methods( $shipping_zone->get_id(), $seller_id );
+
+            if ( ! empty( $shipping_methods ) ) {
+                $is_available = true ;
+            }
+        }
 
         return apply_filters( $this->id . '_is_available', $is_available, $package, $this );
     }

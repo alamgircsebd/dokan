@@ -437,7 +437,6 @@ class ShippingZone {
                     [ 0, 0, 1],
                     [ 0, 0, 0],
                 ];
-
                 foreach( $shipping_zones as $shipping_zone ) {
                     foreach( $use_cases as $use_case ) {
                         if ( $use_case[0] ) {
