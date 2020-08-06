@@ -273,6 +273,7 @@ class DSR_View {
             $user_info         = get_userdata( $review->post_author );
             $review_author_img = get_avatar( $user_info->user_email, 180 );
             $permalink         = '';
+            $author_name       = $user_info->display_name ? $user_info->display_name : $user_info->user_nicename;
 
             $rating = get_post_meta( $review->ID, 'rating', true );
             ?>
@@ -288,7 +289,7 @@ class DSR_View {
                                         </div>
                                 </a>
                                 <p>
-                                    <strong itemprop="author"><?php echo $user_info->user_nicename ?></strong>
+                                    <strong itemprop="author"><?php echo $author_name ?></strong>
                                     <em class="verified"><?php //echo $single_comment->user_id == 0 ? '(Guest)' : ''; ?></em>
                                     –
                                     <a href="<?php echo $permalink; ?>">
