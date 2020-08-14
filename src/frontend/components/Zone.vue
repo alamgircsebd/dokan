@@ -267,6 +267,7 @@ export default {
             state: [],
             country: [],
             postcode: [],
+            continent: [],
 
             showCountryList: false,
             showStateList: false,
@@ -348,6 +349,7 @@ export default {
             var self = this,
                 data = {
                     action: 'dokan-save-zone-settings',
+                    continent: self.continent,
                     country: self.country,
                     state: self.wantToLimitLocation ? self.state: [],
                     postcode: self.wantToLimitLocation ? self.postcode : '',
@@ -485,33 +487,22 @@ export default {
                         self.zone.locations = resp.data.data.zone_locations;
                     }
 
-                    var zoneLocationTypes = Object.keys(self.zoneLocation);
-                    if (zoneLocationTypes.indexOf('postcode') < 0) {
-                        if (zoneLocationTypes.indexOf('state') >= 0) {
-                            self.showPostCodeList = true;
-                        } else if (zoneLocationTypes.indexOf('country') >= 0) {
-                            self.showStateList = true;
-                            self.showPostCodeList = true;
-                            var country = _.pluck( self.zoneLocation['country'], 'code' );
-                            self.stateList = self.getStatesFromCountry( country );
-                        } else if (zoneLocationTypes.indexOf('continent') >= 0) {
-                            self.showCountryList = true;
-                            self.showStateList = true;
-                            self.showPostCodeList = true;
-                            var continent = _.pluck( self.zoneLocation['continent'], 'code' );
-                            self.countryList = self.getCountryFromContinent( continent );
-                        }
-                    }
-
                     if ( resp.data.locations.length > 0 ) {
                         var locationResp = _.groupBy( resp.data.locations, 'type' );
 
-                        if ( Object.keys( locationResp ).includes( 'state' ) || Object.keys( locationResp ).includes( 'postcode' ) ) {
+                        if ( Object.keys( locationResp ).includes( 'country' ) || Object.keys( locationResp ).includes( 'state' ) || Object.keys( locationResp ).includes( 'postcode' ) ) {
                             self.wantToLimitLocation = true;
                         }
 
                         Object.keys( locationResp ).forEach(function(key) {
-                            if ( 'country' == key ) {
+                            if ( 'continent' == key ) {
+                                self.continent = locationResp[key].map( continentData => {
+                                    return {
+                                        code: continentData.code,
+                                        name: dokanShipping.continents[continentData.code].name
+                                    }
+                                });
+                            } else if ( 'country' == key ) {
                                 self.country = locationResp[key].map( countrydata => {
                                     return {
                                         code: countrydata.code,
@@ -535,6 +526,26 @@ export default {
                                 }
                             }
                         });
+                    }
+
+                    var zoneLocationTypes = Object.keys(self.zoneLocation);
+                    if (zoneLocationTypes.indexOf('postcode') < 0) {
+                        if (zoneLocationTypes.indexOf('state') >= 0) {
+                            self.showPostCodeList = true;
+                        } else if (zoneLocationTypes.indexOf('country') >= 0) {
+                            self.showStateList = true;
+                            self.showPostCodeList = true;
+                            var country = _.pluck( self.zoneLocation['country'], 'code' );
+                            self.stateList = self.getStatesFromCountry( country );
+                        } else if (zoneLocationTypes.indexOf('continent') >= 0) {
+                            self.showCountryList = true;
+                            self.showStateList = true;
+                            self.showPostCodeList = true;
+                            var country = _.pluck( self.country, 'code' );
+                            var continent = _.pluck( self.zoneLocation['continent'], 'code' );
+                            self.countryList = self.getCountryFromContinent( continent );
+                            self.stateList = self.getStatesFromCountry( country );
+                        }
                     }
 
                     jQuery('#dokan-shipping-zone').unblock();
