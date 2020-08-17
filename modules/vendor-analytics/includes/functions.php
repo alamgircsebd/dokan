@@ -467,7 +467,7 @@ function dokan_vendor_analytics_client_id() {
      *
      * @var string
      */
-    return apply_filters( 'dokan_vendor_analytics_client_id', '960107032423-kdgngj3qsmb6ji5ige6l7qt1bfb5n2a8.apps.googleusercontent.com' );
+    return apply_filters( 'dokan_vendor_analytics_client_id', '805455242052-r6h35kdd24ojcslu2ct2eqmjc398pp8i.apps.googleusercontent.com' );
 }
 
 /**
