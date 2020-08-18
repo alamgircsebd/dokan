@@ -447,8 +447,6 @@ class ShippingZone {
                     [ 0, 0, 0, 0 ]
                 ];
 
-                error_log( print_r( $shipping_zones, true ) );
-
                 foreach( $shipping_zones as $shipping_zone ) {
                     foreach( $use_cases as $use_case ) {
                         if ( $use_case[0] ) {
@@ -478,7 +476,7 @@ class ShippingZone {
                             $check_postcode = empty( $shipping_zone['postcode'] );
                         }
 
-                        if ( $check_continent && $check_postcode && $check_state && $check_country ) {
+                        if ( $check_postcode && $check_state && $check_country && $check_continent ) {
                             $zone_id_from_package = $shipping_zone['zone_id'];
                             break;
                         }
@@ -489,6 +487,18 @@ class ShippingZone {
                     }
                 }
             }
+        }
+
+        if ( ! $zone_id_from_package ) {
+            $zone_id_from_package = $wpdb->get_var(
+                "SELECT `zone`.`zone_id` FROM `{$wpdb->prefix}woocommerce_shipping_zones` as `zone`
+                LEFT JOIN {$wpdb->prefix}dokan_shipping_zone_locations as `location` on `zone`.`zone_id` = `location`.`zone_id`
+                LEFT JOIN {$wpdb->prefix}dokan_shipping_zone_methods as method on `zone`.`zone_id` = `method`.`zone_id`
+                WHERE `location`.`zone_id` is NULL
+                AND `method`.`is_enabled` = 1
+                AND `method`.`seller_id` = {$vendor_id}
+                ORDER BY zone.zone_order ASC LIMIT 1"
+            );
         }
 
         return apply_filters( 'dokan_get_zone_id_from_package', $zone_id_from_package, $package );
