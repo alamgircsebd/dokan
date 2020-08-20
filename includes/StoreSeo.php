@@ -77,12 +77,12 @@ class StoreSeo {
             add_filter( 'wpseo_opengraph_title', array( $this, 'replace_og_title' ) );
             add_filter( 'wpseo_opengraph_desc', array( $this, 'replace_og_desc' ) );
             add_filter( 'wpseo_opengraph_image', array( $this, 'replace_og_img' ) );
-            add_action( 'wpseo_opengraph', array( $this, 'print_og_img' ), 20 );
+            add_action( 'wpseo_frontend_presenters', array( $this, 'print_og_img' ), 20 );
 
             add_filter( 'wpseo_twitter_title', array( $this, 'replace_twitter_title' ) );
             add_filter( 'wpseo_twitter_description', array( $this, 'replace_twitter_desc' ) );
             add_filter( 'wpseo_twitter_image', array( $this, 'replace_twitter_img' ) );
-            add_action( 'wpseo_twitter', array( $this, 'print_twitter_img' ), 20 );
+            add_action( 'wpseo_frontend_presenters', array( $this, 'print_twitter_img' ), 20 );
         } else {
 
             add_filter( 'wp_title', array( $this, 'replace_title' ), 100 );
