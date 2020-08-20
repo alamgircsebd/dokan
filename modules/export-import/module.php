@@ -83,7 +83,7 @@ class Module {
         add_filter( 'dokan_dashboard_nav_active', array( $this, 'dashboard_active_menu' ) );
         add_filter( 'woocommerce_product_import_pre_insert_product_object', array( $this, 'change_product_status' ), 20, 2 );
 
-        add_action( 'wp_footer', array( $this, 'bind_global_ajaxurl' ), 10 );
+        add_action( 'wp_footer', array( $this, 'bind_global_ajaxurl' ), 35 );
 
         // Module activation hook
         add_action( 'dokan_activated_module_export_import', array( self::class, 'activate' ) );
