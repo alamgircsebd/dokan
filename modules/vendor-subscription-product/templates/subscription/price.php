@@ -72,7 +72,7 @@ if ( ! $chosen_period = get_post_meta( $post_id, '_subscription_period', true ) 
     </div>
 
     <div class="dokan-form-group subscription-trial-length-field dokan-clearfix">
-        <label for="_subscription_trial_length" class="form-label"><?php esc_html_e( 'Free Trail', 'dokan' ); ?></label>
+        <label for="_subscription_trial_length" class="form-label"><?php esc_html_e( 'Free Trial', 'dokan' ); ?></label>
         <div class="content-half-part">
             <input type="number" step="1" min="0" name="_subscription_trial_length" id="_subscription_trial_length" class="dokan-form-control" value="<?php echo $chosen_trial_length ?>" placeholder="0">
         </div>
