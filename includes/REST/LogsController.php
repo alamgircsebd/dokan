@@ -108,7 +108,7 @@ class LogsController extends DokanRESTAdminController {
             /**
              * Payment gateway fee minus from admin commission earning
              */
-            $processing_fee = dokan()->commission->get_processing_fee( $order );
+            $processing_fee = $order->get_meta( 'dokan_gateway_fee' );
             $commission     = $is_subscription_product ? $result->order_total : $result->order_total - $result->net_amount;
 
             if ( $processing_fee && $processing_fee > 0 ) {
