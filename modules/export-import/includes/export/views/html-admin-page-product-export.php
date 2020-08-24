@@ -129,7 +129,3 @@ $total_rows      = $product_count->publish + $product_count->private + $variatio
 </div><!-- .dokan-dashboard-wrap -->
 
 <?php do_action( 'dokan_dashboard_wrap_end' ); ?>
-
-<script>
-    window.ajaxurl = dokan.ajaxurl;
-</script>

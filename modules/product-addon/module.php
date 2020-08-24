@@ -208,7 +208,7 @@ class Module {
             ),
         );
 
-        wp_localize_script( 'jquery', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
+        wp_localize_script( 'dokan-pa-script', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
     }
 
     /**

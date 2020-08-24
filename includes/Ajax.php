@@ -344,6 +344,19 @@ class Ajax {
 
         $location = array();
 
+        if ( ! empty( $_POST['continent'] ) && is_array( $_POST['continent'] ) ) {
+            $continent_array = array();
+
+            foreach ( $_POST['continent'] as $continent ) {
+                $continent_array[] = array(
+                    'code' => $continent['code'],
+                    'type'  => 'continent'
+                );
+            }
+
+            $location = array_merge( $location, $continent_array );
+        }
+
         if ( ! empty( $_POST['country'] ) && is_array( $_POST['country'] ) ) {
             $country_array = array();
 
