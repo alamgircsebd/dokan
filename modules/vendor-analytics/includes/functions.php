@@ -401,14 +401,14 @@ function dokan_geographic_analytics() {
  * @return array
  */
 function dokan_system_analytics() {
-    $metrics    = 'ga:sessions';
-    $dimensions = 'ga:browser,ga:operatingSystem,ga:operatingSystemVersion';
-    $sort       = '-ga:sessions';
-    $headers = array(
-        'browser'                   => __( 'Browser', 'dokan' ),
-        'operatingSystem'           => __( 'Operating System', 'dokan' ),
-        'operatingSystemVersion'    => __( 'OS Version', 'dokan' ),
-        'sessions'                  => __( 'Sessions', 'dokan' )
+    $metrics       = 'ga:pageviews';
+    $dimensions    = 'ga:browser,ga:operatingSystem,ga:operatingSystemVersion';
+    $sort          = '-ga:pageviews';
+    $headers       = array(
+        'browser'                => __( 'Browser', 'dokan' ),
+        'operatingSystem'        => __( 'Operating System', 'dokan' ),
+        'operatingSystemVersion' => __( 'OS Version', 'dokan' ),
+        'sessions'               => __( 'Sessions', 'dokan' )
     );
     $Vendor_filter = new Dokan_Vendor_Analytics_Reports();
     $Vendor_filter->get_analytics_content( $metrics, $dimensions, $sort, $headers );
