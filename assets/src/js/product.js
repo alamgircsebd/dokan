@@ -25,6 +25,15 @@
             this.variants.dates();
             this.variants.initSaleSchedule();
 
+            //seo
+            $('.product-edit-new-container').on('click', '.snippet-btn', this.editProduct.seo.toggleSnippet );
+
+            $('.product-edit-new-container').on( 'input', 'input.wpseo-title-input, textarea.wpseo-meta-input', this.editProduct.seo.dataRender );
+            $('.product-edit-new-container').on( 'input', '#post_title', this.editProduct.seo.onChangePostTitle );
+            $('.product-edit-new-container').on( 'change', 'select#wpseo_title_shortcode, select#wpseo_meta_shortcode', this.editProduct.seo.shortcodeRender );
+            $( 'input.wpseo-title-input' ).trigger('input');
+            $( 'textarea.wpseo-meta-input' ).trigger('input');
+
             // shipping
             $('.product-edit-new-container, #product-shipping').on('change', 'input[type=checkbox]#_overwrite_shipping', this.editProduct.shipping.showHideOverride );
             $('.product-edit-new-container').on('change', 'input[type=checkbox]#_disable_shipping', this.editProduct.shipping.disableOverride );
@@ -116,6 +125,74 @@
 
                     // Finally, open the modal.
                     variable_image_frame.open();
+                }
+            },
+
+            seo: {
+                toggleSnippet: function() {
+                    $(".dokan-seo-snippet-edit-wrap").toggle();
+                },
+
+                replaceShortCodes: function ( str, shortCodes ) {
+                    var codes = Object.keys( shortCodes ),
+                        i = 0;
+
+                    for ( i = 0; i < codes.length; i++ ) {
+                        var escapedCode = codes[i].replace(/\[/g, '\\[').replace(/\]/g, '\\]'),
+                            re = new RegExp( escapedCode, 'gi' );
+
+                        str = str.replace( re, shortCodes[ codes[i] ] );
+                    }
+
+                    return str;
+                },
+
+                dataRender: function() {
+                    var self = $(this),
+                        val = self.val(),
+                        shortCodes = {
+                            '[title]' : self.data('title'),
+                            '[sep]' : self.data('sep'),
+                            '[sitename]' : self.data('sitename'),
+                        };
+
+                    if ( val == '' ) {
+                        if ( 'text' == self[0].type ) {
+                            val = '[title] [sep] [sitename]';
+                            self.val( val );
+                        }
+
+                        if ( 'textarea' == self[0].type ) {
+                            val = $('.seo-snippet').find('.seo-meta').data('default');
+                            self.val( val );
+                        }
+                    }
+
+                    var convertedString = Dokan_Editor.editProduct.seo.replaceShortCodes( val, shortCodes );
+
+                    $('.dokan-seo-product-options').find(self.data('class')).html( convertedString );
+                },
+
+                shortcodeRender: function() {
+                    var self = $(this),
+                        val = self.val();
+
+                    if ( '' == val ) {
+                        return
+                    }
+                    var $txt = jQuery( self.data('class') );
+                    var caretPos = $txt[0].selectionStart;
+                    var textAreaTxt = $txt.val();
+                    $txt.val(textAreaTxt.substring(0, caretPos) + ' ' + val + ' ' + textAreaTxt.substring(caretPos) );
+                    $txt.trigger('input').trigger('focus');
+                },
+
+                onChangePostTitle: function () {
+                    var input = $(this),
+                        title = input.val();
+
+                    $( '[name="_yoast_wpseo_title"], [name="_yoast_wpseo_metadesc"]' )
+                        .data( 'title', title ).trigger( 'input' );
                 }
             },
 
