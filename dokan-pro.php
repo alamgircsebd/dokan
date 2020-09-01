@@ -339,6 +339,7 @@ class Dokan_Pro {
 
         $this->container['store']       = new \WeDevs\DokanPro\Store();
         $this->container['store_seo']   = new \WeDevs\DokanPro\StoreSeo();
+        $this->container['product_seo'] = new \WeDevs\DokanPro\ProductSeo();
         $this->container['store_share'] = new \WeDevs\DokanPro\StoreShare();
         $this->container['products']    = new \WeDevs\DokanPro\Products();
         $this->container['review']      = new \WeDevs\DokanPro\Review();

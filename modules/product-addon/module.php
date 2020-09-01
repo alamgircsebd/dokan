@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro\Modules\ProductAddon;
 
+use WC_Product_Addons_Admin;
+
 class Module {
 
     /**
@@ -109,6 +111,49 @@ class Module {
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
         add_filter( 'dokan_set_template_path', array( $this, 'load_product_addon_templates' ), 10, 3 );
+        add_action( 'wp_ajax_wc_pao_get_addon_field', array( $this, 'ajax_get_addon_field' ), 1 );
+    }
+
+    /**
+     * Get add-on field.
+     *
+     * @since 1.0.0
+     */
+    public function ajax_get_addon_field() {
+        check_ajax_referer( 'wc-pao-get-addon-field', 'security' );
+
+        global $product_addons, $post, $options;
+
+        ob_start();
+        $addon                       = array();
+        $addon['name']               = '';
+        $addon['title_format']       = 'label';
+        $addon['description_enable'] = '';
+        $addon['description']        = '';
+        $addon['required']           = '';
+        $addon['type']               = 'multiple_choice';
+        $addon['display']            = 'select';
+        $addon['restrictions']       = '';
+        $addon['restrictions_type']  = 'any_text';
+        $addon['min']                = '';
+        $addon['max']                = '';
+        $addon['adjust_price']       = '';
+        $addon['price_type']         = '';
+        $addon['price']              = '';
+
+        $addon['options']            = array(
+            WC_Product_Addons_Admin::get_new_addon_option(),
+        );
+
+        $loop = "{loop}";
+
+        include( DOKAN_PRODUCT_ADDON_DIR . '/templates/product-addon/html-addon.php' );
+
+        $html = ob_get_clean();
+
+        $html = str_replace( array( "\n", "\r" ), '', str_replace( "'", '"', $html ) );
+
+        wp_send_json( array( 'html' => $html ) );
     }
 
     /**
