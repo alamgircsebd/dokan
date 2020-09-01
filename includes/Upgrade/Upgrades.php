@@ -16,7 +16,12 @@ class Upgrades {
      *
      * @var array
      */
-    private static $upgrades = [];
+    private static $upgrades = [
+        '3.0.7' => [
+            'upgrader' => Upgraders\V_3_0_7::class,
+            'require'  => '3.0.4',
+        ],
+    ];
 
     /**
      * Get DB installed version number

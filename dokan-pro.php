@@ -320,6 +320,7 @@ class Dokan_Pro {
         new WeDevs\DokanPro\Refund\Hooks();
         new WeDevs\DokanPro\Coupons\Hooks();
         new \WeDevs\DokanPro\Shipping\Hooks();
+        new \WeDevs\DokanPro\Upgrade\Hooks();
 
         new \WeDevs\DokanPro\StoreCategory();
         new \WeDevs\DokanPro\StoreListsFilter();
