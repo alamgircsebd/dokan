@@ -65,9 +65,9 @@
                                     <td class="details">
                                         <?php
                                         if ( current_user_can( 'dokan_view_order' ) ) {
-                                            $order_link = '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $request['order_id'] ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan-lite' ), esc_attr( $request['order_id'] ) ) . '</strong></a>';
+                                            $order_link = '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $request['order_id'] ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong></a>';
                                         } else {
-                                            $order_link = '<strong>' . sprintf( __( 'Order %s', 'dokan-lite' ), esc_attr( $request['order_id'] ) ) . '</strong>';
+                                            $order_link = '<strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong>';
                                         }
 
                                         echo sprintf( '<a href="%s">#%d</a> by %s on %s', add_query_arg( [ 'request' => $request['id'] ], dokan_get_navigation_url( 'return-request' ) ), $request['id'], $request['customer']['name'], $order_link );
@@ -78,7 +78,7 @@
                                                 <a href="<?php echo add_query_arg( [ 'request' => $request['id'] ], dokan_get_navigation_url( 'return-request' ) ); ?>" class="request-manage"><?php _e( 'Manage', 'dokan' ); ?></a>
                                             </span> |
                                             <span class="delete">
-                                                <a href="#" class="request-delete"><?php _e( 'Delete', 'dokan' ); ?></a>
+                                                <a href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-delete-rma-request', 'request_id' => $request['id'] ), dokan_get_navigation_url('return-request') ), 'dokan-delete-rma-request' ); ?>" class="request-delete"><?php _e( 'Delete', 'dokan' ); ?></a>
                                             </span>
                                         </div>
 

@@ -47,6 +47,7 @@ class Dokan_REST_Store_Review_Controller extends DokanRESTController {
                         'required'    => false,
                     ),
                 ) ),
+                'permission_callback' => '__return_true',
             ),
         ) );
 
@@ -62,6 +63,7 @@ class Dokan_REST_Store_Review_Controller extends DokanRESTController {
             array(
                 'methods'             => WP_REST_Server::READABLE,
                 'callback'            => array( $this, 'get_item' ),
+                'permission_callback' => '__return_true',
             ),
 
             array(

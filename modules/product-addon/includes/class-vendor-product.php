@@ -14,7 +14,7 @@ class Dokan_Product_Addon_Vendor_Product {
      */
     public function __construct() {
         add_action( 'dokan_product_edit_after_main', [ $this, 'add_addons_section' ], 15, 2 );
-        add_action( 'dokan_product_updated', [ $this, 'save_addon_options' ], 15, 2 );
+        add_action( 'dokan_product_updated', [ $this, 'save_addon_options' ], 35, 2 );
     }
 
     /**

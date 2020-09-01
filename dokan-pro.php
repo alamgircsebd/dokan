@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 3.0.6
+  Version: 3.0.7
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 4.3.1
+  WC tested up to: 4.4.1
   License: GPL2
   TextDomain: dokan
  */
@@ -35,7 +35,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '3.0.6';
+    public $version = '3.0.7';
 
     /**
      * Databse version key
@@ -320,6 +320,7 @@ class Dokan_Pro {
         new WeDevs\DokanPro\Refund\Hooks();
         new WeDevs\DokanPro\Coupons\Hooks();
         new \WeDevs\DokanPro\Shipping\Hooks();
+        new \WeDevs\DokanPro\Upgrade\Hooks();
 
         new \WeDevs\DokanPro\StoreCategory();
         new \WeDevs\DokanPro\StoreListsFilter();
@@ -339,6 +340,7 @@ class Dokan_Pro {
 
         $this->container['store']       = new \WeDevs\DokanPro\Store();
         $this->container['store_seo']   = new \WeDevs\DokanPro\StoreSeo();
+        $this->container['product_seo'] = new \WeDevs\DokanPro\ProductSeo();
         $this->container['store_share'] = new \WeDevs\DokanPro\StoreShare();
         $this->container['products']    = new \WeDevs\DokanPro\Products();
         $this->container['review']      = new \WeDevs\DokanPro\Review();

@@ -401,14 +401,14 @@ function dokan_geographic_analytics() {
  * @return array
  */
 function dokan_system_analytics() {
-    $metrics    = 'ga:sessions';
-    $dimensions = 'ga:browser,ga:operatingSystem,ga:operatingSystemVersion';
-    $sort       = '-ga:sessions';
-    $headers = array(
-        'browser'                   => __( 'Browser', 'dokan' ),
-        'operatingSystem'           => __( 'Operating System', 'dokan' ),
-        'operatingSystemVersion'    => __( 'OS Version', 'dokan' ),
-        'sessions'                  => __( 'Sessions', 'dokan' )
+    $metrics       = 'ga:pageviews';
+    $dimensions    = 'ga:browser,ga:operatingSystem,ga:operatingSystemVersion';
+    $sort          = '-ga:pageviews';
+    $headers       = array(
+        'browser'                => __( 'Browser', 'dokan' ),
+        'operatingSystem'        => __( 'Operating System', 'dokan' ),
+        'operatingSystemVersion' => __( 'OS Version', 'dokan' ),
+        'sessions'               => __( 'Sessions', 'dokan' )
     );
     $Vendor_filter = new Dokan_Vendor_Analytics_Reports();
     $Vendor_filter->get_analytics_content( $metrics, $dimensions, $sort, $headers );
@@ -467,7 +467,7 @@ function dokan_vendor_analytics_client_id() {
      *
      * @var string
      */
-    return apply_filters( 'dokan_vendor_analytics_client_id', '960107032423-kdgngj3qsmb6ji5ige6l7qt1bfb5n2a8.apps.googleusercontent.com' );
+    return apply_filters( 'dokan_vendor_analytics_client_id', '805455242052-r6h35kdd24ojcslu2ct2eqmjc398pp8i.apps.googleusercontent.com' );
 }
 
 /**

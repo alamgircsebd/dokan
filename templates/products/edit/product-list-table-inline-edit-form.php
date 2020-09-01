@@ -19,12 +19,12 @@
                         <?php esc_html_e( 'Product Tags', 'dokan' ); ?>
                     </label>
 
-                    <select data-field-name="product_tag" class="dokan-form-control" multiple>
-                        <?php foreach ( $options['tags'] as $tag ): ?>
-                            <option value="<?php echo esc_attr( $tag->term_id ); ?>"<?php echo in_array( $tag->term_id, $product_tag ) ? ' selected' : ''; ?>>
-                                <?php echo esc_html( $tag->name ); ?>
-                            </option>
-                        <?php endforeach; ?>
+                    <select multiple="multiple" data-field-name="product_tag" id="product_tag_search" class="product_tags dokan-form-control dokan-select2">
+                        <?php foreach ( $options['tags'] as $tax_term ) : ?>
+                            <?php if ( ! empty( $product_tag ) && in_array( $tax_term->term_id, $product_tag ) ) : ?>
+                                <option value="<?php echo $tax_term->term_id; ?>" selected="selected" ><?php echo $tax_term->name; ?></option>
+                            <?php endif ?>
+                        <?php endforeach ?>
                     </select>
 
                     <label>

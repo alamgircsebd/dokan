@@ -100,6 +100,78 @@ and open the template in the editor.
     }
 }
 
+.product-edit-new-container {
+    .dokan-product-seo {
+        .seo-snippet {
+            padding: 20px;
+            background-color: white;
+            font-family: arial,sans-serif;
+            box-sizing: border-box;
+            padding: 0 12px 12px;
+            line-height: 1.4em;
+            font-size: 13px;
+
+            .seo-title {
+                color: #1e0fbe;
+                cursor: pointer;
+                -webkit-text-decoration: none;
+                text-decoration: none;
+                font-size: 18px;
+                line-height: 1.2;
+                font-weight: normal;
+                margin: 0;
+                overflow: hidden;
+                max-width: 600px;
+                vertical-align: top;
+                text-overflow: ellipsis;
+            }
+            .seo-slug {
+                display: inline-block;
+                color: #006621;
+                cursor: pointer;
+                max-width: 600px;
+                white-space: nowrap;
+                font-size: 14px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .seo-meta {
+                color: #545454;
+                cursor: pointer;
+                position: relative;
+                max-width: 600px;
+                font-size: 13px;
+            }
+        }
+
+        .snippet-btn {
+            border: 1px solid #ccc;
+            background-color: #eee;
+
+            &:hover {
+                background-color: #ddd;
+            }
+        }
+
+        .wpseo-shortcode-wrap {
+            position: absolute;
+            right: 0px;
+            top: -8px;
+
+            select.wpseo_shortcode {
+                height: 30px;
+                background-color: #fafafa;
+
+                &:hover {
+                    height: 30px;
+                    background-color: #f1f1f1;
+                }
+            }
+        }
+    }
+}
+
+
 @-webkit-keyframes ring {
     0% { transform: rotate(0); }
     1% { transform: rotate(30deg); }
