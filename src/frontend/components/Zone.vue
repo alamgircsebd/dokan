@@ -396,6 +396,7 @@ export default {
                 if ( resp.success ) {
                     self.fetchZone();
                     self.successMessage = resp.data;
+                    self.saveZoneSettings();
                     jQuery('.zone-method-wrapper').unblock();
                 } else {
                     jQuery('.zone-method-wrapper').unblock();
@@ -420,6 +421,7 @@ export default {
                 if ( resp.success ) {
                     self.fetchZone();
                     self.editShippingMethodModal = false;
+                    self.saveZoneSettings();
                     jQuery('.zone-method-wrapper').unblock();
                 } else {
                     jQuery('.zone-method-wrapper').unblock();
@@ -578,6 +580,7 @@ export default {
                     self.fetchZone();
                     self.showAddShippingMethodModal = false;
                     self.successMessage = resp.data;
+                    self.saveZoneSettings();
                 } else {
                     alert( resp.data )
                 }
