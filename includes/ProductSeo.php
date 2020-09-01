@@ -42,7 +42,7 @@ class ProductSeo {
     /**
      * Convert Yoast shortcode format to Dokan format
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.7
      *
      * @param string $str
      *
@@ -67,7 +67,7 @@ class ProductSeo {
     /**
      * Convert Dokan shortcode format to Yoast format
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.7
      *
      * @param string $str
      *

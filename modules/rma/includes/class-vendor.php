@@ -287,7 +287,7 @@ class Dokan_RMA_Vendor {
     /**
      * Handle delete rma request
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.7
      *
      * @return void
      */

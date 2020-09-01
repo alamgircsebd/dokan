@@ -723,7 +723,7 @@ function dokan_rma_generate_coupon_code() {
  * @param $id
  * @param $vendor_id
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.0.7
  *
  * @return bool
  */

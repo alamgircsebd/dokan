@@ -9,7 +9,7 @@ class V_3_0_7_ShippingLocations extends DokanBackgroundProcesses {
     /**
      * Sync the missing shipping locations data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.7
      *
      * @param int $page
      *
