@@ -74,9 +74,9 @@
                                                 <td>
                                                     <?php
                                                         if ( current_user_can( 'dokan_view_order' ) ) {
-                                                            $order_link = '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $request['order_id'] ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan-lite' ), esc_attr( $request['order_id'] ) ) . '</strong></a>';
+                                                            $order_link = '<a href="' . wp_nonce_url( add_query_arg( array( 'order_id' => $request['order_id'] ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' ) . '"><strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong></a>';
                                                         } else {
-                                                            $order_link = '<strong>' . sprintf( __( 'Order %s', 'dokan-lite' ), esc_attr( $request['order_id'] ) ) . '</strong>';
+                                                            $order_link = '<strong>' . sprintf( __( 'Order %s', 'dokan' ), esc_attr( $request['order_id'] ) ) . '</strong>';
                                                         }
                                                         echo $order_link;
                                                      ?>

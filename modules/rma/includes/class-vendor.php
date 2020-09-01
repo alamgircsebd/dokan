@@ -29,7 +29,7 @@ class Dokan_RMA_Vendor {
         add_action( 'dokan_rma_request_content_inside_before', [ $this, 'show_seller_enable_message' ] );
         add_action( 'dokan_rma_reqeusts_after', [ $this, 'add_popup_template' ], 10 );
         add_action( 'template_redirect', [ $this, 'save_rma_settings' ], 10 );
-
+        add_action( 'template_redirect', array( $this, 'handle_delete_rma_request' ), 10 );
     }
 
     /**
@@ -155,8 +155,8 @@ class Dokan_RMA_Vendor {
                             'base'      => add_query_arg( 'page', '%#%' ),
                             'format'    => '',
                             'type'      => 'array',
-                            'prev_text' => __( '&laquo; Previous', 'dokan-lite' ),
-                            'next_text' => __( 'Next &raquo;', 'dokan-lite' ),
+                            'prev_text' => __( '&laquo; Previous', 'dokan' ),
+                            'next_text' => __( 'Next &raquo;', 'dokan' ),
                             'total'     => $total_page,
                             'current'   => $page
                         ) );
@@ -282,6 +282,49 @@ class Dokan_RMA_Vendor {
         update_user_meta( dokan_get_current_user_id(), '_dokan_rma_settings', $data );
 
         wp_redirect( add_query_arg( [ 'message' => 'success' ], dokan_get_navigation_url( 'settings/rma' ) ), 302 );
+    }
+
+    /**
+     * Handle delete rma request
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function handle_delete_rma_request() {
+        if ( ! dokan_is_user_seller( dokan_get_current_user_id() ) ) {
+            return;
+        }
+
+        if ( ! current_user_can( 'dokan_view_store_rma_menu' ) ) {
+            return;
+        }
+
+        if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-delete-rma-request' ) {
+            $request_id = isset( $_GET['request_id'] ) ? (int) $_GET['request_id'] : 0;
+
+            $get_data = wp_unslash( $_GET );
+
+            if ( ! $request_id ) {
+                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'return-request' ) ) );
+                return;
+            }
+
+            if ( ! wp_verify_nonce( $get_data['_wpnonce'], 'dokan-delete-rma-request' ) ) {
+                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'return-request' ) ) );
+                return;
+            }
+
+            $warrnty_requests = new Dokan_RMA_Warranty_Request();
+            $warrnty_requests->delete( $request_id, dokan_get_current_user_id() );
+
+            do_action( 'dokan_rma_request_deleted', $request_id );
+
+            wc_add_notice( __( 'Return Request has been deleted successfully', 'dokan' ), 'success' );
+
+            wp_redirect( add_query_arg( array( 'message' => 'rma_request_deleted' ), dokan_get_navigation_url( 'return-request' ) ) );
+            exit;
+        }
     }
 
 }

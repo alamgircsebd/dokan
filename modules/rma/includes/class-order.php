@@ -149,8 +149,8 @@ class Dokan_RMA_Order {
                 'base'      => add_query_arg( 'cpage', '%#%' ),
                 'format'    => '',
                 'type'      => 'array',
-                'prev_text' => __( '&laquo; Previous', 'dokan-lite' ),
-                'next_text' => __( 'Next &raquo;', 'dokan-lite' ),
+                'prev_text' => __( '&laquo; Previous', 'dokan' ),
+                'next_text' => __( 'Next &raquo;', 'dokan' ),
                 'total'     => $total_page,
                 'current'   => $page
             ) );
@@ -317,7 +317,7 @@ class Dokan_RMA_Order {
             $name = $value = $expiry = false;
 
             $order = wc_get_order( $order_id );
-            
+
             if ( empty( $order ) ) {
                 return;
             }

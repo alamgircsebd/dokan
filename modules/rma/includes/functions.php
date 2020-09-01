@@ -717,12 +717,39 @@ function dokan_rma_generate_coupon_code() {
     return $code;
 }
 
+/**
+ * Dokan delete warranty request
+ *
+ * @param $id
+ * @param $vendor_id
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return bool
+ */
+function dokan_delete_warranty_request( $id, $vendor_id ) {
+    global $wpdb;
 
+    $request_table      = $wpdb->prefix . 'dokan_rma_request';
+    $request_item_table = $wpdb->prefix . 'dokan_rma_request_product';
 
+    $warranty_request = dokan_get_warranty_request( [ 'id' => $id, 'vendor_id' => $vendor_id ] );
 
+    if ( ! $warranty_request ) {
+        return false;
+    }
 
+    $wpdb->delete(
+        $request_table,
+        [ 'id' => $id, 'vendor_id' => $vendor_id ],
+        [ '%d', '%d' ]
+    );
 
+    $wpdb->delete(
+        $request_item_table,
+        [ 'request_id' => $id ],
+        [ '%d' ]
+    );
 
-
-
-
+    return true;
+}

@@ -19,10 +19,10 @@
 
     <thead>
         <tr>
-            <th class="rma-order-id"><span class="nobr"><?php _e( 'Order ID', 'dokan-lite' ); ?></span></th>
-            <th class="rma-vendor"><span class="nobr"><?php _e( 'Vendor', 'dokan-lite' ); ?></span></th>
-            <th class="rma-details"><span class="nobr"><?php _e( 'Type', 'dokan-lite' ); ?></span></th>
-            <th class="rma-status"><span class="nobr"><?php _e( 'Status', 'dokan-lite' ); ?></span></th>
+            <th class="rma-order-id"><span class="nobr"><?php _e( 'Order ID', 'dokan' ); ?></span></th>
+            <th class="rma-vendor"><span class="nobr"><?php _e( 'Vendor', 'dokan' ); ?></span></th>
+            <th class="rma-details"><span class="nobr"><?php _e( 'Type', 'dokan' ); ?></span></th>
+            <th class="rma-status"><span class="nobr"><?php _e( 'Status', 'dokan' ); ?></span></th>
             <th></th>
         </tr>
     </thead>
@@ -36,7 +36,7 @@
                     <tr class="order">
                         <td class="order-number">
                             <?php
-                                
+
                                 echo sprintf( '<a href="%s">#%s</a> on <a href="%s">Order #%s</a>', esc_url( wc_get_account_endpoint_url( 'view-rma-requests' ) ) . $request['id'], $request['id'], $order->get_view_order_url(), $order->get_order_number() );
                             ?>
                         </td>
