@@ -218,7 +218,10 @@ class StoreCategory {
      */
     public function after_store_profile_saved( $store_id ) {
         $store_categories = ! empty( $_POST['dokan_store_categories'] ) ? $_POST['dokan_store_categories'] : null;
-        dokan_set_store_categories( $store_id, $store_categories );
+
+        if ( $store_categories ) {
+            dokan_set_store_categories( $store_id, $store_categories );
+        }
     }
 
     /**
