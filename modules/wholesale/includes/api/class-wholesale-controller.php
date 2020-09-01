@@ -38,6 +38,7 @@ class Dokan_REST_Wholesale_Controller extends DokanRESTController {
                         'type'        => 'string',
                     ],
                 ] ),
+                'permission_callback' => '__return_true',
             ),
         ) );
 
