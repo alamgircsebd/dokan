@@ -75,4 +75,26 @@ class Dokan_RMA_Warranty_Request {
         return dokan_update_warranty_request( $data );
     }
 
+    /**
+     * Delete warranty request
+     *
+     * @param int $id
+     * @param int $vendor_id
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool|WP_Error
+     */
+    public function delete( $id = 0, $vendor_id = 0 ) {
+        if ( ! $id ) {
+            return new WP_Error( 'no-id', __( 'No request id found', 'dokan' ) );
+        }
+
+        if ( ! $vendor_id ) {
+            return new WP_Error( 'no-vendor-id', __( 'No vendor id found', 'dokan' ) );
+        }
+
+        return dokan_delete_warranty_request( $id, $vendor_id );
+    }
+
 }
