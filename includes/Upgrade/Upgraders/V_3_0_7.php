@@ -10,7 +10,7 @@ class V_3_0_7 extends DokanProUpgrader {
     /**
      * Update the missing shipping zone locations table data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.7
      *
      * @return void
      */

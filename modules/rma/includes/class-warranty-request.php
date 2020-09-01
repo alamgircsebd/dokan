@@ -81,7 +81,7 @@ class Dokan_RMA_Warranty_Request {
      * @param int $id
      * @param int $vendor_id
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.0.7
      *
      * @return bool|WP_Error
      */
