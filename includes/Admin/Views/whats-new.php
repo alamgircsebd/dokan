@@ -1,6 +1,22 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.0.8',
+        'released' => '2020-09-04',
+        'changes'  => array(
+            array(
+                'title'       => 'Shipping data updater',
+                'type'        => 'Fix',
+                'description' => 'Shipping data updater is not showing some situations'
+            ),
+            array(
+                'title'       => 'Product type allowed in Vendor subsction product',
+                'type'        => 'Fix',
+                'description' => 'Default subscription type product is not showing in vendor subscription type product module'
+            ),
+        )
+    ),
+    array(
         'version'  => 'Version 3.0.7',
         'released' => '2020-09-01',
         'changes'  => array(

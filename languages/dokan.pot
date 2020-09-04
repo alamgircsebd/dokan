@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 3.0.7\n"
+"Project-Id-Version: Dokan Pro 3.0.8\n"
 "Report-Msgid-Bugs-To: https://wedevs.com/account/tickets/\n"
-"POT-Creation-Date: 2020-09-01 17:51:15+00:00\n"
+"POT-Creation-Date: 2020-09-04 05:06:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -11608,6 +11608,14 @@ msgstr ""
 msgid ""
 "<b>Dokan Vendor Subscription Product Addon </b> requires %sWooCommerce "
 "Subscriptions plugin%s to be installed & activated first !"
+msgstr ""
+
+#: modules/vendor-subscription-product/module.php:144
+msgid "Simple Subscription Product"
+msgstr ""
+
+#: modules/vendor-subscription-product/module.php:145
+msgid "Variable Subscription Product"
 msgstr ""
 
 #: modules/vendor-subscription-product/templates/subscription/html-subscription-schedule.php:23
