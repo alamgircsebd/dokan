@@ -21,6 +21,10 @@ class Upgrades {
             'upgrader' => Upgraders\V_3_0_7::class,
             'require'  => '3.0.4',
         ],
+        '3.0.8' => [
+            'upgrader' => Upgraders\V_3_0_8::class,
+            'require'  => '3.0.4',
+        ],
     ];
 
     /**
@@ -46,6 +50,10 @@ class Upgrades {
     public static function is_upgrade_required( $is_required = false ) {
         $installed_version = self::get_db_installed_version();
         $upgrade_versions  = array_keys( self::$upgrades );
+
+        if ( ! $installed_version ) {
+            return true;
+        }
 
         if ( $installed_version && version_compare( $installed_version, end( $upgrade_versions ), '<' ) ) {
             return true;
