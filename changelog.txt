@@ -1,3 +1,9 @@
+v3.0.8 -> Sep 04, 2020
+----------------------------------
+
+- [fix] Shipping data updater issue fixed
+- [fix] Subscription type product is not in the `Product Type` list
+
 v3.0.7 -> Sep 01, 2020
 ----------------------------------
 
