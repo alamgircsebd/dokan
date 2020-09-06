@@ -55,7 +55,7 @@ class Dokan_Product_Enquiry_Email extends WC_Email {
         $this->id             = 'dokan_product_enquiry_email';
         $this->title          = __( 'Dokan Product Enquiry', 'dokan' );
         $this->description    = __( 'Send email to vendor on product enquiry.', 'dokan' );
-        $this->template_html  = 'product-enquery-email-html.php';
+        $this->template_html  = 'product-enquiry-email-html.php';
         $this->template_base  = DOKAN_ENQUIRY_VIEWS . '/';
         $this->placeholders   = array(
             '{site_title}'    => $this->get_blogname(),
