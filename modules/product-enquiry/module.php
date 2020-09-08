@@ -281,7 +281,7 @@ class Module {
      * @return array
      */
     public function add_email_template_file( $template_files ) {
-        $template_files[] = 'product-enquery-email-html.php';
+        $template_files[] = 'product-enquiry-email-html.php';
 
         return $template_files;
     }

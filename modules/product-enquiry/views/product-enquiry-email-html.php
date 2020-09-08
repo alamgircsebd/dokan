@@ -9,7 +9,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email ); ?>
 </p>
 
 <p>
-    <?php printf( __( 'Enquery Summery:', 'dokan' ) ); ?>
+    <?php printf( __( 'Enquiry Summary:', 'dokan' ) ); ?>
 </p>
 
 <ul class="dokan-product-enquery">
