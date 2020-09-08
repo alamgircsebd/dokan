@@ -1,6 +1,108 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.0.8',
+        'released' => '2020-09-04',
+        'changes'  => array(
+            array(
+                'title'       => 'Shipping data updater',
+                'type'        => 'Fix',
+                'description' => 'Shipping data updater is not showing some situations'
+            ),
+            array(
+                'title'       => 'Product type allowed in Vendor subsction product',
+                'type'        => 'Fix',
+                'description' => 'Default subscription type product is not showing in vendor subscription type product module'
+            ),
+        )
+    ),
+    array(
+        'version'  => 'Version 3.0.7',
+        'released' => '2020-09-01',
+        'changes'  => array(
+            array(
+                'title'       => 'Refactor Product SEO',
+                'type'        => 'Fix',
+                'description' => 'Vendor product SEO refactor codes where improve performance'
+            ),
+            array(
+                'title'       => 'Shipping Continent Issue (Shipping)',
+                'type'        => 'Fix',
+                'description' => 'When try to add shipping with a continent then it not working properly'
+            ),
+            array(
+                'title'       => 'Global Multiple Zone Conflict (Shipping)',
+                'type'        => 'Fix',
+                'description' => 'Global multiple zone conflict issue in shipping'
+            ),
+            array(
+                'title'       => 'Paypal Gateway Fee not Showing on All Logs (PayPal)',
+                'type'        => 'Fix',
+                'description' => 'Paypal gateway fee not showing on all logs when products purchase by multi vendors'
+            ),
+            array(
+                'title'       => 'CSV Import Not Working with WordPress v5.5 (Import/Export Tool)',
+                'type'        => 'Fix',
+                'description' => 'CSV import not working cause of JS error'
+            ),
+            array(
+                'title'       => 'Product Addon Conflicting with WooCommerce Booking (Product Addon)',
+                'type'        => 'Fix',
+                'description' => 'Product addon conflicting with WooCommerce booking when try to add new addon fields'
+            ),
+            array(
+                'title'       => 'Tags List Loading Problem',
+                'type'        => 'Fix',
+                'description' => 'Long tags listing issue fixed on product quick edit area'
+            ),
+            array(
+                'title'       => 'Duplicate Booking Email',
+                'type'        => 'Fix',
+                'description' => 'Vendor getting duplicate booking email when new customer booking'
+            ),
+            array(
+                'title'       => 'Store Review Author Name (Store Review)',
+                'type'        => 'Fix',
+                'description' => 'Store review author name show display name if exits'
+            ),
+            array(
+                'title'       => 'Yoast SEO Hooks Changed',
+                'type'        => 'Fix',
+                'description' => 'Yoast SEO plugin some hooks changed on latest version'
+            ),
+            array(
+                'title'       => 'Update Vendor Analytics Logo and Key (Vendor Analytics)',
+                'type'        => 'Fix',
+                'description' => 'Update Vendor Analytics module logo and primary metrics key'
+            ),
+            array(
+                'title'       => 'Store Category Resets',
+                'type'        => 'Fix',
+                'description' => 'Store category resets after updating store Payment details'
+            ),
+            array(
+                'title'       => 'Automatic Save Zone Location Data (Shipping)',
+                'type'        => 'Fix',
+                'description' => 'Automatic save zone location data during method add, edit and delete'
+            ),
+            array(
+                'title'       => 'Product Type not Saving',
+                'type'        => 'Fix',
+                'description' => 'Product type not saving when product addon module active with WooCommerce product addon'
+            ),
+            array(
+                'title'       => 'RMA Request Delete by Vendor',
+                'type'        => 'Fix',
+                'description' => 'RMA request delete by vendor and change text-domain'
+            ),
+            array(
+                'title'       => 'Add Missing Permission Callback in REST Routes',
+                'type'        => 'Fix',
+                'description' => 'Add missing permission callback in REST routes to make WordPress 5.5 compatible'
+            )
+        )
+    ),
+    array(
         'version'  => 'Version 3.0.6',
         'released' => '2020-07-23',
         'changes'  => array(

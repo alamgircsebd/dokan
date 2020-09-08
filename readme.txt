@@ -3,9 +3,9 @@ Contributors: tareq1988, wedevs, sabbir1991
 Donate Link: http://tareq.co/donate/
 Tags: woocommerce, multivendor, multi-vendor, paypal, shop, vendor, seller, store, sell, online, amazon, dokan, ebay, Etsy, multi seller, multi store, multi vendor, multi vendors, multistore, multivendor, product vendor, product vendors, vendor, vendor system, vendors, wc market place, wc marketplace, wc vendors, woo vendors, woocommerce market place, woocommerce marketplace, woocommerce multi vendor,  commission rate, e-commerce, ebay, ecommerce, yith, yithemes
 Requires at least: 4.4
-Tested up to: 5.4.2
+Tested up to: 5.5.1
 WC requires at least: 3.0
-WC tested up to: 4.3.1
+WC tested up to: 4.4.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -171,6 +171,36 @@ A. You just delete the free version and install and activate the pro version. No
 15. Frontend &rarr; Individual Seller Store
 
 == Changelog ==
+
+v3.0.8 -> Sep 04, 2020
+----------------------------------
+
+- [fix] Shipping data updater issue fixed
+- [fix] Subscription type product is not in the `Product Type` list
+
+
+v3.0.7 -> Sep 01, 2020
+----------------------------------
+
+- [fix] Refactor Product SEO
+- [fix] Shipping continent issues
+- [fix] Global multiple zone conflict issue in shipping
+- [fix] Paypal gateway fee not showing when products purchase by multi vendor
+- [fix] CSV import not working cause of JS error
+- [fix] Product addon conflicting with WC booking
+- [fix] Long tags listing issue fixed on product quick edit area
+- [fix] Wrong text domain on store support email templates
+- [fix] Vendor getting duplicate booking email
+- [fix] JS conflicting issue on product addon module
+- [fix] Spelling mistake fixed on vendor subscription module
+- [fix] Store review author name show display name if exits
+- [fix] Yoast SEO plugin some hooks changed
+- [fix] Update Vendor Analytics module logo and primary metrics key
+- [fix] Store category resets after updating store Payment details
+- [fix] Automatic save zone location data during method add, edit and delete
+- [fix] Product type not saving with product addon module
+- [fix] RMA request delete by vendor and change text-domain
+- [fix] Add missing permission callback in REST routes to make WP 5.5 compatible
 
 v3.0.6 -> July 23, 2020
 ----------------------------------

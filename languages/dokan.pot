@@ -2,9 +2,9 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Dokan Pro 3.0.6\n"
+"Project-Id-Version: Dokan Pro 3.0.8\n"
 "Report-Msgid-Bugs-To: https://wedevs.com/account/tickets/\n"
-"POT-Creation-Date: 2020-07-23 11:26:16+00:00\n"
+"POT-Creation-Date: 2020-09-04 05:06:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,35 +35,35 @@ msgstr ""
 msgid "Error: Nonce verification failed"
 msgstr ""
 
-#: dokan-pro.php:465
+#: dokan-pro.php:467
 msgid "Activating"
 msgstr ""
 
-#: dokan-pro.php:466
+#: dokan-pro.php:468
 msgid "Deactivating"
 msgstr ""
 
-#: dokan-pro.php:467 includes/Admin/Admin.php:340
+#: dokan-pro.php:469 includes/Admin/Admin.php:340
 msgid "Amount you will get from sales in both percentage and fixed fee"
 msgstr ""
 
-#: dokan-pro.php:468
+#: dokan-pro.php:470
 msgid "It will override the default commission admin gets from each sales"
 msgstr ""
 
-#: dokan-pro.php:650
+#: dokan-pro.php:652
 msgid "Starter"
 msgstr ""
 
-#: dokan-pro.php:655
+#: dokan-pro.php:657
 msgid "Professional"
 msgstr ""
 
-#: dokan-pro.php:660
+#: dokan-pro.php:662
 msgid "Business"
 msgstr ""
 
-#: dokan-pro.php:665
+#: dokan-pro.php:667
 msgid "Enterprise"
 msgstr ""
 
@@ -473,7 +473,7 @@ msgstr ""
 msgid "Add New Announcement"
 msgstr ""
 
-#: includes/Admin/Announcement.php:104 modules/booking/module.php:587
+#: includes/Admin/Announcement.php:104 modules/booking/module.php:581
 #: modules/booking/templates/booking/product-list.php:119
 #: modules/booking/templates/booking/resources/resources.php:111
 #: modules/product-addon/templates/product-addon/html-global-admin.php:28
@@ -682,11 +682,11 @@ msgstr ""
 msgid "Settings save successfully"
 msgstr ""
 
-#: includes/Ajax.php:393
+#: includes/Ajax.php:406
 msgid "Zone settings save successfully"
 msgstr ""
 
-#: includes/Ajax.php:429 includes/Ajax.php:1658 includes/Products.php:219
+#: includes/Ajax.php:442 includes/Ajax.php:1671 includes/Products.php:219
 #: includes/functions-wc.php:280
 #: modules/simple-auction/templates/auction/auction-shipping.php:39
 #: templates/orders/views/html-order-items.php:21
@@ -694,42 +694,42 @@ msgstr ""
 msgid "Standard"
 msgstr ""
 
-#: includes/Ajax.php:439 includes/Ajax.php:1668 includes/Products.php:858
+#: includes/Ajax.php:452 includes/Ajax.php:1681 includes/Products.php:858
 #: includes/woo-views/variation-admin-html.php:68
 #: templates/products/edit/inventory.php:57
 msgid "Do not allow"
 msgstr ""
 
-#: includes/Ajax.php:440 includes/Ajax.php:1669
+#: includes/Ajax.php:453 includes/Ajax.php:1682
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: includes/Ajax.php:441 includes/Ajax.php:1670 includes/Products.php:860
+#: includes/Ajax.php:454 includes/Ajax.php:1683 includes/Products.php:860
 #: includes/woo-views/variation-admin-html.php:70
 #: templates/products/edit/inventory.php:59
 msgid "Allow"
 msgstr ""
 
-#: includes/Ajax.php:446 includes/Ajax.php:1675
+#: includes/Ajax.php:459 includes/Ajax.php:1688
 #: includes/woo-views/variation-admin-html.php:78
 #: modules/booking/templates/booking/product-list.php:154
 #: modules/simple-auction/templates/auction/auction-products-listing.php:129
 msgid "In stock"
 msgstr ""
 
-#: includes/Ajax.php:447 includes/Ajax.php:1676
+#: includes/Ajax.php:460 includes/Ajax.php:1689
 #: includes/woo-views/variation-admin-html.php:79
 #: modules/booking/templates/booking/product-list.php:156
 #: modules/simple-auction/templates/auction/auction-products-listing.php:131
 msgid "Out of stock"
 msgstr ""
 
-#: includes/Ajax.php:1131 includes/Ajax.php:1157 includes/Ajax.php:1241
+#: includes/Ajax.php:1144 includes/Ajax.php:1170 includes/Ajax.php:1254
 #: templates/settings/shipping.php:203 templates/settings/shipping.php:233
 msgid "State"
 msgstr ""
 
-#: includes/Ajax.php:1137 includes/Ajax.php:1161
+#: includes/Ajax.php:1150 includes/Ajax.php:1174
 #: modules/rma/templates/rma/product.php:111
 #: modules/rma/templates/rma/settings.php:118
 #: src/frontend/components/Zone.vue:168
@@ -740,40 +740,40 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: includes/Ajax.php:1211
+#: includes/Ajax.php:1224
 msgid "No Announcement found"
 msgstr ""
 
-#: includes/Ajax.php:1243
+#: includes/Ajax.php:1256
 msgid "--Select State--"
 msgstr ""
 
-#: includes/Ajax.php:1247
+#: includes/Ajax.php:1260
 msgid "Other States"
 msgstr ""
 
-#: includes/Ajax.php:1311
+#: includes/Ajax.php:1324
 msgid "Please select a State from the dropdown"
 msgstr ""
 
-#: includes/Ajax.php:1313 includes/Ajax.php:1316
+#: includes/Ajax.php:1326 includes/Ajax.php:1329
 msgid "Shipping Cost : "
 msgstr ""
 
-#: includes/Ajax.php:1319
+#: includes/Ajax.php:1332
 msgid "Please select a country from the dropdown"
 msgstr ""
 
-#: includes/Ajax.php:1563
+#: includes/Ajax.php:1576
 msgid "Clear All"
 msgstr ""
 
-#: includes/Ajax.php:1563 templates/coupon/form.php:112
+#: includes/Ajax.php:1576 templates/coupon/form.php:112
 msgid "Clear"
 msgstr ""
 
-#: includes/Ajax.php:1856 includes/woo-views/variation-admin-html.php:6
-#: modules/booking/module.php:588
+#: includes/Ajax.php:1869 includes/woo-views/variation-admin-html.php:6
+#: modules/booking/module.php:582
 #: modules/booking/templates/booking/persons/html-booking-person.php:9
 #: modules/booking/templates/booking/resources/html-booking-resource.php:9
 #: modules/booking/templates/booking/resources/resources.php:112
@@ -789,7 +789,7 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: includes/Ajax.php:1867
+#: includes/Ajax.php:1880
 #: modules/simple-auction/templates/auction/product-attribute.php:24
 #: templates/orders/views/html-product-attribute.php:66
 #: templates/products/edit/attributes.php:72
@@ -798,14 +798,14 @@ msgstr ""
 msgid "Visible on the product page"
 msgstr ""
 
-#: includes/Ajax.php:1874 templates/orders/views/html-product-attribute.php:72
+#: includes/Ajax.php:1887 templates/orders/views/html-product-attribute.php:72
 #: templates/products/edit/attributes.php:85
 #: templates/products/edit/html-product-attribute.php:28
 #: templates/products/edit/templates-js.php:27
 msgid "Used for variations"
 msgstr ""
 
-#: includes/Ajax.php:1885 includes/Ajax.php:1896
+#: includes/Ajax.php:1898 includes/Ajax.php:1909
 #: templates/products/edit/attributes.php:99
 #: templates/products/edit/attributes.php:113
 #: templates/products/edit/templates-js.php:36
@@ -1582,9 +1582,9 @@ msgstr ""
 #: includes/REST/ReviewsController.php:62
 #: includes/REST/ReviewsController.php:83 includes/REST/StoreController.php:28
 #: includes/REST/StoreController.php:56 includes/REST/StoreController.php:71
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:56
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:91
-#: modules/wholesale/includes/api/class-wholesale-controller.php:56
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:57
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:93
+#: modules/wholesale/includes/api/class-wholesale-controller.php:57
 msgid "Unique identifier for the object."
 msgstr ""
 
@@ -1604,13 +1604,13 @@ msgid "No announcement id found"
 msgstr ""
 
 #: includes/REST/AnnouncementController.php:360
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:273
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:275
 #. translators: %s: force=true
 msgid "The post does not support trashing. Set '%s' to delete."
 msgstr ""
 
 #: includes/REST/AnnouncementController.php:365
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:278
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:280
 msgid "The post has already been deleted."
 msgstr ""
 
@@ -1620,7 +1620,7 @@ msgstr ""
 
 #: includes/REST/AnnouncementController.php:427
 #: includes/REST/StoreController.php:134
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:340
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:342
 msgid "No items found for bulk updating"
 msgstr ""
 
@@ -2139,7 +2139,7 @@ msgid "Invalid store id. Store not exists."
 msgstr ""
 
 #: includes/REST/ReviewsController.php:309
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:207
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:209
 msgid "No review id found"
 msgstr ""
 
@@ -2371,12 +2371,12 @@ msgstr ""
 msgid "No Reviews Found"
 msgstr ""
 
-#: includes/Review.php:674 modules/store-reviews/classes/DSR_View.php:285
+#: includes/Review.php:674 modules/store-reviews/classes/DSR_View.php:286
 #: templates/review/listing-table-tr.php:84
 msgid "Rated %d out of 5"
 msgstr ""
 
-#: includes/Review.php:675 modules/store-reviews/classes/DSR_View.php:286
+#: includes/Review.php:675 modules/store-reviews/classes/DSR_View.php:287
 #: templates/review/listing-table-tr.php:85
 msgid "out of 5"
 msgstr ""
@@ -2598,8 +2598,8 @@ msgstr ""
 msgid "Shipping method not deleted"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:153 src/frontend/components/Zone.vue:286
-#: src/frontend/components/Zone.vue:561
+#: includes/Shipping/ShippingZone.php:153 src/frontend/components/Zone.vue:287
+#: src/frontend/components/Zone.vue:574
 msgid "Lets you charge a rate for shipping"
 msgstr ""
 
@@ -2607,15 +2607,15 @@ msgstr ""
 msgid "Method enable or disable not working"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:301 src/frontend/components/Zone.vue:294
+#: includes/Shipping/ShippingZone.php:301 src/frontend/components/Zone.vue:295
 msgid "Flat Rate"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:303 src/frontend/components/Zone.vue:295
+#: includes/Shipping/ShippingZone.php:303 src/frontend/components/Zone.vue:296
 msgid "Local Pickup"
 msgstr ""
 
-#: includes/Shipping/ShippingZone.php:305 src/frontend/components/Zone.vue:296
+#: includes/Shipping/ShippingZone.php:305 src/frontend/components/Zone.vue:297
 msgid "Free Shipping"
 msgstr ""
 
@@ -3626,7 +3626,7 @@ msgid "{product_title} - is Cancelled"
 msgstr ""
 
 #: modules/booking/includes/emails/class-dokan-booking-email-cancelled.php:121
-#: modules/booking/module.php:585
+#: modules/booking/module.php:579
 #: modules/booking/templates/booking/my-bookings/all-bookings.php:130
 #: modules/booking/templates/booking/my-bookings/booking-details.php:236
 #: modules/booking/templates/booking/resources/resources.php:107
@@ -3664,104 +3664,104 @@ msgstr ""
 msgid "Enter a name for the new resource"
 msgstr ""
 
-#: modules/booking/module.php:335
+#: modules/booking/module.php:339
 msgid "Dokan New Booking"
 msgstr ""
 
-#: modules/booking/module.php:336
+#: modules/booking/module.php:340
 msgid ""
 "New booking emails are sent to the admin when a new booking is created and "
 "paid. This email is also received when a Pending confirmation booking is "
 "created."
 msgstr ""
 
-#: modules/booking/module.php:390 modules/booking/module.php:1139
+#: modules/booking/module.php:384 modules/booking/module.php:1133
 msgid "Booking"
 msgstr ""
 
-#: modules/booking/module.php:413
+#: modules/booking/module.php:407
 msgid "You have no permission to view this booking page"
 msgstr ""
 
-#: modules/booking/module.php:756 modules/booking/module.php:770
+#: modules/booking/module.php:750 modules/booking/module.php:764
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: modules/booking/module.php:759
+#: modules/booking/module.php:753
 msgid "You have taken too long. Please go back and retry."
 msgstr ""
 
-#: modules/booking/module.php:842
+#: modules/booking/module.php:836
 msgid "Error Occured"
 msgstr ""
 
-#: modules/booking/module.php:857
+#: modules/booking/module.php:851
 msgid "All Booking Product"
 msgstr ""
 
-#: modules/booking/module.php:861
+#: modules/booking/module.php:855
 msgid "Add Booking Product"
 msgstr ""
 
-#: modules/booking/module.php:865
+#: modules/booking/module.php:859
 #: modules/booking/templates/booking/my-bookings/all-bookings.php:41
 msgid "Manage Bookings"
 msgstr ""
 
-#: modules/booking/module.php:869
+#: modules/booking/module.php:863
 msgid "Calendar"
 msgstr ""
 
-#: modules/booking/module.php:873
+#: modules/booking/module.php:867
 #: modules/booking/templates/booking/resources/html-booking-resources.php:90
 msgid "Manage Resources"
 msgstr ""
 
-#: modules/booking/module.php:877
+#: modules/booking/module.php:871
 msgid "Edit Booking Product"
 msgstr ""
 
-#: modules/booking/module.php:881
+#: modules/booking/module.php:875
 msgid "Edit Resource"
 msgstr ""
 
-#: modules/booking/module.php:885
+#: modules/booking/module.php:879
 msgid "Edit Booking"
 msgstr ""
 
-#: modules/booking/module.php:1114
+#: modules/booking/module.php:1108
 msgid "View booking menu"
 msgstr ""
 
-#: modules/booking/module.php:1117
+#: modules/booking/module.php:1111
 msgid "Manage booking products"
 msgstr ""
 
-#: modules/booking/module.php:1118
+#: modules/booking/module.php:1112
 msgid "Manage booking calendar"
 msgstr ""
 
-#: modules/booking/module.php:1119
+#: modules/booking/module.php:1113
 msgid "Manage bookings"
 msgstr ""
 
-#: modules/booking/module.php:1120
+#: modules/booking/module.php:1114
 msgid "Manage booking resource"
 msgstr ""
 
-#: modules/booking/module.php:1121
+#: modules/booking/module.php:1115
 msgid "Add booking product"
 msgstr ""
 
-#: modules/booking/module.php:1122
+#: modules/booking/module.php:1116
 msgid "Edit booking product"
 msgstr ""
 
-#: modules/booking/module.php:1123
+#: modules/booking/module.php:1117
 msgid "Delete booking product"
 msgstr ""
 
-#: modules/booking/module.php:1154
+#: modules/booking/module.php:1148
 msgid "Booking Person Discount (Amount Off Per Person)"
 msgstr ""
 
@@ -4473,6 +4473,8 @@ msgstr ""
 #: src/admin/components/Announcement.vue:140
 #: src/frontend/components/Zone.vue:163 templates/coupon/form.php:19
 #: templates/products/edit/product-list-table-inline-edit-form.php:10
+#: templates/products/product-seo-content.php:50
+#: templates/products/product-seo-content.php:67
 msgid "Title"
 msgstr ""
 
@@ -7385,52 +7387,52 @@ msgstr ""
 msgid "Multiple Choice"
 msgstr ""
 
-#: modules/product-addon/module.php:37
+#: modules/product-addon/module.php:39
 msgid ""
 "<b>Dokan Product Addon </b> requires %sWooCommerce Product addons plugin%s "
 "to be installed & activated first !"
 msgstr ""
 
-#: modules/product-addon/module.php:199
+#: modules/product-addon/module.php:244
 msgid ""
 "All fields must have a title and/or option name. Please review the settings "
 "highlighted in red border."
 msgstr ""
 
-#: modules/product-addon/module.php:200
+#: modules/product-addon/module.php:245
 #: modules/product-addon/templates/product-addon/html-addon.php:205
 msgid "Limit price range"
 msgstr ""
 
-#: modules/product-addon/module.php:201
+#: modules/product-addon/module.php:246
 #: modules/product-addon/templates/product-addon/html-addon.php:209
 msgid "Limit quantity range"
 msgstr ""
 
-#: modules/product-addon/module.php:202
+#: modules/product-addon/module.php:247
 #: modules/product-addon/templates/product-addon/html-addon.php:212
 #: modules/product-addon/templates/product-addon/html-addon.php:215
 msgid "Limit character length"
 msgstr ""
 
-#: modules/product-addon/module.php:203
+#: modules/product-addon/module.php:248
 #: modules/product-addon/templates/product-addon/html-addon.php:199
 msgid "Restrictions"
 msgstr ""
 
-#: modules/product-addon/module.php:204
+#: modules/product-addon/module.php:249
 msgid "Are you sure you want remove this add-on field?"
 msgstr ""
 
-#: modules/product-addon/module.php:205
+#: modules/product-addon/module.php:250
 msgid "Are you sure you want delete this option?"
 msgstr ""
 
-#: modules/product-addon/module.php:206
+#: modules/product-addon/module.php:251
 msgid "Add Image Swatch"
 msgstr ""
 
-#: modules/product-addon/module.php:207
+#: modules/product-addon/module.php:252
 msgid "Add Image"
 msgstr ""
 
@@ -8194,14 +8196,23 @@ msgid ""
 "effect globally for your products"
 msgstr ""
 
+#: modules/rma/includes/class-vendor.php:323
+msgid "Return Request has been deleted successfully"
+msgstr ""
+
 #: modules/rma/includes/class-warranty-request-conversation.php:65
 msgid "Conversation to saved"
 msgstr ""
 
 #: modules/rma/includes/class-warranty-request-conversation.php:91
 #: modules/rma/includes/class-warranty-request.php:43
+#: modules/rma/includes/class-warranty-request.php:90
 #: modules/rma/includes/functions.php:432
 msgid "No request id found"
+msgstr ""
+
+#: modules/rma/includes/class-warranty-request.php:94
+msgid "No vendor id found"
 msgstr ""
 
 #: modules/rma/includes/emails/class-dokan-rma-send-coupin-email.php:24
@@ -9611,24 +9622,24 @@ msgstr ""
 msgid "Thanks for your review"
 msgstr ""
 
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:79
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:81
 msgid "Trash or permanenet delete"
 msgstr ""
 
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:183
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:189
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:185
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:191
 msgid "No review found"
 msgstr ""
 
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:211
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:213
 msgid "Review title must be required"
 msgstr ""
 
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:215
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:217
 msgid "Review content must be required"
 msgstr ""
 
-#: modules/store-reviews/classes/api/class-store-reviews-controller.php:289
+#: modules/store-reviews/classes/api/class-store-reviews-controller.php:291
 msgid "The review cannot be deleted."
 msgstr ""
 
@@ -11599,6 +11610,14 @@ msgid ""
 "Subscriptions plugin%s to be installed & activated first !"
 msgstr ""
 
+#: modules/vendor-subscription-product/module.php:144
+msgid "Simple Subscription Product"
+msgstr ""
+
+#: modules/vendor-subscription-product/module.php:145
+msgid "Variable Subscription Product"
+msgstr ""
+
 #: modules/vendor-subscription-product/templates/subscription/html-subscription-schedule.php:23
 #: modules/vendor-subscription-product/templates/subscription/html-subscription-schedule.php:30
 msgid "Payment"
@@ -11646,7 +11665,7 @@ msgid "Sign up Fee"
 msgstr ""
 
 #: modules/vendor-subscription-product/templates/subscription/price.php:75
-msgid "Free Trail"
+msgid "Free Trial"
 msgstr ""
 
 #: modules/vendor-subscription-product/templates/subscription/price.php:111
@@ -12162,30 +12181,30 @@ msgstr ""
 msgid "User ID."
 msgstr ""
 
-#: modules/wholesale/includes/api/class-wholesale-controller.php:60
+#: modules/wholesale/includes/api/class-wholesale-controller.php:61
 msgid "Status for wholesale customer"
 msgstr ""
 
-#: modules/wholesale/includes/api/class-wholesale-controller.php:196
-#: modules/wholesale/includes/api/class-wholesale-controller.php:202
-#: modules/wholesale/includes/api/class-wholesale-controller.php:233
-#: modules/wholesale/includes/api/class-wholesale-controller.php:247
+#: modules/wholesale/includes/api/class-wholesale-controller.php:197
+#: modules/wholesale/includes/api/class-wholesale-controller.php:203
+#: modules/wholesale/includes/api/class-wholesale-controller.php:234
+#: modules/wholesale/includes/api/class-wholesale-controller.php:248
 msgid "No user found"
 msgstr ""
 
-#: modules/wholesale/includes/api/class-wholesale-controller.php:206
+#: modules/wholesale/includes/api/class-wholesale-controller.php:207
 msgid "Not a valid user for wholesale"
 msgstr ""
 
-#: modules/wholesale/includes/api/class-wholesale-controller.php:237
+#: modules/wholesale/includes/api/class-wholesale-controller.php:238
 msgid "No status found for update"
 msgstr ""
 
-#: modules/wholesale/includes/api/class-wholesale-controller.php:241
+#: modules/wholesale/includes/api/class-wholesale-controller.php:242
 msgid "Status are not valid"
 msgstr ""
 
-#: modules/wholesale/includes/api/class-wholesale-controller.php:282
+#: modules/wholesale/includes/api/class-wholesale-controller.php:283
 msgid "No data found for bulk updating"
 msgstr ""
 
@@ -12536,6 +12555,7 @@ msgstr ""
 #: src/admin/components/StoreCategoriesIndex.vue:29
 #: src/admin/components/StoreCategoriesIndex.vue:159
 #: src/admin/components/StoreCategoriesShow.vue:27
+#: templates/products/product-seo-content.php:59
 msgid "Slug"
 msgstr ""
 
@@ -12888,7 +12908,7 @@ msgstr ""
 msgid "Minimum order amount for free shipping"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:290
+#: src/frontend/components/Zone.vue:291
 msgid ""
 "Enter a cost (excl. tax) or sum, e.g. <code>10.00 * [qty]</code>. Use "
 "<code>[qty]</code> for the number of items, <code>[cost]</code> for the "
@@ -12896,11 +12916,11 @@ msgid ""
 "max_fee='']</code> for percentage based fees."
 msgstr ""
 
-#: src/frontend/components/Zone.vue:291
+#: src/frontend/components/Zone.vue:292
 msgid "Edit Shipping Method"
 msgstr ""
 
-#: src/frontend/components/Zone.vue:292
+#: src/frontend/components/Zone.vue:293
 msgid "Postcodes need to be comma separated"
 msgstr ""
 
@@ -13621,6 +13641,59 @@ msgstr ""
 #: templates/products/product-lot-discount.php:26
 #: templates/settings/discount.php:24
 msgid "Percentage"
+msgstr ""
+
+#: templates/products/product-seo-content.php:14
+msgid "SEO"
+msgstr ""
+
+#: templates/products/product-seo-content.php:15
+msgid "Manage SEO for this product"
+msgstr ""
+
+#: templates/products/product-seo-content.php:29
+msgid "Snippet Preview"
+msgstr ""
+
+#: templates/products/product-seo-content.php:35
+msgid ""
+"Please provide a meta description by editing the snippet below. If you "
+"don’t, Google will try to find a relevant part of your post to show in the "
+"search results."
+msgstr ""
+
+#: templates/products/product-seo-content.php:41
+msgid "Edit Snippet"
+msgstr ""
+
+#: templates/products/product-seo-content.php:46
+#: templates/products/product-seo-content.php:56
+msgid "SEO Title"
+msgstr ""
+
+#: templates/products/product-seo-content.php:49
+#: templates/products/product-seo-content.php:66
+msgid "Insert snippet variable"
+msgstr ""
+
+#: templates/products/product-seo-content.php:51
+#: templates/products/product-seo-content.php:68
+msgid "Seperator"
+msgstr ""
+
+#: templates/products/product-seo-content.php:52
+#: templates/products/product-seo-content.php:69
+msgid "Site Title"
+msgstr ""
+
+#: templates/products/product-seo-content.php:63
+#: templates/products/product-seo-content.php:72
+msgid "Meta description"
+msgstr ""
+
+#: templates/products/product-seo-content.php:79
+#: templates/products/product-seo-content.php:80
+msgid "Focus keyword"
 msgstr ""
 
 #: templates/products/product-shipping-content.php:26

@@ -112,6 +112,7 @@ class Module {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_subcription_product_templates' ], 10, 3 );
         add_filter( 'woocommerce_order_item_needs_processing', array( $this, 'order_needs_processing' ), 10, 2 );
+        add_filter( 'dokan_get_product_types', [ $this, 'add_subscription_type_product' ] );
     }
 
     /**
@@ -128,6 +129,22 @@ class Module {
         }
 
         return $needs_processing;
+    }
+
+    /**
+     * Add subscription product for vendor subscription allowd categories
+     *
+     * @since 3.0.8
+     *
+     * @param $product_type
+     *
+     * @return array
+     */
+    public function add_subscription_type_product( $product_type ) {
+        $product_type['subscription']          = __( 'Simple Subscription Product', 'dokan' );
+        $product_type['variable-subscription'] = __( 'Variable Subscription Product', 'dokan' );
+
+        return $product_type;
     }
 
     /**
