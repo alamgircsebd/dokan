@@ -253,31 +253,16 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                                         <div class="dokan-form-group">
                                             <label for="product_cat" class="form-label"><?php esc_html_e( 'Category', 'dokan-lite' ); ?></label>
                                             <?php
-                                            $product_cat = -1;
-                                            $term = array();
-                                            $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
-
-                                            if ( $term ) {
-                                                $product_cat = reset( $term );
-                                            }
                                             include_once DOKAN_LIB_DIR.'/class.category-walker.php';
-
-                                            $category_args =  array(
-                                                'show_option_none' => __( '- Select a category -', 'dokan-lite' ),
-                                                'hierarchical'     => 1,
-                                                'hide_empty'       => 0,
-                                                'name'             => 'product_cat',
-                                                'id'               => 'product_cat',
-                                                'taxonomy'         => 'product_cat',
-                                                'title_li'         => '',
-                                                'class'            => 'product_cat dokan-form-control dokan-select2',
-                                                'exclude'          => '',
-                                                'selected'         => $product_cat,
-                                                'walker'           => new CategoryDropdownSingle( $post_id )
-                                            );
-
-                                            wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', $category_args ) );
-                                        ?>
+                                            $terms = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'all' ) );
+                                            ?>
+                                            <select name="product_cat" id="product_cat" class="product_cat product_cat_search dokan-form-control dokan-select2">
+                                                <?php if ( ! empty( $terms ) ) : ?>
+                                                    <?php foreach ( $terms as $tax_term ) : ?>
+                                                        <option value="<?php echo esc_attr( $tax_term->term_id ); ?>" selected="selected" ><?php echo esc_html( $tax_term->name ); ?></option>
+                                                    <?php endforeach ?>
+                                                <?php endif ?>
+                                            </select>
                                             <div class="dokan-product-cat-alert dokan-hide">
                                                 <?php esc_html_e('Please choose a category!', 'dokan-lite' ); ?>
                                             </div>
@@ -286,26 +271,16 @@ do_action( 'dokan_dashboard_wrap_before', $post, $post_id );
                                         <div class="dokan-form-group">
                                             <label for="product_cat" class="form-label"><?php esc_html_e( 'Category', 'dokan-lite' ); ?></label>
                                             <?php
-                                            $term = array();
-                                            $term = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'ids') );
-                                            include_once DOKAN_LIB_DIR.'/class.taxonomy-walker.php';
-                                            $drop_down_category = wp_dropdown_categories( apply_filters( 'dokan_product_cat_dropdown_args', array(
-                                                'show_option_none' => __( '', 'dokan-lite' ),
-                                                'hierarchical'     => 1,
-                                                'hide_empty'       => 0,
-                                                'name'             => 'product_cat[]',
-                                                'id'               => 'product_cat',
-                                                'taxonomy'         => 'product_cat',
-                                                'title_li'         => '',
-                                                'class'            => 'product_cat dokan-form-control dokan-select2',
-                                                'exclude'          => '',
-                                                'selected'         => $term,
-                                                'echo'             => 0,
-                                                'walker'           => new TaxonomyDropdown( $post_id )
-                                            ) ) );
-
-                                            echo str_replace( '<select', '<select data-placeholder="' . esc_html__( 'Select product category', 'dokan-lite' ) . '" multiple="multiple" ', $drop_down_category ); // phpcs:ignore WordPress.XSS.EscapeOutput.OutputNotEscaped
+                                            include_once DOKAN_LIB_DIR.'/class.category-walker.php';
+                                            $terms = wp_get_post_terms( $post_id, 'product_cat', array( 'fields' => 'all' ) );
                                             ?>
+                                            <select multiple="multiple" name="product_cat[]" id="product_cat" class="product_cat product_cat_search dokan-form-control dokan-select2">
+                                                <?php if ( ! empty( $terms ) ) : ?>
+                                                    <?php foreach ( $terms as $tax_term ) : ?>
+                                                        <option value="<?php echo esc_attr( $tax_term->term_id ); ?>" selected="selected" ><?php echo esc_html( $tax_term->name ); ?></option>
+                                                    <?php endforeach ?>
+                                                <?php endif ?>
+                                            </select>
                                         </div>
                                     <?php endif; ?>
 
