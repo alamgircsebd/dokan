@@ -656,13 +656,14 @@ export default {
             let array = typeof data != 'object' ? JSON.parse(data) : data;
             let str = '';
 
-            str += '"Order ID", "Vendor ID", "Vendor Name", "Order Total", "Refund Total", "Vendor Earning", "Commission", "Status", "Date"';
+            str += '"Order ID", "Vendor ID", "Vendor Name", "Previous Order Total", "Order Total", "Vendor Earning", "Commission", "Gateway Fee", "Shipping", "Tax", "Status", "Date"';
             str += '\r\n';
 
             for (let i = 0; i < array.length; i++) {
                 let line = '';
 
                 for (let index in array[i]) {
+
                     if (line != '') line += ',';
 
                     if ( 'commission' == index || 'previous_order_total' == index || 'vendor_earning' == index || 'dokan_gateway_fee' == index || 'shipping_total' == index || 'tax_total' == index ) {
@@ -679,11 +680,11 @@ export default {
                     } else if ( 'order_total' == index ) {
 
                         // if there is refund for an order, calculate refund total
-                        let total_refund = 0;
+                        let total_refund = array[i]['order_total'];
 
-                        if ( array[i]['has_refund'] ) {
-                            total_refund = array[i]['previous_order_total'] - array[i]['order_total'];
-                        }
+                        // if ( array[i]['has_refund'] ) {
+                        //     total_refund = array[i]['previous_order_total'] - array[i]['order_total'];
+                        // }
 
                         line += '"' + accounting.formatMoney(
                             total_refund,
