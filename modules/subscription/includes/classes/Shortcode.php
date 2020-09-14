@@ -120,7 +120,12 @@ class Shortcode {
                                         $again            = $maybe_reactivate ? __( 'again', 'dokan' ) : '';
                                     ?>
 
-                                    <label><?php _e( "To {$notice} your subscription {$again} click here &rarr;", "dokan" ); ?></label>
+                                    <label>
+                                        <?php
+                                            /* translators: 1: Required PHP Version 2: Running php version */
+                                            echo sprintf( __( 'To %1$s your subscription %2$s click here &rarr;', 'dokan' ), $notice, $again );
+                                        ?>
+                                    </label>
 
                                     <?php wp_nonce_field( $nonce ); ?>
                                     <input type="submit" name="<?php echo esc_attr( $input_name ); ?>" class="<?php echo esc_attr( "btn btn-sm {$btn_class}" ); ?>" value="<?php echo esc_attr( ucfirst( $notice ) ); ?>">
