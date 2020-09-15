@@ -85,6 +85,10 @@ class Module {
      * @return void
      */
     public function hooks() {
+        add_filter( 'woocommerce_email_classes', array( $this, 'setup_emails' ) );
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_wholesale_register_emails' ) );
+        add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_wholesale_register_actions' ) );
+
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_wholesale_templates' ], 10, 3 );
         add_filter( 'dokan_rest_api_class_map', [ $this, 'rest_api_class_map' ] );
@@ -165,5 +169,32 @@ class Module {
         ];
 
         return $data;
+    }
+
+    public function setup_emails( $emails ) {
+        if ( isset( $emails['Dokan_Email_Wholesale_Register'] ) ) {
+            $email = $emails['Dokan_Email_Wholesale_Register'];
+
+            $email->title       = __( 'Dokan New Wholesale Register', 'dokan' );
+            $email->description = __( 'New emails are sent to the admin when a new wholesale registration occured.', 'dokan' );
+
+            $email->template_base = $this->plugin_path() . '/templates';
+            $email->recipient     = get_option( 'admin_email' );;
+        }
+
+        return $emails;
+
+    }
+
+    public function load_dokan_wholesale_register_emails( $wc_emails ) {
+        $wc_emails['Dokan_Email_Wholesale_Register'] = include( DOKAN_WHOLESALE_INC_DIR. '/emails/class-dokan-wholesale-email-registration.php' );
+
+        return $wc_emails;
+    }
+
+    public function register_dokan_wholesale_register_actions( $actions ) {
+        $actions[] = 'dokan_wholesale_customer_register';
+
+        return $actions;
     }
 }
