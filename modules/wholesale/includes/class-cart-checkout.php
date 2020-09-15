@@ -169,7 +169,7 @@ class Dokan_Wholesale_Cart_Checkout {
 
                 if ( $remaining_qty > 0 ) {
                     echo '<br>';
-                    echo sprintf( __( 'For wholesale price buy <strong>%d</strong> more units' ), $remaining_qty );
+                    echo sprintf( __( 'For wholesale price buy <strong>%d</strong> more units', 'dokan' ), $remaining_qty );
                 }
             }
         }
@@ -220,7 +220,7 @@ class Dokan_Wholesale_Cart_Checkout {
                 if ( $product->is_type( 'simple' ) ) {
                     $wholesale = get_post_meta( $product->get_id(), '_dokan_wholesale_meta', true );
                     if ( isset( $wholesale['enable_wholesale'] ) && 'yes' == $wholesale['enable_wholesale'] ) {
-                        $wholesale_price = apply_filters( 'dokan_wholesale_price_loop', sprintf( '<span class="dokan-wholesale-price">( %s: %s )</span>', __( 'Wholesale', 'dokan'), wc_price( $wholesale['price'] ) ) );
+                        $wholesale_price = apply_filters( 'dokan_wholesale_price_loop', sprintf( '<span class="dokan-wholesale-price">( %s: %s )</span>', __( 'Wholesale', 'dokan' ), wc_price( $wholesale['price'] ) ) );
                         return $price . $wholesale_price;
                     }
                 }
