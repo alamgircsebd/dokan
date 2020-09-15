@@ -237,36 +237,28 @@ function dokan_get_best_sellers( $limit = 5 ) {
 /**
  * Get featured sellers list
  *
- * @param  integer $limit
+ * @param int $count
+ *
  * @return array
  */
 function dokan_get_feature_sellers( $count = 5 ) {
-    $args = array(
-        'role'         => 'seller',
-        'meta_query'   => array(
-            array(
+    $args = [
+        'role__in'   => [ 'administrator', 'seller' ],
+        'meta_query' => [
+            [
                 'key'   => 'dokan_feature_seller',
                 'value' => 'yes',
-            ),
-            array(
+            ],
+            [
                 'key'   => 'dokan_enable_selling',
                 'value' => 'yes',
-            )
-        ),
-        'offset'       => $count
-    );
+            ],
+        ],
+        'number'     => $count,
+    ];
 
-    $users = get_users( apply_filters( 'dokan_get_feature_sellers_args', $args ) );
+    $sellers = get_users( apply_filters( 'dokan_get_feature_sellers_args', $args ) );
 
-    $args = array(
-        'role'       => 'administrator',
-        'meta_key'   => 'dokan_feature_seller',
-        'meta_value' => 'yes',
-        'offset'     => $count
-    );
-    $admins = get_users( $args );
-
-    $sellers = array_merge( $admins, $users );
     return $sellers;
 }
 
