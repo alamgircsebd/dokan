@@ -109,6 +109,11 @@ class Module {
 
         // include email class
         add_action( 'dokan_loaded', [ __CLASS__, 'load_emails' ], 20 );
+
+        //Category import restriction if category restriction enable, for XML
+        add_filter( 'wp_import_post_data_raw', [ $this, 'restrict_category_on_xml_import' ] );
+        //For csv
+        add_action( 'woocommerce_product_import_before_process_item', [ $this, 'restrict_category_on_csv_import' ] );
     }
 
     /**
@@ -1104,5 +1109,67 @@ class Module {
         ];
 
         return $args;
+    }
+
+    /**
+     * Restrict category if selected category found
+     *
+     * @param $post
+     *
+     * @return null|\WP_Post $post
+     */
+    public function restrict_category_on_xml_import( $post ) {
+        $category_name = array_values( array_map( function ( $category ) {
+            return $category['name'];
+        }, array_filter( $post['terms'], function ( $term ) {
+            return $term['domain'] === 'product_cat';
+        } ) ) )[0];
+
+        $allowed_categories = $this->get_vendor_allowed_categories();
+
+        if ( ! empty( $allowed_categories ) ) {
+            $categories = [];
+            foreach ( $allowed_categories as $ac ) {
+                $categories[] = strtolower( get_term_field( 'name', $ac ) );
+            }
+
+            if ( in_array( strtolower( $category_name ), $categories ) ) {
+                return $post;
+            }
+
+            return null;
+        }
+
+        return $post;
+    }
+
+    /**
+     * Restric product import on csv if category restriction enable
+     *
+     * @param $data
+     */
+    public function restrict_category_on_csv_import( $data ) {
+        $categories         = $data['category_ids'];
+        $allowed_categories = $this->get_vendor_allowed_categories();
+
+        if ( ! empty( $allowed_categories ) ) {
+            foreach ( $categories as $category ) {
+                if ( ! in_array( $category, $allowed_categories ) ) {
+                    throw new \Exception( 'Current subscription does not allow this ' . get_term_field( 'name', $category ) );
+                }
+            }
+        }
+    }
+
+    /**
+     * Get subscription allowed categories if exist
+     *
+     * @return array
+     */
+    protected function get_vendor_allowed_categories() {
+        $vendor_subscription = dokan()->vendor->get( get_current_user_id() )->subscription;
+        $allowed_categories  = $vendor_subscription->get_allowed_product_categories();
+
+        return $allowed_categories;
     }
 }
