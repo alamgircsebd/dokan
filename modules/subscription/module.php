@@ -112,6 +112,7 @@ class Module {
 
         //Category import restriction if category restriction enable, for XML
         add_filter( 'wp_import_post_data_raw', [ $this, 'restrict_category_on_xml_import' ] );
+
         //For csv
         add_action( 'woocommerce_product_import_before_process_item', [ $this, 'restrict_category_on_csv_import' ] );
     }
@@ -1114,6 +1115,8 @@ class Module {
     /**
      * Restrict category if selected category found
      *
+     * * @since DOKAN_PRO_SINCE
+     *
      * @param $post
      *
      * @return null|\WP_Post $post
@@ -1122,15 +1125,15 @@ class Module {
         $category_name = array_values( array_map( function ( $category ) {
             return $category['name'];
         }, array_filter( $post['terms'], function ( $term ) {
-            return $term['domain'] === 'product_cat';
+            return 'product_cat' === $term['domain'];
         } ) ) )[0];
 
         $allowed_categories = $this->get_vendor_allowed_categories();
 
         if ( ! empty( $allowed_categories ) ) {
             $categories = [];
-            foreach ( $allowed_categories as $ac ) {
-                $categories[] = strtolower( get_term_field( 'name', $ac ) );
+            foreach ( $allowed_categories as $allowed_category ) {
+                $categories[] = strtolower( get_term_field( 'name', $allowed_category ) );
             }
 
             if ( in_array( strtolower( $category_name ), $categories ) ) {
@@ -1146,6 +1149,8 @@ class Module {
     /**
      * Restric product import on csv if category restriction enable
      *
+     * @since DOKAN_PRO_SINCE
+     *
      * @param $data
      */
     public function restrict_category_on_csv_import( $data ) {
@@ -1155,7 +1160,7 @@ class Module {
         if ( ! empty( $allowed_categories ) ) {
             foreach ( $categories as $category ) {
                 if ( ! in_array( $category, $allowed_categories ) ) {
-                    throw new \Exception( 'Current subscription does not allow this ' . get_term_field( 'name', $category ) );
+                    throw new \Exception( __( 'Current subscription does not allow this', 'dokan' ) . get_term_field( 'name', $category ) );
                 }
             }
         }
@@ -1163,6 +1168,8 @@ class Module {
 
     /**
      * Get subscription allowed categories if exist
+     *
+     * @since DOKAN_PRO_SINCE
      *
      * @return array
      */
