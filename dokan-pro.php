@@ -598,10 +598,12 @@ class Dokan_Pro {
      */
     public function set_email_template_directory( $dokan_emails ) {
         $dokan_pro_emails = [
-            'product-updated-pending',
-            'announcement',
-            'refund-seller-mail',
-            'refund_request',
+            'announcement.php',
+            'product-updated-pending.php',
+            'refund_request.php',
+            'refund-seller-mail.php',
+            'vendor-disabled.php',
+            'vendor-enabled.php',
         ];
 
         return array_merge( $dokan_pro_emails, $dokan_emails );
