@@ -762,13 +762,7 @@ class Products {
             $cats = array_pop( $cats );
         }
 
-        $wp_tags = get_the_terms( $post, 'product_tag' );
-
-        if ( $wp_tags ) {
-            $tags = wp_list_pluck( $wp_tags, 'term_id' );
-        } else {
-            $tags = array();
-        }
+        $tags = get_the_terms( $post, 'product_tag' );
 
         $args = array(
             'pro'     => true,
