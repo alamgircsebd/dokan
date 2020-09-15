@@ -99,7 +99,7 @@ class LogsController extends DokanRESTAdminController {
             $total_shipping = $order->get_total_shipping() ? $order->get_total_shipping() : 0;
 
             $tax_totals = 0;
-            if ( $order->get_tax_totals() ) :     
+            if ( $order->get_tax_totals() ) :
                 foreach ( $order->get_tax_totals() as $tax ) :
                     $tax_totals = $tax_totals + $tax->amount;
                 endforeach;
@@ -115,17 +115,19 @@ class LogsController extends DokanRESTAdminController {
                 $commission = $is_subscription_product ? $result->order_total : ( $result->order_total - $result->net_amount ) - $processing_fee;
             }
 
+            $dp = 2; // 2 decimal points
+
             $logs[] = [
                 'order_id'             => $result->order_id,
                 'vendor_id'            => $result->seller_id,
                 'vendor_name'          => dokan()->vendor->get( $result->seller_id )->get_shop_name(),
-                'previous_order_total' => $order_total,
-                'order_total'          => $result->order_total,
-                'vendor_earning'       => $is_subscription_product ? 0 : $result->net_amount,
-                'commission'           => $commission,
-                'dokan_gateway_fee'    => $processing_fee ? $processing_fee : 0,
-                'shipping_total'       => $total_shipping,
-                'tax_total'            => $tax_totals,
+                'previous_order_total' => wc_format_decimal( $order_total, $dp ),
+                'order_total'          => wc_format_decimal( $result->order_total, $dp ),
+                'vendor_earning'       => $is_subscription_product ? 0 : wc_format_decimal( $result->net_amount, $dp ),
+                'commission'           => wc_format_decimal( $commission ),
+                'dokan_gateway_fee'    => $processing_fee ? wc_format_decimal( $processing_fee, $dp ) : 0,
+                'shipping_total'       => wc_format_decimal( $total_shipping, $dp ),
+                'tax_total'            => wc_format_decimal( $tax_totals, $dp ),
                 'status'               => $statuses[ $result->order_status ],
                 'date'                 => $result->post_date,
                 'has_refund'           => $has_refund,

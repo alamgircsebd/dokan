@@ -709,7 +709,7 @@ class Dokan_Pro {
  *
  * @since 2.5.3
  *
- * @return void
+ * @return \Dokan_Pro
  * */
 function dokan_pro() {
     return Dokan_Pro::init();

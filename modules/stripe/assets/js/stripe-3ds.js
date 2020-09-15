@@ -47,7 +47,6 @@ jQuery( function( $ ) {
              * card as some AJAX process needs to happen before we do.
              */
             if ( 'yes' === dokan_stripe_connect_params.is_checkout ) {
-                console.log('load 1')
                 $( document.body ).on( 'updated_checkout', function() {
                     // Don't re-mount if already mounted in DOM.
                     if ( $( '#dokan-stripe-card-element' ).children().length ) {

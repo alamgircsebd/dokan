@@ -426,7 +426,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      *
      * @since 3.0.3
      *
-     * @param array $error
+     * @param object $error
      */
     public function is_retryable_error( $error ) {
         return (
@@ -617,7 +617,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * @param  int  $order_id
      * @param  int  $seller_id
      *
-     * @return array
+     * @return object
      */
     public function get_dokan_order( $order_id, $seller_id ) {
         global $wpdb;

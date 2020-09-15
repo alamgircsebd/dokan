@@ -2,6 +2,7 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe;
 
+use Exception;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
 use WeDevs\Dokan\Exceptions\DokanException;
 use WeDevs\DokanPro\Modules\Stripe\DokanStripe;
@@ -73,8 +74,8 @@ class IntentController extends StripePaymentGateway {
 
         try {
             $order = $this->get_order_from_request();
-        } catch ( DokanException $e ) {
-            $message = sprintf( __( 'Payment verification error: %s', 'dokan' ), $e->get_message() );
+        } catch ( Exception $e ) {
+            $message = sprintf( __( 'Payment verification error: %s', 'dokan' ), $e->getMessage() );
 
             wc_add_notice( esc_html( $message ), 'error' );
 
@@ -82,7 +83,7 @@ class IntentController extends StripePaymentGateway {
                 ? get_permalink( wc_get_page_id( 'shop' ) )
                 : wc_get_checkout_url();
 
-            $this->handle_error( $e, $redirect_url );
+            $this->handle_error( '[Stripe Connect] Error getting order from intent request.', $e, $redirect_url );
         }
 
         try {
@@ -91,13 +92,13 @@ class IntentController extends StripePaymentGateway {
             if ( ! isset( $_GET['is_ajax'] ) ) {
                 $redirect_url = isset( $_GET['redirect_to'] ) // wpcs: csrf ok.
                     ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) // wpcs: csrf ok.
-                    : $gateway->get_return_url( $order );
+                    : $this->get_return_url( $order );
 
                 wp_safe_redirect( $redirect_url );
             }
             exit;
-        } catch ( DokanException $e ) {
-            $this->handle_error( $e, $gateway->get_return_url( $order ) );
+        } catch ( Exception $e ) {
+            $this->handle_error( '[Stripe Connect] Error verifying intent after checkout.', $e, $this->get_return_url( $order ) );
         }
     }
 
@@ -109,9 +110,20 @@ class IntentController extends StripePaymentGateway {
      * @param DokanException $e
      * @param string $redirect_url An URL to use if a redirect is needed.
      */
-    protected function handle_error( $e, $redirect_url ) {
+    protected function handle_error( $message, $e, $redirect_url ) {
         // Log the exception before redirecting.
-        $message = sprintf( 'PaymentIntent verification exception: %s', $e->get_message() );
+        if ( $e instanceof DokanException ) {
+            $errors = [
+                'code'    => $e->get_error_code(),
+                'message' => $e->get_message(),
+            ];
+        } else {
+            $errors = [
+                'message' => $e->get_message(),
+            ];
+        }
+
+        dokan_log( "$message\n" . print_r( $errors, true ), 'error' );
 
         // `is_ajax` is only used for PI error reporting, a response is not expected.
         if ( isset( $_GET['is_ajax'] ) ) {

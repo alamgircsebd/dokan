@@ -2,6 +2,7 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe;
 
+use Exception;
 use WeDevs\Dokan\Exceptions\DokanException;
 
 defined( 'ABSPATH' ) || exit;
@@ -96,12 +97,18 @@ class Transaction {
      */
     public function transfer() {
         try {
-            $transfer = \Stripe\Transfer::create( [
+            $params = [
                 'amount'             => $this->amount,
                 'destination'        => $this->vendor,
                 'source_transaction' => $this->admin,
                 'currency'           => $this->currency ? strtolower( $this->currency ) : strtolower( get_woocommerce_currency() ),
-            ] );
+            ];
+
+            dokan_log( "[Stripe Connect] Transfer params for transaction:\n" . print_r( $params, true ) );
+
+            $transfer = \Stripe\Transfer::create( $params );
+
+            dokan_log( "[Stripe Connect] Transaction transferred successfully:\n" . print_r( $transfer, true ) );
         } catch ( Exception $e ) {
             throw new DokanException( 'dokan_unable_to_transfer', $e->getMessage() );
         }

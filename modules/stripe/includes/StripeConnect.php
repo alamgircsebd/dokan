@@ -104,7 +104,7 @@ class StripeConnect extends StripePaymentGateway {
      * @return void
      */
     public function show_update_card_notice( $user_id, $load_address ) {
-        if ( ! $this->saved_cards || ! Payment_Tokens::customer_has_saved_methods( $user_id ) || 'billing' !== $load_address ) {
+        if ( ! $this->saved_cards || ! PaymentTokens::customer_has_saved_methods( $user_id ) || 'billing' !== $load_address ) {
             return;
         }
 
@@ -179,15 +179,15 @@ class StripeConnect extends StripePaymentGateway {
         wp_enqueue_style( 'dokan_stripe', DOKAN_STRIPE_ASSETS . 'css/stripe.css' );
 
         if ( ! Helper::is_3d_secure_enabled() && $this->checkout_modal && ! is_add_payment_method_page() ) {
-            wp_enqueue_script( 'stripe', 'https://checkout.stripe.com/v2/checkout.js', '', '2.0', true );
+            wp_enqueue_script( 'stripe', 'https://checkout.stripe.com/v2/checkout.js', [], '2.0', true );
             wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-checkout.js', dirname( __FILE__ ) ), [ 'stripe' ], false, true );
         } else if ( ! Helper::is_3d_secure_enabled() && ! is_add_payment_method_page() ) {
-            wp_enqueue_script( 'stripe', 'https://js.stripe.com/v1/', '', '1.0', true );
+            wp_enqueue_script( 'stripe', 'https://js.stripe.com/v1/', [], '1.0', true );
             wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe.js', dirname( __FILE__ ) ), [ 'jquery','stripe' ], false, false );
         }
 
         if ( Helper::is_3d_secure_enabled() || is_add_payment_method_page() ) {
-            wp_enqueue_script( 'stripe', 'https://js.stripe.com/v3/', [], '', true );
+            wp_enqueue_script( 'stripe', 'https://js.stripe.com/v3/', [], [], true );
             wp_enqueue_script( 'dokan_stripe', plugins_url( 'assets/js/stripe-3ds.js', dirname( __FILE__ ) ), [ 'jquery', 'stripe' ], false, true );
         }
 
@@ -241,30 +241,14 @@ class StripeConnect extends StripePaymentGateway {
     }
 
     /**
-     * Admin Panel Options
-     * - Options for bits like 'title' and availability on a country-by-country basis
+     * Admin options in WC payments settings
+     *
+     * @since 3.0.3
+     *
+     * @return void
      */
     public function admin_options() {
-        ?>
-        <h3><?php _e( 'Stripe Connect', 'dokan' ); ?></h3>
-        <p><?php _e( 'Stripe works by adding credit card fields on the checkout and then sending the details to Stripe for verification.', 'dokan' ); ?></p>
-        <?php
-            echo '<p>' . sprintf( __( 'Recurring subscription requires webhooks to be configured. Go to <a href="%s">webhook</a> and set your webhook url <code>%s</code>. Otherwise recurring payment not working automatically', 'dokan' ), 'https://dashboard.stripe.com/account/webhooks', add_query_arg( array( 'webhook' => 'dokan' ), home_url('/') ) ) . '</p>';
-         ?>
-        <?php if ( in_array( get_option( 'woocommerce_currency' ), array( 'AED','AFN','ALL','AMD','ANG','AOA','ARS','AUD','AWG','AZN','BAM','BBD','BDT','BGN','BIF','BMD','BND','BOB','BRL','BSD','BWP','BZD','CAD','CDF','CHF','CLP','CNY','COP','CRC','CVE','CZK','DJF','DKK','DOP','DZD','EEK','EGP','ETB','EUR','FJD','FKP','GBP','GEL','GIP','GMD','GNF','GTQ','GYD','HKD','HNL','HRK','HTG','HUF','IDR','ILS','INR','ISK','JMD','JPY','KES','KGS','KHR','KMF','KRW','KYD','KZT','LAK','LBP','LKR','LRD','LSL','LTL','LVL','MAD','MDL','MGA','MKD','MNT','MOP','MRO','MUR','MVR','MWK','MXN','MYR','MZN','NAD','NGN','NIO','NOK','NPR','NZD','PAB','PEN','PGK','PHP','PKR','PLN','PYG','QAR','RON','RSD','RUB','RWF','SAR','SBD','SCR','SEK','SGD','SHP','SLL','SOS','SRD','STD','SVC','SZL','THB','TJS','TOP','TRY','TTD','TWD','TZS','UAH','UGX','USD','UYU','UZS','VEF','VND','VUV','WST','XAF','XCD','XOF','XPF','YER','ZAR','ZMW' ) ) ) { ?>
-        <table class="form-table">
-            <?php $this->generate_settings_html(); ?>
-        </table><!--/.form-table-->
-
-        <?php } else { ?>
-
-        <div class="inline error">
-            <p>
-                <strong><?php _e( 'Gateway Disabled', 'dokan' ); ?></strong>
-                <?php echo __( 'Choose a currency supported by Stripe as your store currency to enable Stripe Connect.', 'dokan' ); ?>
-            </p>
-        </div>
-        <?php }
+        Helper::get_template( 'admin-options', [ 'gateway' => $this ] );
     }
 
     /**
@@ -310,7 +294,7 @@ class StripeConnect extends StripePaymentGateway {
         >';
 
         if ( $this->testmode ) {
-            $description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'dokan' ), 'https://stripe.com/docs/testing' );
+            $description .= ' ' . sprintf( __( 'TEST MODE ENABLED. In test mode, you can use the card number 4242424242424242 and 4000002500003155 for testing 3D Secure with any CVC and a valid expiration date or check the <a href="%s" target="_blank">Testing Stripe documentation</a> for more card numbers.', 'dokan' ), 'https://stripe.com/docs/testing' );
         }
 
         $description                   = trim( $description );
