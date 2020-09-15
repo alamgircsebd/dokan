@@ -170,6 +170,15 @@ class DPS_Admin {
                         $('input[name="_subscription_product_admin_commission"]').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
                     }
                 }).trigger('change');
+
+                $('#_regular_price').on('keyup', function() {
+                    var self = $(this),
+                        val = self.val();
+
+                    if ( $( 'input[name*="_regular_price"]' ).length > 1 ) {
+                        $( 'input[name*="_regular_price"]' ).val( val );
+                    }
+                }).trigger('change');
             })(jQuery);
         </script>
 
