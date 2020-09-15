@@ -1,6 +1,7 @@
 import "../../less/single-product.less";
 
 ;(function($) {
+
     $('.dokan-report-abuse-admin-single-product-delete-item').on('click', function (e) {
         e.preventDefault();
 
@@ -9,7 +10,8 @@ import "../../less/single-product.less";
         const tr = button.parents('tr');
         const fieldset = button.parents('fieldset');
 
-        if (! confirm('Are you sure you want to delete this report')) {
+
+        if ( ! confirm( dokanReportAbuse.i18n.confirmDelete ) ) {
             return;
         }
 
