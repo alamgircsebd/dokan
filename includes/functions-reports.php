@@ -60,8 +60,8 @@ function dokan_seller_sales_statement() {
     $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
     if ( isset( $_GET['dokan_report_filter'] ) ) {
-        $start_date = $_GET['start_date'];
-        $end_date = $_GET['end_date'];
+        $start_date = date( 'Y-m-d', strtotime( $_GET['start_date'] ) );
+        $end_date   = date( 'Y-m-d', strtotime( $_GET['end_date'] ) );
     }
     ?>
 
@@ -460,8 +460,8 @@ function dokan_daily_sales() {
     $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
     if ( isset( $_POST['dokan_report_filter'] ) ) {
-        $start_date = $_POST['start_date'];
-        $end_date = $_POST['end_date'];
+        $start_date = date( 'Y-m-d', strtotime( $_POST['start_date'] ) );
+        $end_date   = date( 'Y-m-d', strtotime( $_POST['end_date'] ) );
     }
     ?>
 
