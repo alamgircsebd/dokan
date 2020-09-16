@@ -111,7 +111,7 @@ function dokan_geo_filter_form( $scope = '', $display = 'inline' ) {
     wp_enqueue_script( 'dokan-geo-filters' );
 
     $s             = get_query_var( 's', '' );
-    $seller_s      = $search_query = isset( $_GET['dokan_seller_search'] ) ? sanitize_text_field( $_GET['dokan_seller_search'] ) : '';
+    $seller_s      = $search_query = isset( $_GET['do_seller_search'] ) ? sanitize_text_field( $_GET['do_seller_search'] ) : '';
     $latitude      = isset( $_GET['latitude'] ) ? $_GET['latitude'] : null;
     $longitude     = isset( $_GET['longitude'] ) ? $_GET['longitude'] : null;
     $address       = isset( $_GET['address'] ) ? $_GET['address'] : '';

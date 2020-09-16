@@ -1,6 +1,6 @@
 <div class="dokan-geolocation-location-filters">
     <div class="dokan-geo-filters-column">
-        <input type="text" class="store-search-input dokan-form-control" name="dokan_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>">
+        <input type="text" class="store-search-input dokan-form-control" name="do_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>">
     </div>
 
     <div class="dokan-geo-filters-column">

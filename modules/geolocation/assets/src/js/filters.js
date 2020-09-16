@@ -17,7 +17,7 @@ import './bootstrap-dropdown';
         this.switchable_scope = null;
         this.display = '';
         this.s = '';
-        this.dokan_seller_search = '';
+        this.do_seller_search = '';
         this.product_cat = '';
         this.latitude = 0.00;
         this.longitude = 0.00;
@@ -43,7 +43,7 @@ import './bootstrap-dropdown';
         self.display_form();
 
         self.s = self.form.find( '[name="s"]' ).val();
-        self.dokan_seller_search = self.form.find( '[name="dokan_seller_search"]' ).val();
+        self.do_seller_search = self.form.find( '[name="do_seller_search"]' ).val();
         self.latitude = self.form.find( '[name="latitude"]' ).val();
         self.longitude = self.form.find( '[name="longitude"]' ).val();
 
@@ -58,11 +58,11 @@ import './bootstrap-dropdown';
             self.set_param( 'distance', $( this ).val() );
         } );
 
-        self.form.find( '[name="s"], [name="dokan_seller_search"]' ).on( 'blur', function () {
+        self.form.find( '[name="s"], [name="do_seller_search"]' ).on( 'blur', function () {
             self.set_search_term( $( this ).val() );
         } );
 
-        self.form.find( '[name="s"], [name="dokan_seller_search"]' ).on( 'keypress', function ( e ) {
+        self.form.find( '[name="s"], [name="do_seller_search"]' ).on( 'keypress', function ( e ) {
             if ( 13 === e.which ) {
                 self.set_search_term( $( this ).val() );
             }
@@ -136,7 +136,7 @@ import './bootstrap-dropdown';
 
             if ( 'product' === scope ) {
                 self.form.find( '[name="s"]' ).removeClass( 'dokan-hide' );
-                self.form.find( '[name="dokan_seller_search"]' ).addClass( 'dokan-hide' );
+                self.form.find( '[name="do_seller_search"]' ).addClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-product-categories' ).removeClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-filters-column' ).removeClass( 'dokan-w4' ).addClass( 'dokan-w3' );
                 self.form.find( '[name="store_categories"]' ).parent().addClass( 'dokan-hide' );
@@ -145,7 +145,7 @@ import './bootstrap-dropdown';
                 var addClass = self.isStoreCategoryOn ? 'dokan-w3' : 'dokan-w4';
 
                 self.form.find( '[name="s"]' ).addClass( 'dokan-hide' );
-                self.form.find( '[name="dokan_seller_search"]' ).removeClass( 'dokan-hide' );
+                self.form.find( '[name="do_seller_search"]' ).removeClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-product-categories' ).addClass( 'dokan-hide' );
                 self.form.find( '.dokan-geo-filters-column' ).removeClass( removeClass ).addClass( addClass );
                 self.form.find( '[name="store_categories"]' ).parent().removeClass( 'dokan-hide' );
@@ -310,7 +310,7 @@ import './bootstrap-dropdown';
 
     GeolocationFilter.prototype.set_search_term = function ( s ) {
         this.set_param( 's', s );
-        this.set_param( 'dokan_seller_search', s );
+        this.set_param( 'do_seller_search', s );
     };
 
     GeolocationFilter.prototype.set_address = function ( address ) {
@@ -408,7 +408,7 @@ import './bootstrap-dropdown';
             param = '';
 
         for ( param in this.queries ) {
-            if ( [ 'post_type', 'dokan_seller_search', 's' ].indexOf( param ) < 0 ) {
+            if ( [ 'post_type', 'do_seller_search', 's' ].indexOf( param ) < 0 ) {
                 if ( param === 'distance' && ( ! this.latitude || ! this.longitude ) ) {
                     continue;
                 }
@@ -418,7 +418,7 @@ import './bootstrap-dropdown';
         }
 
         var s = this.s || '',
-            dokan_seller_search = this.dokan_seller_search || '',
+            do_seller_search = this.do_seller_search || '',
             base_url = '';
 
         if ( 'product' === scope ) {
@@ -429,8 +429,8 @@ import './bootstrap-dropdown';
             search.push( 'post_type=product' );
             base_url = this.form.find( '[name="wc_shop_page"]' ).val();
         } else {
-            if ( dokan_seller_search ) {
-                search.push( 'dokan_seller_search=' + dokan_seller_search );
+            if ( do_seller_search ) {
+                search.push( 'do_seller_search=' + do_seller_search );
             }
 
             base_url = this.form.find( '[name="dokan_store_listing_page"]' ).val();
