@@ -268,7 +268,7 @@ class IntentController extends StripePaymentGateway {
                 continue;
             }
 
-            DokanStripe::transfer()->amount( $vendor_earning )->from( $charge_id )->to( $connected_vendor_id );
+            DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
 
             if ( $order->get_id() !== $tmp_order_id ) {
                 $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );
