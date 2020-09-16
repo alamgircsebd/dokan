@@ -98,7 +98,7 @@ class Helper {
      * @return void
      */
     public static function set_api_version() {
-        Stripe::setApiVersion( '2020-03-02' );
+        Stripe::setApiVersion( '2020-08-27' );
     }
 
     /**
