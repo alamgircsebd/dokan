@@ -439,9 +439,12 @@ class Products {
 
         if ( 'grouped' == $product_type && version_compare( WC_VERSION, '2.7', '>' ) ) {
             $product = wc_get_product( $post_id );
-            $goroup_product_ids = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
-            $product->set_props( array( 'children' => $goroup_product_ids ) );
+            $group_product_ids = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
+            $product->set_props( array( 'children' => $group_product_ids ) );
             $product->save();
+
+            //set product type to 'grouped'
+            wp_set_object_terms( $post_id, $product_type, 'product_type' );
         }
     }
 
