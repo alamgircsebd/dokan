@@ -68,7 +68,7 @@ class Dokan_Live_Search_Widget extends WP_Widget {
                     </span>
                     <input type="hidden" name="dokan-live-search-option" value="<?php echo $live_search_option; ?>" class="dokan-live-search-option" id="dokan-live-search-option">
                 </div>
-                <div id="dokan-ajax-search-suggestion-result">
+                <div id="dokan-ajax-search-suggestion-result" class="dokan-ajax-search-result">
                 </div>
              </form>
          </div>

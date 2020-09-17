@@ -48,8 +48,8 @@ class Module {
      * @uses wp_enqueue_style()
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dokan-ls-custom-style', plugins_url( 'assets/css/style.css', __FILE__ ), time(), date( 'Ymd' ) );
-        wp_enqueue_script( 'dokan-ls-custom-js', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), time(), true );
+        wp_enqueue_style( 'dokan-ls-custom-style', plugins_url( 'assets/css/style.css', __FILE__ ), false, DOKAN_PLUGIN_VERSION );
+        wp_enqueue_script( 'dokan-ls-custom-js', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
 
         wp_localize_script( 'dokan-ls-custom-js', 'dokanLiveSearch', array(
             'ajaxurl'      => admin_url( 'admin-ajax.php' ),
@@ -109,7 +109,7 @@ class Module {
                     OR
                     (p.post_title LIKE '%{$keyword}%')
                 )
-                ORDER BY t.name ASC, p.post_date DESC LIMIT 10;";
+                ORDER BY t.name ASC, p.post_date DESC LIMIT 250;";
      
             } else {
                 $querystr = "SELECT DISTINCT $wpdb->posts.*
@@ -124,7 +124,7 @@ class Module {
                 )
                 AND $wpdb->posts.post_status = 'publish'
                 AND $wpdb->posts.post_type = 'product'
-                ORDER BY $wpdb->posts.post_date DESC LIMIT 10";
+                ORDER BY $wpdb->posts.post_date DESC LIMIT 250";
             }
      
             $query_results = $wpdb->get_results( $querystr );
