@@ -87,6 +87,8 @@ class Module {
 
         // Module activation hook
         add_action( 'dokan_activated_module_export_import', array( self::class, 'activate' ) );
+        //Handle wholesale column when export
+        add_filter( 'woocommerce_product_export_meta_value', [ $this, 'non_neumeric_wholesale_handle' ], 10, 2 );
     }
 
     public function handle_step_submission() {
@@ -1296,5 +1298,21 @@ class Module {
                 </script>
             <?php
         }
+    }
+
+    /**
+     * Non scalar to scalar due to wc export escape non-scalar value
+     * @param $meta_value
+     * @param $meta
+     *
+     * @return string
+     */
+    public function non_neumeric_wholesale_handle( $meta_value, $meta ) {
+        if ( ! is_scalar( $meta_value ) ) {
+            if ( $meta_value['enable_wholesale'] ) {
+                return 'price:' . $meta_value['price'] . ',' . 'quantity:' . $meta_value['quantity'];
+            }
+        }
+
     }
 }
