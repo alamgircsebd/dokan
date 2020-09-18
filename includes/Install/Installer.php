@@ -90,7 +90,7 @@ class Installer {
         }
 
         if ( ! isset( $wp_roles ) ) {
-            $wp_roles = new WP_Roles();
+            $wp_roles = new WP_Roles(); // @codingStandardsIgnoreLine
         }
 
         add_role(
@@ -413,7 +413,7 @@ class Installer {
     private static function parse_update_notice( $content, $new_version ) {
         // Output Upgrade Notice.
         $matches        = null;
-        $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( DOKAN_PLUGIN_VERSION ) . '\s*=|$)~Uis';
+        $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( DOKAN_PLUGIN_VERSION, '/' ) . '\s*=|$)~Uis';
         $upgrade_notice = '';
 
         if ( preg_match( $regexp, $content, $matches ) ) {
