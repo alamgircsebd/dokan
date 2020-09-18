@@ -59,7 +59,7 @@ class Installer {
     /**
      * Update product new style options
      *
-     * when user first install this plugin
+     * When user first install this plugin
      * the new product style options changed to new
      *
      * @since 2.3
@@ -85,41 +85,43 @@ class Installer {
     public function user_roles() {
         global $wp_roles;
 
-        if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
-            $wp_roles = new WP_Roles();
+        if ( ! class_exists( 'WP_Roles' ) ) {
+            return;
+        }
+
+        if ( ! isset( $wp_roles ) ) {
+            $wp_roles = new WP_Roles(); // @codingStandardsIgnoreLine
         }
 
         add_role(
             'seller', __( 'Vendor', 'dokan-lite' ), [
-				'read'                      => true,
-				'publish_posts'             => true,
-				'edit_posts'                => true,
-				'delete_published_posts'    => true,
-				'edit_published_posts'      => true,
-				'delete_posts'              => true,
-				'manage_categories'         => true,
-				'moderate_comments'         => true,
-				'unfiltered_html'           => true,
-				'upload_files'              => true,
-				'edit_shop_orders'          => true,
-				'edit_product'              => true,
-				'read_product'              => true,
-				'delete_product'            => true,
-				'edit_products'             => true,
-				'publish_products'          => true,
-				'read_private_products'     => true,
-				'delete_products'           => true,
-				'delete_products'           => true,
-				'delete_private_products'   => true,
-				'delete_published_products' => true,
-				'delete_published_products' => true,
-				'edit_private_products'     => true,
-				'edit_published_products'   => true,
-				'manage_product_terms'      => true,
-				'delete_product_terms'      => true,
-				'assign_product_terms'      => true,
-				'dokandar'                  => true,
-			]
+                'read'                      => true,
+                'publish_posts'             => true,
+                'edit_posts'                => true,
+                'delete_published_posts'    => true,
+                'edit_published_posts'      => true,
+                'delete_posts'              => true,
+                'manage_categories'         => true,
+                'moderate_comments'         => true,
+                'unfiltered_html'           => true,
+                'upload_files'              => true,
+                'edit_shop_orders'          => true,
+                'edit_product'              => true,
+                'read_product'              => true,
+                'delete_product'            => true,
+                'edit_products'             => true,
+                'publish_products'          => true,
+                'read_private_products'     => true,
+                'delete_products'           => true,
+                'delete_private_products'   => true,
+                'delete_published_products' => true,
+                'edit_private_products'     => true,
+                'edit_published_products'   => true,
+                'manage_product_terms'      => true,
+                'delete_product_terms'      => true,
+                'assign_product_terms'      => true,
+                'dokandar'                  => true,
+            ]
         );
 
         $capabilities = [];
@@ -193,9 +195,9 @@ class Installer {
 
                                 wp_update_post(
                                     [
-										'ID'          => $child_page_id,
-										'post_parent' => $page_id,
-									]
+                                        'ID'          => $child_page_id,
+                                        'post_parent' => $page_id,
+                                    ]
                                 );
                             }
                         }
@@ -215,13 +217,13 @@ class Installer {
         if ( ! $page_obj ) {
             $page_id = wp_insert_post(
                 [
-					'post_title'     => $page['post_title'],
-					'post_name'      => $page['slug'],
-					'post_content'   => $page['content'],
-					'post_status'    => 'publish',
-					'post_type'      => 'page',
-					'comment_status' => 'closed',
-				]
+                    'post_title'     => $page['post_title'],
+                    'post_name'      => $page['slug'],
+                    'post_content'   => $page['content'],
+                    'post_status'    => 'publish',
+                    'post_type'      => 'page',
+                    'comment_status' => 'closed',
+                ]
             );
 
             if ( $page_id && ! is_wp_error( $page_id ) ) {
@@ -411,7 +413,7 @@ class Installer {
     private static function parse_update_notice( $content, $new_version ) {
         // Output Upgrade Notice.
         $matches        = null;
-        $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( DOKAN_PLUGIN_VERSION ) . '\s*=|$)~Uis';
+        $regexp         = '~==\s*Upgrade Notice\s*==\s*=\s*(.*)\s*=(.*)(=\s*' . preg_quote( DOKAN_PLUGIN_VERSION, '/' ) . '\s*=|$)~Uis';
         $upgrade_notice = '';
 
         if ( preg_match( $regexp, $content, $matches ) ) {
@@ -421,7 +423,7 @@ class Installer {
             $notice_version_parts  = explode( '.', trim( $matches[1] ) );
             $current_version_parts = explode( '.', DOKAN_PLUGIN_VERSION );
 
-            if ( 3 !== sizeof( $notice_version_parts ) ) {
+            if ( 3 !== count( $notice_version_parts ) ) {
                 return;
             }
 
