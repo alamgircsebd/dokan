@@ -19,6 +19,8 @@ class Module {
         $this->hooks();
 
         add_action( 'dokan_activated_module_spmv', array( self::class, 'activate' ) );
+        //Prevent Duplicate SKU for multiple save from various vendor
+        add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'prevent_duplicate_sku' ] );
     }
 
     /**
@@ -113,5 +115,44 @@ class Module {
 
         include_once ABSPATH . 'wp-admin/includes/upgrade.php';
         dbDelta( $sql );
+    }
+
+    /**
+     * Prevent duplicate sku when multiple vendor add same product
+     *
+     * @param $duplicate
+     *
+     * @return void
+     */
+    public function prevent_duplicate_sku( $duplicate, $product ) {
+        $sku        = $duplicate->get_sku( 'edit' );
+        $unique_sku = $this->get_unique_sku( $sku );
+        $duplicate->set_sku( $unique_sku );
+    }
+
+    /**
+     * Check recursively if sku exist
+     *
+     * @param $sku
+     *
+     * @return mixed
+     */
+    public function get_unique_sku( $sku ) {
+        $unique_sku = $sku;
+        global $wpdb;
+        $result = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_key='_sku' AND meta_value =%s ", $sku ) );
+        if ( $result >= 1 ) {
+            if ( strpos( $sku, '-' ) !== false ) {
+                $arr                      = explode( '-', $sku );
+                $arr[ count( $arr ) - 1 ] = $arr[ count( $arr ) - 1 ] + 1;
+                $unique_sku               = implode( '-', $arr );
+            } else {
+                $unique_sku = $sku . '-1';
+            }
+
+            return $this->get_unique_sku( $unique_sku );
+        } else {
+            return $unique_sku;
+        }
     }
 }
