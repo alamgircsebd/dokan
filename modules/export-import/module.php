@@ -87,6 +87,8 @@ class Module {
 
         // Module activation hook
         add_action( 'dokan_activated_module_export_import', array( self::class, 'activate' ) );
+        //False to is_feature column
+        add_filter( 'woocommerce_product_import_process_item_data', [ $this, 'feature_column_to_false' ] );
         //Handle wholesale column when export
         add_filter( 'woocommerce_product_export_meta_value', [ $this, 'non_neumeric_wholesale_handle' ], 10, 2 );
     }
@@ -1298,6 +1300,21 @@ class Module {
                 </script>
             <?php
         }
+    }
+
+    /**
+     * CSV import is_feature to false if not admin
+     *
+     * @param $data
+     *
+     * @return $data
+     */
+    public function feature_column_to_false( $data ) {
+        if ( ! wc_current_user_has_role( 'administrator' ) ) {
+            $data['featured'] = false;
+        }
+
+        return $data;
     }
 
     /**
