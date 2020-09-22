@@ -466,6 +466,10 @@ class Module {
      * @return void
      */
     public static function can_create_product( $errors, $data ) {
+        if ( $data['ID'] ) {
+            return;
+        }
+
         $user_id = dokan_get_current_user_id();
 
         if ( dokan_is_user_seller( $user_id ) ) {
