@@ -111,6 +111,7 @@ class Module {
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
         add_filter( 'dokan_set_template_path', array( $this, 'load_product_addon_templates' ), 10, 3 );
+        add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'load_vendor_staff_addons' ], 9 );
         add_action( 'wp_ajax_wc_pao_get_addon_field', array( $this, 'ajax_get_addon_field' ), 1 );
     }
 
@@ -270,4 +271,15 @@ class Module {
 
         return $template_path;
     }
+
+    public function load_vendor_staff_addons() {
+        add_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
+    }
+
+    public function set_author_in_for_vendor_staff( $query ) {
+        if ( $query->query['post_type'] === 'global_product_addon' ) {
+            $query->set( 'author__in', get_vendor_staff() );
+        }
+    }
+
 }
