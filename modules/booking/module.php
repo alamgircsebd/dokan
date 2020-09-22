@@ -299,13 +299,11 @@ class Module {
         }
 
         //override emails
-        add_filter( 'woocommerce_email_classes', array( $this, 'setup_emails' ), 12 );
         add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_booking_cancelled_emails' ), 13 );
         add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_cancelled_actions' ) );
 
-        //override email receipents
-        add_filter( 'woocommerce_email_recipient_new_booking', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
-        //add_filter( 'woocommerce_email_recipient_booking_cancelled', array( $this, 'set_seller_as_email_recipient' ), 10, 2 );
+        add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_booking_new_emails' ), 14 );
+        add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_new_actions') );
 
     }
     public function load_dokan_booking_cancelled_emails( $wc_emails ) {
@@ -319,6 +317,17 @@ class Module {
         return $actions;
     }
 
+    public function load_dokan_booking_new_emails( $wc_emails ) {
+        $wc_emails['Dokan_Email_Booking_New'] = include( DOKAN_WC_BOOKING_DIR . '/includes/emails/class-dokan-booking-email-new.php' );
+
+        return $wc_emails;
+    }
+
+    public function register_dokan_booking_new_actions( $actions ) {
+        $actions[] = 'woocommerce_admin_new_booking_notification';
+
+        return $actions;
+    }
     /**
      * Filter template for New Booking Email template path
      *
