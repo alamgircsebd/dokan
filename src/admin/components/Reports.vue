@@ -212,6 +212,12 @@
 
                 <template slot="dokan_gateway_fee" slot-scope="data">
                     <currency :amount="data.row.dokan_gateway_fee"></currency>
+                    <span
+                        v-if="get_gateway_fee_paid_by( data.row.gateway_fee_paid_by )"
+                        v-tooltip
+                        :title="get_gateway_fee_paid_by( data.row.gateway_fee_paid_by )"
+                        class="notication-tooltip"
+                    >!</span>
                 </template>
 
                 <template slot="shipping_total" slot-scope="data">
@@ -830,6 +836,19 @@ export default {
                 this.filter.query.order_status = 'wc-' + status;
                 this.setRoute( this.filter.query );
             });
+        },
+
+        get_gateway_fee_paid_by( paid_by ) {
+            paid_by = paid_by || 'admin';
+
+            const fee_paid_by = {
+                seller: this.__( 'seller', 'dokan' ),
+                admin: this.__( 'admin', 'dokan' ),
+            };
+
+            return fee_paid_by[ paid_by ]
+                ? this.sprintf( this.__( 'Processing fee paid by %s', 'dokan' ), fee_paid_by[ paid_by ]  )
+                : '';
         }
     }
 };
@@ -838,6 +857,10 @@ export default {
 <style lang="less">
 .reports-page {
     .logs-area {
+        th {
+            white-space: nowrap;
+        }
+
         .order_total {
 
             del {
@@ -1004,4 +1027,26 @@ export default {
     }
 }
 
+.dokan_gateway_fee {
+
+    > div {
+        float: left;
+    }
+
+    .notication-tooltip {
+        background-color: #ccc;
+        display: inline-block;
+        font-size: 11px;
+        line-height: 1;
+        width: 13px;
+        height: 13px;
+        text-align: center;
+        border-radius: 50%;
+        padding: 1px;
+        color: #000;
+        margin-left: 4px;
+        position: relative;
+        top: -1px;
+    }
+}
 </style>

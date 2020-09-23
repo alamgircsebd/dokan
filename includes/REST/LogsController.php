@@ -77,9 +77,9 @@ class LogsController extends DokanRESTAdminController {
             $offset
         );
 
-        $results = $wpdb->get_results( $sql );
-        $logs     = [];
-        $statuses = wc_get_order_statuses();
+        $results     = $wpdb->get_results( $sql );
+        $logs        = [];
+        $statuses    = wc_get_order_statuses();
 
         foreach ( $results as $result ) {
             $order                   = wc_get_order( $result->order_id );
@@ -126,6 +126,7 @@ class LogsController extends DokanRESTAdminController {
                 'vendor_earning'       => $is_subscription_product ? 0 : wc_format_decimal( $result->net_amount, $dp ),
                 'commission'           => wc_format_decimal( $commission ),
                 'dokan_gateway_fee'    => $processing_fee ? wc_format_decimal( $processing_fee, $dp ) : 0,
+                'gateway_fee_paid_by'  => $order->get_meta( 'dokan_gateway_fee_paid_by', true ),
                 'shipping_total'       => wc_format_decimal( $total_shipping, $dp ),
                 'tax_total'            => wc_format_decimal( $tax_totals, $dp ),
                 'status'               => $statuses[ $result->order_status ],
