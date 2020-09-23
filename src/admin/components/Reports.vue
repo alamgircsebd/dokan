@@ -839,7 +839,6 @@ export default {
 .reports-page {
     .logs-area {
         .order_total {
-            display: flex;
 
             del {
                 padding-right: 5px;

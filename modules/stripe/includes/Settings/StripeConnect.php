@@ -40,6 +40,14 @@ return apply_filters( 'dokan_get_stripe_connect_settings', [
         'default'     => 'no',
         'desc_tip'    => true
     ],
+    'seller_pays_the_processing_fee' => [
+        'title'       => __( 'Seller pays the processing fee in 3DS mode', 'dokan' ),
+        'label'       => __( 'If activated, Sellers will pay the Stripe processing fee instead of Admin/Site Owner in 3DS mode.', 'dokan' ),
+        'type'        => 'checkbox',
+        'description' => __( 'By default Admin/Site Owner pays the Stripe processing fee.', 'dokan' ),
+        'default'     => 'no',
+        'desc_tip'    => true,
+    ],
     'testmode' => [
         'title'       => __( 'Test mode', 'dokan' ),
         'label'       => __( 'Enable Test Mode', 'dokan' ),

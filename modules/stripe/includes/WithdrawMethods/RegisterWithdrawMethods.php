@@ -41,6 +41,7 @@ class RegisterWithdrawMethods {
     private function hooks() {
         add_filter( 'dokan_withdraw_methods', [ $this, 'register_methods' ] );
         add_filter( 'dokan_get_processing_fee', [ $this, 'get_order_processing_fee' ], 10, 2 );
+        add_filter( 'dokan_get_processing_gateway_fee', [ $this, 'get_processing_gateway_fee' ], 10, 3 );
         add_action( 'template_redirect', [ $this, 'authorize_vendor' ] );
         add_action( 'template_redirect', [ $this, 'deauthorize_vendor' ] );
     }
@@ -227,7 +228,12 @@ class RegisterWithdrawMethods {
      */
     public function get_order_processing_fee( $processing_fee, $order ) {
         if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
-            $stripe_processing_fee = $order->get_meta( 'dokan_gateway_stripe_fee' );
+            $stripe_processing_fee = $order->get_meta( 'dokan_gateway_fee' );
+
+            // In old module, we were saving fee as `dokan_gateway_stripe_fee` meta
+            if ( ! $stripe_processing_fee ) {
+                $stripe_processing_fee = $order->get_meta( 'dokan_gateway_stripe_fee' );
+            }
 
             if ( $stripe_processing_fee ) {
                 $processing_fee = $stripe_processing_fee;
@@ -235,5 +241,14 @@ class RegisterWithdrawMethods {
         }
 
         return $processing_fee;
+    }
+
+    public function get_processing_gateway_fee( $gateway_fee, $suborder, $order ) {
+        if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
+            $order_processing_fee = dokan()->commission->get_processing_fee( $order );
+            $gateway_fee          = Helper::calculate_processing_fee_for_suborder( $order_processing_fee, $suborder, $order );
+        }
+
+        return $gateway_fee;
     }
 }

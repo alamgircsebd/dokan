@@ -385,7 +385,12 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         }
 
         try {
-            $intent = PaymentIntent::retrieve( $intent_id );
+            $intent = PaymentIntent::retrieve( [
+                'id' => $intent_id,
+                'expand' => [
+                    'charges.data.balance_transaction'
+                ]
+            ] );
         } catch( Exception $e ) {
             return false;
         }

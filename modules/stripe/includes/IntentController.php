@@ -247,6 +247,12 @@ class IntentController extends StripePaymentGateway {
         $currency      = $order->get_currency();
         $charge_id     = $this->get_charge_id_from_order( $order );
         $all_orders    = $this->get_all_orders_to_be_processed( $order );
+        $order_total   = $order->get_total();
+        $stripe_fee    = Helper::format_gateway_balance_fee( $intent->charges->first()->balance_transaction );
+
+        // In case of we have sub orders, lets add the gateway fee in the parent order.
+        $order->update_meta_data( 'dokan_gateway_fee', $stripe_fee );
+        $order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $stripe_fee ) );
 
         if ( ! $charge_id ) {
             throw new DokanException( 'dokan_charge_id_not_found', __( 'No charge id is found to process the order!', 'dokan' ) );
@@ -260,8 +266,17 @@ class IntentController extends StripePaymentGateway {
             $tmp_order_id        = $tmp_order->get_id();
             $vendor_id           = dokan_get_seller_id_by_order( $tmp_order_id );
             $vendor_raw_earning  = dokan()->commission->get_earning_by_order( $tmp_order, 'seller' );
-            $vendor_earning      = Helper::get_stripe_amount( $vendor_raw_earning );
             $connected_vendor_id = get_user_meta( $vendor_id, 'dokan_connected_vendor_id', true );
+            $tmp_order_total     = $tmp_order->get_total();
+
+            if ( Helper::seller_pays_the_processing_fee() && ! empty( $order_total ) && ! empty( $tmp_order_total ) && ! empty( $stripe_fee ) ) {
+                $stripe_fee_for_vendor = Helper::calculate_processing_fee_for_suborder( $stripe_fee, $tmp_order, $order );
+                $vendor_raw_earning    = $vendor_raw_earning - $stripe_fee_for_vendor;
+
+                $tmp_order->update_meta_data( 'dokan_gateway_fee_paid_by', 'seller' );
+            }
+
+            $vendor_earning = Helper::get_stripe_amount( $vendor_raw_earning );
 
             if ( ! $connected_vendor_id ) {
                 $tmp_order->add_order_note( sprintf( __( 'Vendor\'s payment will be transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
@@ -282,6 +297,8 @@ class IntentController extends StripePaymentGateway {
                 );
             }
 
+            $tmp_order->save_meta_data();
+
             $withdraw_data = [
                 'user_id'  => $vendor_id,
                 'amount'   => $vendor_raw_earning,
@@ -301,5 +318,8 @@ class IntentController extends StripePaymentGateway {
                 $charge_id
             )
         );
+
+        $order->save_meta_data();
+        dokan()->commission->calculate_gateway_fee( $order->get_id() );
     }
 }

@@ -279,6 +279,36 @@ class Helper {
         $settings = self::get_settings();
 
         return ! empty( $settings['saved_cards'] ) && 'yes' === $settings['saved_cards'];
+        $settings = self::get_settings();
+    }
+
+    /**
+     * Does seller pay the Stripe processing fee
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return bool
+     */
+    public static function seller_pays_the_processing_fee() {
+        $settings = self::get_settings();
+
+        return isset( $settings['seller_pays_the_processing_fee'] ) && dokan_validate_boolean( $settings['seller_pays_the_processing_fee'] );
+    }
+
+    /**
+     * Calculate the processing fee for a single vendor for an order
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param float $order_processing_fee
+     * @param \WC_ORDER $suborder
+     * @param \WC_ORDER $order
+     *
+     * @return float
+     */
+    public static function calculate_processing_fee_for_suborder( $order_processing_fee, $suborder, $order ) {
+        $stripe_fee_for_vendor = $order_processing_fee * ( $suborder->get_total() / $order->get_total() );
+        return number_format( $stripe_fee_for_vendor, 10 );
     }
 
     /**
