@@ -209,7 +209,6 @@ class Module {
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-
         global $wp;
 
         if ( !is_admin() && isset( $wp->query_vars['booking'] ) ) {
@@ -338,7 +337,6 @@ class Module {
      * @return $emails
      */
     function setup_emails( $emails ) {
-        
         if ( ! isset( $emails['WC_Email_New_Booking'] ) ) {
             return;
         }
@@ -366,8 +364,7 @@ class Module {
      * @return $recipient
      */
     function set_seller_as_email_recipient( $recipient, $booking ) {
-
-        if ( !$booking ) {
+        if ( ! $booking ) {
             return $recipient;
         }
 
@@ -384,7 +381,6 @@ class Module {
      * @return array $urls
      */
     function add_booking_page( $urls ) {
-
         if ( ! current_user_can( 'dokan_view_booking_menu' ) ) {
             return $urls;
         }
@@ -409,8 +405,6 @@ class Module {
      * @return array $query_vars
      */
     function load_template_from_plugin( $query_vars ) {
-
-
         if ( isset( $query_vars['booking'] ) ) {
             if ( !current_user_can( 'dokan_view_booking_menu' ) ) {
                 dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this booking page', 'dokan' ) ) );
@@ -539,7 +533,6 @@ class Module {
      * @return $url
      */
     function set_redirect_url( $url, $product_id ) {
-
         $product_type = isset( $_POST['product_type'] ) ? $_POST['product_type'] : '';
         $tab          = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
 
@@ -565,7 +558,6 @@ class Module {
      *
      */
     function add_new_resource() {
-
         $add_resource_name = wc_clean( $_POST['add_resource_name'] );
 
         if ( empty( $add_resource_name ) ) {
@@ -755,14 +747,17 @@ class Module {
      */
     function mark_booking_confirmed() {
 
-        if ( !current_user_can( 'manage_bookings' ) ) {
+        if ( ! current_user_can( 'dokan_manage_bookings' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'dokan' ) );
         }
-        if ( !check_admin_referer( 'wc-booking-confirm' ) ) {
+
+        if ( ! check_admin_referer( 'wc-booking-confirm' ) ) {
             wp_die( __( 'You have taken too long. Please go back and retry.', 'dokan' ) );
         }
+        
         $booking_id = isset( $_GET['booking_id'] ) && (int) $_GET['booking_id'] ? (int) $_GET['booking_id'] : '';
-        if ( !$booking_id ) {
+        
+        if ( ! $booking_id ) {
             die;
         }
 
@@ -780,17 +775,16 @@ class Module {
         }
 
         wp_safe_redirect( wp_get_referer() );
+        die();
     }
 
     public static function get_booking_status_counts_by( $seller_id ) {
-
         global $wpdb;
 
         $cache_key = 'dokan-wc-booking-status-count-' . $seller_id;
         $counts    = wp_cache_get( $cache_key );
 
         if ( 1 ) {
-
             $statuses = array_unique( array_merge( get_wc_booking_statuses(), get_wc_booking_statuses( 'user' ), get_wc_booking_statuses( 'cancel' ) ) );
 
             $statuses = array_fill_keys( array_keys( array_flip( $statuses ) ), 0 );
@@ -828,7 +822,6 @@ class Module {
     }
 
     function change_booking_status() {
-
         check_ajax_referer( 'dokan_wc_booking_change_status' );
 
         $booking_id = intval( $_POST['booking_id'] );
@@ -900,7 +893,6 @@ class Module {
      * @return array
      */
     function dokan_get_bookings_menu_title( $current_page ) {
-
         $menus = apply_filters( 'dokan_booking_menu', '' );
 
         foreach ( $menus as $key => $value ) {
