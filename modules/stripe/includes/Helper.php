@@ -153,10 +153,6 @@ class Helper {
             return false;
         }
 
-        if ( 'usd' !== strtolower( get_option( 'woocommerce_currency' ) ) ) {
-            return false;
-        }
-
         return true;
     }
 
