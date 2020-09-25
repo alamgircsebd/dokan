@@ -202,11 +202,6 @@ class RegisterWithdrawMethods {
                 ),
                 'error'
             );
-
-            wp_die(
-                __( 'Unable to deauthorize your store. Please contact the site admin.', 'dokan' ),
-                __( 'Authorization Error', 'dokan' )
-            );
         }
 
         delete_user_meta( $vendor_id, '_stripe_connect_access_key' );
