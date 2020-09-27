@@ -64,6 +64,11 @@ class Messenger {
             jQuery( 'button.dokan-live-chat-messenger, .dokan-store-live-chat-btn' ).on( 'click', function( e ) {
                 e.preventDefault();
 
+                if (typeof FB === 'undefined') {
+                    alert('Facebook SDK is not found, or blocked by the browser. Can not initialize the chat.');
+                    return;
+                }
+
                 if (window.DokanFBChatLoaded !== undefined) {
                     FB.CustomerChat.showDialog();
                     return;
@@ -75,11 +80,15 @@ class Messenger {
                         autoLogAppEvents: true,
                         version: '<?php echo self::VERSION; ?>',
                     });
-
-                    window.DokanFBChatLoaded = true;
                 };
 
                 window.fbAsyncInit();
+            });
+
+            jQuery(function() {
+                FB.Event.subscribe('customerchat.load', function() {
+                    window.DokanFBChatLoaded = true;
+                });
             });
         </script>
         <?php
