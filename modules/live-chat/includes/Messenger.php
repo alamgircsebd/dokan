@@ -77,18 +77,15 @@ class Messenger {
                 window.fbAsyncInit = function() {
                     FB.init({
                         xfbml: true,
-                        autoLogAppEvents: true,
                         version: '<?php echo self::VERSION; ?>',
+                    });
+
+                    FB.Event.subscribe('customerchat.load', function() {
+                        window.DokanFBChatLoaded = true;
                     });
                 };
 
                 window.fbAsyncInit();
-            });
-
-            jQuery(function() {
-                FB.Event.subscribe('customerchat.load', function() {
-                    window.DokanFBChatLoaded = true;
-                });
             });
         </script>
         <?php
