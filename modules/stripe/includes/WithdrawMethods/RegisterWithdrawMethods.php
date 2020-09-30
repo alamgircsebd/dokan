@@ -226,8 +226,8 @@ class RegisterWithdrawMethods {
         if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
             $stripe_processing_fee = $order->get_meta( 'dokan_gateway_fee' );
 
-            // In old module, we were saving fee as `dokan_gateway_stripe_fee` meta
             if ( ! $stripe_processing_fee ) {
+                // During processing vendor payment we save stripe fee in parent order
                 $stripe_processing_fee = $order->get_meta( 'dokan_gateway_stripe_fee' );
             }
 
