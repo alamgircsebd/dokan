@@ -192,7 +192,7 @@ function dokan_seller_sales_statement() {
 function dokan_get_order_report_data( $args = [], $start_date, $end_date, $current_user = false ) {
     global $wpdb;
 
-    if ( !$current_user ) {
+    if ( ! $current_user ) {
         $current_user = dokan_get_current_user_id();
     }
 
@@ -249,8 +249,8 @@ function dokan_get_order_report_data( $args = [], $start_date, $end_date, $curre
     $query['from']   = "FROM {$wpdb->posts} AS posts";
 
     // Joins
-    $joins         = [];
-    $joins['do']   = "LEFT JOIN {$wpdb->prefix}dokan_orders AS do ON posts.ID = do.order_id";
+    $joins       = [];
+    $joins['do'] = "LEFT JOIN {$wpdb->prefix}dokan_orders AS do ON posts.ID = do.order_id";
 
     foreach ( $data as $key => $value ) {
         if ( $value['type'] == 'meta' ) {
@@ -283,7 +283,7 @@ function dokan_get_order_report_data( $args = [], $start_date, $end_date, $curre
 
     $query['join'] = implode( ' ', $joins );
 
-    $query['where']  = "
+    $query['where'] = "
         WHERE   posts.post_type     = 'shop_order'
         AND     posts.post_status   != 'trash'
         AND     do.seller_id = {$current_user}
@@ -791,9 +791,6 @@ function dokan_top_sellers() {
         $end_date = date( 'Ymd', current_time( 'timestamp' ) );
     }
 
-    $start_date = strtotime( $start_date );
-    $end_date   = strtotime( $end_date );
-
     // Get order ids and dates in range
     $order_items = apply_filters( 'woocommerce_reports_top_sellers_order_items', $wpdb->get_results( "
         SELECT order_item_meta_2.meta_value as product_id, SUM( order_item_meta.meta_value ) as item_quantity FROM {$wpdb->prefix}woocommerce_order_items as order_items
@@ -807,8 +804,8 @@ function dokan_top_sellers() {
         AND     posts.post_status   != 'trash'
         AND     do.seller_id = {$current_user}
         AND     do.order_status IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', [ 'wc-completed', 'wc-processing', 'wc-on-hold' ] ) ) . "')
-        AND     post_date > '" . date( 'Y-m-d', $start_date ) . "'
-        AND     post_date < '" . date( 'Y-m-d', strtotime( '+1 day', $end_date ) ) . "'
+        AND     post_date > '" . date( 'Y-m-d', strtotime( $start_date ) ) . "'
+        AND     post_date < '" . date( 'Y-m-d', strtotime( '+1 day', strtotime( $end_date ) ) ) . "'
         AND     order_items.order_item_type = 'line_item'
         AND     order_item_meta.meta_key = '_qty'
         AND     order_item_meta_2.meta_key = '_product_id'
@@ -896,9 +893,6 @@ function dokan_top_earners() {
         $end_date = date( 'Ymd', current_time( 'timestamp' ) );
     }
 
-    $start_date = strtotime( $start_date );
-    $end_date   = strtotime( $end_date );
-
     // Get order ids and dates in range
     $order_items = apply_filters( 'woocommerce_reports_top_earners_order_items', $wpdb->get_results( "
         SELECT order_item_meta_2.meta_value as product_id, SUM( order_item_meta.meta_value ) as line_total,SUM( do.net_amount ) as total_earning FROM {$wpdb->prefix}woocommerce_order_items as order_items
@@ -912,8 +906,8 @@ function dokan_top_earners() {
         AND     posts.post_status   != 'trash'
         AND     do.seller_id = {$current_user}
         AND     do.order_status           IN ('" . implode( "','", apply_filters( 'woocommerce_reports_order_statuses', $withdraw_order_status ) ) . "')
-        AND     post_date > '" . date( 'Y-m-d', $start_date ) . "'
-        AND     post_date < '" . date( 'Y-m-d', strtotime( '+1 day', $end_date ) ) . "'
+        AND     post_date > '" . date( 'Y-m-d', strtotime( $start_date ) ) . "'
+        AND     post_date < '" . date( 'Y-m-d', strtotime( '+1 day', strtotime( $end_date ) ) ) . "'
         AND     order_items.order_item_type = 'line_item'
         AND     order_item_meta.meta_key = '_line_total'
         AND     order_item_meta_2.meta_key = '_product_id'
