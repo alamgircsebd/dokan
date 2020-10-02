@@ -1,15 +1,4 @@
 <h3><?php _e( 'Stripe Connect', 'dokan' ); ?></h3>
-<?php if ( 'usd' !== strtolower( get_option( 'woocommerce_currency' ) ) ) : ?>
-    <div class="inline error">
-        <p>
-            <strong><?php esc_html_e( 'Gateway Disabled', 'dokan' ); ?></strong>
-            <?php esc_html_e( 'Dokan Stripe Connect only works for USD.', 'dokan' ); ?>
-        </p>
-    </div>
-	<?php
-    return;
-endif;
-?>
 <p><?php _e( 'Stripe works by adding credit card fields on the checkout and then sending the details to Stripe for verification.', 'dokan' ); ?></p>
 <p>
     <?php
