@@ -142,7 +142,7 @@ class Validator {
             }
 
             $order_line_item       = $order_line_items[ $item_id ];
-            $order_line_item_total = $order_line_item->get_total();
+            $order_line_item_total = wc_format_decimal( $order_line_item->get_total() );
 
             if ( $order->get_total_refunded_for_item( $item_id ) ) {
                 $item_total = $item_total + $order->get_total_refunded_for_item( $item_id );
