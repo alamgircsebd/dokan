@@ -42,6 +42,7 @@ class RegisterWithdrawMethods {
         add_filter( 'dokan_withdraw_methods', [ $this, 'register_methods' ] );
         add_filter( 'dokan_get_processing_fee', [ $this, 'get_order_processing_fee' ], 10, 2 );
         add_filter( 'dokan_get_processing_gateway_fee', [ $this, 'get_processing_gateway_fee' ], 10, 3 );
+        add_filter( 'dokan_orders_vendor_net_amount', [ $this, 'dokan_orders_vendor_net_amount' ], 10, 5 );
         add_action( 'template_redirect', [ $this, 'authorize_vendor' ] );
         add_action( 'template_redirect', [ $this, 'deauthorize_vendor' ] );
     }
@@ -202,11 +203,6 @@ class RegisterWithdrawMethods {
                 ),
                 'error'
             );
-
-            wp_die(
-                __( 'Unable to deauthorize your store. Please contact the site admin.', 'dokan' ),
-                __( 'Authorization Error', 'dokan' )
-            );
         }
 
         delete_user_meta( $vendor_id, '_stripe_connect_access_key' );
@@ -230,8 +226,8 @@ class RegisterWithdrawMethods {
         if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
             $stripe_processing_fee = $order->get_meta( 'dokan_gateway_fee' );
 
-            // In old module, we were saving fee as `dokan_gateway_stripe_fee` meta
             if ( ! $stripe_processing_fee ) {
+                // During processing vendor payment we save stripe fee in parent order
                 $stripe_processing_fee = $order->get_meta( 'dokan_gateway_stripe_fee' );
             }
 
@@ -243,6 +239,17 @@ class RegisterWithdrawMethods {
         return $processing_fee;
     }
 
+    /**
+     * Calculate gateway fee for a suborder
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param float     $gateway_fee
+     * @param \WC_Order $suborder
+     * @param \WC_Order $order
+     *
+     * @return float|int
+     */
     public function get_processing_gateway_fee( $gateway_fee, $suborder, $order ) {
         if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
             $order_processing_fee = dokan()->commission->get_processing_fee( $order );
@@ -250,5 +257,29 @@ class RegisterWithdrawMethods {
         }
 
         return $gateway_fee;
+    }
+
+    /**
+     * Vendor net earning for a order
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param float     $net_amount
+     * @param float     $vendor_earning
+     * @param float     $gateway_fee
+     * @param \WC_Order $suborder
+     * @param \WC_Order $order
+     *
+     * @return void
+     */
+    public function dokan_orders_vendor_net_amount( $net_amount, $vendor_earning, $gateway_fee, $suborder, $order ) {
+        if (
+            'dokan-stripe-connect' === $order->get_payment_method()
+            && 'seller' !== $suborder->get_meta( 'dokan_gateway_fee_paid_by', true )
+        ) {
+            return $vendor_earning;
+        }
+
+        return $net_amount;
     }
 }

@@ -7,7 +7,7 @@ use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 class Messenger {
-    const VERSION = 'v6.0';
+    const VERSION = 'v8.0';
 
     public function __construct() {
         add_action( 'init', [ $this, 'register_shortcode'] );
@@ -63,11 +63,25 @@ class Messenger {
         <script>
             jQuery( 'button.dokan-live-chat-messenger, .dokan-store-live-chat-btn' ).on( 'click', function( e ) {
                 e.preventDefault();
+
+                if (typeof FB === 'undefined') {
+                    alert('Facebook SDK is not found, or blocked by the browser. Can not initialize the chat.');
+                    return;
+                }
+
+                if (window.DokanFBChatLoaded !== undefined) {
+                    FB.CustomerChat.showDialog();
+                    return;
+                }
+
                 window.fbAsyncInit = function() {
                     FB.init({
                         xfbml: true,
-                        autoLogAppEvents: true,
                         version: '<?php echo self::VERSION; ?>',
+                    });
+
+                    FB.Event.subscribe('customerchat.load', function() {
+                        window.DokanFBChatLoaded = true;
                     });
                 };
 

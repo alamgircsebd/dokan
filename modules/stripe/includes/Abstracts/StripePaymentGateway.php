@@ -594,6 +594,13 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         global $wpdb;
 
         foreach ( $all_withdraws as $withdraw ) {
+            $stripe_key          = get_user_meta( $withdraw['user_id'], '_stripe_connect_access_key', true );
+            $connected_vendor_id = get_user_meta( $withdraw['user_id'], 'dokan_connected_vendor_id', true );
+
+            if ( ! $stripe_key && ! $connected_vendor_id ) {
+                continue;
+            }
+
             $wpdb->insert( $wpdb->prefix . 'dokan_vendor_balance',
                 [
                     'vendor_id'     => $withdraw['user_id'],
@@ -631,9 +638,20 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
      * @return void
      */
     public function process_seller_withdraws( $all_withdraws ){
+        if ( ! $all_withdraws ) {
+            return;
+        }
+        
         $IP = dokan_get_client_ip();
 
         foreach ( $all_withdraws as $withdraw_data ) {
+            $stripe_key          = get_user_meta( $withdraw_data['user_id'], '_stripe_connect_access_key', true );
+            $connected_vendor_id = get_user_meta( $withdraw_data['user_id'], 'dokan_connected_vendor_id', true );
+
+            if ( ! $stripe_key && ! $connected_vendor_id ) {
+                continue;
+            }
+
             $data = [
                 'date'   => current_time( 'mysql' ),
                 'status' => 1,

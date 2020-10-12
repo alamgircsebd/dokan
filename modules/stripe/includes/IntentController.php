@@ -250,9 +250,15 @@ class IntentController extends StripePaymentGateway {
         $order_total   = $order->get_total();
         $stripe_fee    = Helper::format_gateway_balance_fee( $intent->charges->first()->balance_transaction );
 
+        // This will make sure the parent order has processing_fee that requires in
+        // Commission::calculate_gateway_fee() method at begining.
+        $order->update_meta_data( 'dokan_gateway_stripe_fee', $stripe_fee );
+
         // In case of we have sub orders, lets add the gateway fee in the parent order.
-        $order->update_meta_data( 'dokan_gateway_fee', $stripe_fee );
-        $order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $stripe_fee ) );
+        if ( $order->get_meta( 'has_sub_order' ) ) {
+            $order->update_meta_data( 'dokan_gateway_fee', $stripe_fee );
+            $order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $stripe_fee ) );
+        }
 
         if ( ! $charge_id ) {
             throw new DokanException( 'dokan_charge_id_not_found', __( 'No charge id is found to process the order!', 'dokan' ) );
