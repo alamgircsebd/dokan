@@ -59,7 +59,6 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             $source_object    = $this->get_source_object( wc_clean( $posted['stripe_source'] ) );
             $source_id        = $source_object->id;
             $maybe_saved_card = ! empty( $posted[ 'wc-' . $payment_method . '-new-payment-method' ] );
-
             /**
              * This is true if the user wants to store the card to their account.
              * Criteria to save to file is they are logged in, they opted to save or product requirements and the source is
@@ -198,10 +197,12 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     public function save_source_to_order( $order, $source ) {
         if ( $source->customer ) {
             $order->update_meta_data( 'dokan_stripe_customer_id', $source->customer );
+            $order->update_meta_data( '_stripe_customer_id', $source->customer );
         }
 
         if ( $source->source ) {
             $order->update_meta_data( 'dokan_stripe_source_id', $source->source );
+            $order->update_meta_data( '_stripe_source_id', $source->source );
         }
 
         if ( is_callable( [ $order, 'save' ] ) ) {
@@ -524,6 +525,38 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
     }
 
     /**
+     * Given a response from Stripe, check if it's a card error where authentication is required
+     * to complete the payment.
+     *
+     * @param object $response The response from Stripe.
+     * @return boolean Whether or not it's a 'authentication_required' error
+     */
+    public function is_authentication_required_for_payment( $response ) {
+        return ( ! empty( $response->error ) && 'authentication_required' === $response->error->code )
+            || ( ! empty( $response->last_payment_error ) && 'authentication_required' === $response->last_payment_error->code )
+            || ( ! empty( $response->status ) && 'requires_source_action' === $response->status );
+    }
+
+    /**
+     * Check to see if we need to update the idempotency
+     * key to be different from previous charge request.
+     *
+     * @since 4.1.0
+     * @param object $source_object
+     * @param object $error
+     * @return bool
+     */
+    public function need_update_idempotency_key( $source_object, $error ) {
+        return (
+            $error &&
+            1 < $this->retry_interval &&
+            ! empty( $source_object ) &&
+            'chargeable' === $source_object->status &&
+            $this->is_same_idempotency_error( $error )
+        );
+    }
+
+    /**
      * Customer param wrong? The user may have been deleted on stripe's end. Remove customer_id. Can be retried without.
      *
      * @since 3.0.3
@@ -736,4 +769,22 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             'redirect' => wc_get_endpoint_url( 'payment-methods' ),
         ];
     }
+
+    /**
+     * Checks if subscription has a Stripe customer ID and adds it if doesn't.
+     *
+     * Fix renewal for existing subscriptions affected by https://github.com/woocommerce/woocommerce-gateway-stripe/issues/1072.
+     * @param int $order_id subscription renewal order id.
+     */
+    public function ensure_subscription_has_customer_id( $order_id ) {
+        $subscriptions_ids = wcs_get_subscriptions_for_order( $order_id, array( 'order_type' => 'any' ) );
+        foreach( $subscriptions_ids as $subscription_id => $subscription ) {
+            if ( ! metadata_exists( 'post', $subscription_id, '_stripe_customer_id' ) ) {
+                $stripe_customer = new Customer( $subscription->get_user_id() );
+                update_post_meta( $subscription_id, '_stripe_customer_id', $stripe_customer->get_id() );
+                update_post_meta( $order_id, '_stripe_customer_id', $stripe_customer->get_id() );
+            }
+        }
+    }
+
 }

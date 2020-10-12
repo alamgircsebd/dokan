@@ -297,6 +297,12 @@ class IntentController extends StripePaymentGateway {
                 );
             }
 
+            $tmp_order->update_meta_data( '_stripe_customer_id', $intent->customer );
+            $tmp_order->update_meta_data( '_transaction_id', $intent->charges->first()->id );
+            $tmp_order->update_meta_data( '_stripe_source_id', $intent->source );
+            $tmp_order->update_meta_data( '_stripe_intent_id', $intent->id );
+            $tmp_order->update_meta_data( '_stripe_charge_captured', 'yes' );
+
             $tmp_order->save_meta_data();
 
             $withdraw_data = [

@@ -42,7 +42,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
     public function pay() {
         $order              = $this->order;
         $stripe_customer_id = null;
-        $force_save_source  = false;
+        $force_save_source  = true;
 
         // If it's a recurring subscription order.
         if ( Helper::is_subscription_order( $order ) ) {
@@ -144,7 +144,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
      *
      * @return object
      */
-    public function create_intent( $order, $prepared_source ) {
+    public function create_intent( $order, $prepared_source, $amount = NULL ) {
         $description = sprintf(
             __( '%1$s - Order %2$s', 'dokan' ),
             wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
@@ -153,7 +153,7 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
 
         $request = [
             'source'               => $prepared_source->source,
-            'amount'               => Helper::get_stripe_amount( $order->get_total() ),
+            'amount'               => $amount ? Helper::get_stripe_amount( $amount ) : Helper::get_stripe_amount( $order->get_total() ),
             'currency'             => strtolower( $order->get_currency() ),
             'description'          => $description,
             'setup_future_usage'   => $prepared_source->setup_future_usage,
@@ -190,6 +190,11 @@ class Stripe3DSPayment extends StripeConnect implements Payable {
      */
     public function save_intent_to_order( $order, $intent ) {
         $order->update_meta_data( 'dokan_stripe_intent_id', $intent->id );
+        $order->update_meta_data( '_stripe_customer_id', $intent->customer );
+        $order->update_meta_data( '_transaction_id', $intent->charges->first()->id );
+        $order->update_meta_data( '_stripe_source_id', $intent->source );
+        $order->update_meta_data( '_stripe_intent_id', $intent->id );
+        $order->update_meta_data( '_stripe_charge_captured', 'yes' );
 
         if ( is_callable( [ $order, 'save' ] ) ) {
             $order->save();

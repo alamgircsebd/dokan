@@ -4,6 +4,7 @@ namespace WeDevs\DokanPro\Modules\Stripe;
 
 use WC_AJAX;
 use Exception;
+use Stripe\PaymentIntent;
 use WeDevs\DokanPro\Modules\Stripe\Payment_Tokens;
 use WeDevs\Dokan\Exceptions\DokanException;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
@@ -16,6 +17,13 @@ defined( 'ABSPATH' ) || exit;
 class StripeConnect extends StripePaymentGateway {
 
     /**
+     * The delay between retries.
+     *
+     * @var int
+     */
+    public $retry_interval;
+
+    /**
      * Constructor method
      *
      * @since 3.0.3
@@ -23,12 +31,26 @@ class StripeConnect extends StripePaymentGateway {
      * @return vois
      */
     public function __construct() {
+        $this->retry_interval     = 1;
         $this->id                 = 'dokan-stripe-connect';
         $this->method_title       = __( 'Dokan Stripe Connect', 'dokan' );
         $this->method_description = __( 'Have your customers pay with credit card.', 'dokan' );
         $this->icon               = DOKAN_STRIPE_ASSETS . 'images/cards.png';
         $this->has_fields         = true;
-        $this->supports           = [ 'products', 'refund', 'subscriptions', 'tokenization' ];
+        $this->supports           = [
+            'products',
+            'refund',
+            'tokenization',
+            'subscriptions',
+            'subscription_cancellation',
+            'subscription_suspension',
+            'subscription_reactivation',
+            'subscription_amount_changes',
+            'subscription_date_changes',
+            'subscription_payment_method_change',
+            'subscription_payment_method_change_customer',
+            'subscription_payment_method_change_admin',
+        ];
 
         $this->init_form_fields();
         $this->init_settings();
@@ -76,6 +98,693 @@ class StripeConnect extends StripePaymentGateway {
         add_filter( 'woocommerce_payment_successful_result', [ $this, 'modify_successful_payment_result' ], 99999, 2 );
         add_action( 'woocommerce_checkout_order_review', [ $this, 'set_subscription_data' ] );
         add_action( 'woocommerce_customer_save_address', [ $this, 'show_update_card_notice' ], 10, 2 );
+
+        if ( class_exists( 'WC_Subscriptions_Order' ) ) {
+            add_action( 'woocommerce_scheduled_subscription_payment_' . $this->id, array( $this, 'scheduled_subscription_payment' ), 20, 2 );
+            add_action( 'wcs_resubscribe_order_created', array( $this, 'delete_resubscribe_meta' ), 10 );
+            add_filter( 'wcs_renewal_order_created', array( $this, 'delete_renewal_meta' ), 10 );
+            add_filter( 'dokan_gateway_stripe_renewal_process_payment', array( $this, 'handle_transfer_payment' ), 10 );
+            add_filter( 'woocommerce_subscription_activation_next_payment_not_recalculated', array( $this, 'calculate_next_payment_date' ), 10, 3 );
+            add_action( 'woocommerce_subscription_failing_payment_method_updated_dokan-stripe-connect', array( $this, 'update_failing_payment_method' ), 10, 2 );
+            add_action( 'dokan_stripe_cards_payment_fields', array( $this, 'display_update_subs_payment_checkout' ) );
+            add_action( 'dokan_stripe_connect_add_payment_method_' . $this->id . '_success', array( $this, 'handle_add_payment_method_success' ), 10, 2 );
+            add_action( 'dokan_stripe_payment_completed', array( $this, 'update_payment_meta_for_subscription' ), 12, 2 );
+
+            // display the credit card used for a subscription in the "My Subscriptions" table
+            add_filter( 'woocommerce_my_subscriptions_payment_method', array( $this, 'maybe_render_subscription_payment_method' ), 10, 2 );
+
+            // allow store managers to manually set Stripe as the payment method on a subscription
+            add_filter( 'woocommerce_subscription_payment_meta', array( $this, 'add_subscription_payment_meta' ), 10, 2 );
+            add_filter( 'woocommerce_subscription_validate_payment_meta', array( $this, 'validate_subscription_payment_meta' ), 10, 2 );
+            add_filter( 'dokan_stripe_display_save_payment_method_checkbox', array( $this, 'maybe_hide_save_checkbox' ) );
+
+            /*
+             * WC subscriptions hooks into the "template_redirect" hook with priority 100.
+             * If the screen is "Pay for order" and the order is a subscription renewal, it redirects to the plain checkout.
+             * See: https://github.com/woocommerce/woocommerce-subscriptions/blob/99a75687e109b64cbc07af6e5518458a6305f366/includes/class-wcs-cart-renewal.php#L165
+             * If we are in the "You just need to authorize SCA" flow, we don't want that redirection to happen.
+             */
+            // add_action( 'template_redirect', array( $this, 'remove_order_pay_var' ), 99 );
+            // add_action( 'template_redirect', array( $this, 'restore_order_pay_var' ), 101 );
+        }
+    }
+
+    /**
+     * Schedule subscription payment
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param float $amount_to_charge
+     * @param Object $renewal_order
+     *
+     * @return Success|Exceptions
+     */
+    public function scheduled_subscription_payment( $amount_to_charge, $renewal_order ) {
+        $this->process_subscription_payment( $amount_to_charge, $renewal_order, true, false );
+    }
+
+    /**
+     * Scheduled_subscription_payment function.
+     *
+     * @param $amount_to_charge float The amount to charge.
+     * @param $renewal_order WC_Order A WC_Order object created to record the renewal payment.
+     */
+    public function process_subscription_payment( $amount = 0.0, $renewal_order, $retry = true, $previous_error ) {
+        try {
+            if ( $amount * 100 < $this->get_minimum_amount() ) {
+                /* translators: minimum amount */
+                $message = sprintf( __( 'Sorry, the minimum allowed order total is %1$s to use this payment method.', 'dokan' ), wc_price( $this->get_minimum_amount() / 100 ) );
+                throw new Exception(
+                    'Error while processing renewal order ' . $renewal_order->get_id() . ' : ' . $message,
+                    $message
+                );
+            }
+
+            $order_id = $renewal_order->get_id();
+
+            $this->ensure_subscription_has_customer_id( $order_id );
+
+            // Unlike regular off-session subscription payments, early renewals are treated as on-session payments, involving the customer.
+            if ( isset( $_REQUEST['process_early_renewal'] ) ) { // wpcs: csrf ok.
+                $response = parent::process_payment( $order_id, true, false, $previous_error, true );
+
+                if( 'success' === $response['result'] && isset( $response['payment_intent_secret'] ) ) {
+                    $verification_url = add_query_arg(
+                        array(
+                            'order'         => $order_id,
+                            'nonce'         => wp_create_nonce( 'dokan_stripe_confirm_pi' ),
+                            'redirect_to'   => remove_query_arg( array( 'process_early_renewal', 'subscription_id', 'wcs_nonce' ) ),
+                            'early_renewal' => true,
+                        ),
+                        WC_AJAX::get_endpoint( 'dokan_stripe_verify_intent' )
+                    );
+
+                    echo wp_json_encode( array(
+                        'stripe_sca_required' => true,
+                        'intent_secret'       => $response['payment_intent_secret'],
+                        'redirect_url'        => $verification_url,
+                    ) );
+
+                    exit;
+                }
+
+                // Hijack all other redirects in order to do the redirection in JavaScript.
+                add_action( 'wp_redirect', array( $this, 'redirect_after_early_renewal' ), 100 );
+
+                return;
+            }
+
+            // Check for an existing intent, which is associated with the order.
+            if ( $this->has_authentication_already_failed( $renewal_order ) ) {
+                return;
+            }
+
+            // Get source from order
+            $prepared_source = $this->prepare_order_source( $renewal_order );
+            $source_object   = $prepared_source->source_object;
+
+            if ( ! $prepared_source->customer ) {
+                throw new Exception(
+                    'Failed to process renewal for order ' . $renewal_order->get_id() . '. Stripe customer id is missing in the order',
+                    __( 'Customer not found', 'dokan' )
+                );
+            }
+
+            /* If we're doing a retry and source is chargeable, we need to pass
+             * a different idempotency key and retry for success.
+             */
+            if ( is_object( $source_object ) && empty( $source_object->error ) && $this->need_update_idempotency_key( $source_object, $previous_error ) ) {
+                add_filter( 'wc_stripe_idempotency_key', array( $this, 'change_idempotency_key' ), 10, 2 );
+            }
+
+            if ( ( $this->is_no_such_source_error( $previous_error ) || $this->is_no_linked_source_error( $previous_error ) ) && apply_filters( 'wc_stripe_use_default_customer_source', true ) ) {
+                // Passing empty source will charge customer default.
+                $prepared_source->source = '';
+            }
+
+            $this->lock_order_payment( $renewal_order );
+
+            $response                   = $this->create_intent_for_renewal_order( $renewal_order, $prepared_source, $amount );
+            $is_authentication_required = $this->is_authentication_required_for_payment( $response );
+
+            // It's only a failed payment if it's an error and it's not of the type 'authentication_required'.
+            // If it's 'authentication_required', then we should email the user and ask them to authenticate.
+            if ( ! empty( $response->error ) && ! $is_authentication_required ) {
+                // We want to retry.
+                if ( $this->is_retryable_error( $response->error ) ) {
+                    if ( $retry ) {
+                        // Don't do anymore retries after this.
+                        if ( 5 <= $this->retry_interval ) {
+                            return $this->process_subscription_payment( $amount, $renewal_order, false, $response->error );
+                        }
+
+                        sleep( $this->retry_interval );
+
+                        $this->retry_interval++;
+
+                        return $this->process_subscription_payment( $amount, $renewal_order, true, $response->error );
+                    } else {
+                        $localized_message = __( 'Sorry, we are unable to process your payment at this time. Please retry later.', 'dokan' );
+                        $renewal_order->add_order_note( $localized_message );
+                        throw new Exception( print_r( $response, true ), $localized_message );
+                    }
+                }
+
+                $localized_messages = Helper::get_localized_messages();
+
+                if ( 'card_error' === $response->error->type ) {
+                    $localized_message = isset( $localized_messages[ $response->error->code ] ) ? $localized_messages[ $response->error->code ] : $response->error->message;
+                } else {
+                    $localized_message = isset( $localized_messages[ $response->error->type ] ) ? $localized_messages[ $response->error->type ] : $response->error->message;
+                }
+
+                $renewal_order->add_order_note( $localized_message );
+
+                throw new Exception( print_r( $response, true ), $localized_message );
+            }
+
+            // Either the charge was successfully captured, or it requires further authentication.
+            if ( $is_authentication_required ) {
+                do_action( 'wc_gateway_stripe_process_payment_authentication_required', $renewal_order, $response );
+
+                $error_message = __( 'This transaction requires authentication.', 'dokan' );
+                $renewal_order->add_order_note( $error_message );
+
+                $charge = end( $response->error->payment_intent->charges->data );
+                $id = $charge->id;
+                $order_id = $renewal_order->get_id();
+
+                $renewal_order->set_transaction_id( $id );
+                $renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'dokan' ), $id ) );
+                if ( is_callable( array( $renewal_order, 'save' ) ) ) {
+                    $renewal_order->save();
+                }
+            } else {
+                // The charge was successfully captured
+                do_action( 'wc_gateway_stripe_process_payment', $response, $renewal_order );
+                do_action( 'dokan_stripe_payment_completed', $renewal_order, $response );
+
+                $this->process_response( end( $response->charges->data ), $renewal_order );
+            }
+
+            $this->unlock_order_payment( $renewal_order );
+        } catch ( Exception $e ) {
+            do_action( 'wc_gateway_stripe_process_payment_error', $e, $renewal_order );
+
+            /* translators: error message */
+            $renewal_order->update_status( 'failed' );
+        }
+    }
+
+    /**
+     * Include the payment meta data required to process automatic recurring payments so that store managers can
+     * manually set up automatic recurring payments for a customer via the Edit Subscriptions screen in 2.0+.
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $payment_meta associative array of meta data required for automatic payments
+     * @param WC_Subscription $subscription An instance of a subscription object
+     *
+     * @return array
+     */
+    public function add_subscription_payment_meta( $payment_meta, $subscription ) {
+        $subscription_id = $subscription->get_id();
+        $source_id       = get_post_meta( $subscription_id, '_stripe_source_id', true );
+
+        // For BW compat will remove in future.
+        if ( empty( $source_id ) ) {
+            $source_id = get_post_meta( $subscription_id, '_stripe_card_id', true );
+
+            // Take this opportunity to update the key name.
+            update_post_meta( $subscription_id, '_stripe_source_id', $source_id );
+            delete_post_meta( $subscription_id, '_stripe_card_id', $source_id );
+        }
+
+        $payment_meta[ $this->id ] = array(
+            'post_meta' => array(
+                '_stripe_customer_id' => array(
+                    'value' => get_post_meta( $subscription_id, '_stripe_customer_id', true ),
+                    'label' => 'Stripe Customer ID',
+                ),
+                '_stripe_source_id'   => array(
+                    'value' => $source_id,
+                    'label' => 'Stripe Source ID',
+                ),
+            ),
+        );
+
+        return $payment_meta;
+    }
+
+    /**
+     * Update subscription payment meta when order created
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function update_payment_meta_for_subscription( $order, $intent ) {
+        if ( empty( $order ) ) {
+            return;
+        }
+
+        $subscriptions = wcs_get_subscriptions_for_order( $order->get_id() );
+
+        if ( empty( $subscriptions ) ) {
+            return;
+        }
+
+        foreach ( $subscriptions as $key => $subscription ) {
+            update_post_meta( $subscription->get_id(), '_stripe_customer_id', $intent->customer );
+            update_post_meta( $subscription->get_id(), '_transaction_id', $intent->charges->first()->id );
+            update_post_meta( $subscription->get_id(), '_stripe_source_id', $intent->source );
+            update_post_meta( $subscription->get_id(), '_stripe_intent_id', $intent->id );
+        }
+     }
+
+    /**
+     * Validate the payment meta data required to process automatic recurring payments so that store managers can
+     * manually set up automatic recurring payments for a customer via the Edit Subscriptions screen in 2.0+.
+     *
+     * @since 2.5
+     * @since 4.0.4 Stripe sourd id field no longer needs to be required.
+     * @param string $payment_method_id The ID of the payment method to validate
+     * @param array $payment_meta associative array of meta data required for automatic payments
+     * @return array
+     */
+    public function validate_subscription_payment_meta( $payment_method_id, $payment_meta ) {
+        if ( $this->id === $payment_method_id ) {
+
+            if ( ! isset( $payment_meta['post_meta']['_stripe_customer_id']['value'] ) || empty( $payment_meta['post_meta']['_stripe_customer_id']['value'] ) ) {
+
+                // Allow empty stripe customer id during subscription renewal. It will be added when processing payment if required.
+                if ( ! isset( $_POST['wc_order_action'] ) || 'wcs_process_renewal' !== $_POST['wc_order_action'] ) {
+                    throw new Exception( __( 'A "Stripe Customer ID" value is required.', 'dokan' ) );
+                }
+            } elseif ( 0 !== strpos( $payment_meta['post_meta']['_stripe_customer_id']['value'], 'cus_' ) ) {
+                throw new Exception( __( 'Invalid customer ID. A valid "Stripe Customer ID" must begin with "cus_".', 'dokan' ) );
+            }
+
+            if (
+                ( ! empty( $payment_meta['post_meta']['_stripe_source_id']['value'] )
+                && 0 !== strpos( $payment_meta['post_meta']['_stripe_source_id']['value'], 'card_' ) )
+                && ( ! empty( $payment_meta['post_meta']['_stripe_source_id']['value'] )
+                && 0 !== strpos( $payment_meta['post_meta']['_stripe_source_id']['value'], 'src_' ) ) ) {
+
+                throw new Exception( __( 'Invalid source ID. A valid source "Stripe Source ID" must begin with "src_" or "card_".', 'dokan' ) );
+            }
+        }
+    }
+
+    /**
+     * Calculate next payment date
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function calculate_next_payment_date( $stored_next_payment, $old_status, $subscription ) {
+        $calculated_next_payment = $subscription->calculate_date( 'next_payment' );
+
+        if ( $calculated_next_payment > 0 ) {
+            $subscription->update_dates( array( 'next_payment' => $calculated_next_payment ) );
+        } elseif ( $stored_next_payment < gmdate( 'U' ) ) { // delete the stored date if it's in the past as we're not updating it (the calculated next payment date is 0 or none)
+            $subscription->delete_date( 'next_payment' );
+        }
+
+        $subscription->save();
+    }
+
+    /**
+     * Update the customer_id for a subscription after using Stripe to complete a payment to make up for
+     * an automatic renewal payment which previously failed.
+     *
+     * @since DOKAN_PRO_VERSION
+     *
+     * @param WC_Subscription $subscription The subscription for which the failing payment method relates.
+     * @param WC_Order $renewal_order The order which recorded the successful payment (to make up for the failed automatic payment).
+     *
+     * @return void
+     */
+    public function update_failing_payment_method( $subscription, $renewal_order ) {
+        update_post_meta( $subscription->get_id(), '_stripe_customer_id', $renewal_order->get_meta( '_stripe_customer_id', true ) );
+        update_post_meta( $subscription->get_id(), '_stripe_source_id', $renewal_order->get_meta( '_stripe_source_id', true ) );
+    }
+
+    /**
+     * Displays a checkbox to allow users to update all subs payments with new
+     * payment.
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return HTML
+     */
+    public function display_update_subs_payment_checkout() {
+        $subs_statuses = apply_filters( 'dokan_stripe_update_subs_payment_method_card_statuses', array( 'active' ) );
+        if (
+            apply_filters( 'dokan_stripe_display_update_subs_payment_method_card_checkbox', true ) &&
+            wcs_user_has_subscription( get_current_user_id(), '', $subs_statuses ) &&
+            is_add_payment_method_page()
+        ) {
+            $label = esc_html( apply_filters( 'dokan_stripe_save_to_subs_text', __( 'Update the Payment Method used for all of my active subscriptions.', 'dokan' ) ) );
+            $id    = sprintf( 'dokan-%1$s-update-subs-payment-method-card', $this->id );
+            woocommerce_form_field(
+                $id,
+                array(
+                    'type'    => 'checkbox',
+                    'label'   => $label,
+                    'default' => apply_filters( 'dokan_stripe_save_to_subs_checked', false ),
+                )
+            );
+        }
+    }
+
+    /**
+     * Updates all active subscriptions payment method.
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param string $source_id
+     * @param object $source_object
+     *
+     * @return Void
+     */
+    public function handle_add_payment_method_success( $source_id, $source_object ) {
+        if ( isset( $_POST[ 'wc-' . $this->id . '-update-subs-payment-method-card' ] ) ) {
+            $all_subs        = wcs_get_users_subscriptions();
+            $subs_statuses   = apply_filters( 'dokan_stripe_update_subs_payment_method_card_statuses', array( 'active' ) );
+            $stripe_customer = new Customer( get_current_user_id() );
+
+            if ( ! empty( $all_subs ) ) {
+                foreach ( $all_subs as $sub ) {
+                    if ( $sub->has_status( $subs_statuses ) ) {
+                        update_post_meta( $sub->get_id(), '_stripe_source_id', $source_id );
+                        update_post_meta( $sub->get_id(), '_stripe_customer_id', $stripe_customer->get_id() );
+                        update_post_meta( $sub->get_id(), '_payment_method', $this->id );
+                        update_post_meta( $sub->get_id(), '_payment_method_title', $this->method_title );
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Render the payment method used for a subscription in the "My Subscriptions" table
+     *
+     * @since 1.7.5
+     * @param string $payment_method_to_display the default payment method text to display
+     * @param WC_Subscription $subscription the subscription details
+     * @return string the subscription payment method
+     */
+    public function maybe_render_subscription_payment_method( $payment_method_to_display, $subscription ) {
+        $customer_user = $subscription->get_customer_id();
+
+        // bail for other payment methods
+        if ( $subscription->get_payment_method() !== $this->id || ! $customer_user ) {
+            return $payment_method_to_display;
+        }
+
+        $stripe_source_id = get_post_meta( $subscription->get_id(), '_stripe_source_id', true );
+
+        // For BW compat will remove in future.
+        if ( empty( $stripe_source_id ) ) {
+            $stripe_source_id = get_post_meta( $subscription->get_id(), '_stripe_card_id', true );
+
+            // Take this opportunity to update the key name.
+            update_post_meta( $subscription->get_id(), '_stripe_source_id', $stripe_source_id );
+        }
+
+        $stripe_customer    = new Customer();
+        $stripe_customer_id = get_post_meta( $subscription->get_id(), '_stripe_customer_id', true );
+
+        // If we couldn't find a Stripe customer linked to the subscription, fallback to the user meta data.
+        if ( ! $stripe_customer_id || ! is_string( $stripe_customer_id ) ) {
+            $user_id            = $customer_user;
+            $stripe_customer_id = get_user_option( '_stripe_customer_id', $user_id );
+            $stripe_source_id   = get_user_option( '_stripe_source_id', $user_id );
+
+            // For BW compat will remove in future.
+            if ( empty( $stripe_source_id ) ) {
+                $stripe_source_id = get_user_option( '_stripe_card_id', $user_id );
+
+                // Take this opportunity to update the key name.
+                update_user_option( $user_id, '_stripe_source_id', $stripe_source_id, false );
+            }
+        }
+
+        // If we couldn't find a Stripe customer linked to the account, fallback to the order meta data.
+        if ( ( ! $stripe_customer_id || ! is_string( $stripe_customer_id ) ) && false !== $subscription->order ) {
+            $stripe_customer_id = get_post_meta( $subscription->get_parent_id(), '_stripe_customer_id', true );
+            $stripe_source_id   = get_post_meta( $subscription->get_parent_id(), '_stripe_source_id', true );
+
+            // For BW compat will remove in future.
+            if ( empty( $stripe_source_id ) ) {
+                $stripe_source_id = get_post_meta( $subscription->get_parent_id(), '_stripe_card_id', true );
+
+                // Take this opportunity to update the key name.
+                update_post_meta( $subscription->get_parent_id(), '_stripe_source_id', $stripe_source_id );
+            }
+        }
+
+        $stripe_customer->set_id( $stripe_customer_id );
+
+        $sources                   = $stripe_customer->get_sources();
+        $payment_method_to_display = __( 'N/A', 'dokan' );
+
+        if ( $sources ) {
+            $card = false;
+
+            foreach ( $sources as $source ) {
+                if ( isset( $source->type ) && 'card' === $source->type ) {
+                    $card = $source->card;
+                } elseif ( isset( $source->object ) && 'card' === $source->object ) {
+                    $card = $source;
+                }
+
+                if ( $source->id === $stripe_source_id ) {
+                    if ( $card ) {
+                        /* translators: 1) card brand 2) last 4 digits */
+                        $payment_method_to_display = sprintf( __( 'Via %1$s card ending in %2$s', 'dokan' ), ( isset( $card->brand ) ? $card->brand : __( 'N/A', 'dokan' ) ), $card->last4 );
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return $payment_method_to_display;
+    }
+
+    /**
+     * Create a new PaymentIntent
+     *
+     * @since 3.0.3
+     *
+     * @param \WC_Order $order
+     * @param object $prepared_source The source that is used for the payment
+     *
+     * @return object
+     */
+    public function create_intent_for_renewal_order( $order, $prepared_source, $amount = NULL ) {
+        $description = sprintf(
+            __( '%1$s - Order %2$s', 'dokan' ),
+            wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES ),
+            $order->get_order_number()
+        );
+
+        $request = [
+            'source'               => $prepared_source->source,
+            'amount'               => $amount ? Helper::get_stripe_amount( $amount ) : Helper::get_stripe_amount( $order->get_total() ),
+            'currency'             => strtolower( $order->get_currency() ),
+            'description'          => $description,
+            'confirm'              => 'true',
+            'setup_future_usage'   => 'off_session',
+            'capture_method'       => 'automatic',
+            'payment_method_types' => [
+                'card',
+            ],
+        ];
+
+        if ( $prepared_source->customer ) {
+            $request['customer'] = $prepared_source->customer;
+        }
+
+        try {
+            $intent = PaymentIntent::create( $request );
+        } catch ( Exception $e ) {
+            throw new DokanException( 'unable_to_create_payment_intent', $e->getMessage() );
+        }
+
+        $order->update_meta_data( 'dokan_stripe_intent_id', $intent->id );
+        $order->update_meta_data( '_stripe_intent_id', $intent->id );
+
+        if ( is_callable( [ $order, 'save' ] ) ) {
+            $order->save();
+        }
+
+        return $intent;
+    }
+
+    /**
+     * Don't transfer Stripe customer/token meta to resubscribe orders.
+     * @param int $resubscribe_order The order created for the customer to resubscribe to the old expired/cancelled subscription
+     */
+    public function delete_resubscribe_meta( $resubscribe_order ) {
+        delete_post_meta( $resubscribe_order->get_id(), '_stripe_customer_id' );
+        delete_post_meta( $resubscribe_order->get_id(), '_stripe_source_id' );
+        // For BW compat will remove in future
+        delete_post_meta( $resubscribe_order->get_id(), '_stripe_card_id' );
+        // delete payment intent ID
+        delete_post_meta( $resubscribe_order->get_id(), '_stripe_intent_id' );
+        delete_post_meta( $resubscribe_order->get_id(), 'dokan_stripe_intent_id' );
+    }
+
+    /**
+     * Don't transfer Stripe fee/ID meta to renewal orders.
+     * @param int $resubscribe_order The order created for the customer to resubscribe to the old expired/cancelled subscription
+     */
+    public function delete_renewal_meta( $renewal_order ) {
+        // delete payment intent ID
+        delete_post_meta( $renewal_order->get_id(), '_stripe_intent_id' );
+        delete_post_meta( $renewal_order->get_id(), 'dokan_stripe_intent_id' );
+
+        return $renewal_order;
+    }
+
+    /**
+     * Handle transfer payment
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     */
+    public function handle_transfer_payment( $response, $order ) {
+
+    }
+
+    /**
+     * Get payment source from an order. This could be used in the future for
+     * a subscription as an example, therefore using the current user ID would
+     * not work - the customer won't be logged in :)
+     *
+     * Not using 2.6 tokens for this part since we need a customer AND a card
+     * token, and not just one.
+     *
+     * @since 3.1.0
+     * @version 4.0.0
+     * @param object $order
+     * @return object
+     */
+    public function prepare_order_source( $order = null ) {
+        $stripe_customer = new Customer();
+        $stripe_source   = false;
+        $token_id        = false;
+        $source_object   = false;
+
+        if ( $order ) {
+            $order_id = $order->get_id();
+
+            $stripe_customer_id = get_post_meta( $order_id, '_stripe_customer_id', true );
+
+            if ( $stripe_customer_id ) {
+                $stripe_customer->set_id( $stripe_customer_id );
+            }
+
+            $source_id = $order->get_meta( '_stripe_source_id', true );
+
+            // Since 4.0.0, we changed card to source so we need to account for that.
+            if ( empty( $source_id ) ) {
+                $source_id = $order->get_meta( '_stripe_card_id', true );
+
+                // Take this opportunity to update the key name.
+                $order->update_meta_data( '_stripe_source_id', $source_id );
+
+                if ( is_callable( array( $order, 'save' ) ) ) {
+                    $order->save();
+                }
+            }
+
+            if ( $source_id ) {
+                $stripe_source = $source_id;
+                $source_object = $this->get_source_object( $source_id );
+            } elseif ( apply_filters( 'wc_stripe_use_default_customer_source', true ) ) {
+                /*
+                 * We can attempt to charge the customer's default source
+                 * by sending empty source id.
+                 */
+                $stripe_source = '';
+            }
+        }
+
+        return (object) array(
+            'token_id'      => $token_id,
+            'customer'      => $stripe_customer ? $stripe_customer->get_id() : false,
+            'source'        => $stripe_source,
+            'source_object' => $source_object,
+        );
+    }
+
+    /**
+     * Checks if a renewal already failed because a manual authentication is required.
+     *
+     * @param WC_Order $renewal_order The renewal order.
+     * @return boolean
+     */
+    public function has_authentication_already_failed( $renewal_order ) {
+        $intent_id = $renewal_order->get_meta( '_stripe_intent_id' );
+
+        if ( $intent_id ) {
+            $intent_id = $this->get_intent( 'payment_intents', $intent_id );
+        } else {
+            // The order doesn't have a payment intent, but it may have a setup intent.
+            $intent_id = $renewal_order->get_meta( '_stripe_setup_intent' );
+
+            if ( $intent_id ) {
+                $intent_id = $this->get_intent( 'setup_intents', $intent_id );
+            }
+        }
+
+        if (
+            ! $intent_id
+            || 'requires_payment_method' !== $intent_id->status
+            || 'requires_source_action' !== $intent_id->status
+            || empty( $intent_id->last_payment_error )
+            || 'authentication_required' !== $intent_id->last_payment_error->code
+        ) {
+            return false;
+        }
+
+        // Make sure all emails are instantiated.
+        \WC_Emails::instance();
+
+        /**
+         * A payment attempt failed because SCA authentication is required.
+         *
+         * @param WC_Order $renewal_order The order that is being renewed.
+         */
+        do_action( 'wc_gateway_stripe_process_payment_authentication_required', $renewal_order );
+
+        // Fail the payment attempt (order would be currently pending because of retry rules).
+        $charge    = end( $intent_id->charges->data );
+        $charge_id = $charge->id;
+        $renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'dokan' ), $charge_id ) );
+
+        return true;
+    }
+
+    /**
+     * Checks to see if we need to hide the save checkbox field.
+     * Because when cart contains a subs product, it will save regardless.
+     *
+     * @since 4.0.0
+     * @version 4.0.0
+     */
+    public function maybe_hide_save_checkbox( $display_tokenization ) {
+        if ( \WC_Subscriptions_Cart::cart_contains_subscription() ) {
+            return false;
+        }
+
+        return $display_tokenization;
     }
 
     /**
