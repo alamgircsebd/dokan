@@ -80,6 +80,8 @@ class Ajax {
 
             $message = apply_filters( 'dokan_pro_refund_ajax_refund_request_message', __( 'Refund request submitted.', 'dokan' ) );
 
+            do_action( 'dokan_refund_requested', $refund->get_order_id() );
+
             wp_send_json_success( [
                 'refund'  => $refund->get_data(),
                 'message' => $message,

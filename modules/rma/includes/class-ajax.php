@@ -213,7 +213,7 @@ class Dokan_RMA_Ajax {
                 \WeDevs\DokanPro\Refund\Ajax::wc_ajax_request_error_handler( $e );
             }
 
-            do_action( 'dokan_refund_request_notification',  $data['refund_order_id'] );
+            do_action( 'dokan_rma_requested',  $data['refund_order_id'] );
 
             wp_send_json_success( $data );
         }

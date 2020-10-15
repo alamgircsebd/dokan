@@ -622,7 +622,8 @@ class Dokan_Pro {
         $actions[] = 'dokan_vendor_enabled';
         $actions[] = 'dokan_vendor_disabled';
         $actions[] = 'dokan_after_announcement_saved';
-        $actions[] = 'dokan_refund_request_notification';
+        $actions[] = 'dokan_rma_requested';
+        $actions[] = 'dokan_refund_requested';
         $actions[] = 'dokan_refund_processed_notification';
         $actions[] = 'dokan_edited_product_pending_notification';
 
