@@ -83,7 +83,11 @@ if ( wc_tax_enabled() ) {
         <tbody id="order_line_items">
         <?php
             foreach ( $line_items as $item_id => $item ) {
-                $_product = $item->get_product();
+                if ( version_compare( WC_VERSION, '4.4.0', '>=' ) ) {
+                    $_product = $item->get_product();
+                } else {
+                    $_product = $order->get_product_from_item( $item );
+                }
 
                 dokan_get_template_part( 'orders/views/html-order-item', '', array(
                     'pro'          => true,

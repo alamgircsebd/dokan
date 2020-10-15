@@ -82,7 +82,11 @@ $subscription_post  = get_post( $subscription_id );
 
                           switch ( $item['type'] ) {
                             case 'line_item' :
-                            $_product   = $subscription->get_product_from_item( $item );
+                            if ( version_compare( WC_VERSION, '4.4.0', '>=' ) ) {
+                                $_product = $item->get_product();
+                            } else {
+                                $_product = $subscription->get_product_from_item( $item );
+                            }
 
                             dokan_get_template_part( 'orders/order-item-html', '', array(
                               'order'    => $subscription,
