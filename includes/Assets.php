@@ -126,7 +126,7 @@ class Assets {
 
             'dokan-pro-vue-frontend-shipping' => [
                 'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend-shipping.js',
-                'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ],
+                'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap', 'underscore' ],
                 'version'   => $this->script_version,
                 'in_footer' => true
             ],
