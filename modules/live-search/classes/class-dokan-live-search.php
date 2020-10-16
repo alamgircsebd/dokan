@@ -34,7 +34,9 @@ class Dokan_Live_Search_Widget extends WP_Widget {
      * @param array $instance Saved values from database.
      */
     public function widget( $args, $instance ) {
-        extract( $args );
+        if ( is_array( $args ) ) {
+            extract( $args, EXTR_SKIP );
+        }
 
         $title              = !empty ( $instance['title'] ) ? $instance['title'] : '';
         $title              = apply_filters('widget_title', $title, $instance, $this->id_base);
