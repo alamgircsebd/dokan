@@ -23,7 +23,7 @@ npm install
 
 ## To Release
 
-1. Bump the versions in `package.json`
+1. Bump the versions in `dokan-pro.php` and `package.json`
 1. Add changelogs to `changelog.txt` file
 1. Run: `npm run build`
 2. If you have used `DOKAN_PRO_SINCE` in comments, run `npm run version` to replace with the current version from `package.json`
