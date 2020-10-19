@@ -50,9 +50,12 @@ class BlockEditorBlockTypes {
 
         $version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
 
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
         wp_register_script(
             'dokan-blocks-editor-script',
-            DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-blocks-editor-script.js',
+            DOKAN_PRO_PLUGIN_ASSEST . '/js/dokan-blocks-editor-script' . $suffix . '.js',
             [ 'wp-blocks', 'wp-i18n', 'wp-element' ],
             $version,
             true

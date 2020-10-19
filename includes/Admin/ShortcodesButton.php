@@ -97,8 +97,11 @@ class ShortcodesButton {
         //enqueue TinyMCE plugin script with its ID.
         $screen = get_current_screen();
 
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
         if ( 'page' == $screen->post_type || 'product' == $screen->post_type ) {
-            $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tinymce-button.js";
+            $plugin_array["dokan_button"] =  DOKAN_PRO_PLUGIN_ASSEST . "/js/dokan-tinymce-button" . $suffix . '.js';
         }
 
         return $plugin_array;

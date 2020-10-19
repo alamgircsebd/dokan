@@ -42,9 +42,12 @@ class SingleProduct {
      */
     public static function enqueue_scripts() {
         if ( is_product() ) {
+            // Use minified libraries if SCRIPT_DEBUG is turned off
+            $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
             $product = wc_get_product();
 
-            wp_enqueue_script( 'dokan-report-abuse', DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse.js', [ 'jquery', 'dokan-login-form-popup' ], DOKAN_PRO_PLUGIN_VERSION, true );
+            wp_enqueue_script( 'dokan-report-abuse', DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse' . $suffix . '.js', [ 'jquery', 'dokan-login-form-popup' ], DOKAN_PRO_PLUGIN_VERSION, true );
 
             $options = get_option( 'dokan_report_abuse', [] );
 

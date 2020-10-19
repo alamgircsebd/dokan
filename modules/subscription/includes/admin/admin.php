@@ -37,8 +37,11 @@ class DPS_Admin {
     }
 
     public function admin_enqueue_scripts() {
-        wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', false, date( 'Ymd' ) );
-        wp_enqueue_script( 'dps-custom-admin-js', DPS_URL . '/assets/js/admin-script.js', array('jquery'), false, true );
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+        wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style' . $suffix . '.css', false, date( 'Ymd' ) );
+        wp_enqueue_script( 'dps-custom-admin-js', DPS_URL . '/assets/js/admin-script' . $suffix . '.js', array('jquery'), false, true );
 
         wp_localize_script( 'dps-custom-admin-js', 'dokanSubscription', array(
             'ajaxurl'             => admin_url( 'admin-ajax.php' ),
@@ -47,7 +50,10 @@ class DPS_Admin {
     }
 
     public function vue_admin_enqueue_scripts() {
-        wp_enqueue_script( 'dps-subscription', DPS_URL . '/assets/js/subscription.js', array(  'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+        wp_enqueue_script( 'dps-subscription', DPS_URL . '/assets/js/subscription' . $suffix . '.js', array(  'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
     }
 
     /**
