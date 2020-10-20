@@ -9,7 +9,7 @@ class Auth extends OAuth {
     /**
      * Get vendor authorization URL
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @return string
      */
@@ -26,7 +26,7 @@ class Auth extends OAuth {
     /**
      * Get vendor deauthorization URL
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class Auth extends OAuth {
     /**
      * Retrieve vendor token from Stripe API
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param string $code
      *

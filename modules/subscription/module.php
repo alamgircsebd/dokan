@@ -1119,7 +1119,7 @@ class Module {
     /**
      * Restrict category if selected category found
      *
-     * * @since DOKAN_PRO_SINCE
+     * * @since 3.1.0
      *
      * @param $post
      *
@@ -1153,7 +1153,7 @@ class Module {
     /**
      * Restric product import on csv if category restriction enable
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param $data
      */
@@ -1173,7 +1173,7 @@ class Module {
     /**
      * Get subscription allowed categories if exist
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @return array
      */

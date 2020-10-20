@@ -28,6 +28,7 @@
     "store-reviews",
     "store-support",
     "vendor-verification",
+    "vendor-analytics",
     "paypal-adaptive-payments",
     "stripe",
     "subscription",
