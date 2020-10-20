@@ -23,6 +23,7 @@ jQuery( function( $ ) {
             $( 'input.variable_is_downloadable, input.variable_is_virtual, input.variable_manage_stock' ).change();
             $( '.dokan-product-variation-wrapper' ).on( 'dokan_variations_loaded', this.variations_loaded );
             $( document.body ).on( 'dokan_variations_added', this.variation_added );
+            this.variation_toggle_init();
         },
 
         /**
@@ -79,6 +80,40 @@ jQuery( function( $ ) {
             return false;
         },
 
+        variation_toggle_init: function() {
+            $('.dokan-attribute-variation-options').on( 'click', 'h3.variation-topbar-heading', function(e) {
+                e.preventDefault();
+
+                var self = $(this);
+
+                self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
+                    if ( $(this).is( ':visible' ) ) {
+                        self.closest('.dokan-product-variation-itmes').find( 'i.fa-sort-desc' ).removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
+                    } else {
+                        self.closest('.dokan-product-variation-itmes').find( 'i.fa-sort-desc' ).removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
+                    }
+                });
+
+            });
+
+            $('.dokan-attribute-variation-options').on( 'click', '.toggle-variation-content', function(e) {
+                e.preventDefault();
+
+                var self = $(this);
+
+                self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
+                    if ( $(this).is( ':visible' ) ) {
+                        self.removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
+                    } else {
+                        self.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
+                    }
+                } );
+
+                return false;
+            } );
+
+        },
+
         /**
          * Run actions when variations is loaded
          *
@@ -88,7 +123,7 @@ jQuery( function( $ ) {
         variations_loaded: function( event, needsUpdate ) {
             needsUpdate = needsUpdate || false;
 
-            var wrapper = $( '.dokan-product-variation-wrapper' );
+            var wrapper = $( '.dokan-attribute-variation-options' );
 
             if ( ! needsUpdate ) {
                 // Show/hide downloadable, virtual and stock fields
@@ -111,38 +146,6 @@ jQuery( function( $ ) {
                 // Disable cancel and save buttons
                 $( 'button.cancel-variation-changes, button.save-variation-changes', wrapper ).attr( 'disabled', 'disabled' );
             }
-
-
-            $( 'h3.variation-topbar-heading', wrapper ).on( 'click', function(e) {
-                e.preventDefault();
-
-                var self = $(this);
-
-                self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
-                    if ( $(this).is( ':visible' ) ) {
-                        self.closest('.dokan-product-variation-itmes').find( 'i.fa-sort-desc' ).removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
-                    } else {
-                        self.closest('.dokan-product-variation-itmes').find( 'i.fa-sort-desc' ).removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
-                    }
-                });
-
-            });
-
-            $( '.toggle-variation-content', wrapper ).on( 'click', function(e) {
-                e.preventDefault();
-
-                var self = $(this);
-
-                self.closest('.dokan-product-variation-itmes').find('.dokan-variable-attributes').slideToggle( 300, function() {
-                    if ( $(this).is( ':visible' ) ) {
-                        self.removeClass( 'fa-flip-horizointal' ).addClass( 'fa-flip-vertical' );
-                    } else {
-                        self.removeClass( 'fa-flip-vertical' ).addClass( 'fa-flip-horizointal' );
-                    }
-                } );
-
-                return false;
-            } );
 
             $('.tips').tooltip();
 
@@ -412,6 +415,7 @@ jQuery( function( $ ) {
                     wrapper.empty().append( response ).attr( 'data-page', page );
 
                     $( '.dokan-product-variation-wrapper' ).trigger( 'dokan_variations_loaded' );
+                    // $( '.dokan-product-variation-wrapper' ).trigger( 'dokan_variations_toggle_init' );
 
                     Dokan_Product_Variation_Ajax.unblock();
                 }

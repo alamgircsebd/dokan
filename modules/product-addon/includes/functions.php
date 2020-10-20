@@ -1,9 +1,5 @@
 <?php
 
-function dokan_pa_load() {
-    $dokan_product_addon = Dokan_Product_Addon::init();
-}
-
 function dokan_pa_convert_type_name( $type = '' ) {
     switch ( $type ) {
         case 'checkboxes':
@@ -161,4 +157,53 @@ function dokan_pa_addons_cmp( $a, $b ) {
     }
 
     return ( $a['position'] < $b['position'] ) ? -1 : 1;
+}
+
+function get_vendor_staff(){
+    $author_in    = [];
+    $current_user = get_current_user_id();
+
+    array_push( $author_in, $current_user );
+
+    $vendor    = get_user_meta( $current_user, '_vendor_id', true );
+    $author_in = array_merge( $author_in, get_staff_ids( $vendor ) );
+    $author_in = array_merge( $author_in, get_staff_ids( $current_user ) );
+
+    if ( ! empty( $staffs ) ) {
+        foreach ( $staffs as $staff ) {
+            array_push( $author_in, $staff->ID );
+        }
+    }
+
+    if ( ! empty( $other_staff ) ) {
+        foreach ( $other_staff as $staff ) {
+            array_push( $author_in, $staff->ID );
+        }
+    }
+
+    if ( ! empty ( $vendor ) ) {
+        array_push( $author_in, get_user_by( 'ID', $vendor )->ID );
+    }
+
+    return $author_in;
+}
+
+function get_staff_ids( $user_id ) {
+    $ids    = [];
+    $staffs = get_users( [
+        'meta_key'   => '_vendor_id',
+        'meta_value' => $user_id,
+    ] );
+
+    if ( ! empty( $staffs ) ) {
+        foreach ( $staffs as $staff ) {
+            array_push( $ids, $staff->ID );
+        }
+    }
+
+    return $ids;
+}
+
+function dokan_pa_view_addon_for_vendor_staff_vendor( $query ) {
+    $query->set( 'author__in', get_vendor_staff() );
 }

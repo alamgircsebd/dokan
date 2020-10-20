@@ -254,14 +254,14 @@ use WeDevs\Dokan\Walkers\TaxonomyDropdown;
                                     <div class="content-half-part dokan-auction-dates-from">
                                         <label class="dokan-control-label" for="_auction_dates_from"><?php _e( 'Auction Start date', 'dokan' ); ?></label>
                                         <div class="dokan-form-group">
-                                            <input class="dokan-form-control auction-datepicker" name="_auction_dates_from" id="_auction_dates_from" type="text" value="" style="width: 97%;">
+                                            <input class="dokan-form-control auction-datepicker" name="_auction_dates_from" id="_auction_dates_from" type="text" value="" style="width: 97%;" readonly>
                                         </div>
                                     </div>
 
                                     <div class="content-half-part dokan-auction-dates-to">
                                         <label class="dokan-control-label" for="_auction_dates_to"><?php _e( 'Auction End date', 'dokan' ); ?></label>
                                         <div class="dokan-form-group">
-                                            <input class="dokan-form-control auction-datepicker" name="_auction_dates_to" id="_auction_dates_to" type="text" value="">
+                                            <input class="dokan-form-control auction-datepicker" name="_auction_dates_to" id="_auction_dates_to" type="text" value="" readonly>
                                         </div>
                                     </div>
 
@@ -366,6 +366,7 @@ use WeDevs\Dokan\Walkers\TaxonomyDropdown;
                 hourText: dokan.datepicker.hour,
                 minuteText: dokan.datepicker.minute
             });
+
             $('#_auction_automatic_relist').on( 'click', function(){
               if($(this).prop('checked')){
                   $('.relist_options').show();

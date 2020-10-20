@@ -212,6 +212,12 @@
 
                 <template slot="dokan_gateway_fee" slot-scope="data">
                     <currency :amount="data.row.dokan_gateway_fee"></currency>
+                    <span
+                        v-if="get_gateway_fee_paid_by( data.row.gateway_fee_paid_by )"
+                        v-tooltip
+                        :title="get_gateway_fee_paid_by( data.row.gateway_fee_paid_by )"
+                        class="notication-tooltip"
+                    >!</span>
                 </template>
 
                 <template slot="shipping_total" slot-scope="data">
@@ -656,13 +662,14 @@ export default {
             let array = typeof data != 'object' ? JSON.parse(data) : data;
             let str = '';
 
-            str += '"Order ID", "Vendor ID", "Vendor Name", "Order Total", "Refund Total", "Vendor Earning", "Commission", "Status", "Date"';
+            str += '"Order ID", "Vendor ID", "Vendor Name", "Previous Order Total", "Order Total", "Vendor Earning", "Commission", "Gateway Fee", "Shipping", "Tax", "Status", "Date"';
             str += '\r\n';
 
             for (let i = 0; i < array.length; i++) {
                 let line = '';
 
                 for (let index in array[i]) {
+
                     if (line != '') line += ',';
 
                     if ( 'commission' == index || 'previous_order_total' == index || 'vendor_earning' == index || 'dokan_gateway_fee' == index || 'shipping_total' == index || 'tax_total' == index ) {
@@ -679,11 +686,11 @@ export default {
                     } else if ( 'order_total' == index ) {
 
                         // if there is refund for an order, calculate refund total
-                        let total_refund = 0;
+                        let total_refund = array[i]['order_total'];
 
-                        if ( array[i]['has_refund'] ) {
-                            total_refund = array[i]['previous_order_total'] - array[i]['order_total'];
-                        }
+                        // if ( array[i]['has_refund'] ) {
+                        //     total_refund = array[i]['previous_order_total'] - array[i]['order_total'];
+                        // }
 
                         line += '"' + accounting.formatMoney(
                             total_refund,
@@ -829,6 +836,19 @@ export default {
                 this.filter.query.order_status = 'wc-' + status;
                 this.setRoute( this.filter.query );
             });
+        },
+
+        get_gateway_fee_paid_by( paid_by ) {
+            paid_by = paid_by || 'admin';
+
+            const fee_paid_by = {
+                seller: this.__( 'seller', 'dokan' ),
+                admin: this.__( 'admin', 'dokan' ),
+            };
+
+            return fee_paid_by[ paid_by ]
+                ? this.sprintf( this.__( 'Processing fee paid by %s', 'dokan' ), fee_paid_by[ paid_by ]  )
+                : '';
         }
     }
 };
@@ -837,8 +857,11 @@ export default {
 <style lang="less">
 .reports-page {
     .logs-area {
+        th {
+            white-space: nowrap;
+        }
+
         .order_total {
-            display: flex;
 
             del {
                 padding-right: 5px;
@@ -1004,4 +1027,26 @@ export default {
     }
 }
 
+.dokan_gateway_fee {
+
+    > div {
+        float: left;
+    }
+
+    .notication-tooltip {
+        background-color: #ccc;
+        display: inline-block;
+        font-size: 11px;
+        line-height: 1;
+        width: 13px;
+        height: 13px;
+        text-align: center;
+        border-radius: 50%;
+        padding: 1px;
+        color: #000;
+        margin-left: 4px;
+        position: relative;
+        top: -1px;
+    }
+}
 </style>

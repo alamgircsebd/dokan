@@ -15,8 +15,21 @@
         "wikimedia/composer-merge-plugin": "^1.3@dev",
         "hybridauth/hybridauth": "^3.0@dev"
     },
-    "require-dev": {},
-    "scripts": {},
+    "require-dev": {
+        "wp-coding-standards/wpcs": "dev-master",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
+        "tareq1988/wp-php-cs-fixer": "dev-master",
+        "phpcompatibility/phpcompatibility-wp": "dev-master",
+        "phpunit/phpunit": "7.5.9"
+    },
+    "scripts": {
+      "phpcs": [
+        "phpcs -p -s"
+      ],
+      "phpcbf": [
+        "phpcbf -p"
+      ]
+    },
     "autoload" : {
       "psr-4": {
           "WeDevs\\DokanPro\\": "includes/"

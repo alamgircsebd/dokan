@@ -2,12 +2,11 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe\PaymentMethods;
 
+use Exception;
 use Stripe\Token;
 use Stripe\Charge;
 use Stripe\BalanceTransaction;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
-use WeDevs\Dokan\Exceptions\DokanException;
-use WeDevs\DokanPro\Modules\Stripe\Customer;
 use WeDevs\DokanPro\Modules\Stripe\StripeConnect;
 use WeDevs\DokanPro\Modules\Stripe\Interfaces\Payable;
 
@@ -44,7 +43,6 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
     public function pay() {
         $order         = $this->order;
         $customer_id   = get_current_user_id();
-        $all_withdraws = [];
 
         $this->validate_minimum_order_amount( $order );
 
@@ -84,7 +82,7 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
             }
         } catch( Exception $e ) {
             $order->add_order_note( sprintf( __( 'Stripe Payment Error: %s', 'dokan' ), $e->getMessage() ) );
-            update_post_meta( $order_id, '_dwh_stripe_charge_error', $e->getMessage());
+            update_post_meta( $order->get_id(), '_dwh_stripe_charge_error', $e->getMessage());
             wc_add_notice( __( 'Error: ', 'dokan' ) . $e->getMessage() );
             return;
         }
@@ -178,11 +176,24 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
                 );
             }
 
+            // update gateway fee
+            if ( ! empty( $access_token ) && ! empty( $charge->balance_transaction  ) ) {
+                $balance_transaction = BalanceTransaction::retrieve( [ 'id' => $charge->balance_transaction ], $access_token );
+
+                if ( $balance_transaction ) {
+                    $fee            = Helper::format_gateway_balance_fee( $balance_transaction );
+                    $vendor_earning = $vendor_earning - $fee;
+
+                    update_post_meta( $tmp_order_id, 'dokan_gateway_stripe_fee', $fee );
+                    $tmp_order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $fee ) );
+                }
+            }
+
             // Only process withdraw request once vendor get paid.
             if ( ! is_null( $token ) ) {
                 $withdraw_data = [
                     'user_id'  => $seller_id,
-                    'amount'   => $vendor_earning,
+                    'amount'   => wc_format_decimal( $vendor_earning ),
                     'order_id' => $tmp_order_id,
                 ];
 
@@ -202,19 +213,6 @@ class StripeNon3DSPayment extends StripeConnect implements Payable {
         $order->payment_complete();
         $this->insert_into_vendor_balance( $all_withdraws );
         $this->process_seller_withdraws( $all_withdraws );
-
-        // update gateway fee
-        if ( ! empty( $access_token ) && ! empty( $charge->balance_transaction  ) ) {
-            $balance_transaction = BalanceTransaction::retrieve( [ 'id' => $charge->balance_transaction ], $access_token );
-
-            if ( $balance_transaction ) {
-                $fee = Helper::format_gateway_balance_fee( $balance_transaction );
-
-                update_post_meta( $tmp_order_id, 'dokan_gateway_stripe_fee', $fee );
-
-                $tmp_order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $fee ) );
-            }
-        }
 
         foreach ( $charge_ids as $seller_id => $charge_id ) {
             $meta_key = $this->stripe_meta_key . $seller_id;

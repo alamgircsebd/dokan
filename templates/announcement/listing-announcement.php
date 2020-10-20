@@ -20,7 +20,7 @@
                 </div>
                 <div class="dokan-annnouncement-date dokan-left">
                     <div class="announcement-day"><?php echo date_i18n( 'd', strtotime( $notice->post_date ) ); ?></div>
-                    <div class="announcement-month"><?php echo date_i18n( 'l', strtotime( $notice->post_date ) ); ?></div>
+                    <div class="announcement-month"><?php echo date_i18n( 'F', strtotime( $notice->post_date ) ); ?></div>
                     <div class="announcement-year"><?php echo date_i18n( 'Y', strtotime( $notice->post_date ) ); ?></div>
                 </div>
                 <div class="dokan-announcement-content-wrap dokan-left">

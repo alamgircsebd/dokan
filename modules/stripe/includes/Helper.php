@@ -23,7 +23,7 @@ class Helper {
      *
      * @since 3.0.3
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_3d_secure_enabled() {
         $settings = self::get_settings();
@@ -51,7 +51,7 @@ class Helper {
      *
      * @since 3.0.3
      *
-     * @return boolean
+     * @return bool
      */
     public static function is_test_mode() {
         $settings = self::get_settings();
@@ -68,7 +68,7 @@ class Helper {
      *
      * @since 3.0.3
      *
-     * @return boolean
+     * @return bool
      */
     public static function has_subscription_module() {
         return dokan_pro()->module->is_active( 'product_subscription' );
@@ -98,7 +98,7 @@ class Helper {
      * @return void
      */
     public static function set_api_version() {
-        Stripe::setApiVersion( '2019-05-16' );
+        Stripe::setApiVersion( '2020-08-27' );
     }
 
     /**
@@ -121,18 +121,20 @@ class Helper {
     /**
      * Get subscription product from an order
      *
-     * @param \WC_order $order
+     * @param \WC_Order $order
      *
-     * @return \WC_order or null on failure
+     * @return \WC_Order|null
      */
     public static function get_subscription_product_by_order( $order ) {
         foreach ( $order->get_items() as $item ) {
             $product = $item->get_product();
 
-            if ( 'product_pack' === $product->get_type() || 'subscription' === $product->get_type() || 'variable-subscription' === $order->get_type() ) {
+            if ( in_array( $product->get_type(), [ 'product_pack', 'subscription', 'variable-subscription' ], true ) ) {
                 return $product;
             }
         }
+
+        return null;
     }
 
     /**
@@ -147,7 +149,7 @@ class Helper {
             return false;
         }
 
-        if ( ! is_ssl() ) {
+        if ( ! is_ssl() && ! self::is_test_mode() ) {
             return false;
         }
 
@@ -223,7 +225,7 @@ class Helper {
      *
      * @since 3.0.3
      *
-     * @return boolean
+     * @return bool
      */
     public static function allow_non_connected_sellers() {
         $settings = self::get_settings();
@@ -236,7 +238,7 @@ class Helper {
      *
      * @since  3.0.3
      *
-     * @return boolean
+     * @return bool
      */
     public static function show_checkout_modal() {
         $settings = self::get_settings();
@@ -273,6 +275,36 @@ class Helper {
         $settings = self::get_settings();
 
         return ! empty( $settings['saved_cards'] ) && 'yes' === $settings['saved_cards'];
+        $settings = self::get_settings();
+    }
+
+    /**
+     * Does seller pay the Stripe processing fee
+     *
+     * @since 3.1.0
+     *
+     * @return bool
+     */
+    public static function seller_pays_the_processing_fee() {
+        $settings = self::get_settings();
+
+        return isset( $settings['seller_pays_the_processing_fee'] ) && dokan_validate_boolean( $settings['seller_pays_the_processing_fee'] );
+    }
+
+    /**
+     * Calculate the processing fee for a single vendor for an order
+     *
+     * @since 3.1.0
+     *
+     * @param float $order_processing_fee
+     * @param \WC_ORDER $suborder
+     * @param \WC_ORDER $order
+     *
+     * @return float
+     */
+    public static function calculate_processing_fee_for_suborder( $order_processing_fee, $suborder, $order ) {
+        $stripe_fee_for_vendor = $order_processing_fee * ( $suborder->get_total() / $order->get_total() );
+        return number_format( $stripe_fee_for_vendor, 10 );
     }
 
     /**
@@ -359,7 +391,7 @@ class Helper {
      * @param $balance_transaction
      * @return string|void
      */
-    public function format_gateway_balance_fee( $balance_transaction ) {
+    public static function format_gateway_balance_fee( $balance_transaction ) {
         if ( ! is_object( $balance_transaction ) ) {
             return;
         }
@@ -389,7 +421,7 @@ class Helper {
      *
      * @return array
      */
-    public function no_decimal_currencies() {
+    public static function no_decimal_currencies() {
         return array(
             'bif',
             'clp',
@@ -419,5 +451,19 @@ class Helper {
      */
     public static function is_no_such_subscription_error( $error_message ) {
         return preg_match( '/No such subscription/i', $error_message );
+    }
+
+    /**
+     * Include module template
+     *
+     * @since 3.1.0
+     *
+     * @param string $name
+     * @param array  $args
+     *
+     * @return void
+     */
+    public static function get_template( $name, $args = [] ) {
+        dokan_get_template( "$name.php", $args, 'dokan/modules/stripe', trailingslashit( DOKAN_STRIPE_TEMPLATE_PATH ) );
     }
 }

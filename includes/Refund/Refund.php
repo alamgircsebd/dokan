@@ -772,6 +772,10 @@ class Refund extends DokanModel {
 
         $refund = $this->save();
 
+        //remove cache for seller earning
+        $cache_key = 'dokan_get_earning_from_order_table' . $this->get_order_id() . 'seller';
+        wp_cache_delete( $cache_key );
+
         if ( is_wp_error( $refund ) ) {
             return $refund;
         }

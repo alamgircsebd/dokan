@@ -64,6 +64,7 @@ class Installer {
      *
      * @since 2.8.0
      * @since 3.0.0 Using module manager to activate all modules
+     * @since 3.1.0 Activate only available modules instead of all modules
      *
      * @return void
      * */
@@ -85,6 +86,6 @@ class Installer {
             return;
         }
 
-        $modules->activate_modules( $modules->get_all_module_ids() );
+        $modules->activate_modules( $modules->get_available_modules() );
     }
 }

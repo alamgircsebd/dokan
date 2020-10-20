@@ -3,11 +3,11 @@
   Plugin Name: Dokan Pro
   Plugin URI: https://wedevs.com/dokan/
   Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
-  Version: 3.0.8
+  Version: 3.1
   Author: weDevs
   Author URI: https://wedevs.com/
   WC requires at least: 3.0
-  WC tested up to: 4.4.1
+  WC tested up to: 4.6
   License: GPL2
   TextDomain: dokan
  */
@@ -35,7 +35,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '3.0.8';
+    public $version = '3.1';
 
     /**
      * Databse version key
@@ -598,10 +598,12 @@ class Dokan_Pro {
      */
     public function set_email_template_directory( $dokan_emails ) {
         $dokan_pro_emails = [
-            'product-updated-pending',
-            'announcement',
-            'refund-seller-mail',
-            'refund_request',
+            'announcement.php',
+            'product-updated-pending.php',
+            'refund_request.php',
+            'refund-seller-mail.php',
+            'vendor-disabled.php',
+            'vendor-enabled.php',
         ];
 
         return array_merge( $dokan_pro_emails, $dokan_emails );
@@ -620,7 +622,8 @@ class Dokan_Pro {
         $actions[] = 'dokan_vendor_enabled';
         $actions[] = 'dokan_vendor_disabled';
         $actions[] = 'dokan_after_announcement_saved';
-        $actions[] = 'dokan_refund_request_notification';
+        $actions[] = 'dokan_rma_requested';
+        $actions[] = 'dokan_refund_requested';
         $actions[] = 'dokan_refund_processed_notification';
         $actions[] = 'dokan_edited_product_pending_notification';
 
@@ -707,7 +710,7 @@ class Dokan_Pro {
  *
  * @since 2.5.3
  *
- * @return void
+ * @return \Dokan_Pro
  * */
 function dokan_pro() {
     return Dokan_Pro::init();

@@ -7,12 +7,12 @@
         <div class="dokan-geo-filters-column">
             <div class="<?php echo ! $scope ? 'dokan-input-group': ' no-dropdown'; ?>">
                 <?php if ( 'vendor' === $scope ): ?>
-                    <input type="text" class="dokan-form-control" name="dokan_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>" value="<?php echo esc_attr( $seller_s ); ?>">
+                    <input type="text" class="dokan-form-control" name="do_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>" value="<?php echo esc_attr( $seller_s ); ?>">
                 <?php elseif ( 'product' === $scope ): ?>
                     <input type="text" class="dokan-form-control" name="s" placeholder="<?php echo esc_attr( $placeholders['search_products'] ); ?>" value="<?php echo esc_attr( $s ); ?>">
                 <?php else : ?>
                     <input type="text" class="dokan-form-control" name="s" placeholder="<?php echo esc_attr( $placeholders['search_products'] ); ?>" value="<?php echo esc_attr( $s ); ?>">
-                    <input type="text" class="dokan-form-control dokan-hide" name="dokan_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>" value="<?php echo esc_attr( $seller_s ); ?>">
+                    <input type="text" class="dokan-form-control dokan-hide" name="do_seller_search" placeholder="<?php echo esc_attr( $placeholders['search_vendors'] ); ?>" value="<?php echo esc_attr( $seller_s ); ?>">
                 <?php endif; ?>
 
                 <?php if ( ! $scope ): ?>

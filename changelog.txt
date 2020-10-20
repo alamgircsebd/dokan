@@ -1,3 +1,53 @@
+v3.1 -> Oct 20, 2020
+----------------------------------
+
+- [new] Vendor Analytics
+- [new] Live search with autocomplete list
+- [update] Refactor and fix stripe connect module
+- [fix] Add gateway fee payee indicator in admin report logs
+- [fix] Booking confirmation not working when trying to confirm it from the booking list
+- [fix] Text domain fix on export and import fix
+- [fix] Activate only available modules during plugin activation
+- [fix] Product type not changing to grouped
+- [fix] Branding issue on Dokan seller search on store list page
+- [fix] Vendor earning in order details after the refund
+- [fix] Vendor export statement in report
+- [fix] Remove external product type from subscription allowed product types
+- [fix] Subscription product price not saving when WC auction plugin active
+- [fix] Featured sellers showing more than limit
+- [fix] Product tags search not working properly on quick edit area
+- [fix] Text domain issue when report abuse delete in js end
+- [fix] JS console error fixed on report abuse module edit product page
+- [fix] Text domain missing on Wholesale module
+- [fix] Subscription plan page design broken when different language use
+- [fix] Vendor product csv import ui issue
+- [fix] Dokan Pro core email template locations
+- [fix] Store default geolocation when creating product first time
+- [fix] Coupon product and exclude product field move to search select with variations
+- [fix] Missing report header in csv
+- [fix] Missing translation string for Dokan Subscription module
+- [fix] Product variation toggle issue, variation downloadable file delete issue
+- [fix] Product inquiry email spelling mistake
+- [fix] Vendor can modify other vendor product
+- [fix] Multi vendor duplicate SKU
+- [fix] Vendor not getting email confirmation
+- [fix] Can not quick update products when product limit reached
+- [fix] Product addons vendor staff vendor view
+- [fix] CSV import feature column to false if not admin
+- [fix] Export wholesale column missing
+- [fix] Edited product status not working properly
+- [fix] Simple subscription layout break when vendor subscription active
+- [fix] Product add-on type File upload does not show the file on vendor order
+- [fix] Auction start,end field disable from keyboard
+- [fix] Announcements week days to month
+- [fix] Product discount price scheduled issue
+- [fix] Import restriction on subscription category
+- [fix] Wholesale customer registration email to admin
+- [fix] Report custom date not working for daily sales & statements
+- [fix] New refund request email not sending to admin
+- [fix] WooCommerce deprecated function changes
+- [fix] Refund issue with decimal formatting number order total
+
 v3.0.8 -> Sep 04, 2020
 ----------------------------------
 

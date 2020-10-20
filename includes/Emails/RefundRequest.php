@@ -18,7 +18,8 @@ class RefundRequest extends WC_Email {
         $this->template_base    = DOKAN_PRO_DIR . '/templates/';
 
         // Triggers for this email
-        add_action( 'dokan_refund_request_notification', array( $this, 'trigger' ), 30 );
+        add_action( 'dokan_rma_requested', array( $this, 'trigger' ), 30 );
+        add_action( 'dokan_refund_requested', array( $this, 'trigger' ), 30 );
 
         // Call parent constructor
         parent::__construct();

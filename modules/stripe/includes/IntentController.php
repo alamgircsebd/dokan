@@ -2,6 +2,7 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe;
 
+use Exception;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
 use WeDevs\Dokan\Exceptions\DokanException;
 use WeDevs\DokanPro\Modules\Stripe\DokanStripe;
@@ -73,8 +74,8 @@ class IntentController extends StripePaymentGateway {
 
         try {
             $order = $this->get_order_from_request();
-        } catch ( DokanException $e ) {
-            $message = sprintf( __( 'Payment verification error: %s', 'dokan' ), $e->get_message() );
+        } catch ( Exception $e ) {
+            $message = sprintf( __( 'Payment verification error: %s', 'dokan' ), $e->getMessage() );
 
             wc_add_notice( esc_html( $message ), 'error' );
 
@@ -82,7 +83,7 @@ class IntentController extends StripePaymentGateway {
                 ? get_permalink( wc_get_page_id( 'shop' ) )
                 : wc_get_checkout_url();
 
-            $this->handle_error( $e, $redirect_url );
+            $this->handle_error( '[Stripe Connect] Error getting order from intent request.', $e, $redirect_url );
         }
 
         try {
@@ -91,13 +92,13 @@ class IntentController extends StripePaymentGateway {
             if ( ! isset( $_GET['is_ajax'] ) ) {
                 $redirect_url = isset( $_GET['redirect_to'] ) // wpcs: csrf ok.
                     ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) // wpcs: csrf ok.
-                    : $gateway->get_return_url( $order );
+                    : $this->get_return_url( $order );
 
                 wp_safe_redirect( $redirect_url );
             }
             exit;
-        } catch ( DokanException $e ) {
-            $this->handle_error( $e, $gateway->get_return_url( $order ) );
+        } catch ( Exception $e ) {
+            $this->handle_error( '[Stripe Connect] Error verifying intent after checkout.', $e, $this->get_return_url( $order ) );
         }
     }
 
@@ -109,9 +110,20 @@ class IntentController extends StripePaymentGateway {
      * @param DokanException $e
      * @param string $redirect_url An URL to use if a redirect is needed.
      */
-    protected function handle_error( $e, $redirect_url ) {
+    protected function handle_error( $message, $e, $redirect_url ) {
         // Log the exception before redirecting.
-        $message = sprintf( 'PaymentIntent verification exception: %s', $e->get_message() );
+        if ( $e instanceof DokanException ) {
+            $errors = [
+                'code'    => $e->get_error_code(),
+                'message' => $e->get_message(),
+            ];
+        } else {
+            $errors = [
+                'message' => $e->get_message(),
+            ];
+        }
+
+        dokan_log( "$message\n" . print_r( $errors, true ), 'error' );
 
         // `is_ajax` is only used for PI error reporting, a response is not expected.
         if ( isset( $_GET['is_ajax'] ) ) {
@@ -235,6 +247,18 @@ class IntentController extends StripePaymentGateway {
         $currency      = $order->get_currency();
         $charge_id     = $this->get_charge_id_from_order( $order );
         $all_orders    = $this->get_all_orders_to_be_processed( $order );
+        $order_total   = $order->get_total();
+        $stripe_fee    = Helper::format_gateway_balance_fee( $intent->charges->first()->balance_transaction );
+
+        // This will make sure the parent order has processing_fee that requires in
+        // Commission::calculate_gateway_fee() method at begining.
+        $order->update_meta_data( 'dokan_gateway_stripe_fee', $stripe_fee );
+
+        // In case of we have sub orders, lets add the gateway fee in the parent order.
+        if ( $order->get_meta( 'has_sub_order' ) ) {
+            $order->update_meta_data( 'dokan_gateway_fee', $stripe_fee );
+            $order->add_order_note( sprintf( __( 'Payment gateway processing fee %s', 'dokan' ), $stripe_fee ) );
+        }
 
         if ( ! $charge_id ) {
             throw new DokanException( 'dokan_charge_id_not_found', __( 'No charge id is found to process the order!', 'dokan' ) );
@@ -248,15 +272,24 @@ class IntentController extends StripePaymentGateway {
             $tmp_order_id        = $tmp_order->get_id();
             $vendor_id           = dokan_get_seller_id_by_order( $tmp_order_id );
             $vendor_raw_earning  = dokan()->commission->get_earning_by_order( $tmp_order, 'seller' );
-            $vendor_earning      = Helper::get_stripe_amount( $vendor_raw_earning );
             $connected_vendor_id = get_user_meta( $vendor_id, 'dokan_connected_vendor_id', true );
+            $tmp_order_total     = $tmp_order->get_total();
+
+            if ( Helper::seller_pays_the_processing_fee() && ! empty( $order_total ) && ! empty( $tmp_order_total ) && ! empty( $stripe_fee ) ) {
+                $stripe_fee_for_vendor = Helper::calculate_processing_fee_for_suborder( $stripe_fee, $tmp_order, $order );
+                $vendor_raw_earning    = $vendor_raw_earning - $stripe_fee_for_vendor;
+
+                $tmp_order->update_meta_data( 'dokan_gateway_fee_paid_by', 'seller' );
+            }
+
+            $vendor_earning = Helper::get_stripe_amount( $vendor_raw_earning );
 
             if ( ! $connected_vendor_id ) {
                 $tmp_order->add_order_note( sprintf( __( 'Vendor\'s payment will be transferred to admin account since the vendor had not connected to Stripe.', 'dokan' ) ) );
                 continue;
             }
 
-            DokanStripe::transfer()->amount( $vendor_earning )->from( $charge_id )->to( $connected_vendor_id );
+            DokanStripe::transfer()->amount( $vendor_earning, $currency )->from( $charge_id )->to( $connected_vendor_id );
 
             if ( $order->get_id() !== $tmp_order_id ) {
                 $tmp_order->update_meta_data( 'paid_with_dokan_3ds', true );
@@ -269,6 +302,14 @@ class IntentController extends StripePaymentGateway {
                     )
                 );
             }
+
+            $tmp_order->update_meta_data( '_stripe_customer_id', $intent->customer );
+            $tmp_order->update_meta_data( '_transaction_id', $intent->charges->first()->id );
+            $tmp_order->update_meta_data( '_stripe_source_id', $intent->source );
+            $tmp_order->update_meta_data( '_stripe_intent_id', $intent->id );
+            $tmp_order->update_meta_data( '_stripe_charge_captured', 'yes' );
+
+            $tmp_order->save_meta_data();
 
             $withdraw_data = [
                 'user_id'  => $vendor_id,
@@ -289,5 +330,8 @@ class IntentController extends StripePaymentGateway {
                 $charge_id
             )
         );
+
+        $order->save_meta_data();
+        dokan()->commission->calculate_gateway_fee( $order->get_id() );
     }
 }

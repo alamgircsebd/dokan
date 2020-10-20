@@ -219,6 +219,8 @@ class Dokan_REST_Wholesale_Controller extends DokanRESTController {
             $user->add_cap( 'dokan_wholesale_customer' );
         }
 
+        do_action('dokan_wholesale_customer_register', $user, $request);
+
         return $this->prepare_item_for_response( $user, $request );
     }
 

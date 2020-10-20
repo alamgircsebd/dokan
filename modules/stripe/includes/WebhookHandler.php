@@ -4,7 +4,9 @@ namespace WeDevs\DokanPro\Modules\Stripe;
 
 use Exception;
 use Stripe\Event;
+use Stripe\Stripe;
 use Stripe\WebhookEndpoint;
+use WeDevs\Dokan\Exceptions\DokanException;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,7 +52,7 @@ class WebhookHandler {
 
         try {
             $response = WebhookEndpoint::create( [
-                'url'            => home_url( 'wc-api/dokan_stripe', 'https' ),
+                'url'            => home_url( 'wc-api/dokan_stripe' ),
                 'enabled_events' => $this->get_events()
             ] );
 
@@ -150,8 +152,52 @@ class WebhookHandler {
             return;
         }
 
+        dokan_log( "[Stripe Connect] Webhook request body:\n" . print_r( $event, true ) );
+
         try {
+            if ( ! empty( $event->account ) ) {
+                $users = get_users( [
+                    'meta_key'     => 'dokan_connected_vendor_id',
+                    'meta_value'   => $event->account,
+                    'meta_compare' => '=',
+                ] );
+
+                if ( empty( $users ) ) {
+                    // We've handled the deauth cleanup in RegisterWithdrawMethods::deauthorize_vendor
+                    if ( 'account.application.deauthorized' === $event->type ) {
+                        status_header( 200 );
+                        exit;
+                    }
+
+                    throw new DokanException(
+                        'dokan_stripe_connect_error_account_not_found',
+                        sprintf(
+                            __( 'No user found for Stripe account id %s.', 'dokan' ),
+                            $event->account
+                        )
+                    );
+                }
+
+                $vendor            = $users[0];
+                $vendor_id         = $vendor->ID;
+                $vendor_access_key = get_user_meta( $vendor_id, '_stripe_connect_access_key', true );
+
+                if ( empty( $vendor_access_key ) ) {
+                    throw new DokanException(
+                        'dokan_stripe_connect_error_vendor_access_key_not_found',
+                        sprintf(
+                            __( 'Stripe connect access key not found for vendor id %d.', 'dokan' ),
+                            $vendor_id
+                        )
+                    );
+                }
+
+                Stripe::setApiKey( $vendor_access_key );
+            }
+
             $event = Event::retrieve( $event->id );
+
+            dokan_log( "[Stripe Connect] Webhook retrieved event:\n" . print_r( $event, true ) );
 
             if ( array_key_exists( $event->type, Helper::get_supported_webhook_events() ) ) {
                 DokanStripe::events()->get( $event )->handle();

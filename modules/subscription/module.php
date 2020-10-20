@@ -109,6 +109,12 @@ class Module {
 
         // include email class
         add_action( 'dokan_loaded', [ __CLASS__, 'load_emails' ], 20 );
+
+        //Category import restriction if category restriction enable, for XML
+        add_filter( 'wp_import_post_data_raw', [ $this, 'restrict_category_on_xml_import' ] );
+
+        //For csv
+        add_action( 'woocommerce_product_import_before_process_item', [ $this, 'restrict_category_on_csv_import' ] );
     }
 
     /**
@@ -460,6 +466,10 @@ class Module {
      * @return void
      */
     public static function can_create_product( $errors, $data ) {
+        if ( $data['ID'] ) {
+            return;
+        }
+
         $user_id = dokan_get_current_user_id();
 
         if ( dokan_is_user_seller( $user_id ) ) {
@@ -1104,5 +1114,73 @@ class Module {
         ];
 
         return $args;
+    }
+
+    /**
+     * Restrict category if selected category found
+     *
+     * * @since 3.1.0
+     *
+     * @param $post
+     *
+     * @return null|\WP_Post $post
+     */
+    public function restrict_category_on_xml_import( $post ) {
+        $category_name = array_values( array_map( function ( $category ) {
+            return $category['name'];
+        }, array_filter( $post['terms'], function ( $term ) {
+            return 'product_cat' === $term['domain'];
+        } ) ) )[0];
+
+        $allowed_categories = $this->get_vendor_allowed_categories();
+
+        if ( ! empty( $allowed_categories ) ) {
+            $categories = [];
+            foreach ( $allowed_categories as $allowed_category ) {
+                $categories[] = strtolower( get_term_field( 'name', $allowed_category ) );
+            }
+
+            if ( in_array( strtolower( $category_name ), $categories ) ) {
+                return $post;
+            }
+
+            return null;
+        }
+
+        return $post;
+    }
+
+    /**
+     * Restric product import on csv if category restriction enable
+     *
+     * @since 3.1.0
+     *
+     * @param $data
+     */
+    public function restrict_category_on_csv_import( $data ) {
+        $categories         = $data['category_ids'];
+        $allowed_categories = $this->get_vendor_allowed_categories();
+
+        if ( ! empty( $allowed_categories ) ) {
+            foreach ( $categories as $category ) {
+                if ( ! in_array( $category, $allowed_categories ) ) {
+                    throw new \Exception( __( 'Current subscription does not allow this', 'dokan' ) . get_term_field( 'name', $category ) );
+                }
+            }
+        }
+    }
+
+    /**
+     * Get subscription allowed categories if exist
+     *
+     * @since 3.1.0
+     *
+     * @return array
+     */
+    protected function get_vendor_allowed_categories() {
+        $vendor_subscription = dokan()->vendor->get( get_current_user_id() )->subscription;
+        $allowed_categories  = $vendor_subscription->get_allowed_product_categories();
+
+        return $allowed_categories;
     }
 }

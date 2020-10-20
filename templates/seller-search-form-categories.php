@@ -22,7 +22,7 @@
         } );
 
         category.on( 'change', function () {
-            form.trigger( 'dokan_seller_search' );
+            form.trigger( 'do_seller_search' );
         } );
     } );
 </script>

@@ -15,7 +15,6 @@ const pluginFiles = [
     'templates/',
     'changelog.txt',
     'dokan-pro.php',
-    'readme.txt',
     'composer.json',
     'composer.lock',
 ];
@@ -83,7 +82,7 @@ exec( 'rm -rf plans && rm *.zip', {
 
         console.log( `Finished copying ${plan} files.` );
 
-        asyncExec( 'composer install -vvv && composer dump -o', {
+        asyncExec( 'composer install --optimize-autoloader --no-dev', {
             cwd: dest,
         }, () => {
             console.log( `Installed composer packages in ${dest} directory.` );

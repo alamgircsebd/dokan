@@ -5,7 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="woocommerce dokan-pa-all-addons">
 	<a class="dokan-btn dokan-btn-theme dokan-pa-create-btn" href="<?php echo add_query_arg( 'add', true, dokan_get_navigation_url( 'settings/product-addon' ) ); ?>" class="add-new-h2"><?php esc_html_e( 'Create New addon', 'dokan' ); ?></a>
-
+    <div style="margin-bottom: 10px">
+        <a href="<?php echo add_query_arg( 'add', true, dokan_get_navigation_url( 'settings/product-addon' ) ); ?>"><?php esc_html_e( 'Create New', 'dokan' ); ?></a>
+    </div>
 	<table id="global-addons-table" class="dokan-table" cellspacing="0">
 		<thead>
 			<tr>
@@ -17,7 +19,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</thead>
 		<tbody id="the-list">
 			<?php
-			$global_addons = WC_Product_Addons_Groups::get_all_global_groups();
+            add_action( 'pre_get_posts', 'dokan_pa_view_addon_for_vendor_staff_vendor' );
+
+            $global_addons = WC_Product_Addons_Groups::get_all_global_groups();
+
+            remove_action( 'pre_get_posts', 'dokan_pa_view_addon_for_vendor_staff_vendor' );
 
 			if ( $global_addons ) {
 				foreach ( $global_addons as $global_addon ) {
@@ -54,9 +60,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			} else {
 				?>
 				<tr>
-					<td colspan="5"><?php esc_html_e( 'No add-ons found.', 'dokan' ); ?> <a href="<?php echo add_query_arg( 'add', true, dokan_get_navigation_url( 'settings/product-addon' ) ); ?>"><?php esc_html_e( 'Create add-ons.', 'dokan' ); ?></a></td>
 				</tr>
-				<?php
+                <td colspan="5"><?php esc_html_e( 'No add-ons found.', 'dokan' ); ?> </td>
+                <?php
 			}
 			?>
 		</tbody>

@@ -59,7 +59,7 @@ $parser = new Dokan_WXR_Parser();
 							<p><input type="radio" name="content" value="all" id="export_all" checked="checked"> <label for="export_all"><?php _e( 'All', 'dokan' ); ?></label></p>
 							<p><input type="radio" name="content" value="product" id="export_product"> <label for="export_product"><?php _e( 'Product', 'dokan' ); ?></label></p>
 							<p><input type="radio" name="content" value="product_variation" id="export_variation_product"> <label for="export_variation_product"><?php _e( 'Variation', 'dokan' ); ?></label></p>
-							<p><input type="submit" name="export_xml" value="Export" class="btn btn-danger"></p>
+							<p><input type="submit" name="export_xml" value="<?php esc_attr_e( 'Export', 'dokan' ); ?>" class="btn btn-danger"></p>
 						</form>
 
 					</div>

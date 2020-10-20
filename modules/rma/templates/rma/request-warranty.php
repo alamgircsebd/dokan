@@ -38,7 +38,11 @@ $count_warranty_product = 0;
         <tbody>
             <?php foreach ( $order->get_items('line_item') as $item ): ?>
                 <?php
-                    $_product = $order->get_product_from_item( $item );
+                    if ( version_compare( WC_VERSION, '4.4.0', '>=' ) ) {
+                        $_product = $item->get_product();
+                    } else {
+                        $_product = $order->get_product_from_item( $item );
+                    }
                     $vendor_id = get_post_field( 'post_author', $_product->get_id() );
 
                     $warranty_item = new Dokan_Warranty_Item( $item->get_id() );

@@ -40,4 +40,21 @@
         <?php endif ?>
 
     <?php } ?>
-</div>
+</div> 
+
+<?php
+    $datepicker_format = 'yy-mm-dd';
+    if ( get_option( 'date_format' ) === 'F j, Y' ) {
+        $datepicker_format = 'MM d, yy';
+    }
+?>
+
+<script>
+    (function($){
+        $(document).ready(function(){
+            $('.datepicker').datepicker({
+                dateFormat: '<?php echo $datepicker_format; ?>'
+            });
+        });
+    })(jQuery);
+</script>

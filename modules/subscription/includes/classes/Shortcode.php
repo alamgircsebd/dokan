@@ -120,7 +120,12 @@ class Shortcode {
                                         $again            = $maybe_reactivate ? __( 'again', 'dokan' ) : '';
                                     ?>
 
-                                    <label><?php _e( "To {$notice} your subscription {$again} click here &rarr;", "dokan" ); ?></label>
+                                    <label>
+                                        <?php
+                                            /* translators: 1: Required PHP Version 2: Running php version */
+                                            echo sprintf( __( 'To %1$s your subscription %2$s click here &rarr;', 'dokan' ), $notice, $again );
+                                        ?>
+                                    </label>
 
                                     <?php wp_nonce_field( $nonce ); ?>
                                     <input type="submit" name="<?php echo esc_attr( $input_name ); ?>" class="<?php echo esc_attr( "btn btn-sm {$btn_class}" ); ?>" value="<?php echo esc_attr( ucfirst( $notice ) ); ?>">
@@ -186,41 +191,42 @@ class Shortcode {
                         </div><!-- .pack_price -->
 
                         <div class="pack_content">
+
                             <h2><?php echo $sub_pack->get_package_title(); ?></h2>
+                            <?php the_content(); ?>
 
-                            <?php the_content();
+                            <div class="pack_data_option">
+                                <?php
+                                $no_of_product = $sub_pack->get_number_of_products();
 
-                            $no_of_product = $sub_pack->get_number_of_products();
-
-                            if ( '-1' === $no_of_product ) {
-                                printf( __( '<div class="pack_data_option"><strong>Unlimited</strong> Products <br />', 'dokan' ) );
-                            } else {
-                                printf( __( '<div class="pack_data_option"><strong>%d</strong> Products <br />', 'dokan' ), $no_of_product );
-                            }
-
-                            ?>
-
-                            <?php if ( $is_recurring && $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id() ) ) : ?>
-                                <span class="dps-rec-period">
-                                    <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
-                                </span>
-                            <?php elseif ( $is_recurring && $sub_pack->is_trial() ) : ?>
-                                <span class="dps-rec-period">
-                                    <?php printf( __( 'In every %d %s(s) <p class="trail-details">%d %s(s) trial </p> </div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ), $sub_pack->get_trial_range(), Helper::recurring_period( $sub_pack->get_trial_period_types() ) ); ?>
-                                </span>
-                            <?php elseif ( $is_recurring && $recurring_interval >= 1) : ?>
-                                <span class="dps-rec-period">
-                                    <?php printf( __( 'In every %d %s(s)</div>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
-                                </span>
-                            <?php else :
-                                if ( $sub_pack->get_pack_valid_days() == 0 ) {
-                                    printf( __( 'For<br /><strong>Unlimited</strong> Days</div>', 'dokan' ) );
+                                if ( '-1' === $no_of_product ) {
+                                    printf( __( '<strong>Unlimited</strong> Products <br />', 'dokan' ) );
                                 } else {
-                                    $pack_validity = $sub_pack->get_pack_valid_days();
-                                    printf( __( 'For<br /><strong>%s</strong> Days</div>', 'dokan' ), $pack_validity );
+                                    printf( __( '<strong>%d</strong> Products <br />', 'dokan' ), $no_of_product );
                                 }
-                            endif; ?>
-
+                                ?>
+                                <?php if ( $is_recurring && $sub_pack->is_trial() && Helper::has_used_trial_pack( get_current_user_id() ) ) : ?>
+                                    <span class="dps-rec-period">
+                                        <?php printf( __( 'In every %d %s(s)', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
+                                    </span>
+                                <?php elseif ( $is_recurring && $sub_pack->is_trial() ) : ?>
+                                    <span class="dps-rec-period">
+                                        <?php printf( __( 'In every %d %s(s) <p class="trail-details">%d %s(s) trial </p>', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ), $sub_pack->get_trial_range(), Helper::recurring_period( $sub_pack->get_trial_period_types() ) ); ?>
+                                    </span>
+                                <?php elseif ( $is_recurring && $recurring_interval >= 1) : ?>
+                                    <span class="dps-rec-period">
+                                        <?php printf( __( 'In every %d %s(s)', 'dokan' ), $recurring_interval, Helper::recurring_period( $recurring_period ) ); ?>
+                                    </span>
+                                <?php else :
+                                    if ( $sub_pack->get_pack_valid_days() == 0 ) {
+                                        printf( __( 'For<br /><strong>Unlimited</strong> Days', 'dokan' ) );
+                                    } else {
+                                        $pack_validity = $sub_pack->get_pack_valid_days();
+                                        printf( __( 'For<br /><strong>%s</strong> Days', 'dokan' ), $pack_validity );
+                                    }
+                                endif; ?>
+                            </div>
+                            
                         </div>
 
                         <div class="buy_pack_button">

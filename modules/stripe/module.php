@@ -19,7 +19,22 @@ class Module {
      * @return void
      */
     public function __construct() {
+        $this->define_constants();
         $this->set_controllers();
+    }
+
+    /**
+     * Define module constants
+     *
+     * @since 3.0.3
+     *
+     * @return void
+     */
+    private function define_constants() {
+        define( 'DOKAN_STRIPE_FILE', __FILE__ );
+        define( 'DOKAN_STRIPE_PATH', dirname( DOKAN_STRIPE_FILE ) );
+        define( 'DOKAN_STRIPE_ASSETS', plugin_dir_url( DOKAN_STRIPE_FILE ) . 'assets/' );
+        define( 'DOKAN_STRIPE_TEMPLATE_PATH', dirname( DOKAN_STRIPE_FILE ) . '/templates/' );
     }
 
     /**
@@ -30,7 +45,6 @@ class Module {
      * @return void
      */
     private function set_controllers() {
-        $this->container['constants']                 = new Constants();
         $this->container['webhook']                   = new WebhookHandler();
         $this->container['register_gateways']         = new RegisterGateways();
         $this->container['register_withdraw_methods'] = new RegisterWithdrawMethods();

@@ -2,12 +2,15 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe\WithdrawMethods;
 
-use Stripe\OAuth;
-use Stripe\Error\OAuth\OAuthBase;
+use Exception;
+use WeDevs\DokanPro\Modules\Stripe\Auth;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * @todo These methods should be refactored to put in different related classes
+ */
 class RegisterWithdrawMethods {
 
     /**
@@ -19,7 +22,7 @@ class RegisterWithdrawMethods {
      */
     public function __construct() {
         add_action( 'admin_notices', [ $this, 'admin_notices' ] );
-        
+
         if ( ! Helper::is_ready() ) {
             return;
         }
@@ -37,10 +40,13 @@ class RegisterWithdrawMethods {
      */
     private function hooks() {
         add_filter( 'dokan_withdraw_methods', [ $this, 'register_methods' ] );
-        add_filter( 'template_redirect', [ $this, 'connect_vendor_to_stripe' ] );
-        add_filter( 'template_redirect', [ $this, 'delete_stripe_account' ] );
+        add_filter( 'dokan_get_processing_fee', [ $this, 'get_order_processing_fee' ], 10, 2 );
+        add_filter( 'dokan_get_processing_gateway_fee', [ $this, 'get_processing_gateway_fee' ], 10, 3 );
+        add_filter( 'dokan_orders_vendor_net_amount', [ $this, 'dokan_orders_vendor_net_amount' ], 10, 5 );
+        add_action( 'template_redirect', [ $this, 'authorize_vendor' ] );
+        add_action( 'template_redirect', [ $this, 'deauthorize_vendor' ] );
     }
-    
+
     /**
      * Show admin notices
      *
@@ -57,12 +63,12 @@ class RegisterWithdrawMethods {
             printf( '<div class="error"><p>' . $notice . '</p></div>' );
         }
 
-        if ( ! is_ssl() ) {
+        if ( ! is_ssl() && ! Helper::is_test_mode() ) {
            $notice = sprintf(
                     __( '%s requires %s', 'dokan' ),
                     '<strong>Dokan Stripe Connect</strong>',
                     '<strong>SSL</strong>'
-                ); 
+                );
             printf( '<div class="error"><p>' . $notice . '</p></div>' );
         }
     }
@@ -90,113 +96,190 @@ class RegisterWithdrawMethods {
      *
      * @since 3.0.3
      *
-     * @param array $store_settings
-     *
      * @return void
      */
-    public function stripe_authorize_button( $store_settings ) {
+    public function stripe_authorize_button() {
         $vendor_id           = get_current_user_id();
         $key                 = get_user_meta( $vendor_id, '_stripe_connect_access_key', true );
         $connected_vendor_id = get_user_meta( $vendor_id, 'dokan_connected_vendor_id', true );
-        ?>
-        <style type="text/css" media="screen">
-            .dokan-stripe-connect-container {
-                border: 1px solid #eee;
-                padding: 15px;
-            }
+        $auth_url            = '#';
+        $disconnect_url      = '#';
 
-            .dokan-stripe-connect-container .dokan-alert {
-                margin-bottom: 0;
-            }
-        </style>
+        if ( empty( $key ) && empty( $connected_vendor_id ) ) {
+            $auth_url = Auth::get_vendor_authorize_url();
+        } else {
+            $disconnect_url = Auth::get_vendor_deauthorize_url();
+        }
 
-        <div class="dokan-stripe-connect-container">
-            <input type="hidden" name="settings[stripe]" value="<?php echo empty( $key ) ? 0 : 1; ?>">
-            <?php
-                if ( empty( $key ) && empty( $connected_vendor_id ) ) {
-
-                    echo '<div class="dokan-alert dokan-alert-danger">';
-                        _e( 'Your account is not connected to Stripe. Connect your Stripe account to receive payouts.', 'dokan' );
-                    echo '</div>';
-
-                    $url = OAuth::authorizeUrl( [
-                        'scope' => 'read_write',
-                    ] );
-
-                    ?>
-                    <br/>
-                    <a class="dokan-stripe-connect-link" href="<?php echo $url; ?>" target="_TOP">
-                        <img src="<?php echo esc_url( DOKAN_STRIPE_ASSETS . 'images/blue.png' ); ?>" width="190" height="33" data-hires="true">
-                    </a>
-                    <?php
-
-                } else {
-                    ?>
-                    <div class="dokan-alert dokan-alert-success">
-                        <?php _e( 'Your account is connected with Stripe', 'dokan' ); ?>
-                        <a  class="dokan-btn dokan-btn-danger dokan-btn-theme" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-disconnect-stripe' ), dokan_get_navigation_url( 'settings/payment' ) ), 'dokan-disconnect-stripe' ); ?>"><?php _e( 'Disconnect', 'dokan' ); ?></a>
-                    </div>
-                    <?php
-                }
-            ?>
-        </div>
-        <?php
+        Helper::get_template( 'vendor-settings-payment', [
+            'vendor_id'           => $vendor_id,
+            'key'                 => $key,
+            'connected_vendor_id' => $connected_vendor_id,
+            'auth_url'            => $auth_url,
+            'disconnect_url'      => $disconnect_url,
+        ] );
     }
 
     /**
-     * Connect vendor to stripe
+     * Authorize vendor
      *
      * @since 3.0.3
      *
      * @return void
      */
-    public function connect_vendor_to_stripe() {
-        if ( ! empty( $_GET['state'] ) && 'wepay' == $_GET['state'] ) {
+    public function authorize_vendor() {
+        if ( ! isset( $_GET['state'] ) || false === strpos( $_GET['state'], 'dokan-stripe-connect' ) ) {
             return;
         }
 
-        if ( empty( $_GET['scope'] ) || empty( $_GET['code'] ) ) {
+        if ( empty( $_GET['code'] ) ) {
+            return;
+        }
+
+        $get_data = wp_unslash( $_GET );
+
+        $nonce = str_replace( 'dokan-stripe-connect:', '', $get_data['state'] );
+
+        if ( ! wp_verify_nonce( $nonce, 'dokan-stripe-vendor-authorize' ) ) {
             return;
         }
 
         try {
-            $resp = OAuth::token( [
-                'code'       => $_GET['code'],
-                'grant_type' => 'authorization_code',
-            ] );
-        } catch ( OAuthBase $e ) {
-            wp_send_json( 'Something went wrong: ' . $e->getMessage() );
+            $response = Auth::get_vendor_token( $get_data['code'] );
+        } catch ( Exception $e ) {
+            dokan_log(
+                sprintf(
+                    "[Stripe Connect] Unable to authorize vendor. \nException Message: %s\nError Trace:\n%s",
+                    $e->getMessage(),
+                    $e->getTraceAsString()
+                ),
+                'error'
+            );
+
+            wp_die(
+                __( 'Unable to authorize your store. Please contact the site admin.', 'dokan' ),
+                __( 'Authorization Error', 'dokan' )
+            );
         }
 
-        update_user_meta( get_current_user_id(), 'dokan_connected_vendor_id', $resp->stripe_user_id );
-        update_user_meta( get_current_user_id(), '_stripe_connect_access_key', $resp->access_token );
+        update_user_meta( get_current_user_id(), 'dokan_connected_vendor_id', $response->stripe_user_id );
+        update_user_meta( get_current_user_id(), '_stripe_connect_access_key', $response->access_token );
         wp_redirect( dokan_get_navigation_url( 'settings/payment' ) );
         exit;
     }
 
     /**
-     * Delete vendor stripe account
+     * Deauthorize vendor
      *
      * @since 3.0.3
      *
      * @return void
      */
-    public function delete_stripe_account() {
+    public function deauthorize_vendor() {
+        if ( ! isset( $_GET['action'] ) || 'dokan-disconnect-stripe' !== $_GET['action'] ) {
+            return;
+        }
+
+        if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'dokan-stripe-vendor-deauthorize' ) ) {
+            return;
+        }
+
         $vendor_id = get_current_user_id();
 
         if ( ! $vendor_id || ! dokan_is_user_seller( $vendor_id ) ) {
             return;
         }
 
-        if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-disconnect-stripe' ) {
-            if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'dokan-disconnect-stripe' ) ) {
-                return;
+        try {
+            Auth::deauthorize( [
+                'stripe_user_id' => get_user_meta( $vendor_id, 'dokan_connected_vendor_id', true ),
+            ] );
+        } catch( Exception $e ) {
+            dokan_log(
+                sprintf(
+                    "[Stripe Connect] Unable to deauthorize vendor. \nException Message: %s\nError Trace:\n%s",
+                    $e->getMessage(),
+                    $e->getTraceAsString()
+                ),
+                'error'
+            );
+        }
+
+        delete_user_meta( $vendor_id, '_stripe_connect_access_key' );
+        delete_user_meta( $vendor_id, 'dokan_connected_vendor_id' );
+
+        wp_redirect( dokan_get_navigation_url( 'settings/payment' ) );
+        exit;
+    }
+
+    /**
+     * Order processing fee for Stripe
+     *
+     * @since 3.1.0
+     *
+     * @param float     $processing_fee
+     * @param \WC_Order $order
+     *
+     * @return float
+     */
+    public function get_order_processing_fee( $processing_fee, $order ) {
+        if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
+            $stripe_processing_fee = $order->get_meta( 'dokan_gateway_fee' );
+
+            if ( ! $stripe_processing_fee ) {
+                // During processing vendor payment we save stripe fee in parent order
+                $stripe_processing_fee = $order->get_meta( 'dokan_gateway_stripe_fee' );
             }
 
-            delete_user_meta( $vendor_id, '_stripe_connect_access_key');
-            delete_user_meta( $vendor_id, 'dokan_connected_vendor_id');
-            wp_redirect( dokan_get_navigation_url( 'settings/payment' ) );
-            exit;
+            if ( $stripe_processing_fee ) {
+                $processing_fee = $stripe_processing_fee;
+            }
         }
+
+        return $processing_fee;
+    }
+
+    /**
+     * Calculate gateway fee for a suborder
+     *
+     * @since 3.1.0
+     *
+     * @param float     $gateway_fee
+     * @param \WC_Order $suborder
+     * @param \WC_Order $order
+     *
+     * @return float|int
+     */
+    public function get_processing_gateway_fee( $gateway_fee, $suborder, $order ) {
+        if ( 'dokan-stripe-connect' === $order->get_payment_method() ) {
+            $order_processing_fee = dokan()->commission->get_processing_fee( $order );
+            $gateway_fee          = Helper::calculate_processing_fee_for_suborder( $order_processing_fee, $suborder, $order );
+        }
+
+        return $gateway_fee;
+    }
+
+    /**
+     * Vendor net earning for a order
+     *
+     * @since 3.1.0
+     *
+     * @param float     $net_amount
+     * @param float     $vendor_earning
+     * @param float     $gateway_fee
+     * @param \WC_Order $suborder
+     * @param \WC_Order $order
+     *
+     * @return void
+     */
+    public function dokan_orders_vendor_net_amount( $net_amount, $vendor_earning, $gateway_fee, $suborder, $order ) {
+        if (
+            'dokan-stripe-connect' === $order->get_payment_method()
+            && 'seller' !== $suborder->get_meta( 'dokan_gateway_fee_paid_by', true )
+        ) {
+            return $vendor_earning;
+        }
+
+        return $net_amount;
     }
 }

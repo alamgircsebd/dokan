@@ -122,6 +122,8 @@ class Helper {
             return;
         }
 
+        unset( $product_types['external'] );
+
         foreach ( $product_types as $value => $label ) {
             $output .= '<option value="' . esc_attr( $value ) . '" ';
             $output .= in_array( $value, $selected ) ? ' selected="selected"' : '';

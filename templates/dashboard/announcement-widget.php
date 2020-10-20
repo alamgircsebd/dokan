@@ -33,7 +33,7 @@
                     </div>
                     <div class="dokan-dashboard-announce-date dokan-right <?php echo ( $notice->status == 'unread' ) ? 'dokan-dashboard-announce-unread' : 'dokan-dashboard-announce-read'; ?>">
                         <div class="announce-day"><?php echo date_i18n( 'd', strtotime( $notice->post_date ) ); ?></div>
-                        <div class="announce-month"><?php echo date_i18n( 'l', strtotime( $notice->post_date ) ); ?></div>
+                        <div class="announce-month"><?php echo date_i18n( 'F', strtotime( $notice->post_date ) ); ?></div>
                         <div class="announce-year"><?php echo date_i18n( 'Y', strtotime( $notice->post_date ) ); ?></div>
                     </div>
                     <div class="dokan-clearfix"></div>

@@ -93,19 +93,15 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="product-dropdown"><?php _e( 'Product', 'dokan' ); ?><span class="required"> *</span></label>
         <div class="dokan-w5 dokan-text-left">
-            <select name="product_drop_down[]" class="dokan-select2 dokan-coupon-product-select dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>" required>
+            <select class="dokan-form-control dokan-coupon-product-select dokan-product-search" multiple="multiple" style="width: 100%;" id="product_drop_down[]" name="product_drop_down[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'dokan' ); ?>" data-action="dokan_json_search_products_and_variations" data-user_ids="<?php echo dokan_get_current_user_id(); ?>">
                 <option value="select_all"><?php esc_html_e( 'Select All', 'dokan' ); ?></option>
                 <?php
-                foreach ( $all_products as $key => $object ) {
-                    if ( in_array( $object->ID, $products_id ) ) {
-                        $select = 'selected';
-                    } else {
-                        $select = '';
+                    foreach ( $products_id as $id ) {
+                        $product = wc_get_product( $id );
+                        if ( is_object( $product ) ) {
+                            echo '<option value="' . esc_attr( $id ) . '"' . selected( true, true, false ) . '>' . wp_kses_post( $product->get_formatted_name() ) . '</option>';
+                        }
                     }
-                    ?>
-                    <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php echo $object->post_title; ?></option>
-                    <?php
-                }
                 ?>
             </select>
             <a href="#" style="margin-top: 5px;" class="dokan-btn dokan-btn-default dokan-btn-sm dokan-coupon-product-select-all"><?php _e( 'Select all', 'dokan' ) ?></a>
@@ -116,18 +112,15 @@
     <div class="dokan-form-group">
         <label class="dokan-w3 dokan-control-label" for="product"><?php _e( 'Exclude products', 'dokan' ); ?></label>
         <div class="dokan-w5 dokan-text-left">
-            <select name="exclude_product_ids[]" class="dokan-select2 dokan-form-control" multiple data-placeholder="<?php _e( 'Select Some Product', 'dokan' ); ?>">
+            <select class="dokan-form-control dokan-product-search" multiple="multiple" style="width: 100%;" id="exclude_product_ids[]" name="exclude_product_ids[]" data-placeholder="<?php esc_attr_e( 'Search for a product&hellip;', 'dokan' ); ?>" data-action="dokan_json_search_products_and_variations" data-user_ids="<?php echo dokan_get_current_user_id(); ?>">
+                <option value="select_all"><?php esc_html_e( 'Select All', 'dokan' ); ?></option>
                 <?php
-                foreach ( $all_products as $key => $object ) {
-                    if ( in_array( $object->ID, $exclude_products ) ) {
-                        $select = 'selected';
-                    } else {
-                        $select = '';
+                    foreach ( $exclude_products as $id ) {
+                        $product = wc_get_product( $id );
+                        if ( is_object( $product ) ) {
+                            echo '<option value="' . esc_attr( $id ) . '"' . selected( true, true, false ) . '>' . wp_kses_post( $product->get_formatted_name() ) . '</option>';
+                        }
                     }
-                    ?>
-                        <option <?php echo $select; ?>  value="<?php echo $object->ID; ?>"><?php _e( $object->post_title, 'dokan' ); ?></option>
-                    <?php
-                }
                 ?>
             </select>
         </div>

@@ -87,6 +87,12 @@ class Module {
 
         // Module activation hook
         add_action( 'dokan_activated_module_export_import', array( self::class, 'activate' ) );
+        //Other Vendor data protection from csv import
+        add_filter( 'woocommerce_product_import_process_item_data', [ $this, 'protect_other_vendor_product_on_csv' ] );
+        //False to is_feature column
+        add_filter( 'woocommerce_product_import_process_item_data', [ $this, 'feature_column_to_false' ] );
+        //Handle wholesale column when export
+        add_filter( 'woocommerce_product_export_meta_value', [ $this, 'non_neumeric_wholesale_handle' ], 10, 2 );
     }
 
     public function handle_step_submission() {
@@ -1296,5 +1302,63 @@ class Module {
                 </script>
             <?php
         }
+    }
+
+    /**
+     * If ID/sku match with current user then update.
+     * if not then create for current vendor and don't
+     * touch other vensor data.
+     *
+     * @param $data
+     *
+     * @return $data
+     */
+    public function protect_other_vendor_product_on_csv( $data ) {
+        $current_user = get_current_user_id();
+        $product_id   = $data['id'] ? $data['id'] : $data['sku'];
+
+        if ( empty( $data['id'] ) && ! empty( $data['sku'] ) ) {
+            $product_id = wc_get_product_id_by_sku( $data['sku'] );
+        }
+
+        $post_author = absint( get_post_field( 'post_author', $product_id ) );
+
+        if ( $post_author !== $current_user ) {
+            $data['id']  = 0;
+            $data['sku'] = 0;
+        }
+
+        return $data;
+    }
+
+    /**
+     * CSV import is_feature to false if not admin
+     *
+     * @param $data
+     *
+     * @return $data
+     */
+    public function feature_column_to_false( $data ) {
+        if ( ! wc_current_user_has_role( 'administrator' ) ) {
+            $data['featured'] = false;
+        }
+
+        return $data;
+    }
+
+    /**
+     * Non scalar to scalar due to wc export escape non-scalar value
+     * @param $meta_value
+     * @param $meta
+     *
+     * @return string
+     */
+    public function non_neumeric_wholesale_handle( $meta_value, $meta ) {
+        if ( ! is_scalar( $meta_value ) ) {
+            if ( $meta_value['enable_wholesale'] ) {
+                return 'price:' . $meta_value['price'] . ',' . 'quantity:' . $meta_value['quantity'];
+            }
+        }
+
     }
 }

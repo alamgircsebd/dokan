@@ -47,11 +47,11 @@ class Reports {
             $end_date = date( 'Y-m-d', strtotime( 'midnight', current_time( 'timestamp' ) ) );
 
             if ( isset( $_GET['start_date'] ) ) {
-                $start_date = $_GET['start_date'];
+                $start_date = date( 'Y-m-d', strtotime( $_GET['start_date'] ) );
             }
 
             if ( isset( $_GET['end_date'] ) ) {
-                $end_date = $_GET['end_date'];
+                $end_date = date( 'Y-m-d', strtotime( $_GET['end_date'] ) );
             }
 
             $filename = "Statement-".date( 'Y-m-d',time() );
@@ -59,7 +59,7 @@ class Reports {
             header( "Content-Disposition: attachment; filename=$filename.csv" );
             $currency = get_woocommerce_currency_symbol();
             $headers  = array(
-                'date'         => __( 'Date', 'dokan' ),
+                'date'         => __( 'Trn Date', 'dokan' ),
                 'balance_date' => __( 'Balance Date', 'dokan' ),
                 'id'           => __( 'ID', 'dokan' ),
                 'type'         => __( 'Type', 'dokan' ),
@@ -80,7 +80,8 @@ class Reports {
             $opening_balance = $vendor->get_balance( false, date( 'Y-m-d', strtotime( $start_date . ' -1 days' ) ) );
             $status = implode( "', '", dokan_withdraw_get_active_order_status() );
 
-            $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE( trn_date ) >= %s AND DATE(trn_date) <= %s AND ( ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ) ORDER BY trn_date";
+            $sql = "SELECT * from {$wpdb->prefix}dokan_vendor_balance WHERE vendor_id = %d AND DATE(balance_date) >= %s AND DATE(balance_date) <= %s AND ( ( trn_type = 'dokan_orders' AND status IN ('{$status}') ) OR trn_type IN ( 'dokan_withdraw', 'dokan_refund' ) ) ORDER BY balance_date";
+
             $statements = $wpdb->get_results( $wpdb->prepare( $sql, $vendor->id, $start_date, $end_date ) );
 
             echo $start_date . ', ';

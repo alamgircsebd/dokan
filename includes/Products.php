@@ -439,9 +439,12 @@ class Products {
 
         if ( 'grouped' == $product_type && version_compare( WC_VERSION, '2.7', '>' ) ) {
             $product = wc_get_product( $post_id );
-            $goroup_product_ids = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
-            $product->set_props( array( 'children' => $goroup_product_ids ) );
+            $group_product_ids = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
+            $product->set_props( array( 'children' => $group_product_ids ) );
             $product->save();
+
+            //set product type to 'grouped'
+            wp_set_object_terms( $post_id, $product_type, 'product_type' );
         }
     }
 
@@ -629,18 +632,15 @@ class Products {
      * @return $product
      */
     public function save_product_post_data( $product ) {
+        if ( 'yes' === get_user_meta( dokan_get_current_user_id(), 'dokan_publishing', true ) ) {
+            return $product;
+        }
         //update product status to pending-review if set by admin
-        if ( 'publish' !== $product['post_status'] || 'on' !== dokan_get_option( 'edited_product_status', 'dokan_selling' ) ) {
+        if ( 'on' === dokan_get_option( 'edited_product_status', 'dokan_selling' ) ) {
+            $product['post_status'] = 'pending';
+
             return $product;
         }
-
-        $vendor_id = dokan_get_current_user_id();
-        // return early if vendor can publish product directly
-        if ( 'yes' === get_user_meta( $vendor_id, 'dokan_publishing', true ) ) {
-            return $product;
-        }
-
-        $product['post_status'] = 'pending';
 
         return $product;
     }
@@ -762,13 +762,7 @@ class Products {
             $cats = array_pop( $cats );
         }
 
-        $wp_tags = get_the_terms( $post, 'product_tag' );
-
-        if ( $wp_tags ) {
-            $tags = wp_list_pluck( $wp_tags, 'term_id' );
-        } else {
-            $tags = array();
-        }
+        $tags = get_the_terms( $post, 'product_tag' );
 
         $args = array(
             'pro'     => true,
