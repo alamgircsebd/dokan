@@ -64,7 +64,7 @@ class Installer {
      *
      * @since 2.8.0
      * @since 3.0.0 Using module manager to activate all modules
-     * @since DOKAN_PRO_SINCE Activate only available modules instead of all modules
+     * @since 3.1.0 Activate only available modules instead of all modules
      *
      * @return void
      * */

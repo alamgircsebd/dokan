@@ -132,7 +132,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Schedule subscription payment
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param float $amount_to_charge
      * @param Object $renewal_order
@@ -300,7 +300,7 @@ class StripeConnect extends StripePaymentGateway {
      * Include the payment meta data required to process automatic recurring payments so that store managers can
      * manually set up automatic recurring payments for a customer via the Edit Subscriptions screen in 2.0+.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param array $payment_meta associative array of meta data required for automatic payments
      * @param WC_Subscription $subscription An instance of a subscription object
@@ -339,7 +339,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Update subscription payment meta when order created
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @return void
      */
@@ -435,7 +435,7 @@ class StripeConnect extends StripePaymentGateway {
      * Displays a checkbox to allow users to update all subs payments with new
      * payment.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @return HTML
      */
@@ -462,7 +462,7 @@ class StripeConnect extends StripePaymentGateway {
     /**
      * Updates all active subscriptions payment method.
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param string $source_id
      * @param object $source_object
