@@ -4,14 +4,11 @@ namespace WeDevs\DokanPro\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
-use WeDevs\Dokan\Abstracts\DokanBackgroundProcesses;
-use WeDevs\DokanPro\Emails\Announcement;
-
 if ( ! class_exists( 'WC_Email', false ) ) {
     include_once dirname( WC_PLUGIN_FILE ) . '/includes/emails/class-wc-email.php';
 }
 
-class AnnouncementBackgroundProcess extends DokanBackgroundProcesses {
+class AnnouncementBackgroundProcess extends \WeDevs\Dokan\Abstracts\DokanBackgroundProcesses {
 
     /**
      * @var string
@@ -34,7 +31,7 @@ class AnnouncementBackgroundProcess extends DokanBackgroundProcesses {
         $seller_id = $payload['sender_id'];
         $post_id   = $payload['post_id'];
 
-        $announcement_email = new Announcement();
+        $announcement_email = new \WeDevs\DokanPro\Emails\Announcement();
 
         if ( ! empty( $seller_id ) ) {
             $announcement_email->trigger( $seller_id, $post_id );
