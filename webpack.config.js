@@ -81,8 +81,10 @@ const plugins = [
     new MiniCssExtractPlugin( {
         moduleFilename: ( { name } ) => {
             if ( name.match( /\/modules\// ) ) {
+                //return process.env.NODE_ENV === 'production' ? `${ name.replace( '/js/', '/css/' ) }.min.css` : `${ name.replace( '/js/', '/css/' ) }.css`;
                 return `${ name.replace( '/js/', '/css/' ) }.css`;
             }
+            //return process.env.NODE_ENV === 'production' ? '../css/[name].min.css' : '../css/[name].css';
             return '../css/[name].css';
         },
     } ),
@@ -95,6 +97,7 @@ module.exports = {
     entry: entryPoints,
     output: {
         path: path.resolve( __dirname, './assets/js' ),
+        //filename: process.env.NODE_ENV === 'production' ? '[name].min.js' : '[name].js'
         filename: '[name].js',
     },
 
