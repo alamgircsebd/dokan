@@ -9,8 +9,14 @@ class Assets {
 
     private $script_version;
 
+    private $suffix;
+
     public function __construct() {
         $this->script_version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
+
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $this->suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
 
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', [ $this, 'register' ], 5 );
@@ -118,14 +124,14 @@ class Assets {
     public function get_scripts() {
         $scripts = [
             'dokan-pro-vue-admin' => [
-                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-admin.js',
+                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-admin' . $this->suffix . '.js',
                 'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap', 'selectWoo' ],
                 'version'   => $this->script_version,
                 'in_footer' => true
             ],
 
             'dokan-pro-vue-frontend-shipping' => [
-                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend-shipping.js',
+                'src'       => DOKAN_PRO_PLUGIN_ASSEST . '/js/vue-pro-frontend-shipping' . $this->suffix . '.js',
                 'deps'      => [ 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap', 'underscore' ],
                 'version'   => $this->script_version,
                 'in_footer' => true
@@ -144,11 +150,11 @@ class Assets {
 
         $styles = [
             'dokan-pro-vue-admin' => [
-                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin.css',
+                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-admin' . $this->suffix . '.css',
                 'version' => $this->script_version,
             ],
             'dokan-pro-vue-frontend-shipping' => [
-                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping.css',
+                'src'     =>  DOKAN_PRO_PLUGIN_ASSEST . '/css/vue-pro-frontend-shipping' . $this->suffix . '.css',
                 'version' => $this->script_version,
             ],
             'dokan-pro-wp-version-before-5-3' => [

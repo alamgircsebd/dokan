@@ -95,8 +95,11 @@ class Dokan_Wholesale_Admin {
      * @return void
      */
     public function admin_enqueue_scripts() {
-        wp_enqueue_style( 'dokan-wholesale-admin-style', DOKAN_WHOLESALE_ASSETS_DIR . '/css/admin.css', false, DOKAN_PLUGIN_VERSION, 'all' );
-        wp_enqueue_script( 'dokan-wholesale-admin', DOKAN_WHOLESALE_ASSETS_DIR . '/js/admin.js', array(  'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+        wp_enqueue_style( 'dokan-wholesale-admin-style', DOKAN_WHOLESALE_ASSETS_DIR . '/css/admin' . $suffix . '.css', false, DOKAN_PLUGIN_VERSION, 'all' );
+        wp_enqueue_script( 'dokan-wholesale-admin', DOKAN_WHOLESALE_ASSETS_DIR . '/js/admin' . $suffix . '.js', array(  'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
     }
 
     /**

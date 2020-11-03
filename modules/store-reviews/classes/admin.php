@@ -77,8 +77,11 @@ class DSR_Admin {
      * @return void
      */
     public function vue_admin_enqueue_scripts() {
-        wp_enqueue_style( 'dsr-admin-css', DOKAN_SELLER_RATINGS_PLUGIN_ASSEST . '/css/admin.css', false, time() );
-        wp_enqueue_script( 'dsr-admin', DOKAN_SELLER_RATINGS_PLUGIN_ASSEST . '/js/admin.js', array( 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+        wp_enqueue_style( 'dsr-admin-css', DOKAN_SELLER_RATINGS_PLUGIN_ASSEST . '/css/admin' . $suffix . '.css', false, time() );
+        wp_enqueue_script( 'dsr-admin', DOKAN_SELLER_RATINGS_PLUGIN_ASSEST . '/js/admin' . $suffix . '.js', array( 'jquery', 'dokan-vue-vendor', 'dokan-vue-bootstrap' ), false, true );
     }
 }
 

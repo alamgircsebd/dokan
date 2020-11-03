@@ -221,8 +221,11 @@ class Module {
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style.css', [], date( 'Ymd' ) );
-        wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script.js', array( 'jquery' ), time(), true );
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+        wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style' . $suffix . '.css', [], date( 'Ymd' ) );
+        wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script' . $suffix . '.js', array( 'jquery' ), time(), true );
         wp_localize_script( 'dps-custom-js', 'dokanSubscription', array(
             'cancel_string'   => __( 'Do you really want to cancel the subscription?', 'dokan' ),
             'activate_string' => __( 'Want to activate the subscription again?', 'dokan' ),

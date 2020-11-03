@@ -105,15 +105,19 @@ class Module {
     public function load_scripts() {
         global $wp, $post;
 
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+
         if ( is_account_page() ) {
-            wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
+            wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts' . $suffix . '.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
         }
 
         if ( $post ) {
             $product = wc_get_product( $post->ID );
 
             if ( $product ) {
-                wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
+                wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts' . $suffix . '.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
                 wp_localize_script( 'dokan-wholesale-script', 'DokanWholesale', [
                         'currency_symbol'   => get_woocommerce_currency_symbol(),
                         'check_permission'  => dokan_wholesale_can_see_price(),
