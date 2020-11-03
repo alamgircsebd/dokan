@@ -22,7 +22,14 @@
         "phpcompatibility/phpcompatibility-wp": "dev-master",
         "phpunit/phpunit": "7.5.9"
     },
-    "scripts": {},
+    "scripts": {
+      "phpcs": [
+        "phpcs -p -s"
+      ],
+      "phpcbf": [
+        "phpcbf -p"
+      ]
+    },
     "autoload" : {
       "psr-4": {
           "WeDevs\\DokanPro\\": "includes/"

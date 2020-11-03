@@ -52,6 +52,11 @@ class StoreCoupons extends TagBase {
         if ( dokan_is_store_page() ) {
             $dokan_store   = dokan_pro()->store;
             $store         = dokan()->vendor->get( get_query_var( 'author' ) );
+
+            if ( empty( $store->data ) ) {
+                return;
+            }
+
             $store_user    = $store->data;
             $store_info    = $store_user->get_shop_info();
             $store_coupons = $dokan_store->get_store_coupons( $store_user, $store_info );

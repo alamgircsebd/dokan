@@ -15,7 +15,6 @@ const pluginFiles = [
     'templates/',
     'changelog.txt',
     'dokan-pro.php',
-    'readme.txt',
     'composer.json',
     'composer.lock',
 ];

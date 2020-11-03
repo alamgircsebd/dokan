@@ -215,7 +215,7 @@ class RegisterWithdrawMethods {
     /**
      * Order processing fee for Stripe
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param float     $processing_fee
      * @param \WC_Order $order
@@ -242,7 +242,7 @@ class RegisterWithdrawMethods {
     /**
      * Calculate gateway fee for a suborder
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param float     $gateway_fee
      * @param \WC_Order $suborder
@@ -262,7 +262,7 @@ class RegisterWithdrawMethods {
     /**
      * Vendor net earning for a order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param float     $net_amount
      * @param float     $vendor_earning

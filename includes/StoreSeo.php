@@ -203,11 +203,15 @@ class StoreSeo {
     public function print_social_tags() {
         $meta_values = $this->store_info;
 
-        if ( !isset( $meta_values['store_seo'] ) || $meta_values == false ) {
+        if ( ! isset( $meta_values['store_seo'] ) || $meta_values == false ) {
             return;
         }
 
         $seller = get_userdata( get_query_var( 'author' ) );
+
+        if ( empty( $seller ) ) {
+            return;
+        }
 
         $og_url        = dokan_get_store_url( $seller->ID );
         $og_title      = isset( $meta_values['store_seo']['dokan-seo-og-title'] ) ? $meta_values['store_seo']['dokan-seo-og-title'] : '';

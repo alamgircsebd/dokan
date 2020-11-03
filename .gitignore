@@ -35,3 +35,4 @@ env.json
 !dist/clean.js
 !dist/makepot.js
 /vendor/
+phpcs-report.txt

@@ -281,7 +281,7 @@ class Helper {
     /**
      * Does seller pay the Stripe processing fee
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @return bool
      */
@@ -294,7 +294,7 @@ class Helper {
     /**
      * Calculate the processing fee for a single vendor for an order
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param float $order_processing_fee
      * @param \WC_ORDER $suborder
@@ -456,7 +456,7 @@ class Helper {
     /**
      * Include module template
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.0
      *
      * @param string $name
      * @param array  $args

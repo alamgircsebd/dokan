@@ -20,11 +20,11 @@ class Module {
 
         add_action( 'dokan_activated_module_spmv', array( self::class, 'activate' ) );
         //Prevent Duplicate SKU for multiple save from various vendor
-        add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'prevent_duplicate_sku' ] );
+        add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'prevent_duplicate_sku' ], 10, 2 );
     }
 
     /**
-     * hooks
+     * Hooks
      *
      * @since 1.0.0
      *
@@ -38,7 +38,7 @@ class Module {
     }
 
     /**
-     * includes all necessary class a functions file
+     * Includes all necessary class a functions file
      *
      * @since 1.0.0
      *
@@ -82,7 +82,7 @@ class Module {
     public function hooks() {
         $enable_option = dokan_get_option( 'enable_pricing', 'dokan_spmv', 'off' );
 
-        if ( 'off' == $enable_option ) {
+        if ( 'off' === $enable_option ) {
             return;
         }
 
