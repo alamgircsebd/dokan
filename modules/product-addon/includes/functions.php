@@ -59,27 +59,29 @@ function dokan_pa_get_posted_product_addons( $postdata = [] ) {
         $addon_price              = $postdata['product_addon_price'];
         $addon_min                = $postdata['product_addon_min'];
         $addon_max                = $postdata['product_addon_max'];
+        $total_addon_name         = count( $addon_name );
 
-        for ( $i = 0; $i < count( $addon_name ); $i++ ) {
-            if ( ! isset( $addon_name[ $i ] ) || ( '' == $addon_name[ $i ] ) ) {
+        for ( $i = 0; $i < $total_addon_name; $i++ ) {
+            if ( ! isset( $addon_name[ $i ] ) || ( '' === $addon_name[ $i ] ) ) {
                 continue;
             }
 
             $addon_options = [];
 
             if ( isset( $addon_option_label[ $i ] ) ) {
-                $option_label      = $addon_option_label[ $i ];
-                $option_price      = $addon_option_price[ $i ];
-                $option_price_type = $addon_option_price_type[ $i ];
-                $option_image      = $addon_option_image[ $i ];
+                $option_label       = $addon_option_label[ $i ];
+                $option_price       = $addon_option_price[ $i ];
+                $option_price_type  = $addon_option_price_type[ $i ];
+                $option_image       = $addon_option_image[ $i ];
+                $total_option_label = count( $option_label );
 
-                for ( $ii = 0; $ii < count( $option_label ); $ii++ ) {
+                for ( $ii = 0; $ii < $total_option_label; $ii++ ) {
                     $label      = sanitize_text_field( stripslashes( $option_label[ $ii ] ) );
                     $price      = wc_format_decimal( sanitize_text_field( stripslashes( $option_price[ $ii ] ) ) );
                     $image      = sanitize_text_field( stripslashes( $option_image[ $ii ] ) );
                     $price_type = sanitize_text_field( stripslashes( $option_price_type[ $ii ] ) );
 
-                    if( ! empty( $label ) && ! empty( $price ) && ! empty( $price_type ) ) {
+                    if ( ! empty( $label ) && ! empty( $price_type ) ) {
                         $addon_options[] = array(
                             'label'      => $label,
                             'price'      => $price,
@@ -119,7 +121,7 @@ function dokan_pa_get_posted_product_addons( $postdata = [] ) {
     if ( ! empty( $postdata['import_product_addon'] ) ) {
         $import_addons = maybe_unserialize( maybe_unserialize( stripslashes( trim( $postdata['import_product_addon'] ) ) ) );
 
-        if ( is_array( $import_addons ) && sizeof( $import_addons ) > 0 ) {
+        if ( is_array( $import_addons ) && count( $import_addons ) > 0 ) {
             $valid = true;
 
             foreach ( $import_addons as $addon ) {
@@ -152,14 +154,14 @@ function dokan_pa_get_posted_product_addons( $postdata = [] ) {
 }
 
 function dokan_pa_addons_cmp( $a, $b ) {
-    if ( $a['position'] == $b['position'] ) {
+    if ( $a['position'] === $b['position'] ) {
         return 0;
     }
 
     return ( $a['position'] < $b['position'] ) ? -1 : 1;
 }
 
-function get_vendor_staff(){
+function get_vendor_staff() {
     $author_in    = [];
     $current_user = get_current_user_id();
 
@@ -181,7 +183,7 @@ function get_vendor_staff(){
         }
     }
 
-    if ( ! empty ( $vendor ) ) {
+    if ( ! empty( $vendor ) ) {
         array_push( $author_in, get_user_by( 'ID', $vendor )->ID );
     }
 
@@ -190,10 +192,12 @@ function get_vendor_staff(){
 
 function get_staff_ids( $user_id ) {
     $ids    = [];
-    $staffs = get_users( [
-        'meta_key'   => '_vendor_id',
-        'meta_value' => $user_id,
-    ] );
+    $staffs = get_users(
+        [
+			'meta_key'   => '_vendor_id', // phpcs:ignore
+			'meta_value' => $user_id, // phpcs:ignore
+		]
+    );
 
     if ( ! empty( $staffs ) ) {
         foreach ( $staffs as $staff ) {
