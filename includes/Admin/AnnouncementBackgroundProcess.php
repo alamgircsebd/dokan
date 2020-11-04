@@ -4,11 +4,13 @@ namespace WeDevs\DokanPro\Admin;
 
 defined( 'ABSPATH' ) || exit;
 
+use WeDevs\Dokan\Abstracts\DokanBackgroundProcesses;
+
 if ( ! class_exists( 'WC_Email', false ) ) {
     include_once dirname( WC_PLUGIN_FILE ) . '/includes/emails/class-wc-email.php';
 }
 
-class AnnouncementBackgroundProcess extends \WeDevs\Dokan\Abstracts\DokanBackgroundProcesses {
+class AnnouncementBackgroundProcess extends DokanBackgroundProcesses {
 
     /**
      * @var string
