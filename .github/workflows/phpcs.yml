@@ -13,7 +13,7 @@ jobs:
         with:
           php-version: '7.3'
           coverage: none
-          tools: composer:v1, cs2pr
+          tools: cs2pr
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -27,9 +27,9 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-suggest --no-progress
-        with:
-          tools: composer:v1
+          uses: php-actions/composer@v2
+          with:
+            args: --prefer-dist --no-suggest --no-progress
 
       - id: changes
         run: |
