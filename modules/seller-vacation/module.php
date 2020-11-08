@@ -24,8 +24,9 @@ class Module {
         add_filter( 'dokan_product_listing_query', array( $this, 'modified_product_listing_query' ) );
         add_filter( 'dokan_get_post_status', array( $this, 'show_vacation_status_listing' ), 12 );
         add_filter( 'dokan_get_post_status_label_class', array( $this, 'show_vacation_status_listing_label' ), 12 );
+        add_filter( 'dokan_pre_product_listing_args', array( $this, 'dokan_pre_product_listing_args_modified' ), 12, 2 );
 
-        add_action( 'dokan_product_listing_status_filter', array( $this, 'add_vacation_product_listing_filter'), 10, 2 );
+        add_action( 'dokan_product_listing_status_filter', array( $this, 'add_vacation_product_listing_filter' ), 10, 2 );
         add_action( 'dokan_store_profile_frame_after', array( $this, 'show_vacation_message' ), 10, 2 );
         add_action( 'template_redirect', array( $this, 'remove_product_from_cart_for_closed_store' ) );
     }
@@ -38,11 +39,11 @@ class Module {
      * @return void
      */
     private function define_constants() {
-        define( 'DOKAN_SELLER_VACATION_FILE' , __FILE__ );
-        define( 'DOKAN_SELLER_VACATION_PATH' , dirname( DOKAN_SELLER_VACATION_FILE ) );
-        define( 'DOKAN_SELLER_VACATION_INCLUDES' , DOKAN_SELLER_VACATION_PATH . '/includes' );
-        define( 'DOKAN_SELLER_VACATION_URL' , plugins_url( '', DOKAN_SELLER_VACATION_FILE ) );
-        define( 'DOKAN_SELLER_VACATION_ASSETS' , DOKAN_SELLER_VACATION_URL . '/assets' );
+        define( 'DOKAN_SELLER_VACATION_FILE', __FILE__ );
+        define( 'DOKAN_SELLER_VACATION_PATH', dirname( DOKAN_SELLER_VACATION_FILE ) );
+        define( 'DOKAN_SELLER_VACATION_INCLUDES', DOKAN_SELLER_VACATION_PATH . '/includes' );
+        define( 'DOKAN_SELLER_VACATION_URL', plugins_url( '', DOKAN_SELLER_VACATION_FILE ) );
+        define( 'DOKAN_SELLER_VACATION_ASSETS', DOKAN_SELLER_VACATION_URL . '/assets' );
         define( 'DOKAN_SELLER_VACATION_VIEWS', DOKAN_SELLER_VACATION_PATH . '/views' );
     }
 
@@ -80,13 +81,16 @@ class Module {
      * @return void
      */
     public function custom_post_status_vacation() {
-        register_post_status( 'vacation', array(
-            'label'                     => _x( 'Vacation', 'dokan' ),
-            'public'                    => false,
-            'show_in_admin_all_list'    => true,
-            'show_in_admin_status_list' => true,
-            'label_count'               => _n_noop( 'Vacation <span class="count">(%s)</span>', 'Vacation <span class="count">(%s)</span>' )
-        ) );
+        register_post_status(
+            'vacation', array(
+				'label'                     => __( 'Vacation', 'dokan' ),
+				'public'                    => false,
+				'show_in_admin_all_list'    => true,
+				'show_in_admin_status_list' => true,
+                /* Translators: %s: number of vacation */
+				'label_count'               => _n_noop( 'Vacation <span class="count">(%s)</span>', 'Vacation <span class="count">(%s)</span>', 'dokan' ),
+            )
+        );
     }
 
     /**
@@ -107,7 +111,7 @@ class Module {
                 $message = $store_info['setting_vacation_message'];
             } else {
                 $schedules    = dokan_seller_vacation_get_vacation_schedules( $shop_info );
-                $current_time = date( 'Y-m-d', current_time( 'timestamp' ) );
+                $current_time = date( 'Y-m-d', current_time( 'timestamp' ) ); // phpcs:ignore
 
                 foreach ( $schedules as $schedule ) {
                     $from = $schedule['from'];
@@ -123,9 +127,11 @@ class Module {
             if ( $raw_output ) {
                 echo esc_html( $message );
             } else {
-                dokan_seller_vacation_get_template( 'vacation-message', array(
-                    'message' => $message,
-                ) );
+                dokan_seller_vacation_get_template(
+                    'vacation-message', array(
+						'message' => $message,
+                    )
+                );
             }
         }
     }
@@ -137,16 +143,22 @@ class Module {
      */
     public function add_vacation_product_listing_filter( $status_class, $post_counts ) {
         ?>
-        <li<?php echo $status_class == 'vacation' ? ' class="active"' : ''; ?>>
-            <a href="<?php echo add_query_arg( array( 'post_status' => 'vacation' ), get_permalink() ); ?>"><?php printf( __( 'Vacation (%d)', 'dokan' ), $post_counts->vacation ); ?></a>
+        <li<?php echo $status_class === 'vacation' ? ' class="active"' : ''; ?>>
+            <a href="<?php echo add_query_arg( array( 'post_status' => 'vacation' ), get_permalink() ); ?>">
+                <?php
+                /* Translators: %d: number of vacation; */
+                printf( __( 'Vacation (%d)', 'dokan' ), $post_counts->vacation );
+                ?>
+            </a>
         </li>
         <?php
     }
 
     /**
      * Show Vacation status with product in product listing
-     * @param  string $value
+     *
      * @param  string $status
+     *
      * @return string
      */
     public function show_vacation_status_listing( $status ) {
@@ -155,15 +167,39 @@ class Module {
     }
 
     /**
-    * Get vacation status label
-    *
-    * @since 1.2
-    *
-    * @return void
-    **/
+     * Get vacation status label
+     *
+     * @since 1.2
+     *
+     * @return void
+     */
     public function show_vacation_status_listing_label( $labels ) {
         $labels['vacation'] = 'dokan-label-info';
         return $labels;
+    }
+
+    /**
+     * Add vacation status on product listing query
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param array $args
+     * @param array $get_data
+     *
+     * @return array
+     */
+    public function dokan_pre_product_listing_args_modified( $args, $get_data ) {
+        if ( isset( $get_data['post_status'] ) && in_array( $get_data['post_status'], 'vacation', true ) ) {
+            $args['post_status'] = $get_data['post_status'];
+            return $args;
+        }
+
+        if ( is_array( $args ) ) {
+            $args['post_status'][] = 'vacation';
+            return $args;
+        }
+
+        return $args;
     }
 
     /**
@@ -172,9 +208,9 @@ class Module {
      * @return array
      */
     public function modified_product_listing_query( $args ) {
-
-        if ( isset( $_GET['post_status'] ) && $_GET['post_status'] == 'vacation' ) {
-            $args['post_status'] = $_GET['post_status'];
+        $get = wp_unslash( $_GET ); // phpcs:ignore CSRF ok.
+        if ( isset( $get['post_status'] ) && $get['post_status'] === 'vacation' ) {
+            $args['post_status'] = $get['post_status'];
             return $args;
         }
 
@@ -188,19 +224,18 @@ class Module {
     /**
      * Remove product from cart for closed store
      * @param  null
-     * @return void 
-     */    
+     * @return void
+     */
     public function remove_product_from_cart_for_closed_store() {
         if ( is_cart() || is_checkout() ) {
-
-            foreach( WC()->cart->cart_contents as $item ) {
-                $product_id = ( isset( $item['variation_id'] ) && $item['variation_id'] != 0 ) ? $item['variation_id'] : $item['product_id'];
+            foreach ( WC()->cart->cart_contents as $item ) {
+                $product_id = ( isset( $item['variation_id'] ) && $item['variation_id'] !== 0 ) ? $item['variation_id'] : $item['product_id'];
 
                 if ( empty( $product_id ) ) {
                     continue;
                 }
 
-                $vendor_id  = get_post_field( 'post_author', $product_id );
+                $vendor_id = get_post_field( 'post_author', $product_id );
 
                 if ( empty( $vendor_id ) ) {
                     continue;
@@ -211,7 +246,6 @@ class Module {
                     WC()->cart->remove_cart_item( $product_cart_id );
                 }
             }
-
         }
     }
 }
