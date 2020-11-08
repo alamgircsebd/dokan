@@ -189,13 +189,13 @@ class Module {
      * @return array
      */
     public function dokan_pre_product_listing_args_modified( $args, $get_data ) {
-        if ( isset( $get_data['post_status'] ) && in_array( $get_data['post_status'], 'vacation', true ) ) {
+        if ( isset( $get_data['post_status'] ) && $get_data['post_status'] === 'vacation' ) {
             $args['post_status'] = $get_data['post_status'];
             return $args;
         }
 
-        if ( is_array( $args ) ) {
-            $args['post_status'][] = 'vacation';
+        if ( is_array( $args ) && ! isset( $get_data['post_status'] ) ) {
+            $args['post_status'] = 'vacation';
             return $args;
         }
 
