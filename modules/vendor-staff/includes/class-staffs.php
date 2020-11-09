@@ -13,14 +13,15 @@ class Dokan_staffs {
      * @since 1.0.0
      */
     public function __construct() {
-        add_action( 'dokan_add_staff_content',   array( $this, 'display_errors' ), 10 );
-        add_action( 'dokan_add_staff_content',   array( $this, 'add_staff_content' ), 15 );
-        add_action( 'template_redirect',         array( $this, 'handle_staff' ), 10 );
-        add_action( 'template_redirect',         array( $this, 'delete_staff' ), 99 );
-        add_action( 'template_redirect',         array( $this, 'handle_pemission' ), 99 );
-        add_action( 'dokan_new_product_added',   array( $this, 'filter_product' ), 10, 2 );
-        add_action( 'dokan_product_updated',     array( $this, 'update_product' ), 10 );
+        add_action( 'dokan_add_staff_content', array( $this, 'display_errors' ), 10 );
+        add_action( 'dokan_add_staff_content', array( $this, 'add_staff_content' ), 15 );
+        add_action( 'template_redirect', array( $this, 'handle_staff' ), 10 );
+        add_action( 'template_redirect', array( $this, 'delete_staff' ), 99 );
+        add_action( 'template_redirect', array( $this, 'handle_pemission' ), 99 );
+        add_action( 'dokan_new_product_added', array( $this, 'filter_product' ), 10, 2 );
+        add_action( 'dokan_product_updated', array( $this, 'update_product' ), 10 );
         add_action( 'dokan_product_listing_arg', array( $this, 'listing_product' ), 10 );
+        add_action( 'dokan_is_product_author', array( $this, 'dokan_is_product_author_modified' ), 10, 2 );
     }
 
     /**
@@ -34,7 +35,12 @@ class Dokan_staffs {
         if ( ! empty( self::$errors ) ) {
             foreach ( self::$errors as $key => $error ) {
                 if ( is_wp_error( $error ) ) {
-                    dokan_get_template_part('global/dokan-error', '', array( 'deleted' => true, 'message' => $error->get_error_message() ) );
+                    dokan_get_template_part(
+                        'global/dokan-error', '', array(
+							'deleted' => true,
+							'message' => $error->get_error_message(),
+                        )
+                    );
                 }
             }
         }
@@ -66,7 +72,6 @@ class Dokan_staffs {
         }
 
         include DOKAN_VENDOR_staff_DIR . '/templates/form.php';
-
     }
 
     /**
@@ -118,17 +123,17 @@ class Dokan_staffs {
                 'first_name'   => $_POST['first_name'],
                 'last_name'    => $_POST['last_name'],
                 'role'         => 'vendor_staff',
-                'display_name' => $_POST['first_name'] . ' ' . $_POST['last_name']
+                'display_name' => $_POST['first_name'] . ' ' . $_POST['last_name'],
             );
         } else {
             $userdata = array(
-                'ID'           => (int)$is_edit,
+                'ID'           => (int) $is_edit,
                 'user_email'   => $_POST['email'],
                 'user_login'   => $_POST['email'],
                 'first_name'   => $_POST['first_name'],
                 'last_name'    => $_POST['last_name'],
                 'role'         => 'vendor_staff',
-                'display_name' => $_POST['first_name'] . ' ' . $_POST['last_name']
+                'display_name' => $_POST['first_name'] . ' ' . $_POST['last_name'],
             );
 
             if ( ! empty( $user_password ) ) {
@@ -187,7 +192,6 @@ class Dokan_staffs {
     public function delete_staff() {
         if ( isset( $_GET['action'] ) && $_GET['action'] == 'delete_staff' ) {
             if ( wp_verify_nonce( $_GET['_staff_delete_nonce'], 'staff_delete_nonce' ) ) {
-
                 $user_id   = ! empty( $_GET['staff_id'] ) ? $_GET['staff_id'] : 0;
                 $vendor_id = get_user_meta( $user_id, '_vendor_id', true );
 
@@ -225,7 +229,7 @@ class Dokan_staffs {
             return;
         }
 
-        if ( isset( $_GET['view'] ) && $_GET['view']  != 'manage_permissions' ) {
+        if ( isset( $_GET['view'] ) && $_GET['view'] != 'manage_permissions' ) {
             return;
         }
 
@@ -244,21 +248,27 @@ class Dokan_staffs {
             return;
         }
 
-        foreach( $all_cap as $key=>$cap ) {
+        foreach ( $all_cap as $key => $cap ) {
             $capabilities = array_merge( $capabilities, array_keys( $cap ) );
         }
 
         foreach ( $capabilities as $key => $value ) {
-            if ( isset( $_POST[$value] ) && $_POST[$value] ) {
+            if ( isset( $_POST[ $value ] ) && $_POST[ $value ] ) {
                 $staff->add_cap( $value );
             } else {
                 $staff->remove_cap( $value );
             }
         }
 
-        $redirect_url = add_query_arg( array( 'view' => 'manage_permissions', 'action' => 'manage', 'staff_id' => $staff_id, 'message' => 'success' ), dokan_get_navigation_url( 'staffs' ) );
+        $redirect_url = add_query_arg(
+            array(
+				'view' => 'manage_permissions',
+				'action' => 'manage',
+				'staff_id' => $staff_id,
+				'message' => 'success',
+            ), dokan_get_navigation_url( 'staffs' )
+        );
         wp_redirect( $redirect_url );
-
     }
 
     /**
@@ -269,7 +279,6 @@ class Dokan_staffs {
       * @return void
       */
     public function filter_product( $product_id, $post_data ) {
-
         if ( ! $product_id ) {
             return;
         }
@@ -289,7 +298,12 @@ class Dokan_staffs {
             return;
         }
 
-        wp_update_post( array( 'ID' => $product_id, 'post_author' => $vendor_id ) );
+        wp_update_post(
+            array(
+				'ID' => $product_id,
+				'post_author' => $vendor_id,
+            )
+        );
         update_post_meta( $product_id, '_staff_id', $staff_id );
     }
 
@@ -324,5 +338,34 @@ class Dokan_staffs {
         }
 
         return $args;
+    }
+
+    /**
+     * Product author modified
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @param int $user_id
+     * @param int $product_id
+     *
+     * @return int $vendor_id
+     */
+    public function dokan_is_product_author_modified( $user_id, $product_id ) {
+        if ( ! $product_id ) {
+            return $user_id;
+        }
+
+        if ( ! is_user_logged_in() ) {
+            return $user_id;
+        }
+
+        if ( ! current_user_can( 'vendor_staff' ) ) {
+            return $user_id;
+        }
+
+        $staff_id  = get_current_user_id();
+        $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
+
+        return (int) $vendor_id;
     }
 }
