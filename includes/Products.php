@@ -33,9 +33,9 @@ class Products {
         add_action( 'dokan_product_edit_after_inventory_variants', array( $this, 'load_lot_discount_content' ), 25, 2 );
         add_action( 'dokan_dashboard_wrap_after', array( $this, 'load_variations_js_template' ), 10, 2 );
         add_action( 'dokan_render_new_product_template', array( $this, 'render_new_product_template' ), 10 );
-        add_action( 'woocommerce_product_options_advanced', array( $this,'add_per_product_commission_options' ), 15 );
-        add_action( 'woocommerce_process_product_meta_simple', array( $this,'save_per_product_commission_options' ), 15 );
-        add_action( 'woocommerce_process_product_meta_variable', array( $this,'save_per_product_commission_options' ), 15 );
+        add_action( 'woocommerce_product_options_advanced', array( $this, 'add_per_product_commission_options' ), 15 );
+        add_action( 'woocommerce_process_product_meta_simple', array( $this, 'save_per_product_commission_options' ), 15 );
+        add_action( 'woocommerce_process_product_meta_variable', array( $this, 'save_per_product_commission_options' ), 15 );
         add_action( 'dokan_new_product_added', array( $this, 'set_product_tags' ), 10, 2 );
         add_action( 'dokan_product_updated', array( $this, 'set_product_tags' ) );
         add_action( 'dokan_product_updated', array( $this, 'set_product_type' ), 11 );
@@ -87,14 +87,18 @@ class Products {
         $product_attributes   = get_post_meta( $post_id, '_product_attributes', true );
         $attribute_taxonomies = wc_get_attribute_taxonomies();
 
-        dokan_get_template_part( 'products/product-variation', '', array(
-            'pro'                  => true,
-            'post_id'              => $post_id,
-            '_has_attribute'       => $_has_attribute,
-            '_create_variations'   => $_create_variations,
-            'product_attributes'   => $product_attributes,
-            'attribute_taxonomies' => $attribute_taxonomies,
-        ) );
+        dokan_get_template_part(
+            'products/product-variation',
+            '',
+            array(
+                'pro'                  => true,
+                'post_id'              => $post_id,
+                '_has_attribute'       => $_has_attribute,
+                '_create_variations'   => $_create_variations,
+                'product_attributes'   => $product_attributes,
+                'attribute_taxonomies' => $attribute_taxonomies,
+            )
+        );
     }
 
     /**
@@ -111,15 +115,18 @@ class Products {
         $is_enable_op_discount  = dokan_get_option( 'discount_edit', 'dokan_selling' );
         $is_enable_op_discount  = $is_enable_op_discount ? $is_enable_op_discount : array();
 
-        dokan_get_template_part( 'products/product-lot-discount', '', array(
-            'pro'                    => true,
-            'post_id'                => $post_id,
-            '_is_lot_discount'       => $_is_lot_discount,
-            '_lot_discount_quantity' => $_lot_discount_quantity,
-            '_lot_discount_amount'   => $_lot_discount_amount,
-            'is_enable_op_discount'  => $is_enable_op_discount,
-        ) );
-
+        dokan_get_template_part(
+            'products/product-lot-discount',
+            '',
+            array(
+                'pro'                    => true,
+                'post_id'                => $post_id,
+                '_is_lot_discount'       => $_is_lot_discount,
+                '_lot_discount_quantity' => $_lot_discount_quantity,
+                '_lot_discount_amount'   => $_lot_discount_amount,
+                'is_enable_op_discount'  => $is_enable_op_discount,
+            )
+        );
     }
 
 
@@ -134,7 +141,14 @@ class Products {
      * @return void
      */
     public function load_variations_js_template( $post, $post_id ) {
-        dokan_get_template_part( 'products/edit/tmpl-add-attribute', '', array( 'pro' => true, 'post_id' => $post_id ) );
+        dokan_get_template_part(
+            'products/edit/tmpl-add-attribute',
+            '',
+            array(
+                'pro' => true,
+                'post_id' => $post_id,
+            )
+        );
     }
 
     /**
@@ -148,7 +162,6 @@ class Products {
      * @return void
      */
     public function load_shipping_tax_content( $post, $post_id ) {
-
         $user_id                 = dokan_get_current_user_id();
         $processing_time         = dokan_get_shipping_processing_times();
         $_required_tax           = get_post_meta( $post_id, '_required_tax', true );
@@ -162,23 +175,27 @@ class Products {
         $classes_options         = $this->get_tax_class_option();
         $porduct_shipping_pt     = ( $_processing_time ) ? $_processing_time : $dps_pt;
 
-        dokan_get_template_part( 'products/product-shipping-content', '', array(
-            'pro'                     => true,
-            'post'                    => $post,
-            'post_id'                 => $post_id,
-            'user_id'                 => $user_id,
-            'processing_time'         => $processing_time,
-            '_required_tax'           => $_required_tax,
-            '_disable_shipping'       => $_disable_shipping,
-            '_additional_price'       => $_additional_price,
-            '_additional_qty'         => $_additional_qty,
-            '_processing_time'        => $_processing_time,
-            'dps_shipping_type_price' => $dps_shipping_type_price,
-            'dps_additional_qty'      => $dps_additional_qty,
-            'dps_pt'                  => $dps_pt,
-            'classes_options'         => $classes_options,
-            'porduct_shipping_pt'     => $porduct_shipping_pt,
-        ) );
+        dokan_get_template_part(
+            'products/product-shipping-content',
+            '',
+            array(
+                'pro'                     => true,
+                'post'                    => $post,
+                'post_id'                 => $post_id,
+                'user_id'                 => $user_id,
+                'processing_time'         => $processing_time,
+                '_required_tax'           => $_required_tax,
+                '_disable_shipping'       => $_disable_shipping,
+                '_additional_price'       => $_additional_price,
+                '_additional_qty'         => $_additional_qty,
+                '_processing_time'        => $_processing_time,
+                'dps_shipping_type_price' => $dps_shipping_type_price,
+                'dps_additional_qty'      => $dps_additional_qty,
+                'dps_pt'                  => $dps_pt,
+                'classes_options'         => $classes_options,
+                'porduct_shipping_pt'     => $porduct_shipping_pt,
+            )
+        );
     }
 
     /**
@@ -192,13 +209,17 @@ class Products {
         $upsells_ids = get_post_meta( $post_id, '_upsell_ids', true );
         $crosssells_ids = get_post_meta( $post_id, '_crosssell_ids', true );
 
-        dokan_get_template_part( 'products/linked-product-content', '', array(
-            'pro'            => true,
-            'post'           => $post,
-            'post_id'        => $post_id,
-            'upsells_ids'    => $upsells_ids,
-            'crosssells_ids' => $crosssells_ids
-        ) );
+        dokan_get_template_part(
+            'products/linked-product-content',
+            '',
+            array(
+                'pro'            => true,
+                'post'           => $post,
+                'post_id'        => $post_id,
+                'upsells_ids'    => $upsells_ids,
+                'crosssells_ids' => $crosssells_ids,
+            )
+        );
     }
 
     /**
@@ -219,7 +240,6 @@ class Products {
         $classes_options[''] = __( 'Standard', 'dokan' );
 
         if ( $tax_classes ) {
-
             foreach ( $tax_classes as $class ) {
                 $classes_options[ sanitize_title( $class ) ] = esc_html( $class );
             }
@@ -229,26 +249,27 @@ class Products {
     }
 
     /**
-     * add per product commission options
+     * Add per product commission options
      *
      * @since 2.4.12
      *
      * @return void
      */
     public function add_per_product_commission_options() {
-
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
 
-        woocommerce_wp_select( array(
-            'id'            => '_per_product_admin_commission_type',
-            'label'         => __( 'Admin Commission type', 'dokan' ),
-            'options'       => dokan_commission_types(),
-            'wrapper_class' => 'per-product-commission-type show_if_simple show_if_variable show_if_booking',
-            'description'   => __( 'Set the commission type admin will get from this product', 'dokan' ),
-            'data_type'     => 'price'
-        ) );
+        woocommerce_wp_select(
+            array(
+                'id'            => '_per_product_admin_commission_type',
+                'label'         => __( 'Admin Commission type', 'dokan' ),
+                'options'       => dokan_commission_types(),
+                'wrapper_class' => 'per-product-commission-type show_if_simple show_if_variable show_if_booking',
+                'description'   => __( 'Set the commission type admin will get from this product', 'dokan' ),
+                'data_type'     => 'price',
+            )
+        );
 
         $product          = wc_get_product( get_the_ID() );
         $admin_commission = $product->get_meta( '_per_product_admin_commission' );
@@ -257,11 +278,11 @@ class Products {
 
         <div class="commission show_if_simple show_if_variable show_if_booking">
             <p class="form-field dimensions_field">
-                <label for="admin_commission"><?php  _e( 'Admin Commission', 'dokan' ); ?></label>
+                <label for="admin_commission"><?php esc_html_e( 'Admin Commission', 'dokan' ); ?></label>
                 <span class="wrapper">
-                    <input id="admin_commission" class="input-text wc_input_decimal" type="text" name="_per_product_admin_commission" value="<?php echo wc_format_localized_price( $admin_commission ); ?>">
+                    <input id="admin_commission" class="input-text wc_input_decimal wc_input_price" type="text" name="_per_product_admin_commission" value="<?php echo wc_format_localized_price( $admin_commission ); ?>">
                     <span class="additional_fee dokan-hide">
-                        <?php echo esc_html( '% &nbsp;&nbsp; +'); ?>
+                        <?php echo esc_html( '% &nbsp;&nbsp; +' ); ?>
                         <input class="input-text wc_input_decimal" type="text" name="_per_product_admin_additional_fee" value="<?php echo wc_format_localized_price( $additional_fee ); ?>">
                     </span>
                     <span class="combine-commission-description"></span>
@@ -298,6 +319,12 @@ class Products {
                         $('input[name=_per_product_admin_commission]').removeAttr('required');
                         $('input[name=_per_product_admin_additional_fee]').removeAttr('required');
                     }
+
+                    if ( 'flat' == $(this).val() ) {
+                        $('input#admin_commission').removeClass( 'wc_input_decimal' ).addClass( 'wc_input_price' );
+                    } else {
+                        $('input#admin_commission').removeClass( 'wc_input_price' ).addClass( 'wc_input_decimal' );
+                    }
                 }).trigger('change');
             })(jQuery);
         </script>
@@ -305,7 +332,7 @@ class Products {
     }
 
     /**
-     * save per product commission options
+     * Save per product commission options
      *
      * @since 2.4.12
      *
@@ -314,7 +341,6 @@ class Products {
      * @return void
      */
     public static function save_per_product_commission_options( $post_id ) {
-
         if ( ! current_user_can( 'manage_woocommerce' ) ) {
             return;
         }
@@ -323,17 +349,17 @@ class Products {
         $admin_commission = '';
         $additional_fee   = '';
 
-        if ( isset( $_POST['_per_product_admin_commission_type'] ) ) {
-            $commission_type = ! empty( $_POST['_per_product_admin_commission_type'] ) ? $_POST['_per_product_admin_commission_type'] : 'percentage';
+        if ( isset( $_POST['_per_product_admin_commission_type'] ) ) { // phpcs:ignore
+            $commission_type = ! empty( $_POST['_per_product_admin_commission_type'] ) ? sanitize_text_field( $_POST['_per_product_admin_commission_type'] ) : 'percentage'; // phpcs:ignore
             update_post_meta( $post_id, '_per_product_admin_commission_type', $commission_type );
         }
 
-        if ( isset( $_POST['_per_product_admin_commission'] ) ) {
-            $admin_commission = '' === $_POST['_per_product_admin_commission'] ? '' : (float) $_POST['_per_product_admin_commission'] ;
+        if ( isset( $_POST['_per_product_admin_commission'] ) ) { // phpcs:ignore
+            $admin_commission = ( '' === $_POST['_per_product_admin_commission'] ) ? '' : sanitize_text_field( $_POST['_per_product_admin_commission'] ); // phpcs:ignore
         }
 
-        if ( isset( $_POST['_per_product_admin_additional_fee'] ) ) {
-            $additional_fee = '' === $_POST['_per_product_admin_additional_fee'] ? '' : (float) $_POST['_per_product_admin_additional_fee'];
+        if ( isset( $_POST['_per_product_admin_additional_fee'] ) ) { // phpcs:ignore
+            $additional_fee = ( '' === $_POST['_per_product_admin_additional_fee'] ) ? '' : (float) $_POST['_per_product_admin_additional_fee']; // phpcs:ignore
         }
 
         // Combine commission requires both fields to be field.
@@ -341,7 +367,7 @@ class Products {
             update_post_meta( $post_id, '_per_product_admin_commission', '' );
             update_post_meta( $post_id, '_per_product_admin_additional_fee', '' );
         } else {
-            update_post_meta( $post_id, '_per_product_admin_commission', $admin_commission );
+            update_post_meta( $post_id, '_per_product_admin_commission', wc_format_decimal( $admin_commission ) );
             update_post_meta( $post_id, '_per_product_admin_additional_fee', $additional_fee );
         }
     }
@@ -356,19 +382,22 @@ class Products {
      * @return void
      */
     public function save_pro_product_data( $post_id ) {
+        // phpcs:disable WordPress.Security.NonceVerification.Missing
         if ( ! $post_id ) {
             return;
         }
 
-        $is_virtual   = isset( $_POST['_virtual'] ) ? 'yes' : 'no';
-        $product_type = empty( $_POST['product_type'] ) ? 'simple' : stripslashes( $_POST['product_type'] );
+        $post_data = wp_unslash( $_POST );
+
+        $is_virtual   = isset( $post_data['_virtual'] ) ? 'yes' : 'no';
+        $product_type = empty( $post_data['product_type'] ) ? 'simple' : $post_data['product_type'];
 
         // Save lot discount options
-        $is_lot_discount = isset( $_POST['_is_lot_discount'] ) ? $_POST['_is_lot_discount'] : 'no';
-        if ( $is_lot_discount == 'yes' ) {
-            $lot_discount_quantity = isset( $_POST['_lot_discount_quantity'] ) ? $_POST['_lot_discount_quantity'] : 0;
-            $lot_discount_amount   = isset( $_POST['_lot_discount_amount'] ) ? $_POST['_lot_discount_amount'] : 0;
-            if ( $lot_discount_quantity == '0' || $lot_discount_amount == '0' ) {
+        $is_lot_discount = isset( $post_data['_is_lot_discount'] ) ? sanitize_text_field( $post_data['_is_lot_discount'] ) : 'no';
+        if ( $is_lot_discount === 'yes' ) {
+            $lot_discount_quantity = isset( $post_data['_lot_discount_quantity'] ) ? $post_data['_lot_discount_quantity'] : 0;
+            $lot_discount_amount   = isset( $post_data['_lot_discount_amount'] ) ? $post_data['_lot_discount_amount'] : 0;
+            if ( $lot_discount_quantity === '0' || $lot_discount_amount === '0' ) {
                 update_post_meta( $post_id, '_lot_discount_quantity', $lot_discount_quantity );
                 update_post_meta( $post_id, '_lot_discount_amount', $lot_discount_amount );
                 update_post_meta( $post_id, '_is_lot_discount', 'no' );
@@ -377,29 +406,28 @@ class Products {
                 update_post_meta( $post_id, '_lot_discount_amount', $lot_discount_amount );
                 update_post_meta( $post_id, '_is_lot_discount', $is_lot_discount );
             }
-        } else if ( $is_lot_discount == 'no' ) {
+        } elseif ( $is_lot_discount === 'no' ) {
             update_post_meta( $post_id, '_lot_discount_quantity', 0 );
             update_post_meta( $post_id, '_lot_discount_amount', 0 );
             update_post_meta( $post_id, '_is_lot_discount', 'no' );
         }
 
         // Dimensions
-        if ( 'no' == $is_virtual ) {
-
-            if ( isset( $_POST['_weight'] ) ) {
-                update_post_meta( $post_id, '_weight', ( '' === $_POST['_weight'] ) ? '' : wc_format_decimal( $_POST['_weight'] )  );
+        if ( 'no' === $is_virtual ) {
+            if ( isset( $post_data['_weight'] ) ) {
+                update_post_meta( $post_id, '_weight', ( '' === $post_data['_weight'] ) ? '' : wc_format_decimal( $post_data['_weight'] ) );
             }
 
-            if ( isset( $_POST['_length'] ) ) {
-                update_post_meta( $post_id, '_length', ( '' === $_POST['_length'] ) ? '' : wc_format_decimal( $_POST['_length'] )  );
+            if ( isset( $post_data['_length'] ) ) {
+                update_post_meta( $post_id, '_length', ( '' === $post_data['_length'] ) ? '' : wc_format_decimal( $post_data['_length'] ) );
             }
 
-            if ( isset( $_POST['_width'] ) ) {
-                update_post_meta( $post_id, '_width', ( '' === $_POST['_width'] ) ? '' : wc_format_decimal( $_POST['_width'] )  );
+            if ( isset( $post_data['_width'] ) ) {
+                update_post_meta( $post_id, '_width', ( '' === $post_data['_width'] ) ? '' : wc_format_decimal( $post_data['_width'] ) );
             }
 
-            if ( isset( $_POST['_height'] ) ) {
-                update_post_meta( $post_id, '_height', ( '' === $_POST['_height'] ) ? '' : wc_format_decimal( $_POST['_height'] )  );
+            if ( isset( $post_data['_height'] ) ) {
+                update_post_meta( $post_id, '_height', ( '' === $post_data['_height'] ) ? '' : wc_format_decimal( $post_data['_height'] ) );
             }
         } else {
             update_post_meta( $post_id, '_weight', '' );
@@ -409,37 +437,37 @@ class Products {
         }
 
         //Save shipping meta data
-        update_post_meta( $post_id, '_disable_shipping', stripslashes( isset( $_POST['_disable_shipping'] ) ? $_POST['_disable_shipping'] : 'no' ) );
+        update_post_meta( $post_id, '_disable_shipping', isset( $post_data['_disable_shipping'] ) ? $post_data['_disable_shipping'] : 'no' );
 
-        if ( isset( $_POST['_overwrite_shipping'] ) && $_POST['_overwrite_shipping'] == 'yes' ) {
-            update_post_meta( $post_id, '_overwrite_shipping', stripslashes( $_POST['_overwrite_shipping'] ) );
+        if ( isset( $post_data['_overwrite_shipping'] ) && $post_data['_overwrite_shipping'] === 'yes' ) {
+            update_post_meta( $post_id, '_overwrite_shipping', $post_data['_overwrite_shipping'] );
         } else {
             update_post_meta( $post_id, '_overwrite_shipping', 'no' );
         }
 
-        update_post_meta( $post_id, '_additional_price', stripslashes( isset( $_POST['_additional_price'] ) ? $_POST['_additional_price'] : ''  ) );
-        update_post_meta( $post_id, '_additional_qty', stripslashes( isset( $_POST['_additional_qty'] ) ? $_POST['_additional_qty'] : ''  ) );
-        update_post_meta( $post_id, '_dps_processing_time', stripslashes( isset( $_POST['_dps_processing_time'] ) ? $_POST['_dps_processing_time'] : ''  ) );
+        update_post_meta( $post_id, '_additional_price', isset( $post_data['_additional_price'] ) ? $post_data['_additional_price'] : '' );
+        update_post_meta( $post_id, '_additional_qty', isset( $post_data['_additional_qty'] ) ? $post_data['_additional_qty'] : '' );
+        update_post_meta( $post_id, '_dps_processing_time', isset( $post_data['_dps_processing_time'] ) ? $post_data['_dps_processing_time'] : '' );
 
         // Save shipping class
-        $product_shipping_class = ( isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $_POST['product_shipping_class'] ) : '';
+        $product_shipping_class = ( isset( $post_data['product_shipping_class'] ) && $post_data['product_shipping_class'] > 0 && 'external' !== $product_type ) ? absint( $post_data['product_shipping_class'] ) : '';
         wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
         // Cross sells and upsells
-        $upsells    = isset( $_POST['upsell_ids'] ) ? array_map( 'intval', $_POST['upsell_ids'] ) : array();
-        $crosssells = isset( $_POST['crosssell_ids'] ) ? array_map( 'intval', $_POST['crosssell_ids'] ) : array();
+        $upsells    = isset( $post_data['upsell_ids'] ) ? array_map( 'intval', $post_data['upsell_ids'] ) : array();
+        $crosssells = isset( $post_data['crosssell_ids'] ) ? array_map( 'intval', $post_data['crosssell_ids'] ) : array();
 
         update_post_meta( $post_id, '_upsell_ids', $upsells );
         update_post_meta( $post_id, '_crosssell_ids', $crosssells );
 
         // Save variations
-        if ( 'variable' == $product_type ) {
+        if ( 'variable' === $product_type ) {
             dokan_save_variations( $post_id );
         }
 
-        if ( 'grouped' == $product_type && version_compare( WC_VERSION, '2.7', '>' ) ) {
+        if ( 'grouped' === $product_type && version_compare( WC_VERSION, '2.7', '>' ) ) {
             $product = wc_get_product( $post_id );
-            $group_product_ids = isset( $_POST['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $_POST['grouped_products'] ) ) : array();
+            $group_product_ids = isset( $post_data['grouped_products'] ) ? array_filter( array_map( 'intval', (array) $post_data['grouped_products'] ) ) : array();
             $product->set_props( array( 'children' => $group_product_ids ) );
             $product->save();
 
@@ -468,9 +496,12 @@ class Products {
         }
 
         // Newly added tags will be string typed data
-        $tags = array_filter( $posted_data['product_tag'], function ( $tag ) {
-            return ! absint( $tag );
-        } );
+        $tags = array_filter(
+            $posted_data['product_tag'],
+            function ( $tag ) {
+                return ! absint( $tag );
+            }
+        );
 
         if ( ! empty( $tags ) ) {
             $tags_ids = array();
@@ -516,7 +547,7 @@ class Products {
         if ( $can_duplicate_product && 'on' === $vendor_can_duplicate_product ) {
             $row_action['duplicate'] = array(
                 'title' => __( 'Duplicate', 'dokan' ),
-                'url'   => wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $post->ID ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ),
+                'url'   => wp_nonce_url( add_query_arg( array( 'action' => 'dokan-duplicate-product', 'product_id' => $post->ID, ), dokan_get_navigation_url('products') ), 'dokan-duplicate-product' ), // phpcs:ignore
                 'class' => 'duplicate',
             );
         }
@@ -532,12 +563,11 @@ class Products {
     * @return void
     **/
     public function handle_duplicate_product() {
-
         if ( ! is_user_logged_in() ) {
             return;
         }
 
-        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) == 'off' ) {
+        if ( dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' ) === 'off' ) {
             return;
         }
 
@@ -549,21 +579,21 @@ class Products {
             return;
         }
 
-        if ( isset( $_GET['action'] ) && $_GET['action'] == 'dokan-duplicate-product' ) {
+        if ( isset( $_GET['action'] ) && $_GET['action'] === 'dokan-duplicate-product' ) {
             $product_id = isset( $_GET['product_id'] ) ? (int) $_GET['product_id'] : 0;
 
-            if ( !$product_id ) {
-                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
+            if ( ! $product_id ) {
+                wp_safe_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
                 return;
             }
 
-            if ( !wp_verify_nonce( $_GET['_wpnonce'], 'dokan-duplicate-product' ) ) {
-                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
+            if ( ! isset( $_GET['_wpnonce'] ) || ! wp_verify_nonce( $_GET['_wpnonce'], 'dokan-duplicate-product' ) ) { // phpcs:ignore
+                wp_safe_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
                 return;
             }
 
-            if ( !dokan_is_product_author( $product_id ) ) {
-                wp_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
+            if ( ! dokan_is_product_author( $product_id ) ) {
+                wp_safe_redirect( add_query_arg( array( 'message' => 'error' ), dokan_get_navigation_url( 'products' ) ) );
                 return;
             }
 
@@ -572,11 +602,11 @@ class Products {
             // Compatibility for WC 3.0+
             if ( version_compare( WC_VERSION, '2.7', '>' ) ) {
                 $product = wc_get_product( $product_id );
-                $clone_product =  $wo_dup->product_duplicate( $product );
-                $clone_product_id =  $clone_product->get_id();
+                $clone_product = $wo_dup->product_duplicate( $product );
+                $clone_product_id = $clone_product->get_id();
             } else {
                 $post = get_post( $product_id );
-                $clone_product_id =  $wo_dup->duplicate_product( $post );
+                $clone_product_id = $wo_dup->duplicate_product( $post );
             }
 
             // If vendor is disabled, make product status pending
@@ -586,12 +616,17 @@ class Products {
                 $product_status = dokan_get_new_post_status();
             }
 
-            wp_update_post( array( 'ID' => intval( $clone_product_id ), 'post_status' => $product_status ) );
+            wp_update_post(
+                array(
+                    'ID' => intval( $clone_product_id ),
+                    'post_status' => $product_status,
+                )
+            );
 
             do_action( 'dokan_product_duplicate_after_save', $clone_product, $product );
 
             $redirect = apply_filters( 'dokan_redirect_after_product_duplicating', dokan_get_navigation_url( 'products' ), $product_id, $clone_product_id );
-            wp_redirect( add_query_arg( array( 'message' => 'product_duplicated' ),  $redirect ) );
+            wp_safe_redirect( add_query_arg( array( 'message' => 'product_duplicated' ), $redirect ) );
             exit;
         }
     }
@@ -604,8 +639,15 @@ class Products {
     * @return void
     **/
     public function display_duplicate_message( $type ) {
-        if ( 'product_duplicated' == $type ) {
-            dokan_get_template_part( 'global/dokan-success', '', array( 'deleted' => true, 'message' => __( 'Product succesfully duplicated', 'dokan' ) ) );
+        if ( 'product_duplicated' === $type ) {
+            dokan_get_template_part(
+                'global/dokan-success',
+                '',
+                array(
+                    'deleted' => true,
+                    'message' => __( 'Product succesfully duplicated', 'dokan' ),
+                )
+            );
         }
     }
 
@@ -617,8 +659,9 @@ class Products {
      * @param integer $post_id
      */
     public function set_product_type( $post_id ) {
-        if ( isset( $_POST['product_type'] ) ) {
-            wp_set_object_terms( $post_id, $_POST['product_type'], 'product_type' );
+        $post_data = wp_unslash( $_POST );
+        if ( isset( $post_data['product_type'] ) ) {
+            wp_set_object_terms( $post_id, $post_data['product_type'], 'product_type' );
         }
     }
 
@@ -655,7 +698,6 @@ class Products {
      * @return $product_types
      */
     public function set_default_product_types( $product_types ) {
-
         $product_types = array(
             'simple' => __( 'Simple', 'dokan' ),
             'variable' => __( 'Variable', 'dokan' ),
@@ -678,15 +720,14 @@ class Products {
      * @param string $status
      */
     public function updated_product_email( $product_id ) {
-
-        if ( dokan_get_option( 'edited_product_status', 'dokan_selling', 'off' ) != 'on' ) {
+        if ( dokan_get_option( 'edited_product_status', 'dokan_selling', 'off' ) !== 'on' ) {
             return;
         }
 
-        $product       = wc_get_product( $product_id );
-        $seller_id     = get_post_field( 'post_author', $product_id );
-        $seller        = get_user_by( 'id', $seller_id );
-        $category      = wp_get_post_terms( dokan_get_prop( $product, 'id' ), 'product_cat', array( 'fields' => 'names' ) );
+        $product   = wc_get_product( $product_id );
+        $seller_id = get_post_field( 'post_author', $product_id );
+        $seller    = get_user_by( 'id', $seller_id );
+        $category  = wp_get_post_terms( dokan_get_prop( $product, 'id' ), 'product_cat', array( 'fields' => 'names' ) );
 
         do_action( 'dokan_edited_product_pending_notification', $product, $seller, $category );
     }
@@ -699,12 +740,16 @@ class Products {
     * @return void
     **/
     public function group_product_content( $post, $post_id ) {
-        dokan_get_template_part( 'products/group-product', '', array(
-            'pro'            => true,
-            'post'           => $post,
-            'post_id'        => $post_id,
-            'product'        => wc_get_product( $post_id )
-        ) );
+        dokan_get_template_part(
+            'products/group-product',
+            '',
+            array(
+                'pro'            => true,
+                'post'           => $post,
+                'post_id'        => $post_id,
+                'product'        => wc_get_product( $post_id ),
+            )
+        );
     }
 
     /**
@@ -866,15 +911,17 @@ class Products {
      * @return void
      */
     public function product_inline_edit() {
-        if ( ! wp_verify_nonce( $_POST['security'], 'product-inline-edit' ) ) {
+        $post_data = wp_unslash( $_POST );
+
+        if ( ! isset( $post_data['security'] ) || ! wp_verify_nonce( $post_data['security'], 'product-inline-edit' ) ) {
             wp_send_json_error( __( 'Invalid nonce', 'dokan' ) );
         }
 
-        if ( empty( $_POST['data'] ) ) {
-            wp_send_json_error( __( 'data is empty' ), 422 );
+        if ( empty( $post_data['data'] ) ) {
+            wp_send_json_error( __( 'data is empty', 'dokan' ), 422 );
         }
 
-        $posted_data = $_POST['data'];
+        $posted_data = $post_data['data'];
 
         if ( empty( $posted_data['ID'] ) ) {
             wp_send_json_error( __( 'Product ID field is required', 'dokan' ), 422 );
@@ -948,7 +995,7 @@ class Products {
 
         $post = get_post( $product_id );
         $row_actions = dokan_product_get_row_action( $post );
-        $tr_class = ( $post->post_status == 'pending' ) ? 'danger' : '';
+        $tr_class = ( $post->post_status === 'pending' ) ? 'danger' : '';
 
         $row_args = array(
             'post' => $post,
