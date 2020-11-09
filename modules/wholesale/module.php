@@ -17,7 +17,7 @@ class Module {
     }
 
     /**
-     * hooks
+     * Hooks
      *
      * @since 2.9.5
      *
@@ -41,7 +41,7 @@ class Module {
     }
 
     /**
-     * includes all necessary class a functions file
+     * Includes all necessary class a functions file
      *
      * @since 2.9.5
      *
@@ -111,16 +111,28 @@ class Module {
 
         if ( $post ) {
             $product = wc_get_product( $post->ID );
+            $get     = wp_unslash( $_GET ); // phpcs:ignore CSRF ok.
+
+            if ( dokan_is_seller_dashboard() && isset( $get['product_id'] ) ) {
+                $post_id = intval( $get['product_id'] );
+                $product = wc_get_product( $post_id );
+            }
 
             if ( $product ) {
                 wp_enqueue_script( 'dokan-wholesale-script', DOKAN_WHOLESALE_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
-                wp_localize_script( 'dokan-wholesale-script', 'DokanWholesale', [
+                wp_localize_script(
+                    'dokan-wholesale-script',
+                    'DokanWholesale',
+                    [
                         'currency_symbol'   => get_woocommerce_currency_symbol(),
                         'check_permission'  => dokan_wholesale_can_see_price(),
-                        'variation_wholesale_string' => apply_filters( 'dokan_variable_product_wholesale_string', [
-                            'wholesale_price' => __( 'Wholesale Price', 'dokan' ),
-                            'minimum_quantity' => __( 'Minimum Quantity', 'dokan' )
-                        ] )
+                        'variation_wholesale_string' => apply_filters(
+                            'dokan_variable_product_wholesale_string',
+                            [
+                                'wholesale_price' => __( 'Wholesale Price', 'dokan' ),
+                                'minimum_quantity' => __( 'Minimum Quantity', 'dokan' ),
+                            ]
+                        ),
                     ]
                 );
             }
@@ -150,7 +162,7 @@ class Module {
      * @return void
      */
     public function rest_api_class_map( $class_map ) {
-        $class_map[ DOKAN_WHOLESALE_INC_DIR . '/api/class-wholesale-controller.php'] = 'Dokan_REST_Wholesale_Controller';
+        $class_map[ DOKAN_WHOLESALE_INC_DIR . '/api/class-wholesale-controller.php' ] = 'Dokan_REST_Wholesale_Controller';
 
         return $class_map;
     }
@@ -179,15 +191,14 @@ class Module {
             $email->description = __( 'New emails are sent to the admin when a new wholesale registration occured.', 'dokan' );
 
             $email->template_base = $this->plugin_path() . '/templates';
-            $email->recipient     = get_option( 'admin_email' );;
+            $email->recipient     = get_option( 'admin_email' );
         }
 
         return $emails;
-
     }
 
     public function load_dokan_wholesale_register_emails( $wc_emails ) {
-        $wc_emails['Dokan_Email_Wholesale_Register'] = include( DOKAN_WHOLESALE_INC_DIR. '/emails/class-dokan-wholesale-email-registration.php' );
+        $wc_emails['Dokan_Email_Wholesale_Register'] = include DOKAN_WHOLESALE_INC_DIR . '/emails/class-dokan-wholesale-email-registration.php';
 
         return $wc_emails;
     }
