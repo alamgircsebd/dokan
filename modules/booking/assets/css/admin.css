@@ -678,7 +678,7 @@ th.column-booking_status {
         margin-right: 6px;
         line-height: 24px; }
       .wc_bookings_calendar_form .wc_bookings_calendar td .bookings {
-        height: 100px;
+        height: auto;
         width: 100%;
         text-align: left;
         font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif; }
