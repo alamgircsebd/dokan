@@ -54,8 +54,8 @@ class Dokan_Staffs {
      * @return void
      */
     public function add_staff_content() {
-        $get = wp_unslash( $_GET ); // phpcs:ignore 
-        $is_edit = ( isset( $get['action'] ) && $get['action'] === 'edit' && ! empty( $get['staff_id'] ) ) ? $get['staff_id'] : 0;
+        $get_data = wp_unslash( $_GET ); // phpcs:ignore
+        $is_edit = ( isset( $get_data['action'] ) && $get_data['action'] === 'edit' && ! empty( $get_data['staff_id'] ) ) ? $get_data['staff_id'] : 0;
 
         if ( ! $is_edit ) {
             $first_name  = '';
@@ -64,7 +64,7 @@ class Dokan_Staffs {
             $phone       = '';
             $button_name = __( 'Create staff', 'dokan' );
         } else {
-            $user        = get_user_by( 'id', $get['staff_id'] );
+            $user        = get_user_by( 'id', $get_data['staff_id'] );
             $first_name  = $user->first_name;
             $last_name   = $user->last_name;
             $email       = $user->user_email;
@@ -83,7 +83,7 @@ class Dokan_Staffs {
      * @return void
      */
     public function handle_staff() {
-        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+        $post_data = wp_unslash( $_POST );
 
         if ( ! isset( $post_data['staff_creation'] ) ) {
             return;
@@ -193,7 +193,7 @@ class Dokan_Staffs {
      * @return void
      */
     public function delete_staff() {
-        $get_data = wp_unslash( $_GET ); // phpcs:ignore
+        $get_data = wp_unslash( $_GET );
 
         if ( isset( $get_data['action'] ) && $get_data['action'] === 'delete_staff' ) {
             if ( isset( $get_data['_staff_delete_nonce'] ) && wp_verify_nonce( $get_data['_staff_delete_nonce'], 'staff_delete_nonce' ) ) {
@@ -222,7 +222,8 @@ class Dokan_Staffs {
      * @return void
      */
     public function handle_pemission() {
-        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+        $post_data = wp_unslash( $_POST );
+        $get_data  = wp_unslash( $_GET );
 
         if ( ! isset( $post_data['update_staff_permission'] ) ) {
             return;
@@ -236,11 +237,11 @@ class Dokan_Staffs {
             return;
         }
 
-        if ( isset( $_GET['view'] ) && $_GET['view'] !== 'manage_permissions' ) {
+        if ( isset( $get_data['view'] ) && $get_data['view'] !== 'manage_permissions' ) {
             return;
         }
 
-        $staff_id  = ! empty( $_GET['staff_id'] ) ? $_GET['staff_id'] : 0;
+        $staff_id  = ! empty( $get_data['staff_id'] ) ? $get_data['staff_id'] : 0;
         $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
 
         if ( $staff_id && $vendor_id !== get_current_user_id() ) {
