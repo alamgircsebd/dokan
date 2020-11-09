@@ -24,7 +24,7 @@ class Module {
         add_filter( 'dokan_product_listing_query', array( $this, 'modified_product_listing_query' ) );
         add_filter( 'dokan_get_post_status', array( $this, 'show_vacation_status_listing' ), 12 );
         add_filter( 'dokan_get_post_status_label_class', array( $this, 'show_vacation_status_listing_label' ), 12 );
-        add_filter( 'dokan_pre_product_listing_args', array( $this, 'dokan_pre_product_listing_args_modified' ), 12, 2 );
+        add_filter( 'dokan_product_listing_post_statuses', array( $this, 'add_vacation_product_listing_statuses_filter' ), 12, 1 );
 
         add_action( 'dokan_product_listing_status_filter', array( $this, 'add_vacation_product_listing_filter' ), 10, 2 );
         add_action( 'dokan_store_profile_frame_after', array( $this, 'show_vacation_message' ), 10, 2 );
@@ -183,25 +183,16 @@ class Module {
      *
      * @since DOKAN_PRO_SINCE
      *
-     * @param array $args
-     * @param array $get_data
+     * @param array $post_status
      *
      * @return array
      */
-    public function dokan_pre_product_listing_args_modified( $args, $get_data ) {
-        $post_statuses = array( 'publish', 'draft', 'pending', 'future', 'vacation' );
-
-        if ( isset( $get_data['post_status'] ) && $get_data['post_status'] === 'vacation' ) {
-            $args['post_status'] = $get_data['post_status'];
-            return $args;
+    public function add_vacation_product_listing_statuses_filter( $post_status ) {
+        if ( is_array( $post_status ) ) {
+            $post_status[] = 'vacation';
         }
 
-        if ( is_array( $args ) && ! isset( $get_data['post_status'] ) ) {
-            $args['post_status'] = $post_statuses;
-            return $args;
-        }
-
-        return $args;
+        return $post_status;
     }
 
     /**
