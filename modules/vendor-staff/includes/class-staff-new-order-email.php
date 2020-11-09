@@ -32,9 +32,9 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
             $this->description    = __( 'New order emails are sent to chosen recipient(s) when a new order is received.', 'dokan' );
             $this->template_html  = 'emails/staff-new-order.php';
             $this->template_plain = 'emails/plain/staff-new-order.php';
-            $this->template_base  = DOKAN_VENDOR_staff_DIR.'/templates/';
+            $this->template_base  = DOKAN_VENDOR_STAFF_DIR . '/templates/';
 
-            $this->placeholders   = array(
+            $this->placeholders = array(
                 '{site_title}'   => $this->get_blogname(),
                 '{order_date}'   => '',
                 '{order_number}' => '',
@@ -98,7 +98,7 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
                 $this->placeholders['{order_number}'] = $this->object->get_order_number();
             }
 
-            $staff_ids  = dokan_get_staff_id_by_order( $order_id );
+            $staff_ids = dokan_get_staff_id_by_order( $order_id );
 
             if ( empty( $staff_ids ) ) {
                 return;
@@ -132,7 +132,7 @@ if ( ! class_exists( 'Dokan_Staff_New_Order' ) ) :
                     'plain_text'    => false,
                     'email'         => $this,
                     'order_info'    => $this->order_info,
-                ), 'dokan' ,$this->template_base
+                ), 'dokan', $this->template_base
             );
         }
 
