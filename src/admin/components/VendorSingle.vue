@@ -509,7 +509,7 @@ export default {
             this.store.admin_additional_fee = accounting.formatNumber( this.store.admin_additional_fee, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format );
             this.store.admin_commission = this.store.admin_commission_type == 'flat' ? accounting.formatNumber( this.store.admin_commission, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format ) : this.store.admin_commission;
 
-            if (this.store.admin_commission === '0.00') {
+            if (this.store.admin_commission === accounting.formatNumber( 0.00, dokan.currency.precision, dokan.currency.thousand, dokan.currency.decimal, dokan.currency.format )) {
                 this.store.admin_commission = '';
             }
         },
