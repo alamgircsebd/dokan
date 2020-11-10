@@ -242,7 +242,7 @@ class Dokan_Staffs {
         }
 
         $staff_id  = ! empty( $get_data['staff_id'] ) ? $get_data['staff_id'] : 0;
-        $vendor_id = get_user_meta( $staff_id, '_vendor_id', true );
+        $vendor_id = (int) get_user_meta( $staff_id, '_vendor_id', true );
 
         if ( $staff_id && $vendor_id !== get_current_user_id() ) {
             return;
