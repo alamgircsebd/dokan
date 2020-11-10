@@ -31,6 +31,8 @@ class Module {
         add_action( 'template_redirect', array( $this, 'remove_product_from_cart_for_closed_store' ) );
         add_action( 'dokan_new_product_added', array( $this, 'product_status_modified_on_vacation' ), 12 );
         add_action( 'dokan_product_updated', array( $this, 'product_status_modified_on_vacation' ), 12 );
+        add_action( 'dokan_product_duplicate_after_save', array( $this, 'set_vacation_duplicate_product_brands' ), 35 );
+        add_filter( 'dokan_bulk_product_statuses', array( $this, 'set_vacation_product_statuses' ), 35 );
     }
 
     /**
@@ -254,6 +256,29 @@ class Module {
      *
      * @return void
      */
+    public function set_vacation_duplicate_product_brands( $clone_product ) {
+        if ( ! isset( $clone_product ) ) {
+            return;
+        }
+
+        $seller_id = get_post_field( 'post_author', $clone_product->get_id() );
+
+        if ( dokan_seller_vacation_is_seller_on_vacation( $seller_id ) ) {
+            $product = wc_get_product( $clone_product->get_id() );
+            $product->set_status( 'vacation' );
+            $product->save();
+        }
+    }
+
+    /**
+     * Product status modified on vacation enable
+     *
+     * @since DOKAN_PRO_SINCH
+     *
+     * @param int $product_id
+     *
+     * @return void
+     */
     public function product_status_modified_on_vacation( $product_id ) {
         $seller_id = get_post_field( 'post_author', $product_id );
 
@@ -262,5 +287,23 @@ class Module {
             $product->set_status( 'vacation' );
             $product->save();
         }
+    }
+
+    /**
+     * Bulk edit status modified on vacation enable
+     *
+     * @since DOKAN_PRO_SINCH
+     *
+     * @param array $status
+     *
+     * @return array $status
+     */
+    public function set_vacation_product_statuses( $status ) {
+        $vendor_id = dokan_get_current_user_id();
+        if ( isset( $status['publish'] ) && dokan_seller_vacation_is_seller_on_vacation( $vendor_id ) ) {
+            unset( $status['publish'] );
+        }
+
+        return $status;
     }
 }
