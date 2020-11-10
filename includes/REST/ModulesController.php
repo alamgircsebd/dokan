@@ -133,8 +133,8 @@ class ModulesController extends DokanRESTAdminController {
                 'plan'         => $module['plan'],
                 'active'       => in_array( $module['id'], $activate_modules, true ),
                 'available'    => file_exists( $module['module_file'] ),
-                'doc_id'       => $module['doc_id'] ?? null,
-                'doc_link'     => $module['doc_link'] ?? null,
+                'doc_id'       => isset( $module['doc_id'] ) ? $module['doc_id'] : null,
+                'doc_link'     => isset( $module['doc_link'] ) ? $module['doc_link'] : null,
             ];
         }
 

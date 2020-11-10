@@ -11,16 +11,16 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.0.0",
         "wikimedia/composer-merge-plugin": "^1.3@dev",
-        "hybridauth/hybridauth": "^3.0@dev",
-        "phpunit/phpunit": "^6.5"
+        "hybridauth/hybridauth": "^3.0@dev"
     },
     "require-dev": {
         "wp-coding-standards/wpcs": "dev-master",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.4.3",
         "tareq1988/wp-php-cs-fixer": "dev-master",
-        "phpcompatibility/phpcompatibility-wp": "dev-master"
+        "phpcompatibility/phpcompatibility-wp": "dev-master",
+        "phpunit/phpunit": ">=6.5.14"
     },
     "config": {
         "platform": {
