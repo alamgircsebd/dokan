@@ -149,13 +149,13 @@ class Module {
 
         add_role(
             'vendor_staff', __( 'Vendor Staff', 'dokan' ), array(
-				'read'     => true,
+                'read'     => true,
             )
         );
 
         $users_query = new \WP_User_Query(
             array(
-				'role' => 'vendor_staff',
+                'role' => 'vendor_staff',
             )
         );
 
@@ -195,7 +195,7 @@ class Module {
     public static function deactivate() {
         $users_query = new \WP_User_Query(
             array(
-				'role' => 'vendor_staff',
+                'role' => 'vendor_staff',
             )
         );
 
@@ -276,8 +276,8 @@ class Module {
             if ( ! current_user_can( 'seller' ) ) {
                 dokan_get_template_part(
                     'global/dokan-error', '', array(
-						'deleted' => false,
-						'message' => __( 'You have no permission to view this page', 'dokan' ),
+                        'deleted' => false,
+                        'message' => __( 'You have no permission to view this page', 'dokan' ),
                     )
                 );
             } else {
