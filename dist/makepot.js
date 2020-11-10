@@ -6,6 +6,9 @@ wpvuei18n.makepot( {
         'build/*',
         'node_modules/*',
         'modules/.*/assets/js',
+        'vendor/*',
+        '.github/*',
+        '.php_cs'
     ],
     mainFile: 'dokan-pro.php',
     domainPath: '/languages/',
