@@ -29,6 +29,8 @@ class Module {
         add_action( 'dokan_product_listing_status_filter', array( $this, 'add_vacation_product_listing_filter' ), 10, 2 );
         add_action( 'dokan_store_profile_frame_after', array( $this, 'show_vacation_message' ), 10, 2 );
         add_action( 'template_redirect', array( $this, 'remove_product_from_cart_for_closed_store' ) );
+        add_action( 'dokan_new_product_added', array( $this, 'product_status_modified_on_vacation' ), 12 );
+        add_action( 'dokan_product_updated', array( $this, 'product_status_modified_on_vacation' ), 12 );
     }
 
     /**
@@ -240,6 +242,25 @@ class Module {
                     WC()->cart->remove_cart_item( $product_cart_id );
                 }
             }
+        }
+    }
+
+    /**
+     * Product status modified on vacation enable
+     *
+     * @since DOKAN_PRO_SINCH
+     *
+     * @param int $product_id
+     *
+     * @return void
+     */
+    public function product_status_modified_on_vacation( $product_id ) {
+        $seller_id = get_post_field( 'post_author', $product_id );
+
+        if ( dokan_seller_vacation_is_seller_on_vacation( $seller_id ) ) {
+            $product = wc_get_product( $product_id );
+            $product->set_status( 'vacation' );
+            $product->save();
         }
     }
 }
