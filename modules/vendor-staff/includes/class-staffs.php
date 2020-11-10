@@ -237,7 +237,7 @@ class Dokan_Staffs {
             return;
         }
 
-        if ( isset( $get_data['view'] ) && $get_data['view'] !== 'manage_permissions' ) {
+        if ( isset( $get_data['view'] ) && 'manage_permissions' !== $get_data['view'] ) {
             return;
         }
 
@@ -269,12 +269,12 @@ class Dokan_Staffs {
         }
 
         $redirect_url = add_query_arg(
-            array(
-				'view' => 'manage_permissions',
-				'action' => 'manage',
-				'staff_id' => $staff_id,
-				'message' => 'success',
-            ), dokan_get_navigation_url( 'staffs' )
+            [
+                'view'     => 'manage_permissions',
+                'action'   => 'manage',
+                'staff_id' => $staff_id,
+                'message'  => 'success',
+            ], dokan_get_navigation_url( 'staffs' )
         );
         wp_safe_redirect( $redirect_url );
     }
@@ -307,10 +307,10 @@ class Dokan_Staffs {
         }
 
         wp_update_post(
-            array(
-				'ID' => $product_id,
-				'post_author' => $vendor_id,
-            )
+            [
+                'ID' => $product_id,
+                'post_author' => $vendor_id,
+            ]
         );
         update_post_meta( $product_id, '_staff_id', $staff_id );
     }
