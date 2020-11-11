@@ -242,7 +242,7 @@ class Module {
     * @since 2.8
     *
     * @return void
-    **/
+    */
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
@@ -253,7 +253,7 @@ class Module {
     * @since 2.8
     *
     * @return void
-    **/
+    */
     public function load_vendor_staff_templates( $template_path, $template, $args ) {
         if ( isset( $args['is_vendor_staff'] ) && $args['is_vendor_staff'] ) {
             return $this->plugin_path() . '/templates';
@@ -292,8 +292,6 @@ class Module {
             }
         }
     }
-
-
 
     /**
      * Add staffs page in seller dashboard
