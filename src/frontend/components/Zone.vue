@@ -444,7 +444,9 @@ export default {
                     name: dokanShipping.states[code][statecode]
                 } ) );
 
-                states = states.concat( states, stateArray);
+                if( stateArray.length > 0 ) {
+                    states = states.concat( states, stateArray);
+                }
             });
 
             return states;
