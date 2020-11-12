@@ -209,7 +209,7 @@ class ReviewsController extends DokanRESTController {
      * @return bool
      */
     public function create_item_permissions_check( $request ) {
-        if ( ! class_exists( 'Dokan_Store_Reviews' ) ) {
+        if ( ! dokan_pro()->module->is_active( 'store_reviews' ) ) {
             return false;
         }
 
