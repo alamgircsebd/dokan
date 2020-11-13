@@ -43,6 +43,11 @@ class SubscriptionDeleted implements WebhookHandleable {
         $vendor_id     = Helper::get_vendor_id_by_subscription( $subscription->id );
         $order_id      = get_user_meta( $vendor_id, 'product_order_id', true );
         $has_recurring = get_user_meta( $vendor_id, '_customer_recurring_subscription', true );
+        $product_id    = get_user_meta( $vendor_id, 'product_package_id', true );
+
+        if ( ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+            return;
+        }
 
         if ( $has_recurring ) {
             SubscriptionHelper::delete_subscription_pack( $vendor_id, $order_id );

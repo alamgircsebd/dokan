@@ -4,12 +4,12 @@ use DokanPro\Modules\Subscription\Helper;
 use WeDevs\Dokan\Abstracts\DokanRESTController;
 
 /**
-* Subscription API controller
-*
-* @since 2.8.0
-*
-* @package dokan
-*/
+ * Subscription API controller
+ *
+ * @since 2.8.0
+ *
+ * @package dokan
+ */
 class Dokan_REST_Subscription_Controller extends DokanRESTController {
 
     /**
@@ -34,31 +34,37 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
      * @return void
      */
     public function register_routes() {
-        register_rest_route( $this->namespace, '/' . $this->base, [
-            [
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => [ $this, 'get_subscription' ],
-                'permission_callback' => [ $this, 'check_permission' ],
-                'args'                => $this->get_collection_params(),
-            ],
-        ] );
+        register_rest_route(
+            $this->namespace, '/' . $this->base, [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_subscription' ],
+                    'permission_callback' => [ $this, 'check_permission' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)/', [
-            [
-                'methods'             => WP_REST_Server::EDITABLE,
-                'callback'            => [ $this, 'update_subscription' ],
-                'permission_callback' => [ $this, 'check_permission' ],
-                'args'                => $this->get_collection_params(),
-            ],
-        ] );
+        register_rest_route(
+            $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)/', [
+                [
+                    'methods'             => WP_REST_Server::EDITABLE,
+                    'callback'            => [ $this, 'update_subscription' ],
+                    'permission_callback' => [ $this, 'check_permission' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/batch', [
-            [
-                'methods'  => WP_REST_Server::EDITABLE,
-                'callback' => [ $this, 'batch_update' ],
-                'permission_callback' => [ $this, 'check_permission' ],
-            ],
-        ] );
+        register_rest_route(
+            $this->namespace, '/' . $this->base . '/batch', [
+                [
+                    'methods'  => WP_REST_Server::EDITABLE,
+                    'callback' => [ $this, 'batch_update' ],
+                    'permission_callback' => [ $this, 'check_permission' ],
+                ],
+            ]
+        );
     }
 
     /**
@@ -82,19 +88,21 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
     public function get_subscription( $request ) {
         $params = $request->get_params();
 
-        $args = apply_filters( 'dokan_get_subscription_args', [
-            'role' => 'seller',
-            'meta_query' => [
-                [
-                    'key'   => 'can_post_product',
-                    'value' => '1'
-                ],
-                [
-                    'key'   => 'dokan_enable_selling',
-                    'value' => 'yes'
+        $args = apply_filters(
+            'dokan_get_subscription_args', [
+                'role__in' => [ 'seller', 'administrator' ],
+                'meta_query' => [
+                    [
+                        'key'   => 'can_post_product',
+                        'value' => '1',
+                    ],
+                    [
+                        'key'   => 'dokan_enable_selling',
+                        'value' => 'yes',
+                    ],
                 ],
             ]
-        ] );
+        );
 
         if ( ! empty( $params['per_page'] ) ) {
             $args['number'] = $params['per_page'];
@@ -236,8 +244,9 @@ class Dokan_REST_Subscription_Controller extends DokanRESTController {
                     Helper::log( 'Subscription cancellation check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
                     do_action( 'dps_cancel_recurring_subscription', $order_id, $user_id, $cancel_immediately );
                 } elseif ( ! $vendor->has_recurring_pack() ) {
+                    $cancel_immediately = true;
                     Helper::log( 'Subscription cancellation check: Admin has canceled Subscription of User #' . $user_id . ' on order #' . $order_id );
-                    do_action( 'dps_cancel_non_recurring_subscription', $order_id, $user_id );
+                    do_action( 'dps_cancel_non_recurring_subscription', $order_id, $user_id, $cancel_immediately );
                 }
             }
         }

@@ -238,7 +238,7 @@ class IntentController extends StripePaymentGateway {
      */
     public function process_vendor_payment( $order, $intent ) {
         if ( Helper::is_subscription_order( $order ) ) {
-            $is_recurring = false;
+            $is_recurring = true;
             do_action( 'dokan_process_subscription_order', $order, $intent, $is_recurring );
             return;
         }

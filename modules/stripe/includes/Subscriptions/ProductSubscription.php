@@ -115,7 +115,6 @@ class ProductSubscription extends StripePaymentGateway {
         if ( $dokan_subscription->is_recurring() ) {
             $subscription_interval = $dokan_subscription->get_recurring_interval();
             $subscription_period   = $dokan_subscription->get_period_type();
-            $subscription_length   = $dokan_subscription->get_period_length();
             $trial_period_days     = $dokan_subscription->is_trial() ? $dokan_subscription->get_trial_period_length() : 0;
 
             // if vendor already has used a trial pack, create a new plan without trial period
@@ -128,20 +127,24 @@ class ProductSubscription extends StripePaymentGateway {
                 $stripe_plan   = Plan::retrieve( $product_pack_id );
                 $this->plan_id = $stripe_plan->id;
             } catch ( Exception $e ) {
-                $stripe_product = Product::create( [
-                   'name' => $product_pack_name,
-                   'type' => 'service'
-                ] );
+                $stripe_product = Product::create(
+                    [
+                        'name' => $product_pack_name,
+                        'type' => 'service',
+                    ]
+                );
 
-                $stripe_plan = Plan::create( [
-                    'amount'            => StripeHelper::get_stripe_amount( $product_pack->get_price() ),
-                    'interval'          => $subscription_period,
-                    'interval_count'    => $subscription_interval,
-                    'currency'          => strtolower( get_woocommerce_currency() ),
-                    'id'                => $product_pack_id,
-                    'product'           => $stripe_product->id,
-                    'trial_period_days' => $trial_period_days
-                ] );
+                $stripe_plan = Plan::create(
+                    [
+                        'amount'            => StripeHelper::get_stripe_amount( $product_pack->get_price() ),
+                        'interval'          => $subscription_period,
+                        'interval_count'    => $subscription_interval,
+                        'currency'          => strtolower( get_woocommerce_currency() ),
+                        'id'                => $product_pack_id,
+                        'product'           => $stripe_product->id,
+                        'trial_period_days' => $trial_period_days,
+                    ]
+                );
 
                 $this->plan_id = $stripe_plan->id;
             }
@@ -151,25 +154,26 @@ class ProductSubscription extends StripePaymentGateway {
             if ( empty( $subscription->id ) ) {
                 $error = [
                     'code'    => 'subscription_not_created',
-                    'message' => __( 'Unable to create subscription', 'dokan' )
+                    'message' => __( 'Unable to create subscription', 'dokan' ),
                 ];
 
                 return wp_send_json_error( $error, 422 );
             }
 
-            $add_s = ( $subscription_interval != 1 ) ? 's' : '';
-            update_user_meta( $vendor_id, 'can_post_product', '1' );
-            update_user_meta( $vendor_id, '_stripe_subscription_id', $subscription->id );
-            update_user_meta( $vendor_id, 'product_package_id', $product_pack->get_id() );
-            update_user_meta( $vendor_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
-            update_user_meta( $vendor_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-            update_user_meta( $vendor_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
-            update_user_meta( $vendor_id, '_customer_recurring_subscription', 'active' );
-            update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
+            if ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
+                update_user_meta( $vendor_id, 'can_post_product', '1' );
+                update_user_meta( $vendor_id, '_stripe_subscription_id', $subscription->id );
+                update_user_meta( $vendor_id, 'product_package_id', $product_pack->get_id() );
+                update_user_meta( $vendor_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
+                update_user_meta( $vendor_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                update_user_meta( $vendor_id, '_customer_recurring_subscription', 'active' );
+                update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
+                update_user_meta( $vendor_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );
 
-            // need to remove these meta data. Update it on webhook reponse
-            $this->setup_commissions( $product_pack, $vendor_id );
-            do_action( 'dokan_vendor_purchased_subscription', $vendor_id );
+                // need to remove these meta data. Update it on webhook reponse
+                $this->setup_commissions( $product_pack, $vendor_id );
+                do_action( 'dokan_vendor_purchased_subscription', $vendor_id );
+            }
 
             return $subscription;
         }
@@ -202,9 +206,9 @@ class ProductSubscription extends StripePaymentGateway {
             $subscription     = $this->setup_subscription();
 
             update_user_meta( get_current_user_id(), 'product_order_id', $order->get_id() );
-            $order->add_order_note( sprintf( __( 'Order %s payment is completed via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), StripeHelper::get_gateway_title(), $subscription->id ) );
+            $order->add_order_note( sprintf( __( 'Order %1$s payment is completed via %2$s on (Charge IDs: %3$s)', 'dokan' ), $order->get_order_number(), StripeHelper::get_gateway_title(), $subscription->id ) );
             $order->payment_complete();
-        } else {
+        } elseif ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
             // Vendor is purchasing non-recurring subscription, so if there is any recurring pack, cancel it first
             $previous_subscription = get_user_meta( $vendor_id, '_stripe_subscription_id', true );
 
@@ -212,20 +216,20 @@ class ProductSubscription extends StripePaymentGateway {
                 $this->cancel_now( $previous_subscription, $dokan_subscription );
             }
 
-            $pack_validity = get_post_meta( $product_pack->get_id(), '_pack_validity', true );
             update_user_meta( $vendor_id, 'previous_subscription', false );
             update_user_meta( $vendor_id, 'product_package_id', $product_pack->get_id() );
             update_user_meta( $vendor_id, 'product_order_id', $order->get_id() );
             update_user_meta( $vendor_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
             update_user_meta( $vendor_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-            update_user_meta( $vendor_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
             update_user_meta( $vendor_id, 'can_post_product', '1' );
             update_user_meta( $vendor_id, '_customer_recurring_subscription', false );
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
-        }
+            update_user_meta( $vendor_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );
 
-        $this->setup_commissions( $product_pack, $vendor_id );
-        do_action( 'dokan_vendor_purchased_subscription', $vendor_id );
+            $this->setup_commissions( $product_pack, $vendor_id );
+            $order->payment_complete();
+            do_action( 'dokan_vendor_purchased_subscription', $vendor_id );
+        }
     }
 
     /**
@@ -257,17 +261,19 @@ class ProductSubscription extends StripePaymentGateway {
                 return $this->create_subscription();
             }
 
-            $upgrade = Subscription::update( $already_has_subscription, [
-                'cancel_at_period_end' => false,
-                'items' => [
-                    [
-                        'id'   => $subscription->items->data[0]->id,
-                        'plan' => $this->plan_id
-                    ]
-                ],
-                'proration_behavior' => 'create_prorations',
-                'coupon'  => $this->get_coupon()
-            ] );
+            $upgrade = Subscription::update(
+                $already_has_subscription, [
+                    'cancel_at_period_end' => false,
+                    'items' => [
+                        [
+                            'id'   => $subscription->items->data[0]->id,
+                            'plan' => $this->plan_id,
+                        ],
+                    ],
+                    'proration_behavior' => 'create_prorations',
+                    'coupon'  => $this->get_coupon(),
+                ]
+            );
 
             $vendor_subscription->reset_active_cancelled_subscription();
 
@@ -290,17 +296,19 @@ class ProductSubscription extends StripePaymentGateway {
         $this->validate_source( $prepared_source );
         $this->stripe_customer = $prepared_source->customer;
 
-        $subscription = Subscription::create( [
-            'expand'   => ['latest_invoice.payment_intent'],
-            'customer' => $this->stripe_customer,
-            'items'    => [
-                [
-                    'plan' => $this->plan_id,
+        $subscription = Subscription::create(
+            [
+                'expand'   => [ 'latest_invoice.payment_intent' ],
+                'customer' => $this->stripe_customer,
+                'items'    => [
+                    [
+                        'plan' => $this->plan_id,
+                    ],
                 ],
-            ],
-            'coupon'          => $this->get_coupon(),
-            'trial_from_plan' => true,
-        ] );
+                'coupon'          => $this->get_coupon(),
+                'trial_from_plan' => true,
+            ]
+        );
 
         return $subscription;
     }
@@ -319,27 +327,29 @@ class ProductSubscription extends StripePaymentGateway {
             return;
         }
 
-        $coupon = Coupon::create( [
-            'duration'   => 'once',
-            'id'         => $discount .'_OFF_' . random_int( 1, 999999 ),
-            'amount_off' => StripeHelper::get_stripe_amount( $discount ),
-            'currency'   => strtolower( get_woocommerce_currency() )
-        ] );
+        $coupon = Coupon::create(
+            [
+                'duration'   => 'once',
+                'id'         => $discount . '_OFF_' . random_int( 1, 999999 ),
+                'amount_off' => StripeHelper::get_stripe_amount( $discount ),
+                'currency'   => strtolower( get_woocommerce_currency() ),
+            ]
+        );
 
         return $coupon->id;
     }
 
     /**
-    * Cancel stripe subscription
-    *
-    * @since 3.0.3
-    *
-    * @param int $order_id
-    * @param int $vendor_id
-    * @param bool $immediately Force subscription to be cancelled immediately. [since 3.0.3]
-    *
-    * @return void
-    **/
+     * Cancel stripe subscription
+     *
+     * @since 3.0.3
+     *
+     * @param int $order_id
+     * @param int $vendor_id
+     * @param bool $immediately Force subscription to be cancelled immediately. [since 3.0.3]
+     *
+     * @return void
+     **/
     public function cancel_subscription( $order_id, $vendor_id, $cancel_immediately ) {
         $order = wc_get_order( $order_id );
 
@@ -377,12 +387,12 @@ class ProductSubscription extends StripePaymentGateway {
     }
 
     /**
-    * Cancel stripe subscription
-    *
-    * @since 3.0.3
-    *
-    * @return void
-    **/
+     * Cancel stripe subscription
+     *
+     * @since 3.0.3
+     *
+     * @return void
+     **/
     public function activate_subscription( $order_id, $vendor_id ) {
         $order = wc_get_order( $order_id );
 
@@ -430,7 +440,7 @@ class ProductSubscription extends StripePaymentGateway {
             update_user_meta( $vendor_id, 'dokan_admin_percentage', $admin_commission );
             update_user_meta( $vendor_id, 'dokan_admin_additional_fee', $admin_additional_fee );
             update_user_meta( $vendor_id, 'dokan_admin_percentage_type', $admin_commission_type );
-        } else if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+        } elseif ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
             update_user_meta( $vendor_id, 'dokan_admin_percentage', $admin_commission );
             update_user_meta( $vendor_id, 'dokan_admin_percentage_type', $admin_commission_type );
         } else {

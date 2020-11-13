@@ -278,7 +278,6 @@
         $.get( dokan.ajaxurl, {
             action: 'get_vendor_earning',
             product_id: product_id,
-            product_price: product_price,
             product_price: sale_price ? sale_price : product_price,
             _wpnonce: dokan.nonce
         } )

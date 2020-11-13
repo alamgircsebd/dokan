@@ -25,6 +25,10 @@ class Upgrades {
             'upgrader' => Upgraders\V_3_0_8::class,
             'require'  => '3.0.4',
         ],
+        '3.1.1' => [
+            'upgrader' => Upgraders\V_3_1_1::class,
+            'require'  => null,
+        ],
     ];
 
     /**
@@ -94,7 +98,7 @@ class Upgrades {
         $installed_version = self::get_db_installed_version();
 
         foreach ( self::$upgrades as $version => $upgrade ) {
-            if ( version_compare( $installed_version , $version, '<' ) ) {
+            if ( version_compare( $installed_version, $version, '<' ) ) {
                 $upgrades[ $upgrade['require'] ][] = $upgrade;
             }
         }

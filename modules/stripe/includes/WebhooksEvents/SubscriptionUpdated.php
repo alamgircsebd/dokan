@@ -3,6 +3,7 @@
 namespace WeDevs\DokanPro\Modules\Stripe\WebhooksEvents;
 
 use WeDevs\DokanPro\Modules\Stripe\Helper;
+use DokanPro\Modules\Subscription\Helper as SubscriptionHelper;
 use WeDevs\DokanPro\Modules\Stripe\Interfaces\WebhookHandleable;
 
 defined( 'ABSPATH' ) || exit;
@@ -44,20 +45,26 @@ class SubscriptionUpdated implements WebhookHandleable {
         }
 
         $vendor_id    = Helper::get_vendor_id_by_subscription( $subscription->id );
-        $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start );
-        $period_end   = date( 'Y-m-d H:i:s', $subscription->current_period_end );
-        $order_id     = get_user_meta( $vendor_id, 'product_order_id', true );
+        $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start ); // phpcs:ignore
+        $product_id   = get_user_meta( $vendor_id, 'product_package_id', true );
 
-        update_user_meta( $vendor_id, 'product_pack_startdate', $period_start );
-        update_user_meta( $vendor_id, 'product_pack_enddate', $period_end );
-        update_user_meta( $vendor_id, 'can_post_product', '1' );
-        update_user_meta( $vendor_id, 'has_pending_subscription', false );
+        if ( ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+            return;
+        }
 
         if ( ! empty( $subscription->cancel_at ) ) {
-            update_user_meta( $vendor_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', $subscription->cancel_at ) );
+            update_user_meta( $vendor_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', $subscription->cancel_at ) ); // phpcs:ignore
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', true );
         } else {
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
+            update_user_meta( $vendor_id, 'product_pack_startdate', $period_start );
+            update_user_meta( $vendor_id, 'can_post_product', '1' );
+            update_user_meta( $vendor_id, 'has_pending_subscription', false );
+
+            $dokan_subscription    = dokan()->subscription->get( $product_id );
+            update_user_meta( $vendor_id, 'product_pack_enddate', $dokan_subscription->get_product_pack_end_date() );
+
+            do_action( 'dokan_vendor_purchased_subscription', $vendor_id );
         }
     }
 }
