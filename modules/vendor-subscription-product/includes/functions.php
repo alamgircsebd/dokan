@@ -18,7 +18,7 @@ function dokan_vps_get_vendor_subscriptons_by_orders( $user_orders, $seller_id )
             foreach ( $the_subscriptions as $skey => $the_subscription ) {
                 $subscription_products = $the_subscription->get_items();
                 foreach ( $subscription_products as $pkey => $subscription_product ) {
-                    if ( $seller_id === get_post_field( 'post_author', $subscription_product->get_product_id() ) ) {
+                    if ( $seller_id === (int) get_post_field( 'post_author', $subscription_product->get_product_id() ) ) {
                         $user_subscriptions[ $skey ] = $the_subscription;
                     }
                 }
