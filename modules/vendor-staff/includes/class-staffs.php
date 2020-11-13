@@ -19,6 +19,7 @@ class Dokan_Staffs {
         add_action( 'template_redirect', array( $this, 'delete_staff' ), 99 );
         add_action( 'template_redirect', array( $this, 'handle_pemission' ), 99 );
         add_action( 'dokan_new_product_added', array( $this, 'filter_product' ), 10, 2 );
+        add_action( 'dokan_product_duplicate_after_save', array( $this, 'filter_duplicate_product' ), 10, 2 );
         add_action( 'dokan_product_updated', array( $this, 'update_product' ), 10 );
         add_action( 'dokan_product_listing_arg', array( $this, 'listing_product' ), 10 );
         add_action( 'dokan_is_product_author', array( $this, 'dokan_is_product_author_modified' ), 10, 2 );
@@ -324,6 +325,21 @@ class Dokan_Staffs {
      */
     public function update_product( $post_id ) {
         $this->filter_product( $post_id, array() );
+    }
+
+    /**
+     * Update duplicate product data
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function filter_duplicate_product( $clone_product ) {
+        if ( ! isset( $clone_product ) ) {
+            return;
+        }
+
+        $this->filter_product( $clone_product->get_id(), array() );
     }
 
     /**
