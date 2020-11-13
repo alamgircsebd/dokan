@@ -16,6 +16,7 @@ class Installer {
     public function do_install() {
         $this->create_shipping_tables();
         $this->maybe_activate_modules();
+        $this->appsero_optin();
     }
 
     /**
@@ -46,7 +47,7 @@ class Installer {
               `location_code` varchar(255) DEFAULT NULL,
               `location_type` varchar(255) DEFAULT NULL,
               PRIMARY KEY (`id`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;"
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;",
         ];
 
         include_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -77,15 +78,36 @@ class Installer {
 
         $modules = ! empty( dokan_pro()->module ) ? dokan_pro()->module : new \WeDevs\DokanPro\Module();
 
-        $has_installed = $wpdb->get_var( $wpdb->prepare(
-            "select option_id from {$wpdb->options} where option_name = %s",
-            $modules::ACTIVE_MODULES_DB_KEY
-        ) );
+        $has_installed = $wpdb->get_var(
+            $wpdb->prepare(
+                "select option_id from {$wpdb->options} where option_name = %s",
+                $modules::ACTIVE_MODULES_DB_KEY
+            )
+        );
 
         if ( $has_installed ) {
             return;
         }
 
         $modules->activate_modules( $modules->get_available_modules() );
+    }
+
+    /**
+     * Initialize the appsero SDK
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    protected function appsero_optin() {
+        if ( ! class_exists( '\Appsero\Client' ) ) {
+            return;
+        }
+
+        $client = new \Appsero\Client( '8f0a1669-b8db-46eb-9fc4-02ac5bfe89e7', 'Dokan Pro', DOKAN_PRO_FILE );
+
+        $insights = $client->insights();
+        $insights->hide_notice()->init();
+        $insights->optin();
     }
 }
