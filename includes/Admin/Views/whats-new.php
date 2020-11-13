@@ -1,6 +1,67 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.1.1',
+        'released' => '2020-11-14',
+        'changes'  => array(
+            array(
+                'title'       => 'Refactored Stripe Connect Module',
+                'type'        => 'Fix',
+                'description' => 'Refactored and fixed stripe connect module. Here fixed multiples dokan and vendor product subscription issues.',
+            ),
+            array(
+                'title'       => 'Vendor Subscription Product Cancel Not Showing on Vendor Dashboard',
+                'type'        => 'Fix',
+                'description' => 'When a customer canceled their subscription then last status not showing vendor dashboard.',
+            ),
+            array(
+                'title'       => 'Wholesale Product Checkbox Not Working',
+                'type'        => 'Fix',
+                'description' => 'Wholesale product checkbox not working when product status pending in vendor product edit page',
+            ),
+            array(
+                'title'       => 'Product Wise Commission Not Working Comma Decimal',
+                'type'        => 'Fix',
+                'description' => 'Product wise commission not working when use comma decimal separator issue fixed',
+            ),
+            array(
+                'title'       => 'Dokan Modules Section Active/Inactive Tab Issue',
+                'type'        => 'Fix',
+                'description' => 'Dokan modules section active/inactive tab section not work correctly',
+            ),
+            array(
+                'title'       => 'Product Addon Select Field Options Issue with Price Field Blank',
+                'type'        => 'Fix',
+                'description' => 'When a vendor try to add a product addon select field with price field blank then the option not saving',
+            ),
+            array(
+                'title'       => 'Required Minimum PHP Version Set to 7.0.0',
+                'type'        => 'Fix',
+                'description' => 'PHP 5.6 Compatibility, update required minimum php version is set to 7.0.0 on Dokan',
+            ),
+            array(
+                'title'       => 'Vendor Not Able to Duplicate Product',
+                'type'        => 'Fix',
+                'description' => 'Duplicate product not working when try any product duplicate from vendor dashboard',
+            ),
+            array(
+                'title'       => 'Fixed translation Issue for Dokan pro',
+                'type'        => 'Fix',
+                'description' => 'Fixed multiple translation issues for Dokan amdin settings pages',
+            ),
+            array(
+                'title'       => 'Refactored Dokan Admin Modules Page',
+                'type'        => 'Fix',
+                'description' => 'Modules url changed on title and image in dokan admin modules page',
+            ),
+            array(
+                'title'       => 'Dokan Booking Calendar Issue on Single day',
+                'type'        => 'Fix',
+                'description' => 'Dokan booking calendar only shows one booking on a single day on vendor dashboard booking details page',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.1',
         'released' => '2020-10-20',
         'changes'  => array(
