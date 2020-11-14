@@ -20,13 +20,15 @@ class LogsController extends DokanRESTAdminController {
      * @return void
      */
     public function register_routes() {
-        register_rest_route( $this->namespace, '/' . $this->base, array(
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( $this, 'get_logs' ),
-                'permission_callback' => array( $this, 'check_permission' )
-            ),
-        ) );
+        register_rest_route(
+            $this->namespace, '/' . $this->base, [
+				[
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_logs' ],
+					'permission_callback' => [ $this, 'check_permission' ],
+				],
+			]
+        );
     }
 
     /**
@@ -44,12 +46,12 @@ class LogsController extends DokanRESTAdminController {
         $offset = isset( $params['page'] ) ? (int) ( $params['page'] - 1 ) * $params['per_page'] : 0;
 
         // filter the log query
-        $order_id      = ! empty( $params['order_id'] ) ? $params['order_id'] : 0;
-        $vendor_id     = ! empty( $params['vendor_id'] ) ? (int) $params['vendor_id'] : 0;
-        $order_status  = ! empty( $params['order_status'] ) ? $params['order_status'] : '';
+        $order_id     = ! empty( $params['order_id'] ) ? $params['order_id'] : 0;
+        $vendor_id    = ! empty( $params['vendor_id'] ) ? (int) $params['vendor_id'] : 0;
+        $order_status = ! empty( $params['order_status'] ) ? $params['order_status'] : '';
 
-        $order_clause  = $order_id ? "order_id = {$order_id}" : "order_id != 0";
-        $seller_clause = $vendor_id ? "seller_id = {$vendor_id}" : "seller_id != 0";
+        $order_clause  = $order_id ? "order_id = {$order_id}" : 'order_id != 0';
+        $seller_clause = $vendor_id ? "seller_id = {$vendor_id}" : 'seller_id != 0';
         $status_clause = $order_status ? "p.post_status = '{$order_status}'" : "p.post_status != 'trash'";
         $where_query   = "{$seller_clause} AND {$status_clause} AND {$order_clause}";
 
@@ -77,9 +79,9 @@ class LogsController extends DokanRESTAdminController {
             $offset
         );
 
-        $results     = $wpdb->get_results( $sql );
-        $logs        = [];
-        $statuses    = wc_get_order_statuses();
+        $results  = $wpdb->get_results( $sql ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $logs     = [];
+        $statuses = wc_get_order_statuses();
 
         foreach ( $results as $result ) {
             $order                   = wc_get_order( $result->order_id );
