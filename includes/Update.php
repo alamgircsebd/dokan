@@ -17,6 +17,13 @@ class Update {
     private $license;
 
     /**
+     * The license product ID
+     *
+     * @var string
+     */
+    private $product_id = 'dokan-pro';
+
+    /**
      * Initialize the class
      */
     public function __construct() {
