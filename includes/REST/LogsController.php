@@ -117,6 +117,8 @@ class LogsController extends DokanRESTAdminController {
 
             $dp = 2; // 2 decimal points
 
+            $gateway_fee_paid_by = $order->get_meta( 'dokan_gateway_fee_paid_by', true );
+
             $logs[] = [
                 'order_id'             => $result->order_id,
                 'vendor_id'            => $result->seller_id,
@@ -126,7 +128,7 @@ class LogsController extends DokanRESTAdminController {
                 'vendor_earning'       => $is_subscription_product ? 0 : wc_format_decimal( $result->net_amount, $dp ),
                 'commission'           => wc_format_decimal( $commission ),
                 'dokan_gateway_fee'    => $processing_fee ? wc_format_decimal( $processing_fee, $dp ) : 0,
-                'gateway_fee_paid_by'  => $order->get_meta( 'dokan_gateway_fee_paid_by', true ),
+                'gateway_fee_paid_by'  => $gateway_fee_paid_by ? $gateway_fee_paid_by : 'admin',
                 'shipping_total'       => wc_format_decimal( $total_shipping, $dp ),
                 'tax_total'            => wc_format_decimal( $tax_totals, $dp ),
                 'status'               => $statuses[ $result->order_status ],

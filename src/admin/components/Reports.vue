@@ -662,14 +662,13 @@ export default {
             let array = typeof data != 'object' ? JSON.parse(data) : data;
             let str = '';
 
-            str += '"Order ID", "Vendor ID", "Vendor Name", "Previous Order Total", "Order Total", "Vendor Earning", "Commission", "Gateway Fee", "Shipping", "Tax", "Status", "Date"';
+            str += '"Order ID", "Vendor ID", "Vendor Name", "Previous Order Total", "Order Total", "Vendor Earning", "Commission", "Gateway Fee", "Gateway Fee Paid By", "Shipping", "Tax", "Status", "Date"';
             str += '\r\n';
 
             for (let i = 0; i < array.length; i++) {
                 let line = '';
 
                 for (let index in array[i]) {
-
                     if (line != '') line += ',';
 
                     if ( 'commission' == index || 'previous_order_total' == index || 'vendor_earning' == index || 'dokan_gateway_fee' == index || 'shipping_total' == index || 'tax_total' == index ) {
