@@ -84,10 +84,10 @@ class Dokan_Pro {
         require_once __DIR__ . '/vendor/autoload.php';
 
         $this->define_constants();
-        $this->init_updater();
 
         add_action( 'plugins_loaded', [ $this, 'check_dokan_lite_exist' ] );
         add_action( 'dokan_loaded', [ $this, 'init_plugin' ] );
+        add_action( 'plugins_loaded', [ $this, 'init_updater' ] );
 
         register_activation_hook( __FILE__, [ $this, 'activate' ] );
 
