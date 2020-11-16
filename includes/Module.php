@@ -377,7 +377,7 @@ class Module {
                         'doc_link'     => 'https://wedevs.com/docs/dokan/modules/how-to-install-use-dokan-subscription/',
                         'mod_link'     => 'https://wedevs.com/dokan/modules/subscription/',
                     ],
-                    'vendor_analytics' => [
+                    /*'vendor_analytics' => [
                         'id'           => 'vendor_analytics',
                         'name'         => __( 'Vendor Analytics', 'dokan' ),
                         'description'  => __( 'A plugin for store and product analytics for vendor.', 'dokan' ),
@@ -387,7 +387,7 @@ class Module {
                         'plan'         => [ 'business', 'enterprise' ],
                         'doc_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-vendor-analytics/',
                         'mod_link'     => 'https://wedevs.com/docs/dokan/modules/dokan-vendor-analytics/',
-                    ],
+                    ],*/
                     'vendor_staff' => [
                         'id'           => 'vendor_staff',
                         'name'         => __( 'Vendor Staff Manager', 'dokan' ),
