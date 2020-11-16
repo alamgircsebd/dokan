@@ -1,3 +1,18 @@
+v3.1.1 -> Nov 16, 2020
+----------------------------------
+
+- [Fix] Stripe Refactor
+- [fix] Customer subscription cancel status not showing for vendor
+- [fix] Wholesale product checkbox not working when product status pending
+- [fix] Product wise commission not working comma decimal issue fixed
+- [fix] Dokan modules section active/inactive issue
+- [fix] Product addon select field not saving when price field blank
+- [fix] PHP 5.6 Compatibility, **update: required minimum php version is set to 7.0.0
+- [fix] Duplicate product not working when try any product duplicate
+- [fix] Fixed translation issue for Dokan pro
+- [fix] Modules url changes on module title and image in Dokan admin
+- [fix] Dokan booking calendar only shows one booking on a single day
+
 v3.1 -> Oct 20, 2020
 ----------------------------------
 

@@ -95,7 +95,7 @@ class Installer {
     /**
      * Initialize the appsero SDK
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.1
      *
      * @return void
      */

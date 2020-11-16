@@ -3,11 +3,11 @@
  * Plugin Name: Dokan Pro
  * Plugin URI: https://wedevs.com/dokan/
  * Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
- * Version: 3.1
+ * Version: 3.1.1
  * Author: weDevs
  * Author URI: https://wedevs.com/
  * WC requires at least: 3.0
- * WC tested up to: 4.6
+ * WC tested up to: 4.7
  * License: GPL2
  * TextDomain: dokan
  */
@@ -84,10 +84,10 @@ class Dokan_Pro {
         require_once __DIR__ . '/vendor/autoload.php';
 
         $this->define_constants();
-        $this->init_updater();
 
         add_action( 'plugins_loaded', [ $this, 'check_dokan_lite_exist' ] );
         add_action( 'dokan_loaded', [ $this, 'init_plugin' ] );
+        add_action( 'plugins_loaded', [ $this, 'init_updater' ] );
 
         register_activation_hook( __FILE__, [ $this, 'activate' ] );
 
@@ -374,7 +374,7 @@ class Dokan_Pro {
     /**
      * Initialize the plugin updater
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.1
      *
      * @return void
      */
