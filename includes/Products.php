@@ -272,18 +272,21 @@ class Products {
         );
 
         $product          = wc_get_product( get_the_ID() );
+        $commission_type  = $product->get_meta( '_per_product_admin_commission_type' );
         $admin_commission = $product->get_meta( '_per_product_admin_commission' );
         $additional_fee   = $product->get_meta( '_per_product_admin_additional_fee' );
+        $wc_input_class   = ( $commission_type === 'flat' || $commission_type === '' ) ? 'wc_input_price' : 'wc_input_decimal';
+        $admin_commission = ( $commission_type === 'flat' || $commission_type === '' ) ? wc_format_localized_price( $admin_commission ) : $admin_commission;
         ?>
 
         <div class="commission show_if_simple show_if_variable show_if_booking">
             <p class="form-field dimensions_field">
                 <label for="admin_commission"><?php esc_html_e( 'Admin Commission', 'dokan' ); ?></label>
                 <span class="wrapper">
-                    <input id="admin_commission" class="input-text wc_input_decimal wc_input_price" type="text" name="_per_product_admin_commission" value="<?php echo wc_format_localized_price( $admin_commission ); ?>">
+                    <input id="admin_commission" class="input-text <?php echo $wc_input_class; ?>" type="text" name="_per_product_admin_commission" value="<?php echo $admin_commission; ?>">
                     <span class="additional_fee dokan-hide">
                         <?php echo esc_html( '% &nbsp;&nbsp; +' ); ?>
-                        <input class="input-text wc_input_decimal" type="text" name="_per_product_admin_additional_fee" value="<?php echo wc_format_localized_price( $additional_fee ); ?>">
+                        <input class="input-text wc_input_price" type="text" name="_per_product_admin_additional_fee" value="<?php echo wc_format_localized_price( $additional_fee ); ?>">
                     </span>
                     <span class="combine-commission-description"></span>
                 </span>
@@ -359,7 +362,7 @@ class Products {
         }
 
         if ( isset( $_POST['_per_product_admin_additional_fee'] ) ) { // phpcs:ignore
-            $additional_fee = ( '' === $_POST['_per_product_admin_additional_fee'] ) ? '' : (float) $_POST['_per_product_admin_additional_fee']; // phpcs:ignore
+            $additional_fee = ( '' === $_POST['_per_product_admin_additional_fee'] ) ? '' : sanitize_text_field( $_POST['_per_product_admin_additional_fee'] ); // phpcs:ignore
         }
 
         // Combine commission requires both fields to be field.
@@ -368,7 +371,7 @@ class Products {
             update_post_meta( $post_id, '_per_product_admin_additional_fee', '' );
         } else {
             update_post_meta( $post_id, '_per_product_admin_commission', wc_format_decimal( $admin_commission ) );
-            update_post_meta( $post_id, '_per_product_admin_additional_fee', $additional_fee );
+            update_post_meta( $post_id, '_per_product_admin_additional_fee', wc_format_decimal( $additional_fee ) );
         }
     }
 
