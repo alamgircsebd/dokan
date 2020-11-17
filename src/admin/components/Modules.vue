@@ -70,8 +70,10 @@
                                 <div class="name column-name">
                                     <h3>
                                         <!-- <a href="#" class="plugin-name" @click.prevent="openInfoModal( module )">{{ module.name }}</a> -->
-                                        <a :href="module.doc_link" class="plugin-name">{{ module.name }}</a>
-                                        <img class="plugin-icon" :src="module.thumbnail" :alt="module.name" />
+                                        <a :href="module.mod_link" class="plugin-name">{{ module.name }}</a>
+                                        <a :href="module.mod_link" class="plugin-name">
+                                            <img class="plugin-icon" :src="module.thumbnail" :alt="module.name" />
+                                        </a>
                                     </h3>
                                 </div>
 

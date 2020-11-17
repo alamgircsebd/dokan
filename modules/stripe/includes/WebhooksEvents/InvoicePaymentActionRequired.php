@@ -3,6 +3,7 @@
 namespace WeDevs\DokanPro\Modules\Stripe\WebhooksEvents;
 
 use WeDevs\DokanPro\Modules\Stripe\Helper;
+use DokanPro\Modules\Subscription\Helper as SubscriptionHelper;
 use WeDevs\DokanPro\Modules\Stripe\Interfaces\WebhookHandleable;
 
 defined( 'ABSPATH' ) || exit;
@@ -39,9 +40,18 @@ class InvoicePaymentActionRequired implements WebhookHandleable {
     public function handle() {
         $invoice = $this->event->data->object;
 
-        if ( ! empty( $invoice->subscription ) ) {
-            WC()->mailer();
-            do_action( 'dokan_invoice_payment_action_required', Helper::get_vendor_id_by_subscription( $invoice->subscription ), $invoice );
+        if ( empty( $invoice->subscription ) ) {
+            return;
         }
+
+        $vendor_id  = Helper::get_vendor_id_by_subscription( $invoice->subscription );
+        $product_id = get_user_meta( $vendor_id, 'product_package_id', true );
+
+        if ( ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+            return;
+        }
+
+        WC()->mailer();
+        do_action( 'dokan_invoice_payment_action_required', Helper::get_vendor_id_by_subscription( $invoice->subscription ), $invoice );
     }
 }

@@ -228,7 +228,6 @@ class Module {
             'trialPeriodSingular'       => wcs_get_available_time_periods(),
             'trialPeriodPlurals'        => wcs_get_available_time_periods( 'plural' ),
             'subscriptionLengths'       => wcs_get_subscription_ranges(),
-            'subscriptionLengths'       => wcs_get_subscription_ranges(),
             'syncOptions'                           => [
                 'week'  => $billing_period_strings['week'],
                 'month' => $billing_period_strings['month'],

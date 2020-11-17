@@ -4,6 +4,7 @@ namespace WeDevs\DokanPro\Modules\Stripe\WebhooksEvents;
 
 use Stripe\Subscription;
 use WeDevs\DokanPro\Modules\Stripe\Helper;
+use DokanPro\Modules\Subscription\Helper as SubscriptionHelper;
 use WeDevs\DokanPro\Modules\Stripe\Interfaces\WebhookHandleable;
 
 defined( 'ABSPATH' ) || exit;
@@ -49,10 +50,14 @@ class InvoicePaymentSucceeded implements WebhookHandleable {
         $period_start = date( 'Y-m-d H:i:s', $subscription->current_period_start );
         $period_end   = date( 'Y-m-d H:i:s', $subscription->current_period_end );
         $order_id     = get_user_meta( $vendor_id, 'product_order_id', true );
+        $product_id   = get_user_meta( $vendor_id, 'product_package_id', true );
+
+        if ( ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+            return;
+        }
 
         if ( $invoice->paid ) {
             update_user_meta( $vendor_id, 'product_pack_startdate', $period_start );
-            update_user_meta( $vendor_id, 'product_pack_enddate', $period_end );
             update_user_meta( $vendor_id, 'can_post_product', '1' );
             update_user_meta( $vendor_id, 'has_pending_subscription', false );
             update_user_meta( $vendor_id, 'dokan_has_active_cancelled_subscrption', false );
@@ -60,6 +65,8 @@ class InvoicePaymentSucceeded implements WebhookHandleable {
             if ( ! empty( $invoice->charge ) ) {
                 update_post_meta( $order_id, '_stripe_subscription_charge_id', $invoice->charge );
             }
+
+            do_action( 'dokan_vendor_purchased_subscription', $vendor_id );
         }
     }
 }

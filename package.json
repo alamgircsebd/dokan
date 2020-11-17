@@ -1,6 +1,6 @@
 {
   "name": "dokan-pro",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "A WordPress marketplace plugin",
   "author": "weDevs",
   "license": "GPL",
@@ -17,12 +17,12 @@
     "release": "npm run clean && npm run dev:build && npm run build && npm run makepot && npm run version && npm run zip"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/plugin-proposal-optional-chaining": "^7.12.1",
+    "@babel/core": "^7.8.7",
+    "@babel/plugin-proposal-optional-chaining": "^7.8.3",
     "@wordpress/babel-preset-default": "^4.19.0",
-    "babel-loader": "^8.1.0",
-    "cross-env": "^7.0.2",
-    "css-loader": "^3.6.0",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^7.0.1",
+    "css-loader": "^3.4.2",
     "file-loader": "^5.1.0",
     "fs-extra": "^8.1.0",
     "less": "^3.12.2",

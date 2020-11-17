@@ -106,7 +106,12 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
             $customer_id = $customer->get_id();
         } else {
-            $customer->update_customer();
+            try {
+                $customer->update_customer();
+            } catch ( Exception $exception ) {
+                $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
+                $customer_id = $customer->get_id();
+            }
         }
 
         if ( empty( $source_object ) && ! $is_token ) {
@@ -641,7 +646,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
         if ( ! $all_withdraws ) {
             return;
         }
-        
+
         $IP = dokan_get_client_ip();
 
         foreach ( $all_withdraws as $withdraw_data ) {

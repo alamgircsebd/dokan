@@ -2,7 +2,9 @@
 
 namespace DokanPro\Modules\Subscription;
 
+use DateTimeZone;
 use DokanPro\Modules\Subscription\Abstracts\VendorSubscription;
+use WC_DateTime;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -65,6 +67,7 @@ class SubscriptionPack extends VendorSubscription {
     public function get_packages( $args = [] ) {
         $defaults = [
             'post_type' => 'product',
+            'post_status' => 'publish',
             'tax_query' => [
                 [
                     'taxonomy' => 'product_type',
@@ -221,9 +224,47 @@ class SubscriptionPack extends VendorSubscription {
             return 0;
         }
 
-        $date_time = new \WC_DateTime( "+ {$length} days", new \DateTimeZone( 'UTC' ) );
+        $date_time = new WC_DateTime( "+ {$length} days", new DateTimeZone( 'UTC' ) );
 
         return intval( $date_time->getTimestamp() );
+    }
+
+    /**
+     * @return string
+     */
+    public function get_product_pack_end_date() {
+        $end_date       = 'unlimited';
+        $subscription_length    = $this->get_period_length();
+        $subscription_period    = $this->get_period_type();
+        $pack_validity          = absint( $this->get_pack_valid_days() );
+
+        if ( $this->is_recurring() && $subscription_length > 0 ) {
+            // if subscription_length is greater that zero product pack enddate will be equal to subscription_length
+            try {
+                $add_s          = $subscription_length > 1 ? 's' : '';
+                $date_time      = new WC_DateTime( "+ {$subscription_length} {$subscription_period}{$add_s}", new DateTimeZone( 'UTC' ) );
+
+                // now add trial time if exists.
+                if ( $this->is_trial() ) {
+                    $trial_length = $this->get_trial_period_length();
+                    $date_time->modify( "+ $trial_length days" );
+                }
+                // finally get formatted end date
+                $end_date = $date_time->format( 'Y-m-d H:i:s' );
+
+            } catch ( \Exception $exception ) {
+                $end_date = 'unlimited';
+            }
+        } elseif ( ! $this->is_recurring() && $pack_validity !== 0 ) {
+            try {
+                $date_time = new WC_DateTime( "+{$pack_validity} days", new DateTimeZone( 'UTC' ) );
+                $end_date = $date_time->format( 'Y-m-d H:i:s' );
+            } catch ( \Exception $exception ) {
+                $end_date = 'unlimited';
+            }
+        }
+
+        return $end_date;
     }
 
     /**

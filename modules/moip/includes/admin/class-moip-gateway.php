@@ -2,7 +2,9 @@
 /**
  * No cheating please
  */
-if ( ! defined( 'WPINC' ) ) exit;
+if ( ! defined( 'WPINC' ) ) {
+    exit;
+}
 
 use Moip\Moip;
 use Moip\Auth\OAuth;
@@ -76,19 +78,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'label'       => __( 'Enable Wirecard', 'dokan' ),
                 'type'        => 'checkbox',
                 'description' => '',
-                'default'     => 'no'
+                'default'     => 'no',
             ),
             'title' => array(
                 'title'       => __( 'Title', 'dokan' ),
                 'type'        => 'text',
                 'description' => __( 'This controls the title which the user sees during checkout.', 'dokan' ),
-                'default'     => __( 'Wirecard Credit Card', 'dokan' )
+                'default'     => __( 'Wirecard Credit Card', 'dokan' ),
             ),
             'description' => array(
                 'title'       => __( 'Description', 'dokan' ),
                 'type'        => 'textarea',
                 'description' => __( 'This controls the description which the user sees during checkout.', 'dokan' ),
-                'default'     => 'Pay with your credit card via Wirecard.'
+                'default'     => 'Pay with your credit card via Wirecard.',
             ),
             'moip_fee' => array(
                 'title'       => __( 'Wirecard Fee', 'dokan' ),
@@ -98,14 +100,14 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                     'vendor'  => __( 'Vendor', 'dokan' ),
                 ),
                 'description' => __( 'Select who will bear the Wirecard transection fee.', 'dokan' ),
-                'default'     => 'vendor'
+                'default'     => 'vendor',
             ),
             'testmode' => array(
                 'title'       => __( 'Test mode', 'dokan' ),
                 'label'       => __( 'Enable Test Mode', 'dokan' ),
                 'type'        => 'checkbox',
                 'description' => __( 'Place the payment gateway in test mode using test API keys.', 'dokan' ),
-                'default'     => 'yes'
+                'default'     => 'yes',
             ),
             'production-credentials-title' => array(
                 'title' => __( 'Production credentials', 'dokan' ),
@@ -115,19 +117,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'title'       => __( 'Production Token', 'dokan' ),
                 'type'        => 'text',
                 'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API token from your wirecard account. (Required**)', 'dokan' ) ),
-                'default'     => ''
+                'default'     => '',
             ),
             'production_key' => array(
                 'title'       => __( 'Production Key', 'dokan' ),
                 'type'        => 'text',
                 'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion API keys from your wirecard account. (Required**)', 'dokan' ) ),
-                'default'     => ''
+                'default'     => '',
             ),
             'production_public_key' => array(
                 'title'       => __( 'Production Public Key', 'dokan' ),
                 'type'        => 'textarea',
                 'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $production_url, __( 'Get your producttion public API keys from your wirecard account. (Required**)', 'dokan' ) ),
-                'default'     => ''
+                'default'     => '',
             ),
             'test-credentials-title' => array(
                 'title' => __( 'Test credentials', 'dokan' ),
@@ -137,19 +139,19 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'title'       => __( 'Test Token', 'dokan' ),
                 'type'        => 'text',
                 'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API token from your wirecard account. (Required**)', 'dokan' ) ),
-                'default'     => ''
+                'default'     => '',
             ),
             'test_key' => array(
                 'title'       => __( 'Test Key', 'dokan' ),
                 'type'        => 'text',
                 'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test API keys from your wirecard account. (Required**)', 'dokan' ) ),
-                'default'     => ''
+                'default'     => '',
             ),
             'test_public_key' => array(
                 'title'       => __( 'Test Public Key', 'dokan' ),
                 'type'        => 'textarea',
                 'description' => sprintf( '<a href="%s" target="_blank">%s</a>', $test_url, __( 'Get your test public API keys from your wirecard account. (Required**)', 'dokan' ) ),
-                'default'     => ''
+                'default'     => '',
             ),
         );
     }
@@ -185,14 +187,14 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         $post_data = wp_unslash( $_POST );
         $field_key = "woocommerce_{$this->id}_";
 
-        if ( ! isset( $post_data["{$field_key}enabled"] ) || $post_data["{$field_key}enabled"] != 1 ) {
+        if ( ! isset( $post_data[ "{$field_key}enabled" ] ) || $post_data[ "{$field_key}enabled" ] != 1 ) {
             return;
         }
 
-        $key        = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_key"] ) : wc_clean( $post_data["{$field_key}production_key"] );
-        $token      = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_token"] ) : wc_clean( $post_data["{$field_key}production_token"] );
-        $public_key = $post_data["{$field_key}testmode"] == 1 ? wc_clean( $post_data["{$field_key}test_public_key"] ) : wc_clean( $post_data["{$field_key}production_public_key"] );
-        $base_url   = $post_data["{$field_key}testmode"] == 1 ? esc_url( 'https://sandbox.moip.com.br/v2/channels' ) : esc_url( 'https://api.moip.com.br/v2/channels' );
+        $key        = $post_data[ "{$field_key}testmode" ] == 1 ? wc_clean( $post_data[ "{$field_key}test_key" ] ) : wc_clean( $post_data[ "{$field_key}production_key" ] );
+        $token      = $post_data[ "{$field_key}testmode" ] == 1 ? wc_clean( $post_data[ "{$field_key}test_token" ] ) : wc_clean( $post_data[ "{$field_key}production_token" ] );
+        $public_key = $post_data[ "{$field_key}testmode" ] == 1 ? wc_clean( $post_data[ "{$field_key}test_public_key" ] ) : wc_clean( $post_data[ "{$field_key}production_public_key" ] );
+        $base_url   = $post_data[ "{$field_key}testmode" ] == 1 ? esc_url( 'https://sandbox.moip.com.br/v2/channels' ) : esc_url( 'https://api.moip.com.br/v2/channels' );
 
         if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
             return;
@@ -202,7 +204,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             'name'        => get_bloginfo( 'name' ),
             'description' => get_bloginfo( 'description' ),
             'site'        => get_site_url(),
-            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes'
+            'redirectUri' => dokan_get_navigation_url( 'settings/payment' ) . '?moip=yes',
         );
 
         $headers = array(
@@ -213,15 +215,17 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
 
         $curl = curl_init();
 
-        curl_setopt_array( $curl, array(
-          CURLOPT_URL => $base_url,
-          CURLOPT_RETURNTRANSFER => true,
-          CURLOPT_MAXREDIRS => 10,
-          CURLOPT_TIMEOUT => 30,
-          CURLOPT_CUSTOMREQUEST => 'POST',
-          CURLOPT_POSTFIELDS => json_encode( $body ),
-          CURLOPT_HTTPHEADER => $headers,
-        ) );
+        curl_setopt_array(
+            $curl, array(
+                CURLOPT_URL => $base_url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode( $body ),
+                CURLOPT_HTTPHEADER => $headers,
+            )
+        );
 
         $response = curl_exec( $curl );
         $error    = curl_error( $curl );
@@ -277,7 +281,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             return;
         }
 
-        wp_enqueue_script( 'dokan-moip', MOIP_ASSETS . '/js/moip.js' , array(), false, false );
+        wp_enqueue_script( 'dokan-moip', MOIP_ASSETS . '/js/moip.js', array(), false, false );
 
         $moip_params = array(
             'public_key'   => $this->public_key,
@@ -286,7 +290,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             'cvc_error'    => __( 'Card CVC number is not valid', 'dokan' ),
         );
 
-        wp_enqueue_script( 'dokan-moip-checkout', MOIP_ASSETS . '/js/moip-checkout.js' , array( 'jquery' ), false, false );
+        wp_enqueue_script( 'dokan-moip-checkout', MOIP_ASSETS . '/js/moip-checkout.js', array( 'jquery' ), false, false );
         wp_localize_script( 'dokan-moip', 'moip_params', $moip_params );
     }
 
@@ -309,10 +313,10 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             <p class="form-row form-row-wide">
 
                 <?php
-                    $cc_form = new WC_Payment_Gateway_CC;
-                    $cc_form->id       = $this->id;
-                    $cc_form->supports = $this->supports;
-                    $cc_form->form();
+                $cc_form = new WC_Payment_Gateway_CC();
+                $cc_form->id       = $this->id;
+                $cc_form->supports = $this->supports;
+                $cc_form->form();
                 ?>
 
             </p>
@@ -349,14 +353,13 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             } else {
                 $this->process_seller_payment( $order_id, $order, $access_token );
             }
-
-        } catch( Exception $e ) {
+        } catch ( Exception $e ) {
             throw new Exception( __( 'Something went wrong: ', 'dokan' ) . $e->getMessage() );
         }
 
         return array(
             'result'   => 'success',
-            'redirect' => $this->get_return_url( $order )
+            'redirect' => $this->get_return_url( $order ),
         );
     }
 
@@ -366,9 +369,8 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @return void
      */
     public function process_seller_subscriptoin_payment( $order_id, $order, $access_token ) {
-
         $currency     = strtolower( get_woocommerce_currency() );
-        $order_desc   = sprintf( __( '%s - Order %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
+        $order_desc   = sprintf( __( '%1$s - Order %2$s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
 
         if ( ! $order ) {
             throw new Exception( __( 'No orders found to process!', 'dokan' ) );
@@ -389,7 +391,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             $subscription_length   = $dokan_subscription->get_period_length();
             $trial_details         = array(
                 'days'             => $dokan_subscription->is_trial() ? $dokan_subscription->get_trial_period_length() : 0,
-                'is_enabled'       => $dokan_subscription->is_trial()
+                'is_enabled'       => $dokan_subscription->is_trial(),
             );
 
             if ( 'week' === $subscription_period ) {
@@ -420,29 +422,37 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 throw new Exception( __( 'Subscripton can\'t be created', 'dokan' ) );
             }
 
-            $add_s = ( $subscription_interval != 1 ) ? 's' : '';
+            if ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
+                $add_s = ( $subscription_interval != 1 ) ? 's' : '';
 
-            update_user_meta( $customer_user_id, 'product_package_id', $product_pack->get_id() );
-            update_user_meta( $customer_user_id, 'product_order_id', $order_id );
-            update_user_meta( $customer_user_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
-            update_user_meta( $customer_user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-            update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
-            update_user_meta( $customer_user_id, 'can_post_product', '1' );
-            update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
+                update_user_meta( $customer_user_id, 'product_package_id', $product_pack->get_id() );
+                update_user_meta( $customer_user_id, 'product_order_id', $order_id );
+                update_user_meta( $customer_user_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
+                update_user_meta( $customer_user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                update_user_meta( $customer_user_id, 'can_post_product', '1' );
+                update_user_meta( $customer_user_id, '_customer_recurring_subscription', 'active' );
 
-            $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
-            $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
+                if ( $subscription_length > 0 ) {
+                    update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( '+' . $subscription_interval . ' ' . $subscription_period . '' . $add_s ) ) );
+                } else {
+                    update_user_meta( $customer_user_id, 'product_pack_enddate', 'unlimited' );
+                }
 
-            if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
-                update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
-                update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
-            } else {
-                update_user_meta( $customer_user_id, 'dokan_admin_percentage', '' );
+                $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
+                $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
+
+                if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage', $admin_commission );
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage_type', $admin_commission_type );
+                } else {
+                    update_user_meta( $customer_user_id, 'dokan_admin_percentage', '' );
+                }
+
+                do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
             }
 
             $order->payment_complete();
-            do_action( 'dokan_vendor_purchased_subscription', $customer_user_id );
-        } else {
+        } elseif ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
             try {
                 // get access token
                 if ( $this->testmode == 'yes' ) {
@@ -486,7 +496,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 // Creating an order and splitting payment using 'addReceiver' method
                 // Here we're setting a secondary account to receive vendor commission
                 $moip_order->setCustomer( $moip_data['customer'] )
-                ->create();
+                    ->create();
 
                 if ( ! isset( $_POST['moip_hash'] ) || empty( $_POST['moip_hash'] ) ) {
                     throw new Exception( __( 'Credit card nout found', 'dokan' ) );
@@ -496,8 +506,8 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 $card_number = wc_clean( $_POST['moip_hash'] );
 
                 $payment = $moip_order->payments()
-                ->setCreditCardHash( $card_number, $moip_data['holder'] )
-                ->execute();
+                    ->setCreditCardHash( $card_number, $moip_data['holder'] )
+                    ->execute();
 
                 $payment_id = $payment->getId();
 
@@ -510,9 +520,14 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 update_user_meta( $customer_user_id, 'product_order_id', $order_id );
                 update_user_meta( $customer_user_id, 'product_no_with_pack', get_post_meta( $product_pack->get_id(), '_no_of_product', true ) );
                 update_user_meta( $customer_user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
                 update_user_meta( $customer_user_id, 'can_post_product', '1' );
                 update_user_meta( $customer_user_id, '_customer_recurring_subscription', '' );
+
+                if ( absint( $pack_validity ) > 0 ) {
+                    update_user_meta( $customer_user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+$pack_validity days" ) ) );
+                } else {
+                    update_user_meta( $customer_user_id, 'product_pack_enddate', 'unlimited' );
+                }
 
                 $admin_commission      = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission', true );
                 $admin_commission_type = get_post_meta( $product_pack->get_id(), '_subscription_product_admin_commission_type', true );
@@ -544,7 +559,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      */
     public function process_seller_payment( $order_id, $order, $access_token ) {
         $currency     = strtolower( get_woocommerce_currency() );
-        $order_desc   = sprintf( __( '%s - Order %s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
+        $order_desc   = sprintf( __( '%1$s - Order %2$s', 'dokan' ), esc_html( get_bloginfo( 'name' ) ), $order->get_order_number() );
         $has_suborder = get_post_meta( $order_id, 'has_sub_order', true );
         $all_orders   = array();
 
@@ -552,13 +567,17 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         // if has sub-orders, pick only sub-orders
         // if it's a single order, get the single order only
         if ( $has_suborder == '1' ) {
-            $sub_orders = get_children( array( 'post_parent' => $order_id, 'post_type' => 'shop_order' ) );
+            $sub_orders = get_children(
+                array(
+                    'post_parent' => $order_id,
+                    'post_type' => 'shop_order',
+                )
+            );
 
             foreach ( $sub_orders as $order_post ) {
-                $sub_order    = wc_get_order( $order_post->ID  );
+                $sub_order    = wc_get_order( $order_post->ID );
                 $all_orders[] = $sub_order;
             }
-
         } else {
             $all_orders[] = $order;
         }
@@ -614,8 +633,8 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             // Creating an order and splitting payment using 'addReceiver' method
             // Here we're setting a secondary account to receive vendor commission
             $moip_order->setCustomer( $moip_data['customer'] )
-            ->addReceiver( $moip_vendor_account, 'SECONDARY', $vendor_commission, null, $moip_fee_bearer )
-            ->create();
+                ->addReceiver( $moip_vendor_account, 'SECONDARY', $vendor_commission, null, $moip_fee_bearer )
+                ->create();
 
             if ( ! isset( $_POST['moip_hash'] ) || empty( $_POST['moip_hash'] ) ) {
                 throw new Exception( __( 'Credit card nout found', 'dokan' ) );
@@ -625,8 +644,8 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             $card_number = wc_clean( $_POST['moip_hash'] );
 
             $payment = $moip_order->payments()
-            ->setCreditCardHash( $card_number, $moip_data['holder'] )
-            ->execute();
+                ->setCreditCardHash( $card_number, $moip_data['holder'] )
+                ->execute();
 
             $payment_id = $payment->getId();
 
@@ -667,25 +686,25 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         $customer_info['full_name']    = $order->get_formatted_billing_full_name();
         $customer_info['email']        = $order->get_billing_email();
         $customer_info['birthdate']    = '';
-        $customer_info['tax_document'] = wc_clean( $_POST['billing_cpf'] );
+        $customer_info['tax_document'] = wc_clean( wp_unslash( $_POST['billing_cpf'] ) );
         $customer_info['phone_prefix'] = substr( $order->get_billing_phone(), 0, 2 );
         $customer_info['phone_sufix']  = substr( $order->get_billing_phone(), 2 );
 
         // todo
         // add mandatory phone, tax, birthday fields in the checkout form
         $customer = $moip->customers()->setOwnId( uniqid() )
-                ->setFullname( $customer_info['full_name'] )
-                ->setEmail( $customer_info['email'] )
-                ->setBirthDate( '1988-12-30' )
-                ->setTaxDocument( $customer_info['tax_document'] )
-                ->setPhone( $customer_info['phone_prefix'], $customer_info['phone_sufix'] )
-                ->create();
+            ->setFullname( $customer_info['full_name'] )
+            ->setEmail( $customer_info['email'] )
+            ->setBirthDate( '1988-12-30' )
+            ->setTaxDocument( $customer_info['tax_document'] )
+            ->setPhone( $customer_info['phone_prefix'], $customer_info['phone_sufix'] )
+            ->create();
 
         $holder = $moip->holders()
-                ->setFullname( $customer_info['full_name'] )
-                ->setBirthDate( '1988-12-30' )
-                ->setTaxDocument( $customer_info['tax_document'] )
-                ->setPhone( $customer_info['phone_prefix'], $customer_info['phone_sufix'] );
+            ->setFullname( $customer_info['full_name'] )
+            ->setBirthDate( '1988-12-30' )
+            ->setTaxDocument( $customer_info['tax_document'] )
+            ->setPhone( $customer_info['phone_prefix'], $customer_info['phone_sufix'] );
 
         $moip_data = array();
         $moip_data['customer'] = $customer;
@@ -702,7 +721,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @return void
      */
     public function process_seller_withdraws( $all_withdraws ) {
-        $IP       =  dokan_get_client_ip();
+        $IP       = dokan_get_client_ip();
         $withdraw = new Dokan_Withdraw();
 
         foreach ( $all_withdraws as $withdraw_data ) {
@@ -711,7 +730,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
                 'status'  => 1,
                 'method'  => 'dokan-moip-connect',
                 'notes'   => sprintf( __( 'Order %d payment auto paid via Dokan Wirecard', 'dokan' ), $withdraw_data['order_id'] ),
-                'ip'      => $IP
+                'ip'      => $IP,
             );
 
             $data = array_merge( $data, $withdraw_data );
@@ -758,16 +777,16 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
             throw new Exception( __( 'CPF number is required', 'dokan' ) );
         }
 
-        if ( strlen( $_POST['billing_cpf'] ) !== 11 ) {
+        if ( strlen( wp_unslash( $_POST['billing_cpf'] ) ) !== 11 ) {
             throw new Exception( __( 'CPF number must be 11 character long', 'dokan' ) );
         }
     }
 
     /**
-    * Check is subscription order
-    *
-    * @return void
-    **/
+     * Check is subscription order
+     *
+     * @return void
+     **/
     public function is_subscription_order( $order ) {
         if ( ! $order ) {
             return false;

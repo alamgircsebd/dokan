@@ -95,7 +95,7 @@ class ModulesController extends DokanRESTAdminController {
 
         foreach ( $modules as $module ) {
             if ( ! in_array( $module, $available_modules, true ) ) {
-                /* translators: %s: module name */
+                /* Translators: %s: module name */
                 return new WP_Error( 'dokan_pro_rest_error', sprintf( __( '%s module is not available in your system.', 'dokan' ), $module ) );
             }
         }
@@ -135,6 +135,7 @@ class ModulesController extends DokanRESTAdminController {
                 'available'    => file_exists( $module['module_file'] ),
                 'doc_id'       => isset( $module['doc_id'] ) ? $module['doc_id'] : null,
                 'doc_link'     => isset( $module['doc_link'] ) ? $module['doc_link'] : null,
+                'mod_link'     => isset( $module['mod_link'] ) ? $module['mod_link'] : null,
             ];
         }
 

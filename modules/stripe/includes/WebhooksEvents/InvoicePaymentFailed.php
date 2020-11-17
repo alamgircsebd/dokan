@@ -3,6 +3,7 @@
 namespace WeDevs\DokanPro\Modules\Stripe\WebhooksEvents;
 
 use WeDevs\DokanPro\Modules\Stripe\Helper;
+use DokanPro\Modules\Subscription\Helper as SubscriptionHelper;
 use WeDevs\DokanPro\Modules\Stripe\Interfaces\WebhookHandleable;
 
 defined( 'ABSPATH' ) || exit;
@@ -37,8 +38,13 @@ class InvoicePaymentFailed implements WebhookHandleable {
      * @return void
      */
     public function handle() {
-        $invoice   = $this->event->data->object;
-        $vendor_id = Helper::get_vendor_id_by_subscription( $invoice->subscription );
+        $invoice    = $this->event->data->object;
+        $vendor_id  = Helper::get_vendor_id_by_subscription( $invoice->subscription );
+        $product_id = get_user_meta( $vendor_id, 'product_package_id', true );
+
+        if ( ! SubscriptionHelper::is_subscription_product( $product_id ) ) {
+            return;
+        }
 
         // Terminate user to update product
         update_user_meta( $vendor_id, 'can_post_product', '0' );

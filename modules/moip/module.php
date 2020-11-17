@@ -68,14 +68,14 @@ class Module {
         add_action( 'woocommerce_after_checkout_validation', array( $this, 'check_vendor_configure_moip' ), 15, 2 );
 
         // admin control over vendor moip account
-        add_action( 'edit_user_profile', array( $this, 'moip_admin_menu') , 50 );
-        add_action( 'show_user_profile', array( $this, 'moip_admin_menu') , 50 );
+        add_action( 'edit_user_profile', array( $this, 'moip_admin_menu' ), 50 );
+        add_action( 'show_user_profile', array( $this, 'moip_admin_menu' ), 50 );
 
-        add_action( 'personal_options_update', array( $this, 'moip_admin_functions') , 50 );
-        add_action( 'edit_user_profile_update', array( $this, 'moip_admin_functions') , 50 );
+        add_action( 'personal_options_update', array( $this, 'moip_admin_functions' ), 50 );
+        add_action( 'edit_user_profile_update', array( $this, 'moip_admin_functions' ), 50 );
 
         //handle webhook
-        add_action( 'init', array( $this, 'handle_moip_webhook') , 10 );
+        add_action( 'init', array( $this, 'handle_moip_webhook' ), 10 );
         // cancel recurring subscription
         add_action( 'dps_cancel_recurring_subscription', array( $this, 'cancel_recurring_subscription' ), 10, 2 );
 
@@ -92,28 +92,28 @@ class Module {
      * @return void
      */
     public function register_webhook() {
-        if ( get_option( 'dokan-moip-webhook-registered' ) == 'yes' ) {
+        if ( get_option( 'dokan-moip-webhook-registered' ) === 'yes' ) {
             return;
         }
 
-        $settings   = get_option( 'woocommerce_dokan-moip-connect_settings' );
+        $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
 
-        $key        = $settings['testmode'] == 'no' ? $settings['production_key'] : $settings['test_key'];
-        $token      = $settings['testmode'] == 'no' ? $settings['production_token'] : $settings['test_token'];
-        $public_key = $settings['testmode'] == 'no' ? $settings['production_public_key'] : $settings['test_public_key'];
+        $key        = $settings['testmode'] === 'no' ? $settings['production_key'] : $settings['test_key'];
+        $token      = $settings['testmode'] === 'no' ? $settings['production_token'] : $settings['test_token'];
+        $public_key = $settings['testmode'] === 'no' ? $settings['production_public_key'] : $settings['test_public_key'];
 
         if ( empty( $key ) || empty( $token ) || empty( $public_key ) ) {
             return;
         }
 
-        $base_url = $settings['testmode'] == 'no' ? 'https://api.moip.com.br/assinaturas/v1/users/preferences' : 'https://sandbox.moip.com.br/assinaturas/v1/users/preferences';
+        $base_url = $settings['testmode'] === 'no' ? 'https://api.moip.com.br/assinaturas/v1/users/preferences' : 'https://sandbox.moip.com.br/assinaturas/v1/users/preferences';
 
         $body = array(
             'notification' => array(
                 'webhook'  => array(
-                    'url'  => get_site_url() . '?webhook=dokan-moip'
-                )
-            )
+                    'url'  => get_site_url() . '?webhook=dokan-moip',
+                ),
+            ),
         );
 
         $args = array(
@@ -122,9 +122,9 @@ class Module {
             'headers'       => array(
                 'cache-control' => 'no-cache',
                 'Content-Type'  => 'application/json',
-                'Authorization' => 'Basic ' . base64_encode( $token . ':' . $key ),
+                'Authorization' => 'Basic ' . base64_encode( $token . ':' . $key ), // phpcs:ignore
             ),
-            'body'          => json_encode( $body )
+            'body'          => wp_json_encode( $body ),
         );
 
         $response = wp_remote_post( $base_url, $args );
@@ -133,7 +133,7 @@ class Module {
             wp_send_json_error( 'Error', 'Something went wrong' );
         }
 
-        if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
+        if ( isset( $response['response']['code'] ) && $response['response']['code'] === '200' ) {
             update_option( 'dokan-moip-webhook-registered', 'yes' );
         }
     }
@@ -151,7 +151,7 @@ class Module {
             return;
         }
 
-        if ( $order_id != get_user_meta( $user_id, 'product_order_id', true ) ) {
+        if ( $order_id != get_user_meta( $user_id, 'product_order_id', true ) ) { //phpcs:ignore
             return;
         }
 
@@ -215,14 +215,26 @@ class Module {
 
             if ( in_array( $response->resource->status->code, array( 2, 3 ) ) ) {
                 $product_id = $invoice->plan->code;
+                // get wc product object
+                $product_pack = wc_get_product( $product_id );
 
-                $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
-                $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
-                $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
+                if ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
+                    $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
+                    $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
+                    $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
+                    $subscription_length   = absint( get_post_meta( $product_id, '_subscription_length', true ) );
 
-                update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
-                update_user_meta( $user_id, 'can_post_product', '1' );
+                    update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                    update_user_meta( $user_id, 'can_post_product', '1' );
+
+                    if ( $subscription_length > 0 ) {
+                        update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( '+' . $subscription_interval . ' ' . $subscription_period . '' . $add_s ) ) );
+                    } else {
+                        update_user_meta( $user_id, 'product_pack_enddate', 'unlimited' );
+                    }
+
+                    do_action( 'dokan_vendor_purchased_subscription', $user_id );
+                }
             } elseif ( $response->resource->status->code == 5 ) {
                 // failed payment but still have chance to pay the bill using auto retry payment
                 update_user_meta( $user_id, 'can_post_product', '0' );
@@ -261,7 +273,6 @@ class Module {
         }
 
         if ( isset( $response->event ) && $response->event == 'subscription.updated' ) {
-
             if ( 'ACTIVE' !== $response->resource->status ) {
                 return;
             }
@@ -271,14 +282,27 @@ class Module {
             $subscription_code = $response->resource->code;
             $user_id           = $wpdb->get_var( "SELECT `user_id` FROM $wpdb->usermeta WHERE `meta_key` = 'subscription_code' AND `meta_value`='$subscription_code'" );
 
-            $product_id            = $response->resource->plan->code;
-            $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
-            $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
-            $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
+            $product_id = $response->resource->plan->code;
 
-            update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-            update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subscription_interval . " " . $subscription_period . "" . $add_s ) ) );
-            update_user_meta( $user_id, 'can_post_product', '1' );
+            $product_pack = wc_get_product( $product_id );
+
+            if ( $product_pack && 'product_pack' === $product_pack->get_type() ) {
+                $subscription_interval = get_post_meta( $product_id, '_subscription_period_interval', true );
+                $subscription_period   = get_post_meta( $product_id, '_subscription_period', true );
+                $add_s                 = ( $subscription_interval != 1 ) ? 's' : '';
+                $subscription_length   = absint( get_post_meta( $product_id, '_subscription_length', true ) );
+
+                update_user_meta( $user_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
+                update_user_meta( $user_id, 'can_post_product', '1' );
+
+                if ( $subscription_length > 0 ) {
+                    update_user_meta( $user_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( '+' . $subscription_interval . ' ' . $subscription_period . '' . $add_s ) ) );
+                } else {
+                    update_user_meta( $user_id, 'product_pack_enddate', 'unlimited' );
+                }
+
+                do_action( 'dokan_vendor_purchased_subscription', $user_id );
+            }
         }
     }
 
@@ -303,14 +327,14 @@ class Module {
      * @return void
      */
     public function check_vendor_configure_moip( $data, $errors ) {
-        $settings = get_option('woocommerce_dokan-moip-connect_settings');
+        $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
 
         // bailout if the gateway is not enabled
-        if ( isset( $settings['enabled'] ) && $settings['enabled'] == 'yes' ) {
-            if ( 'dokan-moip-connect' == $data['payment_method'] ) {
+        if ( isset( $settings['enabled'] ) && $settings['enabled'] === 'yes' ) {
+            if ( 'dokan-moip-connect' === $data['payment_method'] ) {
                 foreach ( WC()->cart->get_cart() as $item ) {
                     $product_id = $item['data']->get_id();
-                    $available_vendors[get_post_field( 'post_author', $product_id )][] = $item['data'];
+                    $available_vendors[ get_post_field( 'post_author', $product_id ) ][] = $item['data'];
                 }
 
                 $vendor_names = array();
@@ -322,12 +346,12 @@ class Module {
                     if ( empty( $vendor_moip_account ) ) {
                         $vendor_products = array();
 
-                        foreach ( $available_vendors[$vendor_id] as $product ) {
+                        foreach ( $available_vendors[ $vendor_id ] as $product ) {
                             $vendor_products[] = sprintf( '<a href="%s">%s</a>', $product->get_permalink(), $product->get_name() );
                         }
-                        $vendor_names[$vendor_id] = array(
+                        $vendor_names[ $vendor_id ] = array(
                             'name' => sprintf( '<a href="%s">%s</a>', esc_url( $vendor->get_shop_url() ), $vendor->get_shop_name() ),
-                            'products' => implode( ', ', $vendor_products )
+                            'products' => implode( ', ', $vendor_products ),
                         );
                     }
                 }
@@ -336,18 +360,18 @@ class Module {
                     if ( user_can( $vendor_id, 'manage_options' ) ) {
                         return;
                     }
-
-                    $errors->add( 'moip-not-configured', sprintf( __( '<strong>Error!</strong> You cannot complete your purchase until <strong>%s</strong> has enabled Stripe as a payment gateway. Please remove %s to continue.', 'dokan' ), $data['name'], $data['products'] ) );
+                    /* translators: %s: moip payment method not configured error message */
+                    $errors->add( 'moip-not-configured', sprintf( __( '<strong>Error!</strong> You cannot complete your purchase until <strong>%1$s</strong> has enabled Wirecard as a payment gateway. Please remove %2$s to continue.', 'dokan' ), $data['name'], $data['products'] ) );
                 }
             }
         }
     }
 
     /**
-    * Save moip progress settings data
-    *
-    * @return void
-    **/
+     * Save moip progress settings data
+     *
+     * @return void
+     **/
     public function save_moip_progress( $store_id, $dokan_settings ) {
         if ( ! $store_id ) {
             return;
@@ -356,7 +380,7 @@ class Module {
         $dokan_settings = get_user_meta( $store_id, 'dokan_profile_settings', true );
 
         if ( isset( $_POST['settings']['moip'] ) ) {
-            $dokan_settings['payment']['moip'] = wc_clean( $_POST['settings']['moip'] );
+            $dokan_settings['payment']['moip'] = wc_clean( wp_unslash( $_POST['settings']['moip'] ) ); // phpcs:ignore
         }
 
         update_user_meta( $store_id, 'dokan_profile_settings', $dokan_settings );
@@ -398,11 +422,10 @@ class Module {
      *
      * @return array
      */
-    function can_seller_add_product( $errors ) {
-
-        $payment_gateways = new \WC_Payment_Gateways;
+    public function can_seller_add_product( $errors ) {
+        $payment_gateways = new \WC_Payment_Gateways();
         $available_gateways = $payment_gateways->get_available_payment_gateways();
-        $settings = get_option('woocommerce_dokan-moip-connect_settings');
+        $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
         // bailout if the gateway is not enabled
         if ( isset( $settings['enabled'] ) && $settings['enabled'] !== 'yes' ) {
             return $errors;
@@ -412,7 +435,7 @@ class Module {
         $vendor_moip_account = get_user_meta( $user_id, 'vendor_moip_account', true );
 
         if ( empty( $vendor_moip_account ) && count( $available_gateways ) < 2 ) {
-            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Wirecard account isn\'t active yet. Please connect to Wirecard first!', 'dokan' ), dokan_get_navigation_url('settings/payment'), __( 'Connect to Moip', 'dokan' ) );
+            $errors[] = sprintf( '%s <a href="%s">%s</a>', __( 'Your Wirecard account isn\'t active yet. Please connect to Wirecard first!', 'dokan' ), dokan_get_navigation_url( 'settings/payment' ), __( 'Connect to Moip', 'dokan' ) );
         }
 
         return $errors;
@@ -429,10 +452,10 @@ class Module {
         $withdraw_settings    = get_option( 'dokan_withdraw' );
         $hide_withdraw_option = isset( $withdraw_settings['hide_withdraw_option'] ) ? $withdraw_settings['hide_withdraw_option'] : 'off';
 
-        if ( $hide_withdraw_option == 'on' ) {
+        if ( $hide_withdraw_option === 'on' ) {
             $settings = get_option( 'woocommerce_dokan-moip-connect_settings' );
             // bailout if the gateway is not enabled
-            if ( isset( $settings['enabled'] ) && $settings['enabled'] != 'yes' ) {
+            if ( isset( $settings['enabled'] ) && $settings['enabled'] !== 'yes' ) {
                 return $urls;
             }
 
@@ -447,24 +470,25 @@ class Module {
     }
 
     /**
-    * This is admin menu for controlling Seller moip status
-    *
-    * @param array $store_settings
-    */
-    function moip_admin_menu( $user ) {
-
-        if ( ! dokan_is_user_seller( $user->ID ) || ! current_user_can( 'manage_woocommerce' )  ) {
+     * This is admin menu for controlling Seller moip status
+     *
+     * @param object $user
+     * @return mixed
+     */
+    public function moip_admin_menu( $user ) {
+        if ( ! dokan_is_user_seller( $user->ID ) || ! current_user_can( 'manage_woocommerce' ) ) {
             return $user;
         }
 
         $vendor_moip_account = get_user_meta( $user->ID, 'vendor_moip_account', true );
         ?>
-        <h3><?php _e( 'Dokan Wirecard Settings', 'dokan' );?></h3>
+        <h3><?php esc_html_e( 'Dokan Wirecard Settings', 'dokan' ); ?></h3>
         <?php
-        if ( ! empty( $vendor_moip_account ) ) : ?>
-            <?php submit_button( __( 'Disconnect User Wirecard Account', 'dokan' ) ,'delete', 'disconnect_user_moip'); ?>
+        if ( ! empty( $vendor_moip_account ) ) :
+            ?>
+            <?php submit_button( __( 'Disconnect User Wirecard Account', 'dokan' ), 'delete', 'disconnect_user_moip' ); ?>
         <?php else : ?>
-            <h4><?php _e( 'User account not connected to Wirecard', 'dokan' );?></h4>
+            <h4><?php esc_html_e( 'User account not connected to Wirecard', 'dokan' ); ?></h4>
         <?php
         endif;
     }
@@ -472,11 +496,11 @@ class Module {
     /**
      * Admin functions for controlling user Moip Accounts
      *
-     * @param array $store_settings
+     * @param int $user_id
+     * @return mixed
      */
-    function moip_admin_functions( $user_id ) {
-
-        if ( ! dokan_is_user_seller( $user_id ) || ! current_user_can( 'manage_woocommerce' )  ) {
+    public function moip_admin_functions( $user_id ) {
+        if ( ! dokan_is_user_seller( $user_id ) || ! current_user_can( 'manage_woocommerce' ) ) {
             return $user_id;
         }
 

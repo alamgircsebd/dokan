@@ -1,7 +1,6 @@
 <?php
 
 use DokanPro\Modules\Subscription\Helper;
-use DokanPro\Modules\Subscription\SubscriptionPack;
 
 /**
  * PayPal Standard Subscription Class.
@@ -81,7 +80,7 @@ class DPS_PayPal_Standard_Subscriptions {
     private static function log( $message = '' ) {
         $paypal_settings = self::get_wc_paypal_settings();
 
-        if ( isset( $paypal_settings['debug'] ) && $paypal_settings['debug'] == 'yes' ) {
+        if ( isset( $paypal_settings['debug'] ) && $paypal_settings['debug'] === 'yes' ) {
             $logger = new WC_Logger();
             $logger->add( 'paypal', $message );
         }
@@ -100,13 +99,13 @@ class DPS_PayPal_Standard_Subscriptions {
      * Returns a payment gateway object by gateway's ID, or false if it could not find the gateway.
      */
     public static function get_payment_gateway( $gateway_id ) {
-
         $found_gateway = false;
 
         if ( WC()->payment_gateways ) {
-            foreach (WC()->payment_gateways->payment_gateways() as $gateway) {
-                if ( $gateway_id == $gateway->id )
+            foreach ( WC()->payment_gateways->payment_gateways() as $gateway ) {
+                if ( $gateway_id == $gateway->id ) {
                     $found_gateway = $gateway;
+                }
             }
         }
 
@@ -115,7 +114,6 @@ class DPS_PayPal_Standard_Subscriptions {
 
     /**
      * Adds extra PayPal credential fields required to manage subscriptions.
-     *
      */
     public static function paypal_settings_args( $form_fields ) {
         // Warn store managers not to change their PayPal Email address as it can break existing Subscriptions in WC2.0+
@@ -126,28 +124,28 @@ class DPS_PayPal_Standard_Subscriptions {
             'api_credentials' => array(
                 'title'       => __( 'API Credentials', 'dokan' ),
                 'type'        => 'title',
-                'description' => sprintf( __( 'Enter your PayPal API credentials to unlock subscription suspension and cancellation features. %sLearn More &raquo;%s', 'dokan' ), '<a href="http://docs.woothemes.com/document/store-manager-guide/#extrapaypalconfigurationsteps" target="_blank" tabindex="-1">', '</a>' ),
-                'default'     => ''
-                ),
+                'description' => sprintf( __( 'Enter your PayPal API credentials to unlock subscription suspension and cancellation features. %1$sLearn More &raquo;%2$s', 'dokan' ), '<a href="http://docs.woothemes.com/document/store-manager-guide/#extrapaypalconfigurationsteps" target="_blank" tabindex="-1">', '</a>' ),
+                'default'     => '',
+            ),
             'api_username' => array(
                 'title'       => __( 'API Username', 'dokan' ),
                 'type'        => 'text',
                 'description' => '',
-                'default'     => ''
-                ),
+                'default'     => '',
+            ),
             'api_password' => array(
                 'title'       => __( 'API Password', 'dokan' ),
                 'type'        => 'text',
                 'description' => '',
-                'default'     => ''
-                ),
+                'default'     => '',
+            ),
             'api_signature' => array(
                 'title'       => __( 'API Signature', 'dokan' ),
                 'type'        => 'text',
                 'description' => '',
-                'default'     => ''
-                )
-            );
+                'default'     => '',
+            ),
+        );
 
         return $form_fields;
     }
@@ -157,7 +155,6 @@ class DPS_PayPal_Standard_Subscriptions {
      * the global instance, so our admin fields are not set (nor saved). As a result, we
      * need to run the save routine @see WC_Settings_API::process_admin_options() again
      * to save our fields.
-     *
      */
     public static function save_subscription_form_fields() {
         $paypal_gateway = self::get_payment_gateway( 'paypal' );
@@ -175,7 +172,7 @@ class DPS_PayPal_Standard_Subscriptions {
             throw new Exception( __( 'Sorry, with paypal you can\'t switch subscription plan.', 'dokan' ) );
         }
 
-        $custom      = (array)json_decode( $paypal_args['custom'] );
+        $custom      = (array) json_decode( $paypal_args['custom'] );
         $order_id    = $custom['order_id'];
         $order_key   = $custom['order_key'];
 
@@ -183,13 +180,14 @@ class DPS_PayPal_Standard_Subscriptions {
         $order_items = $order->get_items();
 
         // Only one subscription allowed in the cart when PayPal Standard is active
-        $product = $order->get_product_from_item( array_pop( $order_items ) );
+        $subs_product       = $order->get_items();
+        $product            = reset( $subs_product );
 
-        if ( ! Helper::is_subscription_product( $product->get_id() ) ) {
+        if ( ! Helper::is_subscription_product( $product['product_id'] ) ) {
             return $paypal_args;
         }
 
-        $subscription = dokan()->subscription->get( $product->get_id() );
+        $subscription = dokan()->subscription->get( $product['product_id'] );
 
         $paypal_args['cmd']       = '_xclick-subscriptions';
         $paypal_args['item_name'] = $subscription->get_package_title();
@@ -201,21 +199,21 @@ class DPS_PayPal_Standard_Subscriptions {
 
         $converted_periods = array();
 
-        foreach ($unconverted_periods as $key => $period) {
-            switch (strtolower( $period )) {
+        foreach ( $unconverted_periods as $key => $period ) {
+            switch ( strtolower( $period ) ) {
                 case 'day':
-                $converted_periods[$key] = 'D';
-                break;
+                    $converted_periods[ $key ] = 'D';
+                    break;
                 case 'week':
-                $converted_periods[$key] = 'W';
-                break;
+                    $converted_periods[ $key ] = 'W';
+                    break;
                 case 'year':
-                $converted_periods[$key] = 'Y';
-                break;
+                    $converted_periods[ $key ] = 'Y';
+                    break;
                 case 'month':
                 default:
-                $converted_periods[$key] = 'M';
-                break;
+                    $converted_periods[ $key ] = 'M';
+                    break;
             }
         }
 
@@ -239,7 +237,7 @@ class DPS_PayPal_Standard_Subscriptions {
                 }
 
                 // trail subscription
-                $paypal_args['p1'] = $subscription->get_trial_range();;
+                $paypal_args['p1'] = $subscription->get_trial_range();
 
                 // trail period
                 $paypal_args['t1'] = $converted_periods['trial_period'];
@@ -271,10 +269,10 @@ class DPS_PayPal_Standard_Subscriptions {
             if ( 0 === $subscription_installments ) {
                 // Recurring for unlimted period
                 $paypal_args['src'] = 1;
-            } else if ( 1 === $subscription_installments ) {
+            } elseif ( 1 === $subscription_installments ) {
                 // One time subscription
                 $paypal_args['src'] = 0;
-            } else if ( $subscription_installments > 1 && $subscription_installments <= 52 ) {
+            } elseif ( $subscription_installments > 1 && $subscription_installments <= 52 ) {
                 // Recurring for certain time (number of subscription installments)
                 $paypal_args['src'] = 1;
                 $paypal_args['srt'] = $subscription_installments;
@@ -290,11 +288,21 @@ class DPS_PayPal_Standard_Subscriptions {
             // Subscription price
             $paypal_args['a3'] = $initial_payment;
 
-            // Subscription duration
-            $paypal_args['p3'] = $subscription->get_pack_valid_days();
 
-            // Subscription period
-            $paypal_args['t3'] = 'D';
+            if ( absint( $subscription->get_pack_valid_days() ) > 0 ) {
+                // Subscription duration
+                $paypal_args['p3'] = $subscription->get_pack_valid_days();
+
+                // Subscription period
+                $paypal_args['t3'] = 'D';
+            } else {
+                // set unlimited validity for 5 years
+                // Subscription duration
+                $paypal_args['p3'] = '5';
+
+                // Subscription period
+                $paypal_args['t3'] = 'Y';
+            }
         }
 
         // Force return URL so that order description & instructions display
@@ -313,9 +321,9 @@ class DPS_PayPal_Standard_Subscriptions {
 
         // $transaction_details = stripslashes_deep( $transaction_details );
 
-        Helper::log( 'Transaction details check: ' .print_r( $transaction_details, true ) );
+        Helper::log( 'Transaction details check: ' . print_r( $transaction_details, true ) );
 
-        if ( !in_array( $transaction_details['txn_type'], array('subscr_signup', 'subscr_payment', 'subscr_cancel', 'subscr_eot', 'subscr_failed', 'subscr_modify') ) ) {
+        if ( ! in_array( $transaction_details['txn_type'], array( 'subscr_signup', 'subscr_payment', 'subscr_cancel', 'subscr_eot', 'subscr_failed', 'subscr_modify' ) ) ) {
             return;
         }
 
@@ -323,7 +331,7 @@ class DPS_PayPal_Standard_Subscriptions {
             return;
         }
 
-        $custom      = (array)json_decode( $transaction_details['custom'] );
+        $custom      = (array) json_decode( $transaction_details['custom'] );
         $order_id    = $custom['order_id'];
         $order_key   = $custom['order_key'];
 
@@ -333,8 +341,14 @@ class DPS_PayPal_Standard_Subscriptions {
         $subs_product       = $order->get_items();
         $product            = reset( $subs_product );
 
-        $customer_id        = get_post_meta( $order_id, '_customer_user', true );
-        $no_of_product_pack = get_post_meta( $product['product_id'], '_no_of_product', true );
+        if ( ! Helper::is_subscription_product( $product['product_id'] ) ) {
+            return;
+        }
+
+        $customer_id         = get_post_meta( $order_id, '_customer_user', true );
+        $vendor_subscription = dokan()->subscription->get( $product['product_id'] );
+        $subs_interval       = $vendor_subscription->get_recurring_interval();
+        $no_of_product_pack  = $vendor_subscription->get_number_of_products();
 
         if ( dokan_get_prop( $order, 'order_key' ) !== $order_key ) {
             self::log( 'Subscription IPN Error: Order Key does not match invoice.' );
@@ -345,7 +359,7 @@ class DPS_PayPal_Standard_Subscriptions {
             update_post_meta( $order_id, '_paypal_subscriber_ID', $transaction_details['subscr_id'] );
         }
 
-        switch ($transaction_details['txn_type'] ) {
+        switch ( $transaction_details['txn_type'] ) {
             case 'subscr_signup':
                 // Store PayPal Details
                 update_post_meta( $order_id, 'Payer PayPal address', $transaction_details['payer_email'] );
@@ -354,17 +368,13 @@ class DPS_PayPal_Standard_Subscriptions {
 
                 $order->payment_complete();
 
-                $subs_interval = get_post_meta( $product['product_id'], '_subscription_period_interval', true );
-                $subs_period   = get_post_meta( $product['product_id'], '_subscription_period', true );
-                $add_s         = ($subs_interval != 1 ) ? 's' : '';
-
                 update_user_meta( $customer_id, 'product_package_id', $product['product_id'] );
                 update_user_meta( $customer_id, 'product_order_id', $order_id );
-                update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product['product_id'], '_no_of_product', true ) );
+                update_user_meta( $customer_id, 'product_no_with_pack', $no_of_product_pack );
                 update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subs_interval . " " . $subs_period . "" . $add_s ) ) );
                 update_user_meta( $customer_id, 'can_post_product', '1' );
                 update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
+                update_user_meta( $customer_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
 
                 // make all the existing product publish
                 Helper::make_product_publish( $customer_id );
@@ -386,48 +396,22 @@ class DPS_PayPal_Standard_Subscriptions {
                     update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
                 }
 
+                do_action( 'dokan_vendor_purchased_subscription', $customer_id );
+
                 $order->add_order_note( __( 'IPN subscription sign up completed.', 'dokan' ) );
                 self::log( 'IPN subscription sign up completed for order ' );
 
-            break;
+                break;
 
             case 'subscr_payment':
-                if ( 'completed' == strtolower( $transaction_details['payment_status'] ) ) {
-                    $subs_interval = get_post_meta( $product['product_id'], '_subscription_period_interval', true );
-                    $subs_period   = get_post_meta( $product['product_id'], '_subscription_period', true );
-                    $add_s         = ($subs_interval != 1 ) ? 's' : '';
-
-                    // Store PayPal Details
-                    update_post_meta( $order_id, '_payer_first_name', $transaction_details['first_name'] );
-                    update_post_meta( $order_id, '_payer_last_name', $transaction_details['last_name'] );
-
-                    update_user_meta( $customer_id, 'product_package_id', $product['product_id'] );
-                    update_user_meta( $customer_id, 'product_order_id', $order_id );
-                    update_user_meta( $customer_id, 'product_no_with_pack', get_post_meta( $product['product_id'], '_no_of_product', true ) );
+                if ( 'completed' === strtolower( $transaction_details['payment_status'] ) ) {
+                    update_user_meta( $customer_id, 'dokan_has_active_cancelled_subscrption', false );
                     update_user_meta( $customer_id, 'product_pack_startdate', date( 'Y-m-d H:i:s' ) );
-                    update_user_meta( $customer_id, 'product_pack_enddate', date( 'Y-m-d H:i:s', strtotime( "+" . $subs_interval . " " . $subs_period . "" . $add_s ) ) );
                     update_user_meta( $customer_id, 'can_post_product', '1' );
-                    update_user_meta( $customer_id, '_customer_recurring_subscription', 'active' );
+                    update_user_meta( $customer_id, 'has_pending_subscription', false );
+                    update_user_meta( $customer_id, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
 
-                    // make all the existing product publish
-                    Helper::make_product_publish( $customer_id );
-
-                    $admin_commission      = get_post_meta( $product['product_id'], '_subscription_product_admin_commission', true );
-                    $admin_additional_fee  = get_post_meta( $product['product_id'], '_subscription_product_admin_additional_fee', true );
-                    $admin_commission_type = get_post_meta( $product['product_id'], '_subscription_product_admin_commission_type', true );
-
-                    if ( ! empty( $admin_commission ) && ! empty( $admin_commission_type ) ) {
-                        update_user_meta( $customer_id, 'dokan_admin_percentage', $admin_commission );
-                        update_user_meta( $customer_id, 'dokan_admin_percentage_type', $admin_commission_type );
-                    } else {
-                        update_user_meta( $customer_id, 'dokan_admin_percentage', '' );
-                    }
-
-                    if ( ! empty( $admin_additional_fee ) && ! empty( $admin_commission_type ) ) {
-                        update_user_meta( $customer_id, 'dokan_admin_additional_fee', $admin_additional_fee );
-                    } else {
-                        update_user_meta( $customer_id, 'dokan_admin_additional_fee', '' );
-                    }
+                    do_action( 'dokan_vendor_purchased_subscription', $customer_id );
 
                     if ( dokan_get_prop( $order, 'status' ) != 'completed' ) {
                         $order->payment_complete();
@@ -435,23 +419,20 @@ class DPS_PayPal_Standard_Subscriptions {
 
                     // Subscription Payment completed
                     $order->add_order_note( sprintf( __( 'IPN subscription payment completed. txn_id#%s', 'dokan' ), $transaction_details['txn_id'] ) );
-
-                } elseif ( 'failed' == strtolower( $transaction_details['payment_status'] ) ) {
+                } elseif ( 'failed' === strtolower( $transaction_details['payment_status'] ) ) {
 
                     // Subscription Payment completed
                     $order->add_order_note( __( 'IPN subscription payment failed.', 'dokan' ) );
 
                     self::log( 'IPN subscription payment failed for order ' . $order_id );
 
-                // First payment on order, don't generate a renewal order
+                    // First payment on order, don't generate a renewal order
                 } else {
-
                     self::log( 'IPN subscription payment notification received for order ' . $order_id . ' with status ' . $transaction_details['payment_status'] );
                 }
                 break;
 
             case 'subscr_cancel':
-
                 self::log( 'IPN subscription cancelled for order ' . $order_id );
 
                 // Subscription Payment completed
@@ -464,13 +445,11 @@ class DPS_PayPal_Standard_Subscriptions {
 
                 break;
 
-            case 'subscr_eot': // Subscription ended, either due to failed payments or expiration
-
+            case 'subscr_eot':
                 $subscription_length = get_post_meta( $product['product_id'], '_subscription_length', true );
 
                 // PayPal fires the 'subscr_eot' notice immediately if a subscription is only for one billing period, so ignore the request when we only have one billing period
                 if ( 1 != $subscription_length && $subscription_length != get_post_meta( $product['product_id'], '_subscription_period_interval', true ) ) {
-
                     self::log( 'IPN subscription end-of-term for order ' . $order_id );
 
                     // Record subscription ended
@@ -483,8 +462,7 @@ class DPS_PayPal_Standard_Subscriptions {
 
                 break;
 
-            case 'subscr_failed': // Subscription sign up failed
-
+            case 'subscr_failed':
                 self::log( 'IPN subscription payment failure for order ' . $order_id );
 
                 // Subscription Payment completed
@@ -498,14 +476,13 @@ class DPS_PayPal_Standard_Subscriptions {
         }
 
         // Prevent default IPN handling for subscription txn_types
-         exit;
+        exit;
     }
 
     /**
      * When a store manager or user cancels a subscription in the store, also cancel the subscription with PayPal.
      */
     public static function cancel_subscription_with_paypal( $order_id, $user_id ) {
-
         $order        = new WC_Order( $order_id );
         $profile_id   = get_post_meta( $order->get_id(), '_paypal_subscriber_ID', true );
 
@@ -527,33 +504,34 @@ class DPS_PayPal_Standard_Subscriptions {
      * Express Checkout  NVP API can be used.
      */
     public static function change_subscription_status( $profile_id, $new_status ) {
-
-        switch ($new_status) {
-            case 'Cancel' :
-            $new_status_string = __( 'cancelled', 'dokan' );
-            break;
-            case 'Suspend' :
-            $new_status_string = __( 'suspended', 'dokan' );
-            break;
-            case 'Reactivate' :
-            $new_status_string = __( 'reactivated', 'dokan' );
-            break;
+        switch ( $new_status ) {
+            case 'Cancel':
+                $new_status_string = __( 'cancelled', 'dokan' );
+                break;
+            case 'Suspend':
+                $new_status_string = __( 'suspended', 'dokan' );
+                break;
+            case 'Reactivate':
+                $new_status_string = __( 'reactivated', 'dokan' );
+                break;
         }
 
-        $request = wp_remote_post( self::$api_endpoint, array(
-            'timeout'   => 15,
-            'sslverify' => false,
-            'body'      => array(
-                'USER'      => self::$api_username,
-                'PWD'       => self::$api_password,
-                'SIGNATURE' => self::$api_signature,
-                'VERSION'   => '76.0',
-                'METHOD'    => 'ManageRecurringPaymentsProfileStatus',
-                'PROFILEID' => $profile_id,
-                'ACTION'    => $new_status,
-                'NOTE'      => sprintf( __( 'Subscription %s at %s', 'dokan' ), $new_status_string, get_bloginfo( 'name' ) )
+        $request = wp_remote_post(
+            self::$api_endpoint, array(
+                'timeout'   => 15,
+                'sslverify' => false,
+                'body'      => array(
+                    'USER'      => self::$api_username,
+                    'PWD'       => self::$api_password,
+                    'SIGNATURE' => self::$api_signature,
+                    'VERSION'   => '76.0',
+                    'METHOD'    => 'ManageRecurringPaymentsProfileStatus',
+                    'PROFILEID' => $profile_id,
+                    'ACTION'    => $new_status,
+                    'NOTE'      => sprintf( __( 'Subscription %1$s at %2$s', 'dokan' ), $new_status_string, get_bloginfo( 'name' ) ),
+                ),
             )
-        ) );
+        );
 
         if ( is_wp_error( $request ) || $request['response']['code'] != 200 ) {
             self::log( 'Subscription Cancel - HTTP error' );
@@ -576,12 +554,12 @@ class DPS_PayPal_Standard_Subscriptions {
     }
 
     /**
-    * Check for paypal information and save logs
-    *
-    * @since  [1.1.4]
-    * @return set $debug,$log and $endpoint variables
-    */
-    public static function subscription_paypal_credential_verify(){
+     * Check for paypal information and save logs
+     *
+     * @since  [1.1.4]
+     * @return set $debug,$log and $endpoint variables
+     */
+    public static function subscription_paypal_credential_verify() {
         $paypal_settings = self::get_wc_paypal_settings();
 
         if ( $paypal_settings && ! isset( $paypal_settings['debug'] ) ) {
@@ -589,7 +567,7 @@ class DPS_PayPal_Standard_Subscriptions {
             function dokan_paypal_credential_error() {
                 ?>
                 <div id="message" class="error notice is-dismissible">
-                    <p><?php _e( 'Your Paypal Credentials are not complete', 'dokan' ); ?>.</p>
+                    <p><?php esc_html_e( 'Your Paypal Credentials are not complete', 'dokan' ); ?>.</p>
                     <button type="button" class="notice-dismiss">
                         <span class="screen-reader-text">Dismiss this notice.</span>
                     </button>
@@ -597,11 +575,10 @@ class DPS_PayPal_Standard_Subscriptions {
                 <?php
             }
             add_action( 'admin_notices', 'dokan_paypal_credential_error' );
-        }
-        else{
-            self::$debug = ( $paypal_settings['debug'] == 'yes' ) ? true : false;
+        } else {
+            self::$debug = ( $paypal_settings['debug'] === 'yes' ) ? true : false;
             self::$log = ( self::$debug ) ? new WC_Logger() : '';
-            self::$api_endpoint = ( $paypal_settings['testmode'] == 'no' ) ? 'https://api-3t.paypal.com/nvp' : 'https://api-3t.sandbox.paypal.com/nvp';
+            self::$api_endpoint = ( $paypal_settings['testmode'] === 'no' ) ? 'https://api-3t.paypal.com/nvp' : 'https://api-3t.sandbox.paypal.com/nvp';
         }
     }
 

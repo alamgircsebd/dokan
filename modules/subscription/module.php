@@ -19,7 +19,7 @@ class Module {
      * @uses add_action()
      */
     public function __construct() {
-        require_once dirname( __FILE__ ). '/includes/classes/class-dps-product-pack.php';
+        require_once dirname( __FILE__ ) . '/includes/classes/class-dps-product-pack.php';
 
         $this->response = '';
 
@@ -76,7 +76,7 @@ class Module {
 
         add_filter( 'dokan_get_dashboard_nav', [ __CLASS__, 'add_new_page' ], 11, 1 );
         add_filter( 'dokan_set_template_path', array( $this, 'load_subscription_templates' ), 11, 3 );
-        add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin') );
+        add_action( 'dokan_load_custom_template', array( $this, 'load_template_from_plugin' ) );
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
 
         add_filter( 'woocommerce_order_item_needs_processing', array( $this, 'order_needs_processing' ), 10, 2 );
@@ -133,7 +133,7 @@ class Module {
      * Nothing being called here yet.
      */
     public static function activate() {
-        do_action('dps_schedule_pack_update');
+        do_action( 'dps_schedule_pack_update' );
 
         set_transient( 'dokan-subscription', 1 );
 
@@ -141,19 +141,19 @@ class Module {
             wp_schedule_event( time(), 'daily', 'dps_schedule_pack_update' );
         }
 
-        if( ! self::is_dokan_plugin() ) {
-
+        if ( ! self::is_dokan_plugin() ) {
             if ( ! get_page_by_title( __( 'Product Subscription', 'dokan' ) ) ) {
-
                 $dasboard_page = get_page_by_title( 'Dashboard' );
 
-                $page_id = wp_insert_post( array(
-                    'post_title'   => wp_strip_all_tags( __( 'Product Subscription', 'dokan' ) ),
-                    'post_content' => '[dps_product_pack]',
-                    'post_status'  => 'publish',
-                    'post_parent'  => $dasboard_page->ID,
-                    'post_type'    => 'page'
-                ) );
+                $page_id = wp_insert_post(
+                    array(
+                        'post_title'   => wp_strip_all_tags( __( 'Product Subscription', 'dokan' ) ),
+                        'post_content' => '[dps_product_pack]',
+                        'post_status'  => 'publish',
+                        'post_parent'  => $dasboard_page->ID,
+                        'post_type'    => 'page',
+                    )
+                );
             }
         }
     }
@@ -162,10 +162,12 @@ class Module {
      * Placeholder for deactivation function
      */
     public static function deactivate() {
-        $users = get_users( [
-            'role'   => 'seller',
-            'fields' => [ 'ID', 'user_email' ]
-        ] );
+        $users = get_users(
+            [
+                'role'   => 'seller',
+                'fields' => [ 'ID', 'user_email' ],
+            ]
+        );
 
         foreach ( $users as $user ) {
             Helper::make_product_publish( $user->ID );
@@ -179,7 +181,7 @@ class Module {
      * @return boolean true|false
      */
     public static function is_dokan_plugin() {
-        return defined('DOKAN_PLUGIN_VERSION');
+        return defined( 'DOKAN_PLUGIN_VERSION' );
     }
 
     /**
@@ -226,9 +228,10 @@ class Module {
 
         wp_enqueue_style( 'dps-custom-style', DPS_URL . '/assets/css/style' . $suffix . '.css', [], date( 'Ymd' ) );
         wp_enqueue_script( 'dps-custom-js', DPS_URL . '/assets/js/script' . $suffix . '.js', array( 'jquery' ), time(), true );
-        wp_localize_script( 'dps-custom-js', 'dokanSubscription', array(
-            'cancel_string'   => __( 'Do you really want to cancel the subscription?', 'dokan' ),
-            'activate_string' => __( 'Want to activate the subscription again?', 'dokan' ),
+        wp_localize_script(
+            'dps-custom-js', 'dokanSubscription', array(
+                'cancel_string'   => __( 'Do you really want to cancel the subscription?', 'dokan' ),
+                'activate_string' => __( 'Want to activate the subscription again?', 'dokan' ),
         ) );
     }
 
@@ -239,7 +242,6 @@ class Module {
         $vendor_id = dokan_get_current_user_id();
 
         if ( dokan_is_seller_enabled( $vendor_id ) ) {
-
             $remaining_product = Helper::get_vendor_remaining_products( $vendor_id );
 
             if ( '-1' === $remaining_product ) {
@@ -247,8 +249,7 @@ class Module {
             }
 
             if ( $remaining_product == 0 || ! self::can_post_product() ) {
-
-                if( self::is_dokan_plugin() ) {
+                if ( self::is_dokan_plugin() ) {
                     $permalink = dokan_get_navigation_url( 'subscription' );
                 } else {
                     $page_id   = dokan_get_option( 'subscription_pack', 'dokan_product_subscription' );
@@ -256,10 +257,10 @@ class Module {
                 }
                 // $page_id = dokan_get_option( 'subscription_pack', 'dokan_product_subscription' );
                 $info = sprintf( __( 'Sorry! You can not add or publish any more product. Please <a href="%s">update your package</a>.', 'dokan' ), $permalink );
-                echo "<p class='dokan-info'>" . $info . "</p>";
-                echo "<style>.dokan-add-product-link{display : none !important}</style>";
+                echo "<p class='dokan-info'>" . $info . '</p>';
+                echo '<style>.dokan-add-product-link{display : none !important}</style>';
             } else {
-                echo "<p class='dokan-info'>". sprintf( __( 'You can add %d more product(s).', 'dokan' ), $remaining_product ) . "</p>";
+                echo "<p class='dokan-info'>" . sprintf( __( 'You can add %d more product(s).', 'dokan' ), $remaining_product ) . '</p>';
             }
         }
     }
@@ -275,23 +276,23 @@ class Module {
     }
 
     /**
-    * Get plugin path
-    *
-    * @since 2.8
-    *
-    * @return void
-    **/
+     * Get plugin path
+     *
+     * @since 2.8
+     *
+     * @return void
+     **/
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
 
     /**
-    * Load Dokan subscription templates
-    *
-    * @since 2.8
-    *
-    * @return void
-    **/
+     * Load Dokan subscription templates
+     *
+     * @since 2.8
+     *
+     * @return void
+     **/
     public function load_subscription_templates( $template_path, $template, $args ) {
         if ( isset( $args['is_subscription'] ) && $args['is_subscription'] ) {
             return $this->plugin_path() . '/templates';
@@ -308,7 +309,7 @@ class Module {
      * @return void
      */
     function load_template_from_plugin( $query_vars ) {
-        if ( ! isset( $query_vars['subscription' ] ) ) {
+        if ( ! isset( $query_vars['subscription'] ) ) {
             return $query_vars;
         }
 
@@ -330,7 +331,7 @@ class Module {
      *
      * @since 1.1.5
      */
-    function add_rewrite_rules(){
+    function add_rewrite_rules() {
         if ( get_transient( 'dokan-subscription' ) ) {
             flush_rewrite_rules( true );
             delete_transient( 'dokan-subscription' );
@@ -344,9 +345,8 @@ class Module {
      * @return array
      */
     public static function add_new_page( $urls ) {
-
-        if( self::is_dokan_plugin() ) {
-            $permalink = dokan_get_navigation_url('subscription');
+        if ( self::is_dokan_plugin() ) {
+            $permalink = dokan_get_navigation_url( 'subscription' );
         } else {
             $page_id = dokan_get_option( 'subscription_pack', 'dokan_product_subscription' );
             $permalink = get_permalink( $page_id );
@@ -364,13 +364,13 @@ class Module {
                     'title' => __( 'Subscription', 'dokan' ),
                     'icon'  => '<i class="fa fa-book"></i>',
                     'url'   => $permalink,
-                    'pos'   => 180
+                    'pos'   => 180,
                 );
             } else {
                 $urls['subscription'] = array(
                     'title' => __( 'Subscription', 'dokan' ),
                     'icon'  => '<i class="fa fa-book"></i>',
-                    'url'   => $permalink
+                    'url'   => $permalink,
                 );
             }
         }
@@ -388,7 +388,6 @@ class Module {
         $user_id = dokan_get_current_user_id();
 
         if ( dokan_is_user_seller( $user_id ) ) {
-
             $remaining_product = Helper::get_vendor_remaining_products( $user_id );
 
             if ( '-1' === $remaining_product ) {
@@ -396,10 +395,10 @@ class Module {
             }
 
             if ( $remaining_product <= 0 ) {
-                $errors[] = __( "Sorry your subscription exceeds your package limits please update your package subscription", 'dokan' );
+                $errors[] = __( 'Sorry your subscription exceeds your package limits please update your package subscription', 'dokan' );
                 return $errors;
             } else {
-                update_user_meta( $user_id, 'product_no_with_pack', $remaining_product - 1  );
+                update_user_meta( $user_id, 'product_no_with_pack', $remaining_product - 1 );
                 return $errors;
             }
         }
@@ -455,7 +454,7 @@ class Module {
 
         $allowed_status = apply_filters( 'dps_get_product_by_seller_allowed_statuses', array( 'publish', 'pending' ) );
 
-        $query = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_author = $user_id AND post_type = 'product' AND post_status IN ( '" . implode( "','", $allowed_status ). "' )";
+        $query = "SELECT COUNT(*) FROM $wpdb->posts WHERE post_author = $user_id AND post_type = 'product' AND post_status IN ( '" . implode( "','", $allowed_status ) . "' )";
         $count = $wpdb->get_var( $query );
 
         return $count;
@@ -476,7 +475,6 @@ class Module {
         $user_id = dokan_get_current_user_id();
 
         if ( dokan_is_user_seller( $user_id ) ) {
-
             $remaining_product = Helper::get_vendor_remaining_products( $user_id );
 
             if ( '-1' === $remaining_product ) {
@@ -486,7 +484,7 @@ class Module {
             if ( $remaining_product <= 0 ) {
                 $errors = new \WP_Error( 'no-subscription', __( 'Sorry your subscription exceeds your package limits please update your package subscription', 'dokan' ) );
             } else {
-                update_user_meta( $user_id, 'product_no_with_pack', $remaining_product - 1  );
+                update_user_meta( $user_id, 'product_no_with_pack', $remaining_product - 1 );
             }
 
             return $errors;
@@ -518,12 +516,12 @@ class Module {
     }
 
     /**
-    * Filter vendor category according to subscription
-    *
-    * @since 1.1.5
-    *
-    * @return void
-    **/
+     * Filter vendor category according to subscription
+     *
+     * @since 1.1.5
+     *
+     * @return void
+     **/
     public static function filter_category( $args ) {
         $user_id = get_current_user_id();
 
@@ -582,9 +580,11 @@ class Module {
             return $types;
         }
 
-        $types = array_filter( $types, function( $value, $key ) use ( $allowed_product_types ) {
+        $types = array_filter(
+            $types, function( $value, $key ) use ( $allowed_product_types ) {
             return in_array( $key, $allowed_product_types );
-        }, ARRAY_FILTER_USE_BOTH );
+        }, ARRAY_FILTER_USE_BOTH
+        );
 
         return $types;
     }
@@ -608,11 +608,11 @@ class Module {
         if ( 'dokan_view_product_menu' === $cap ) {
             $allowed_product_types = Helper::get_vendor_allowed_product_types();
 
-            $default_types = ['simple', 'variable', 'grouped', 'external'];
+            $default_types = [ 'simple', 'variable', 'grouped', 'external' ];
 
             // if no other default product is selected ( ei: dokan_get_product_types() ) then don't show the product menu
             if ( $allowed_product_types && ! array_intersect( $default_types, $allowed_product_types ) ) {
-                return ['no_permission'];
+                return [ 'no_permission' ];
             }
         }
 
@@ -620,7 +620,7 @@ class Module {
             $allowed_product_types = Helper::get_vendor_allowed_product_types();
 
             if ( $allowed_product_types && ! in_array( 'booking', $allowed_product_types ) ) {
-                return ['no_permission'];
+                return [ 'no_permission' ];
             }
         }
 
@@ -628,7 +628,7 @@ class Module {
             $allowed_product_types = Helper::get_vendor_allowed_product_types();
 
             if ( $allowed_product_types && ! in_array( 'auction', $allowed_product_types ) ) {
-                return ['no_permission'];
+                return [ 'no_permission' ];
             }
         }
 
@@ -651,19 +651,29 @@ class Module {
     }
 
     /**
-     * Shedule task daliy update this functions
-     *
+     * Schedule task daily update this functions
      */
     public function schedule_task() {
-        $users = get_users( [
-            'role'   => 'seller',
-            'fields' => [ 'ID', 'user_email' ]
-        ] );
+        $users = get_users(
+            [
+                'role__in'   => [ 'seller', 'administrator' ],
+                'fields' => [ 'ID', 'user_email' ],
+            ]
+        );
 
         foreach ( $users as $user ) {
+            $vendor_subscription = dokan()->vendor->get( $user->ID )->subscription;
+
+            // if no vendor is not subscribed to any pack, skip the vendor, this process also enable code editor autocomplete/quick access support.
+            if ( ! $vendor_subscription instanceof \DokanPro\Modules\Subscription\SubscriptionPack ) {
+                continue;
+            }
+
+            if ( ! Helper::is_subscription_product( $vendor_subscription->get_id() ) ) {
+                continue;
+            }
 
             if ( Helper::maybe_cancel_subscription( $user->ID ) ) {
-
                 if ( Helper::check_vendor_has_existing_product( $user->ID ) ) {
                     Helper::make_product_draft( $user->ID );
                 }
@@ -682,20 +692,12 @@ class Module {
                 }
             }
 
-            $vendor = dokan()->vendor->get( $user->ID )->subscription;
-
-            // if no vendor is not subscribed to any pack, skip the vendor
-            if ( ! $vendor ) {
-                continue;
-            }
-
             $is_seller_enabled  = dokan_is_seller_enabled( $user->ID );
-            $can_post_product   = $vendor->can_post_product();
-            $has_recurring_pack = $vendor->has_recurring_pack();
-            $has_subscription   = $vendor->has_subscription();
+            $can_post_product   = $vendor_subscription->can_post_product();
+            $has_recurring_pack = $vendor_subscription->has_recurring_pack();
+            $has_subscription   = $vendor_subscription->has_subscription();
 
             if ( ! $has_recurring_pack && $is_seller_enabled && $has_subscription && $can_post_product ) {
-
                 if ( Helper::alert_before_two_days( $user->ID ) ) {
                     $subject = ( dokan_get_option( 'email_subject', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_subject', 'dokan_product_subscription' ) : __( 'Package End notification alert', 'dokan' );
                     $message = ( dokan_get_option( 'email_body', 'dokan_product_subscription' ) ) ? dokan_get_option( 'email_body', 'dokan_product_subscription' ) : __( 'Your Package validation remaining some days please confirm it', 'dokan' );
@@ -726,7 +728,6 @@ class Module {
             $product_id = $product['product_id'];
 
             if ( Helper::is_subscription_product( $product_id ) ) {
-
                 if ( ! Helper::has_used_trial_pack( $customer_id ) ) {
                     Helper::add_used_trial_pack( $customer_id, $product_id );
                 }
@@ -771,7 +772,7 @@ class Module {
      * @param string  $url url
      */
     public static function add_to_cart_redirect( $url ) {
-        $product_id = isset( $_REQUEST['add-to-cart'] ) ?  (int) $_REQUEST['add-to-cart'] : 0;
+        $product_id = isset( $_REQUEST['add-to-cart'] ) ? (int) $_REQUEST['add-to-cart'] : 0;
 
         if ( ! $product_id ) {
             return $url;
@@ -791,7 +792,6 @@ class Module {
      * work with PayPal Standard, which only accept one subscription per checkout.
      */
     public static function maybe_empty_cart( $valid, $product_id, $quantity ) {
-
         if ( Helper::is_subscription_product( $product_id ) ) {
             WC()->cart->empty_cart();
         }
@@ -813,7 +813,6 @@ class Module {
      * @return bool
      */
     function order_needs_processing( $needs_processing, $product ) {
-
         if ( $product->get_type() == 'product_pack' ) {
             $needs_processing = false;
         }
@@ -868,12 +867,12 @@ class Module {
     }
 
     /**
-    * Cancel recurrring subscription via paypal
-    *
-    * @since 1.2.1
-    *
-    * @return void
-    **/
+     * Cancel recurrring subscription via paypal
+     *
+     * @since 1.2.1
+     *
+     * @return void
+     **/
     public function cancel_recurring_subscription( $order_id, $user_id ) {
         if ( ! $order_id ) {
             return;
@@ -1087,7 +1086,6 @@ class Module {
         $subscription_pack = null;
 
         if ( $vendor->get_id() && dokan_is_user_seller( $vendor->get_id() ) ) {
-
             $subscription_pack_id = get_user_meta( $vendor->get_id(), 'product_package_id', true );
 
             if ( $subscription_pack_id ) {
@@ -1113,7 +1111,7 @@ class Module {
             'taxonomy' => 'product_type',
             'field'    => 'slug',
             'terms'    => 'product_pack',
-            'operator' => 'NOT IN'
+            'operator' => 'NOT IN',
         ];
 
         return $args;
@@ -1129,11 +1127,17 @@ class Module {
      * @return null|\WP_Post $post
      */
     public function restrict_category_on_xml_import( $post ) {
-        $category_name = array_values( array_map( function ( $category ) {
-            return $category['name'];
-        }, array_filter( $post['terms'], function ( $term ) {
-            return 'product_cat' === $term['domain'];
-        } ) ) )[0];
+        $category_name = array_values(
+            array_map(
+                function ( $category ) {
+                    return $category['name'];
+                }, array_filter(
+                    $post['terms'], function ( $term ) {
+                    return 'product_cat' === $term['domain'];
+                }
+                )
+            )
+        )[0];
 
         $allowed_categories = $this->get_vendor_allowed_categories();
 
