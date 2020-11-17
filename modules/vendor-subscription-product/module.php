@@ -113,6 +113,12 @@ class Module {
         add_filter( 'dokan_set_template_path', [ $this, 'load_subcription_product_templates' ], 10, 3 );
         add_filter( 'woocommerce_order_item_needs_processing', array( $this, 'order_needs_processing' ), 10, 2 );
         add_filter( 'dokan_get_product_types', [ $this, 'add_subscription_type_product' ] );
+
+        // store subscription type product, per product commission.
+        if ( class_exists( '\WeDevs\DokanPro\Products' ) ) {
+            add_action( 'woocommerce_process_product_meta_subscription', array( '\WeDevs\DokanPro\Products', 'save_per_product_commission_options' ), 15 );
+            add_action( 'woocommerce_process_product_meta_variable-subscription', array( '\WeDevs\DokanPro\Products', 'save_per_product_commission_options' ), 15 );
+        }
     }
 
     /**
