@@ -37,6 +37,22 @@ class ProductSubscription extends StripePaymentGateway {
     protected $plan_id;
 
     /**
+     * Product id holder
+     *
+     * @var int
+     */
+    protected $product_id;
+
+    /**
+     * Order object holder
+     *
+     * @var object
+     */
+    protected $order;
+
+
+
+    /**
      * Stripe Customer id holder
      *
      * @var string
@@ -50,6 +66,7 @@ class ProductSubscription extends StripePaymentGateway {
      */
     public function __construct() {
         StripeHelper::bootstrap_stripe();
+        $this->order = null;
         $this->hooks();
     }
 
@@ -112,6 +129,16 @@ class ProductSubscription extends StripePaymentGateway {
         $product_pack_id    = $product_pack->get_slug() . '-' . $product_pack->get_id();
         $vendor_id          = get_current_user_id();
 
+        if ( $this->order instanceof \WC_Order ) {
+            $initial_payment = $this->order->get_total();
+        } else {
+            foreach ( $cart_data = WC()->session->get('cart') as $cart_item ) {
+                if ( (int) $cart_item['product_id'] == (int) $this->product_id ) {
+                    $initial_payment = $cart_item['line_total'];
+                }
+            }
+        }
+
         if ( $dokan_subscription->is_recurring() ) {
             $subscription_interval = $dokan_subscription->get_recurring_interval();
             $subscription_period   = $dokan_subscription->get_period_type();
@@ -136,7 +163,7 @@ class ProductSubscription extends StripePaymentGateway {
 
                 $stripe_plan = Plan::create(
                     [
-                        'amount'            => StripeHelper::get_stripe_amount( $product_pack->get_price() ),
+                        'amount'            => StripeHelper::get_stripe_amount( $initial_payment ),
                         'interval'          => $subscription_period,
                         'interval_count'    => $subscription_interval,
                         'currency'          => strtolower( get_woocommerce_currency() ),
@@ -194,6 +221,7 @@ class ProductSubscription extends StripePaymentGateway {
         $product_pack       = StripeHelper::get_subscription_product_by_order( $order );
         $dokan_subscription = dokan()->subscription->get( $product_pack->get_id() );
         $vendor_id          = get_current_user_id();
+        $this->order        = $order;
 
         if ( is_object( $intent ) ) {
             $this->stripe_customer = $intent->customer;
