@@ -36,6 +36,7 @@ class Module {
     public function __construct() {
         $this->depends_on['WC_Subscriptions'] = array(
             'name'   => 'WC_Subscriptions',
+            /* translators: WooCommerce subscription plugin link */
             'notice' => sprintf( __( '<b>Dokan Vendor Subscription Product Addon </b> requires %1$sWooCommerce Subscriptions plugin%2$s to be installed & activated first !', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-subscriptions/">', '</a>' ),
         );
 
@@ -103,7 +104,7 @@ class Module {
         new \Dokan_VSP_User_Subscription();
     }
 
-     /**
+    /**
      * Init all hooks
      *
      * @since 1.0.0
@@ -128,7 +129,7 @@ class Module {
      * @param  array $product
      * @return bool
      */
-    function order_needs_processing( $needs_processing, $product ) {
+    public function order_needs_processing( $needs_processing, $product ) {
         if ( $product->get_type() === 'subscription' || $product->get_type() === 'variable-subscription' || $product->get_type() === 'subscription_variation' ) {
             $needs_processing = false;
         }
@@ -168,15 +169,15 @@ class Module {
         }
 
         // Vendor product edit page when product is pending review
-        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
+        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) { // phpcs:ignore
             $this->enqueue_scripts();
         }
 
-        if ( isset( $wp->query_vars['user-subscription'] ) && ! empty( $_GET['subscription_id'] ) ) {
+        if ( isset( $wp->query_vars['user-subscription'] ) && ! empty( $_GET['subscription_id'] ) ) { // phpcs:ignore
             $this->enqueue_scripts();
         }
 
-        if ( isset( $wp->query_vars['coupons'] ) && ! empty( $_GET['post'] ) ) {
+        if ( isset( $wp->query_vars['coupons'] ) && ! empty( $_GET['post'] ) ) { // phpcs:ignore
             $this->enqueue_scripts();
         }
     }
