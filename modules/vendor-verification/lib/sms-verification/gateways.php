@@ -171,7 +171,7 @@ class WeDevs_Dokan_SMS_Gateways {
             }
         } catch ( Exception $exc ) {
             $error_code = (int) $exc->getCode();
-            $response   = $this->handle_errors( $error_code, $response );
+            $response['message']   = $this->handle_twilio_errors( $error_code );
         }
 
         return $response;
@@ -219,28 +219,30 @@ class WeDevs_Dokan_SMS_Gateways {
     }
 
     /**
-     * Handles error codes and returns translatable text
+     * Handles Twilio error codes and returns translatable text
      *
      * @param $error_code
      *
-     * @return array
+     * @return string|void
      */
-    public function handle_errors( $error_code, array $response ) {
+    public function handle_twilio_errors( $error_code ) {
+        $response = dokan_get_option( 'sms_sent_error', 'dokan_verification_sms_gateways' );
+
         switch ( $error_code ) {
             case 21211:
-                $response['message'] = __( 'Invalid phone number.', 'dokan' );
+                $response = __( 'Invalid phone number.', 'dokan' );
                 break;
 
             case 21610:
-                $response['message'] = __( 'This number is blocked for your account.', 'dokan' );
+                $response = __( 'This number is blocked for your account.', 'dokan' );
                 break;
 
             case 21612:
-                $response['message'] = __( 'Twilio cannot route to this number.', 'dokan' );
+                $response = __( 'Twilio cannot route to this number.', 'dokan' );
                 break;
 
             case 21614:
-                $response['message'] = __( 'This number is incapable of receiving SMS messages.', 'dokan' );
+                $response = __( 'This number is incapable of receiving SMS messages.', 'dokan' );
                 break;
         }
 
