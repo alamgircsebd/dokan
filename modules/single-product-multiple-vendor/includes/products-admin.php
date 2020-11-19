@@ -64,10 +64,13 @@ class Dokan_SPMV_Products_Admin {
     public function enqueue_scripts( $hook ) {
         global $post;
 
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
         if ( $hook == 'post-new.php' || $hook == 'post.php' ) {
             if ( 'product' === $post->post_type ) {
-                wp_enqueue_style( 'dokan-spmv-products-admin', DOKAN_SPMV_ASSETS_DIR . '/css/dokan-spmv-products-admin.css', [], DOKAN_PRO_PLUGIN_VERSION );
-                wp_enqueue_script( 'dokan-spmv-products-admin', DOKAN_SPMV_ASSETS_DIR . '/js/dokan-spmv-products-admin.js', [ 'jquery', 'dokan_pro_admin' ], DOKAN_PRO_PLUGIN_VERSION, true );
+                wp_enqueue_style( 'dokan-spmv-products-admin', DOKAN_SPMV_ASSETS_DIR . '/css/dokan-spmv-products-admin' . $suffix . '.css', [], DOKAN_PRO_PLUGIN_VERSION );
+                wp_enqueue_script( 'dokan-spmv-products-admin', DOKAN_SPMV_ASSETS_DIR . '/js/dokan-spmv-products-admin' . $suffix . '.js', [ 'jquery', 'dokan_pro_admin' ], DOKAN_PRO_PLUGIN_VERSION, true );
                 add_filter( 'dokan_admin_localize_param', [ $this, 'add_localize_params' ]);
             }
         }

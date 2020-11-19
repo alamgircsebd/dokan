@@ -36,6 +36,9 @@ class AdminSingleProduct {
      * @return void
      */
     public static function meta_box( $post ) {
+        // Use minified libraries if SCRIPT_DEBUG is turned off
+        $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
         $reports = dokan_report_abuse_get_reports( [
             'product_id' => $post->ID,
         ] );
@@ -46,8 +49,8 @@ class AdminSingleProduct {
             'time_format' => get_option( 'time_format', 'g:i a' ),
         ] );
 
-        wp_enqueue_style( 'dokan-report-abuse-admin-single-product', DOKAN_REPORT_ABUSE_ASSETS . '/css/dokan-report-abuse-admin-single-product.css', ['dokan-fontawesome'], DOKAN_PRO_PLUGIN_VERSION );
-        wp_enqueue_script( 'dokan-report-abuse-admin-single-product', DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse-admin-single-product.js', ['jquery'], DOKAN_PRO_PLUGIN_VERSION, true );
+        wp_enqueue_style( 'dokan-report-abuse-admin-single-product', DOKAN_REPORT_ABUSE_ASSETS . '/css/dokan-report-abuse-admin-single-product' . $suffix . '.css', ['dokan-fontawesome'], DOKAN_PRO_PLUGIN_VERSION );
+        wp_enqueue_script( 'dokan-report-abuse-admin-single-product', DOKAN_REPORT_ABUSE_ASSETS . '/js/dokan-report-abuse-admin-single-product' . $suffix . '.js', ['jquery'], DOKAN_PRO_PLUGIN_VERSION, true );
 
         wp_localize_script( 'dokan-report-abuse-admin-single-product', 'dokanReportAbuse', [
             'rest' => [
