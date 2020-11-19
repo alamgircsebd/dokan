@@ -8,8 +8,9 @@ $chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $variation_pr
 $chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $variation_product );
 
 // Set month as the default billing period
+// @codingStandardsIgnoreStart
 if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', true ) ) {
-     $chosen_period = 'month';
+    $chosen_period = 'month';
 }
 ?>
 
@@ -120,3 +121,4 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
     <?php endif; ?>
 </div>
 <?php endif; ?>
+// @codingStandardsIgnoreEnd
