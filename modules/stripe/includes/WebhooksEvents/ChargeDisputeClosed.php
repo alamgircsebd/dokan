@@ -51,7 +51,7 @@ class ChargeDisputeClosed implements WebhookHandleable {
 
             update_user_meta( $vendor_id, 'can_post_product', '1' );
             $order->set_status( 'completed' );
-            $order->add_order_note( sprintf( __( 'Order %s status is now completed due to dispute resolved in your favour via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), $settings['title'], $charge_id ) );
+            $order->add_order_note( sprintf( __( 'Order %s status is now completed due to dispute resolved in your favour via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), Helper::get_gateway_title(), $charge_id ) );
             $order->save();
         }
     }
