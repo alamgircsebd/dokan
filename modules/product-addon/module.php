@@ -42,20 +42,27 @@ class Module {
             ),
         ];
 
-        add_action(
-            'plugins_loaded', function () {
-				if ( ! $this->check_if_has_dependency() ) {
-					add_action( 'admin_notices', [ $this, 'dependency_notice' ] );
+        add_action( 'plugins_loaded', [ $this, 'init' ] );
+    }
 
-					return;
-				}
+    /**
+     * Init the modules
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function init() {
+        if ( ! $this->check_if_has_dependency() ) {
+            add_action( 'admin_notices', [ $this, 'dependency_notice' ] );
 
-				$this->define();
-				$this->includes();
-				$this->initiate();
-				$this->hooks();
-			}
-        );
+            return;
+        }
+
+        $this->define();
+        $this->includes();
+        $this->initiate();
+        $this->hooks();
     }
 
     /**
