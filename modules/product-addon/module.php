@@ -271,12 +271,27 @@ class Module {
 
         return $template_path;
     }
-
+    
     public function load_vendor_staff_addons() {
         add_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
     }
 
+    /**
+     * Set author in for vendor staff
+     *
+     * @param $query
+     *
+     * @return void
+     */
     public function set_author_in_for_vendor_staff( $query ) {
+        $product = wc_get_product( get_the_ID() );
+
+        $vendor = dokan_get_vendor_by_product( $product );
+
+        if ( ! in_array( $vendor->get_id(), get_vendor_staff(), true ) ) {
+            return;
+        }
+
         if ( $query->query['post_type'] === 'global_product_addon' ) {
             $query->set( 'author__in', get_vendor_staff() );
         }
