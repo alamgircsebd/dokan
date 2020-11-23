@@ -14,7 +14,7 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
 }
 ?>
 
-<?php if ( $variation_product->is_type('subscription_variation') ): ?>
+<?php if ( $variation_product->is_type( 'subscription_variation' ) ): ?>
 <div class="dokan-form-group dokan-clearfix show_if_variable-subscription">
     <div class="subscription-price">
         <div class="content-half-part">
