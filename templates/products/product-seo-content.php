@@ -32,7 +32,7 @@
                     <div class="seo-snippet">
                         <div class="seo-title"></div>
                         <div class="seo-slug"><?php echo get_permalink( $post_id ); ?></div>
-                        <div class="seo-meta" data-default="<?php _e( 'Please provide a meta description by editing the snippet below. If you don’t, Google will try to find a relevant part of your post to show in the search results.', 'dokan' ); ?>"></div>
+                        <div class="seo-meta"></div>
                     </div>
 
                 </div>
