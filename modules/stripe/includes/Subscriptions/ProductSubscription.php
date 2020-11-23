@@ -106,13 +106,6 @@ class ProductSubscription extends StripePaymentGateway {
         $this->source_id  = ! empty( $data['source_id'] ) ? wc_clean( $data['source_id'] ) : '';
         $this->product_id = ! empty( $data['product_id'] ) ? wc_clean( $data['product_id'] ) : '';
 
-        $error = [
-            'code'    => 'subscription_not_created',
-            'message' => 'testing this error message',
-        ];
-
-        wp_send_json_error( $error );
-
         $subscription = $this->setup_subscription();
 
         if ( is_wp_error( $subscription ) ) {
