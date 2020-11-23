@@ -521,7 +521,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
         $response = wp_remote_post( $base_url, $args );
 
         if ( is_wp_error( $response ) ) {
-            throw new Exception( __( 'Something went wrong', 'dokan' ) );
+            throw new Exception( sprintf( '%1$s : %2$s', __( 'Something went wrong', 'dokan' ), $response->get_error_message() ) );
         }
 
         if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
