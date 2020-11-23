@@ -55,7 +55,7 @@ class WeDevs_Dokan_SMS_Gateways {
         $sms_throttle = wedevs_sms_get_option( 'sms_throttle' );
 
         //not enabled? bail out
-        if ( (string) $sms_throttle !== 'on' ) {
+        if ( 'on' !== (string) $sms_throttle ) {
             return true;
         }
 
@@ -162,7 +162,7 @@ class WeDevs_Dokan_SMS_Gateways {
                 $sms_data['text']
             );
 
-            if ( (string) $message->status !== 'failed' ) {
+            if ( 'failed' !== (string) $message->status ) {
                 $response = [
                     'success' => true,
                     'code'    => $sms_data['code'],
