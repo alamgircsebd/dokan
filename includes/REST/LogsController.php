@@ -130,7 +130,7 @@ class LogsController extends DokanRESTAdminController {
                 'vendor_earning'       => $is_subscription_product ? 0 : wc_format_decimal( $result->net_amount, $dp ),
                 'commission'           => wc_format_decimal( $commission ),
                 'dokan_gateway_fee'    => $processing_fee ? wc_format_decimal( $processing_fee, $dp ) : 0,
-                'gateway_fee_paid_by'  => $gateway_fee_paid_by ? $gateway_fee_paid_by : 'admin',
+                'gateway_fee_paid_by'  => $gateway_fee_paid_by ? $gateway_fee_paid_by : '',
                 'shipping_total'       => wc_format_decimal( $total_shipping, $dp ),
                 'tax_total'            => wc_format_decimal( $tax_totals, $dp ),
                 'status'               => $statuses[ $result->order_status ],
