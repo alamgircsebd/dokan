@@ -190,9 +190,10 @@ div.dokan-booking-wrapper input.dokan-btn{
 }
 
 .wc_bookings_calendar_form .calendar_days .dokan-booking-time[class] {
-    background: skyblue;
-    width: 150px;
-    padding: 15px 0 0px 10px;
+    background: #f1f1f1;
+    width: auto;
+    padding: 15px;
+    font-size: 0.75rem;
 }
 
 .wc_bookings_calendar_form .dokan-has-booking.has-next[class] {

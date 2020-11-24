@@ -440,7 +440,7 @@ th.column-booking_status {
         border-right-width: 1px;
         border-right-color: #DEDEDE; }
         .wc_bookings_calendar_form .calendar_days .hours li label {
-          width: 24px;
+          width: auto;
           text-align: right;
           float: left;
           margin: 2px 8px;

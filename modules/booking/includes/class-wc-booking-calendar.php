@@ -252,6 +252,10 @@ class Dokan_WC_Bookings_Calendar {
             $return .= '<br/>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title;
         }
 
+        if ( $resource = $booking->get_start() ) {
+            $return .= '<br/>' . $booking->get_start_date( '', 'g:ia' ) . '&mdash;' . $booking->get_end_date( '', 'g:ia' );
+        }
+
         return $return;
     }
 

@@ -59,9 +59,13 @@
 
 		<div class="calendar_days">
 			<ul class="hours">
-				<?php for ( $i = 0; $i < 24; $i ++ ) : ?>
-					<li><label><?php if ( $i != 0 && $i != 24 ) echo date_i18n( 'g:ia', strtotime( "midnight +{$i} hour" ) ); ?></label></li>
-				<?php endfor; ?>
+                <?php for ( $i = 0; $i < 24; $i ++ ) : ?>
+                    <li>
+                        <label>
+                            <?php echo esc_html( date_i18n( 'ga', strtotime( "midnight +{$i} hour" ) ) ); ?>
+                        </label>
+                    </li>
+                <?php endfor; ?>
 			</ul>
 			<ul class="bookings">
 				<?php $this->list_bookings_for_day(); ?>
