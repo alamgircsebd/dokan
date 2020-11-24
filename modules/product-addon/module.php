@@ -36,9 +36,8 @@ class Module {
     public function __construct() {
         $this->depends_on['WC_Product_Addons'] = [
             'name'   => 'WC_Product_Addons',
-            'notice' => sprintf(
-                __( '<b>Dokan Product Addon </b> requires %1$sWooCommerce Product addons plugin%2$s to be installed & activated first !', 'dokan' ),
-                '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>'
+            /* translators: 1: tag start with href, 2: tag end */
+            'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %1$sWooCommerce Product addons plugin%2$s to be installed & activated first !', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>'
             ),
         ];
 
