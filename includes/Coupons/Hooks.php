@@ -87,6 +87,7 @@ class Hooks {
 
         if ( $coupon->get_minimum_amount() > $line_item_total ) {
             // return validation message when coupon amount greater than total amount
+            // translators: %s : showing minimun amount for coupon
             throw new Exception( sprintf( __( 'The minimun spend for this coupon is %s', 'dokan' ), wc_price( $coupon->get_minimum_amount() ) ), 108 );
         }
 
@@ -101,13 +102,13 @@ class Hooks {
      * @return void
      */
     public function render_coupon_header_template() {
-        $is_edit      = ( isset( $_GET['view'] ) && $_GET['view'] === 'add_coupons' ) ? true : false; // phpcs:ignore
-        $is_edit_page = ( ! empty( $_GET['post'] ) && $is_edit ) ? true : false;
+        $is_edit      = ( isset( $_GET['view'] ) && 'add_coupons' === $_GET['view'] ) ? true : false; // phpcs:ignore
+        $is_edit_page = ( ! empty( $_GET['post'] ) && $is_edit ) ? true : false; // phpcs:ignore
         dokan_get_template_part(
             'coupon/header', '', array(
-				'pro' => true,
-				'is_edit_page' => $is_edit_page,
-				'is_edit' => $is_edit,
+                'pro' => true,
+                'is_edit_page' => $is_edit_page,
+                'is_edit' => $is_edit,
             )
         );
     }
@@ -131,8 +132,8 @@ class Hooks {
                 foreach ( $messages as $message ) {
                     dokan_get_template_part(
                         'global/dokan-error', '', array(
-							'deleted' => true,
-							'message' => $message,
+                            'deleted' => true,
+                            'message' => $message,
                         )
                     );
                 }
@@ -165,13 +166,13 @@ class Hooks {
      *
      * @return void
      */
-    function list_user_coupons() {
+    public function list_user_coupons() {
         //click add coupon then hide this function
-        if ( isset( $_GET['view'] ) && $_GET['view'] === 'add_coupons' ) { // phpcs:ignore
+        if ( isset( $_GET['view'] ) && 'add_coupons' === $_GET['view'] ) { // phpcs:ignore
             return;
         }
 
-        if ( isset( $_GET['post'] ) && $_GET['action'] === 'edit' ) { // phpcs:ignore
+        if ( isset( $_GET['post'] ) && 'edit' === $_GET['action'] ) { // phpcs:ignore
             return;
         }
 
@@ -182,15 +183,15 @@ class Hooks {
             $this->get_messages();
             dokan_get_template_part(
                 'coupon/listing', '', array(
-					'pro' => true,
-					'coupons' => $all_coupons,
+                    'pro' => true,
+                    'coupons' => $all_coupons,
                 )
             );
         } else {
             dokan_get_template_part(
                 'coupon/no-coupon', '', array(
-					'pro' => true,
-					'message' => __( 'No coupons found!', 'dokan' ),
+                    'pro' => true,
+                    'message' => __( 'No coupons found!', 'dokan' ),
                 )
             );
         }
@@ -201,16 +202,16 @@ class Hooks {
      *
      * @return void
      */
-    function get_messages() {
-        if ( isset( $_GET['message'] ) && $_GET['message'] === 'delete_succefully' ) { // phpcs:ignore
+    public function get_messages() {
+        if ( isset( $_GET['message'] ) && 'delete_succefully' === $_GET['message'] ) { // phpcs:ignore
             dokan_get_template_part( 'global/dokan-message', '', array( 'message' => __( 'Coupon has been deleted successfully!', 'dokan' ) ) );
         }
 
-        if ( isset( $_GET['message'] ) && $_GET['message'] === 'coupon_saved' ) { // phpcs:ignore
+        if ( isset( $_GET['message'] ) && 'coupon_saved' === $_GET['message'] ) { // phpcs:ignore
             dokan_get_template_part( 'global/dokan-message', '', array( 'message' => __( 'Coupon has been saved successfully!', 'dokan' ) ) );
         }
 
-        if ( isset( $_GET['message'] ) && $_GET['message'] === 'coupon_update' ) { // phpcs:ignore
+        if ( isset( $_GET['message'] ) && 'coupon_update' === $_GET['message'] ) { // phpcs:ignore
             dokan_get_template_part( 'global/dokan-message', '', array( 'message' => __( 'Coupon has been updated successfully!', 'dokan' ) ) );
         }
     }
@@ -222,18 +223,21 @@ class Hooks {
      *
      * @return void
      */
-    function add_coupons_form( $validated ) {
+    public function add_coupons_form( $validated ) {
+        $get_data  = wp_unslash( $_GET ); // phpcs:ignore
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
         //intial time hide this function
-        if ( ! isset( $_GET['view'] ) ) { // phpcs:ignore
+        if ( ! isset( $get_data['view'] ) ) {
             return;
-        } elseif ( $_GET['view'] !== 'add_coupons' ) { // phpcs:ignore
+        } elseif ( $get_data['view'] !== 'add_coupons' ) {
             return;
         }
 
         $button_name = __( 'Create Coupon', 'dokan' );
 
-        if ( isset( $_GET['post'] ) && $_GET['action'] == 'edit' ) { // phpcs:ignore
-            $post                       = get_post( $_GET['post'] ); // phpcs:ignore
+        if ( isset( $get_data['post'] ) && 'edit' === $get_data['action'] ) {
+            $post                       = get_post( $get_data['post'] );
             $button_name                = __( 'Update Coupon', 'dokan' );
             $discount_type              = get_post_meta( $post->ID, 'discount_type', true );
             $amount                     = get_post_meta( $post->ID, 'coupon_amount', true );
@@ -255,7 +259,7 @@ class Hooks {
         $description = isset( $post->post_content ) ? $post->post_content : '';
 
         if ( ! empty( $post_id ) && ! dokan_is_valid_owner( $post_id, dokan_get_current_user_id() ) ) {
-            wp_redirect( dokan_get_navigation_url( 'coupons' ) );
+            wp_safe_redirect( dokan_get_navigation_url( 'coupons' ) );
             exit();
         }
 
@@ -271,27 +275,27 @@ class Hooks {
         if ( isset( $expire ) && ( (string) (int) $expire === $expire )
             && ( $expire <= PHP_INT_MAX )
             && ( $expire >= ~PHP_INT_MAX ) ) {
-            $expire = date( 'Y-m-d', $expire );
+            $expire = date( 'Y-m-d', $expire ); // phpcs:ignore
         } else {
-            $expire = ! empty( $expire ) ? date( 'Y-m-d', strtotime( $expire ) ) : '';
+            $expire = ! empty( $expire ) ? date( 'Y-m-d', strtotime( $expire ) ) : ''; // phpcs:ignore
         }
 
         $products_id = str_replace( ' ', '', $products );
         $products_id = explode( ',', $products_id );
 
-        if ( isset( $apply_before_tax ) && $apply_before_tax == 'yes' ) {
+        if ( isset( $apply_before_tax ) && 'yes' === $apply_before_tax ) {
             $apply_before_tax = 'checked';
         } else {
             $apply_before_tax = '';
         }
 
-        if ( isset( $exclide_sale_item ) && $exclide_sale_item == 'yes' ) {
+        if ( isset( $exclide_sale_item ) && 'yes' === $exclide_sale_item ) {
             $exclide_sale_item = 'checked';
         } else {
             $exclide_sale_item = '';
         }
 
-        if ( isset( $show_on_store ) && $show_on_store == 'yes' ) {
+        if ( isset( $show_on_store ) && 'yes' === $show_on_store ) {
             $show_on_store = 'checked';
         } else {
             $show_on_store = '';
@@ -301,59 +305,59 @@ class Hooks {
         $customer_email = isset( $customer_email ) ? implode( ',', $customer_email ) : '';
 
         if ( is_wp_error( self::$validated ) ) {
-            $post_id       = $_POST['post_id'];
-            $post_title    = $_POST['title'];
-            $description   = $_POST['description'];
-            $discount_type = $_POST['discount_type'];
-            $amount        = $_POST['amount'];
+            $post_id       = $post_data['post_id'];
+            $post_title    = $post_data['title'];
+            $description   = $post_data['description'];
+            $discount_type = $post_data['discount_type'];
+            $amount        = $post_data['amount'];
 
-            if ( isset( $_POST['product_drop_down'] ) ) {
-                $products = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_drop_down'] ) ) );
+            if ( isset( $post_data['product_drop_down'] ) ) {
+                $products = implode( ',', array_filter( array_map( 'intval', (array) $post_data['product_drop_down'] ) ) );
             } else {
                 $products = '';
             }
 
-            if ( isset( $_POST['exclude_product_ids'] ) ) {
-                $exclude_products = implode( ',', array_filter( array_map( 'intval', (array) $_POST['exclude_product_ids'] ) ) );
+            if ( isset( $post_data['exclude_product_ids'] ) ) {
+                $exclude_products = implode( ',', array_filter( array_map( 'intval', (array) $post_data['exclude_product_ids'] ) ) );
             } else {
                 $exclude_products = '';
             }
 
-            if ( isset( $_POST['product_categories'] ) ) {
-                $product_categories = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_categories'] ) ) );
+            if ( isset( $post_data['product_categories'] ) ) {
+                $product_categories = implode( ',', array_filter( array_map( 'intval', (array) $post_data['product_categories'] ) ) );
             } else {
                 $product_categories = '';
             }
 
-            if ( isset( $_POST['exclude_product_categories'] ) ) {
-                $exclude_product_categories = implode( ',', array_filter( array_map( 'intval', (array) $_POST['exclude_product_categories'] ) ) );
+            if ( isset( $post_data['exclude_product_categories'] ) ) {
+                $exclude_product_categories = implode( ',', array_filter( array_map( 'intval', (array) $post_data['exclude_product_categories'] ) ) );
             } else {
                 $exclude_product_categories = '';
             }
 
-            $usage_limit = $_POST['usage_limit'];
-            $expire      = $_POST['expire'];
+            $usage_limit = $post_data['usage_limit'];
+            $expire      = $post_data['expire'];
 
-            if ( isset( $_POST['apply_before_tax'] ) && $_POST['apply_before_tax'] == 'yes' ) {
+            if ( isset( $post_data['apply_before_tax'] ) && 'yes' === $post_data['apply_before_tax'] ) {
                 $apply_before_tax = 'checked';
             } else {
                 $apply_before_tax = '';
             }
 
-            if ( isset( $_POST['exclude_sale_items'] ) && $_POST['exclude_sale_items'] == 'yes' ) {
+            if ( isset( $post_data['exclude_sale_items'] ) && 'yes' === $post_data['exclude_sale_items'] ) {
                 $exclide_sale_item = 'checked';
             } else {
                 $exclide_sale_item = '';
             }
 
-            if ( isset( $_POST['show_on_store'] ) && $_POST['show_on_store'] == 'yes' ) {
+            if ( isset( $post_data['show_on_store'] ) && 'yes' === $post_data['show_on_store'] ) {
                 $show_on_store = 'checked';
             } else {
                 $show_on_store = '';
             }
 
-            $minimum_amount = $_POST['minium_ammount'];
-            $customer_email = $_POST['email_restrictions'];
+            $minimum_amount = $post_data['minium_ammount'];
+            $customer_email = $post_data['email_restrictions'];
         }
 
         $exclude_products = str_replace( ' ', '', $exclude_products );
@@ -405,7 +409,7 @@ class Hooks {
      *
      * @return void
      */
-    function handle_coupons() {
+    public function handle_coupons() {
         if ( ! is_user_logged_in() ) {
             return;
         }
@@ -431,19 +435,21 @@ class Hooks {
      *
      * @return object WP_Error|error
      */
-    function validate() {
-        if ( ! isset( $_POST['coupon_creation'] ) ) {
+    public function validate() {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
+        if ( ! isset( $post_data['coupon_creation'] ) ) {
             return;
         }
 
-        if ( ! wp_verify_nonce( $_POST['coupon_nonce_field'], 'coupon_nonce' ) ) {
+        if ( ! wp_verify_nonce( $post_data['coupon_nonce_field'], 'coupon_nonce' ) ) {
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
         $errors = new WP_Error();
 
         // Checking permissions for adding and editing
-        if ( empty( $_POST['post_id'] ) ) {
+        if ( empty( $post_data['post_id'] ) ) {
             if ( ! current_user_can( 'dokan_add_coupon' ) ) {
                 $errors->add( 'title', __( 'You have no permission to add this coupon', 'dokan' ) );
             }
@@ -453,19 +459,19 @@ class Hooks {
             }
         }
 
-        if ( empty( $_POST['title'] ) ) {
+        if ( empty( $post_data['title'] ) ) {
             $errors->add( 'title', __( 'Please enter the coupon title', 'dokan' ) );
         }
 
-        if ( empty( $_POST['amount'] ) ) {
+        if ( empty( $post_data['amount'] ) ) {
             $errors->add( 'amount', __( 'Please enter the amount', 'dokan' ) );
         }
 
-        if ( ! isset( $_POST['product_drop_down'] ) || ! count( $_POST['product_drop_down'] ) ) {
+        if ( ! isset( $post_data['product_drop_down'] ) || ! count( $post_data['product_drop_down'] ) ) {
             $errors->add( 'products', __( 'Please specify any products', 'dokan' ) );
         }
 
-        $this->is_coupon_exist( $_POST['title'], $errors );
+        $this->is_coupon_exist( $post_data['title'], $errors );
 
         if ( $errors->get_error_codes() ) {
             return $errors;
@@ -481,10 +487,12 @@ class Hooks {
      *
      * @return void
      */
-    function coupun_delete() {
-        if ( ! isset( $_GET['post'] ) || ! isset( $_GET['action'] ) ) { // phpcs:ignore
+    public function coupun_delete() {
+        $get_data = wp_unslash( $_GET ); // phpcs:ignore
+
+        if ( ! isset( $get_data['post'] ) || ! isset( $get_data['action'] ) ) { // phpcs:ignore
             return;
-        } elseif ( $_GET['action'] !== 'delete' ) { // phpcs:ignore
+        } elseif ( $get_data['action'] !== 'delete' ) { // phpcs:ignore
             return;
         }
 
@@ -492,12 +500,12 @@ class Hooks {
             wp_die( __( 'You have not permission to delete this coupon', 'dokan' ) );
         }
 
-        if ( ! wp_verify_nonce( $_GET['coupon_del_nonce'], '_coupon_del_nonce' ) ) { // phpcs:ignore
+        if ( ! wp_verify_nonce( $get_data['coupon_del_nonce'], '_coupon_del_nonce' ) ) { // phpcs:ignore
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
-        dokan_pro()->coupon->delete( $_GET['post'], true ); // phpcs:ignore
-        wp_redirect( add_query_arg( array( 'message' => 'delete_succefully' ), dokan_get_navigation_url( 'coupons' ) ) );
+        dokan_pro()->coupon->delete( $get_data['post'], true ); // phpcs:ignore
+        wp_safe_redirect( add_query_arg( array( 'message' => 'delete_succefully' ), dokan_get_navigation_url( 'coupons' ) ) );
     }
 
     /**
@@ -507,19 +515,21 @@ class Hooks {
      *
      * @return void
      */
-    function coupons_create() {
-        if ( ! isset( $_POST['coupon_creation'] ) ) {
+    public function coupons_create() {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
+        if ( ! isset( $post_data['coupon_creation'] ) ) {
             return;
         }
 
-        if ( ! wp_verify_nonce( $_POST['coupon_nonce_field'], 'coupon_nonce' ) ) {
+        if ( ! wp_verify_nonce( $post_data['coupon_nonce_field'], 'coupon_nonce' ) ) {
             wp_die( __( 'Are you cheating?', 'dokan' ) );
         }
 
-        if ( empty( $_POST['post_id'] ) ) {
+        if ( empty( $post_data['post_id'] ) ) {
             $post = array(
-                'post_title'   => $_POST['title'],
-                'post_content' => $_POST['description'],
+                'post_title'   => $post_data['title'],
+                'post_content' => $post_data['description'],
                 'post_status'  => 'publish',
                 'post_type'    => 'shop_coupon',
                 'post_author'  => dokan_get_current_user_id(),
@@ -529,9 +539,9 @@ class Hooks {
             $message = 'coupon_saved';
         } else {
             $post = array(
-                'ID'           => $_POST['post_id'],
-                'post_title'   => $_POST['title'],
-                'post_content' => $_POST['description'],
+                'ID'           => $post_data['post_id'],
+                'post_title'   => $post_data['title'],
+                'post_content' => $post_data['description'],
                 'post_status'  => 'publish',
                 'post_type'    => 'shop_coupon',
                 'post_author'  => dokan_get_current_user_id(),
@@ -544,17 +554,17 @@ class Hooks {
             return;
         }
 
-        $customer_email     = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $_POST['email_restrictions'] ) ) ) );
-        $type               = sanitize_text_field( $_POST['discount_type'] );
-        $amount             = wc_format_decimal( sanitize_text_field( $_POST['amount'] ) );
-        $usage_limit        = empty( $_POST['usage_limit'] ) ? '' : absint( $_POST['usage_limit'] );
-        $expiry_date        = strtotime( sanitize_text_field( $_POST['expire'] ) );
-        $apply_before_tax   = isset( $_POST['apply_before_tax'] ) ? 'yes' : 'no';
-        $exclude_sale_items = isset( $_POST['exclude_sale_items'] ) ? 'yes' : 'no';
-        $show_on_store      = isset( $_POST['show_on_store'] ) ? 'yes' : 'no';
-        $minimum_amount     = wc_format_decimal( sanitize_text_field( $_POST['minium_ammount'] ) );
+        $customer_email     = array_filter( array_map( 'trim', explode( ',', sanitize_text_field( $post_data['email_restrictions'] ) ) ) );
+        $type               = sanitize_text_field( $post_data['discount_type'] );
+        $amount             = wc_format_decimal( sanitize_text_field( $post_data['amount'] ) );
+        $usage_limit        = empty( $post_data['usage_limit'] ) ? '' : absint( $post_data['usage_limit'] );
+        $expiry_date        = strtotime( sanitize_text_field( $post_data['expire'] ) );
+        $apply_before_tax   = isset( $post_data['apply_before_tax'] ) ? 'yes' : 'no';
+        $exclude_sale_items = isset( $post_data['exclude_sale_items'] ) ? 'yes' : 'no';
+        $show_on_store      = isset( $post_data['show_on_store'] ) ? 'yes' : 'no';
+        $minimum_amount     = wc_format_decimal( sanitize_text_field( $post_data['minium_ammount'] ) );
 
-        if ( isset( $_POST['product_drop_down'][0] ) && 'select_all' === $_POST['product_drop_down'][0] ) {
+        if ( isset( $post_data['product_drop_down'][0] ) && 'select_all' === $post_data['product_drop_down'][0] ) {
             $product_ids = array_map(
                 function( $product ) {
                     return intval( $product->ID );
@@ -562,26 +572,26 @@ class Hooks {
             );
 
             $product_ids = implode( ',', $product_ids );
-        } elseif ( isset( $_POST['product_drop_down'] ) ) {
-            $product_ids = implode( ',', array_filter( array_map( 'intval', (array) $_POST['product_drop_down'] ) ) );
+        } elseif ( isset( $post_data['product_drop_down'] ) ) {
+            $product_ids = implode( ',', array_filter( array_map( 'intval', (array) $post_data['product_drop_down'] ) ) );
         } else {
             $product_ids = '';
         }
 
-        if ( isset( $_POST['exclude_product_ids'] ) ) {
-            $exclude_product_ids = implode( ',', array_filter( array_map( 'intval', (array) $_POST['exclude_product_ids'] ) ) );
+        if ( isset( $post_data['exclude_product_ids'] ) ) {
+            $exclude_product_ids = implode( ',', array_filter( array_map( 'intval', (array) $post_data['exclude_product_ids'] ) ) );
         } else {
             $exclude_product_ids = '';
         }
 
-        if ( isset( $_POST['product_categories'] ) ) {
-            $product_categories = array_filter( array_map( 'intval', (array) $_POST['product_categories'] ) );
+        if ( isset( $post_data['product_categories'] ) ) {
+            $product_categories = array_filter( array_map( 'intval', (array) $post_data['product_categories'] ) );
         } else {
             $product_categories = array();
         }
 
-        if ( isset( $_POST['exclude_product_categories'] ) ) {
-            $exclude_product_categories = array_filter( array_map( 'intval', (array) $_POST['exclude_product_categories'] ) );
+        if ( isset( $post_data['exclude_product_categories'] ) ) {
+            $exclude_product_categories = array_filter( array_map( 'intval', (array) $post_data['exclude_product_categories'] ) );
         } else {
             $exclude_product_categories = array();
         }
@@ -604,7 +614,7 @@ class Hooks {
         do_action( 'dokan_after_coupon_create', $post_id );
 
         if ( ! defined( 'DOING_AJAX' ) ) {
-            wp_redirect( add_query_arg( array( 'message' => $message ), dokan_get_navigation_url( 'coupons' ) ) );
+            wp_safe_redirect( add_query_arg( array( 'message' => $message ), dokan_get_navigation_url( 'coupons' ) ) );
         }
     }
 
@@ -618,7 +628,9 @@ class Hooks {
     *
     * @return object $error
     */
-    function is_coupon_exist( $title, $errors ) {
+    public function is_coupon_exist( $title, $errors ) {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
         $args = array(
 			'post_type' => 'shop_coupon',
 			'name' => $title,
@@ -627,7 +639,7 @@ class Hooks {
 
         if ( $title ) {
             if ( ! empty( $query ) ) {
-                if ( empty( $_POST['post_id'] ) || $_POST['post_id'] !== $query[0]->ID ) { // phpcs:ignore
+                if ( empty( $post_data['post_id'] ) || $post_data['post_id'] !== $query[0]->ID ) { // phpcs:ignore
                     return $errors->add( 'duplicate', __( 'Coupon title already exists', 'dokan' ) );
                 }
             }
