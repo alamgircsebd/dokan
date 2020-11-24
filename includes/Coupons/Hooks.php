@@ -131,10 +131,11 @@ class Hooks {
 
                 foreach ( $messages as $message ) {
                     dokan_get_template_part(
-                        'global/dokan-error', '', array(
+                        'global/dokan-error', '',
+                        [
                             'deleted' => true,
                             'message' => $message,
-                        )
+                        ]
                     );
                 }
             }
@@ -182,17 +183,19 @@ class Hooks {
         if ( ! empty( $all_coupons->coupons ) ) {
             $this->get_messages();
             dokan_get_template_part(
-                'coupon/listing', '', array(
+                'coupon/listing', '',
+                [
                     'pro' => true,
                     'coupons' => $all_coupons,
-                )
+                ]
             );
         } else {
             dokan_get_template_part(
-                'coupon/no-coupon', '', array(
+                'coupon/no-coupon', '',
+                [
                     'pro' => true,
                     'message' => __( 'No coupons found!', 'dokan' ),
-                )
+                ]
             );
         }
     }
@@ -230,7 +233,7 @@ class Hooks {
         //intial time hide this function
         if ( ! isset( $get_data['view'] ) ) {
             return;
-        } elseif ( $get_data['view'] !== 'add_coupons' ) {
+        } elseif ( 'add_coupons' !== $get_data['view'] ) {
             return;
         }
 
@@ -365,17 +368,19 @@ class Hooks {
 
         if ( empty( $post_id ) && ! current_user_can( 'dokan_add_coupon' ) ) {
             dokan_get_template_part(
-                'global/dokan-error', '', array(
-					'deleted' => false,
-					'message' => __( 'You have no permission to add coupon', 'dokan' ),
-                )
+                'global/dokan-error', '',
+                [
+                    'deleted' => false,
+                    'message' => __( 'You have no permission to add coupon', 'dokan' ),
+                ]
             );
         } elseif ( ! empty( $post_id ) && ! current_user_can( 'dokan_edit_coupon' ) ) {
             dokan_get_template_part(
-                'global/dokan-error', '', array(
-					'deleted' => false,
-					'message' => __( 'You have no permission to edit this coupon', 'dokan' ),
-                )
+                'global/dokan-error', '',
+                [
+                    'deleted' => false,
+                    'message' => __( 'You have no permission to edit this coupon', 'dokan' ),
+                ]
             );
         } else {
             dokan_get_template_part(
