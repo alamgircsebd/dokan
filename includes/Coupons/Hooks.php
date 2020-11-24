@@ -497,7 +497,7 @@ class Hooks {
 
         if ( ! isset( $get_data['post'] ) || ! isset( $get_data['action'] ) ) { // phpcs:ignore
             return;
-        } elseif ( $get_data['action'] !== 'delete' ) { // phpcs:ignore
+        } elseif ( 'delete' !== $get_data['action'] ) { // phpcs:ignore
             return;
         }
 
@@ -637,8 +637,8 @@ class Hooks {
         $post_data = wp_unslash( $_POST ); // phpcs:ignore
 
         $args = array(
-			'post_type' => 'shop_coupon',
-			'name' => $title,
+            'post_type' => 'shop_coupon',
+            'name' => $title,
 		);
         $query = get_posts( $args );
 
