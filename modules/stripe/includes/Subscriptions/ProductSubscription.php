@@ -197,7 +197,7 @@ class ProductSubscription extends StripePaymentGateway {
 
             if ( ! empty( $trial_period_days ) ) {
                 try {
-                    $date_time = new \WC_DateTime( "+ {$trial_period_days} days", new DateTimeZone( 'UTC' ) );
+                    $date_time = new \WC_DateTime( "+ {$trial_period_days} days", new \DateTimeZone( 'UTC' ) );
                     $date_time->setTime( 23, 59, 59 );
                     $subscription_args['trial_end'] = $date_time->getTimestamp();
                 } catch ( Exception $exception ) {
