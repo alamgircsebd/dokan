@@ -1223,24 +1223,24 @@ class Module {
             // Send success.
             wp_send_json_success(
                 array(
-					'position'   => 'done',
-					'percentage' => 100,
-					'url'        => dokan_get_navigation_url() . 'tools/csv-import?step=done',
-					'imported'   => count( $results['imported'] ),
-					'failed'     => count( $results['failed'] ),
-					'updated'    => count( $results['updated'] ),
-					'skipped'    => count( $results['skipped'] ),
+                    'position'   => 'done',
+                    'percentage' => 100,
+                    'url'        => dokan_get_navigation_url() . 'tools/csv-import?step=done',
+                    'imported'   => count( $results['imported'] ),
+                    'failed'     => count( $results['failed'] ),
+                    'updated'    => count( $results['updated'] ),
+                    'skipped'    => count( $results['skipped'] ),
                 )
             );
         } else {
             wp_send_json_success(
                 array(
-					'position'   => $importer->get_file_position(),
-					'percentage' => $percent_complete,
-					'imported'   => count( $results['imported'] ),
-					'failed'     => count( $results['failed'] ),
-					'updated'    => count( $results['updated'] ),
-					'skipped'    => count( $results['skipped'] ),
+                    'position'   => $importer->get_file_position(),
+                    'percentage' => $percent_complete,
+                    'imported'   => count( $results['imported'] ),
+                    'failed'     => count( $results['failed'] ),
+                    'updated'    => count( $results['updated'] ),
+                    'skipped'    => count( $results['skipped'] ),
                 )
             );
         }
