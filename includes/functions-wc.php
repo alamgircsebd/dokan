@@ -1698,3 +1698,47 @@ function dokan_rest_validate_single_seller_mode( $order, $request, $creating ) {
 }
 
 add_filter( 'woocommerce_rest_pre_insert_shop_order_object', 'dokan_rest_validate_single_seller_mode', 15, 3 );
+
+if ( ! function_exists( 'woocommerce_customer_available_downloads_modified' ) ) {
+
+    /**
+     * Dokan customer available downloads modified for sub orders
+     *
+     * @since  DOKAN_PRO_SINCE
+     *
+     * @param  Array $downloads
+     * @param  Int $customer_id
+     *
+     * @return Array $modified_downloads|$downloads
+     */
+    function dokan_woocommerce_customer_available_downloads_modified( $downloads, $customer_id ) {
+        if ( empty( $downloads ) ) {
+            return;
+        }
+
+        $modified_downloads = [];
+
+        foreach ( $downloads as $download ) {
+            $order_id = $download['order_id'];
+            $order    = wc_get_order( $order_id );
+
+            if ( empty( $order ) ) {
+                continue;
+            }
+
+            if ( $order->get_meta( 'has_sub_order' ) ) {
+                continue;
+            }
+
+            $modified_downloads[] = $download;
+        }
+
+        if ( ! empty( $modified_downloads ) ) {
+            return $modified_downloads;
+        }
+
+        return $downloads;
+    }
+
+    add_filter( 'woocommerce_customer_available_downloads', 'dokan_woocommerce_customer_available_downloads_modified', 15, 2 );
+}
