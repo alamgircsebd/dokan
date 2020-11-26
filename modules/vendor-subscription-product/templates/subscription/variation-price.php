@@ -121,4 +121,4 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
     <?php endif; ?>
 </div>
 <?php endif; ?>
-// @codingStandardsIgnoreEnd
+<?php // @codingStandardsIgnoreEnd ?>
