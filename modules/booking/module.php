@@ -613,10 +613,10 @@ class Module {
             return;
         }
 
-        $post_id = $post_data['resource_id'];
+        $post_id = intval( $post_data['resource_id'] );
 
         $post             = get_post( $post_id );
-        $post->post_title = $post_data['post_title'];
+        $post->post_title = sanitize_text_field( $post_data['post_title'] );
 
         wp_update_post( $post );
 
@@ -1112,7 +1112,7 @@ class Module {
             return;
         }
 
-        wp_delete_post( $post_data['person_id'] );
+        wp_delete_post( intval( $post_data['person_id'] ) );
         exit;
     }
 
