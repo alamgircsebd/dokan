@@ -8,12 +8,13 @@ use WP_REST_Server;
 use WeDevs\Dokan\Abstracts\DokanRESTController;
 
 /**
-* Reviews API controller
-*
-* @since 2.8.0
-*
-* @package dokan
-*/
+ * Reviews API controller
+ *
+ * @package dokan
+ * @since 2.8.0
+ *
+ * @author weDevs
+ */
 class ReviewsController extends DokanRESTController {
 
     /**
@@ -31,95 +32,102 @@ class ReviewsController extends DokanRESTController {
     protected $base = 'reviews';
 
 
-
     /**
      * Register all routes related with coupons
      *
      * @return void
      */
     public function register_routes() {
-        register_rest_route( $this->namespace, '/' . $this->base, array(
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( $this, 'get_reviews' ),
-                'permission_callback' => array( $this, 'get_reviews_permission_check' ),
-                'args'                => $this->get_collection_params(),
-            ),
-        ) );
+        register_rest_route(
+            $this->namespace, '/' . $this->base, [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_reviews' ],
+                    'permission_callback' => [ $this, 'get_reviews_permission_check' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/summary', array(
-            array(
-                'methods'             => WP_REST_Server::READABLE,
-                'callback'            => array( $this, 'get_reviews_summary' ),
-                'permission_callback' => array( $this, 'check_reviews_summary_permission' ),
-                'args'                => $this->get_collection_params(),
-            ),
-        ) );
+        register_rest_route(
+            $this->namespace, '/' . $this->base . '/summary', [
+                [
+                    'methods'             => WP_REST_Server::READABLE,
+                    'callback'            => [ $this, 'get_reviews_summary' ],
+                    'permission_callback' => [ $this, 'check_reviews_summary_permission' ],
+                    'args'                => $this->get_collection_params(),
+                ],
+            ]
+        );
 
-        register_rest_route( $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)', array(
-            'args' => array(
-                'id' => array(
-                    'description' => __( 'Unique identifier for the object.' ),
-                    'type'        => 'integer',
-                ),
-            ),
-            array(
-                'methods'             => WP_REST_Server::EDITABLE,
-                'callback'            => array( $this, 'update_review_status' ),
-                'permission_callback' => array( $this, 'manage_reviews_permission_check' ),
-                'args'                =>  array(
-                    'status' => array(
-                        'description' => __( 'Review Status', 'dokan' ),
-                        'required'    => true,
-                        'type'        => 'string',
-                    ),
-                ),
-            ),
-        ) );
+        register_rest_route(
+            $this->namespace, '/' . $this->base . '/(?P<id>[\d]+)', [
+                'args' => [
+                    'id' => [
+                        'description' => __( 'Unique identifier for the object.', 'dokan' ),
+                        'type'        => 'integer',
+                    ],
+                ],
+                [
+                    'methods'             => WP_REST_Server::EDITABLE,
+                    'callback'            => [ $this, 'update_review_status' ],
+                    'permission_callback' => [ $this, 'manage_reviews_permission_check' ],
+                    'args'                => [
+                        'status' => [
+                            'description' => __( 'Review Status', 'dokan' ),
+                            'required'    => true,
+                            'type'        => 'string',
+                        ],
+                    ],
+                ],
+            ]
+        );
 
-        register_rest_route( $this->namespace, '/stores/(?P<id>[\d]+)/reviews' , array(
-            'args' => array(
-                'id' => array(
-                    'description'       => __( 'Unique identifier for the object.', 'dokan' ),
-                    'type'              => 'integer',
-                    'validate_callback' => array( $this, 'is_valid_store' ),
-                ),
-            ),
-            array(
-                'methods'  => WP_REST_Server::CREATABLE,
-                'callback' => array( $this, 'create_item' ),
-                'permission_callback' => array( $this, 'create_item_permissions_check' ),
-                'args'     => array(
-                    'title' => array(
-                        'required'    => true,
-                        'type'        => 'string',
-                        'description' => __( 'Review title.', 'dokan' ),
-                    ),
-                    'content' => array(
-                        'required'    => true,
-                        'type'        => 'string',
-                        'description' => __( 'Review content.', 'dokan' ),
-                    ),
-                    'rating' => array(
-                        'required'          => false,
+        register_rest_route(
+            $this->namespace, '/stores/(?P<id>[\d]+)/reviews', [
+                'args' => [
+                    'id' => [
+                        'description'       => __( 'Unique identifier for the object.', 'dokan' ),
                         'type'              => 'integer',
-                        'description'       => __( 'Review rating', 'dokan' ),
-                        'validate_callback' => array( $this, 'is_valid_rating' ),
-                        'default'           => 0,
-                    ),
-                )
-            ),
-        ) );
+                        'validate_callback' => [ $this, 'is_valid_store' ],
+                    ],
+                ],
+                [
+                    'methods'             => WP_REST_Server::CREATABLE,
+                    'callback'            => [ $this, 'create_item' ],
+                    'permission_callback' => [ $this, 'create_item_permissions_check' ],
+                    'args'                => [
+                        'title'   => [
+                            'required'    => true,
+                            'type'        => 'string',
+                            'description' => __( 'Review title.', 'dokan' ),
+                        ],
+                        'content' => [
+                            'required'    => true,
+                            'type'        => 'string',
+                            'description' => __( 'Review content.', 'dokan' ),
+                        ],
+                        'rating'  => [
+                            'required'          => false,
+                            'type'              => 'integer',
+                            'description'       => __( 'Review rating', 'dokan' ),
+                            'validate_callback' => [ $this, 'is_valid_rating' ],
+                            'default'           => 0,
+                        ],
+                    ],
+                ],
+            ]
+        );
     }
 
     /**
      * Validate store
      *
-     * @since 2.9.5
-     *
-     * @param mixed            $value
+     * @param mixed $value
      * @param \WP_REST_Request $request
-     * @param string           $param
+     * @param string $param
+     *
+     * @since 2.9.5
      *
      * @return bool|\WP_Error
      */
@@ -174,42 +182,43 @@ class ReviewsController extends DokanRESTController {
      * @return object
      */
     public function get_reviews( $request ) {
-        $store_id = dokan_get_current_user_id();
+        $store_id     = dokan_get_current_user_id();
         $review_class = dokan_pro()->review;
 
         if ( empty( $store_id ) ) {
-            return new WP_Error( 'no_store_found', __( 'No seller found', 'dokan' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_store_found', __( 'No seller found', 'dokan' ), [ 'status' => 404 ] );
         }
 
-        $limit = $request['per_page'];
+        $limit  = $request['per_page'];
         $offset = ( $request['page'] - 1 ) * $request['per_page'];
 
-        $status = $this->get_status( $request );
+        $status   = $this->get_status( $request );
         $comments = $review_class->comment_query( $store_id, 'product', $limit, $status, $offset );
 
         $count = $this->get_total_count( $status );
 
-        $data = array();
+        $data = [];
         foreach ( $comments as $comment ) {
             $data[] = $this->prepare_item_for_response( $comment, $request );
         }
 
         $response = rest_ensure_response( $data );
         $response = $this->format_collection_response( $response, $request, $count );
+
         return $response;
     }
 
     /**
      * Create review permission callback
      *
-     * @since 2.9.5
-     *
      * @param \WP_REST_Request $request
+     *
+     * @since 2.9.5
      *
      * @return bool
      */
     public function create_item_permissions_check( $request ) {
-        if ( ! class_exists( 'Dokan_Store_Reviews' ) ) {
+        if ( ! dokan_pro()->module->is_active( 'store_reviews' ) ) {
             return false;
         }
 
@@ -225,11 +234,11 @@ class ReviewsController extends DokanRESTController {
     /**
      * Validate rating
      *
-     * @since 2.9.5
-     *
-     * @param mixed            $value
+     * @param mixed $value
      * @param \WP_REST_Request $request
-     * @param string           $param
+     * @param string $param
+     *
+     * @since 2.9.5
      *
      * @return bool|\WP_Error
      */
@@ -246,19 +255,21 @@ class ReviewsController extends DokanRESTController {
     /**
      * Creates a store review
      *
-     * @since 2.9.5
-     *
      * @param \WP_REST_Request $request
+     *
+     * @since 2.9.5
      *
      * @return \WP_Error|\WP_REST_Response
      */
     public function create_item( $request ) {
-        $post_id = dsr_save_store_review( $request['id'], array(
-            'title'       => $request['title'],
-            'content'     => $request['content'],
-            'reviewer_id' => get_current_user_id(),
-            'rating'      => $request['rating'],
-        ) );
+        $post_id = dsr_save_store_review(
+            $request['id'], [
+                'title'       => $request['title'],
+                'content'     => $request['content'],
+                'reviewer_id' => get_current_user_id(),
+                'rating'      => $request['rating'],
+            ]
+        );
 
         if ( is_wp_error( $post_id ) ) {
             return $post_id;
@@ -270,21 +281,21 @@ class ReviewsController extends DokanRESTController {
         $user_gravatar = get_avatar_url( $user->user_email );
 
         $data = [
-            'id'            => absint( $post->ID ) ,
-            'author'        => array(
+            'id'         => absint( $post->ID ),
+            'author'     => [
                 'id'     => $user->ID,
                 'name'   => $user->user_login,
                 'email'  => $user->user_email,
                 'url'    => $user->user_url,
-                'avatar' => $user_gravatar
-            ),
-            'title'         => $post->post_title,
-            'content'       => $post->post_content,
-            'permalink'     => null,
-            'product_id'    => null,
-            'approved'      => true,
-            'date'          => mysql_to_rfc3339( $post->post_date ),
-            'rating'        => absint( get_post_meta( $post->ID, 'rating', true ) ),
+                'avatar' => $user_gravatar,
+            ],
+            'title'      => $post->post_title,
+            'content'    => $post->post_content,
+            'permalink'  => null,
+            'product_id' => null,
+            'approved'   => true,
+            'date'       => mysql_to_rfc3339( $post->post_date ),
+            'rating'     => absint( get_post_meta( $post->ID, 'rating', true ) ),
         ];
 
         return rest_ensure_response( $data );
@@ -298,31 +309,31 @@ class ReviewsController extends DokanRESTController {
      * @return void
      */
     public function update_review_status( $request ) {
-        $store_id = dokan_get_current_user_id();
+        $store_id     = dokan_get_current_user_id();
         $review_class = dokan_pro()->review;
 
         if ( empty( $store_id ) ) {
-            return new WP_Error( 'no_store_found', __( 'No seller found', 'dokan' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_store_found', __( 'No seller found', 'dokan' ), [ 'status' => 404 ] );
         }
 
         if ( empty( $request['id'] ) ) {
-            return new WP_Error( 'no_reivew_found', __( 'No review id found', 'dokan' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_reivew_found', __( 'No review id found', 'dokan' ), [ 'status' => 404 ] );
         }
 
         if ( empty( $request['status'] ) ) {
-            return new WP_Error( 'no_reivew_status_found', __( 'No review status found for updating review', 'dokan' ), array( 'status' => 404 ) );
+            return new WP_Error( 'no_reivew_status_found', __( 'No review status found for updating review', 'dokan' ), [ 'status' => 404 ] );
         }
 
         $status = $this->get_status( $request );
 
-        $comment_id  = $request['id'];
+        $comment_id = $request['id'];
 
         if ( isset( $comment_id ) ) {
             wp_set_comment_status( $comment_id, $status );
         }
 
         $comment = get_comment( $comment_id );
-        $data = $this->prepare_item_for_response( $comment, $request );
+        $data    = $this->prepare_item_for_response( $comment, $request );
 
         return rest_ensure_response( $data );
     }
@@ -332,24 +343,27 @@ class ReviewsController extends DokanRESTController {
      *
      * @since 2.8.0
      *
-     * @return void
+     * @return mixed
      */
     public function get_status( $request ) {
         $status = isset( $request['status'] ) ? $request['status'] : '';
 
-        if ( $status == 'hold' ) {
-            return '0';
-        } else if ( $status == 'spam' ) {
-            return 'spam';
-        } else if ( $status == 'trash' ) {
-            return 'trash';
-        } else {
-            return '1';
+        switch ( $status ) {
+            case 'hold':
+                return '0';
+            case 'spam':
+                return 'spam';
+            case 'trash':
+                return 'trash';
+            default:
+                return '1';
         }
     }
 
     /**
      * Get total count of comment
+     *
+     * @param $status
      *
      * @since 2.8.0
      *
@@ -382,10 +396,10 @@ class ReviewsController extends DokanRESTController {
     public function get_reviews_summary( $request ) {
         $seller_id = dokan_get_current_user_id();
 
-        $data = array(
+        $data = [
             'comment_counts' => dokan_count_comments( 'product', $seller_id ),
             'reviews_url'    => dokan_get_navigation_url( 'reviews' ),
-        );
+        ];
 
         return rest_ensure_response( $data );
     }
@@ -399,15 +413,15 @@ class ReviewsController extends DokanRESTController {
      * @return WP_REST_Response $response Response data.
      */
     public function prepare_item_for_response( $review, $request ) {
-        $data = array(
-            'id'               => (int) $review->comment_ID,
-            'date_created'     => wc_rest_prepare_date_response( $review->comment_date ),
-            'review'           => $review->comment_content,
-            'rating'           => (int) get_comment_meta( $review->comment_ID, 'rating', true ),
-            'name'             => $review->comment_author,
-            'email'            => $review->comment_author_email,
-            'verified'         => wc_review_is_from_verified_owner( $review->comment_ID ),
-        );
+        $data = [
+            'id'           => (int) $review->comment_ID,
+            'date_created' => wc_rest_prepare_date_response( $review->comment_date ),
+            'review'       => $review->comment_content,
+            'rating'       => (int) get_comment_meta( $review->comment_ID, 'rating', true ),
+            'name'         => $review->comment_author,
+            'email'        => $review->comment_author_email,
+            'verified'     => wc_review_is_from_verified_owner( $review->comment_ID ),
+        ];
 
         $context = ! empty( $request['context'] ) ? $request['context'] : 'view';
         $data    = $this->add_additional_fields_to_object( $data, $request );
@@ -422,55 +436,55 @@ class ReviewsController extends DokanRESTController {
      * @return array
      */
     public function get_item_schema() {
-        $schema = array(
+        $schema = [
             '$schema'    => 'http://json-schema.org/draft-04/schema#',
             'title'      => 'product_review',
             'type'       => 'object',
-            'properties' => array(
-                'id' => array(
+            'properties' => [
+                'id'               => [
                     'description' => __( 'Unique identifier for the resource.', 'dokan' ),
                     'type'        => 'integer',
-                    'context'     => array( 'view', 'edit' ),
+                    'context'     => [ 'view', 'edit' ],
                     'readonly'    => true,
-                ),
-                'review' => array(
+                ],
+                'review'           => [
                     'description' => __( 'The content of the review.', 'dokan' ),
                     'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'date_created' => array(
+                    'context'     => [ 'view', 'edit' ],
+                ],
+                'date_created'     => [
                     'description' => __( "The date the review was created, in the site's timezone.", 'dokan' ),
                     'type'        => 'date-time',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'date_created_gmt' => array(
-                    'description' => __( "The date the review was created, as GMT.", 'dokan' ),
+                    'context'     => [ 'view', 'edit' ],
+                ],
+                'date_created_gmt' => [
+                    'description' => __( 'The date the review was created, as GMT.', 'dokan' ),
                     'type'        => 'date-time',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'rating' => array(
+                    'context'     => [ 'view', 'edit' ],
+                ],
+                'rating'           => [
                     'description' => __( 'Review rating (0 to 5).', 'dokan' ),
                     'type'        => 'integer',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'name' => array(
+                    'context'     => [ 'view', 'edit' ],
+                ],
+                'name'             => [
                     'description' => __( 'Reviewer name.', 'dokan' ),
                     'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'email' => array(
+                    'context'     => [ 'view', 'edit' ],
+                ],
+                'email'            => [
                     'description' => __( 'Reviewer email.', 'dokan' ),
                     'type'        => 'string',
-                    'context'     => array( 'view', 'edit' ),
-                ),
-                'verified' => array(
+                    'context'     => [ 'view', 'edit' ],
+                ],
+                'verified'         => [
                     'description' => __( 'Shows if the reviewer bought the product or not.', 'dokan' ),
                     'type'        => 'boolean',
-                    'context'     => array( 'view', 'edit' ),
+                    'context'     => [ 'view', 'edit' ],
                     'readonly'    => true,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
 
         return $this->add_additional_fields_schema( $schema );
     }
