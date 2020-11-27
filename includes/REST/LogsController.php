@@ -46,9 +46,9 @@ class LogsController extends DokanRESTAdminController {
         $offset = isset( $params['page'] ) ? (int) ( $params['page'] - 1 ) * $params['per_page'] : 0;
 
         // filter the log query
-        $order_id     = ! empty( $params['order_id'] ) ? $params['order_id'] : 0;
-        $vendor_id    = ! empty( $params['vendor_id'] ) ? (int) $params['vendor_id'] : 0;
-        $order_status = ! empty( $params['order_status'] ) ? $params['order_status'] : '';
+        $order_id     = ! empty( $params['order_id'] ) ? (int) sanitize_key( $params['order_id'] ) : 0;
+        $vendor_id    = ! empty( $params['vendor_id'] ) ? (int) sanitize_key( $params['vendor_id'] ) : 0;
+        $order_status = ! empty( $params['order_status'] ) ? sanitize_text_field( $params['order_status'] ) : '';
 
         $order_clause  = $order_id ? "order_id = {$order_id}" : 'order_id != 0';
         $seller_clause = $vendor_id ? "seller_id = {$vendor_id}" : 'seller_id != 0';
