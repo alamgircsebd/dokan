@@ -13,7 +13,7 @@ class Module {
      *
      * @var array
      */
-    private $depends_on = array();
+    private $depends_on = [];
 
     /**
      * Displa dependency error if not present
@@ -22,7 +22,7 @@ class Module {
      *
      * @var array
      */
-    private $dependency_error = array();
+    private $dependency_error = [];
 
     /**
      * Constructor for the Dokan_Product_Addon class
@@ -34,26 +34,38 @@ class Module {
      * @uses add_action()
      */
     public function __construct() {
-        $this->depends_on['WC_Product_Addons'] = array(
+        $this->depends_on['WC_Product_Addons'] = [
             'name'   => 'WC_Product_Addons',
-            'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %sWooCommerce Product addons plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>' ),
-        );
+            /* translators: 1: tag start with href, 2: tag end */
+            'notice' => sprintf( __( '<b>Dokan Product Addon </b> requires %1$sWooCommerce Product addons plugin%2$s to be installed & activated first !', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/product-add-ons/">', '</a>'
+            ),
+        ];
 
-        add_action( 'plugins_loaded', function () {
-            if ( ! $this->check_if_has_dependency() ) {
-                add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
-                return;
-            }
-
-            $this->define();
-            $this->includes();
-            $this->initiate();
-            $this->hooks();
-        } );
+        add_action( 'plugins_loaded', [ $this, 'init' ] );
     }
 
     /**
-     * hooks
+     * Init the modules
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @return void
+     */
+    public function init() {
+        if ( ! $this->check_if_has_dependency() ) {
+            add_action( 'admin_notices', [ $this, 'dependency_notice' ] );
+
+            return;
+        }
+
+        $this->define();
+        $this->includes();
+        $this->initiate();
+        $this->hooks();
+    }
+
+    /**
+     * Hooks
      *
      * @since 1.0.0
      *
@@ -66,12 +78,12 @@ class Module {
     }
 
     /**
-    * Get plugin path
-    *
-    * @since 1.5.1
-    *
-    * @return void
-    **/
+     * Get plugin path
+     *
+     * @since 1.5.1
+     *
+     * @return void
+     **/
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
@@ -101,7 +113,7 @@ class Module {
         \Dokan_Product_Addon_Vendor_Product::init();
     }
 
-     /**
+    /**
      * Init all hooks
      *
      * @since 1.0.0
@@ -110,9 +122,9 @@ class Module {
      */
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
-        add_filter( 'dokan_set_template_path', array( $this, 'load_product_addon_templates' ), 10, 3 );
+        add_filter( 'dokan_set_template_path', [ $this, 'load_product_addon_templates' ], 10, 3 );
         add_action( 'woocommerce_before_add_to_cart_button', [ $this, 'load_vendor_staff_addons' ], 9 );
-        add_action( 'wp_ajax_wc_pao_get_addon_field', array( $this, 'ajax_get_addon_field' ), 1 );
+        add_action( 'wp_ajax_wc_pao_get_addon_field', [ $this, 'ajax_get_addon_field' ], 1 );
     }
 
     /**
@@ -126,7 +138,7 @@ class Module {
         global $product_addons, $post, $options;
 
         ob_start();
-        $addon                       = array();
+        $addon                       = [];
         $addon['name']               = '';
         $addon['title_format']       = 'label';
         $addon['description_enable'] = '';
@@ -142,19 +154,19 @@ class Module {
         $addon['price_type']         = '';
         $addon['price']              = '';
 
-        $addon['options']            = array(
+        $addon['options'] = [
             WC_Product_Addons_Admin::get_new_addon_option(),
-        );
+        ];
 
-        $loop = "{loop}";
+        $loop = '{loop}';
 
-        include( DOKAN_PRODUCT_ADDON_DIR . '/templates/product-addon/html-addon.php' );
+        include DOKAN_PRODUCT_ADDON_DIR . '/templates/product-addon/html-addon.php';
 
         $html = ob_get_clean();
 
-        $html = str_replace( array( "\n", "\r" ), '', str_replace( "'", '"', $html ) );
+        $html = str_replace( [ "\n", "\r" ], '', str_replace( "'", '"', $html ) );
 
-        wp_send_json( array( 'html' => $html ) );
+        wp_send_json( [ 'html' => $html ] );
     }
 
     /**
@@ -167,11 +179,11 @@ class Module {
     public function load_scripts() {
         global $wp;
 
-        if ( isset( $wp->query_vars['settings'] ) && $wp->query_vars['settings'] == 'product-addon' ) {
+        if ( isset( $wp->query_vars['settings'] ) && 'product-addon' === $wp->query_vars['settings'] ) {
             $this->enqueue_scripts();
         }
 
-        if ( isset( $wp->query_vars['booking'] ) && $wp->query_vars['booking'] == 'edit' ) {
+        if ( isset( $wp->query_vars['booking'] ) && 'edit' === $wp->query_vars['booking'] ) {
             $this->enqueue_scripts();
         }
 
@@ -185,7 +197,7 @@ class Module {
         }
 
         // Vendor product edit page when product is pending review
-        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
+        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' === $_GET['action'] ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
             $this->enqueue_scripts();
         }
     }
@@ -195,9 +207,10 @@ class Module {
      *
      * @since 1.0.0
      */
-    function dependency_notice(){
+    public function dependency_notice() {
         $errors = '';
-        $error = '';
+        $error  = '';
+
         foreach ( $this->dependency_error as $error ) {
             $errors .= '<p>' . $error . '</p>';
         }
@@ -211,13 +224,13 @@ class Module {
      *
      * @return boolean
      */
-    function check_if_has_dependency() {
+    public function check_if_has_dependency() {
         $res = true;
 
         foreach ( $this->depends_on as $class ) {
             if ( ! class_exists( $class['name'] ) ) {
                 $this->dependency_error[] = $class['notice'];
-                $res = false;
+                $res                      = false;
             }
         }
 
@@ -232,38 +245,43 @@ class Module {
      * @return void
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dokan-pa-style', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/css/main.css', false , DOKAN_PLUGIN_VERSION, 'all' );
-        wp_enqueue_script( 'dokan-pa-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
-        wp_enqueue_script( 'dokan-pa-addons-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/addons.js', array( 'jquery', 'dokan-pa-script' ), DOKAN_PLUGIN_VERSION, true );
-        $params = array(
+        wp_enqueue_style( 'dokan-pa-style', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/css/main.css', false, DOKAN_PLUGIN_VERSION, 'all' );
+        wp_enqueue_script( 'dokan-pa-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/scripts.js', [ 'jquery' ], DOKAN_PLUGIN_VERSION, true );
+        wp_enqueue_script(
+            'dokan-pa-addons-script', DOKAN_PRODUCT_ADDON_ASSETS_DIR . '/js/addons.js', [
+				'jquery',
+				'dokan-pa-script',
+			], DOKAN_PLUGIN_VERSION, true
+        );
+        $params = [
             'ajax_url' => admin_url( 'admin-ajax.php' ),
-            'nonce'    => array(
+            'nonce'    => [
                 'get_addon_options' => wp_create_nonce( 'wc-pao-get-addon-options' ),
                 'get_addon_field'   => wp_create_nonce( 'wc-pao-get-addon-field' ),
-            ),
-            'i18n'     => array(
-                'required_fields'       => __( 'All fields must have a title and/or option name. Please review the settings highlighted in red border.', 'dokan' ),
-                'limit_price_range'         => __( 'Limit price range', 'dokan' ),
-                'limit_quantity_range'      => __( 'Limit quantity range', 'dokan' ),
-                'limit_character_length'    => __( 'Limit character length', 'dokan' ),
-                'restrictions'              => __( 'Restrictions', 'dokan' ),
-                'confirm_remove_addon'      => __( 'Are you sure you want remove this add-on field?', 'dokan' ),
-                'confirm_remove_option'     => __( 'Are you sure you want delete this option?', 'dokan' ),
-                'add_image_swatch'          => __( 'Add Image Swatch', 'dokan' ),
-                'add_image'                 => __( 'Add Image', 'dokan' ),
-            ),
-        );
+            ],
+            'i18n'     => [
+                'required_fields'        => __( 'All fields must have a title and/or option name. Please review the settings highlighted in red border.', 'dokan' ),
+                'limit_price_range'      => __( 'Limit price range', 'dokan' ),
+                'limit_quantity_range'   => __( 'Limit quantity range', 'dokan' ),
+                'limit_character_length' => __( 'Limit character length', 'dokan' ),
+                'restrictions'           => __( 'Restrictions', 'dokan' ),
+                'confirm_remove_addon'   => __( 'Are you sure you want remove this add-on field?', 'dokan' ),
+                'confirm_remove_option'  => __( 'Are you sure you want delete this option?', 'dokan' ),
+                'add_image_swatch'       => __( 'Add Image Swatch', 'dokan' ),
+                'add_image'              => __( 'Add Image', 'dokan' ),
+            ],
+        ];
 
         wp_localize_script( 'dokan-pa-script', 'wc_pao_params', apply_filters( 'wc_pao_params', $params ) );
     }
 
     /**
-    * Load dokan pro templates
-    *
-    * @since 1.5.1
-    *
-    * @return void
-    **/
+     * Load dokan pro templates
+     *
+     * @since 1.5.1
+     *
+     * @return void
+     **/
     public function load_product_addon_templates( $template_path, $template, $args ) {
         if ( isset( $args['is_product_addon'] ) && $args['is_product_addon'] ) {
             return $this->plugin_path() . '/templates';
@@ -276,7 +294,22 @@ class Module {
         add_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
     }
 
+    /**
+     * Set author in for vendor staff
+     *
+     * @param $query
+     *
+     * @return void
+     */
     public function set_author_in_for_vendor_staff( $query ) {
+        $product = wc_get_product( get_the_ID() );
+
+        $vendor = dokan_get_vendor_by_product( $product );
+
+        if ( ! in_array( $vendor->get_id(), get_vendor_staff(), true ) ) {
+            return;
+        }
+
         if ( $query->query['post_type'] === 'global_product_addon' ) {
             $query->set( 'author__in', get_vendor_staff() );
         }
