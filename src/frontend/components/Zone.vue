@@ -494,7 +494,7 @@ export default {
                     if ( resp.data.locations.length > 0 ) {
                         var locationResp = _.groupBy( resp.data.locations, 'type' );
 
-                        if ( Object.keys( locationResp ).includes( 'country' ) || Object.keys( locationResp ).includes( 'state' ) || Object.keys( locationResp ).includes( 'postcode' ) ) {
+                        if ( ( Object.keys( locationResp ).includes( 'country' ) && Object.keys( locationResp ).includes( 'state' ) ) || ( Object.keys( locationResp ).includes( 'country' ) && Object.keys( locationResp ).includes( 'postcode' ) ) ) {
                             self.wantToLimitLocation = true;
                         }
 
