@@ -94,6 +94,11 @@ $changelog = array(
                 'type'        => 'Fix',
                 'description' => 'Product seo default meta description removed from vendor dashboard product edit page.',
             ),
+            array(
+                'title'       => 'Check End Date Before Cancelling Vendor Subscriptions',
+                'type'        => 'Fix',
+                'description' => 'Check subscription product pack end date before cancelling vendor subscriptions.',
+            ),
         ),
     ),
     array(
