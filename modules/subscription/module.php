@@ -673,6 +673,13 @@ class Module {
                 continue;
             }
 
+            $current_enddate = get_user_meta( $user->ID, 'product_pack_enddate', true );
+            $actual_enddate = $vendor_subscription->get_product_pack_end_date();
+
+            if ( $current_enddate !== $actual_enddate ) {
+                update_user_meta( $user->ID, 'product_pack_enddate', $vendor_subscription->get_product_pack_end_date() );
+            }
+
             if ( Helper::maybe_cancel_subscription( $user->ID ) ) {
                 if ( Helper::check_vendor_has_existing_product( $user->ID ) ) {
                     Helper::make_product_draft( $user->ID );
