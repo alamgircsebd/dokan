@@ -569,6 +569,24 @@ jQuery( function( $ ) {
                 $( '#dokan-variable-product-options' ).find( '.dokan-variations-container' ).prepend( variation );
                 $( 'button.cancel-variation-changes, button.save-variation-changes' ).removeAttr( 'disabled' );
                 $( '.dokan-product-variation-wrapper' ).trigger( 'dokan_variations_added', 1 );
+
+                var product_type    = $( '#product_type' ).val();
+                var is_virtual      = $( 'input#_virtual:checked' ).length;
+                var is_downloadable = $( 'input#_downloadable:checked' ).length;
+
+                // Hide/Show all with rules.
+                var hide_classes = '.hide_if_downloadable, .hide_if_virtual';
+                var show_classes = '.show_if_downloadable, .show_if_virtual';
+
+                $.each( [ 'simple', 'variable', 'grouped', 'subscription', 'variable-subscription' ], function( index, value ) {
+                    hide_classes = hide_classes + ', .hide_if_' + value;
+                    show_classes = show_classes + ', .show_if_' + value;
+                });
+                $( hide_classes ).show();
+                $( show_classes ).hide();
+
+                $( '.show_if_' + product_type ).show();
+                $( '.hide_if_' + product_type ).hide();
                 Dokan_Product_Variation_Ajax.unblock();
             });
 
