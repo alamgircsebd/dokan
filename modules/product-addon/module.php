@@ -302,15 +302,18 @@ class Module {
      * @return void
      */
     public function set_author_in_for_vendor_staff( $query ) {
-        $product = wc_get_product( get_the_ID() );
-
-        $vendor = dokan_get_vendor_by_product( $product );
-
-        if ( ! in_array( $vendor->get_id(), get_vendor_staff(), true ) ) {
-            return;
-        }
-
         if ( $query->query['post_type'] === 'global_product_addon' ) {
+            global $post;
+
+            remove_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
+            $vendor = dokan_get_vendor_by_product( $post->ID );
+
+            if ( ! in_array( $vendor->get_id(), get_vendor_staff(), true ) ) {
+                return;
+            }
+
+            add_action( 'pre_get_posts', [ $this, 'set_author_in_for_vendor_staff' ] );
+
             $query->set( 'author__in', get_vendor_staff() );
         }
     }
