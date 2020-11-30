@@ -1,6 +1,107 @@
 <?php
 $changelog = array(
     array(
+        'version'  => 'Version 3.1.2',
+        'released' => '2020-11-30',
+        'changes'  => array(
+            array(
+                'title'       => 'Vendor Gets Error With PayPal',
+                'type'        => 'Fix',
+                'description' => 'Vendor gets error while purchasing normal product with PayPal in checkout page.',
+            ),
+            array(
+                'title'       => 'Multi Vendor Product Showing Others Vendor',
+                'type'        => 'Fix',
+                'description' => 'Single product multi vendor products showing others vendor area issue when SPMV product duplicated.',
+            ),
+            array(
+                'title'       => 'Admin Commission Set 0 by Default',
+                'type'        => 'Fix',
+                'description' => 'Admin commission set 0 by default when create/update vendor form admin area.',
+            ),
+            array(
+                'title'       => 'Enable Vacation Mode is Hiding Products',
+                'type'        => 'Fix',
+                'description' => 'Enable vacation mode is hiding products from vendor dashboard, vendor not able to see the products.',
+            ),
+            array(
+                'title'       => 'Vendor Staff not Able Manage Product',
+                'type'        => 'Fix',
+                'description' => 'Vendor staff not able to add/edit any product on vendor dashboard, also fixed capabilities issue and imporove code standard.',
+            ),
+            array(
+                'title'       => 'Vendor Shipping Settings Page Console Error',
+                'type'        => 'Fix',
+                'description' => 'Vendor shipping settings page showing js error issue when try to add/update any shipping zone.',
+            ),
+            array(
+                'title'       => 'Update Vendor Review REST API',
+                'type'        => 'Fix',
+                'description' => 'Update vendor review REST API and fixed some errors.',
+            ),
+            array(
+                'title'       => 'SMS verification Error Message Translation',
+                'type'        => 'Fix',
+                'description' => 'SMS verification error message translation not available.',
+            ),
+            array(
+                'title'       => 'SMS Verification Error Handling',
+                'type'        => 'Fix',
+                'description' => 'SMS verification error handling for vendors.',
+            ),
+            array(
+                'title'       => 'Booking Product Virtual Option Not Saving',
+                'type'        => 'Fix',
+                'description' => 'Booking product virtual option not saving while 1st time create form vendor dashboard.',
+            ),
+            array(
+                'title'       => 'Coupon Minimum Amount Not Working',
+                'type'        => 'Fix',
+                'description' => 'Coupon minimum amount not working with variation products issue fixed.',
+            ),
+            array(
+                'title'       => 'Vendor Product Addon Appears on Other Vendors',
+                'type'        => 'Fix',
+                'description' => 'Vendor product addon appears in every product in marketplace when that vendor logged in.',
+            ),
+            array(
+                'title'       => 'Product Wise Commission Issue in Subscription Product',
+                'type'        => 'Fix',
+                'description' => 'Product wise Commission is not working in subscription product on admin area product edit page.',
+            ),
+            array(
+                'title'       => 'Report CSV Header Mismatch',
+                'type'        => 'Fix',
+                'description' => 'Report csv header mismatch issue fixed.',
+            ),
+            array(
+                'title'       => 'Stripe Dashboard Tax Issue',
+                'type'        => 'Fix',
+                'description' => 'Stripe Dashboard does not show the price including the tax for vendors.',
+            ),
+            array(
+                'title'       => 'SKU Data Not importing with CSV',
+                'type'        => 'Fix',
+                'description' => 'SKU data not importing when CSV import on vendor dashboard.',
+            ),
+            array(
+                'title'       => 'Booking Single Day Data Issue',
+                'type'        => 'Fix',
+                'description' => 'Booking single day no data showing, responsiveness issue fixes form vendor dashboard booking details page.',
+            ),
+            array(
+                'title'       => 'Product Seo Default Meta Field Issue',
+                'type'        => 'Fix',
+                'description' => 'Product seo default meta description removed from vendor dashboard product edit page.',
+            ),
+            array(
+                'title'       => 'Check End Date Before Cancelling Vendor Subscriptions',
+                'type'        => 'Fix',
+                'description' => 'Check subscription product pack end date before cancelling vendor subscriptions.',
+            ),
+        ),
+    ),
+    array(
         'version'  => 'Version 3.1.1',
         'released' => '2020-11-14',
         'changes'  => array(
