@@ -348,7 +348,8 @@ th.column-booking_status {
 
 .wc_bookings_calendar_form {
   margin: 1em 0 0 !important;
-  min-width: 875px; }
+  width: 100%;
+  max-width: 875px; }
   .wc_bookings_calendar_form .daily_popover {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
     position: absolute;
