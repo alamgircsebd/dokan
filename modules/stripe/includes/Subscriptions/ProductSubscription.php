@@ -294,7 +294,7 @@ class ProductSubscription extends StripePaymentGateway {
     /**
      * Maybe create subscription
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.2
      */
     protected function maybe_create_subscription( $subscription_args ) {
         $vendor_subscription      = dokan()->vendor->get( get_current_user_id() )->subscription;

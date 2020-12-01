@@ -1,3 +1,30 @@
+v3.1.2 Dec 01, 2020
+----------------------------------
+
+- [fix] Vendor gets error while purchasing normal product with PayPal in checkout page
+- [fix] Single product multi vendor products showing others vendor area issue when SPMV product duplicated
+- [fix] Admin commission set 0 by default when create/update vendor form admin area
+- [fix] Enable vacation mode is hiding products from vendor dashboard, vendor not able to see the products
+- [fix] Vendor staff not able to add/edit any product on vendor dashboard, also fixed capabilities issue and improve code standard
+- [fix] Vendor shipping settings page showing JS error issue when try to add/update any shipping zone
+- [fix] Update vendor review REST API and fixed some errors
+- [fix] SMS verification error message translation not available
+- [fix] SMS verification error handling for vendors
+- [fix] Booking product virtual option not saving while 1st time create form vendor dashboard
+- [fix] Coupon minimum amount not working with variation products issue fixed
+- [fix] Vendor product addon appears in every product in marketplace when that vendor logged in
+- [fix] Product wise Commission is not working in subscription product on admin area product edit page
+- [fix] Report CSV header mismatch issue fixed
+- [fix] Stripe Dashboard does not show the price including the tax for vendors
+- [fix] SKU data not importing when CSV import on vendor dashboard
+- [fix] Booking single day no data showing, responsiveness issue fixes form vendor dashboard booking details page
+- [fix] Product SEO default meta description removed from vendor dashboard product edit page
+- [fix] Check product pack end date before cancelling vendor subscriptions
+- [fix] Downloads files showing multiple entries when have suborder
+- [fix] Variable product showing extra fields when subscription type product update from vendor dashboard
+- [fix] Bookable Product: Booking by day view which is missing in Booking calendar.
+- [fix] If the processing fee is not 0 and if the dokan_gateway_fee_paid_by meta is blank then the processing fee is paid by the admin.
+
 v3.1.1 -> Nov 16, 2020
 ----------------------------------
 

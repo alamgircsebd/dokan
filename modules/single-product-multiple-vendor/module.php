@@ -134,7 +134,7 @@ class Module {
     /**
      * Update duplicate product if exists multi vendor
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.2
      *
      * @param array $clone_product
      * @param array $product
