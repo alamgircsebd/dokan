@@ -2,12 +2,12 @@
 $changelog = array(
     array(
         'version'  => 'Version 3.1.2',
-        'released' => '2020-11-30',
+        'released' => '2020-12-01',
         'changes'  => array(
             array(
                 'title'       => 'Vendor Gets Error With PayPal',
                 'type'        => 'Fix',
-                'description' => 'Vendor gets error while purchasing normal product with PayPal in checkout page.',
+                'description' => 'Vendor gets error while purchasing products if they purchased a vendor subscription product with PayPal in checkout page.',
             ),
             array(
                 'title'       => 'Multi Vendor Product Showing Others Vendor',
@@ -20,14 +20,14 @@ $changelog = array(
                 'description' => 'Admin commission set 0 by default when create/update vendor form admin area.',
             ),
             array(
-                'title'       => 'Enable Vacation Mode is Hiding Products',
+                'title'       => 'Enabling Vacation Mode is Hiding Products',
                 'type'        => 'Fix',
-                'description' => 'Enable vacation mode is hiding products from vendor dashboard, vendor not able to see the products.',
+                'description' => 'Enabling vacation mode is hiding products from vendor dashboard, vendor is not able to see the products.',
             ),
             array(
-                'title'       => 'Vendor Staff not Able Manage Product',
+                'title'       => 'Vendor Staff Is Not Able To Manage Product',
                 'type'        => 'Fix',
-                'description' => 'Vendor staff not able to add/edit any product on vendor dashboard, also fixed capabilities issue and imporove code standard.',
+                'description' => 'Vendor staff is not able to add/edit any product on vendor dashboard, also fixed capabilities issue.',
             ),
             array(
                 'title'       => 'Vendor Shipping Settings Page Console Error',
@@ -42,7 +42,7 @@ $changelog = array(
             array(
                 'title'       => 'SMS verification Error Message Translation',
                 'type'        => 'Fix',
-                'description' => 'SMS verification error message translation not available.',
+                'description' => 'SMS verification error message translation was not available.',
             ),
             array(
                 'title'       => 'SMS Verification Error Handling',
@@ -62,10 +62,10 @@ $changelog = array(
             array(
                 'title'       => 'Vendor Product Addon Appears on Other Vendors',
                 'type'        => 'Fix',
-                'description' => 'Vendor product addon appears in every product in marketplace when that vendor logged in.',
+                'description' => 'Vendor product addon appears in every product in marketplace when that vendor is logged in.',
             ),
             array(
-                'title'       => 'Product Wise Commission Issue in Subscription Product',
+                'title'       => 'Product Wise Commission Issue In Subscription Product',
                 'type'        => 'Fix',
                 'description' => 'Product wise Commission is not working in subscription product on admin area product edit page.',
             ),
@@ -95,9 +95,29 @@ $changelog = array(
                 'description' => 'Product seo default meta description removed from vendor dashboard product edit page.',
             ),
             array(
+                'title'       => 'Variable product gets extra fields of variable subscription product',
+                'type'        => 'Fix',
+                'description' => 'When a vendor wants to create a variable product, extra field added from the vendor subscription product.',
+            ),
+            array(
                 'title'       => 'Check End Date Before Cancelling Vendor Subscriptions',
                 'type'        => 'Fix',
-                'description' => 'Check subscription product pack end date before cancelling vendor subscriptions.',
+                'description' => 'Check subscription product pack end date matched with stored end date before cancelling vendor subscriptions. If both value does not match, update end date value.',
+            ),
+            array(
+                'title'       => 'Downloads files showing multiple entries when have suborder',
+                'type'        => 'Fix',
+                'description' => 'Downloads files showing multiple entries when have suborder.',
+            ),
+            array(
+                'title'       => 'Gateway fee paid by admin if empty',
+                'type'        => 'Fix',
+                'description' => 'If the processing fee is not 0 and if the dokan_gateway_fee_paid_by meta is blank then the processing fee is paid by the admin.',
+            ),
+            array(
+                'title'       => 'Booking by day view which is missing in Booking calendar',
+                'type'        => 'Fix',
+                'description' => 'Bookable Product: Booking by day view which is missing in Booking calender.',
             ),
         ),
     ),

@@ -47,7 +47,7 @@ class Module {
     /**
      * Init the modules
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.2
      *
      * @return void
      */

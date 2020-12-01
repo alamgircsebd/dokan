@@ -1704,7 +1704,7 @@ if ( ! function_exists( 'woocommerce_customer_available_downloads_modified' ) ) 
     /**
      * Dokan customer available downloads modified for sub orders
      *
-     * @since  DOKAN_PRO_SINCE
+     * @since  3.1.2
      *
      * @param  Array $downloads
      * @param  Int $customer_id

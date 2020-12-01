@@ -330,7 +330,7 @@ class Dokan_Staffs {
     /**
      * Update duplicate product data
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.2
      *
      * @return void
      */
@@ -367,7 +367,7 @@ class Dokan_Staffs {
     /**
      * Product author modified
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.2
      *
      * @param int $user_id
      * @param int $product_id
