@@ -2,6 +2,8 @@
 
 namespace WeDevs\DokanPro\Modules\VSP;
 
+use \WeDevs\DokanPro\Products;
+
 class Module {
 
     /**
@@ -34,11 +36,12 @@ class Module {
     public function __construct() {
         $this->depends_on['WC_Subscriptions'] = array(
             'name'   => 'WC_Subscriptions',
-            'notice' => sprintf( __( '<b>Dokan Vendor Subscription Product Addon </b> requires %sWooCommerce Subscriptions plugin%s to be installed & activated first !' , 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-subscriptions/">', '</a>' ),
+            /* translators: WooCommerce subscription plugin link */
+            'notice' => sprintf( __( '<b>Dokan Vendor Subscription Product Addon </b> requires %1$sWooCommerce Subscriptions plugin%2$s to be installed & activated first !', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-subscriptions/">', '</a>' ),
         );
 
         if ( ! $this->check_if_has_dependency() ) {
-            add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
+            add_action( 'admin_notices', array( $this, 'dependency_notice' ) );
             return;
         }
 
@@ -52,7 +55,7 @@ class Module {
     }
 
     /**
-     * hooks
+     * Hooks
      *
      * @since 1.0.0
      *
@@ -101,7 +104,7 @@ class Module {
         new \Dokan_VSP_User_Subscription();
     }
 
-     /**
+    /**
      * Init all hooks
      *
      * @since 1.0.0
@@ -111,8 +114,12 @@ class Module {
     public function hooks() {
         add_action( 'wp_enqueue_scripts', [ $this, 'load_scripts' ] );
         add_filter( 'dokan_set_template_path', [ $this, 'load_subcription_product_templates' ], 10, 3 );
-        add_filter( 'woocommerce_order_item_needs_processing', array( $this, 'order_needs_processing' ), 10, 2 );
+        add_filter( 'woocommerce_order_item_needs_processing', [ $this, 'order_needs_processing' ], 10, 2 );
         add_filter( 'dokan_get_product_types', [ $this, 'add_subscription_type_product' ] );
+
+        // store subscription type product, per product commission.
+        add_action( 'woocommerce_process_product_meta_subscription', [ Products::class, 'save_per_product_commission_options' ], 15 );
+        add_action( 'woocommerce_process_product_meta_variable-subscription', [ Products::class, 'save_per_product_commission_options' ], 15 );
     }
 
     /**
@@ -122,9 +129,8 @@ class Module {
      * @param  array $product
      * @return bool
      */
-    function order_needs_processing( $needs_processing, $product ) {
-
-        if ( $product->get_type() == 'subscription' || $product->get_type() == 'variable-subscription' || $product->get_type() == 'subscription_variation' ) {
+    public function order_needs_processing( $needs_processing, $product ) {
+        if ( $product->get_type() === 'subscription' || $product->get_type() === 'variable-subscription' || $product->get_type() === 'subscription_variation' ) {
             $needs_processing = false;
         }
 
@@ -163,15 +169,15 @@ class Module {
         }
 
         // Vendor product edit page when product is pending review
-        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' == $_GET['action'] ) {
+        if ( isset( $wp->query_vars['products'] ) && ! empty( $_GET['product_id'] ) && ! empty( $_GET['action'] ) && 'edit' === sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) { // phpcs:ignore
             $this->enqueue_scripts();
         }
 
-        if ( isset( $wp->query_vars['user-subscription'] ) && ! empty( $_GET['subscription_id'] ) ) {
+        if ( isset( $wp->query_vars['user-subscription'] ) && ! empty( $_GET['subscription_id'] ) ) { // phpcs:ignore
             $this->enqueue_scripts();
         }
 
-        if ( isset( $wp->query_vars['coupons'] ) && ! empty( $_GET['post'] ) ) {
+        if ( isset( $wp->query_vars['coupons'] ) && ! empty( $_GET['post'] ) ) { // phpcs:ignore
             $this->enqueue_scripts();
         }
     }
@@ -181,7 +187,7 @@ class Module {
      *
      * @since 1.0.0
      */
-    function dependency_notice(){
+    public function dependency_notice() {
         $errors = '';
         $error = '';
         foreach ( $this->dependency_error as $error ) {
@@ -197,7 +203,7 @@ class Module {
      *
      * @return boolean
      */
-    function check_if_has_dependency() {
+    public function check_if_has_dependency() {
         $res = true;
 
         foreach ( $this->depends_on as $class ) {
@@ -218,7 +224,7 @@ class Module {
      * @return void
      */
     public function enqueue_scripts() {
-        wp_enqueue_style( 'dokan-vsp-style', DOKAN_VSP_DIR_ASSETS_DIR . '/css/style.css', false , DOKAN_PLUGIN_VERSION, 'all' );
+        wp_enqueue_style( 'dokan-vsp-style', DOKAN_VSP_DIR_ASSETS_DIR . '/css/style.css', false, DOKAN_PLUGIN_VERSION, 'all' );
         wp_enqueue_script( 'dokan-vsp-script', DOKAN_VSP_DIR_ASSETS_DIR . '/js/scripts.js', array( 'jquery' ), DOKAN_PLUGIN_VERSION, true );
 
         $billing_period_strings = \WC_Subscriptions_Synchroniser::get_billing_period_ranges();
@@ -228,10 +234,10 @@ class Module {
             'trialPeriodSingular'       => wcs_get_available_time_periods(),
             'trialPeriodPlurals'        => wcs_get_available_time_periods( 'plural' ),
             'subscriptionLengths'       => wcs_get_subscription_ranges(),
-            'syncOptions'                           => [
+            'syncOptions'               => [
                 'week'  => $billing_period_strings['week'],
                 'month' => $billing_period_strings['month'],
-            ]
+            ],
         ];
 
         wp_localize_script( 'jquery', 'dokanVPS', apply_filters( 'wc_vps_params', $params ) );
@@ -250,6 +256,5 @@ class Module {
         }
 
         return $template_path;
-
     }
 }

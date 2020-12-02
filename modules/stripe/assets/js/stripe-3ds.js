@@ -246,7 +246,28 @@ jQuery( function( $ ) {
                     && response.data.code
                     && 'subscription_not_created' === response.data.code
                     ) {
-                    return console.log( response.data.code.message )
+                    let errorContainer = dokan_stripe_form.form.closest( '.woocommerce' ).find( '.woocommerce-notices-wrapper' );
+
+                    // there maybe multiple `woocommerce-notices-wrapper`. So get the first one
+                    if ( errorContainer.length ) {
+                        errorContainer = errorContainer.get( 0 );
+                    }
+
+                    dokan_stripe_form.reset();
+
+                    $( '.woocommerce-NoticeGroup-checkout' ).remove();
+                    console.log( response ); // Leave for troubleshooting.
+                    $( errorContainer ).html( '<ul class="woocommerce_error woocommerce-error dokan-stripe-error"><li /></ul>' );
+                    $( errorContainer ).find( 'li' ).text( response.data.message ); // Prevent XSS
+
+                    if ( $( '.dokan-stripe-error' ).length ) {
+                        $( 'html, body' ).animate({
+                            scrollTop: ( $( '.dokan-stripe-error' ).offset().top - 200 )
+                        }, 200 );
+                    }
+
+                    dokan_stripe_form.unblock();
+                    return;
                 }
 
                 if ( typeof response !== 'undefined'

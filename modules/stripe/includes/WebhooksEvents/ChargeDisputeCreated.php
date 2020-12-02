@@ -49,7 +49,7 @@ class ChargeDisputeCreated implements WebhookHandleable {
 
         update_user_meta( $vendor_id, 'can_post_product', '0' );
         $order->set_status( 'on-hold' );
-        $order->add_order_note( sprintf( __( 'Order %s status is now on-hold due to dispute via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), $settings['title'], $charge_id ) );
+        $order->add_order_note( sprintf( __( 'Order %s status is now on-hold due to dispute via %s on (Charge IDs: %s)', 'dokan' ), $order->get_order_number(), Helper::get_gateway_title(), $charge_id ) );
         $order->save();
     }
 }

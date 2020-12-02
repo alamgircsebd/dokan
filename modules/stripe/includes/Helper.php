@@ -129,7 +129,7 @@ class Helper {
         foreach ( $order->get_items() as $item ) {
             $product = $item->get_product();
 
-            if ( in_array( $product->get_type(), [ 'product_pack', 'subscription', 'variable-subscription' ], true ) ) {
+            if ( 'product_pack' === $product->get_type() ) {
                 return $product;
             }
         }

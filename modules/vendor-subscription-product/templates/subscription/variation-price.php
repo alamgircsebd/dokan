@@ -8,10 +8,12 @@ $chosen_trial_length = WC_Subscriptions_Product::get_trial_length( $variation_pr
 $chosen_trial_period = WC_Subscriptions_Product::get_trial_period( $variation_product );
 
 // Set month as the default billing period
+// @codingStandardsIgnoreStart
 if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', true ) ) {
-     $chosen_period = 'month';
+    $chosen_period = 'month';
 }
 ?>
+
 <div class="dokan-form-group dokan-clearfix show_if_variable-subscription">
     <div class="subscription-price">
         <div class="content-half-part">
@@ -117,3 +119,4 @@ if ( ! $chosen_period = get_post_meta( $variation->ID, '_subscription_period', t
     </div>
     <?php endif; ?>
 </div>
+<?php // @codingStandardsIgnoreEnd ?>
