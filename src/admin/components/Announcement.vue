@@ -12,12 +12,12 @@
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
-            <li><router-link :to="{ name: 'Announcement' }" active-class="current" exact v-html="sprintf( __( 'All <span class=\'count\'>(%s)</span>', 'dokan' ), counts.all )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Announcement', query: { status: 'publish' }}" active-class="current" exact v-html="sprintf( __( 'Published <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.publish )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Announcement', query: { status: 'pending' }}" active-class="current" exact v-html="sprintf( __( 'Pending <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.pending )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Announcement', query: { status: 'future' }}" active-class="current" exact v-html="sprintf( __( 'Scheduled <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.future )"></router-link></li>
-            <li><router-link :to="{ name: 'Announcement', query: { status: 'draft' }}" active-class="current" exact v-html="sprintf( __( 'Draft <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.draft )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Announcement', query: { status: 'trash' }}" active-class="current" exact v-html="sprintf( __( 'Trash <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.trash )"></router-link></li>
+            <li><router-link :to="{ name: 'Announcement' }" active-class="current" exact >{{ __( 'All', 'dokan' ) }} <span class="count">{{ counts.all }}</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Announcement', query: { status: 'publish' }}" active-class="current" exact >{{ __( 'Published', 'dokan' ) }} <span class="count">{{ counts.publish }}</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Announcement', query: { status: 'pending' }}" active-class="current" exact >{{ __( 'Pending', 'dokan' ) }} <span class="count">{{ counts.pending }}</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Announcement', query: { status: 'future' }}" active-class="current" exact >{{ __( 'Scheduled', 'dokan' ) }} <span class="count">{{ counts.future }}</span></router-link></li>
+            <li><router-link :to="{ name: 'Announcement', query: { status: 'draft' }}" active-class="current" exact >{{ __( 'Draft', 'dokan' ) }} <span class="count">{{ counts.draft }}</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Announcement', query: { status: 'trash' }}" active-class="current" exact >{{ __( 'Trash', 'dokan' ) }} <span class="count">{{ counts.trash }}</span></router-link></li>
         </ul>
 
         <list-table

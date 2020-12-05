@@ -10,9 +10,9 @@
         <hr class="wp-header-end">
 
         <ul class="subsubsub">
-            <li><router-link :to="{ name: 'Refund', query: { status: 'pending' }}" active-class="current" exact v-html="sprintf( __( 'Pending <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.pending )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Refund', query: { status: 'completed' }}" active-class="current" exact v-html="sprintf( __( 'Approved <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.completed )"></router-link> | </li>
-            <li><router-link :to="{ name: 'Refund', query: { status: 'cancelled' }}" active-class="current" exact v-html="sprintf( __( 'Cancelled <span class=\'count\'>(%s)</span>', 'dokan-lite' ), counts.cancelled )"></router-link></li>
+            <li><router-link :to="{ name: 'Refund', query: { status: 'pending' }}" active-class="current" exact >{{ __( 'Pending', 'dokan' ) }} <span class="count">{{ counts.pending }}</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Refund', query: { status: 'completed' }}" active-class="current" exact >{{ __( 'Approved', 'dokan' ) }} <span class="count">{{ counts.completed }}</span></router-link> | </li>
+            <li><router-link :to="{ name: 'Refund', query: { status: 'cancelled' }}" active-class="current" exact >{{ __( 'Cancelled', 'dokan' ) }} <span class="count">{{ counts.cancelled }}</span></router-link></li>
         </ul>
 
         <search title="Search Refund" @searched="doSearch"></search>
