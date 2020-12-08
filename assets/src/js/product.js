@@ -141,7 +141,9 @@
                         var escapedCode = codes[i].replace(/\[/g, '\\[').replace(/\]/g, '\\]'),
                             re = new RegExp( escapedCode, 'gi' );
 
-                        str = str.replace( re, shortCodes[ codes[i] ] );
+                        if ( str ) {
+                            str = str.replace( re, shortCodes[ codes[i] ] );
+                        }
                     }
 
                     return str;
