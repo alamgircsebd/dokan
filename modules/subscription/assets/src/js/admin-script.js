@@ -9,7 +9,8 @@
 			.find('.linked_product_tab').addClass('hide_if_product_pack').end()
 			.find('.attributes_tab').addClass('hide_if_product_pack').end()
 			.find('._no_of_product_field').hide().end()
-			.find('._pack_validity_field').hide()
+			.find('._pack_validity_field').hide().end()
+            .find('#_tax_status').parent().parent().addClass('show_if_product_pack').end()
 	}
 
 	$('body').on('woocommerce-product-type-change',function(event, select_val){
