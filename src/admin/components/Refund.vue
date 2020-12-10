@@ -34,6 +34,7 @@
             @action:click="onActionClick"
             @bulk:click="onBulkAction"
             @searched="doSearch"
+            :text="$root.listTableTexts()"
         >
 
             <template slot="order_id" slot-scope="data">

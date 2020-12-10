@@ -36,6 +36,7 @@
             @pagination="goToPage"
             @action:click="onActionClick"
             @bulk:click="onBulkAction"
+            :text="$root.listTableTexts()"
         >
 
             <template slot="title" slot-scope="data">
