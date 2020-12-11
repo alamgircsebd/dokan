@@ -39,8 +39,8 @@ class Module {
      * @return void
      */
     public function define_constant() {
-        define( 'DOKAN_VENDOR_staff_DIR', dirname( __FILE__ ) );
-        define( 'DOKAN_VENDOR_staff_INC_DIR', DOKAN_VENDOR_staff_DIR . '/includes' );
+        define( 'DOKAN_VENDOR_STAFF_DIR', dirname( __FILE__ ) );
+        define( 'DOKAN_VENDOR_STAFF_INC_DIR', DOKAN_VENDOR_STAFF_DIR . '/includes' );
     }
 
     /**
@@ -51,8 +51,8 @@ class Module {
      * @return void
      */
     public function includes() {
-        require_once DOKAN_VENDOR_staff_INC_DIR . '/functions.php';
-        require_once DOKAN_VENDOR_staff_INC_DIR . '/class-staffs.php';
+        require_once DOKAN_VENDOR_STAFF_INC_DIR . '/functions.php';
+        require_once DOKAN_VENDOR_STAFF_INC_DIR . '/class-staffs.php';
     }
 
     /**
@@ -63,7 +63,7 @@ class Module {
      * @return void
      */
     public function initiate() {
-        new \Dokan_staffs();
+        new \Dokan_Staffs();
     }
 
     /**
@@ -76,7 +76,6 @@ class Module {
      * @uses wp_enqueue_style
      */
     public function enqueue_scripts() {
-
     }
 
     /**
@@ -86,7 +85,7 @@ class Module {
      *
      * @return void
      */
-    function add_rewrite_rules() {
+    public function add_rewrite_rules() {
         if ( get_transient( 'dokan-vendor-staff' ) ) {
             flush_rewrite_rules( true );
             delete_transient( 'dokan-vendor-staff' );
@@ -110,7 +109,7 @@ class Module {
         }
 
         if ( is_admin() && ! wp_doing_ajax() ) {
-            wp_redirect( dokan_get_navigation_url( 'dashboard' ) );
+            wp_safe_redirect( dokan_get_navigation_url( 'dashboard' ) );
             exit;
         }
     }
@@ -145,16 +144,20 @@ class Module {
         set_transient( 'dokan-vendor-staff', 1 );
 
         if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
-            $wp_roles = new \WP_Roles();
+            $wp_roles = new \WP_Roles(); // phpcs:ignore
         }
 
-        add_role( 'vendor_staff', __( 'Vendor Staff', 'dokan' ), array(
-            'read'     => true,
-        ) );
+        add_role(
+            'vendor_staff', __( 'Vendor Staff', 'dokan' ), array(
+                'read'     => true,
+            )
+        );
 
-        $users_query = new \WP_User_Query( array(
-            'role' => 'vendor_staff'
-        ) );
+        $users_query = new \WP_User_Query(
+            array(
+                'role' => 'vendor_staff',
+            )
+        );
 
         $staffs = $users_query->get_results();
         $staff_caps = dokan_get_staff_capabilities();
@@ -190,9 +193,11 @@ class Module {
      * @return void
      */
     public static function deactivate() {
-        $users_query = new \WP_User_Query( array(
-            'role' => 'vendor_staff'
-        ) );
+        $users_query = new \WP_User_Query(
+            array(
+                'role' => 'vendor_staff',
+            )
+        );
 
         $staffs = $users_query->get_results();
         $staff_caps = dokan_get_staff_capabilities();
@@ -225,7 +230,7 @@ class Module {
      *
      * @param array $query_var
      */
-    function add_endpoint( $query_var ) {
+    public function add_endpoint( $query_var ) {
         $query_var['staffs'] = 'staffs';
 
         return $query_var;
@@ -237,7 +242,7 @@ class Module {
     * @since 2.8
     *
     * @return void
-    **/
+    */
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
@@ -248,7 +253,7 @@ class Module {
     * @since 2.8
     *
     * @return void
-    **/
+    */
     public function load_vendor_staff_templates( $template_path, $template, $args ) {
         if ( isset( $args['is_vendor_staff'] ) && $args['is_vendor_staff'] ) {
             return $this->plugin_path() . '/templates';
@@ -266,24 +271,27 @@ class Module {
      *
      * @return string
      */
-    function load_staff_template( $query_vars ) {
-
+    public function load_staff_template( $query_vars ) {
         if ( isset( $query_vars['staffs'] ) ) {
             if ( ! current_user_can( 'seller' ) ) {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this page', 'dokan' ) ) );
+                dokan_get_template_part(
+                    'global/dokan-error', '', array(
+                        'deleted' => false,
+                        'message' => __( 'You have no permission to view this page', 'dokan' ),
+                    )
+                );
             } else {
-                if ( isset( $_GET['view'] ) && $_GET['view'] == 'add_staffs' ) {
+                $get_data = wp_unslash( $_GET ); // phpcs:ignore
+                if ( isset( $get_data['view'] ) && $get_data['view'] === 'add_staffs' ) {
                     dokan_get_template_part( 'vendor-staff/add-staffs', '', array( 'is_vendor_staff' => true ) );
-                } else if ( isset( $_GET['view'] ) && $_GET['view'] == 'manage_permissions' ) {
+                } elseif ( isset( $get_data['view'] ) && $get_data['view'] === 'manage_permissions' ) {
                     dokan_get_template_part( 'vendor-staff/permissions', '', array( 'is_vendor_staff' => true ) );
-                }else {
+                } else {
                     dokan_get_template_part( 'vendor-staff/staffs', '', array( 'is_vendor_staff' => true ) );
                 }
             }
         }
     }
-
-
 
     /**
      * Add staffs page in seller dashboard
@@ -298,7 +306,7 @@ class Module {
                 'title' => __( 'Staff', 'dokan' ),
                 'icon'  => '<i class="fa fa-users"></i>',
                 'url'   => dokan_get_navigation_url( 'staffs' ),
-                'pos'   => 172
+                'pos'   => 172,
             );
         }
 
@@ -313,7 +321,7 @@ class Module {
      * @return array
      */
     public function load_staff_emails( $emails ) {
-        $emails['Dokan_Staff_New_Order'] = include( DOKAN_VENDOR_staff_INC_DIR . '/class-staff-new-order-email.php' );
+        $emails['Dokan_Staff_New_Order'] = include DOKAN_VENDOR_STAFF_INC_DIR . '/class-staff-new-order-email.php';
 
         return $emails;
     }

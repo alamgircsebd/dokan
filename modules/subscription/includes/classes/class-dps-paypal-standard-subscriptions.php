@@ -168,16 +168,11 @@ class DPS_PayPal_Standard_Subscriptions {
      * @return [type]              [description]
      */
     public static function paypal_standard_subscription_args( $paypal_args ) {
-        if ( self::has_subscription() ) {
-            throw new Exception( __( 'Sorry, with paypal you can\'t switch subscription plan.', 'dokan' ) );
-        }
-
         $custom      = (array) json_decode( $paypal_args['custom'] );
         $order_id    = $custom['order_id'];
         $order_key   = $custom['order_key'];
 
         $order       = new WC_Order( $order_id );
-        $order_items = $order->get_items();
 
         // Only one subscription allowed in the cart when PayPal Standard is active
         $subs_product       = $order->get_items();
@@ -185,6 +180,10 @@ class DPS_PayPal_Standard_Subscriptions {
 
         if ( ! Helper::is_subscription_product( $product['product_id'] ) ) {
             return $paypal_args;
+        }
+
+        if ( self::has_subscription() ) {
+            throw new Exception( __( 'Sorry, with paypal you can\'t switch subscription plan.', 'dokan' ) );
         }
 
         $subscription = dokan()->subscription->get( $product['product_id'] );

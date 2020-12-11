@@ -21,6 +21,7 @@ class Module {
         add_action( 'dokan_activated_module_spmv', array( self::class, 'activate' ) );
         //Prevent Duplicate SKU for multiple save from various vendor
         add_action( 'woocommerce_product_duplicate_before_save', [ $this, 'prevent_duplicate_sku' ], 10, 2 );
+        add_action( 'dokan_product_duplicate_after_save', [ $this, 'update_duplicate_product_spmv' ], 10, 2 );
     }
 
     /**
@@ -128,6 +129,28 @@ class Module {
         $sku        = $duplicate->get_sku( 'edit' );
         $unique_sku = $this->get_unique_sku( $sku );
         $duplicate->set_sku( $unique_sku );
+    }
+
+    /**
+     * Update duplicate product if exists multi vendor
+     *
+     * @since 3.1.2
+     *
+     * @param array $clone_product
+     * @param array $product
+     *
+     * @return void
+     */
+    public function update_duplicate_product_spmv( $clone_product, $product ) {
+        if ( ! isset( $clone_product ) ) {
+            return;
+        }
+
+        $map_id = get_post_meta( $clone_product->get_id(), '_has_multi_vendor', true );
+
+        if ( $map_id ) {
+            update_post_meta( $clone_product->get_id(), '_has_multi_vendor', '' );
+        }
     }
 
     /**

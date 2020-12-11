@@ -15,10 +15,13 @@ class Dokan_WC_Bookings_Calendar {
             wp_enqueue_script( 'wc-enhanced-select' );
         }
 
+        // @codingStandardsIgnoreStart
         $product_filter = isset( $_REQUEST['filter_bookings'] ) ? absint( $_REQUEST['filter_bookings'] ) : '';
         $view           = isset( $_REQUEST['view'] ) && $_REQUEST['view'] == 'day' ? 'day' : 'month';
+        // @codingStandardsIgnoreEnd
 
-        if ( $view == 'day' ) {
+        if ( 'day' === (string) $view ) {
+            // @codingStandardsIgnoreLine
             $day = isset( $_REQUEST['calendar_day'] ) ? wc_clean( $_REQUEST['calendar_day'] ) : date( 'Y-m-d' );
 
             if ( version_compare( WC_BOOKINGS_VERSION, '1.15.0', '>=' ) ) {
@@ -37,6 +40,7 @@ class Dokan_WC_Bookings_Calendar {
                 );
             }
         } else {
+            // @codingStandardsIgnoreStart
             $month = isset( $_REQUEST['calendar_month'] ) ? absint( $_REQUEST['calendar_month'] ) : date( 'n' );
             $year  = isset( $_REQUEST['calendar_year'] ) ? absint( $_REQUEST['calendar_year'] ) : date( 'Y' );
 
@@ -58,6 +62,7 @@ class Dokan_WC_Bookings_Calendar {
             $last_day      = date( 't', strtotime( "$year-$month-01" ) );
             $start_date_w  = absint( date( 'w', strtotime( "$year-$month-01" ) ) );
             $end_date_w    = absint( date( 'w', strtotime( "$year-$month-$last_day" ) ) );
+            // @codingStandardsIgnoreEnd
 
             // Calc day offset
             $day_offset = $start_date_w - $start_of_week;
@@ -68,6 +73,7 @@ class Dokan_WC_Bookings_Calendar {
             $end_day_offset = $end_day_offset >= 0 && $end_day_offset < 7 ? $end_day_offset : 7 - abs( $end_day_offset );
 
             // We want to get the last minute of the day, so we will go forward one day to midnight and subtract a min
+            // @codingStandardsIgnoreLine
             $end_day_offset = $end_day_offset + 1;
 
             $start_timestamp = strtotime( "-{$day_offset} day", strtotime( "$year-$month-01" ) );
@@ -90,7 +96,7 @@ class Dokan_WC_Bookings_Calendar {
             }
         }
 
-        include DOKAN_WC_BOOKING_DIR.( '/templates/booking/calendar/html-calendar-' . $view . '.php' );
+        include DOKAN_WC_BOOKING_DIR . ( '/templates/booking/calendar/html-calendar-' . $view . '.php' );
     }
 
     /**
@@ -106,7 +112,7 @@ class Dokan_WC_Bookings_Calendar {
         $date_end   = strtotime( "$year-$month-$day 23:59" );
 
         foreach ( $this->bookings as $booking ) {
-
+            // @codingStandardsIgnoreLine
             if ( get_post_field( 'post_author', $booking->product_id ) != dokan_get_current_user_id() ) {
                 continue;
             }
@@ -116,33 +122,37 @@ class Dokan_WC_Bookings_Calendar {
                 ( $booking->start < $date_start && $booking->end > $date_end ) ||
                 ( $booking->end > $date_start && $booking->end <= $date_end )
                 ) {
-
                     $edit_url = wp_nonce_url( add_query_arg( array( 'order_id' => $booking->order_id ), dokan_get_navigation_url( 'orders' ) ), 'dokan_view_order' );
-                echo '<li><a href="'.$edit_url.'">';
+                echo '<li><a href="' . $edit_url . '">';
                     echo '<strong>#' . $booking->id . ' - ';
-                    if ( $product = $booking->get_product() ) {
-                        echo $product->get_title();
-                    }
+				if ( $booking->get_product() ) {
+                    $product = $booking->get_product();
+					echo $product->get_title();
+				}
                     echo '</strong>';
                     echo '<ul>';
 
-                        if ( ( $customer = $booking->get_customer() ) && ! empty( $customer->name ) ) {
-                            echo '<li>' . __( 'Booked by', 'dokan' ) . ' ' . $customer->name . '</li>';
-                        }
+				if ( ( $booking->get_customer() ) ) {
+                    $customer = $booking->get_customer();
+                    if ( ! empty( $customer->name ) ) {
+                        echo '<li>' . __( 'Booked by', 'dokan' ) . ' ' . $customer->name . '</li>';
+                    }
+				}
 
-                        echo '<li>';
+				echo '<li>';
 
-                        if ( $booking->is_all_day() ) {
-                            echo __( 'All Day', 'dokan' );
-                        } else {
-                            echo $booking->get_start_date( '', 'g:ia' ) . '&mdash;' . $booking->get_end_date( '', 'g:ia' );
-                        }
+				if ( $booking->is_all_day() ) {
+					echo __( 'All Day', 'dokan' );
+				} else {
+					echo $booking->get_start_date( '', 'g:ia' ) . '&mdash;' . $booking->get_end_date( '', 'g:ia' );
+				}
 
                         echo '</li>';
 
-                        if ( $resource = $booking->get_resource() ) {
-                            echo '<li>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title . '</li>';
-                        }
+				if ( $booking->get_resource() ) {
+                    $resource = $booking->get_resource();
+					echo '<li>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title . '</li>';
+				}
                     echo '</ul></a>';
                 echo '</li>';
             }
@@ -160,7 +170,7 @@ class Dokan_WC_Bookings_Calendar {
         foreach ( $this->bookings as $booking ) {
             $seller = get_post_field( 'post_author', $booking->get_product_id() );
 
-            if ( $seller != dokan_get_current_user_id() ) {
+            if ( (int) $seller !== dokan_get_current_user_id() ) {
                 continue;
             }
 
@@ -200,8 +210,8 @@ class Dokan_WC_Bookings_Calendar {
         $column = 0;
 
         foreach ( $all_day_bookings as $booking ) {
-            echo '<li data-tip="' . esc_attr( $this->get_tip( $booking ) ). '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: 0; bottom: 0; display:list-item; ">
-                    <a href="' . $edit_url. '">' . $this->get_tip( $booking ) . '</a>
+            echo '<li data-tip="' . esc_attr( $this->get_tip( $booking ) ) . '" style="background: ' . $unqiue_ids[ $booking->product_id . $booking->resource_id ] . '; left:' . 100 * $column . 'px; top: 0; bottom: 0; display:list-item; ">
+                    <a href="' . $edit_url . '">' . $this->get_tip( $booking ) . '</a>
                 </li>';
             $column++;
         }
@@ -213,11 +223,12 @@ class Dokan_WC_Bookings_Calendar {
             foreach ( $bookings as $booking ) {
                 $short_start_time = $this->get_short_time( $booking->get_start() );
                 $short_end_time   = $this->get_short_time( $booking->get_end() );
+                // @codingStandardsIgnoreLine
                 $booking_time     = sprintf( __( '%1$s %2$s', 'dokan' ), $short_start_time, $short_end_time );
 
                 $element = "<li class='dokan-booking-time dokan-booking-{$short_start_time}' data-booking-time='{$booking_time}'>";
                 $element .= "<a href='{$edit_url}'>{$this->get_tip( $booking )}</a>";
-                $element .= "</li>";
+                $element .= '</li>';
 
                 echo $element;
             }
@@ -228,7 +239,8 @@ class Dokan_WC_Bookings_Calendar {
      * Get a random colour
      */
     public function random_color() {
-        return sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+        // @codingStandardsIgnoreLine
+        return sprintf( '#%06X', mt_rand( 0, 0xFFFFFF ) );
     }
 
     /**
@@ -237,19 +249,29 @@ class Dokan_WC_Bookings_Calendar {
      * @return string
      */
     public function get_tip( $booking ) {
-        $return  = "";
+        $return  = '';
         $return .= '#' . $booking->id . ' - ';
 
-        if ( $product = $booking->get_product() ) {
+        if ( $booking->get_product() ) {
+            $product = $booking->get_product();
             $return .= $product->get_title();
         }
 
-        if ( ( $customer = $booking->get_customer() ) && ! empty( $customer->name ) ) {
-            $return .= '<br/>' . __( 'Booked by', 'dokan' ) . ' ' . $customer->name;
+        if ( ( $booking->get_customer() ) ) {
+            $customer = $booking->get_customer();
+
+            if ( ! empty( $customer->name ) ) {
+                $return .= '<br/>' . __( 'Booked by', 'dokan' ) . ' ' . $customer->name;
+            }
         }
 
-        if ( $resource = $booking->get_resource() ) {
+        if ( $booking->get_resource() ) {
+            $resource = $booking->get_resource();
             $return .= '<br/>' . __( 'Resource #', 'dokan' ) . $resource->ID . ' - ' . $resource->post_title;
+        }
+
+        if ( $booking->get_start() ) {
+            $return .= '<br/>' . $booking->get_start_date( '', 'g:ia' ) . '&mdash;' . $booking->get_end_date( '', 'g:ia' );
         }
 
         return $return;
@@ -261,20 +283,25 @@ class Dokan_WC_Bookings_Calendar {
     public function product_filters() {
         $filters = array();
 
-        $products =  get_posts( apply_filters( 'get_booking_products_args', array(
-            'post_status'    => 'publish',
-            'post_type'      => 'product',
-            'author'         => dokan_get_current_user_id(),
-            'posts_per_page' => -1,
-            'tax_query'      => array(
-                array(
-                    'taxonomy' => 'product_type',
-                    'field'    => 'slug',
-                    'terms'    => 'booking'
+        $products = get_posts(
+            apply_filters(
+                'get_booking_products_args', array(
+					'post_status'    => 'publish',
+					'post_type'      => 'product',
+					'author'         => dokan_get_current_user_id(),
+					'posts_per_page' => -1,
+                    // @codingStandardsIgnoreLine
+					'tax_query'      => array(
+						array(
+							'taxonomy' => 'product_type',
+							'field'    => 'slug',
+							'terms'    => 'booking',
+						),
+					),
+					'suppress_filters' => true,
                 )
-            ),
-            'suppress_filters' => true
-        ) ) );
+            )
+        );
 
         foreach ( $products as $product ) {
             $filters[ $product->ID ] = $product->post_title;
@@ -296,15 +323,19 @@ class Dokan_WC_Bookings_Calendar {
     public function resources_filters() {
         $filters = array();
 
-        $resources = get_posts( apply_filters( 'get_booking_resources_args', array(
-            'post_status'      => 'publish',
-            'post_type'        => 'bookable_resource',
-            'posts_per_page'   => -1,
-            'orderby'          => 'menu_order',
-            'order'            => 'asc',
-            'suppress_filters' => true,
-            'author'           => dokan_get_current_user_id()
-        ) ) );
+        $resources = get_posts(
+            apply_filters(
+                'get_booking_resources_args', array(
+					'post_status'      => 'publish',
+					'post_type'        => 'bookable_resource',
+					'posts_per_page'   => -1,
+					'orderby'          => 'menu_order',
+					'order'            => 'asc',
+					'suppress_filters' => true,
+					'author'           => dokan_get_current_user_id(),
+                )
+            )
+        );
 
         foreach ( $resources as $resource ) {
             $filters[ $resource->ID ] = $resource->post_title;
@@ -328,6 +359,7 @@ class Dokan_WC_Bookings_Calendar {
         // Remove spaces so AM/PM will be directly next to time.
         $time_format = str_replace( ' ', '', $time_format );
 
+        // @codingStandardsIgnoreStart
         // Hide minutes if on the hour.
         if ( '00' === date( 'i', $timestamp ) ) {
             // Remove minutes from time format.
@@ -335,5 +367,6 @@ class Dokan_WC_Bookings_Calendar {
         }
 
         return date( $time_format, $timestamp );
+        // @codingStandardsIgnoreEnd
     }
 }

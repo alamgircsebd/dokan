@@ -37,11 +37,11 @@ class Module {
 
         $this->depends_on['wc_bookings'] = array(
             'name'   => 'WC_Bookings',
-            'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %sWooCommerce Bookings plugin%s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-bookings/">', '</a>' ),
+            'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %1$sWooCommerce Bookings plugin%2$s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-bookings/">', '</a>' ),
         );
 
         if ( ! $this->check_if_has_dependency() ) {
-            add_action( 'admin_notices', array ( $this, 'dependency_notice' ) );
+            add_action( 'admin_notices', array( $this, 'dependency_notice' ) );
             return;
         }
 
@@ -98,7 +98,7 @@ class Module {
      *
      * @return boolean
      */
-    function check_if_has_dependency() {
+    public function check_if_has_dependency() {
         $res = true;
 
         foreach ( $this->depends_on as $class ) {
@@ -156,7 +156,7 @@ class Module {
      *
      * @since 1.0.0
      */
-    function dependency_notice() {
+    public function dependency_notice() {
         $errors = '';
         $error  = '';
         foreach ( $this->dependency_error as $error ) {
@@ -175,7 +175,7 @@ class Module {
     public static function activate() {
         global $wp_roles;
 
-        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+        if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
             $wp_roles = new \WP_Roles();
         }
 
@@ -187,7 +187,7 @@ class Module {
             'dokan_manage_booking_products',
             'dokan_manage_booking_calendar',
             'dokan_manage_bookings',
-            'dokan_manage_booking_resource'
+            'dokan_manage_booking_resource',
         );
 
         foreach ( $all_cap as $key => $cap ) {
@@ -211,7 +211,7 @@ class Module {
     public function enqueue_scripts() {
         global $wp;
 
-        if ( !is_admin() && isset( $wp->query_vars['booking'] ) ) {
+        if ( ! is_admin() && isset( $wp->query_vars['booking'] ) ) {
             global $post, $wp_scripts;
 
             /**
@@ -225,7 +225,7 @@ class Module {
 
             $jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
 
-            $suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+            $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
             wp_register_script( 'wc_bookings_writepanel_js', DOKAN_WC_BOOKING_PLUGIN_ASSEST . '/js/writepanel.min.js', array( 'jquery', 'jquery-ui-datepicker' ), DOKAN_WC_BOOKING_PLUGIN_VERSION, true );
             wp_register_script( 'wc_bookings_settings_js', WC_BOOKINGS_PLUGIN_URL . '/assets/js/settings' . $suffix . '.js', array( 'jquery' ), WC_BOOKINGS_VERSION, true );
             wp_register_script( 'jquery-tiptip', WC()->plugin_url() . '/assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), WC_VERSION, true );
@@ -275,7 +275,7 @@ class Module {
      *
      * @return void
      */
-    function init_hooks() {
+    public function init_hooks() {
         if ( $this->dependency_not_found ) {
             return;
         }
@@ -288,12 +288,12 @@ class Module {
 
         add_action( 'dokan_rewrite_rules_loaded', array( $this, 'add_rewrite_rules' ) );
 
-        if ( !class_exists( 'WC_Product_Booking' ) && defined( 'WC_BOOKINGS_MAIN_FILE' ) ) {
+        if ( ! class_exists( 'WC_Product_Booking' ) && defined( 'WC_BOOKINGS_MAIN_FILE' ) ) {
             $wcb_path = preg_replace( '(woocommmerce-bookings.php)', '', WC_BOOKINGS_MAIN_FILE );
             include_once $wcb_path . 'includes/class-wc-product-booking.php';
         }
 
-        if ( !is_admin() ) {
+        if ( ! is_admin() ) {
             include_once DOKAN_WC_BOOKING_DIR . '/includes/class-wc-booking-calendar.php';
         }
 
@@ -302,11 +302,10 @@ class Module {
         add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_cancelled_actions' ) );
 
         add_filter( 'woocommerce_email_classes', array( $this, 'load_dokan_booking_new_emails' ), 14 );
-        add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_new_actions') );
-
+        add_filter( 'woocommerce_email_actions', array( $this, 'register_dokan_booking_new_actions' ) );
     }
     public function load_dokan_booking_cancelled_emails( $wc_emails ) {
-        $wc_emails['Dokan_Email_Booking_Cancelled'] = include( DOKAN_WC_BOOKING_DIR. '/includes/emails/class-dokan-booking-email-cancelled.php' );
+        $wc_emails['Dokan_Email_Booking_Cancelled'] = include DOKAN_WC_BOOKING_DIR . '/includes/emails/class-dokan-booking-email-cancelled.php';
 
         return $wc_emails;
     }
@@ -317,7 +316,7 @@ class Module {
     }
 
     public function load_dokan_booking_new_emails( $wc_emails ) {
-        $wc_emails['Dokan_Email_Booking_New'] = include( DOKAN_WC_BOOKING_DIR . '/includes/emails/class-dokan-booking-email-new.php' );
+        $wc_emails['Dokan_Email_Booking_New'] = include DOKAN_WC_BOOKING_DIR . '/includes/emails/class-dokan-booking-email-new.php';
 
         return $wc_emails;
     }
@@ -336,18 +335,18 @@ class Module {
      *
      * @return $emails
      */
-    function setup_emails( $emails ) {
+    public function setup_emails( $emails ) {
         if ( ! isset( $emails['WC_Email_New_Booking'] ) ) {
             return;
         }
-        
+
         $email = $emails['WC_Email_New_Booking'];
 
         $email->title       = __( 'Dokan New Booking', 'dokan' );
         $email->description = __( 'New booking emails are sent to the admin when a new booking is created and paid. This email is also received when a Pending confirmation booking is created.', 'dokan' );
 
         $email->template_base = DOKAN_WC_BOOKING_TEMPLATE_PATH;
-        $email->recipient     = "vendor@ofthe.product";
+        $email->recipient     = 'vendor@ofthe.product';
 
         return $emails;
     }
@@ -363,7 +362,7 @@ class Module {
      *
      * @return $recipient
      */
-    function set_seller_as_email_recipient( $recipient, $booking ) {
+    public function set_seller_as_email_recipient( $recipient, $booking ) {
         if ( ! $booking ) {
             return $recipient;
         }
@@ -380,7 +379,7 @@ class Module {
      * @param array $urls
      * @return array $urls
      */
-    function add_booking_page( $urls ) {
+    public function add_booking_page( $urls ) {
         if ( ! current_user_can( 'dokan_view_booking_menu' ) ) {
             return $urls;
         }
@@ -404,10 +403,15 @@ class Module {
      *
      * @return array $query_vars
      */
-    function load_template_from_plugin( $query_vars ) {
+    public function load_template_from_plugin( $query_vars ) {
         if ( isset( $query_vars['booking'] ) ) {
-            if ( !current_user_can( 'dokan_view_booking_menu' ) ) {
-                dokan_get_template_part( 'global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this booking page', 'dokan' ) ) );
+            if ( ! current_user_can( 'dokan_view_booking_menu' ) ) {
+                dokan_get_template_part(
+                    'global/dokan-error', '', array(
+                        'deleted' => false,
+                        'message' => __( 'You have no permission to view this booking page', 'dokan' ),
+                    )
+                );
             } else {
                 dokan_get_template_part( 'booking/booking', '', array( 'is_booking' => true ) );
             }
@@ -424,7 +428,7 @@ class Module {
      *
      * @return array new $vars
      */
-    function register_booking_queryvar( $vars ) {
+    public function register_booking_queryvar( $vars ) {
         $vars[] = 'booking';
         return $vars;
     }
@@ -432,7 +436,7 @@ class Module {
     /**
      * Rewrite flush when reactive this plugin
      */
-    function add_rewrite_rules() {
+    public function add_rewrite_rules() {
         if ( get_transient( 'dokan-wc-booking' ) ) {
             flush_rewrite_rules( true );
             delete_transient( 'dokan-wc-booking' );
@@ -450,10 +454,11 @@ class Module {
      *
      * @return void
      */
-    function save_booking_data( $post_id ) {
+    public function save_booking_data( $post_id ) {
         global $wpdb;
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
 
-        $product_type = empty( $_POST['product_type'] ) ? 'simple' : sanitize_title( stripslashes( $_POST['product_type'] ) );
+        $product_type = empty( $post_data['product_type'] ) ? 'simple' : sanitize_title( stripslashes( $post_data['product_type'] ) );
 
         if ( 'booking' !== $product_type ) {
             return;
@@ -461,62 +466,66 @@ class Module {
 
         $product = new \WC_Product_Booking( $post_id );
 
-        if ( !is_a( $product, 'WC_Product_Booking' ) ) {
+        if ( ! is_a( $product, 'WC_Product_Booking' ) ) {
             return;
         }
 
         // Save shipping class
-        $product_shipping_class = isset( $_POST['product_shipping_class'] ) && $_POST['product_shipping_class'] > 0 ? absint( $_POST['product_shipping_class'] ) : '';
+        $product_shipping_class = isset( $post_data['product_shipping_class'] ) && $post_data['product_shipping_class'] > 0 ? absint( $post_data['product_shipping_class'] ) : '';
         wp_set_object_terms( $post_id, $product_shipping_class, 'product_shipping_class' );
 
         $resources = $this->get_posted_resources();
         $posted_props = array(
-            'apply_adjacent_buffer'      => isset( $_POST['_wc_booking_apply_adjacent_buffer'] ),
+            'apply_adjacent_buffer'      => isset( $post_data['_wc_booking_apply_adjacent_buffer'] ),
             'availability'               => $this->get_posted_availability(),
-            'block_cost'                 => wc_clean( $_POST['_wc_booking_block_cost'] ),
-            'buffer_period'              => wc_clean( $_POST['_wc_booking_buffer_period'] ),
-            'calendar_display_mode'      => wc_clean( $_POST['_wc_booking_calendar_display_mode'] ),
-            'cancel_limit_unit'          => wc_clean( $_POST['_wc_booking_cancel_limit_unit'] ),
-            'cancel_limit'               => wc_clean( $_POST['_wc_booking_cancel_limit'] ),
-            'check_start_block_only'     => 'start' === $_POST['_wc_booking_check_availability_against'],
-            'cost'                       => wc_clean( $_POST['_wc_booking_cost'] ),
-            'default_date_availability'  => wc_clean( $_POST['_wc_booking_default_date_availability'] ),
-            'display_cost'               => wc_clean( $_POST['_wc_display_cost'] ),
-            'duration_type'              => wc_clean( $_POST['_wc_booking_duration_type'] ),
-            'duration_unit'              => wc_clean( $_POST['_wc_booking_duration_unit'] ),
-            'duration'                   => wc_clean( $_POST['_wc_booking_duration'] ),
-            'enable_range_picker'        => isset( $_POST['_wc_booking_enable_range_picker'] ),
-            'first_block_time'           => wc_clean( $_POST['_wc_booking_first_block_time'] ),
-            'has_person_cost_multiplier' => isset( $_POST['_wc_booking_person_cost_multiplier'] ),
-            'has_person_qty_multiplier'  => isset( $_POST['_wc_booking_person_qty_multiplier'] ),
-            'has_person_types'           => isset( $_POST['_wc_booking_has_person_types'] ),
-            'has_persons'                => isset( $_POST['_wc_booking_has_persons'] ),
-            'has_resources'              => isset( $_POST['_wc_booking_has_resources'] ),
-            'max_date_unit'              => wc_clean( $_POST['_wc_booking_max_date_unit'] ),
-            'max_date_value'             => wc_clean( $_POST['_wc_booking_max_date'] ),
-            'max_duration'               => wc_clean( $_POST['_wc_booking_max_duration'] ),
-            'max_persons'                => isset( $_POST['_wc_booking_max_persons_group'] ) ? wc_clean( $_POST['_wc_booking_max_persons_group'] ) : '',
-            'min_date_unit'              => wc_clean( $_POST['_wc_booking_min_date_unit'] ),
-            'min_date_value'             => wc_clean( $_POST['_wc_booking_min_date'] ),
-            'min_duration'               => wc_clean( $_POST['_wc_booking_min_duration'] ),
-            'min_persons'                => isset( $_POST['_wc_booking_min_persons_group'] ) ? wc_clean( $_POST['_wc_booking_min_persons_group'] ) : '' ,
+            'block_cost'                 => wc_clean( $post_data['_wc_booking_block_cost'] ),
+            'buffer_period'              => wc_clean( $post_data['_wc_booking_buffer_period'] ),
+            'calendar_display_mode'      => wc_clean( $post_data['_wc_booking_calendar_display_mode'] ),
+            'cancel_limit_unit'          => wc_clean( $post_data['_wc_booking_cancel_limit_unit'] ),
+            'cancel_limit'               => wc_clean( $post_data['_wc_booking_cancel_limit'] ),
+            'check_start_block_only'     => 'start' === $post_data['_wc_booking_check_availability_against'],
+            'cost'                       => wc_clean( $post_data['_wc_booking_cost'] ),
+            'default_date_availability'  => wc_clean( $post_data['_wc_booking_default_date_availability'] ),
+            'display_cost'               => wc_clean( $post_data['_wc_display_cost'] ),
+            'duration_type'              => wc_clean( $post_data['_wc_booking_duration_type'] ),
+            'duration_unit'              => wc_clean( $post_data['_wc_booking_duration_unit'] ),
+            'duration'                   => wc_clean( $post_data['_wc_booking_duration'] ),
+            'enable_range_picker'        => isset( $post_data['_wc_booking_enable_range_picker'] ),
+            'first_block_time'           => wc_clean( $post_data['_wc_booking_first_block_time'] ),
+            'has_person_cost_multiplier' => isset( $post_data['_wc_booking_person_cost_multiplier'] ),
+            'has_person_qty_multiplier'  => isset( $post_data['_wc_booking_person_qty_multiplier'] ),
+            'has_person_types'           => isset( $post_data['_wc_booking_has_person_types'] ),
+            'has_persons'                => isset( $post_data['_wc_booking_has_persons'] ),
+            'has_resources'              => isset( $post_data['_wc_booking_has_resources'] ),
+            'max_date_unit'              => wc_clean( $post_data['_wc_booking_max_date_unit'] ),
+            'max_date_value'             => wc_clean( $post_data['_wc_booking_max_date'] ),
+            'max_duration'               => wc_clean( $post_data['_wc_booking_max_duration'] ),
+            'max_persons'                => isset( $post_data['_wc_booking_max_persons_group'] ) ? wc_clean( $post_data['_wc_booking_max_persons_group'] ) : '',
+            'min_date_unit'              => wc_clean( $post_data['_wc_booking_min_date_unit'] ),
+            'min_date_value'             => wc_clean( $post_data['_wc_booking_min_date'] ),
+            'min_duration'               => wc_clean( $post_data['_wc_booking_min_duration'] ),
+            'min_persons'                => isset( $post_data['_wc_booking_min_persons_group'] ) ? wc_clean( $post_data['_wc_booking_min_persons_group'] ) : '',
             'person_types'               => $this->get_posted_person_types( $product ),
             'pricing'                    => $this->get_posted_pricing(),
-            'qty'                        => wc_clean( $_POST['_wc_booking_qty'] ),
-            'requires_confirmation'      => isset( $_POST['_wc_booking_requires_confirmation'] ),
-            'resource_label'             => isset( $_POST['_wc_booking_resource_label'] ) ? wc_clean( $_POST['_wc_booking_resource_label'] ) : '',
+            'qty'                        => wc_clean( $post_data['_wc_booking_qty'] ),
+            'requires_confirmation'      => isset( $post_data['_wc_booking_requires_confirmation'] ),
+            'resource_label'             => isset( $post_data['_wc_booking_resource_label'] ) ? wc_clean( $post_data['_wc_booking_resource_label'] ) : '',
             'resource_base_costs'        => wp_list_pluck( $resources, 'base_cost' ),
             'resource_block_costs'       => wp_list_pluck( $resources, 'block_cost' ),
             'resource_ids'               => array_keys( $resources ),
-            'resources_assignment'       => isset( $_POST['_wc_booking_resources_assignment'] ) ? wc_clean( $_POST['_wc_booking_resources_assignment'] ) : '',
-            'user_can_cancel'            => isset( $_POST['_wc_booking_user_can_cancel'] ),
-            'has_restricted_days'        => isset( $_POST['_wc_booking_has_restricted_days' ] ) ? wc_clean( $_POST['_wc_booking_has_restricted_days'] ) : '',
-            'restricted_days'            => isset( $_POST['_wc_booking_restricted_days'] ) ? wc_clean( $_POST['_wc_booking_restricted_days'] ) : ''
+            'resources_assignment'       => isset( $post_data['_wc_booking_resources_assignment'] ) ? wc_clean( $post_data['_wc_booking_resources_assignment'] ) : '',
+            'user_can_cancel'            => isset( $post_data['_wc_booking_user_can_cancel'] ),
+            'has_restricted_days'        => isset( $post_data['_wc_booking_has_restricted_days'] ) ? wc_clean( $post_data['_wc_booking_has_restricted_days'] ) : '',
+            'restricted_days'            => isset( $post_data['_wc_booking_restricted_days'] ) ? wc_clean( $post_data['_wc_booking_restricted_days'] ) : '',
         );
 
         $product->set_props( $posted_props );
 
         $product->save();
+
+        $_virtual   = isset( $post_data['_virtual'] ) ? wc_clean( $post_data['_virtual'] ) : '';
+        $is_virtual = 'on' === $_virtual ? 'yes' : 'no';
+        update_post_meta( $post_id, '_virtual', 'yes' );
 
         do_action( 'dokan_booking_after_product_data_saved' );
     }
@@ -532,16 +541,18 @@ class Module {
      *
      * @return $url
      */
-    function set_redirect_url( $url, $product_id ) {
-        $product_type = isset( $_POST['product_type'] ) ? $_POST['product_type'] : '';
+    public function set_redirect_url( $url, $product_id ) {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
+        $product_type = isset( $post_data['product_type'] ) ? $post_data['product_type'] : '';
         $tab          = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
 
-        if ( 'booking' == $product_type ) {
+        if ( 'booking' === $product_type ) {
             $url = add_query_arg( array( 'product_id' => $product_id ), dokan_get_navigation_url( 'booking' ) . 'edit/' );
             return $url;
         }
 
-        if ( 'booking' == $tab ) {
+        if ( 'booking' === $tab ) {
             $url = add_query_arg( array(), dokan_get_navigation_url( 'booking' ) );
             return $url;
         }
@@ -555,9 +566,8 @@ class Module {
      * @since 1.0
      *
      * @return void
-     *
      */
-    function add_new_resource() {
+    public function add_new_resource() {
         $add_resource_name = wc_clean( $_POST['add_resource_name'] );
 
         if ( empty( $add_resource_name ) ) {
@@ -569,23 +579,23 @@ class Module {
             'post_content' => '',
             'post_status'  => 'publish',
             'post_author'  => dokan_get_current_user_id(),
-            'post_type'    => 'bookable_resource'
+            'post_type'    => 'bookable_resource',
         );
         $resource_id = wp_insert_post( $resource );
         $edit_url    = dokan_get_navigation_url( 'booking' ) . 'resources/edit/?id=' . $resource_id;
         ob_start();
         ?>
         <tr>
-            <td><a href="<?php echo $edit_url ?>"><?php echo $add_resource_name ?></a></td>
+            <td><a href="<?php echo $edit_url; ?>"><?php echo $add_resource_name; ?></a></td>
             <td><?php _e( 'N/A', 'dokan' ); ?></td>
             <td>
-                <a class="dokan-btn dokan-btn-sm dokan-btn-theme" href ="<?php echo $edit_url  ?>"><?php _e( 'Edit', 'dokan' );  ?></a>
-                <button class="dokan-btn dokan-btn-theme dokan-btn-sm btn-remove" data-id="<?php echo $resource_id ?>"><?php _e( 'Remove', 'dokan' ); ?></button>
+                <a class="dokan-btn dokan-btn-sm dokan-btn-theme" href ="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a>
+                <button class="dokan-btn dokan-btn-theme dokan-btn-sm btn-remove" data-id="<?php echo $resource_id; ?>"><?php _e( 'Remove', 'dokan' ); ?></button>
             </td>
         </tr>
 
         <?php
-        $output      = ob_get_clean();
+        $output = ob_get_clean();
         wp_send_json_success( $output );
     }
 
@@ -596,69 +606,71 @@ class Module {
      *
      * @return void
      */
-    function update_resource_data() {
-        if ( !isset( $_POST['dokan_booking_resource_update'] ) ) {
+    public function update_resource_data() {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
+        if ( ! isset( $post_data['dokan_booking_resource_update'] ) ) {
             return;
         }
 
-        $post_id = $_POST['resource_id'];
+        $post_id = intval( $post_data['resource_id'] );
 
         $post             = get_post( $post_id );
-        $post->post_title = $_POST['post_title'];
+        $post->post_title = sanitize_text_field( $post_data['post_title'] );
 
         wp_update_post( $post );
 
         // Qty field
-        update_post_meta( $post_id, 'qty', wc_clean( $_POST['_wc_booking_qty'] ) );
+        update_post_meta( $post_id, 'qty', wc_clean( $post_data['_wc_booking_qty'] ) );
         // Availability
         $availability = array();
-        $row_size     = isset( $_POST["wc_booking_availability_type"] ) ? sizeof( $_POST["wc_booking_availability_type"] ) : 0;
+        $row_size     = isset( $post_data['wc_booking_availability_type'] ) ? count( $post_data['wc_booking_availability_type'] ) : 0;
         for ( $i = 0; $i < $row_size; $i ++ ) {
-            $availability[$i]['type']     = wc_clean( $_POST["wc_booking_availability_type"][$i] );
-            $availability[$i]['bookable'] = wc_clean( $_POST["wc_booking_availability_bookable"][$i] );
-            $availability[$i]['priority'] = intval( $_POST['wc_booking_availability_priority'][$i] );
+            $availability[ $i ]['type']     = wc_clean( $post_data['wc_booking_availability_type'][ $i ] );
+            $availability[ $i ]['bookable'] = wc_clean( $post_data['wc_booking_availability_bookable'][ $i ] );
+            $availability[ $i ]['priority'] = intval( $post_data['wc_booking_availability_priority'][ $i ] );
 
-            switch ( $availability[$i]['type'] ) {
-                case 'custom' :
-                    $availability[$i]['from'] = wc_clean( $_POST["wc_booking_availability_from_date"][$i] );
-                    $availability[$i]['to']   = wc_clean( $_POST["wc_booking_availability_to_date"][$i] );
+            switch ( $availability[ $i ]['type'] ) {
+                case 'custom':
+                    $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_date'][ $i ] );
+                    $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_date'][ $i ] );
                     break;
-                case 'months' :
-                    $availability[$i]['from'] = wc_clean( $_POST["wc_booking_availability_from_month"][$i] );
-                    $availability[$i]['to']   = wc_clean( $_POST["wc_booking_availability_to_month"][$i] );
+                case 'months':
+                    $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_month'][ $i ] );
+                    $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_month'][ $i ] );
                     break;
-                case 'weeks' :
-                    $availability[$i]['from'] = wc_clean( $_POST["wc_booking_availability_from_week"][$i] );
-                    $availability[$i]['to']   = wc_clean( $_POST["wc_booking_availability_to_week"][$i] );
+                case 'weeks':
+                    $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_week'][ $i ] );
+                    $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_week'][ $i ] );
                     break;
-                case 'days' :
-                    $availability[$i]['from'] = wc_clean( $_POST["wc_booking_availability_from_day_of_week"][$i] );
-                    $availability[$i]['to']   = wc_clean( $_POST["wc_booking_availability_to_day_of_week"][$i] );
+                case 'days':
+                    $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_day_of_week'][ $i ] );
+                    $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_day_of_week'][ $i ] );
                     break;
-                case 'time' :
-                case 'time:1' :
-                case 'time:2' :
-                case 'time:3' :
-                case 'time:4' :
-                case 'time:5' :
-                case 'time:6' :
-                case 'time:7' :
-                    $availability[$i]['from'] = wc_booking_sanitize_time( $_POST["wc_booking_availability_from_time"][$i] );
-                    $availability[$i]['to']   = wc_booking_sanitize_time( $_POST["wc_booking_availability_to_time"][$i] );
+                case 'time':
+                case 'time:1':
+                case 'time:2':
+                case 'time:3':
+                case 'time:4':
+                case 'time:5':
+                case 'time:6':
+                case 'time:7':
+                    $availability[ $i ]['from'] = wc_booking_sanitize_time( $post_data['wc_booking_availability_from_time'][ $i ] );
+                    $availability[ $i ]['to']   = wc_booking_sanitize_time( $post_data['wc_booking_availability_to_time'][ $i ] );
                     break;
-                case 'time:range' :
-                    $availability[$i]['from'] = wc_booking_sanitize_time( $_POST["wc_booking_availability_from_time"][$i] );
-                    $availability[$i]['to']   = wc_booking_sanitize_time( $_POST["wc_booking_availability_to_time"][$i] );
+                case 'time:range':
+                    $availability[ $i ]['from'] = wc_booking_sanitize_time( $post_data['wc_booking_availability_from_time'][ $i ] );
+                    $availability[ $i ]['to']   = wc_booking_sanitize_time( $post_data['wc_booking_availability_to_time'][ $i ] );
 
-                    $availability[$i]['from_date'] = wc_clean( $_POST['wc_booking_availability_from_date'][$i] );
-                    $availability[$i]['to_date']   = wc_clean( $_POST['wc_booking_availability_to_date'][$i] );
+                    $availability[ $i ]['from_date'] = wc_clean( $post_data['wc_booking_availability_from_date'][ $i ] );
+                    $availability[ $i ]['to_date']   = wc_clean( $post_data['wc_booking_availability_to_date'][ $i ] );
                     break;
             }
         }
         update_post_meta( $post_id, '_wc_booking_availability', $availability );
 
         $redirect_url = dokan_get_navigation_url( 'booking' ) . 'resources/edit/?id=' . $post_id;
-        wp_redirect( add_query_arg( array( 'message' => 'success' ), $redirect_url ) );
+        wp_safe_redirect( add_query_arg( array( 'message' => 'success' ), $redirect_url ) );
     }
 
     /**
@@ -668,7 +680,7 @@ class Module {
      *
      * @return JSON Success | Error
      */
-    function delete_resource() {
+    public function delete_resource() {
         $post_id = wc_clean( $_POST['resource_id'] );
 
         if ( wp_delete_post( $post_id ) ) {
@@ -687,7 +699,7 @@ class Module {
      *
      * @return string
      */
-    function set_booking_menu_as_active( $active_menu ) {
+    public function set_booking_menu_as_active( $active_menu ) {
         return 'booking';
     }
 
@@ -700,7 +712,7 @@ class Module {
      *
      * @return void
      */
-    function add_seller_id_meta( $booking_id ) {
+    public function add_seller_id_meta( $booking_id ) {
         $product_id = get_post_meta( $booking_id, '_booking_product_id', true );
         $seller_id  = get_post_field( 'post_author', $product_id );
         update_post_meta( $booking_id, '_booking_seller_id', $seller_id );
@@ -715,7 +727,7 @@ class Module {
      *
      * @return array $product_types
      */
-    function exclude_booking_type_from_product_listing( $product_types ) {
+    public function exclude_booking_type_from_product_listing( $product_types ) {
         $product_types[] = 'booking';
         return $product_types;
     }
@@ -729,7 +741,7 @@ class Module {
      *
      * @return void
      */
-    function add_seller_manage_cap() {
+    public function add_seller_manage_cap() {
         global $wp_roles;
 
         if ( is_object( $wp_roles ) ) {
@@ -743,10 +755,8 @@ class Module {
      * @since 1.0
      *
      * @return void
-     *
      */
-    function mark_booking_confirmed() {
-
+    public function mark_booking_confirmed() {
         if ( ! current_user_can( 'dokan_manage_bookings' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'dokan' ) );
         }
@@ -754,9 +764,9 @@ class Module {
         if ( ! check_admin_referer( 'wc-booking-confirm' ) ) {
             wp_die( __( 'You have taken too long. Please go back and retry.', 'dokan' ) );
         }
-        
+
         $booking_id = isset( $_GET['booking_id'] ) && (int) $_GET['booking_id'] ? (int) $_GET['booking_id'] : '';
-        
+
         if ( ! $booking_id ) {
             die;
         }
@@ -806,8 +816,8 @@ class Module {
                 $total = 0;
 
                 foreach ( $results as $status ) {
-                    if ( isset( $counts[$status->post_status] ) ) {
-                        $counts[$status->post_status] += 1;
+                    if ( isset( $counts[ $status->post_status ] ) ) {
+                        $counts[ $status->post_status ] += 1;
                         $counts['total']              += 1;
                     }
                 }
@@ -821,21 +831,21 @@ class Module {
         return $counts;
     }
 
-    function change_booking_status() {
+    public function change_booking_status() {
         check_ajax_referer( 'dokan_wc_booking_change_status' );
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
 
-        $booking_id = intval( $_POST['booking_id'] );
+        $booking_id = intval( $post_data['booking_id'] );
         $booking    = get_wc_booking( $booking_id );
 
-        $status = wc_clean( $_POST['booking_order_status'] );
+        $status = wc_clean( $post_data['booking_order_status'] );
 
         if ( $booking->update_status( $status ) ) {
-            $html = '<label class="dokan-label dokan-booking-label-' . esc_attr( $status ) . ' ">' . get_post_status_object( $status )->label .  '</label>';
+            $html = '<label class="dokan-label dokan-booking-label-' . esc_attr( $status ) . ' ">' . get_post_status_object( $status )->label . '</label>';
 
             wp_send_json_success( $html );
-
         } else {
-            echo _e( "Error Occured", 'dokan' );
+            echo _e( 'Error Occured', 'dokan' );
         }
 
         exit();
@@ -847,40 +857,40 @@ class Module {
      * @since 1.1
      * @return array
      */
-    function dokan_get_bookings_menu( $bookings ) {
+    public function dokan_get_bookings_menu( $bookings ) {
         $bookings = array(
-            "" => array(
+            '' => array(
                 'title' => __( 'All Booking Product', 'dokan' ),
-                'tabs'  => true
+                'tabs'  => true,
             ),
-            "new-product"     => array(
+            'new-product'     => array(
                 'title' => __( 'Add Booking Product', 'dokan' ),
-                'tabs'  => false
+                'tabs'  => false,
             ),
-            "my-bookings"     => array(
+            'my-bookings'     => array(
                 'title' => __( 'Manage Bookings', 'dokan' ),
-                'tabs'  => current_user_can( 'dokan_manage_bookings' )
+                'tabs'  => current_user_can( 'dokan_manage_bookings' ),
             ),
-            "calendar"        => array(
+            'calendar'        => array(
                 'title' => __( 'Calendar', 'dokan' ),
-                'tabs'  => current_user_can( 'dokan_manage_booking_calendar' )
+                'tabs'  => current_user_can( 'dokan_manage_booking_calendar' ),
             ),
-            "resources"       => array(
+            'resources'       => array(
                 'title' => __( 'Manage Resources', 'dokan' ),
-                'tabs'  => current_user_can( 'dokan_manage_booking_resource' )
+                'tabs'  => current_user_can( 'dokan_manage_booking_resource' ),
             ),
-            "edit"            => array(
+            'edit'            => array(
                 'title' => __( 'Edit Booking Product', 'dokan' ),
-                'tabs'  => false
+                'tabs'  => false,
             ),
-            "resources/edit"  => array(
+            'resources/edit'  => array(
                 'title' => __( 'Edit Resource', 'dokan' ),
-                'tabs'  => false
+                'tabs'  => false,
             ),
-            "booking-details" => array(
+            'booking-details' => array(
                 'title' => __( 'Edit Booking', 'dokan' ),
-                'tabs'  => false
-            )
+                'tabs'  => false,
+            ),
         );
 
         return apply_filters( 'dokan_booking_nav_titles', $bookings );
@@ -892,11 +902,10 @@ class Module {
      * @since 1.1
      * @return array
      */
-    function dokan_get_bookings_menu_title( $current_page ) {
+    public function dokan_get_bookings_menu_title( $current_page ) {
         $menus = apply_filters( 'dokan_booking_menu', '' );
 
         foreach ( $menus as $key => $value ) {
-
             if ( $current_page == $key ) {
                 $title = $value['title'];
             }
@@ -905,53 +914,54 @@ class Module {
     }
 
 
-    private function get_posted_availability(){
+    private function get_posted_availability() {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
         $availability = array();
-        $row_size     = isset( $_POST['wc_booking_availability_type'] ) ? sizeof( $_POST['wc_booking_availability_type'] ) : 0;
+        $row_size     = isset( $post_data['wc_booking_availability_type'] ) ? count( $post_data['wc_booking_availability_type'] ) : 0;
         for ( $i = 0; $i < $row_size; $i ++ ) {
-                $availability[ $i ]['type']     = wc_clean( $_POST['wc_booking_availability_type'][ $i ] );
-                $availability[ $i ]['bookable'] = wc_clean( $_POST['wc_booking_availability_bookable'][ $i ] );
-                $availability[ $i ]['priority'] = intval( $_POST['wc_booking_availability_priority'][ $i ] );
+                $availability[ $i ]['type']     = wc_clean( $post_data['wc_booking_availability_type'][ $i ] );
+                $availability[ $i ]['bookable'] = wc_clean( $post_data['wc_booking_availability_bookable'][ $i ] );
+                $availability[ $i ]['priority'] = intval( $post_data['wc_booking_availability_priority'][ $i ] );
 
-                switch ( $availability[ $i ]['type'] ) {
-                        case 'custom' :
-                                $availability[ $i ]['from'] = wc_clean( $_POST['wc_booking_availability_from_date'][ $i ] );
-                                $availability[ $i ]['to']   = wc_clean( $_POST['wc_booking_availability_to_date'][ $i ] );
-                        break;
-                        case 'months' :
-                                $availability[ $i ]['from'] = wc_clean( $_POST['wc_booking_availability_from_month'][ $i ] );
-                                $availability[ $i ]['to']   = wc_clean( $_POST['wc_booking_availability_to_month'][ $i ] );
-                        break;
-                        case 'weeks' :
-                                $availability[ $i ]['from'] = wc_clean( $_POST['wc_booking_availability_from_week'][ $i ] );
-                                $availability[ $i ]['to']   = wc_clean( $_POST['wc_booking_availability_to_week'][ $i ] );
-                        break;
-                        case 'days' :
-                                $availability[ $i ]['from'] = wc_clean( $_POST['wc_booking_availability_from_day_of_week'][ $i ] );
-                                $availability[ $i ]['to']   = wc_clean( $_POST['wc_booking_availability_to_day_of_week'][ $i ] );
-                        break;
-                        case 'time' :
-                        case 'time:1' :
-                        case 'time:2' :
-                        case 'time:3' :
-                        case 'time:4' :
-                        case 'time:5' :
-                        case 'time:6' :
-                        case 'time:7' :
-                                $availability[ $i ]['from'] = wc_booking_sanitize_time( $_POST['wc_booking_availability_from_time'][ $i ] );
-                                $availability[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
-                        break;
-                        case 'time:range' :
-                                $availability[ $i ]['from'] = wc_booking_sanitize_time( $_POST['wc_booking_availability_from_time'][ $i ] );
-                                $availability[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_availability_to_time'][ $i ] );
+            switch ( $availability[ $i ]['type'] ) {
+                case 'custom':
+                        $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_date'][ $i ] );
+                        $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_date'][ $i ] );
+                    break;
+                case 'months':
+                        $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_month'][ $i ] );
+                        $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_month'][ $i ] );
+                    break;
+                case 'weeks':
+                        $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_week'][ $i ] );
+                        $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_week'][ $i ] );
+                    break;
+                case 'days':
+                        $availability[ $i ]['from'] = wc_clean( $post_data['wc_booking_availability_from_day_of_week'][ $i ] );
+                        $availability[ $i ]['to']   = wc_clean( $post_data['wc_booking_availability_to_day_of_week'][ $i ] );
+                    break;
+                case 'time':
+                case 'time:1':
+                case 'time:2':
+                case 'time:3':
+                case 'time:4':
+                case 'time:5':
+                case 'time:6':
+                case 'time:7':
+                        $availability[ $i ]['from'] = wc_booking_sanitize_time( $post_data['wc_booking_availability_from_time'][ $i ] );
+                        $availability[ $i ]['to']   = wc_booking_sanitize_time( $post_data['wc_booking_availability_to_time'][ $i ] );
+                    break;
+                case 'time:range':
+                        $availability[ $i ]['from'] = wc_booking_sanitize_time( $post_data['wc_booking_availability_from_time'][ $i ] );
+                        $availability[ $i ]['to']   = wc_booking_sanitize_time( $post_data['wc_booking_availability_to_time'][ $i ] );
 
-                                $availability[ $i ]['from_date'] = wc_clean( $_POST['wc_booking_availability_from_date'][ $i ] );
-                                $availability[ $i ]['to_date']   = wc_clean( $_POST['wc_booking_availability_to_date'][ $i ] );
-                        break;
-                }
+                        $availability[ $i ]['from_date'] = wc_clean( $post_data['wc_booking_availability_from_date'][ $i ] );
+                        $availability[ $i ]['to_date']   = wc_clean( $post_data['wc_booking_availability_to_date'][ $i ] );
+                    break;
+            }
         }
         return $availability;
-
     }
 
     /**
@@ -960,55 +970,57 @@ class Module {
      * @return array
      */
     private function get_posted_pricing() {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
         $pricing = array();
-        $row_size     = isset( $_POST['wc_booking_pricing_type'] ) ? sizeof( $_POST['wc_booking_pricing_type'] ) : 0;
+        $row_size     = isset( $post_data['wc_booking_pricing_type'] ) ? count( $post_data['wc_booking_pricing_type'] ) : 0;
         for ( $i = 0; $i < $row_size; $i ++ ) {
-                $pricing[ $i ]['type']          = wc_clean( $_POST['wc_booking_pricing_type'][ $i ] );
-                $pricing[ $i ]['cost']          = wc_clean( $_POST['wc_booking_pricing_cost'][ $i ] );
-                $pricing[ $i ]['modifier']      = wc_clean( $_POST['wc_booking_pricing_cost_modifier'][ $i ] );
-                $pricing[ $i ]['base_cost']     = wc_clean( $_POST['wc_booking_pricing_base_cost'][ $i ] );
-                $pricing[ $i ]['base_modifier'] = wc_clean( $_POST['wc_booking_pricing_base_cost_modifier'][ $i ] );
+                $pricing[ $i ]['type']          = wc_clean( $post_data['wc_booking_pricing_type'][ $i ] );
+                $pricing[ $i ]['cost']          = wc_clean( $post_data['wc_booking_pricing_cost'][ $i ] );
+                $pricing[ $i ]['modifier']      = wc_clean( $post_data['wc_booking_pricing_cost_modifier'][ $i ] );
+                $pricing[ $i ]['base_cost']     = wc_clean( $post_data['wc_booking_pricing_base_cost'][ $i ] );
+                $pricing[ $i ]['base_modifier'] = wc_clean( $post_data['wc_booking_pricing_base_cost_modifier'][ $i ] );
 
-                switch ( $pricing[ $i ]['type'] ) {
-                        case 'custom' :
-                                $pricing[ $i ]['from'] = wc_clean( $_POST['wc_booking_pricing_from_date'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_clean( $_POST['wc_booking_pricing_to_date'][ $i ] );
-                        break;
-                        case 'months' :
-                                $pricing[ $i ]['from'] = wc_clean( $_POST['wc_booking_pricing_from_month'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_clean( $_POST['wc_booking_pricing_to_month'][ $i ] );
-                        break;
-                        case 'weeks' :
-                                $pricing[ $i ]['from'] = wc_clean( $_POST['wc_booking_pricing_from_week'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_clean( $_POST['wc_booking_pricing_to_week'][ $i ] );
-                        break;
-                        case 'days' :
-                                $pricing[ $i ]['from'] = wc_clean( $_POST['wc_booking_pricing_from_day_of_week'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_clean( $_POST['wc_booking_pricing_to_day_of_week'][ $i ] );
-                        break;
-                        case 'time' :
-                        case 'time:1' :
-                        case 'time:2' :
-                        case 'time:3' :
-                        case 'time:4' :
-                        case 'time:5' :
-                        case 'time:6' :
-                        case 'time:7' :
-                                $pricing[ $i ]['from'] = wc_booking_sanitize_time( $_POST['wc_booking_pricing_from_time'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_pricing_to_time'][ $i ] );
-                        break;
-                        case 'time:range' :
-                                $pricing[ $i ]['from'] = wc_booking_sanitize_time( $_POST['wc_booking_pricing_from_time'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_booking_sanitize_time( $_POST['wc_booking_pricing_to_time'][ $i ] );
+            switch ( $pricing[ $i ]['type'] ) {
+                case 'custom':
+                        $pricing[ $i ]['from'] = wc_clean( $post_data['wc_booking_pricing_from_date'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_clean( $post_data['wc_booking_pricing_to_date'][ $i ] );
+                    break;
+                case 'months':
+                        $pricing[ $i ]['from'] = wc_clean( $post_data['wc_booking_pricing_from_month'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_clean( $post_data['wc_booking_pricing_to_month'][ $i ] );
+                    break;
+                case 'weeks':
+                        $pricing[ $i ]['from'] = wc_clean( $post_data['wc_booking_pricing_from_week'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_clean( $post_data['wc_booking_pricing_to_week'][ $i ] );
+                    break;
+                case 'days':
+                        $pricing[ $i ]['from'] = wc_clean( $post_data['wc_booking_pricing_from_day_of_week'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_clean( $post_data['wc_booking_pricing_to_day_of_week'][ $i ] );
+                    break;
+                case 'time':
+                case 'time:1':
+                case 'time:2':
+                case 'time:3':
+                case 'time:4':
+                case 'time:5':
+                case 'time:6':
+                case 'time:7':
+                        $pricing[ $i ]['from'] = wc_booking_sanitize_time( $post_data['wc_booking_pricing_from_time'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_booking_sanitize_time( $post_data['wc_booking_pricing_to_time'][ $i ] );
+                    break;
+                case 'time:range':
+                        $pricing[ $i ]['from'] = wc_booking_sanitize_time( $post_data['wc_booking_pricing_from_time'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_booking_sanitize_time( $post_data['wc_booking_pricing_to_time'][ $i ] );
 
-                                $pricing[ $i ]['from_date'] = wc_clean( $_POST['wc_booking_pricing_from_date'][ $i ] );
-                                $pricing[ $i ]['to_date']   = wc_clean( $_POST['wc_booking_pricing_to_date'][ $i ] );
-                        break;
-                        default :
-                                $pricing[ $i ]['from'] = wc_clean( $_POST['wc_booking_pricing_from'][ $i ] );
-                                $pricing[ $i ]['to']   = wc_clean( $_POST['wc_booking_pricing_to'][ $i ] );
-                        break;
-                }
+                        $pricing[ $i ]['from_date'] = wc_clean( $post_data['wc_booking_pricing_from_date'][ $i ] );
+                        $pricing[ $i ]['to_date']   = wc_clean( $post_data['wc_booking_pricing_to_date'][ $i ] );
+                    break;
+                default:
+                        $pricing[ $i ]['from'] = wc_clean( $post_data['wc_booking_pricing_from'][ $i ] );
+                        $pricing[ $i ]['to']   = wc_clean( $post_data['wc_booking_pricing_to'][ $i ] );
+                    break;
+            }
         }
         return $pricing;
     }
@@ -1019,37 +1031,40 @@ class Module {
      * @return array
      */
     private function get_posted_person_types( $product ) {
+        $post_data    = wp_unslash( $_POST ); // phpcs:ignore
         $person_types = array();
 
-        if ( isset( $_POST['person_id'] ) && isset( $_POST['_wc_booking_has_persons'] ) ) {
-                $person_ids         = $_POST['person_id'];
-                $person_menu_order  = $_POST['person_menu_order'];
-                $person_name        = $_POST['person_name'];
-                $person_cost        = $_POST['person_cost'];
-                $person_block_cost  = $_POST['person_block_cost'];
-                $person_description = $_POST['person_description'];
-                $person_min         = $_POST['person_min'];
-                $person_max         = $_POST['person_max'];
-                $max_loop           = max( array_keys( $_POST['person_id'] ) );
+        if ( isset( $post_data['person_id'] ) && isset( $post_data['_wc_booking_has_persons'] ) ) {
+                $person_ids         = $post_data['person_id'];
+                $person_menu_order  = $post_data['person_menu_order'];
+                $person_name        = $post_data['person_name'];
+                $person_cost        = $post_data['person_cost'];
+                $person_block_cost  = $post_data['person_block_cost'];
+                $person_description = $post_data['person_description'];
+                $person_min         = $post_data['person_min'];
+                $person_max         = $post_data['person_max'];
+                $max_loop           = max( array_keys( $post_data['person_id'] ) );
 
-                for ( $i = 0; $i <= $max_loop; $i ++ ) {
-                        if ( ! isset( $person_ids[ $i ] ) ) {
-                                continue;
-                        }
-                        $person_id   = absint( $person_ids[ $i ] );
-                        $person_type = new \WC_Product_Booking_Person_Type( $person_id );
-                        $person_type->set_props( array(
-                                'name'        => wc_clean( stripslashes( $person_name[ $i ] ) ),
-                                'description' => wc_clean( stripslashes( $person_description[ $i ] ) ),
-                                'sort_order'  => absint( $person_menu_order[ $i ] ),
-                                'cost'        => wc_clean( $person_cost[ $i ] ),
-                                'block_cost'  => wc_clean( $person_block_cost[ $i ] ),
-                                'min'         => wc_clean( $person_min[ $i ] ),
-                                'max'         => wc_clean( $person_max[ $i ] ),
-                                'parent_id'   => $product->get_id(),
-                        ) );
-                        $person_types[] = $person_type;
-                }
+            for ( $i = 0; $i <= $max_loop; $i ++ ) {
+                if ( ! isset( $person_ids[ $i ] ) ) {
+                    continue;
+				}
+                    $person_id   = absint( $person_ids[ $i ] );
+                    $person_type = new \WC_Product_Booking_Person_Type( $person_id );
+                    $person_type->set_props(
+                        array(
+                            'name'        => wc_clean( stripslashes( $person_name[ $i ] ) ),
+                            'description' => wc_clean( stripslashes( $person_description[ $i ] ) ),
+                            'sort_order'  => absint( $person_menu_order[ $i ] ),
+                            'cost'        => wc_clean( $person_cost[ $i ] ),
+                            'block_cost'  => wc_clean( $person_block_cost[ $i ] ),
+                            'min'         => wc_clean( $person_min[ $i ] ),
+                            'max'         => wc_clean( $person_max[ $i ] ),
+                            'parent_id'   => $product->get_id(),
+                        )
+                    );
+                    $person_types[] = $person_type;
+            }
         }
         return $person_types;
     }
@@ -1059,24 +1074,25 @@ class Module {
      *
      * @return array
      */
-    private function get_posted_resources( ) {
+    private function get_posted_resources() {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
         $resources = array();
 
-        if ( isset( $_POST['resource_id'] ) && isset( $_POST['_wc_booking_has_resources'] ) ) {
-                $resource_ids         = $_POST['resource_id'];
-                $resource_menu_order  = $_POST['resource_menu_order'];
-                $resource_base_cost   = $_POST['resource_cost'];
-                $resource_block_cost  = $_POST['resource_block_cost'];
-                $max_loop             = max( array_keys( $_POST['resource_id'] ) );
+        if ( isset( $post_data['resource_id'] ) && isset( $post_data['_wc_booking_has_resources'] ) ) {
+                $resource_ids         = $post_data['resource_id'];
+                $resource_menu_order  = $post_data['resource_menu_order'];
+                $resource_base_cost   = $post_data['resource_cost'];
+                $resource_block_cost  = $post_data['resource_block_cost'];
+                $max_loop             = max( array_keys( $post_data['resource_id'] ) );
                 $resource_base_costs  = array();
                 $resource_block_costs = array();
 
-                foreach ( $resource_menu_order as $key => $value ) {
-                        $resources[ absint( $resource_ids[ $key ] ) ] = array(
-                                'base_cost'  => wc_clean( $resource_base_cost[ $key ] ),
-                                'block_cost' => wc_clean( $resource_block_cost[ $key ] ),
-                        );
-                }
+            foreach ( $resource_menu_order as $key => $value ) {
+                $resources[ absint( $resource_ids[ $key ] ) ] = array(
+                    'base_cost'  => wc_clean( $resource_base_cost[ $key ] ),
+                    'block_cost' => wc_clean( $resource_block_cost[ $key ] ),
+                );
+            }
         }
 
         return $resources;
@@ -1087,14 +1103,16 @@ class Module {
      * @since 2.7.3
      */
     public function dokan_remove_bookable_person() {
-        if ( ! isset( $_POST['action'] ) && $_POST['action'] != 'woocommerce_remove_bookable_person' ) {
+        $post_data = wp_unslash( $_POST ); // phpcs:ignore
+
+        if ( ! isset( $post_data['action'] ) && $post_data['action'] != 'woocommerce_remove_bookable_person' ) {
             return;
         }
-        if ( ! wp_verify_nonce( $_POST['security'], 'delete-bookable-person' ) ) {
+        if ( ! wp_verify_nonce( $post_data['security'], 'delete-bookable-person' ) ) {
             return;
         }
 
-        wp_delete_post( $_POST['person_id'] );
+        wp_delete_post( intval( $post_data['person_id'] ) );
         exit;
     }
 

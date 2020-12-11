@@ -185,7 +185,7 @@ class Module {
     /**
      * Add vacation status on product listing query
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.2
      *
      * @param array $post_status
      *
