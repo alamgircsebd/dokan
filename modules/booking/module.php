@@ -525,7 +525,7 @@ class Module {
 
         $_virtual   = isset( $post_data['_virtual'] ) ? wc_clean( $post_data['_virtual'] ) : '';
         $is_virtual = 'on' === $_virtual ? 'yes' : 'no';
-        update_post_meta( $post_id, '_virtual', 'yes' );
+        update_post_meta( $post_id, '_virtual', $is_virtual );
 
         do_action( 'dokan_booking_after_product_data_saved' );
     }
