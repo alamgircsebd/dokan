@@ -1742,3 +1742,41 @@ if ( ! function_exists( 'woocommerce_customer_available_downloads_modified' ) ) 
 
     add_filter( 'woocommerce_customer_available_downloads', 'dokan_woocommerce_customer_available_downloads_modified', 15, 2 );
 }
+
+add_action( 'woocommerce_order_after_calculate_totals', 'calculate_with_order_discount', 20, 2 );
+
+/**
+ * Calculate order totals with order discount
+ *
+ * @param $and_taxes
+ * @param $order
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return void
+ */
+function calculate_with_order_discount( $and_taxes, $order ) {
+    $order_id  = $order->get_id();
+    $discounts = dokan_get_discount_by_order( $order_id );
+
+    if ( empty( $discounts['order_discount'] ) && empty( $discounts['quantity_discount'] ) ) {
+        return;
+    }
+
+    $order_discount    = 0;
+    $quantity_discount = 0;
+    $order_total       = $order->get_total();
+
+    if ( ! empty( $discounts['order_discount'] ) ) {
+        $order_discount = $discounts['order_discount'];
+    }
+
+    if ( ! empty( $discounts['quantity_discount'] ) ) {
+        $quantity_discount = $discounts['quantity_discount'];
+    }
+
+    $new_total = ( $order_total - $order_discount - $quantity_discount );
+    $order->set_total( $new_total );
+
+    do_action( 'dokan_order_discount_after_calculate_totals', $and_taxes, $order );
+}
