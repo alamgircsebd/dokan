@@ -2,6 +2,7 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe;
 
+use Stripe\SetupIntent;
 use WC_AJAX;
 use Exception;
 use Stripe\PaymentIntent;
@@ -196,6 +197,7 @@ class StripeConnect extends StripePaymentGateway {
 
             // Check for an existing intent, which is associated with the order.
             if ( $this->has_authentication_already_failed( $renewal_order ) ) {
+                dokan_log( 'has_authentication_already_failed is true' );
                 return;
             }
 
@@ -598,8 +600,8 @@ class StripeConnect extends StripePaymentGateway {
             'currency'             => strtolower( $order->get_currency() ),
             'description'          => $description,
             'confirm'              => 'true',
-            'setup_future_usage'   => 'off_session',
-            'capture_method'       => 'automatic',
+            'off_session'          => 'true',
+            'confirmation_method'  => 'automatic',
             'payment_method_types' => [
                 'card',
             ],
@@ -731,18 +733,7 @@ class StripeConnect extends StripePaymentGateway {
      * @return boolean
      */
     public function has_authentication_already_failed( $renewal_order ) {
-        $intent_id = $renewal_order->get_meta( '_stripe_intent_id' );
-
-        if ( $intent_id ) {
-            $intent_id = $this->get_intent( 'payment_intents', $intent_id );
-        } else {
-            // The order doesn't have a payment intent, but it may have a setup intent.
-            $intent_id = $renewal_order->get_meta( '_stripe_setup_intent' );
-
-            if ( $intent_id ) {
-                $intent_id = $this->get_intent( 'setup_intents', $intent_id );
-            }
-        }
+        $intent_id = $this->get_intent_from_order( $renewal_order );
 
         if (
             ! $intent_id
@@ -770,6 +761,40 @@ class StripeConnect extends StripePaymentGateway {
         $renewal_order->update_status( 'failed', sprintf( __( 'Stripe charge awaiting authentication by user: %s.', 'dokan' ), $charge_id ) );
 
         return true;
+    }
+
+    /**
+     * Retrieves intent from Stripe API by intent id.
+     *
+     * @param string $intent_type 	Either 'payment_intents' or 'setup_intents'.
+     * @param string $intent_id		Intent id.
+     * @return object|bool 			Either the intent object or `false`.
+     * @throws Exception 			Throws exception for unknown $intent_type.
+     */
+    public function get_intent( $intent_type, $intent_id ) {
+        if ( ! in_array( $intent_type, [ 'payment_intents', 'setup_intents' ] ) ) {
+            throw new Exception( "Failed to get intent of type $intent_type. Type is not allowed" );
+        }
+
+        switch ( $intent_type ) {
+            case 'payment_intents':
+                try {
+                    $intent = PaymentIntent::retrieve( $intent_id );
+                } catch( Exception $e ) {
+                    return false;
+                }
+                break;
+
+            case 'setup_intents':
+                try {
+                    $intent = SetupIntent::retrieve( $intent_id );
+                } catch( Exception $e ) {
+                    return false;
+                }
+                break;
+        }
+
+        return $intent;
     }
 
     /**

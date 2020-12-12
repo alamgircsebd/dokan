@@ -87,6 +87,7 @@ class WebhookHandler {
             'payment_intent.payment_failed',
             'payment_intent.processing',
             'payment_intent.succeeded',
+            'payment_intent.requires_action',
             'charge.captured',
             'charge.expired',
             'charge.failed',
@@ -152,7 +153,7 @@ class WebhookHandler {
             return;
         }
 
-        dokan_log( "[Stripe Connect] Webhook request body:\n" . print_r( $event, true ) );
+        //dokan_log( "[Stripe Connect] Webhook request body:\n" . print_r( $event, true ) );
 
         try {
             if ( ! empty( $event->account ) ) {
@@ -197,7 +198,7 @@ class WebhookHandler {
 
             $event = Event::retrieve( $event->id );
 
-            dokan_log( "[Stripe Connect] Webhook retrieved event:\n" . print_r( $event, true ) );
+            //dokan_log( "[Stripe Connect] Webhook retrieved event:\n" . print_r( $event, true ) );
 
             if ( array_key_exists( $event->type, Helper::get_supported_webhook_events() ) ) {
                 DokanStripe::events()->get( $event )->handle();
