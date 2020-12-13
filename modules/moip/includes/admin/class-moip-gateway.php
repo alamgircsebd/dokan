@@ -48,10 +48,10 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
         $this->enabled         = $this->get_option( 'enabled' );
         $this->testmode        = $this->get_option( 'testmode' );
         $this->moip_fee        = $this->get_option( 'moip_fee' );
-        $this->base_url        = $this->testmode == 'no' ? 'https://api.moip.com.br' : 'https://sandbox.moip.com.br';
-        $this->token           = $this->testmode == 'no' ? $this->get_option( 'production_token' ) : $this->get_option( 'test_token' );
-        $this->key             = $this->testmode == 'no' ? $this->get_option( 'production_key' ) : $this->get_option( 'test_key' );
-        $this->public_key      = $this->testmode == 'no' ? $this->get_option( 'production_public_key' ) : $this->get_option( 'test_public_key' );
+        $this->base_url        = $this->testmode === 'no' ? 'https://api.moip.com.br' : 'https://sandbox.moip.com.br';
+        $this->token           = $this->testmode === 'no' ? $this->get_option( 'production_token' ) : $this->get_option( 'test_token' );
+        $this->key             = $this->testmode === 'no' ? $this->get_option( 'production_key' ) : $this->get_option( 'test_key' );
+        $this->public_key      = $this->testmode === 'no' ? $this->get_option( 'production_public_key' ) : $this->get_option( 'test_public_key' );
     }
 
     /**
@@ -69,7 +69,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
      * @return array
      */
     public function load_form_fields() {
-        $test_url       = 'https://conta-sandbox.moip.com.br/configurations/api_credentials';
+        $test_url       = 'https://conta-sandbox.wirecard.com.br/configurations/api_credentials';
         $production_url = 'https://conta.moip.com.br/configurations/api_credentials';
 
         return array(
