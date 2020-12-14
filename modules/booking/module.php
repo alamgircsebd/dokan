@@ -9,6 +9,15 @@ namespace WeDevs\DokanPro\Modules\Booking;
  */
 class Module {
 
+    /**
+     * Module version
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @var string
+     */
+    public $version = null;
+
     private $depends_on           = array();
     private $dependency_error     = array();
     private $dependency_not_found = false;
@@ -25,6 +34,7 @@ class Module {
      * @uses add_action()
      */
     public function __construct() {
+        $this->version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
 
         // Define all constant
         define( 'DOKAN_WC_BOOKING_PLUGIN_VERSION', '1.4.1' );
@@ -37,6 +47,7 @@ class Module {
 
         $this->depends_on['wc_bookings'] = array(
             'name'   => 'WC_Bookings',
+            // @codingStandardsIgnoreLine
             'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %1$sWooCommerce Bookings plugin%2$s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-bookings/">', '</a>' ),
         );
 
@@ -152,7 +163,7 @@ class Module {
     }
 
     /**
-     * print error notice if dependency not active
+     * Print error notice if dependency not active
      *
      * @since 1.0.0
      */
@@ -176,6 +187,7 @@ class Module {
         global $wp_roles;
 
         if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
+            // @codingStandardsIgnoreLine
             $wp_roles = new \WP_Roles();
         }
 
@@ -217,11 +229,12 @@ class Module {
             /**
              * All styles goes here
              */
+            // @codingStandardsIgnoreLine
             wp_enqueue_style( 'dokan_wc_booking-styles', plugins_url( 'assets/css/style.css', __FILE__ ), false, date( 'Ymd' ) );
             /**
              * All scripts goes here
              */
-            wp_enqueue_script( 'dokan_wc_booking-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
+            wp_enqueue_script( 'dokan_wc_booking-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), $this->version, true );
 
             $jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
 
@@ -232,7 +245,9 @@ class Module {
             $post_id = isset( $post->ID ) ? $post->ID : '';
 
             if ( dokan_is_seller_dashboard() ) {
+                // @codingStandardsIgnoreLine
                 if ( isset( $_GET['product_id'] ) ) {
+                    // @codingStandardsIgnoreLine
                     $post_id = $_GET['product_id'];
                 } else {
                     $post_id = '';
@@ -264,6 +279,7 @@ class Module {
 
             wp_enqueue_style( 'wc_bookings_admin_styles', DOKAN_WC_BOOKING_PLUGIN_ASSEST . '/css/admin.css', null, DOKAN_WC_BOOKING_PLUGIN_VERSION );
             wp_enqueue_style( 'woocommerce_admin_styles', WC()->plugin_url() . '/assets/css/admin.css', null, WC_VERSION );
+            // @codingStandardsIgnoreLine
             wp_enqueue_style( 'jquery-ui-style', '//ajax.googleapis.com/ajax/libs/jqueryui/' . $jquery_version . '/themes/smoothness/jquery-ui.css' );
 
             add_filter( 'dokan_dashboard_nav_active', array( $this, 'set_booking_menu_as_active' ) );
@@ -545,6 +561,7 @@ class Module {
         $post_data = wp_unslash( $_POST ); // phpcs:ignore
 
         $product_type = isset( $post_data['product_type'] ) ? $post_data['product_type'] : '';
+        // @codingStandardsIgnoreLine
         $tab          = isset( $_GET['tab'] ) ? $_GET['tab'] : '';
 
         if ( 'booking' === $product_type ) {
@@ -568,6 +585,7 @@ class Module {
      * @return void
      */
     public function add_new_resource() {
+        // @codingStandardsIgnoreLine
         $add_resource_name = wc_clean( $_POST['add_resource_name'] );
 
         if ( empty( $add_resource_name ) ) {
@@ -587,10 +605,10 @@ class Module {
         ?>
         <tr>
             <td><a href="<?php echo $edit_url; ?>"><?php echo $add_resource_name; ?></a></td>
-            <td><?php _e( 'N/A', 'dokan' ); ?></td>
+            <td><?php esc_attr_e( 'N/A', 'dokan' ); ?></td>
             <td>
-                <a class="dokan-btn dokan-btn-sm dokan-btn-theme" href ="<?php echo $edit_url; ?>"><?php _e( 'Edit', 'dokan' ); ?></a>
-                <button class="dokan-btn dokan-btn-theme dokan-btn-sm btn-remove" data-id="<?php echo $resource_id; ?>"><?php _e( 'Remove', 'dokan' ); ?></button>
+                <a class="dokan-btn dokan-btn-sm dokan-btn-theme" href ="<?php echo $edit_url; ?>"><?php esc_attr_e( 'Edit', 'dokan' ); ?></a>
+                <button class="dokan-btn dokan-btn-theme dokan-btn-sm btn-remove" data-id="<?php echo $resource_id; ?>"><?php esc_attr_e( 'Remove', 'dokan' ); ?></button>
             </td>
         </tr>
 
@@ -681,6 +699,7 @@ class Module {
      * @return JSON Success | Error
      */
     public function delete_resource() {
+        // @codingStandardsIgnoreLine
         $post_id = wc_clean( $_POST['resource_id'] );
 
         if ( wp_delete_post( $post_id ) ) {
@@ -774,7 +793,7 @@ class Module {
         // Additional check to see if Seller id is same as current user
         $seller = get_post_meta( $booking_id, '_booking_seller_id', true );
 
-        if ( $seller != dokan_get_current_user_id() ) {
+        if ( (int) $seller !== dokan_get_current_user_id() ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'dokan' ) );
         }
 
@@ -810,6 +829,7 @@ class Module {
             pm.meta_value = %d AND
             p.post_status != 'trash' ";
 
+            // @codingStandardsIgnoreLine
             $results = $wpdb->get_results( $wpdb->prepare( $sql, $meta_key, $seller_id ) );
 
             if ( $results ) {
@@ -906,6 +926,7 @@ class Module {
         $menus = apply_filters( 'dokan_booking_menu', '' );
 
         foreach ( $menus as $key => $value ) {
+            // @codingStandardsIgnoreLine
             if ( $current_page == $key ) {
                 $title = $value['title'];
             }
@@ -1105,6 +1126,7 @@ class Module {
     public function dokan_remove_bookable_person() {
         $post_data = wp_unslash( $_POST ); // phpcs:ignore
 
+        // @codingStandardsIgnoreLine
         if ( ! isset( $post_data['action'] ) && $post_data['action'] != 'woocommerce_remove_bookable_person' ) {
             return;
         }
