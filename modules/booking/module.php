@@ -47,7 +47,7 @@ class Module {
 
         $this->depends_on['wc_bookings'] = array(
             'name'   => 'WC_Bookings',
-            // @codingStandardsIgnoreLine
+            /* translators: %1$s: string %2$s: string */
             'notice' => sprintf( __( '<b>Dokan WC Booking </b> requires %1$sWooCommerce Bookings plugin%2$s to be installed & activated!', 'dokan' ), '<a target="_blank" href="https://woocommerce.com/products/woocommerce-bookings/">', '</a>' ),
         );
 
