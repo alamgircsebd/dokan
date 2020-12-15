@@ -636,7 +636,7 @@ function dokan_pro_get_template( $name, $args = [] ) {
 }
 
 /**
- * Dokan register deactivation hook description]
+ * Dokan register deactivation hook description
  *
  * @param string $file     full file path
  * @param array|string $function callback function
@@ -649,4 +649,17 @@ function dokan_register_deactivation_hook( $file, $function ) {
         $base_name = plugin_basename( $file );
         add_action( "dokan_deactivate_{$base_name}", $function );
     }
+}
+
+/**
+ * Dokan is single seller mode enable
+ *
+ * @since DOKAN_PRO_SINCE
+ *
+ * @return boolean
+ */
+function dokan_is_single_seller_mode_enable() {
+    $is_single_seller_mode = apply_filters_deprecated( 'dokan_signle_seller_mode', [ dokan_get_option( 'enable_single_seller_mode', 'dokan_general', 'off' ) ], '3.0.0', 'dokan_single_seller_mode' );
+
+    return apply_filters( 'dokan_single_seller_mode', $is_single_seller_mode );
 }
