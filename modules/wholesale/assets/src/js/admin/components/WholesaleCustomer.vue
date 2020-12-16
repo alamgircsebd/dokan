@@ -24,6 +24,7 @@
             :per-page="perPage"
             :current-page="currentPage"
             :action-column="actionColumn"
+            :text="$root.listTableTexts()"
 
             not-found="No customers found."
 

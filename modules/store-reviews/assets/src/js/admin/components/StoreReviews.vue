@@ -30,6 +30,7 @@
             @pagination="goToPage"
             @action:click="onActionClick"
             @bulk:click="onBulkAction"
+            :text="$root.listTableTexts()"
         >
             <template slot="title" slot-scope="data">
                 <strong><a href="#" @click.prevent="showEditForm( data.row )">{{ data.row.title }}</a></strong>

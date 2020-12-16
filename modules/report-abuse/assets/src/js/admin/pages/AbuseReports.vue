@@ -13,6 +13,7 @@
             :total-pages="totalPages"
             :per-page="perPage"
             :current-page="currentPage"
+            :text="$root.listTableTexts()"
             @pagination="goToPage"
             @bulk:click="onBulkAction"
         >

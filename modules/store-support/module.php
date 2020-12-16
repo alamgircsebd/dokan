@@ -692,7 +692,7 @@ class Module {
                             <td><span class="dokan-label <?php echo $topic_status ?>"><?php echo $topic->post_status; ?></span></td>
                             <td class="dokan-order-date"><span><?php echo get_the_date( 'F j, Y \a\t g:i a' , $topic->ID )?></span></td>
                             <td>
-                                <a class="dokan-btn dokan-btn-default dokan-btn-sm tips dokan-support-status-change" onclick="return confirm('Are you sure?');" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-support-topic-status', 'topic_id' => $topic->ID, 'ticket_status' => $c_status ), dokan_get_navigation_url('support') ), 'dokan-change-topic-status' ); ?>" title="" data-changing_post_id="<?php echo $topic->ID ?>" data-original-title="<?php echo $btn_title ?>"><i class="fa <?php echo $btn_icon ?>">&nbsp;</i></a>
+                                <a class="dokan-btn dokan-btn-default dokan-btn-sm tips dokan-support-status-change" onclick="return confirm('<?php _e( 'Are you sure?', 'dokan' ); ?>');" href="<?php echo wp_nonce_url( add_query_arg( array( 'action' => 'dokan-support-topic-status', 'topic_id' => $topic->ID, 'ticket_status' => $c_status ), dokan_get_navigation_url('support') ), 'dokan-change-topic-status' ); ?>" title="" data-changing_post_id="<?php echo $topic->ID ?>" data-original-title="<?php echo $btn_title ?>"><i class="fa <?php echo $btn_icon ?>">&nbsp;</i></a>
                             </td>
                         </tr>
               <?php endforeach; ?>
