@@ -1,6 +1,6 @@
 <?php
 global $post;
-
+// @codingStandardsIgnoreStart
     /**
      *  dokan_dashboard_content_before hook
      *
@@ -129,10 +129,34 @@ global $post;
                                         ?>
                                         ">
                                         <?php _e( 'Delete Permanently', 'dokan' ); ?></a> | </span>
-                                    <?php
+                                        <?php
+                                    }
+
+                                    $can_duplicate_product = current_user_can( 'dokan_duplicate_product' );
+                                    $vendor_can_duplicate_product = dokan_get_option( 'vendor_duplicate_product', 'dokan_selling', 'on' );
+
+                                    if ( $can_duplicate_product && 'on' === $vendor_can_duplicate_product ) {
+                                        ?>
+                                        <span class="duplicate"><a href="
+                                        <?php
+                                            echo wp_nonce_url(
+                                                add_query_arg(
+                                                    array(
+                                                        'action' => 'dokan-duplicate-product',
+                                                        'product_type' => 'booking',
+                                                        'product_id' => $post->ID,
+                                                        'tab' => 'booking',
+                                                    ),
+                                                    dokan_get_navigation_url( 'booking' )
+                                                ), 'dokan-duplicate-product'
+                                            );
+                                            ?>
+                                        ">
+                                        <?php esc_html_e( 'Duplicate', 'dokan' ); ?></a> | </span>
+                                        <?php
                                     }
                                     ?>
-                                   
+
                                     <span class="view"><a href="<?php echo get_permalink( $product->get_id() ); ?>" rel="permalink"><?php _e( 'View', 'dokan' ); ?></a></span>
                                 </div>
                             </td>
@@ -273,25 +297,22 @@ global $post;
                 </article>
             </div>
 
-            <?php
+    <?php
 
     /**
      *  dokan_dashboard_content_before hook
      *
-     *  @hooked get_dashboard_side_navigation
+     * @hooked get_dashboard_side_navigation
      *
-     *  @since 2.4
+     * @since 2.4
      */
     do_action( 'dokan_dashboard_content_inside_after' );
     do_action( 'dokan_after_listing_product' );
-    ?>
 
-    <?php
-
-/**
- *  dokan_dashboard_content_after hook
- *
- *  @since 2.4
- */
-do_action( 'dokan_dashboard_content_after' );
-?>
+    /**
+     *  dokan_dashboard_content_after hook
+     *
+     * @since 2.4
+     */
+    do_action( 'dokan_dashboard_content_after' );
+    // @codingStandardsIgnoreEnd

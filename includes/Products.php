@@ -629,6 +629,11 @@ class Products {
             do_action( 'dokan_product_duplicate_after_save', $clone_product, $product );
 
             $redirect = apply_filters( 'dokan_redirect_after_product_duplicating', dokan_get_navigation_url( 'products' ), $product_id, $clone_product_id );
+
+            if ( isset( $_GET['product_type'] ) && 'booking' === $_GET['product_type'] ) {
+                $redirect = apply_filters( 'dokan_redirect_after_product_duplicating', dokan_get_navigation_url( 'booking' ), $product_id, $clone_product_id );
+            }
+
             wp_safe_redirect( add_query_arg( array( 'message' => 'product_duplicated' ), $redirect ) );
             exit;
         }
