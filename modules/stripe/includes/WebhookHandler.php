@@ -208,7 +208,6 @@ class WebhookHandler {
             exit;
         } catch ( Exception $e ) {
             dokan_log( $e->getMessage(), 'error' );
-            status_header( 400 );
             exit;
         }
     }
