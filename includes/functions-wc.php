@@ -71,12 +71,14 @@ function dokan_save_variations( $post_id ) {
                 $modified_date = date_i18n( 'Y-m-d H:i:s', current_time( 'timestamp' ) );//phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 
                 $wpdb->update(
-                    $wpdb->posts, [
-						'post_status'       => $post_status,
-						'menu_order'        => $variable_menu_order[ $i ],
-						'post_modified'     => $modified_date,
-						'post_modified_gmt' => get_gmt_from_date( $modified_date ),
-					], [ 'ID' => $variation_id ]
+                    $wpdb->posts,
+                    [
+                        'post_status'       => $post_status,
+                        'menu_order'        => $variable_menu_order[ $i ],
+                        'post_modified'     => $modified_date,
+                        'post_modified_gmt' => get_gmt_from_date( $modified_date ),
+                    ],
+                    [ 'ID' => $variation_id ]
                 );
 
                 clean_post_cache( $variation_id );
@@ -679,9 +681,9 @@ if ( ! function_exists( 'dokan_user_update_to_seller' ) ) {
 
         $user_id = wp_update_user(
             [
-				'ID' => $user_id,
-				'user_nicename' => $data['shopurl'],
-			]
+                'ID'            => $user_id,
+                'user_nicename' => $data['shopurl'],
+            ]
         );
         update_user_meta( $user_id, 'first_name', $data['fname'] );
         update_user_meta( $user_id, 'last_name', $data['lname'] );
@@ -731,12 +733,13 @@ if ( ! function_exists( 'dokan_become_seller_handler' ) ) {
             $errors = [];
 
             $checks = apply_filters(
-                'dokan_customer_migration_required_fields', [
-					'fname'    => __( 'Enter your first name', 'dokan' ),
-					'shopname' => __( 'Enter your shop name', 'dokan' ),
-					'address'  => __( 'Enter your shop address', 'dokan' ),
-					'phone'    => __( 'Enter your phone number', 'dokan' ),
-				]
+                'dokan_customer_migration_required_fields',
+                [
+                    'fname'    => __( 'Enter your first name', 'dokan' ),
+                    'shopname' => __( 'Enter your shop name', 'dokan' ),
+                    'address'  => __( 'Enter your shop address', 'dokan' ),
+                    'phone'    => __( 'Enter your phone number', 'dokan' ),
+                ]
             );
 
             foreach ( $checks as $field => $error ) {
@@ -894,12 +897,13 @@ function dokan_display_order_discounts( $table_rows, $order ) {
 
     if ( ! empty( $discounts['quantity_discount'] ) ) {
         $table_rows = dokan_array_after(
-            $table_rows, 'cart_subtotal', [
-				'quantity_discount' => [
-					'label' => __( 'Quantity Discount:', 'dokan' ),
-					'value' => wc_price( $discounts['quantity_discount'] ),
-				],
-			]
+            $table_rows, 'cart_subtotal',
+            [
+                'quantity_discount' => [
+                    'label' => __( 'Quantity Discount:', 'dokan' ),
+                    'value' => wc_price( $discounts['quantity_discount'] ),
+                ],
+            ]
         );
     }
 
@@ -910,12 +914,13 @@ function dokan_display_order_discounts( $table_rows, $order ) {
         ];
 
         $table_rows = dokan_array_after(
-            $table_rows, 'cart_subtotal', [
-				'order_discount' => [
-					'label' => __( 'Order Discount:', 'dokan' ),
-					'value' => wc_price( $discounts['order_discount'] ),
-				],
-			]
+            $table_rows, 'cart_subtotal',
+            [
+                'order_discount' => [
+                    'label' => __( 'Order Discount:', 'dokan' ),
+                    'value' => wc_price( $discounts['order_discount'] ),
+                ],
+            ]
         );
     }
 
@@ -1238,9 +1243,9 @@ function dokan_override_author_for_variations( $product, $seller_id ) {
         foreach ( $variations as $key => $variation ) {
             wp_update_post(
                 [
-					'ID'          => $variation->ID,
-					'post_author' => $seller_id,
-				]
+                    'ID'          => $variation->ID,
+                    'post_author' => $seller_id,
+                ]
             );
         }
     }
@@ -1633,9 +1638,9 @@ function dokan_override_variation_product_author( $variation_id ) {
 
     wp_update_post(
         [
-			'ID'          => $variation_id,
-			'post_author' => $vendor_id,
-		]
+            'ID'          => $variation_id,
+            'post_author' => $vendor_id,
+        ]
     );
 
     do_action( 'dokan_after_override_variation_product_author', $product, $vendor_id );
