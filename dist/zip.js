@@ -45,9 +45,6 @@ const allowedVendorFiles = {
     'paypal/sdk-core-php': [
         'lib'
     ],
-    'rmccue/requests': [
-        'library'
-    ],
     'stripe/stripe-php': [
         'data', 'lib', 'init.php'
     ],

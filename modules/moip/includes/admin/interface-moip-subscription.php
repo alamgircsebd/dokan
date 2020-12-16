@@ -8,27 +8,30 @@ interface Moip_Subscription_Interface {
     /**
      * Create moip plan
      *
+     * @param  object $order
      * @param  object $product
      * @param  int $subscription_interval
      * @param  string $subscription_period
      * @param  int $subscription_length
+     * @param  array $trial_details
      *
      * @return void
      */
-    public function create_plan( $product, $subscription_interval, $subscription_period, $subscription_length, $trial_details = [] );
+    public function create_plan( $order, $product, $subscription_interval, $subscription_period, $subscription_length, $trial_details = [] );
 
     /**
      * Edit a plan
      *
      * @param  int $plan_id
-     * @param  object product
+     * @param  object $order
+     * @param  object $product
      * @param  int $subscription_interval
      * @param  string $subscription_period
      * @param  int $subscription_length
      *
      * @return int $plan_id
      */
-    public function edit_plan( $plan_id, $product, $subscription_interval, $subscription_period, $subscription_length, $trial_details = [] );
+    public function edit_plan( $plan_id, $order, $product, $subscription_interval, $subscription_period, $subscription_length, $trial_details = [] );
 
     /**
      * Create moip subscription

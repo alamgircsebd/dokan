@@ -49,16 +49,17 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
 
     /**
      * Create moip plan
-     *
-     * @param  object $product
-     * @param  int $subscription_interval
-     * @param  string $subscription_period
-     * @param  int $subscription_length
+     * @param object $order
+     * @param object $product
+     * @param int $subscription_interval
+     * @param string $subscription_period
+     * @param int $subscription_length
+     * @param array $trail_details
      *
      * @return void
+     * @throws Exception
      */
-    public function create_plan( $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] ) {
-
+    public function create_plan( $order, $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] ) {
         $base_url = $this->base_url . '/plans';
 
         // if dokan billing cycle stop sets to never, set subscription_length to 999 (unlimited)
@@ -66,20 +67,26 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             $subscription_length = 999;
         }
 
+        if ( $order instanceof \WC_Order ) {
+            $initial_payment = wc_format_decimal( $order->get_total(), 2 ) * 100;
+        } else {
+            $initial_payment = wc_format_decimal( $product->get_price(), 2 ) * 100;
+        }
+
         $plan_body = array(
             'code'           => $product->get_id(),
             'name'           => $product->get_name(),
             'description'    => $product->get_description(),
-            'amount'         => $product->get_price() * 100,
+            'amount'         => $initial_payment,
             'interval'       => array(
                 'length'     => $subscription_interval,
-                'unit'       => $subscription_period
+                'unit'       => $subscription_period,
             ),
             'billing_cycles' => $subscription_length,
             'trial'          => array(
                 'days'       => ! empty( $trail_details['days'] ) ? $trail_details['days'] : 0,
-                'enabled'    => ! empty( $trail_details['is_enabled'] ) ? $trail_details['is_enabled'] : false
-            )
+                'enabled'    => ! empty( $trail_details['is_enabled'] ) ? $trail_details['is_enabled'] : false,
+            ),
         );
 
         $args = array(
@@ -89,10 +96,10 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             'blocking'    => true,
             'headers'     => array(
                 'Authorization' => 'Basic ' . base64_encode( $this->token . ':' . $this->key ),
-                'Content-Type'  => 'application/json'
+                'Content-Type'  => 'application/json',
             ),
             'body'        => json_encode( $plan_body ),
-            'cookies'     => array()
+            'cookies'     => array(),
         );
 
         $response = wp_remote_post( $base_url, $args );
@@ -124,15 +131,17 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
     /**
      * Edit a plan
      *
-     * @param  int $plan_id
-     * @param  object product
-     * @param  int $subscription_interval
-     * @param  string $subscription_period
-     * @param  int $subscription_length
+     * @param int $plan_id
+     * @param object $order
+     * @param object $product
+     * @param int $subscription_interval
+     * @param string $subscription_period
+     * @param int $subscription_length
      *
      * @return int $plan_id
+     * @throws Exception
      */
-    public function edit_plan( $plan_id, $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] ) {
+    public function edit_plan( $plan_id, $order, $product, $subscription_interval, $subscription_period, $subscription_length, $trail_details = [] ) {
         if ( empty( $plan_id ) || empty( $product ) ) {
             return false;
         }
@@ -141,21 +150,27 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             return false;
         }
 
+        if ( $order instanceof \WC_Order ) {
+            $initial_payment = wc_format_decimal( $order->get_total(), 2 ) * 100;
+        } else {
+            $initial_payment = wc_format_decimal( $product->get_price(), 2 ) * 100;
+        }
+
         $base_url = $this->base_url . '/plans/' . $plan_id;
 
         $plan_body = array(
             'code'          => $plan_id,
             'name'          => $product->get_name(),
-            'amount'        => $product->get_price() * 100,
+            'amount'        => $initial_payment,
             'interval'      => array(
                 'length'    => $subscription_interval,
-                'unit'      => $subscription_period
+                'unit'      => $subscription_period,
             ),
             'billing_cycles' => $subscription_length,
             'trial'          => array(
                 'days'       => ! empty( $trail_details['days'] ) ? $trail_details['days'] : 0,
-                'enabled'    => ! empty( $trail_details['is_enabled'] ) ? $trail_details['is_enabled'] : false
-            )
+                'enabled'    => ! empty( $trail_details['is_enabled'] ) ? $trail_details['is_enabled'] : false,
+            ),
         );
 
         $args = array(
@@ -166,10 +181,10 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             'blocking'    => true,
             'headers'     => array(
                 'Authorization' => 'Basic ' . base64_encode( $this->token . ':' . $this->key ),
-                'Content-Type'  => 'application/json'
+                'Content-Type'  => 'application/json',
             ),
             'body'        => json_encode( $plan_body ),
-            'cookies'     => array()
+            'cookies'     => array(),
         );
 
         $response = wp_remote_request( $base_url, $args );
@@ -178,7 +193,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             throw new Exception( __( 'Something went wrong', 'dokan' ) );
         }
 
-        if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {
+        if ( isset( $response['response']['code'] ) && $response['response']['code'] === '200' ) {
             return $product->get_id();
         }
     }
@@ -186,10 +201,11 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
     /**
      * Create moip subscription
      *
-     * @param  object $order
-     * @param  int $plan_id
+     * @param object $order
+     * @param int $plan_id
      *
      * @return int subscriptoin_id
+     * @throws Exception
      */
     public function create_subscription( $order, $plan_id ) {
         $base_url = $this->base_url . '/subscriptions?new_customer=true';
@@ -250,16 +266,16 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
             'blocking'    => true,
             'headers'     => array(
                 'Authorization' => 'Basic ' . base64_encode( $this->token . ':' . $this->key ),
-                'Content-Type'  => 'application/json'
+                'Content-Type'  => 'application/json',
             ),
             'body'        => json_encode( $subs_body ),
-            'cookies'     => array()
+            'cookies'     => array(),
         );
 
         $response = wp_remote_post( $base_url, $args );
 
         if ( is_wp_error( $response ) ) {
-            throw new Exception( __('Subscripton can\'t be created', 'dokan' ) );
+            throw new Exception( __( 'Subscripton can\'t be created: ', 'dokan' ) . $response->get_error_message() );
         }
 
         if ( isset( $response['response']['code'] ) && $response['response']['code'] == '400' ) {
@@ -269,7 +285,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
                 update_user_meta( get_current_user_id(), 'subscription_code', $subscription_code );
                 return $subscription_code;
             } else {
-                throw new Exception( __( 'Subscripton not created', 'dokan' ) );
+                throw new Exception( __( 'Subscription not created', 'dokan' ) );
             }
         }
 
@@ -521,7 +537,7 @@ class Dokan_Moip_Subscription implements Moip_Subscription_Interface {
         $response = wp_remote_post( $base_url, $args );
 
         if ( is_wp_error( $response ) ) {
-            throw new Exception( __( 'Something went wrong', 'dokan' ) );
+            throw new Exception( sprintf( '%1$s : %2$s', __( 'Something went wrong', 'dokan' ), $response->get_error_message() ) );
         }
 
         if ( isset( $response['response']['code'] ) && $response['response']['code'] == '200' ) {

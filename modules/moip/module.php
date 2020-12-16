@@ -315,7 +315,11 @@ class Module {
         require_once MOIP_INC . '/admin/class-moip-subscription.php';
 
         $dms = new \Dokan_Moip_Subscription();
-        $dms->retry_payment();
+        try {
+            $dms->retry_payment();
+        } catch ( \Exception $exception ) {
+            dokan_log( 'WireCard Retry Payment Issue: ' . $exception->getMessage(), 'notice' );
+        }
     }
 
     /**
