@@ -14,6 +14,15 @@ use Hybridauth\Storage\Session;
  */
 class Module {
 
+    /**
+     * Module version
+     *
+     * @since DOKAN_PRO_SINCE
+     *
+     * @var string
+     */
+    public $version = null;
+
     public static $plugin_prefix;
     public static $plugin_url;
     public static $plugin_path;
@@ -35,6 +44,8 @@ class Module {
      * @uses add_action()
      */
     public function __construct() {
+        $this->version = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : DOKAN_PRO_PLUGIN_VERSION;
+
         self::$plugin_prefix   = 'Dokan_verification_';
         self::$plugin_basename = plugin_basename( __FILE__ );
         self::$plugin_url      = plugin_dir_url( self::$plugin_basename );
@@ -46,6 +57,8 @@ class Module {
         $this->includes_file();
 
         add_action( 'dokan_activated_module_vendor_verification', array( self::class, 'activate' ) );
+
+        $this->disallow_direct_access();
     }
 
     public function init_hooks() {
@@ -98,12 +111,12 @@ class Module {
     }
 
     /**
-    * Get plugin path
-    *
-    * @since 1.5.1
-    *
-    * @return void
-    **/
+     * Get plugin path
+     *
+     * @since 1.5.1
+     *
+     * @return void
+     **/
     public function plugin_path() {
         return untrailingslashit( plugin_dir_path( __FILE__ ) );
     }
@@ -114,56 +127,68 @@ class Module {
             'debug_mode' => false,
 
             'providers' => array(
-                "Facebook" => array(
-                    "enabled" => true,
-                    "keys"    => array( "id" => "", "secret" => "" ),
-                    "scope"   => "email, public_profile"
+                'Facebook' => array(
+                    'enabled' => true,
+                    'keys'    => array(
+                        'id' => '',
+                        'secret' => '',
+                    ),
+                    'scope'   => 'email, public_profile',
                 ),
-                "Google"   => array(
-                    "enabled"         => true,
-                    "keys"            => array( "id" => "", "secret" => "" ),
-                    "scope"           => "https://www.googleapis.com/auth/userinfo.profile ". // optional
-                        "https://www.googleapis.com/auth/userinfo.email"   , // optional
-                    "access_type"     => "offline",
-                    "approval_prompt" => "force",
-                    "hd"              => home_url()
+                'Google'   => array(
+                    'enabled'         => true,
+                    'keys'            => array(
+                        'id' => '',
+                        'secret' => '',
+                    ),
+                    // @codingStandardsIgnoreLine
+                    'scope'           => 'https://www.googleapis.com/auth/userinfo.profile ' . 'https://www.googleapis.com/auth/userinfo.email', // optional
+                    'access_type'     => 'offline',
+                    'approval_prompt' => 'force',
+                    'hd'              => home_url(),
                 ),
-                "LinkedIn" => array(
-                    "enabled" => true,
-                    "keys"    => array( "id" => "", "secret" => "" ),
+                'LinkedIn' => array(
+                    'enabled' => true,
+                    'keys'    => array(
+                        'id' => '',
+                        'secret' => '',
+                    ),
                 ),
-                "Twitter"  => array(
-                    "enabled" => true,
-                    "keys"    => array( "key" => "", "secret" => "" ),
+                'Twitter'  => array(
+                    'enabled' => true,
+                    'keys'    => array(
+                        'key' => '',
+                        'secret' => '',
+                    ),
                 ),
-            )
+            ),
         );
 
         //facebook config from admin
         $fb_id     = dokan_get_option( 'fb_app_id', 'dokan_verification' );
         $fb_secret = dokan_get_option( 'fb_app_secret', 'dokan_verification' );
-        if ( $fb_id != '' && $fb_secret != '' ) {
+        if ( ! empty( $fb_id ) && ! empty( $fb_secret ) ) {
             $config['providers']['Facebook']['keys']['id']     = $fb_id;
             $config['providers']['Facebook']['keys']['secret'] = $fb_secret;
         }
         //google config from admin
         $g_id     = dokan_get_option( 'google_app_id', 'dokan_verification' );
         $g_secret = dokan_get_option( 'google_app_secret', 'dokan_verification' );
-        if ( $g_id != '' && $g_secret != '' ) {
+        if ( ! empty( $g_id ) && ! empty( $g_secret ) ) {
             $config['providers']['Google']['keys']['id']     = $g_id;
             $config['providers']['Google']['keys']['secret'] = $g_secret;
         }
         //linkedin config from admin
         $l_id     = dokan_get_option( 'linkedin_app_id', 'dokan_verification' );
         $l_secret = dokan_get_option( 'linkedin_app_secret', 'dokan_verification' );
-        if ( $l_id != '' && $l_secret != '' ) {
+        if ( ! empty( $l_id ) && ! empty( $l_secret ) ) {
             $config['providers']['LinkedIn']['keys']['id']     = $l_id;
             $config['providers']['LinkedIn']['keys']['secret'] = $l_secret;
         }
         //Twitter config from admin
         $twitter_id     = dokan_get_option( 'twitter_app_id', 'dokan_verification' );
         $twitter_secret = dokan_get_option( 'twitter_app_secret', 'dokan_verification' );
-        if ( $twitter_id != '' && $twitter_secret != '' ) {
+        if ( ! empty( $twitter_id ) && ! empty( $twitter_secret ) ) {
             $config['providers']['Twitter']['keys']['key']    = $twitter_id;
             $config['providers']['Twitter']['keys']['secret'] = $twitter_secret;
         }
@@ -180,33 +205,40 @@ class Module {
         return $config;
     }
 
-    function load_verification_template_header( $heading, $query_vars ) {
-        if ( isset( $query_vars ) && $query_vars == 'verification' ) {
+    public function load_verification_template_header( $heading, $query_vars ) {
+        if ( isset( $query_vars ) && (string) $query_vars === 'verification' ) {
             $heading = __( 'Verification', 'dokan' );
         }
 
         return $heading;
     }
 
-    function load_verification_content( $query_vars ) {
-        if ( isset( $query_vars['settings'] ) && $query_vars['settings'] == 'verification' ) {
-            if (  current_user_can( 'dokan_view_store_verification_menu' ) ) {
-                dokan_get_template_part( 'vendor-verification/verification-new', '', array(
-                    'is_vendor_verification'   => true,
-                ) );
+    public function load_verification_content( $query_vars ) {
+        if ( isset( $query_vars['settings'] ) && (string) $query_vars['settings'] === 'verification' ) {
+            if ( current_user_can( 'dokan_view_store_verification_menu' ) ) {
+                dokan_get_template_part(
+                    'vendor-verification/verification-new', '', array(
+                        'is_vendor_verification'   => true,
+                    )
+                );
             } else {
-                dokan_get_template_part('global/dokan-error', '', array( 'deleted' => false, 'message' => __( 'You have no permission to view this verification page', 'dokan' ) ) );
+                dokan_get_template_part(
+                    'global/dokan-error', '', array(
+                        'deleted' => false,
+                        'message' => __( 'You have no permission to view this verification page', 'dokan' ),
+                    )
+                );
             }
 
             return;
         }
     }
 
-    function load_verfication_admin_template() {
-        add_submenu_page( 'dokan', __( 'Vendor Verifications', 'dokan' ), __( 'Verifications' ), 'manage_options', 'dokan-seller-verifications', array( $this, 'seller_verfications_page' ) );
+    public function load_verfication_admin_template() {
+        add_submenu_page( 'dokan', __( 'Vendor Verifications', 'dokan' ), __( 'Verifications', 'dokan' ), 'manage_options', 'dokan-seller-verifications', array( $this, 'seller_verfications_page' ) );
     }
 
-    function seller_verfications_page() {
+    public function seller_verfications_page() {
         require_once dirname( __FILE__ ) . '/templates/admin-verifications.php';
     }
 
@@ -218,7 +250,8 @@ class Module {
     public static function activate() {
         global $wp_roles;
 
-        if ( class_exists( 'WP_Roles' ) && !isset( $wp_roles ) ) {
+        if ( class_exists( 'WP_Roles' ) && ! isset( $wp_roles ) ) {
+            // @codingStandardsIgnoreLine
             $wp_roles = new \WP_Roles();
         }
 
@@ -257,7 +290,7 @@ class Module {
      *
      * @return void
      */
-    function includes_file() {
+    public function includes_file() {
         $inc_dir = DOKAN_VERFICATION_INC_DIR;
         $lib_dir = DOKAN_VERFICATION_LIB_DIR;
 
@@ -284,6 +317,7 @@ class Module {
     }
 
     public function init_session() {
+        // @codingStandardsIgnoreLine
         if ( session_id() == '' ) {
             session_start();
         }
@@ -303,11 +337,12 @@ class Module {
             return;
         }
 
+        // @codingStandardsIgnoreStart
         if ( isset( $_GET['dokan_auth_dc'] ) ) {
             $seller_profile = dokan_get_store_info( $vendor_id );
             $provider_dc    = sanitize_text_field( $_GET['dokan_auth_dc'] );
 
-            $seller_profile['dokan_verification'][$provider_dc] = '';
+            $seller_profile['dokan_verification'][ $provider_dc ] = '';
 
             update_user_meta( $vendor_id, 'dokan_profile_settings', $seller_profile );
             return;
@@ -355,25 +390,25 @@ class Module {
             }
 
             $seller_profile = dokan_get_store_info( $vendor_id );
-            $seller_profile['dokan_verification'][$provider] = (array) $user_profile;
+            $seller_profile['dokan_verification'][ $provider ] = (array) $user_profile;
 
             update_user_meta( $vendor_id, 'dokan_profile_settings', $seller_profile );
-
         } catch ( Exception $e ) {
             $this->e_msg = $e->getMessage();
         }
+        // @codingStandardsIgnoreEnd
     }
 
     /**
-    * Load rma templates. so that it can overide from theme
-    *
-    * Just create `rma` folder inside dokan folder then
-    * override your necessary template.
-    *
-    * @since 1.0.0
-    *
-    * @return void
-    **/
+     * Load rma templates. so that it can overide from theme
+     *
+     * Just create `rma` folder inside dokan folder then
+     * override your necessary template.
+     *
+     * @since 1.0.0
+     *
+     * @return void
+     **/
     public function load_verification_templates( $template_path, $template, $args ) {
         if ( isset( $args['is_vendor_verification'] ) && $args['is_vendor_verification'] ) {
             return $this->plugin_path() . '/templates';
@@ -394,9 +429,10 @@ class Module {
     public function enqueue_scripts() {
         global $wp;
 
-        wp_enqueue_style( 'dokan-verification-styles', plugins_url( 'assets/css/style.css', __FILE__ ), true, date( 'Ymd' ) );
-        wp_enqueue_script( 'dokan-verification-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), false, true );
+        wp_enqueue_style( 'dokan-verification-styles', plugins_url( 'assets/css/style.css', __FILE__ ), true, gmdate( 'Ymd' ) );
+        wp_enqueue_script( 'dokan-verification-scripts', plugins_url( 'assets/js/script.js', __FILE__ ), array( 'jquery' ), $this->version, true );
 
+        // @codingStandardsIgnoreLine
         if ( isset( $wp->query_vars['settings'] ) == 'verification' ) {
             wp_enqueue_script( 'wc-country-select' );
         }
@@ -428,25 +464,26 @@ class Module {
             'icon'       => '<i class="fa fa-check"></i>',
             'url'        => dokan_get_navigation_url( 'settings/verification' ),
             'pos'        => 55,
-            'permission' => 'dokan_view_store_verification_menu'
+            'permission' => 'dokan_view_store_verification_menu',
         );
 
         return $urls;
     }
 
-    function dokan_verification_set_templates( $path, $part ) {
-
-        if ( $part == 'verification' ) {
-            dokan_get_template_part( 'vendor-verification/verification', '', array(
-                'is_vendor_verification' => true,
-            ) );
+    public function dokan_verification_set_templates( $path, $part ) {
+        if ( 'verification' === (string) $part ) {
+            dokan_get_template_part(
+                'vendor-verification/verification', '', array(
+                    'is_vendor_verification' => true,
+                )
+            );
             // return DOKAN_VERFICATION_DIR . '/templates/verification.php';
         }
 
         return $path;
     }
 
-    function dokan_verification_template_endpoint( $query_var ) {
+    public function dokan_verification_template_endpoint( $query_var ) {
         $query_var[] = 'verification';
         return $query_var;
     }
@@ -457,9 +494,10 @@ class Module {
      * @return void
      */
     public function dokan_update_verify_info() {
+        // @codingStandardsIgnoreLine
         parse_str( $_POST['data'], $postdata );
 
-        if ( !wp_verify_nonce( $postdata['dokan_verify_action_nonce'], 'dokan_verify_action' ) ) {
+        if ( ! wp_verify_nonce( $postdata['dokan_verify_action_nonce'], 'dokan_verify_action' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
 
@@ -471,6 +509,7 @@ class Module {
             $seller_profile['dokan_verification']['info']['dokan_v_id_type']   = $postdata['dokan_v_id_type'];
             $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'pending';
 
+            // @codingStandardsIgnoreLine
             $msg = sprintf( __( 'Your ID verification request is Sent and %s approval', 'dokan' ), $seller_profile['dokan_verification']['info']['dokan_v_id_status'] );
             dokan_verification_request_submit_email();
         }
@@ -497,7 +536,6 @@ class Module {
         unset( $seller_profile['dokan_verification']['info']['dokan_v_id_status'] );
         //update user meta pending here
         update_user_meta( $user_id, 'dokan_profile_settings', $seller_profile );
-        // update_user_meta( $user_id, 'dokan_verification_status', 'cancelled' );
 
         $msg = __( 'Your ID Verification request is cancelled', 'dokan' );
 
@@ -532,15 +570,15 @@ class Module {
      */
 
     public function dokan_sv_form_action() {
-
+        // @codingStandardsIgnoreStart
         parse_str( $_POST['formData'], $postdata );
-        if ( !wp_verify_nonce( $postdata['dokan_sv_nonce'], 'dokan_sv_nonce_action' ) ) {
+        if ( ! wp_verify_nonce( $postdata['dokan_sv_nonce'], 'dokan_sv_nonce_action' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
         $postdata['status']    = $_POST['status'];
         $postdata['seller_id'] = $_POST['seller_id'];
         $postdata['type']      = $_POST['type'];
-
+        // @codingStandardsIgnoreEnd
 
         $user_id        = $postdata['seller_id'];
         $seller_profile = dokan_get_store_info( $user_id );
@@ -548,7 +586,6 @@ class Module {
         switch ( $postdata['status'] ) {
             case 'approved':
                 if ( $postdata['type'] === 'id' ) {
-
                     $seller_profile['dokan_verification']['verified_info']['photo'] = array(
                         'photo_id'        => $postdata['dokan_gravatar'],
                         'dokan_v_id_type' => $postdata['dokan_v_id_type'],
@@ -556,7 +593,6 @@ class Module {
 
                     $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'approved';
                 } elseif ( $postdata['type'] === 'address' ) {
-
                     $seller_profile['dokan_verification']['verified_info']['store_address'] = array(
                         'street_1' => $postdata['street_1'],
                         'street_2' => $postdata['street_2'],
@@ -581,13 +617,10 @@ class Module {
 
                 break;
 
-            case 'pending' :
-
+            case 'pending':
                 if ( $postdata['type'] === 'id' ) {
-
                     $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'pending';
                 } elseif ( $postdata['type'] === 'address' ) {
-
                     $seller_profile['dokan_verification']['info']['store_address']['v_status'] = 'pending';
                 }
 
@@ -595,9 +628,8 @@ class Module {
 
                 break;
 
-            case 'rejected' :
+            case 'rejected':
                 if ( $postdata['type'] === 'id' ) {
-
                     $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'rejected';
                 } elseif ( $postdata['type'] === 'address' ) {
                     $seller_profile['dokan_verification']['info']['store_address']['v_status'] = 'rejected';
@@ -607,14 +639,11 @@ class Module {
 
                 break;
 
-            case 'disapproved' :
-
+            case 'disapproved':
                 if ( $postdata['type'] === 'id' ) {
-
                     unset( $seller_profile['dokan_verification']['verified_info']['photo'] );
                     $seller_profile['dokan_verification']['info']['dokan_v_id_status'] = 'pending';
                 } elseif ( $postdata['type'] === 'address' ) {
-
                     unset( $seller_profile['dokan_verification']['verified_info']['store_address'] );
 
                     $seller_profile['dokan_verification']['info']['store_address']['v_status'] = 'pending';
@@ -638,10 +667,11 @@ class Module {
      */
 
     public function dokan_update_verify_info_insert_address() {
-
+        // @codingStandardsIgnoreLine
         $address_field = $_POST['dokan_address'];
 
-        if ( !wp_verify_nonce( $_POST['dokan_verify_action_address_form_nonce'], 'dokan_verify_action_address_form' ) ) {
+        // @codingStandardsIgnoreLine
+        if ( ! wp_verify_nonce( $_POST['dokan_verify_action_address_form_nonce'], 'dokan_verify_action_address_form' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
 
@@ -664,7 +694,7 @@ class Module {
 
         $store_address = wp_parse_args( $address_field, $default );
 
-        $msg = __('Please fill all the required fields', 'dokan' );
+        $msg = __( 'Please fill all the required fields', 'dokan' );
 
         $seller_profile['dokan_verification']['info']['store_address'] = $store_address;
 
@@ -686,15 +716,14 @@ class Module {
      */
 
     public function dokan_v_recheck_verification_status_meta( $meta_id, $object_id, $meta_key, $_meta_value ) {
-
-        if ( $meta_key != 'dokan_profile_settings' ) {
+        if ( 'dokan_profile_settings' !== (string) $meta_key ) {
             return;
         }
         $current_user = $object_id;
 
         $seller_profile = dokan_get_store_info( $current_user );
 
-        if ( !isset( $seller_profile['dokan_verification']['info'] ) ) {
+        if ( ! isset( $seller_profile['dokan_verification']['info'] ) ) {
             return;
         }
 
@@ -703,23 +732,20 @@ class Module {
 
         if ( $id_status === $address_status ) {
             update_user_meta( $current_user, 'dokan_verification_status', $id_status );
-        } elseif ( ($id_status === 'pending' || $id_status === 'approved' || $id_status === 'rejected' ) && ( $address_status === 'approved' || $address_status === 'pending' || $address_status === 'rejected' ) ) {
+        } elseif ( ( $id_status === 'pending' || $id_status === 'approved' || $id_status === 'rejected' ) && ( $address_status === 'approved' || $address_status === 'pending' || $address_status === 'rejected' ) ) {
             $st = $id_status . ',' . $address_status;
             update_user_meta( $current_user, 'dokan_verification_status', $st );
-        } elseif ( ($id_status === 'pending' || $id_status === 'approved' || $id_status === 'rejected') && $address_status === '' ) {
+        } elseif ( ( $id_status === 'pending' || $id_status === 'approved' || $id_status === 'rejected' ) && $address_status === '' ) {
             update_user_meta( $current_user, 'dokan_verification_status', $id_status );
         } elseif ( $id_status === '' && ( $address_status === 'approved' || $address_status === 'pending' || $address_status === 'rejected' ) ) {
             update_user_meta( $current_user, 'dokan_verification_status', $address_status );
         }
-
 
         //clear info meta if empty
         if ( empty( $seller_profile['dokan_verification']['info'] ) ) {
             unset( $seller_profile['dokan_verification']['info'] );
             update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
         }
-
-        return;
     }
 
     /*
@@ -732,9 +758,10 @@ class Module {
      */
 
     public function dokan_v_send_sms() {
+        // @codingStandardsIgnoreLine
         parse_str( $_POST['data'], $postdata );
 
-        if ( !wp_verify_nonce( $postdata['dokan_verify_action_nonce'], 'dokan_verify_action' ) ) {
+        if ( ! wp_verify_nonce( $postdata['dokan_verify_action_nonce'], 'dokan_verify_action' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
         $info['success'] = false;
@@ -742,8 +769,8 @@ class Module {
         $sms  = \WeDevs_dokan_SMS_Gateways::instance();
         $info = $sms->send( $postdata['phone'] );
 
+        // @codingStandardsIgnoreLine
         if ( $info['success'] == true ) {
-
             $current_user   = get_current_user_id();
             $seller_profile = dokan_get_store_info( $current_user );
 
@@ -765,10 +792,10 @@ class Module {
      *
      */
     public function dokan_v_verify_sms_code() {
-
+        // @codingStandardsIgnoreLine
         parse_str( $_POST['data'], $postdata );
 
-        if ( !wp_verify_nonce( $postdata['dokan_verify_action_nonce'], 'dokan_verify_action' ) ) {
+        if ( ! wp_verify_nonce( $postdata['dokan_verify_action_nonce'], 'dokan_verify_action' ) ) {
             wp_send_json_error( __( 'Are you cheating?', 'dokan' ) );
         }
 
@@ -777,8 +804,8 @@ class Module {
 
         $saved_code = $seller_profile['dokan_verification']['info']['phone_code'];
 
+        // @codingStandardsIgnoreLine
         if ( $saved_code == $postdata['sms_code'] ) {
-
             $seller_profile['dokan_verification']['info']['phone_status'] = 'verified';
             $seller_profile['dokan_verification']['info']['phone_no'] = $seller_profile['dokan_verification']['info']['phone_no'];
             update_user_meta( $current_user, 'dokan_profile_settings', $seller_profile );
@@ -812,15 +839,70 @@ class Module {
             return $upload;
         }
 
+        // @codingStandardsIgnoreLine
         if ( strpos( $_SERVER['HTTP_REFERER'], 'settings/verification' ) != false ) {
             $user_id = get_current_user_id();
             $user = get_user_by( 'id', $user_id );
-            $dirname = $user_id . '-' . $user->user_login;
+
+            $vendor_verification_hash = get_user_meta( $user_id, 'dokan_vendor_verification_folder_hash', true );
+
+            if ( empty( $vendor_verification_hash ) ) {
+                $vendor_verification_hash = $this->generate_random_string();
+                update_user_meta( $user_id, 'dokan_vendor_verification_folder_hash', $vendor_verification_hash );
+            }
+
+            $dirname = $user_id . '-' . $user->user_login . '/' . $vendor_verification_hash;
             $upload['subdir'] = '/verification/' . $dirname;
             $upload['path']   = $upload['basedir'] . $upload['subdir'];
             $upload['url']    = $upload['baseurl'] . $upload['subdir'];
         }
 
         return $upload;
+    }
+
+    /**
+     * @since DOKAN_PRO_SINCE
+     * Creates .htaccess & index.html files if not exists that prevent direct folder access
+     */
+    public function disallow_direct_access() {
+        if ( get_transient( 'dokan_vendor_verification_access_check' ) ) {
+            return;
+        }
+
+        $uploads_dir   = trailingslashit( wp_upload_dir()['basedir'] ) . 'verification';
+        $file_htaccess = $uploads_dir . '/.htaccess';
+        $file_html     = $uploads_dir . '/index.html';
+
+        $rule = 'deny from all';
+
+        if ( ! is_dir( $uploads_dir ) ) {
+            wp_mkdir_p( $uploads_dir );
+        }
+
+        if ( ! file_exists( $file_htaccess ) || ! file_exists( $file_html ) ) {
+            file_put_contents( $file_htaccess, $rule ); // phpcs:ignore
+            file_put_contents( $file_html, '' ); // phpcs:ignore
+        }
+
+        // Sets transient for 1 day
+        set_transient( 'dokan_vendor_verification_access_check', true, 60 * 60 * 24 );
+    }
+
+    /**
+     * @param int $length
+     *
+     * @return string
+     * @since DOKAN_PRO_SINCE
+     * Generates a random string
+     */
+    public function generate_random_string( $length = 20 ) {
+        $characters        = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters_length = strlen( $characters );
+        $random_string     = '';
+        for ( $i = 0; $i < $length; $i ++ ) {
+            $random_string .= $characters[ wp_rand( 0, $characters_length - 1 ) ];
+        }
+
+        return $random_string;
     }
 }
