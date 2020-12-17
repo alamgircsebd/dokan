@@ -162,6 +162,12 @@ class Module {
      */
     public function get_unique_sku( $sku ) {
         $unique_sku = $sku;
+
+        // If SKU is already empty, we don't need to create a new SKU
+        if ( empty( $unique_sku ) ) {
+            return  $unique_sku;
+        }
+
         global $wpdb;
         $result = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->prefix}postmeta WHERE meta_key='_sku' AND meta_value =%s ", $sku ) );
         if ( $result >= 1 ) {
