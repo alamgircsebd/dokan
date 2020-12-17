@@ -283,12 +283,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "1ec3efa04bdd3abe9d03253656c5a1759c7ef4e0"
+                "reference": "91ab47e4a5b151d90815150b5ba6fc83e3b14548"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/1ec3efa04bdd3abe9d03253656c5a1759c7ef4e0",
-                "reference": "1ec3efa04bdd3abe9d03253656c5a1759c7ef4e0",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/91ab47e4a5b151d90815150b5ba6fc83e3b14548",
+                "reference": "91ab47e4a5b151d90815150b5ba6fc83e3b14548",
                 "shasum": ""
             },
             "require": {
@@ -296,7 +296,7 @@
             },
             "require-dev": {
                 "phing/phing": "~2.7",
-                "phpunit/phpunit": "^4.8.35|^5.7|^6.0",
+                "phpunit/phpunit": "^4.8.35|^5.7|^6.0|^9.4",
                 "squizlabs/php_codesniffer": "~2.0"
             },
             "suggest": {
@@ -366,7 +366,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2020-11-27T03:09:17+00:00"
+            "time": "2020-12-17T05:14:58+00:00"
         },
         {
             "name": "rmccue/requests",
@@ -2132,12 +2132,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "cda358face567f4cd8356c8d5411e38f30e2d3e9"
+                "reference": "9bcb29cce831a8f9b2c8aee0bba1a57445f9dbf1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/cda358face567f4cd8356c8d5411e38f30e2d3e9",
-                "reference": "cda358face567f4cd8356c8d5411e38f30e2d3e9",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/9bcb29cce831a8f9b2c8aee0bba1a57445f9dbf1",
+                "reference": "9bcb29cce831a8f9b2c8aee0bba1a57445f9dbf1",
                 "shasum": ""
             },
             "require": {
@@ -2175,7 +2175,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2020-11-23T23:43:09+00:00"
+            "time": "2020-12-15T02:38:00+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
