@@ -107,7 +107,7 @@ abstract class StripePaymentGateway extends WC_Payment_Gateway_CC {
             $customer_id = $customer->get_id();
         } else {
             try {
-                $customer->update_customer();
+                $customer->update_customer( [ 'source' => $source_id ] );
             } catch ( Exception $exception ) {
                 $customer->set_id( $customer->create_customer( [ 'source' => $source_id ] ) );
                 $customer_id = $customer->get_id();

@@ -104,12 +104,13 @@ class Transaction {
                 'currency'           => $this->currency ? strtolower( $this->currency ) : strtolower( get_woocommerce_currency() ),
             ];
 
-            dokan_log( "[Stripe Connect] Transfer params for transaction:\n" . print_r( $params, true ) );
+            //dokan_log( "[Stripe Connect] Transfer params for transaction:\n" . print_r( $params, true ) );
 
             $transfer = \Stripe\Transfer::create( $params );
 
-            dokan_log( "[Stripe Connect] Transaction transferred successfully:\n" . print_r( $transfer, true ) );
+            //dokan_log( "[Stripe Connect] Transaction transferred successfully:\n" . print_r( $transfer, true ) );
         } catch ( Exception $e ) {
+            dokan_log( '[Stripe Connect] Transfer Error: ' . $e->getMessage() );
             throw new DokanException( 'dokan_unable_to_transfer', $e->getMessage() );
         }
     }

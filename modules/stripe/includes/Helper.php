@@ -2,6 +2,7 @@
 
 namespace WeDevs\DokanPro\Modules\Stripe;
 
+use Stripe\BalanceTransaction;
 use Stripe\Stripe;
 use WeDevs\DokanPro\Modules\Stripe\Settings\RetrieveSettings;
 
@@ -393,12 +394,20 @@ class Helper {
      */
     public static function format_gateway_balance_fee( $balance_transaction ) {
         if ( ! is_object( $balance_transaction ) ) {
+            try {
+                $balance_transaction = BalanceTransaction::retrieve( $balance_transaction );
+            } catch ( \Exception $exception ) {
+                return;
+            }
+        }
+
+        if ( ! is_object( $balance_transaction ) ) {
             return;
         }
 
         $fee = $balance_transaction->fee;
         foreach ( $balance_transaction->fee_details as $fee_details ) {
-            if ( $fee_details->type == 'stripe_fee' ) {
+            if ( $fee_details->type === 'stripe_fee' ) {
                 $fee = $fee_details->amount;
                 break;
             }
@@ -409,7 +418,7 @@ class Helper {
         }
 
         if ( $balance_transaction->exchange_rate ) {
-            return round ($fee / $balance_transaction->exchange_rate, 2);
+            return number_format( $fee / $balance_transaction->exchange_rate, 2, '.', '' );
         }
 
         return $fee;
