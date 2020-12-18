@@ -783,7 +783,14 @@ class StripeConnect extends StripePaymentGateway {
         switch ( $intent_type ) {
             case 'payment_intents':
                 try {
-                    $intent = PaymentIntent::retrieve( $intent_id );
+                    $intent = PaymentIntent::retrieve(
+                        $intent_id,
+                        [
+                            'expand' => [
+                                'charges.data.balance_transaction',
+                            ],
+                        ]
+                    );
                 } catch( Exception $e ) {
                     return false;
                 }

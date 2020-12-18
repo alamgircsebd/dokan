@@ -297,7 +297,7 @@ class IntentController extends StripePaymentGateway {
                     sprintf(
                         __( 'Order %s payment is completed via %s with 3d secure on (Charge ID: %s)', 'dokan' ),
                         $tmp_order->get_order_number(),
-                        $this->title,
+                        $this->get_title(),
                         $charge_id
                     )
                 );
@@ -326,7 +326,7 @@ class IntentController extends StripePaymentGateway {
             sprintf(
                 __( 'Order %s payment is completed via %s 3d secure. (Charge ID: %s)', 'dokan' ),
                 $order->get_order_number(),
-                $this->title,
+                $this->get_title(),
                 $charge_id
             )
         );
