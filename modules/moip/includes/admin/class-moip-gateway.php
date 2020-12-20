@@ -797,7 +797,7 @@ class Dokan_Moip_Connect extends WC_Payment_Gateway {
     /**
      * Setup commissions
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.3
      *
      * @param Object $product_pack
      * @param int $vendor_id

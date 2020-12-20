@@ -30,6 +30,7 @@ const removeFiles = [
     'modules/store-reviews/assets/src',
     'modules/subscription/assets/src',
     'modules/wholesale/assets/src',
+    'vendor/rmccue',
 ];
 
 const allowedVendorFiles = {

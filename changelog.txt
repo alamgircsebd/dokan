@@ -1,3 +1,25 @@
+v3.1.3 Dec 20, 2020
+----------------------------------
+
+- [update] WireCard: Added tax/discount for Vendor Subscriptions, previously only actual product price was sent to API
+- [update] WireCard: Added a new exception if vendor account is not linked with wire card, now the user will get proper error messages instead of Something went wrong
+- [fix] Refund and announcement listing loading problem and text-domain issue fixed
+- [fix] Booking addon options are missing on the Booking type product edit panel
+- [fix] Variable product image upload when yoast seo plugin is active
+- [fix] Added tax fields for vendor subscription type product, previously users weren't able to select tax for vendor subscription products
+- [fix] Translation support for list tables on Dokan admin pages
+- [fix] Booking simple product changes to virtual product
+- [fix] Fixed Dokan Stripe 3ds recurring issue with vendor subscription products
+- [fix] Dokan order discount mismatch when recalculate from admin panel order details page
+- [fix] Fixed cart coupon option disabled for multi vendors
+- [fix] WireCard: added some new exceptions to display formatted errors to users
+- [fix] WireCard: Fixed product pack end date for vendor subscription, previously this was causing subscription to get canceled automatically before subscriptions actual end date
+- [fix] WireCard: Fixed decimal issues on product price, this was causing API error due to mismatch order total
+- [fix] WireCard: Removed rmccue/requests library from vendor folder, WordPress already has this library pre installed. This was causing a fatal error on some installations
+- [fix] Limit your zone selected by default when zone created with a country
+- [fix] Disallow direct access vendor verification uploaded documents folder
+- [fix] Fixed Dokan Stripe resource missing api error for empty source provided via api call
+
 v3.1.2 Dec 01, 2020
 ----------------------------------
 
