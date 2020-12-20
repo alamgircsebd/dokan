@@ -17,7 +17,7 @@ class Module {
     /**
      * Module version
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.3
      *
      * @var string
      */
@@ -861,7 +861,7 @@ class Module {
     }
 
     /**
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.3
      * Creates .htaccess & index.html files if not exists that prevent direct folder access
      */
     public function disallow_direct_access() {
@@ -892,7 +892,7 @@ class Module {
      * @param int $length
      *
      * @return string
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.3
      * Generates a random string
      */
     public function generate_random_string( $length = 20 ) {

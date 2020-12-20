@@ -126,8 +126,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
-                "rmccue/requests": ">=1.0"
+                "php": ">=5.5"
             },
             "require-dev": {
                 "codacy/coverage": "dev-master",
@@ -367,60 +366,6 @@
                 "x509"
             ],
             "time": "2020-12-17T05:14:58+00:00"
-        },
-        {
-            "name": "rmccue/requests",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/rmccue/Requests.git",
-                "reference": "282d774aa04bb905d182ef756c3e1201d9b3b059"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/rmccue/Requests/zipball/282d774aa04bb905d182ef756c3e1201d9b3b059",
-                "reference": "282d774aa04bb905d182ef756c3e1201d9b3b059",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.2"
-            },
-            "require-dev": {
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
-                "phpcompatibility/php-compatibility": "^9.0",
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.5",
-                "requests/test-server": "dev-master",
-                "squizlabs/php_codesniffer": "^3.5",
-                "wp-coding-standards/wpcs": "^2.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Requests": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "ISC"
-            ],
-            "authors": [
-                {
-                    "name": "Ryan McCue",
-                    "homepage": "http://ryanmccue.info"
-                }
-            ],
-            "description": "A HTTP library written in PHP, for human beings.",
-            "homepage": "http://github.com/rmccue/Requests",
-            "keywords": [
-                "curl",
-                "fsockopen",
-                "http",
-                "idna",
-                "ipv6",
-                "iri",
-                "sockets"
-            ],
-            "time": "2020-11-30T09:26:19+00:00"
         },
         {
             "name": "stripe/stripe-php",

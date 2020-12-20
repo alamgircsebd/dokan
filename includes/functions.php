@@ -654,7 +654,7 @@ function dokan_register_deactivation_hook( $file, $function ) {
 /**
  * Dokan is single seller mode enable
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.1.3
  *
  * @return boolean
  */

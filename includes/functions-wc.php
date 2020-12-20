@@ -1785,7 +1785,7 @@ add_action( 'woocommerce_order_after_calculate_totals', 'calculate_with_order_di
  * @param $and_taxes
  * @param $order
  *
- * @since DOKAN_PRO_SINCE
+ * @since 3.1.3
  *
  * @return void
  */

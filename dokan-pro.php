@@ -3,11 +3,11 @@
  * Plugin Name: Dokan Pro
  * Plugin URI: https://wedevs.com/dokan/
  * Description: An e-commerce marketplace plugin for WordPress. Powered by WooCommerce and weDevs.
- * Version: 3.1.2
+ * Version: 3.1.3
  * Author: weDevs
  * Author URI: https://wedevs.com/
  * WC requires at least: 3.0
- * WC tested up to: 4.7
+ * WC tested up to: 4.8.0
  * License: GPL2
  * TextDomain: dokan
  */
@@ -36,7 +36,7 @@ class Dokan_Pro {
      *
      * @var string
      */
-    public $version = '3.1.2';
+    public $version = '3.1.3';
 
     /**
      * Databse version key

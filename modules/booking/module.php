@@ -12,7 +12,7 @@ class Module {
     /**
      * Module version
      *
-     * @since DOKAN_PRO_SINCE
+     * @since 3.1.3
      *
      * @var string
      */
